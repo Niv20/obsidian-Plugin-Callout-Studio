@@ -3,6 +3,7 @@ import type { App } from "obsidian";
 import type CalloutStudioPlugin from "../main";
 import type { CalloutDefinition } from "../types";
 import { CalloutEditor } from "./CalloutEditor";
+import { materialFontFamily } from "../utils/iconLoader";
 
 export class CalloutStudioSettingsTab extends PluginSettingTab {
 	plugin: CalloutStudioPlugin;
@@ -128,24 +129,20 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 	): void {
 		const row = containerEl.createDiv({ cls: "callout-studio-row" });
 
-		// Icon preview
+		// Icon preview — supports all icon types
 		const iconEl = row.createDiv({ cls: "callout-studio-row-icon" });
-		try {
-			setIcon(
-				iconEl,
-				def.icon.type === "lucide" ? def.icon.value : "pencil",
-			);
-		} catch {
-			iconEl.textContent = "📝";
-		}
+		this.renderRowIcon(iconEl, def);
 
-		// Info
+		// Info: name + > [!id] syntax
 		const infoEl = row.createDiv({ cls: "callout-studio-row-info" });
-		infoEl.createDiv({
+		infoEl.createSpan({
 			cls: "callout-studio-row-name",
 			text: def.displayName,
 		});
-		infoEl.createDiv({ cls: "callout-studio-row-id", text: def.id });
+		infoEl.createEl("code", {
+			cls: "callout-studio-row-syntax",
+			text: `> [!${def.id}]`,
+		});
 
 		// Color swatches
 		const colorsEl = row.createDiv({ cls: "callout-studio-row-colors" });
@@ -229,6 +226,58 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 					this.display();
 				}
 			});
+		}
+	}
+
+	private renderRowIcon(container: HTMLElement, def: CalloutDefinition): void {
+		switch (def.icon.type) {
+			case "lucide":
+				try {
+					setIcon(container, def.icon.value);
+				} catch {
+					container.textContent = "?";
+				}
+				break;
+			case "material": {
+				const span = container.createSpan({
+					cls: "callout-studio-material-icon",
+					text: def.icon.value,
+				});
+				const fontFamily = materialFontFamily(
+					def.icon.style ?? "outlined",
+				);
+				span.setCssProps({
+					"--cs-material-font": `"${fontFamily}"`,
+				});
+				if (def.icon.style === "filled") {
+					span.setCssProps({ "--cs-material-fill": "1" });
+				}
+				break;
+			}
+			case "svg": {
+				const svgData = this.plugin.registry.customSvgIcons.find(
+					(s) => s.name === def.icon.value,
+				);
+				if (svgData) {
+					const parser = new DOMParser();
+					const doc = parser.parseFromString(
+						svgData.svg,
+						"image/svg+xml",
+					);
+					const svgEl = doc.documentElement;
+					container.appendChild(
+						container.doc.importNode(svgEl, true),
+					);
+				} else {
+					container.textContent = "?";
+				}
+				break;
+			}
+			case "emoji":
+				container.textContent = def.icon.value;
+				break;
+			default:
+				container.textContent = "?";
 		}
 	}
 
