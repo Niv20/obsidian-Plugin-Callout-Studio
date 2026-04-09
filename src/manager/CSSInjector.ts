@@ -103,7 +103,8 @@ export class CSSInjector {
 	private getIconCSS(def: CalloutDefinition): string {
 		switch (def.icon.type) {
 			case "lucide":
-				return `lucide-${def.icon.value}`;
+				// getIconIds() already returns IDs with the "lucide-" prefix
+				return def.icon.value;
 			case "svg": {
 				// Look up SVG content from registry
 				const svgData = this.registry.customSvgIcons.find(

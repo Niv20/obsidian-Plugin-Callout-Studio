@@ -16,12 +16,7 @@
 		"strictBindCallApply": true,
 		"allowSyntheticDefaultImports": true,
 		"useUnknownInCatchVariables": true,
-		"lib": [
-			"DOM",
-			"ES2021"
-		]
+		"lib": ["DOM", "ES2021"]
 	},
-	"include": [
-		"src/**/*.ts"
-	]
+	"include": ["src/**/*.ts"]
 }
