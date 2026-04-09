@@ -207,6 +207,24 @@
 	color: var(--color-base-70, #dcddde);
 }
 
+/* ─── Icon Preview in Editor ──────────────────────────────────── */
+
+.callout-studio-icon-preview {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 32px;
+	height: 32px;
+	border-radius: var(--radius-s);
+	background-color: var(--background-modifier-hover);
+	margin-right: 8px;
+}
+
+.callout-studio-icon-preview svg {
+	width: 20px;
+	height: 20px;
+}
+
 /* ─── Editor Buttons ──────────────────────────────────────────── */
 
 .callout-studio-editor-buttons {

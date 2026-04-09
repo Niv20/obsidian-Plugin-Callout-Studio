@@ -1,6 +1,7 @@
 import { Modal, Setting, setIcon } from "obsidian";
 import type CalloutStudioPlugin from "../main";
 import type { CalloutDefinition, CalloutIcon } from "../types";
+import { IconPicker } from "./IconPicker";
 
 function generateId(displayName: string): string {
 	return displayName
@@ -98,18 +99,27 @@ export class CalloutEditor extends Modal {
 		});
 
 		// Icon
-		new Setting(contentEl)
+		const iconSetting = new Setting(contentEl)
 			.setName("Icon")
-			.setDesc("Lucide icon name (e.g. pencil, alert-triangle, info)")
-			.addText((text) => {
-				text
-					.setPlaceholder("lucide icon name")
-					.setValue(this.icon.value)
-					.onChange((value) => {
-						this.icon = { type: "lucide", value };
-						this.updatePreview();
-					});
+			.setDesc(this.getIconLabel());
+
+		// Icon preview
+		const iconPreviewEl = iconSetting.controlEl.createDiv("callout-studio-icon-preview");
+		this.renderIconPreview(iconPreviewEl);
+
+		iconSetting.addButton((btn) => {
+			btn.setButtonText("Pick icon").onClick(async () => {
+				const picker = new IconPicker(this.plugin, this.icon);
+				const result = await picker.open();
+				if (result) {
+					this.icon = result;
+					iconSetting.setDesc(this.getIconLabel());
+					iconPreviewEl.empty();
+					this.renderIconPreview(iconPreviewEl);
+					this.updatePreview();
+				}
 			});
+		});
 
 		// Color Light
 		new Setting(contentEl)
@@ -238,6 +248,47 @@ export class CalloutEditor extends Modal {
 		this.idWarningEl.removeClass("is-visible");
 	}
 
+	private getIconLabel(): string {
+		const { type, value, style } = this.icon;
+		if (type === "material" && style) {
+			return `${type}: ${value} (${style})`;
+		}
+		return `${type}: ${value}`;
+	}
+
+	private renderIconPreview(container: HTMLElement): void {
+		container.empty();
+		switch (this.icon.type) {
+			case "lucide":
+				try {
+					setIcon(container, this.icon.value);
+				} catch {
+					container.textContent = "?";
+				}
+				break;
+			case "material":
+				container.createSpan({
+					cls: "material-symbols-outlined",
+					text: this.icon.value,
+				});
+				break;
+			case "svg": {
+				const svgData = this.plugin.registry.customSvgIcons.find(
+					(s) => s.name === this.icon.value,
+				);
+				if (svgData) {
+					container.innerHTML = svgData.svg;
+				} else {
+					container.textContent = "?";
+				}
+				break;
+			}
+			case "emoji":
+				container.textContent = this.icon.value;
+				break;
+		}
+	}
+
 	private updatePreview(): void {
 		if (!this.previewEl) return;
 		this.previewEl.empty();
@@ -261,11 +312,7 @@ export class CalloutEditor extends Modal {
 
 		// Icon
 		const iconEl = titleEl.createDiv({ cls: "callout-icon" });
-		try {
-			setIcon(iconEl, this.icon.value);
-		} catch {
-			iconEl.textContent = "📝";
-		}
+		this.renderIconPreview(iconEl);
 
 		// Title text
 		const titleInner = titleEl.createDiv({ cls: "callout-title-inner" });
