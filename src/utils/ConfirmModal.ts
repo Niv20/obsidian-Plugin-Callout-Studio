@@ -1,0 +1,57 @@
+import { Modal } from "obsidian";
+import type { App } from "obsidian";
+import { t } from "../i18n";
+
+export class ConfirmModal extends Modal {
+	private resolved = false;
+	private resolve: (value: boolean) => void = () => {};
+
+	constructor(
+		app: App,
+		private message: string,
+	) {
+		super(app);
+	}
+
+	onOpen(): void {
+		const { contentEl } = this;
+		contentEl.createEl("p", { text: this.message });
+
+		const btnContainer = contentEl.createDiv({
+			cls: "modal-button-container",
+		});
+
+		btnContainer
+			.createEl("button", { text: t("confirm.cancel") })
+			.addEventListener("click", () => {
+				this.resolved = true;
+				this.resolve(false);
+				this.close();
+			});
+
+		btnContainer
+			.createEl("button", {
+				text: t("confirm.ok"),
+				cls: "mod-warning",
+			})
+			.addEventListener("click", () => {
+				this.resolved = true;
+				this.resolve(true);
+				this.close();
+			});
+	}
+
+	onClose(): void {
+		if (!this.resolved) {
+			this.resolve(false);
+		}
+		this.contentEl.empty();
+	}
+
+	confirm(): Promise<boolean> {
+		return new Promise<boolean>((resolve) => {
+			this.resolve = resolve;
+			this.open();
+		});
+	}
+}

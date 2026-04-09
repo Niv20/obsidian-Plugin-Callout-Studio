@@ -192,4 +192,8 @@ export const en: Record<string, string> = {
 	"popup.customize": "Customize this callout type",
 	"popup.createNew": "Create new type based on this",
 	"popup.openSettings": "Open callout studio settings \u2192",
+
+	// Confirm modal
+	"confirm.ok": "Delete",
+	"confirm.cancel": "Cancel",
 };

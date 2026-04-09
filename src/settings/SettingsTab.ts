@@ -4,6 +4,7 @@ import type CalloutStudioPlugin from "../main";
 import type { CalloutDefinition } from "../types";
 import { CalloutEditor } from "./CalloutEditor";
 import { materialFontFamily } from "../utils/iconLoader";
+import { ConfirmModal } from "../utils/ConfirmModal";
 import { t, setLocale, getAvailableLocales } from "../i18n";
 
 export class CalloutStudioSettingsTab extends PluginSettingTab {
@@ -277,15 +278,15 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 			});
 			setIcon(deleteBtn, "trash-2");
 			deleteBtn.addEventListener("click", () => {
-				// eslint-disable-next-line no-alert -- Obsidian has no built-in confirm dialog
-				if (
-					confirm(
-						t("settings.deleteConfirm", { name: def.displayName }),
-					)
-				) {
-					this.plugin.registry.remove(def.id);
-					this.display();
-				}
+				void new ConfirmModal(
+					this.app,
+					t("settings.deleteConfirm", { name: def.displayName }),
+				).confirm().then((ok) => {
+					if (ok) {
+						this.plugin.registry.remove(def.id);
+						this.display();
+					}
+				});
 			});
 		}
 	}
