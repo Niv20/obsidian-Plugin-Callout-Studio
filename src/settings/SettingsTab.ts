@@ -1,4 +1,4 @@
-import { Notice, PluginSettingTab, Setting, setIcon } from "obsidian";
+import { Menu, Notice, PluginSettingTab, Setting, setIcon } from "obsidian";
 import type { App } from "obsidian";
 import type CalloutStudioPlugin from "../main";
 import type { CalloutDefinition } from "../types";
@@ -34,13 +34,26 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 	private renderCalloutTypesSection(containerEl: HTMLElement): void {
 		new Setting(containerEl).setName("My callout types").setHeading();
 
-		// Action buttons row
-		const actionsEl = containerEl.createDiv({
-			cls: "callout-studio-actions",
+		// Toolbar: search + add button + kebab menu
+		const toolbar = containerEl.createDiv({
+			cls: "callout-studio-toolbar",
 		});
 
-		const addBtn = actionsEl.createEl("button", {
-			text: "+ add new callout",
+		const searchWrap = toolbar.createDiv({
+			cls: "callout-studio-toolbar-search",
+		});
+		new Setting(searchWrap).addSearch((search) => {
+			search
+				.setPlaceholder("Filter by name or ID...")
+				.setValue(this.searchQuery)
+				.onChange((value) => {
+					this.searchQuery = value;
+					this.refreshLists();
+				});
+		});
+
+		const addBtn = toolbar.createEl("button", {
+			text: "+ Add new callout",
 			cls: "mod-cta",
 		});
 		// eslint-disable-next-line @typescript-eslint/no-misused-promises
@@ -50,39 +63,36 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 			this.display();
 		});
 
-		const importBtn = actionsEl.createEl("button", {
-			text: "Import from CSS snippet",
+		const kebabBtn = toolbar.createEl("button", {
+			cls: "clickable-icon callout-studio-kebab-btn",
+			attr: { "aria-label": "More actions" },
 		});
-		// eslint-disable-next-line @typescript-eslint/no-misused-promises
-		importBtn.addEventListener("click", async () => {
-			await this.importFromSnippets();
-			this.display();
+		setIcon(kebabBtn, "more-vertical");
+		kebabBtn.addEventListener("click", (evt) => {
+			const menu = new Menu();
+			menu.addItem((item) =>
+				item
+					.setTitle("Import from CSS snippet")
+					.setIcon("file-code")
+					.onClick(async () => {
+						await this.importFromSnippets();
+						this.display();
+					}),
+			);
+			menu.addItem((item) =>
+				item
+					.setTitle("Import from JSON")
+					.setIcon("file-json")
+					.onClick(() => this.importFromJSON()),
+			);
+			menu.addItem((item) =>
+				item
+					.setTitle("Export all")
+					.setIcon("download")
+					.onClick(() => this.exportCallouts()),
+			);
+			menu.showAtMouseEvent(evt);
 		});
-
-		const importJsonBtn = actionsEl.createEl("button", {
-			text: "Import from JSON",
-		});
-		importJsonBtn.addEventListener("click", () => {
-			this.importFromJSON();
-		});
-
-		const exportBtn = actionsEl.createEl("button", { text: "Export all" });
-		exportBtn.addEventListener("click", () => {
-			this.exportCallouts();
-		});
-
-		// Search
-		new Setting(containerEl)
-			.setName("Search callouts")
-			.addSearch((search) => {
-				search
-					.setPlaceholder("Filter by name or ID...")
-					.setValue(this.searchQuery)
-					.onChange((value) => {
-						this.searchQuery = value;
-						this.refreshLists();
-					});
-			});
 
 		// User-defined callout list container
 		this.userListEl = containerEl.createDiv();

@@ -4,15 +4,29 @@
 
 /* ─── Settings Panel ──────────────────────────────────────────── */
 
-.callout-studio-settings .callout-studio-actions {
+.callout-studio-settings .callout-studio-toolbar {
 	display: flex;
+	align-items: center;
 	gap: 8px;
-	flex-wrap: wrap;
-	margin-bottom: 16px;
+	margin-bottom: 12px;
 }
 
-.callout-studio-settings .callout-studio-actions button {
-	min-height: 32px;
+.callout-studio-toolbar-search {
+	flex: 1;
+	min-width: 0;
+}
+
+.callout-studio-toolbar-search .setting-item {
+	border: none;
+	padding: 0;
+}
+
+.callout-studio-toolbar-search .setting-item-info {
+	display: none;
+}
+
+.callout-studio-kebab-btn {
+	flex-shrink: 0;
 }
 
 .callout-studio-empty-state {
