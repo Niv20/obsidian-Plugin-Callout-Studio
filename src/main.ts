@@ -7,11 +7,13 @@ import { CalloutEditor } from './settings/CalloutEditor';
 import { CalloutAutoComplete } from './editor/AutoComplete';
 import { registerContextMenu } from './editor/ContextMenu';
 import { TransparentPopup } from './editor/TransparentPopup';
+import { CalloutStudioAPI } from './api/PluginAPI';
 
 export default class CalloutStudioPlugin extends Plugin {
 	registry!: CalloutRegistry;
 	cssInjector!: CSSInjector;
 	popup!: TransparentPopup;
+	api!: CalloutStudioAPI;
 
 	get settings(): PluginSettings {
 		return this.registry.settings;
@@ -69,6 +71,9 @@ export default class CalloutStudioPlugin extends Plugin {
 
 		// Transparent floating popup
 		this.popup = new TransparentPopup(this);
+
+		// Public API for other plugins
+		this.api = new CalloutStudioAPI(this);
 	}
 
 	onunload() {
