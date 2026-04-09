@@ -109,6 +109,7 @@ export class IconPicker extends Modal {
 
 	private buildTabs(): void {
 		this.tabsEl.empty();
+		this.tabsEl.setAttribute("role", "tablist");
 
 		const tabs: Array<{ id: "lucide" | "material" | "svg"; label: string }> = [
 			{ id: "lucide", label: "Lucide" },
@@ -117,9 +118,16 @@ export class IconPicker extends Modal {
 		];
 
 		for (const tab of tabs) {
+			const isActive = this.activeTab === tab.id;
 			const btn = this.tabsEl.createEl("button", {
 				text: tab.label,
-				cls: `icon-picker-tab${this.activeTab === tab.id ? " is-active" : ""}`,
+				cls: `icon-picker-tab${isActive ? " is-active" : ""}`,
+				attr: {
+					role: "tab",
+					"aria-selected": String(isActive),
+					"aria-controls": `icon-picker-panel-${tab.id}`,
+					tabindex: isActive ? "0" : "-1",
+				},
 			});
 			btn.addEventListener("click", () => {
 				this.activeTab = tab.id;
@@ -169,7 +177,9 @@ export class IconPicker extends Modal {
 		this.lucideDisplayed = 0;
 
 		const grid = this.tabContentEl.createDiv("icon-picker-grid");
+		grid.setAttribute("role", "grid");
 		this.appendLucideIcons(grid);
+		this.enableGridKeyNav(grid);
 
 		// Load more button
 		const loadMoreContainer = this.tabContentEl.createDiv("icon-picker-load-more");
@@ -263,6 +273,8 @@ export class IconPicker extends Modal {
 		const categorySelect = toolbar.createEl("select", { cls: "icon-picker-category-select" });
 
 		const grid = this.tabContentEl.createDiv("icon-picker-grid");
+		grid.setAttribute("role", "grid");
+		this.enableGridKeyNav(grid);
 		const loadMoreContainer = this.tabContentEl.createDiv("icon-picker-load-more");
 
 		const updateGrid = () => {
@@ -611,5 +623,55 @@ export class IconPicker extends Modal {
 			this.resolve = null;
 		}
 		this.close();
+	}
+
+	/**
+	 * Adds arrow key navigation to an icon grid.
+	 */
+	private enableGridKeyNav(grid: HTMLElement): void {
+		grid.addEventListener("keydown", (e) => {
+			const cells = Array.from(grid.querySelectorAll<HTMLElement>(".icon-picker-cell"));
+			const current = document.activeElement as HTMLElement | null;
+			const idx = current ? cells.indexOf(current) : -1;
+			if (idx < 0) return;
+
+			// Compute approximate columns from grid layout
+			const first = cells[0];
+			const second = cells[1];
+			let cols = 1;
+			if (first && second) {
+				const firstRect = first.getBoundingClientRect();
+				const secondRect = second.getBoundingClientRect();
+				if (Math.abs(firstRect.top - secondRect.top) < 2) {
+					// Same row — count cells in first row
+					cols = cells.filter((c) =>
+						Math.abs(c.getBoundingClientRect().top - firstRect.top) < 2,
+					).length;
+				}
+			}
+
+			let next = -1;
+			switch (e.key) {
+				case "ArrowRight":
+					next = idx + 1;
+					break;
+				case "ArrowLeft":
+					next = idx - 1;
+					break;
+				case "ArrowDown":
+					next = idx + cols;
+					break;
+				case "ArrowUp":
+					next = idx - cols;
+					break;
+				default:
+					return;
+			}
+
+			if (next >= 0 && next < cells.length) {
+				e.preventDefault();
+				cells[next]?.focus();
+			}
+		});
 	}
 }

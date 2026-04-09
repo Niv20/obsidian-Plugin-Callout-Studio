@@ -719,3 +719,50 @@
 	pointer-events: none;
 }
 
+/* ─── Accessibility & Mobile ─────────────────────────────────── */
+
+/* Focus-visible for all interactive elements */
+.callout-studio-settings .callout-studio-actions button:focus-visible,
+.callout-studio-row-buttons button:focus-visible,
+.callout-studio-editor-buttons button:focus-visible,
+.callout-studio-preview-toggle:focus-visible,
+.icon-picker-tab:focus-visible,
+.icon-picker-footer button:focus-visible,
+.icon-picker-svg-textarea:focus-visible {
+	outline: 2px solid var(--text-accent);
+	outline-offset: -2px;
+}
+
+.icon-picker-search input:focus-visible,
+.icon-picker-toolbar input:focus-visible,
+.icon-picker-toolbar select:focus-visible,
+.icon-picker-svg-name-row input:focus-visible {
+	outline: 2px solid var(--text-accent);
+	outline-offset: -1px;
+}
+
+/* Minimum 32px touch targets */
+.icon-picker-tab {
+	min-height: 32px;
+}
+
+.icon-picker-search input,
+.icon-picker-toolbar input,
+.icon-picker-toolbar select,
+.icon-picker-svg-name-row input {
+	min-height: 32px;
+}
+
+.callout-studio-preview-toggle {
+	min-height: 32px;
+	min-width: 32px;
+}
+
+.callout-studio-popup-action {
+	min-height: 32px;
+}
+
+.callout-studio-popup-item {
+	min-height: 32px;
+}
+
