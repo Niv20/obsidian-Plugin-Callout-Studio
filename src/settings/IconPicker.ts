@@ -14,6 +14,7 @@ import {
 	sanitizeSVG,
 	isValidSvgIconName,
 	makeIcon,
+	materialFontFamily,
 } from "../utils/iconLoader";
 
 const GRID_PAGE_SIZE = 120;
@@ -49,6 +50,9 @@ export class IconPicker extends Modal {
 	private tabContentEl!: HTMLElement;
 	private previewEl!: HTMLElement;
 	private confirmBtn!: HTMLButtonElement;
+
+	// Track font links added by this picker so we can clean up
+	private addedFontLinks: HTMLLinkElement[] = [];
 
 	constructor(plugin: CalloutStudioPlugin, currentIcon?: CalloutIcon) {
 		super(plugin.app);
@@ -109,6 +113,11 @@ export class IconPicker extends Modal {
 			this.resolve(null);
 			this.resolve = null;
 		}
+		// Clean up font links we added
+		for (const link of this.addedFontLinks) {
+			link.remove();
+		}
+		this.addedFontLinks = [];
 	}
 
 	// ── Tabs ────────────────────────────────────────────────────────────
@@ -141,8 +150,10 @@ export class IconPicker extends Modal {
 			btn.addEventListener("click", () => {
 				this.activeTab = tab.id;
 				this.searchQuery = "";
+				this.selectedIcon = null;
 				this.buildTabs();
 				this.renderTab();
+				this.updatePreview();
 			});
 		}
 	}
@@ -260,6 +271,25 @@ export class IconPicker extends Modal {
 
 	// ── Material Tab ────────────────────────────────────────────────────
 
+	/**
+	 * Ensures the Google Font <link> for a given Material style is loaded.
+	 * Tracks added links so they can be removed on close.
+	 */
+	private ensureMaterialFont(style: MaterialIconStyle): void {
+		const family = materialFontFamily(style);
+		const encodedFamily = family.replace(/ /g, "+");
+		// Check if a link for this family already exists in the document
+		const selector = `link[href*="family=${encodedFamily}"]`;
+		if (document.querySelector(selector)) return;
+
+		// eslint-disable-next-line obsidianmd/no-forbidden-elements -- dynamic font loading requires a link element
+		const link = document.createElement("link");
+		link.rel = "stylesheet";
+		link.href = `https://fonts.googleapis.com/css2?family=${encodedFamily}:opsz,wght,FILL,GRAD@24,400,0..1,0`;
+		document.head.appendChild(link);
+		this.addedFontLinks.push(link);
+	}
+
 	private renderMaterialTab(): void {
 		if (!this.plugin.settings.iconSources.material) {
 			this.tabContentEl
@@ -269,6 +299,9 @@ export class IconPicker extends Modal {
 				);
 			return;
 		}
+
+		// Ensure the Material font is loaded for the current style
+		this.ensureMaterialFont(this.materialStyle);
 
 		const toolbar = this.tabContentEl.createDiv("icon-picker-toolbar");
 
@@ -330,6 +363,7 @@ export class IconPicker extends Modal {
 
 		styleSelect.addEventListener("change", () => {
 			this.materialStyle = styleSelect.value as MaterialIconStyle;
+			this.ensureMaterialFont(this.materialStyle);
 			updateGrid();
 		});
 
@@ -408,9 +442,14 @@ export class IconPicker extends Modal {
 			});
 			// Render material icon via font ligature
 			const iconSpan = cell.createSpan({
-				cls: "material-symbols-outlined",
+				cls: "icon-picker-material-icon",
 			});
 			iconSpan.setText(meta.name);
+			const fontFamily = materialFontFamily(this.materialStyle);
+			iconSpan.setCssProps({ "--cs-material-font": `"${fontFamily}"` });
+			if (this.materialStyle === "filled") {
+				iconSpan.setCssProps({ "--cs-material-fill": "1" });
+			}
 
 			if (
 				this.selectedIcon?.type === "material" &&

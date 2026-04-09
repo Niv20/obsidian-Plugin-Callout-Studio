@@ -624,8 +624,20 @@
 	height: 20px;
 }
 
-.icon-picker-material-cell .material-symbols-outlined {
+.icon-picker-material-cell .icon-picker-material-icon {
+	font-family: var(--cs-material-font, "Material Symbols Outlined");
+	font-weight: normal;
+	font-style: normal;
 	font-size: 24px;
+	line-height: 1;
+	letter-spacing: normal;
+	text-transform: none;
+	white-space: nowrap;
+	direction: ltr;
+	-webkit-font-feature-settings: "liga";
+	font-feature-settings: "liga";
+	-webkit-font-smoothing: antialiased;
+	font-variation-settings: "FILL" var(--cs-material-fill, 0);
 }
 
 .icon-picker-load-more {

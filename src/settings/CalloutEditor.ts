@@ -1,4 +1,10 @@
-import { Modal, Setting, setIcon, TextComponent, SliderComponent } from "obsidian";
+import {
+	Modal,
+	Setting,
+	setIcon,
+	TextComponent,
+	SliderComponent,
+} from "obsidian";
 import type CalloutStudioPlugin from "../main";
 import type { CalloutDefinition, CalloutIcon } from "../types";
 import { IconPicker } from "./IconPicker";
@@ -406,7 +412,9 @@ export class CalloutEditor extends Modal {
 		// Apply icon transform in preview
 		const transforms: string[] = [];
 		if (this.iconOffsetX !== 0 || this.iconOffsetY !== 0) {
-			transforms.push(`translate(${this.iconOffsetX}px, ${this.iconOffsetY}px)`);
+			transforms.push(
+				`translate(${this.iconOffsetX}px, ${this.iconOffsetY}px)`,
+			);
 		}
 		if (this.iconSize !== 1) {
 			transforms.push(`scale(${this.iconSize})`);

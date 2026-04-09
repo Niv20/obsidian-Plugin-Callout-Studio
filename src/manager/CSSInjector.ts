@@ -113,7 +113,8 @@ export class CSSInjector {
 		if (ox === 0 && oy === 0 && scale === 1) return "";
 
 		const transforms: string[] = [];
-		if (ox !== 0 || oy !== 0) transforms.push(`translate(${ox}px, ${oy}px)`);
+		if (ox !== 0 || oy !== 0)
+			transforms.push(`translate(${ox}px, ${oy}px)`);
 		if (scale !== 1) transforms.push(`scale(${scale})`);
 
 		return (
