@@ -82,3 +82,21 @@ export function getContrastRatio(fg: RGB, bg: RGB): number {
 export function isLowContrast(fg: RGB, bg: RGB): boolean {
 	return getContrastRatio(fg, bg) < 4.5;
 }
+
+/**
+ * Linearly blend two hex colours.
+ * amount = 0 → hex1, amount = 1 → hex2.
+ */
+export function blendHex(
+	hex1: string,
+	hex2: string,
+	amount: number,
+): string {
+	const c1 = hexToRgb(hex1);
+	const c2 = hexToRgb(hex2);
+	return rgbToHex(
+		c1.r + (c2.r - c1.r) * amount,
+		c1.g + (c2.g - c1.g) * amount,
+		c1.b + (c2.b - c1.b) * amount,
+	);
+}

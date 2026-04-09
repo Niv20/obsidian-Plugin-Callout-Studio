@@ -149,12 +149,6 @@
 	padding: 16px;
 }
 
-.callout-studio-hex-input {
-	width: 90px !important;
-	font-family: var(--font-monospace);
-	font-size: var(--font-ui-smaller);
-}
-
 .callout-studio-id-warning {
 	color: var(--text-error);
 	font-size: var(--font-ui-smaller);
@@ -186,12 +180,32 @@
 	font-weight: var(--font-semibold);
 }
 
-.callout-studio-preview-toggle {
+/* Segmented Light/Dark toggle */
+.callout-studio-segmented-toggle {
+	display: inline-flex;
+	border: 1px solid var(--background-modifier-border);
+	border-radius: 6px;
+	overflow: hidden;
+}
+
+.callout-studio-seg-btn {
 	font-size: var(--font-ui-smaller);
-	padding: 2px 10px;
-	border-radius: 4px;
-	cursor: pointer;
+	padding: 2px 12px;
 	min-height: 24px;
+	border: none;
+	background: transparent;
+	color: var(--text-muted);
+	cursor: pointer;
+	transition: background 0.12s ease, color 0.12s ease;
+}
+
+.callout-studio-seg-btn:hover {
+	background: var(--background-modifier-hover);
+}
+
+.callout-studio-seg-btn.is-active {
+	background: var(--interactive-accent);
+	color: var(--text-on-accent);
 }
 
 .callout-studio-preview {
@@ -241,73 +255,144 @@
 	padding: 4px 16px;
 }
 
-/* ─── Preview + Icon Adjustment Panel ─────────────────────────── */
+/* ─── Preview + Adjustments Panel ─────────────────────────────── */
 
 .callout-studio-preview-panel {
 	display: grid;
-	grid-template-columns: 1fr 1fr;
-	gap: 16px;
+	grid-template-columns: 1fr 200px;
+	gap: 12px;
 	margin: 16px 0;
+	align-items: start;
 }
 
 .callout-studio-preview-col {
 	min-width: 0;
 }
 
-.callout-studio-sliders-col {
+/* Right adjustment column */
+.callout-studio-adjust-col {
 	min-width: 0;
 	display: flex;
 	flex-direction: column;
-	gap: 2px;
+	gap: 8px;
 }
 
-.callout-studio-sliders-header {
+.callout-studio-adjust-section {
+	border: 1px solid var(--background-modifier-border);
+	border-radius: 8px;
+	overflow: hidden;
+}
+
+.callout-studio-adjust-header {
 	font-size: var(--font-ui-smaller);
 	font-weight: var(--font-semibold);
 	color: var(--text-muted);
-	padding: 8px 12px;
+	padding: 6px 10px;
 	background: var(--background-secondary);
-	border-radius: 8px 8px 0 0;
-	border: 1px solid var(--background-modifier-border);
-	border-bottom: none;
 }
 
-.callout-studio-sliders-col .setting-item {
-	padding: 6px 12px;
-	border-top: none;
-	background: var(--background-primary);
-	border-left: 1px solid var(--background-modifier-border);
-	border-right: 1px solid var(--background-modifier-border);
+/* Slider rows: label above slider */
+.callout-studio-slider-row {
+	padding: 4px 10px 6px;
 }
 
-.callout-studio-sliders-col .setting-item:last-child {
-	border-bottom: 1px solid var(--background-modifier-border);
-	border-radius: 0 0 8px 8px;
-}
-
-.callout-studio-sliders-col .setting-item-name {
+.callout-studio-slider-label {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
 	font-size: var(--font-ui-smaller);
+	color: var(--text-muted);
+	margin-bottom: 2px;
 }
 
-.callout-studio-sliders-col .setting-item-description {
+.callout-studio-slider-row .setting-item {
+	padding: 0;
+	border: none;
+}
+
+.callout-studio-slider-row .setting-item-info {
 	display: none;
+}
+
+.callout-studio-slider-row .setting-item-control {
+	width: 100%;
+}
+
+.callout-studio-slider-row .setting-item-control input[type="range"] {
+	width: 100%;
+}
+
+/* Hide slider tooltip bubble */
+.callout-studio-slider-row .slider-tooltip,
+.callout-studio-slider-row [class*="tooltip"] {
+	display: none !important;
 }
 
 /* ─── Icon Adjustment Sliders ─────────────────────────────────── */
 
 .callout-studio-slider-value {
-	display: inline-block;
-	min-width: 40px;
-	text-align: right;
 	font-size: var(--font-ui-smaller);
-	color: var(--text-muted);
+	color: var(--text-faint);
 	font-family: var(--font-monospace);
-	margin-left: 8px;
+	white-space: nowrap;
 }
 
 .callout-studio-icon-transformed {
 	transform: var(--cs-icon-transform);
 	transform-origin: center;
+}
+
+/* ─── Compact Color Grid ──────────────────────────────────────── */
+
+.callout-studio-color-grid {
+	padding: 6px 10px 8px;
+}
+
+.callout-studio-color-grid-header {
+	display: grid;
+	grid-template-columns: 1fr 32px 32px;
+	gap: 6px;
+	font-size: 10px;
+	color: var(--text-faint);
+	text-align: center;
+	margin-bottom: 4px;
+}
+
+.callout-studio-color-grid-header span:first-child {
+	text-align: left;
+}
+
+.callout-studio-color-row {
+	display: grid;
+	grid-template-columns: 1fr 32px 32px;
+	gap: 6px;
+	align-items: center;
+	padding: 2px 0;
+}
+
+.callout-studio-color-row > span {
+	font-size: var(--font-ui-smaller);
+	color: var(--text-muted);
+}
+
+.callout-studio-color-input {
+	width: 28px;
+	height: 22px;
+	padding: 0;
+	border: 1px solid var(--background-modifier-border);
+	border-radius: 4px;
+	cursor: pointer;
+	background: none;
+	justify-self: center;
+}
+
+.callout-studio-color-input::-webkit-color-swatch-wrapper {
+	padding: 1px;
+}
+
+.callout-studio-color-input::-webkit-color-swatch {
+	border: none;
+	border-radius: 3px;
 }
 
 /* ─── Autocomplete Suggestions ────────────────────────────────── */
@@ -676,7 +761,8 @@
 	height: 20px;
 }
 
-.icon-picker-material-cell .icon-picker-material-icon {
+.icon-picker-material-cell .icon-picker-material-icon,
+.callout-studio-material-icon {
 	font-family: var(--cs-material-font, "Material Symbols Outlined");
 	font-weight: normal;
 	font-style: normal;

@@ -20,6 +20,14 @@ export interface CalloutDefinition {
 	iconOffsetY?: number;
 	/** Icon scale factor (0.5 to 2.0, default 1) */
 	iconSize?: number;
+	/** Custom background color – light mode */
+	bgColorLight?: string;
+	/** Custom background color – dark mode */
+	bgColorDark?: string;
+	/** Custom content text color – light mode */
+	textColorLight?: string;
+	/** Custom content text color – dark mode */
+	textColorDark?: string;
 	metadata?: Record<string, string>;
 }
 

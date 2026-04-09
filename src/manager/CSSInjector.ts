@@ -76,18 +76,42 @@ export class CSSInjector {
 		const parts: string[] = [];
 
 		// Light mode (default)
+		const lightProps: string[] = [
+			`  --callout-color: ${lightRgb};`,
+		];
+		if (iconCSS) lightProps.push(`  --callout-icon: ${iconCSS};`);
+		if (def.bgColorLight) {
+			lightProps.push(`  background-color: ${def.bgColorLight};`);
+		}
 		parts.push(
-			`.callout[data-callout="${def.id}"] {\n` +
-				`  --callout-color: ${lightRgb};\n` +
-				(iconCSS ? `  --callout-icon: ${iconCSS};\n` : "") +
-				`}`,
+			`.callout[data-callout="${def.id}"] {\n${lightProps.join("\n")}\n}`,
 		);
 
-		// Dark mode override (only if different from light)
-		if (def.colorLight !== def.colorDark) {
+		// Dark mode override
+		if (def.colorLight !== def.colorDark || def.bgColorLight !== def.bgColorDark) {
+			const darkProps: string[] = [
+				`  --callout-color: ${darkRgb};`,
+			];
+			if (def.bgColorDark) {
+				darkProps.push(`  background-color: ${def.bgColorDark};`);
+			}
 			parts.push(
-				`.theme-dark .callout[data-callout="${def.id}"] {\n` +
-					`  --callout-color: ${darkRgb};\n` +
+				`.theme-dark .callout[data-callout="${def.id}"] {\n${darkProps.join("\n")}\n}`,
+			);
+		}
+
+		// Content text color overrides
+		if (def.textColorLight) {
+			parts.push(
+				`.callout[data-callout="${def.id}"] > .callout-content {\n` +
+					`  color: ${def.textColorLight};\n` +
+					`}`,
+			);
+		}
+		if (def.textColorDark && def.textColorDark !== def.textColorLight) {
+			parts.push(
+				`.theme-dark .callout[data-callout="${def.id}"] > .callout-content {\n` +
+					`  color: ${def.textColorDark};\n` +
 					`}`,
 			);
 		}

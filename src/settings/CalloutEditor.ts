@@ -8,6 +8,8 @@ import {
 import type CalloutStudioPlugin from "../main";
 import type { CalloutDefinition, CalloutIcon } from "../types";
 import { IconPicker } from "./IconPicker";
+import { materialFontFamily } from "../utils/iconLoader";
+import { blendHex } from "../utils/colorUtils";
 
 function generateId(displayName: string): string {
 	return displayName
@@ -29,6 +31,10 @@ export class CalloutEditor extends Modal {
 	private icon: CalloutIcon;
 	private colorLight: string;
 	private colorDark: string;
+	private bgColorLight: string;
+	private bgColorDark: string;
+	private textColorLight: string;
+	private textColorDark: string;
 	private foldable: boolean;
 	private defaultFolded: boolean;
 	private iconOffsetX: number;
@@ -50,6 +56,14 @@ export class CalloutEditor extends Modal {
 			: { type: "lucide", value: "pencil" };
 		this.colorLight = existing?.colorLight ?? "#448aff";
 		this.colorDark = existing?.colorDark ?? "#448aff";
+		this.bgColorLight =
+			existing?.bgColorLight ??
+			blendHex(this.colorLight, "#ffffff", 0.88);
+		this.bgColorDark =
+			existing?.bgColorDark ??
+			blendHex(this.colorDark, "#1e1e1e", 0.88);
+		this.textColorLight = existing?.textColorLight ?? "#1a1a1a";
+		this.textColorDark = existing?.textColorDark ?? "#e0e0e0";
 		this.foldable = existing?.foldable ?? true;
 		this.defaultFolded = existing?.defaultFolded ?? false;
 		this.iconOffsetX = existing?.iconOffsetX ?? 0;
@@ -137,47 +151,7 @@ export class CalloutEditor extends Modal {
 			});
 		});
 
-		// Color Light
-		new Setting(contentEl)
-			.setName("Color (light mode)")
-			.setDesc("Callout accent color in light themes")
-			.addColorPicker((picker) => {
-				picker.setValue(this.colorLight).onChange((value) => {
-					this.colorLight = value;
-					this.updatePreview();
-				});
-			})
-			.addText((text) => {
-				text.setValue(this.colorLight).onChange((value) => {
-					if (/^#[0-9a-f]{6}$/i.test(value)) {
-						this.colorLight = value;
-						this.updatePreview();
-					}
-				});
-				text.inputEl.addClass("callout-studio-hex-input");
-			});
-
-		// Color Dark
-		new Setting(contentEl)
-			.setName("Color (dark mode)")
-			.setDesc("Callout accent color in dark themes")
-			.addColorPicker((picker) => {
-				picker.setValue(this.colorDark).onChange((value) => {
-					this.colorDark = value;
-					this.updatePreview();
-				});
-			})
-			.addText((text) => {
-				text.setValue(this.colorDark).onChange((value) => {
-					if (/^#[0-9a-f]{6}$/i.test(value)) {
-						this.colorDark = value;
-						this.updatePreview();
-					}
-				});
-				text.inputEl.addClass("callout-studio-hex-input");
-			});
-
-		// ── Preview + Icon Adjustment (two-column layout) ───────────
+		// ── Preview + Adjustments Panel (two-column) ────────────────
 		const previewPanel = contentEl.createDiv({
 			cls: "callout-studio-preview-panel",
 		});
@@ -194,15 +168,28 @@ export class CalloutEditor extends Modal {
 		});
 		previewHeader.createSpan({ text: "Live preview" });
 
-		// Light/Dark toggle
-		const toggleBtn = previewHeader.createEl("button", {
-			cls: "callout-studio-preview-toggle",
-			text: "Light",
-			attr: { "aria-label": "Toggle light/dark preview" },
+		// Segmented Light/Dark toggle
+		const segmented = previewHeader.createDiv({
+			cls: "callout-studio-segmented-toggle",
 		});
-		toggleBtn.addEventListener("click", () => {
-			this.previewDarkMode = !this.previewDarkMode;
-			toggleBtn.textContent = this.previewDarkMode ? "Dark" : "Light";
+		const lightBtn = segmented.createEl("button", {
+			cls: "callout-studio-seg-btn is-active",
+			text: "Light",
+		});
+		const darkBtn = segmented.createEl("button", {
+			cls: "callout-studio-seg-btn",
+			text: "Dark",
+		});
+		lightBtn.addEventListener("click", () => {
+			this.previewDarkMode = false;
+			lightBtn.addClass("is-active");
+			darkBtn.removeClass("is-active");
+			this.updatePreview();
+		});
+		darkBtn.addEventListener("click", () => {
+			this.previewDarkMode = true;
+			darkBtn.addClass("is-active");
+			lightBtn.removeClass("is-active");
 			this.updatePreview();
 		});
 
@@ -211,75 +198,133 @@ export class CalloutEditor extends Modal {
 		});
 		this.updatePreview();
 
-		// Right column: Icon adjustment sliders
-		const slidersCol = previewPanel.createDiv({
-			cls: "callout-studio-sliders-col",
+		// Right column: Adjustments
+		const adjustCol = previewPanel.createDiv({
+			cls: "callout-studio-adjust-col",
 		});
 
-		const slidersHeader = slidersCol.createDiv({
-			cls: "callout-studio-sliders-header",
+		// ── Icon adjustment section ──
+		const iconAdjust = adjustCol.createDiv({
+			cls: "callout-studio-adjust-section",
 		});
-		slidersHeader.createSpan({ text: "Icon adjustment" });
+		iconAdjust.createDiv({
+			cls: "callout-studio-adjust-header",
+			text: "Icon adjustment",
+		});
 
-		let sizeValueEl: HTMLElement;
-		new Setting(slidersCol)
-			.setName("Size")
-			.addSlider((slider: SliderComponent) => {
-				slider
-					.setLimits(50, 200, 5)
-					.setValue(Math.round(this.iconSize * 100))
-					.setDynamicTooltip()
-					.setInstant(true)
-					.onChange((value: number) => {
-						this.iconSize = value / 100;
-						sizeValueEl.textContent = `${value}%`;
-						this.updatePreview();
-					});
-				sizeValueEl = slider.sliderEl.parentElement!.createSpan({
-					cls: "callout-studio-slider-value",
-					text: `${Math.round(this.iconSize * 100)}%`,
+		// Size slider
+		const sizeRow = iconAdjust.createDiv({
+			cls: "callout-studio-slider-row",
+		});
+		const sizeLabel = sizeRow.createDiv({
+			cls: "callout-studio-slider-label",
+		});
+		sizeLabel.createSpan({ text: "Size" });
+		const sizeValue = sizeLabel.createSpan({
+			cls: "callout-studio-slider-value",
+			text: `${Math.round(this.iconSize * 100)}%`,
+		});
+		new Setting(sizeRow).addSlider((slider: SliderComponent) => {
+			slider
+				.setLimits(50, 200, 5)
+				.setValue(Math.round(this.iconSize * 100))
+				.setInstant(true)
+				.onChange((value: number) => {
+					this.iconSize = value / 100;
+					sizeValue.textContent = `${value}%`;
+					this.updatePreview();
 				});
-			});
+		});
 
-		let hOffsetValueEl: HTMLElement;
-		new Setting(slidersCol)
-			.setName("Horizontal offset")
-			.addSlider((slider: SliderComponent) => {
-				slider
-					.setLimits(-10, 10, 1)
-					.setValue(this.iconOffsetX)
-					.setDynamicTooltip()
-					.setInstant(true)
-					.onChange((value: number) => {
-						this.iconOffsetX = value;
-						hOffsetValueEl.textContent = `${value}px`;
-						this.updatePreview();
-					});
-				hOffsetValueEl = slider.sliderEl.parentElement!.createSpan({
-					cls: "callout-studio-slider-value",
-					text: `${this.iconOffsetX}px`,
+		// Horizontal offset slider
+		const hRow = iconAdjust.createDiv({
+			cls: "callout-studio-slider-row",
+		});
+		const hLabel = hRow.createDiv({
+			cls: "callout-studio-slider-label",
+		});
+		hLabel.createSpan({ text: "Horizontal offset" });
+		const hValue = hLabel.createSpan({
+			cls: "callout-studio-slider-value",
+			text: `${this.iconOffsetX}px`,
+		});
+		new Setting(hRow).addSlider((slider: SliderComponent) => {
+			slider
+				.setLimits(-10, 10, 1)
+				.setValue(this.iconOffsetX)
+				.setInstant(true)
+				.onChange((value: number) => {
+					this.iconOffsetX = value;
+					hValue.textContent = `${value}px`;
+					this.updatePreview();
 				});
-			});
+		});
 
-		let vOffsetValueEl: HTMLElement;
-		new Setting(slidersCol)
-			.setName("Vertical offset")
-			.addSlider((slider: SliderComponent) => {
-				slider
-					.setLimits(-10, 10, 1)
-					.setValue(this.iconOffsetY)
-					.setDynamicTooltip()
-					.setInstant(true)
-					.onChange((value: number) => {
-						this.iconOffsetY = value;
-						vOffsetValueEl.textContent = `${value}px`;
-						this.updatePreview();
-					});
-				vOffsetValueEl = slider.sliderEl.parentElement!.createSpan({
-					cls: "callout-studio-slider-value",
-					text: `${this.iconOffsetY}px`,
+		// Vertical offset slider
+		const vRow = iconAdjust.createDiv({
+			cls: "callout-studio-slider-row",
+		});
+		const vLabel = vRow.createDiv({
+			cls: "callout-studio-slider-label",
+		});
+		vLabel.createSpan({ text: "Vertical offset" });
+		const vValue = vLabel.createSpan({
+			cls: "callout-studio-slider-value",
+			text: `${this.iconOffsetY}px`,
+		});
+		new Setting(vRow).addSlider((slider: SliderComponent) => {
+			slider
+				.setLimits(-10, 10, 1)
+				.setValue(this.iconOffsetY)
+				.setInstant(true)
+				.onChange((value: number) => {
+					this.iconOffsetY = value;
+					vValue.textContent = `${value}px`;
+					this.updatePreview();
 				});
-			});
+		});
+
+		// ── Colors section ──
+		const colorsSection = adjustCol.createDiv({
+			cls: "callout-studio-adjust-section",
+		});
+		colorsSection.createDiv({
+			cls: "callout-studio-adjust-header",
+			text: "Colors",
+		});
+
+		const colorGrid = colorsSection.createDiv({
+			cls: "callout-studio-color-grid",
+		});
+
+		// Header row
+		const gridHeader = colorGrid.createDiv({
+			cls: "callout-studio-color-grid-header",
+		});
+		gridHeader.createSpan({ text: "" }); // spacer
+		gridHeader.createSpan({ text: "Light" });
+		gridHeader.createSpan({ text: "Dark" });
+
+		// Background row
+		this.addColorRow(colorGrid, "Background", this.bgColorLight, this.bgColorDark, (light, dark) => {
+			if (light !== undefined) this.bgColorLight = light;
+			if (dark !== undefined) this.bgColorDark = dark;
+			this.updatePreview();
+		});
+
+		// Text row
+		this.addColorRow(colorGrid, "Text", this.textColorLight, this.textColorDark, (light, dark) => {
+			if (light !== undefined) this.textColorLight = light;
+			if (dark !== undefined) this.textColorDark = dark;
+			this.updatePreview();
+		});
+
+		// Icon/accent row
+		this.addColorRow(colorGrid, "Icon", this.colorLight, this.colorDark, (light, dark) => {
+			if (light !== undefined) this.colorLight = light;
+			if (dark !== undefined) this.colorDark = dark;
+			this.updatePreview();
+		});
 
 		// Foldable
 		new Setting(contentEl)
@@ -319,6 +364,38 @@ export class CalloutEditor extends Modal {
 		});
 		saveBtn.addEventListener("click", () => {
 			this.save();
+		});
+	}
+
+	/**
+	 * Adds a row to the colour grid with a label plus Light and Dark colour inputs.
+	 */
+	private addColorRow(
+		grid: HTMLElement,
+		label: string,
+		lightVal: string,
+		darkVal: string,
+		onChange: (light?: string, dark?: string) => void,
+	): void {
+		const row = grid.createDiv({ cls: "callout-studio-color-row" });
+		row.createSpan({ text: label });
+
+		const lightInput = row.createEl("input", {
+			type: "color",
+			value: lightVal,
+			cls: "callout-studio-color-input",
+		});
+		lightInput.addEventListener("input", () => {
+			onChange(lightInput.value, undefined);
+		});
+
+		const darkInput = row.createEl("input", {
+			type: "color",
+			value: darkVal,
+			cls: "callout-studio-color-input",
+		});
+		darkInput.addEventListener("input", () => {
+			onChange(undefined, darkInput.value);
 		});
 	}
 
@@ -366,12 +443,22 @@ export class CalloutEditor extends Modal {
 					container.textContent = "?";
 				}
 				break;
-			case "material":
-				container.createSpan({
-					cls: "material-symbols-outlined",
+			case "material": {
+				const span = container.createSpan({
+					cls: "callout-studio-material-icon",
 					text: this.icon.value,
 				});
+				const fontFamily = materialFontFamily(
+					this.icon.style ?? "outlined",
+				);
+				span.setCssProps({
+					"--cs-material-font": `"${fontFamily}"`,
+				});
+				if (this.icon.style === "filled") {
+					span.setCssProps({ "--cs-material-fill": "1" });
+				}
 				break;
+			}
 			case "svg": {
 				const svgData = this.plugin.registry.customSvgIcons.find(
 					(s) => s.name === this.icon.value,
@@ -401,9 +488,18 @@ export class CalloutEditor extends Modal {
 		if (!this.previewEl) return;
 		this.previewEl.empty();
 
-		const color = this.previewDarkMode ? this.colorDark : this.colorLight;
+		const accentColor = this.previewDarkMode
+			? this.colorDark
+			: this.colorLight;
+		const bgColor = this.previewDarkMode
+			? this.bgColorDark
+			: this.bgColorLight;
+		const textColor = this.previewDarkMode
+			? this.textColorDark
+			: this.textColorLight;
+
 		const rgbMatch = /^#([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})$/i.exec(
-			color,
+			accentColor,
 		);
 		let rgbStr = "68, 138, 255";
 		if (rgbMatch && rgbMatch[1] && rgbMatch[2] && rgbMatch[3]) {
@@ -413,6 +509,7 @@ export class CalloutEditor extends Modal {
 		const calloutEl = this.previewEl.createDiv({ cls: "callout" });
 		calloutEl.setAttribute("data-callout", this.calloutId || "note");
 		calloutEl.style.setProperty("--callout-color", rgbStr);
+		calloutEl.style.backgroundColor = bgColor;
 
 		if (this.previewDarkMode) {
 			calloutEl.addClass("callout-studio-preview-dark");
@@ -447,8 +544,12 @@ export class CalloutEditor extends Modal {
 
 		// Content
 		const contentEl = calloutEl.createDiv({ cls: "callout-content" });
+		contentEl.style.color = textColor;
 		const p = contentEl.createEl("p");
-		p.textContent = "This is how your callout will look in a note.";
+		p.textContent =
+			"Lorem ipsum dolor sit amet, consectetur adipiscing elit. " +
+			"Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. " +
+			"Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.";
 	}
 
 	private save(): void {
@@ -471,6 +572,10 @@ export class CalloutEditor extends Modal {
 			icon: { ...this.icon },
 			colorLight: this.colorLight,
 			colorDark: this.colorDark,
+			bgColorLight: this.bgColorLight,
+			bgColorDark: this.bgColorDark,
+			textColorLight: this.textColorLight,
+			textColorDark: this.textColorDark,
 			foldable: this.foldable,
 			defaultFolded: this.defaultFolded,
 			builtIn: false,

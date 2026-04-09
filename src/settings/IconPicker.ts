@@ -273,21 +273,31 @@ export class IconPicker extends Modal {
 
 	/**
 	 * Ensures the Google Font <link> for a given Material style is loaded.
+	 * Returns a Promise that resolves once the font is usable.
 	 * Tracks added links so they can be removed on close.
 	 */
-	private ensureMaterialFont(style: MaterialIconStyle): void {
+	private ensureMaterialFont(style: MaterialIconStyle): Promise<void> {
 		const family = materialFontFamily(style);
 		const encodedFamily = family.replace(/ /g, "+");
 		// Check if a link for this family already exists in the document
 		const selector = `link[href*="family=${encodedFamily}"]`;
-		if (document.querySelector(selector)) return;
+		if (document.querySelector(selector)) {
+			// Link exists – still wait for the font to be usable
+			return document.fonts.ready.then(() => {});
+		}
 
-		// eslint-disable-next-line obsidianmd/no-forbidden-elements -- dynamic font loading requires a link element
-		const link = document.createElement("link");
-		link.rel = "stylesheet";
-		link.href = `https://fonts.googleapis.com/css2?family=${encodedFamily}:opsz,wght,FILL,GRAD@24,400,0..1,0`;
-		document.head.appendChild(link);
-		this.addedFontLinks.push(link);
+		return new Promise<void>((resolve) => {
+			// eslint-disable-next-line obsidianmd/no-forbidden-elements -- dynamic font loading requires a link element
+			const link = document.createElement("link");
+			link.rel = "stylesheet";
+			link.href = `https://fonts.googleapis.com/css2?family=${encodedFamily}:opsz,wght,FILL,GRAD@24,400,0..1,0`;
+			link.onload = () => {
+				void document.fonts.ready.then(() => resolve());
+			};
+			link.onerror = () => resolve(); // don't block on error
+			document.head.appendChild(link);
+			this.addedFontLinks.push(link);
+		});
 	}
 
 	private renderMaterialTab(): void {
@@ -299,9 +309,6 @@ export class IconPicker extends Modal {
 				);
 			return;
 		}
-
-		// Ensure the Material font is loaded for the current style
-		this.ensureMaterialFont(this.materialStyle);
 
 		const toolbar = this.tabContentEl.createDiv("icon-picker-toolbar");
 
@@ -363,8 +370,14 @@ export class IconPicker extends Modal {
 
 		styleSelect.addEventListener("change", () => {
 			this.materialStyle = styleSelect.value as MaterialIconStyle;
-			this.ensureMaterialFont(this.materialStyle);
-			updateGrid();
+			// Show loading while font downloads, then refresh grid
+			grid.empty();
+			const loadingEl = grid.createDiv("icon-picker-loading");
+			loadingEl.setText("Icons are loading, please wait\u2026");
+			void this.ensureMaterialFont(this.materialStyle).then(() => {
+				if (this.activeTab !== "material") return;
+				updateGrid();
+			});
 		});
 
 		categorySelect.addEventListener("change", () => {
@@ -382,24 +395,35 @@ export class IconPicker extends Modal {
 			}
 		});
 
-		// Load icons
+		// Load icons — wait for both metadata AND font before showing the grid
 		if (this.materialIcons.length > 0) {
-			this.populateMaterialCategories(categorySelect);
-			updateGrid();
-			searchInput.focus();
+			// Metadata cached – just need font
+			const loadingEl = grid.createDiv("icon-picker-loading");
+			loadingEl.setText("Icons are loading, please wait\u2026");
+			void this.ensureMaterialFont(this.materialStyle).then(() => {
+				if (this.activeTab !== "material") return;
+				loadingEl.remove();
+				this.populateMaterialCategories(categorySelect);
+				updateGrid();
+				searchInput.focus();
+			});
 		} else {
 			this.materialLoading = true;
 			grid.createDiv("icon-picker-loading").setText(
-				"Loading material icons...",
+				"Icons are loading, please wait\u2026",
 			);
 
 			const cacheData = this.plugin.registry.materialIconsCache;
-			loadMaterialIcons(cacheData)
-				.then((data) => {
+			const fontPromise = this.ensureMaterialFont(this.materialStyle);
+			const dataPromise = loadMaterialIcons(cacheData);
+
+			Promise.all([fontPromise, dataPromise])
+				.then(([, data]) => {
 					this.materialIcons = data.icons;
 					this.plugin.registry.materialIconsCache = data;
 					this.materialLoading = false;
 					this.materialError = null;
+					if (this.activeTab !== "material") return;
 					this.populateMaterialCategories(categorySelect);
 					updateGrid();
 					searchInput.focus();
@@ -679,15 +703,25 @@ export class IconPicker extends Modal {
 				setIcon(iconContainer, this.selectedIcon.value);
 				labelEl.setText(`lucide: ${this.selectedIcon.value}`);
 				break;
-			case "material":
-				iconContainer.createSpan({
-					cls: "material-symbols-outlined",
+			case "material": {
+				const span = iconContainer.createSpan({
+					cls: "callout-studio-material-icon",
 					text: this.selectedIcon.value,
 				});
+				const fontFamily = materialFontFamily(
+					this.selectedIcon.style ?? "outlined",
+				);
+				span.setCssProps({
+					"--cs-material-font": `"${fontFamily}"`,
+				});
+				if (this.selectedIcon.style === "filled") {
+					span.setCssProps({ "--cs-material-fill": "1" });
+				}
 				labelEl.setText(
 					`material: ${this.selectedIcon.value} (${this.selectedIcon.style ?? "outlined"})`,
 				);
 				break;
+			}
 			case "svg": {
 				const svgData = this.customSvgs.find(
 					(s) => s.name === this.selectedIcon?.value,
