@@ -4,10 +4,14 @@ import { CalloutRegistry } from './manager/CalloutRegistry';
 import { CSSInjector } from './manager/CSSInjector';
 import { CalloutStudioSettingsTab } from './settings/SettingsTab';
 import { CalloutEditor } from './settings/CalloutEditor';
+import { CalloutAutoComplete } from './editor/AutoComplete';
+import { registerContextMenu } from './editor/ContextMenu';
+import { TransparentPopup } from './editor/TransparentPopup';
 
 export default class CalloutStudioPlugin extends Plugin {
 	registry!: CalloutRegistry;
 	cssInjector!: CSSInjector;
+	popup!: TransparentPopup;
 
 	get settings(): PluginSettings {
 		return this.registry.settings;
@@ -56,10 +60,20 @@ export default class CalloutStudioPlugin extends Plugin {
 				new CalloutEditor(this).open();
 			},
 		});
+
+		// Editor autocomplete on [! trigger
+		this.registerEditorSuggest(new CalloutAutoComplete(this));
+
+		// Right-click context menu for callout blocks
+		registerContextMenu(this);
+
+		// Transparent floating popup
+		this.popup = new TransparentPopup(this);
 	}
 
 	onunload() {
 		this.cssInjector.destroy();
+		this.popup.destroy();
 	}
 
 	async saveSettings(): Promise<void> {
