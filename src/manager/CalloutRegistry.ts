@@ -1,4 +1,10 @@
-import type { CalloutDefinition, CustomSvgIcon, MaterialIconsCacheData, PluginData, PluginSettings } from "../types";
+import type {
+	CalloutDefinition,
+	CustomSvgIcon,
+	MaterialIconsCacheData,
+	PluginData,
+	PluginSettings,
+} from "../types";
 import { DEFAULT_CALLOUTS, DEFAULT_SETTINGS } from "../constants";
 
 const CURRENT_DATA_VERSION = 1;
@@ -36,7 +42,12 @@ export class CalloutRegistry {
 				if (this.callouts.has(saved.id) && saved.builtIn) {
 					// Merge overrides onto built-in
 					const existing = this.callouts.get(saved.id)!;
-					this.callouts.set(saved.id, { ...existing, ...saved, builtIn: true, source: "builtin" });
+					this.callouts.set(saved.id, {
+						...existing,
+						...saved,
+						builtIn: true,
+						source: "builtin",
+					});
 				} else if (!saved.builtIn) {
 					this.callouts.set(saved.id, saved);
 				}
@@ -47,9 +58,18 @@ export class CalloutRegistry {
 		if (data.settings) {
 			this.settings = {
 				popup: { ...DEFAULT_SETTINGS.popup, ...data.settings.popup },
-				autocomplete: { ...DEFAULT_SETTINGS.autocomplete, ...data.settings.autocomplete },
-				iconSources: { ...DEFAULT_SETTINGS.iconSources, ...data.settings.iconSources },
-				colorMode: { ...DEFAULT_SETTINGS.colorMode, ...data.settings.colorMode },
+				autocomplete: {
+					...DEFAULT_SETTINGS.autocomplete,
+					...data.settings.autocomplete,
+				},
+				iconSources: {
+					...DEFAULT_SETTINGS.iconSources,
+					...data.settings.iconSources,
+				},
+				colorMode: {
+					...DEFAULT_SETTINGS.colorMode,
+					...data.settings.colorMode,
+				},
 			};
 		}
 
@@ -82,11 +102,17 @@ export class CalloutRegistry {
 			callouts: calloutsToSave,
 			settings: this.settings,
 			materialIconsCache: this.materialIconsCache,
-			customSvgIcons: this.customSvgIcons.length > 0 ? this.customSvgIcons : undefined,
+			customSvgIcons:
+				this.customSvgIcons.length > 0
+					? this.customSvgIcons
+					: undefined,
 		};
 	}
 
-	private isModified(current: CalloutDefinition, original: CalloutDefinition): boolean {
+	private isModified(
+		current: CalloutDefinition,
+		original: CalloutDefinition,
+	): boolean {
 		return (
 			current.displayName !== original.displayName ||
 			current.colorLight !== original.colorLight ||
@@ -164,7 +190,8 @@ export class CalloutRegistry {
 	importFromCSS(cssText: string): CalloutDefinition[] {
 		const imported: CalloutDefinition[] = [];
 		// Match patterns like: .callout[data-callout="name"] { --callout-color: R, G, B; }
-		const regex = /\.callout\[data-callout=["']([^"']+)["']\]\s*\{[^}]*--callout-color:\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)/g;
+		const regex =
+			/\.callout\[data-callout=["']([^"']+)["']\]\s*\{[^}]*--callout-color:\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)/g;
 		let match: RegExpExecArray | null;
 
 		while ((match = regex.exec(cssText)) !== null) {
@@ -179,10 +206,17 @@ export class CalloutRegistry {
 			const gN = parseInt(g, 10);
 			const bN = parseInt(b, 10);
 
-			const hex = "#" + [rN, gN, bN].map((c) => c.toString(16).padStart(2, "0")).join("");
+			const hex =
+				"#" +
+				[rN, gN, bN]
+					.map((c) => c.toString(16).padStart(2, "0"))
+					.join("");
 			const def: CalloutDefinition = {
 				id,
-				displayName: id.split("-").map((w) => w.charAt(0).toUpperCase() + w.slice(1)).join(" "),
+				displayName: id
+					.split("-")
+					.map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+					.join(" "),
 				icon: { type: "lucide", value: "pencil" },
 				colorLight: hex,
 				colorDark: hex,

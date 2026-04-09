@@ -1,4 +1,4 @@
-import { Modal, Setting, setIcon } from "obsidian";
+import { Modal, Setting, setIcon, TextComponent } from "obsidian";
 import type CalloutStudioPlugin from "../main";
 import type { CalloutDefinition, CalloutIcon } from "../types";
 import { IconPicker } from "./IconPicker";
@@ -36,13 +36,16 @@ export class CalloutEditor extends Modal {
 
 		this.displayName = existing?.displayName ?? "";
 		this.calloutId = existing?.id ?? "";
-		this.icon = existing?.icon ? { ...existing.icon } : { type: "lucide", value: "pencil" };
+		this.icon = existing?.icon
+			? { ...existing.icon }
+			: { type: "lucide", value: "pencil" };
 		this.colorLight = existing?.colorLight ?? "#448aff";
 		this.colorDark = existing?.colorDark ?? "#448aff";
 		this.foldable = existing?.foldable ?? true;
 		this.defaultFolded = existing?.defaultFolded ?? false;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-misused-promises -- intentional Promise-returning override for modal result
 	open(): Promise<CalloutDefinition | null> {
 		return new Promise((resolve) => {
 			this.resolve = resolve;
@@ -62,14 +65,13 @@ export class CalloutEditor extends Modal {
 			.setName("Display name")
 			.setDesc("The human-readable label shown in the UI")
 			.addText((text) => {
-				text
-					.setPlaceholder("e.g. My Warning")
+				text.setPlaceholder("My warning")
 					.setValue(this.displayName)
 					.onChange((value) => {
 						this.displayName = value;
 						if (!this.existingId) {
 							this.calloutId = generateId(value);
-							idInput.setValue(this.calloutId);
+							idInput?.setValue(this.calloutId);
 							this.updateIdWarning();
 						}
 						this.updatePreview();
@@ -78,14 +80,14 @@ export class CalloutEditor extends Modal {
 			});
 
 		// Callout ID
-		let idInput: any;
+		let idInput: TextComponent | null = null;
 		const idSetting = new Setting(contentEl)
 			.setName("Callout ID")
-			.setDesc("Unique identifier used in markdown syntax: > [!id]")
+			// eslint-disable-next-line obsidianmd/ui/sentence-case -- [!id] is literal Markdown syntax
+			.setDesc("Unique identifier used in Markdown syntax: > [!id]")
 			.addText((text) => {
 				idInput = text;
-				text
-					.setPlaceholder("e.g. my-warning")
+				text.setPlaceholder("My-warning")
 					.setValue(this.calloutId)
 					.onChange((value) => {
 						this.calloutId = value;
@@ -104,7 +106,9 @@ export class CalloutEditor extends Modal {
 			.setDesc(this.getIconLabel());
 
 		// Icon preview
-		const iconPreviewEl = iconSetting.controlEl.createDiv("callout-studio-icon-preview");
+		const iconPreviewEl = iconSetting.controlEl.createDiv(
+			"callout-studio-icon-preview",
+		);
 		this.renderIconPreview(iconPreviewEl);
 
 		iconSetting.addButton((btn) => {
@@ -126,22 +130,18 @@ export class CalloutEditor extends Modal {
 			.setName("Color (light mode)")
 			.setDesc("Callout accent color in light themes")
 			.addColorPicker((picker) => {
-				picker
-					.setValue(this.colorLight)
-					.onChange((value) => {
-						this.colorLight = value;
-						this.updatePreview();
-					});
+				picker.setValue(this.colorLight).onChange((value) => {
+					this.colorLight = value;
+					this.updatePreview();
+				});
 			})
 			.addText((text) => {
-				text
-					.setValue(this.colorLight)
-					.onChange((value) => {
-						if (/^#[0-9a-f]{6}$/i.test(value)) {
-							this.colorLight = value;
-							this.updatePreview();
-						}
-					});
+				text.setValue(this.colorLight).onChange((value) => {
+					if (/^#[0-9a-f]{6}$/i.test(value)) {
+						this.colorLight = value;
+						this.updatePreview();
+					}
+				});
 				text.inputEl.addClass("callout-studio-hex-input");
 			});
 
@@ -150,28 +150,28 @@ export class CalloutEditor extends Modal {
 			.setName("Color (dark mode)")
 			.setDesc("Callout accent color in dark themes")
 			.addColorPicker((picker) => {
-				picker
-					.setValue(this.colorDark)
-					.onChange((value) => {
-						this.colorDark = value;
-						this.updatePreview();
-					});
+				picker.setValue(this.colorDark).onChange((value) => {
+					this.colorDark = value;
+					this.updatePreview();
+				});
 			})
 			.addText((text) => {
-				text
-					.setValue(this.colorDark)
-					.onChange((value) => {
-						if (/^#[0-9a-f]{6}$/i.test(value)) {
-							this.colorDark = value;
-							this.updatePreview();
-						}
-					});
+				text.setValue(this.colorDark).onChange((value) => {
+					if (/^#[0-9a-f]{6}$/i.test(value)) {
+						this.colorDark = value;
+						this.updatePreview();
+					}
+				});
 				text.inputEl.addClass("callout-studio-hex-input");
 			});
 
 		// Live Preview
-		const previewContainer = contentEl.createDiv({ cls: "callout-studio-preview-container" });
-		const previewHeader = previewContainer.createDiv({ cls: "callout-studio-preview-header" });
+		const previewContainer = contentEl.createDiv({
+			cls: "callout-studio-preview-container",
+		});
+		const previewHeader = previewContainer.createDiv({
+			cls: "callout-studio-preview-header",
+		});
 		previewHeader.createSpan({ text: "Live preview" });
 
 		// Light/Dark toggle
@@ -186,7 +186,9 @@ export class CalloutEditor extends Modal {
 			this.updatePreview();
 		});
 
-		this.previewEl = previewContainer.createDiv({ cls: "callout-studio-preview" });
+		this.previewEl = previewContainer.createDiv({
+			cls: "callout-studio-preview",
+		});
 		this.updatePreview();
 
 		// Foldable
@@ -210,9 +212,13 @@ export class CalloutEditor extends Modal {
 			});
 
 		// Action buttons
-		const buttonContainer = contentEl.createDiv({ cls: "callout-studio-editor-buttons" });
+		const buttonContainer = contentEl.createDiv({
+			cls: "callout-studio-editor-buttons",
+		});
 
-		const cancelBtn = buttonContainer.createEl("button", { text: "Cancel" });
+		const cancelBtn = buttonContainer.createEl("button", {
+			text: "Cancel",
+		});
 		cancelBtn.addEventListener("click", () => {
 			this.close();
 		});
@@ -237,9 +243,13 @@ export class CalloutEditor extends Modal {
 		}
 
 		// Check for duplicate (only if new or id changed)
-		const isIdChanged = this.existingId !== null && this.calloutId !== this.existingId;
+		const isIdChanged =
+			this.existingId !== null && this.calloutId !== this.existingId;
 		const isNew = this.existingId === null;
-		if ((isNew || isIdChanged) && this.plugin.registry.has(this.calloutId)) {
+		if (
+			(isNew || isIdChanged) &&
+			this.plugin.registry.has(this.calloutId)
+		) {
 			this.idWarningEl.setText("A callout with this ID already exists");
 			this.idWarningEl.addClass("is-visible");
 			return;
@@ -277,7 +287,10 @@ export class CalloutEditor extends Modal {
 					(s) => s.name === this.icon.value,
 				);
 				if (svgData) {
-					container.innerHTML = svgData.svg;
+					const parser = new DOMParser();
+					const doc = parser.parseFromString(svgData.svg, "image/svg+xml");
+					const svgEl = doc.documentElement;
+					container.appendChild(container.doc.importNode(svgEl, true));
 				} else {
 					container.textContent = "?";
 				}
@@ -294,7 +307,9 @@ export class CalloutEditor extends Modal {
 		this.previewEl.empty();
 
 		const color = this.previewDarkMode ? this.colorDark : this.colorLight;
-		const rgbMatch = /^#([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})$/i.exec(color);
+		const rgbMatch = /^#([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})$/i.exec(
+			color,
+		);
 		let rgbStr = "68, 138, 255";
 		if (rgbMatch && rgbMatch[1] && rgbMatch[2] && rgbMatch[3]) {
 			rgbStr = `${parseInt(rgbMatch[1], 16)}, ${parseInt(rgbMatch[2], 16)}, ${parseInt(rgbMatch[3], 16)}`;
@@ -327,10 +342,14 @@ export class CalloutEditor extends Modal {
 	private save(): void {
 		if (!this.calloutId) return;
 
-		const isIdChanged = this.existingId !== null && this.calloutId !== this.existingId;
+		const isIdChanged =
+			this.existingId !== null && this.calloutId !== this.existingId;
 		const isNew = this.existingId === null;
 
-		if ((isNew || isIdChanged) && this.plugin.registry.has(this.calloutId)) {
+		if (
+			(isNew || isIdChanged) &&
+			this.plugin.registry.has(this.calloutId)
+		) {
 			return; // Duplicate ID
 		}
 

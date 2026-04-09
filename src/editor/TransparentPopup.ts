@@ -16,7 +16,7 @@ export class TransparentPopup {
 		anchorRect: DOMRect,
 		currentCalloutId: string | null,
 		onConvert: (def: CalloutDefinition) => void,
-		onAction?: (action: string) => void
+		onAction?: (action: string) => void,
 	): void {
 		this.hide();
 
@@ -29,11 +29,15 @@ export class TransparentPopup {
 		this.applyAnimation(this.popupEl, popup.animation);
 
 		// Header
-		const headerEl = this.popupEl.createDiv({ cls: "callout-studio-popup-header" });
+		const headerEl = this.popupEl.createDiv({
+			cls: "callout-studio-popup-header",
+		});
 		headerEl.textContent = "Convert callout to:";
 
 		// Callout list
-		const listEl = this.popupEl.createDiv({ cls: "callout-studio-popup-list" });
+		const listEl = this.popupEl.createDiv({
+			cls: "callout-studio-popup-list",
+		});
 		const allCallouts = this.plugin.registry.getAll();
 		const maxItems = popup.maxItems;
 		let count = 0;
@@ -42,13 +46,17 @@ export class TransparentPopup {
 			if (def.id === currentCalloutId) continue;
 			if (count >= maxItems) break;
 
-			const itemEl = listEl.createDiv({ cls: "callout-studio-popup-item" });
+			const itemEl = listEl.createDiv({
+				cls: "callout-studio-popup-item",
+			});
 			itemEl.setAttribute("tabindex", "0");
 			itemEl.setAttribute("role", "button");
 			itemEl.setAttribute("aria-label", `Convert to ${def.displayName}`);
 
 			if (popup.showIcons) {
-				const iconEl = itemEl.createDiv({ cls: "callout-studio-popup-item-icon" });
+				const iconEl = itemEl.createDiv({
+					cls: "callout-studio-popup-item-icon",
+				});
 				try {
 					if (def.icon.type === "lucide") {
 						setIcon(iconEl, def.icon.value);
@@ -61,12 +69,18 @@ export class TransparentPopup {
 			}
 
 			if (popup.showColorDots) {
-				const dotEl = itemEl.createDiv({ cls: "callout-studio-popup-item-dot" });
+				const dotEl = itemEl.createDiv({
+					cls: "callout-studio-popup-item-dot",
+				});
 				const isDark = document.body.classList.contains("theme-dark");
-				dotEl.style.backgroundColor = isDark ? def.colorDark : def.colorLight;
+				dotEl.style.backgroundColor = isDark
+					? def.colorDark
+					: def.colorLight;
 			}
 
-			const nameEl = itemEl.createDiv({ cls: "callout-studio-popup-item-name" });
+			const nameEl = itemEl.createDiv({
+				cls: "callout-studio-popup-item-name",
+			});
 			nameEl.textContent = def.displayName;
 
 			itemEl.addEventListener("click", () => {
@@ -89,33 +103,56 @@ export class TransparentPopup {
 		this.popupEl.createDiv({ cls: "callout-studio-popup-divider" });
 
 		// Quick actions
-		const actionsEl = this.popupEl.createDiv({ cls: "callout-studio-popup-actions" });
+		const actionsEl = this.popupEl.createDiv({
+			cls: "callout-studio-popup-actions",
+		});
 
 		if (onAction) {
-			this.addActionItem(actionsEl, "clipboard-copy", "Copy callout markdown", () => {
-				onAction("copy");
-				this.hide();
-			});
+			this.addActionItem(
+				actionsEl,
+				"clipboard-copy",
+				"Copy callout markdown",
+				() => {
+					onAction("copy");
+					this.hide();
+				},
+			);
 
 			if (popup.showEditButton && currentCalloutId) {
-				this.addActionItem(actionsEl, "palette", "Customize this callout type", () => {
-					onAction("edit");
-					this.hide();
-				});
+				this.addActionItem(
+					actionsEl,
+					"palette",
+					"Customize this callout type",
+					() => {
+						onAction("edit");
+						this.hide();
+					},
+				);
 			}
 
-			this.addActionItem(actionsEl, "plus", "Create new type based on this", () => {
-				onAction("create-based");
-				this.hide();
-			});
+			this.addActionItem(
+				actionsEl,
+				"plus",
+				"Create new type based on this",
+				() => {
+					onAction("create-based");
+					this.hide();
+				},
+			);
 		}
 
 		// Footer
-		const footerEl = this.popupEl.createDiv({ cls: "callout-studio-popup-footer" });
-		footerEl.textContent = "Open Callout Studio Settings →";
+		const footerEl = this.popupEl.createDiv({
+			cls: "callout-studio-popup-footer",
+		});
+		footerEl.textContent = "Open callout studio settings →";
 		footerEl.addEventListener("click", () => {
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
 			(this.plugin.app as any).setting.open();
-			(this.plugin.app as any).setting.openTabById(this.plugin.manifest.id);
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
+			(this.plugin.app as any).setting.openTabById(
+				this.plugin.manifest.id,
+			);
 			this.hide();
 		});
 
@@ -146,13 +183,22 @@ export class TransparentPopup {
 		document.addEventListener("keydown", this.escHandler);
 	}
 
-	private addActionItem(container: HTMLElement, icon: string, label: string, onClick: () => void): void {
-		const item = container.createDiv({ cls: "callout-studio-popup-action" });
+	private addActionItem(
+		container: HTMLElement,
+		icon: string,
+		label: string,
+		onClick: () => void,
+	): void {
+		const item = container.createDiv({
+			cls: "callout-studio-popup-action",
+		});
 		item.setAttribute("tabindex", "0");
 		item.setAttribute("role", "button");
 		item.setAttribute("aria-label", label);
 
-		const iconEl = item.createDiv({ cls: "callout-studio-popup-action-icon" });
+		const iconEl = item.createDiv({
+			cls: "callout-studio-popup-action-icon",
+		});
 		setIcon(iconEl, icon);
 
 		item.createSpan({ text: label });
@@ -194,8 +240,7 @@ export class TransparentPopup {
 		const gap = 8;
 
 		// First, make visible to measure
-		el.style.visibility = "hidden";
-		el.style.display = "block";
+		el.addClass("is-measuring");
 
 		const elRect = el.getBoundingClientRect();
 		const viewW = window.innerWidth;
@@ -213,7 +258,8 @@ export class TransparentPopup {
 			case "top-right":
 				top = anchorRect.top;
 				left = anchorRect.right + gap;
-				if (left + elRect.width > viewW) left = anchorRect.left - elRect.width - gap;
+				if (left + elRect.width > viewW)
+					left = anchorRect.left - elRect.width - gap;
 				break;
 			case "cursor":
 			default:
@@ -232,9 +278,11 @@ export class TransparentPopup {
 			left = viewW - elRect.width - gap;
 		}
 
-		el.style.top = `${top}px`;
-		el.style.left = `${left}px`;
-		el.style.visibility = "visible";
+		el.setCssProps({
+			"--cs-popup-top": `${top}px`,
+			"--cs-popup-left": `${left}px`,
+		});
+		el.removeClass("is-measuring");
 	}
 
 	hide(): void {

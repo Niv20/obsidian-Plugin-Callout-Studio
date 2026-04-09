@@ -1,9 +1,8 @@
-import { getIconIds } from "obsidian";
+import { getIconIds, requestUrl } from "obsidian";
 import type {
 	MaterialIconMeta,
 	MaterialIconsCacheData,
 	MaterialIconStyle,
-	CustomSvgIcon,
 	CalloutIcon,
 } from "../types";
 
@@ -36,14 +35,16 @@ export async function loadMaterialIcons(
 		return cache;
 	}
 
-	const response = await fetch(MATERIAL_ICONS_API);
-	if (!response.ok) {
+	let raw: string;
+	try {
+		const response = await requestUrl({ url: MATERIAL_ICONS_API });
+		raw = response.text;
+	} catch {
 		if (cache) return cache; // fallback to stale cache
-		throw new Error(`Failed to fetch Material Icons: ${response.status}`);
+		throw new Error("Failed to fetch Material Icons");
 	}
 
-	// Google prefixes JSON with ")]}'", strip it
-	const raw = await response.text();
+	// Google prefixes JSON with ")]}'\""}, strip it
 	const jsonStart = raw.indexOf("\n");
 	const json = JSON.parse(raw.substring(jsonStart)) as {
 		icons: Array<{
@@ -59,7 +60,12 @@ export async function loadMaterialIcons(
 		"Material Symbols Rounded": "rounded",
 		"Material Symbols Sharp": "sharp",
 	};
-	const ALL_STYLES: MaterialIconStyle[] = ["outlined", "rounded", "sharp", "filled"];
+	const ALL_STYLES: MaterialIconStyle[] = [
+		"outlined",
+		"rounded",
+		"sharp",
+		"filled",
+	];
 
 	const icons: MaterialIconMeta[] = json.icons.map((raw) => {
 		const unsupported = new Set(raw.unsupported_families);
@@ -92,16 +98,10 @@ export function filterMaterialIcons(
 ): MaterialIconMeta[] {
 	const lc = query.toLowerCase();
 	return icons.filter((icon) => {
-		if (
-			style &&
-			!icon.styles.includes(style)
-		) {
+		if (style && !icon.styles.includes(style)) {
 			return false;
 		}
-		if (
-			category &&
-			!icon.categories.includes(category)
-		) {
+		if (category && !icon.categories.includes(category)) {
 			return false;
 		}
 		if (!lc) return true;
@@ -184,7 +184,10 @@ export function sanitizeSVG(raw: string): string | null {
 		const w = svg.getAttribute("width");
 		const h = svg.getAttribute("height");
 		if (w && h) {
-			svg.setAttribute("viewBox", `0 0 ${parseFloat(w)} ${parseFloat(h)}`);
+			svg.setAttribute(
+				"viewBox",
+				`0 0 ${parseFloat(w)} ${parseFloat(h)}`,
+			);
 		} else {
 			svg.setAttribute("viewBox", "0 0 24 24");
 		}

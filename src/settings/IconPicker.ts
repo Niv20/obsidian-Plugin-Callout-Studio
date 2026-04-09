@@ -1,6 +1,11 @@
 import { Modal, setIcon } from "obsidian";
 import type CalloutStudioPlugin from "../main";
-import type { CalloutIcon, MaterialIconMeta, MaterialIconStyle, CustomSvgIcon } from "../types";
+import type {
+	CalloutIcon,
+	MaterialIconMeta,
+	MaterialIconStyle,
+	CustomSvgIcon,
+} from "../types";
 import {
 	getLucideIcons,
 	loadMaterialIcons,
@@ -54,6 +59,7 @@ export class IconPicker extends Modal {
 			plugin.settings.iconSources.materialStyleDefault ?? "outlined";
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-misused-promises -- intentional Promise-returning override for modal result
 	open(): Promise<CalloutIcon | null> {
 		return new Promise((resolve) => {
 			this.resolve = resolve;
@@ -111,7 +117,10 @@ export class IconPicker extends Modal {
 		this.tabsEl.empty();
 		this.tabsEl.setAttribute("role", "tablist");
 
-		const tabs: Array<{ id: "lucide" | "material" | "svg"; label: string }> = [
+		const tabs: Array<{
+			id: "lucide" | "material" | "svg";
+			label: string;
+		}> = [
 			{ id: "lucide", label: "Lucide" },
 			{ id: "material", label: "Material" },
 			{ id: "svg", label: "Custom SVG" },
@@ -159,7 +168,8 @@ export class IconPicker extends Modal {
 	// ── Lucide Tab ──────────────────────────────────────────────────────
 
 	private renderLucideTab(): void {
-		const searchContainer = this.tabContentEl.createDiv("icon-picker-search");
+		const searchContainer =
+			this.tabContentEl.createDiv("icon-picker-search");
 		const searchInput = searchContainer.createEl("input", {
 			type: "text",
 			placeholder: "Search Lucide icons...",
@@ -182,8 +192,12 @@ export class IconPicker extends Modal {
 		this.enableGridKeyNav(grid);
 
 		// Load more button
-		const loadMoreContainer = this.tabContentEl.createDiv("icon-picker-load-more");
-		const loadMoreBtn = loadMoreContainer.createEl("button", { text: "Load more" });
+		const loadMoreContainer = this.tabContentEl.createDiv(
+			"icon-picker-load-more",
+		);
+		const loadMoreBtn = loadMoreContainer.createEl("button", {
+			text: "Load more",
+		});
 		loadMoreBtn.addEventListener("click", () => {
 			this.appendLucideIcons(grid);
 			if (this.lucideDisplayed >= this.lucideIcons.length) {
@@ -221,7 +235,9 @@ export class IconPicker extends Modal {
 			) {
 				cell.addClass("is-selected");
 			}
-			cell.addEventListener("click", () => this.selectLucide(iconId, grid));
+			cell.addEventListener("click", () =>
+				this.selectLucide(iconId, grid),
+			);
 			cell.addEventListener("keydown", (e) => {
 				if (e.key === "Enter" || e.key === " ") {
 					e.preventDefault();
@@ -246,9 +262,11 @@ export class IconPicker extends Modal {
 
 	private renderMaterialTab(): void {
 		if (!this.plugin.settings.iconSources.material) {
-			this.tabContentEl.createDiv("icon-picker-notice").setText(
-				"Material Icons are disabled in settings. Enable them under Icon Sources.",
-			);
+			this.tabContentEl
+				.createDiv("icon-picker-notice")
+				.setText(
+					"Material icons are disabled in settings. Enable them under icon sources.",
+				);
 			return;
 		}
 
@@ -262,20 +280,31 @@ export class IconPicker extends Modal {
 		});
 
 		// Style selector
-		const styleSelect = toolbar.createEl("select", { cls: "icon-picker-style-select" });
-		const styles: MaterialIconStyle[] = ["outlined", "filled", "rounded", "sharp"];
+		const styleSelect = toolbar.createEl("select", {
+			cls: "icon-picker-style-select",
+		});
+		const styles: MaterialIconStyle[] = [
+			"outlined",
+			"filled",
+			"rounded",
+			"sharp",
+		];
 		for (const s of styles) {
 			const opt = styleSelect.createEl("option", { text: s, value: s });
 			if (s === this.materialStyle) opt.selected = true;
 		}
 
 		// Category selector
-		const categorySelect = toolbar.createEl("select", { cls: "icon-picker-category-select" });
+		const categorySelect = toolbar.createEl("select", {
+			cls: "icon-picker-category-select",
+		});
 
 		const grid = this.tabContentEl.createDiv("icon-picker-grid");
 		grid.setAttribute("role", "grid");
 		this.enableGridKeyNav(grid);
-		const loadMoreContainer = this.tabContentEl.createDiv("icon-picker-load-more");
+		const loadMoreContainer = this.tabContentEl.createDiv(
+			"icon-picker-load-more",
+		);
 
 		const updateGrid = () => {
 			this.materialFiltered = filterMaterialIcons(
@@ -309,7 +338,9 @@ export class IconPicker extends Modal {
 			updateGrid();
 		});
 
-		const loadMoreBtn = loadMoreContainer.createEl("button", { text: "Load more" });
+		const loadMoreBtn = loadMoreContainer.createEl("button", {
+			text: "Load more",
+		});
 		loadMoreBtn.addEventListener("click", () => {
 			this.appendMaterialIcons(grid);
 			if (this.materialDisplayed >= this.materialFiltered.length) {
@@ -324,7 +355,9 @@ export class IconPicker extends Modal {
 			searchInput.focus();
 		} else {
 			this.materialLoading = true;
-			grid.createDiv("icon-picker-loading").setText("Loading Material icons...");
+			grid.createDiv("icon-picker-loading").setText(
+				"Loading material icons...",
+			);
 
 			const cacheData = this.plugin.registry.materialIconsCache;
 			loadMaterialIcons(cacheData)
@@ -374,7 +407,9 @@ export class IconPicker extends Modal {
 				},
 			});
 			// Render material icon via font ligature
-			const iconSpan = cell.createSpan({ cls: "material-symbols-outlined" });
+			const iconSpan = cell.createSpan({
+				cls: "material-symbols-outlined",
+			});
 			iconSpan.setText(meta.name);
 
 			if (
@@ -384,7 +419,9 @@ export class IconPicker extends Modal {
 			) {
 				cell.addClass("is-selected");
 			}
-			cell.addEventListener("click", () => this.selectMaterial(meta.name, grid));
+			cell.addEventListener("click", () =>
+				this.selectMaterial(meta.name, grid),
+			);
 			cell.addEventListener("keydown", (e) => {
 				if (e.key === "Enter" || e.key === " ") {
 					e.preventDefault();
@@ -409,9 +446,11 @@ export class IconPicker extends Modal {
 
 	private renderSvgTab(): void {
 		if (!this.plugin.settings.iconSources.customSvg) {
-			this.tabContentEl.createDiv("icon-picker-notice").setText(
-				"Custom SVG icons are disabled in settings. Enable them under Icon Sources.",
-			);
+			this.tabContentEl
+				.createDiv("icon-picker-notice")
+				.setText(
+					"Custom SVG icons are disabled in settings. Enable them under icon sources.",
+				);
 			return;
 		}
 
@@ -429,7 +468,8 @@ export class IconPicker extends Modal {
 		// SVG textarea
 		const textarea = inputArea.createEl("textarea", {
 			cls: "icon-picker-svg-textarea",
-			placeholder: "Paste SVG markup here, or drag and drop an SVG file...",
+			placeholder:
+				"Paste SVG markup here, or drag and drop an SVG file...",
 			attr: { rows: "6" },
 		});
 
@@ -470,7 +510,9 @@ export class IconPicker extends Modal {
 			errorEl.hide();
 
 			if (!name || !isValidSvgIconName(name)) {
-				errorEl.setText("Name must contain only lowercase letters, numbers, and hyphens.");
+				errorEl.setText(
+					"Name must contain only lowercase letters, numbers, and hyphens.",
+				);
 				errorEl.show();
 				return;
 			}
@@ -490,7 +532,7 @@ export class IconPicker extends Modal {
 
 			this.customSvgs.push({ name, svg: sanitized });
 			this.plugin.registry.customSvgIcons = [...this.customSvgs];
-			this.plugin.saveSettings();
+			void this.plugin.saveSettings();
 
 			nameInput.value = "";
 			textarea.value = "";
@@ -498,7 +540,9 @@ export class IconPicker extends Modal {
 		});
 
 		// Gallery of existing SVGs
-		const galleryLabel = this.tabContentEl.createEl("h4", { text: "SVG gallery" });
+		this.tabContentEl.createEl("h4", {
+			text: "SVG gallery",
+		});
 		const gallery = this.tabContentEl.createDiv("icon-picker-svg-gallery");
 		this.renderSvgGallery(gallery);
 	}
@@ -507,7 +551,9 @@ export class IconPicker extends Modal {
 		gallery.empty();
 
 		if (this.customSvgs.length === 0) {
-			gallery.createDiv("icon-picker-empty").setText("No custom SVG icons yet.");
+			gallery
+				.createDiv("icon-picker-empty")
+				.setText("No custom SVG icons yet.");
 			return;
 		}
 
@@ -522,7 +568,10 @@ export class IconPicker extends Modal {
 			});
 
 			const iconEl = cell.createDiv("icon-picker-svg-preview");
-			iconEl.innerHTML = svg.svg;
+			const parser = new DOMParser();
+			const doc = parser.parseFromString(svg.svg, "image/svg+xml");
+			const svgEl = doc.documentElement;
+			iconEl.appendChild(iconEl.doc.importNode(svgEl, true));
 
 			const label = cell.createDiv("icon-picker-svg-label");
 			label.setText(svg.name);
@@ -536,9 +585,9 @@ export class IconPicker extends Modal {
 
 			cell.addEventListener("click", () => {
 				this.selectedIcon = makeIcon("svg", svg.name);
-				gallery.querySelectorAll(".is-selected").forEach((el) =>
-					el.removeClass("is-selected"),
-				);
+				gallery
+					.querySelectorAll(".is-selected")
+					.forEach((el) => el.removeClass("is-selected"));
 				cell.addClass("is-selected");
 				this.updatePreview();
 			});
@@ -551,9 +600,11 @@ export class IconPicker extends Modal {
 			setIcon(deleteBtn, "trash-2");
 			deleteBtn.addEventListener("click", (e) => {
 				e.stopPropagation();
-				this.customSvgs = this.customSvgs.filter((s) => s.name !== svg.name);
+				this.customSvgs = this.customSvgs.filter(
+					(s) => s.name !== svg.name,
+				);
 				this.plugin.registry.customSvgIcons = [...this.customSvgs];
-				this.plugin.saveSettings();
+				void this.plugin.saveSettings();
 				if (
 					this.selectedIcon?.type === "svg" &&
 					this.selectedIcon.value === svg.name
@@ -579,7 +630,9 @@ export class IconPicker extends Modal {
 
 		this.confirmBtn?.toggleClass("is-disabled", false);
 
-		const iconContainer = this.previewEl.createDiv("icon-picker-preview-icon");
+		const iconContainer = this.previewEl.createDiv(
+			"icon-picker-preview-icon",
+		);
 		const labelEl = this.previewEl.createDiv("icon-picker-preview-label");
 
 		switch (this.selectedIcon.type) {
@@ -601,7 +654,10 @@ export class IconPicker extends Modal {
 					(s) => s.name === this.selectedIcon?.value,
 				);
 				if (svgData) {
-					iconContainer.innerHTML = svgData.svg;
+					const parser = new DOMParser();
+					const doc = parser.parseFromString(svgData.svg, "image/svg+xml");
+					const svgEl = doc.documentElement;
+					iconContainer.appendChild(iconContainer.doc.importNode(svgEl, true));
 				}
 				labelEl.setText(`svg: ${this.selectedIcon.value}`);
 				break;
@@ -630,7 +686,9 @@ export class IconPicker extends Modal {
 	 */
 	private enableGridKeyNav(grid: HTMLElement): void {
 		grid.addEventListener("keydown", (e) => {
-			const cells = Array.from(grid.querySelectorAll<HTMLElement>(".icon-picker-cell"));
+			const cells = Array.from(
+				grid.querySelectorAll<HTMLElement>(".icon-picker-cell"),
+			);
 			const current = document.activeElement as HTMLElement | null;
 			const idx = current ? cells.indexOf(current) : -1;
 			if (idx < 0) return;
@@ -644,8 +702,11 @@ export class IconPicker extends Modal {
 				const secondRect = second.getBoundingClientRect();
 				if (Math.abs(firstRect.top - secondRect.top) < 2) {
 					// Same row — count cells in first row
-					cols = cells.filter((c) =>
-						Math.abs(c.getBoundingClientRect().top - firstRect.top) < 2,
+					cols = cells.filter(
+						(c) =>
+							Math.abs(
+								c.getBoundingClientRect().top - firstRect.top,
+							) < 2,
 					).length;
 				}
 			}

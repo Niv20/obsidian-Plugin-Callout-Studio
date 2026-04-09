@@ -1,13 +1,13 @@
-import { Plugin } from 'obsidian';
-import type { PluginData, PluginSettings } from './types';
-import { CalloutRegistry } from './manager/CalloutRegistry';
-import { CSSInjector } from './manager/CSSInjector';
-import { CalloutStudioSettingsTab } from './settings/SettingsTab';
-import { CalloutEditor } from './settings/CalloutEditor';
-import { CalloutAutoComplete } from './editor/AutoComplete';
-import { registerContextMenu } from './editor/ContextMenu';
-import { TransparentPopup } from './editor/TransparentPopup';
-import { CalloutStudioAPI } from './api/PluginAPI';
+import { Plugin } from "obsidian";
+import type { PluginData, PluginSettings } from "./types";
+import { CalloutRegistry } from "./manager/CalloutRegistry";
+import { CSSInjector } from "./manager/CSSInjector";
+import { CalloutStudioSettingsTab } from "./settings/SettingsTab";
+import { CalloutEditor } from "./settings/CalloutEditor";
+import { CalloutAutoComplete } from "./editor/AutoComplete";
+import { registerContextMenu } from "./editor/ContextMenu";
+import { TransparentPopup } from "./editor/TransparentPopup";
+import { CalloutStudioAPI } from "./api/PluginAPI";
 
 export default class CalloutStudioPlugin extends Plugin {
 	registry!: CalloutRegistry;
@@ -22,7 +22,7 @@ export default class CalloutStudioPlugin extends Plugin {
 	async onload() {
 		// Initialize registry and load persisted data
 		this.registry = new CalloutRegistry();
-		const savedData = await this.loadData() as Partial<PluginData> | null;
+		const savedData = (await this.loadData()) as Partial<PluginData> | null;
 		this.registry.load(savedData);
 
 		// Initialize CSS injector
@@ -32,14 +32,14 @@ export default class CalloutStudioPlugin extends Plugin {
 		// Re-inject CSS when registry changes
 		this.registry.onChange(() => {
 			this.cssInjector.scheduleInject();
-			this.saveSettings();
+			void this.saveSettings();
 		});
 
 		// Re-inject on theme change
 		this.registerEvent(
-			this.app.workspace.on('css-change', () => {
+			this.app.workspace.on("css-change", () => {
 				this.cssInjector.inject();
-			})
+			}),
 		);
 
 		// Settings tab
@@ -47,19 +47,21 @@ export default class CalloutStudioPlugin extends Plugin {
 
 		// Commands
 		this.addCommand({
-			id: 'open-settings',
-			name: 'Open settings',
+			id: "open-settings",
+			name: "Open settings",
 			callback: () => {
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
 				(this.app as any).setting.open();
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
 				(this.app as any).setting.openTabById(this.manifest.id);
 			},
 		});
 
 		this.addCommand({
-			id: 'create-callout',
-			name: 'Create new callout type',
+			id: "create-callout",
+			name: "Create new callout type",
 			callback: () => {
-				new CalloutEditor(this).open();
+				void new CalloutEditor(this).open();
 			},
 		});
 

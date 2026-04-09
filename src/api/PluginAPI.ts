@@ -60,7 +60,9 @@ export class CalloutStudioAPI {
 	/**
 	 * Opens the icon picker modal and returns the selected icon, or null.
 	 */
-	async openIconPicker(currentIcon?: CalloutIcon): Promise<CalloutIcon | null> {
+	async openIconPicker(
+		currentIcon?: CalloutIcon,
+	): Promise<CalloutIcon | null> {
 		const picker = new IconPicker(this.plugin, currentIcon);
 		return picker.open();
 	}
@@ -68,7 +70,9 @@ export class CalloutStudioAPI {
 	/**
 	 * Opens the callout editor modal and returns the resulting definition, or null.
 	 */
-	async openCalloutEditor(existing?: CalloutDefinition): Promise<CalloutDefinition | null> {
+	async openCalloutEditor(
+		existing?: CalloutDefinition,
+	): Promise<CalloutDefinition | null> {
 		const editor = new CalloutEditor(this.plugin, existing);
 		return editor.open();
 	}

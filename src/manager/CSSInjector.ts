@@ -26,11 +26,14 @@ export class CSSInjector {
 
 	private ensureStyleElement(): void {
 		if (this.styleEl) return;
-		const existing = document.getElementById(STYLE_ELEMENT_ID) as HTMLStyleElement | null;
+		const existing = document.getElementById(
+			STYLE_ELEMENT_ID,
+		) as HTMLStyleElement | null;
 		if (existing) {
 			this.styleEl = existing;
 			return;
 		}
+		// eslint-disable-next-line obsidianmd/no-forbidden-elements -- dynamic CSS injection requires a style element
 		this.styleEl = document.createElement("style");
 		this.styleEl.id = STYLE_ELEMENT_ID;
 		document.head.appendChild(this.styleEl);
@@ -75,17 +78,17 @@ export class CSSInjector {
 		// Light mode (default)
 		parts.push(
 			`.callout[data-callout="${def.id}"] {\n` +
-			`  --callout-color: ${lightRgb};\n` +
-			(iconCSS ? `  --callout-icon: ${iconCSS};\n` : "") +
-			`}`
+				`  --callout-color: ${lightRgb};\n` +
+				(iconCSS ? `  --callout-icon: ${iconCSS};\n` : "") +
+				`}`,
 		);
 
 		// Dark mode override (only if different from light)
 		if (def.colorLight !== def.colorDark) {
 			parts.push(
 				`.theme-dark .callout[data-callout="${def.id}"] {\n` +
-				`  --callout-color: ${darkRgb};\n` +
-				`}`
+					`  --callout-color: ${darkRgb};\n` +
+					`}`,
 			);
 		}
 
@@ -141,8 +144,11 @@ export class CSSInjector {
 	}
 
 	private updateMaterialFontLink(needed: boolean): void {
-		const existing = document.getElementById(MATERIAL_FONT_LINK_ID) as HTMLLinkElement | null;
+		const existing = document.getElementById(
+			MATERIAL_FONT_LINK_ID,
+		) as HTMLLinkElement | null;
 		if (needed && !existing) {
+			// eslint-disable-next-line obsidianmd/no-forbidden-elements -- dynamic font loading requires a link element
 			const link = document.createElement("link");
 			link.id = MATERIAL_FONT_LINK_ID;
 			link.rel = "stylesheet";

@@ -9,7 +9,10 @@ interface CalloutInfo {
 	prefix: string;
 }
 
-function findCalloutAtCursor(editor: Editor, cursorLine: number): CalloutInfo | null {
+function findCalloutAtCursor(
+	editor: Editor,
+	cursorLine: number,
+): CalloutInfo | null {
 	// Scan from cursor line upward to find the callout header
 	for (let line = cursorLine; line >= 0; line--) {
 		const text = editor.getLine(line);
@@ -32,12 +35,14 @@ function findCalloutAtCursor(editor: Editor, cursorLine: number): CalloutInfo | 
 	return null;
 }
 
-function convertCallout(editor: Editor, info: CalloutInfo, newId: string, newDisplayName: string): void {
+function convertCallout(
+	editor: Editor,
+	info: CalloutInfo,
+	newId: string,
+	newDisplayName: string,
+): void {
 	const line = editor.getLine(info.headerLine);
-	const newLine = line.replace(
-		CALLOUT_HEADER_REGEX,
-		`$1[!${newId}]`
-	);
+	const newLine = line.replace(CALLOUT_HEADER_REGEX, `$1[!${newId}]`);
 
 	// Replace the title text after the callout marker if present
 	// Pattern: > [!id] Title  OR  > [!id]+/- Title
@@ -57,7 +62,11 @@ export function registerContextMenu(plugin: CalloutStudioPlugin): void {
 	plugin.registerEvent(
 		plugin.app.workspace.on(
 			"editor-menu",
-			(menu: Menu, editor: Editor, _info: MarkdownView | MarkdownFileInfo) => {
+			(
+				menu: Menu,
+				editor: Editor,
+				_info: MarkdownView | MarkdownFileInfo,
+			) => {
 				const cursor = editor.getCursor();
 				const calloutInfo = findCalloutAtCursor(editor, cursor.line);
 
@@ -69,8 +78,7 @@ export function registerContextMenu(plugin: CalloutStudioPlugin): void {
 				// Convert to... submenu
 				if (plugin.settings.popup.showConvertSubmenu) {
 					menu.addItem((item) => {
-						item
-							.setTitle("Convert callout to...")
+						item.setTitle("Convert callout to...")
 							.setIcon("repeat")
 							.setSection("callout-studio");
 
@@ -82,12 +90,20 @@ export function registerContextMenu(plugin: CalloutStudioPlugin): void {
 					for (const def of allCallouts) {
 						if (def.id === calloutInfo.id) continue;
 						menu.addItem((item) => {
-							item
-								.setTitle(def.displayName)
-								.setIcon(def.icon.type === "lucide" ? def.icon.value : "pencil")
+							item.setTitle(def.displayName)
+								.setIcon(
+									def.icon.type === "lucide"
+										? def.icon.value
+										: "pencil",
+								)
 								.setSection("callout-studio")
 								.onClick(() => {
-									convertCallout(editor, calloutInfo, def.id, def.displayName);
+									convertCallout(
+										editor,
+										calloutInfo,
+										def.id,
+										def.displayName,
+									);
 								});
 						});
 					}
@@ -95,8 +111,7 @@ export function registerContextMenu(plugin: CalloutStudioPlugin): void {
 
 				// Quick actions
 				menu.addItem((item) => {
-					item
-						.setTitle("Copy callout markdown")
+					item.setTitle("Copy callout Markdown")
 						.setIcon("clipboard-copy")
 						.setSection("callout-studio-actions")
 						.onClick(() => {
@@ -105,17 +120,20 @@ export function registerContextMenu(plugin: CalloutStudioPlugin): void {
 				});
 
 				menu.addItem((item) => {
-					item
-						.setTitle("Open Callout Studio settings")
+					item.setTitle("Open callout studio settings")
 						.setIcon("settings")
 						.setSection("callout-studio-actions")
 						.onClick(() => {
-							(plugin.app as any).setting.open();
-							(plugin.app as any).setting.openTabById(plugin.manifest.id);
+						// eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
+						(plugin.app as any).setting.open();
+						// eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
+							(plugin.app as any).setting.openTabById(
+								plugin.manifest.id,
+							);
 						});
 				});
-			}
-		)
+			},
+		),
 	);
 }
 
@@ -131,5 +149,5 @@ function copyCalloutMarkdown(editor: Editor, info: CalloutInfo): void {
 		lines.push(text);
 	}
 
-	navigator.clipboard.writeText(lines.join("\n"));
+	void navigator.clipboard.writeText(lines.join("\n"));
 }

@@ -18,7 +18,11 @@ export function rgbToHex(r: number, g: number, b: number): string {
 	return (
 		"#" +
 		[r, g, b]
-			.map((c) => Math.max(0, Math.min(255, Math.round(c))).toString(16).padStart(2, "0"))
+			.map((c) =>
+				Math.max(0, Math.min(255, Math.round(c)))
+					.toString(16)
+					.padStart(2, "0"),
+			)
 			.join("")
 	);
 }
@@ -60,7 +64,9 @@ export function hexToRgbString(hex: string): string {
 function luminance(r: number, g: number, b: number): number {
 	const toLinear = (c: number): number => {
 		const srgb = c / 255;
-		return srgb <= 0.03928 ? srgb / 12.92 : Math.pow((srgb + 0.055) / 1.055, 2.4);
+		return srgb <= 0.03928
+			? srgb / 12.92
+			: Math.pow((srgb + 0.055) / 1.055, 2.4);
 	};
 	return 0.2126 * toLinear(r) + 0.7152 * toLinear(g) + 0.0722 * toLinear(b);
 }

@@ -22,7 +22,7 @@ export class CalloutAutoComplete extends EditorSuggest<CalloutDefinition> {
 	onTrigger(
 		cursor: EditorPosition,
 		editor: Editor,
-		_file: TFile | null
+		_file: TFile | null,
 	): EditorSuggestTriggerInfo | null {
 		if (!this.plugin.settings.autocomplete.enabled) return null;
 
@@ -60,7 +60,7 @@ export class CalloutAutoComplete extends EditorSuggest<CalloutDefinition> {
 		const filtered = all.filter(
 			(d) =>
 				d.id.toLowerCase().includes(query) ||
-				d.displayName.toLowerCase().includes(query)
+				d.displayName.toLowerCase().includes(query),
 		);
 
 		// Sort: user-defined first, then built-in, alphabetical within each group
@@ -79,7 +79,9 @@ export class CalloutAutoComplete extends EditorSuggest<CalloutDefinition> {
 
 		// Icon
 		if (autocomplete.showIconPreviews) {
-			const iconEl = el.createDiv({ cls: "callout-studio-suggestion-icon" });
+			const iconEl = el.createDiv({
+				cls: "callout-studio-suggestion-icon",
+			});
 			try {
 				if (def.icon.type === "lucide") {
 					setIcon(iconEl, def.icon.value);
@@ -95,14 +97,21 @@ export class CalloutAutoComplete extends EditorSuggest<CalloutDefinition> {
 
 		// Color badge
 		if (autocomplete.showColorPreviews) {
-			const badgeEl = el.createDiv({ cls: "callout-studio-suggestion-badge" });
+			const badgeEl = el.createDiv({
+				cls: "callout-studio-suggestion-badge",
+			});
 			const isDark = document.body.classList.contains("theme-dark");
-			badgeEl.style.backgroundColor = isDark ? def.colorDark : def.colorLight;
+			badgeEl.style.backgroundColor = isDark
+				? def.colorDark
+				: def.colorLight;
 		}
 
 		// Text container
 		const textEl = el.createDiv({ cls: "callout-studio-suggestion-text" });
-		textEl.createDiv({ cls: "callout-studio-suggestion-name", text: def.displayName });
+		textEl.createDiv({
+			cls: "callout-studio-suggestion-name",
+			text: def.displayName,
+		});
 		textEl.createDiv({ cls: "callout-studio-suggestion-id", text: def.id });
 	}
 
