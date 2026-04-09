@@ -1,8 +1,225 @@
-/*
+/* ═══════════════════════════════════════════════════════════════
+   Callout Studio — Plugin Styles
+   ═══════════════════════════════════════════════════════════════ */
 
-This CSS file will be included with your plugin, and
-available in the app when your plugin is enabled.
+/* ─── Settings Panel ──────────────────────────────────────────── */
 
-If your plugin does not need CSS, delete this file.
+.callout-studio-settings .callout-studio-actions {
+	display: flex;
+	gap: 8px;
+	flex-wrap: wrap;
+	margin-bottom: 16px;
+}
 
-*/
+.callout-studio-settings .callout-studio-actions button {
+	min-height: 32px;
+}
+
+.callout-studio-empty-state {
+	color: var(--text-muted);
+	font-style: italic;
+	padding: 16px 0;
+}
+
+/* ─── Callout List Rows ───────────────────────────────────────── */
+
+.callout-studio-callout-list {
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+	margin-bottom: 24px;
+}
+
+.callout-studio-row {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	padding: 8px 12px;
+	border-radius: 8px;
+	background: var(--background-secondary);
+	transition: background 120ms ease;
+}
+
+.callout-studio-row:hover {
+	background: var(--background-secondary-alt);
+}
+
+.callout-studio-row-icon {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 32px;
+	height: 32px;
+	flex-shrink: 0;
+	color: var(--text-normal);
+}
+
+.callout-studio-row-icon svg {
+	width: 18px;
+	height: 18px;
+}
+
+.callout-studio-row-info {
+	flex: 1;
+	min-width: 0;
+}
+
+.callout-studio-row-name {
+	font-weight: var(--font-semibold);
+	font-size: var(--font-ui-medium);
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.callout-studio-row-id {
+	font-size: var(--font-ui-smaller);
+	color: var(--text-muted);
+	font-family: var(--font-monospace);
+}
+
+/* ─── Color Swatches ──────────────────────────────────────────── */
+
+.callout-studio-row-colors {
+	display: flex;
+	gap: 6px;
+	flex-shrink: 0;
+}
+
+.callout-studio-color-swatch {
+	position: relative;
+	width: 24px;
+	height: 24px;
+	border-radius: 6px;
+	border: 1px solid var(--background-modifier-border);
+	cursor: default;
+}
+
+.callout-studio-swatch-label {
+	position: absolute;
+	bottom: -1px;
+	right: 1px;
+	font-size: 9px;
+	font-weight: 700;
+	color: rgba(255, 255, 255, 0.9);
+	text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+	pointer-events: none;
+	line-height: 1;
+}
+
+/* ─── Row Buttons ─────────────────────────────────────────────── */
+
+.callout-studio-row-buttons {
+	display: flex;
+	gap: 4px;
+	flex-shrink: 0;
+}
+
+.callout-studio-row-buttons button {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 32px;
+	height: 32px;
+	padding: 0;
+	border-radius: 6px;
+	cursor: pointer;
+	color: var(--text-muted);
+	background: transparent;
+	border: none;
+}
+
+.callout-studio-row-buttons button:hover {
+	background: var(--background-modifier-hover);
+	color: var(--text-normal);
+}
+
+.callout-studio-row-buttons button svg {
+	width: 16px;
+	height: 16px;
+}
+
+.callout-studio-delete-btn:hover {
+	color: var(--text-error) !important;
+}
+
+/* ─── Callout Editor Modal ────────────────────────────────────── */
+
+.callout-studio-editor .modal-content {
+	padding: 16px;
+}
+
+.callout-studio-hex-input {
+	width: 90px !important;
+	font-family: var(--font-monospace);
+	font-size: var(--font-ui-smaller);
+}
+
+.callout-studio-id-warning {
+	color: var(--text-error);
+	font-size: var(--font-ui-smaller);
+	margin-top: 4px;
+	display: none;
+}
+
+.callout-studio-id-warning.is-visible {
+	display: block;
+}
+
+/* ─── Live Preview ────────────────────────────────────────────── */
+
+.callout-studio-preview-container {
+	margin: 16px 0;
+	border: 1px solid var(--background-modifier-border);
+	border-radius: 8px;
+	overflow: hidden;
+}
+
+.callout-studio-preview-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 8px 12px;
+	background: var(--background-secondary);
+	font-size: var(--font-ui-smaller);
+	color: var(--text-muted);
+	font-weight: var(--font-semibold);
+}
+
+.callout-studio-preview-toggle {
+	font-size: var(--font-ui-smaller);
+	padding: 2px 10px;
+	border-radius: 4px;
+	cursor: pointer;
+	min-height: 24px;
+}
+
+.callout-studio-preview {
+	padding: 12px;
+}
+
+.callout-studio-preview .callout {
+	margin: 0;
+}
+
+.callout-studio-preview-dark {
+	background: var(--color-base-20, #1e1e1e);
+	color: var(--color-base-70, #dcddde);
+}
+
+/* ─── Editor Buttons ──────────────────────────────────────────── */
+
+.callout-studio-editor-buttons {
+	display: flex;
+	justify-content: flex-end;
+	gap: 8px;
+	margin-top: 16px;
+	padding-top: 16px;
+	border-top: 1px solid var(--background-modifier-border);
+}
+
+.callout-studio-editor-buttons button {
+	min-height: 32px;
+	padding: 4px 16px;
+}
+
