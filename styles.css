@@ -433,3 +433,271 @@
 	color: var(--text-accent);
 }
 
+/* ─── Icon Picker Modal ──────────────────────────────────────── */
+
+.callout-studio-icon-picker .modal-content {
+	padding: 0;
+}
+
+.icon-picker-container {
+	display: flex;
+	flex-direction: column;
+	height: 500px;
+	max-height: 70vh;
+}
+
+.icon-picker-tabs {
+	display: flex;
+	border-bottom: 1px solid var(--background-modifier-border);
+	padding: 0 12px;
+	flex-shrink: 0;
+}
+
+.icon-picker-tab {
+	padding: 8px 16px;
+	background: none;
+	border: none;
+	border-bottom: 2px solid transparent;
+	color: var(--text-muted);
+	cursor: pointer;
+	font-size: var(--font-ui-small);
+	transition: color 0.15s, border-color 0.15s;
+}
+
+.icon-picker-tab:hover {
+	color: var(--text-normal);
+}
+
+.icon-picker-tab.is-active {
+	color: var(--text-accent);
+	border-bottom-color: var(--text-accent);
+}
+
+.icon-picker-content {
+	flex: 1;
+	overflow-y: auto;
+	padding: 12px;
+}
+
+.icon-picker-search {
+	margin-bottom: 12px;
+}
+
+.icon-picker-search input {
+	width: 100%;
+	padding: 6px 10px;
+}
+
+.icon-picker-toolbar {
+	display: flex;
+	gap: 8px;
+	margin-bottom: 12px;
+	flex-wrap: wrap;
+}
+
+.icon-picker-toolbar input {
+	flex: 1;
+	min-width: 150px;
+	padding: 6px 10px;
+}
+
+.icon-picker-toolbar select {
+	padding: 6px 8px;
+}
+
+.icon-picker-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(42px, 1fr));
+	gap: 4px;
+}
+
+.icon-picker-cell {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 42px;
+	height: 42px;
+	border-radius: var(--radius-s);
+	cursor: pointer;
+	color: var(--text-normal);
+	transition: background-color 0.1s;
+}
+
+.icon-picker-cell:hover {
+	background-color: var(--background-modifier-hover);
+}
+
+.icon-picker-cell:focus-visible {
+	outline: 2px solid var(--text-accent);
+	outline-offset: -2px;
+}
+
+.icon-picker-cell.is-selected {
+	background-color: var(--interactive-accent);
+	color: var(--text-on-accent);
+}
+
+.icon-picker-cell svg {
+	width: 20px;
+	height: 20px;
+}
+
+.icon-picker-material-cell .material-symbols-outlined {
+	font-size: 24px;
+}
+
+.icon-picker-load-more {
+	text-align: center;
+	padding: 12px;
+}
+
+.icon-picker-notice,
+.icon-picker-loading,
+.icon-picker-error,
+.icon-picker-empty {
+	padding: 24px;
+	text-align: center;
+	color: var(--text-muted);
+}
+
+.icon-picker-error {
+	color: var(--text-error);
+}
+
+/* SVG tab */
+
+.icon-picker-svg-input {
+	margin-bottom: 16px;
+}
+
+.icon-picker-svg-name-row {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	margin-bottom: 8px;
+}
+
+.icon-picker-svg-name-row input {
+	flex: 1;
+	padding: 6px 10px;
+}
+
+.icon-picker-svg-textarea {
+	width: 100%;
+	min-height: 100px;
+	padding: 8px;
+	font-family: var(--font-monospace);
+	font-size: var(--font-ui-smaller);
+	resize: vertical;
+	border: 1px solid var(--background-modifier-border);
+	border-radius: var(--radius-s);
+	margin-bottom: 8px;
+}
+
+.icon-picker-svg-textarea.is-drag-over {
+	border-color: var(--text-accent);
+	background-color: var(--background-modifier-hover);
+}
+
+.icon-picker-svg-error {
+	color: var(--text-error);
+	font-size: var(--font-ui-smaller);
+	margin-bottom: 8px;
+}
+
+.icon-picker-svg-gallery {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+	gap: 8px;
+}
+
+.icon-picker-svg-cell {
+	width: auto;
+	height: auto;
+	flex-direction: column;
+	padding: 8px;
+	position: relative;
+}
+
+.icon-picker-svg-preview {
+	width: 32px;
+	height: 32px;
+}
+
+.icon-picker-svg-preview svg {
+	width: 100%;
+	height: 100%;
+}
+
+.icon-picker-svg-label {
+	font-size: var(--font-ui-smaller);
+	color: var(--text-muted);
+	margin-top: 4px;
+	text-align: center;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	max-width: 100%;
+}
+
+.icon-picker-svg-delete {
+	position: absolute;
+	top: 2px;
+	right: 2px;
+	width: 20px;
+	height: 20px;
+	padding: 0;
+	background: none;
+	border: none;
+	color: var(--text-muted);
+	cursor: pointer;
+	opacity: 0;
+	transition: opacity 0.1s;
+}
+
+.icon-picker-svg-cell:hover .icon-picker-svg-delete {
+	opacity: 1;
+}
+
+.icon-picker-svg-delete:hover {
+	color: var(--text-error);
+}
+
+/* Footer */
+
+.icon-picker-footer {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	padding: 12px;
+	border-top: 1px solid var(--background-modifier-border);
+	flex-shrink: 0;
+}
+
+.icon-picker-preview {
+	flex: 1;
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	color: var(--text-muted);
+	font-size: var(--font-ui-small);
+}
+
+.icon-picker-preview-icon {
+	width: 24px;
+	height: 24px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.icon-picker-preview-icon svg {
+	width: 24px;
+	height: 24px;
+}
+
+.icon-picker-footer button.is-disabled {
+	opacity: 0.5;
+	pointer-events: none;
+}
+

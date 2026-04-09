@@ -1,4 +1,4 @@
-import type { CalloutDefinition, PluginData, PluginSettings } from "../types";
+import type { CalloutDefinition, CustomSvgIcon, MaterialIconsCacheData, PluginData, PluginSettings } from "../types";
 import { DEFAULT_CALLOUTS, DEFAULT_SETTINGS } from "../constants";
 
 const CURRENT_DATA_VERSION = 1;
@@ -10,6 +10,8 @@ export class CalloutRegistry {
 	private builtInDefaults: Map<string, CalloutDefinition> = new Map();
 	private changeCallbacks: RegistryChangeCallback[] = [];
 	settings: PluginSettings;
+	materialIconsCache?: MaterialIconsCacheData;
+	customSvgIcons: CustomSvgIcon[] = [];
 
 	constructor() {
 		this.settings = structuredClone(DEFAULT_SETTINGS);
@@ -50,6 +52,14 @@ export class CalloutRegistry {
 				colorMode: { ...DEFAULT_SETTINGS.colorMode, ...data.settings.colorMode },
 			};
 		}
+
+		// Restore icon data
+		if (data.materialIconsCache) {
+			this.materialIconsCache = data.materialIconsCache;
+		}
+		if (data.customSvgIcons) {
+			this.customSvgIcons = data.customSvgIcons;
+		}
 	}
 
 	toSaveData(): PluginData {
@@ -71,6 +81,8 @@ export class CalloutRegistry {
 			version: CURRENT_DATA_VERSION,
 			callouts: calloutsToSave,
 			settings: this.settings,
+			materialIconsCache: this.materialIconsCache,
+			customSvgIcons: this.customSvgIcons.length > 0 ? this.customSvgIcons : undefined,
 		};
 	}
 
