@@ -97,7 +97,31 @@ export class CSSInjector {
 			parts.push(this.generateMaterialIconOverride(def));
 		}
 
+		// Icon position/size transform
+		const iconTransform = this.getIconTransformCSS(def);
+		if (iconTransform) {
+			parts.push(iconTransform);
+		}
+
 		return parts.join("\n\n");
+	}
+
+	private getIconTransformCSS(def: CalloutDefinition): string {
+		const ox = def.iconOffsetX ?? 0;
+		const oy = def.iconOffsetY ?? 0;
+		const scale = def.iconSize ?? 1;
+		if (ox === 0 && oy === 0 && scale === 1) return "";
+
+		const transforms: string[] = [];
+		if (ox !== 0 || oy !== 0) transforms.push(`translate(${ox}px, ${oy}px)`);
+		if (scale !== 1) transforms.push(`scale(${scale})`);
+
+		return (
+			`.callout[data-callout="${def.id}"] > .callout-title > .callout-icon {\n` +
+			`  transform: ${transforms.join(" ")};\n` +
+			`  transform-origin: center;\n` +
+			`}`
+		);
 	}
 
 	private getIconCSS(def: CalloutDefinition): string {
@@ -169,11 +193,13 @@ export class CSSInjector {
 		}
 
 		// Remove font links that are no longer needed
-		const existingLinks = document.querySelectorAll<HTMLLinkElement>(
-			`link[id^="${MATERIAL_FONT_LINK_ID}"]`,
+		const existingLinks = Array.from(
+			document.querySelectorAll<HTMLLinkElement>(
+				`link[id^="${MATERIAL_FONT_LINK_ID}"]`,
+			),
 		);
 		for (const link of existingLinks) {
-			const family = link.dataset.family;
+			const family = link.getAttribute("data-family");
 			if (!family || !neededFamilies.has(family)) {
 				link.remove();
 			} else {
@@ -186,7 +212,7 @@ export class CSSInjector {
 			// eslint-disable-next-line obsidianmd/no-forbidden-elements -- dynamic font loading requires a link element
 			const link = document.createElement("link");
 			link.id = `${MATERIAL_FONT_LINK_ID}-${family}`;
-			link.dataset.family = family;
+			link.setAttribute("data-family", family);
 			link.rel = "stylesheet";
 			link.href = `https://fonts.googleapis.com/css2?family=${family}:opsz,wght,FILL,GRAD@24,400,0..1,0`;
 			document.head.appendChild(link);

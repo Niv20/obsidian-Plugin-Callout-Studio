@@ -14,6 +14,12 @@ export interface CalloutDefinition {
 	defaultFolded: boolean;
 	builtIn: boolean;
 	source: "user" | "theme" | "plugin" | "builtin";
+	/** Horizontal icon offset in px (−10 to 10) */
+	iconOffsetX?: number;
+	/** Vertical icon offset in px (−10 to 10) */
+	iconOffsetY?: number;
+	/** Icon scale factor (0.5 to 2.0, default 1) */
+	iconSize?: number;
 	metadata?: Record<string, string>;
 }
 

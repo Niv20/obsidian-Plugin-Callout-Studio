@@ -1,4 +1,4 @@
-import { Modal, Setting, setIcon, TextComponent } from "obsidian";
+import { Modal, Setting, setIcon, TextComponent, SliderComponent } from "obsidian";
 import type CalloutStudioPlugin from "../main";
 import type { CalloutDefinition, CalloutIcon } from "../types";
 import { IconPicker } from "./IconPicker";
@@ -25,6 +25,9 @@ export class CalloutEditor extends Modal {
 	private colorDark: string;
 	private foldable: boolean;
 	private defaultFolded: boolean;
+	private iconOffsetX: number;
+	private iconOffsetY: number;
+	private iconSize: number;
 	private previewEl: HTMLElement | null = null;
 	private previewDarkMode = false;
 	private idWarningEl: HTMLElement | null = null;
@@ -43,6 +46,9 @@ export class CalloutEditor extends Modal {
 		this.colorDark = existing?.colorDark ?? "#448aff";
 		this.foldable = existing?.foldable ?? true;
 		this.defaultFolded = existing?.defaultFolded ?? false;
+		this.iconOffsetX = existing?.iconOffsetX ?? 0;
+		this.iconOffsetY = existing?.iconOffsetY ?? 0;
+		this.iconSize = existing?.iconSize ?? 1;
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-misused-promises -- intentional Promise-returning override for modal result
@@ -124,6 +130,69 @@ export class CalloutEditor extends Modal {
 				}
 			});
 		});
+
+		// Icon size
+		let sizeValueEl: HTMLElement;
+		new Setting(contentEl)
+			.setName("Icon size")
+			.setDesc("Scale the icon (0.5× to 2×)")
+			.addSlider((slider: SliderComponent) => {
+				slider
+					.setLimits(50, 200, 5)
+					.setValue(Math.round(this.iconSize * 100))
+					.setDynamicTooltip()
+					.onChange((value: number) => {
+						this.iconSize = value / 100;
+						sizeValueEl.textContent = `${value}%`;
+						this.updatePreview();
+					});
+				sizeValueEl = slider.sliderEl.parentElement!.createSpan({
+					cls: "callout-studio-slider-value",
+					text: `${Math.round(this.iconSize * 100)}%`,
+				});
+			});
+
+		// Icon horizontal offset
+		let hOffsetValueEl: HTMLElement;
+		new Setting(contentEl)
+			.setName("Icon horizontal offset")
+			.setDesc("Shift the icon left or right (−10px to 10px)")
+			.addSlider((slider: SliderComponent) => {
+				slider
+					.setLimits(-10, 10, 1)
+					.setValue(this.iconOffsetX)
+					.setDynamicTooltip()
+					.onChange((value: number) => {
+						this.iconOffsetX = value;
+						hOffsetValueEl.textContent = `${value}px`;
+						this.updatePreview();
+					});
+				hOffsetValueEl = slider.sliderEl.parentElement!.createSpan({
+					cls: "callout-studio-slider-value",
+					text: `${this.iconOffsetX}px`,
+				});
+			});
+
+		// Icon vertical offset
+		let vOffsetValueEl: HTMLElement;
+		new Setting(contentEl)
+			.setName("Icon vertical offset")
+			.setDesc("Shift the icon up or down (−10px to 10px)")
+			.addSlider((slider: SliderComponent) => {
+				slider
+					.setLimits(-10, 10, 1)
+					.setValue(this.iconOffsetY)
+					.setDynamicTooltip()
+					.onChange((value: number) => {
+						this.iconOffsetY = value;
+						vOffsetValueEl.textContent = `${value}px`;
+						this.updatePreview();
+					});
+				vOffsetValueEl = slider.sliderEl.parentElement!.createSpan({
+					cls: "callout-studio-slider-value",
+					text: `${this.iconOffsetY}px`,
+				});
+			});
 
 		// Color Light
 		new Setting(contentEl)
@@ -334,6 +403,21 @@ export class CalloutEditor extends Modal {
 		const iconEl = titleEl.createDiv({ cls: "callout-icon" });
 		this.renderIconPreview(iconEl);
 
+		// Apply icon transform in preview
+		const transforms: string[] = [];
+		if (this.iconOffsetX !== 0 || this.iconOffsetY !== 0) {
+			transforms.push(`translate(${this.iconOffsetX}px, ${this.iconOffsetY}px)`);
+		}
+		if (this.iconSize !== 1) {
+			transforms.push(`scale(${this.iconSize})`);
+		}
+		if (transforms.length > 0) {
+			iconEl.setCssProps({
+				"--cs-icon-transform": transforms.join(" "),
+			});
+			iconEl.addClass("callout-studio-icon-transformed");
+		}
+
 		// Title text
 		const titleInner = titleEl.createDiv({ cls: "callout-title-inner" });
 		titleInner.textContent = this.displayName || "Untitled Callout";
@@ -368,6 +452,9 @@ export class CalloutEditor extends Modal {
 			defaultFolded: this.defaultFolded,
 			builtIn: false,
 			source: "user",
+			iconOffsetX: this.iconOffsetX,
+			iconOffsetY: this.iconOffsetY,
+			iconSize: this.iconSize,
 		};
 
 		if (this.existingId) {

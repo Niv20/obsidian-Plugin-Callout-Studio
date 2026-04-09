@@ -241,6 +241,23 @@
 	padding: 4px 16px;
 }
 
+/* ─── Icon Adjustment Sliders ─────────────────────────────────── */
+
+.callout-studio-slider-value {
+	display: inline-block;
+	min-width: 40px;
+	text-align: right;
+	font-size: var(--font-ui-smaller);
+	color: var(--text-muted);
+	font-family: var(--font-monospace);
+	margin-left: 8px;
+}
+
+.callout-studio-icon-transformed {
+	transform: var(--cs-icon-transform);
+	transform-origin: center;
+}
+
 /* ─── Autocomplete Suggestions ────────────────────────────────── */
 
 .callout-studio-suggestion {
