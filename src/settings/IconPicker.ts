@@ -655,9 +655,14 @@ export class IconPicker extends Modal {
 				);
 				if (svgData) {
 					const parser = new DOMParser();
-					const doc = parser.parseFromString(svgData.svg, "image/svg+xml");
+					const doc = parser.parseFromString(
+						svgData.svg,
+						"image/svg+xml",
+					);
 					const svgEl = doc.documentElement;
-					iconContainer.appendChild(iconContainer.doc.importNode(svgEl, true));
+					iconContainer.appendChild(
+						iconContainer.doc.importNode(svgEl, true),
+					);
 				}
 				labelEl.setText(`svg: ${this.selectedIcon.value}`);
 				break;

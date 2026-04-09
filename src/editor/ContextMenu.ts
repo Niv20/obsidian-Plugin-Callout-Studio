@@ -124,9 +124,9 @@ export function registerContextMenu(plugin: CalloutStudioPlugin): void {
 						.setIcon("settings")
 						.setSection("callout-studio-actions")
 						.onClick(() => {
-						// eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
-						(plugin.app as any).setting.open();
-						// eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
+							// eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
+							(plugin.app as any).setting.open();
+							// eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
 							(plugin.app as any).setting.openTabById(
 								plugin.manifest.id,
 							);

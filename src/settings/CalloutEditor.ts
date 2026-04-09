@@ -288,9 +288,14 @@ export class CalloutEditor extends Modal {
 				);
 				if (svgData) {
 					const parser = new DOMParser();
-					const doc = parser.parseFromString(svgData.svg, "image/svg+xml");
+					const doc = parser.parseFromString(
+						svgData.svg,
+						"image/svg+xml",
+					);
 					const svgEl = doc.documentElement;
-					container.appendChild(container.doc.importNode(svgEl, true));
+					container.appendChild(
+						container.doc.importNode(svgEl, true),
+					);
 				} else {
 					container.textContent = "?";
 				}
