@@ -8,6 +8,7 @@ import { CalloutAutoComplete } from "./editor/AutoComplete";
 import { registerContextMenu } from "./editor/ContextMenu";
 import { TransparentPopup } from "./editor/TransparentPopup";
 import { CalloutStudioAPI } from "./api/PluginAPI";
+import { setLocale, t } from "./i18n";
 
 export default class CalloutStudioPlugin extends Plugin {
 	registry!: CalloutRegistry;
@@ -24,6 +25,9 @@ export default class CalloutStudioPlugin extends Plugin {
 		this.registry = new CalloutRegistry();
 		const savedData = (await this.loadData()) as Partial<PluginData> | null;
 		this.registry.load(savedData);
+
+		// Set UI locale from saved preference
+		setLocale(this.settings.language);
 
 		// Initialize CSS injector
 		this.cssInjector = new CSSInjector(this.app, this.registry);
@@ -48,7 +52,7 @@ export default class CalloutStudioPlugin extends Plugin {
 		// Commands
 		this.addCommand({
 			id: "open-settings",
-			name: "Open settings",
+			name: t("cmd.openSettings"),
 			callback: () => {
 				// eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
 				(this.app as any).setting.open();
@@ -59,7 +63,7 @@ export default class CalloutStudioPlugin extends Plugin {
 
 		this.addCommand({
 			id: "create-callout",
-			name: "Create new callout type",
+			name: t("cmd.createCallout"),
 			callback: () => {
 				void new CalloutEditor(this).open();
 			},

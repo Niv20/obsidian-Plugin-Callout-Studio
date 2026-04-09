@@ -166,4 +166,5 @@ export const DEFAULT_SETTINGS: PluginSettings = {
 		format: "hex",
 		showContrastWarning: true,
 	},
+	language: "auto",
 };

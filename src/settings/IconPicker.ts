@@ -16,6 +16,7 @@ import {
 	makeIcon,
 	materialFontFamily,
 } from "../utils/iconLoader";
+import { t } from "../i18n";
 
 const GRID_PAGE_SIZE = 120;
 
@@ -73,7 +74,7 @@ export class IconPicker extends Modal {
 
 	onOpen(): void {
 		this.modalEl.addClass("callout-studio-icon-picker");
-		this.titleEl.setText("Pick an icon");
+		this.titleEl.setText(t("iconPicker.pickIcon"));
 
 		// Load SVG gallery from plugin data
 		this.customSvgs = [...(this.plugin.registry.customSvgIcons ?? [])];
@@ -94,13 +95,13 @@ export class IconPicker extends Modal {
 		this.updatePreview();
 
 		this.confirmBtn = footer.createEl("button", {
-			text: "Confirm",
+			text: t("iconPicker.confirm"),
 			cls: "mod-cta",
 		});
 		this.confirmBtn.addEventListener("click", () => this.confirm());
 
 		const cancelBtn = footer.createEl("button", {
-			text: "Cancel",
+			text: t("iconPicker.cancel"),
 		});
 		cancelBtn.addEventListener("click", () => this.cancel());
 
@@ -130,9 +131,9 @@ export class IconPicker extends Modal {
 			id: "lucide" | "material" | "svg";
 			label: string;
 		}> = [
-			{ id: "lucide", label: "Lucide" },
-			{ id: "material", label: "Material" },
-			{ id: "svg", label: "Custom SVG" },
+			{ id: "lucide", label: t("iconPicker.lucide") },
+			{ id: "material", label: t("iconPicker.material") },
+			{ id: "svg", label: t("iconPicker.customSvg") },
 		];
 
 		for (const tab of tabs) {
@@ -183,7 +184,7 @@ export class IconPicker extends Modal {
 			this.tabContentEl.createDiv("icon-picker-search");
 		const searchInput = searchContainer.createEl("input", {
 			type: "text",
-			placeholder: "Search Lucide icons...",
+			placeholder: t("iconPicker.searchLucide"),
 			value: this.searchQuery,
 		});
 		searchInput.addEventListener("input", () => {
@@ -207,7 +208,7 @@ export class IconPicker extends Modal {
 			"icon-picker-load-more",
 		);
 		const loadMoreBtn = loadMoreContainer.createEl("button", {
-			text: "Load more",
+			text: t("iconPicker.loadMore"),
 		});
 		loadMoreBtn.addEventListener("click", () => {
 			this.appendLucideIcons(grid);
@@ -305,7 +306,7 @@ export class IconPicker extends Modal {
 			this.tabContentEl
 				.createDiv("icon-picker-notice")
 				.setText(
-					"Material icons are disabled in settings. Enable them under icon sources.",
+					t("iconPicker.materialDisabled"),
 				);
 			return;
 		}
@@ -315,7 +316,7 @@ export class IconPicker extends Modal {
 		// Search
 		const searchInput = toolbar.createEl("input", {
 			type: "text",
-			placeholder: "Search Material icons...",
+			placeholder: t("iconPicker.searchMaterial"),
 			value: this.searchQuery,
 		});
 
@@ -373,7 +374,7 @@ export class IconPicker extends Modal {
 			// Show loading while font downloads, then refresh grid
 			grid.empty();
 			const loadingEl = grid.createDiv("icon-picker-loading");
-			loadingEl.setText("Icons are loading, please wait\u2026");
+			loadingEl.setText(t("iconPicker.iconsLoading"));
 			void this.ensureMaterialFont(this.materialStyle).then(() => {
 				if (this.activeTab !== "material") return;
 				updateGrid();
@@ -386,7 +387,7 @@ export class IconPicker extends Modal {
 		});
 
 		const loadMoreBtn = loadMoreContainer.createEl("button", {
-			text: "Load more",
+			text: t("iconPicker.loadMore"),
 		});
 		loadMoreBtn.addEventListener("click", () => {
 			this.appendMaterialIcons(grid);
@@ -399,7 +400,7 @@ export class IconPicker extends Modal {
 		if (this.materialIcons.length > 0) {
 			// Metadata cached – just need font
 			const loadingEl = grid.createDiv("icon-picker-loading");
-			loadingEl.setText("Icons are loading, please wait\u2026");
+			loadingEl.setText(t("iconPicker.iconsLoading"));
 			void this.ensureMaterialFont(this.materialStyle).then(() => {
 				if (this.activeTab !== "material") return;
 				loadingEl.remove();
@@ -410,7 +411,7 @@ export class IconPicker extends Modal {
 		} else {
 			this.materialLoading = true;
 			grid.createDiv("icon-picker-loading").setText(
-				"Icons are loading, please wait\u2026",
+				t("iconPicker.iconsLoading"),
 			);
 
 			const cacheData = this.plugin.registry.materialIconsCache;
@@ -433,7 +434,7 @@ export class IconPicker extends Modal {
 					this.materialError = err.message;
 					grid.empty();
 					grid.createDiv("icon-picker-error").setText(
-						`Failed to load Material icons: ${err.message}`,
+						t("iconPicker.loadFailed", { error: err.message }),
 					);
 				});
 		}
@@ -441,7 +442,7 @@ export class IconPicker extends Modal {
 
 	private populateMaterialCategories(select: HTMLSelectElement): void {
 		select.empty();
-		select.createEl("option", { text: "All categories", value: "" });
+		select.createEl("option", { text: t("iconPicker.allCategories"), value: "" });
 		const cats = getMaterialCategories(this.materialIcons);
 		for (const cat of cats) {
 			select.createEl("option", { text: cat, value: cat });
@@ -512,7 +513,7 @@ export class IconPicker extends Modal {
 			this.tabContentEl
 				.createDiv("icon-picker-notice")
 				.setText(
-					"Custom SVG icons are disabled in settings. Enable them under icon sources.",
+					t("iconPicker.svgDisabled"),
 				);
 			return;
 		}
@@ -522,17 +523,17 @@ export class IconPicker extends Modal {
 
 		// Name input
 		const nameRow = inputArea.createDiv("icon-picker-svg-name-row");
-		nameRow.createSpan({ text: "Name:" });
+		nameRow.createSpan({ text: t("iconPicker.nameLabel") });
 		const nameInput = nameRow.createEl("input", {
 			type: "text",
-			placeholder: "my-icon-name",
+			placeholder: t("iconPicker.namePlaceholder"),
 		});
 
 		// SVG textarea
 		const textarea = inputArea.createEl("textarea", {
 			cls: "icon-picker-svg-textarea",
 			placeholder:
-				"Paste SVG markup here, or drag and drop an SVG file...",
+				t("iconPicker.svgPlaceholder"),
 			attr: { rows: "6" },
 		});
 
@@ -563,7 +564,7 @@ export class IconPicker extends Modal {
 
 		// Add button
 		const addBtn = inputArea.createEl("button", {
-			text: "Add SVG icon",
+			text: t("iconPicker.addSvg"),
 			cls: "mod-cta",
 		});
 		addBtn.addEventListener("click", () => {
@@ -574,21 +575,21 @@ export class IconPicker extends Modal {
 
 			if (!name || !isValidSvgIconName(name)) {
 				errorEl.setText(
-					"Name must contain only lowercase letters, numbers, and hyphens.",
+					t("iconPicker.nameInvalid"),
 				);
 				errorEl.show();
 				return;
 			}
 
 			if (this.customSvgs.some((s) => s.name === name)) {
-				errorEl.setText("An SVG icon with this name already exists.");
+				errorEl.setText(t("iconPicker.nameExists"));
 				errorEl.show();
 				return;
 			}
 
 			const sanitized = sanitizeSVG(raw);
 			if (!sanitized) {
-				errorEl.setText("Invalid SVG markup. Please check the input.");
+				errorEl.setText(t("iconPicker.invalidSvg"));
 				errorEl.show();
 				return;
 			}
@@ -604,7 +605,7 @@ export class IconPicker extends Modal {
 
 		// Gallery of existing SVGs
 		this.tabContentEl.createEl("h4", {
-			text: "SVG gallery",
+			text: t("iconPicker.svgGallery"),
 		});
 		const gallery = this.tabContentEl.createDiv("icon-picker-svg-gallery");
 		this.renderSvgGallery(gallery);
@@ -616,7 +617,7 @@ export class IconPicker extends Modal {
 		if (this.customSvgs.length === 0) {
 			gallery
 				.createDiv("icon-picker-empty")
-				.setText("No custom SVG icons yet.");
+				.setText(t("iconPicker.noSvgIcons"));
 			return;
 		}
 
@@ -658,7 +659,7 @@ export class IconPicker extends Modal {
 			// Delete button
 			const deleteBtn = cell.createEl("button", {
 				cls: "icon-picker-svg-delete",
-				attr: { "aria-label": "Delete" },
+				attr: { "aria-label": t("iconPicker.delete") },
 			});
 			setIcon(deleteBtn, "trash-2");
 			deleteBtn.addEventListener("click", (e) => {
@@ -686,7 +687,7 @@ export class IconPicker extends Modal {
 		this.previewEl.empty();
 
 		if (!this.selectedIcon) {
-			this.previewEl.setText("No icon selected");
+			this.previewEl.setText(t("iconPicker.noIconSelected"));
 			this.confirmBtn?.toggleClass("is-disabled", true);
 			return;
 		}

@@ -70,6 +70,7 @@ export class CalloutRegistry {
 					...DEFAULT_SETTINGS.colorMode,
 					...data.settings.colorMode,
 				},
+				language: data.settings.language ?? DEFAULT_SETTINGS.language,
 			};
 		}
 

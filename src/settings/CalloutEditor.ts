@@ -10,6 +10,7 @@ import type { CalloutDefinition, CalloutIcon } from "../types";
 import { IconPicker } from "./IconPicker";
 import { materialFontFamily } from "../utils/iconLoader";
 import { blendHex } from "../utils/colorUtils";
+import { t } from "../i18n";
 
 function generateId(displayName: string): string {
 	return displayName
@@ -83,14 +84,14 @@ export class CalloutEditor extends Modal {
 		contentEl.empty();
 		contentEl.addClass("callout-studio-editor");
 
-		this.setTitle(this.existingId ? "Edit callout" : "New callout");
+		this.setTitle(this.existingId ? t("editor.editCallout") : t("editor.newCallout"));
 
 		// Display Name
 		new Setting(contentEl)
-			.setName("Display name")
-			.setDesc("The human-readable label shown in the UI")
+			.setName(t("editor.displayName"))
+			.setDesc(t("editor.displayNameDesc"))
 			.addText((text) => {
-				text.setPlaceholder("My warning")
+				text.setPlaceholder(t("editor.displayNamePlaceholder"))
 					.setValue(this.displayName)
 					.onChange((value) => {
 						this.displayName = value;
@@ -107,12 +108,12 @@ export class CalloutEditor extends Modal {
 		// Callout ID
 		let idInput: TextComponent | null = null;
 		const idSetting = new Setting(contentEl)
-			.setName("Callout ID")
+			.setName(t("editor.calloutId"))
 			// eslint-disable-next-line obsidianmd/ui/sentence-case -- [!id] is literal Markdown syntax
-			.setDesc("Unique identifier used in Markdown syntax: > [!id]")
+			.setDesc(t("editor.calloutIdDesc"))
 			.addText((text) => {
 				idInput = text;
-				text.setPlaceholder("My-warning")
+				text.setPlaceholder(t("editor.calloutIdPlaceholder"))
 					.setValue(this.calloutId)
 					.onChange((value) => {
 						this.calloutId = value;
@@ -127,7 +128,7 @@ export class CalloutEditor extends Modal {
 
 		// Icon
 		const iconSetting = new Setting(contentEl)
-			.setName("Icon")
+			.setName(t("editor.icon"))
 			.setDesc(this.getIconLabel());
 
 		// Icon preview
@@ -165,7 +166,7 @@ export class CalloutEditor extends Modal {
 		const previewHeader = previewContainer.createDiv({
 			cls: "callout-studio-preview-header",
 		});
-		previewHeader.createSpan({ text: "Live preview" });
+		previewHeader.createSpan({ text: t("editor.livePreview") });
 
 		// Segmented Light/Dark toggle
 		const segmented = previewHeader.createDiv({
@@ -173,11 +174,11 @@ export class CalloutEditor extends Modal {
 		});
 		const lightBtn = segmented.createEl("button", {
 			cls: "callout-studio-seg-btn is-active",
-			text: "Light",
+			text: t("editor.light"),
 		});
 		const darkBtn = segmented.createEl("button", {
 			cls: "callout-studio-seg-btn",
-			text: "Dark",
+			text: t("editor.dark"),
 		});
 		lightBtn.addEventListener("click", () => {
 			this.previewDarkMode = false;
@@ -208,7 +209,7 @@ export class CalloutEditor extends Modal {
 		});
 		iconAdjust.createDiv({
 			cls: "callout-studio-adjust-header",
-			text: "Icon adjustment",
+			text: t("editor.iconAdjustment"),
 		});
 
 		// Size slider
@@ -218,7 +219,7 @@ export class CalloutEditor extends Modal {
 		const sizeLabel = sizeRow.createDiv({
 			cls: "callout-studio-slider-label",
 		});
-		sizeLabel.createSpan({ text: "Size" });
+		sizeLabel.createSpan({ text: t("editor.size") });
 		const sizeValue = sizeLabel.createSpan({
 			cls: "callout-studio-slider-value",
 			text: `${Math.round(this.iconSize * 100)}%`,
@@ -242,7 +243,7 @@ export class CalloutEditor extends Modal {
 		const hLabel = hRow.createDiv({
 			cls: "callout-studio-slider-label",
 		});
-		hLabel.createSpan({ text: "Horizontal offset" });
+		hLabel.createSpan({ text: t("editor.horizontalOffset") });
 		const hValue = hLabel.createSpan({
 			cls: "callout-studio-slider-value",
 			text: `${this.iconOffsetX}px`,
@@ -266,7 +267,7 @@ export class CalloutEditor extends Modal {
 		const vLabel = vRow.createDiv({
 			cls: "callout-studio-slider-label",
 		});
-		vLabel.createSpan({ text: "Vertical offset" });
+		vLabel.createSpan({ text: t("editor.verticalOffset") });
 		const vValue = vLabel.createSpan({
 			cls: "callout-studio-slider-value",
 			text: `${this.iconOffsetY}px`,
@@ -289,7 +290,7 @@ export class CalloutEditor extends Modal {
 		});
 		colorsSection.createDiv({
 			cls: "callout-studio-adjust-header",
-			text: "Colors",
+			text: t("editor.colors"),
 		});
 
 		const colorGrid = colorsSection.createDiv({
@@ -301,13 +302,13 @@ export class CalloutEditor extends Modal {
 			cls: "callout-studio-color-grid-header",
 		});
 		gridHeader.createSpan({ text: "" }); // spacer
-		gridHeader.createSpan({ text: "Light" });
-		gridHeader.createSpan({ text: "Dark" });
+		gridHeader.createSpan({ text: t("editor.light") });
+		gridHeader.createSpan({ text: t("editor.dark") });
 
 		// Background row
 		this.addColorRow(
 			colorGrid,
-			"Background",
+			t("editor.background"),
 			this.bgColorLight,
 			this.bgColorDark,
 			(light, dark) => {
@@ -320,7 +321,7 @@ export class CalloutEditor extends Modal {
 		// Text row
 		this.addColorRow(
 			colorGrid,
-			"Text",
+			t("editor.text"),
 			this.textColorLight,
 			this.textColorDark,
 			(light, dark) => {
@@ -333,7 +334,7 @@ export class CalloutEditor extends Modal {
 		// Icon/accent row
 		this.addColorRow(
 			colorGrid,
-			"Icon",
+			t("editor.iconColor"),
 			this.colorLight,
 			this.colorDark,
 			(light, dark) => {
@@ -345,8 +346,8 @@ export class CalloutEditor extends Modal {
 
 		// Foldable
 		new Setting(contentEl)
-			.setName("Foldable")
-			.setDesc("Allow the callout to be collapsed/expanded")
+			.setName(t("editor.foldable"))
+			.setDesc(t("editor.foldableDesc"))
 			.addToggle((toggle) => {
 				toggle.setValue(this.foldable).onChange((value) => {
 					this.foldable = value;
@@ -355,8 +356,8 @@ export class CalloutEditor extends Modal {
 
 		// Default Folded
 		new Setting(contentEl)
-			.setName("Default folded")
-			.setDesc("Start the callout in a collapsed state")
+			.setName(t("editor.defaultFolded"))
+			.setDesc(t("editor.defaultFoldedDesc"))
 			.addToggle((toggle) => {
 				toggle.setValue(this.defaultFolded).onChange((value) => {
 					this.defaultFolded = value;
@@ -369,14 +370,14 @@ export class CalloutEditor extends Modal {
 		});
 
 		const cancelBtn = buttonContainer.createEl("button", {
-			text: "Cancel",
+			text: t("editor.cancel"),
 		});
 		cancelBtn.addEventListener("click", () => {
 			this.close();
 		});
 
 		const saveBtn = buttonContainer.createEl("button", {
-			text: this.existingId ? "Save changes" : "Create callout",
+			text: this.existingId ? t("editor.saveChanges") : t("editor.createCallout"),
 			cls: "mod-cta",
 		});
 		saveBtn.addEventListener("click", () => {
@@ -421,7 +422,7 @@ export class CalloutEditor extends Modal {
 		this.idWarningEl.empty();
 
 		if (!this.calloutId) {
-			this.idWarningEl.setText("ID cannot be empty");
+			this.idWarningEl.setText(t("editor.idEmpty"));
 			this.idWarningEl.addClass("is-visible");
 			return;
 		}
@@ -434,7 +435,7 @@ export class CalloutEditor extends Modal {
 			(isNew || isIdChanged) &&
 			this.plugin.registry.has(this.calloutId)
 		) {
-			this.idWarningEl.setText("A callout with this ID already exists");
+			this.idWarningEl.setText(t("editor.idExists"));
 			this.idWarningEl.addClass("is-visible");
 			return;
 		}
@@ -557,16 +558,13 @@ export class CalloutEditor extends Modal {
 
 		// Title text
 		const titleInner = titleEl.createDiv({ cls: "callout-title-inner" });
-		titleInner.textContent = this.displayName || "Untitled Callout";
+		titleInner.textContent = this.displayName || t("editor.untitledCallout");
 
 		// Content
 		const contentEl = calloutEl.createDiv({ cls: "callout-content" });
 		contentEl.style.color = textColor;
 		const p = contentEl.createEl("p");
-		p.textContent =
-			"Lorem ipsum dolor sit amet, consectetur adipiscing elit. " +
-			"Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. " +
-			"Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.";
+		p.textContent = t("editor.loremIpsum");
 	}
 
 	private save(): void {

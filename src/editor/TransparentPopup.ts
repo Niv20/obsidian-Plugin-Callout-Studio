@@ -1,6 +1,7 @@
 import { setIcon } from "obsidian";
 import type CalloutStudioPlugin from "../main";
 import type { CalloutDefinition, PopupAnimation } from "../types";
+import { t } from "../i18n";
 
 export class TransparentPopup {
 	private plugin: CalloutStudioPlugin;
@@ -32,7 +33,7 @@ export class TransparentPopup {
 		const headerEl = this.popupEl.createDiv({
 			cls: "callout-studio-popup-header",
 		});
-		headerEl.textContent = "Convert callout to:";
+		headerEl.textContent = t("popup.convertTo");
 
 		// Callout list
 		const listEl = this.popupEl.createDiv({
@@ -51,7 +52,7 @@ export class TransparentPopup {
 			});
 			itemEl.setAttribute("tabindex", "0");
 			itemEl.setAttribute("role", "button");
-			itemEl.setAttribute("aria-label", `Convert to ${def.displayName}`);
+			itemEl.setAttribute("aria-label", t("popup.convertToAria", { name: def.displayName }));
 
 			if (popup.showIcons) {
 				const iconEl = itemEl.createDiv({
@@ -111,7 +112,7 @@ export class TransparentPopup {
 			this.addActionItem(
 				actionsEl,
 				"clipboard-copy",
-				"Copy callout markdown",
+				t("popup.copyMarkdown"),
 				() => {
 					onAction("copy");
 					this.hide();
@@ -122,7 +123,7 @@ export class TransparentPopup {
 				this.addActionItem(
 					actionsEl,
 					"palette",
-					"Customize this callout type",
+					t("popup.customize"),
 					() => {
 						onAction("edit");
 						this.hide();
@@ -133,7 +134,7 @@ export class TransparentPopup {
 			this.addActionItem(
 				actionsEl,
 				"plus",
-				"Create new type based on this",
+				t("popup.createNew"),
 				() => {
 					onAction("create-based");
 					this.hide();
@@ -145,7 +146,7 @@ export class TransparentPopup {
 		const footerEl = this.popupEl.createDiv({
 			cls: "callout-studio-popup-footer",
 		});
-		footerEl.textContent = "Open callout studio settings →";
+		footerEl.textContent = t("popup.openSettings");
 		footerEl.addEventListener("click", () => {
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
 			(this.plugin.app as any).setting.open();

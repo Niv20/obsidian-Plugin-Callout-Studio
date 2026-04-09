@@ -76,6 +76,7 @@ export interface PluginSettings {
 	autocomplete: AutocompleteSettings;
 	iconSources: IconSourceSettings;
 	colorMode: ColorModeSettings;
+	language: string;
 }
 
 export interface PluginData {

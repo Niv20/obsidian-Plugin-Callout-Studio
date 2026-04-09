@@ -123,9 +123,7 @@ export class CalloutAutoComplete extends EditorSuggest<CalloutDefinition> {
 		// a stray ']' right after the cursor. Consume it if present.
 		const line = editor.getLine(end.line);
 		const adjustedEnd =
-			line[end.ch] === "]"
-				? { line: end.line, ch: end.ch + 1 }
-				: end;
+			line[end.ch] === "]" ? { line: end.line, ch: end.ch + 1 } : end;
 
 		const foldMark = def.foldable ? (def.defaultFolded ? "-" : "+") : "";
 		const replacement = `[!${def.id}]${foldMark} ${def.displayName}`;

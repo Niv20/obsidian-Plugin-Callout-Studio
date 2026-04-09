@@ -1,5 +1,6 @@
 import { Editor, MarkdownFileInfo, MarkdownView, Menu } from "obsidian";
 import type CalloutStudioPlugin from "../main";
+import { t } from "../i18n";
 
 const CALLOUT_HEADER_REGEX = /^(\s*>[\s>]*)\[!([^\]]+)\]/;
 
@@ -78,7 +79,7 @@ export function registerContextMenu(plugin: CalloutStudioPlugin): void {
 				// Convert to... submenu
 				if (plugin.settings.popup.showConvertSubmenu) {
 					menu.addItem((item) => {
-						item.setTitle("Convert callout to...")
+						item.setTitle(t("contextMenu.convertTo"))
 							.setIcon("repeat")
 							.setSection("callout-studio");
 
@@ -111,7 +112,7 @@ export function registerContextMenu(plugin: CalloutStudioPlugin): void {
 
 				// Quick actions
 				menu.addItem((item) => {
-					item.setTitle("Copy callout Markdown")
+					item.setTitle(t("contextMenu.copyMarkdown"))
 						.setIcon("clipboard-copy")
 						.setSection("callout-studio-actions")
 						.onClick(() => {
@@ -120,7 +121,7 @@ export function registerContextMenu(plugin: CalloutStudioPlugin): void {
 				});
 
 				menu.addItem((item) => {
-					item.setTitle("Open callout studio settings")
+					item.setTitle(t("contextMenu.openSettings"))
 						.setIcon("settings")
 						.setSection("callout-studio-actions")
 						.onClick(() => {
