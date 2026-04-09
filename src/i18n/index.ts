@@ -30,13 +30,13 @@ export function registerLocale(
  * If `"auto"`, the locale is derived from Obsidian's `moment.locale()`.
  * Falls back to `"en"` when the requested locale has no translations.
  */
+type MomentLike = { locale: () => string };
+type WindowWithMoment = Window & { moment?: MomentLike };
+
 export function setLocale(code: string): void {
 	if (code === "auto") {
-		// Obsidian exposes moment globally
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		const m = (window as any).moment as { locale: () => string } | undefined;
-		const obsidianLocale = m?.locale() ?? "en";
-		// Take the language portion (e.g. "he" from "he-IL")
+		const obsidianLocale =
+			(window as WindowWithMoment).moment?.locale() ?? "en";
 		const lang = obsidianLocale.split("-")[0] ?? "en";
 		currentLocale = locales[lang] ? lang : "en";
 	} else {
@@ -52,16 +52,16 @@ export function setLocale(code: string): void {
  * // → "Imported 3 callout type(s) from CSS snippets."
  * ```
  */
-export function t(
-	key: string,
-	vars?: Record<string, string | number>,
-): string {
+export function t(key: string, vars?: Record<string, string | number>): string {
 	const table = locales[currentLocale] ?? en;
 	let value = table[key] ?? en[key] ?? key;
 
 	if (vars) {
 		for (const [k, v] of Object.entries(vars)) {
-			value = value.replace(new RegExp(`\\{\\{${k}\\}\\}`, "g"), String(v));
+			value = value.replace(
+				new RegExp(`\\{\\{${k}\\}\\}`, "g"),
+				String(v),
+			);
 		}
 	}
 

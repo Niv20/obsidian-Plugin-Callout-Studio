@@ -34,7 +34,9 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 	// ─── Section A: My Callout Types ─────────────────────────
 
 	private renderCalloutTypesSection(containerEl: HTMLElement): void {
-		new Setting(containerEl).setName(t("settings.myCalloutTypes")).setHeading();
+		new Setting(containerEl)
+			.setName(t("settings.myCalloutTypes"))
+			.setHeading();
 
 		// Toolbar: search + add button + kebab menu
 		const toolbar = containerEl.createDiv({
@@ -129,7 +131,9 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 	// ─── Section B: Built-in Callouts ────────────────────────
 
 	private renderBuiltInCalloutsSection(containerEl: HTMLElement): void {
-		new Setting(containerEl).setName(t("settings.builtInCallouts")).setHeading();
+		new Setting(containerEl)
+			.setName(t("settings.builtInCallouts"))
+			.setHeading();
 
 		this.builtInListEl = containerEl.createDiv();
 		this.renderBuiltInList();
@@ -188,7 +192,9 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 		const lightSwatch = colorsEl.createDiv({
 			cls: "callout-studio-color-swatch",
 			attr: {
-				"aria-label": t("settings.lightColorAria", { color: def.colorLight }),
+				"aria-label": t("settings.lightColorAria", {
+					color: def.colorLight,
+				}),
 				title: t("settings.lightColorAria", { color: def.colorLight }),
 			},
 		});
@@ -201,7 +207,9 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 		const darkSwatch = colorsEl.createDiv({
 			cls: "callout-studio-color-swatch",
 			attr: {
-				"aria-label": t("settings.darkColorAria", { color: def.colorDark }),
+				"aria-label": t("settings.darkColorAria", {
+					color: def.colorDark,
+				}),
 				title: t("settings.darkColorAria", { color: def.colorDark }),
 			},
 		});
@@ -215,7 +223,9 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 		const buttonsEl = row.createDiv({ cls: "callout-studio-row-buttons" });
 
 		const editBtn = buttonsEl.createEl("button", {
-			attr: { "aria-label": t("settings.editAria", { name: def.displayName }) },
+			attr: {
+				"aria-label": t("settings.editAria", { name: def.displayName }),
+			},
 		});
 		setIcon(editBtn, "pencil");
 		// eslint-disable-next-line @typescript-eslint/no-misused-promises
@@ -245,7 +255,11 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 
 		if (isBuiltIn) {
 			const resetBtn = buttonsEl.createEl("button", {
-				attr: { "aria-label": t("settings.resetAria", { name: def.displayName }) },
+				attr: {
+					"aria-label": t("settings.resetAria", {
+						name: def.displayName,
+					}),
+				},
 			});
 			setIcon(resetBtn, "rotate-ccw");
 			resetBtn.addEventListener("click", () => {
@@ -255,12 +269,20 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 		} else {
 			const deleteBtn = buttonsEl.createEl("button", {
 				cls: "callout-studio-delete-btn",
-				attr: { "aria-label": t("settings.deleteAria", { name: def.displayName }) },
+				attr: {
+					"aria-label": t("settings.deleteAria", {
+						name: def.displayName,
+					}),
+				},
 			});
 			setIcon(deleteBtn, "trash-2");
 			deleteBtn.addEventListener("click", () => {
 				// eslint-disable-next-line no-alert -- Obsidian has no built-in confirm dialog
-				if (confirm(t("settings.deleteConfirm", { name: def.displayName }))) {
+				if (
+					confirm(
+						t("settings.deleteConfirm", { name: def.displayName }),
+					)
+				) {
 					this.plugin.registry.remove(def.id);
 					this.display();
 				}
@@ -328,7 +350,9 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 	private renderPopupSettings(containerEl: HTMLElement): void {
 		const { popup } = this.plugin.settings;
 
-		new Setting(containerEl).setName(t("settings.contextMenuPopup")).setHeading();
+		new Setting(containerEl)
+			.setName(t("settings.contextMenuPopup"))
+			.setHeading();
 
 		new Setting(containerEl)
 			.setName(t("settings.enablePopup"))
@@ -340,19 +364,21 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 				}),
 			);
 
-		new Setting(containerEl).setName(t("settings.popupPosition")).addDropdown((d) =>
-			d
-				.addOptions({
-					"top-left": t("settings.topLeft"),
-					"top-right": t("settings.topRight"),
-					cursor: t("settings.cursor"),
-				})
-				.setValue(popup.position)
-				.onChange(async (v: string) => {
-					popup.position = v as typeof popup.position;
-					await this.plugin.saveSettings();
-				}),
-		);
+		new Setting(containerEl)
+			.setName(t("settings.popupPosition"))
+			.addDropdown((d) =>
+				d
+					.addOptions({
+						"top-left": t("settings.topLeft"),
+						"top-right": t("settings.topRight"),
+						cursor: t("settings.cursor"),
+					})
+					.setValue(popup.position)
+					.onChange(async (v: string) => {
+						popup.position = v as typeof popup.position;
+						await this.plugin.saveSettings();
+					}),
+			);
 
 		new Setting(containerEl)
 			.setName(t("settings.popupTransparency"))
@@ -382,12 +408,14 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 					}),
 			);
 
-		new Setting(containerEl).setName(t("settings.showIconsPopup")).addToggle((tog) =>
-			tog.setValue(popup.showIcons).onChange(async (v) => {
-				popup.showIcons = v;
-				await this.plugin.saveSettings();
-			}),
-		);
+		new Setting(containerEl)
+			.setName(t("settings.showIconsPopup"))
+			.addToggle((tog) =>
+				tog.setValue(popup.showIcons).onChange(async (v) => {
+					popup.showIcons = v;
+					await this.plugin.saveSettings();
+				}),
+			);
 
 		new Setting(containerEl)
 			.setName(t("settings.showColorDots"))
@@ -428,20 +456,22 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 				}),
 			);
 
-		new Setting(containerEl).setName(t("settings.popupAnimation")).addDropdown((d) =>
-			d
-				.addOptions({
-					fade: t("settings.animFade"),
-					slide: t("settings.animSlide"),
-					scale: t("settings.animScale"),
-					none: t("settings.animNone"),
-				})
-				.setValue(popup.animation)
-				.onChange(async (v: string) => {
-					popup.animation = v as typeof popup.animation;
-					await this.plugin.saveSettings();
-				}),
-		);
+		new Setting(containerEl)
+			.setName(t("settings.popupAnimation"))
+			.addDropdown((d) =>
+				d
+					.addOptions({
+						fade: t("settings.animFade"),
+						slide: t("settings.animSlide"),
+						scale: t("settings.animScale"),
+						none: t("settings.animNone"),
+					})
+					.setValue(popup.animation)
+					.onChange(async (v: string) => {
+						popup.animation = v as typeof popup.animation;
+						await this.plugin.saveSettings();
+					}),
+			);
 	}
 
 	// ─── Section D: Autocomplete Settings ────────────────────
@@ -449,7 +479,9 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 	private renderAutocompleteSettings(containerEl: HTMLElement): void {
 		const { autocomplete } = this.plugin.settings;
 
-		new Setting(containerEl).setName(t("settings.autocomplete")).setHeading();
+		new Setting(containerEl)
+			.setName(t("settings.autocomplete"))
+			.setHeading();
 
 		new Setting(containerEl)
 			.setName(t("settings.enableAutocomplete"))
@@ -472,24 +504,30 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 					}),
 			);
 
-		new Setting(containerEl).setName(t("settings.showColorPreviews")).addToggle((tog) =>
-			tog.setValue(autocomplete.showColorPreviews).onChange(async (v) => {
-				autocomplete.showColorPreviews = v;
-				await this.plugin.saveSettings();
-			}),
-		);
-
-		new Setting(containerEl).setName(t("settings.maxSuggestions")).addText((txt) =>
-			txt
-				.setValue(String(autocomplete.maxSuggestions))
-				.onChange(async (v) => {
-					const n = parseInt(v, 10);
-					if (!isNaN(n) && n > 0) {
-						autocomplete.maxSuggestions = n;
+		new Setting(containerEl)
+			.setName(t("settings.showColorPreviews"))
+			.addToggle((tog) =>
+				tog
+					.setValue(autocomplete.showColorPreviews)
+					.onChange(async (v) => {
+						autocomplete.showColorPreviews = v;
 						await this.plugin.saveSettings();
-					}
-				}),
-		);
+					}),
+			);
+
+		new Setting(containerEl)
+			.setName(t("settings.maxSuggestions"))
+			.addText((txt) =>
+				txt
+					.setValue(String(autocomplete.maxSuggestions))
+					.onChange(async (v) => {
+						const n = parseInt(v, 10);
+						if (!isNaN(n) && n > 0) {
+							autocomplete.maxSuggestions = n;
+							await this.plugin.saveSettings();
+						}
+					}),
+			);
 
 		new Setting(containerEl)
 			.setName(t("settings.triggerCharacter"))
@@ -504,7 +542,9 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 	private renderIconSourceSettings(containerEl: HTMLElement): void {
 		const { iconSources } = this.plugin.settings;
 
-		new Setting(containerEl).setName(t("settings.iconSources")).setHeading();
+		new Setting(containerEl)
+			.setName(t("settings.iconSources"))
+			.setHeading();
 
 		new Setting(containerEl)
 			.setName(t("settings.lucideIcons"))
@@ -591,15 +631,17 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 					}),
 			);
 
-		new Setting(containerEl).setName(t("settings.colorFormat")).addDropdown((d) =>
-			d
-				.addOptions({ hex: "HEX", hsl: "HSL", rgb: "RGB" })
-				.setValue(colorMode.format)
-				.onChange(async (v: string) => {
-					colorMode.format = v as typeof colorMode.format;
-					await this.plugin.saveSettings();
-				}),
-		);
+		new Setting(containerEl)
+			.setName(t("settings.colorFormat"))
+			.addDropdown((d) =>
+				d
+					.addOptions({ hex: "HEX", hsl: "HSL", rgb: "RGB" })
+					.setValue(colorMode.format)
+					.onChange(async (v: string) => {
+						colorMode.format = v as typeof colorMode.format;
+						await this.plugin.saveSettings();
+					}),
+			);
 
 		new Setting(containerEl)
 			.setName(t("settings.showContrastWarning"))
@@ -642,9 +684,7 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 			}
 
 			if (totalImported > 0) {
-				new Notice(
-					t("notice.importedCSS", { count: totalImported }),
-				);
+				new Notice(t("notice.importedCSS", { count: totalImported }));
 			} else {
 				new Notice(t("notice.noNewCSS"));
 			}
@@ -691,14 +731,10 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 					if (added) imported++;
 				}
 				if (imported > 0) {
-					new Notice(
-						t("notice.importedJSON", { count: imported }),
-					);
+					new Notice(t("notice.importedJSON", { count: imported }));
 					this.display();
 				} else {
-					new Notice(
-						t("notice.noNewJSON"),
-					);
+					new Notice(t("notice.noNewJSON"));
 				}
 			} catch {
 				new Notice(t("notice.failedJSON"));

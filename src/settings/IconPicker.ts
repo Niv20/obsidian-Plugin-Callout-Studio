@@ -305,9 +305,7 @@ export class IconPicker extends Modal {
 		if (!this.plugin.settings.iconSources.material) {
 			this.tabContentEl
 				.createDiv("icon-picker-notice")
-				.setText(
-					t("iconPicker.materialDisabled"),
-				);
+				.setText(t("iconPicker.materialDisabled"));
 			return;
 		}
 
@@ -442,7 +440,10 @@ export class IconPicker extends Modal {
 
 	private populateMaterialCategories(select: HTMLSelectElement): void {
 		select.empty();
-		select.createEl("option", { text: t("iconPicker.allCategories"), value: "" });
+		select.createEl("option", {
+			text: t("iconPicker.allCategories"),
+			value: "",
+		});
 		const cats = getMaterialCategories(this.materialIcons);
 		for (const cat of cats) {
 			select.createEl("option", { text: cat, value: cat });
@@ -512,9 +513,7 @@ export class IconPicker extends Modal {
 		if (!this.plugin.settings.iconSources.customSvg) {
 			this.tabContentEl
 				.createDiv("icon-picker-notice")
-				.setText(
-					t("iconPicker.svgDisabled"),
-				);
+				.setText(t("iconPicker.svgDisabled"));
 			return;
 		}
 
@@ -532,8 +531,7 @@ export class IconPicker extends Modal {
 		// SVG textarea
 		const textarea = inputArea.createEl("textarea", {
 			cls: "icon-picker-svg-textarea",
-			placeholder:
-				t("iconPicker.svgPlaceholder"),
+			placeholder: t("iconPicker.svgPlaceholder"),
 			attr: { rows: "6" },
 		});
 
@@ -574,9 +572,7 @@ export class IconPicker extends Modal {
 			errorEl.hide();
 
 			if (!name || !isValidSvgIconName(name)) {
-				errorEl.setText(
-					t("iconPicker.nameInvalid"),
-				);
+				errorEl.setText(t("iconPicker.nameInvalid"));
 				errorEl.show();
 				return;
 			}

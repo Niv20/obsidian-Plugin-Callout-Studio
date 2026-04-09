@@ -84,7 +84,9 @@ export class CalloutEditor extends Modal {
 		contentEl.empty();
 		contentEl.addClass("callout-studio-editor");
 
-		this.setTitle(this.existingId ? t("editor.editCallout") : t("editor.newCallout"));
+		this.setTitle(
+			this.existingId ? t("editor.editCallout") : t("editor.newCallout"),
+		);
 
 		// Display Name
 		new Setting(contentEl)
@@ -109,7 +111,6 @@ export class CalloutEditor extends Modal {
 		let idInput: TextComponent | null = null;
 		const idSetting = new Setting(contentEl)
 			.setName(t("editor.calloutId"))
-			// eslint-disable-next-line obsidianmd/ui/sentence-case -- [!id] is literal Markdown syntax
 			.setDesc(t("editor.calloutIdDesc"))
 			.addText((text) => {
 				idInput = text;
@@ -377,7 +378,9 @@ export class CalloutEditor extends Modal {
 		});
 
 		const saveBtn = buttonContainer.createEl("button", {
-			text: this.existingId ? t("editor.saveChanges") : t("editor.createCallout"),
+			text: this.existingId
+				? t("editor.saveChanges")
+				: t("editor.createCallout"),
 			cls: "mod-cta",
 		});
 		saveBtn.addEventListener("click", () => {
@@ -558,7 +561,8 @@ export class CalloutEditor extends Modal {
 
 		// Title text
 		const titleInner = titleEl.createDiv({ cls: "callout-title-inner" });
-		titleInner.textContent = this.displayName || t("editor.untitledCallout");
+		titleInner.textContent =
+			this.displayName || t("editor.untitledCallout");
 
 		// Content
 		const contentEl = calloutEl.createDiv({ cls: "callout-content" });

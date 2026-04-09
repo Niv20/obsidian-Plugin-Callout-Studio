@@ -52,7 +52,10 @@ export class TransparentPopup {
 			});
 			itemEl.setAttribute("tabindex", "0");
 			itemEl.setAttribute("role", "button");
-			itemEl.setAttribute("aria-label", t("popup.convertToAria", { name: def.displayName }));
+			itemEl.setAttribute(
+				"aria-label",
+				t("popup.convertToAria", { name: def.displayName }),
+			);
 
 			if (popup.showIcons) {
 				const iconEl = itemEl.createDiv({
@@ -131,15 +134,10 @@ export class TransparentPopup {
 				);
 			}
 
-			this.addActionItem(
-				actionsEl,
-				"plus",
-				t("popup.createNew"),
-				() => {
-					onAction("create-based");
-					this.hide();
-				},
-			);
+			this.addActionItem(actionsEl, "plus", t("popup.createNew"), () => {
+				onAction("create-based");
+				this.hide();
+			});
 		}
 
 		// Footer
