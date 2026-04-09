@@ -87,11 +87,7 @@ export function isLowContrast(fg: RGB, bg: RGB): boolean {
  * Linearly blend two hex colours.
  * amount = 0 → hex1, amount = 1 → hex2.
  */
-export function blendHex(
-	hex1: string,
-	hex2: string,
-	amount: number,
-): string {
+export function blendHex(hex1: string, hex2: string, amount: number): string {
 	const c1 = hexToRgb(hex1);
 	const c2 = hexToRgb(hex2);
 	return rgbToHex(

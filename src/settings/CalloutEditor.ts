@@ -60,8 +60,7 @@ export class CalloutEditor extends Modal {
 			existing?.bgColorLight ??
 			blendHex(this.colorLight, "#ffffff", 0.88);
 		this.bgColorDark =
-			existing?.bgColorDark ??
-			blendHex(this.colorDark, "#1e1e1e", 0.88);
+			existing?.bgColorDark ?? blendHex(this.colorDark, "#1e1e1e", 0.88);
 		this.textColorLight = existing?.textColorLight ?? "#1a1a1a";
 		this.textColorDark = existing?.textColorDark ?? "#e0e0e0";
 		this.foldable = existing?.foldable ?? true;
@@ -306,25 +305,43 @@ export class CalloutEditor extends Modal {
 		gridHeader.createSpan({ text: "Dark" });
 
 		// Background row
-		this.addColorRow(colorGrid, "Background", this.bgColorLight, this.bgColorDark, (light, dark) => {
-			if (light !== undefined) this.bgColorLight = light;
-			if (dark !== undefined) this.bgColorDark = dark;
-			this.updatePreview();
-		});
+		this.addColorRow(
+			colorGrid,
+			"Background",
+			this.bgColorLight,
+			this.bgColorDark,
+			(light, dark) => {
+				if (light !== undefined) this.bgColorLight = light;
+				if (dark !== undefined) this.bgColorDark = dark;
+				this.updatePreview();
+			},
+		);
 
 		// Text row
-		this.addColorRow(colorGrid, "Text", this.textColorLight, this.textColorDark, (light, dark) => {
-			if (light !== undefined) this.textColorLight = light;
-			if (dark !== undefined) this.textColorDark = dark;
-			this.updatePreview();
-		});
+		this.addColorRow(
+			colorGrid,
+			"Text",
+			this.textColorLight,
+			this.textColorDark,
+			(light, dark) => {
+				if (light !== undefined) this.textColorLight = light;
+				if (dark !== undefined) this.textColorDark = dark;
+				this.updatePreview();
+			},
+		);
 
 		// Icon/accent row
-		this.addColorRow(colorGrid, "Icon", this.colorLight, this.colorDark, (light, dark) => {
-			if (light !== undefined) this.colorLight = light;
-			if (dark !== undefined) this.colorDark = dark;
-			this.updatePreview();
-		});
+		this.addColorRow(
+			colorGrid,
+			"Icon",
+			this.colorLight,
+			this.colorDark,
+			(light, dark) => {
+				if (light !== undefined) this.colorLight = light;
+				if (dark !== undefined) this.colorDark = dark;
+				this.updatePreview();
+			},
+		);
 
 		// Foldable
 		new Setting(contentEl)
@@ -507,7 +524,7 @@ export class CalloutEditor extends Modal {
 		}
 
 		const calloutEl = this.previewEl.createDiv({ cls: "callout" });
-		calloutEl.setAttribute("data-callout", this.calloutId || "note");
+		calloutEl.setAttribute("data-callout", "cs-preview");
 		calloutEl.style.setProperty("--callout-color", rgbStr);
 		calloutEl.style.backgroundColor = bgColor;
 

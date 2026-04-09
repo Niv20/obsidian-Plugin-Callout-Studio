@@ -76,9 +76,7 @@ export class CSSInjector {
 		const parts: string[] = [];
 
 		// Light mode (default)
-		const lightProps: string[] = [
-			`  --callout-color: ${lightRgb};`,
-		];
+		const lightProps: string[] = [`  --callout-color: ${lightRgb};`];
 		if (iconCSS) lightProps.push(`  --callout-icon: ${iconCSS};`);
 		if (def.bgColorLight) {
 			lightProps.push(`  background-color: ${def.bgColorLight};`);
@@ -88,10 +86,11 @@ export class CSSInjector {
 		);
 
 		// Dark mode override
-		if (def.colorLight !== def.colorDark || def.bgColorLight !== def.bgColorDark) {
-			const darkProps: string[] = [
-				`  --callout-color: ${darkRgb};`,
-			];
+		if (
+			def.colorLight !== def.colorDark ||
+			def.bgColorLight !== def.bgColorDark
+		) {
+			const darkProps: string[] = [`  --callout-color: ${darkRgb};`];
 			if (def.bgColorDark) {
 				darkProps.push(`  background-color: ${def.bgColorDark};`);
 			}

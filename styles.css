@@ -196,7 +196,9 @@
 	background: transparent;
 	color: var(--text-muted);
 	cursor: pointer;
-	transition: background 0.12s ease, color 0.12s ease;
+	transition:
+		background 0.12s ease,
+		color 0.12s ease;
 }
 
 .callout-studio-seg-btn:hover {
