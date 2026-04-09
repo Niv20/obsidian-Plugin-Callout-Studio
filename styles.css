@@ -494,41 +494,53 @@
 
 .icon-picker-tabs {
 	display: flex;
+	gap: 4px;
 	border-bottom: 1px solid var(--background-modifier-border);
-	padding: 0 12px;
+	padding: 4px 12px 0;
 	flex-shrink: 0;
+	background: var(--background-primary);
 }
 
 .icon-picker-tab {
-	padding: 8px 16px;
+	padding: 6px 16px;
 	background: none;
 	border: none;
 	border-bottom: 2px solid transparent;
+	border-radius: var(--radius-s) var(--radius-s) 0 0;
 	color: var(--text-muted);
 	cursor: pointer;
 	font-size: var(--font-ui-small);
+	font-weight: var(--font-semibold);
 	transition:
 		color 0.15s,
-		border-color 0.15s;
+		border-color 0.15s,
+		background-color 0.15s;
 }
 
 .icon-picker-tab:hover {
 	color: var(--text-normal);
+	background-color: var(--background-modifier-hover);
 }
 
 .icon-picker-tab.is-active {
 	color: var(--text-accent);
 	border-bottom-color: var(--text-accent);
+	background-color: transparent;
 }
 
 .icon-picker-content {
 	flex: 1;
 	overflow-y: auto;
-	padding: 12px;
+	padding: 0 12px 12px;
 }
 
 .icon-picker-search {
-	margin-bottom: 12px;
+	position: sticky;
+	top: 0;
+	z-index: 1;
+	background: var(--background-primary);
+	padding: 12px 0;
+	margin-bottom: 0;
 }
 
 .icon-picker-search input {
@@ -537,9 +549,14 @@
 }
 
 .icon-picker-toolbar {
+	position: sticky;
+	top: 0;
+	z-index: 1;
+	background: var(--background-primary);
 	display: flex;
 	gap: 8px;
-	margin-bottom: 12px;
+	padding: 12px 0;
+	margin-bottom: 0;
 	flex-wrap: wrap;
 }
 
