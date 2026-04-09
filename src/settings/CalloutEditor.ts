@@ -137,69 +137,6 @@ export class CalloutEditor extends Modal {
 			});
 		});
 
-		// Icon size
-		let sizeValueEl: HTMLElement;
-		new Setting(contentEl)
-			.setName("Icon size")
-			.setDesc("Scale the icon (0.5× to 2×)")
-			.addSlider((slider: SliderComponent) => {
-				slider
-					.setLimits(50, 200, 5)
-					.setValue(Math.round(this.iconSize * 100))
-					.setDynamicTooltip()
-					.onChange((value: number) => {
-						this.iconSize = value / 100;
-						sizeValueEl.textContent = `${value}%`;
-						this.updatePreview();
-					});
-				sizeValueEl = slider.sliderEl.parentElement!.createSpan({
-					cls: "callout-studio-slider-value",
-					text: `${Math.round(this.iconSize * 100)}%`,
-				});
-			});
-
-		// Icon horizontal offset
-		let hOffsetValueEl: HTMLElement;
-		new Setting(contentEl)
-			.setName("Icon horizontal offset")
-			.setDesc("Shift the icon left or right (−10px to 10px)")
-			.addSlider((slider: SliderComponent) => {
-				slider
-					.setLimits(-10, 10, 1)
-					.setValue(this.iconOffsetX)
-					.setDynamicTooltip()
-					.onChange((value: number) => {
-						this.iconOffsetX = value;
-						hOffsetValueEl.textContent = `${value}px`;
-						this.updatePreview();
-					});
-				hOffsetValueEl = slider.sliderEl.parentElement!.createSpan({
-					cls: "callout-studio-slider-value",
-					text: `${this.iconOffsetX}px`,
-				});
-			});
-
-		// Icon vertical offset
-		let vOffsetValueEl: HTMLElement;
-		new Setting(contentEl)
-			.setName("Icon vertical offset")
-			.setDesc("Shift the icon up or down (−10px to 10px)")
-			.addSlider((slider: SliderComponent) => {
-				slider
-					.setLimits(-10, 10, 1)
-					.setValue(this.iconOffsetY)
-					.setDynamicTooltip()
-					.onChange((value: number) => {
-						this.iconOffsetY = value;
-						vOffsetValueEl.textContent = `${value}px`;
-						this.updatePreview();
-					});
-				vOffsetValueEl = slider.sliderEl.parentElement!.createSpan({
-					cls: "callout-studio-slider-value",
-					text: `${this.iconOffsetY}px`,
-				});
-			});
-
 		// Color Light
 		new Setting(contentEl)
 			.setName("Color (light mode)")
@@ -240,8 +177,16 @@ export class CalloutEditor extends Modal {
 				text.inputEl.addClass("callout-studio-hex-input");
 			});
 
-		// Live Preview
-		const previewContainer = contentEl.createDiv({
+		// ── Preview + Icon Adjustment (two-column layout) ───────────
+		const previewPanel = contentEl.createDiv({
+			cls: "callout-studio-preview-panel",
+		});
+
+		// Left column: Live Preview
+		const previewCol = previewPanel.createDiv({
+			cls: "callout-studio-preview-col",
+		});
+		const previewContainer = previewCol.createDiv({
 			cls: "callout-studio-preview-container",
 		});
 		const previewHeader = previewContainer.createDiv({
@@ -265,6 +210,76 @@ export class CalloutEditor extends Modal {
 			cls: "callout-studio-preview",
 		});
 		this.updatePreview();
+
+		// Right column: Icon adjustment sliders
+		const slidersCol = previewPanel.createDiv({
+			cls: "callout-studio-sliders-col",
+		});
+
+		const slidersHeader = slidersCol.createDiv({
+			cls: "callout-studio-sliders-header",
+		});
+		slidersHeader.createSpan({ text: "Icon adjustment" });
+
+		let sizeValueEl: HTMLElement;
+		new Setting(slidersCol)
+			.setName("Size")
+			.addSlider((slider: SliderComponent) => {
+				slider
+					.setLimits(50, 200, 5)
+					.setValue(Math.round(this.iconSize * 100))
+					.setDynamicTooltip()
+					.setInstant(true)
+					.onChange((value: number) => {
+						this.iconSize = value / 100;
+						sizeValueEl.textContent = `${value}%`;
+						this.updatePreview();
+					});
+				sizeValueEl = slider.sliderEl.parentElement!.createSpan({
+					cls: "callout-studio-slider-value",
+					text: `${Math.round(this.iconSize * 100)}%`,
+				});
+			});
+
+		let hOffsetValueEl: HTMLElement;
+		new Setting(slidersCol)
+			.setName("Horizontal offset")
+			.addSlider((slider: SliderComponent) => {
+				slider
+					.setLimits(-10, 10, 1)
+					.setValue(this.iconOffsetX)
+					.setDynamicTooltip()
+					.setInstant(true)
+					.onChange((value: number) => {
+						this.iconOffsetX = value;
+						hOffsetValueEl.textContent = `${value}px`;
+						this.updatePreview();
+					});
+				hOffsetValueEl = slider.sliderEl.parentElement!.createSpan({
+					cls: "callout-studio-slider-value",
+					text: `${this.iconOffsetX}px`,
+				});
+			});
+
+		let vOffsetValueEl: HTMLElement;
+		new Setting(slidersCol)
+			.setName("Vertical offset")
+			.addSlider((slider: SliderComponent) => {
+				slider
+					.setLimits(-10, 10, 1)
+					.setValue(this.iconOffsetY)
+					.setDynamicTooltip()
+					.setInstant(true)
+					.onChange((value: number) => {
+						this.iconOffsetY = value;
+						vOffsetValueEl.textContent = `${value}px`;
+						this.updatePreview();
+					});
+				vOffsetValueEl = slider.sliderEl.parentElement!.createSpan({
+					cls: "callout-studio-slider-value",
+					text: `${this.iconOffsetY}px`,
+				});
+			});
 
 		// Foldable
 		new Setting(contentEl)

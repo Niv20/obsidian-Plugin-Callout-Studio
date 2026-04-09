@@ -169,7 +169,7 @@
 /* ─── Live Preview ────────────────────────────────────────────── */
 
 .callout-studio-preview-container {
-	margin: 16px 0;
+	margin: 0;
 	border: 1px solid var(--background-modifier-border);
 	border-radius: 8px;
 	overflow: hidden;
@@ -239,6 +239,58 @@
 .callout-studio-editor-buttons button {
 	min-height: 32px;
 	padding: 4px 16px;
+}
+
+/* ─── Preview + Icon Adjustment Panel ─────────────────────────── */
+
+.callout-studio-preview-panel {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 16px;
+	margin: 16px 0;
+}
+
+.callout-studio-preview-col {
+	min-width: 0;
+}
+
+.callout-studio-sliders-col {
+	min-width: 0;
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+}
+
+.callout-studio-sliders-header {
+	font-size: var(--font-ui-smaller);
+	font-weight: var(--font-semibold);
+	color: var(--text-muted);
+	padding: 8px 12px;
+	background: var(--background-secondary);
+	border-radius: 8px 8px 0 0;
+	border: 1px solid var(--background-modifier-border);
+	border-bottom: none;
+}
+
+.callout-studio-sliders-col .setting-item {
+	padding: 6px 12px;
+	border-top: none;
+	background: var(--background-primary);
+	border-left: 1px solid var(--background-modifier-border);
+	border-right: 1px solid var(--background-modifier-border);
+}
+
+.callout-studio-sliders-col .setting-item:last-child {
+	border-bottom: 1px solid var(--background-modifier-border);
+	border-radius: 0 0 8px 8px;
+}
+
+.callout-studio-sliders-col .setting-item-name {
+	font-size: var(--font-ui-smaller);
+}
+
+.callout-studio-sliders-col .setting-item-description {
+	display: none;
 }
 
 /* ─── Icon Adjustment Sliders ─────────────────────────────────── */
