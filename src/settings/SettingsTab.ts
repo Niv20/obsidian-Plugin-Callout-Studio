@@ -8,6 +8,8 @@ import { materialFontFamily } from "../utils/iconLoader";
 export class CalloutStudioSettingsTab extends PluginSettingTab {
 	plugin: CalloutStudioPlugin;
 	private searchQuery = "";
+	private userListEl: HTMLElement | null = null;
+	private builtInListEl: HTMLElement | null = null;
 
 	constructor(app: App, plugin: CalloutStudioPlugin) {
 		super(app, plugin);
@@ -78,16 +80,24 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 					.setValue(this.searchQuery)
 					.onChange((value) => {
 						this.searchQuery = value;
-						this.display();
+						this.refreshLists();
 					});
 			});
 
-		// User-defined callout list
+		// User-defined callout list container
+		this.userListEl = containerEl.createDiv();
+		this.renderUserList();
+	}
+
+	private renderUserList(): void {
+		if (!this.userListEl) return;
+		this.userListEl.empty();
+
 		const userCallouts = this.plugin.registry.getUserDefined();
 		const filtered = this.filterCallouts(userCallouts);
 
 		if (filtered.length === 0) {
-			containerEl.createEl("p", {
+			this.userListEl.createEl("p", {
 				text:
 					userCallouts.length === 0
 						? 'No custom callouts yet. Click "+ Add new callout" to create one.'
@@ -95,7 +105,7 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 				cls: "callout-studio-empty-state",
 			});
 		} else {
-			const listEl = containerEl.createDiv({
+			const listEl = this.userListEl.createDiv({
 				cls: "callout-studio-callout-list",
 			});
 			for (const def of filtered) {
@@ -109,15 +119,32 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 	private renderBuiltInCalloutsSection(containerEl: HTMLElement): void {
 		new Setting(containerEl).setName("Built-in callouts").setHeading();
 
+		this.builtInListEl = containerEl.createDiv();
+		this.renderBuiltInList();
+	}
+
+	private renderBuiltInList(): void {
+		if (!this.builtInListEl) return;
+		this.builtInListEl.empty();
+
 		const builtInCallouts = this.plugin.registry.getBuiltIn();
 		const filtered = this.filterCallouts(builtInCallouts);
-		const listEl = containerEl.createDiv({
+		const listEl = this.builtInListEl.createDiv({
 			cls: "callout-studio-callout-list",
 		});
 
 		for (const def of filtered) {
 			this.renderCalloutRow(listEl, def, true);
 		}
+	}
+
+	/**
+	 * Re-render only the callout lists without rebuilding the whole tab.
+	 * This preserves search input focus.
+	 */
+	private refreshLists(): void {
+		this.renderUserList();
+		this.renderBuiltInList();
 	}
 
 	// ─── Callout Row Rendering ───────────────────────────────
