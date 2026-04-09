@@ -50,6 +50,11 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 			this.display();
 		});
 
+		const importJsonBtn = actionsEl.createEl("button", { text: "Import from JSON" });
+		importJsonBtn.addEventListener("click", () => {
+			this.importFromJSON();
+		});
+
 		const exportBtn = actionsEl.createEl("button", { text: "Export all" });
 		exportBtn.addEventListener("click", () => {
 			this.exportCallouts();
@@ -467,5 +472,42 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 		a.click();
 		URL.revokeObjectURL(url);
 		new Notice("Callouts exported to callout-studio-callouts.json");
+	}
+
+	private importFromJSON(): void {
+		const input = document.createElement("input");
+		input.type = "file";
+		input.accept = ".json";
+		input.addEventListener("change", async () => {
+			const file = input.files?.[0];
+			if (!file) return;
+			try {
+				const text = await file.text();
+				const defs = JSON.parse(text) as CalloutDefinition[];
+				if (!Array.isArray(defs)) {
+					new Notice("Invalid JSON format: expected an array.");
+					return;
+				}
+				let imported = 0;
+				for (const def of defs) {
+					if (!def.id || !def.displayName) continue;
+					const added = this.plugin.registry.add({
+						...def,
+						builtIn: false,
+						source: "user",
+					});
+					if (added) imported++;
+				}
+				if (imported > 0) {
+					new Notice(`Imported ${imported} callout type(s) from JSON.`);
+					this.display();
+				} else {
+					new Notice("No new callout types were imported (IDs may already exist).");
+				}
+			} catch {
+				new Notice("Failed to parse JSON file.");
+			}
+		});
+		input.click();
 	}
 }
