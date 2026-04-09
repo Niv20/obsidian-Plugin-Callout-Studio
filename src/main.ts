@@ -2,6 +2,8 @@ import { Plugin } from 'obsidian';
 import type { PluginData, PluginSettings } from './types';
 import { CalloutRegistry } from './manager/CalloutRegistry';
 import { CSSInjector } from './manager/CSSInjector';
+import { CalloutStudioSettingsTab } from './settings/SettingsTab';
+import { CalloutEditor } from './settings/CalloutEditor';
 
 export default class CalloutStudioPlugin extends Plugin {
 	registry!: CalloutRegistry;
@@ -34,6 +36,9 @@ export default class CalloutStudioPlugin extends Plugin {
 			})
 		);
 
+		// Settings tab
+		this.addSettingTab(new CalloutStudioSettingsTab(this.app, this));
+
 		// Commands
 		this.addCommand({
 			id: 'open-settings',
@@ -48,7 +53,7 @@ export default class CalloutStudioPlugin extends Plugin {
 			id: 'create-callout',
 			name: 'Create new callout type',
 			callback: () => {
-				// Will be wired to CalloutEditor modal in Step 1.7
+				new CalloutEditor(this).open();
 			},
 		});
 	}
