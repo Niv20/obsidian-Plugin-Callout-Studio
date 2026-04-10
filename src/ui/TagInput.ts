@@ -208,7 +208,7 @@ export class TagInput {
 	}
 
 	private renderTag(tag: string): void {
-		const tagEl = createDiv({ cls: "cs-tag-chip" });
+		const tagEl = this.tagsRowEl.createDiv({ cls: "cs-tag-chip" });
 		tagEl.setAttribute("data-tag", tag);
 
 		tagEl.createSpan({ cls: "cs-tag-chip-text", text: tag });
@@ -220,7 +220,6 @@ export class TagInput {
 			this.removeTag(tag);
 		});
 
-		this.tagsRowEl.appendChild(tagEl);
 	}
 
 	getTags(): string[] {

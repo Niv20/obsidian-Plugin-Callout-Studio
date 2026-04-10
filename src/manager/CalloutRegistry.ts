@@ -201,7 +201,6 @@ export class CalloutRegistry {
 
 	findByAlias(alias: string): CalloutDefinition | undefined {
 		for (const def of this.callouts.values()) {
-			// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call -- ESLint type-checker fails to resolve def.aliases; type is string[] | undefined
 			if (def.aliases && def.aliases.includes(alias)) return def;
 		}
 		return undefined;
