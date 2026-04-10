@@ -407,7 +407,9 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 			// Apply live styles
 			callout.style.borderRadius = `${globalStyle.borderRadius}px`;
 			if (globalStyle.border) {
-				callout.setCssProps({ border: "1.5px solid rgba(var(--callout-color), 0.45)" });
+				callout.setCssProps({
+					border: "1.5px solid rgba(var(--callout-color), 0.45)",
+				});
 			} else {
 				callout.setCssProps({ border: "none" });
 			}
@@ -473,9 +475,7 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 			)
 			.setDesc(t("settings.titleScaleDesc"))
 			.addSlider((s) => {
-				const nameSetting = s.sliderEl.closest(
-					".setting-item",
-				);
+				const nameSetting = s.sliderEl.closest(".setting-item");
 				s.setLimits(0.5, 2.0, 0.05)
 					.setValue(globalStyle.titleScale)
 					.setDynamicTooltip()
@@ -500,9 +500,7 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 			)
 			.setDesc(t("settings.contentScaleDesc"))
 			.addSlider((s) => {
-				const nameSetting = s.sliderEl.closest(
-					".setting-item",
-				);
+				const nameSetting = s.sliderEl.closest(".setting-item");
 				s.setLimits(0.5, 2.0, 0.05)
 					.setValue(globalStyle.contentScale)
 					.setDynamicTooltip()
@@ -527,9 +525,7 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 			)
 			.setDesc(t("settings.borderRadiusDesc"))
 			.addSlider((s) => {
-				const nameSetting = s.sliderEl.closest(
-					".setting-item",
-				);
+				const nameSetting = s.sliderEl.closest(".setting-item");
 				s.setLimits(0, 24, 1)
 					.setValue(globalStyle.borderRadius)
 					.setDynamicTooltip()
