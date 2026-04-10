@@ -37,7 +37,9 @@ export class TagInput {
 		this.tags = [...(opts.initialTags ?? [])];
 		this.onChange = opts.onChange;
 		this.validate = opts.validate;
+		// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- numeric constant; LS stale-cache false positive
 		this.maxLength = opts.maxLength ?? MAX_TAG_LENGTH;
+		// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- numeric constant; LS stale-cache false positive
 		this.maxTags = opts.maxTags ?? MAX_TAGS_COUNT;
 		this.placeholder = opts.placeholder ?? "";
 
