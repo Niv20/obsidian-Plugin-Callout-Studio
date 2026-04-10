@@ -28,6 +28,8 @@ export interface CalloutDefinition {
 	textColorLight?: string;
 	/** Custom content text color – dark mode */
 	textColorDark?: string;
+	/** Alternative IDs (aliases) that map to this callout */
+	aliases?: string[];
 	metadata?: Record<string, string>;
 }
 

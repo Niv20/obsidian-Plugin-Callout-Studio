@@ -1,5 +1,11 @@
 import type { CalloutDefinition, PluginSettings } from "./types";
 
+/** Maximum characters allowed per callout ID */
+export const MAX_TAG_LENGTH = 10;
+
+/** Maximum number of IDs (aliases) allowed per callout */
+export const MAX_TAGS_COUNT = 4;
+
 export const DEFAULT_CALLOUTS: CalloutDefinition[] = [
 	{
 		id: "note",
@@ -22,11 +28,23 @@ export const DEFAULT_CALLOUTS: CalloutDefinition[] = [
 		defaultFolded: false,
 		builtIn: true,
 		source: "builtin",
+		aliases: ["summary", "tldr"],
 	},
 	{
 		id: "info",
 		displayName: "Info",
 		icon: { type: "lucide", value: "info" },
+		colorLight: "#448aff",
+		colorDark: "#448aff",
+		foldable: true,
+		defaultFolded: false,
+		builtIn: true,
+		source: "builtin",
+	},
+	{
+		id: "todo",
+		displayName: "Todo",
+		icon: { type: "lucide", value: "check-circle-2" },
 		colorLight: "#448aff",
 		colorDark: "#448aff",
 		foldable: true,
@@ -44,6 +62,7 @@ export const DEFAULT_CALLOUTS: CalloutDefinition[] = [
 		defaultFolded: false,
 		builtIn: true,
 		source: "builtin",
+		aliases: ["hint", "important"],
 	},
 	{
 		id: "success",
@@ -55,6 +74,7 @@ export const DEFAULT_CALLOUTS: CalloutDefinition[] = [
 		defaultFolded: false,
 		builtIn: true,
 		source: "builtin",
+		aliases: ["check", "done"],
 	},
 	{
 		id: "question",
@@ -66,6 +86,7 @@ export const DEFAULT_CALLOUTS: CalloutDefinition[] = [
 		defaultFolded: false,
 		builtIn: true,
 		source: "builtin",
+		aliases: ["help", "faq"],
 	},
 	{
 		id: "warning",
@@ -77,6 +98,7 @@ export const DEFAULT_CALLOUTS: CalloutDefinition[] = [
 		defaultFolded: false,
 		builtIn: true,
 		source: "builtin",
+		aliases: ["caution", "attention"],
 	},
 	{
 		id: "failure",
@@ -88,6 +110,7 @@ export const DEFAULT_CALLOUTS: CalloutDefinition[] = [
 		defaultFolded: false,
 		builtIn: true,
 		source: "builtin",
+		aliases: ["fail", "missing"],
 	},
 	{
 		id: "danger",
@@ -99,6 +122,7 @@ export const DEFAULT_CALLOUTS: CalloutDefinition[] = [
 		defaultFolded: false,
 		builtIn: true,
 		source: "builtin",
+		aliases: ["error"],
 	},
 	{
 		id: "bug",
@@ -132,6 +156,7 @@ export const DEFAULT_CALLOUTS: CalloutDefinition[] = [
 		defaultFolded: false,
 		builtIn: true,
 		source: "builtin",
+		aliases: ["cite"],
 	},
 ];
 

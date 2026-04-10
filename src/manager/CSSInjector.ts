@@ -126,6 +126,56 @@ export class CSSInjector {
 			parts.push(iconTransform);
 		}
 
+		// Generate alias selectors that reference the same styles
+		if (def.aliases && def.aliases.length > 0) {
+			for (const alias of def.aliases) {
+				parts.push(
+					`/* alias: ${alias} → ${def.id} */\n` +
+						`.callout[data-callout="${alias}"] {\n${lightProps.join("\n")}\n}`,
+				);
+				if (
+					def.colorLight !== def.colorDark ||
+					def.bgColorLight !== def.bgColorDark
+				) {
+					const aliasDarkProps: string[] = [
+						`  --callout-color: ${darkRgb};`,
+					];
+					if (def.bgColorDark) {
+						aliasDarkProps.push(
+							`  background-color: ${def.bgColorDark};`,
+						);
+					}
+					parts.push(
+						`.theme-dark .callout[data-callout="${alias}"] {\n${aliasDarkProps.join("\n")}\n}`,
+					);
+				}
+				if (def.textColorLight) {
+					parts.push(
+						`.callout[data-callout="${alias}"] > .callout-content {\n  color: ${def.textColorLight};\n}`,
+					);
+				}
+				if (
+					def.textColorDark &&
+					def.textColorDark !== def.textColorLight
+				) {
+					parts.push(
+						`.theme-dark .callout[data-callout="${alias}"] > .callout-content {\n  color: ${def.textColorDark};\n}`,
+					);
+				}
+				if (def.icon.type === "material") {
+					const aliasDef = { ...def, id: alias };
+					parts.push(this.generateMaterialIconOverride(aliasDef));
+				}
+				const aliasTransform = this.getIconTransformCSS({
+					...def,
+					id: alias,
+				});
+				if (aliasTransform) {
+					parts.push(aliasTransform);
+				}
+			}
+		}
+
 		return parts.join("\n\n");
 	}
 

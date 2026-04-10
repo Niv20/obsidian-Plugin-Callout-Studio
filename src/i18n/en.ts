@@ -97,6 +97,15 @@ export const en: Record<string, string> = {
 	"settings.showContrastWarningDesc":
 		"Warns if icon color has low contrast against callout background",
 
+	// Settings — Reset
+	"settings.resetAll": "Reset",
+	"settings.resetAllDesc":
+		"Delete all user callouts and reset built-in callouts to their defaults.",
+	"settings.resetAllButton": "Reset all callout types",
+	"settings.resetAllConfirm":
+		"This will delete all your custom callouts and reset all built-in callouts to their defaults. This action cannot be undone. Are you sure?",
+	"notice.resetAllDone": "All callout types have been reset to defaults.",
+
 	// Settings — Language
 	"settings.language": "Language",
 	"settings.languageDesc": "Plugin interface language",
@@ -119,11 +128,13 @@ export const en: Record<string, string> = {
 	"editor.newCallout": "New callout",
 	"editor.displayName": "Display name",
 	"editor.displayNameDesc": "The human-readable label shown in the UI",
+	"editor.displayNameBuiltIn":
+		"Display name cannot be changed for built-in callouts",
 	"editor.displayNamePlaceholder": "My warning",
-	"editor.calloutId": "Callout ID",
-	"editor.calloutIdDesc":
-		"Unique identifier used in Markdown syntax: > [!id]",
-	"editor.calloutIdPlaceholder": "My-warning",
+	"editor.calloutIds": "Callout IDs",
+	"editor.calloutIdsDesc":
+		"All identifiers for this callout. Press Enter or Space to add.",
+	"editor.calloutIdsPlaceholder": "Add ID...",
 	"editor.icon": "Icon",
 	"editor.light": "Light",
 	"editor.dark": "Dark",
@@ -143,8 +154,9 @@ export const en: Record<string, string> = {
 	"editor.cancel": "Cancel",
 	"editor.saveChanges": "Save changes",
 	"editor.createCallout": "Create callout",
-	"editor.idEmpty": "ID cannot be empty",
+	"editor.idEmpty": "At least one ID is required",
 	"editor.idExists": "A callout with this ID already exists",
+	"editor.idConflict": "This ID conflicts with an existing callout",
 	"editor.untitledCallout": "Untitled Callout",
 	"editor.loremIpsum":
 		"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.",

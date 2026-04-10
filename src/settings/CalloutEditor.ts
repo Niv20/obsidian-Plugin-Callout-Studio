@@ -1,16 +1,11 @@
-import {
-	Modal,
-	Setting,
-	setIcon,
-	TextComponent,
-	SliderComponent,
-} from "obsidian";
+import { Modal, Setting, setIcon, SliderComponent } from "obsidian";
 import type CalloutStudioPlugin from "../main";
 import type { CalloutDefinition, CalloutIcon } from "../types";
 import { IconPicker } from "./IconPicker";
 import { materialFontFamily } from "../utils/iconLoader";
 import { blendHex } from "../utils/colorUtils";
 import { t } from "../i18n";
+import { TagInput } from "../ui/TagInput";
 
 function generateId(displayName: string): string {
 	return displayName
@@ -24,6 +19,7 @@ function generateId(displayName: string): string {
 export class CalloutEditor extends Modal {
 	private plugin: CalloutStudioPlugin;
 	private existingId: string | null;
+	private isBuiltIn: boolean;
 	private resolve: ((result: CalloutDefinition | null) => void) | null = null;
 
 	// Form state
@@ -41,14 +37,18 @@ export class CalloutEditor extends Modal {
 	private iconOffsetX: number;
 	private iconOffsetY: number;
 	private iconSize: number;
+	private aliases: string[];
 	private previewEl: HTMLElement | null = null;
 	private previewDarkMode = false;
-	private idWarningEl: HTMLElement | null = null;
+	private idsTagInput: TagInput | null = null;
+	private saveBtn: HTMLButtonElement | null = null;
+	private initialSnapshot: string = "";
 
 	constructor(plugin: CalloutStudioPlugin, existing?: CalloutDefinition) {
 		super(plugin.app);
 		this.plugin = plugin;
 		this.existingId = existing?.id ?? null;
+		this.isBuiltIn = existing?.builtIn ?? false;
 
 		this.displayName = existing?.displayName ?? "";
 		this.calloutId = existing?.id ?? "";
@@ -69,6 +69,7 @@ export class CalloutEditor extends Modal {
 		this.iconOffsetX = existing?.iconOffsetX ?? 0;
 		this.iconOffsetY = existing?.iconOffsetY ?? 0;
 		this.iconSize = existing?.iconSize ?? 1;
+		this.aliases = [...(existing?.aliases ?? [])];
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-misused-promises -- intentional Promise-returning override for modal result
@@ -83,6 +84,10 @@ export class CalloutEditor extends Modal {
 		const { contentEl } = this;
 		contentEl.empty();
 		contentEl.addClass("callout-studio-editor");
+		this.modalEl.addClass("callout-studio-editor-modal");
+
+		// Snapshot initial state for dirty-checking
+		this.initialSnapshot = this.stateSnapshot();
 
 		this.setTitle(
 			this.existingId ? t("editor.editCallout") : t("editor.newCallout"),
@@ -91,41 +96,76 @@ export class CalloutEditor extends Modal {
 		// Display Name
 		new Setting(contentEl)
 			.setName(t("editor.displayName"))
-			.setDesc(t("editor.displayNameDesc"))
+			.setDesc(
+				this.isBuiltIn
+					? t("editor.displayNameBuiltIn")
+					: t("editor.displayNameDesc"),
+			)
 			.addText((text) => {
-				text.setPlaceholder(t("editor.displayNamePlaceholder"))
-					.setValue(this.displayName)
-					.onChange((value) => {
+				text.setPlaceholder(
+					t("editor.displayNamePlaceholder"),
+				).setValue(this.displayName);
+				if (this.isBuiltIn) {
+					text.setDisabled(true);
+				} else {
+					text.onChange((value) => {
 						this.displayName = value;
 						if (!this.existingId) {
 							this.calloutId = generateId(value);
-							idInput?.setValue(this.calloutId);
+							if (this.idsTagInput) {
+								const currentTags = this.idsTagInput.getTags();
+								if (currentTags.length === 0) {
+									this.idsTagInput.setTags([this.calloutId]);
+								} else {
+									currentTags[0] = this.calloutId;
+									this.idsTagInput.setTags(currentTags);
+								}
+							}
 							this.updateIdWarning();
 						}
 						this.updatePreview();
+						this.updateSaveState();
 					});
-				text.inputEl.focus();
+				}
+				if (!this.isBuiltIn) text.inputEl.focus();
 			});
 
-		// Callout ID
-		let idInput: TextComponent | null = null;
-		const idSetting = new Setting(contentEl)
-			.setName(t("editor.calloutId"))
-			.setDesc(t("editor.calloutIdDesc"))
-			.addText((text) => {
-				idInput = text;
-				text.setPlaceholder(t("editor.calloutIdPlaceholder"))
-					.setValue(this.calloutId)
-					.onChange((value) => {
-						this.calloutId = value;
-						this.updateIdWarning();
-						this.updatePreview();
-					});
-			});
+		// Callout IDs (primary + aliases) — unified tag input
+		const initialIds = [this.calloutId, ...this.aliases].filter(Boolean);
+		const idsSetting = new Setting(contentEl)
+			.setName(t("editor.calloutIds"))
+			.setDesc(t("editor.calloutIdsDesc"));
 
-		this.idWarningEl = idSetting.descEl.createEl("div", {
-			cls: "callout-studio-id-warning",
+		// Error element lives in the left description area
+		const idsErrorEl = idsSetting.descEl.createDiv();
+
+		this.idsTagInput = new TagInput(idsSetting.controlEl, {
+			initialTags: initialIds,
+			placeholder: t("editor.calloutIdsPlaceholder"),
+			errorEl: idsErrorEl,
+			onChange: (tags) => {
+				this.calloutId = tags[0] ?? "";
+				this.aliases = tags.slice(1);
+				this.updateIdWarning();
+				this.updatePreview();
+				this.updateSaveState();
+			},
+			validate: (tag) => {
+				// Check if this ID already exists in the registry (and isn't the one we're editing)
+				if (this.plugin.registry.has(tag) && tag !== this.existingId) {
+					return t("editor.idConflict");
+				}
+				// Also check if ID is an alias of another callout
+				const conflict = this.plugin.registry.findByAlias(tag);
+				if (conflict && conflict.id !== this.existingId) {
+					return t("editor.idConflict");
+				}
+				return null;
+			},
 		});
+
+		// Show initial warning if no ID
+		this.updateIdWarning();
 
 		// Icon
 		const iconSetting = new Setting(contentEl)
@@ -352,6 +392,7 @@ export class CalloutEditor extends Modal {
 			.addToggle((toggle) => {
 				toggle.setValue(this.foldable).onChange((value) => {
 					this.foldable = value;
+					this.updateSaveState();
 				});
 			});
 
@@ -362,11 +403,12 @@ export class CalloutEditor extends Modal {
 			.addToggle((toggle) => {
 				toggle.setValue(this.defaultFolded).onChange((value) => {
 					this.defaultFolded = value;
+					this.updateSaveState();
 				});
 			});
 
-		// Action buttons
-		const buttonContainer = contentEl.createDiv({
+		// Action buttons — sticky bottom bar
+		const buttonContainer = this.modalEl.createDiv({
 			cls: "callout-studio-editor-buttons",
 		});
 
@@ -383,9 +425,13 @@ export class CalloutEditor extends Modal {
 				: t("editor.createCallout"),
 			cls: "mod-cta",
 		});
+		this.saveBtn = saveBtn;
 		saveBtn.addEventListener("click", () => {
 			this.save();
 		});
+
+		// Set initial save button state
+		this.updateSaveState();
 	}
 
 	/**
@@ -420,13 +466,60 @@ export class CalloutEditor extends Modal {
 		});
 	}
 
+	private stateSnapshot(): string {
+		return JSON.stringify({
+			displayName: this.displayName,
+			calloutId: this.calloutId,
+			icon: this.icon,
+			colorLight: this.colorLight,
+			colorDark: this.colorDark,
+			bgColorLight: this.bgColorLight,
+			bgColorDark: this.bgColorDark,
+			textColorLight: this.textColorLight,
+			textColorDark: this.textColorDark,
+			foldable: this.foldable,
+			defaultFolded: this.defaultFolded,
+			iconOffsetX: this.iconOffsetX,
+			iconOffsetY: this.iconOffsetY,
+			iconSize: this.iconSize,
+			aliases: this.aliases,
+		});
+	}
+
+	private isStateValid(): boolean {
+		// Must have at least one ID
+		if (!this.calloutId) return false;
+		// Custom callouts must have a display name
+		if (!this.isBuiltIn && !this.displayName.trim()) return false;
+		// ID must not conflict with existing callouts
+		const isIdChanged =
+			this.existingId !== null && this.calloutId !== this.existingId;
+		const isNew = this.existingId === null;
+		if (
+			(isNew || isIdChanged) &&
+			this.plugin.registry.has(this.calloutId)
+		) {
+			return false;
+		}
+		return true;
+	}
+
+	private updateSaveState(): void {
+		if (!this.saveBtn) return;
+		const hasChanges = this.stateSnapshot() !== this.initialSnapshot;
+		const isValid = this.isStateValid();
+		// For new callouts: enable if valid (no need for "changes" check)
+		// For existing: enable if valid AND has changes
+		const enabled = this.existingId ? hasChanges && isValid : isValid;
+		this.saveBtn.disabled = !enabled;
+		this.saveBtn.toggleClass("cs-btn-disabled", !enabled);
+	}
+
 	private updateIdWarning(): void {
-		if (!this.idWarningEl) return;
-		this.idWarningEl.empty();
+		if (!this.idsTagInput) return;
 
 		if (!this.calloutId) {
-			this.idWarningEl.setText(t("editor.idEmpty"));
-			this.idWarningEl.addClass("is-visible");
+			this.idsTagInput.showExternalError(t("editor.idEmpty"));
 			return;
 		}
 
@@ -438,12 +531,11 @@ export class CalloutEditor extends Modal {
 			(isNew || isIdChanged) &&
 			this.plugin.registry.has(this.calloutId)
 		) {
-			this.idWarningEl.setText(t("editor.idExists"));
-			this.idWarningEl.addClass("is-visible");
+			this.idsTagInput.showExternalError(t("editor.idExists"));
 			return;
 		}
 
-		this.idWarningEl.removeClass("is-visible");
+		this.idsTagInput.clearExternalError();
 	}
 
 	private getIconLabel(): string {
@@ -569,6 +661,8 @@ export class CalloutEditor extends Modal {
 		contentEl.style.color = textColor;
 		const p = contentEl.createEl("p");
 		p.textContent = t("editor.loremIpsum");
+
+		this.updateSaveState();
 	}
 
 	private save(): void {
@@ -597,11 +691,12 @@ export class CalloutEditor extends Modal {
 			textColorDark: this.textColorDark,
 			foldable: this.foldable,
 			defaultFolded: this.defaultFolded,
-			builtIn: false,
-			source: "user",
+			builtIn: this.isBuiltIn,
+			source: this.isBuiltIn ? "builtin" : "user",
 			iconOffsetX: this.iconOffsetX,
 			iconOffsetY: this.iconOffsetY,
 			iconSize: this.iconSize,
+			aliases: this.aliases.length > 0 ? [...this.aliases] : undefined,
 		};
 
 		if (this.existingId) {
@@ -626,5 +721,7 @@ export class CalloutEditor extends Modal {
 			this.resolve = null;
 		}
 		this.contentEl.empty();
+		this.modalEl.querySelector(".callout-studio-editor-buttons")?.remove();
+		this.modalEl.removeClass("callout-studio-editor-modal");
 	}
 }

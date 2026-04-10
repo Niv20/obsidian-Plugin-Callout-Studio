@@ -30,6 +30,7 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 		this.renderIconSourceSettings(containerEl);
 		this.renderColorModeSettings(containerEl);
 		this.renderLanguageSettings(containerEl);
+		this.renderResetSection(containerEl);
 	}
 
 	// ─── Section A: My Callout Types ─────────────────────────
@@ -177,16 +178,22 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 		const iconEl = row.createDiv({ cls: "callout-studio-row-icon" });
 		this.renderRowIcon(iconEl, def);
 
-		// Info: name + > [!id] syntax
+		// Info: name + all IDs as > [!id] chips
 		const infoEl = row.createDiv({ cls: "callout-studio-row-info" });
 		infoEl.createSpan({
 			cls: "callout-studio-row-name",
 			text: def.displayName,
 		});
-		infoEl.createEl("code", {
-			cls: "callout-studio-row-syntax",
-			text: `> [!${def.id}]`,
+		const syntaxLine = infoEl.createDiv({
+			cls: "callout-studio-row-syntax-line",
 		});
+		const allIds = [def.id, ...(def.aliases ?? [])];
+		for (const id of allIds) {
+			syntaxLine.createEl("code", {
+				cls: "callout-studio-row-syntax",
+				text: `> [!${id}]`,
+			});
+		}
 
 		// Color swatches
 		const colorsEl = row.createDiv({ cls: "callout-studio-row-colors" });
@@ -233,18 +240,25 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 		editBtn.addEventListener("click", async () => {
 			if (isBuiltIn) {
 				// For built-in: open editor with the current (possibly overridden) values
-				const editorModal = new CalloutEditor(this.plugin, {
-					...def,
-					builtIn: false,
-				});
+				const editorModal = new CalloutEditor(this.plugin, def);
 				const result = await editorModal.open();
 				if (result) {
-					// Apply overrides to built-in
+					// Apply overrides to built-in — keep it in built-in section
 					this.plugin.registry.update(def.id, {
 						displayName: result.displayName,
 						icon: result.icon,
 						colorLight: result.colorLight,
 						colorDark: result.colorDark,
+						bgColorLight: result.bgColorLight,
+						bgColorDark: result.bgColorDark,
+						textColorLight: result.textColorLight,
+						textColorDark: result.textColorDark,
+						foldable: result.foldable,
+						defaultFolded: result.defaultFolded,
+						iconOffsetX: result.iconOffsetX,
+						iconOffsetY: result.iconOffsetY,
+						iconSize: result.iconSize,
+						aliases: result.aliases,
 					});
 				}
 			} else {
@@ -255,7 +269,9 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 		});
 
 		if (isBuiltIn) {
+			const modified = this.plugin.registry.isBuiltInModified(def.id);
 			const resetBtn = buttonsEl.createEl("button", {
+				cls: "callout-studio-reset-btn",
 				attr: {
 					"aria-label": t("settings.resetAria", {
 						name: def.displayName,
@@ -263,7 +279,12 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 				},
 			});
 			setIcon(resetBtn, "rotate-ccw");
+			if (!modified) {
+				resetBtn.setAttribute("disabled", "true");
+				resetBtn.addClass("callout-studio-btn-disabled");
+			}
 			resetBtn.addEventListener("click", () => {
+				if (!modified) return;
 				this.plugin.registry.resetBuiltIn(def.id);
 				this.display();
 			});
@@ -281,12 +302,14 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 				void new ConfirmModal(
 					this.app,
 					t("settings.deleteConfirm", { name: def.displayName }),
-				).confirm().then((ok) => {
-					if (ok) {
-						this.plugin.registry.remove(def.id);
-						this.display();
-					}
-				});
+				)
+					.confirm()
+					.then((ok) => {
+						if (ok) {
+							this.plugin.registry.remove(def.id);
+							this.display();
+						}
+					});
 			});
 		}
 	}
@@ -665,7 +688,8 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 		return callouts.filter(
 			(d) =>
 				d.displayName.toLowerCase().includes(q) ||
-				d.id.toLowerCase().includes(q),
+				d.id.toLowerCase().includes(q) ||
+				(d.aliases ?? []).some((a) => a.toLowerCase().includes(q)),
 		);
 	}
 
@@ -767,6 +791,29 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 						this.plugin.settings.language = v;
 						setLocale(v);
 						await this.plugin.saveSettings();
+						this.display();
+					}),
+			);
+	}
+
+	private renderResetSection(containerEl: HTMLElement): void {
+		new Setting(containerEl).setName(t("settings.resetAll")).setHeading();
+
+		new Setting(containerEl)
+			.setDesc(t("settings.resetAllDesc"))
+			.addButton((btn) =>
+				btn
+					.setButtonText(t("settings.resetAllButton"))
+					.setWarning()
+					.onClick(async () => {
+						const confirmed = await new ConfirmModal(
+							this.app,
+							t("settings.resetAllConfirm"),
+						).confirm();
+						if (!confirmed) return;
+						this.plugin.registry.resetAll();
+						await this.plugin.saveSettings();
+						new Notice(t("notice.resetAllDone"));
 						this.display();
 					}),
 			);

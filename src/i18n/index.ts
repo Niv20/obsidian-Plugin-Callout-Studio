@@ -1,9 +1,11 @@
 import { en } from "./en";
+import { he } from "./he";
 
 export type LocaleKey = keyof typeof en;
 
 const locales: Record<string, Record<string, string>> = {
 	en,
+	he,
 };
 
 let currentLocale = "en";

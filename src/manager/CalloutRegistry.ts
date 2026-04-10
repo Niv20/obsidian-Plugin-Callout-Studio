@@ -114,6 +114,9 @@ export class CalloutRegistry {
 		current: CalloutDefinition,
 		original: CalloutDefinition,
 	): boolean {
+		const aliasesChanged =
+			JSON.stringify(current.aliases ?? []) !==
+			JSON.stringify(original.aliases ?? []);
 		return (
 			current.displayName !== original.displayName ||
 			current.colorLight !== original.colorLight ||
@@ -122,7 +125,8 @@ export class CalloutRegistry {
 			current.icon.value !== original.icon.value ||
 			current.icon.style !== original.icon.style ||
 			current.foldable !== original.foldable ||
-			current.defaultFolded !== original.defaultFolded
+			current.defaultFolded !== original.defaultFolded ||
+			aliasesChanged
 		);
 	}
 
@@ -160,6 +164,13 @@ export class CalloutRegistry {
 		return true;
 	}
 
+	isBuiltInModified(id: string): boolean {
+		const current = this.callouts.get(id);
+		const original = this.builtInDefaults.get(id);
+		if (!current || !original) return false;
+		return this.isModified(current, original);
+	}
+
 	resetBuiltIn(id: string): boolean {
 		const original = this.builtInDefaults.get(id);
 		if (!original) return false;
@@ -186,6 +197,22 @@ export class CalloutRegistry {
 
 	has(id: string): boolean {
 		return this.callouts.has(id);
+	}
+
+	findByAlias(alias: string): CalloutDefinition | undefined {
+		for (const def of this.callouts.values()) {
+			// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call -- ESLint type-checker fails to resolve def.aliases; type is string[] | undefined
+			if (def.aliases && def.aliases.includes(alias)) return def;
+		}
+		return undefined;
+	}
+
+	resetAll(): void {
+		this.callouts.clear();
+		for (const def of DEFAULT_CALLOUTS) {
+			this.callouts.set(def.id, structuredClone(def));
+		}
+		this.notifyChange();
 	}
 
 	importFromCSS(cssText: string): CalloutDefinition[] {

@@ -60,7 +60,8 @@ export class CalloutAutoComplete extends EditorSuggest<CalloutDefinition> {
 		const filtered = all.filter(
 			(d) =>
 				d.id.toLowerCase().includes(query) ||
-				d.displayName.toLowerCase().includes(query),
+				d.displayName.toLowerCase().includes(query) ||
+				(d.aliases ?? []).some((a) => a.toLowerCase().includes(query)),
 		);
 
 		// Sort: user-defined first, then built-in, alphabetical within each group
