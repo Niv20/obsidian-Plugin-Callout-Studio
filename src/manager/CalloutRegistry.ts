@@ -56,10 +56,18 @@ export class CalloutRegistry {
 
 		// Merge settings
 		if (data.settings) {
+			const savedGlobal = data.settings.globalStyle;
 			this.settings = {
 				globalStyle: {
 					...DEFAULT_SETTINGS.globalStyle,
-					...data.settings.globalStyle,
+					...savedGlobal,
+					// Ensure borderSides is always a proper object
+					borderSides: {
+						...DEFAULT_SETTINGS.globalStyle.borderSides,
+						...(savedGlobal?.borderSides as
+							| Record<string, boolean>
+							| undefined),
+					},
 				},
 				popup: { ...DEFAULT_SETTINGS.popup, ...data.settings.popup },
 				autocomplete: {

@@ -398,20 +398,46 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 
 		const updatePreview = () => {
 			previewCard.empty();
-			// Re-create the mock callout with current settings
 			const callout = previewCard.createDiv({
 				cls: "callout cs-global-preview-callout",
 				attr: { "data-callout": "cs-preview" },
 			});
 
-			// Apply live styles
-			callout.style.borderRadius = `${globalStyle.borderRadius}px`;
-			if (globalStyle.border) {
+			// Apply live styles via CSS custom props
+			callout.setCssProps({
+				"--cs-preview-radius": `${globalStyle.borderRadius}px`,
+			});
+
+			// Border sides
+			const { top, right, bottom, left } = globalStyle.borderSides;
+			const allSides = top && right && bottom && left;
+			const anySide = top || right || bottom || left;
+			const bStyle = `${globalStyle.borderWidth}px solid rgba(var(--callout-color), 0.45)`;
+
+			if (allSides) {
 				callout.setCssProps({
-					border: "1.5px solid rgba(var(--callout-color), 0.45)",
+					"--cs-preview-border": bStyle,
+					"--cs-preview-border-top": bStyle,
+					"--cs-preview-border-right": bStyle,
+					"--cs-preview-border-bottom": bStyle,
+					"--cs-preview-border-left": bStyle,
+				});
+			} else if (anySide) {
+				callout.setCssProps({
+					"--cs-preview-border": "none",
+					"--cs-preview-border-top": top ? bStyle : "none",
+					"--cs-preview-border-right": right ? bStyle : "none",
+					"--cs-preview-border-bottom": bottom ? bStyle : "none",
+					"--cs-preview-border-left": left ? bStyle : "none",
 				});
 			} else {
-				callout.setCssProps({ border: "none" });
+				callout.setCssProps({
+					"--cs-preview-border": "none",
+					"--cs-preview-border-top": "none",
+					"--cs-preview-border-right": "none",
+					"--cs-preview-border-bottom": "none",
+					"--cs-preview-border-left": "none",
+				});
 			}
 
 			// Title row
@@ -422,13 +448,17 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 				cls: "callout-title-inner",
 			});
 			titleInner.setText(t("settings.previewCalloutTitle"));
-			titleInner.style.fontSize = `${globalStyle.titleScale}em`;
+			titleInner.setCssProps({
+				"--cs-preview-title-size": `${globalStyle.titleScale}em`,
+			});
 
 			// Content
 			const content = callout.createDiv({ cls: "callout-content" });
 			const p = content.createEl("p");
 			p.setText(t("settings.previewCalloutContent"));
-			content.style.fontSize = `${globalStyle.contentScale}em`;
+			content.setCssProps({
+				"--cs-preview-content-size": `${globalStyle.contentScale}em`,
+			});
 
 			if (globalStyle.alignToTitle) {
 				content.addClass("cs-align-to-title");
@@ -442,21 +472,215 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 			cls: "cs-global-controls-col",
 		});
 
-		// Border toggle
-		new Setting(controlsCol)
-			.setName(t("settings.border"))
-			.setDesc(t("settings.borderDesc"))
-			.addToggle((tog) =>
-				tog.setValue(globalStyle.border).onChange(async (v) => {
-					globalStyle.border = v;
+		// ── Borders group ──
+		const borderGroupEl = controlsCol.createDiv({
+			cls: "cs-settings-group",
+		});
+		borderGroupEl.createDiv({
+			cls: "cs-settings-group-header",
+			text: t("settings.border"),
+		});
+
+		// Compact border side selector: row of toggle buttons
+		const borderSidesRow = borderGroupEl.createDiv({
+			cls: "cs-border-sides-row",
+		});
+
+		const sides: { key: "top" | "right" | "bottom" | "left"; label: string }[] = [
+			{ key: "top", label: t("settings.borderTop") },
+			{ key: "right", label: t("settings.borderRight") },
+			{ key: "bottom", label: t("settings.borderBottom") },
+			{ key: "left", label: t("settings.borderLeft") },
+		];
+
+		// "All" toggle button
+		const allActive =
+			globalStyle.borderSides.top &&
+			globalStyle.borderSides.right &&
+			globalStyle.borderSides.bottom &&
+			globalStyle.borderSides.left;
+
+		const allBtn = borderSidesRow.createEl("button", {
+			cls: `cs-border-side-btn${allActive ? " is-active" : ""}`,
+			text: t("settings.borderAll"),
+		});
+		// eslint-disable-next-line @typescript-eslint/no-misused-promises
+		allBtn.addEventListener("click", async () => {
+			const nowAll =
+				globalStyle.borderSides.top &&
+				globalStyle.borderSides.right &&
+				globalStyle.borderSides.bottom &&
+				globalStyle.borderSides.left;
+			const newVal = !nowAll;
+			globalStyle.borderSides.top = newVal;
+			globalStyle.borderSides.right = newVal;
+			globalStyle.borderSides.bottom = newVal;
+			globalStyle.borderSides.left = newVal;
+			await this.plugin.saveSettings();
+			this.plugin.cssInjector.inject();
+			// Refresh the whole border group to update button states
+			this.display();
+		});
+
+		for (const side of sides) {
+			const active = globalStyle.borderSides[side.key];
+			const btn = borderSidesRow.createEl("button", {
+				cls: `cs-border-side-btn${active ? " is-active" : ""}`,
+				text: side.label,
+			});
+			// eslint-disable-next-line @typescript-eslint/no-misused-promises
+			btn.addEventListener("click", async () => {
+				globalStyle.borderSides[side.key] =
+					!globalStyle.borderSides[side.key];
+				await this.plugin.saveSettings();
+				this.plugin.cssInjector.inject();
+				this.display();
+			});
+		}
+
+		// Border width slider
+		const anySideActive =
+			globalStyle.borderSides.top ||
+			globalStyle.borderSides.right ||
+			globalStyle.borderSides.bottom ||
+			globalStyle.borderSides.left;
+
+		if (anySideActive) {
+			new Setting(borderGroupEl)
+				.setName(
+					`${t("settings.borderWidth")}  ${globalStyle.borderWidth}px`,
+				)
+				.addSlider((s) => {
+					const settingItem = s.sliderEl.closest(".setting-item");
+					s.setLimits(0.5, 5, 0.5)
+						.setValue(globalStyle.borderWidth)
+						.setDynamicTooltip();
+					s.sliderEl.addEventListener("input", () => {
+						const v =
+							Math.round(parseFloat(s.sliderEl.value) * 10) / 10;
+						globalStyle.borderWidth = v;
+						if (settingItem) {
+							const nameEl =
+								settingItem.querySelector(".setting-item-name");
+							if (nameEl)
+								nameEl.textContent = `${t("settings.borderWidth")}  ${v}px`;
+						}
+						updatePreview();
+					});
+					s.onChange(async (v) => {
+						globalStyle.borderWidth = Math.round(v * 10) / 10;
+						await this.plugin.saveSettings();
+						this.plugin.cssInjector.inject();
+					});
+				});
+		}
+
+		// ── Font scale group ──
+		const fontGroupEl = controlsCol.createDiv({
+			cls: "cs-settings-group",
+		});
+		fontGroupEl.createDiv({
+			cls: "cs-settings-group-header",
+			text: t("settings.fontScaleGroup"),
+		});
+
+		// Title scale slider
+		new Setting(fontGroupEl)
+			.setName(
+				`${t("settings.titleScale")}  ×${globalStyle.titleScale.toFixed(2)}`,
+			)
+			.addSlider((s) => {
+				const settingItem = s.sliderEl.closest(".setting-item");
+				s.setLimits(0.5, 1.5, 0.05)
+					.setValue(globalStyle.titleScale)
+					.setDynamicTooltip();
+				s.sliderEl.addEventListener("input", () => {
+					const v =
+						Math.round(parseFloat(s.sliderEl.value) * 100) / 100;
+					globalStyle.titleScale = v;
+					if (settingItem) {
+						const nameEl =
+							settingItem.querySelector(".setting-item-name");
+						if (nameEl)
+							nameEl.textContent = `${t("settings.titleScale")}  ×${v.toFixed(2)}`;
+					}
+					updatePreview();
+				});
+				s.onChange(async (v) => {
+					globalStyle.titleScale = Math.round(v * 100) / 100;
 					await this.plugin.saveSettings();
 					this.plugin.cssInjector.inject();
+				});
+			});
+
+		// Content scale slider
+		new Setting(fontGroupEl)
+			.setName(
+				`${t("settings.contentScale")}  ×${globalStyle.contentScale.toFixed(2)}`,
+			)
+			.addSlider((s) => {
+				const settingItem = s.sliderEl.closest(".setting-item");
+				s.setLimits(0.5, 1.5, 0.05)
+					.setValue(globalStyle.contentScale)
+					.setDynamicTooltip();
+				s.sliderEl.addEventListener("input", () => {
+					const v =
+						Math.round(parseFloat(s.sliderEl.value) * 100) / 100;
+					globalStyle.contentScale = v;
+					if (settingItem) {
+						const nameEl =
+							settingItem.querySelector(".setting-item-name");
+						if (nameEl)
+							nameEl.textContent = `${t("settings.contentScale")}  ×${v.toFixed(2)}`;
+					}
 					updatePreview();
-				}),
-			);
+				});
+				s.onChange(async (v) => {
+					globalStyle.contentScale = Math.round(v * 100) / 100;
+					await this.plugin.saveSettings();
+					this.plugin.cssInjector.inject();
+				});
+			});
+
+		// ── Shape group ──
+		const shapeGroupEl = controlsCol.createDiv({
+			cls: "cs-settings-group",
+		});
+		shapeGroupEl.createDiv({
+			cls: "cs-settings-group-header",
+			text: t("settings.shapeGroup"),
+		});
+
+		// Border radius slider
+		new Setting(shapeGroupEl)
+			.setName(
+				`${t("settings.borderRadius")}  ${globalStyle.borderRadius}px`,
+			)
+			.addSlider((s) => {
+				const settingItem = s.sliderEl.closest(".setting-item");
+				s.setLimits(0, 24, 1)
+					.setValue(globalStyle.borderRadius)
+					.setDynamicTooltip();
+				s.sliderEl.addEventListener("input", () => {
+					const v = parseInt(s.sliderEl.value, 10);
+					globalStyle.borderRadius = v;
+					if (settingItem) {
+						const nameEl =
+							settingItem.querySelector(".setting-item-name");
+						if (nameEl)
+							nameEl.textContent = `${t("settings.borderRadius")}  ${v}px`;
+					}
+					updatePreview();
+				});
+				s.onChange(async (v) => {
+					globalStyle.borderRadius = v;
+					await this.plugin.saveSettings();
+					this.plugin.cssInjector.inject();
+				});
+			});
 
 		// Align to title toggle
-		new Setting(controlsCol)
+		new Setting(shapeGroupEl)
 			.setName(t("settings.alignToTitle"))
 			.setDesc(t("settings.alignToTitleDesc"))
 			.addToggle((tog) =>
@@ -467,81 +691,6 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 					updatePreview();
 				}),
 			);
-
-		// Title scale slider
-		new Setting(controlsCol)
-			.setName(
-				`${t("settings.titleScale")}  ×${globalStyle.titleScale.toFixed(2)}`,
-			)
-			.setDesc(t("settings.titleScaleDesc"))
-			.addSlider((s) => {
-				const nameSetting = s.sliderEl.closest(".setting-item");
-				s.setLimits(0.5, 2.0, 0.05)
-					.setValue(globalStyle.titleScale)
-					.setDynamicTooltip()
-					.onChange(async (v) => {
-						globalStyle.titleScale = Math.round(v * 100) / 100;
-						if (nameSetting) {
-							const nameEl =
-								nameSetting.querySelector(".setting-item-name");
-							if (nameEl)
-								nameEl.textContent = `${t("settings.titleScale")}  ×${globalStyle.titleScale.toFixed(2)}`;
-						}
-						await this.plugin.saveSettings();
-						this.plugin.cssInjector.inject();
-						updatePreview();
-					});
-			});
-
-		// Content scale slider
-		new Setting(controlsCol)
-			.setName(
-				`${t("settings.contentScale")}  ×${globalStyle.contentScale.toFixed(2)}`,
-			)
-			.setDesc(t("settings.contentScaleDesc"))
-			.addSlider((s) => {
-				const nameSetting = s.sliderEl.closest(".setting-item");
-				s.setLimits(0.5, 2.0, 0.05)
-					.setValue(globalStyle.contentScale)
-					.setDynamicTooltip()
-					.onChange(async (v) => {
-						globalStyle.contentScale = Math.round(v * 100) / 100;
-						if (nameSetting) {
-							const nameEl =
-								nameSetting.querySelector(".setting-item-name");
-							if (nameEl)
-								nameEl.textContent = `${t("settings.contentScale")}  ×${globalStyle.contentScale.toFixed(2)}`;
-						}
-						await this.plugin.saveSettings();
-						this.plugin.cssInjector.inject();
-						updatePreview();
-					});
-			});
-
-		// Border radius slider
-		new Setting(controlsCol)
-			.setName(
-				`${t("settings.borderRadius")}  ${globalStyle.borderRadius}px`,
-			)
-			.setDesc(t("settings.borderRadiusDesc"))
-			.addSlider((s) => {
-				const nameSetting = s.sliderEl.closest(".setting-item");
-				s.setLimits(0, 24, 1)
-					.setValue(globalStyle.borderRadius)
-					.setDynamicTooltip()
-					.onChange(async (v) => {
-						globalStyle.borderRadius = v;
-						if (nameSetting) {
-							const nameEl =
-								nameSetting.querySelector(".setting-item-name");
-							if (nameEl)
-								nameEl.textContent = `${t("settings.borderRadius")}  ${v}px`;
-						}
-						await this.plugin.saveSettings();
-						this.plugin.cssInjector.inject();
-						updatePreview();
-					});
-			});
 	}
 
 	// ─── Section C: Context Menu / Popup Settings ────────────

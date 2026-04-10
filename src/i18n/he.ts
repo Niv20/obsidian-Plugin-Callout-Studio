@@ -37,23 +37,28 @@ export const he: Record<string, string> = {
 	// Settings — Global style
 	"settings.globalStyle": "עיצוב כללי לתיבות הבלטה",
 	"settings.globalStyleDesc": "הגדרות אלו משפיעות על כל תיבות ההבלטה.",
-	"settings.border": "קו חיצוני (בורדר)",
-	"settings.borderDesc": "הצגת קו מתאר חיצוני סביב כל תיבות ההבלטה",
+	"settings.border": "גבולות",
+	"settings.borderDesc": "בחירת הצדדים שבהם יוצג גבול לתיבת ההבלטה",
+	"settings.borderAll": "הכל",
+	"settings.borderTop": "למעלה",
+	"settings.borderRight": "ימין",
+	"settings.borderBottom": "למטה",
+	"settings.borderLeft": "שמאל",
+	"settings.borderWidth": "עובי גבול",
+	"settings.borderWidthDesc": "עובי הגבול בפיקסלים לצדדים פעילים",
 	"settings.alignToTitle": "יישור לכותרת",
 	"settings.alignToTitleDesc":
 		"הטקסט מתחיל באותו קו אנכי של הכותרת במקום של האייקון",
-	"settings.titleScale": "סקאלת פונט כותרת",
-	"settings.titleScaleDesc":
-		"מקדם הכפלה לגודל הפונט של הכותרת (1 = ברירת מחדל)",
-	"settings.contentScale": "סקאלת פונט תוכן",
-	"settings.contentScaleDesc":
-		"מקדם הכפלה לגודל הפונט של התוכן (1 = ברירת מחדל)",
+	"settings.fontScaleGroup": "סקאלת פונט",
+	"settings.titleScale": "כותרת",
+	"settings.contentScale": "תוכן",
+	"settings.shapeGroup": "צורה",
 	"settings.borderRadius": "עיגול פינות",
 	"settings.borderRadiusDesc": "רדיוס גבול בפיקסלים לפינות תיבת ההבלטה",
 	"settings.previewTitle": "תצוגה מקדימה",
 	"settings.previewCalloutTitle": "תיבת הבלטה לדוגמה",
 	"settings.previewCalloutContent":
-		"לורם איפסום דולור סיט אמט, קונסקטורר אדיפיסינג אלית. סד דו איוסמוד טמפור אינסידידונט אוט לבורה את דולורה מגנה אליקווה.",
+		"לורם איפסום דולור סיט אמט, קונסקטורר אדיפיסינג אלית.",
 
 	// Settings — Popup
 	"settings.enablePopup": "הפעלת תפריט הקשר צף",

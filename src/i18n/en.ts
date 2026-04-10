@@ -37,23 +37,28 @@ export const en: Record<string, string> = {
 	// Settings — Global style
 	"settings.globalStyle": "Global callout style",
 	"settings.globalStyleDesc": "These settings affect all callouts globally.",
-	"settings.border": "Outer border",
-	"settings.borderDesc": "Show a visible border outline around all callouts",
+	"settings.border": "Borders",
+	"settings.borderDesc": "Select which sides of the callout have a visible border",
+	"settings.borderAll": "All",
+	"settings.borderTop": "Top",
+	"settings.borderRight": "Right",
+	"settings.borderBottom": "Bottom",
+	"settings.borderLeft": "Left",
+	"settings.borderWidth": "Border thickness",
+	"settings.borderWidthDesc": "Thickness in pixels for active borders",
 	"settings.alignToTitle": "Align to title",
 	"settings.alignToTitleDesc":
 		"Content text starts at the same vertical line as the title instead of the icon",
-	"settings.titleScale": "Title font scale",
-	"settings.titleScaleDesc":
-		"Scale factor for the title font size (1 = default)",
-	"settings.contentScale": "Content font scale",
-	"settings.contentScaleDesc":
-		"Scale factor for the content font size (1 = default)",
+	"settings.fontScaleGroup": "Font scale",
+	"settings.titleScale": "Title",
+	"settings.contentScale": "Content",
+	"settings.shapeGroup": "Shape",
 	"settings.borderRadius": "Corner rounding",
 	"settings.borderRadiusDesc": "Border-radius in pixels for callout corners",
 	"settings.previewTitle": "Preview",
 	"settings.previewCalloutTitle": "Example callout",
 	"settings.previewCalloutContent":
-		"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+		"Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
 
 	// Settings — Popup
 	"settings.enablePopup": "Enable context menu popup",

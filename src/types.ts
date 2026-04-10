@@ -74,8 +74,15 @@ export interface ColorModeSettings {
 }
 
 export interface GlobalStyleSettings {
-	/** Show an outer border on all callouts */
-	border: boolean;
+	/** Which border sides are enabled */
+	borderSides: {
+		top: boolean;
+		right: boolean;
+		bottom: boolean;
+		left: boolean;
+	};
+	/** Border thickness in px */
+	borderWidth: number;
 	/** Align content text to the title start instead of the icon start */
 	alignToTitle: boolean;
 	/** Scale factor for callout title font size (e.g. 0.8 – 1.5) */

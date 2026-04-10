@@ -336,10 +336,22 @@ export class CSSInjector {
 		if (gs.borderRadius !== 4) {
 			props.push(`  border-radius: ${gs.borderRadius}px;`);
 		}
-		if (gs.border) {
-			props.push(
-				`  border: 1.5px solid rgba(var(--callout-color), 0.45);`,
-			);
+
+		// Border sides
+		const { top, right, bottom, left } = gs.borderSides;
+		const allSides = top && right && bottom && left;
+		const anySide = top || right || bottom || left;
+		const bStyle = `${gs.borderWidth}px solid rgba(var(--callout-color), 0.45)`;
+
+		if (allSides) {
+			props.push(`  border: ${bStyle};`);
+		} else if (anySide) {
+			// Reset any default border first
+			props.push(`  border: none;`);
+			if (top) props.push(`  border-top: ${bStyle};`);
+			if (right) props.push(`  border-right: ${bStyle};`);
+			if (bottom) props.push(`  border-bottom: ${bStyle};`);
+			if (left) props.push(`  border-left: ${bStyle};`);
 		}
 
 		if (props.length > 0) {
