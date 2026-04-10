@@ -376,12 +376,11 @@ export class CSSInjector {
 			);
 		}
 
-		// Align content to title (remove left padding so text starts at title level)
+		// Align content to title text (indent past icon + gap)
 		if (gs.alignToTitle) {
 			parts.push(
 				`.callout > .callout-content {\n` +
-					`  padding-left: 0;\n` +
-					`  margin-left: 0;\n` +
+					`  padding-inline-start: calc(var(--callout-padding, 12px) + var(--icon-size, 18px) + var(--size-4-2, 8px));\n` +
 					`}`,
 			);
 		}

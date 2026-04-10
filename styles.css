@@ -1215,14 +1215,14 @@
 }
 
 .cs-global-preview-callout > .callout-content {
-	padding: 0 12px 10px 40px;
+	padding: 0 12px 10px 12px;
 	color: var(--text-normal);
 	line-height: 1.5;
 	font-size: var(--cs-preview-content-size, 1em);
 }
 
 .cs-global-preview-callout > .callout-content.cs-align-to-title {
-	padding-left: 12px;
+	padding-left: 38px;
 }
 
 .cs-global-preview-callout > .callout-content p {

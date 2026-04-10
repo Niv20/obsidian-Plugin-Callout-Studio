@@ -486,7 +486,10 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 			cls: "cs-border-sides-row",
 		});
 
-		const sides: { key: "top" | "right" | "bottom" | "left"; label: string }[] = [
+		const sides: {
+			key: "top" | "right" | "bottom" | "left";
+			label: string;
+		}[] = [
 			{ key: "top", label: t("settings.borderTop") },
 			{ key: "right", label: t("settings.borderRight") },
 			{ key: "bottom", label: t("settings.borderBottom") },

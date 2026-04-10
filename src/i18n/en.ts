@@ -38,7 +38,8 @@ export const en: Record<string, string> = {
 	"settings.globalStyle": "Global callout style",
 	"settings.globalStyleDesc": "These settings affect all callouts globally.",
 	"settings.border": "Borders",
-	"settings.borderDesc": "Select which sides of the callout have a visible border",
+	"settings.borderDesc":
+		"Select which sides of the callout have a visible border",
 	"settings.borderAll": "All",
 	"settings.borderTop": "Top",
 	"settings.borderRight": "Right",
