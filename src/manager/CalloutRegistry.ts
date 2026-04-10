@@ -57,6 +57,10 @@ export class CalloutRegistry {
 		// Merge settings
 		if (data.settings) {
 			this.settings = {
+				globalStyle: {
+					...DEFAULT_SETTINGS.globalStyle,
+					...data.settings.globalStyle,
+				},
 				popup: { ...DEFAULT_SETTINGS.popup, ...data.settings.popup },
 				autocomplete: {
 					...DEFAULT_SETTINGS.autocomplete,

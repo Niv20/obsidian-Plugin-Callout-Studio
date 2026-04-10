@@ -25,6 +25,7 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 
 		this.renderCalloutTypesSection(containerEl);
 		this.renderBuiltInCalloutsSection(containerEl);
+		this.renderGlobalStyleSection(containerEl);
 		this.renderPopupSettings(containerEl);
 		this.renderAutocompleteSettings(containerEl);
 		this.renderIconSourceSettings(containerEl);
@@ -367,6 +368,184 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 			default:
 				container.textContent = "?";
 		}
+	}
+
+	// ─── Section: Global Callout Style ──────────────────────
+
+	private renderGlobalStyleSection(containerEl: HTMLElement): void {
+		const { globalStyle } = this.plugin.settings;
+
+		const heading = new Setting(containerEl)
+			.setName(t("settings.globalStyle"))
+			.setHeading();
+		heading.descEl.setText(t("settings.globalStyleDesc"));
+
+		// Two-column wrapper: preview (sticky) | controls (scrollable)
+		const wrapper = containerEl.createDiv({
+			cls: "cs-global-style-wrapper",
+		});
+
+		// ── Left: live preview (sticky) ──
+		const previewCol = wrapper.createDiv({ cls: "cs-global-preview-col" });
+		const previewLabel = previewCol.createDiv({
+			cls: "cs-global-preview-label",
+		});
+		previewLabel.setText(t("settings.previewTitle"));
+
+		const previewCard = previewCol.createDiv({
+			cls: "cs-global-preview-card",
+		});
+
+		const updatePreview = () => {
+			previewCard.empty();
+			// Re-create the mock callout with current settings
+			const callout = previewCard.createDiv({
+				cls: "callout cs-global-preview-callout",
+				attr: { "data-callout": "cs-preview" },
+			});
+
+			// Apply live styles
+			callout.style.borderRadius = `${globalStyle.borderRadius}px`;
+			if (globalStyle.border) {
+				callout.setCssProps({ border: "1.5px solid rgba(var(--callout-color), 0.45)" });
+			} else {
+				callout.setCssProps({ border: "none" });
+			}
+
+			// Title row
+			const titleRow = callout.createDiv({ cls: "callout-title" });
+			const iconEl = titleRow.createDiv({ cls: "callout-icon" });
+			setIcon(iconEl, "info");
+			const titleInner = titleRow.createDiv({
+				cls: "callout-title-inner",
+			});
+			titleInner.setText(t("settings.previewCalloutTitle"));
+			titleInner.style.fontSize = `${globalStyle.titleScale}em`;
+
+			// Content
+			const content = callout.createDiv({ cls: "callout-content" });
+			const p = content.createEl("p");
+			p.setText(t("settings.previewCalloutContent"));
+			content.style.fontSize = `${globalStyle.contentScale}em`;
+
+			if (globalStyle.alignToTitle) {
+				content.addClass("cs-align-to-title");
+			}
+		};
+
+		updatePreview();
+
+		// ── Right: controls ──
+		const controlsCol = wrapper.createDiv({
+			cls: "cs-global-controls-col",
+		});
+
+		// Border toggle
+		new Setting(controlsCol)
+			.setName(t("settings.border"))
+			.setDesc(t("settings.borderDesc"))
+			.addToggle((tog) =>
+				tog.setValue(globalStyle.border).onChange(async (v) => {
+					globalStyle.border = v;
+					await this.plugin.saveSettings();
+					this.plugin.cssInjector.inject();
+					updatePreview();
+				}),
+			);
+
+		// Align to title toggle
+		new Setting(controlsCol)
+			.setName(t("settings.alignToTitle"))
+			.setDesc(t("settings.alignToTitleDesc"))
+			.addToggle((tog) =>
+				tog.setValue(globalStyle.alignToTitle).onChange(async (v) => {
+					globalStyle.alignToTitle = v;
+					await this.plugin.saveSettings();
+					this.plugin.cssInjector.inject();
+					updatePreview();
+				}),
+			);
+
+		// Title scale slider
+		new Setting(controlsCol)
+			.setName(
+				`${t("settings.titleScale")}  ×${globalStyle.titleScale.toFixed(2)}`,
+			)
+			.setDesc(t("settings.titleScaleDesc"))
+			.addSlider((s) => {
+				const nameSetting = s.sliderEl.closest(
+					".setting-item",
+				);
+				s.setLimits(0.5, 2.0, 0.05)
+					.setValue(globalStyle.titleScale)
+					.setDynamicTooltip()
+					.onChange(async (v) => {
+						globalStyle.titleScale = Math.round(v * 100) / 100;
+						if (nameSetting) {
+							const nameEl =
+								nameSetting.querySelector(".setting-item-name");
+							if (nameEl)
+								nameEl.textContent = `${t("settings.titleScale")}  ×${globalStyle.titleScale.toFixed(2)}`;
+						}
+						await this.plugin.saveSettings();
+						this.plugin.cssInjector.inject();
+						updatePreview();
+					});
+			});
+
+		// Content scale slider
+		new Setting(controlsCol)
+			.setName(
+				`${t("settings.contentScale")}  ×${globalStyle.contentScale.toFixed(2)}`,
+			)
+			.setDesc(t("settings.contentScaleDesc"))
+			.addSlider((s) => {
+				const nameSetting = s.sliderEl.closest(
+					".setting-item",
+				);
+				s.setLimits(0.5, 2.0, 0.05)
+					.setValue(globalStyle.contentScale)
+					.setDynamicTooltip()
+					.onChange(async (v) => {
+						globalStyle.contentScale = Math.round(v * 100) / 100;
+						if (nameSetting) {
+							const nameEl =
+								nameSetting.querySelector(".setting-item-name");
+							if (nameEl)
+								nameEl.textContent = `${t("settings.contentScale")}  ×${globalStyle.contentScale.toFixed(2)}`;
+						}
+						await this.plugin.saveSettings();
+						this.plugin.cssInjector.inject();
+						updatePreview();
+					});
+			});
+
+		// Border radius slider
+		new Setting(controlsCol)
+			.setName(
+				`${t("settings.borderRadius")}  ${globalStyle.borderRadius}px`,
+			)
+			.setDesc(t("settings.borderRadiusDesc"))
+			.addSlider((s) => {
+				const nameSetting = s.sliderEl.closest(
+					".setting-item",
+				);
+				s.setLimits(0, 24, 1)
+					.setValue(globalStyle.borderRadius)
+					.setDynamicTooltip()
+					.onChange(async (v) => {
+						globalStyle.borderRadius = v;
+						if (nameSetting) {
+							const nameEl =
+								nameSetting.querySelector(".setting-item-name");
+							if (nameEl)
+								nameEl.textContent = `${t("settings.borderRadius")}  ${v}px`;
+						}
+						await this.plugin.saveSettings();
+						this.plugin.cssInjector.inject();
+						updatePreview();
+					});
+			});
 	}
 
 	// ─── Section C: Context Menu / Popup Settings ────────────

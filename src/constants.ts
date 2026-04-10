@@ -1,10 +1,14 @@
-import type { CalloutDefinition, PluginSettings } from "./types";
+import type {
+	CalloutDefinition,
+	GlobalStyleSettings,
+	PluginSettings,
+} from "./types";
 
 /** Maximum characters allowed per callout ID */
-export const MAX_TAG_LENGTH = 10;
+export const MAX_TAG_LENGTH: number = 10;
 
 /** Maximum number of IDs (aliases) allowed per callout */
-export const MAX_TAGS_COUNT = 4;
+export const MAX_TAGS_COUNT: number = 4;
 
 export const DEFAULT_CALLOUTS: CalloutDefinition[] = [
 	{
@@ -161,6 +165,13 @@ export const DEFAULT_CALLOUTS: CalloutDefinition[] = [
 ];
 
 export const DEFAULT_SETTINGS: PluginSettings = {
+	globalStyle: {
+		border: false,
+		alignToTitle: false,
+		titleScale: 1,
+		contentScale: 1,
+		borderRadius: 4,
+	} satisfies GlobalStyleSettings,
 	popup: {
 		enabled: true,
 		position: "top-left",

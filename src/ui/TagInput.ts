@@ -219,7 +219,6 @@ export class TagInput {
 			e.stopPropagation();
 			this.removeTag(tag);
 		});
-
 	}
 
 	getTags(): string[] {

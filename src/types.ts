@@ -73,7 +73,21 @@ export interface ColorModeSettings {
 	showContrastWarning: boolean;
 }
 
+export interface GlobalStyleSettings {
+	/** Show an outer border on all callouts */
+	border: boolean;
+	/** Align content text to the title start instead of the icon start */
+	alignToTitle: boolean;
+	/** Scale factor for callout title font size (e.g. 0.8 – 1.5) */
+	titleScale: number;
+	/** Scale factor for callout content font size (e.g. 0.8 – 1.5) */
+	contentScale: number;
+	/** Border-radius in px for callout corners */
+	borderRadius: number;
+}
+
 export interface PluginSettings {
+	globalStyle: GlobalStyleSettings;
 	popup: PopupSettings;
 	autocomplete: AutocompleteSettings;
 	iconSources: IconSourceSettings;

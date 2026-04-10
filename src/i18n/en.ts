@@ -34,6 +34,27 @@ export const en: Record<string, string> = {
 	"settings.lightColorAria": "Light: {{color}}",
 	"settings.darkColorAria": "Dark: {{color}}",
 
+	// Settings — Global style
+	"settings.globalStyle": "Global callout style",
+	"settings.globalStyleDesc": "These settings affect all callouts globally.",
+	"settings.border": "Outer border",
+	"settings.borderDesc": "Show a visible border outline around all callouts",
+	"settings.alignToTitle": "Align to title",
+	"settings.alignToTitleDesc":
+		"Content text starts at the same vertical line as the title instead of the icon",
+	"settings.titleScale": "Title font scale",
+	"settings.titleScaleDesc":
+		"Scale factor for the title font size (1 = default)",
+	"settings.contentScale": "Content font scale",
+	"settings.contentScaleDesc":
+		"Scale factor for the content font size (1 = default)",
+	"settings.borderRadius": "Corner rounding",
+	"settings.borderRadiusDesc": "Border-radius in pixels for callout corners",
+	"settings.previewTitle": "Preview",
+	"settings.previewCalloutTitle": "Example callout",
+	"settings.previewCalloutContent":
+		"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+
 	// Settings — Popup
 	"settings.enablePopup": "Enable context menu popup",
 	"settings.enablePopupDesc":

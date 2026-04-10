@@ -1142,3 +1142,110 @@
 	pointer-events: none;
 	filter: grayscale(1);
 }
+
+/* ─── Global Callout Style Section ────────────────────────────── */
+
+.cs-global-style-wrapper {
+	display: grid;
+	grid-template-columns: 1.4fr 1fr;
+	gap: 20px;
+	margin-bottom: 24px;
+	align-items: start;
+}
+
+/* Sticky preview column */
+.cs-global-preview-col {
+	position: sticky;
+	top: 0;
+	align-self: start;
+}
+
+.cs-global-preview-label {
+	font-size: var(--font-ui-smaller);
+	font-weight: var(--font-semibold);
+	color: var(--text-muted);
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
+	margin-bottom: 8px;
+}
+
+.cs-global-preview-card {
+	border: 1px solid var(--background-modifier-border);
+	border-radius: 10px;
+	padding: 20px;
+	background:
+		repeating-linear-gradient(
+			45deg,
+			transparent,
+			transparent 10px,
+			rgba(128, 128, 128, 0.03) 10px,
+			rgba(128, 128, 128, 0.03) 20px
+		),
+		var(--background-secondary);
+	min-height: 120px;
+}
+
+/* Preview callout mock — neutral gray */
+.cs-global-preview-callout {
+	--callout-color: 158, 158, 158;
+	background: rgba(var(--callout-color), 0.1);
+	padding: 0;
+	margin: 0;
+	overflow: hidden;
+}
+
+.cs-global-preview-callout > .callout-title {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	padding: 8px 12px;
+	font-weight: var(--font-semibold);
+	color: rgb(var(--callout-color));
+}
+
+.cs-global-preview-callout > .callout-title > .callout-icon {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-shrink: 0;
+	color: rgb(var(--callout-color));
+}
+
+.cs-global-preview-callout > .callout-title > .callout-icon svg {
+	width: 18px;
+	height: 18px;
+}
+
+.cs-global-preview-callout > .callout-content {
+	padding: 0 12px 10px 40px;
+	color: var(--text-normal);
+	line-height: 1.5;
+}
+
+.cs-global-preview-callout > .callout-content.cs-align-to-title {
+	padding-left: 12px;
+}
+
+.cs-global-preview-callout > .callout-content p {
+	margin: 0;
+}
+
+/* Controls column */
+.cs-global-controls-col {
+	display: flex;
+	flex-direction: column;
+}
+
+.cs-global-controls-col .setting-item {
+	padding: 10px 0;
+}
+
+/* Responsive: stack on narrow setting panels */
+@media (max-width: 700px) {
+	.cs-global-style-wrapper {
+		grid-template-columns: 1fr;
+	}
+	.cs-global-preview-col {
+		position: static;
+	}
+}
