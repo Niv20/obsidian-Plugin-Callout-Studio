@@ -28,6 +28,8 @@ export function getLucideIcons(filter?: string): string[] {
 const MATERIAL_ICONS_API =
 	"https://fonts.google.com/metadata/icons?key=material_symbols&incomplete=true";
 const CACHE_VALIDITY_MS = 30 * 24 * 60 * 60 * 1000; // 30 days
+/** Bump this to force re-fetch when the API URL or parsing changes */
+const METADATA_VERSION = 3;
 
 /**
  * Fetches Material Symbols metadata from Google Fonts CDN.
@@ -36,7 +38,11 @@ const CACHE_VALIDITY_MS = 30 * 24 * 60 * 60 * 1000; // 30 days
 export async function loadMaterialIcons(
 	cache: MaterialIconsCacheData | undefined,
 ): Promise<MaterialIconsCacheData> {
-	if (cache && Date.now() - cache.fetchedAt < CACHE_VALIDITY_MS) {
+	if (
+		cache &&
+		cache.version === METADATA_VERSION &&
+		Date.now() - cache.fetchedAt < CACHE_VALIDITY_MS
+	) {
 		return cache;
 	}
 
@@ -72,8 +78,17 @@ export async function loadMaterialIcons(
 		"filled",
 	];
 
-	const icons: MaterialIconMeta[] = json.icons.map((raw) => {
+	const MS_FAMILIES = new Set(Object.keys(STYLE_MAP));
+
+	const seen = new Set<string>();
+	const icons: MaterialIconMeta[] = [];
+	for (const raw of json.icons) {
+		if (seen.has(raw.name)) continue;
+		seen.add(raw.name);
 		const unsupported = new Set(raw.unsupported_families);
+		// Skip icons that don't support ANY Material Symbols family (old Material Icons only)
+		const hasAnyMs = [...MS_FAMILIES].some((f) => !unsupported.has(f));
+		if (!hasAnyMs) continue;
 		const styles = ALL_STYLES.filter((s) => {
 			const familyName = Object.entries(STYLE_MAP).find(
 				([, v]) => v === s,
@@ -81,19 +96,21 @@ export async function loadMaterialIcons(
 			if (!familyName) return true; // "filled" is always supported
 			return !unsupported.has(familyName);
 		});
-		return {
+		icons.push({
 			name: raw.name,
 			categories: raw.categories,
 			tags: raw.tags,
 			styles,
-		};
-	});
+		});
+	}
 
-	return { icons, fetchedAt: Date.now() };
+	return { icons, fetchedAt: Date.now(), version: METADATA_VERSION };
 }
 
 /**
  * Filter Material icons by name/tag search and optional style + category.
+ * The query is split on whitespace so each word is matched independently
+ * against icon names (underscores treated as spaces) and tags.
  */
 export function filterMaterialIcons(
 	icons: MaterialIconMeta[],
@@ -101,7 +118,10 @@ export function filterMaterialIcons(
 	style?: MaterialIconStyle,
 	category?: string,
 ): MaterialIconMeta[] {
-	const lc = query.toLowerCase();
+	const words = query
+		.toLowerCase()
+		.split(/\s+/)
+		.filter((w) => w.length > 0);
 	return icons.filter((icon) => {
 		if (style && !icon.styles.includes(style)) {
 			return false;
@@ -109,10 +129,13 @@ export function filterMaterialIcons(
 		if (category && !icon.categories.includes(category)) {
 			return false;
 		}
-		if (!lc) return true;
-		return (
-			icon.name.toLowerCase().includes(lc) ||
-			icon.tags.some((t) => t.toLowerCase().includes(lc))
+		if (words.length === 0) return true;
+		const nameSpaced = icon.name.toLowerCase().replace(/_/g, " ");
+		return words.every(
+			(w) =>
+				nameSpaced.includes(w) ||
+				icon.name.toLowerCase().includes(w) ||
+				icon.tags.some((t) => t.toLowerCase().includes(w)),
 		);
 	});
 }

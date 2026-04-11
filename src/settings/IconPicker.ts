@@ -44,6 +44,7 @@ export class IconPicker extends Modal {
 	private materialDisplayed = 0;
 	private materialLoading = false;
 	private materialError: string | null = null;
+	private materialLoadPromise: Promise<void> | null = null;
 
 	// SVG state
 	private customSvgs: CustomSvgIcon[] = [];
@@ -56,6 +57,8 @@ export class IconPicker extends Modal {
 
 	// Track font links added by this picker so we can clean up
 	private addedFontLinks: HTMLLinkElement[] = [];
+	// Track active loading timers so we can clean them up
+	private loadingTimers: ReturnType<typeof setTimeout>[] = [];
 
 	constructor(plugin: CalloutStudioPlugin, currentIcon?: CalloutIcon) {
 		super(plugin.app);
@@ -82,6 +85,9 @@ export class IconPicker extends Modal {
 
 		// Load SVG gallery from plugin data
 		this.customSvgs = [...(this.plugin.registry.customSvgIcons ?? [])];
+
+		// Preload Material icons metadata so it's ready when the tab is opened
+		this.preloadMaterialIcons();
 
 		// Build layout
 		const container = this.contentEl.createDiv("icon-picker-container");
@@ -123,6 +129,27 @@ export class IconPicker extends Modal {
 			link.remove();
 		}
 		this.addedFontLinks = [];
+		// Clean up loading timers
+		for (const timer of this.loadingTimers) {
+			clearTimeout(timer);
+		}
+		this.loadingTimers = [];
+	}
+
+	/**
+	 * Creates a loading element that becomes visible after a 1-second delay.
+	 */
+	private createDelayedLoading(
+		parent: HTMLElement,
+		text: string,
+	): HTMLElement {
+		const el = parent.createDiv("icon-picker-loading");
+		el.setText(text);
+		const timer = setTimeout(() => {
+			el.addClass("is-visible");
+		}, 1000);
+		this.loadingTimers.push(timer);
+		return el;
 	}
 
 	// ── Tabs ────────────────────────────────────────────────────────────
@@ -196,7 +223,19 @@ export class IconPicker extends Modal {
 			this.lucideIcons = getLucideIcons(this.searchQuery);
 			this.lucideDisplayed = 0;
 			grid.empty();
+			grid.removeClass("is-loaded");
 			this.appendLucideIcons(grid);
+			grid.addClass("is-loaded");
+			if (this.lucideIcons.length === 0 && this.searchQuery) {
+				grid.createDiv("icon-picker-empty").setText(
+					t("iconPicker.noResults"),
+				);
+			}
+			if (this.lucideDisplayed >= this.lucideIcons.length) {
+				loadMoreContainer.hide();
+			} else {
+				loadMoreContainer.show();
+			}
 		});
 
 		this.lucideIcons = getLucideIcons(this.searchQuery);
@@ -205,6 +244,7 @@ export class IconPicker extends Modal {
 		const grid = this.tabContentEl.createDiv("icon-picker-grid");
 		grid.setAttribute("role", "grid");
 		this.appendLucideIcons(grid);
+		grid.addClass("is-loaded");
 		this.enableGridKeyNav(grid);
 
 		// Load more button
@@ -277,6 +317,28 @@ export class IconPicker extends Modal {
 	// ── Material Tab ────────────────────────────────────────────────────
 
 	/**
+	 * Starts loading Material icons metadata in the background.
+	 * Called on open so data is ready when the user switches tabs.
+	 */
+	private preloadMaterialIcons(): void {
+		if (this.materialIcons.length > 0 || this.materialLoading) return;
+
+		const cacheData = this.plugin.registry.materialIconsCache;
+		this.materialLoading = true;
+		this.materialLoadPromise = loadMaterialIcons(cacheData)
+			.then((data) => {
+				this.materialIcons = data.icons;
+				this.plugin.registry.materialIconsCache = data;
+				this.materialLoading = false;
+				this.materialError = null;
+			})
+			.catch((err: Error) => {
+				this.materialLoading = false;
+				this.materialError = err.message;
+			});
+	}
+
+	/**
 	 * Ensures the Google Font <link> for a given Material style is loaded.
 	 * Returns a Promise that resolves once the font is usable.
 	 * Tracks added links so they can be removed on close.
@@ -347,6 +409,11 @@ export class IconPicker extends Modal {
 		const categorySelect = toolbar.createEl("select", {
 			cls: "icon-picker-category-select",
 		});
+		// Default "All" option shown immediately while data loads
+		categorySelect.createEl("option", {
+			text: t("iconPicker.allCategories"),
+			value: "",
+		});
 
 		const grid = this.tabContentEl.createDiv("icon-picker-grid");
 		grid.setAttribute("role", "grid");
@@ -364,7 +431,17 @@ export class IconPicker extends Modal {
 			);
 			this.materialDisplayed = 0;
 			grid.empty();
+			grid.removeClass("is-loaded");
 			this.appendMaterialIcons(grid);
+			grid.addClass("is-loaded");
+			if (
+				this.materialFiltered.length === 0 &&
+				this.materialIcons.length > 0
+			) {
+				grid.createDiv("icon-picker-empty").setText(
+					t("iconPicker.noResults"),
+				);
+			}
 			if (this.materialDisplayed >= this.materialFiltered.length) {
 				loadMoreContainer.hide();
 			} else {
@@ -381,8 +458,8 @@ export class IconPicker extends Modal {
 			this.materialStyle = styleSelect.value as MaterialIconStyle;
 			// Show loading while font downloads, then refresh grid
 			grid.empty();
-			const loadingEl = grid.createDiv("icon-picker-loading");
-			loadingEl.setText(t("iconPicker.iconsLoading"));
+			grid.removeClass("is-loaded");
+			this.createDelayedLoading(grid, t("iconPicker.iconsLoading"));
 			void this.ensureMaterialFont(this.materialStyle).then(() => {
 				if (this.activeTab !== "material") return;
 				updateGrid();
@@ -413,8 +490,10 @@ export class IconPicker extends Modal {
 		// Load icons — wait for both metadata AND font before showing the grid
 		if (this.materialIcons.length > 0) {
 			// Metadata cached – just need font
-			const loadingEl = grid.createDiv("icon-picker-loading");
-			loadingEl.setText(t("iconPicker.iconsLoading"));
+			const loadingEl = this.createDelayedLoading(
+				grid,
+				t("iconPicker.iconsLoading"),
+			);
 			void this.ensureMaterialFont(this.materialStyle).then(() => {
 				if (this.activeTab !== "material") return;
 				loadingEl.remove();
@@ -422,22 +501,29 @@ export class IconPicker extends Modal {
 				updateGrid();
 				searchInput.focus();
 			});
-		} else {
-			this.materialLoading = true;
-			grid.createDiv("icon-picker-loading").setText(
-				t("iconPicker.iconsLoading"),
+		} else if (this.materialError) {
+			// Preload failed — show error immediately
+			grid.createDiv("icon-picker-error").setText(
+				t("iconPicker.loadFailed", { error: this.materialError }),
 			);
+		} else {
+			// Metadata still loading (from preload) or not started — wait for it
+			this.createDelayedLoading(grid, t("iconPicker.iconsLoading"));
 
-			const cacheData = this.plugin.registry.materialIconsCache;
 			const fontPromise = this.ensureMaterialFont(this.materialStyle);
-			const dataPromise = loadMaterialIcons(cacheData);
+			const dataPromise =
+				this.materialLoadPromise ??
+				loadMaterialIcons(this.plugin.registry.materialIconsCache).then(
+					(data) => {
+						this.materialIcons = data.icons;
+						this.plugin.registry.materialIconsCache = data;
+						this.materialLoading = false;
+						this.materialError = null;
+					},
+				);
 
 			Promise.all([fontPromise, dataPromise])
-				.then(([, data]) => {
-					this.materialIcons = data.icons;
-					this.plugin.registry.materialIconsCache = data;
-					this.materialLoading = false;
-					this.materialError = null;
+				.then(() => {
 					if (this.activeTab !== "material") return;
 					this.populateMaterialCategories(categorySelect);
 					updateGrid();

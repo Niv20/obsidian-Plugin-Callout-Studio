@@ -197,8 +197,6 @@ export const DEFAULT_SETTINGS: PluginSettings = {
 		materialWeightDefault: 400,
 	},
 	colorMode: {
-		mode: "auto",
-		format: "hex",
 		showContrastWarning: true,
 	},
 	language: "auto",

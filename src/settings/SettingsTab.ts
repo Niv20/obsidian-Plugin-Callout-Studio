@@ -1,4 +1,11 @@
-import { Menu, Notice, PluginSettingTab, Setting, setIcon } from "obsidian";
+import {
+	Menu,
+	Modal,
+	Notice,
+	PluginSettingTab,
+	Setting,
+	setIcon,
+} from "obsidian";
 import type { App } from "obsidian";
 import type CalloutStudioPlugin from "../main";
 import type { CalloutDefinition } from "../types";
@@ -334,6 +341,13 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 					def.icon.style ?? "outlined",
 					def.icon.weight ?? 400,
 				);
+				console.debug("[CalloutStudio] renderRowIcon material:", {
+					name: def.icon.value,
+					style: def.icon.style ?? "outlined",
+					weight: def.icon.weight ?? 400,
+					hasCached: !!cached,
+					cacheSize: this.plugin.registry.materialSvgCache.length,
+				});
 				if (cached) {
 					const parser = new DOMParser();
 					const doc = parser.parseFromString(
@@ -341,6 +355,7 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 						"image/svg+xml",
 					);
 					const svgEl = doc.documentElement;
+					svgEl.setAttribute("fill", "currentColor");
 					container.appendChild(
 						container.doc.importNode(svgEl, true),
 					);
@@ -880,45 +895,6 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 			.setDesc(t("settings.materialCacheDesc"));
 		cacheHeading.settingEl.addClass("callout-studio-cache-heading");
 
-		// Metadata cache info
-		const metadataCache = this.plugin.registry.materialIconsCache;
-		const metadataCount = metadataCache?.icons.length ?? 0;
-		const metadataDate = metadataCache
-			? new Date(metadataCache.fetchedAt).toLocaleDateString()
-			: t("settings.cacheNotDownloaded");
-
-		new Setting(containerEl)
-			.setName(t("settings.metadataCache"))
-			.setDesc(
-				metadataCount > 0
-					? t("settings.metadataCacheInfo", {
-							count: String(metadataCount),
-							date: metadataDate,
-						})
-					: t("settings.cacheNotDownloaded"),
-			)
-			.addButton((btn) =>
-				btn
-					.setButtonText(t("settings.refreshCache"))
-					.onClick(async () => {
-						try {
-							const { loadMaterialIcons } =
-								await import("../utils/iconLoader");
-							const data = await loadMaterialIcons(undefined);
-							this.plugin.registry.materialIconsCache = data;
-							await this.plugin.saveSettings();
-							new Notice(
-								t("notice.cacheRefreshed", {
-									count: String(data.icons.length),
-								}),
-							);
-							this.display();
-						} catch {
-							new Notice(t("notice.cacheRefreshFailed"));
-						}
-					}),
-			);
-
 		// SVG cache info
 		const svgCount = this.plugin.registry.materialSvgCache.length;
 		const svgSize = this.plugin.registry.getMaterialSvgCacheSize();
@@ -940,46 +916,31 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 
 		if (svgCount > 0) {
 			svgCacheSetting.addButton((btn) =>
-				btn
-					.setButtonText(t("settings.clearSvgCache"))
-					.setWarning()
-					.onClick(async () => {
-						this.plugin.registry.clearMaterialSvgCache();
-						this.plugin.cssInjector.inject();
-						await this.plugin.saveSettings();
-						new Notice(t("notice.svgCacheCleared"));
-						this.display();
-					}),
-			);
-
-			svgCacheSetting.addButton((btn) =>
 				btn.setButtonText(t("settings.viewCachedSvgs")).onClick(() => {
-					this.toggleSvgCachePanel(containerEl);
+					this.openSvgCacheModal();
 				}),
 			);
 		}
 	}
 
-	private toggleSvgCachePanel(containerEl: HTMLElement): void {
-		const existing = containerEl.querySelector(
-			".callout-studio-svg-cache-panel",
-		);
-		if (existing) {
-			existing.remove();
-			return;
-		}
+	private openSvgCacheModal(): void {
+		const modal = new Modal(this.app);
+		modal.titleEl.setText(t("settings.cachedSvgsTitle"));
+		modal.modalEl.addClass("callout-studio-cache-modal");
 
-		const panel = containerEl.createDiv({
-			cls: "callout-studio-svg-cache-panel",
-		});
 		const cache = this.plugin.registry.materialSvgCache;
 
 		if (cache.length === 0) {
-			panel.createEl("p", { text: t("settings.svgCacheEmpty") });
+			modal.contentEl.createEl("p", {
+				text: t("settings.svgCacheEmpty"),
+			});
+			modal.open();
 			return;
 		}
 
-		const grid = panel.createDiv({ cls: "callout-studio-cache-grid" });
+		const grid = modal.contentEl.createDiv({
+			cls: "callout-studio-cache-grid",
+		});
 		for (const entry of cache) {
 			const cell = grid.createDiv({ cls: "callout-studio-cache-cell" });
 
@@ -989,17 +950,20 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 			const parser = new DOMParser();
 			const doc = parser.parseFromString(entry.svg, "image/svg+xml");
 			const svgEl = doc.documentElement;
+			svgEl.setAttribute("fill", "currentColor");
 			iconEl.appendChild(iconEl.doc.importNode(svgEl, true));
 
 			const label = cell.createDiv({
 				cls: "callout-studio-cache-label",
 			});
-			label.setText(`${entry.name}`);
+			label.setText(entry.name);
 			const meta = cell.createDiv({
 				cls: "callout-studio-cache-meta",
 			});
 			meta.setText(`${entry.style} · ${entry.weight}`);
 		}
+
+		modal.open();
 	}
 
 	// ─── Section F: Color Mode Settings ──────────────────────
@@ -1008,35 +972,6 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 		const { colorMode } = this.plugin.settings;
 
 		new Setting(containerEl).setName(t("settings.colorMode")).setHeading();
-
-		new Setting(containerEl)
-			.setName(t("settings.colorAppMode"))
-			.setDesc(t("settings.colorAppModeDesc"))
-			.addDropdown((d) =>
-				d
-					.addOptions({
-						auto: t("settings.colorAuto"),
-						light: t("settings.colorForceLight"),
-						dark: t("settings.colorForceDark"),
-					})
-					.setValue(colorMode.mode)
-					.onChange(async (v: string) => {
-						colorMode.mode = v as typeof colorMode.mode;
-						await this.plugin.saveSettings();
-					}),
-			);
-
-		new Setting(containerEl)
-			.setName(t("settings.colorFormat"))
-			.addDropdown((d) =>
-				d
-					.addOptions({ hex: "HEX", hsl: "HSL", rgb: "RGB" })
-					.setValue(colorMode.format)
-					.onChange(async (v: string) => {
-						colorMode.format = v as typeof colorMode.format;
-						await this.plugin.saveSettings();
-					}),
-			);
 
 		new Setting(containerEl)
 			.setName(t("settings.showContrastWarning"))
@@ -1183,6 +1118,7 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 						).confirm();
 						if (!confirmed) return;
 						this.plugin.registry.resetAll();
+						this.plugin.cssInjector.inject();
 						await this.plugin.saveSettings();
 						new Notice(t("notice.resetAllDone"));
 						this.display();

@@ -83,7 +83,14 @@ export class CalloutRegistry {
 				},
 				colorMode: {
 					...DEFAULT_SETTINGS.colorMode,
-					...data.settings.colorMode,
+					showContrastWarning:
+						((
+							data.settings.colorMode as unknown as Record<
+								string,
+								unknown
+							>
+						)?.showContrastWarning as boolean) ??
+						DEFAULT_SETTINGS.colorMode.showContrastWarning,
 				},
 				language: data.settings.language ?? DEFAULT_SETTINGS.language,
 			};
@@ -283,6 +290,15 @@ export class CalloutRegistry {
 		for (const def of DEFAULT_CALLOUTS) {
 			this.callouts.set(def.id, structuredClone(def));
 		}
+		// Reset global style to defaults
+		this.settings.globalStyle = structuredClone(
+			DEFAULT_SETTINGS.globalStyle,
+		);
+		// Clear SVG caches and custom icons
+		this.materialSvgCache = [];
+		this.customSvgIcons = [];
+		// Reset color mode settings
+		this.settings.colorMode = structuredClone(DEFAULT_SETTINGS.colorMode);
 		this.notifyChange();
 	}
 

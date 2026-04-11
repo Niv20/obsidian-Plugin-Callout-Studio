@@ -1,7 +1,7 @@
 import type { App } from "obsidian";
 import type { CalloutDefinition } from "../types";
 import { hexToRgbString } from "../utils/colorUtils";
-import { materialFontFamily, svgToDataUri } from "../utils/iconLoader";
+import { svgToDataUri } from "../utils/iconLoader";
 import type { CalloutRegistry } from "./CalloutRegistry";
 
 const STYLE_ELEMENT_ID = "callout-studio-styles";
@@ -54,27 +54,11 @@ export class CSSInjector {
 		const materialFonts = new Set<string>();
 
 		for (const def of callouts) {
-			if (def.icon.type === "material") {
-				// Only need font link if no cached SVG
-				const cached = this.registry.findMaterialSvg(
-					def.icon.value,
-					def.icon.style ?? "outlined",
-					def.icon.weight ?? 400,
-				);
-				if (!cached) {
-					materialFonts.add(def.icon.style ?? "outlined");
-				}
-			}
 			rules.push(this.generateCalloutCSS(def));
 		}
 
-		// Handle Material Icons fonts
+		// Clean up any leftover material font links (no longer needed for rendering)
 		this.updateMaterialFontLinks(materialFonts);
-
-		// If we have material icons, add the required CSS for font rendering
-		if (materialFonts.size > 0) {
-			rules.push(this.getMaterialIconBaseCSS());
-		}
 
 		this.styleEl.textContent = rules.join("\n\n");
 	}
@@ -126,15 +110,17 @@ export class CSSInjector {
 			);
 		}
 
-		// Material icon font override (only when no cached SVG)
+		// Material icon SVG override (uses mask-image with cached SVG data URI)
 		if (def.icon.type === "material") {
 			const cached = this.registry.findMaterialSvg(
 				def.icon.value,
 				def.icon.style ?? "outlined",
 				def.icon.weight ?? 400,
 			);
-			if (!cached) {
-				parts.push(this.generateMaterialIconOverride(def));
+			if (cached) {
+				parts.push(
+					this.generateMaterialSvgOverride(def.id, cached.svg),
+				);
 			}
 		}
 
@@ -186,9 +172,13 @@ export class CSSInjector {
 						def.icon.style ?? "outlined",
 						def.icon.weight ?? 400,
 					);
-					if (!cachedAlias) {
-						const aliasDef = { ...def, id: alias };
-						parts.push(this.generateMaterialIconOverride(aliasDef));
+					if (cachedAlias) {
+						parts.push(
+							this.generateMaterialSvgOverride(
+								alias,
+								cachedAlias.svg,
+							),
+						);
 					}
 				}
 				const aliasTransform = this.getIconTransformCSS({
@@ -239,18 +229,9 @@ export class CSSInjector {
 				return `lucide-pencil`;
 			}
 			case "material": {
-				// Use cached SVG if available
-				const cached = this.registry.findMaterialSvg(
-					def.icon.value,
-					def.icon.style ?? "outlined",
-					def.icon.weight ?? 400,
-				);
-				if (cached) {
-					return svgToDataUri(cached.svg);
-				}
-				// Material icons use font ligatures, not SVG.
-				// We set a special CSS custom property and override rendering.
-				return `lucide-pencil`; // fallback for --callout-icon
+				// Always use pencil fallback for --callout-icon.
+				// The actual icon is rendered via ::after mask-image when SVG is cached.
+				return `lucide-pencil`;
 			}
 			case "emoji":
 				return `"${def.icon.value}"`;
@@ -259,29 +240,31 @@ export class CSSInjector {
 		}
 	}
 
-	private generateMaterialIconOverride(def: CalloutDefinition): string {
-		if (def.icon.type !== "material") return "";
-		const fontFamily = materialFontFamily(def.icon.style ?? "outlined");
-		const isFilled = def.icon.style === "filled";
-		const weight = def.icon.weight ?? 400;
+	/**
+	 * Generates CSS that renders a Material icon from a cached SVG data URI
+	 * using mask-image. Works in PDF export (no external font needed).
+	 */
+	private generateMaterialSvgOverride(
+		calloutId: string,
+		svg: string,
+	): string {
+		const dataUri = svgToDataUri(svg);
 		return (
-			`.callout[data-callout="${def.id}"] > .callout-title > .callout-icon::after {\n` +
-			`  content: "${def.icon.value}";\n` +
-			`  font-family: "${fontFamily}";\n` +
-			`  font-size: 24px;\n` +
-			`  font-weight: ${weight};\n` +
-			`  line-height: 1;\n` +
-			`  letter-spacing: normal;\n` +
-			`  text-transform: none;\n` +
-			`  white-space: nowrap;\n` +
-			`  direction: ltr;\n` +
-			`  -webkit-font-feature-settings: "liga";\n` +
-			`  font-feature-settings: "liga";\n` +
-			`  -webkit-font-smoothing: antialiased;\n` +
-			(isFilled ? `  font-variation-settings: 'FILL' 1;\n` : "") +
-			`}\n` +
-			`.callout[data-callout="${def.id}"] > .callout-title > .callout-icon > svg {\n` +
+			`.callout[data-callout="${calloutId}"] > .callout-title > .callout-icon > svg {\n` +
 			`  display: none;\n` +
+			`}\n` +
+			`.callout[data-callout="${calloutId}"] > .callout-title > .callout-icon::after {\n` +
+			`  content: "";\n` +
+			`  display: inline-block;\n` +
+			`  width: var(--icon-size, 1.2em);\n` +
+			`  height: var(--icon-size, 1.2em);\n` +
+			`  -webkit-mask-image: ${dataUri};\n` +
+			`  mask-image: ${dataUri};\n` +
+			`  -webkit-mask-size: contain;\n` +
+			`  mask-size: contain;\n` +
+			`  -webkit-mask-repeat: no-repeat;\n` +
+			`  mask-repeat: no-repeat;\n` +
+			`  background-color: rgb(var(--callout-color));\n` +
 			`}`
 		);
 	}
@@ -328,27 +311,6 @@ export class CSSInjector {
 			link.href = `https://fonts.googleapis.com/css2?family=${family}:opsz,wght,FILL,GRAD@24,100..700,0..1,0`;
 			document.head.appendChild(link);
 		}
-	}
-
-	private getMaterialIconBaseCSS(): string {
-		return (
-			`/* Material Symbols base */\n` +
-			`.material-symbols-outlined {\n` +
-			`  font-family: "Material Symbols Outlined";\n` +
-			`  font-weight: normal;\n` +
-			`  font-style: normal;\n` +
-			`  font-size: 24px;\n` +
-			`  line-height: 1;\n` +
-			`  letter-spacing: normal;\n` +
-			`  text-transform: none;\n` +
-			`  white-space: nowrap;\n` +
-			`  word-wrap: normal;\n` +
-			`  direction: ltr;\n` +
-			`  -webkit-font-feature-settings: "liga";\n` +
-			`  font-feature-settings: "liga";\n` +
-			`  -webkit-font-smoothing: antialiased;\n` +
-			`}`
-		);
 	}
 
 	scheduleInject(): void {

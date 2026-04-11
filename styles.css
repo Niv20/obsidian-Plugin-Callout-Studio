@@ -374,6 +374,53 @@
 	transform-origin: center;
 }
 
+/* ─── Color Palette Presets ───────────────────────────────────── */
+
+.cs-palette-container {
+	padding: 4px 10px 8px;
+}
+
+.cs-palette-label {
+	font-size: var(--font-ui-smaller);
+	color: var(--text-muted);
+	margin-bottom: 6px;
+}
+
+.cs-palette-row {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.cs-palette-dropdown {
+	flex: 1;
+	padding: 6px 8px;
+	border-radius: var(--radius-s);
+	border: 1px solid var(--background-modifier-border);
+	background-color: var(--background-secondary);
+	color: var(--text-normal);
+	font-size: var(--font-ui-small);
+}
+
+.cs-palette-preview-swatch {
+	display: flex;
+	align-items: center;
+	gap: 0;
+	min-width: 36px;
+	min-height: 20px;
+}
+
+.cs-palette-preview-swatch .cs-palette-circle {
+	width: 18px;
+	height: 18px;
+	border-radius: 50%;
+	border: 1.5px solid var(--background-primary);
+}
+
+.cs-palette-preview-swatch .cs-palette-circle + .cs-palette-circle {
+	margin-left: -6px;
+}
+
 /* ─── Compact Color Grid ──────────────────────────────────────── */
 
 .callout-studio-color-grid {
@@ -749,10 +796,32 @@
 	padding: 6px 8px;
 }
 
+@keyframes cs-grid-fade-in {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
+
 .icon-picker-grid {
 	display: grid;
 	grid-template-columns: repeat(auto-fill, minmax(42px, 1fr));
 	gap: 4px;
+}
+
+.icon-picker-grid.is-loaded > .icon-picker-cell {
+	animation: cs-grid-fade-in 0.25s ease-out both;
+}
+
+.icon-picker-loading {
+	opacity: 0;
+	transition: opacity 0.2s ease;
+}
+
+.icon-picker-loading.is-visible {
+	opacity: 1;
 }
 
 .icon-picker-cell {
@@ -812,8 +881,14 @@
 .icon-picker-loading,
 .icon-picker-error,
 .icon-picker-empty {
+	grid-column: 1 / -1;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	min-height: 120px;
 	padding: 24px;
 	text-align: center;
+	white-space: nowrap;
 	color: var(--text-muted);
 }
 
@@ -1300,14 +1375,11 @@
 	}
 }
 
-/* ─── Material SVG Cache Panel ──────────────────────────────── */
+/* ─── Material SVG Cache Modal ──────────────────────────────── */
 
-.callout-studio-svg-cache-panel {
-	margin: 8px 0 16px;
-	padding: 12px;
-	border: 1px solid var(--background-modifier-border);
-	border-radius: 8px;
-	background: var(--background-secondary);
+.callout-studio-cache-modal .modal-content {
+	max-height: 60vh;
+	overflow-y: auto;
 }
 
 .callout-studio-cache-grid {

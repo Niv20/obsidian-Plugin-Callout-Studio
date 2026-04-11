@@ -37,8 +37,6 @@ export interface CalloutDefinition {
 
 export type PopupAnimation = "fade" | "slide" | "scale" | "none";
 export type PopupPosition = "top-left" | "top-right" | "cursor";
-export type ColorFormat = "hex" | "hsl" | "rgb";
-export type ColorMode = "auto" | "light" | "dark";
 export type MaterialIconStyle = "outlined" | "filled" | "rounded" | "sharp";
 
 export interface PopupSettings {
@@ -69,8 +67,6 @@ export interface IconSourceSettings {
 }
 
 export interface ColorModeSettings {
-	mode: ColorMode;
-	format: ColorFormat;
 	showContrastWarning: boolean;
 }
 
@@ -116,6 +112,8 @@ export interface PluginData {
 export interface MaterialIconsCacheData {
 	icons: MaterialIconMeta[];
 	fetchedAt: number;
+	/** Cache format version — bump to force re-fetch after URL changes */
+	version?: number;
 }
 
 export interface MaterialIconMeta {

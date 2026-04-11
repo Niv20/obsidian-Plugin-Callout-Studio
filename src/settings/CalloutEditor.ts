@@ -4,6 +4,11 @@ import type { CalloutDefinition, CalloutIcon } from "../types";
 import { IconPicker } from "./IconPicker";
 import { materialFontFamily } from "../utils/iconLoader";
 import { blendHex } from "../utils/colorUtils";
+import {
+	COLOR_PALETTES,
+	OBSIDIAN_PALETTES,
+	EXTRA_PALETTES,
+} from "../utils/colorPalettes";
 import { t } from "../i18n";
 import { TagInput } from "../ui/TagInput";
 
@@ -334,8 +339,103 @@ export class CalloutEditor extends Modal {
 			text: t("editor.colors"),
 		});
 
+		// ── Palette Presets ──
+		const paletteContainer = colorsSection.createDiv({
+			cls: "cs-palette-container",
+		});
+		paletteContainer.createDiv({
+			cls: "cs-palette-label",
+			text: t("editor.palettes"),
+		});
+
+		const paletteRow = paletteContainer.createDiv({
+			cls: "cs-palette-row",
+		});
+
 		const colorGrid = colorsSection.createDiv({
 			cls: "callout-studio-color-grid",
+		});
+
+		// Track color inputs so palette selection can update them
+		const colorInputs: {
+			bgLight?: HTMLInputElement;
+			bgDark?: HTMLInputElement;
+			textLight?: HTMLInputElement;
+			textDark?: HTMLInputElement;
+			accentLight?: HTMLInputElement;
+			accentDark?: HTMLInputElement;
+		} = {};
+
+		// Build palette dropdown
+		const paletteSelect = paletteRow.createEl("select", {
+			cls: "cs-palette-dropdown",
+		});
+
+		// Default "none" option
+		paletteSelect.createEl("option", {
+			text: t("editor.paletteNone"),
+			value: "",
+		});
+
+		// Obsidian group
+		const obsidianGroup = paletteSelect.createEl("optgroup", {
+			attr: { label: t("editor.paletteGroupObsidian") },
+		});
+		for (const p of OBSIDIAN_PALETTES) {
+			obsidianGroup.createEl("option", { text: p.name, value: p.id });
+		}
+
+		// Extra presets group
+		const presetsGroup = paletteSelect.createEl("optgroup", {
+			attr: { label: t("editor.paletteGroupPresets") },
+		});
+		for (const p of EXTRA_PALETTES) {
+			presetsGroup.createEl("option", { text: p.name, value: p.id });
+		}
+
+		// Color preview swatch next to dropdown
+		const previewSwatch = paletteRow.createDiv({
+			cls: "cs-palette-preview-swatch",
+		});
+		const updatePalettePreview = (
+			palette: { colorLight: string; colorDark: string } | null,
+		) => {
+			previewSwatch.empty();
+			if (!palette) return;
+			const c1 = previewSwatch.createDiv({ cls: "cs-palette-circle" });
+			c1.style.backgroundColor = palette.colorLight;
+			const c2 = previewSwatch.createDiv({ cls: "cs-palette-circle" });
+			c2.style.backgroundColor = palette.colorDark;
+		};
+
+		paletteSelect.addEventListener("change", () => {
+			const selected = COLOR_PALETTES.find(
+				(p) => p.id === paletteSelect.value,
+			);
+			if (!selected) {
+				updatePalettePreview(null);
+				return;
+			}
+
+			this.colorLight = selected.colorLight;
+			this.colorDark = selected.colorDark;
+			if (selected.bgColorLight !== undefined) {
+				this.bgColorLight = selected.bgColorLight;
+			}
+			if (selected.bgColorDark !== undefined) {
+				this.bgColorDark = selected.bgColorDark;
+			}
+			// Update color inputs
+			if (colorInputs.accentLight)
+				colorInputs.accentLight.value = this.colorLight;
+			if (colorInputs.accentDark)
+				colorInputs.accentDark.value = this.colorDark;
+			if (colorInputs.bgLight)
+				colorInputs.bgLight.value = this.bgColorLight;
+			if (colorInputs.bgDark) colorInputs.bgDark.value = this.bgColorDark;
+
+			updatePalettePreview(selected);
+			this.updatePreview();
 		});
 
 		// Header row
@@ -347,7 +447,7 @@ export class CalloutEditor extends Modal {
 		gridHeader.createSpan({ text: t("editor.dark") });
 
 		// Background row
-		this.addColorRow(
+		const bgInputs = this.addColorRow(
 			colorGrid,
 			t("editor.background"),
 			this.bgColorLight,
@@ -358,9 +458,11 @@ export class CalloutEditor extends Modal {
 				this.updatePreview();
 			},
 		);
+		colorInputs.bgLight = bgInputs.light;
+		colorInputs.bgDark = bgInputs.dark;
 
 		// Text row
-		this.addColorRow(
+		const textInputs = this.addColorRow(
 			colorGrid,
 			t("editor.text"),
 			this.textColorLight,
@@ -371,9 +473,11 @@ export class CalloutEditor extends Modal {
 				this.updatePreview();
 			},
 		);
+		colorInputs.textLight = textInputs.light;
+		colorInputs.textDark = textInputs.dark;
 
 		// Icon/accent row
-		this.addColorRow(
+		const accentInputs = this.addColorRow(
 			colorGrid,
 			t("editor.iconColor"),
 			this.colorLight,
@@ -384,6 +488,8 @@ export class CalloutEditor extends Modal {
 				this.updatePreview();
 			},
 		);
+		colorInputs.accentLight = accentInputs.light;
+		colorInputs.accentDark = accentInputs.dark;
 
 		// Foldable
 		new Setting(contentEl)
@@ -427,7 +533,7 @@ export class CalloutEditor extends Modal {
 		});
 		this.saveBtn = saveBtn;
 		saveBtn.addEventListener("click", () => {
-			this.save();
+			void this.save();
 		});
 
 		// Set initial save button state
@@ -443,7 +549,7 @@ export class CalloutEditor extends Modal {
 		lightVal: string,
 		darkVal: string,
 		onChange: (light?: string, dark?: string) => void,
-	): void {
+	): { light: HTMLInputElement; dark: HTMLInputElement } {
 		const row = grid.createDiv({ cls: "callout-studio-color-row" });
 		row.createSpan({ text: label });
 
@@ -464,6 +570,8 @@ export class CalloutEditor extends Modal {
 		darkInput.addEventListener("input", () => {
 			onChange(undefined, darkInput.value);
 		});
+
+		return { light: lightInput, dark: darkInput };
 	}
 
 	private stateSnapshot(): string {
@@ -570,6 +678,7 @@ export class CalloutEditor extends Modal {
 						"image/svg+xml",
 					);
 					const svgEl = doc.documentElement;
+					svgEl.setAttribute("fill", "currentColor");
 					container.appendChild(
 						container.doc.importNode(svgEl, true),
 					);
@@ -684,7 +793,7 @@ export class CalloutEditor extends Modal {
 		this.updateSaveState();
 	}
 
-	private save(): void {
+	private async save(): Promise<void> {
 		if (!this.calloutId) return;
 
 		const isIdChanged =
@@ -718,6 +827,7 @@ export class CalloutEditor extends Modal {
 			aliases: this.aliases.length > 0 ? [...this.aliases] : undefined,
 		};
 
+		// Add/update in registry first so SVG cleanup knows this callout exists
 		if (this.existingId) {
 			if (isIdChanged) {
 				this.plugin.registry.remove(this.existingId);
@@ -729,10 +839,31 @@ export class CalloutEditor extends Modal {
 			this.plugin.registry.add(def);
 		}
 
-		// Download Material SVG in background and clean up unused ones
+		// Download Material SVG after the callout is in the registry
 		if (def.icon.type === "material") {
-			void this.plugin.cacheMaterialSvg(def.icon);
+			if (this.saveBtn) {
+				this.saveBtn.disabled = true;
+				this.saveBtn.textContent = t("editor.downloadingIcon");
+			}
+			try {
+				await this.plugin.cacheMaterialSvg(def.icon);
+				const cached = this.plugin.registry.findMaterialSvg(
+					def.icon.value,
+					def.icon.style ?? "outlined",
+					def.icon.weight ?? 400,
+				);
+				console.debug(
+					"[CalloutStudio] save: SVG cached?",
+					!!cached,
+					"cache size:",
+					this.plugin.registry.materialSvgCache.length,
+				);
+			} catch (err) {
+				console.warn("[CalloutStudio] save: SVG download failed", err);
+				// Continue even if download fails — will retry on next load
+			}
 		}
+
 		this.plugin.registry.cleanupUnusedMaterialSvgs();
 
 		if (this.resolve) this.resolve(def);

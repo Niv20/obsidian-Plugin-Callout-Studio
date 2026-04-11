@@ -117,6 +117,39 @@ export class CalloutAutoComplete extends EditorSuggest<CalloutDefinition> {
 					setIcon(iconEl, def.icon.value);
 				} else if (def.icon.type === "emoji") {
 					iconEl.textContent = def.icon.value;
+				} else if (def.icon.type === "material") {
+					const cached = this.plugin.registry.findMaterialSvg(
+						def.icon.value,
+						def.icon.style ?? "outlined",
+						def.icon.weight ?? 400,
+					);
+					if (cached) {
+						const parser = new DOMParser();
+						const doc = parser.parseFromString(
+							cached.svg,
+							"image/svg+xml",
+						);
+						const svgEl = doc.documentElement;
+						svgEl.setAttribute("fill", "currentColor");
+						iconEl.appendChild(iconEl.doc.importNode(svgEl, true));
+					} else {
+						setIcon(iconEl, "pencil");
+					}
+				} else if (def.icon.type === "svg") {
+					const svgData = this.plugin.registry.customSvgIcons.find(
+						(s) => s.name === def.icon.value,
+					);
+					if (svgData) {
+						const parser = new DOMParser();
+						const doc = parser.parseFromString(
+							svgData.svg,
+							"image/svg+xml",
+						);
+						const svgEl = doc.documentElement;
+						iconEl.appendChild(iconEl.doc.importNode(svgEl, true));
+					} else {
+						setIcon(iconEl, "pencil");
+					}
 				} else {
 					setIcon(iconEl, "pencil");
 				}
@@ -151,7 +184,6 @@ export class CalloutAutoComplete extends EditorSuggest<CalloutDefinition> {
 
 		// Consume a stray ']' that Obsidian may have auto-inserted
 		const afterCursor = line.slice(end.ch);
-		const hasBracket = afterCursor.startsWith("]");
 
 		// Parse what already exists after the `[!...]` on the line
 		// Pattern: optional ']', optional fold mark (+/-), optional ' Title...'

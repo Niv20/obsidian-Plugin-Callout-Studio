@@ -112,17 +112,13 @@ export const he: Record<string, string> = {
 		"עובי הקו של אייקוני Material (100 = דק, 700 = עבה)",
 	"settings.materialCache": "מטמון אייקוני Material",
 	"settings.materialCacheDesc":
-		"מטא-דאטה של אייקונים יורד מגוגל בשימוש הראשון ונשמר מקומית. קבצי SVG בודדים יורדים כשבוחרים אייקון Material לתיבת הבלטה, כך שהם עובדים אופליין ובהדפסה.",
-	"settings.metadataCache": "מטמון מטא-דאטה",
-	"settings.metadataCacheInfo": "{{count}} אייקונים · עדכון אחרון: {{date}}",
-	"settings.cacheNotDownloaded":
-		"טרם הורד — יוריד כשתגלוש באייקוני Material לראשונה.",
-	"settings.refreshCache": "רענון",
+		"קבצי SVG בודדים של אייקוני Material יורדים כשבוחרים אייקון לתיבת הבלטה, כך שהם עובדים אופליין ובייצוא PDF.",
 	"settings.svgCache": "קבצי SVG שהורדו",
 	"settings.svgCacheInfo": "{{count}} אייקונים · {{size}}",
 	"settings.svgCacheEmpty": "אין עדיין אייקוני SVG של Material במטמון.",
 	"settings.clearSvgCache": "ניקוי",
 	"settings.viewCachedSvgs": "צפייה",
+	"settings.cachedSvgsTitle": "אייקוני Material שמורים",
 
 	// Settings — Color mode
 	"settings.colorAppMode": "מצב החלת צבע",
@@ -139,11 +135,11 @@ export const he: Record<string, string> = {
 	// Settings — Reset
 	"settings.resetAll": "איפוס",
 	"settings.resetAllDesc":
-		"מחיקת כל תיבות ההבלטה המותאמות ואיפוס המובנות לברירות המחדל.",
-	"settings.resetAllButton": "איפוס כל סוגי תיבות ההבלטה",
+		"מחיקת כל תיבות ההבלטה, איפוס מובנות, סגנונות גלובליות (גבולות, קנה מידות, צורה), אייקוני SVG מותאמים, וקבצי Material SVG שהורדו.",
+	"settings.resetAllButton": "איפוס הכל",
 	"settings.resetAllConfirm":
-		"פעולה זו תמחק את כל תיבות ההבלטה המותאמות שלך ותאפס את כל המובנות לברירות המחדל. לא ניתן לבטל פעולה זו. להמשיך?",
-	"notice.resetAllDone": "כל סוגי תיבות ההבלטה אופסו לברירות המחדל.",
+		"פעולה זו תמחק תיבות הבלטה מותאמות, תאפס מובנות, סגנונות גלובליות, אייקוני SVG מותאמים וקבצי Material SVG. לא ניתן לבטל. להמשיך?",
+	"notice.resetAllDone": "הכל אופס לברירות המחדל.",
 
 	// Settings — Language
 	"settings.language": "שפה",
@@ -160,9 +156,6 @@ export const he: Record<string, string> = {
 	"notice.noNewJSON":
 		"לא יובאו תיבות הבלטה חדשות (ייתכן שהמזהים כבר קיימים).",
 	"notice.failedJSON": "ניתוח קובץ ה-JSON נכשל.",
-	"notice.cacheRefreshed":
-		"מטא-דאטה של אייקוני Material רוענן ({{count}} אייקונים).",
-	"notice.cacheRefreshFailed": "רענון מטא-דאטה של אייקוני Material נכשל.",
 	"notice.svgCacheCleared": "מטמון SVG של Material נוקה.",
 
 	// Callout Editor
@@ -189,6 +182,10 @@ export const he: Record<string, string> = {
 	"editor.background": "רקע",
 	"editor.text": "טקסט",
 	"editor.iconColor": "אייקון",
+	"editor.palettes": "תבניות מוכנות",
+	"editor.paletteNone": "— בחירת תבנית —",
+	"editor.paletteGroupObsidian": "תיבות הבלטה של Obsidian",
+	"editor.paletteGroupPresets": "תבניות צבע",
 	"editor.foldable": "ניתן לקיפול",
 	"editor.foldableDesc": "אפשר לתיבת ההבלטה להיות מצומצמת/מורחבת",
 	"editor.defaultFolded": "מקופל כברירת מחדל",
@@ -196,6 +193,7 @@ export const he: Record<string, string> = {
 	"editor.cancel": "ביטול",
 	"editor.saveChanges": "שמירת שינויים",
 	"editor.createCallout": "יצירת תיבת הבלטה",
+	"editor.downloadingIcon": "מוריד אייקון…",
 	"editor.idEmpty": "נדרש לפחות מזהה אחד",
 	"editor.idExists": "תיבת הבלטה עם מזהה זה כבר קיימת",
 	"editor.idConflict": "מזהה זה מתנגש עם תיבת הבלטה קיימת",
@@ -229,6 +227,7 @@ export const he: Record<string, string> = {
 	"iconPicker.svgGallery": "גלריית SVG",
 	"iconPicker.noSvgIcons": "אין עדיין אייקוני SVG מותאמים אישית.",
 	"iconPicker.noIconSelected": "לא נבחר אייקון",
+	"iconPicker.noResults": "לא נמצאו אייקונים התואמים לחיפוש.",
 	"iconPicker.delete": "מחיקה",
 
 	// Context Menu

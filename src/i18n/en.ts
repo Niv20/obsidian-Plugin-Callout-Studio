@@ -112,17 +112,13 @@ export const en: Record<string, string> = {
 		"Stroke thickness for Material icons (100 = thin, 700 = bold)",
 	"settings.materialCache": "Material icon cache",
 	"settings.materialCacheDesc":
-		"Icon metadata is downloaded from Google on first use and cached locally. Individual SVGs are downloaded when you select a Material icon for a callout, so they work offline and in print.",
-	"settings.metadataCache": "Metadata cache",
-	"settings.metadataCacheInfo": "{{count}} icons · Last updated: {{date}}",
-	"settings.cacheNotDownloaded":
-		"Not yet downloaded — will be fetched when you first browse Material icons.",
-	"settings.refreshCache": "Refresh",
+		"Individual Material icon SVGs are downloaded when you select one for a callout, so they work offline and in PDF export.",
 	"settings.svgCache": "Downloaded SVGs",
 	"settings.svgCacheInfo": "{{count}} icons · {{size}}",
 	"settings.svgCacheEmpty": "No Material SVGs cached yet.",
 	"settings.clearSvgCache": "Clear",
 	"settings.viewCachedSvgs": "View",
+	"settings.cachedSvgsTitle": "Cached Material SVGs",
 
 	// Settings — Color mode
 	"settings.colorAppMode": "Color application mode",
@@ -139,11 +135,11 @@ export const en: Record<string, string> = {
 	// Settings — Reset
 	"settings.resetAll": "Reset",
 	"settings.resetAllDesc":
-		"Delete all user callouts and reset built-in callouts to their defaults.",
-	"settings.resetAllButton": "Reset all callout types",
+		"Delete all user callouts, reset built-in callouts, global styles (borders, font scale, shape), custom SVG icons, and downloaded Material SVGs.",
+	"settings.resetAllButton": "Reset everything",
 	"settings.resetAllConfirm":
-		"This will delete all your custom callouts and reset all built-in callouts to their defaults. This action cannot be undone. Are you sure?",
-	"notice.resetAllDone": "All callout types have been reset to defaults.",
+		"This will delete all custom callouts, reset built-in callouts, global styles, custom SVG icons, and all cached Material SVGs. This action cannot be undone. Are you sure?",
+	"notice.resetAllDone": "Everything has been reset to defaults.",
 
 	// Settings — Language
 	"settings.language": "Language",
@@ -161,9 +157,6 @@ export const en: Record<string, string> = {
 	"notice.noNewJSON":
 		"No new callout types were imported (ids may already exist).",
 	"notice.failedJSON": "Failed to parse JSON file.",
-	"notice.cacheRefreshed":
-		"Material icon metadata refreshed ({{count}} icons).",
-	"notice.cacheRefreshFailed": "Failed to refresh Material icon metadata.",
 	"notice.svgCacheCleared": "Material SVG cache cleared.",
 
 	// Callout Editor
@@ -190,6 +183,10 @@ export const en: Record<string, string> = {
 	"editor.background": "Background",
 	"editor.text": "Text",
 	"editor.iconColor": "Icon",
+	"editor.palettes": "Presets",
+	"editor.paletteNone": "— Select a preset —",
+	"editor.paletteGroupObsidian": "Obsidian callouts",
+	"editor.paletteGroupPresets": "Color presets",
 	"editor.foldable": "Foldable",
 	"editor.foldableDesc": "Allow the callout to be collapsed/expanded",
 	"editor.defaultFolded": "Default folded",
@@ -197,6 +194,7 @@ export const en: Record<string, string> = {
 	"editor.cancel": "Cancel",
 	"editor.saveChanges": "Save changes",
 	"editor.createCallout": "Create callout",
+	"editor.downloadingIcon": "Downloading icon…",
 	"editor.idEmpty": "At least one ID is required",
 	"editor.idExists": "A callout with this ID already exists",
 	"editor.idConflict": "This ID conflicts with an existing callout",
@@ -231,6 +229,7 @@ export const en: Record<string, string> = {
 	"iconPicker.svgGallery": "SVG gallery",
 	"iconPicker.noSvgIcons": "No custom SVG icons yet.",
 	"iconPicker.noIconSelected": "No icon selected",
+	"iconPicker.noResults": "No icons match your search.",
 	"iconPicker.delete": "Delete",
 
 	// Context Menu
