@@ -716,112 +716,30 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 			);
 
 		new Setting(containerEl)
-			.setName(t("settings.popupPosition"))
-			.addDropdown((d) =>
-				d
-					.addOptions({
-						"top-left": t("settings.topLeft"),
-						"top-right": t("settings.topRight"),
-						cursor: t("settings.cursor"),
-					})
-					.setValue(popup.position)
-					.onChange(async (v: string) => {
-						popup.position = v as typeof popup.position;
-						await this.plugin.saveSettings();
-					}),
-			);
-
-		new Setting(containerEl)
-			.setName(t("settings.popupTransparency"))
-			.setDesc(t("settings.popupTransparencyDesc"))
-			.addSlider((s) =>
-				s
-					.setLimits(0, 100, 5)
-					.setValue(popup.transparency)
-					.setDynamicTooltip()
-					.onChange(async (v) => {
-						popup.transparency = v;
-						await this.plugin.saveSettings();
-					}),
-			);
-
-		new Setting(containerEl)
-			.setName(t("settings.backdropBlur"))
-			.setDesc(t("settings.backdropBlurDesc"))
-			.addSlider((s) =>
-				s
-					.setLimits(0, 20, 1)
-					.setValue(popup.backdropBlur)
-					.setDynamicTooltip()
-					.onChange(async (v) => {
-						popup.backdropBlur = v;
-						await this.plugin.saveSettings();
-					}),
-			);
-
-		new Setting(containerEl)
-			.setName(t("settings.showIconsPopup"))
+			.setName(t("settings.showEditCallout"))
 			.addToggle((tog) =>
-				tog.setValue(popup.showIcons).onChange(async (v) => {
-					popup.showIcons = v;
+				tog.setValue(popup.showEditCallout).onChange(async (v) => {
+					popup.showEditCallout = v;
 					await this.plugin.saveSettings();
 				}),
 			);
 
 		new Setting(containerEl)
-			.setName(t("settings.showColorDots"))
+			.setName(t("settings.showOpenSettings"))
 			.addToggle((tog) =>
-				tog.setValue(popup.showColorDots).onChange(async (v) => {
-					popup.showColorDots = v;
+				tog.setValue(popup.showOpenSettings).onChange(async (v) => {
+					popup.showOpenSettings = v;
 					await this.plugin.saveSettings();
 				}),
 			);
 
 		new Setting(containerEl)
-			.setName(t("settings.maxItemsPopup"))
-			.addText((txt) =>
-				txt.setValue(String(popup.maxItems)).onChange(async (v) => {
-					const n = parseInt(v, 10);
-					if (!isNaN(n) && n > 0) {
-						popup.maxItems = n;
-						await this.plugin.saveSettings();
-					}
-				}),
-			);
-
-		new Setting(containerEl)
-			.setName(t("settings.showConvertSubmenu"))
+			.setName(t("settings.showCopyMarkdown"))
 			.addToggle((tog) =>
-				tog.setValue(popup.showConvertSubmenu).onChange(async (v) => {
-					popup.showConvertSubmenu = v;
+				tog.setValue(popup.showCopyMarkdown).onChange(async (v) => {
+					popup.showCopyMarkdown = v;
 					await this.plugin.saveSettings();
 				}),
-			);
-
-		new Setting(containerEl)
-			.setName(t("settings.showEditButton"))
-			.addToggle((tog) =>
-				tog.setValue(popup.showEditButton).onChange(async (v) => {
-					popup.showEditButton = v;
-					await this.plugin.saveSettings();
-				}),
-			);
-
-		new Setting(containerEl)
-			.setName(t("settings.popupAnimation"))
-			.addDropdown((d) =>
-				d
-					.addOptions({
-						fade: t("settings.animFade"),
-						slide: t("settings.animSlide"),
-						scale: t("settings.animScale"),
-						none: t("settings.animNone"),
-					})
-					.setValue(popup.animation)
-					.onChange(async (v: string) => {
-						popup.animation = v as typeof popup.animation;
-						await this.plugin.saveSettings();
-					}),
 			);
 	}
 

@@ -75,7 +75,9 @@ export const he: Record<string, string> = {
 	"settings.showIconsPopup": "הצגת אייקונים בתפריט הצף",
 	"settings.showColorDots": "הצגת נקודות צבע בתפריט הצף",
 	"settings.maxItemsPopup": "מספר פריטים מקסימלי בתפריט הצף",
-	"settings.showConvertSubmenu": 'הצגת תפריט משנה "המר ל..."',
+	"settings.showEditCallout": 'הצגת "עריכת הגדרות תיבת הבלטה"',
+	"settings.showOpenSettings": 'הצגת "פתיחת הגדרות Callout Studio"',
+	"settings.showCopyMarkdown": 'הצגת "העתקת קוד Markdown"',
 	"settings.showEditButton": 'הצגת כפתור "עריכת תיבת הבלטה"',
 	"settings.popupAnimation": "אנימציית תפריט צף",
 	"settings.animFade": "עמעום (Fade)",
@@ -217,7 +219,7 @@ export const he: Record<string, string> = {
 	"iconPicker.delete": "מחיקה",
 
 	// Context Menu
-	"contextMenu.convertTo": "המרת תיבת הבלטה ל...",
+	"contextMenu.editCallout": "עריכת הגדרות תיבת הבלטה",
 	"contextMenu.copyMarkdown": "העתקת קוד Markdown",
 	"contextMenu.openSettings": "פתיחת הגדרות Callout Studio",
 

@@ -1,5 +1,6 @@
 import { Editor, MarkdownFileInfo, MarkdownView, Menu } from "obsidian";
 import type CalloutStudioPlugin from "../main";
+import { CalloutEditor } from "../settings/CalloutEditor";
 import { t } from "../i18n";
 
 const CALLOUT_HEADER_REGEX = /^(\s*>[\s>]*)\[!([^\]]+)\]/;
@@ -14,11 +15,9 @@ function findCalloutAtCursor(
 	editor: Editor,
 	cursorLine: number,
 ): CalloutInfo | null {
-	// Scan from cursor line upward to find the callout header
 	for (let line = cursorLine; line >= 0; line--) {
 		const text = editor.getLine(line);
 
-		// Check if this line is a callout header
 		const match = CALLOUT_HEADER_REGEX.exec(text);
 		if (match && match[1] !== undefined && match[2] !== undefined) {
 			return {
@@ -28,35 +27,11 @@ function findCalloutAtCursor(
 			};
 		}
 
-		// If line doesn't start with ">", we've left the blockquote
 		if (!/^\s*>/.test(text)) {
 			return null;
 		}
 	}
 	return null;
-}
-
-function convertCallout(
-	editor: Editor,
-	info: CalloutInfo,
-	newId: string,
-	newDisplayName: string,
-): void {
-	const line = editor.getLine(info.headerLine);
-	const newLine = line.replace(CALLOUT_HEADER_REGEX, `$1[!${newId}]`);
-
-	// Replace the title text after the callout marker if present
-	// Pattern: > [!id] Title  OR  > [!id]+/- Title
-	const afterMarker = /^(\s*>[\s>]*\[![^\]]+\][+-]?\s*)(.*)$/;
-	const titleMatch = afterMarker.exec(newLine);
-	let finalLine: string;
-	if (titleMatch && titleMatch[1] !== undefined) {
-		finalLine = titleMatch[1] + newDisplayName;
-	} else {
-		finalLine = newLine;
-	}
-
-	editor.setLine(info.headerLine, finalLine);
 }
 
 export function registerContextMenu(plugin: CalloutStudioPlugin): void {
@@ -68,71 +43,56 @@ export function registerContextMenu(plugin: CalloutStudioPlugin): void {
 				editor: Editor,
 				_info: MarkdownView | MarkdownFileInfo,
 			) => {
+				const { popup } = plugin.settings;
+				if (!popup.enabled) return;
+
 				const cursor = editor.getCursor();
 				const calloutInfo = findCalloutAtCursor(editor, cursor.line);
-
 				if (!calloutInfo) return;
 
-				// Add "Callout Studio" section
-				menu.addSeparator();
+				const currentDef = plugin.registry.get(calloutInfo.id);
 
-				// Convert to... submenu
-				if (plugin.settings.popup.showConvertSubmenu) {
+				if (popup.showEditCallout) {
 					menu.addItem((item) => {
-						item.setTitle(t("contextMenu.convertTo"))
-							.setIcon("repeat")
-							.setSection("callout-studio");
-
-						// We can't create native submenus easily, so we add
-						// individual items for each callout type
+						item.setTitle(t("contextMenu.editCallout"))
+							.setIcon("pencil")
+							.setSection("callout-studio")
+							.onClick(() => {
+								if (!currentDef) return;
+								void new CalloutEditor(
+									plugin,
+									currentDef,
+								).open();
+							});
 					});
-
-					const allCallouts = plugin.registry.getAll();
-					for (const def of allCallouts) {
-						if (def.id === calloutInfo.id) continue;
-						menu.addItem((item) => {
-							item.setTitle(def.displayName)
-								.setIcon(
-									def.icon.type === "lucide"
-										? def.icon.value
-										: "pencil",
-								)
-								.setSection("callout-studio")
-								.onClick(() => {
-									convertCallout(
-										editor,
-										calloutInfo,
-										def.id,
-										def.displayName,
-									);
-								});
-						});
-					}
 				}
 
-				// Quick actions
-				menu.addItem((item) => {
-					item.setTitle(t("contextMenu.copyMarkdown"))
-						.setIcon("clipboard-copy")
-						.setSection("callout-studio-actions")
-						.onClick(() => {
-							copyCalloutMarkdown(editor, calloutInfo);
-						});
-				});
+				if (popup.showOpenSettings) {
+					menu.addItem((item) => {
+						item.setTitle(t("contextMenu.openSettings"))
+							.setIcon("settings")
+							.setSection("callout-studio")
+							.onClick(() => {
+								// eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
+								(plugin.app as any).setting.open();
+								// eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
+								(plugin.app as any).setting.openTabById(
+									plugin.manifest.id,
+								);
+							});
+					});
+				}
 
-				menu.addItem((item) => {
-					item.setTitle(t("contextMenu.openSettings"))
-						.setIcon("settings")
-						.setSection("callout-studio-actions")
-						.onClick(() => {
-							// eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
-							(plugin.app as any).setting.open();
-							// eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
-							(plugin.app as any).setting.openTabById(
-								plugin.manifest.id,
-							);
-						});
-				});
+				if (popup.showCopyMarkdown) {
+					menu.addItem((item) => {
+						item.setTitle(t("contextMenu.copyMarkdown"))
+							.setIcon("clipboard-copy")
+							.setSection("callout-studio")
+							.onClick(() => {
+								copyCalloutMarkdown(editor, calloutInfo);
+							});
+					});
+				}
 			},
 		),
 	);

@@ -47,7 +47,9 @@ export interface PopupSettings {
 	showIcons: boolean;
 	showColorDots: boolean;
 	maxItems: number;
-	showConvertSubmenu: boolean;
+	showEditCallout: boolean;
+	showOpenSettings: boolean;
+	showCopyMarkdown: boolean;
 	showEditButton: boolean;
 	animation: PopupAnimation;
 }

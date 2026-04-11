@@ -77,7 +77,9 @@ export const en: Record<string, string> = {
 	"settings.showIconsPopup": "Show icons in popup",
 	"settings.showColorDots": "Show color dots in popup",
 	"settings.maxItemsPopup": "Max items visible in popup",
-	"settings.showConvertSubmenu": 'Show "convert to\u2026" submenu',
+	"settings.showEditCallout": 'Show "Edit callout settings"',
+	"settings.showOpenSettings": 'Show "Open callout studio settings"',
+	"settings.showCopyMarkdown": 'Show "Copy callout Markdown"',
 	"settings.showEditButton": 'Show "edit callout" button',
 	"settings.popupAnimation": "Popup animation",
 	"settings.animFade": "Fade",
@@ -220,7 +222,7 @@ export const en: Record<string, string> = {
 	"iconPicker.delete": "Delete",
 
 	// Context Menu
-	"contextMenu.convertTo": "Convert callout to\u2026",
+	"contextMenu.editCallout": "Edit callout settings",
 	"contextMenu.copyMarkdown": "Copy callout Markdown",
 	"contextMenu.openSettings": "Open callout studio settings",
 
