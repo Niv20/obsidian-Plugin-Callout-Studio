@@ -191,7 +191,6 @@ export const DEFAULT_SETTINGS: PluginSettings = {
 		enabled: true,
 		showIconPreviews: true,
 		showColorPreviews: true,
-		maxSuggestions: 10,
 	},
 	iconSources: {
 		lucide: true,

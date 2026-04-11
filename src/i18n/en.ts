@@ -90,13 +90,9 @@ export const en: Record<string, string> = {
 	// Settings — Autocomplete
 	"settings.enableAutocomplete": "Enable [! Autocomplete",
 	"settings.enableAutocompleteDesc":
-		'Show suggestions when you type "[!" in the editor',
+		'Show suggestions when you type "[!" inside a blockquote in the editor. Pick a callout type from the list to insert a complete callout header. Works in Source mode and Live Preview.',
 	"settings.showIconPreviews": "Show icon previews in autocomplete",
 	"settings.showColorPreviews": "Show color previews",
-	"settings.maxSuggestions": "Max suggestions",
-	"settings.triggerCharacter": "Trigger character",
-	"settings.triggerCharacterDesc":
-		"The autocomplete is triggered when you type this sequence",
 
 	// Settings — Icon sources
 	"settings.lucideIcons": "Lucide icons",

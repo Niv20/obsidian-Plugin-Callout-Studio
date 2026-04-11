@@ -58,7 +58,6 @@ export interface AutocompleteSettings {
 	enabled: boolean;
 	showIconPreviews: boolean;
 	showColorPreviews: boolean;
-	maxSuggestions: number;
 }
 
 export interface IconSourceSettings {

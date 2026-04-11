@@ -433,7 +433,7 @@
 	display: flex;
 	align-items: center;
 	gap: 8px;
-	padding: 4px 8px;
+	padding: 6px 8px;
 }
 
 .callout-studio-suggestion-icon {
@@ -451,14 +451,6 @@
 	height: 16px;
 }
 
-.callout-studio-suggestion-badge {
-	width: 10px;
-	height: 10px;
-	border-radius: 50%;
-	flex-shrink: 0;
-	border: 1px solid var(--background-modifier-border);
-}
-
 .callout-studio-suggestion-text {
 	flex: 1;
 	min-width: 0;
@@ -472,6 +464,7 @@
 	font-size: var(--font-ui-smaller);
 	color: var(--text-muted);
 	font-family: var(--font-monospace);
+	white-space: nowrap;
 }
 
 /* ─── Transparent Popup ───────────────────────────────────────── */

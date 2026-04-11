@@ -12,11 +12,36 @@ import type { CalloutDefinition } from "../types";
 
 export class CalloutAutoComplete extends EditorSuggest<CalloutDefinition> {
 	private plugin: CalloutStudioPlugin;
+	private pendingEditor: Editor | null = null;
+	private pendingLine = -1;
 
 	constructor(plugin: CalloutStudioPlugin) {
 		super(plugin.app);
 		this.plugin = plugin;
-		this.limit = plugin.settings.autocomplete.maxSuggestions;
+	}
+
+	close(): void {
+		const editor = this.pendingEditor;
+		const line = this.pendingLine;
+		this.pendingEditor = null;
+		this.pendingLine = -1;
+		super.close();
+
+		if (editor && line >= 0) {
+			window.requestAnimationFrame(() => {
+				setTimeout(() => {
+					const lineText = editor.getLine(line);
+					const quoteMatch = /^(\s*>\s*)/.exec(lineText);
+					const quotePrefix = quoteMatch?.[1] ?? "> ";
+					const endPos = { line, ch: lineText.length };
+					editor.replaceRange("\n" + quotePrefix, endPos);
+					editor.setCursor({
+						line: line + 1,
+						ch: quotePrefix.length,
+					});
+				}, 50);
+			});
+		}
 	}
 
 	onTrigger(
@@ -54,7 +79,6 @@ export class CalloutAutoComplete extends EditorSuggest<CalloutDefinition> {
 	getSuggestions(context: EditorSuggestContext): CalloutDefinition[] {
 		const query = context.query.toLowerCase();
 		const all = this.plugin.registry.getAll();
-		const maxResults = this.plugin.settings.autocomplete.maxSuggestions;
 
 		// Filter
 		const filtered = all.filter(
@@ -70,19 +94,24 @@ export class CalloutAutoComplete extends EditorSuggest<CalloutDefinition> {
 			return a.displayName.localeCompare(b.displayName);
 		});
 
-		return filtered.slice(0, maxResults);
+		return filtered;
 	}
 
 	renderSuggestion(def: CalloutDefinition, el: HTMLElement): void {
 		el.addClass("callout-studio-suggestion");
 
 		const { autocomplete } = this.plugin.settings;
+		const isDark = document.body.classList.contains("theme-dark");
+		const color = isDark ? def.colorDark : def.colorLight;
 
 		// Icon
 		if (autocomplete.showIconPreviews) {
 			const iconEl = el.createDiv({
 				cls: "callout-studio-suggestion-icon",
 			});
+			if (autocomplete.showColorPreviews) {
+				iconEl.style.color = color;
+			}
 			try {
 				if (def.icon.type === "lucide") {
 					setIcon(iconEl, def.icon.value);
@@ -96,39 +125,78 @@ export class CalloutAutoComplete extends EditorSuggest<CalloutDefinition> {
 			}
 		}
 
-		// Color badge
-		if (autocomplete.showColorPreviews) {
-			const badgeEl = el.createDiv({
-				cls: "callout-studio-suggestion-badge",
-			});
-			const isDark = document.body.classList.contains("theme-dark");
-			badgeEl.style.backgroundColor = isDark
-				? def.colorDark
-				: def.colorLight;
-		}
-
 		// Text container
 		const textEl = el.createDiv({ cls: "callout-studio-suggestion-text" });
-		textEl.createDiv({
+		const nameEl = textEl.createDiv({
 			cls: "callout-studio-suggestion-name",
 			text: def.displayName,
 		});
-		textEl.createDiv({ cls: "callout-studio-suggestion-id", text: def.id });
+		if (autocomplete.showColorPreviews) {
+			nameEl.style.color = color;
+		}
+
+		// Show all IDs (main + aliases) on the same line
+		const allIds = [def.id, ...(def.aliases ?? [])];
+		const idEl = textEl.createDiv({
+			cls: "callout-studio-suggestion-id",
+		});
+		idEl.textContent = allIds.join(", ");
 	}
 
 	selectSuggestion(def: CalloutDefinition): void {
 		if (!this.context) return;
-		const { editor, start, end } = this.context;
+		const { editor, start, end, query } = this.context;
 
-		// Obsidian auto-inserts ']' when user types '[', so there may be
-		// a stray ']' right after the cursor. Consume it if present.
 		const line = editor.getLine(end.line);
-		const adjustedEnd =
-			line[end.ch] === "]" ? { line: end.line, ch: end.ch + 1 } : end;
+
+		// Consume a stray ']' that Obsidian may have auto-inserted
+		const afterCursor = line.slice(end.ch);
+		const hasBracket = afterCursor.startsWith("]");
+
+		// Parse what already exists after the `[!...]` on the line
+		// Pattern: optional ']', optional fold mark (+/-), optional ' Title...'
+		const restMatch = /^(\]?)([+-]?)\s*(.*)$/.exec(afterCursor);
+		const existingTitle = restMatch?.[3]?.trim() ?? "";
+
+		// Detect if this is a brand-new callout (no title text after the header)
+		const isNewCallout = existingTitle === "";
+
+		// Check if the existing title matches any known callout display name
+		const allDefs = this.plugin.registry.getAll();
+		const isKnownCalloutName = allDefs.some(
+			(d) => d.displayName.toLowerCase() === existingTitle.toLowerCase(),
+		);
+
+		// If the user typed an alias, use that alias as the ID
+		const queryLower = query.toLowerCase();
+		const allIds = [def.id, ...(def.aliases ?? [])];
+		const matchedId =
+			allIds.find((id) => id.toLowerCase() === queryLower) ??
+			allIds.find((id) => id.toLowerCase().startsWith(queryLower)) ??
+			def.id;
+
+		// Decide what title to use
+		let title: string;
+		if (existingTitle === "" || isKnownCalloutName) {
+			title = def.displayName;
+		} else {
+			title = existingTitle;
+		}
 
 		const foldMark = def.foldable ? (def.defaultFolded ? "-" : "+") : "";
-		const replacement = `[!${def.id}]${foldMark} ${def.displayName}`;
 
-		editor.replaceRange(replacement, start, adjustedEnd);
+		// Replace from trigger start to end of line
+		const lineEnd: EditorPosition = {
+			line: end.line,
+			ch: line.length,
+		};
+
+		const replacement = `[!${matchedId}]${foldMark} ${title}`;
+		editor.replaceRange(replacement, start, lineEnd);
+
+		if (isNewCallout) {
+			this.pendingEditor = editor;
+			this.pendingLine = start.line;
+		}
 	}
 }

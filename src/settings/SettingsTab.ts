@@ -26,8 +26,8 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 		this.renderCalloutTypesSection(containerEl);
 		this.renderBuiltInCalloutsSection(containerEl);
 		this.renderGlobalStyleSection(containerEl);
-		this.renderPopupSettings(containerEl);
 		this.renderAutocompleteSettings(containerEl);
+		this.renderPopupSettings(containerEl);
 		this.renderIconSourceSettings(containerEl);
 		this.renderColorModeSettings(containerEl);
 		this.renderLanguageSettings(containerEl);
@@ -763,6 +763,35 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 			.setName(t("settings.autocomplete"))
 			.setHeading();
 
+		const itemsContainer = containerEl.createDiv();
+
+		const renderItems = () => {
+			itemsContainer.empty();
+			if (!autocomplete.enabled) return;
+
+			new Setting(itemsContainer)
+				.setName(t("settings.showIconPreviews"))
+				.addToggle((tog) =>
+					tog
+						.setValue(autocomplete.showIconPreviews)
+						.onChange(async (v) => {
+							autocomplete.showIconPreviews = v;
+							await this.plugin.saveSettings();
+						}),
+				);
+
+			new Setting(itemsContainer)
+				.setName(t("settings.showColorPreviews"))
+				.addToggle((tog) =>
+					tog
+						.setValue(autocomplete.showColorPreviews)
+						.onChange(async (v) => {
+							autocomplete.showColorPreviews = v;
+							await this.plugin.saveSettings();
+						}),
+				);
+		};
+
 		new Setting(containerEl)
 			.setName(t("settings.enableAutocomplete"))
 			.setDesc(t("settings.enableAutocompleteDesc"))
@@ -770,51 +799,12 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 				tog.setValue(autocomplete.enabled).onChange(async (v) => {
 					autocomplete.enabled = v;
 					await this.plugin.saveSettings();
+					renderItems();
 				}),
 			);
 
-		new Setting(containerEl)
-			.setName(t("settings.showIconPreviews"))
-			.addToggle((tog) =>
-				tog
-					.setValue(autocomplete.showIconPreviews)
-					.onChange(async (v) => {
-						autocomplete.showIconPreviews = v;
-						await this.plugin.saveSettings();
-					}),
-			);
-
-		new Setting(containerEl)
-			.setName(t("settings.showColorPreviews"))
-			.addToggle((tog) =>
-				tog
-					.setValue(autocomplete.showColorPreviews)
-					.onChange(async (v) => {
-						autocomplete.showColorPreviews = v;
-						await this.plugin.saveSettings();
-					}),
-			);
-
-		new Setting(containerEl)
-			.setName(t("settings.maxSuggestions"))
-			.addText((txt) =>
-				txt
-					.setValue(String(autocomplete.maxSuggestions))
-					.onChange(async (v) => {
-						const n = parseInt(v, 10);
-						if (!isNaN(n) && n > 0) {
-							autocomplete.maxSuggestions = n;
-							await this.plugin.saveSettings();
-						}
-					}),
-			);
-
-		new Setting(containerEl)
-			.setName(t("settings.triggerCharacter"))
-			.setDesc(t("settings.triggerCharacterDesc"))
-			.addText((txt) => {
-				txt.setValue("[!").setDisabled(true);
-			});
+		containerEl.appendChild(itemsContainer);
+		renderItems();
 	}
 
 	// ─── Section E: Icon Source Settings ─────────────────────
