@@ -10,7 +10,7 @@ import { TagInput } from "../ui/TagInput";
 function generateId(displayName: string): string {
 	return displayName
 		.toLowerCase()
-		.replace(/[^a-z0-9\s-]/g, "")
+		.replace(/[^\p{L}\p{N}\s-]/gu, "")
 		.replace(/\s+/g, "-")
 		.replace(/-+/g, "-")
 		.replace(/^-|-$/g, "");

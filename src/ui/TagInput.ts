@@ -162,7 +162,7 @@ export class TagInput {
 
 		const tag = raw
 			.toLowerCase()
-			.replace(/[^a-z0-9-]/g, "")
+			.replace(/[^\p{L}\p{N}-]/gu, "")
 			.replace(/-+/g, "-")
 			.replace(/^-|-$/g, "");
 		if (!tag) return;
