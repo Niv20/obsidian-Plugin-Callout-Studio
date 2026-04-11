@@ -88,7 +88,7 @@ export const he: Record<string, string> = {
 	// Settings — Autocomplete
 	"settings.enableAutocomplete": "הפעלת השלמה אוטומטית ל-[!",
 	"settings.enableAutocompleteDesc":
-		'הצגת הצעות כשאתה מקליד "[!" בתוך בלוק ציטוט בעורך. בחר סוג תיבת הבלטה מהרשימה כדי להכניס כותרת שלמה. פועל במצב Source mode ו-Live Preview.',
+		'הצגת הצעות כשאתה מקליד "[!" בתוך בלוק ציטוט בעורך. בחר סוג תיבת הבלטה מהרשימה כדי להכניס כותרת שלמה.',
 	"settings.showIconPreviews":
 		"הצגת תצוגה מקדימה של אייקונים בהשלמה האוטומטית",
 	"settings.showColorPreviews": "הצגת תצוגה מקדימה של צבעים",
