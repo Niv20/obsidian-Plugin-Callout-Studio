@@ -705,6 +705,40 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 			.setName(t("settings.contextMenuPopup"))
 			.setHeading();
 
+		const itemsContainer = containerEl.createDiv();
+
+		const renderItems = () => {
+			itemsContainer.empty();
+			if (!popup.enabled) return;
+
+			new Setting(itemsContainer)
+				.setName(t("settings.showEditCallout"))
+				.addToggle((tog) =>
+					tog.setValue(popup.showEditCallout).onChange(async (v) => {
+						popup.showEditCallout = v;
+						await this.plugin.saveSettings();
+					}),
+				);
+
+			new Setting(itemsContainer)
+				.setName(t("settings.showOpenSettings"))
+				.addToggle((tog) =>
+					tog.setValue(popup.showOpenSettings).onChange(async (v) => {
+						popup.showOpenSettings = v;
+						await this.plugin.saveSettings();
+					}),
+				);
+
+			new Setting(itemsContainer)
+				.setName(t("settings.showCopyMarkdown"))
+				.addToggle((tog) =>
+					tog.setValue(popup.showCopyMarkdown).onChange(async (v) => {
+						popup.showCopyMarkdown = v;
+						await this.plugin.saveSettings();
+					}),
+				);
+		};
+
 		new Setting(containerEl)
 			.setName(t("settings.enablePopup"))
 			.setDesc(t("settings.enablePopupDesc"))
@@ -712,35 +746,12 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 				tog.setValue(popup.enabled).onChange(async (v) => {
 					popup.enabled = v;
 					await this.plugin.saveSettings();
+					renderItems();
 				}),
 			);
 
-		new Setting(containerEl)
-			.setName(t("settings.showEditCallout"))
-			.addToggle((tog) =>
-				tog.setValue(popup.showEditCallout).onChange(async (v) => {
-					popup.showEditCallout = v;
-					await this.plugin.saveSettings();
-				}),
-			);
-
-		new Setting(containerEl)
-			.setName(t("settings.showOpenSettings"))
-			.addToggle((tog) =>
-				tog.setValue(popup.showOpenSettings).onChange(async (v) => {
-					popup.showOpenSettings = v;
-					await this.plugin.saveSettings();
-				}),
-			);
-
-		new Setting(containerEl)
-			.setName(t("settings.showCopyMarkdown"))
-			.addToggle((tog) =>
-				tog.setValue(popup.showCopyMarkdown).onChange(async (v) => {
-					popup.showCopyMarkdown = v;
-					await this.plugin.saveSettings();
-				}),
-			);
+		containerEl.appendChild(itemsContainer);
+		renderItems();
 	}
 
 	// ─── Section D: Autocomplete Settings ────────────────────

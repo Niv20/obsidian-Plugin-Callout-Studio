@@ -63,7 +63,7 @@ export const he: Record<string, string> = {
 	// Settings — Popup
 	"settings.enablePopup": "הפעלת תפריט הקשר צף",
 	"settings.enablePopupDesc":
-		"הצגת פאנל צף חצי-שקוף הצמוד לתפריט הקליק הימני. הוא מציג את כל סוגי תיבות ההבלטה הזמינים ומאפשר להכניס, להמיר או לערוך אותן במהירות מבלי לפתוח את לוח ההגדרות.",
+		"הוספת פעולות נוספות לתפריט הקליק הימני כאשר הסמן נמצא בתוך תיבת הבלטה. פועל במצב Source mode ובמצב Live Preview בעת עריכת תוכן ה-callout.",
 	"settings.popupPosition": "מיקום התפריט הצף",
 	"settings.topLeft": "שמאל-למעלה",
 	"settings.topRight": "ימין-למעלה",

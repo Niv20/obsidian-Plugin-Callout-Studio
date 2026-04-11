@@ -64,7 +64,7 @@ export const en: Record<string, string> = {
 	// Settings — Popup
 	"settings.enablePopup": "Enable context menu popup",
 	"settings.enablePopupDesc":
-		"Show a semi-transparent floating panel anchored to the right-click context menu. It shows all available callout types and lets you quickly insert, convert, or edit callouts without opening the settings panel.",
+		"Add extra actions to the right-click context menu when your cursor is inside a callout. Works in Source mode and in Live Preview while editing callout content.",
 	"settings.popupPosition": "Popup position",
 	"settings.topLeft": "Top-left",
 	"settings.topRight": "Top-right",
