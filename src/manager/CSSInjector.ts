@@ -55,7 +55,15 @@ export class CSSInjector {
 
 		for (const def of callouts) {
 			if (def.icon.type === "material") {
-				materialFonts.add(def.icon.style ?? "outlined");
+				// Only need font link if no cached SVG
+				const cached = this.registry.findMaterialSvg(
+					def.icon.value,
+					def.icon.style ?? "outlined",
+					def.icon.weight ?? 400,
+				);
+				if (!cached) {
+					materialFonts.add(def.icon.style ?? "outlined");
+				}
 			}
 			rules.push(this.generateCalloutCSS(def));
 		}
@@ -118,9 +126,16 @@ export class CSSInjector {
 			);
 		}
 
-		// Material icon font override
+		// Material icon font override (only when no cached SVG)
 		if (def.icon.type === "material") {
-			parts.push(this.generateMaterialIconOverride(def));
+			const cached = this.registry.findMaterialSvg(
+				def.icon.value,
+				def.icon.style ?? "outlined",
+				def.icon.weight ?? 400,
+			);
+			if (!cached) {
+				parts.push(this.generateMaterialIconOverride(def));
+			}
 		}
 
 		// Icon position/size transform
@@ -166,8 +181,15 @@ export class CSSInjector {
 					);
 				}
 				if (def.icon.type === "material") {
-					const aliasDef = { ...def, id: alias };
-					parts.push(this.generateMaterialIconOverride(aliasDef));
+					const cachedAlias = this.registry.findMaterialSvg(
+						def.icon.value,
+						def.icon.style ?? "outlined",
+						def.icon.weight ?? 400,
+					);
+					if (!cachedAlias) {
+						const aliasDef = { ...def, id: alias };
+						parts.push(this.generateMaterialIconOverride(aliasDef));
+					}
 				}
 				const aliasTransform = this.getIconTransformCSS({
 					...def,
@@ -216,10 +238,20 @@ export class CSSInjector {
 				}
 				return `lucide-pencil`;
 			}
-			case "material":
+			case "material": {
+				// Use cached SVG if available
+				const cached = this.registry.findMaterialSvg(
+					def.icon.value,
+					def.icon.style ?? "outlined",
+					def.icon.weight ?? 400,
+				);
+				if (cached) {
+					return svgToDataUri(cached.svg);
+				}
 				// Material icons use font ligatures, not SVG.
 				// We set a special CSS custom property and override rendering.
 				return `lucide-pencil`; // fallback for --callout-icon
+			}
 			case "emoji":
 				return `"${def.icon.value}"`;
 			default:
@@ -231,11 +263,13 @@ export class CSSInjector {
 		if (def.icon.type !== "material") return "";
 		const fontFamily = materialFontFamily(def.icon.style ?? "outlined");
 		const isFilled = def.icon.style === "filled";
+		const weight = def.icon.weight ?? 400;
 		return (
 			`.callout[data-callout="${def.id}"] > .callout-title > .callout-icon::after {\n` +
 			`  content: "${def.icon.value}";\n` +
 			`  font-family: "${fontFamily}";\n` +
 			`  font-size: 24px;\n` +
+			`  font-weight: ${weight};\n` +
 			`  line-height: 1;\n` +
 			`  letter-spacing: normal;\n` +
 			`  text-transform: none;\n` +
@@ -291,7 +325,7 @@ export class CSSInjector {
 			link.id = `${MATERIAL_FONT_LINK_ID}-${family}`;
 			link.setAttribute("data-family", family);
 			link.rel = "stylesheet";
-			link.href = `https://fonts.googleapis.com/css2?family=${family}:opsz,wght,FILL,GRAD@24,400,0..1,0`;
+			link.href = `https://fonts.googleapis.com/css2?family=${family}:opsz,wght,FILL,GRAD@24,100..700,0..1,0`;
 			document.head.appendChild(link);
 		}
 	}

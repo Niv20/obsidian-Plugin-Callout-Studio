@@ -539,9 +539,9 @@ export class CalloutEditor extends Modal {
 	}
 
 	private getIconLabel(): string {
-		const { type, value, style } = this.icon;
-		if (type === "material" && style) {
-			return `${type}: ${value} (${style})`;
+		const { type, value, style, weight } = this.icon;
+		if (type === "material") {
+			return `${type}: ${value} (${style ?? "outlined"}, ${weight ?? 400})`;
 		}
 		return `${type}: ${value}`;
 	}
@@ -557,18 +557,37 @@ export class CalloutEditor extends Modal {
 				}
 				break;
 			case "material": {
-				const span = container.createSpan({
-					cls: "callout-studio-material-icon",
-					text: this.icon.value,
-				});
-				const fontFamily = materialFontFamily(
+				// Use cached SVG if available
+				const cached = this.plugin.registry.findMaterialSvg(
+					this.icon.value,
 					this.icon.style ?? "outlined",
+					this.icon.weight ?? 400,
 				);
-				span.setCssProps({
-					"--cs-material-font": `"${fontFamily}"`,
-				});
-				if (this.icon.style === "filled") {
-					span.setCssProps({ "--cs-material-fill": "1" });
+				if (cached) {
+					const parser = new DOMParser();
+					const doc = parser.parseFromString(
+						cached.svg,
+						"image/svg+xml",
+					);
+					const svgEl = doc.documentElement;
+					container.appendChild(
+						container.doc.importNode(svgEl, true),
+					);
+				} else {
+					const span = container.createSpan({
+						cls: "callout-studio-material-icon",
+						text: this.icon.value,
+					});
+					const fontFamily = materialFontFamily(
+						this.icon.style ?? "outlined",
+					);
+					span.setCssProps({
+						"--cs-material-font": `"${fontFamily}"`,
+						"--cs-material-weight": String(this.icon.weight ?? 400),
+					});
+					if (this.icon.style === "filled") {
+						span.setCssProps({ "--cs-material-fill": "1" });
+					}
 				}
 				break;
 			}
@@ -709,6 +728,12 @@ export class CalloutEditor extends Modal {
 		} else {
 			this.plugin.registry.add(def);
 		}
+
+		// Download Material SVG in background and clean up unused ones
+		if (def.icon.type === "material") {
+			void this.plugin.cacheMaterialSvg(def.icon);
+		}
+		this.plugin.registry.cleanupUnusedMaterialSvgs();
 
 		if (this.resolve) this.resolve(def);
 		this.resolve = null;

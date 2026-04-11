@@ -107,9 +107,22 @@ export const he: Record<string, string> = {
 	"settings.styleFilled": "מלא (Filled)",
 	"settings.styleRounded": "מעוגל (Rounded)",
 	"settings.styleSharp": "חד (Sharp)",
-	"settings.cacheMaterial": "שמירת אייקוני Material במטמון אופליין",
-	"settings.cacheMaterialDesc":
-		"הורדת מטא-דאטה של אייקונים לשימוש ללא אינטרנט",
+	"settings.materialWeightDefault": "משקל ברירת מחדל לאייקוני Material",
+	"settings.materialWeightDefaultDesc":
+		"עובי הקו של אייקוני Material (100 = דק, 700 = עבה)",
+	"settings.materialCache": "מטמון אייקוני Material",
+	"settings.materialCacheDesc":
+		"מטא-דאטה של אייקונים יורד מגוגל בשימוש הראשון ונשמר מקומית. קבצי SVG בודדים יורדים כשבוחרים אייקון Material לתיבת הבלטה, כך שהם עובדים אופליין ובהדפסה.",
+	"settings.metadataCache": "מטמון מטא-דאטה",
+	"settings.metadataCacheInfo": "{{count}} אייקונים · עדכון אחרון: {{date}}",
+	"settings.cacheNotDownloaded":
+		"טרם הורד — יוריד כשתגלוש באייקוני Material לראשונה.",
+	"settings.refreshCache": "רענון",
+	"settings.svgCache": "קבצי SVG שהורדו",
+	"settings.svgCacheInfo": "{{count}} אייקונים · {{size}}",
+	"settings.svgCacheEmpty": "אין עדיין אייקוני SVG של Material במטמון.",
+	"settings.clearSvgCache": "ניקוי",
+	"settings.viewCachedSvgs": "צפייה",
 
 	// Settings — Color mode
 	"settings.colorAppMode": "מצב החלת צבע",
@@ -147,6 +160,10 @@ export const he: Record<string, string> = {
 	"notice.noNewJSON":
 		"לא יובאו תיבות הבלטה חדשות (ייתכן שהמזהים כבר קיימים).",
 	"notice.failedJSON": "ניתוח קובץ ה-JSON נכשל.",
+	"notice.cacheRefreshed":
+		"מטא-דאטה של אייקוני Material רוענן ({{count}} אייקונים).",
+	"notice.cacheRefreshFailed": "רענון מטא-דאטה של אייקוני Material נכשל.",
+	"notice.svgCacheCleared": "מטמון SVG של Material נוקה.",
 
 	// Callout Editor
 	"editor.editCallout": "עריכת תיבת הבלטה",
@@ -195,14 +212,10 @@ export const he: Record<string, string> = {
 	"iconPicker.customSvg": "SVG מותאם אישית",
 	"iconPicker.searchLucide": "חיפוש אייקוני Lucide...",
 	"iconPicker.loadMore": "טען עוד",
-	"iconPicker.materialDisabled":
-		"אייקוני Material מבוטלים בהגדרות. יש להפעיל אותם תחת מקורות אייקונים.",
 	"iconPicker.searchMaterial": "חיפוש אייקוני Material...",
 	"iconPicker.iconsLoading": "האייקונים נטענים, נא להמתין...",
 	"iconPicker.loadFailed": "טעינת אייקוני Material נכשלה: {{error}}",
 	"iconPicker.allCategories": "כל הקטגוריות",
-	"iconPicker.svgDisabled":
-		"אייקוני SVG מותאמים אישית מבוטלים בהגדרות. יש להפעיל אותם תחת מקורות אייקונים.",
 	"iconPicker.nameLabel": "שם:",
 	"iconPicker.namePlaceholder": "my-icon-name",
 	"iconPicker.svgPlaceholder": "הדבק כאן קוד SVG, או גרור ושחרר קובץ SVG...",
@@ -211,6 +224,8 @@ export const he: Record<string, string> = {
 		"השם חייב להכיל אותיות באנגלית (קטנות), מספרים ומקפים בלבד.",
 	"iconPicker.nameExists": "אייקון SVG עם שם זה כבר קיים.",
 	"iconPicker.invalidSvg": "קוד SVG לא תקין. נא לבדוק את הקלט.",
+	"iconPicker.svgTooLarge":
+		"ה-SVG חורג ממגבלת 100 KB. יש להשתמש באייקון פשוט יותר.",
 	"iconPicker.svgGallery": "גלריית SVG",
 	"iconPicker.noSvgIcons": "אין עדיין אייקוני SVG מותאמים אישית.",
 	"iconPicker.noIconSelected": "לא נבחר אייקון",

@@ -15,6 +15,7 @@ import {
 	isValidSvgIconName,
 	makeIcon,
 	materialFontFamily,
+	MAX_CUSTOM_SVG_BYTES,
 } from "../utils/iconLoader";
 import { t } from "../i18n";
 
@@ -38,6 +39,7 @@ export class IconPicker extends Modal {
 	private materialIcons: MaterialIconMeta[] = [];
 	private materialFiltered: MaterialIconMeta[] = [];
 	private materialStyle: MaterialIconStyle = "outlined";
+	private materialWeight: number = 400;
 	private materialCategory = "";
 	private materialDisplayed = 0;
 	private materialLoading = false;
@@ -62,6 +64,8 @@ export class IconPicker extends Modal {
 		this.selectedIcon = currentIcon ? { ...currentIcon } : null;
 		this.materialStyle =
 			plugin.settings.iconSources.materialStyleDefault ?? "outlined";
+		this.materialWeight =
+			plugin.settings.iconSources.materialWeightDefault ?? 400;
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-misused-promises -- intentional Promise-returning override for modal result
@@ -291,7 +295,7 @@ export class IconPicker extends Modal {
 			// eslint-disable-next-line obsidianmd/no-forbidden-elements -- dynamic font loading requires a link element
 			const link = document.createElement("link");
 			link.rel = "stylesheet";
-			link.href = `https://fonts.googleapis.com/css2?family=${encodedFamily}:opsz,wght,FILL,GRAD@24,400,0..1,0`;
+			link.href = `https://fonts.googleapis.com/css2?family=${encodedFamily}:opsz,wght,FILL,GRAD@24,100..700,0..1,0`;
 			link.onload = () => {
 				void document.fonts.ready.then(() => resolve());
 			};
@@ -302,13 +306,6 @@ export class IconPicker extends Modal {
 	}
 
 	private renderMaterialTab(): void {
-		if (!this.plugin.settings.iconSources.material) {
-			this.tabContentEl
-				.createDiv("icon-picker-notice")
-				.setText(t("iconPicker.materialDisabled"));
-			return;
-		}
-
 		const toolbar = this.tabContentEl.createDiv("icon-picker-toolbar");
 
 		// Search
@@ -331,6 +328,19 @@ export class IconPicker extends Modal {
 		for (const s of styles) {
 			const opt = styleSelect.createEl("option", { text: s, value: s });
 			if (s === this.materialStyle) opt.selected = true;
+		}
+
+		// Weight selector
+		const weightSelect = toolbar.createEl("select", {
+			cls: "icon-picker-weight-select",
+		});
+		const weights = [100, 200, 300, 400, 500, 600, 700];
+		for (const w of weights) {
+			const opt = weightSelect.createEl("option", {
+				text: String(w),
+				value: String(w),
+			});
+			if (w === this.materialWeight) opt.selected = true;
 		}
 
 		// Category selector
@@ -377,6 +387,12 @@ export class IconPicker extends Modal {
 				if (this.activeTab !== "material") return;
 				updateGrid();
 			});
+		});
+
+		weightSelect.addEventListener("change", () => {
+			this.materialWeight = parseInt(weightSelect.value, 10);
+			// Weight changes don't require re-loading fonts; just refresh selection
+			updateGrid();
 		});
 
 		categorySelect.addEventListener("change", () => {
@@ -472,7 +488,10 @@ export class IconPicker extends Modal {
 			});
 			iconSpan.setText(meta.name);
 			const fontFamily = materialFontFamily(this.materialStyle);
-			iconSpan.setCssProps({ "--cs-material-font": `"${fontFamily}"` });
+			iconSpan.setCssProps({
+				"--cs-material-font": `"${fontFamily}"`,
+				"--cs-material-weight": String(this.materialWeight),
+			});
 			if (this.materialStyle === "filled") {
 				iconSpan.setCssProps({ "--cs-material-fill": "1" });
 			}
@@ -498,7 +517,9 @@ export class IconPicker extends Modal {
 	}
 
 	private selectMaterial(name: string, grid: HTMLElement): void {
-		this.selectedIcon = makeIcon("material", name, this.materialStyle);
+		const icon = makeIcon("material", name, this.materialStyle);
+		icon.weight = this.materialWeight;
+		this.selectedIcon = icon;
 		grid.querySelectorAll(".is-selected").forEach((el) =>
 			el.removeClass("is-selected"),
 		);
@@ -510,13 +531,6 @@ export class IconPicker extends Modal {
 	// ── SVG Tab ─────────────────────────────────────────────────────────
 
 	private renderSvgTab(): void {
-		if (!this.plugin.settings.iconSources.customSvg) {
-			this.tabContentEl
-				.createDiv("icon-picker-notice")
-				.setText(t("iconPicker.svgDisabled"));
-			return;
-		}
-
 		// Input area
 		const inputArea = this.tabContentEl.createDiv("icon-picker-svg-input");
 
@@ -579,6 +593,13 @@ export class IconPicker extends Modal {
 
 			if (this.customSvgs.some((s) => s.name === name)) {
 				errorEl.setText(t("iconPicker.nameExists"));
+				errorEl.show();
+				return;
+			}
+
+			// Check size limit
+			if (new Blob([raw]).size > MAX_CUSTOM_SVG_BYTES) {
+				errorEl.setText(t("iconPicker.svgTooLarge"));
 				errorEl.show();
 				return;
 			}
@@ -710,12 +731,15 @@ export class IconPicker extends Modal {
 				);
 				span.setCssProps({
 					"--cs-material-font": `"${fontFamily}"`,
+					"--cs-material-weight": String(
+						this.selectedIcon.weight ?? 400,
+					),
 				});
 				if (this.selectedIcon.style === "filled") {
 					span.setCssProps({ "--cs-material-fill": "1" });
 				}
 				labelEl.setText(
-					`material: ${this.selectedIcon.value} (${this.selectedIcon.style ?? "outlined"})`,
+					`material: ${this.selectedIcon.value} (${this.selectedIcon.style ?? "outlined"}, ${this.selectedIcon.weight ?? 400})`,
 				);
 				break;
 			}

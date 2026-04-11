@@ -193,11 +193,8 @@ export const DEFAULT_SETTINGS: PluginSettings = {
 		showColorPreviews: true,
 	},
 	iconSources: {
-		lucide: true,
-		material: true,
-		customSvg: true,
 		materialStyleDefault: "outlined",
-		cacheMaterialOffline: true,
+		materialWeightDefault: 400,
 	},
 	colorMode: {
 		mode: "auto",

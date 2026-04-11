@@ -2,6 +2,8 @@ export interface CalloutIcon {
 	type: "lucide" | "material" | "svg" | "emoji";
 	value: string;
 	style?: "outlined" | "filled" | "rounded" | "sharp";
+	/** Material Symbols weight (100–700, default 400) */
+	weight?: number;
 }
 
 export interface CalloutDefinition {
@@ -61,11 +63,9 @@ export interface AutocompleteSettings {
 }
 
 export interface IconSourceSettings {
-	lucide: boolean;
-	material: boolean;
-	customSvg: boolean;
 	materialStyleDefault: MaterialIconStyle;
-	cacheMaterialOffline: boolean;
+	/** Material Symbols weight default (100–700) */
+	materialWeightDefault: number;
 }
 
 export interface ColorModeSettings {
@@ -109,6 +109,8 @@ export interface PluginData {
 	settings: PluginSettings;
 	materialIconsCache?: MaterialIconsCacheData;
 	customSvgIcons?: CustomSvgIcon[];
+	/** Locally cached SVGs for selected Material icons */
+	materialSvgCache?: MaterialSvgCacheEntry[];
 }
 
 export interface MaterialIconsCacheData {
@@ -125,5 +127,12 @@ export interface MaterialIconMeta {
 
 export interface CustomSvgIcon {
 	name: string;
+	svg: string;
+}
+
+export interface MaterialSvgCacheEntry {
+	name: string;
+	style: MaterialIconStyle;
+	weight: number;
 	svg: string;
 }

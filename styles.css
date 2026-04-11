@@ -789,7 +789,7 @@
 .icon-picker-material-cell .icon-picker-material-icon,
 .callout-studio-material-icon {
 	font-family: var(--cs-material-font, "Material Symbols Outlined");
-	font-weight: normal;
+	font-weight: var(--cs-material-weight, normal);
 	font-style: normal;
 	font-size: 24px;
 	line-height: 1;
@@ -1298,4 +1298,68 @@
 	.cs-global-preview-col {
 		position: static;
 	}
+}
+
+/* ─── Material SVG Cache Panel ──────────────────────────────── */
+
+.callout-studio-svg-cache-panel {
+	margin: 8px 0 16px;
+	padding: 12px;
+	border: 1px solid var(--background-modifier-border);
+	border-radius: 8px;
+	background: var(--background-secondary);
+}
+
+.callout-studio-cache-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+	gap: 8px;
+}
+
+.callout-studio-cache-cell {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 4px;
+	padding: 8px 4px;
+	border-radius: 6px;
+	background: var(--background-primary);
+	border: 1px solid var(--background-modifier-border);
+}
+
+.callout-studio-cache-icon {
+	width: 24px;
+	height: 24px;
+}
+
+.callout-studio-cache-icon svg {
+	width: 24px;
+	height: 24px;
+}
+
+.callout-studio-cache-label {
+	font-size: var(--font-smallest);
+	font-weight: 500;
+	text-align: center;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	max-width: 100%;
+}
+
+.callout-studio-cache-meta {
+	font-size: 10px;
+	color: var(--text-muted);
+	text-align: center;
+}
+
+/* ─── Icon Picker Weight Select ─────────────────────────────── */
+
+.icon-picker-weight-select {
+	padding: 4px 8px;
+	border-radius: 4px;
+	border: 1px solid var(--background-modifier-border);
+	background: var(--background-secondary);
+	color: var(--text-normal);
+	font-size: var(--font-small);
 }

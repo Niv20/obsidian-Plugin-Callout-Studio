@@ -2,6 +2,8 @@ import type {
 	CalloutDefinition,
 	CustomSvgIcon,
 	MaterialIconsCacheData,
+	MaterialIconStyle,
+	MaterialSvgCacheEntry,
 	PluginData,
 	PluginSettings,
 } from "../types";
@@ -18,6 +20,7 @@ export class CalloutRegistry {
 	settings: PluginSettings;
 	materialIconsCache?: MaterialIconsCacheData;
 	customSvgIcons: CustomSvgIcon[] = [];
+	materialSvgCache: MaterialSvgCacheEntry[] = [];
 
 	constructor() {
 		this.settings = structuredClone(DEFAULT_SETTINGS);
@@ -93,6 +96,9 @@ export class CalloutRegistry {
 		if (data.customSvgIcons) {
 			this.customSvgIcons = data.customSvgIcons;
 		}
+		if (data.materialSvgCache) {
+			this.materialSvgCache = data.materialSvgCache;
+		}
 	}
 
 	toSaveData(): PluginData {
@@ -118,6 +124,10 @@ export class CalloutRegistry {
 			customSvgIcons:
 				this.customSvgIcons.length > 0
 					? this.customSvgIcons
+					: undefined,
+			materialSvgCache:
+				this.materialSvgCache.length > 0
+					? this.materialSvgCache
 					: undefined,
 		};
 	}
@@ -216,6 +226,56 @@ export class CalloutRegistry {
 			if (def.aliases && def.aliases.includes(alias)) return def;
 		}
 		return undefined;
+	}
+
+	// ── Material SVG cache ───────────────────────────────────
+
+	findMaterialSvg(
+		name: string,
+		style: MaterialIconStyle,
+		weight: number = 400,
+	): MaterialSvgCacheEntry | undefined {
+		return this.materialSvgCache.find(
+			(e) => e.name === name && e.style === style && e.weight === weight,
+		);
+	}
+
+	addMaterialSvg(entry: MaterialSvgCacheEntry): void {
+		this.materialSvgCache = this.materialSvgCache.filter(
+			(e) =>
+				!(
+					e.name === entry.name &&
+					e.style === entry.style &&
+					e.weight === entry.weight
+				),
+		);
+		this.materialSvgCache.push(entry);
+	}
+
+	/** Removes cached Material SVGs that are no longer used by any callout. */
+	cleanupUnusedMaterialSvgs(): void {
+		const usedKeys = new Set<string>();
+		for (const def of this.callouts.values()) {
+			if (def.icon.type === "material") {
+				usedKeys.add(
+					`${def.icon.style ?? "outlined"}/${def.icon.value}/${def.icon.weight ?? 400}`,
+				);
+			}
+		}
+		this.materialSvgCache = this.materialSvgCache.filter((entry) =>
+			usedKeys.has(`${entry.style}/${entry.name}/${entry.weight}`),
+		);
+	}
+
+	clearMaterialSvgCache(): void {
+		this.materialSvgCache = [];
+	}
+
+	getMaterialSvgCacheSize(): number {
+		return this.materialSvgCache.reduce(
+			(acc, e) => acc + new Blob([e.svg]).size,
+			0,
+		);
 	}
 
 	resetAll(): void {

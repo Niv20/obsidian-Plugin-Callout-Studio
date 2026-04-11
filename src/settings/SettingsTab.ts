@@ -328,18 +328,36 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 				}
 				break;
 			case "material": {
-				const span = container.createSpan({
-					cls: "callout-studio-material-icon",
-					text: def.icon.value,
-				});
-				const fontFamily = materialFontFamily(
+				// Use cached SVG if available (works offline + in print)
+				const cached = this.plugin.registry.findMaterialSvg(
+					def.icon.value,
 					def.icon.style ?? "outlined",
+					def.icon.weight ?? 400,
 				);
-				span.setCssProps({
-					"--cs-material-font": `"${fontFamily}"`,
-				});
-				if (def.icon.style === "filled") {
-					span.setCssProps({ "--cs-material-fill": "1" });
+				if (cached) {
+					const parser = new DOMParser();
+					const doc = parser.parseFromString(
+						cached.svg,
+						"image/svg+xml",
+					);
+					const svgEl = doc.documentElement;
+					container.appendChild(
+						container.doc.importNode(svgEl, true),
+					);
+				} else {
+					const span = container.createSpan({
+						cls: "callout-studio-material-icon",
+						text: def.icon.value,
+					});
+					const fontFamily = materialFontFamily(
+						def.icon.style ?? "outlined",
+					);
+					span.setCssProps({
+						"--cs-material-font": `"${fontFamily}"`,
+					});
+					if (def.icon.style === "filled") {
+						span.setCssProps({ "--cs-material-fill": "1" });
+					}
 				}
 				break;
 			}
@@ -817,36 +835,6 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 			.setHeading();
 
 		new Setting(containerEl)
-			.setName(t("settings.lucideIcons"))
-			.setDesc(t("settings.lucideIconsDesc"))
-			.addToggle((tog) =>
-				tog.setValue(iconSources.lucide).onChange(async (v) => {
-					iconSources.lucide = v;
-					await this.plugin.saveSettings();
-				}),
-			);
-
-		new Setting(containerEl)
-			.setName(t("settings.materialIcons"))
-			.setDesc(t("settings.materialIconsDesc"))
-			.addToggle((tog) =>
-				tog.setValue(iconSources.material).onChange(async (v) => {
-					iconSources.material = v;
-					await this.plugin.saveSettings();
-				}),
-			);
-
-		new Setting(containerEl)
-			.setName(t("settings.customSvg"))
-			.setDesc(t("settings.customSvgDesc"))
-			.addToggle((tog) =>
-				tog.setValue(iconSources.customSvg).onChange(async (v) => {
-					iconSources.customSvg = v;
-					await this.plugin.saveSettings();
-				}),
-			);
-
-		new Setting(containerEl)
 			.setName(t("settings.materialStyleDefault"))
 			.addDropdown((d) =>
 				d
@@ -865,16 +853,153 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 			);
 
 		new Setting(containerEl)
-			.setName(t("settings.cacheMaterial"))
-			.setDesc(t("settings.cacheMaterialDesc"))
-			.addToggle((tog) =>
-				tog
-					.setValue(iconSources.cacheMaterialOffline)
-					.onChange(async (v) => {
-						iconSources.cacheMaterialOffline = v;
+			.setName(t("settings.materialWeightDefault"))
+			.setDesc(t("settings.materialWeightDefaultDesc"))
+			.addDropdown((d) => {
+				const weights: Record<string, string> = {
+					"100": "100 (Thin)",
+					"200": "200 (Extra Light)",
+					"300": "300 (Light)",
+					"400": "400 (Regular)",
+					"500": "500 (Medium)",
+					"600": "600 (Semi Bold)",
+					"700": "700 (Bold)",
+				};
+				d.addOptions(weights)
+					.setValue(String(iconSources.materialWeightDefault))
+					.onChange(async (v: string) => {
+						iconSources.materialWeightDefault = parseInt(v, 10);
 						await this.plugin.saveSettings();
+					});
+			});
+
+		// ── Material icon cache management ──
+
+		const cacheHeading = new Setting(containerEl)
+			.setName(t("settings.materialCache"))
+			.setDesc(t("settings.materialCacheDesc"));
+		cacheHeading.settingEl.addClass("callout-studio-cache-heading");
+
+		// Metadata cache info
+		const metadataCache = this.plugin.registry.materialIconsCache;
+		const metadataCount = metadataCache?.icons.length ?? 0;
+		const metadataDate = metadataCache
+			? new Date(metadataCache.fetchedAt).toLocaleDateString()
+			: t("settings.cacheNotDownloaded");
+
+		new Setting(containerEl)
+			.setName(t("settings.metadataCache"))
+			.setDesc(
+				metadataCount > 0
+					? t("settings.metadataCacheInfo", {
+							count: String(metadataCount),
+							date: metadataDate,
+						})
+					: t("settings.cacheNotDownloaded"),
+			)
+			.addButton((btn) =>
+				btn
+					.setButtonText(t("settings.refreshCache"))
+					.onClick(async () => {
+						try {
+							const { loadMaterialIcons } =
+								await import("../utils/iconLoader");
+							const data = await loadMaterialIcons(undefined);
+							this.plugin.registry.materialIconsCache = data;
+							await this.plugin.saveSettings();
+							new Notice(
+								t("notice.cacheRefreshed", {
+									count: String(data.icons.length),
+								}),
+							);
+							this.display();
+						} catch {
+							new Notice(t("notice.cacheRefreshFailed"));
+						}
 					}),
 			);
+
+		// SVG cache info
+		const svgCount = this.plugin.registry.materialSvgCache.length;
+		const svgSize = this.plugin.registry.getMaterialSvgCacheSize();
+		const svgSizeStr =
+			svgSize < 1024
+				? `${svgSize} B`
+				: `${(svgSize / 1024).toFixed(1)} KB`;
+
+		const svgCacheSetting = new Setting(containerEl)
+			.setName(t("settings.svgCache"))
+			.setDesc(
+				svgCount > 0
+					? t("settings.svgCacheInfo", {
+							count: String(svgCount),
+							size: svgSizeStr,
+						})
+					: t("settings.svgCacheEmpty"),
+			);
+
+		if (svgCount > 0) {
+			svgCacheSetting.addButton((btn) =>
+				btn
+					.setButtonText(t("settings.clearSvgCache"))
+					.setWarning()
+					.onClick(async () => {
+						this.plugin.registry.clearMaterialSvgCache();
+						this.plugin.cssInjector.inject();
+						await this.plugin.saveSettings();
+						new Notice(t("notice.svgCacheCleared"));
+						this.display();
+					}),
+			);
+
+			svgCacheSetting.addButton((btn) =>
+				btn.setButtonText(t("settings.viewCachedSvgs")).onClick(() => {
+					this.toggleSvgCachePanel(containerEl);
+				}),
+			);
+		}
+	}
+
+	private toggleSvgCachePanel(containerEl: HTMLElement): void {
+		const existing = containerEl.querySelector(
+			".callout-studio-svg-cache-panel",
+		);
+		if (existing) {
+			existing.remove();
+			return;
+		}
+
+		const panel = containerEl.createDiv({
+			cls: "callout-studio-svg-cache-panel",
+		});
+		const cache = this.plugin.registry.materialSvgCache;
+
+		if (cache.length === 0) {
+			panel.createEl("p", { text: t("settings.svgCacheEmpty") });
+			return;
+		}
+
+		const grid = panel.createDiv({ cls: "callout-studio-cache-grid" });
+		for (const entry of cache) {
+			const cell = grid.createDiv({ cls: "callout-studio-cache-cell" });
+
+			const iconEl = cell.createDiv({
+				cls: "callout-studio-cache-icon",
+			});
+			const parser = new DOMParser();
+			const doc = parser.parseFromString(entry.svg, "image/svg+xml");
+			const svgEl = doc.documentElement;
+			iconEl.appendChild(iconEl.doc.importNode(svgEl, true));
+
+			const label = cell.createDiv({
+				cls: "callout-studio-cache-label",
+			});
+			label.setText(`${entry.name}`);
+			const meta = cell.createDiv({
+				cls: "callout-studio-cache-meta",
+			});
+			meta.setText(`${entry.style} · ${entry.weight}`);
+		}
 	}
 
 	// ─── Section F: Color Mode Settings ──────────────────────

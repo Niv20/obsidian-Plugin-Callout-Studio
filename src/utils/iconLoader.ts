@@ -6,6 +6,11 @@ import type {
 	CalloutIcon,
 } from "../types";
 
+// ── Constants ───────────────────────────────────────────────────────────
+
+/** Maximum bytes allowed for a custom SVG upload */
+export const MAX_CUSTOM_SVG_BYTES = 102_400; // 100 KB
+
 // ── Lucide ──────────────────────────────────────────────────────────────
 
 /**
@@ -139,6 +144,54 @@ export function getMaterialCategories(icons: MaterialIconMeta[]): string[] {
 		}
 	}
 	return [...set].sort();
+}
+
+// ── Material SVG Download ───────────────────────────────────────────────
+
+/**
+ * Builds the Google Fonts SVG URL for a Material Symbols icon.
+ */
+function getMaterialSvgUrl(
+	name: string,
+	style: MaterialIconStyle,
+	weight: number,
+): string {
+	const family = style === "filled" ? "outlined" : style;
+	const isFilled = style === "filled";
+
+	let variant: string;
+	if (isFilled && weight !== 400) {
+		variant = `fill1wght${weight}`;
+	} else if (isFilled) {
+		variant = "fill1";
+	} else if (weight !== 400) {
+		variant = `wght${weight}`;
+	} else {
+		variant = "default";
+	}
+
+	return `https://fonts.gstatic.com/s/i/short-term/release/materialsymbols${family}/${name}/${variant}/24px.svg`;
+}
+
+/**
+ * Downloads an individual Material Symbols SVG icon from Google Fonts.
+ * Returns the sanitized SVG string.
+ */
+export async function downloadMaterialSvg(
+	name: string,
+	style: MaterialIconStyle,
+	weight: number = 400,
+): Promise<string> {
+	const url = getMaterialSvgUrl(name, style, weight);
+	const response = await requestUrl({ url });
+	const raw = response.text;
+
+	const sanitized = sanitizeSVG(raw);
+	if (!sanitized) {
+		throw new Error(`Invalid SVG received for Material icon "${name}"`);
+	}
+
+	return sanitized;
 }
 
 // ── SVG Sanitization ────────────────────────────────────────────────────

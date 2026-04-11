@@ -107,8 +107,22 @@ export const en: Record<string, string> = {
 	"settings.styleFilled": "Filled",
 	"settings.styleRounded": "Rounded",
 	"settings.styleSharp": "Sharp",
-	"settings.cacheMaterial": "Cache material icons offline",
-	"settings.cacheMaterialDesc": "Downloads icon metadata for offline use",
+	"settings.materialWeightDefault": "Material icons weight default",
+	"settings.materialWeightDefaultDesc":
+		"Stroke thickness for Material icons (100 = thin, 700 = bold)",
+	"settings.materialCache": "Material icon cache",
+	"settings.materialCacheDesc":
+		"Icon metadata is downloaded from Google on first use and cached locally. Individual SVGs are downloaded when you select a Material icon for a callout, so they work offline and in print.",
+	"settings.metadataCache": "Metadata cache",
+	"settings.metadataCacheInfo": "{{count}} icons · Last updated: {{date}}",
+	"settings.cacheNotDownloaded":
+		"Not yet downloaded — will be fetched when you first browse Material icons.",
+	"settings.refreshCache": "Refresh",
+	"settings.svgCache": "Downloaded SVGs",
+	"settings.svgCacheInfo": "{{count}} icons · {{size}}",
+	"settings.svgCacheEmpty": "No Material SVGs cached yet.",
+	"settings.clearSvgCache": "Clear",
+	"settings.viewCachedSvgs": "View",
 
 	// Settings — Color mode
 	"settings.colorAppMode": "Color application mode",
@@ -147,6 +161,10 @@ export const en: Record<string, string> = {
 	"notice.noNewJSON":
 		"No new callout types were imported (ids may already exist).",
 	"notice.failedJSON": "Failed to parse JSON file.",
+	"notice.cacheRefreshed":
+		"Material icon metadata refreshed ({{count}} icons).",
+	"notice.cacheRefreshFailed": "Failed to refresh Material icon metadata.",
+	"notice.svgCacheCleared": "Material SVG cache cleared.",
 
 	// Callout Editor
 	"editor.editCallout": "Edit callout",
@@ -195,14 +213,10 @@ export const en: Record<string, string> = {
 	"iconPicker.customSvg": "Custom SVG",
 	"iconPicker.searchLucide": "Search Lucide icons...",
 	"iconPicker.loadMore": "Load more",
-	"iconPicker.materialDisabled":
-		"Material icons are disabled in settings. Enable them under icon sources.",
 	"iconPicker.searchMaterial": "Search Material icons...",
 	"iconPicker.iconsLoading": "Icons are loading, please wait\u2026",
 	"iconPicker.loadFailed": "Failed to load Material icons: {{error}}",
 	"iconPicker.allCategories": "All categories",
-	"iconPicker.svgDisabled":
-		"Custom SVG icons are disabled in settings. Enable them under icon sources.",
 	"iconPicker.nameLabel": "Name:",
 	"iconPicker.namePlaceholder": "my-icon-name",
 	"iconPicker.svgPlaceholder":
@@ -212,6 +226,8 @@ export const en: Record<string, string> = {
 		"Name must contain only lowercase letters, numbers, and hyphens.",
 	"iconPicker.nameExists": "An SVG icon with this name already exists.",
 	"iconPicker.invalidSvg": "Invalid SVG markup. Please check the input.",
+	"iconPicker.svgTooLarge":
+		"SVG exceeds the 100 KB size limit. Use a simpler icon.",
 	"iconPicker.svgGallery": "SVG gallery",
 	"iconPicker.noSvgIcons": "No custom SVG icons yet.",
 	"iconPicker.noIconSelected": "No icon selected",

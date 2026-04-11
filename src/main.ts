@@ -1,5 +1,5 @@
 import { Plugin } from "obsidian";
-import type { PluginData, PluginSettings } from "./types";
+import type { CalloutIcon, PluginData, PluginSettings } from "./types";
 import { CalloutRegistry } from "./manager/CalloutRegistry";
 import { CSSInjector } from "./manager/CSSInjector";
 import { CalloutStudioSettingsTab } from "./settings/SettingsTab";
@@ -8,6 +8,7 @@ import { CalloutAutoComplete } from "./editor/AutoComplete";
 import { registerContextMenu } from "./editor/ContextMenu";
 import { TransparentPopup } from "./editor/TransparentPopup";
 import { CalloutStudioAPI } from "./api/PluginAPI";
+import { downloadMaterialSvg } from "./utils/iconLoader";
 import { setLocale, t } from "./i18n";
 
 export default class CalloutStudioPlugin extends Plugin {
@@ -80,6 +81,9 @@ export default class CalloutStudioPlugin extends Plugin {
 
 		// Public API for other plugins
 		this.api = new CalloutStudioAPI(this);
+
+		// Download missing Material SVGs in background
+		void this.ensureMaterialSvgs();
 	}
 
 	onunload() {
@@ -89,5 +93,77 @@ export default class CalloutStudioPlugin extends Plugin {
 
 	async saveSettings(): Promise<void> {
 		await this.saveData(this.registry.toSaveData());
+	}
+
+	/**
+	 * Downloads an individual Material SVG for a callout icon and caches it.
+	 * Also cleans up SVGs no longer used by any callout.
+	 */
+	async cacheMaterialSvg(icon: CalloutIcon): Promise<void> {
+		if (icon.type !== "material") return;
+		const style = icon.style ?? "outlined";
+		const weight = icon.weight ?? 400;
+		// Skip if already cached
+		if (this.registry.findMaterialSvg(icon.value, style, weight)) return;
+		try {
+			const svg = await downloadMaterialSvg(icon.value, style, weight);
+			this.registry.addMaterialSvg({
+				name: icon.value,
+				style,
+				weight,
+				svg,
+			});
+			this.registry.cleanupUnusedMaterialSvgs();
+			this.cssInjector.inject();
+			await this.saveSettings();
+		} catch (err) {
+			console.warn(
+				"Callout Studio: failed to download Material SVG",
+				err,
+			);
+		}
+	}
+
+	/**
+	 * Ensures all callouts using Material icons have a cached SVG.
+	 * Runs in background on plugin load.
+	 */
+	private async ensureMaterialSvgs(): Promise<void> {
+		const callouts = this.registry.getAll();
+		const missing = callouts.filter((def) => {
+			if (def.icon.type !== "material") return false;
+			return !this.registry.findMaterialSvg(
+				def.icon.value,
+				def.icon.style ?? "outlined",
+				def.icon.weight ?? 400,
+			);
+		});
+
+		if (missing.length === 0) return;
+
+		let downloaded = 0;
+		for (const def of missing) {
+			try {
+				const svg = await downloadMaterialSvg(
+					def.icon.value,
+					def.icon.style ?? "outlined",
+					def.icon.weight ?? 400,
+				);
+				this.registry.addMaterialSvg({
+					name: def.icon.value,
+					style: def.icon.style ?? "outlined",
+					weight: def.icon.weight ?? 400,
+					svg,
+				});
+				downloaded++;
+			} catch {
+				// Silently skip failures — will retry next load
+			}
+		}
+
+		if (downloaded > 0) {
+			this.cssInjector.inject();
+			await this.saveSettings();
+		}
 	}
 }
