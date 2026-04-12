@@ -905,6 +905,7 @@ export class CalloutEditor extends Modal {
 					}),
 					t("vault.updateFiles"),
 					t("vault.skip"),
+					"mod-cta",
 				).confirm();
 
 				if (confirmed) {

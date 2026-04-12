@@ -11,6 +11,7 @@ export class ConfirmModal extends Modal {
 		private message: string,
 		private confirmLabel?: string,
 		private cancelLabel?: string,
+		private confirmClass: string = "mod-warning",
 	) {
 		super(app);
 	}
@@ -36,7 +37,7 @@ export class ConfirmModal extends Modal {
 		btnContainer
 			.createEl("button", {
 				text: this.confirmLabel ?? t("confirm.ok"),
-				cls: "mod-warning",
+				cls: this.confirmClass,
 			})
 			.addEventListener("click", () => {
 				this.resolved = true;
