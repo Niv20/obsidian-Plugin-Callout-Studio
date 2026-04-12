@@ -163,6 +163,15 @@ export class CalloutRegistry {
 		if (this.callouts.has(def.id)) {
 			return false;
 		}
+		// Check if this ID is already an alias of another callout
+		if (this.findByAlias(def.id)) {
+			return false;
+		}
+		// Check if any of this callout's aliases conflict with existing IDs or aliases
+		for (const alias of def.aliases ?? []) {
+			if (this.callouts.has(alias)) return false;
+			if (this.findByAlias(alias)) return false;
+		}
 		this.callouts.set(def.id, def);
 		this.notifyChange();
 		return true;
@@ -320,6 +329,8 @@ export class CalloutRegistry {
 			const b = match[4];
 			if (!id || !r || !g || !b) continue;
 			if (this.callouts.has(id)) continue;
+			// Skip if ID conflicts with an existing alias
+			if (this.findByAlias(id)) continue;
 
 			const rN = parseInt(r, 10);
 			const gN = parseInt(g, 10);
