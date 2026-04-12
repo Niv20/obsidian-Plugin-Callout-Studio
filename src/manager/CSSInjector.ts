@@ -11,6 +11,7 @@ const DEBOUNCE_MS = 300;
 export class CSSInjector {
 	private styleEl: HTMLStyleElement | null = null;
 	private debounceTimer: number | null = null;
+	private injecting = false;
 	private registry: CalloutRegistry;
 	private app: App;
 
@@ -40,8 +41,13 @@ export class CSSInjector {
 	}
 
 	inject(): void {
+		if (this.injecting) return;
+		this.injecting = true;
 		this.ensureStyleElement();
-		if (!this.styleEl) return;
+		if (!this.styleEl) {
+			this.injecting = false;
+			return;
+		}
 
 		const callouts = this.registry.getAll();
 		const rules: string[] = [
@@ -64,6 +70,10 @@ export class CSSInjector {
 		this.updateMaterialFontLinks(materialFonts);
 
 		this.styleEl.textContent = rules.join("\n\n");
+
+		// Trigger Obsidian to re-render callouts with updated styles
+		this.app.workspace.trigger("css-change");
+		this.injecting = false;
 	}
 
 	private generateCalloutCSS(def: CalloutDefinition): string {
