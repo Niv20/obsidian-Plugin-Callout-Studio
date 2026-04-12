@@ -262,4 +262,6 @@ export const he: Record<string, string> = {
 	"vault.resetAliasWarning":
 		"{{count}} הפניות ב-{{files}} קבצים משתמשות בכינויים מותאמים: {{aliases}}. הם יפסיקו לעבוד לאחר איפוס. להמשיך?",
 	"vault.resetConfirm": "איפוס",
+	"vault.resetAllInUse":
+		"⚠ {{count}} הפניות ב-{{files}} קבצים משתמשות בסוגי תיבות הבלטה שיימחקו.",
 };

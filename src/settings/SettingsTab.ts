@@ -1188,9 +1188,32 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 					.setButtonText(t("settings.resetAllButton"))
 					.setWarning()
 					.onClick(async () => {
+						// Check if user callouts are in use in vault
+						const userCallouts =
+							this.plugin.registry.getUserDefined();
+						const userIds = userCallouts.flatMap((c) => [
+							c.id,
+							...(c.aliases ?? []),
+						]);
+
+						let message = t("settings.resetAllConfirm");
+						if (userIds.length > 0) {
+							const { fileCount, totalCount } =
+								await countCalloutUsages(this.app, userIds);
+							if (fileCount > 0) {
+								message =
+									t("vault.resetAllInUse", {
+										count: String(totalCount),
+										files: String(fileCount),
+									}) +
+									"\n\n" +
+									message;
+							}
+						}
+
 						const confirmed = await new ConfirmModal(
 							this.app,
-							t("settings.resetAllConfirm"),
+							message,
 						).confirm();
 						if (!confirmed) return;
 						this.plugin.registry.resetAll();

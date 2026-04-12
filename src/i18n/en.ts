@@ -265,4 +265,6 @@ export const en: Record<string, string> = {
 	"vault.resetAliasWarning":
 		"{{count}} reference(s) in {{files}} file(s) use custom alias(es): {{aliases}}. These will stop working after reset. Continue?",
 	"vault.resetConfirm": "Reset",
+	"vault.resetAllInUse":
+		"⚠ {{count}} callout reference(s) in {{files}} file(s) use custom callout types that will be deleted.",
 };
