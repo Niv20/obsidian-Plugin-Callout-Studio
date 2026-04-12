@@ -37,6 +37,7 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 
 		this.renderCalloutTypesSection(containerEl);
 		this.renderBuiltInCalloutsSection(containerEl);
+		this.renderFallbackCalloutSection(containerEl);
 		this.renderGlobalStyleSection(containerEl);
 		this.renderAutocompleteSettings(containerEl);
 		this.renderPopupSettings(containerEl);
@@ -477,6 +478,31 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 			default:
 				container.textContent = "?";
 		}
+	}
+
+	// ─── Section: Fallback Callout ──────────────────────────
+
+	private renderFallbackCalloutSection(containerEl: HTMLElement): void {
+		new Setting(containerEl)
+			.setName(t("settings.fallbackCallout"))
+			.setHeading();
+
+		new Setting(containerEl)
+			.setName(t("settings.fallbackCallout"))
+			.setDesc(t("settings.fallbackCalloutDesc"))
+			.addDropdown((dd) => {
+				const allCallouts = this.plugin.registry.getAll();
+				for (const c of allCallouts) {
+					dd.addOption(c.id, `${c.displayName} (${c.id})`);
+				}
+				dd.setValue(
+					this.plugin.settings.fallbackCalloutId,
+				).onChange(async (val) => {
+					this.plugin.settings.fallbackCalloutId = val;
+					await this.plugin.saveSettings();
+					this.plugin.cssInjector.inject();
+				});
+			});
 	}
 
 	// ─── Section: Global Callout Style ──────────────────────

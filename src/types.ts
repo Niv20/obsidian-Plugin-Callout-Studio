@@ -97,6 +97,8 @@ export interface PluginSettings {
 	iconSources: IconSourceSettings;
 	colorMode: ColorModeSettings;
 	language: string;
+	/** Callout ID to use as fallback for unrecognized callout types. Empty = Obsidian default */
+	fallbackCalloutId: string;
 }
 
 export interface PluginData {

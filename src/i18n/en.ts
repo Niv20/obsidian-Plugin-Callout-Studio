@@ -34,6 +34,11 @@ export const en: Record<string, string> = {
 	"settings.lightColorAria": "Light: {{color}}",
 	"settings.darkColorAria": "Dark: {{color}}",
 
+	// Settings — Fallback callout
+	"settings.fallbackCallout": "Default fallback callout",
+	"settings.fallbackCalloutDesc":
+		"Unrecognized callout types in your vault will inherit the style of this callout.",
+
 	// Settings — Global style
 	"settings.globalStyle": "Global callout style",
 	"settings.globalStyleDesc": "These settings affect all callouts globally.",

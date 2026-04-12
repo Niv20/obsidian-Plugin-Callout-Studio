@@ -93,6 +93,9 @@ export class CalloutRegistry {
 						DEFAULT_SETTINGS.colorMode.showContrastWarning,
 				},
 				language: data.settings.language ?? DEFAULT_SETTINGS.language,
+				fallbackCalloutId:
+					data.settings.fallbackCalloutId ??
+					DEFAULT_SETTINGS.fallbackCalloutId,
 			};
 		}
 

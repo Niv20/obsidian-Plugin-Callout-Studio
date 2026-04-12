@@ -200,4 +200,5 @@ export const DEFAULT_SETTINGS: PluginSettings = {
 		showContrastWarning: true,
 	},
 	language: "auto",
+	fallbackCalloutId: "note",
 };

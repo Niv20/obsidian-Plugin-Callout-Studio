@@ -57,6 +57,9 @@ export class CSSInjector {
 			rules.push(this.generateCalloutCSS(def));
 		}
 
+		// Fallback rule: style unrecognized callout IDs with the fallback callout
+		rules.push(this.generateFallbackCSS(callouts));
+
 		// Clean up any leftover material font links (no longer needed for rendering)
 		this.updateMaterialFontLinks(materialFonts);
 
@@ -379,6 +382,108 @@ export class CSSInjector {
 					`  padding-inline-start: calc(var(--callout-padding, 12px) + var(--icon-size, 18px) + var(--size-4-2, 8px));\n` +
 					`}`,
 			);
+		}
+
+		return parts.join("\n\n");
+	}
+
+	/**
+	 * Generates a CSS rule that applies the fallback callout's styles to any
+	 * callout whose data-callout ID is not explicitly defined.
+	 * Uses `:not()` selectors to exclude all known IDs/aliases.
+	 */
+	private generateFallbackCSS(callouts: CalloutDefinition[]): string {
+		const fallbackId = this.registry.settings.fallbackCalloutId;
+		if (!fallbackId) return "";
+
+		const fallbackDef = callouts.find((c) => c.id === fallbackId);
+		if (!fallbackDef) return "";
+
+		// Collect all known callout IDs and aliases
+		const knownIds: string[] = [];
+		for (const def of callouts) {
+			knownIds.push(def.id);
+			if (def.aliases) knownIds.push(...def.aliases);
+		}
+
+		const notSelectors = knownIds
+			.map((id) => `:not([data-callout="${id}"])`)
+			.join("");
+
+		const lightRgb = hexToRgbString(fallbackDef.colorLight);
+		const darkRgb = hexToRgbString(fallbackDef.colorDark);
+		const iconCSS = this.getIconCSS(fallbackDef);
+
+		const parts: string[] = [
+			"/* Fallback callout style for unrecognized types */",
+		];
+
+		const lightProps: string[] = [`  --callout-color: ${lightRgb};`];
+		if (iconCSS) lightProps.push(`  --callout-icon: ${iconCSS};`);
+		if (fallbackDef.bgColorLight) {
+			lightProps.push(
+				`  background-color: ${fallbackDef.bgColorLight};`,
+			);
+		}
+		parts.push(
+			`.callout${notSelectors} {\n${lightProps.join("\n")}\n}`,
+		);
+
+		if (
+			fallbackDef.colorLight !== fallbackDef.colorDark ||
+			fallbackDef.bgColorLight !== fallbackDef.bgColorDark
+		) {
+			const darkProps: string[] = [`  --callout-color: ${darkRgb};`];
+			if (fallbackDef.bgColorDark) {
+				darkProps.push(
+					`  background-color: ${fallbackDef.bgColorDark};`,
+				);
+			}
+			parts.push(
+				`.theme-dark .callout${notSelectors} {\n${darkProps.join("\n")}\n}`,
+			);
+		}
+
+		if (fallbackDef.textColorLight) {
+			parts.push(
+				`.callout${notSelectors} > .callout-content {\n  color: ${fallbackDef.textColorLight};\n}`,
+			);
+		}
+		if (
+			fallbackDef.textColorDark &&
+			fallbackDef.textColorDark !== fallbackDef.textColorLight
+		) {
+			parts.push(
+				`.theme-dark .callout${notSelectors} > .callout-content {\n  color: ${fallbackDef.textColorDark};\n}`,
+			);
+		}
+
+		// Material SVG icon override for fallback
+		if (fallbackDef.icon.type === "material") {
+			const cached = this.registry.findMaterialSvg(
+				fallbackDef.icon.value,
+				fallbackDef.icon.style ?? "outlined",
+				fallbackDef.icon.weight ?? 400,
+			);
+			if (cached) {
+				const dataUri = svgToDataUri(cached.svg);
+				parts.push(
+					`.callout${notSelectors} > .callout-title > .callout-icon > svg {\n  display: none;\n}\n` +
+						`.callout${notSelectors} > .callout-title > .callout-icon::after {\n` +
+						`  content: "";\n` +
+						`  display: inline-block;\n` +
+						`  width: var(--icon-size, 1.2em);\n` +
+						`  height: var(--icon-size, 1.2em);\n` +
+						`  -webkit-mask-image: ${dataUri};\n` +
+						`  mask-image: ${dataUri};\n` +
+						`  -webkit-mask-size: contain;\n` +
+						`  mask-size: contain;\n` +
+						`  -webkit-mask-repeat: no-repeat;\n` +
+						`  mask-repeat: no-repeat;\n` +
+						`  background-color: rgb(var(--callout-color));\n` +
+						`}`,
+				);
+			}
 		}
 
 		return parts.join("\n\n");

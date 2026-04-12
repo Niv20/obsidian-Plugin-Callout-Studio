@@ -34,6 +34,11 @@ export const he: Record<string, string> = {
 	"settings.lightColorAria": "בהיר: {{color}}",
 	"settings.darkColorAria": "כהה: {{color}}",
 
+	// Settings — Fallback callout
+	"settings.fallbackCallout": "תיבת הבלטה ברירת מחדל",
+	"settings.fallbackCalloutDesc":
+		"סוגי תיבות הבלטה לא מוכרים יקבלו את העיצוב של תיבת הבלטה זו.",
+
 	// Settings — Global style
 	"settings.globalStyle": "עיצוב כללי לתיבות הבלטה",
 	"settings.globalStyleDesc": "הגדרות אלו משפיעות על כל תיבות ההבלטה.",
