@@ -261,6 +261,10 @@ export const en: Record<string, string> = {
 	"vault.skip": "Skip",
 	"vault.filesUpdated":
 		"Updated {{count}} callout reference(s) in vault files.",
+	"vault.idsUpdated":
+		"Updated {{count}} callout ID(s) in vault files: {{oldIds}} → {{newId}}",
+	"vault.titlesUpdated":
+		"Updated {{count}} callout title(s) in vault files: {{oldTitle}} → {{newTitle}}",
 	"vault.deleteInUse":
 		'"{{name}}" is used {{count}} time(s) in {{files}} file(s). Choose how to proceed:',
 	"vault.replaceWith": "Replace with:",

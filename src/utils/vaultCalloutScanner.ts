@@ -69,3 +69,44 @@ export async function replaceCalloutIdsInVault(
 
 	return totalReplacements;
 }
+
+/**
+ * Replace the display-name / title text of callouts that match the given IDs.
+ * Matches lines like `> [!id] Old Title` or `> [!id]+ Old Title` and replaces
+ * the title portion with `newTitle`. Only replaces when the existing title
+ * matches `oldTitle` (case-insensitive) to avoid clobbering user-customized titles.
+ */
+export async function replaceCalloutTitlesInVault(
+	app: App,
+	ids: string[],
+	oldTitle: string,
+	newTitle: string,
+): Promise<number> {
+	if (ids.length === 0) return 0;
+
+	const idPattern = ids.map(escapeRegex).join("|");
+	const escapedOld = escapeRegex(oldTitle);
+	// Match: > [!id][+-]? OldTitle (with optional fold indicator)
+	const regex = new RegExp(
+		`(^>\\s*\\[!(?:${idPattern})\\][+-]?)\\s+${escapedOld}\\s*$`,
+		"gim",
+	);
+
+	const files = app.vault.getMarkdownFiles();
+	let totalReplacements = 0;
+
+	for (const file of files) {
+		const content = await app.vault.read(file);
+		let count = 0;
+		const newContent = content.replace(regex, (_match, prefix: string) => {
+			count++;
+			return `${prefix} ${newTitle}`;
+		});
+		if (count > 0) {
+			totalReplacements += count;
+			await app.vault.modify(file, newContent);
+		}
+	}
+
+	return totalReplacements;
+}

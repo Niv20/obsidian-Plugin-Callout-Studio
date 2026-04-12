@@ -258,6 +258,10 @@ export const he: Record<string, string> = {
 	"vault.updateFiles": "עדכון קבצים",
 	"vault.skip": "דלג",
 	"vault.filesUpdated": "עודכנו {{count}} הפניות בקבצי הכספת.",
+	"vault.idsUpdated":
+		"עודכנו {{count}} מזהי תיבות הבלטה בקבצי הכספת: {{oldIds}} → {{newId}}",
+	"vault.titlesUpdated":
+		"עודכנו {{count}} כותרות תיבות הבלטה בקבצי הכספת: {{oldTitle}} → {{newTitle}}",
 	"vault.deleteInUse":
 		'"{{name}}" בשימוש {{count}} פעמים ב-{{files}} קבצים. בחר כיצד להמשיך:',
 	"vault.replaceWith": "החלפה ב:",

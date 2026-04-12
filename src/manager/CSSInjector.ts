@@ -431,13 +431,9 @@ export class CSSInjector {
 		const lightProps: string[] = [`  --callout-color: ${lightRgb};`];
 		if (iconCSS) lightProps.push(`  --callout-icon: ${iconCSS};`);
 		if (fallbackDef.bgColorLight) {
-			lightProps.push(
-				`  background-color: ${fallbackDef.bgColorLight};`,
-			);
+			lightProps.push(`  background-color: ${fallbackDef.bgColorLight};`);
 		}
-		parts.push(
-			`.callout${notSelectors} {\n${lightProps.join("\n")}\n}`,
-		);
+		parts.push(`.callout${notSelectors} {\n${lightProps.join("\n")}\n}`);
 
 		if (
 			fallbackDef.colorLight !== fallbackDef.colorDark ||

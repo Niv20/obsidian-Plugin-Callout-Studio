@@ -11,10 +11,10 @@ import {
 } from "../utils/colorPalettes";
 import { t } from "../i18n";
 import { TagInput } from "../ui/TagInput";
-import { ConfirmModal } from "../utils/ConfirmModal";
 import {
 	countCalloutUsages,
 	replaceCalloutIdsInVault,
+	replaceCalloutTitlesInVault,
 } from "../utils/vaultCalloutScanner";
 
 function generateId(displayName: string): string {
@@ -812,26 +812,31 @@ export class CalloutEditor extends Modal {
 			return; // Duplicate ID
 		}
 
-		// Compute IDs that were removed (for vault update check)
+		// Gather old state for vault updates
 		let removedIds: string[] = [];
+		let oldDisplayName: string | null = null;
+		let oldAllIds: string[] = [];
 		if (this.existingId) {
 			const existingDef = this.plugin.registry.get(this.existingId);
 			if (existingDef) {
-				const oldIds = [existingDef.id, ...(existingDef.aliases ?? [])];
+				oldDisplayName = existingDef.displayName;
+				oldAllIds = [existingDef.id, ...(existingDef.aliases ?? [])];
 				const newIdSet = new Set(
 					[this.calloutId, ...this.aliases].map((s) =>
 						s.toLowerCase(),
 					),
 				);
-				removedIds = oldIds.filter(
+				removedIds = oldAllIds.filter(
 					(id) => !newIdSet.has(id.toLowerCase()),
 				);
 			}
 		}
 
+		const newDisplayName = this.displayName || this.calloutId;
+
 		const def: CalloutDefinition = {
 			id: this.calloutId,
-			displayName: this.displayName || this.calloutId,
+			displayName: newDisplayName,
 			icon: { ...this.icon },
 			colorLight: this.colorLight,
 			colorDark: this.colorDark,
@@ -888,38 +893,52 @@ export class CalloutEditor extends Modal {
 
 		this.plugin.registry.cleanupUnusedMaterialSvgs();
 
-		// Offer to update vault files if IDs were removed
+		// Auto-update vault files when IDs changed (no confirmation)
 		if (removedIds.length > 0) {
-			const { fileCount, totalCount } = await countCalloutUsages(
+			const { fileCount } = await countCalloutUsages(
 				this.app,
 				removedIds,
 			);
 			if (fileCount > 0) {
-				const confirmed = await new ConfirmModal(
+				const replaced = await replaceCalloutIdsInVault(
 					this.app,
-					t("vault.renameConfirm", {
-						count: String(totalCount),
-						files: String(fileCount),
-						oldIds: removedIds.join(", "),
-						newId: this.calloutId,
-					}),
-					t("vault.updateFiles"),
-					t("vault.skip"),
-					"mod-cta",
-				).confirm();
-
-				if (confirmed) {
-					const replaced = await replaceCalloutIdsInVault(
-						this.app,
-						removedIds,
-						this.calloutId,
-					);
+					removedIds,
+					this.calloutId,
+				);
+				if (replaced > 0) {
 					new Notice(
-						t("vault.filesUpdated", {
+						t("vault.idsUpdated", {
 							count: String(replaced),
+							oldIds: removedIds.join(", "),
+							newId: this.calloutId,
 						}),
 					);
 				}
+			}
+		}
+
+		// Auto-update vault titles when display name changed (no confirmation)
+		if (
+			oldDisplayName &&
+			oldDisplayName !== newDisplayName &&
+			oldAllIds.length > 0
+		) {
+			// Use all current IDs (including aliases) to find matching callouts
+			const allCurrentIds = [this.calloutId, ...this.aliases];
+			const replaced = await replaceCalloutTitlesInVault(
+				this.app,
+				allCurrentIds,
+				oldDisplayName,
+				newDisplayName,
+			);
+			if (replaced > 0) {
+				new Notice(
+					t("vault.titlesUpdated", {
+						count: String(replaced),
+						oldTitle: oldDisplayName,
+						newTitle: newDisplayName,
+					}),
+				);
 			}
 		}
 

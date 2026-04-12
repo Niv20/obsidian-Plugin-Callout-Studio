@@ -497,13 +497,13 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 				for (const c of allCallouts) {
 					dd.addOption(c.id, `${c.displayName} (${c.id})`);
 				}
-				dd.setValue(
-					this.plugin.settings.fallbackCalloutId,
-				).onChange(async (val) => {
-					this.plugin.settings.fallbackCalloutId = val;
-					await this.plugin.saveSettings();
-					this.plugin.cssInjector.inject();
-				});
+				dd.setValue(this.plugin.settings.fallbackCalloutId).onChange(
+					async (val) => {
+						this.plugin.settings.fallbackCalloutId = val;
+						await this.plugin.saveSettings();
+						this.plugin.cssInjector.inject();
+					},
+				);
 			});
 	}
 
