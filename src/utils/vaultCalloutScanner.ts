@@ -46,10 +46,7 @@ export async function replaceCalloutIdsInVault(
 	if (oldIds.length === 0) return 0;
 
 	const pattern = oldIds.map(escapeRegex).join("|");
-	const regex = new RegExp(
-		`(^>\\s*\\[!)(${pattern})(\\])`,
-		"gim",
-	);
+	const regex = new RegExp(`(^>\\s*\\[!)(${pattern})(\\])`, "gim");
 
 	const files = app.vault.getMarkdownFiles();
 	let totalReplacements = 0;

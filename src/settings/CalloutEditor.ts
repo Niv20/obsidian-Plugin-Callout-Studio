@@ -817,10 +817,7 @@ export class CalloutEditor extends Modal {
 		if (this.existingId) {
 			const existingDef = this.plugin.registry.get(this.existingId);
 			if (existingDef) {
-				const oldIds = [
-					existingDef.id,
-					...(existingDef.aliases ?? []),
-				];
+				const oldIds = [existingDef.id, ...(existingDef.aliases ?? [])];
 				const newIdSet = new Set(
 					[this.calloutId, ...this.aliases].map((s) =>
 						s.toLowerCase(),
