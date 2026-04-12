@@ -336,6 +336,8 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 					files: String(fileCount),
 				}),
 				otherCallouts,
+				this.plugin.registry,
+				this.plugin.settings.fallbackCalloutId,
 			).prompt();
 
 			if (result.action === "cancel") return;

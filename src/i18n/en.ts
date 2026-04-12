@@ -263,10 +263,11 @@ export const en: Record<string, string> = {
 		"Updated {{count}} callout reference(s) in vault files.",
 	"vault.deleteInUse":
 		'"{{name}}" is used {{count}} time(s) in {{files}} file(s). Choose how to proceed:',
-	"vault.replaceWith": "Replace with",
+	"vault.replaceWith": "Replace with:",
 	"vault.selectCallout": "\u2014 Select a callout \u2014",
 	"vault.replaceAndDelete": "Replace & delete",
 	"vault.deleteWithout": "Delete without replacing",
+	"vault.confirmDelete": "Confirm",
 	"vault.resetAliasWarning":
 		"{{count}} reference(s) in {{files}} file(s) use custom alias(es): {{aliases}}. These will stop working after reset. Continue?",
 	"vault.resetConfirm": "Reset",
