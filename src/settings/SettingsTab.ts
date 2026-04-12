@@ -12,6 +12,11 @@ import type { CalloutDefinition } from "../types";
 import { CalloutEditor } from "./CalloutEditor";
 import { materialFontFamily } from "../utils/iconLoader";
 import { ConfirmModal } from "../utils/ConfirmModal";
+import { ReplaceCalloutModal } from "../utils/ReplaceCalloutModal";
+import {
+	countCalloutUsages,
+	replaceCalloutIdsInVault,
+} from "../utils/vaultCalloutScanner";
 import { t, setLocale, getAvailableLocales } from "../i18n";
 
 export class CalloutStudioSettingsTab extends PluginSettingTab {
@@ -293,8 +298,7 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 			}
 			resetBtn.addEventListener("click", () => {
 				if (!modified) return;
-				this.plugin.registry.resetBuiltIn(def.id);
-				this.display();
+				void this.handleBuiltInReset(def);
 			});
 		} else {
 			const deleteBtn = buttonsEl.createEl("button", {
@@ -307,19 +311,91 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 			});
 			setIcon(deleteBtn, "trash-2");
 			deleteBtn.addEventListener("click", () => {
-				void new ConfirmModal(
-					this.app,
-					t("settings.deleteConfirm", { name: def.displayName }),
-				)
-					.confirm()
-					.then((ok) => {
-						if (ok) {
-							this.plugin.registry.remove(def.id);
-							this.display();
-						}
-					});
+				void this.handleCalloutDelete(def);
 			});
 		}
+	}
+
+	private async handleCalloutDelete(def: CalloutDefinition): Promise<void> {
+		const allIds = [def.id, ...(def.aliases ?? [])];
+		const { fileCount, totalCount } = await countCalloutUsages(
+			this.app,
+			allIds,
+		);
+
+		if (fileCount > 0) {
+			const otherCallouts = this.plugin.registry
+				.getAll()
+				.filter((c) => c.id !== def.id);
+			const result = await new ReplaceCalloutModal(
+				this.app,
+				t("vault.deleteInUse", {
+					name: def.displayName,
+					count: String(totalCount),
+					files: String(fileCount),
+				}),
+				otherCallouts,
+			).prompt();
+
+			if (result.action === "cancel") return;
+
+			if (result.action === "replace") {
+				const replaced = await replaceCalloutIdsInVault(
+					this.app,
+					allIds,
+					result.replaceWith,
+				);
+				new Notice(
+					t("vault.filesUpdated", { count: String(replaced) }),
+				);
+			}
+
+			this.plugin.registry.remove(def.id);
+		} else {
+			const confirmed = await new ConfirmModal(
+				this.app,
+				t("settings.deleteConfirm", { name: def.displayName }),
+			).confirm();
+			if (!confirmed) return;
+			this.plugin.registry.remove(def.id);
+		}
+
+		this.display();
+	}
+
+	private async handleBuiltInReset(def: CalloutDefinition): Promise<void> {
+		const original = this.plugin.registry.getBuiltInDefault(def.id);
+		if (original) {
+			const currentAliases = def.aliases ?? [];
+			const originalAliasSet = new Set(
+				(original.aliases ?? []).map((a) => a.toLowerCase()),
+			);
+			const customAliases = currentAliases.filter(
+				(a) => !originalAliasSet.has(a.toLowerCase()),
+			);
+
+			if (customAliases.length > 0) {
+				const { fileCount, totalCount } = await countCalloutUsages(
+					this.app,
+					customAliases,
+				);
+				if (fileCount > 0) {
+					const confirmed = await new ConfirmModal(
+						this.app,
+						t("vault.resetAliasWarning", {
+							count: String(totalCount),
+							files: String(fileCount),
+							aliases: customAliases.join(", "),
+						}),
+						t("vault.resetConfirm"),
+					).confirm();
+					if (!confirmed) return;
+				}
+			}
+		}
+
+		this.plugin.registry.resetBuiltIn(def.id);
+		this.display();
 	}
 
 	private renderRowIcon(

@@ -246,4 +246,20 @@ export const he: Record<string, string> = {
 	// Confirm modal
 	"confirm.ok": "מחיקה",
 	"confirm.cancel": "ביטול",
+
+	// Vault edge-case modals
+	"vault.renameConfirm":
+		'{{count}} הפניות ב-{{files}} קבצים משתמשות במזהים שהוסרו: {{oldIds}}. לעדכן ל-"{{newId}}"?',
+	"vault.updateFiles": "עדכון קבצים",
+	"vault.skip": "דלג",
+	"vault.filesUpdated": "עודכנו {{count}} הפניות בקבצי הכספת.",
+	"vault.deleteInUse":
+		'"{{name}}" בשימוש {{count}} פעמים ב-{{files}} קבצים. בחר כיצד להמשיך:',
+	"vault.replaceWith": "החלפה ב",
+	"vault.selectCallout": "\u2014 בחירת תיבת הבלטה \u2014",
+	"vault.replaceAndDelete": "החלפה ומחיקה",
+	"vault.deleteWithout": "מחיקה ללא החלפה",
+	"vault.resetAliasWarning":
+		"{{count}} הפניות ב-{{files}} קבצים משתמשות בכינויים מותאמים: {{aliases}}. הם יפסיקו לעבוד לאחר איפוס. להמשיך?",
+	"vault.resetConfirm": "איפוס",
 };

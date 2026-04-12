@@ -1,4 +1,4 @@
-import { Modal, Setting, setIcon, SliderComponent } from "obsidian";
+import { Modal, Notice, Setting, setIcon, SliderComponent } from "obsidian";
 import type CalloutStudioPlugin from "../main";
 import type { CalloutDefinition, CalloutIcon } from "../types";
 import { IconPicker } from "./IconPicker";
@@ -11,6 +11,11 @@ import {
 } from "../utils/colorPalettes";
 import { t } from "../i18n";
 import { TagInput } from "../ui/TagInput";
+import { ConfirmModal } from "../utils/ConfirmModal";
+import {
+	countCalloutUsages,
+	replaceCalloutIdsInVault,
+} from "../utils/vaultCalloutScanner";
 
 function generateId(displayName: string): string {
 	return displayName
@@ -807,6 +812,26 @@ export class CalloutEditor extends Modal {
 			return; // Duplicate ID
 		}
 
+		// Compute IDs that were removed (for vault update check)
+		let removedIds: string[] = [];
+		if (this.existingId) {
+			const existingDef = this.plugin.registry.get(this.existingId);
+			if (existingDef) {
+				const oldIds = [
+					existingDef.id,
+					...(existingDef.aliases ?? []),
+				];
+				const newIdSet = new Set(
+					[this.calloutId, ...this.aliases].map((s) =>
+						s.toLowerCase(),
+					),
+				);
+				removedIds = oldIds.filter(
+					(id) => !newIdSet.has(id.toLowerCase()),
+				);
+			}
+		}
+
 		const def: CalloutDefinition = {
 			id: this.calloutId,
 			displayName: this.displayName || this.calloutId,
@@ -865,6 +890,40 @@ export class CalloutEditor extends Modal {
 		}
 
 		this.plugin.registry.cleanupUnusedMaterialSvgs();
+
+		// Offer to update vault files if IDs were removed
+		if (removedIds.length > 0) {
+			const { fileCount, totalCount } = await countCalloutUsages(
+				this.app,
+				removedIds,
+			);
+			if (fileCount > 0) {
+				const confirmed = await new ConfirmModal(
+					this.app,
+					t("vault.renameConfirm", {
+						count: String(totalCount),
+						files: String(fileCount),
+						oldIds: removedIds.join(", "),
+						newId: this.calloutId,
+					}),
+					t("vault.updateFiles"),
+					t("vault.skip"),
+				).confirm();
+
+				if (confirmed) {
+					const replaced = await replaceCalloutIdsInVault(
+						this.app,
+						removedIds,
+						this.calloutId,
+					);
+					new Notice(
+						t("vault.filesUpdated", {
+							count: String(replaced),
+						}),
+					);
+				}
+			}
+		}
 
 		if (this.resolve) this.resolve(def);
 		this.resolve = null;

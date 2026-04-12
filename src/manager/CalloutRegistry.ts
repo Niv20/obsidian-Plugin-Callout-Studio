@@ -228,6 +228,10 @@ export class CalloutRegistry {
 		return this.callouts.has(id);
 	}
 
+	getBuiltInDefault(id: string): CalloutDefinition | undefined {
+		return this.builtInDefaults.get(id);
+	}
+
 	findByAlias(alias: string): CalloutDefinition | undefined {
 		for (const def of this.callouts.values()) {
 			if (def.aliases && def.aliases.includes(alias)) return def;
