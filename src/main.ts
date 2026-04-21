@@ -5,6 +5,10 @@ import { CSSInjector } from "./manager/CSSInjector";
 import { CalloutStudioSettingsTab } from "./settings/SettingsTab";
 import { CalloutEditor } from "./settings/CalloutEditor";
 import { CalloutAutoComplete } from "./editor/AutoComplete";
+import {
+	unwrapCalloutAtSelection,
+	wrapSelectionInCallout,
+} from "./editor/CalloutBlockTools";
 import { registerContextMenu } from "./editor/ContextMenu";
 import { TransparentPopup } from "./editor/TransparentPopup";
 import { CalloutStudioAPI } from "./api/PluginAPI";
@@ -68,6 +72,58 @@ export default class CalloutStudioPlugin extends Plugin {
 			callback: () => {
 				void new CalloutEditor(this).open();
 			},
+		});
+
+		this.addCommand({
+			id: "callout-wrap",
+			name: t("cmd.calloutWrap"),
+			editorCallback: (editor) => {
+				wrapSelectionInCallout(editor);
+			},
+		});
+
+		this.addCommand({
+			id: "callout-wrap-selection",
+			name: t("cmd.calloutWrapSelection"),
+			editorCheckCallback: (checking, editor) => {
+				if (!checking) {
+					if (editor.somethingSelected()) {
+						wrapSelectionInCallout(editor, {
+							requireSelection: true,
+						});
+					} else {
+						editor.replaceSelection(">");
+					}
+				}
+				return true;
+			},
+			// eslint-disable-next-line obsidianmd/commands/no-default-hotkeys
+			hotkeys: [{ modifiers: ["Shift"], key: ">" }],
+		});
+
+		this.addCommand({
+			id: "callout-unwrap",
+			name: t("cmd.calloutUnwrap"),
+			editorCallback: (editor) => {
+				unwrapCalloutAtSelection(editor);
+			},
+		});
+
+		this.addCommand({
+			id: "callout-unwrap-selection",
+			name: t("cmd.calloutUnwrapSelection"),
+			editorCheckCallback: (checking, editor) => {
+				if (!checking) {
+					if (editor.somethingSelected()) {
+						unwrapCalloutAtSelection(editor);
+					} else {
+						editor.replaceSelection("<");
+					}
+				}
+				return true;
+			},
+			// eslint-disable-next-line obsidianmd/commands/no-default-hotkeys
+			hotkeys: [{ modifiers: ["Shift"], key: "<" }],
 		});
 
 		// Editor autocomplete on [! trigger

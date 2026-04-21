@@ -10,6 +10,11 @@ import {
 import type CalloutStudioPlugin from "../main";
 import type { CalloutDefinition } from "../types";
 
+const CALLOUT_QUOTE_PREFIX_REGEX = /^((?:\s*> ?|\t)+)/;
+
+const countQuoteTokens = (prefix: string): number =>
+	(prefix.match(/>/g) ?? []).length;
+
 export class CalloutAutoComplete extends EditorSuggest<CalloutDefinition> {
 	private plugin: CalloutStudioPlugin;
 	private pendingEditor: Editor | null = null;
@@ -31,8 +36,37 @@ export class CalloutAutoComplete extends EditorSuggest<CalloutDefinition> {
 			window.requestAnimationFrame(() => {
 				setTimeout(() => {
 					const lineText = editor.getLine(line);
-					const quoteMatch = /^(\s*>\s*)/.exec(lineText);
+					const quoteMatch =
+						CALLOUT_QUOTE_PREFIX_REGEX.exec(lineText);
 					const quotePrefix = quoteMatch?.[1] ?? "> ";
+					const quoteDepth = countQuoteTokens(quotePrefix);
+					const nextLine = line + 1;
+
+					if (nextLine < editor.lineCount()) {
+						const nextLineText = editor.getLine(nextLine);
+						const nextPrefix =
+							CALLOUT_QUOTE_PREFIX_REGEX.exec(
+								nextLineText,
+							)?.[1] ?? "";
+						const nextDepth = countQuoteTokens(nextPrefix);
+						const targetPrefix =
+							nextDepth >= quoteDepth ? nextPrefix : quotePrefix;
+
+						if (nextPrefix !== targetPrefix) {
+							editor.replaceRange(
+								targetPrefix,
+								{ line: nextLine, ch: 0 },
+								{ line: nextLine, ch: nextPrefix.length },
+							);
+						}
+
+						editor.setCursor({
+							line: nextLine,
+							ch: targetPrefix.length,
+						});
+						return;
+					}
+
 					const endPos = { line, ch: lineText.length };
 					editor.replaceRange("\n" + quotePrefix, endPos);
 					editor.setCursor({
@@ -176,8 +210,16 @@ export class CalloutAutoComplete extends EditorSuggest<CalloutDefinition> {
 		idEl.textContent = allIds.join(", ");
 	}
 
-	selectSuggestion(def: CalloutDefinition): void {
+	selectSuggestion(
+		def: CalloutDefinition,
+		evt: MouseEvent | KeyboardEvent,
+	): void {
 		if (!this.context) return;
+		if (evt instanceof KeyboardEvent) {
+			evt.preventDefault();
+			evt.stopPropagation();
+		}
+
 		const { editor, start, end, query } = this.context;
 
 		const line = editor.getLine(end.line);

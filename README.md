@@ -1,16 +1,18 @@
-# Obsidian Sample Plugin
+# Callout Studio
 
-This is a sample plugin for Obsidian (https://obsidian.md).
+Callout Studio is an Obsidian community plugin for managing custom callout styles, icons, and editor workflows.
 
-This project uses TypeScript to provide type checking and documentation.
-The repo depends on the latest plugin API (obsidian.d.ts) in TypeScript Definition format, which contains TSDoc comments describing what it does.
+## Callout block tools
 
-This sample plugin demonstrates some of the basic functionality the plugin API can do.
-- Adds a ribbon icon, which shows a Notice when clicked.
-- Adds a command "Open modal (simple)" which opens a Modal.
-- Adds a plugin setting tab to the settings page.
-- Registers a global click event and output 'click' to the console.
-- Registers a global interval which logs 'setInterval' to the console.
+The plugin now includes editor commands for wrapping and unwrapping callout blocks:
+
+- `Wrap in callout` (`callout-wrap`): wraps the current paragraph or the selected span in a new Obsidian callout block and places the cursor after `> [!` so the existing autocomplete flow can complete the type.
+- `Unwrap from callout` (`callout-unwrap`): removes one callout level from the callout under the cursor or selection.
+- `Wrap selection in callout` (`callout-wrap-selection`): selection-only command with a default hotkey of `Shift + >`.
+- `Unwrap selection from callout` (`callout-unwrap-selection`): selection-only command with a default hotkey of `Shift + <`.
+
+The default wrap and unwrap shortcuts are implemented as normal Obsidian command hotkeys, so users can change them in **Settings → Hotkeys** or read more in the Obsidian Settings guide: https://obsidian.md/help/settings and the Hotkeys section: https://obsidian.md/help/hotkeys.
+When no text is selected, those hotkeys fall back to inserting the literal `>` or `<` character.
 
 ## First time developing plugins?
 
@@ -56,7 +58,8 @@ Quick starting guide for new plugin devs:
 - Copy over `main.js`, `styles.css`, `manifest.json` to your vault `VaultFolder/.obsidian/plugins/your-plugin-id/`.
 
 ## Improve code quality with eslint
-- [ESLint](https://eslint.org/) is a tool that analyzes your code to quickly find problems. You can run ESLint against your plugin to find common bugs and ways to improve your code. 
+
+- [ESLint](https://eslint.org/) is a tool that analyzes your code to quickly find problems. You can run ESLint against your plugin to find common bugs and ways to improve your code.
 - This project already has eslint preconfigured, you can invoke a check by running`npm run lint`
 - Together with a custom eslint [plugin](https://github.com/obsidianmd/eslint-plugin) for Obsidan specific code guidelines.
 - A GitHub action is preconfigured to automatically lint every commit on all branches.
@@ -69,7 +72,7 @@ The simple way is to set the `fundingUrl` field to your link in your `manifest.j
 
 ```json
 {
-    "fundingUrl": "https://buymeacoffee.com"
+	"fundingUrl": "https://buymeacoffee.com"
 }
 ```
 
@@ -77,11 +80,11 @@ If you have multiple URLs, you can also do:
 
 ```json
 {
-    "fundingUrl": {
-        "Buy Me a Coffee": "https://buymeacoffee.com",
-        "GitHub Sponsor": "https://github.com/sponsors",
-        "Patreon": "https://www.patreon.com/"
-    }
+	"fundingUrl": {
+		"Buy Me a Coffee": "https://buymeacoffee.com",
+		"GitHub Sponsor": "https://github.com/sponsors",
+		"Patreon": "https://www.patreon.com/"
+	}
 }
 ```
 

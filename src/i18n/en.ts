@@ -2,6 +2,10 @@ export const en: Record<string, string> = {
 	// Commands
 	"cmd.openSettings": "Open settings",
 	"cmd.createCallout": "Create new callout type",
+	"cmd.calloutWrap": "Wrap in callout",
+	"cmd.calloutWrapSelection": "Wrap selection in callout",
+	"cmd.calloutUnwrap": "Unwrap from callout",
+	"cmd.calloutUnwrapSelection": "Unwrap selection from callout",
 
 	// Settings — Section headings
 	"settings.myCalloutTypes": "My callout types",
@@ -163,6 +167,9 @@ export const en: Record<string, string> = {
 		"No new callout types were imported (ids may already exist).",
 	"notice.failedJSON": "Failed to parse JSON file.",
 	"notice.svgCacheCleared": "Material SVG cache cleared.",
+	"notice.nothingToWrap": "Nothing to wrap.",
+	"notice.selectionContainsNoContent": "Selection contains no content.",
+	"notice.cursorNotInsideCallout": "Cursor is not inside a callout.",
 
 	// Callout Editor
 	"editor.editCallout": "Edit callout",

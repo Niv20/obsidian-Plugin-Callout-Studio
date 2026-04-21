@@ -944,7 +944,7 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 		renderItems();
 	}
 
-	// ─── Section E: Icon Source Settings ─────────────────────
+	// ─── Section F: Icon Source Settings ─────────────────────
 
 	private renderIconSourceSettings(containerEl: HTMLElement): void {
 		const { iconSources } = this.plugin.settings;
@@ -1070,7 +1070,7 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 		modal.open();
 	}
 
-	// ─── Section F: Color Mode Settings ──────────────────────
+	// ─── Section G: Color Mode Settings ──────────────────────
 
 	private renderColorModeSettings(containerEl: HTMLElement): void {
 		const { colorMode } = this.plugin.settings;
@@ -1178,7 +1178,7 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 		input.click();
 	}
 
-	// ─── Section G: Language ─────────────────────────────────
+	// ─── Section H: Language ─────────────────────────────────
 
 	private renderLanguageSettings(containerEl: HTMLElement): void {
 		new Setting(containerEl).setName(t("settings.language")).setHeading();

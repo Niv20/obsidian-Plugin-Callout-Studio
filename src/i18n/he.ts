@@ -2,6 +2,10 @@ export const he: Record<string, string> = {
 	// Commands
 	"cmd.openSettings": "פתיחת הגדרות",
 	"cmd.createCallout": "יצירת סוג תיבת הבלטה חדש",
+	"cmd.calloutWrap": "עטיפה ב-callout",
+	"cmd.calloutWrapSelection": "עטיפת הבחירה ב-callout",
+	"cmd.calloutUnwrap": "פתיחה מתוך callout",
+	"cmd.calloutUnwrapSelection": "פתיחת הבחירה מתוך callout",
 
 	// Settings — Section headings
 	"settings.myCalloutTypes": "סוגי תיבות ההבלטה שלי",
@@ -162,6 +166,9 @@ export const he: Record<string, string> = {
 		"לא יובאו תיבות הבלטה חדשות (ייתכן שהמזהים כבר קיימים).",
 	"notice.failedJSON": "ניתוח קובץ ה-JSON נכשל.",
 	"notice.svgCacheCleared": "מטמון SVG של Material נוקה.",
+	"notice.nothingToWrap": "אין תוכן לעטוף.",
+	"notice.selectionContainsNoContent": "הבחירה לא מכילה תוכן.",
+	"notice.cursorNotInsideCallout": "הסמן אינו נמצא בתוך callout.",
 
 	// Callout Editor
 	"editor.editCallout": "עריכת תיבת הבלטה",
