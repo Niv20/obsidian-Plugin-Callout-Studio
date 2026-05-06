@@ -29,9 +29,13 @@
 	"dependencies": {
 		"@codemirror/view": "6.38.6",
 		"monkey-around": "^3.0.0",
+		"number-flow": "^0.6.0",
 		"obsidian": "1.10.3"
 	},
 	"nano-staged": {
 		"*.{ts,mts}": "eslint"
+	},
+	"overrides": {
+		"eslint-plugin-n": "17.24.0"
 	}
 }

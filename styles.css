@@ -614,6 +614,18 @@ button.callout-studio-icon-picker-loading {
 	white-space: nowrap;
 }
 
+.callout-studio-number-flow {
+	display: inline-block;
+	min-width: 5.5ch;
+	direction: ltr;
+	unicode-bidi: isolate;
+	text-align: end;
+	font-variant-numeric: tabular-nums;
+	line-height: 1;
+	--number-flow-mask-height: 0.08em;
+	--number-flow-mask-width: 0.22em;
+}
+
 .callout-studio-icon-transformed {
 	transform: var(--cs-icon-transform);
 	transform-origin: center;

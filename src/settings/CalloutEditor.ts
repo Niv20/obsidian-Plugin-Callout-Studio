@@ -11,6 +11,7 @@ import {
 import { t } from "../i18n";
 import { TagInput } from "../ui/TagInput";
 import { renderColorCircles } from "../ui/ColorCircles";
+import { createAnimatedNumberLabel } from "../ui/AnimatedNumberLabel";
 import {
 	countCalloutUsages,
 	normalizeFoldMarkersInVault,
@@ -308,9 +309,10 @@ export class CalloutEditor extends Modal {
 			cls: "callout-studio-slider-label",
 		});
 		sizeLabel.createSpan({ text: t("editor.size") });
-		const sizeValue = sizeLabel.createSpan({
-			cls: "callout-studio-slider-value",
-			text: `${Math.round(this.iconSize * 100)}%`,
+		const sizeValue = createAnimatedNumberLabel(sizeLabel, {
+			initialValue: Math.round(this.iconSize * 100),
+			suffix: "%",
+			format: { maximumFractionDigits: 0 },
 		});
 		new Setting(sizeRow).addSlider((slider: SliderComponent) => {
 			slider
@@ -319,7 +321,7 @@ export class CalloutEditor extends Modal {
 				.setInstant(true)
 				.onChange((value: number) => {
 					this.iconSize = value / 100;
-					sizeValue.textContent = `${value}%`;
+					sizeValue.update(value);
 					this.updatePreview();
 				});
 		});
@@ -332,9 +334,10 @@ export class CalloutEditor extends Modal {
 			cls: "callout-studio-slider-label",
 		});
 		hLabel.createSpan({ text: t("editor.horizontalOffset") });
-		const hValue = hLabel.createSpan({
-			cls: "callout-studio-slider-value",
-			text: `${this.iconOffsetX}px`,
+		const hValue = createAnimatedNumberLabel(hLabel, {
+			initialValue: this.iconOffsetX,
+			suffix: "px",
+			format: { maximumFractionDigits: 0 },
 		});
 		new Setting(hRow).addSlider((slider: SliderComponent) => {
 			slider
@@ -343,7 +346,7 @@ export class CalloutEditor extends Modal {
 				.setInstant(true)
 				.onChange((value: number) => {
 					this.iconOffsetX = value;
-					hValue.textContent = `${value}px`;
+					hValue.update(value);
 					this.updatePreview();
 				});
 		});
@@ -356,9 +359,10 @@ export class CalloutEditor extends Modal {
 			cls: "callout-studio-slider-label",
 		});
 		vLabel.createSpan({ text: t("editor.verticalOffset") });
-		const vValue = vLabel.createSpan({
-			cls: "callout-studio-slider-value",
-			text: `${this.iconOffsetY}px`,
+		const vValue = createAnimatedNumberLabel(vLabel, {
+			initialValue: this.iconOffsetY,
+			suffix: "px",
+			format: { maximumFractionDigits: 0 },
 		});
 		new Setting(vRow).addSlider((slider: SliderComponent) => {
 			slider
@@ -367,7 +371,7 @@ export class CalloutEditor extends Modal {
 				.setInstant(true)
 				.onChange((value: number) => {
 					this.iconOffsetY = value;
-					vValue.textContent = `${value}px`;
+					vValue.update(value);
 					this.updatePreview();
 				});
 		});

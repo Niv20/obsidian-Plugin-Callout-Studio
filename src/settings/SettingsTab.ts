@@ -21,6 +21,11 @@ import {
 	scanStringForUnknownCallouts,
 } from "../utils/vaultCalloutScanner";
 import { t } from "../i18n";
+import {
+	createAnimatedNumberLabel,
+	type AnimatedNumberLabel,
+	type AnimatedNumberLabelOptions,
+} from "../ui/AnimatedNumberLabel";
 
 type ObsidianSettingsPane = {
 	open?: () => void;
@@ -574,8 +579,11 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 		const addSliderRow = (
 			parentEl: HTMLElement,
 			label: string,
-			initialValue: string,
-			configure: (slider: SliderComponent, valueEl: HTMLElement) => void,
+			numberOptions: AnimatedNumberLabelOptions,
+			configure: (
+				slider: SliderComponent,
+				valueLabel: AnimatedNumberLabel,
+			) => void,
 		): void => {
 			const row = parentEl.createDiv({
 				cls: "callout-studio-slider-row",
@@ -584,12 +592,14 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 				cls: "callout-studio-slider-label",
 			});
 			labelEl.createSpan({ text: label });
-			const valueEl = labelEl.createSpan({
-				cls: "callout-studio-slider-value",
-				text: initialValue,
-			});
+			const valueLabel = createAnimatedNumberLabel(
+				labelEl,
+				numberOptions,
+			);
 
-			new Setting(row).addSlider((slider) => configure(slider, valueEl));
+			new Setting(row).addSlider((slider) =>
+				configure(slider, valueLabel),
+			);
 		};
 
 		// Two-column wrapper: preview (sticky) | controls (scrollable)
@@ -775,14 +785,18 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 		addSliderRow(
 			borderWidthRow,
 			t("settings.borderWidth"),
-			`${globalStyle.borderWidth}px`,
-			(s, valueEl) => {
+			{
+				initialValue: globalStyle.borderWidth,
+				suffix: "px",
+				format: { maximumFractionDigits: 1 },
+			},
+			(s, valueLabel) => {
 				s.setLimits(1, 4, 0.5).setValue(globalStyle.borderWidth);
 				s.sliderEl.addEventListener("input", () => {
 					const v =
 						Math.round(parseFloat(s.sliderEl.value) * 10) / 10;
 					globalStyle.borderWidth = v;
-					valueEl.textContent = `${v}px`;
+					valueLabel.update(v);
 					updatePreview();
 					this.plugin.cssInjector.scheduleInject();
 				});
@@ -824,14 +838,21 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 		addSliderRow(
 			fontGroupEl,
 			t("settings.titleScale"),
-			`×${globalStyle.titleScale.toFixed(2)}`,
-			(s, valueEl) => {
+			{
+				initialValue: globalStyle.titleScale,
+				prefix: "×",
+				format: {
+					minimumFractionDigits: 2,
+					maximumFractionDigits: 2,
+				},
+			},
+			(s, valueLabel) => {
 				s.setLimits(0.5, 1.5, 0.05).setValue(globalStyle.titleScale);
 				s.sliderEl.addEventListener("input", () => {
 					const v =
 						Math.round(parseFloat(s.sliderEl.value) * 100) / 100;
 					globalStyle.titleScale = v;
-					valueEl.textContent = `×${v.toFixed(2)}`;
+					valueLabel.update(v);
 					updatePreview();
 					this.plugin.cssInjector.scheduleInject();
 				});
@@ -847,14 +868,21 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 		addSliderRow(
 			fontGroupEl,
 			t("settings.contentScale"),
-			`×${globalStyle.contentScale.toFixed(2)}`,
-			(s, valueEl) => {
+			{
+				initialValue: globalStyle.contentScale,
+				prefix: "×",
+				format: {
+					minimumFractionDigits: 2,
+					maximumFractionDigits: 2,
+				},
+			},
+			(s, valueLabel) => {
 				s.setLimits(0.5, 1.5, 0.05).setValue(globalStyle.contentScale);
 				s.sliderEl.addEventListener("input", () => {
 					const v =
 						Math.round(parseFloat(s.sliderEl.value) * 100) / 100;
 					globalStyle.contentScale = v;
-					valueEl.textContent = `×${v.toFixed(2)}`;
+					valueLabel.update(v);
 					updatePreview();
 					this.plugin.cssInjector.scheduleInject();
 				});
@@ -879,13 +907,17 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 		addSliderRow(
 			shapeGroupEl,
 			t("settings.borderRadius"),
-			`${globalStyle.borderRadius}px`,
-			(s, valueEl) => {
+			{
+				initialValue: globalStyle.borderRadius,
+				suffix: "px",
+				format: { maximumFractionDigits: 0 },
+			},
+			(s, valueLabel) => {
 				s.setLimits(0, 24, 1).setValue(globalStyle.borderRadius);
 				s.sliderEl.addEventListener("input", () => {
 					const v = parseInt(s.sliderEl.value, 10);
 					globalStyle.borderRadius = v;
-					valueEl.textContent = `${v}px`;
+					valueLabel.update(v);
 					updatePreview();
 					this.plugin.cssInjector.scheduleInject();
 				});
