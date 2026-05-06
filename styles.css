@@ -41,6 +41,9 @@
 }
 
 .callout-studio-settings .cs-subheader-row .setting-item-name {
+	display: flex;
+	align-items: baseline;
+	gap: 6px;
 	font-size: 1.05em;
 	font-weight: 600;
 }
@@ -50,19 +53,25 @@
 	padding-bottom: 0;
 }
 
-.callout-studio-settings .cs-subheader-row .cs-inline-icon-btn {
-	width: 28px;
-	height: 28px;
+.callout-studio-settings .cs-subheader-row .cs-refresh-inline-link {
+	appearance: none;
+	height: auto;
 	padding: 0;
-	margin-left: 4px;
 	border: none;
 	background: transparent;
 	box-shadow: none;
 	color: var(--text-muted);
+	font-size: var(--font-smallest);
+	font-weight: 400;
+	line-height: 1;
+	text-decoration: underline;
+	cursor: pointer;
 }
 
-.callout-studio-settings .cs-subheader-row .cs-inline-icon-btn:hover,
-.callout-studio-settings .cs-subheader-row .cs-inline-icon-btn:focus-visible {
+.callout-studio-settings .cs-subheader-row .cs-refresh-inline-link:hover,
+.callout-studio-settings
+	.cs-subheader-row
+	.cs-refresh-inline-link:focus-visible {
 	background: transparent;
 	color: var(--text-normal);
 	box-shadow: none;
@@ -1746,7 +1755,9 @@ button.callout-studio-icon-picker-loading {
 	border-radius: 6px;
 	background: var(--background-secondary);
 }
-.callout-studio-import-report .cs-import-report-group + .cs-import-report-group {
+.callout-studio-import-report
+	.cs-import-report-group
+	+ .cs-import-report-group {
 	margin-top: 0.75rem;
 	padding-top: 0.5rem;
 	border-top: 1px dashed var(--background-modifier-border);

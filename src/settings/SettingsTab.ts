@@ -1,4 +1,11 @@
-import { Modal, Notice, PluginSettingTab, Setting, setIcon } from "obsidian";
+import {
+	Modal,
+	Notice,
+	PluginSettingTab,
+	Setting,
+	setIcon,
+	MarkdownView,
+} from "obsidian";
 import type { App, SliderComponent } from "obsidian";
 import type CalloutStudioPlugin from "../main";
 import type { CalloutDefinition } from "../types";
@@ -11,6 +18,7 @@ import { renderColorCircles } from "../ui/ColorCircles";
 import {
 	countCalloutUsages,
 	replaceCalloutIdsInVault,
+	scanStringForUnknownCallouts,
 } from "../utils/vaultCalloutScanner";
 import { t } from "../i18n";
 
@@ -31,6 +39,10 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 		const { containerEl } = this;
 		containerEl.empty();
 		containerEl.addClass("callout-studio-settings");
+
+		// Pick up callout IDs typed in open editors that haven't been saved
+		// yet. Cheap: scans only in-memory buffers of open Markdown leaves.
+		this.scanOpenEditorsForUnknownCallouts();
 
 		// Subscribe once to registry changes so the tab refreshes whenever a
 		// callout is created/edited/removed from anywhere (autocomplete,
@@ -95,6 +107,38 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 		super.hide();
 	}
 
+	/**
+	 * Scan in-memory buffers of all open Markdown editors for callout IDs not
+	 * yet known to the registry. Used when opening Settings so users see
+	 * IDs they typed but haven't saved yet. Silent; very cheap.
+	 */
+	private scanOpenEditorsForUnknownCallouts(): void {
+		const known = new Set<string>();
+		for (const def of this.plugin.registry.getAll()) {
+			known.add(def.id.toLowerCase());
+			for (const a of def.aliases ?? []) known.add(a.toLowerCase());
+		}
+		const seen = new Set<string>();
+		const leaves = this.app.workspace.getLeavesOfType("markdown");
+		for (const leaf of leaves) {
+			const view = leaf.view;
+			if (!(view instanceof MarkdownView)) continue;
+			const content = view.editor.getValue();
+			if (!content) continue;
+			for (const id of scanStringForUnknownCallouts(content, known)) {
+				seen.add(id);
+			}
+		}
+		if (seen.size === 0) return;
+		const added = this.plugin.addUnknownCalloutsAsFallback(
+			Array.from(seen),
+		);
+		if (added > 0) {
+			void this.plugin.saveSettings();
+			this.plugin.refreshCallouts();
+		}
+	}
+
 	// ─── Section A: My Callout Types ─────────────────────────
 
 	private renderCalloutTypesSection(containerEl: HTMLElement): void {
@@ -119,14 +163,6 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 					this.display();
 				}),
 		);
-		subSetting.addButton((btn) => {
-			btn.setIcon("refresh-cw").onClick(() => {
-				void this.runVaultRescan();
-			});
-			btn.buttonEl.addClass("cs-inline-icon-btn");
-			btn.buttonEl.setAttribute("aria-label", t("settings.refresh"));
-			btn.buttonEl.setAttribute("title", t("settings.refresh"));
-		});
 
 		// User-defined callout list container
 		this.userListEl = containerEl.createDiv();
@@ -1243,6 +1279,18 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 
 	private renderResetSection(containerEl: HTMLElement): void {
 		new Setting(containerEl).setName(t("settings.resetAll")).setHeading();
+
+		new Setting(containerEl)
+			.setName(t("settings.rescanVault"))
+			.setDesc(t("settings.rescanVaultDesc"))
+			.addButton((btn) => {
+				btn.setButtonText(t("settings.rescanVaultHintAction")).onClick(
+					() => {
+						void this.runVaultRescan();
+					},
+				);
+				btn.buttonEl.addClass("cs-settings-neutral-btn");
+			});
 
 		new Setting(containerEl)
 			.setDesc(t("settings.resetAllDesc"))

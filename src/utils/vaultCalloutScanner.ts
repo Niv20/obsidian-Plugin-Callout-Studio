@@ -1,7 +1,48 @@
-import type { App } from "obsidian";
+import type { App, TFile } from "obsidian";
 
 function escapeRegex(str: string): string {
 	return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+/**
+ * Scan a single Markdown file (cheap; reads from cache) and return the set of
+ * callout IDs referenced via `> [!id]` syntax that are NOT in `knownIds`.
+ * Used for incremental tracking on file save / create.
+ */
+export async function scanFileForUnknownCallouts(
+	app: App,
+	file: TFile,
+	knownIds: Set<string>,
+): Promise<string[]> {
+	const regex = /^>\s*\[!([^\]\s]+)\]/gim;
+	const content = await app.vault.cachedRead(file);
+	const found = new Set<string>();
+	let m: RegExpExecArray | null;
+	while ((m = regex.exec(content)) !== null) {
+		const id = m[1]?.toLowerCase();
+		if (!id) continue;
+		if (!knownIds.has(id)) found.add(id);
+	}
+	return Array.from(found);
+}
+
+/**
+ * Synchronously scan an in-memory string (e.g. an open editor's current
+ * buffer that may be unsaved) and return unknown callout IDs.
+ */
+export function scanStringForUnknownCallouts(
+	content: string,
+	knownIds: Set<string>,
+): string[] {
+	const regex = /^>\s*\[!([^\]\s]+)\]/gim;
+	const found = new Set<string>();
+	let m: RegExpExecArray | null;
+	while ((m = regex.exec(content)) !== null) {
+		const id = m[1]?.toLowerCase();
+		if (!id) continue;
+		if (!knownIds.has(id)) found.add(id);
+	}
+	return Array.from(found);
 }
 
 /**

@@ -1,4 +1,4 @@
-import { Plugin, Notice } from "obsidian";
+import { Plugin, Notice, TFile } from "obsidian";
 import type { CalloutIcon, PluginData, PluginSettings } from "./types";
 import { CalloutRegistry } from "./manager/CalloutRegistry";
 import { CSSInjector } from "./manager/CSSInjector";
@@ -13,7 +13,10 @@ import {
 import { registerContextMenu } from "./editor/ContextMenu";
 import { CalloutStudioAPI } from "./api/PluginAPI";
 import { downloadMaterialSvg } from "./utils/iconLoader";
-import { scanVaultForUnknownCallouts } from "./utils/vaultCalloutScanner";
+import {
+	scanFileForUnknownCallouts,
+	scanVaultForUnknownCallouts,
+} from "./utils/vaultCalloutScanner";
 import { setLocale, t } from "./i18n";
 
 export default class CalloutStudioPlugin extends Plugin {
@@ -24,6 +27,8 @@ export default class CalloutStudioPlugin extends Plugin {
 	failedMaterialSvgs: Set<string> = new Set();
 	/** Listeners notified when a Material SVG download finishes (success or failure). */
 	private materialSvgListeners: Set<() => void> = new Set();
+	/** Pending per-file debounce timers for incremental callout scanning. */
+	private fileScanTimers: Map<string, number> = new Map();
 
 	/** Subscribe to Material SVG cache updates. Returns an unsubscribe function. */
 	onMaterialSvgChange(cb: () => void): () => void {
@@ -167,9 +172,32 @@ export default class CalloutStudioPlugin extends Plugin {
 				void this.runVaultScan(true);
 			});
 		}
+
+		// Incremental tracking: discover new callout IDs as users save files
+		// or as files arrive via sync / filesystem.
+		this.app.workspace.onLayoutReady(() => {
+			this.registerEvent(
+				this.app.metadataCache.on("changed", (file) => {
+					if (file instanceof TFile && file.extension === "md") {
+						this.scheduleFileScan(file);
+					}
+				}),
+			);
+			this.registerEvent(
+				this.app.vault.on("create", (file) => {
+					if (file instanceof TFile && file.extension === "md") {
+						this.scheduleFileScan(file);
+					}
+				}),
+			);
+		});
 	}
 
 	onunload() {
+		for (const id of this.fileScanTimers.values()) {
+			window.clearTimeout(id);
+		}
+		this.fileScanTimers.clear();
 		this.cssInjector.destroy();
 	}
 
@@ -187,25 +215,30 @@ export default class CalloutStudioPlugin extends Plugin {
 		this.app.workspace.trigger("css-change");
 	}
 
-	/**
-	 * Scan the vault for callout IDs that are not in the registry and add
-	 * them as fallback-source rows that mirror the current fallback style.
-	 * Returns the number of new rows added.
-	 */
-	async runVaultScan(markFirstRun = false): Promise<number> {
+	/** Build a Set of all callout IDs and aliases currently known to the registry. */
+	private buildKnownCalloutIds(): Set<string> {
 		const known = new Set<string>();
 		for (const def of this.registry.getAll()) {
 			known.add(def.id.toLowerCase());
 			for (const a of def.aliases ?? []) known.add(a.toLowerCase());
 		}
-		const unknown = await scanVaultForUnknownCallouts(this.app, known);
+		return known;
+	}
+
+	/**
+	 * Add the given unknown callout IDs to the registry as fallback-source rows
+	 * that mirror the current fallback style. Returns the number of new rows
+	 * actually added (some IDs may already exist by the time this runs).
+	 */
+	addUnknownCalloutsAsFallback(unknownIds: string[]): number {
+		if (unknownIds.length === 0) return 0;
 		const fallbackId = this.settings.fallbackCalloutId || "note";
 		const noteDefault =
 			DEFAULT_CALLOUTS.find((c) => c.id === "note") ??
 			DEFAULT_CALLOUTS[0]!;
 		const fallback = this.registry.get(fallbackId) ?? noteDefault;
 		let added = 0;
-		for (const id of unknown) {
+		for (const id of unknownIds) {
 			if (this.registry.get(id)) continue;
 			const def = {
 				...fallback,
@@ -218,12 +251,62 @@ export default class CalloutStudioPlugin extends Plugin {
 			};
 			if (this.registry.add(def)) added++;
 		}
+		return added;
+	}
+
+	/**
+	 * Scan the vault for callout IDs that are not in the registry and add
+	 * them as fallback-source rows that mirror the current fallback style.
+	 * Returns the number of new rows added.
+	 */
+	async runVaultScan(markFirstRun = false): Promise<number> {
+		const known = this.buildKnownCalloutIds();
+		const unknown = await scanVaultForUnknownCallouts(this.app, known);
+		const added = this.addUnknownCalloutsAsFallback(unknown);
 		if (markFirstRun) {
 			this.registry.settings.firstRunCompleted = true;
 		}
 		await this.saveSettings();
 		this.refreshCallouts();
 		return added;
+	}
+
+	/**
+	 * Debounced per-file incremental scan. Triggered on metadataCache.changed
+	 * and vault.create. Cheap: reads a single cached file and runs one regex.
+	 */
+	private scheduleFileScan(file: TFile): void {
+		const path = file.path;
+		const existing = this.fileScanTimers.get(path);
+		if (existing !== undefined) window.clearTimeout(existing);
+		const timerId = window.setTimeout(() => {
+			this.fileScanTimers.delete(path);
+			void this.scanFileNow(file);
+		}, 300);
+		this.fileScanTimers.set(path, timerId);
+	}
+
+	private async scanFileNow(file: TFile): Promise<void> {
+		if (this.app.vault.getAbstractFileByPath(file.path) !== file) return;
+		const known = this.buildKnownCalloutIds();
+		let unknown: string[];
+		try {
+			unknown = await scanFileForUnknownCallouts(this.app, file, known);
+		} catch (e) {
+			console.debug("[CalloutStudio] file scan failed", file.path, e);
+			return;
+		}
+		if (unknown.length === 0) return;
+		const added = this.addUnknownCalloutsAsFallback(unknown);
+		if (added > 0) {
+			console.debug(
+				"[CalloutStudio] auto-added callouts from",
+				file.path,
+				unknown,
+			);
+			await this.saveSettings();
+			this.refreshCallouts();
+		}
 	}
 
 	/**
