@@ -10,7 +10,11 @@ import {
 import type CalloutStudioPlugin from "../main";
 import type { CalloutDefinition } from "../types";
 import { CalloutEditor } from "../settings/CalloutEditor";
-import { t } from "../i18n";
+import { getLocale, t } from "../i18n";
+import {
+	getSortedCalloutIds,
+	sortCalloutsByDisplayName,
+} from "../utils/sorting";
 
 const CALLOUT_QUOTE_PREFIX_REGEX = /^((?:\s*> ?|\t)+)/;
 
@@ -135,13 +139,9 @@ export class CalloutAutoComplete extends EditorSuggest<CalloutSuggestion> {
 				(d.aliases ?? []).some((a) => a.toLowerCase().includes(query)),
 		);
 
-		// Sort: user-defined first, then built-in, alphabetical within each group
-		filtered.sort((a, b) => {
-			if (a.builtIn !== b.builtIn) return a.builtIn ? 1 : -1;
-			return a.displayName.localeCompare(b.displayName);
-		});
+		const sorted = sortCalloutsByDisplayName(filtered, getLocale());
 
-		const result: CalloutSuggestion[] = [...filtered];
+		const result: CalloutSuggestion[] = [...sorted];
 		// Append "Create new" if query is non-empty and no exact match
 		const trimmed = context.query.trim();
 		if (trimmed.length > 0) {
@@ -231,7 +231,7 @@ export class CalloutAutoComplete extends EditorSuggest<CalloutSuggestion> {
 		}
 
 		// Show all IDs (main + aliases) on the same line
-		const allIds = [def.id, ...(def.aliases ?? [])];
+		const allIds = getSortedCalloutIds(def, getLocale());
 		const idEl = textEl.createDiv({
 			cls: "callout-studio-suggestion-id",
 		});

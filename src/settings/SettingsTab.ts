@@ -20,7 +20,12 @@ import {
 	replaceCalloutIdsInVault,
 	scanStringForUnknownCallouts,
 } from "../utils/vaultCalloutScanner";
-import { t } from "../i18n";
+import { getLocale, t } from "../i18n";
+import {
+	getSortedCalloutIds,
+	sortCalloutsByDisplayName,
+	sortCalloutsById,
+} from "../utils/sorting";
 import {
 	createAnimatedNumberLabel,
 	type AnimatedNumberLabel,
@@ -192,7 +197,11 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 		if (!this.userListEl) return;
 		this.userListEl.empty();
 
-		const userCallouts = this.plugin.registry.getUserDefined();
+		const locale = getLocale();
+		const userCallouts = sortCalloutsByDisplayName(
+			this.plugin.registry.getUserDefined(),
+			locale,
+		);
 		if (userCallouts.length === 0) {
 			this.userListEl.createDiv({
 				cls: "callout-studio-empty-state",
@@ -224,7 +233,11 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 		if (!this.builtInListEl) return;
 		this.builtInListEl.empty();
 
-		const builtInCallouts = this.plugin.registry.getBuiltIn();
+		const locale = getLocale();
+		const builtInCallouts = sortCalloutsByDisplayName(
+			this.plugin.registry.getBuiltIn(),
+			locale,
+		);
 		const listEl = this.builtInListEl.createDiv({
 			cls: "callout-studio-callout-list",
 		});
@@ -275,7 +288,7 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 		const syntaxLine = infoEl.createDiv({
 			cls: "callout-studio-row-syntax-line",
 		});
-		const allIds = [def.id, ...(def.aliases ?? [])];
+		const allIds = getSortedCalloutIds(def, getLocale());
 		for (const id of allIds) {
 			syntaxLine.createEl("code", {
 				cls: "callout-studio-row-syntax",
@@ -552,7 +565,10 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 			.setName(t("settings.fallbackCallout"))
 			.setDesc(t("settings.fallbackCalloutDesc"))
 			.addDropdown((dd) => {
-				const allCallouts = this.plugin.registry.getAll();
+				const allCallouts = sortCalloutsById(
+					this.plugin.registry.getAll(),
+					getLocale(),
+				);
 				for (const c of allCallouts) {
 					dd.addOption(c.id, `${c.displayName} (${c.id})`);
 				}

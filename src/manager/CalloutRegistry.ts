@@ -9,8 +9,10 @@ import type {
 	PluginSettings,
 } from "../types";
 import { DEFAULT_CALLOUTS, DEFAULT_SETTINGS } from "../constants";
+import { sortCalloutsByDisplayName } from "../utils/sorting";
 
 const CURRENT_DATA_VERSION = 2;
+const SORTED_DEFAULT_CALLOUTS = sortCalloutsByDisplayName(DEFAULT_CALLOUTS);
 
 type LegacySavedSettings = Partial<PluginSettings> & {
 	popup?: Partial<LegacyPopupSettings>;
@@ -29,7 +31,7 @@ export class CalloutRegistry {
 
 	constructor() {
 		this.settings = structuredClone(DEFAULT_SETTINGS);
-		for (const def of DEFAULT_CALLOUTS) {
+		for (const def of SORTED_DEFAULT_CALLOUTS) {
 			this.builtInDefaults.set(def.id, structuredClone(def));
 		}
 	}
@@ -38,7 +40,7 @@ export class CalloutRegistry {
 		this.callouts.clear();
 
 		// Always start with built-in defaults
-		for (const def of DEFAULT_CALLOUTS) {
+		for (const def of SORTED_DEFAULT_CALLOUTS) {
 			this.callouts.set(def.id, structuredClone(def));
 		}
 
