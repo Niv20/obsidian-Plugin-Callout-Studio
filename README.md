@@ -2,6 +2,85 @@
 
 Callout Studio is an Obsidian community plugin for managing custom callout styles, icons, and editor workflows.
 
+## Context menu architecture
+
+Callout Studio injects native Obsidian context menu items by patching `Menu.prototype.showAtMouseEvent` with `monkey-around`. Obsidian routes every right-click menu through that method, so one patch can inspect the click target and add items before the menu is displayed.
+
+```ts
+import { Menu } from "obsidian";
+import { around, dedupe } from "monkey-around";
+
+const uninstall = around(Menu.prototype, {
+	showAtMouseEvent(old) {
+		return dedupe(
+			"your-plugin-context-menu",
+			old,
+			function (this: Menu, event: MouseEvent) {
+				const context = resolveTargetContext(event);
+				if (context) {
+					addCustomMenuItems(this, context);
+				}
+
+				return old?.apply(this, [event]) ?? this;
+			},
+		);
+	},
+});
+
+plugin.register(uninstall);
+```
+
+The important rule is that the patch does not decide behavior by itself. It only resolves a clicked target and hands the result to one shared menu builder.
+
+### How the resolver works
+
+- Source mode and Live Preview: find the nearest `.cm-editor`, resolve the `EditorView` with `EditorView.findFromDOM()`, map click coordinates back to a document offset with `posAtCoords()`, convert that offset to an Obsidian editor position, and then scan upward until the enclosing callout header is found.
+- Reading view: find the nearest `.callout[data-callout]`, ask the preview renderer for `MarkdownSectionInformation`, then locate the matching callout header inside that section and reuse the same action builder.
+- Shared actions: once a callout is resolved, all modes use the same menu composition logic for edit, open settings, and copy markdown.
+
+This is the exact pattern to reuse for another element type: keep the global menu patch, replace the selector and resolver, and keep one shared `addCustomMenuItems()` function.
+
+```ts
+function resolveEditorContext(
+	view: MarkdownView,
+	target: Element,
+	event: MouseEvent,
+) {
+	const cmRoot = target.closest(".cm-editor");
+	if (!(cmRoot instanceof HTMLElement)) return null;
+
+	const editorView = EditorView.findFromDOM(cmRoot);
+	if (!editorView) return null;
+
+	const offset =
+		editorView.posAtCoords({ x: event.clientX, y: event.clientY }) ??
+		editorView.posAtCoords({ x: event.clientX, y: event.clientY }, false);
+	if (offset == null) return null;
+
+	const pos = view.editor.offsetToPos(offset);
+	return findTargetAtLine(view.editor, pos.line);
+}
+```
+
+```ts
+function resolveReadingContext(view: MarkdownView, target: Element) {
+	const element = target.closest(".callout[data-callout]");
+	if (!(element instanceof HTMLElement)) return null;
+
+	const sectionInfo = previewGetSectionInfo(view, element);
+	if (!sectionInfo) return null;
+
+	return findTargetInsideSection(sectionInfo, element.dataset.callout ?? "");
+}
+```
+
+### Notes for other plugin authors
+
+- Use `dedupe()` with a plugin-specific key so hot reloads or duplicate patch registration do not produce duplicate menu items.
+- Always call the original `showAtMouseEvent()` so Obsidian keeps its own items.
+- Keep preview-only lookups narrow. In Callout Studio, the preview section lookup is wrapped in a tiny structural cast because the runtime method exists but is not fully declared on `MarkdownPreviewView`.
+- If you want to support a different rendered element, replace `.callout[data-callout]` with your selector and keep the rest of the pattern intact.
+
 ## Callout block tools
 
 The plugin now includes editor commands for wrapping and unwrapping callout blocks:
