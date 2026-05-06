@@ -35,6 +35,7 @@ export class CalloutEditor extends Modal {
 	private plugin: CalloutStudioPlugin;
 	private existingId: string | null;
 	private isBuiltIn: boolean;
+	private createFromAutocomplete: boolean;
 	private resolve: ((result: CalloutDefinition | null) => void) | null = null;
 
 	// Form state
@@ -69,12 +70,13 @@ export class CalloutEditor extends Modal {
 	constructor(
 		plugin: CalloutStudioPlugin,
 		existing?: CalloutDefinition,
-		options?: { seedDisplayName?: string },
+		options?: { seedDisplayName?: string; createFromAutocomplete?: boolean },
 	) {
 		super(plugin.app);
 		this.plugin = plugin;
 		this.existingId = existing?.id ?? null;
 		this.isBuiltIn = existing?.builtIn ?? false;
+		this.createFromAutocomplete = options?.createFromAutocomplete === true;
 
 		this.displayName =
 			existing?.displayName ?? options?.seedDisplayName ?? "";
@@ -989,8 +991,13 @@ export class CalloutEditor extends Modal {
 	private isStateValid(): boolean {
 		// Must have at least one ID
 		if (!this.calloutId) return false;
-		// Custom callouts must have a display name
-		if (!this.isBuiltIn && !this.displayName.trim()) return false;
+		// Allow empty display name only when creating directly from autocomplete.
+		// In that flow, save() falls back to the callout ID for display text.
+		const requireDisplayName =
+			!this.createFromAutocomplete || this.existingId !== null;
+		if (!this.isBuiltIn && requireDisplayName && !this.displayName.trim()) {
+			return false;
+		}
 		// ID must not conflict with existing callouts
 		const isIdChanged =
 			this.existingId !== null && this.calloutId !== this.existingId;

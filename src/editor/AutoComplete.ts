@@ -324,6 +324,7 @@ export class CalloutAutoComplete extends EditorSuggest<CalloutSuggestion> {
 		};
 		const modal = new CalloutEditor(this.plugin, undefined, {
 			seedDisplayName: query,
+			createFromAutocomplete: true,
 		});
 		const result = await modal.open();
 		if (!result) return;
