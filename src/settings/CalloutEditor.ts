@@ -223,11 +223,8 @@ export class CalloutEditor extends Modal {
 				const result = await picker.open();
 				if (result) {
 					this.icon = result;
-					// For Material icons, ensure the SVG is cached BEFORE
-					// re-rendering the preview so it appears immediately.
-					if (result.type === "material") {
-						await this.plugin.cacheMaterialSvg(result);
-					}
+					// Material icons are already cached by the IconPicker
+					// before it closes, so the preview can render immediately.
 					iconSetting.setDesc(this.getIconLabel());
 					iconPreviewEl.empty();
 					this.renderIconPreview(iconPreviewEl);
@@ -1027,6 +1024,7 @@ export class CalloutEditor extends Modal {
 
 	private renderIconPreview(container: HTMLElement): void {
 		container.empty();
+		container.removeClass("is-loading");
 		switch (this.icon.type) {
 			case "lucide":
 				try {
@@ -1060,6 +1058,11 @@ export class CalloutEditor extends Modal {
 						this.icon.weight ?? 400,
 					);
 					setIcon(container, failed ? "image-off" : "loader-2");
+					if (!failed) {
+						container.addClass("is-loading");
+					} else {
+						container.removeClass("is-loading");
+					}
 				}
 				break;
 			}

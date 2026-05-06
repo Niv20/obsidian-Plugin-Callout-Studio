@@ -4,6 +4,11 @@
 
 /* ─── Settings Panel ──────────────────────────────────────────── */
 
+.callout-studio-settings {
+	width: 100%;
+	max-width: none;
+}
+
 /* Big "Callout Studio" header with search on the same row */
 .callout-studio-settings .cs-header-row.setting-item {
 	border-top: none;
@@ -30,13 +35,37 @@
 /* Subheading row: "My callout types" + Add new */
 .callout-studio-settings .cs-subheader-row.setting-item {
 	padding-top: 4px;
-	padding-bottom: 8px;
+	padding-bottom: 2px;
 	border-top: none;
+	min-height: 0;
 }
 
 .callout-studio-settings .cs-subheader-row .setting-item-name {
 	font-size: 1.05em;
 	font-weight: 600;
+}
+
+.callout-studio-settings .cs-subheader-row .setting-item-info {
+	margin-bottom: 0;
+	padding-bottom: 0;
+}
+
+.callout-studio-settings .cs-subheader-row .cs-inline-icon-btn {
+	width: 28px;
+	height: 28px;
+	padding: 0;
+	margin-left: 4px;
+	border: none;
+	background: transparent;
+	box-shadow: none;
+	color: var(--text-muted);
+}
+
+.callout-studio-settings .cs-subheader-row .cs-inline-icon-btn:hover,
+.callout-studio-settings .cs-subheader-row .cs-inline-icon-btn:focus-visible {
+	background: transparent;
+	color: var(--text-normal);
+	box-shadow: none;
 }
 
 /* Empty state — notice + add button stacked */
@@ -81,7 +110,7 @@
 .callout-studio-empty-state {
 	color: var(--text-muted);
 	font-style: italic;
-	padding: 16px 0;
+	padding: 8px 0 12px;
 }
 
 /* ─── Callout List Rows ───────────────────────────────────────── */
@@ -302,6 +331,39 @@
 	height: 20px;
 }
 
+.callout-studio-icon-preview.is-loading svg {
+	animation: cs-spin 1s linear infinite;
+}
+
+.callout-studio-spinner {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	margin-right: 6px;
+}
+
+.callout-studio-spinner svg {
+	width: 16px;
+	height: 16px;
+	animation: cs-spin 1s linear infinite;
+}
+
+button.callout-studio-icon-picker-loading {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 6px;
+}
+
+@keyframes cs-spin {
+	from {
+		transform: rotate(0deg);
+	}
+	to {
+		transform: rotate(360deg);
+	}
+}
+
 /* ─── Editor Buttons (sticky bottom bar) ──────────────────────── */
 
 .callout-studio-editor-modal {
@@ -467,6 +529,19 @@
 
 .callout-studio-slider-row .setting-item-control input[type="range"] {
 	width: 100%;
+	border: none !important;
+	box-shadow: none !important;
+	outline: none;
+}
+
+.callout-studio-slider-row
+	.setting-item-control
+	input[type="range"]::-webkit-slider-runnable-track,
+.callout-studio-slider-row
+	.setting-item-control
+	input[type="range"]::-moz-range-track {
+	border: none !important;
+	box-shadow: none !important;
 }
 
 .callout-studio-preview .callout-icon,
@@ -1278,16 +1353,19 @@
 
 .cs-global-style-wrapper {
 	display: grid;
-	grid-template-columns: 1fr 1.6fr;
-	gap: 20px;
-	margin-bottom: 24px;
+	grid-template-columns: minmax(0, 1fr) minmax(280px, 0.72fr);
+	gap: 12px;
+	margin: 22px 0 24px;
 	align-items: start;
+	justify-content: stretch;
+	width: 100%;
 }
 
 /* Sticky preview column */
 .cs-global-preview-col {
+	min-width: 0;
 	position: sticky;
-	top: 0;
+	top: 12px;
 	align-self: start;
 }
 
@@ -1302,6 +1380,14 @@
 
 .cs-global-preview-card {
 	padding: 0;
+}
+
+.cs-global-preview-card .callout-studio-preview-header {
+	padding: 6px 10px;
+}
+
+.cs-global-preview-body {
+	min-width: 0;
 }
 
 /* Preview callout mock — neutral gray */
@@ -1414,12 +1500,13 @@
 
 /* Controls column */
 .cs-global-controls-col {
+	min-width: 0;
 	display: flex;
 	flex-direction: column;
-	gap: 4px;
+	gap: 8px;
 }
 
-.cs-global-controls-col .setting-item {
+.cs-global-controls-col > .setting-item {
 	padding: 6px 0;
 }
 
@@ -1428,22 +1515,33 @@
 .cs-settings-group {
 	border: 1px solid var(--background-modifier-border);
 	border-radius: 8px;
-	padding: 8px 12px;
-	margin-bottom: 6px;
+	padding: 0;
+	margin-bottom: 0;
+	overflow: visible;
+	background: var(--background-primary);
 }
 
 .cs-settings-group-header {
 	font-size: var(--font-ui-smaller);
 	font-weight: var(--font-semibold);
 	color: var(--text-muted);
-	text-transform: uppercase;
-	letter-spacing: 0.4px;
-	margin-bottom: 4px;
+	padding: 6px 10px;
+	background: var(--background-secondary);
+	border-radius: 7px 7px 0 0;
+	margin-bottom: 0;
 }
 
-.cs-settings-group .setting-item {
-	padding: 4px 0;
+.cs-settings-group > .setting-item {
+	padding: 8px 10px;
 	border-top: none;
+}
+
+/* Extra breathing room between slider title and the slider track —
+   scoped to the global settings page only (Edit callout modal keeps
+   its tighter spacing). */
+.cs-global-controls-col .callout-studio-slider-row {
+	gap: 12px;
+	padding-bottom: 10px;
 }
 
 /* ─── Border side toggle buttons ──────────────────────────────── */
@@ -1452,7 +1550,14 @@
 	display: flex;
 	gap: 4px;
 	flex-wrap: wrap;
-	margin: 6px 0;
+	margin: 0;
+	padding: 8px 10px 10px;
+}
+
+.cs-border-sides-row + .callout-studio-slider-row {
+	border-top: 1px solid var(--background-modifier-border);
+	margin-top: 4px;
+	padding-top: 18px;
 }
 
 .cs-border-side-btn {

@@ -1,5 +1,5 @@
 import { Modal, Notice, PluginSettingTab, Setting, setIcon } from "obsidian";
-import type { App } from "obsidian";
+import type { App, SliderComponent } from "obsidian";
 import type CalloutStudioPlugin from "../main";
 import type { CalloutDefinition } from "../types";
 import { CalloutEditor } from "./CalloutEditor";
@@ -15,7 +15,6 @@ import { t } from "../i18n";
 
 export class CalloutStudioSettingsTab extends PluginSettingTab {
 	plugin: CalloutStudioPlugin;
-	private myCalloutsHeaderEl: HTMLElement | null = null;
 	private userListEl: HTMLElement | null = null;
 	private builtInListEl: HTMLElement | null = null;
 	private registrySubscription: (() => void) | null = null;
@@ -87,7 +86,6 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 			.setName(t("settings.myCalloutTypes"))
 			.setHeading();
 		subSetting.settingEl.addClass("cs-subheader-row");
-		this.myCalloutsHeaderEl = subSetting.settingEl;
 		subSetting.addButton((btn) =>
 			btn
 				.setButtonText(t("settings.addNewCallout"))
@@ -98,6 +96,14 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 					this.display();
 				}),
 		);
+		subSetting.addButton((btn) => {
+			btn.setIcon("refresh-cw").onClick(() => {
+				void this.runVaultRescan();
+			});
+			btn.buttonEl.addClass("cs-inline-icon-btn");
+			btn.buttonEl.setAttribute("aria-label", t("settings.refresh"));
+			btn.buttonEl.setAttribute("title", t("settings.refresh"));
+		});
 
 		// User-defined callout list container
 		this.userListEl = containerEl.createDiv();
@@ -109,15 +115,13 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 		this.userListEl.empty();
 
 		const userCallouts = this.plugin.registry.getUserDefined();
-		const hasUserCallouts = userCallouts.length > 0;
-		if (this.myCalloutsHeaderEl) {
-			const infoEl =
-				this.myCalloutsHeaderEl.querySelector<HTMLElement>(
-					".setting-item-info",
-				);
-			if (infoEl) infoEl.style.display = hasUserCallouts ? "" : "none";
+		if (userCallouts.length === 0) {
+			this.userListEl.createDiv({
+				cls: "callout-studio-empty-state",
+				text: t("settings.noCalloutsNow"),
+			});
+			return;
 		}
-		if (!hasUserCallouts) return;
 
 		const listEl = this.userListEl.createDiv({
 			cls: "callout-studio-callout-list",
@@ -494,20 +498,46 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 			.setHeading();
 		heading.descEl.setText(t("settings.globalStyleDesc"));
 
+		const addSliderRow = (
+			parentEl: HTMLElement,
+			label: string,
+			initialValue: string,
+			configure: (slider: SliderComponent, valueEl: HTMLElement) => void,
+		): void => {
+			const row = parentEl.createDiv({
+				cls: "callout-studio-slider-row",
+			});
+			const labelEl = row.createDiv({
+				cls: "callout-studio-slider-label",
+			});
+			labelEl.createSpan({ text: label });
+			const valueEl = labelEl.createSpan({
+				cls: "callout-studio-slider-value",
+				text: initialValue,
+			});
+
+			new Setting(row).addSlider((slider) => configure(slider, valueEl));
+		};
+
 		// Two-column wrapper: preview (sticky) | controls (scrollable)
 		const wrapper = containerEl.createDiv({
-			cls: "cs-global-style-wrapper",
+			cls: "callout-studio-preview-panel cs-global-style-wrapper",
 		});
 
 		// ── Left: live preview (sticky) ──
-		const previewCol = wrapper.createDiv({ cls: "cs-global-preview-col" });
-		const previewLabel = previewCol.createDiv({
-			cls: "cs-global-preview-label",
+		const previewCol = wrapper.createDiv({
+			cls: "callout-studio-preview-col cs-global-preview-col",
 		});
-		previewLabel.setText(t("settings.previewTitle"));
+		const previewContainer = previewCol.createDiv({
+			cls: "callout-studio-preview-container cs-global-preview-card",
+		});
+		const previewHeader = previewContainer.createDiv({
+			cls: "callout-studio-preview-header",
+		});
+		previewHeader.createSpan({ text: t("settings.previewTitle") });
 
-		const previewCard = previewCol.createDiv({
-			cls: "cs-global-preview-card",
+		const previewCard = previewContainer.createDiv({
+			cls: "callout-studio-preview cs-global-preview-body",
 		});
 
 		const updatePreview = () => {
@@ -583,15 +613,15 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 
 		// ── Right: controls ──
 		const controlsCol = wrapper.createDiv({
-			cls: "cs-global-controls-col",
+			cls: "callout-studio-adjust-col cs-global-controls-col",
 		});
 
 		// ── Borders group ──
 		const borderGroupEl = controlsCol.createDiv({
-			cls: "cs-settings-group",
+			cls: "callout-studio-adjust-section cs-settings-group",
 		});
 		borderGroupEl.createDiv({
-			cls: "cs-settings-group-header",
+			cls: "callout-studio-adjust-header cs-settings-group-header",
 			text: t("settings.border"),
 		});
 
@@ -663,23 +693,17 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 			globalStyle.borderSides.left;
 
 		if (anySideActive) {
-			new Setting(borderGroupEl)
-				.setName(
-					`${t("settings.borderWidth")}  ${globalStyle.borderWidth}px`,
-				)
-				.addSlider((s) => {
-					const settingItem = s.sliderEl.closest(".setting-item");
-					s.setLimits(0.5, 5, 0.5).setValue(globalStyle.borderWidth);
+			addSliderRow(
+				borderGroupEl,
+				t("settings.borderWidth"),
+				`${globalStyle.borderWidth}px`,
+				(s, valueEl) => {
+					s.setLimits(1, 4, 0.5).setValue(globalStyle.borderWidth);
 					s.sliderEl.addEventListener("input", () => {
 						const v =
 							Math.round(parseFloat(s.sliderEl.value) * 10) / 10;
 						globalStyle.borderWidth = v;
-						if (settingItem) {
-							const nameEl =
-								settingItem.querySelector(".setting-item-name");
-							if (nameEl)
-								nameEl.textContent = `${t("settings.borderWidth")}  ${v}px`;
-						}
+						valueEl.textContent = `${v}px`;
 						updatePreview();
 						this.plugin.cssInjector.scheduleInject();
 					});
@@ -688,36 +712,31 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 						await this.plugin.saveSettings();
 						this.plugin.cssInjector.inject();
 					});
-				});
+				},
+			);
 		}
 
 		// ── Font scale group ──
 		const fontGroupEl = controlsCol.createDiv({
-			cls: "cs-settings-group",
+			cls: "callout-studio-adjust-section cs-settings-group",
 		});
 		fontGroupEl.createDiv({
-			cls: "cs-settings-group-header",
+			cls: "callout-studio-adjust-header cs-settings-group-header",
 			text: t("settings.fontScaleGroup"),
 		});
 
 		// Title scale slider
-		new Setting(fontGroupEl)
-			.setName(
-				`${t("settings.titleScale")}  ×${globalStyle.titleScale.toFixed(2)}`,
-			)
-			.addSlider((s) => {
-				const settingItem = s.sliderEl.closest(".setting-item");
+		addSliderRow(
+			fontGroupEl,
+			t("settings.titleScale"),
+			`×${globalStyle.titleScale.toFixed(2)}`,
+			(s, valueEl) => {
 				s.setLimits(0.5, 1.5, 0.05).setValue(globalStyle.titleScale);
 				s.sliderEl.addEventListener("input", () => {
 					const v =
 						Math.round(parseFloat(s.sliderEl.value) * 100) / 100;
 					globalStyle.titleScale = v;
-					if (settingItem) {
-						const nameEl =
-							settingItem.querySelector(".setting-item-name");
-						if (nameEl)
-							nameEl.textContent = `${t("settings.titleScale")}  ×${v.toFixed(2)}`;
-					}
+					valueEl.textContent = `×${v.toFixed(2)}`;
 					updatePreview();
 					this.plugin.cssInjector.scheduleInject();
 				});
@@ -726,26 +745,21 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 					await this.plugin.saveSettings();
 					this.plugin.cssInjector.inject();
 				});
-			});
+			},
+		);
 
 		// Content scale slider
-		new Setting(fontGroupEl)
-			.setName(
-				`${t("settings.contentScale")}  ×${globalStyle.contentScale.toFixed(2)}`,
-			)
-			.addSlider((s) => {
-				const settingItem = s.sliderEl.closest(".setting-item");
+		addSliderRow(
+			fontGroupEl,
+			t("settings.contentScale"),
+			`×${globalStyle.contentScale.toFixed(2)}`,
+			(s, valueEl) => {
 				s.setLimits(0.5, 1.5, 0.05).setValue(globalStyle.contentScale);
 				s.sliderEl.addEventListener("input", () => {
 					const v =
 						Math.round(parseFloat(s.sliderEl.value) * 100) / 100;
 					globalStyle.contentScale = v;
-					if (settingItem) {
-						const nameEl =
-							settingItem.querySelector(".setting-item-name");
-						if (nameEl)
-							nameEl.textContent = `${t("settings.contentScale")}  ×${v.toFixed(2)}`;
-					}
+					valueEl.textContent = `×${v.toFixed(2)}`;
 					updatePreview();
 					this.plugin.cssInjector.scheduleInject();
 				});
@@ -754,34 +768,29 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 					await this.plugin.saveSettings();
 					this.plugin.cssInjector.inject();
 				});
-			});
+			},
+		);
 
 		// ── Shape group ──
 		const shapeGroupEl = controlsCol.createDiv({
-			cls: "cs-settings-group",
+			cls: "callout-studio-adjust-section cs-settings-group",
 		});
 		shapeGroupEl.createDiv({
-			cls: "cs-settings-group-header",
+			cls: "callout-studio-adjust-header cs-settings-group-header",
 			text: t("settings.shapeGroup"),
 		});
 
 		// Border radius slider
-		new Setting(shapeGroupEl)
-			.setName(
-				`${t("settings.borderRadius")}  ${globalStyle.borderRadius}px`,
-			)
-			.addSlider((s) => {
-				const settingItem = s.sliderEl.closest(".setting-item");
+		addSliderRow(
+			shapeGroupEl,
+			t("settings.borderRadius"),
+			`${globalStyle.borderRadius}px`,
+			(s, valueEl) => {
 				s.setLimits(0, 24, 1).setValue(globalStyle.borderRadius);
 				s.sliderEl.addEventListener("input", () => {
 					const v = parseInt(s.sliderEl.value, 10);
 					globalStyle.borderRadius = v;
-					if (settingItem) {
-						const nameEl =
-							settingItem.querySelector(".setting-item-name");
-						if (nameEl)
-							nameEl.textContent = `${t("settings.borderRadius")}  ${v}px`;
-					}
+					valueEl.textContent = `${v}px`;
 					updatePreview();
 					this.plugin.cssInjector.scheduleInject();
 				});
@@ -790,7 +799,8 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 					await this.plugin.saveSettings();
 					this.plugin.cssInjector.inject();
 				});
-			});
+			},
+		);
 	}
 
 	// ─── Section C: Context Menu Settings ────────────────────
@@ -1150,26 +1160,16 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 					.setCta()
 					.onClick(() => this.exportCallouts()),
 			);
+	}
 
-		new Setting(containerEl)
-			.setName(t("settings.rescanVault"))
-			.setDesc(t("settings.rescanVaultDesc"))
-			.addButton((btn) =>
-				btn
-					.setButtonText(t("settings.rescanVault"))
-					.setIcon("search")
-					.onClick(() => {
-						void (async () => {
-							const added = await this.plugin.runVaultScan(false);
-							new Notice(
-								t("settings.rescanComplete", {
-									count: String(added),
-								}),
-							);
-							this.display();
-						})();
-					}),
-			);
+	private async runVaultRescan(): Promise<void> {
+		const added = await this.plugin.runVaultScan(false);
+		new Notice(
+			t("settings.rescanComplete", {
+				count: String(added),
+			}),
+		);
+		this.display();
 	}
 
 	// ─── Section H: (Language section removed; auto-detected) ─────────

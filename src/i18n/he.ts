@@ -15,6 +15,9 @@ export const he: Record<string, string> = {
 	"settings.rescanVault": "סרוק מחדש את המאגר",
 	"settings.rescanVaultDesc":
 		"מחפש מזהי הבלטה לא מזוהים בהערות ומוסיף אותם כשורות בברירת מחדל.",
+	"settings.rescanVaultHintPrefix":
+		"רוצה למצוא תיבות הבלטה שקיימות כבר ב-Vault?",
+	"settings.rescanVaultHintAction": "סריקה עכשיו",
 	"settings.rescanComplete": "סיום סריקה: נוספו {{count}} בלוקים חדשים.",
 	"replaceModal.deleteWithoutReplaceSuffix": "(נופל לברירת המחדל)",
 
@@ -36,6 +39,7 @@ export const he: Record<string, string> = {
 
 	// Settings — Toolbar
 	"settings.addNewCallout": "+ הוספת תיבת הבלטה חדשה",
+	"settings.refresh": "רענון",
 	"settings.moreActions": "פעולות נוספות",
 	"settings.importCSS": "ייבוא ממקטע CSS (Snippet)",
 	"settings.importJSON": "ייבוא מ-JSON",
@@ -44,6 +48,7 @@ export const he: Record<string, string> = {
 	// Settings — Empty states
 	"settings.noCalloutsYet":
 		'אין עדיין תיבות הבלטה מותאמות אישית. לחצו על "+ הוספת תיבת הבלטה חדשה" כדי ליצור אחת.',
+	"settings.noCalloutsNow": "כרגע אין תיבות הבלטה מותאמות אישית.",
 	"settings.noMatch": "לא נמצאו תיבות הבלטה התואמות לחיפוש שלך.",
 
 	// Settings — Row actions
@@ -85,7 +90,7 @@ export const he: Record<string, string> = {
 	"settings.previewTitle": "תצוגה מקדימה",
 	"settings.previewCalloutTitle": "תיבת הבלטה לדוגמה",
 	"settings.previewCalloutContent":
-		"לורם איפסום דולור סיט אמט, קונסקטורר אדיפיסינג אלית.",
+		"לורם איפסום דולור סיט אמט, קונסקטורר אדיפיסינג אלית. סד דו אייסמוד טמפור אינסידידונט אוט לבורה את דולורה מגנה אליקה. אוט אנים אד מינים ונאים, קויס נוסטרוד אקסרסיטאשן אולמקו לבוריס.",
 
 	// Settings — Context menu
 	"settings.enableContextMenu": "הפעלת פעולות תפריט הקשר ל-callout",

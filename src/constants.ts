@@ -167,7 +167,7 @@ export const DEFAULT_CALLOUTS: CalloutDefinition[] = [
 export const DEFAULT_SETTINGS: PluginSettings = {
 	globalStyle: {
 		borderSides: { top: false, right: false, bottom: false, left: false },
-		borderWidth: 1.5,
+		borderWidth: 2.5,
 		titleScale: 1,
 		contentScale: 1,
 		borderRadius: 4,

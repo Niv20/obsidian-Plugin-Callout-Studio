@@ -334,6 +334,9 @@ export class CalloutRegistry {
 		this.settings.contextMenu = structuredClone(
 			DEFAULT_SETTINGS.contextMenu,
 		);
+		// Reset fallback callout – the previously-selected callout may no
+		// longer exist after the reset, which would leave the dropdown blank.
+		this.settings.fallbackCalloutId = DEFAULT_SETTINGS.fallbackCalloutId;
 		// Clear SVG caches
 		this.materialSvgCache = [];
 		this.notifyChange();

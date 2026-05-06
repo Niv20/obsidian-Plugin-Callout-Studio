@@ -2,6 +2,7 @@ import { Plugin } from "obsidian";
 import type { CalloutIcon, PluginData, PluginSettings } from "./types";
 import { CalloutRegistry } from "./manager/CalloutRegistry";
 import { CSSInjector } from "./manager/CSSInjector";
+import { DEFAULT_CALLOUTS } from "./constants";
 import { CalloutStudioSettingsTab } from "./settings/SettingsTab";
 import { CalloutEditor } from "./settings/CalloutEditor";
 import { CalloutAutoComplete } from "./editor/AutoComplete";
@@ -179,30 +180,22 @@ export default class CalloutStudioPlugin extends Plugin {
 		}
 		const unknown = await scanVaultForUnknownCallouts(this.app, known);
 		const fallbackId = this.settings.fallbackCalloutId || "note";
-		const fallback = this.registry.get(fallbackId);
+		const noteDefault =
+			DEFAULT_CALLOUTS.find((c) => c.id === "note") ??
+			DEFAULT_CALLOUTS[0]!;
+		const fallback = this.registry.get(fallbackId) ?? noteDefault;
 		let added = 0;
 		for (const id of unknown) {
 			if (this.registry.get(id)) continue;
-			const def = fallback
-				? {
-						...fallback,
-						id,
-						displayName: id.charAt(0).toUpperCase() + id.slice(1),
-						aliases: [],
-						builtIn: false,
-						source: "fallback" as const,
-					}
-				: {
-						id,
-						displayName: id.charAt(0).toUpperCase() + id.slice(1),
-						icon: { type: "lucide" as const, value: "pencil" },
-						colorLight: "100, 100, 100",
-						colorDark: "180, 180, 180",
-						foldable: true,
-						defaultFolded: false,
-						builtIn: false,
-						source: "fallback" as const,
-					};
+			const def = {
+				...fallback,
+				icon: fallback.icon,
+				id,
+				displayName: id.charAt(0).toUpperCase() + id.slice(1),
+				aliases: [],
+				builtIn: false,
+				source: "fallback" as const,
+			};
 			if (this.registry.add(def)) added++;
 		}
 		if (markFirstRun) {
@@ -241,7 +234,11 @@ export default class CalloutStudioPlugin extends Plugin {
 					svg,
 				});
 				this.failedMaterialSvgs.delete(failKey);
-				this.registry.cleanupUnusedMaterialSvgs();
+				// Note: do NOT call cleanupUnusedMaterialSvgs() here.
+				// The icon may have just been chosen in the picker and not yet
+				// attached to a callout in the registry — cleanup would
+				// immediately delete the SVG we just downloaded. Cleanup runs
+				// at proper save points (CalloutEditor save, SettingsTab).
 				this.cssInjector.inject();
 				await this.saveSettings();
 				return;

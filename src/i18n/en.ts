@@ -15,6 +15,9 @@ export const en: Record<string, string> = {
 	"settings.rescanVault": "Re-scan vault",
 	"settings.rescanVaultDesc":
 		"Find unrecognized callout IDs used in notes and add them as fallback rows.",
+	"settings.rescanVaultHintPrefix":
+		"Need to discover callouts from your vault?",
+	"settings.rescanVaultHintAction": "Scan now",
 	"settings.rescanComplete":
 		"Re-scan complete: {{count}} new callout(s) added.",
 	"replaceModal.deleteWithoutReplaceSuffix": "(falls back to default)",
@@ -37,6 +40,7 @@ export const en: Record<string, string> = {
 
 	// Settings — Toolbar
 	"settings.addNewCallout": "+ Add new callout",
+	"settings.refresh": "Refresh",
 	"settings.moreActions": "More actions",
 	"settings.importCSS": "Import from CSS snippet",
 	"settings.importJSON": "Import from JSON",
@@ -45,6 +49,7 @@ export const en: Record<string, string> = {
 	// Settings — Empty states
 	"settings.noCalloutsYet":
 		'No custom callouts yet. Click "+ Add new callout" to create one.',
+	"settings.noCalloutsNow": "No custom callouts for now.",
 	"settings.noMatch": "No callouts match your search.",
 
 	// Settings — Row actions
@@ -87,7 +92,7 @@ export const en: Record<string, string> = {
 	"settings.previewTitle": "Preview",
 	"settings.previewCalloutTitle": "Example callout",
 	"settings.previewCalloutContent":
-		"Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+		"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.",
 
 	// Settings — Context menu
 	"settings.enableContextMenu": "Enable callout context actions",

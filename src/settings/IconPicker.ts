@@ -100,7 +100,9 @@ export class IconPicker extends Modal {
 			text: t("iconPicker.confirm"),
 			cls: "mod-cta",
 		});
-		this.confirmBtn.addEventListener("click", () => this.confirm());
+		this.confirmBtn.addEventListener("click", () => {
+			void this.confirm();
+		});
 
 		const cancelBtn = footer.createEl("button", {
 			text: t("iconPicker.cancel"),
@@ -657,11 +659,48 @@ export class IconPicker extends Modal {
 		}
 	}
 
-	private confirm(): void {
-		if (this.selectedIcon && this.resolve) {
-			this.resolve(this.selectedIcon);
-			this.resolve = null;
+	private async confirm(): Promise<void> {
+		if (!this.selectedIcon || !this.resolve) {
+			this.close();
+			return;
 		}
+
+		// For Material icons, download and cache the SVG BEFORE closing the
+		// picker, so the user sees the loading state here (with the icon
+		// preview already visible) instead of in the calling Edit Callout
+		// dialog where the icon hasn't been rendered yet.
+		if (this.selectedIcon.type === "material") {
+			const originalText = this.confirmBtn.textContent ?? "";
+			this.confirmBtn.disabled = true;
+			this.confirmBtn.toggleClass("is-disabled", true);
+			this.confirmBtn.empty();
+			this.confirmBtn.addClass("callout-studio-icon-picker-loading");
+			const spinner = this.confirmBtn.createSpan({
+				cls: "callout-studio-spinner",
+			});
+			setIcon(spinner, "loader-2");
+			this.confirmBtn.createSpan({
+				text: t("editor.downloadingIcon"),
+			});
+			try {
+				await this.plugin.cacheMaterialSvg(this.selectedIcon);
+			} catch {
+				// Errors are surfaced via the failure registry; proceed to
+				// resolve so the user isn't stuck in the picker.
+			} finally {
+				this.confirmBtn.disabled = false;
+				this.confirmBtn.removeClass(
+					"callout-studio-icon-picker-loading",
+				);
+				this.confirmBtn.empty();
+				this.confirmBtn.textContent = originalText;
+			}
+			// User may have cancelled while we were downloading.
+			if (!this.resolve) return;
+		}
+
+		this.resolve(this.selectedIcon);
+		this.resolve = null;
 		this.close();
 	}
 
