@@ -347,4 +347,8 @@ export const en: Record<string, string> = {
 		'Alias "{{value}}" is already used by another callout ("{{other}}") in your vault.',
 	"import.warn.defaultFoldedAutofix":
 		'"defaultFolded" was true while "foldable" was false; defaultFolded was reset to false.',
+
+	// Footer
+	"footer.tagline": "Have feedback, comments, or suggestions? I'd love to hear from you!",
+	"footer.madeBy": "Made by Niv  •  ",
 };

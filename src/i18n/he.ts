@@ -145,7 +145,7 @@ export const he: Record<string, string> = {
 	"settings.colorFormat": "פורמט צבע",
 
 	// Settings — Reset
-	"settings.vaultMaintenance": "תחזוקת Vault",
+	"settings.vaultMaintenance": "ניהול נתונים",
 	"settings.resetAll": "איפוס",
 	"settings.resetAllDesc":
 		"מחיקת כל תיבות ההבלטה, איפוס מובנות, סגנונות גלובליות (גבולות, קנה מידות, צורה) וקבצי Material SVG שהורדו.",
@@ -326,6 +326,10 @@ export const he: Record<string, string> = {
 		'ה-ID/כינוי "{{value}}" כבר בשימוש ברשומה #{{first}} בקובץ הזה.',
 	"import.err.aliasConflict":
 		'הכינוי "{{value}}" כבר בשימוש בתיבת הבלטה אחרת ("{{other}}") במאגר שלך.',
+	// Footer
+	"footer.tagline": "יש לך משוב, הערות או הצעות? אשמח לשמוע!",
+	"footer.madeBy": "נוצר על ידי Niv  •  ",
+
 	"import.warn.defaultFoldedAutofix":
 		'"defaultFolded" היה true בזמן ש-"foldable" היה false; defaultFolded אופס ל-false.',
 };

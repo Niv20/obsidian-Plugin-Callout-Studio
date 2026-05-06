@@ -1367,14 +1367,14 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 			cls: "callout-studio-footer",
 		});
 		footer.createEl("p", {
-			text: "Have feedback, comments, or suggestions? I'd love to hear from you!",
+			text: t("footer.tagline"),
 			cls: "callout-studio-footer-tagline",
 		});
 		const links = footer.createEl("p", {
 			cls: "callout-studio-footer-links",
 		});
 		// eslint-disable-next-line obsidianmd/ui/sentence-case
-		links.createEl("span", { text: "Made by Niv  •  " });
+		links.createEl("span", { text: t("footer.madeBy") });
 		links.createEl("a", {
 			text: "GitHub",
 			href: "https://github.com/Niv20/obsidian-Plugin-Callout-Studio",
