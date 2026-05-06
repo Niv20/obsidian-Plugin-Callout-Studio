@@ -32,6 +32,18 @@
 	min-width: 220px;
 }
 
+/* Section dividers: add spacing + thin top border above every heading
+   except the main plugin title and the "My callout types" sub-header */
+.callout-studio-settings
+	.setting-item.setting-item-heading:not(.cs-header-row):not(
+		.cs-subheader-row
+	) {
+	margin-top: 36px;
+	padding-top: 36px;
+	border-top: 1px solid var(--background-modifier-border);
+	border-radius: 0;
+}
+
 /* Subheading row: "My callout types" + Add new */
 .callout-studio-settings .cs-subheader-row.setting-item {
 	padding-top: 4px;
@@ -1797,17 +1809,17 @@ button.callout-studio-icon-picker-loading {
 
 /* ── Footer ─────────────────────────────────────────────────── */
 .callout-studio-footer {
-        margin-top: 2rem;
-        padding-top: 1rem;
-        border-top: 1px solid var(--background-modifier-border);
-        text-align: center;
-        color: var(--text-muted);
-        font-size: 0.85em;
+	margin-top: 2rem;
+	padding-top: 1rem;
+	border-top: 1px solid var(--background-modifier-border);
+	text-align: center;
+	color: var(--text-muted);
+	font-size: 0.85em;
 }
 .callout-studio-footer a {
-        color: var(--text-accent);
-        text-decoration: none;
+	color: var(--text-accent);
+	text-decoration: none;
 }
 .callout-studio-footer a:hover {
-        text-decoration: underline;
+	text-decoration: underline;
 }
