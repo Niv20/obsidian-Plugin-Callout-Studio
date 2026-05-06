@@ -137,6 +137,8 @@
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
+	max-width: 22ch;
+	display: inline-block;
 }
 
 .callout-studio-row-syntax {
@@ -502,6 +504,11 @@
 
 .cs-palette-menu-hidden {
 	display: none;
+}
+
+.cs-palette-menu.cs-palette-menu-up {
+	top: auto;
+	bottom: calc(100% + 4px);
 }
 
 .cs-palette-menu-group-label {
@@ -1319,7 +1326,9 @@
 }
 
 /* Inline layout: hide title text, content flows next to icon */
-.cs-global-preview-callout.cs-layout-inline > .callout-title > .callout-title-inner {
+.cs-global-preview-callout.cs-layout-inline
+	> .callout-title
+	> .callout-title-inner {
 	display: none;
 }
 .cs-global-preview-callout.cs-layout-inline > .callout-title {

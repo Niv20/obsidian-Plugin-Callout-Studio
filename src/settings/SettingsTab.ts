@@ -1,10 +1,4 @@
-import {
-	Modal,
-	Notice,
-	PluginSettingTab,
-	Setting,
-	setIcon,
-} from "obsidian";
+import { Modal, Notice, PluginSettingTab, Setting, setIcon } from "obsidian";
 import type { App } from "obsidian";
 import type CalloutStudioPlugin from "../main";
 import type { CalloutDefinition } from "../types";
@@ -17,13 +11,15 @@ import {
 	countCalloutUsages,
 	replaceCalloutIdsInVault,
 } from "../utils/vaultCalloutScanner";
-import { t, setLocale, getAvailableLocales } from "../i18n";
+import { t } from "../i18n";
 
 export class CalloutStudioSettingsTab extends PluginSettingTab {
 	plugin: CalloutStudioPlugin;
 	private searchQuery = "";
 	private userListEl: HTMLElement | null = null;
 	private builtInListEl: HTMLElement | null = null;
+	private registrySubscription: (() => void) | null = null;
+	private refreshTimer: number | null = null;
 
 	constructor(app: App, plugin: CalloutStudioPlugin) {
 		super(app, plugin);
@@ -35,6 +31,25 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 		containerEl.empty();
 		containerEl.addClass("callout-studio-settings");
 
+		// Subscribe once to registry changes so the tab refreshes whenever a
+		// callout is created/edited/removed from anywhere (autocomplete,
+		// command, vault scan, …). Debounced to avoid flicker during slider
+		// drags.
+		if (!this.registrySubscription) {
+			const sub = () => {
+				if (!containerEl.isConnected) return;
+				if (this.refreshTimer !== null) {
+					window.clearTimeout(this.refreshTimer);
+				}
+				this.refreshTimer = window.setTimeout(() => {
+					this.refreshTimer = null;
+					if (containerEl.isConnected) this.refreshLists();
+				}, 60);
+			};
+			this.plugin.registry.onChange(sub);
+			this.registrySubscription = sub;
+		}
+
 		this.renderCalloutTypesSection(containerEl);
 		this.renderBuiltInCalloutsSection(containerEl);
 		this.renderFallbackCalloutSection(containerEl);
@@ -42,9 +57,20 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 		this.renderAutocompleteSettings(containerEl);
 		this.renderContextMenuSettings(containerEl);
 		this.renderIconSourceSettings(containerEl);
-		this.renderLanguageSettings(containerEl);
 		this.renderImportExportSection(containerEl);
 		this.renderResetSection(containerEl);
+	}
+
+	hide(): void {
+		if (this.registrySubscription) {
+			this.plugin.registry.offChange(this.registrySubscription);
+			this.registrySubscription = null;
+		}
+		if (this.refreshTimer !== null) {
+			window.clearTimeout(this.refreshTimer);
+			this.refreshTimer = null;
+		}
+		super.hide();
 	}
 
 	// ─── Section A: My Callout Types ─────────────────────────
@@ -70,19 +96,17 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 			.setName(t("settings.myCalloutTypes"))
 			.setHeading();
 		subSetting.settingEl.addClass("cs-subheader-row");
-		if (this.plugin.registry.getUserDefined().length > 0) {
-			subSetting.addButton((btn) =>
-				btn
-					.setButtonText(t("settings.addNewCallout"))
-					.setCta()
-					// eslint-disable-next-line @typescript-eslint/no-misused-promises
-					.onClick(async () => {
-						const editor = new CalloutEditor(this.plugin);
-						await editor.open();
-						this.display();
-					}),
-			);
-		}
+		subSetting.addButton((btn) =>
+			btn
+				.setButtonText(t("settings.addNewCallout"))
+				.setCta()
+				// eslint-disable-next-line @typescript-eslint/no-misused-promises
+				.onClick(async () => {
+					const editor = new CalloutEditor(this.plugin);
+					await editor.open();
+					this.display();
+				}),
+		);
 
 		// User-defined callout list container
 		this.userListEl = containerEl.createDiv();
@@ -97,26 +121,15 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 		const filtered = this.filterCallouts(userCallouts);
 
 		if (filtered.length === 0) {
-			const emptyWrap = this.userListEl.createDiv({
-				cls: "cs-empty-state",
-			});
-			emptyWrap.createEl("p", {
-				text:
-					userCallouts.length === 0
-						? t("settings.noCalloutsYet")
-						: t("settings.noMatch"),
-				cls: "callout-studio-empty-state",
-			});
-			if (userCallouts.length === 0) {
-				const addBtn = emptyWrap.createEl("button", {
-					text: t("settings.addNewCallout"),
-					cls: "mod-cta cs-empty-add-btn",
+			// Only show "no match" when the user is searching; otherwise the
+			// empty list is self-evident (Add button lives in the heading row).
+			if (userCallouts.length > 0) {
+				const emptyWrap = this.userListEl.createDiv({
+					cls: "cs-empty-state",
 				});
-				// eslint-disable-next-line @typescript-eslint/no-misused-promises
-				addBtn.addEventListener("click", async () => {
-					const editor = new CalloutEditor(this.plugin);
-					await editor.open();
-					this.display();
+				emptyWrap.createEl("p", {
+					text: t("settings.noMatch"),
+					cls: "callout-studio-empty-state",
 				});
 			}
 		} else {
@@ -179,10 +192,13 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 
 		// Info: name + all IDs as > [!id] chips
 		const infoEl = row.createDiv({ cls: "callout-studio-row-info" });
-		const nameLine = infoEl.createDiv({ cls: "callout-studio-row-name-line" });
+		const nameLine = infoEl.createDiv({
+			cls: "callout-studio-row-name-line",
+		});
 		nameLine.createSpan({
 			cls: "callout-studio-row-name",
 			text: def.displayName,
+			attr: { title: def.displayName },
 		});
 		if (def.source === "fallback") {
 			nameLine.createSpan({
@@ -1015,12 +1031,7 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 
 		// ── Material icon cache management ──
 
-		const cacheHeading = new Setting(containerEl)
-			.setName(t("settings.materialCache"))
-			.setDesc(t("settings.materialCacheDesc"));
-		cacheHeading.settingEl.addClass("callout-studio-cache-heading");
-
-		// SVG cache info
+		// Single combined row: name + count/size description + View button.
 		const svgCount = this.plugin.registry.materialSvgCache.length;
 		const svgSize = this.plugin.registry.getMaterialSvgCacheSize();
 		const svgSizeStr =
@@ -1028,8 +1039,8 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 				? `${svgSize} B`
 				: `${(svgSize / 1024).toFixed(1)} KB`;
 
-		const svgCacheSetting = new Setting(containerEl)
-			.setName(t("settings.svgCache"))
+		const cacheSetting = new Setting(containerEl)
+			.setName(t("settings.materialCache"))
 			.setDesc(
 				svgCount > 0
 					? t("settings.svgCacheInfo", {
@@ -1038,9 +1049,10 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 						})
 					: t("settings.svgCacheEmpty"),
 			);
+		cacheSetting.settingEl.addClass("callout-studio-cache-heading");
 
 		if (svgCount > 0) {
-			svgCacheSetting.addButton((btn) =>
+			cacheSetting.addButton((btn) =>
 				btn.setButtonText(t("settings.viewCachedSvgs")).onClick(() => {
 					this.openSvgCacheModal();
 				}),
@@ -1242,33 +1254,7 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 			);
 	}
 
-	// ─── Section H: Language ─────────────────────────────────
-
-	private renderLanguageSettings(containerEl: HTMLElement): void {
-		new Setting(containerEl).setName(t("settings.language")).setHeading();
-
-		const localeOptions: Record<string, string> = {
-			auto: t("settings.languageAuto"),
-		};
-		for (const code of getAvailableLocales()) {
-			localeOptions[code] = code.toUpperCase();
-		}
-
-		new Setting(containerEl)
-			.setName(t("settings.language"))
-			.setDesc(t("settings.languageDesc"))
-			.addDropdown((d) =>
-				d
-					.addOptions(localeOptions)
-					.setValue(this.plugin.settings.language)
-					.onChange(async (v: string) => {
-						this.plugin.settings.language = v;
-						setLocale(v);
-						await this.plugin.saveSettings();
-						this.display();
-					}),
-			);
-	}
+	// ─── Section H: (Language section removed; auto-detected) ─────────
 
 	private renderResetSection(containerEl: HTMLElement): void {
 		new Setting(containerEl).setName(t("settings.resetAll")).setHeading();

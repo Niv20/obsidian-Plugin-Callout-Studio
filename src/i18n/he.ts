@@ -8,7 +8,7 @@ export const he: Record<string, string> = {
 	"cmd.calloutUnwrapSelection": "פתיחת הבחירה מתוך callout",
 
 	// Autocomplete
-	"autocomplete.createNew": "צור הבלטה חדשה: \"{{name}}\"",
+	"autocomplete.createNew": 'צור הבלטה חדשה: "{{name}}"',
 
 	// Vault scan / fallback / delete
 	"settings.fallbackTag": "ברירת מחדל",
@@ -197,7 +197,7 @@ export const he: Record<string, string> = {
 	"editor.colors": "צבעים",
 	"editor.background": "רקע",
 	"editor.text": "טקסט",
-	"editor.iconColor": "אייקון",
+	"editor.iconColor": "צבע ראשי",
 	"editor.palettes": "תבניות מוכנות",
 	"editor.paletteNone": "— בחירת תבנית —",
 	"editor.paletteGroupObsidian": "תיבות הבלטה של Obsidian",

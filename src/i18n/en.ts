@@ -8,13 +8,15 @@ export const en: Record<string, string> = {
 	"cmd.calloutUnwrapSelection": "Unwrap selection from callout",
 
 	// Autocomplete
-	"autocomplete.createNew": "Create new callout: \"{{name}}\"",
+	"autocomplete.createNew": 'Create new callout: "{{name}}"',
 
 	// Vault scan / fallback / delete
 	"settings.fallbackTag": "Default fallback",
 	"settings.rescanVault": "Re-scan vault",
-	"settings.rescanVaultDesc": "Find unrecognized callout IDs used in notes and add them as fallback rows.",
-	"settings.rescanComplete": "Re-scan complete: {{count}} new callout(s) added.",
+	"settings.rescanVaultDesc":
+		"Find unrecognized callout IDs used in notes and add them as fallback rows.",
+	"settings.rescanComplete":
+		"Re-scan complete: {{count}} new callout(s) added.",
 	"replaceModal.deleteWithoutReplaceSuffix": "(falls back to default)",
 
 	// Settings — Section headings
@@ -196,7 +198,7 @@ export const en: Record<string, string> = {
 	"editor.colors": "Colors",
 	"editor.background": "Background",
 	"editor.text": "Text",
-	"editor.iconColor": "Icon",
+	"editor.iconColor": "Main color",
 	"editor.palettes": "Presets",
 	"editor.paletteNone": "— Select a preset —",
 	"editor.paletteGroupObsidian": "Obsidian callouts",

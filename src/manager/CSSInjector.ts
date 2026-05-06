@@ -428,6 +428,9 @@ export class CSSInjector {
 			knownIds.push(def.id);
 			if (def.aliases) knownIds.push(...def.aliases);
 		}
+		// Always exclude the settings-tab preview marker so the gray preview
+		// is never tinted by the fallback callout.
+		knownIds.push("cs-preview");
 
 		const notSelectors = knownIds
 			.map((id) => `:not([data-callout="${id}"])`)

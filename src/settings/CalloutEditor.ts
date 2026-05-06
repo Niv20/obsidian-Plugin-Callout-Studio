@@ -591,6 +591,15 @@ export class CalloutEditor extends Modal {
 			buildMenu();
 			menu.removeClass("cs-palette-menu-hidden");
 			trigger.addClass("is-open");
+			// Flip upward if not enough room below the trigger.
+			menu.removeClass("cs-palette-menu-up");
+			const trigRect = trigger.getBoundingClientRect();
+			const menuHeight = menu.offsetHeight || 320;
+			const spaceBelow = window.innerHeight - trigRect.bottom;
+			const spaceAbove = trigRect.top;
+			if (spaceBelow < menuHeight + 16 && spaceAbove > spaceBelow) {
+				menu.addClass("cs-palette-menu-up");
+			}
 			// Focus selected, else first
 			const startIdx = paletteEntries.findIndex(
 				(e) => e.id === selectedId,
@@ -822,7 +831,8 @@ export class CalloutEditor extends Modal {
 		// Custom callouts must have a display name
 		if (!this.isBuiltIn && !this.displayName.trim()) return false;
 		// New callouts require a color preset to be picked (or any manual edit)
-		if (this.existingId === null && !this.customPresetSelected) return false;
+		if (this.existingId === null && !this.customPresetSelected)
+			return false;
 		// ID must not conflict with existing callouts
 		const isIdChanged =
 			this.existingId !== null && this.calloutId !== this.existingId;

@@ -31,7 +31,7 @@ export default class CalloutStudioPlugin extends Plugin {
 		this.registry.load(savedData);
 
 		// Set UI locale from saved preference
-		setLocale(this.settings.language);
+		setLocale("auto");
 
 		// Initialize CSS injector
 		this.cssInjector = new CSSInjector(this.app, this.registry);
@@ -185,16 +185,14 @@ export default class CalloutStudioPlugin extends Plugin {
 				? {
 						...fallback,
 						id,
-						displayName:
-							id.charAt(0).toUpperCase() + id.slice(1),
+						displayName: id.charAt(0).toUpperCase() + id.slice(1),
 						aliases: [],
 						builtIn: false,
 						source: "fallback" as const,
 					}
 				: {
 						id,
-						displayName:
-							id.charAt(0).toUpperCase() + id.slice(1),
+						displayName: id.charAt(0).toUpperCase() + id.slice(1),
 						icon: { type: "lucide" as const, value: "pencil" },
 						colorLight: "100, 100, 100",
 						colorDark: "180, 180, 180",
