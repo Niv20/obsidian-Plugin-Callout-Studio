@@ -328,7 +328,7 @@ export const he: Record<string, string> = {
 		'הכינוי "{{value}}" כבר בשימוש בתיבת הבלטה אחרת ("{{other}}") במאגר שלך.',
 	// Footer
 	"footer.tagline": "יש לך משוב, הערות או הצעות? אשמח לשמוע!",
-	"footer.madeBy": "נוצר על ידי Niv  •  ",
+	"footer.madeBy": "נוצר על ידי ניב  •  ",
 
 	"import.warn.defaultFoldedAutofix":
 		'"defaultFolded" היה true בזמן ש-"foldable" היה false; defaultFolded אופס ל-false.',
