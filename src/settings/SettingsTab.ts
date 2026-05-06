@@ -711,6 +711,9 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 			cls: `cs-border-side-btn${allActive ? " is-active" : ""}`,
 			text: t("settings.borderAll"),
 		});
+
+		const sideButtons = new Map<string, HTMLButtonElement>();
+
 		// eslint-disable-next-line @typescript-eslint/no-misused-promises
 		allBtn.addEventListener("click", async () => {
 			const nowAll =
@@ -725,8 +728,8 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 			globalStyle.borderSides.left = newVal;
 			await this.plugin.saveSettings();
 			this.plugin.cssInjector.inject();
-			// Refresh the whole border group to update button states
-			this.display();
+			syncBorderUI();
+			updatePreview();
 		});
 
 		for (const side of sides) {
@@ -735,46 +738,65 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 				cls: `cs-border-side-btn${active ? " is-active" : ""}`,
 				text: side.label,
 			});
+			sideButtons.set(side.key, btn);
 			// eslint-disable-next-line @typescript-eslint/no-misused-promises
 			btn.addEventListener("click", async () => {
 				globalStyle.borderSides[side.key] =
 					!globalStyle.borderSides[side.key];
 				await this.plugin.saveSettings();
 				this.plugin.cssInjector.inject();
-				this.display();
+				syncBorderUI();
+				updatePreview();
 			});
 		}
 
-		// Border width slider
-		const anySideActive =
+		// Border width slider — always rendered; visibility toggled by syncBorderUI
+		const initialAnySideActive =
 			globalStyle.borderSides.top ||
 			globalStyle.borderSides.right ||
 			globalStyle.borderSides.bottom ||
 			globalStyle.borderSides.left;
+		const borderWidthRow = borderGroupEl.createDiv({
+			cls: initialAnySideActive ? "" : "cs-hidden",
+		});
+		addSliderRow(
+			borderWidthRow,
+			t("settings.borderWidth"),
+			`${globalStyle.borderWidth}px`,
+			(s, valueEl) => {
+				s.setLimits(1, 4, 0.5).setValue(globalStyle.borderWidth);
+				s.sliderEl.addEventListener("input", () => {
+					const v =
+						Math.round(parseFloat(s.sliderEl.value) * 10) / 10;
+					globalStyle.borderWidth = v;
+					valueEl.textContent = `${v}px`;
+					updatePreview();
+					this.plugin.cssInjector.scheduleInject();
+				});
+				s.onChange(async (v) => {
+					globalStyle.borderWidth = Math.round(v * 10) / 10;
+					await this.plugin.saveSettings();
+					this.plugin.cssInjector.inject();
+				});
+			},
+		);
 
-		if (anySideActive) {
-			addSliderRow(
-				borderGroupEl,
-				t("settings.borderWidth"),
-				`${globalStyle.borderWidth}px`,
-				(s, valueEl) => {
-					s.setLimits(1, 4, 0.5).setValue(globalStyle.borderWidth);
-					s.sliderEl.addEventListener("input", () => {
-						const v =
-							Math.round(parseFloat(s.sliderEl.value) * 10) / 10;
-						globalStyle.borderWidth = v;
-						valueEl.textContent = `${v}px`;
-						updatePreview();
-						this.plugin.cssInjector.scheduleInject();
-					});
-					s.onChange(async (v) => {
-						globalStyle.borderWidth = Math.round(v * 10) / 10;
-						await this.plugin.saveSettings();
-						this.plugin.cssInjector.inject();
-					});
-				},
-			);
-		}
+		// Update button active states and slider visibility without re-rendering
+		const syncBorderUI = () => {
+			const { top, right, bottom, left } = globalStyle.borderSides;
+			const isAll = top && right && bottom && left;
+			const isAny = top || right || bottom || left;
+			allBtn.toggleClass("is-active", isAll);
+			for (const side of sides) {
+				sideButtons
+					.get(side.key)
+					?.toggleClass(
+						"is-active",
+						globalStyle.borderSides[side.key],
+					);
+			}
+			borderWidthRow.toggleClass("cs-hidden", !isAny);
+		};
 
 		// ── Font scale group ──
 		const fontGroupEl = controlsCol.createDiv({

@@ -1636,6 +1636,10 @@ button.callout-studio-icon-picker-loading {
 	border-color: var(--interactive-accent);
 }
 
+.cs-hidden {
+	display: none;
+}
+
 /* Responsive: stack on narrow setting panels */
 @media (max-width: 700px) {
 	.callout-studio-preview-panel {
