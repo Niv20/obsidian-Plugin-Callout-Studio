@@ -1,3 +1,4 @@
+import { setIcon } from "obsidian";
 import type { App } from "obsidian";
 import type { CalloutDefinition } from "../types";
 import { hexToRgbString } from "../utils/colorUtils";
@@ -70,6 +71,12 @@ export class CSSInjector {
 		this.updateMaterialFontLinks(materialFonts);
 
 		this.styleEl.textContent = rules.join("\n\n");
+
+		// Lucide icon SVGs are static DOM elements injected once by Obsidian during
+		// rendering. Changing --callout-icon via CSS alone does not update them.
+		// Re-inject icons for all currently rendered callouts so the change is
+		// visible immediately without requiring the user to re-open the note.
+		this.refreshCalloutIconsInDOM();
 
 		// Trigger Obsidian to re-render callouts with updated styles
 		this.app.workspace.trigger("css-change");
@@ -313,6 +320,29 @@ export class CSSInjector {
 			link.rel = "stylesheet";
 			link.href = `https://fonts.googleapis.com/css2?family=${family}:opsz,wght,FILL,GRAD@24,100..700,0..1,0`;
 			document.head.appendChild(link);
+		}
+	}
+
+	/**
+	 * Walk all rendered callout elements in the document and re-inject their
+	 * Lucide SVG icons. Obsidian reads --callout-icon only once at render time,
+	 * so the CSS variable change alone does not update the already-rendered SVG.
+	 * Material and emoji icons are handled purely by CSS and do not need this.
+	 */
+	private refreshCalloutIconsInDOM(): void {
+		const calloutEls = Array.from(
+			document.querySelectorAll(".callout[data-callout]"),
+		) as HTMLElement[];
+		for (const calloutEl of calloutEls) {
+			const id = calloutEl.getAttribute("data-callout");
+			if (!id) continue;
+			const def = this.registry.get(id);
+			if (!def || def.icon.type !== "lucide") continue;
+			const iconEl = calloutEl.querySelector(
+				".callout-title .callout-icon",
+			) as HTMLElement | null;
+			if (!iconEl) continue;
+			setIcon(iconEl, def.icon.value);
 		}
 	}
 
