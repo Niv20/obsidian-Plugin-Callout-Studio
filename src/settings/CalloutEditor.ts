@@ -509,6 +509,22 @@ export class CalloutEditor extends Modal {
 		if (this.existingId === null) {
 			triggerLabel.setText(t("editor.paletteDefault"));
 			renderTriggerCircles(this.colorLight, this.colorDark);
+		} else if (this.isBuiltIn) {
+			const matchedEntry = paletteEntries.find(
+				(e) =>
+					e.palette.colorLight.toLowerCase() ===
+					this.colorLight.toLowerCase(),
+			);
+			if (matchedEntry) {
+				selectedId = matchedEntry.id;
+				triggerLabel.setText(matchedEntry.name);
+				renderTriggerCircles(
+					matchedEntry.palette.colorLight,
+					matchedEntry.palette.colorDark,
+				);
+			} else {
+				renderTriggerCircles(this.colorLight, this.colorDark);
+			}
 		}
 
 		const applyPaletteColors = (
