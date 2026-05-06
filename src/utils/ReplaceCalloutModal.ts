@@ -28,6 +28,7 @@ export class ReplaceCalloutModal extends Modal {
 		private availableCallouts: CalloutDefinition[],
 		private registry: CalloutRegistry,
 		private fallbackId: string,
+		private disallowDeleteWithoutReplace: boolean = false,
 	) {
 		super(app);
 	}
@@ -69,19 +70,23 @@ export class ReplaceCalloutModal extends Modal {
 		}
 
 		// "Delete without replacing" option
-		const noReplaceItem = listEl.createDiv({
-			cls: "callout-studio-replace-item callout-studio-replace-no-replace",
-		});
-		noReplaceItem.createDiv({
-			cls: "callout-studio-replace-item-name callout-studio-replace-no-replace-name",
-			text: `${t("vault.deleteWithout")} ${t("replaceModal.deleteWithoutReplaceSuffix")}`,
-		});
-		this.itemEls.set(null, noReplaceItem);
-		if (!hasCallouts) {
-			this.selectedId = null;
-			noReplaceItem.addClass("is-selected");
+		if (!this.disallowDeleteWithoutReplace) {
+			const noReplaceItem = listEl.createDiv({
+				cls: "callout-studio-replace-item callout-studio-replace-no-replace",
+			});
+			noReplaceItem.createDiv({
+				cls: "callout-studio-replace-item-name callout-studio-replace-no-replace-name",
+				text: `${t("vault.deleteWithout")} ${t("replaceModal.deleteWithoutReplaceSuffix")}`,
+			});
+			this.itemEls.set(null, noReplaceItem);
+			if (!hasCallouts) {
+				this.selectedId = null;
+				noReplaceItem.addClass("is-selected");
+			}
+			noReplaceItem.addEventListener("click", () =>
+				this.selectItem(null),
+			);
 		}
-		noReplaceItem.addEventListener("click", () => this.selectItem(null));
 
 		// Single confirm button
 		const btnContainer = contentEl.createDiv({

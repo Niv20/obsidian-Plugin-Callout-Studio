@@ -288,15 +288,19 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 				void this.handleBuiltInReset(def);
 			});
 		} else {
+			const isFallback =
+				def.id === this.plugin.settings.fallbackCalloutId;
 			const deleteBtn = buttonsEl.createEl("button", {
 				cls: "callout-studio-delete-btn",
 				attr: {
-					"aria-label": t("settings.deleteAria", {
-						name: def.displayName,
-					}),
+					"aria-label": isFallback
+						? t("settings.swapAria", { name: def.displayName })
+						: t("settings.deleteAria", {
+								name: def.displayName,
+							}),
 				},
 			});
-			setIcon(deleteBtn, "trash-2");
+			setIcon(deleteBtn, isFallback ? "arrow-left-right" : "trash-2");
 			deleteBtn.addEventListener("click", () => {
 				void this.handleCalloutDelete(def);
 			});
@@ -314,6 +318,8 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 			const otherCallouts = this.plugin.registry
 				.getAll()
 				.filter((c) => c.id !== def.id);
+			const isFallback =
+				def.id === this.plugin.settings.fallbackCalloutId;
 			const result = await new ReplaceCalloutModal(
 				this.app,
 				t("vault.deleteInUse", {
@@ -324,6 +330,7 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 				otherCallouts,
 				this.plugin.registry,
 				this.plugin.settings.fallbackCalloutId,
+				isFallback,
 			).prompt();
 
 			if (result.action === "cancel") return;

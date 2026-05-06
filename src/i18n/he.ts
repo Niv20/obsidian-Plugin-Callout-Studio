@@ -51,6 +51,8 @@ export const he: Record<string, string> = {
 	"settings.editAria": "עריכת {{name}}",
 	"settings.resetAria": "איפוס {{name}} לברירת מחדל",
 	"settings.deleteAria": "מחיקת {{name}}",
+	"settings.swapAria":
+		"החלפת {{name}} (ברירת המחדל הנוכחית) בתיבת הבלטה אחרת ב-Vault",
 	"settings.deleteConfirm": 'למחוק את תיבת ההבלטה "{{name}}"?',
 	"settings.lightLabel": "בהיר",
 	"settings.darkLabel": "כהה",

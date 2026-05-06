@@ -412,31 +412,42 @@ export class CSSInjector {
 			"/* Fallback callout style for unrecognized types */",
 		];
 
-		const lightProps: string[] = [`  --callout-color: ${lightRgb};`];
-		if (iconCSS) lightProps.push(`  --callout-icon: ${iconCSS};`);
+		// Use `body` prefix + `!important` so the fallback wins over Obsidian's
+		// built-in callout color/icon definitions.
+		const lightProps: string[] = [
+			`  --callout-color: ${lightRgb} !important;`,
+		];
+		if (iconCSS)
+			lightProps.push(`  --callout-icon: ${iconCSS} !important;`);
 		if (fallbackDef.bgColorLight) {
-			lightProps.push(`  background-color: ${fallbackDef.bgColorLight};`);
+			lightProps.push(
+				`  background-color: ${fallbackDef.bgColorLight} !important;`,
+			);
 		}
-		parts.push(`.callout${notSelectors} {\n${lightProps.join("\n")}\n}`);
+		parts.push(
+			`body .callout${notSelectors} {\n${lightProps.join("\n")}\n}`,
+		);
 
 		if (
 			fallbackDef.colorLight !== fallbackDef.colorDark ||
 			fallbackDef.bgColorLight !== fallbackDef.bgColorDark
 		) {
-			const darkProps: string[] = [`  --callout-color: ${darkRgb};`];
+			const darkProps: string[] = [
+				`  --callout-color: ${darkRgb} !important;`,
+			];
 			if (fallbackDef.bgColorDark) {
 				darkProps.push(
-					`  background-color: ${fallbackDef.bgColorDark};`,
+					`  background-color: ${fallbackDef.bgColorDark} !important;`,
 				);
 			}
 			parts.push(
-				`.theme-dark .callout${notSelectors} {\n${darkProps.join("\n")}\n}`,
+				`body.theme-dark .callout${notSelectors} {\n${darkProps.join("\n")}\n}`,
 			);
 		}
 
 		if (fallbackDef.textColorLight) {
 			parts.push(
-				`.callout${notSelectors} > .callout-content {\n  color: ${fallbackDef.textColorLight};\n}`,
+				`body .callout${notSelectors} > .callout-content {\n  color: ${fallbackDef.textColorLight} !important;\n}`,
 			);
 		}
 		if (
@@ -444,7 +455,7 @@ export class CSSInjector {
 			fallbackDef.textColorDark !== fallbackDef.textColorLight
 		) {
 			parts.push(
-				`.theme-dark .callout${notSelectors} > .callout-content {\n  color: ${fallbackDef.textColorDark};\n}`,
+				`body.theme-dark .callout${notSelectors} > .callout-content {\n  color: ${fallbackDef.textColorDark} !important;\n}`,
 			);
 		}
 
@@ -458,19 +469,19 @@ export class CSSInjector {
 			if (cached) {
 				const dataUri = svgToDataUri(cached.svg);
 				parts.push(
-					`.callout${notSelectors} > .callout-title > .callout-icon > svg {\n  display: none;\n}\n` +
-						`.callout${notSelectors} > .callout-title > .callout-icon::after {\n` +
+					`body .callout${notSelectors} > .callout-title > .callout-icon > svg {\n  display: none !important;\n}\n` +
+						`body .callout${notSelectors} > .callout-title > .callout-icon::after {\n` +
 						`  content: "";\n` +
 						`  display: inline-block;\n` +
 						`  width: var(--icon-size, 1.2em);\n` +
 						`  height: var(--icon-size, 1.2em);\n` +
-						`  -webkit-mask-image: ${dataUri};\n` +
-						`  mask-image: ${dataUri};\n` +
+						`  -webkit-mask-image: ${dataUri} !important;\n` +
+						`  mask-image: ${dataUri} !important;\n` +
 						`  -webkit-mask-size: contain;\n` +
 						`  mask-size: contain;\n` +
 						`  -webkit-mask-repeat: no-repeat;\n` +
 						`  mask-repeat: no-repeat;\n` +
-						`  background-color: rgb(var(--callout-color));\n` +
+						`  background-color: rgb(var(--callout-color)) !important;\n` +
 						`}`,
 				);
 			}

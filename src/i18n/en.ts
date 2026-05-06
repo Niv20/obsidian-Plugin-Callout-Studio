@@ -52,6 +52,8 @@ export const en: Record<string, string> = {
 	"settings.editAria": "Edit {{name}}",
 	"settings.resetAria": "Reset {{name}} to default",
 	"settings.deleteAria": "Delete {{name}}",
+	"settings.swapAria":
+		"Swap {{name}} (current fallback) with another callout in the vault",
 	"settings.deleteConfirm": 'Delete callout "{{name}}"?',
 	"settings.lightLabel": "L",
 	"settings.darkLabel": "D",
