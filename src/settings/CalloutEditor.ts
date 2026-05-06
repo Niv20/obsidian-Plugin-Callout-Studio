@@ -200,6 +200,11 @@ export class CalloutEditor extends Modal {
 				const result = await picker.open();
 				if (result) {
 					this.icon = result;
+					// For Material icons, ensure the SVG is cached BEFORE
+					// re-rendering the preview so it appears immediately.
+					if (result.type === "material") {
+						await this.plugin.cacheMaterialSvg(result);
+					}
 					iconSetting.setDesc(this.getIconLabel());
 					iconPreviewEl.empty();
 					this.renderIconPreview(iconPreviewEl);
@@ -678,6 +683,32 @@ export class CalloutEditor extends Modal {
 		colorInputs.accentLight = accentInputs.light;
 		colorInputs.accentDark = accentInputs.dark;
 
+		// Default Folded — disabled when foldable is off
+		let defaultFoldedToggle: import("obsidian").ToggleComponent | null =
+			null;
+		const defaultFoldedSetting = new Setting(contentEl)
+			.setName(t("editor.defaultFolded"))
+			.setDesc(t("editor.defaultFoldedDesc"))
+			.addToggle((toggle) => {
+				defaultFoldedToggle = toggle;
+				toggle.setValue(this.defaultFolded).onChange((value) => {
+					this.defaultFolded = value;
+					this.updateSaveState();
+				});
+				toggle.setDisabled(!this.foldable);
+			});
+		const updateDefaultFoldedGating = (): void => {
+			defaultFoldedSetting.settingEl.toggleClass(
+				"is-disabled",
+				!this.foldable,
+			);
+			defaultFoldedToggle?.setDisabled(!this.foldable);
+			if (!this.foldable && this.defaultFolded) {
+				this.defaultFolded = false;
+				defaultFoldedToggle?.setValue(false);
+			}
+		};
+
 		// Foldable
 		new Setting(contentEl)
 			.setName(t("editor.foldable"))
@@ -685,20 +716,14 @@ export class CalloutEditor extends Modal {
 			.addToggle((toggle) => {
 				toggle.setValue(this.foldable).onChange((value) => {
 					this.foldable = value;
+					updateDefaultFoldedGating();
 					this.updateSaveState();
 				});
 			});
 
-		// Default Folded
-		new Setting(contentEl)
-			.setName(t("editor.defaultFolded"))
-			.setDesc(t("editor.defaultFoldedDesc"))
-			.addToggle((toggle) => {
-				toggle.setValue(this.defaultFolded).onChange((value) => {
-					this.defaultFolded = value;
-					this.updateSaveState();
-				});
-			});
+		// Move the Default Folded row visually after Foldable in the DOM
+		contentEl.appendChild(defaultFoldedSetting.settingEl);
+		updateDefaultFoldedGating();
 
 		// Action buttons — sticky bottom bar
 		const buttonContainer = this.modalEl.createDiv({

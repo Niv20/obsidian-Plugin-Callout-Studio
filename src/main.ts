@@ -10,7 +10,6 @@ import {
 	wrapSelectionInCallout,
 } from "./editor/CalloutBlockTools";
 import { registerContextMenu } from "./editor/ContextMenu";
-import { TransparentPopup } from "./editor/TransparentPopup";
 import { CalloutStudioAPI } from "./api/PluginAPI";
 import { downloadMaterialSvg } from "./utils/iconLoader";
 import { setLocale, t } from "./i18n";
@@ -18,7 +17,6 @@ import { setLocale, t } from "./i18n";
 export default class CalloutStudioPlugin extends Plugin {
 	registry!: CalloutRegistry;
 	cssInjector!: CSSInjector;
-	popup!: TransparentPopup;
 	api!: CalloutStudioAPI;
 
 	get settings(): PluginSettings {
@@ -41,6 +39,7 @@ export default class CalloutStudioPlugin extends Plugin {
 		// Re-inject CSS when registry changes
 		this.registry.onChange(() => {
 			this.cssInjector.scheduleInject();
+			this.app.workspace.trigger("css-change");
 			void this.saveSettings();
 		});
 
@@ -132,9 +131,6 @@ export default class CalloutStudioPlugin extends Plugin {
 		// Right-click context menu for callout blocks
 		registerContextMenu(this);
 
-		// Transparent floating popup
-		this.popup = new TransparentPopup(this);
-
 		// Public API for other plugins
 		this.api = new CalloutStudioAPI(this);
 
@@ -144,11 +140,20 @@ export default class CalloutStudioPlugin extends Plugin {
 
 	onunload() {
 		this.cssInjector.destroy();
-		this.popup.destroy();
 	}
 
 	async saveSettings(): Promise<void> {
 		await this.saveData(this.registry.toSaveData());
+	}
+
+	/**
+	 * Centralized helper that re-applies all callout styling and forces every
+	 * open Markdown view to re-render. Use after any mutation that should be
+	 * immediately visible (palette change, slider commit, fallback swap, …).
+	 */
+	refreshCallouts(): void {
+		this.cssInjector.inject();
+		this.app.workspace.trigger("css-change");
 	}
 
 	/**

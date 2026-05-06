@@ -185,8 +185,8 @@ export const DEFAULT_SETTINGS: PluginSettings = {
 		showColorPreviews: true,
 	},
 	iconSources: {
-		materialStyleDefault: "outlined",
-		materialWeightDefault: 400,
+		materialStyleDefault: "rounded",
+		materialWeightDefault: 300,
 	},
 	language: "auto",
 	fallbackCalloutId: "note",

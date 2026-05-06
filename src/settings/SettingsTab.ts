@@ -326,6 +326,8 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 			this.plugin.registry.remove(def.id);
 		}
 
+		// Drop unused Material SVGs after the deletion
+		this.plugin.registry.cleanupUnusedMaterialSvgs();
 		this.display();
 	}
 

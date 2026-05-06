@@ -66,9 +66,11 @@ export class IconPicker extends Modal {
 		this.currentIcon = currentIcon ?? null;
 		this.selectedIcon = currentIcon ? { ...currentIcon } : null;
 		this.materialStyle =
-			plugin.settings.iconSources.materialStyleDefault ?? "outlined";
+			plugin.settings.iconSources.materialStyleDefault ?? "rounded";
 		this.materialWeight =
-			plugin.settings.iconSources.materialWeightDefault ?? 400;
+			plugin.settings.iconSources.materialWeightDefault ?? 300;
+		// Default category — "Actions" if available, else "All"
+		this.materialCategory = "Actions";
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-misused-promises -- intentional Promise-returning override for modal result
@@ -549,6 +551,13 @@ export class IconPicker extends Modal {
 		const cats = getMaterialCategories(this.materialIcons);
 		for (const cat of cats) {
 			select.createEl("option", { text: cat, value: cat });
+		}
+		// Honor preferred default category if it exists in the loaded list
+		if (this.materialCategory && cats.includes(this.materialCategory)) {
+			select.value = this.materialCategory;
+		} else {
+			this.materialCategory = "";
+			select.value = "";
 		}
 	}
 
