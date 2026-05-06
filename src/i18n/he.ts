@@ -145,6 +145,7 @@ export const he: Record<string, string> = {
 	"settings.colorFormat": "פורמט צבע",
 
 	// Settings — Reset
+	"settings.vaultMaintenance": "תחזוקת Vault",
 	"settings.resetAll": "איפוס",
 	"settings.resetAllDesc":
 		"מחיקת כל תיבות ההבלטה, איפוס מובנות, סגנונות גלובליות (גבולות, קנה מידות, צורה) וקבצי Material SVG שהורדו.",

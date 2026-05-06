@@ -144,6 +144,7 @@ export const en: Record<string, string> = {
 	"settings.colorFormat": "Color format",
 
 	// Settings — Reset
+	"settings.vaultMaintenance": "Vault maintenance",
 	"settings.resetAll": "Reset",
 	"settings.resetAllDesc":
 		"Delete all user callouts, reset built-in callouts, global styles (borders, font scale, shape), and downloaded Material SVGs.",

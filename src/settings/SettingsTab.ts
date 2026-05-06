@@ -89,6 +89,7 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 		this.renderIconSourceSettings(containerEl);
 		this.renderImportExportSection(containerEl);
 		this.renderResetSection(containerEl);
+		this.renderFooter(containerEl);
 	}
 
 	hide(): void {
@@ -1278,7 +1279,9 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 	// ─── Section H: (Language section removed; auto-detected) ─────────
 
 	private renderResetSection(containerEl: HTMLElement): void {
-		new Setting(containerEl).setName(t("settings.resetAll")).setHeading();
+		new Setting(containerEl)
+			.setName(t("settings.vaultMaintenance"))
+			.setHeading();
 
 		new Setting(containerEl)
 			.setName(t("settings.rescanVault"))
@@ -1293,6 +1296,7 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 			});
 
 		new Setting(containerEl)
+			.setName(t("settings.resetAll"))
 			.setDesc(t("settings.resetAllDesc"))
 			.addButton((btn) =>
 				btn
@@ -1334,5 +1338,30 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 						this.display();
 					}),
 			);
+	}
+
+	private renderFooter(containerEl: HTMLElement): void {
+		const footer = containerEl.createEl("div", {
+			cls: "callout-studio-footer",
+		});
+		footer.createEl("p", {
+			text: "Have feedback, comments, or suggestions? I'd love to hear from you!",
+			cls: "callout-studio-footer-tagline",
+		});
+		const links = footer.createEl("p", {
+			cls: "callout-studio-footer-links",
+		});
+		// eslint-disable-next-line obsidianmd/ui/sentence-case
+		links.createEl("span", { text: "Made by Niv  •  " });
+		links.createEl("a", {
+			text: "GitHub",
+			href: "https://github.com/Niv20",
+			attr: { target: "_blank", rel: "noopener noreferrer" },
+		});
+		links.createEl("span", { text: "  •  " });
+		links.createEl("a", {
+			text: "Email",
+			href: "mailto:anivbniv@gmail.com",
+		});
 	}
 }

@@ -1794,3 +1794,20 @@ button.callout-studio-icon-picker-loading {
 	color: var(--text-muted);
 	font-size: 0.9em;
 }
+
+/* ── Footer ─────────────────────────────────────────────────── */
+.callout-studio-footer {
+        margin-top: 2rem;
+        padding-top: 1rem;
+        border-top: 1px solid var(--background-modifier-border);
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.85em;
+}
+.callout-studio-footer a {
+        color: var(--text-accent);
+        text-decoration: none;
+}
+.callout-studio-footer a:hover {
+        text-decoration: underline;
+}
