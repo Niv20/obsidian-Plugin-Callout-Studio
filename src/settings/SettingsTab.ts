@@ -16,6 +16,7 @@ import { t } from "../i18n";
 export class CalloutStudioSettingsTab extends PluginSettingTab {
 	plugin: CalloutStudioPlugin;
 	private searchQuery = "";
+	private myCalloutsHeaderEl: HTMLElement | null = null;
 	private userListEl: HTMLElement | null = null;
 	private builtInListEl: HTMLElement | null = null;
 	private registrySubscription: (() => void) | null = null;
@@ -96,11 +97,11 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 			.setName(t("settings.myCalloutTypes"))
 			.setHeading();
 		subSetting.settingEl.addClass("cs-subheader-row");
+		this.myCalloutsHeaderEl = subSetting.settingEl;
 		subSetting.addButton((btn) =>
 			btn
 				.setButtonText(t("settings.addNewCallout"))
 				.setCta()
-				// eslint-disable-next-line @typescript-eslint/no-misused-promises
 				.onClick(async () => {
 					const editor = new CalloutEditor(this.plugin);
 					await editor.open();
@@ -118,20 +119,24 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 		this.userListEl.empty();
 
 		const userCallouts = this.plugin.registry.getUserDefined();
-		const filtered = this.filterCallouts(userCallouts);
+		const hasUserCallouts = userCallouts.length > 0;
+		if (this.myCalloutsHeaderEl) {
+			const infoEl = this.myCalloutsHeaderEl.querySelector<HTMLElement>(
+				".setting-item-info",
+			);
+			if (infoEl) infoEl.style.display = hasUserCallouts ? "" : "none";
+		}
+		if (!hasUserCallouts) return;
 
+		const filtered = this.filterCallouts(userCallouts);
 		if (filtered.length === 0) {
-			// Only show "no match" when the user is searching; otherwise the
-			// empty list is self-evident (Add button lives in the heading row).
-			if (userCallouts.length > 0) {
-				const emptyWrap = this.userListEl.createDiv({
-					cls: "cs-empty-state",
-				});
-				emptyWrap.createEl("p", {
-					text: t("settings.noMatch"),
-					cls: "callout-studio-empty-state",
-				});
-			}
+			const emptyWrap = this.userListEl.createDiv({
+				cls: "cs-empty-state",
+			});
+			emptyWrap.createEl("p", {
+				text: t("settings.noMatch"),
+				cls: "callout-studio-empty-state",
+			});
 		} else {
 			const listEl = this.userListEl.createDiv({
 				cls: "callout-studio-callout-list",

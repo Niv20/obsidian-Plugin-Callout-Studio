@@ -175,7 +175,7 @@ export const en: Record<string, string> = {
 	"editor.displayNameDesc": "The human-readable label shown in the UI",
 	"editor.displayNameBuiltIn":
 		"Display name cannot be changed for built-in callouts",
-	"editor.displayNamePlaceholder": "My warning",
+	"editor.displayNamePlaceholder": "My callout",
 	"editor.calloutIds": "Callout IDs",
 	"editor.calloutIdsDesc":
 		"All identifiers for this callout. Press Enter or Space to add.",
@@ -193,6 +193,7 @@ export const en: Record<string, string> = {
 	"editor.text": "Text",
 	"editor.iconColor": "Main color",
 	"editor.palettes": "Presets",
+	"editor.paletteDefault": "Default blue",
 	"editor.paletteNone": "— Select a preset —",
 	"editor.paletteGroupObsidian": "Obsidian callouts",
 	"editor.paletteGroupPresets": "Color presets",
@@ -202,6 +203,8 @@ export const en: Record<string, string> = {
 	"editor.foldOff": "Off",
 	"editor.foldOpen": "Open by default",
 	"editor.foldClosed": "Closed by default",
+	"editor.expandPreview": "Expand preview",
+	"editor.collapsePreview": "Collapse preview",
 	"editor.cancel": "Cancel",
 	"editor.saveChanges": "Save changes",
 	"editor.createCallout": "Create callout",

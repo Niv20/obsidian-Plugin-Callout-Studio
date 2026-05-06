@@ -308,14 +308,46 @@
 	display: flex;
 	flex-direction: column;
 	padding-bottom: 0 !important;
-	width: min(900px, 95vw) !important;
-	max-width: min(900px, 95vw) !important;
+	width: min(720px, 95vw) !important;
+	max-width: min(720px, 95vw) !important;
 }
 
 .callout-studio-editor-modal > .modal-content {
 	flex: 1;
 	overflow-y: auto;
 	padding-bottom: 0 !important;
+	padding-left: clamp(18px, 3vw, 24px) !important;
+	padding-right: clamp(18px, 3vw, 24px) !important;
+}
+
+.callout-studio-editor-modal > .modal-title {
+	flex-shrink: 0;
+	position: sticky;
+	top: 0;
+	z-index: 2;
+	background: var(--modal-background);
+	border-bottom: 1px solid var(--background-modifier-border);
+	padding-bottom: 6px;
+	margin-bottom: 0;
+}
+
+/* Fallback: in case .modal-title is not a direct child in some Obsidian builds */
+.callout-studio-editor-modal .modal-title {
+	border-bottom: 1px solid var(--background-modifier-border);
+	padding-bottom: 6px;
+	margin-bottom: 0;
+	background: var(--modal-background);
+}
+
+/* Remove the default top padding gap on the scrollable content so the
+   content sits flush under the sticky title separator (no empty band). */
+.callout-studio-editor-modal > .modal-content {
+	padding-top: 0 !important;
+}
+
+.callout-studio-editor-modal > .modal-content > :first-child {
+	margin-top: 0;
+	padding-top: 8px;
 }
 
 .callout-studio-editor-buttons {
@@ -343,14 +375,18 @@
 
 .callout-studio-preview-panel {
 	display: grid;
-	grid-template-columns: 1fr 240px;
+	grid-template-columns: minmax(0, 400px) 260px;
 	gap: 12px;
 	margin: 16px 0;
 	align-items: start;
+	justify-content: start;
 }
 
 .callout-studio-preview-col {
 	min-width: 0;
+	position: sticky;
+	top: 12px;
+	align-self: start;
 }
 
 /* Right adjustment column */
@@ -364,7 +400,10 @@
 .callout-studio-adjust-section {
 	border: 1px solid var(--background-modifier-border);
 	border-radius: 8px;
-	overflow: hidden;
+	/* Allow palette/fold popups to overflow outside the section while
+	   keeping the inner header's background clipped via its own radius. */
+	overflow: visible;
+	background: var(--background-primary);
 }
 
 .callout-studio-adjust-header {
@@ -373,25 +412,49 @@
 	color: var(--text-muted);
 	padding: 6px 10px;
 	background: var(--background-secondary);
+	border-radius: 7px 7px 0 0;
 }
 
-/* Slider rows: label above slider */
+/* Slider rows: roomy label above full-width slider */
 .callout-studio-slider-row {
-	padding: 4px 10px 6px;
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+	padding: 8px 10px 18px;
 }
 
 .callout-studio-slider-label {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
+	gap: 6px;
+	width: 100%;
 	font-size: var(--font-ui-smaller);
 	color: var(--text-muted);
-	margin-bottom: 2px;
+	line-height: 1.2;
+}
+
+.callout-studio-slider-label span:first-child {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
 }
 
 .callout-studio-slider-row .setting-item {
 	padding: 0;
-	border: none;
+	border: none !important;
+	border-top: none !important;
+	box-shadow: none !important;
+}
+
+.callout-studio-slider-row .setting-item::before,
+.callout-studio-slider-row .setting-item::after {
+	display: none !important;
+}
+
+.callout-studio-slider-row + .callout-studio-slider-row {
+	border-top: 1px solid var(--background-modifier-border);
+	padding-top: 14px;
 }
 
 .callout-studio-slider-row .setting-item-info {
@@ -404,6 +467,11 @@
 
 .callout-studio-slider-row .setting-item-control input[type="range"] {
 	width: 100%;
+}
+
+.callout-studio-preview .callout-icon,
+.callout-studio-preview-fold-toggle {
+	color: rgb(var(--callout-color));
 }
 
 /* Hide slider tooltip bubble */
@@ -493,13 +561,71 @@
 	min-width: 240px;
 	max-height: 320px;
 	overflow-y: auto;
-	z-index: 50;
+	z-index: 1000;
 	padding: 6px 0;
 	border-radius: var(--radius-s);
 	border: 1px solid var(--background-modifier-border);
 	background-color: var(--background-primary);
-	box-shadow: var(--shadow-s);
+	box-shadow:
+		0 8px 18px rgba(0, 0, 0, 0.22),
+		0 2px 6px rgba(0, 0, 0, 0.18);
 	outline: none;
+}
+
+.callout-studio-fold-section {
+	display: flex;
+	flex-direction: column;
+}
+
+.callout-studio-fold-desc {
+	padding: 8px 10px 0;
+	color: var(--text-muted);
+	font-size: var(--font-ui-smaller);
+	line-height: 1.35;
+}
+
+.callout-studio-fold-control {
+	padding: 8px 10px 10px;
+}
+
+.cs-fold-menu {
+	min-width: 100%;
+}
+
+.callout-studio-preview-fold-toggle {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 18px;
+	height: 18px;
+	min-height: 18px;
+	padding: 0;
+	margin-inline-start: 6px;
+	border: none;
+	border-radius: 0;
+	background: transparent !important;
+	color: rgb(var(--callout-color));
+	cursor: pointer;
+	box-shadow: none !important;
+	flex-shrink: 0;
+}
+
+.callout-studio-preview-fold-toggle:hover,
+.callout-studio-preview-fold-toggle:focus,
+.callout-studio-preview-fold-toggle:active {
+	background: transparent !important;
+	color: rgb(var(--callout-color));
+}
+
+.callout-studio-preview-fold-toggle svg {
+	width: 14px;
+	height: 14px;
+	color: rgb(var(--callout-color));
+	stroke: currentColor !important;
+}
+
+.callout-studio-preview-collapsed > .callout-title {
+	padding-bottom: var(--callout-title-padding, 0.5em);
 }
 
 .cs-palette-menu-hidden {
@@ -575,8 +701,8 @@
 
 .callout-studio-color-grid-header {
 	display: grid;
-	grid-template-columns: 1fr 32px 32px;
-	gap: 6px;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	gap: 2px;
 	font-size: 10px;
 	color: var(--text-faint);
 	text-align: center;
@@ -584,13 +710,13 @@
 }
 
 .callout-studio-color-grid-header span:first-child {
-	text-align: left;
+	text-align: center;
 }
 
 .callout-studio-color-row {
 	display: grid;
-	grid-template-columns: 1fr 32px 32px;
-	gap: 6px;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	gap: 2px;
 	align-items: center;
 	padding: 2px 0;
 }
@@ -598,6 +724,9 @@
 .callout-studio-color-row > span {
 	font-size: var(--font-ui-smaller);
 	color: var(--text-muted);
+	text-align: center;
+	justify-self: center;
+	width: 100%;
 }
 
 .callout-studio-color-input {
@@ -1265,6 +1394,24 @@
 	color: var(--text-on-accent);
 }
 
+.cs-segmented-vertical {
+	display: flex;
+	flex-direction: column;
+	margin: 8px 10px 10px;
+}
+
+.cs-segmented-vertical .cs-segmented-btn {
+	width: 100%;
+	border-right: none;
+	border-bottom: 1px solid var(--background-modifier-border);
+	text-align: start;
+	padding: 7px 10px;
+}
+
+.cs-segmented-vertical .cs-segmented-btn:last-child {
+	border-bottom: none;
+}
+
 /* Controls column */
 .cs-global-controls-col {
 	display: flex;
@@ -1335,11 +1482,20 @@
 
 /* Responsive: stack on narrow setting panels */
 @media (max-width: 700px) {
+	.callout-studio-preview-panel {
+		grid-template-columns: 1fr;
+	}
 	.cs-global-style-wrapper {
 		grid-template-columns: 1fr;
 	}
 	.cs-global-preview-col {
 		position: static;
+	}
+}
+
+@media (min-width: 701px) and (max-width: 760px) {
+	.callout-studio-preview-panel {
+		grid-template-columns: minmax(0, 1fr) 250px;
 	}
 }
 

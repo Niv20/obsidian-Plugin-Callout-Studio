@@ -174,7 +174,7 @@ export const he: Record<string, string> = {
 	"editor.displayNameDesc": "התווית הקריאה שתוצג בממשק",
 	"editor.displayNameBuiltIn":
 		"לא ניתן לשנות את שם התצוגה של תיבות הבלטה מובנות",
-	"editor.displayNamePlaceholder": "האזהרה שלי",
+	"editor.displayNamePlaceholder": "ה-callout שלי",
 	"editor.calloutIds": "מזהי תיבת הבלטה (IDs)",
 	"editor.calloutIdsDesc":
 		"כל המזהים לתיבת הבלטה הזו. לחצו Enter או רווח להוספה.",
@@ -192,6 +192,7 @@ export const he: Record<string, string> = {
 	"editor.text": "טקסט",
 	"editor.iconColor": "צבע ראשי",
 	"editor.palettes": "תבניות מוכנות",
+	"editor.paletteDefault": "כחול ברירת מחדל",
 	"editor.paletteNone": "— בחירת תבנית —",
 	"editor.paletteGroupObsidian": "תיבות הבלטה של Obsidian",
 	"editor.paletteGroupPresets": "תבניות צבע",
@@ -201,6 +202,8 @@ export const he: Record<string, string> = {
 	"editor.foldOff": "כבוי",
 	"editor.foldOpen": "פתוח כברירת מחדל",
 	"editor.foldClosed": "סגור כברירת מחדל",
+	"editor.expandPreview": "פתיחת התצוגה המקדימה",
+	"editor.collapsePreview": "סגירת התצוגה המקדימה",
 	"editor.cancel": "ביטול",
 	"editor.saveChanges": "שמירת שינויים",
 	"editor.createCallout": "יצירת תיבת הבלטה",

@@ -27,6 +27,9 @@ function generateId(displayName: string): string {
 		.replace(/^-|-$/g, "");
 }
 
+const DEFAULT_TEXT_COLOR_LIGHT = "#1a1a1a";
+const DEFAULT_TEXT_COLOR_DARK = "#e0e0e0";
+
 export class CalloutEditor extends Modal {
 	private plugin: CalloutStudioPlugin;
 	private existingId: string | null;
@@ -51,10 +54,13 @@ export class CalloutEditor extends Modal {
 	private aliases: string[];
 	private previewEl: HTMLElement | null = null;
 	private previewDarkMode = false;
+	private previewFoldCollapsed = false;
 	private idsTagInput: TagInput | null = null;
+	private hasHadCalloutId = false;
 	private saveBtn: HTMLButtonElement | null = null;
 	private initialSnapshot: string = "";
-	/** True once the user picks a preset or manually edits any color input. */
+	private removePopupOutsideClickListener: (() => void) | null = null;
+	/** True when the detailed color grid should be shown. */
 	private customPresetSelected: boolean = false;
 	private refreshColorGridVisibility: (() => void) | null = null;
 
@@ -82,16 +88,19 @@ export class CalloutEditor extends Modal {
 			blendHex(this.colorLight, "#ffffff", 0.88);
 		this.bgColorDark =
 			existing?.bgColorDark ?? blendHex(this.colorDark, "#1e1e1e", 0.88);
-		this.textColorLight = existing?.textColorLight ?? "#1a1a1a";
-		this.textColorDark = existing?.textColorDark ?? "#e0e0e0";
-		this.foldable = existing?.foldable ?? true;
+		this.textColorLight =
+			existing?.textColorLight ?? DEFAULT_TEXT_COLOR_LIGHT;
+		this.textColorDark = existing?.textColorDark ?? DEFAULT_TEXT_COLOR_DARK;
+		this.foldable = existing?.foldable ?? false;
 		this.defaultFolded = existing?.defaultFolded ?? false;
 		this.iconOffsetX = existing?.iconOffsetX ?? 0;
 		this.iconOffsetY = existing?.iconOffsetY ?? 0;
-		this.iconSize = existing?.iconSize ?? 1;
+		this.iconSize = Math.max(0.5, Math.min(existing?.iconSize ?? 1, 1.5));
 		this.aliases = [...(existing?.aliases ?? [])];
-		// Existing callouts already have committed colors; treat as preset chosen.
-		this.customPresetSelected = existing !== undefined;
+		this.previewFoldCollapsed = this.foldable && this.defaultFolded;
+		this.hasHadCalloutId =
+			this.calloutId.trim().length > 0 || this.aliases.length > 0;
+		this.customPresetSelected = true;
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-misused-promises -- intentional Promise-returning override for modal result
@@ -111,9 +120,10 @@ export class CalloutEditor extends Modal {
 		// Snapshot initial state for dirty-checking
 		this.initialSnapshot = this.stateSnapshot();
 
-		this.setTitle(
-			this.existingId ? t("editor.editCallout") : t("editor.newCallout"),
-		);
+		const editorTitle = this.existingId
+			? t("editor.editCallout")
+			: t("editor.newCallout");
+		this.setTitle(editorTitle);
 
 		// Display Name
 		new Setting(contentEl)
@@ -136,11 +146,16 @@ export class CalloutEditor extends Modal {
 							this.calloutId = generateId(value);
 							if (this.idsTagInput) {
 								const currentTags = this.idsTagInput.getTags();
-								if (currentTags.length === 0) {
-									this.idsTagInput.setTags([this.calloutId]);
-								} else {
-									currentTags[0] = this.calloutId;
-									this.idsTagInput.setTags(currentTags);
+								if (this.calloutId) {
+									this.hasHadCalloutId = true;
+									this.idsTagInput.setTags([
+										this.calloutId,
+										...currentTags.slice(1),
+									]);
+								} else if (currentTags.length > 0) {
+									this.idsTagInput.setTags(
+										currentTags.slice(1),
+									);
 								}
 							}
 							this.updateIdWarning();
@@ -167,6 +182,7 @@ export class CalloutEditor extends Modal {
 			errorEl: idsErrorEl,
 			readonlyTags: this.isBuiltIn ? initialIds : undefined,
 			onChange: (tags) => {
+				if (tags.length > 0) this.hasHadCalloutId = true;
 				this.calloutId = tags[0] ?? "";
 				this.aliases = tags.slice(1);
 				this.updateIdWarning();
@@ -187,7 +203,7 @@ export class CalloutEditor extends Modal {
 			},
 		});
 
-		// Show initial warning if no ID
+		// Sync initial warning state without showing an empty-ID warning before interaction.
 		this.updateIdWarning();
 
 		// Icon
@@ -288,7 +304,7 @@ export class CalloutEditor extends Modal {
 
 		// Size slider
 		const sizeRow = iconAdjust.createDiv({
-			cls: "callout-studio-slider-row",
+			cls: "callout-studio-slider-row cs-size-slider-row",
 		});
 		const sizeLabel = sizeRow.createDiv({
 			cls: "callout-studio-slider-label",
@@ -300,7 +316,7 @@ export class CalloutEditor extends Modal {
 		});
 		new Setting(sizeRow).addSlider((slider: SliderComponent) => {
 			slider
-				.setLimits(50, 200, 5)
+				.setLimits(50, 150, 5)
 				.setValue(Math.round(this.iconSize * 100))
 				.setInstant(true)
 				.onChange((value: number) => {
@@ -441,7 +457,7 @@ export class CalloutEditor extends Modal {
 		void triggerCaret;
 
 		const menu = dropdown.createDiv({
-			cls: "cs-palette-menu cs-palette-menu-hidden",
+			cls: "cs-palette-menu cs-palette-menu-up cs-palette-menu-hidden",
 			attr: { role: "listbox", tabindex: "-1" },
 		});
 
@@ -449,6 +465,38 @@ export class CalloutEditor extends Modal {
 		let selectedId = "";
 		let menuOpen = false;
 		const itemEls: HTMLElement[] = [];
+		const readColorState = () => ({
+			colorLight: this.colorLight,
+			colorDark: this.colorDark,
+			bgColorLight: this.bgColorLight,
+			bgColorDark: this.bgColorDark,
+			textColorLight: this.textColorLight,
+			textColorDark: this.textColorDark,
+		});
+		let colorStateBeforeMenu: ReturnType<typeof readColorState> | null =
+			null;
+		const applyColorState = (
+			state: ReturnType<typeof readColorState>,
+		): void => {
+			this.colorLight = state.colorLight;
+			this.colorDark = state.colorDark;
+			this.bgColorLight = state.bgColorLight;
+			this.bgColorDark = state.bgColorDark;
+			this.textColorLight = state.textColorLight;
+			this.textColorDark = state.textColorDark;
+			if (colorInputs.accentLight)
+				colorInputs.accentLight.value = this.colorLight;
+			if (colorInputs.accentDark)
+				colorInputs.accentDark.value = this.colorDark;
+			if (colorInputs.bgLight)
+				colorInputs.bgLight.value = this.bgColorLight;
+			if (colorInputs.bgDark) colorInputs.bgDark.value = this.bgColorDark;
+			if (colorInputs.textLight)
+				colorInputs.textLight.value = this.textColorLight;
+			if (colorInputs.textDark)
+				colorInputs.textDark.value = this.textColorDark;
+			this.updatePreview();
+		};
 
 		const renderTriggerCircles = (
 			lightColor: string | null,
@@ -460,16 +508,15 @@ export class CalloutEditor extends Modal {
 				size: 16,
 			});
 		};
+		if (this.existingId === null) {
+			triggerLabel.setText(t("editor.paletteDefault"));
+			renderTriggerCircles(this.colorLight, this.colorDark);
+		}
 
 		const applyPaletteColors = (
 			palette: (typeof COLOR_PALETTES)[number],
 			persist: boolean,
 		): void => {
-			const prevLight = this.colorLight;
-			const prevDark = this.colorDark;
-			const prevBgL = this.bgColorLight;
-			const prevBgD = this.bgColorDark;
-
 			this.colorLight = palette.colorLight;
 			this.colorDark = palette.colorDark;
 			if (palette.bgColorLight !== undefined) {
@@ -478,6 +525,8 @@ export class CalloutEditor extends Modal {
 			if (palette.bgColorDark !== undefined) {
 				this.bgColorDark = palette.bgColorDark;
 			}
+			this.textColorLight = DEFAULT_TEXT_COLOR_LIGHT;
+			this.textColorDark = DEFAULT_TEXT_COLOR_DARK;
 
 			if (colorInputs.accentLight)
 				colorInputs.accentLight.value = this.colorLight;
@@ -486,17 +535,13 @@ export class CalloutEditor extends Modal {
 			if (colorInputs.bgLight)
 				colorInputs.bgLight.value = this.bgColorLight;
 			if (colorInputs.bgDark) colorInputs.bgDark.value = this.bgColorDark;
+			if (colorInputs.textLight)
+				colorInputs.textLight.value = this.textColorLight;
+			if (colorInputs.textDark)
+				colorInputs.textDark.value = this.textColorDark;
 
 			this.updatePreview();
-
-			if (!persist) {
-				// Restore on next hover/leave; we keep no-op since the next
-				// hover will overwrite, and on close we re-apply selectedId.
-				void prevLight;
-				void prevDark;
-				void prevBgL;
-				void prevBgD;
-			}
+			if (persist) colorStateBeforeMenu = null;
 		};
 
 		const closeMenu = (): void => {
@@ -504,10 +549,12 @@ export class CalloutEditor extends Modal {
 			menuOpen = false;
 			menu.addClass("cs-palette-menu-hidden");
 			trigger.removeClass("is-open");
-			// Re-apply selected (or revert if nothing chosen)
-			const sel = COLOR_PALETTES.find((p) => p.id === selectedId);
-			if (sel) applyPaletteColors(sel, true);
-			else this.updatePreview();
+			if (colorStateBeforeMenu) {
+				applyColorState(colorStateBeforeMenu);
+				colorStateBeforeMenu = null;
+			} else {
+				this.updatePreview();
+			}
 		};
 
 		const setActive = (index: number): void => {
@@ -588,19 +635,12 @@ export class CalloutEditor extends Modal {
 
 		const openMenu = (): void => {
 			if (menuOpen) return;
+			closeFoldMenu();
 			menuOpen = true;
+			colorStateBeforeMenu = readColorState();
 			buildMenu();
 			menu.removeClass("cs-palette-menu-hidden");
 			trigger.addClass("is-open");
-			// Flip upward if not enough room below the trigger.
-			menu.removeClass("cs-palette-menu-up");
-			const trigRect = trigger.getBoundingClientRect();
-			const menuHeight = menu.offsetHeight || 320;
-			const spaceBelow = window.innerHeight - trigRect.bottom;
-			const spaceAbove = trigRect.top;
-			if (spaceBelow < menuHeight + 16 && spaceAbove > spaceBelow) {
-				menu.addClass("cs-palette-menu-up");
-			}
 			// Focus selected, else first
 			const startIdx = paletteEntries.findIndex(
 				(e) => e.id === selectedId,
@@ -630,21 +670,6 @@ export class CalloutEditor extends Modal {
 				closeMenu();
 			}
 		});
-
-		// Close menu when clicking outside
-		const outsideClick = (ev: MouseEvent): void => {
-			if (!menuOpen) return;
-			if (!dropdown.contains(ev.target as Node)) closeMenu();
-		};
-		document.addEventListener("click", outsideClick);
-		// Cleanup on close
-		this.modalEl.addEventListener(
-			"transitionend",
-			() => {
-				document.removeEventListener("click", outsideClick);
-			},
-			{ once: true },
-		);
 
 		// Header row
 		const gridHeader = colorGrid.createDiv({
@@ -699,12 +724,38 @@ export class CalloutEditor extends Modal {
 		colorInputs.accentLight = accentInputs.light;
 		colorInputs.accentDark = accentInputs.dark;
 
-		// Foldable — single 3-state segmented (Off / Open / Closed)
-		const foldSetting = new Setting(contentEl)
-			.setName(t("editor.foldable"))
-			.setDesc(t("editor.foldableDesc"));
-		const foldSegmented = foldSetting.controlEl.createDiv({
-			cls: "cs-segmented",
+		// Foldable — dropdown in the same adjustment column.
+		const foldSection = adjustCol.createDiv({
+			cls: "callout-studio-adjust-section callout-studio-fold-section",
+		});
+		foldSection.createDiv({
+			cls: "callout-studio-adjust-header",
+			text: t("editor.foldable"),
+		});
+		foldSection.createDiv({
+			cls: "callout-studio-fold-desc",
+			text: t("editor.foldableDesc"),
+		});
+		const foldControl = foldSection.createDiv({
+			cls: "callout-studio-fold-control",
+		});
+		const foldDropdown = foldControl.createDiv({
+			cls: "cs-palette-dropdown cs-fold-dropdown",
+		});
+		const foldTrigger = foldDropdown.createEl("button", {
+			cls: "cs-palette-trigger cs-fold-trigger",
+			attr: { type: "button", "aria-haspopup": "listbox" },
+		});
+		const foldTriggerLabel = foldTrigger.createSpan({
+			cls: "cs-palette-trigger-label",
+		});
+		foldTrigger.createSpan({
+			cls: "cs-palette-trigger-caret",
+			text: "▾",
+		});
+		const foldMenu = foldDropdown.createDiv({
+			cls: "cs-palette-menu cs-palette-menu-up cs-fold-menu cs-palette-menu-hidden",
+			attr: { role: "listbox", tabindex: "-1" },
 		});
 		const foldOptions: {
 			value: "off" | "open" | "closed";
@@ -716,29 +767,114 @@ export class CalloutEditor extends Modal {
 		];
 		const currentFoldState = (): "off" | "open" | "closed" =>
 			!this.foldable ? "off" : this.defaultFolded ? "closed" : "open";
-		const foldBtns: HTMLButtonElement[] = [];
-		for (const opt of foldOptions) {
-			const btn = foldSegmented.createEl("button", {
-				cls: `cs-segmented-btn${
-					currentFoldState() === opt.value ? " is-active" : ""
-				}`,
-				text: opt.label,
-			});
-			btn.addEventListener("click", () => {
-				if (opt.value === "off") {
-					this.foldable = false;
-					this.defaultFolded = false;
-				} else {
-					this.foldable = true;
-					this.defaultFolded = opt.value === "closed";
-				}
-				for (const b of foldBtns) b.removeClass("is-active");
-				btn.addClass("is-active");
-				this.updateSaveState();
-			});
-			foldBtns.push(btn);
-		}
+		const getFoldLabel = (): string =>
+			foldOptions.find((opt) => opt.value === currentFoldState())
+				?.label ?? t("editor.foldOff");
+		foldTriggerLabel.setText(getFoldLabel());
 
+		let foldMenuOpen = false;
+		const readFoldState = () => ({
+			foldable: this.foldable,
+			defaultFolded: this.defaultFolded,
+			previewFoldCollapsed: this.previewFoldCollapsed,
+		});
+		let foldStateBeforeMenu: ReturnType<typeof readFoldState> | null = null;
+		const applyFoldState = (
+			value: "off" | "open" | "closed",
+			persist: boolean,
+		): void => {
+			if (value === "off") {
+				this.foldable = false;
+				this.defaultFolded = false;
+				this.previewFoldCollapsed = false;
+			} else {
+				this.foldable = true;
+				this.defaultFolded = value === "closed";
+				this.previewFoldCollapsed = value === "closed";
+			}
+			this.updatePreview();
+			if (persist) foldStateBeforeMenu = null;
+		};
+		const restoreFoldPreview = (): void => {
+			if (!foldStateBeforeMenu) return;
+			this.foldable = foldStateBeforeMenu.foldable;
+			this.defaultFolded = foldStateBeforeMenu.defaultFolded;
+			this.previewFoldCollapsed =
+				foldStateBeforeMenu.previewFoldCollapsed;
+			foldStateBeforeMenu = null;
+			this.updatePreview();
+		};
+		const closeFoldMenu = (): void => {
+			if (!foldMenuOpen) return;
+			foldMenuOpen = false;
+			foldMenu.addClass("cs-palette-menu-hidden");
+			foldTrigger.removeClass("is-open");
+			restoreFoldPreview();
+		};
+		const selectFoldState = (value: "off" | "open" | "closed"): void => {
+			const opt = foldOptions.find((item) => item.value === value);
+			if (!opt) return;
+
+			applyFoldState(opt.value, true);
+			foldTriggerLabel.setText(opt.label);
+			this.updateSaveState();
+			closeFoldMenu();
+		};
+		const buildFoldMenu = (): void => {
+			foldMenu.empty();
+			for (const opt of foldOptions) {
+				const item = foldMenu.createDiv({
+					cls: `cs-palette-menu-item${
+						currentFoldState() === opt.value ? " is-selected" : ""
+					}`,
+					attr: { role: "option" },
+				});
+				item.createSpan({
+					cls: "cs-palette-menu-item-label",
+					text: opt.label,
+				});
+				item.addEventListener("mouseenter", () => {
+					applyFoldState(opt.value, false);
+				});
+				item.addEventListener("click", () =>
+					selectFoldState(opt.value),
+				);
+			}
+		};
+		const openFoldMenu = (): void => {
+			if (foldMenuOpen) return;
+			closeMenu();
+			foldMenuOpen = true;
+			foldStateBeforeMenu = readFoldState();
+			buildFoldMenu();
+			foldMenu.removeClass("cs-palette-menu-hidden");
+			foldTrigger.addClass("is-open");
+			foldMenu.focus();
+		};
+		foldTrigger.addEventListener("click", () => {
+			if (foldMenuOpen) closeFoldMenu();
+			else openFoldMenu();
+		});
+		foldMenu.addEventListener("keydown", (ev) => {
+			if (ev.key === "Escape") {
+				ev.preventDefault();
+				closeFoldMenu();
+			}
+		});
+		// Close any popup when clicking outside both popup containers.
+		const popupOutsideClick = (ev: MouseEvent): void => {
+			const target = ev.target as Node | null;
+			if (!target) return;
+			if (dropdown.contains(target) || foldDropdown.contains(target))
+				return;
+			closeMenu();
+			closeFoldMenu();
+		};
+		this.removePopupOutsideClickListener?.();
+		document.addEventListener("click", popupOutsideClick);
+		this.removePopupOutsideClickListener = () => {
+			document.removeEventListener("click", popupOutsideClick);
+		};
 		// Action buttons — sticky bottom bar
 		const buttonContainer = this.modalEl.createDiv({
 			cls: "callout-studio-editor-buttons",
@@ -829,9 +965,6 @@ export class CalloutEditor extends Modal {
 		if (!this.calloutId) return false;
 		// Custom callouts must have a display name
 		if (!this.isBuiltIn && !this.displayName.trim()) return false;
-		// New callouts require a color preset to be picked (or any manual edit)
-		if (this.existingId === null && !this.customPresetSelected)
-			return false;
 		// ID must not conflict with existing callouts
 		const isIdChanged =
 			this.existingId !== null && this.calloutId !== this.existingId;
@@ -860,9 +993,14 @@ export class CalloutEditor extends Modal {
 		if (!this.idsTagInput) return;
 
 		if (!this.calloutId) {
-			this.idsTagInput.showExternalError(t("editor.idEmpty"));
+			if (this.hasHadCalloutId) {
+				this.idsTagInput.showExternalError(t("editor.idEmpty"));
+			} else {
+				this.idsTagInput.clearExternalError();
+			}
 			return;
 		}
+		this.hasHadCalloutId = true;
 
 		// Check for duplicate (only if new or id changed)
 		const isIdChanged =
@@ -967,6 +1105,7 @@ export class CalloutEditor extends Modal {
 		// Icon
 		const iconEl = titleEl.createDiv({ cls: "callout-icon" });
 		this.renderIconPreview(iconEl);
+		iconEl.style.color = `rgb(${rgbStr})`;
 
 		// Apply icon transform in preview
 		const transforms: string[] = [];
@@ -990,11 +1129,43 @@ export class CalloutEditor extends Modal {
 		titleInner.textContent =
 			this.displayName || t("editor.untitledCallout");
 
+		if (this.foldable) {
+			const foldBtn = titleEl.createEl("button", {
+				cls: "callout-studio-preview-fold-toggle",
+				attr: {
+					type: "button",
+					"aria-label": this.previewFoldCollapsed
+						? t("editor.expandPreview")
+						: t("editor.collapsePreview"),
+				},
+			});
+			setIcon(
+				foldBtn,
+				this.previewFoldCollapsed ? "chevron-right" : "chevron-down",
+			);
+			foldBtn.style.color = `rgb(${rgbStr})`;
+			const foldSvg = foldBtn.querySelector("svg");
+			if (foldSvg) {
+				foldSvg.style.color = `rgb(${rgbStr})`;
+				foldSvg.setAttribute("stroke", "currentColor");
+			}
+			foldBtn.addEventListener("click", (ev) => {
+				ev.preventDefault();
+				ev.stopPropagation();
+				this.previewFoldCollapsed = !this.previewFoldCollapsed;
+				this.updatePreview();
+			});
+		}
+
 		// Content
-		const contentEl = calloutEl.createDiv({ cls: "callout-content" });
-		contentEl.style.color = textColor;
-		const p = contentEl.createEl("p");
-		p.textContent = t("editor.loremIpsum");
+		if (this.previewFoldCollapsed) {
+			calloutEl.addClass("callout-studio-preview-collapsed");
+		} else {
+			const contentEl = calloutEl.createDiv({ cls: "callout-content" });
+			contentEl.style.color = textColor;
+			const p = contentEl.createEl("p");
+			p.textContent = t("editor.loremIpsum");
+		}
 
 		this.updateSaveState();
 	}
@@ -1172,6 +1343,8 @@ export class CalloutEditor extends Modal {
 	}
 
 	onClose(): void {
+		this.removePopupOutsideClickListener?.();
+		this.removePopupOutsideClickListener = null;
 		if (this.resolve) {
 			this.resolve(null);
 			this.resolve = null;
