@@ -112,8 +112,8 @@ export const en: Record<string, string> = {
 	// Settings — Keyboard shortcuts
 	"settings.openHotkeys": "Callout Studio hotkeys",
 	"settings.openHotkeysDesc":
-		"Open Obsidian's hotkeys settings filtered to Callout Studio commands.",
-	"settings.openHotkeysButton": "Show shortcuts",
+		"Open Obsidian's hotkeys settings for Callout Studio commands, where you can choose your own shortcuts for Create new callout type, Open settings, Unwrap from callout, and Wrap in callout. No shortcuts are assigned by default.",
+	"settings.openHotkeysButton": "Open hotkey settings",
 
 	// Settings — Icon sources
 	"settings.lucideIcons": "Lucide icons",

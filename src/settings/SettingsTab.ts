@@ -1019,9 +1019,9 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 			.setName(t("settings.openHotkeys"))
 			.setDesc(t("settings.openHotkeysDesc"))
 			.addButton((btn) => {
-				btn.setButtonText(t("settings.openHotkeysButton"))
-					.setIcon("keyboard")
-					.onClick(() => this.openObsidianHotkeys());
+				btn.setButtonText(t("settings.openHotkeysButton")).onClick(() =>
+					this.openObsidianHotkeys(),
+				);
 				btn.buttonEl.addClass("cs-settings-neutral-btn");
 			});
 	}

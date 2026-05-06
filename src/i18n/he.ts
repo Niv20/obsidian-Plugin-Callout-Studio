@@ -112,8 +112,8 @@ export const he: Record<string, string> = {
 	// Settings — Keyboard shortcuts
 	"settings.openHotkeys": "קיצורי המקשים של Callout Studio",
 	"settings.openHotkeysDesc":
-		"פתיחת מסך קיצורי המקשים של Obsidian כשהוא מסונן לפקודות של Callout Studio.",
-	"settings.openHotkeysButton": "הצגת הקיצורים",
+		"פתיחת מסך קיצורי המקשים של Obsidian עבור פקודות Callout Studio, שבו אפשר לבחור קיצורים עבור Create new callout type, Open settings, Unwrap from callout ו-Wrap in callout. כברירת מחדל לא מוגדרים קיצורי מקשים.",
+	"settings.openHotkeysButton": "פתח הגדרות",
 
 	// Settings — Icon sources
 	"settings.lucideIcons": "אייקוני Lucide",
