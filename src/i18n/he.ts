@@ -35,7 +35,6 @@ export const he: Record<string, string> = {
 		"יובאו {{count}} תיבות הבלטה; {{overwritten}} רשומות קיימות שודרגו מחדש.",
 
 	// Settings — Toolbar
-	"settings.searchPlaceholder": "סינון לפי שם או מזהה (ID)...",
 	"settings.addNewCallout": "+ הוספת תיבת הבלטה חדשה",
 	"settings.moreActions": "פעולות נוספות",
 	"settings.importCSS": "ייבוא ממקטע CSS (Snippet)",

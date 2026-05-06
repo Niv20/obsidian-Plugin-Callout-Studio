@@ -15,7 +15,6 @@ import { t } from "../i18n";
 
 export class CalloutStudioSettingsTab extends PluginSettingTab {
 	plugin: CalloutStudioPlugin;
-	private searchQuery = "";
 	private myCalloutsHeaderEl: HTMLElement | null = null;
 	private userListEl: HTMLElement | null = null;
 	private builtInListEl: HTMLElement | null = null;
@@ -77,19 +76,10 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 	// ─── Section A: My Callout Types ─────────────────────────
 
 	private renderCalloutTypesSection(containerEl: HTMLElement): void {
-		// Top header: large "Callout Studio" title with search inline
+		// Top header: large "Callout Studio" title
 		const headerSetting = new Setting(containerEl)
 			.setName(t("settings.title"))
-			.setHeading()
-			.addSearch((search) => {
-				search
-					.setPlaceholder(t("settings.searchPlaceholder"))
-					.setValue(this.searchQuery)
-					.onChange((value) => {
-						this.searchQuery = value;
-						this.refreshLists();
-					});
-			});
+			.setHeading();
 		headerSetting.settingEl.addClass("cs-header-row");
 
 		// Subheader: "My callout types" + Add new (button omitted when empty)
@@ -121,29 +111,19 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 		const userCallouts = this.plugin.registry.getUserDefined();
 		const hasUserCallouts = userCallouts.length > 0;
 		if (this.myCalloutsHeaderEl) {
-			const infoEl = this.myCalloutsHeaderEl.querySelector<HTMLElement>(
-				".setting-item-info",
-			);
+			const infoEl =
+				this.myCalloutsHeaderEl.querySelector<HTMLElement>(
+					".setting-item-info",
+				);
 			if (infoEl) infoEl.style.display = hasUserCallouts ? "" : "none";
 		}
 		if (!hasUserCallouts) return;
 
-		const filtered = this.filterCallouts(userCallouts);
-		if (filtered.length === 0) {
-			const emptyWrap = this.userListEl.createDiv({
-				cls: "cs-empty-state",
-			});
-			emptyWrap.createEl("p", {
-				text: t("settings.noMatch"),
-				cls: "callout-studio-empty-state",
-			});
-		} else {
-			const listEl = this.userListEl.createDiv({
-				cls: "callout-studio-callout-list",
-			});
-			for (const def of filtered) {
-				this.renderCalloutRow(listEl, def, false);
-			}
+		const listEl = this.userListEl.createDiv({
+			cls: "callout-studio-callout-list",
+		});
+		for (const def of userCallouts) {
+			this.renderCalloutRow(listEl, def, false);
 		}
 	}
 
@@ -163,12 +143,11 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 		this.builtInListEl.empty();
 
 		const builtInCallouts = this.plugin.registry.getBuiltIn();
-		const filtered = this.filterCallouts(builtInCallouts);
 		const listEl = this.builtInListEl.createDiv({
 			cls: "callout-studio-callout-list",
 		});
 
-		for (const def of filtered) {
+		for (const def of builtInCallouts) {
 			this.renderCalloutRow(listEl, def, true);
 		}
 	}
@@ -1054,17 +1033,6 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 	}
 
 	// ─── Helpers ─────────────────────────────────────────────
-
-	private filterCallouts(callouts: CalloutDefinition[]): CalloutDefinition[] {
-		if (!this.searchQuery) return callouts;
-		const q = this.searchQuery.toLowerCase();
-		return callouts.filter(
-			(d) =>
-				d.displayName.toLowerCase().includes(q) ||
-				d.id.toLowerCase().includes(q) ||
-				(d.aliases ?? []).some((a) => a.toLowerCase().includes(q)),
-		);
-	}
 
 	private async importFromSnippets(): Promise<void> {
 		try {

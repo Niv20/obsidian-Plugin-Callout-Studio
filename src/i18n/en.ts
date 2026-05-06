@@ -36,7 +36,6 @@ export const en: Record<string, string> = {
 		"Imported {{count}} callout type(s); {{overwritten}} existing entry/entries were overwritten.",
 
 	// Settings — Toolbar
-	"settings.searchPlaceholder": "Filter by name or ID...",
 	"settings.addNewCallout": "+ Add new callout",
 	"settings.moreActions": "More actions",
 	"settings.importCSS": "Import from CSS snippet",
