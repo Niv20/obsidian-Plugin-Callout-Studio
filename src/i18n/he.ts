@@ -3,9 +3,7 @@ export const he: Record<string, string> = {
 	"cmd.openSettings": "פתיחת הגדרות",
 	"cmd.createCallout": "יצירת סוג תיבת הבלטה חדש",
 	"cmd.calloutWrap": "עטיפה ב-callout",
-	"cmd.calloutWrapSelection": "עטיפת הבחירה ב-callout",
 	"cmd.calloutUnwrap": "פתיחה מתוך callout",
-	"cmd.calloutUnwrapSelection": "פתיחת הבחירה מתוך callout",
 
 	// Autocomplete
 	"autocomplete.createNew": 'צור הבלטה חדשה: "{{name}}"',
@@ -27,6 +25,7 @@ export const he: Record<string, string> = {
 	"settings.builtInCallouts": "תיבות הבלטה מובנות",
 	"settings.contextMenu": "תפריט הקשר",
 	"settings.autocomplete": "השלמה אוטומטית",
+	"settings.keyboardShortcuts": "קיצורי מקשים",
 	"settings.iconSources": "אייקוני Google Material",
 	"settings.colorMode": "מצב צבע",
 	"settings.importExport": "ייבוא / ייצוא",
@@ -110,6 +109,12 @@ export const he: Record<string, string> = {
 		"הצגת תצוגה מקדימה של אייקונים בהשלמה האוטומטית",
 	"settings.showColorPreviews": "הצגת תצוגה מקדימה של צבעים",
 
+	// Settings — Keyboard shortcuts
+	"settings.openHotkeys": "קיצורי המקשים של Callout Studio",
+	"settings.openHotkeysDesc":
+		"פתיחת מסך קיצורי המקשים של Obsidian כשהוא מסונן לפקודות של Callout Studio.",
+	"settings.openHotkeysButton": "הצגת הקיצורים",
+
 	// Settings — Icon sources
 	"settings.lucideIcons": "אייקוני Lucide",
 	"settings.lucideIconsDesc":
@@ -175,6 +180,10 @@ export const he: Record<string, string> = {
 	"notice.nothingToWrap": "אין תוכן לעטוף.",
 	"notice.selectionContainsNoContent": "הבחירה לא מכילה תוכן.",
 	"notice.cursorNotInsideCallout": "הסמן אינו נמצא בתוך callout.",
+	"notice.openHotkeysFailed":
+		"לא ניתן לפתוח את מסך קיצורי המקשים של Obsidian.",
+	"notice.filterHotkeysFailed":
+		"מסך קיצורי המקשים נפתח, אבל לא ניתן היה להפעיל סינון ל-Callout Studio.",
 
 	// Callout Editor
 	"editor.editCallout": "עריכת תיבת הבלטה",

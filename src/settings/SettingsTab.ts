@@ -22,6 +22,18 @@ import {
 } from "../utils/vaultCalloutScanner";
 import { t } from "../i18n";
 
+type ObsidianSettingsPane = {
+	open?: () => void;
+	openTabById?: (id: string) => void;
+};
+
+type AppWithSettingsPane = App & {
+	setting?: ObsidianSettingsPane;
+};
+
+const HOTKEY_SEARCH_MAX_ATTEMPTS = 12;
+const HOTKEY_SEARCH_RETRY_MS = 50;
+
 export class CalloutStudioSettingsTab extends PluginSettingTab {
 	plugin: CalloutStudioPlugin;
 	private userListEl: HTMLElement | null = null;
@@ -86,6 +98,7 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 		this.renderGlobalStyleSection(containerEl);
 		this.renderAutocompleteSettings(containerEl);
 		this.renderContextMenuSettings(containerEl);
+		this.renderHotkeySettings(containerEl);
 		this.renderIconSourceSettings(containerEl);
 		this.renderImportExportSection(containerEl);
 		this.renderResetSection(containerEl);
@@ -949,6 +962,100 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 		renderItems();
 	}
 
+	private renderHotkeySettings(containerEl: HTMLElement): void {
+		new Setting(containerEl)
+			.setName(t("settings.keyboardShortcuts"))
+			.setHeading();
+
+		new Setting(containerEl)
+			.setName(t("settings.openHotkeys"))
+			.setDesc(t("settings.openHotkeysDesc"))
+			.addButton((btn) => {
+				btn.setButtonText(t("settings.openHotkeysButton"))
+					.setIcon("keyboard")
+					.onClick(() => this.openObsidianHotkeys());
+				btn.buttonEl.addClass("cs-settings-neutral-btn");
+			});
+	}
+
+	private openObsidianHotkeys(): void {
+		const settingsPane = (this.app as AppWithSettingsPane).setting;
+
+		if (!settingsPane?.openTabById) {
+			new Notice(t("notice.openHotkeysFailed"));
+			return;
+		}
+
+		try {
+			settingsPane.open?.();
+			settingsPane.openTabById("hotkeys");
+			this.filterHotkeysToPlugin();
+		} catch {
+			new Notice(t("notice.openHotkeysFailed"));
+		}
+	}
+
+	private filterHotkeysToPlugin(attempt = 1): void {
+		if (this.applyHotkeySearchFilter(this.plugin.manifest.name)) return;
+
+		if (attempt >= HOTKEY_SEARCH_MAX_ATTEMPTS) {
+			new Notice(t("notice.filterHotkeysFailed"));
+			return;
+		}
+
+		window.setTimeout(() => {
+			this.filterHotkeysToPlugin(attempt + 1);
+		}, HOTKEY_SEARCH_RETRY_MS);
+	}
+
+	private applyHotkeySearchFilter(query: string): boolean {
+		const settingsModal = document.querySelector<HTMLElement>(
+			".modal.mod-settings",
+		);
+		const searchRoot =
+			settingsModal?.querySelector<HTMLElement>(
+				".vertical-tab-content-container",
+			) ?? settingsModal;
+
+		if (!searchRoot) return false;
+
+		const searchInput = this.findVisibleInput(searchRoot, [
+			"input[type='search']",
+			".search-input-container input",
+			"input[placeholder]",
+		]);
+
+		if (!searchInput) return false;
+
+		searchInput.focus();
+		searchInput.value = query;
+		searchInput.dispatchEvent(new Event("input", { bubbles: true }));
+		searchInput.dispatchEvent(new Event("change", { bubbles: true }));
+		searchInput.select();
+		return true;
+	}
+
+	private findVisibleInput(
+		root: HTMLElement,
+		selectors: string[],
+	): HTMLInputElement | null {
+		for (const selector of selectors) {
+			const inputs = Array.from(
+				root.querySelectorAll<HTMLInputElement>(selector),
+			);
+			const visibleInput = inputs.find(
+				(input) =>
+					!input.disabled &&
+					!input.readOnly &&
+					input.getClientRects().length > 0,
+			);
+
+			if (visibleInput) return visibleInput;
+		}
+
+		return null;
+	}
+
 	// ─── Section D: Autocomplete Settings ────────────────────
 
 	private renderAutocompleteSettings(containerEl: HTMLElement): void {
@@ -1373,7 +1480,6 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 		const links = footer.createEl("p", {
 			cls: "callout-studio-footer-links",
 		});
-		// eslint-disable-next-line obsidianmd/ui/sentence-case
 		links.createEl("span", { text: t("footer.madeBy") });
 		links.createEl("a", {
 			text: "GitHub",

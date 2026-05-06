@@ -87,11 +87,8 @@ The plugin now includes editor commands for wrapping and unwrapping callout bloc
 
 - `Wrap in callout` (`callout-wrap`): wraps the current paragraph or the selected span in a new Obsidian callout block and places the cursor after `> [!` so the existing autocomplete flow can complete the type.
 - `Unwrap from callout` (`callout-unwrap`): removes one callout level from the callout under the cursor or selection.
-- `Wrap selection in callout` (`callout-wrap-selection`): selection-only command with a default hotkey of `Shift + >`.
-- `Unwrap selection from callout` (`callout-unwrap-selection`): selection-only command with a default hotkey of `Shift + <`.
 
-The default wrap and unwrap shortcuts are implemented as normal Obsidian command hotkeys, so users can change them in **Settings → Hotkeys** or read more in the Obsidian Settings guide: https://obsidian.md/help/settings and the Hotkeys section: https://obsidian.md/help/hotkeys.
-When no text is selected, those hotkeys fall back to inserting the literal `>` or `<` character.
+Callout Studio does not assign default keyboard shortcuts. Users can choose their own shortcuts in **Settings → Hotkeys** or from the plugin settings shortcut button.
 
 ## First time developing plugins?
 

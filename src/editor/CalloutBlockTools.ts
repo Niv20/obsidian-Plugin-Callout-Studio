@@ -377,6 +377,7 @@ export const wrapSelectionInCallout = (
 		return false;
 	}
 
+	const contentStartLine = firstContentLine;
 	const nestLevel = countLeadingQuoteTokens(editor.getLine(firstContentLine));
 	const prefix = buildPrefix(nestLevel);
 	const wrappingExistingCallout = isCalloutHeaderLine(
@@ -388,7 +389,7 @@ export const wrapSelectionInCallout = (
 	const headerLine = `${headerPrefix}> [!`;
 	const replacementLines: string[] = [headerLine];
 
-	for (let line = startLine; line <= endLine; line++) {
+	for (let line = contentStartLine; line <= endLine; line++) {
 		const current = editor.getLine(line);
 		if (isBlankCalloutLine(current)) {
 			const existingRelativeDepth = Math.max(

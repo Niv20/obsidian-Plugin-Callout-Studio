@@ -3,9 +3,7 @@ export const en: Record<string, string> = {
 	"cmd.openSettings": "Open settings",
 	"cmd.createCallout": "Create new callout type",
 	"cmd.calloutWrap": "Wrap in callout",
-	"cmd.calloutWrapSelection": "Wrap selection in callout",
 	"cmd.calloutUnwrap": "Unwrap from callout",
-	"cmd.calloutUnwrapSelection": "Unwrap selection from callout",
 
 	// Autocomplete
 	"autocomplete.createNew": 'Create new callout: "{{name}}"',
@@ -28,6 +26,7 @@ export const en: Record<string, string> = {
 	"settings.builtInCallouts": "Built-in callouts",
 	"settings.contextMenu": "Context menu",
 	"settings.autocomplete": "Autocomplete",
+	"settings.keyboardShortcuts": "Keyboard shortcuts",
 	"settings.iconSources": "Google Material Icons",
 	"settings.colorMode": "Color mode",
 	"settings.importExport": "Import / export",
@@ -110,6 +109,12 @@ export const en: Record<string, string> = {
 	"settings.showIconPreviews": "Show icon previews in autocomplete",
 	"settings.showColorPreviews": "Show color previews",
 
+	// Settings — Keyboard shortcuts
+	"settings.openHotkeys": "Callout Studio hotkeys",
+	"settings.openHotkeysDesc":
+		"Open Obsidian's hotkeys settings filtered to Callout Studio commands.",
+	"settings.openHotkeysButton": "Show shortcuts",
+
 	// Settings — Icon sources
 	"settings.lucideIcons": "Lucide icons",
 	"settings.lucideIconsDesc": "Built-in Obsidian icons (~1,300 icons)",
@@ -175,6 +180,9 @@ export const en: Record<string, string> = {
 	"notice.nothingToWrap": "Nothing to wrap.",
 	"notice.selectionContainsNoContent": "Selection contains no content.",
 	"notice.cursorNotInsideCallout": "Cursor is not inside a callout.",
+	"notice.openHotkeysFailed": "Could not open Obsidian hotkeys settings.",
+	"notice.filterHotkeysFailed":
+		"Opened Obsidian hotkeys, but could not apply the Callout Studio filter.",
 
 	// Callout Editor
 	"editor.editCallout": "Edit callout",
