@@ -450,7 +450,7 @@ export class CalloutEditor extends Modal {
 		});
 		const triggerLabel = trigger.createSpan({
 			cls: "cs-palette-trigger-label",
-			text: t("editor.paletteNone"),
+			text: t("editor.paletteDefault"),
 		});
 		const triggerCaret = trigger.createSpan({
 			cls: "cs-palette-trigger-caret",
@@ -510,25 +510,29 @@ export class CalloutEditor extends Modal {
 				size: 16,
 			});
 		};
-		if (this.existingId === null) {
-			triggerLabel.setText(t("editor.paletteDefault"));
-			renderTriggerCircles(this.colorLight, this.colorDark);
-		} else if (this.isBuiltIn) {
-			const matchedEntry = paletteEntries.find(
-				(e) =>
-					e.palette.colorLight.toLowerCase() ===
-					this.colorLight.toLowerCase(),
+		const matchesPalette = (
+			palette: (typeof COLOR_PALETTES)[number],
+		): boolean =>
+			palette.colorLight.toLowerCase() ===
+				this.colorLight.toLowerCase() &&
+			palette.colorDark.toLowerCase() === this.colorDark.toLowerCase() &&
+			(palette.bgColorLight?.toLowerCase() ?? "") ===
+				this.bgColorLight.toLowerCase() &&
+			(palette.bgColorDark?.toLowerCase() ?? "") ===
+				this.bgColorDark.toLowerCase();
+
+		const matchedEntry = paletteEntries.find(({ palette }) =>
+			matchesPalette(palette),
+		);
+		if (matchedEntry) {
+			selectedId = matchedEntry.id;
+			triggerLabel.setText(matchedEntry.name);
+			renderTriggerCircles(
+				matchedEntry.palette.colorLight,
+				matchedEntry.palette.colorDark,
 			);
-			if (matchedEntry) {
-				selectedId = matchedEntry.id;
-				triggerLabel.setText(matchedEntry.name);
-				renderTriggerCircles(
-					matchedEntry.palette.colorLight,
-					matchedEntry.palette.colorDark,
-				);
-			} else {
-				renderTriggerCircles(this.colorLight, this.colorDark);
-			}
+		} else {
+			renderTriggerCircles(this.colorLight, this.colorDark);
 		}
 
 		const applyPaletteColors = (
