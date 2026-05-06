@@ -934,25 +934,6 @@ export class CalloutEditor extends Modal {
 				}
 				break;
 			}
-			case "svg": {
-				const svgData = this.plugin.registry.customSvgIcons.find(
-					(s) => s.name === this.icon.value,
-				);
-				if (svgData) {
-					const parser = new DOMParser();
-					const doc = parser.parseFromString(
-						svgData.svg,
-						"image/svg+xml",
-					);
-					const svgEl = doc.documentElement;
-					container.appendChild(
-						container.doc.importNode(svgEl, true),
-					);
-				} else {
-					container.textContent = "?";
-				}
-				break;
-			}
 			case "emoji":
 				container.textContent = this.icon.value;
 				break;

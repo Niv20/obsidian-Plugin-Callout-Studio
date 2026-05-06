@@ -6,10 +6,6 @@ import type {
 	CalloutIcon,
 } from "../types";
 
-// ── Constants ───────────────────────────────────────────────────────────
-
-/** Maximum bytes allowed for a custom SVG upload */
-export const MAX_CUSTOM_SVG_BYTES = 102_400; // 100 KB
 
 // ── Lucide ──────────────────────────────────────────────────────────────
 
@@ -305,13 +301,6 @@ function cleanElement(el: Element): void {
 			el.removeAttribute(attr);
 		}
 	}
-}
-
-/**
- * Validates a CustomSvgIcon name: only lowercase a-z, 0-9, hyphens.
- */
-export function isValidSvgIconName(name: string): boolean {
-	return /^[a-z0-9][a-z0-9-]*$/.test(name);
 }
 
 /**

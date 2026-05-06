@@ -75,13 +75,6 @@ export const he: Record<string, string> = {
 	"settings.borderLeft": "שמאל",
 	"settings.borderWidth": "עובי גבול",
 	"settings.borderWidthDesc": "עובי הגבול בפיקסלים לצדדים פעילים",
-	"settings.alignToTitle": "יישור לכותרת",
-	"settings.alignToTitleDesc":
-		"הטקסט מתחיל באותו קו אנכי של הכותרת במקום של האייקון",
-	"settings.titleLayout": "מבנה הכותרת",
-	"settings.titleLayoutDefault": "ברירת מחדל",
-	"settings.titleLayoutAlign": "יישור לכותרת",
-	"settings.titleLayoutInline": "אייקון וטקסט באותה שורה",
 	"settings.fontScaleGroup": "סקאלת פונט",
 	"settings.titleScale": "כותרת",
 	"settings.contentScale": "תוכן",
@@ -116,8 +109,6 @@ export const he: Record<string, string> = {
 	"settings.materialIcons": "אייקוני Google Material",
 	"settings.materialIconsDesc":
 		"דורש חיבור לאינטרנט או מטמון מקומי (כ-3,000 אייקונים)",
-	"settings.customSvg": "SVG מותאם אישית",
-	"settings.customSvgDesc": "אייקוני SVG שהועלו על ידי המשתמש",
 	"settings.materialStyleDefault": "סגנון ברירת מחדל לאייקוני Material",
 	"settings.styleOutlined": "קו מתאר (Outlined)",
 	"settings.styleFilled": "מלא (Filled)",
@@ -148,10 +139,10 @@ export const he: Record<string, string> = {
 	// Settings — Reset
 	"settings.resetAll": "איפוס",
 	"settings.resetAllDesc":
-		"מחיקת כל תיבות ההבלטה, איפוס מובנות, סגנונות גלובליות (גבולות, קנה מידות, צורה), אייקוני SVG מותאמים, וקבצי Material SVG שהורדו.",
+		"מחיקת כל תיבות ההבלטה, איפוס מובנות, סגנונות גלובליות (גבולות, קנה מידות, צורה) וקבצי Material SVG שהורדו.",
 	"settings.resetAllButton": "איפוס הכל",
 	"settings.resetAllConfirm":
-		"פעולה זו תמחק תיבות הבלטה מותאמות, תאפס מובנות, סגנונות גלובליות, אייקוני SVG מותאמים וקבצי Material SVG. לא ניתן לבטל. להמשיך?",
+		"פעולה זו תמחק תיבות הבלטה מותאמות, תאפס מובנות, סגנונות גלובליות וקבצי Material SVG. לא ניתן לבטל. להמשיך?",
 	"notice.resetAllDone": "הכל אופס לברירות המחדל.",
 
 	// Settings — Language
@@ -223,25 +214,12 @@ export const he: Record<string, string> = {
 	"iconPicker.cancel": "ביטול",
 	"iconPicker.lucide": "Lucide",
 	"iconPicker.material": "Material",
-	"iconPicker.customSvg": "SVG מותאם אישית",
 	"iconPicker.searchLucide": "חיפוש אייקוני Lucide...",
 	"iconPicker.loadMore": "טען עוד",
 	"iconPicker.searchMaterial": "חיפוש אייקוני Material...",
 	"iconPicker.iconsLoading": "האייקונים נטענים, נא להמתין...",
 	"iconPicker.loadFailed": "טעינת אייקוני Material נכשלה: {{error}}",
 	"iconPicker.allCategories": "כל הקטגוריות",
-	"iconPicker.nameLabel": "שם:",
-	"iconPicker.namePlaceholder": "my-icon-name",
-	"iconPicker.svgPlaceholder": "הדבק כאן קוד SVG, או גרור ושחרר קובץ SVG...",
-	"iconPicker.addSvg": "הוספת אייקון SVG",
-	"iconPicker.nameInvalid":
-		"השם חייב להכיל אותיות באנגלית (קטנות), מספרים ומקפים בלבד.",
-	"iconPicker.nameExists": "אייקון SVG עם שם זה כבר קיים.",
-	"iconPicker.invalidSvg": "קוד SVG לא תקין. נא לבדוק את הקלט.",
-	"iconPicker.svgTooLarge":
-		"ה-SVG חורג ממגבלת 100 KB. יש להשתמש באייקון פשוט יותר.",
-	"iconPicker.svgGallery": "גלריית SVG",
-	"iconPicker.noSvgIcons": "אין עדיין אייקוני SVG מותאמים אישית.",
 	"iconPicker.noIconSelected": "לא נבחר אייקון",
 	"iconPicker.noResults": "לא נמצאו אייקונים התואמים לחיפוש.",
 	"iconPicker.delete": "מחיקה",

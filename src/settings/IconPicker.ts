@@ -4,18 +4,14 @@ import type {
 	CalloutIcon,
 	MaterialIconMeta,
 	MaterialIconStyle,
-	CustomSvgIcon,
 } from "../types";
 import {
 	getLucideIcons,
 	loadMaterialIcons,
 	filterMaterialIcons,
 	getMaterialCategories,
-	sanitizeSVG,
-	isValidSvgIconName,
 	makeIcon,
 	materialFontFamily,
-	MAX_CUSTOM_SVG_BYTES,
 } from "../utils/iconLoader";
 import { t } from "../i18n";
 
@@ -27,7 +23,7 @@ export class IconPicker extends Modal {
 	private currentIcon: CalloutIcon | null;
 
 	// State
-	private activeTab: "lucide" | "material" | "svg" = "lucide";
+	private activeTab: "lucide" | "material" = "lucide";
 	private searchQuery = "";
 	private selectedIcon: CalloutIcon | null = null;
 
@@ -45,9 +41,6 @@ export class IconPicker extends Modal {
 	private materialLoading = false;
 	private materialError: string | null = null;
 	private materialLoadPromise: Promise<void> | null = null;
-
-	// SVG state
-	private customSvgs: CustomSvgIcon[] = [];
 
 	// DOM refs
 	private tabsEl!: HTMLElement;
@@ -84,9 +77,6 @@ export class IconPicker extends Modal {
 	onOpen(): void {
 		this.modalEl.addClass("callout-studio-icon-picker");
 		this.titleEl.setText(t("iconPicker.pickIcon"));
-
-		// Load SVG gallery from plugin data
-		this.customSvgs = [...(this.plugin.registry.customSvgIcons ?? [])];
 
 		// Preload Material icons metadata so it's ready when the tab is opened
 		this.preloadMaterialIcons();
@@ -161,12 +151,11 @@ export class IconPicker extends Modal {
 		this.tabsEl.setAttribute("role", "tablist");
 
 		const tabs: Array<{
-			id: "lucide" | "material" | "svg";
+			id: "lucide" | "material";
 			label: string;
 		}> = [
 			{ id: "lucide", label: t("iconPicker.lucide") },
 			{ id: "material", label: t("iconPicker.material") },
-			{ id: "svg", label: t("iconPicker.customSvg") },
 		];
 
 		for (const tab of tabs) {
@@ -203,9 +192,6 @@ export class IconPicker extends Modal {
 				break;
 			case "material":
 				this.renderMaterialTab();
-				break;
-			case "svg":
-				this.renderSvgTab();
 				break;
 		}
 	}
@@ -623,176 +609,6 @@ export class IconPicker extends Modal {
 		this.updatePreview();
 	}
 
-	// ── SVG Tab ─────────────────────────────────────────────────────────
-
-	private renderSvgTab(): void {
-		// Input area
-		const inputArea = this.tabContentEl.createDiv("icon-picker-svg-input");
-
-		// Name input
-		const nameRow = inputArea.createDiv("icon-picker-svg-name-row");
-		nameRow.createSpan({ text: t("iconPicker.nameLabel") });
-		const nameInput = nameRow.createEl("input", {
-			type: "text",
-			placeholder: t("iconPicker.namePlaceholder"),
-		});
-
-		// SVG textarea
-		const textarea = inputArea.createEl("textarea", {
-			cls: "icon-picker-svg-textarea",
-			placeholder: t("iconPicker.svgPlaceholder"),
-			attr: { rows: "6" },
-		});
-
-		// Drag-drop support
-		textarea.addEventListener("dragover", (e) => {
-			e.preventDefault();
-			textarea.addClass("is-drag-over");
-		});
-		textarea.addEventListener("dragleave", () => {
-			textarea.removeClass("is-drag-over");
-		});
-		textarea.addEventListener("drop", (e) => {
-			e.preventDefault();
-			textarea.removeClass("is-drag-over");
-			const file = e.dataTransfer?.files[0];
-			if (file && file.type === "image/svg+xml") {
-				const reader = new FileReader();
-				reader.onload = () => {
-					textarea.value = reader.result as string;
-				};
-				reader.readAsText(file);
-			}
-		});
-
-		// Error display
-		const errorEl = inputArea.createDiv("icon-picker-svg-error");
-		errorEl.hide();
-
-		// Add button
-		const addBtn = inputArea.createEl("button", {
-			text: t("iconPicker.addSvg"),
-			cls: "mod-cta",
-		});
-		addBtn.addEventListener("click", () => {
-			const name = nameInput.value.trim();
-			const raw = textarea.value.trim();
-
-			errorEl.hide();
-
-			if (!name || !isValidSvgIconName(name)) {
-				errorEl.setText(t("iconPicker.nameInvalid"));
-				errorEl.show();
-				return;
-			}
-
-			if (this.customSvgs.some((s) => s.name === name)) {
-				errorEl.setText(t("iconPicker.nameExists"));
-				errorEl.show();
-				return;
-			}
-
-			// Check size limit
-			if (new Blob([raw]).size > MAX_CUSTOM_SVG_BYTES) {
-				errorEl.setText(t("iconPicker.svgTooLarge"));
-				errorEl.show();
-				return;
-			}
-
-			const sanitized = sanitizeSVG(raw);
-			if (!sanitized) {
-				errorEl.setText(t("iconPicker.invalidSvg"));
-				errorEl.show();
-				return;
-			}
-
-			this.customSvgs.push({ name, svg: sanitized });
-			this.plugin.registry.customSvgIcons = [...this.customSvgs];
-			void this.plugin.saveSettings();
-
-			nameInput.value = "";
-			textarea.value = "";
-			this.renderSvgGallery(gallery);
-		});
-
-		// Gallery of existing SVGs
-		this.tabContentEl.createEl("h4", {
-			text: t("iconPicker.svgGallery"),
-		});
-		const gallery = this.tabContentEl.createDiv("icon-picker-svg-gallery");
-		this.renderSvgGallery(gallery);
-	}
-
-	private renderSvgGallery(gallery: HTMLElement): void {
-		gallery.empty();
-
-		if (this.customSvgs.length === 0) {
-			gallery
-				.createDiv("icon-picker-empty")
-				.setText(t("iconPicker.noSvgIcons"));
-			return;
-		}
-
-		for (const svg of this.customSvgs) {
-			const cell = gallery.createDiv({
-				cls: "icon-picker-cell icon-picker-svg-cell",
-				attr: {
-					"aria-label": svg.name,
-					tabindex: "0",
-					role: "button",
-				},
-			});
-
-			const iconEl = cell.createDiv("icon-picker-svg-preview");
-			const parser = new DOMParser();
-			const doc = parser.parseFromString(svg.svg, "image/svg+xml");
-			const svgEl = doc.documentElement;
-			iconEl.appendChild(iconEl.doc.importNode(svgEl, true));
-
-			const label = cell.createDiv("icon-picker-svg-label");
-			label.setText(svg.name);
-
-			if (
-				this.selectedIcon?.type === "svg" &&
-				this.selectedIcon.value === svg.name
-			) {
-				cell.addClass("is-selected");
-			}
-
-			cell.addEventListener("click", () => {
-				this.selectedIcon = makeIcon("svg", svg.name);
-				gallery
-					.querySelectorAll(".is-selected")
-					.forEach((el) => el.removeClass("is-selected"));
-				cell.addClass("is-selected");
-				this.updatePreview();
-			});
-
-			// Delete button
-			const deleteBtn = cell.createEl("button", {
-				cls: "icon-picker-svg-delete",
-				attr: { "aria-label": t("iconPicker.delete") },
-			});
-			setIcon(deleteBtn, "trash-2");
-			deleteBtn.addEventListener("click", (e) => {
-				e.stopPropagation();
-				this.customSvgs = this.customSvgs.filter(
-					(s) => s.name !== svg.name,
-				);
-				this.plugin.registry.customSvgIcons = [...this.customSvgs];
-				void this.plugin.saveSettings();
-				if (
-					this.selectedIcon?.type === "svg" &&
-					this.selectedIcon.value === svg.name
-				) {
-					this.selectedIcon = null;
-					this.updatePreview();
-				}
-				this.renderSvgGallery(gallery);
-			});
-		}
-	}
-
 	// ── Preview & Confirm ───────────────────────────────────────────────
 
 	private updatePreview(): void {
@@ -836,24 +652,6 @@ export class IconPicker extends Modal {
 				labelEl.setText(
 					`material: ${this.selectedIcon.value} (${this.selectedIcon.style ?? "outlined"}, ${this.selectedIcon.weight ?? 400})`,
 				);
-				break;
-			}
-			case "svg": {
-				const svgData = this.customSvgs.find(
-					(s) => s.name === this.selectedIcon?.value,
-				);
-				if (svgData) {
-					const parser = new DOMParser();
-					const doc = parser.parseFromString(
-						svgData.svg,
-						"image/svg+xml",
-					);
-					const svgEl = doc.documentElement;
-					iconContainer.appendChild(
-						iconContainer.doc.importNode(svgEl, true),
-					);
-				}
-				labelEl.setText(`svg: ${this.selectedIcon.value}`);
 				break;
 			}
 		}

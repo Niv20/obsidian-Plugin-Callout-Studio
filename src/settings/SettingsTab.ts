@@ -460,25 +460,6 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 				}
 				break;
 			}
-			case "svg": {
-				const svgData = this.plugin.registry.customSvgIcons.find(
-					(s) => s.name === def.icon.value,
-				);
-				if (svgData) {
-					const parser = new DOMParser();
-					const doc = parser.parseFromString(
-						svgData.svg,
-						"image/svg+xml",
-					);
-					const svgEl = doc.documentElement;
-					container.appendChild(
-						container.doc.importNode(svgEl, true),
-					);
-				} else {
-					container.textContent = "?";
-				}
-				break;
-			}
 			case "emoji":
 				container.textContent = def.icon.value;
 				break;
@@ -605,14 +586,6 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 			content.setCssProps({
 				"--cs-preview-content-size": `${globalStyle.contentScale}em`,
 			});
-
-			callout.removeClass("cs-layout-align");
-			callout.removeClass("cs-layout-inline");
-			if (globalStyle.titleLayout === "alignToTitle") {
-				callout.addClass("cs-layout-align");
-			} else if (globalStyle.titleLayout === "inline") {
-				callout.addClass("cs-layout-inline");
-			}
 		};
 
 		updatePreview();
@@ -827,41 +800,6 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 					this.plugin.cssInjector.inject();
 				});
 			});
-
-		// Align/Inline title layout — 3-state segmented control
-		const layoutSetting = new Setting(shapeGroupEl).setName(
-			t("settings.titleLayout"),
-		);
-		const layoutSegmented = layoutSetting.controlEl.createDiv({
-			cls: "cs-segmented",
-		});
-		const layoutOptions: {
-			value: "default" | "alignToTitle" | "inline";
-			label: string;
-		}[] = [
-			{ value: "default", label: t("settings.titleLayoutDefault") },
-			{ value: "alignToTitle", label: t("settings.titleLayoutAlign") },
-			{ value: "inline", label: t("settings.titleLayoutInline") },
-		];
-		const layoutBtns: HTMLButtonElement[] = [];
-		for (const opt of layoutOptions) {
-			const btn = layoutSegmented.createEl("button", {
-				cls: `cs-segmented-btn${
-					globalStyle.titleLayout === opt.value ? " is-active" : ""
-				}`,
-				text: opt.label,
-			});
-			// eslint-disable-next-line @typescript-eslint/no-misused-promises
-			btn.addEventListener("click", async () => {
-				globalStyle.titleLayout = opt.value;
-				for (const b of layoutBtns) b.removeClass("is-active");
-				btn.addClass("is-active");
-				await this.plugin.saveSettings();
-				this.plugin.cssInjector.inject();
-				updatePreview();
-			});
-			layoutBtns.push(btn);
-		}
 	}
 
 	// ─── Section C: Context Menu Settings ────────────────────

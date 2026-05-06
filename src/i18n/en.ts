@@ -77,13 +77,6 @@ export const en: Record<string, string> = {
 	"settings.borderLeft": "Left",
 	"settings.borderWidth": "Border thickness",
 	"settings.borderWidthDesc": "Thickness in pixels for active borders",
-	"settings.alignToTitle": "Align to title",
-	"settings.alignToTitleDesc":
-		"Content text starts at the same vertical line as the title instead of the icon",
-	"settings.titleLayout": "Title layout",
-	"settings.titleLayoutDefault": "Default",
-	"settings.titleLayoutAlign": "Align to title",
-	"settings.titleLayoutInline": "Inline icon + text",
 	"settings.fontScaleGroup": "Font scale",
 	"settings.titleScale": "Title",
 	"settings.contentScale": "Content",
@@ -116,8 +109,6 @@ export const en: Record<string, string> = {
 	"settings.materialIcons": "Google material icons",
 	"settings.materialIconsDesc":
 		"Requires internet or local cache (~3,000 icons)",
-	"settings.customSvg": "Custom SVG",
-	"settings.customSvgDesc": "User-uploaded SVG icons",
 	"settings.materialStyleDefault": "Material icons style default",
 	"settings.styleOutlined": "Outlined",
 	"settings.styleFilled": "Filled",
@@ -148,10 +139,10 @@ export const en: Record<string, string> = {
 	// Settings — Reset
 	"settings.resetAll": "Reset",
 	"settings.resetAllDesc":
-		"Delete all user callouts, reset built-in callouts, global styles (borders, font scale, shape), custom SVG icons, and downloaded Material SVGs.",
+		"Delete all user callouts, reset built-in callouts, global styles (borders, font scale, shape), and downloaded Material SVGs.",
 	"settings.resetAllButton": "Reset everything",
 	"settings.resetAllConfirm":
-		"This will delete all custom callouts, reset built-in callouts, global styles, custom SVG icons, and all cached Material SVGs. This action cannot be undone. Are you sure?",
+		"This will delete all custom callouts, reset built-in callouts, global styles, and all cached Material SVGs. This action cannot be undone. Are you sure?",
 	"notice.resetAllDone": "Everything has been reset to defaults.",
 
 	// Settings — Language

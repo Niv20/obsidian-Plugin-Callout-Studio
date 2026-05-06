@@ -1,7 +1,6 @@
 import type {
 	CalloutDefinition,
 	ContextMenuSettings,
-	CustomSvgIcon,
 	LegacyPopupSettings,
 	MaterialIconsCacheData,
 	MaterialIconStyle,
@@ -26,7 +25,6 @@ export class CalloutRegistry {
 	private changeCallbacks: RegistryChangeCallback[] = [];
 	settings: PluginSettings;
 	materialIconsCache?: MaterialIconsCacheData;
-	customSvgIcons: CustomSvgIcon[] = [];
 	materialSvgCache: MaterialSvgCacheEntry[] = [];
 
 	constructor() {
@@ -68,26 +66,13 @@ export class CalloutRegistry {
 		if (data.settings) {
 			const savedSettings = data.settings as LegacySavedSettings;
 			const savedGlobal = savedSettings.globalStyle as
-				| (Partial<PluginSettings["globalStyle"]> & {
-						alignToTitle?: boolean;
-				  })
+				| Partial<PluginSettings["globalStyle"]>
 				| undefined;
 			const legacyPopup = savedSettings.popup;
-			// Migrate legacy boolean alignToTitle → titleLayout enum
-			let migratedTitleLayout =
-				savedGlobal?.titleLayout ??
-				DEFAULT_SETTINGS.globalStyle.titleLayout;
-			if (
-				!savedGlobal?.titleLayout &&
-				savedGlobal?.alignToTitle === true
-			) {
-				migratedTitleLayout = "alignToTitle";
-			}
 			this.settings = {
 				globalStyle: {
 					...DEFAULT_SETTINGS.globalStyle,
 					...savedGlobal,
-					titleLayout: migratedTitleLayout,
 					// Ensure borderSides is always a proper object
 					borderSides: {
 						...DEFAULT_SETTINGS.globalStyle.borderSides,
@@ -133,11 +118,16 @@ export class CalloutRegistry {
 		if (data.materialIconsCache) {
 			this.materialIconsCache = data.materialIconsCache;
 		}
-		if (data.customSvgIcons) {
-			this.customSvgIcons = data.customSvgIcons;
-		}
 		if (data.materialSvgCache) {
 			this.materialSvgCache = data.materialSvgCache;
+		}
+		// Migration: any callout that still references the removed `svg` icon
+		// type falls back to a generic lucide pencil so renders don't crash.
+		for (const def of this.callouts.values()) {
+			const t = (def.icon?.type as string | undefined) ?? "lucide";
+			if (t === "svg") {
+				def.icon = { type: "lucide", value: "pencil" };
+			}
 		}
 	}
 
@@ -161,10 +151,6 @@ export class CalloutRegistry {
 			callouts: calloutsToSave,
 			settings: this.settings,
 			materialIconsCache: this.materialIconsCache,
-			customSvgIcons:
-				this.customSvgIcons.length > 0
-					? this.customSvgIcons
-					: undefined,
 			materialSvgCache:
 				this.materialSvgCache.length > 0
 					? this.materialSvgCache
@@ -348,9 +334,8 @@ export class CalloutRegistry {
 		this.settings.contextMenu = structuredClone(
 			DEFAULT_SETTINGS.contextMenu,
 		);
-		// Clear SVG caches and custom icons
+		// Clear SVG caches
 		this.materialSvgCache = [];
-		this.customSvgIcons = [];
 		this.notifyChange();
 	}
 

@@ -1,5 +1,5 @@
 export interface CalloutIcon {
-	type: "lucide" | "material" | "svg" | "emoji";
+	type: "lucide" | "material" | "emoji";
 	value: string;
 	style?: "outlined" | "filled" | "rounded" | "sharp";
 	/** Material Symbols weight (100–700, default 400) */
@@ -77,13 +77,6 @@ export interface GlobalStyleSettings {
 	};
 	/** Border thickness in px */
 	borderWidth: number;
-	/** How the callout title row is laid out:
-	 *  - default: standard Obsidian layout (icon + title; content under icon)
-	 *  - alignToTitle: content text starts at the title baseline (past the icon)
-	 *  - inline: hide the title text and continue the first content line on
-	 *    the same row as the icon
-	 */
-	titleLayout: "default" | "alignToTitle" | "inline";
 	/** Scale factor for callout title font size (e.g. 0.8 – 1.5) */
 	titleScale: number;
 	/** Scale factor for callout content font size (e.g. 0.8 – 1.5) */
@@ -109,7 +102,6 @@ export interface PluginData {
 	callouts: CalloutDefinition[];
 	settings: PluginSettings;
 	materialIconsCache?: MaterialIconsCacheData;
-	customSvgIcons?: CustomSvgIcon[];
 	/** Locally cached SVGs for selected Material icons */
 	materialSvgCache?: MaterialSvgCacheEntry[];
 }
@@ -126,11 +118,6 @@ export interface MaterialIconMeta {
 	categories: string[];
 	tags: string[];
 	styles: MaterialIconStyle[];
-}
-
-export interface CustomSvgIcon {
-	name: string;
-	svg: string;
 }
 
 export interface MaterialSvgCacheEntry {

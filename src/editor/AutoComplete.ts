@@ -212,21 +212,6 @@ export class CalloutAutoComplete extends EditorSuggest<CalloutSuggestion> {
 					} else {
 						setIcon(iconEl, "pencil");
 					}
-				} else if (def.icon.type === "svg") {
-					const svgData = this.plugin.registry.customSvgIcons.find(
-						(s) => s.name === def.icon.value,
-					);
-					if (svgData) {
-						const parser = new DOMParser();
-						const doc = parser.parseFromString(
-							svgData.svg,
-							"image/svg+xml",
-						);
-						const svgEl = doc.documentElement;
-						iconEl.appendChild(iconEl.doc.importNode(svgEl, true));
-					} else {
-						setIcon(iconEl, "pencil");
-					}
 				} else {
 					setIcon(iconEl, "pencil");
 				}
