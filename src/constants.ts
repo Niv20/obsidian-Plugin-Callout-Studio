@@ -168,24 +168,16 @@ export const DEFAULT_SETTINGS: PluginSettings = {
 	globalStyle: {
 		borderSides: { top: false, right: false, bottom: false, left: false },
 		borderWidth: 1.5,
-		alignToTitle: false,
+		titleLayout: "default",
 		titleScale: 1,
 		contentScale: 1,
 		borderRadius: 4,
 	} satisfies GlobalStyleSettings,
-	popup: {
+	contextMenu: {
 		enabled: true,
-		position: "top-left",
-		transparency: 15,
-		backdropBlur: 8,
-		showIcons: true,
-		showColorDots: true,
-		maxItems: 8,
 		showEditCallout: true,
 		showOpenSettings: true,
 		showCopyMarkdown: true,
-		showEditButton: true,
-		animation: "scale",
 	},
 	autocomplete: {
 		enabled: true,

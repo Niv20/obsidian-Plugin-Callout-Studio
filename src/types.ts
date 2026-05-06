@@ -35,23 +35,24 @@ export interface CalloutDefinition {
 	metadata?: Record<string, string>;
 }
 
-export type PopupAnimation = "fade" | "slide" | "scale" | "none";
-export type PopupPosition = "top-left" | "top-right" | "cursor";
 export type MaterialIconStyle = "outlined" | "filled" | "rounded" | "sharp";
 
-export interface PopupSettings {
+export interface ContextMenuSettings {
 	enabled: boolean;
-	position: PopupPosition;
-	transparency: number;
-	backdropBlur: number;
-	showIcons: boolean;
-	showColorDots: boolean;
-	maxItems: number;
 	showEditCallout: boolean;
 	showOpenSettings: boolean;
 	showCopyMarkdown: boolean;
-	showEditButton: boolean;
-	animation: PopupAnimation;
+}
+
+export interface LegacyPopupSettings extends ContextMenuSettings {
+	position?: "top-left" | "top-right" | "cursor";
+	transparency?: number;
+	backdropBlur?: number;
+	showIcons?: boolean;
+	showColorDots?: boolean;
+	maxItems?: number;
+	showEditButton?: boolean;
+	animation?: "fade" | "slide" | "scale" | "none";
 }
 
 export interface AutocompleteSettings {
@@ -80,8 +81,13 @@ export interface GlobalStyleSettings {
 	};
 	/** Border thickness in px */
 	borderWidth: number;
-	/** Align content text to the title start instead of the icon start */
-	alignToTitle: boolean;
+	/** How the callout title row is laid out:
+	 *  - default: standard Obsidian layout (icon + title; content under icon)
+	 *  - alignToTitle: content text starts at the title baseline (past the icon)
+	 *  - inline: hide the title text and continue the first content line on
+	 *    the same row as the icon
+	 */
+	titleLayout: "default" | "alignToTitle" | "inline";
 	/** Scale factor for callout title font size (e.g. 0.8 – 1.5) */
 	titleScale: number;
 	/** Scale factor for callout content font size (e.g. 0.8 – 1.5) */
@@ -92,7 +98,7 @@ export interface GlobalStyleSettings {
 
 export interface PluginSettings {
 	globalStyle: GlobalStyleSettings;
-	popup: PopupSettings;
+	contextMenu: ContextMenuSettings;
 	autocomplete: AutocompleteSettings;
 	iconSources: IconSourceSettings;
 	colorMode: ColorModeSettings;

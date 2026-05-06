@@ -385,13 +385,26 @@ export class CSSInjector {
 			);
 		}
 
-		// Align content to title text (indent past icon + gap)
-		if (gs.alignToTitle) {
-			parts.push(
+		// Align content to title text (indent past icon + gap).
+		// Wrapped in @media print as well so PDF export keeps the layout.
+		if (gs.titleLayout === "alignToTitle") {
+			const alignRule =
 				`.callout > .callout-content {\n` +
-					`  padding-inline-start: calc(var(--callout-padding, 12px) + var(--icon-size, 18px) + var(--size-4-2, 8px));\n` +
-					`}`,
-			);
+				`  padding-inline-start: calc(var(--callout-padding, 12px) + var(--icon-size, 18px) + var(--size-4-2, 8px));\n` +
+				`}`;
+			parts.push(alignRule);
+			parts.push(`@media print {\n${alignRule}\n}`);
+		}
+
+		// Inline layout: hide title text, flow first content line next to icon
+		if (gs.titleLayout === "inline") {
+			const inlineRule =
+				`.callout > .callout-title > .callout-title-inner { display: none; }\n` +
+				`.callout > .callout-title { display: inline-flex; align-items: baseline; padding-inline-end: var(--size-4-2, 8px); margin-bottom: 0; vertical-align: top; }\n` +
+				`.callout > .callout-content { display: inline; }\n` +
+				`.callout > .callout-content > :first-child { display: inline; margin: 0; }`;
+			parts.push(inlineRule);
+			parts.push(`@media print {\n${inlineRule}\n}`);
 		}
 
 		return parts.join("\n\n");

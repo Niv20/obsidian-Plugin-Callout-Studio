@@ -67,6 +67,10 @@ export const en: Record<string, string> = {
 	"settings.alignToTitle": "Align to title",
 	"settings.alignToTitleDesc":
 		"Content text starts at the same vertical line as the title instead of the icon",
+	"settings.titleLayout": "Title layout",
+	"settings.titleLayoutDefault": "Default",
+	"settings.titleLayoutAlign": "Align to title",
+	"settings.titleLayoutInline": "Inline icon + text",
 	"settings.fontScaleGroup": "Font scale",
 	"settings.titleScale": "Title",
 	"settings.contentScale": "Content",

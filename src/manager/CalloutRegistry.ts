@@ -1,6 +1,8 @@
 import type {
 	CalloutDefinition,
+	ContextMenuSettings,
 	CustomSvgIcon,
+	LegacyPopupSettings,
 	MaterialIconsCacheData,
 	MaterialIconStyle,
 	MaterialSvgCacheEntry,
@@ -9,7 +11,12 @@ import type {
 } from "../types";
 import { DEFAULT_CALLOUTS, DEFAULT_SETTINGS } from "../constants";
 
-const CURRENT_DATA_VERSION = 1;
+const CURRENT_DATA_VERSION = 2;
+
+type LegacySavedSettings = Partial<PluginSettings> & {
+	popup?: Partial<LegacyPopupSettings>;
+	contextMenu?: Partial<ContextMenuSettings>;
+};
 
 export type RegistryChangeCallback = () => void;
 
@@ -59,11 +66,28 @@ export class CalloutRegistry {
 
 		// Merge settings
 		if (data.settings) {
-			const savedGlobal = data.settings.globalStyle;
+			const savedSettings = data.settings as LegacySavedSettings;
+			const savedGlobal = savedSettings.globalStyle as
+				| (Partial<PluginSettings["globalStyle"]> & {
+						alignToTitle?: boolean;
+				  })
+				| undefined;
+			const legacyPopup = savedSettings.popup;
+			// Migrate legacy boolean alignToTitle → titleLayout enum
+			let migratedTitleLayout =
+				savedGlobal?.titleLayout ??
+				DEFAULT_SETTINGS.globalStyle.titleLayout;
+			if (
+				!savedGlobal?.titleLayout &&
+				savedGlobal?.alignToTitle === true
+			) {
+				migratedTitleLayout = "alignToTitle";
+			}
 			this.settings = {
 				globalStyle: {
 					...DEFAULT_SETTINGS.globalStyle,
 					...savedGlobal,
+					titleLayout: migratedTitleLayout,
 					// Ensure borderSides is always a proper object
 					borderSides: {
 						...DEFAULT_SETTINGS.globalStyle.borderSides,
@@ -72,29 +96,46 @@ export class CalloutRegistry {
 							| undefined),
 					},
 				},
-				popup: { ...DEFAULT_SETTINGS.popup, ...data.settings.popup },
+				contextMenu: {
+					enabled:
+						savedSettings.contextMenu?.enabled ??
+						legacyPopup?.enabled ??
+						DEFAULT_SETTINGS.contextMenu.enabled,
+					showEditCallout:
+						savedSettings.contextMenu?.showEditCallout ??
+						legacyPopup?.showEditCallout ??
+						DEFAULT_SETTINGS.contextMenu.showEditCallout,
+					showOpenSettings:
+						savedSettings.contextMenu?.showOpenSettings ??
+						legacyPopup?.showOpenSettings ??
+						DEFAULT_SETTINGS.contextMenu.showOpenSettings,
+					showCopyMarkdown:
+						savedSettings.contextMenu?.showCopyMarkdown ??
+						legacyPopup?.showCopyMarkdown ??
+						DEFAULT_SETTINGS.contextMenu.showCopyMarkdown,
+				},
 				autocomplete: {
 					...DEFAULT_SETTINGS.autocomplete,
-					...data.settings.autocomplete,
+					...savedSettings.autocomplete,
 				},
 				iconSources: {
 					...DEFAULT_SETTINGS.iconSources,
-					...data.settings.iconSources,
+					...savedSettings.iconSources,
 				},
 				colorMode: {
 					...DEFAULT_SETTINGS.colorMode,
 					showContrastWarning:
 						((
-							data.settings.colorMode as unknown as Record<
+							savedSettings.colorMode as unknown as Record<
 								string,
 								unknown
 							>
 						)?.showContrastWarning as boolean) ??
 						DEFAULT_SETTINGS.colorMode.showContrastWarning,
 				},
-				language: data.settings.language ?? DEFAULT_SETTINGS.language,
+				language: savedSettings.language ?? DEFAULT_SETTINGS.language,
 				fallbackCalloutId:
-					data.settings.fallbackCalloutId ??
+					savedSettings.fallbackCalloutId ??
 					DEFAULT_SETTINGS.fallbackCalloutId,
 			};
 		}
@@ -309,6 +350,9 @@ export class CalloutRegistry {
 		// Reset global style to defaults
 		this.settings.globalStyle = structuredClone(
 			DEFAULT_SETTINGS.globalStyle,
+		);
+		this.settings.contextMenu = structuredClone(
+			DEFAULT_SETTINGS.contextMenu,
 		);
 		// Clear SVG caches and custom icons
 		this.materialSvgCache = [];

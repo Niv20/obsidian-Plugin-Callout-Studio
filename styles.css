@@ -1223,12 +1223,70 @@
 	font-size: var(--cs-preview-content-size, 1em);
 }
 
-.cs-global-preview-callout > .callout-content.cs-align-to-title {
+.cs-global-preview-callout > .callout-content.cs-align-to-title,
+.cs-global-preview-callout.cs-layout-align > .callout-content {
 	padding-left: 38px;
+}
+
+/* Inline layout: hide title text, content flows next to icon */
+.cs-global-preview-callout.cs-layout-inline > .callout-title > .callout-title-inner {
+	display: none;
+}
+.cs-global-preview-callout.cs-layout-inline > .callout-title {
+	display: inline-flex;
+	padding-right: 8px;
+	margin-bottom: 0;
+	vertical-align: top;
+}
+.cs-global-preview-callout.cs-layout-inline > .callout-content {
+	display: inline;
+	padding-left: 0;
+}
+.cs-global-preview-callout.cs-layout-inline > .callout-content > p:first-child {
+	display: inline;
+	margin: 0;
+}
+
+/* Square icon placeholder for the locked preview */
+.cs-global-preview-callout .cs-preview-square-icon {
+	width: 14px;
+	height: 14px;
+	border-radius: 2px;
+	background: rgb(var(--callout-color));
 }
 
 .cs-global-preview-callout > .callout-content p {
 	margin: 0;
+}
+
+/* Segmented control (used for title layout) */
+.cs-segmented {
+	display: inline-flex;
+	gap: 0;
+	border: 1px solid var(--background-modifier-border);
+	border-radius: 6px;
+	overflow: hidden;
+}
+.cs-segmented-btn {
+	background: transparent;
+	border: none;
+	border-right: 1px solid var(--background-modifier-border);
+	padding: 4px 10px;
+	font-size: 0.85em;
+	color: var(--text-muted);
+	cursor: pointer;
+	box-shadow: none;
+}
+.cs-segmented-btn:last-child {
+	border-right: none;
+}
+.cs-segmented-btn:hover {
+	background: var(--background-modifier-hover);
+	color: var(--text-normal);
+}
+.cs-segmented-btn.is-active {
+	background: var(--interactive-accent);
+	color: var(--text-on-accent);
 }
 
 /* Controls column */

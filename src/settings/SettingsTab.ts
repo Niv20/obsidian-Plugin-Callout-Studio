@@ -521,13 +521,16 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 		const updatePreview = () => {
 			previewCard.empty();
 			const callout = previewCard.createDiv({
-				cls: "callout cs-global-preview-callout",
+				cls: "callout cs-global-preview-callout cs-global-preview-locked",
 				attr: { "data-callout": "cs-preview" },
 			});
 
-			// Apply live styles via CSS custom props
+			// Apply live styles via CSS custom props.
+			// Force a fixed gray palette so the preview never inherits the
+			// fallback callout's color.
 			callout.setCssProps({
 				"--cs-preview-radius": `${globalStyle.borderRadius}px`,
+				"--callout-color": "136, 136, 136",
 			});
 
 			// Border sides
@@ -562,10 +565,11 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 				});
 			}
 
-			// Title row
+			// Title row — always uses a square icon placeholder (gray)
 			const titleRow = callout.createDiv({ cls: "callout-title" });
-			const iconEl = titleRow.createDiv({ cls: "callout-icon" });
-			setIcon(iconEl, "info");
+			titleRow.createDiv({
+				cls: "callout-icon cs-preview-square-icon",
+			});
 			const titleInner = titleRow.createDiv({
 				cls: "callout-title-inner",
 			});
@@ -582,8 +586,12 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 				"--cs-preview-content-size": `${globalStyle.contentScale}em`,
 			});
 
-			if (globalStyle.alignToTitle) {
-				content.addClass("cs-align-to-title");
+			callout.removeClass("cs-layout-align");
+			callout.removeClass("cs-layout-inline");
+			if (globalStyle.titleLayout === "alignToTitle") {
+				callout.addClass("cs-layout-align");
+			} else if (globalStyle.titleLayout === "inline") {
+				callout.addClass("cs-layout-inline");
 			}
 		};
 
@@ -677,9 +685,7 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 				)
 				.addSlider((s) => {
 					const settingItem = s.sliderEl.closest(".setting-item");
-					s.setLimits(0.5, 5, 0.5)
-						.setValue(globalStyle.borderWidth)
-						.setDynamicTooltip();
+					s.setLimits(0.5, 5, 0.5).setValue(globalStyle.borderWidth);
 					s.sliderEl.addEventListener("input", () => {
 						const v =
 							Math.round(parseFloat(s.sliderEl.value) * 10) / 10;
@@ -691,6 +697,7 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 								nameEl.textContent = `${t("settings.borderWidth")}  ${v}px`;
 						}
 						updatePreview();
+						this.plugin.cssInjector.scheduleInject();
 					});
 					s.onChange(async (v) => {
 						globalStyle.borderWidth = Math.round(v * 10) / 10;
@@ -716,9 +723,7 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 			)
 			.addSlider((s) => {
 				const settingItem = s.sliderEl.closest(".setting-item");
-				s.setLimits(0.5, 1.5, 0.05)
-					.setValue(globalStyle.titleScale)
-					.setDynamicTooltip();
+				s.setLimits(0.5, 1.5, 0.05).setValue(globalStyle.titleScale);
 				s.sliderEl.addEventListener("input", () => {
 					const v =
 						Math.round(parseFloat(s.sliderEl.value) * 100) / 100;
@@ -730,6 +735,7 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 							nameEl.textContent = `${t("settings.titleScale")}  ×${v.toFixed(2)}`;
 					}
 					updatePreview();
+					this.plugin.cssInjector.scheduleInject();
 				});
 				s.onChange(async (v) => {
 					globalStyle.titleScale = Math.round(v * 100) / 100;
@@ -745,9 +751,7 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 			)
 			.addSlider((s) => {
 				const settingItem = s.sliderEl.closest(".setting-item");
-				s.setLimits(0.5, 1.5, 0.05)
-					.setValue(globalStyle.contentScale)
-					.setDynamicTooltip();
+				s.setLimits(0.5, 1.5, 0.05).setValue(globalStyle.contentScale);
 				s.sliderEl.addEventListener("input", () => {
 					const v =
 						Math.round(parseFloat(s.sliderEl.value) * 100) / 100;
@@ -759,6 +763,7 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 							nameEl.textContent = `${t("settings.contentScale")}  ×${v.toFixed(2)}`;
 					}
 					updatePreview();
+					this.plugin.cssInjector.scheduleInject();
 				});
 				s.onChange(async (v) => {
 					globalStyle.contentScale = Math.round(v * 100) / 100;
@@ -783,9 +788,7 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 			)
 			.addSlider((s) => {
 				const settingItem = s.sliderEl.closest(".setting-item");
-				s.setLimits(0, 24, 1)
-					.setValue(globalStyle.borderRadius)
-					.setDynamicTooltip();
+				s.setLimits(0, 24, 1).setValue(globalStyle.borderRadius);
 				s.sliderEl.addEventListener("input", () => {
 					const v = parseInt(s.sliderEl.value, 10);
 					globalStyle.borderRadius = v;
@@ -796,6 +799,7 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 							nameEl.textContent = `${t("settings.borderRadius")}  ${v}px`;
 					}
 					updatePreview();
+					this.plugin.cssInjector.scheduleInject();
 				});
 				s.onChange(async (v) => {
 					globalStyle.borderRadius = v;
@@ -804,18 +808,40 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 				});
 			});
 
-		// Align to title toggle
-		new Setting(shapeGroupEl)
-			.setName(t("settings.alignToTitle"))
-			.setDesc(t("settings.alignToTitleDesc"))
-			.addToggle((tog) =>
-				tog.setValue(globalStyle.alignToTitle).onChange(async (v) => {
-					globalStyle.alignToTitle = v;
-					await this.plugin.saveSettings();
-					this.plugin.cssInjector.inject();
-					updatePreview();
-				}),
-			);
+		// Align/Inline title layout — 3-state segmented control
+		const layoutSetting = new Setting(shapeGroupEl).setName(
+			t("settings.titleLayout"),
+		);
+		const layoutSegmented = layoutSetting.controlEl.createDiv({
+			cls: "cs-segmented",
+		});
+		const layoutOptions: {
+			value: "default" | "alignToTitle" | "inline";
+			label: string;
+		}[] = [
+			{ value: "default", label: t("settings.titleLayoutDefault") },
+			{ value: "alignToTitle", label: t("settings.titleLayoutAlign") },
+			{ value: "inline", label: t("settings.titleLayoutInline") },
+		];
+		const layoutBtns: HTMLButtonElement[] = [];
+		for (const opt of layoutOptions) {
+			const btn = layoutSegmented.createEl("button", {
+				cls: `cs-segmented-btn${
+					globalStyle.titleLayout === opt.value ? " is-active" : ""
+				}`,
+				text: opt.label,
+			});
+			// eslint-disable-next-line @typescript-eslint/no-misused-promises
+			btn.addEventListener("click", async () => {
+				globalStyle.titleLayout = opt.value;
+				for (const b of layoutBtns) b.removeClass("is-active");
+				btn.addClass("is-active");
+				await this.plugin.saveSettings();
+				this.plugin.cssInjector.inject();
+				updatePreview();
+			});
+			layoutBtns.push(btn);
+		}
 	}
 
 	// ─── Section C: Context Menu Settings ────────────────────

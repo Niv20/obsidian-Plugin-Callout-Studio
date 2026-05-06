@@ -66,6 +66,10 @@ export const he: Record<string, string> = {
 	"settings.alignToTitle": "יישור לכותרת",
 	"settings.alignToTitleDesc":
 		"הטקסט מתחיל באותו קו אנכי של הכותרת במקום של האייקון",
+	"settings.titleLayout": "מבנה הכותרת",
+	"settings.titleLayoutDefault": "ברירת מחדל",
+	"settings.titleLayoutAlign": "יישור לכותרת",
+	"settings.titleLayoutInline": "אייקון וטקסט באותה שורה",
 	"settings.fontScaleGroup": "סקאלת פונט",
 	"settings.titleScale": "כותרת",
 	"settings.contentScale": "תוכן",
