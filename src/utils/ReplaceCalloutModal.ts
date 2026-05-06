@@ -72,13 +72,9 @@ export class ReplaceCalloutModal extends Modal {
 		const noReplaceItem = listEl.createDiv({
 			cls: "callout-studio-replace-item callout-studio-replace-no-replace",
 		});
-		const noReplaceIcon = noReplaceItem.createDiv({
-			cls: "callout-studio-replace-item-icon",
-		});
-		setIcon(noReplaceIcon, "trash-2");
 		noReplaceItem.createDiv({
-			cls: "callout-studio-replace-item-name",
-			text: t("vault.deleteWithout"),
+			cls: "callout-studio-replace-item-name callout-studio-replace-no-replace-name",
+			text: `${t("vault.deleteWithout")} ${t("replaceModal.deleteWithoutReplaceSuffix")}`,
 		});
 		this.itemEls.set(null, noReplaceItem);
 		if (!hasCallouts) {

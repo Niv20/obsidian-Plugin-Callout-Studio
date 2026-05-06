@@ -9,13 +9,26 @@ import {
 } from "obsidian";
 import type CalloutStudioPlugin from "../main";
 import type { CalloutDefinition } from "../types";
+import { CalloutEditor } from "../settings/CalloutEditor";
+import { t } from "../i18n";
 
 const CALLOUT_QUOTE_PREFIX_REGEX = /^((?:\s*> ?|\t)+)/;
 
 const countQuoteTokens = (prefix: string): number =>
 	(prefix.match(/>/g) ?? []).length;
 
-export class CalloutAutoComplete extends EditorSuggest<CalloutDefinition> {
+interface CreateNewSuggestion {
+	__createNew: true;
+	query: string;
+}
+
+type CalloutSuggestion = CalloutDefinition | CreateNewSuggestion;
+
+function isCreateNew(s: CalloutSuggestion): s is CreateNewSuggestion {
+	return (s as CreateNewSuggestion).__createNew === true;
+}
+
+export class CalloutAutoComplete extends EditorSuggest<CalloutSuggestion> {
 	private plugin: CalloutStudioPlugin;
 	private pendingEditor: Editor | null = null;
 	private pendingLine = -1;
@@ -110,7 +123,7 @@ export class CalloutAutoComplete extends EditorSuggest<CalloutDefinition> {
 		};
 	}
 
-	getSuggestions(context: EditorSuggestContext): CalloutDefinition[] {
+	getSuggestions(context: EditorSuggestContext): CalloutSuggestion[] {
 		const query = context.query.toLowerCase();
 		const all = this.plugin.registry.getAll();
 
@@ -128,10 +141,40 @@ export class CalloutAutoComplete extends EditorSuggest<CalloutDefinition> {
 			return a.displayName.localeCompare(b.displayName);
 		});
 
-		return filtered;
+		const result: CalloutSuggestion[] = [...filtered];
+		// Append "Create new" if query is non-empty and no exact match
+		const trimmed = context.query.trim();
+		if (trimmed.length > 0) {
+			const exact = all.some(
+				(d) =>
+					d.id.toLowerCase() === query ||
+					(d.aliases ?? []).some((a) => a.toLowerCase() === query),
+			);
+			if (!exact) {
+				result.push({ __createNew: true, query: trimmed });
+			}
+		}
+		return result;
 	}
 
-	renderSuggestion(def: CalloutDefinition, el: HTMLElement): void {
+	renderSuggestion(item: CalloutSuggestion, el: HTMLElement): void {
+		if (isCreateNew(item)) {
+			el.addClass("callout-studio-suggestion");
+			el.addClass("callout-studio-suggestion-create-new");
+			const iconEl = el.createDiv({
+				cls: "callout-studio-suggestion-icon",
+			});
+			setIcon(iconEl, "plus");
+			const textEl = el.createDiv({
+				cls: "callout-studio-suggestion-text",
+			});
+			textEl.createDiv({
+				cls: "callout-studio-suggestion-name",
+				text: t("autocomplete.createNew", { name: item.query }),
+			});
+			return;
+		}
+		const def = item;
 		el.addClass("callout-studio-suggestion");
 
 		const { autocomplete } = this.plugin.settings;
@@ -211,7 +254,7 @@ export class CalloutAutoComplete extends EditorSuggest<CalloutDefinition> {
 	}
 
 	selectSuggestion(
-		def: CalloutDefinition,
+		item: CalloutSuggestion,
 		evt: MouseEvent | KeyboardEvent,
 	): void {
 		if (!this.context) return;
@@ -220,6 +263,14 @@ export class CalloutAutoComplete extends EditorSuggest<CalloutDefinition> {
 			evt.stopPropagation();
 		}
 
+		// Handle "Create new" — open editor pre-filled with the typed query
+		if (isCreateNew(item)) {
+			const ctx = this.context;
+			void this.openCreateForQuery(item.query, ctx);
+			return;
+		}
+
+		const def = item;
 		const { editor, start, end, query } = this.context;
 
 		const line = editor.getLine(end.line);
@@ -272,5 +323,33 @@ export class CalloutAutoComplete extends EditorSuggest<CalloutDefinition> {
 			this.pendingEditor = editor;
 			this.pendingLine = start.line;
 		}
+	}
+
+	private async openCreateForQuery(
+		query: string,
+		ctx: EditorSuggestContext,
+	): Promise<void> {
+		this.close();
+		const editor = ctx.editor;
+		const start = ctx.start;
+		const end = ctx.end;
+		const lineEnd: EditorPosition = {
+			line: end.line,
+			ch: editor.getLine(end.line).length,
+		};
+		const modal = new CalloutEditor(this.plugin, undefined, {
+			seedDisplayName: query,
+		});
+		const result = await modal.open();
+		if (!result) return;
+		const foldMark = result.foldable
+			? result.defaultFolded
+				? "-"
+				: "+"
+			: "";
+		const replacement = `[!${result.id}]${foldMark} ${result.displayName}`;
+		editor.replaceRange(replacement, start, lineEnd);
+		this.pendingEditor = editor;
+		this.pendingLine = start.line;
 	}
 }

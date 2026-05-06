@@ -71,6 +71,29 @@ export async function replaceCalloutIdsInVault(
 }
 
 /**
+ * Scan every Markdown file once and return the set of callout IDs that
+ * are referenced via `> [!id]` syntax but are NOT in the supplied known set.
+ */
+export async function scanVaultForUnknownCallouts(
+	app: App,
+	knownIds: Set<string>,
+): Promise<string[]> {
+	const regex = /^>\s*\[!([^\]\s]+)\]/gim;
+	const files = app.vault.getMarkdownFiles();
+	const found = new Set<string>();
+	for (const file of files) {
+		const content = await app.vault.cachedRead(file);
+		let m: RegExpExecArray | null;
+		while ((m = regex.exec(content)) !== null) {
+			const id = m[1]?.toLowerCase();
+			if (!id) continue;
+			if (!knownIds.has(id)) found.add(id);
+		}
+	}
+	return Array.from(found);
+}
+
+/**
  * Replace the display-name / title text of callouts that match the given IDs.
  * Matches lines like `> [!id] Old Title` or `> [!id]+ Old Title` and replaces
  * the title portion with `newTitle`. Only replaces when the existing title

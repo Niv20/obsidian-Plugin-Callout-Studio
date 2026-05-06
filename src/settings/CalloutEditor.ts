@@ -58,14 +58,20 @@ export class CalloutEditor extends Modal {
 	private customPresetSelected: boolean = false;
 	private refreshColorGridVisibility: (() => void) | null = null;
 
-	constructor(plugin: CalloutStudioPlugin, existing?: CalloutDefinition) {
+	constructor(
+		plugin: CalloutStudioPlugin,
+		existing?: CalloutDefinition,
+		options?: { seedDisplayName?: string },
+	) {
 		super(plugin.app);
 		this.plugin = plugin;
 		this.existingId = existing?.id ?? null;
 		this.isBuiltIn = existing?.builtIn ?? false;
 
-		this.displayName = existing?.displayName ?? "";
-		this.calloutId = existing?.id ?? "";
+		this.displayName =
+			existing?.displayName ?? options?.seedDisplayName ?? "";
+		this.calloutId =
+			existing?.id ?? generateId(options?.seedDisplayName ?? "");
 		this.icon = existing?.icon
 			? { ...existing.icon }
 			: { type: "lucide", value: "pencil" };

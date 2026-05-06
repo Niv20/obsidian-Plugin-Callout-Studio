@@ -15,7 +15,7 @@ export interface CalloutDefinition {
 	foldable: boolean;
 	defaultFolded: boolean;
 	builtIn: boolean;
-	source: "user" | "theme" | "plugin" | "builtin";
+	source: "user" | "theme" | "plugin" | "builtin" | "fallback";
 	/** Horizontal icon offset in px (−10 to 10) */
 	iconOffsetX?: number;
 	/** Vertical icon offset in px (−10 to 10) */
@@ -98,6 +98,8 @@ export interface PluginSettings {
 	autocomplete: AutocompleteSettings;
 	iconSources: IconSourceSettings;
 	language: string;
+	/** Has the first-run vault scan been completed? */
+	firstRunCompleted?: boolean;
 	/** Callout ID to use as fallback for unrecognized callout types. Empty = Obsidian default */
 	fallbackCalloutId: string;
 }

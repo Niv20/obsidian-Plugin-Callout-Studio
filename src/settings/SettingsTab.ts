@@ -179,10 +179,17 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 
 		// Info: name + all IDs as > [!id] chips
 		const infoEl = row.createDiv({ cls: "callout-studio-row-info" });
-		infoEl.createSpan({
+		const nameLine = infoEl.createDiv({ cls: "callout-studio-row-name-line" });
+		nameLine.createSpan({
 			cls: "callout-studio-row-name",
 			text: def.displayName,
 		});
+		if (def.source === "fallback") {
+			nameLine.createSpan({
+				cls: "cs-fallback-tag",
+				text: t("settings.fallbackTag"),
+			});
+		}
 		const syntaxLine = infoEl.createDiv({
 			cls: "callout-studio-row-syntax-line",
 		});
@@ -314,9 +321,26 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 				new Notice(
 					t("vault.filesUpdated", { count: String(replaced) }),
 				);
+				this.plugin.registry.remove(def.id);
+			} else {
+				// "delete without replacing" — degrade user rows to fallback,
+				// fully remove fallback-source rows
+				if (def.source === "user") {
+					this.plugin.registry.update(def.id, {
+						source: "fallback",
+						aliases: undefined,
+						bgColorLight: undefined,
+						bgColorDark: undefined,
+						textColorLight: undefined,
+						textColorDark: undefined,
+						iconOffsetX: undefined,
+						iconOffsetY: undefined,
+						iconSize: undefined,
+					});
+				} else {
+					this.plugin.registry.remove(def.id);
+				}
 			}
-
-			this.plugin.registry.remove(def.id);
 		} else {
 			const confirmed = await new ConfirmModal(
 				this.app,
@@ -1195,6 +1219,26 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 					.setIcon("download")
 					.setCta()
 					.onClick(() => this.exportCallouts()),
+			);
+
+		new Setting(containerEl)
+			.setName(t("settings.rescanVault"))
+			.setDesc(t("settings.rescanVaultDesc"))
+			.addButton((btn) =>
+				btn
+					.setButtonText(t("settings.rescanVault"))
+					.setIcon("search")
+					.onClick(() => {
+						void (async () => {
+							const added = await this.plugin.runVaultScan(false);
+							new Notice(
+								t("settings.rescanComplete", {
+									count: String(added),
+								}),
+							);
+							this.display();
+						})();
+					}),
 			);
 	}
 

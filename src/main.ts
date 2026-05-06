@@ -12,6 +12,7 @@ import {
 import { registerContextMenu } from "./editor/ContextMenu";
 import { CalloutStudioAPI } from "./api/PluginAPI";
 import { downloadMaterialSvg } from "./utils/iconLoader";
+import { scanVaultForUnknownCallouts } from "./utils/vaultCalloutScanner";
 import { setLocale, t } from "./i18n";
 
 export default class CalloutStudioPlugin extends Plugin {
@@ -136,6 +137,13 @@ export default class CalloutStudioPlugin extends Plugin {
 
 		// Download missing Material SVGs in background
 		void this.ensureMaterialSvgs();
+
+		// First-run vault scan for unrecognized callout IDs
+		if (!this.settings.firstRunCompleted) {
+			this.app.workspace.onLayoutReady(() => {
+				void this.runVaultScan(true);
+			});
+		}
 	}
 
 	onunload() {
@@ -154,6 +162,55 @@ export default class CalloutStudioPlugin extends Plugin {
 	refreshCallouts(): void {
 		this.cssInjector.inject();
 		this.app.workspace.trigger("css-change");
+	}
+
+	/**
+	 * Scan the vault for callout IDs that are not in the registry and add
+	 * them as fallback-source rows that mirror the current fallback style.
+	 * Returns the number of new rows added.
+	 */
+	async runVaultScan(markFirstRun = false): Promise<number> {
+		const known = new Set<string>();
+		for (const def of this.registry.getAll()) {
+			known.add(def.id.toLowerCase());
+			for (const a of def.aliases ?? []) known.add(a.toLowerCase());
+		}
+		const unknown = await scanVaultForUnknownCallouts(this.app, known);
+		const fallbackId = this.settings.fallbackCalloutId || "note";
+		const fallback = this.registry.get(fallbackId);
+		let added = 0;
+		for (const id of unknown) {
+			if (this.registry.get(id)) continue;
+			const def = fallback
+				? {
+						...fallback,
+						id,
+						displayName:
+							id.charAt(0).toUpperCase() + id.slice(1),
+						aliases: [],
+						builtIn: false,
+						source: "fallback" as const,
+					}
+				: {
+						id,
+						displayName:
+							id.charAt(0).toUpperCase() + id.slice(1),
+						icon: { type: "lucide" as const, value: "pencil" },
+						colorLight: "100, 100, 100",
+						colorDark: "180, 180, 180",
+						foldable: true,
+						defaultFolded: false,
+						builtIn: false,
+						source: "fallback" as const,
+					};
+			if (this.registry.add(def)) added++;
+		}
+		if (markFirstRun) {
+			this.registry.settings.firstRunCompleted = true;
+		}
+		await this.saveSettings();
+		this.refreshCallouts();
+		return added;
 	}
 
 	/**

@@ -7,6 +7,16 @@ export const en: Record<string, string> = {
 	"cmd.calloutUnwrap": "Unwrap from callout",
 	"cmd.calloutUnwrapSelection": "Unwrap selection from callout",
 
+	// Autocomplete
+	"autocomplete.createNew": "Create new callout: \"{{name}}\"",
+
+	// Vault scan / fallback / delete
+	"settings.fallbackTag": "Default fallback",
+	"settings.rescanVault": "Re-scan vault",
+	"settings.rescanVaultDesc": "Find unrecognized callout IDs used in notes and add them as fallback rows.",
+	"settings.rescanComplete": "Re-scan complete: {{count}} new callout(s) added.",
+	"replaceModal.deleteWithoutReplaceSuffix": "(falls back to default)",
+
 	// Settings — Section headings
 	"settings.title": "Callout Studio",
 	"settings.myCalloutTypes": "My callout types",

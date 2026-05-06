@@ -1517,3 +1517,38 @@
 	color: var(--text-normal);
 	font-size: var(--font-small);
 }
+
+/* Phase 7: name + fallback tag */
+.callout-studio-row-name-line {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	flex-wrap: wrap;
+}
+.cs-fallback-tag {
+	display: inline-flex;
+	align-items: center;
+	height: 18px;
+	padding: 0 8px;
+	border-radius: 9px;
+	background: var(--background-secondary);
+	color: var(--text-faint);
+	font-size: var(--font-smallest, 11px);
+	line-height: 1;
+	border: 1px solid var(--background-modifier-border);
+}
+
+/* Phase 7: delete-without-replace styling */
+.callout-studio-replace-no-replace .callout-studio-replace-no-replace-name {
+	color: var(--text-error);
+	padding-left: 8px;
+}
+
+/* Phase 7: autocomplete create-new entry */
+.callout-studio-suggestion-create-new {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	color: var(--text-accent);
+	font-style: italic;
+}

@@ -7,6 +7,17 @@ export const he: Record<string, string> = {
 	"cmd.calloutUnwrap": "פתיחה מתוך callout",
 	"cmd.calloutUnwrapSelection": "פתיחת הבחירה מתוך callout",
 
+	// Autocomplete
+	"autocomplete.createNew": "צור הבלטה חדשה: \"{{name}}\"",
+
+	// Vault scan / fallback / delete
+	"settings.fallbackTag": "ברירת מחדל",
+	"settings.rescanVault": "סרוק מחדש את המאגר",
+	"settings.rescanVaultDesc":
+		"מחפש מזהי הבלטה לא מזוהים בהערות ומוסיף אותם כשורות בברירת מחדל.",
+	"settings.rescanComplete": "סיום סריקה: נוספו {{count}} בלוקים חדשים.",
+	"replaceModal.deleteWithoutReplaceSuffix": "(נופל לברירת המחדל)",
+
 	// Settings — Section headings
 	"settings.title": "Callout Studio",
 	"settings.myCalloutTypes": "סוגי תיבות ההבלטה שלי",
