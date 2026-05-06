@@ -28,7 +28,7 @@ export const en: Record<string, string> = {
 	"settings.builtInCallouts": "Built-in callouts",
 	"settings.contextMenu": "Context menu",
 	"settings.autocomplete": "Autocomplete",
-	"settings.iconSources": "Icon sources",
+	"settings.iconSources": "Google Material Icons",
 	"settings.colorMode": "Color mode",
 	"settings.importExport": "Import / export",
 	"settings.import": "Import",

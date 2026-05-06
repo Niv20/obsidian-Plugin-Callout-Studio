@@ -27,7 +27,7 @@ export const he: Record<string, string> = {
 	"settings.builtInCallouts": "תיבות הבלטה מובנות",
 	"settings.contextMenu": "תפריט הקשר",
 	"settings.autocomplete": "השלמה אוטומטית",
-	"settings.iconSources": "מקורות אייקונים",
+	"settings.iconSources": "אייקוני Google Material",
 	"settings.colorMode": "מצב צבע",
 	"settings.importExport": "ייבוא / ייצוא",
 	"settings.import": "ייבוא",
