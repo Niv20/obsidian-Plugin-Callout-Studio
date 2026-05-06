@@ -11,6 +11,7 @@ import {
 } from "../utils/colorPalettes";
 import { t } from "../i18n";
 import { TagInput } from "../ui/TagInput";
+import { renderColorCircles } from "../ui/ColorCircles";
 import {
 	countCalloutUsages,
 	replaceCalloutIdsInVault,
@@ -53,6 +54,9 @@ export class CalloutEditor extends Modal {
 	private idsTagInput: TagInput | null = null;
 	private saveBtn: HTMLButtonElement | null = null;
 	private initialSnapshot: string = "";
+	/** True once the user picks a preset or manually edits any color input. */
+	private customPresetSelected: boolean = false;
+	private refreshColorGridVisibility: (() => void) | null = null;
 
 	constructor(plugin: CalloutStudioPlugin, existing?: CalloutDefinition) {
 		super(plugin.app);
@@ -80,6 +84,8 @@ export class CalloutEditor extends Modal {
 		this.iconOffsetY = existing?.iconOffsetY ?? 0;
 		this.iconSize = existing?.iconSize ?? 1;
 		this.aliases = [...(existing?.aliases ?? [])];
+		// Existing callouts already have committed colors; treat as preset chosen.
+		this.customPresetSelected = existing !== undefined;
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-misused-promises -- intentional Promise-returning override for modal result
@@ -360,6 +366,13 @@ export class CalloutEditor extends Modal {
 		const colorGrid = colorsSection.createDiv({
 			cls: "callout-studio-color-grid",
 		});
+		this.refreshColorGridVisibility = () => {
+			colorGrid.toggleClass(
+				"cs-color-grid-hidden",
+				!this.customPresetSelected,
+			);
+		};
+		this.refreshColorGridVisibility();
 
 		// Track color inputs so palette selection can update them
 		const colorInputs: {
@@ -371,66 +384,84 @@ export class CalloutEditor extends Modal {
 			accentDark?: HTMLInputElement;
 		} = {};
 
-		// Build palette dropdown
-		const paletteSelect = paletteRow.createEl("select", {
-			cls: "cs-palette-dropdown",
-		});
+		// Build rich palette dropdown (custom widget with circles + names)
+		const paletteEntries: {
+			id: string;
+			name: string;
+			group: "obsidian" | "preset";
+			palette: (typeof COLOR_PALETTES)[number];
+		}[] = [
+			...OBSIDIAN_PALETTES.map((p) => ({
+				id: p.id,
+				name: p.name,
+				group: "obsidian" as const,
+				palette: p,
+			})),
+			...EXTRA_PALETTES.map((p) => ({
+				id: p.id,
+				name: p.name,
+				group: "preset" as const,
+				palette: p,
+			})),
+		];
 
-		// Default "none" option
-		paletteSelect.createEl("option", {
+		const dropdown = paletteRow.createDiv({ cls: "cs-palette-dropdown" });
+		const trigger = dropdown.createEl("button", {
+			cls: "cs-palette-trigger",
+			attr: { type: "button", "aria-haspopup": "listbox" },
+		});
+		const triggerCircles = trigger.createDiv({
+			cls: "cs-palette-trigger-circles",
+		});
+		const triggerLabel = trigger.createSpan({
+			cls: "cs-palette-trigger-label",
 			text: t("editor.paletteNone"),
-			value: "",
+		});
+		const triggerCaret = trigger.createSpan({
+			cls: "cs-palette-trigger-caret",
+			text: "▾",
+		});
+		void triggerCaret;
+
+		const menu = dropdown.createDiv({
+			cls: "cs-palette-menu cs-palette-menu-hidden",
+			attr: { role: "listbox", tabindex: "-1" },
 		});
 
-		// Obsidian group
-		const obsidianGroup = paletteSelect.createEl("optgroup", {
-			attr: { label: t("editor.paletteGroupObsidian") },
-		});
-		for (const p of OBSIDIAN_PALETTES) {
-			obsidianGroup.createEl("option", { text: p.name, value: p.id });
-		}
+		let activeIndex = -1;
+		let selectedId = "";
+		let menuOpen = false;
+		const itemEls: HTMLElement[] = [];
 
-		// Extra presets group
-		const presetsGroup = paletteSelect.createEl("optgroup", {
-			attr: { label: t("editor.paletteGroupPresets") },
-		});
-		for (const p of EXTRA_PALETTES) {
-			presetsGroup.createEl("option", { text: p.name, value: p.id });
-		}
-
-		// Color preview swatch next to dropdown
-		const previewSwatch = paletteRow.createDiv({
-			cls: "cs-palette-preview-swatch",
-		});
-		const updatePalettePreview = (
-			palette: { colorLight: string; colorDark: string } | null,
-		) => {
-			previewSwatch.empty();
-			if (!palette) return;
-			const c1 = previewSwatch.createDiv({ cls: "cs-palette-circle" });
-			c1.style.backgroundColor = palette.colorLight;
-			const c2 = previewSwatch.createDiv({ cls: "cs-palette-circle" });
-			c2.style.backgroundColor = palette.colorDark;
+		const renderTriggerCircles = (
+			lightColor: string | null,
+			darkColor: string | null,
+		): void => {
+			triggerCircles.empty();
+			if (lightColor === null || darkColor === null) return;
+			renderColorCircles(triggerCircles, lightColor, darkColor, {
+				size: 16,
+			});
 		};
 
-		paletteSelect.addEventListener("change", () => {
-			const selected = COLOR_PALETTES.find(
-				(p) => p.id === paletteSelect.value,
-			);
-			if (!selected) {
-				updatePalettePreview(null);
-				return;
+		const applyPaletteColors = (
+			palette: (typeof COLOR_PALETTES)[number],
+			persist: boolean,
+		): void => {
+			const prevLight = this.colorLight;
+			const prevDark = this.colorDark;
+			const prevBgL = this.bgColorLight;
+			const prevBgD = this.bgColorDark;
+
+			this.colorLight = palette.colorLight;
+			this.colorDark = palette.colorDark;
+			if (palette.bgColorLight !== undefined) {
+				this.bgColorLight = palette.bgColorLight;
+			}
+			if (palette.bgColorDark !== undefined) {
+				this.bgColorDark = palette.bgColorDark;
 			}
 
-			this.colorLight = selected.colorLight;
-			this.colorDark = selected.colorDark;
-			if (selected.bgColorLight !== undefined) {
-				this.bgColorLight = selected.bgColorLight;
-			}
-			if (selected.bgColorDark !== undefined) {
-				this.bgColorDark = selected.bgColorDark;
-			}
-			// Update color inputs
 			if (colorInputs.accentLight)
 				colorInputs.accentLight.value = this.colorLight;
 			if (colorInputs.accentDark)
@@ -439,9 +470,155 @@ export class CalloutEditor extends Modal {
 				colorInputs.bgLight.value = this.bgColorLight;
 			if (colorInputs.bgDark) colorInputs.bgDark.value = this.bgColorDark;
 
-			updatePalettePreview(selected);
 			this.updatePreview();
+
+			if (!persist) {
+				// Restore on next hover/leave; we keep no-op since the next
+				// hover will overwrite, and on close we re-apply selectedId.
+				void prevLight;
+				void prevDark;
+				void prevBgL;
+				void prevBgD;
+			}
+		};
+
+		const closeMenu = (): void => {
+			if (!menuOpen) return;
+			menuOpen = false;
+			menu.addClass("cs-palette-menu-hidden");
+			trigger.removeClass("is-open");
+			// Re-apply selected (or revert if nothing chosen)
+			const sel = COLOR_PALETTES.find((p) => p.id === selectedId);
+			if (sel) applyPaletteColors(sel, true);
+			else this.updatePreview();
+		};
+
+		const setActive = (index: number): void => {
+			if (index < 0 || index >= itemEls.length) return;
+			const prev = itemEls[activeIndex];
+			if (activeIndex >= 0 && prev) {
+				prev.removeClass("is-active");
+			}
+			activeIndex = index;
+			const el = itemEls[index];
+			if (!el) return;
+			el.addClass("is-active");
+			el.scrollIntoView({ block: "nearest" });
+			// Live preview the hovered preset (do not commit)
+			const entry = paletteEntries[index];
+			if (entry) applyPaletteColors(entry.palette, false);
+		};
+
+		const commitSelection = (index: number): void => {
+			if (index < 0 || index >= paletteEntries.length) return;
+			const entry = paletteEntries[index];
+			if (!entry) return;
+			selectedId = entry.id;
+			applyPaletteColors(entry.palette, true);
+			triggerLabel.setText(entry.name);
+			renderTriggerCircles(
+				entry.palette.colorLight,
+				entry.palette.colorDark,
+			);
+			this.customPresetSelected = true;
+			this.refreshColorGridVisibility?.();
+			this.updateSaveState();
+			closeMenu();
+		};
+
+		const buildMenu = (): void => {
+			menu.empty();
+			itemEls.length = 0;
+
+			const groupSpec: { key: "obsidian" | "preset"; label: string }[] = [
+				{ key: "obsidian", label: t("editor.paletteGroupObsidian") },
+				{ key: "preset", label: t("editor.paletteGroupPresets") },
+			];
+
+			for (const grp of groupSpec) {
+				const groupEntries = paletteEntries
+					.map((e, i) => ({ e, i }))
+					.filter(({ e }) => e.group === grp.key);
+				if (groupEntries.length === 0) continue;
+
+				menu.createDiv({
+					cls: "cs-palette-menu-group-label",
+					text: grp.label,
+				});
+
+				for (const { e, i } of groupEntries) {
+					const item = menu.createDiv({
+						cls: "cs-palette-menu-item",
+						attr: { role: "option", "data-index": String(i) },
+					});
+					renderColorCircles(
+						item,
+						e.palette.colorLight,
+						e.palette.colorDark,
+						{ size: 16 },
+					);
+					item.createSpan({
+						cls: "cs-palette-menu-item-label",
+						text: e.name,
+					});
+					item.addEventListener("mouseenter", () => setActive(i));
+					item.addEventListener("click", () => commitSelection(i));
+					itemEls[i] = item;
+					if (e.id === selectedId) item.addClass("is-selected");
+				}
+			}
+		};
+
+		const openMenu = (): void => {
+			if (menuOpen) return;
+			menuOpen = true;
+			buildMenu();
+			menu.removeClass("cs-palette-menu-hidden");
+			trigger.addClass("is-open");
+			// Focus selected, else first
+			const startIdx = paletteEntries.findIndex(
+				(e) => e.id === selectedId,
+			);
+			activeIndex = -1;
+			setActive(startIdx >= 0 ? startIdx : 0);
+			menu.focus();
+		};
+
+		trigger.addEventListener("click", () => {
+			if (menuOpen) closeMenu();
+			else openMenu();
 		});
+
+		menu.addEventListener("keydown", (ev) => {
+			if (ev.key === "ArrowDown") {
+				ev.preventDefault();
+				setActive(Math.min(activeIndex + 1, itemEls.length - 1));
+			} else if (ev.key === "ArrowUp") {
+				ev.preventDefault();
+				setActive(Math.max(activeIndex - 1, 0));
+			} else if (ev.key === "Enter") {
+				ev.preventDefault();
+				commitSelection(activeIndex);
+			} else if (ev.key === "Escape") {
+				ev.preventDefault();
+				closeMenu();
+			}
+		});
+
+		// Close menu when clicking outside
+		const outsideClick = (ev: MouseEvent): void => {
+			if (!menuOpen) return;
+			if (!dropdown.contains(ev.target as Node)) closeMenu();
+		};
+		document.addEventListener("click", outsideClick);
+		// Cleanup on close
+		this.modalEl.addEventListener(
+			"transitionend",
+			() => {
+				document.removeEventListener("click", outsideClick);
+			},
+			{ once: true },
+		);
 
 		// Header row
 		const gridHeader = colorGrid.createDiv({
@@ -565,6 +742,8 @@ export class CalloutEditor extends Modal {
 		});
 		lightInput.addEventListener("input", () => {
 			onChange(lightInput.value, undefined);
+			this.customPresetSelected = true;
+			this.updateSaveState();
 		});
 
 		const darkInput = row.createEl("input", {
@@ -574,6 +753,8 @@ export class CalloutEditor extends Modal {
 		});
 		darkInput.addEventListener("input", () => {
 			onChange(undefined, darkInput.value);
+			this.customPresetSelected = true;
+			this.updateSaveState();
 		});
 
 		return { light: lightInput, dark: darkInput };
@@ -604,6 +785,8 @@ export class CalloutEditor extends Modal {
 		if (!this.calloutId) return false;
 		// Custom callouts must have a display name
 		if (!this.isBuiltIn && !this.displayName.trim()) return false;
+		// New callouts require a color preset to be picked (or any manual edit)
+		if (this.existingId === null && !this.customPresetSelected) return false;
 		// ID must not conflict with existing callouts
 		const isIdChanged =
 			this.existingId !== null && this.calloutId !== this.existingId;

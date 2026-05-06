@@ -12,6 +12,7 @@ import { CalloutEditor } from "./CalloutEditor";
 import { materialFontFamily } from "../utils/iconLoader";
 import { ConfirmModal } from "../utils/ConfirmModal";
 import { ReplaceCalloutModal } from "../utils/ReplaceCalloutModal";
+import { renderColorCircles } from "../ui/ColorCircles";
 import {
 	countCalloutUsages,
 	replaceCalloutIdsInVault,
@@ -193,36 +194,14 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 			});
 		}
 
-		// Color swatches
+		// Color swatches — two overlapping circles (light + dark)
 		const colorsEl = row.createDiv({ cls: "callout-studio-row-colors" });
-		const lightSwatch = colorsEl.createDiv({
-			cls: "callout-studio-color-swatch",
-			attr: {
-				"aria-label": t("settings.lightColorAria", {
-					color: def.colorLight,
-				}),
-				title: t("settings.lightColorAria", { color: def.colorLight }),
-			},
-		});
-		lightSwatch.style.backgroundColor = def.colorLight;
-		lightSwatch.createSpan({
-			cls: "callout-studio-swatch-label",
-			text: t("settings.lightLabel"),
-		});
-
-		const darkSwatch = colorsEl.createDiv({
-			cls: "callout-studio-color-swatch",
-			attr: {
-				"aria-label": t("settings.darkColorAria", {
-					color: def.colorDark,
-				}),
-				title: t("settings.darkColorAria", { color: def.colorDark }),
-			},
-		});
-		darkSwatch.style.backgroundColor = def.colorDark;
-		darkSwatch.createSpan({
-			cls: "callout-studio-swatch-label",
-			text: t("settings.darkLabel"),
+		renderColorCircles(colorsEl, def.colorLight, def.colorDark, {
+			size: 18,
+			ariaLabel: t("settings.colorPairAria", {
+				light: def.colorLight,
+				dark: def.colorDark,
+			}),
 		});
 
 		// Buttons

@@ -443,31 +443,120 @@
 
 .cs-palette-dropdown {
 	flex: 1;
+	position: relative;
+}
+
+.cs-palette-trigger {
+	width: 100%;
+	display: flex;
+	align-items: center;
+	gap: 8px;
 	padding: 6px 8px;
 	border-radius: var(--radius-s);
 	border: 1px solid var(--background-modifier-border);
 	background-color: var(--background-secondary);
 	color: var(--text-normal);
 	font-size: var(--font-ui-small);
+	cursor: pointer;
+	text-align: start;
 }
 
-.cs-palette-preview-swatch {
+.cs-palette-trigger:hover,
+.cs-palette-trigger.is-open {
+	background-color: var(--background-modifier-hover);
+}
+
+.cs-palette-trigger-circles {
+	display: inline-flex;
+	min-width: 22px;
+}
+
+.cs-palette-trigger-label {
+	flex: 1;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.cs-palette-trigger-caret {
+	color: var(--text-muted);
+	font-size: 10px;
+}
+
+.cs-palette-menu {
+	position: absolute;
+	top: calc(100% + 4px);
+	inset-inline-start: 0;
+	min-width: 240px;
+	max-height: 320px;
+	overflow-y: auto;
+	z-index: 50;
+	padding: 6px 0;
+	border-radius: var(--radius-s);
+	border: 1px solid var(--background-modifier-border);
+	background-color: var(--background-primary);
+	box-shadow: var(--shadow-s);
+	outline: none;
+}
+
+.cs-palette-menu-hidden {
+	display: none;
+}
+
+.cs-palette-menu-group-label {
+	padding: 4px 12px;
+	font-size: var(--font-ui-smaller);
+	color: var(--text-faint);
+	text-transform: uppercase;
+	letter-spacing: 0.04em;
+}
+
+.cs-palette-menu-item {
 	display: flex;
 	align-items: center;
-	gap: 0;
-	min-width: 36px;
-	min-height: 20px;
+	gap: 10px;
+	padding: 6px 12px;
+	cursor: pointer;
+	color: var(--text-normal);
+	font-size: var(--font-ui-small);
 }
 
-.cs-palette-preview-swatch .cs-palette-circle {
-	width: 18px;
-	height: 18px;
+.cs-palette-menu-item.is-active,
+.cs-palette-menu-item:hover {
+	background-color: var(--background-modifier-hover);
+}
+
+.cs-palette-menu-item.is-selected {
+	background-color: var(--background-secondary-alt);
+}
+
+.cs-palette-menu-item-label {
+	flex: 1;
+}
+
+/* ─── Color circles (shared) ──────────────────────────────────── */
+.cs-color-circles {
+	--cs-circle-size: 16px;
+	display: inline-flex;
+	align-items: center;
+	flex-shrink: 0;
+}
+
+.cs-color-circle {
+	width: var(--cs-circle-size);
+	height: var(--cs-circle-size);
 	border-radius: 50%;
 	border: 1.5px solid var(--background-primary);
+	box-sizing: border-box;
 }
 
-.cs-palette-preview-swatch .cs-palette-circle + .cs-palette-circle {
-	margin-left: -6px;
+.cs-color-circle + .cs-color-circle {
+	margin-inline-start: calc(var(--cs-circle-size) * -0.4);
+}
+
+/* Color grid hidden state until a preset is chosen */
+.callout-studio-color-grid.cs-color-grid-hidden {
+	display: none;
 }
 
 /* ─── Compact Color Grid ──────────────────────────────────────── */

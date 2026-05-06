@@ -45,6 +45,7 @@ export const he: Record<string, string> = {
 	"settings.darkLabel": "כהה",
 	"settings.lightColorAria": "בהיר: {{color}}",
 	"settings.darkColorAria": "כהה: {{color}}",
+	"settings.colorPairAria": "בהיר: {{light}} · כהה: {{dark}}",
 
 	// Settings — Fallback callout
 	"settings.fallbackCallout": "תיבת הבלטה ברירת מחדל",

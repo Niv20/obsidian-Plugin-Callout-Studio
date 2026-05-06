@@ -45,6 +45,7 @@ export const en: Record<string, string> = {
 	"settings.darkLabel": "D",
 	"settings.lightColorAria": "Light: {{color}}",
 	"settings.darkColorAria": "Dark: {{color}}",
+	"settings.colorPairAria": "Light: {{light}} · Dark: {{dark}}",
 
 	// Settings — Fallback callout
 	"settings.fallbackCallout": "Default fallback callout",
