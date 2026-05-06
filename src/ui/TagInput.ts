@@ -17,6 +17,7 @@ export class TagInput {
 	private maxTags: number;
 	private errorTimeout: ReturnType<typeof setTimeout> | null = null;
 	private placeholder: string;
+	private readonlyTags: Set<string>;
 
 	constructor(
 		parentEl: HTMLElement,
@@ -32,6 +33,8 @@ export class TagInput {
 			maxTags?: number;
 			/** External error element (placed by caller, e.g. in the description column) */
 			errorEl?: HTMLElement;
+			/** Tags that cannot be removed (no × button rendered) */
+			readonlyTags?: string[];
 		},
 	) {
 		this.tags = [...(opts.initialTags ?? [])];
@@ -40,6 +43,7 @@ export class TagInput {
 		this.maxLength = opts.maxLength ?? MAX_TAG_LENGTH;
 		this.maxTags = opts.maxTags ?? MAX_TAGS_COUNT;
 		this.placeholder = opts.placeholder ?? "";
+		this.readonlyTags = new Set(opts.readonlyTags ?? []);
 
 		// Wrapper: input → tags row
 		this.wrapperEl = parentEl.createDiv({ cls: "cs-tag-wrapper" });
@@ -194,6 +198,7 @@ export class TagInput {
 	}
 
 	private removeTag(tag: string): void {
+		if (this.readonlyTags.has(tag)) return;
 		const idx = this.tags.indexOf(tag);
 		if (idx === -1) return;
 		this.tags.splice(idx, 1);
@@ -211,7 +216,12 @@ export class TagInput {
 		const tagEl = this.tagsRowEl.createDiv({ cls: "cs-tag-chip" });
 		tagEl.setAttribute("data-tag", tag);
 
+		const isReadonly = this.readonlyTags.has(tag);
+		if (isReadonly) tagEl.addClass("is-readonly");
+
 		tagEl.createSpan({ cls: "cs-tag-chip-text", text: tag });
+
+		if (isReadonly) return;
 
 		const removeBtn = tagEl.createSpan({ cls: "cs-tag-chip-remove" });
 		removeBtn.textContent = "×";

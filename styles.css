@@ -1103,6 +1103,11 @@
 	opacity: 1;
 }
 
+.cs-tag-chip.is-readonly {
+	opacity: 0.85;
+	font-style: italic;
+}
+
 /* ─── Disabled Display Name (Built-in) ───────────────────── */
 
 .setting-item input[type="text"]:disabled {

@@ -71,10 +71,47 @@ export async function replaceCalloutIdsInVault(
 }
 
 /**
+ * Rewrite `+/-` fold markers on every `> [!id]` (or alias) line in the vault
+ * to match `desiredMarker` ("" = no marker, "+" = open, "-" = closed).
+ * Only writes a file if at least one line changed.
+ */
+export async function normalizeFoldMarkersInVault(
+	app: App,
+	ids: string[],
+	desiredMarker: "" | "+" | "-",
+): Promise<number> {
+	if (ids.length === 0) return 0;
+
+	const pattern = ids.map(escapeRegex).join("|");
+	const regex = new RegExp(`(^>\\s*\\[!(?:${pattern})\\])([+-]?)`, "gim");
+
+	const files = app.vault.getMarkdownFiles();
+	let totalReplacements = 0;
+
+	for (const file of files) {
+		const content = await app.vault.read(file);
+		let count = 0;
+		const newContent = content.replace(
+			regex,
+			(_match, prefix: string, current: string) => {
+				if (current === desiredMarker) return _match;
+				count++;
+				return `${prefix}${desiredMarker}`;
+			},
+		);
+		if (count > 0) {
+			totalReplacements += count;
+			await app.vault.modify(file, newContent);
+		}
+	}
+
+	return totalReplacements;
+}
+
+/**
  * Scan every Markdown file once and return the set of callout IDs that
  * are referenced via `> [!id]` syntax but are NOT in the supplied known set.
- */
-export async function scanVaultForUnknownCallouts(
+ */export async function scanVaultForUnknownCallouts(
 	app: App,
 	knownIds: Set<string>,
 ): Promise<string[]> {

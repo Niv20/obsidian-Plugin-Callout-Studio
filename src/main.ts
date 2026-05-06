@@ -19,6 +19,8 @@ export default class CalloutStudioPlugin extends Plugin {
 	registry!: CalloutRegistry;
 	cssInjector!: CSSInjector;
 	api!: CalloutStudioAPI;
+	/** In-memory record of Material SVGs that failed to download after retries */
+	failedMaterialSvgs: Set<string> = new Set();
 
 	get settings(): PluginSettings {
 		return this.registry.settings;
@@ -221,23 +223,49 @@ export default class CalloutStudioPlugin extends Plugin {
 		const weight = icon.weight ?? 400;
 		// Skip if already cached
 		if (this.registry.findMaterialSvg(icon.value, style, weight)) return;
-		try {
-			const svg = await downloadMaterialSvg(icon.value, style, weight);
-			this.registry.addMaterialSvg({
-				name: icon.value,
-				style,
-				weight,
-				svg,
-			});
-			this.registry.cleanupUnusedMaterialSvgs();
-			this.cssInjector.inject();
-			await this.saveSettings();
-		} catch (err) {
-			console.warn(
-				"Callout Studio: failed to download Material SVG",
-				err,
-			);
+		const failKey = `${icon.value}|${style}|${weight}`;
+		// Retry up to 3 times with a 2s gap between attempts
+		const maxAttempts = 3;
+		let lastErr: unknown;
+		for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+			try {
+				const svg = await downloadMaterialSvg(
+					icon.value,
+					style,
+					weight,
+				);
+				this.registry.addMaterialSvg({
+					name: icon.value,
+					style,
+					weight,
+					svg,
+				});
+				this.failedMaterialSvgs.delete(failKey);
+				this.registry.cleanupUnusedMaterialSvgs();
+				this.cssInjector.inject();
+				await this.saveSettings();
+				return;
+			} catch (err) {
+				lastErr = err;
+				if (attempt < maxAttempts) {
+					await new Promise((r) => setTimeout(r, 2000));
+				}
+			}
 		}
+		this.failedMaterialSvgs.add(failKey);
+		console.warn(
+			"Callout Studio: failed to download Material SVG after retries",
+			lastErr,
+		);
+	}
+
+	/** Returns true when a Material SVG download has permanently failed (after retries). */
+	hasMaterialSvgFailed(
+		name: string,
+		style: import("./types").MaterialIconStyle,
+		weight: number,
+	): boolean {
+		return this.failedMaterialSvgs.has(`${name}|${style}|${weight}`);
 	}
 
 	/**

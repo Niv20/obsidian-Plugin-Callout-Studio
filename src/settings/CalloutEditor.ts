@@ -2,7 +2,6 @@ import { Modal, Notice, Setting, setIcon, SliderComponent } from "obsidian";
 import type CalloutStudioPlugin from "../main";
 import type { CalloutDefinition, CalloutIcon } from "../types";
 import { IconPicker } from "./IconPicker";
-import { materialFontFamily } from "../utils/iconLoader";
 import { blendHex } from "../utils/colorUtils";
 import {
 	COLOR_PALETTES,
@@ -14,6 +13,7 @@ import { TagInput } from "../ui/TagInput";
 import { renderColorCircles } from "../ui/ColorCircles";
 import {
 	countCalloutUsages,
+	normalizeFoldMarkersInVault,
 	replaceCalloutIdsInVault,
 	replaceCalloutTitlesInVault,
 } from "../utils/vaultCalloutScanner";
@@ -165,6 +165,7 @@ export class CalloutEditor extends Modal {
 			initialTags: initialIds,
 			placeholder: t("editor.calloutIdsPlaceholder"),
 			errorEl: idsErrorEl,
+			readonlyTags: this.isBuiltIn ? initialIds : undefined,
 			onChange: (tags) => {
 				this.calloutId = tags[0] ?? "";
 				this.aliases = tags.slice(1);
@@ -698,47 +699,45 @@ export class CalloutEditor extends Modal {
 		colorInputs.accentLight = accentInputs.light;
 		colorInputs.accentDark = accentInputs.dark;
 
-		// Default Folded — disabled when foldable is off
-		let defaultFoldedToggle: import("obsidian").ToggleComponent | null =
-			null;
-		const defaultFoldedSetting = new Setting(contentEl)
-			.setName(t("editor.defaultFolded"))
-			.setDesc(t("editor.defaultFoldedDesc"))
-			.addToggle((toggle) => {
-				defaultFoldedToggle = toggle;
-				toggle.setValue(this.defaultFolded).onChange((value) => {
-					this.defaultFolded = value;
-					this.updateSaveState();
-				});
-				toggle.setDisabled(!this.foldable);
-			});
-		const updateDefaultFoldedGating = (): void => {
-			defaultFoldedSetting.settingEl.toggleClass(
-				"is-disabled",
-				!this.foldable,
-			);
-			defaultFoldedToggle?.setDisabled(!this.foldable);
-			if (!this.foldable && this.defaultFolded) {
-				this.defaultFolded = false;
-				defaultFoldedToggle?.setValue(false);
-			}
-		};
-
-		// Foldable
-		new Setting(contentEl)
+		// Foldable — single 3-state segmented (Off / Open / Closed)
+		const foldSetting = new Setting(contentEl)
 			.setName(t("editor.foldable"))
-			.setDesc(t("editor.foldableDesc"))
-			.addToggle((toggle) => {
-				toggle.setValue(this.foldable).onChange((value) => {
-					this.foldable = value;
-					updateDefaultFoldedGating();
-					this.updateSaveState();
-				});
+			.setDesc(t("editor.foldableDesc"));
+		const foldSegmented = foldSetting.controlEl.createDiv({
+			cls: "cs-segmented",
+		});
+		const foldOptions: {
+			value: "off" | "open" | "closed";
+			label: string;
+		}[] = [
+			{ value: "off", label: t("editor.foldOff") },
+			{ value: "open", label: t("editor.foldOpen") },
+			{ value: "closed", label: t("editor.foldClosed") },
+		];
+		const currentFoldState = (): "off" | "open" | "closed" =>
+			!this.foldable ? "off" : this.defaultFolded ? "closed" : "open";
+		const foldBtns: HTMLButtonElement[] = [];
+		for (const opt of foldOptions) {
+			const btn = foldSegmented.createEl("button", {
+				cls: `cs-segmented-btn${
+					currentFoldState() === opt.value ? " is-active" : ""
+				}`,
+				text: opt.label,
 			});
-
-		// Move the Default Folded row visually after Foldable in the DOM
-		contentEl.appendChild(defaultFoldedSetting.settingEl);
-		updateDefaultFoldedGating();
+			btn.addEventListener("click", () => {
+				if (opt.value === "off") {
+					this.foldable = false;
+					this.defaultFolded = false;
+				} else {
+					this.foldable = true;
+					this.defaultFolded = opt.value === "closed";
+				}
+				for (const b of foldBtns) b.removeClass("is-active");
+				btn.addClass("is-active");
+				this.updateSaveState();
+			});
+			foldBtns.push(btn);
+		}
 
 		// Action buttons — sticky bottom bar
 		const buttonContainer = this.modalEl.createDiv({
@@ -917,20 +916,12 @@ export class CalloutEditor extends Modal {
 						container.doc.importNode(svgEl, true),
 					);
 				} else {
-					const span = container.createSpan({
-						cls: "callout-studio-material-icon",
-						text: this.icon.value,
-					});
-					const fontFamily = materialFontFamily(
+					const failed = this.plugin.hasMaterialSvgFailed(
+						this.icon.value,
 						this.icon.style ?? "outlined",
+						this.icon.weight ?? 400,
 					);
-					span.setCssProps({
-						"--cs-material-font": `"${fontFamily}"`,
-						"--cs-material-weight": String(this.icon.weight ?? 400),
-					});
-					if (this.icon.style === "filled") {
-						span.setCssProps({ "--cs-material-fill": "1" });
-					}
+					setIcon(container, failed ? "image-off" : "loader-2");
 				}
 				break;
 			}
@@ -1026,11 +1017,15 @@ export class CalloutEditor extends Modal {
 		let removedIds: string[] = [];
 		let oldDisplayName: string | null = null;
 		let oldAllIds: string[] = [];
+		let oldFoldable = false;
+		let oldDefaultFolded = false;
 		if (this.existingId) {
 			const existingDef = this.plugin.registry.get(this.existingId);
 			if (existingDef) {
 				oldDisplayName = existingDef.displayName;
 				oldAllIds = [existingDef.id, ...(existingDef.aliases ?? [])];
+				oldFoldable = existingDef.foldable;
+				oldDefaultFolded = existingDef.defaultFolded;
 				const newIdSet = new Set(
 					[this.calloutId, ...this.aliases].map((s) =>
 						s.toLowerCase(),
@@ -1150,6 +1145,25 @@ export class CalloutEditor extends Modal {
 					}),
 				);
 			}
+		}
+
+		// Auto-normalize fold markers in vault when fold state changed
+		if (
+			this.existingId &&
+			(oldFoldable !== this.foldable ||
+				oldDefaultFolded !== this.defaultFolded)
+		) {
+			const desiredMarker: "" | "+" | "-" = !this.foldable
+				? ""
+				: this.defaultFolded
+					? "-"
+					: "+";
+			const allCurrentIds = [this.calloutId, ...this.aliases];
+			await normalizeFoldMarkersInVault(
+				this.app,
+				allCurrentIds,
+				desiredMarker,
+			);
 		}
 
 		if (this.resolve) this.resolve(def);
