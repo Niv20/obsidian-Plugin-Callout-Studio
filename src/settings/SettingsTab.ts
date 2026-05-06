@@ -1,5 +1,4 @@
 import {
-	Menu,
 	Modal,
 	Notice,
 	PluginSettingTab,
@@ -40,79 +39,50 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 		this.renderFallbackCalloutSection(containerEl);
 		this.renderGlobalStyleSection(containerEl);
 		this.renderAutocompleteSettings(containerEl);
-		this.renderPopupSettings(containerEl);
+		this.renderContextMenuSettings(containerEl);
 		this.renderIconSourceSettings(containerEl);
 		this.renderColorModeSettings(containerEl);
 		this.renderLanguageSettings(containerEl);
+		this.renderImportExportSection(containerEl);
 		this.renderResetSection(containerEl);
 	}
 
 	// ─── Section A: My Callout Types ─────────────────────────
 
 	private renderCalloutTypesSection(containerEl: HTMLElement): void {
-		new Setting(containerEl)
+		// Top header: large "Callout Studio" title with search inline
+		const headerSetting = new Setting(containerEl)
+			.setName(t("settings.title"))
+			.setHeading()
+			.addSearch((search) => {
+				search
+					.setPlaceholder(t("settings.searchPlaceholder"))
+					.setValue(this.searchQuery)
+					.onChange((value) => {
+						this.searchQuery = value;
+						this.refreshLists();
+					});
+			});
+		headerSetting.settingEl.addClass("cs-header-row");
+
+		// Subheader: "My callout types" + Add new (button omitted when empty)
+		const subSetting = new Setting(containerEl)
 			.setName(t("settings.myCalloutTypes"))
 			.setHeading();
-
-		// Toolbar: search + add button + kebab menu
-		const toolbar = containerEl.createDiv({
-			cls: "callout-studio-toolbar",
-		});
-
-		const searchWrap = toolbar.createDiv({
-			cls: "callout-studio-toolbar-search",
-		});
-		new Setting(searchWrap).addSearch((search) => {
-			search
-				.setPlaceholder(t("settings.searchPlaceholder"))
-				.setValue(this.searchQuery)
-				.onChange((value) => {
-					this.searchQuery = value;
-					this.refreshLists();
-				});
-		});
-
-		const addBtn = toolbar.createEl("button", {
-			text: t("settings.addNewCallout"),
-			cls: "mod-cta",
-		});
-		// eslint-disable-next-line @typescript-eslint/no-misused-promises
-		addBtn.addEventListener("click", async () => {
-			const editor = new CalloutEditor(this.plugin);
-			await editor.open();
-			this.display();
-		});
-
-		const kebabBtn = toolbar.createEl("button", {
-			cls: "clickable-icon callout-studio-kebab-btn",
-			attr: { "aria-label": t("settings.moreActions") },
-		});
-		setIcon(kebabBtn, "more-vertical");
-		kebabBtn.addEventListener("click", (evt) => {
-			const menu = new Menu();
-			menu.addItem((item) =>
-				item
-					.setTitle(t("settings.importCSS"))
-					.setIcon("file-code")
+		subSetting.settingEl.addClass("cs-subheader-row");
+		if (this.plugin.registry.getUserDefined().length > 0) {
+			subSetting.addButton((btn) =>
+				btn
+					.setButtonText(t("settings.addNewCallout"))
+					.setCta()
+					// eslint-disable-next-line @typescript-eslint/no-misused-promises
 					.onClick(async () => {
-						await this.importFromSnippets();
+						const editor = new CalloutEditor(this.plugin);
+						await editor.open();
 						this.display();
 					}),
 			);
-			menu.addItem((item) =>
-				item
-					.setTitle(t("settings.importJSON"))
-					.setIcon("file-json")
-					.onClick(() => this.importFromJSON()),
-			);
-			menu.addItem((item) =>
-				item
-					.setTitle(t("settings.exportAll"))
-					.setIcon("download")
-					.onClick(() => this.exportCallouts()),
-			);
-			menu.showAtMouseEvent(evt);
-		});
+		}
 
 		// User-defined callout list container
 		this.userListEl = containerEl.createDiv();
@@ -127,13 +97,28 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 		const filtered = this.filterCallouts(userCallouts);
 
 		if (filtered.length === 0) {
-			this.userListEl.createEl("p", {
+			const emptyWrap = this.userListEl.createDiv({
+				cls: "cs-empty-state",
+			});
+			emptyWrap.createEl("p", {
 				text:
 					userCallouts.length === 0
 						? t("settings.noCalloutsYet")
 						: t("settings.noMatch"),
 				cls: "callout-studio-empty-state",
 			});
+			if (userCallouts.length === 0) {
+				const addBtn = emptyWrap.createEl("button", {
+					text: t("settings.addNewCallout"),
+					cls: "mod-cta cs-empty-add-btn",
+				});
+				// eslint-disable-next-line @typescript-eslint/no-misused-promises
+				addBtn.addEventListener("click", async () => {
+					const editor = new CalloutEditor(this.plugin);
+					await editor.open();
+					this.display();
+				});
+			}
 		} else {
 			const listEl = this.userListEl.createDiv({
 				cls: "callout-studio-callout-list",
@@ -833,55 +818,61 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 			);
 	}
 
-	// ─── Section C: Context Menu / Popup Settings ────────────
+	// ─── Section C: Context Menu Settings ────────────────────
 
-	private renderPopupSettings(containerEl: HTMLElement): void {
-		const { popup } = this.plugin.settings;
+	private renderContextMenuSettings(containerEl: HTMLElement): void {
+		const { contextMenu } = this.plugin.settings;
 
 		new Setting(containerEl)
-			.setName(t("settings.contextMenuPopup"))
+			.setName(t("settings.contextMenu"))
 			.setHeading();
 
 		const itemsContainer = containerEl.createDiv();
 
 		const renderItems = () => {
 			itemsContainer.empty();
-			if (!popup.enabled) return;
+			if (!contextMenu.enabled) return;
 
 			new Setting(itemsContainer)
 				.setName(t("settings.showEditCallout"))
 				.addToggle((tog) =>
-					tog.setValue(popup.showEditCallout).onChange(async (v) => {
-						popup.showEditCallout = v;
-						await this.plugin.saveSettings();
-					}),
+					tog
+						.setValue(contextMenu.showEditCallout)
+						.onChange(async (v) => {
+							contextMenu.showEditCallout = v;
+							await this.plugin.saveSettings();
+						}),
 				);
 
 			new Setting(itemsContainer)
 				.setName(t("settings.showOpenSettings"))
 				.addToggle((tog) =>
-					tog.setValue(popup.showOpenSettings).onChange(async (v) => {
-						popup.showOpenSettings = v;
-						await this.plugin.saveSettings();
-					}),
+					tog
+						.setValue(contextMenu.showOpenSettings)
+						.onChange(async (v) => {
+							contextMenu.showOpenSettings = v;
+							await this.plugin.saveSettings();
+						}),
 				);
 
 			new Setting(itemsContainer)
 				.setName(t("settings.showCopyMarkdown"))
 				.addToggle((tog) =>
-					tog.setValue(popup.showCopyMarkdown).onChange(async (v) => {
-						popup.showCopyMarkdown = v;
-						await this.plugin.saveSettings();
-					}),
+					tog
+						.setValue(contextMenu.showCopyMarkdown)
+						.onChange(async (v) => {
+							contextMenu.showCopyMarkdown = v;
+							await this.plugin.saveSettings();
+						}),
 				);
 		};
 
 		new Setting(containerEl)
-			.setName(t("settings.enablePopup"))
-			.setDesc(t("settings.enablePopupDesc"))
+			.setName(t("settings.enableContextMenu"))
+			.setDesc(t("settings.enableContextMenuDesc"))
 			.addToggle((tog) =>
-				tog.setValue(popup.enabled).onChange(async (v) => {
-					popup.enabled = v;
+				tog.setValue(contextMenu.enabled).onChange(async (v) => {
+					contextMenu.enabled = v;
 					await this.plugin.saveSettings();
 					renderItems();
 				}),
@@ -1156,17 +1147,36 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 					return;
 				}
 				let imported = 0;
+				let overwritten = 0;
 				for (const def of defs) {
 					if (!def.id || !def.displayName) continue;
-					const added = this.plugin.registry.add({
+					const incoming: CalloutDefinition = {
 						...def,
 						builtIn: false,
 						source: "user",
-					});
-					if (added) imported++;
+					};
+					if (this.plugin.registry.has(def.id)) {
+						this.plugin.registry.update(def.id, incoming);
+						overwritten++;
+						imported++;
+					} else {
+						const added = this.plugin.registry.add(incoming);
+						if (added) imported++;
+					}
 				}
 				if (imported > 0) {
-					new Notice(t("notice.importedJSON", { count: imported }));
+					if (overwritten > 0) {
+						new Notice(
+							t("settings.importConflictNotice", {
+								count: imported,
+								overwritten,
+							}),
+						);
+					} else {
+						new Notice(
+							t("notice.importedJSON", { count: imported }),
+						);
+					}
 					this.display();
 				} else {
 					new Notice(t("notice.noNewJSON"));
@@ -1176,6 +1186,30 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 			}
 		});
 		input.click();
+	}
+
+	// ─── Section: Import / Export ────────────────────────────
+
+	private renderImportExportSection(containerEl: HTMLElement): void {
+		new Setting(containerEl)
+			.setName(t("settings.importExport"))
+			.setHeading();
+
+		new Setting(containerEl)
+			.setDesc(t("settings.importExportDesc"))
+			.addButton((btn) =>
+				btn
+					.setButtonText(t("settings.import"))
+					.setIcon("upload")
+					.onClick(() => this.importFromJSON()),
+			)
+			.addButton((btn) =>
+				btn
+					.setButtonText(t("settings.export"))
+					.setIcon("download")
+					.setCta()
+					.onClick(() => this.exportCallouts()),
+			);
 	}
 
 	// ─── Section H: Language ─────────────────────────────────

@@ -4,6 +4,55 @@
 
 /* ─── Settings Panel ──────────────────────────────────────────── */
 
+/* Big "Callout Studio" header with search on the same row */
+.callout-studio-settings .cs-header-row.setting-item {
+	border-top: none;
+	padding-top: 0;
+	padding-bottom: 8px;
+	align-items: center;
+}
+
+.callout-studio-settings .cs-header-row .setting-item-name {
+	font-size: 1.6em;
+	font-weight: 700;
+	color: var(--text-normal);
+}
+
+.callout-studio-settings .cs-header-row .setting-item-control {
+	flex: 1;
+	justify-content: flex-end;
+}
+
+.callout-studio-settings .cs-header-row .search-input-container {
+	min-width: 220px;
+}
+
+/* Subheading row: "My callout types" + Add new */
+.callout-studio-settings .cs-subheader-row.setting-item {
+	padding-top: 4px;
+	padding-bottom: 8px;
+	border-top: none;
+}
+
+.callout-studio-settings .cs-subheader-row .setting-item-name {
+	font-size: 1.05em;
+	font-weight: 600;
+}
+
+/* Empty state — notice + add button stacked */
+.callout-studio-settings .cs-empty-state {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 8px;
+	padding: 12px 0;
+	margin-bottom: 8px;
+}
+
+.callout-studio-settings .cs-empty-state .callout-studio-empty-state {
+	margin: 0;
+}
+
 .callout-studio-settings .callout-studio-toolbar {
 	display: flex;
 	align-items: center;
@@ -598,197 +647,6 @@
 	white-space: nowrap;
 }
 
-/* ─── Transparent Popup ───────────────────────────────────────── */
-
-.callout-studio-popup {
-	position: fixed;
-	top: var(--cs-popup-top, 0);
-	left: var(--cs-popup-left, 0);
-	background: rgba(
-		var(--background-primary-rgb, 255, 255, 255),
-		var(--cs-popup-opacity, 0.85)
-	);
-	backdrop-filter: blur(var(--cs-popup-blur, 8px));
-	-webkit-backdrop-filter: blur(var(--cs-popup-blur, 8px));
-	border: 1px solid rgba(var(--color-base-30, 200, 200, 200), 0.4);
-	border-radius: 10px;
-	box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
-	padding: 8px;
-	min-width: 220px;
-	max-width: 320px;
-	max-height: 400px;
-	overflow-y: auto;
-	z-index: 9999;
-}
-
-.callout-studio-popup.is-measuring {
-	visibility: hidden;
-	display: block;
-}
-
-/* Animations */
-.callout-studio-popup-anim-scale {
-	animation: cs-popup-scale 150ms cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.callout-studio-popup-anim-fade {
-	animation: cs-popup-fade 150ms ease;
-}
-
-.callout-studio-popup-anim-slide {
-	animation: cs-popup-slide 150ms cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-@keyframes cs-popup-scale {
-	from {
-		opacity: 0;
-		transform: scale(0.95) translateY(-4px);
-	}
-	to {
-		opacity: 1;
-		transform: scale(1) translateY(0);
-	}
-}
-
-@keyframes cs-popup-fade {
-	from {
-		opacity: 0;
-	}
-	to {
-		opacity: 1;
-	}
-}
-
-@keyframes cs-popup-slide {
-	from {
-		opacity: 0;
-		transform: translateY(-8px);
-	}
-	to {
-		opacity: 1;
-		transform: translateY(0);
-	}
-}
-
-/* Popup header */
-.callout-studio-popup-header {
-	font-size: var(--font-ui-smaller);
-	font-weight: var(--font-semibold);
-	color: var(--text-muted);
-	padding: 4px 8px 6px;
-	text-transform: uppercase;
-	letter-spacing: 0.5px;
-}
-
-/* Popup list */
-.callout-studio-popup-list {
-	display: flex;
-	flex-direction: column;
-}
-
-.callout-studio-popup-item {
-	display: flex;
-	align-items: center;
-	gap: 8px;
-	padding: 6px 8px;
-	border-radius: 6px;
-	cursor: pointer;
-	transition: background 100ms ease;
-}
-
-.callout-studio-popup-item:hover,
-.callout-studio-popup-item:focus-visible {
-	background: var(--background-modifier-hover);
-	outline: none;
-}
-
-.callout-studio-popup-item-icon {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	width: 18px;
-	height: 18px;
-	flex-shrink: 0;
-	color: var(--text-muted);
-}
-
-.callout-studio-popup-item-icon svg {
-	width: 16px;
-	height: 16px;
-}
-
-.callout-studio-popup-item-dot {
-	width: 8px;
-	height: 8px;
-	border-radius: 50%;
-	flex-shrink: 0;
-}
-
-.callout-studio-popup-item-name {
-	font-size: var(--font-ui-small);
-	flex: 1;
-}
-
-/* Popup divider */
-.callout-studio-popup-divider {
-	height: 1px;
-	background: var(--background-modifier-border);
-	margin: 6px 4px;
-}
-
-/* Popup actions */
-.callout-studio-popup-actions {
-	display: flex;
-	flex-direction: column;
-}
-
-.callout-studio-popup-action {
-	display: flex;
-	align-items: center;
-	gap: 8px;
-	padding: 6px 8px;
-	border-radius: 6px;
-	cursor: pointer;
-	font-size: var(--font-ui-small);
-	color: var(--text-muted);
-	transition:
-		background 100ms ease,
-		color 100ms ease;
-}
-
-.callout-studio-popup-action:hover,
-.callout-studio-popup-action:focus-visible {
-	background: var(--background-modifier-hover);
-	color: var(--text-normal);
-	outline: none;
-}
-
-.callout-studio-popup-action-icon {
-	display: flex;
-	align-items: center;
-	width: 16px;
-	height: 16px;
-	flex-shrink: 0;
-}
-
-.callout-studio-popup-action-icon svg {
-	width: 14px;
-	height: 14px;
-}
-
-/* Popup footer */
-.callout-studio-popup-footer {
-	font-size: var(--font-ui-smaller);
-	color: var(--text-faint);
-	padding: 6px 8px 2px;
-	cursor: pointer;
-	text-align: center;
-}
-
-.callout-studio-popup-footer:hover {
-	color: var(--text-accent);
-}
-
 /* ─── Icon Picker Modal ──────────────────────────────────────── */
 
 .callout-studio-icon-picker .modal-content {
@@ -1154,14 +1012,6 @@
 .callout-studio-preview-toggle {
 	min-height: 32px;
 	min-width: 32px;
-}
-
-.callout-studio-popup-action {
-	min-height: 32px;
-}
-
-.callout-studio-popup-item {
-	min-height: 32px;
 }
 
 /* ─── Tag Input (Aliases) ─────────────────────────────────────── */

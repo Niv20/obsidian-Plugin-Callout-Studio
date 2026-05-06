@@ -8,12 +8,20 @@ export const he: Record<string, string> = {
 	"cmd.calloutUnwrapSelection": "פתיחת הבחירה מתוך callout",
 
 	// Settings — Section headings
+	"settings.title": "Callout Studio",
 	"settings.myCalloutTypes": "סוגי תיבות ההבלטה שלי",
 	"settings.builtInCallouts": "תיבות הבלטה מובנות",
-	"settings.contextMenuPopup": "תפריט הקשר צף (Popup)",
+	"settings.contextMenu": "תפריט הקשר",
 	"settings.autocomplete": "השלמה אוטומטית",
 	"settings.iconSources": "מקורות אייקונים",
 	"settings.colorMode": "מצב צבע",
+	"settings.importExport": "ייבוא / ייצוא",
+	"settings.importExportDesc":
+		"ייבוא תיבות הבלטה מקובץ JSON או CSS Snippet, או ייצוא הכל לקובץ JSON.",
+	"settings.import": "ייבוא",
+	"settings.export": "ייצוא",
+	"settings.importConflictNotice":
+		"יובאו {{count}} תיבות הבלטה; {{overwritten}} רשומות קיימות שודרגו מחדש.",
 
 	// Settings — Toolbar
 	"settings.searchPlaceholder": "סינון לפי שם או מזהה (ID)...",
@@ -69,30 +77,13 @@ export const he: Record<string, string> = {
 	"settings.previewCalloutContent":
 		"לורם איפסום דולור סיט אמט, קונסקטורר אדיפיסינג אלית.",
 
-	// Settings — Popup
-	"settings.enablePopup": "הפעלת תפריט הקשר צף",
-	"settings.enablePopupDesc":
-		"הוספת פעולות נוספות לתפריט הקליק הימני כאשר הסמן נמצא בתוך תיבת הבלטה. פועל במצב Source mode ובמצב Live Preview בעת עריכת תוכן ה-callout.",
-	"settings.popupPosition": "מיקום התפריט הצף",
-	"settings.topLeft": "שמאל-למעלה",
-	"settings.topRight": "ימין-למעלה",
-	"settings.cursor": "סמן",
-	"settings.popupTransparency": "שקיפות התפריט הצף",
-	"settings.popupTransparencyDesc": "0% = אטום לחלוטין, 100% = שקוף לחלוטין",
-	"settings.backdropBlur": "טשטוש רקע (Backdrop blur)",
-	"settings.backdropBlurDesc": "עוצמת הטשטוש בפיקסלים (0–20)",
-	"settings.showIconsPopup": "הצגת אייקונים בתפריט הצף",
-	"settings.showColorDots": "הצגת נקודות צבע בתפריט הצף",
-	"settings.maxItemsPopup": "מספר פריטים מקסימלי בתפריט הצף",
+	// Settings — Context menu
+	"settings.enableContextMenu": "הפעלת פעולות תפריט הקשר ל-callout",
+	"settings.enableContextMenuDesc":
+		"הוספת פעולות נוספות לתפריט הקליק הימני של Obsidian כאשר לוחצים על callout. פועל ב-Reading view, ב-Source mode וב-Live Preview.",
 	"settings.showEditCallout": 'הצגת "עריכת הגדרות תיבת הבלטה"',
 	"settings.showOpenSettings": 'הצגת "פתיחת הגדרות Callout Studio"',
 	"settings.showCopyMarkdown": 'הצגת "העתקת קוד Markdown"',
-	"settings.showEditButton": 'הצגת כפתור "עריכת תיבת הבלטה"',
-	"settings.popupAnimation": "אנימציית תפריט צף",
-	"settings.animFade": "עמעום (Fade)",
-	"settings.animSlide": "החלקה (Slide)",
-	"settings.animScale": "הגדלה (Scale)",
-	"settings.animNone": "ללא",
 
 	// Settings — Autocomplete
 	"settings.enableAutocomplete": "הפעלת השלמה אוטומטית ל-[!",
@@ -246,14 +237,6 @@ export const he: Record<string, string> = {
 	"contextMenu.editCallout": "עריכת הגדרות תיבת הבלטה",
 	"contextMenu.copyMarkdown": "העתקת קוד Markdown",
 	"contextMenu.openSettings": "פתיחת הגדרות Callout Studio",
-
-	// Transparent Popup
-	"popup.convertTo": "המרת תיבת הבלטה ל:",
-	"popup.convertToAria": "המר ל-{{name}}",
-	"popup.copyMarkdown": "העתקת קוד Markdown",
-	"popup.customize": "התאמה אישית של סוג זה",
-	"popup.createNew": "יצירת סוג חדש על בסיס זה",
-	"popup.openSettings": "פתיחת הגדרות Callout Studio ←",
 
 	// Confirm modal
 	"confirm.ok": "מחיקה",

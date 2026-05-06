@@ -8,12 +8,20 @@ export const en: Record<string, string> = {
 	"cmd.calloutUnwrapSelection": "Unwrap selection from callout",
 
 	// Settings — Section headings
+	"settings.title": "Callout Studio",
 	"settings.myCalloutTypes": "My callout types",
 	"settings.builtInCallouts": "Built-in callouts",
-	"settings.contextMenuPopup": "Context menu popup",
+	"settings.contextMenu": "Context menu",
 	"settings.autocomplete": "Autocomplete",
 	"settings.iconSources": "Icon sources",
 	"settings.colorMode": "Color mode",
+	"settings.importExport": "Import / export",
+	"settings.importExportDesc":
+		"Import callouts from a JSON or CSS snippet, or export everything to a JSON file.",
+	"settings.import": "Import",
+	"settings.export": "Export",
+	"settings.importConflictNotice":
+		"Imported {{count}} callout type(s); {{overwritten}} existing entry/entries were overwritten.",
 
 	// Settings — Toolbar
 	"settings.searchPlaceholder": "Filter by name or ID...",
@@ -70,31 +78,13 @@ export const en: Record<string, string> = {
 	"settings.previewCalloutContent":
 		"Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
 
-	// Settings — Popup
-	"settings.enablePopup": "Enable context menu popup",
-	"settings.enablePopupDesc":
-		"Add extra actions to the right-click context menu when your cursor is inside a callout. Works in Source mode and in Live Preview while editing callout content.",
-	"settings.popupPosition": "Popup position",
-	"settings.topLeft": "Top-left",
-	"settings.topRight": "Top-right",
-	"settings.cursor": "Cursor",
-	"settings.popupTransparency": "Popup transparency",
-	"settings.popupTransparencyDesc":
-		"0% = fully opaque, 100% = fully transparent",
-	"settings.backdropBlur": "Backdrop blur",
-	"settings.backdropBlurDesc": "Blur amount in pixels (0\u201320)",
-	"settings.showIconsPopup": "Show icons in popup",
-	"settings.showColorDots": "Show color dots in popup",
-	"settings.maxItemsPopup": "Max items visible in popup",
+	// Settings — Context menu
+	"settings.enableContextMenu": "Enable callout context actions",
+	"settings.enableContextMenuDesc":
+		"Add extra actions to Obsidian's right-click menu when you right-click a callout. Works in Reading view, Source mode, and Live Preview.",
 	"settings.showEditCallout": 'Show "Edit callout settings"',
 	"settings.showOpenSettings": 'Show "Open callout studio settings"',
 	"settings.showCopyMarkdown": 'Show "Copy callout Markdown"',
-	"settings.showEditButton": 'Show "edit callout" button',
-	"settings.popupAnimation": "Popup animation",
-	"settings.animFade": "Fade",
-	"settings.animSlide": "Slide",
-	"settings.animScale": "Scale",
-	"settings.animNone": "None",
 
 	// Settings — Autocomplete
 	"settings.enableAutocomplete": "Enable [! Autocomplete",
@@ -248,14 +238,6 @@ export const en: Record<string, string> = {
 	"contextMenu.editCallout": "Edit callout settings",
 	"contextMenu.copyMarkdown": "Copy callout Markdown",
 	"contextMenu.openSettings": "Open callout studio settings",
-
-	// Transparent Popup
-	"popup.convertTo": "Convert callout to:",
-	"popup.convertToAria": "Convert to {{name}}",
-	"popup.copyMarkdown": "Copy callout markdown",
-	"popup.customize": "Customize this callout type",
-	"popup.createNew": "Create new type based on this",
-	"popup.openSettings": "Open callout studio settings \u2192",
 
 	// Confirm modal
 	"confirm.ok": "Delete",
