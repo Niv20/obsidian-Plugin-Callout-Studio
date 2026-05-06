@@ -30,10 +30,12 @@ export const he: Record<string, string> = {
 	"settings.iconSources": "מקורות אייקונים",
 	"settings.colorMode": "מצב צבע",
 	"settings.importExport": "ייבוא / ייצוא",
-	"settings.importExportDesc":
-		"ייבוא תיבות הבלטה מקובץ JSON או CSS Snippet, או ייצוא הכל לקובץ JSON.",
 	"settings.import": "ייבוא",
 	"settings.export": "ייצוא",
+	"settings.importDesc":
+		"אם רוצים לייבא מ-vault אחר את ההתקדמות שלכם ב-Callout Studio, אפשר לעשות זאת באמצעות קובץ JSON.",
+	"settings.exportDesc":
+		"הייצוא שומר את כל סוגי תיבות ההבלטה המותאמות שלכם בפורמט JSON.",
 	"settings.importConflictNotice":
 		"יובאו {{count}} תיבות הבלטה; {{overwritten}} רשומות קיימות שודרגו מחדש.",
 
@@ -167,6 +169,8 @@ export const he: Record<string, string> = {
 		"לא יובאו תיבות הבלטה חדשות (ייתכן שהמזהים כבר קיימים).",
 	"notice.failedJSON": "ניתוח קובץ ה-JSON נכשל.",
 	"notice.svgCacheCleared": "מטמון SVG של Material נוקה.",
+	"notice.iconDownloadFailed":
+		'הורדת אייקון Material "{{name}}" נכשלה. בדוק את החיבור לאינטרנט.',
 	"notice.nothingToWrap": "אין תוכן לעטוף.",
 	"notice.selectionContainsNoContent": "הבחירה לא מכילה תוכן.",
 	"notice.cursorNotInsideCallout": "הסמן אינו נמצא בתוך callout.",

@@ -103,6 +103,21 @@
 	display: none;
 }
 
+.callout-studio-settings .cs-settings-neutral-btn {
+	background: var(--background-modifier-form-field);
+	border: 1px solid var(--background-modifier-border);
+	color: var(--text-normal);
+	box-shadow: none;
+}
+
+.callout-studio-settings .cs-settings-neutral-btn:hover,
+.callout-studio-settings .cs-settings-neutral-btn:focus-visible {
+	background: var(--background-modifier-hover);
+	border-color: var(--background-modifier-border-hover);
+	color: var(--text-normal);
+	box-shadow: none;
+}
+
 .callout-studio-kebab-btn {
 	flex-shrink: 0;
 }
@@ -150,6 +165,16 @@
 .callout-studio-row-icon svg {
 	width: 18px;
 	height: 18px;
+}
+
+.callout-studio-row-icon.is-loading svg {
+	animation: cs-spin 1s linear infinite;
+	opacity: 0.7;
+}
+
+.callout-studio-row-icon.is-error {
+	color: var(--text-error, var(--color-red));
+	opacity: 0.85;
 }
 
 .callout-studio-row-info {
@@ -333,6 +358,10 @@
 
 .callout-studio-icon-preview.is-loading svg {
 	animation: cs-spin 1s linear infinite;
+}
+
+.callout-studio-icon-preview.is-error {
+	color: var(--text-error, var(--color-red));
 }
 
 .callout-studio-spinner {

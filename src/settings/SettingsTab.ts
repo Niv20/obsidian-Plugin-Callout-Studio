@@ -3,7 +3,6 @@ import type { App, SliderComponent } from "obsidian";
 import type CalloutStudioPlugin from "../main";
 import type { CalloutDefinition } from "../types";
 import { CalloutEditor } from "./CalloutEditor";
-import { materialFontFamily } from "../utils/iconLoader";
 import { ConfirmModal } from "../utils/ConfirmModal";
 import { ReplaceCalloutModal } from "../utils/ReplaceCalloutModal";
 import { renderColorCircles } from "../ui/ColorCircles";
@@ -18,6 +17,7 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 	private userListEl: HTMLElement | null = null;
 	private builtInListEl: HTMLElement | null = null;
 	private registrySubscription: (() => void) | null = null;
+	private materialSvgUnsubscribe: (() => void) | null = null;
 	private refreshTimer: number | null = null;
 
 	constructor(app: App, plugin: CalloutStudioPlugin) {
@@ -49,6 +49,23 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 			this.registrySubscription = sub;
 		}
 
+		// Refresh row icons whenever a Material SVG finishes downloading or
+		// is marked as failed, so users see updated state without restarting.
+		if (!this.materialSvgUnsubscribe) {
+			this.materialSvgUnsubscribe = this.plugin.onMaterialSvgChange(
+				() => {
+					if (!containerEl.isConnected) return;
+					if (this.refreshTimer !== null) {
+						window.clearTimeout(this.refreshTimer);
+					}
+					this.refreshTimer = window.setTimeout(() => {
+						this.refreshTimer = null;
+						if (containerEl.isConnected) this.refreshLists();
+					}, 60);
+				},
+			);
+		}
+
 		this.renderCalloutTypesSection(containerEl);
 		this.renderBuiltInCalloutsSection(containerEl);
 		this.renderFallbackCalloutSection(containerEl);
@@ -64,6 +81,10 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 		if (this.registrySubscription) {
 			this.plugin.registry.offChange(this.registrySubscription);
 			this.registrySubscription = null;
+		}
+		if (this.materialSvgUnsubscribe) {
+			this.materialSvgUnsubscribe();
+			this.materialSvgUnsubscribe = null;
 		}
 		if (this.refreshTimer !== null) {
 			window.clearTimeout(this.refreshTimer);
@@ -405,6 +426,8 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 		container: HTMLElement,
 		def: CalloutDefinition,
 	): void {
+		container.removeClass("is-loading");
+		container.removeClass("is-error");
 		switch (def.icon.type) {
 			case "lucide":
 				try {
@@ -420,13 +443,6 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 					def.icon.style ?? "outlined",
 					def.icon.weight ?? 400,
 				);
-				console.debug("[CalloutStudio] renderRowIcon material:", {
-					name: def.icon.value,
-					style: def.icon.style ?? "outlined",
-					weight: def.icon.weight ?? 400,
-					hasCached: !!cached,
-					cacheSize: this.plugin.registry.materialSvgCache.length,
-				});
 				if (cached) {
 					const parser = new DOMParser();
 					const doc = parser.parseFromString(
@@ -439,18 +455,23 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 						container.doc.importNode(svgEl, true),
 					);
 				} else {
-					const span = container.createSpan({
-						cls: "callout-studio-material-icon",
-						text: def.icon.value,
-					});
-					const fontFamily = materialFontFamily(
+					const failed = this.plugin.hasMaterialSvgFailed(
+						def.icon.value,
 						def.icon.style ?? "outlined",
+						def.icon.weight ?? 400,
 					);
-					span.setCssProps({
-						"--cs-material-font": `"${fontFamily}"`,
-					});
-					if (def.icon.style === "filled") {
-						span.setCssProps({ "--cs-material-fill": "1" });
+					if (failed) {
+						setIcon(container, "circle-help");
+						container.addClass("is-error");
+						container.setAttribute(
+							"aria-label",
+							t("notice.iconDownloadFailed", {
+								name: def.icon.value,
+							}),
+						);
+					} else {
+						setIcon(container, "loader-2");
+						container.addClass("is-loading");
 					}
 				}
 				break;
@@ -1128,6 +1149,14 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 						);
 					}
 					this.display();
+					// Kick off Material SVG downloads for any imported icons
+					// not already cached. The list re-renders automatically
+					// via the onMaterialSvgChange listener as each finishes.
+					for (const def of defs) {
+						if (def.icon?.type === "material") {
+							void this.plugin.cacheMaterialSvg(def.icon);
+						}
+					}
 				} else {
 					new Notice(t("notice.noNewJSON"));
 				}
@@ -1146,20 +1175,24 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 			.setHeading();
 
 		new Setting(containerEl)
-			.setDesc(t("settings.importExportDesc"))
-			.addButton((btn) =>
-				btn
-					.setButtonText(t("settings.import"))
-					.setIcon("upload")
-					.onClick(() => this.importFromJSON()),
-			)
-			.addButton((btn) =>
-				btn
-					.setButtonText(t("settings.export"))
+			.setName(t("settings.import"))
+			.setDesc(t("settings.importDesc"))
+			.addButton((btn) => {
+				btn.setButtonText(t("settings.import"))
 					.setIcon("download")
-					.setCta()
-					.onClick(() => this.exportCallouts()),
-			);
+					.onClick(() => this.importFromJSON());
+				btn.buttonEl.addClass("cs-settings-neutral-btn");
+			});
+
+		new Setting(containerEl)
+			.setName(t("settings.export"))
+			.setDesc(t("settings.exportDesc"))
+			.addButton((btn) => {
+				btn.setButtonText(t("settings.export"))
+					.setIcon("upload")
+					.onClick(() => this.exportCallouts());
+				btn.buttonEl.addClass("cs-settings-neutral-btn");
+			});
 	}
 
 	private async runVaultRescan(): Promise<void> {

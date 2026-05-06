@@ -1,4 +1,4 @@
-import { Plugin } from "obsidian";
+import { Plugin, Notice } from "obsidian";
 import type { CalloutIcon, PluginData, PluginSettings } from "./types";
 import { CalloutRegistry } from "./manager/CalloutRegistry";
 import { CSSInjector } from "./manager/CSSInjector";
@@ -22,6 +22,26 @@ export default class CalloutStudioPlugin extends Plugin {
 	api!: CalloutStudioAPI;
 	/** In-memory record of Material SVGs that failed to download after retries */
 	failedMaterialSvgs: Set<string> = new Set();
+	/** Listeners notified when a Material SVG download finishes (success or failure). */
+	private materialSvgListeners: Set<() => void> = new Set();
+
+	/** Subscribe to Material SVG cache updates. Returns an unsubscribe function. */
+	onMaterialSvgChange(cb: () => void): () => void {
+		this.materialSvgListeners.add(cb);
+		return () => {
+			this.materialSvgListeners.delete(cb);
+		};
+	}
+
+	private notifyMaterialSvgChange(): void {
+		for (const cb of this.materialSvgListeners) {
+			try {
+				cb();
+			} catch (e) {
+				console.warn("[CalloutStudio] material svg listener error", e);
+			}
+		}
+	}
 
 	get settings(): PluginSettings {
 		return this.registry.settings;
@@ -241,6 +261,7 @@ export default class CalloutStudioPlugin extends Plugin {
 				// at proper save points (CalloutEditor save, SettingsTab).
 				this.cssInjector.inject();
 				await this.saveSettings();
+				this.notifyMaterialSvgChange();
 				return;
 			} catch (err) {
 				lastErr = err;
@@ -250,6 +271,8 @@ export default class CalloutStudioPlugin extends Plugin {
 			}
 		}
 		this.failedMaterialSvgs.add(failKey);
+		new Notice(t("notice.iconDownloadFailed", { name: icon.value }));
+		this.notifyMaterialSvgChange();
 		console.warn(
 			"Callout Studio: failed to download Material SVG after retries",
 			lastErr,
@@ -305,6 +328,7 @@ export default class CalloutStudioPlugin extends Plugin {
 		if (downloaded > 0) {
 			this.cssInjector.inject();
 			await this.saveSettings();
+			this.notifyMaterialSvgChange();
 		}
 	}
 }

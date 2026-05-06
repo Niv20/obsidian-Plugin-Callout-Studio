@@ -31,10 +31,11 @@ export const en: Record<string, string> = {
 	"settings.iconSources": "Icon sources",
 	"settings.colorMode": "Color mode",
 	"settings.importExport": "Import / export",
-	"settings.importExportDesc":
-		"Import callouts from a JSON or CSS snippet, or export everything to a JSON file.",
 	"settings.import": "Import",
 	"settings.export": "Export",
+	"settings.importDesc":
+		"Import your Callout Studio progress from another vault using a JSON file.",
+	"settings.exportDesc": "Save all your custom callout types in JSON format.",
 	"settings.importConflictNotice":
 		"Imported {{count}} callout type(s); {{overwritten}} existing entry/entries were overwritten.",
 
@@ -168,6 +169,8 @@ export const en: Record<string, string> = {
 		"No new callout types were imported (ids may already exist).",
 	"notice.failedJSON": "Failed to parse JSON file.",
 	"notice.svgCacheCleared": "Material SVG cache cleared.",
+	"notice.iconDownloadFailed":
+		'Failed to download Material icon "{{name}}". Check your internet connection.',
 	"notice.nothingToWrap": "Nothing to wrap.",
 	"notice.selectionContainsNoContent": "Selection contains no content.",
 	"notice.cursorNotInsideCallout": "Cursor is not inside a callout.",

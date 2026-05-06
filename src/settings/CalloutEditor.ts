@@ -1025,6 +1025,7 @@ export class CalloutEditor extends Modal {
 	private renderIconPreview(container: HTMLElement): void {
 		container.empty();
 		container.removeClass("is-loading");
+		container.removeClass("is-error");
 		switch (this.icon.type) {
 			case "lucide":
 				try {
@@ -1057,11 +1058,12 @@ export class CalloutEditor extends Modal {
 						this.icon.style ?? "outlined",
 						this.icon.weight ?? 400,
 					);
-					setIcon(container, failed ? "image-off" : "loader-2");
-					if (!failed) {
-						container.addClass("is-loading");
+					if (failed) {
+						setIcon(container, "circle-help");
+						container.addClass("is-error");
 					} else {
-						container.removeClass("is-loading");
+						setIcon(container, "loader-2");
+						container.addClass("is-loading");
 					}
 				}
 				break;
