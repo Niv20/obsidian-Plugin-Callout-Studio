@@ -243,16 +243,15 @@
 /* Segmented Light/Dark toggle */
 .callout-studio-segmented-toggle {
 	display: inline-flex;
-	border: 1px solid var(--background-modifier-border);
-	border-radius: 6px;
-	overflow: hidden;
+	gap: 6px;
 }
 
 .callout-studio-seg-btn {
 	font-size: var(--font-ui-smaller);
 	padding: 2px 12px;
 	min-height: 24px;
-	border: none;
+	border: 1px solid var(--background-modifier-border);
+	border-radius: 6px;
 	background: transparent;
 	color: var(--text-muted);
 	cursor: pointer;
@@ -307,6 +306,8 @@
 	display: flex;
 	flex-direction: column;
 	padding-bottom: 0 !important;
+	width: min(900px, 95vw) !important;
+	max-width: min(900px, 95vw) !important;
 }
 
 .callout-studio-editor-modal > .modal-content {
@@ -340,7 +341,7 @@
 
 .callout-studio-preview-panel {
 	display: grid;
-	grid-template-columns: 1fr 200px;
+	grid-template-columns: 1fr 240px;
 	gap: 12px;
 	margin: 16px 0;
 	align-items: start;

@@ -225,16 +225,21 @@ export class CalloutEditor extends Modal {
 		});
 		previewHeader.createSpan({ text: t("editor.livePreview") });
 
-		// Segmented Light/Dark toggle
+		// Segmented Light/Dark toggle — initial state matches current theme.
+		this.previewDarkMode = document.body.classList.contains("theme-dark");
 		const segmented = previewHeader.createDiv({
 			cls: "callout-studio-segmented-toggle",
 		});
 		const lightBtn = segmented.createEl("button", {
-			cls: "callout-studio-seg-btn is-active",
+			cls:
+				"callout-studio-seg-btn" +
+				(this.previewDarkMode ? "" : " is-active"),
 			text: t("editor.light"),
 		});
 		const darkBtn = segmented.createEl("button", {
-			cls: "callout-studio-seg-btn",
+			cls:
+				"callout-studio-seg-btn" +
+				(this.previewDarkMode ? " is-active" : ""),
 			text: t("editor.dark"),
 		});
 		lightBtn.addEventListener("click", () => {

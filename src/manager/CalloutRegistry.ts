@@ -231,6 +231,11 @@ export class CalloutRegistry {
 		const def = this.callouts.get(id);
 		if (!def || def.builtIn) return false;
 		this.callouts.delete(id);
+		// If the removed callout was the active fallback, reset to "note"
+		if (this.settings.fallbackCalloutId === id) {
+			this.settings.fallbackCalloutId =
+				DEFAULT_SETTINGS.fallbackCalloutId;
+		}
 		this.notifyChange();
 		return true;
 	}
