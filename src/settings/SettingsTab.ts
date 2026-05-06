@@ -1355,7 +1355,7 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 		links.createEl("span", { text: "Made by Niv  •  " });
 		links.createEl("a", {
 			text: "GitHub",
-			href: "https://github.com/Niv20",
+			href: "https://github.com/Niv20/obsidian-Plugin-Callout-Studio",
 			attr: { target: "_blank", rel: "noopener noreferrer" },
 		});
 		links.createEl("span", { text: "  •  " });
