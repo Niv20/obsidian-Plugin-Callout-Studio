@@ -132,9 +132,6 @@ export const he: Record<string, string> = {
 	"settings.colorForceLight": "כפיית צבעי מצב בהיר בלבד",
 	"settings.colorForceDark": "כפיית צבעי מצב כהה בלבד",
 	"settings.colorFormat": "פורמט צבע",
-	"settings.showContrastWarning": "הצגת אזהרת ניגודיות צבע",
-	"settings.showContrastWarningDesc":
-		"מתריע אם צבע האייקון בעל ניגודיות נמוכה מול רקע תיבת ההבלטה",
 
 	// Settings — Reset
 	"settings.resetAll": "איפוס",

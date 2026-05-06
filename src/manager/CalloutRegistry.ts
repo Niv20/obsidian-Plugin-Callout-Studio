@@ -122,17 +122,6 @@ export class CalloutRegistry {
 					...DEFAULT_SETTINGS.iconSources,
 					...savedSettings.iconSources,
 				},
-				colorMode: {
-					...DEFAULT_SETTINGS.colorMode,
-					showContrastWarning:
-						((
-							savedSettings.colorMode as unknown as Record<
-								string,
-								unknown
-							>
-						)?.showContrastWarning as boolean) ??
-						DEFAULT_SETTINGS.colorMode.showContrastWarning,
-				},
 				language: savedSettings.language ?? DEFAULT_SETTINGS.language,
 				fallbackCalloutId:
 					savedSettings.fallbackCalloutId ??
@@ -357,8 +346,6 @@ export class CalloutRegistry {
 		// Clear SVG caches and custom icons
 		this.materialSvgCache = [];
 		this.customSvgIcons = [];
-		// Reset color mode settings
-		this.settings.colorMode = structuredClone(DEFAULT_SETTINGS.colorMode);
 		this.notifyChange();
 	}
 

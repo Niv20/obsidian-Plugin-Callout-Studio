@@ -188,9 +188,6 @@ export const DEFAULT_SETTINGS: PluginSettings = {
 		materialStyleDefault: "outlined",
 		materialWeightDefault: 400,
 	},
-	colorMode: {
-		showContrastWarning: true,
-	},
 	language: "auto",
 	fallbackCalloutId: "note",
 };

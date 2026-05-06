@@ -67,10 +67,6 @@ export interface IconSourceSettings {
 	materialWeightDefault: number;
 }
 
-export interface ColorModeSettings {
-	showContrastWarning: boolean;
-}
-
 export interface GlobalStyleSettings {
 	/** Which border sides are enabled */
 	borderSides: {
@@ -101,7 +97,6 @@ export interface PluginSettings {
 	contextMenu: ContextMenuSettings;
 	autocomplete: AutocompleteSettings;
 	iconSources: IconSourceSettings;
-	colorMode: ColorModeSettings;
 	language: string;
 	/** Callout ID to use as fallback for unrecognized callout types. Empty = Obsidian default */
 	fallbackCalloutId: string;

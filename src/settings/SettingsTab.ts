@@ -41,7 +41,6 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 		this.renderAutocompleteSettings(containerEl);
 		this.renderContextMenuSettings(containerEl);
 		this.renderIconSourceSettings(containerEl);
-		this.renderColorModeSettings(containerEl);
 		this.renderLanguageSettings(containerEl);
 		this.renderImportExportSection(containerEl);
 		this.renderResetSection(containerEl);
@@ -1085,26 +1084,6 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 		}
 
 		modal.open();
-	}
-
-	// ─── Section G: Color Mode Settings ──────────────────────
-
-	private renderColorModeSettings(containerEl: HTMLElement): void {
-		const { colorMode } = this.plugin.settings;
-
-		new Setting(containerEl).setName(t("settings.colorMode")).setHeading();
-
-		new Setting(containerEl)
-			.setName(t("settings.showContrastWarning"))
-			.setDesc(t("settings.showContrastWarningDesc"))
-			.addToggle((tog) =>
-				tog
-					.setValue(colorMode.showContrastWarning)
-					.onChange(async (v) => {
-						colorMode.showContrastWarning = v;
-						await this.plugin.saveSettings();
-					}),
-			);
 	}
 
 	// ─── Helpers ─────────────────────────────────────────────

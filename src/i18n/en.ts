@@ -131,9 +131,6 @@ export const en: Record<string, string> = {
 	"settings.colorForceLight": "Force light colors only",
 	"settings.colorForceDark": "Force dark colors only",
 	"settings.colorFormat": "Color format",
-	"settings.showContrastWarning": "Show color contrast warning",
-	"settings.showContrastWarningDesc":
-		"Warns if icon color has low contrast against callout background",
 
 	// Settings — Reset
 	"settings.resetAll": "Reset",
