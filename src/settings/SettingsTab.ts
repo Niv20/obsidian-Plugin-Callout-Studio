@@ -5,6 +5,8 @@ import type { CalloutDefinition } from "../types";
 import { CalloutEditor } from "./CalloutEditor";
 import { ConfirmModal } from "../utils/ConfirmModal";
 import { ReplaceCalloutModal } from "../utils/ReplaceCalloutModal";
+import { ImportReportModal } from "../utils/ImportReportModal";
+import { validateImportPayload } from "../utils/importValidator";
 import { renderColorCircles } from "../ui/ColorCircles";
 import {
 	countCalloutUsages,
@@ -1110,58 +1112,90 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 		input.addEventListener("change", async () => {
 			const file = input.files?.[0];
 			if (!file) return;
+
+			// 1. Read + parse. Surface parse failures via the report modal too,
+			//    so the user gets a centered, readable explanation rather than
+			//    a tiny corner notice.
+			let parsed: unknown;
 			try {
 				const text = await file.text();
-				const defs = JSON.parse(text) as CalloutDefinition[];
-				if (!Array.isArray(defs)) {
-					new Notice(t("notice.invalidJSON"));
-					return;
-				}
-				let imported = 0;
-				let overwritten = 0;
-				for (const def of defs) {
-					if (!def.id || !def.displayName) continue;
-					const incoming: CalloutDefinition = {
-						...def,
-						builtIn: false,
-						source: "user",
-					};
-					if (this.plugin.registry.has(def.id)) {
-						this.plugin.registry.update(def.id, incoming);
-						overwritten++;
-						imported++;
-					} else {
-						const added = this.plugin.registry.add(incoming);
-						if (added) imported++;
-					}
-				}
-				if (imported > 0) {
-					if (overwritten > 0) {
-						new Notice(
-							t("settings.importConflictNotice", {
-								count: imported,
-								overwritten,
-							}),
-						);
-					} else {
-						new Notice(
-							t("notice.importedJSON", { count: imported }),
-						);
-					}
-					this.display();
-					// Kick off Material SVG downloads for any imported icons
-					// not already cached. The list re-renders automatically
-					// via the onMaterialSvgChange listener as each finishes.
-					for (const def of defs) {
-						if (def.icon?.type === "material") {
-							void this.plugin.cacheMaterialSvg(def.icon);
-						}
-					}
-				} else {
-					new Notice(t("notice.noNewJSON"));
-				}
+				parsed = JSON.parse(text);
 			} catch {
-				new Notice(t("notice.failedJSON"));
+				await new ImportReportModal(
+					this.app,
+					[
+						{
+							index: -1,
+							entryLabel: "",
+							level: "error",
+							messageKey: "import.err.parseFailed",
+						},
+					],
+					0,
+					0,
+					true,
+				).prompt();
+				return;
+			}
+
+			// 2. Run the strict structural validator.
+			const result = validateImportPayload(parsed, this.plugin.registry);
+
+			// 3. If anything went wrong, show the report modal and let the
+			//    user decide whether to import only the valid entries.
+			if (result.issues.length > 0 || result.fatal) {
+				const total = Array.isArray(parsed) ? parsed.length : 0;
+				const choice = await new ImportReportModal(
+					this.app,
+					result.issues,
+					result.validDefs.length,
+					total,
+					result.fatal,
+				).prompt();
+				if (choice === "cancel") return;
+			}
+
+			// 4. Import only sanitized, fully-valid definitions.
+			const defs = result.validDefs;
+			if (defs.length === 0) {
+				new Notice(t("notice.noNewJSON"));
+				return;
+			}
+
+			let imported = 0;
+			let overwritten = 0;
+			for (const def of defs) {
+				if (this.plugin.registry.has(def.id)) {
+					this.plugin.registry.update(def.id, def);
+					overwritten++;
+					imported++;
+				} else {
+					const added = this.plugin.registry.add(def);
+					if (added) imported++;
+				}
+			}
+			if (imported > 0) {
+				if (overwritten > 0) {
+					new Notice(
+						t("settings.importConflictNotice", {
+							count: imported,
+							overwritten,
+						}),
+					);
+				} else {
+					new Notice(t("notice.importedJSON", { count: imported }));
+				}
+				this.display();
+				// Kick off Material SVG downloads for any imported icons
+				// not already cached. The list re-renders automatically
+				// via the onMaterialSvgChange listener as each finishes.
+				for (const def of defs) {
+					if (def.icon.type === "material") {
+						void this.plugin.cacheMaterialSvg(def.icon);
+					}
+				}
+			} else {
+				new Notice(t("notice.noNewJSON"));
 			}
 		});
 		input.click();

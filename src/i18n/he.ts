@@ -215,6 +215,8 @@ export const he: Record<string, string> = {
 	"editor.cancel": "ביטול",
 	"editor.saveChanges": "שמירת שינויים",
 	"editor.createCallout": "יצירת תיבת הבלטה",
+	"editor.nameRequired": "חובה למלא שם לתצוגה לפני יצירת תיבת הבלטה.",
+	"editor.noChangesToSave": "לא בוצעו שינויים.",
 	"editor.downloadingIcon": "מוריד אייקון…",
 	"editor.idEmpty": "נדרש לפחות מזהה אחד",
 	"editor.idExists": "תיבת הבלטה עם מזהה זה כבר קיימת",
@@ -270,4 +272,59 @@ export const he: Record<string, string> = {
 	"vault.resetConfirm": "איפוס",
 	"vault.resetAllInUse":
 		"⚠ {{count}} הפניות ב-{{files}} קבצים משתמשות בסוגי תיבות הבלטה שיימחקו.",
+
+	// Import validation
+	"import.title": "בעיות בייבוא",
+	"import.reportLeadIn":
+		"אהמממ נראה שהקובץ שהבאת עבר שינוי. הנה רשימת הבעיות:",
+	"import.reportLeadInFatal":
+		"אהמממ הקובץ הזה לא נראה כמו ייצוא של Callout Studio ולא ניתן לייבא אותו:",
+	"import.entryHeading": "רשומה {{index}} — {{label}}",
+	"import.summary":
+		"{{valid}} מתוך {{total}} רשומות תקינות · נמצאו {{issues}} בעיות.",
+	"import.btnCancel": "ביטול",
+	"import.btnImportValid": "ייבא רק את התקינות ({{count}})",
+	"import.err.notArray": "הערך העליון חייב להיות מערך של הגדרות תיבת הבלטה.",
+	"import.err.parseFailed": "הקובץ אינו JSON תקין ולא ניתן לפרש אותו.",
+	"import.err.entryNotObject": "כל רשומה חייבת להיות אובייקט.",
+	"import.err.requiredMissing": 'השדה החובה "{{field}}" חסר או מסוג שגוי.',
+	"import.err.idEmpty": "ID לא יכול להיות ריק.",
+	"import.err.idTooLong":
+		'ה-ID "{{value}}" באורך {{length}} תווים; המקסימום הוא {{max}}.',
+	"import.err.idBadChar":
+		'ה-ID "{{value}}" מכיל תווים לא חוקיים (רווחים, "|", "[" או "]" אסורים).',
+	"import.err.displayNameEmpty": "שם תצוגה לא יכול להיות ריק.",
+	"import.err.displayNameTooLong":
+		"שם התצוגה באורך {{length}} תווים; המקסימום הוא {{max}}.",
+	"import.err.boolField": '"{{field}}" חייב להיות בוליאני (true או false).',
+	"import.err.iconNotObject": "icon חייב להיות אובייקט.",
+	"import.err.iconTypeInvalid":
+		'סוג האייקון "{{value}}" אינו אחד מ: lucide, material, emoji.',
+	"import.err.iconValueEmpty": "ערך האייקון חייב להיות מחרוזת לא ריקה.",
+	"import.err.iconValueTooLong":
+		"ערך האייקון ארוך באופן חריג ({{length}} תווים).",
+	"import.err.materialStyle":
+		'סגנון אייקון Material "{{value}}" אינו אחד מ: outlined, filled, rounded, sharp.',
+	"import.err.materialWeight":
+		'משקל אייקון Material "{{value}}" חייב להיות מספר שלם בין 100 ל-700, בקפיצות של 100.',
+	"import.err.colorInvalid":
+		'"{{field}}" חייב להיות צבע hex בפורמט "#448aff" (התקבל "{{value}}").',
+	"import.err.numberRange":
+		'"{{field}}" חייב להיות מספר בין {{min}} ל-{{max}} (התקבל "{{value}}").',
+	"import.err.iconSizeRange":
+		'"{{field}}" חייב להיות מספר בין {{min}} ל-{{max}} (התקבל "{{value}}").',
+	"import.err.aliasesNotArray": '"aliases" חייב להיות מערך של מחרוזות.',
+	"import.err.aliasNotString": "כינוי חייב להיות מחרוזת.",
+	"import.err.aliasDup": 'הכינוי "{{value}}" כפול בתוך אותה רשומה.',
+	"import.err.tooManyIds":
+		"יותר מדי ID-ים ({{count}}); לכל תיבת הבלטה מותר עד {{max}} ID-ים (ראשי + כינויים).",
+	"import.err.metadataShape":
+		'"metadata" חייב להיות אובייקט שכל ערכיו מחרוזות.',
+	"import.err.unknownFields": "שדה/שדות לא מוכרים נזרקו: {{fields}}.",
+	"import.err.duplicateInFile":
+		'ה-ID/כינוי "{{value}}" כבר בשימוש ברשומה #{{first}} בקובץ הזה.',
+	"import.err.aliasConflict":
+		'הכינוי "{{value}}" כבר בשימוש בתיבת הבלטה אחרת ("{{other}}") במאגר שלך.',
+	"import.warn.defaultFoldedAutofix":
+		'"defaultFolded" היה true בזמן ש-"foldable" היה false; defaultFolded אופס ל-false.',
 };

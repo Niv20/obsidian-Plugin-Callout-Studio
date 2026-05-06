@@ -58,6 +58,7 @@ export class CalloutEditor extends Modal {
 	private idsTagInput: TagInput | null = null;
 	private hasHadCalloutId = false;
 	private saveBtn: HTMLButtonElement | null = null;
+	private isSaveActionEnabled = false;
 	private initialSnapshot: string = "";
 	private removePopupOutsideClickListener: (() => void) | null = null;
 	/** True when the detailed color grid should be shown. */
@@ -892,6 +893,10 @@ export class CalloutEditor extends Modal {
 		});
 		this.saveBtn = saveBtn;
 		saveBtn.addEventListener("click", () => {
+			if (!this.isSaveActionEnabled) {
+				this.showSaveBlockedNotice();
+				return;
+			}
 			void this.save();
 		});
 
@@ -982,8 +987,28 @@ export class CalloutEditor extends Modal {
 		// For new callouts: enable if valid (no need for "changes" check)
 		// For existing: enable if valid AND has changes
 		const enabled = this.existingId ? hasChanges && isValid : isValid;
-		this.saveBtn.disabled = !enabled;
+		this.isSaveActionEnabled = enabled;
+		this.saveBtn.disabled = false;
+		this.saveBtn.setAttribute("aria-disabled", enabled ? "false" : "true");
 		this.saveBtn.toggleClass("cs-btn-disabled", !enabled);
+	}
+
+	private showSaveBlockedNotice(): void {
+		const hasChanges = this.stateSnapshot() !== this.initialSnapshot;
+
+		if (!this.existingId && !this.displayName.trim()) {
+			new Notice(t("editor.nameRequired"));
+			return;
+		}
+
+		if (this.existingId && !hasChanges) {
+			new Notice(t("editor.noChangesToSave"));
+			return;
+		}
+
+		if (!this.calloutId) {
+			new Notice(t("editor.idEmpty"));
+		}
 	}
 
 	private updateIdWarning(): void {
@@ -1250,6 +1275,7 @@ export class CalloutEditor extends Modal {
 		// Download Material SVG after the callout is in the registry
 		if (def.icon.type === "material") {
 			if (this.saveBtn) {
+				this.isSaveActionEnabled = false;
 				this.saveBtn.disabled = true;
 				this.saveBtn.textContent = t("editor.downloadingIcon");
 			}

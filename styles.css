@@ -1728,3 +1728,57 @@ button.callout-studio-icon-picker-loading {
 	color: var(--text-accent);
 	font-style: italic;
 }
+
+/* ─── Import report modal ─────────────────────────────────── */
+.callout-studio-import-report-modal {
+	max-width: 640px;
+}
+.callout-studio-import-report .cs-import-report-lead {
+	margin-top: 0;
+	font-weight: 600;
+}
+.callout-studio-import-report .cs-import-report-list {
+	max-height: 50vh;
+	overflow-y: auto;
+	margin: 0.75rem 0;
+	padding: 0.5rem 0.75rem;
+	border: 1px solid var(--background-modifier-border);
+	border-radius: 6px;
+	background: var(--background-secondary);
+}
+.callout-studio-import-report .cs-import-report-group + .cs-import-report-group {
+	margin-top: 0.75rem;
+	padding-top: 0.5rem;
+	border-top: 1px dashed var(--background-modifier-border);
+}
+.callout-studio-import-report .cs-import-report-group-heading {
+	font-weight: 600;
+	margin-bottom: 0.25rem;
+	color: var(--text-normal);
+}
+.callout-studio-import-report .cs-import-report-issues {
+	margin: 0;
+	padding-inline-start: 1.25rem;
+}
+.callout-studio-import-report .cs-import-issue {
+	margin: 0.15rem 0;
+	line-height: 1.4;
+}
+.callout-studio-import-report .cs-import-issue-error {
+	color: var(--text-error);
+}
+.callout-studio-import-report .cs-import-issue-warning {
+	color: var(--text-warning, var(--text-accent));
+}
+.callout-studio-import-report .cs-import-issue-field {
+	font-family: var(--font-monospace);
+	font-size: 0.85em;
+	background: var(--background-modifier-border);
+	padding: 0 4px;
+	border-radius: 3px;
+}
+.callout-studio-import-report .cs-import-report-summary {
+	margin: 0.5rem 0 0.75rem;
+	color: var(--text-muted);
+	font-size: 0.9em;
+}

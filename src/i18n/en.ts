@@ -215,6 +215,9 @@ export const en: Record<string, string> = {
 	"editor.cancel": "Cancel",
 	"editor.saveChanges": "Save changes",
 	"editor.createCallout": "Create callout",
+	"editor.nameRequired":
+		"A display name is required before creating a callout.",
+	"editor.noChangesToSave": "No changes were made.",
 	"editor.downloadingIcon": "Downloading icon…",
 	"editor.idEmpty": "At least one ID is required",
 	"editor.idExists": "A callout with this ID already exists",
@@ -285,4 +288,62 @@ export const en: Record<string, string> = {
 	"vault.resetConfirm": "Reset",
 	"vault.resetAllInUse":
 		"⚠ {{count}} callout reference(s) in {{files}} file(s) use custom callout types that will be deleted.",
+
+	// Import validation
+	"import.title": "Import issues",
+	"import.reportLeadIn":
+		"Hmm, looks like the file you imported has been modified. Here is the list of issues:",
+	"import.reportLeadInFatal":
+		"Hmm, this file does not look like a Callout Studio export. It cannot be imported:",
+	"import.entryHeading": "Entry {{index}} — {{label}}",
+	"import.summary":
+		"{{valid}} of {{total}} entries are valid · {{issues}} issue(s) found.",
+	"import.btnCancel": "Cancel",
+	"import.btnImportValid": "Import valid only ({{count}})",
+	"import.err.notArray":
+		"The top-level value must be an array of callout definitions.",
+	"import.err.parseFailed":
+		"The file is not valid JSON and could not be parsed.",
+	"import.err.entryNotObject": "Entry must be an object.",
+	"import.err.requiredMissing":
+		'Required field "{{field}}" is missing or has the wrong type.',
+	"import.err.idEmpty": "ID must not be empty.",
+	"import.err.idTooLong":
+		'ID "{{value}}" is {{length}} characters; the maximum is {{max}}.',
+	"import.err.idBadChar":
+		'ID "{{value}}" contains invalid characters (whitespace, "|", "[", or "]" are not allowed).',
+	"import.err.displayNameEmpty": "Display name must not be empty.",
+	"import.err.displayNameTooLong":
+		"Display name is {{length}} characters; the maximum is {{max}}.",
+	"import.err.boolField": '"{{field}}" must be a boolean (true or false).',
+	"import.err.iconNotObject": "Icon must be an object.",
+	"import.err.iconTypeInvalid":
+		'Icon type "{{value}}" is not one of: lucide, material, emoji.',
+	"import.err.iconValueEmpty": "Icon value must be a non-empty string.",
+	"import.err.iconValueTooLong":
+		"Icon value is unusually long ({{length}} characters).",
+	"import.err.materialStyle":
+		'Material icon style "{{value}}" is not one of: outlined, filled, rounded, sharp.',
+	"import.err.materialWeight":
+		'Material icon weight "{{value}}" must be an integer between 100 and 700, in steps of 100.',
+	"import.err.colorInvalid":
+		'"{{field}}" must be a hex color like "#448aff" (got "{{value}}").',
+	"import.err.numberRange":
+		'"{{field}}" must be a number between {{min}} and {{max}} (got "{{value}}").',
+	"import.err.iconSizeRange":
+		'"{{field}}" must be a number between {{min}} and {{max}} (got "{{value}}").',
+	"import.err.aliasesNotArray": '"aliases" must be an array of strings.',
+	"import.err.aliasNotString": "Alias must be a string.",
+	"import.err.aliasDup": 'Alias "{{value}}" is duplicated within this entry.',
+	"import.err.tooManyIds":
+		"Too many IDs ({{count}}); each callout can have at most {{max}} IDs (primary + aliases).",
+	"import.err.metadataShape":
+		'"metadata" must be an object whose values are all strings.',
+	"import.err.unknownFields": "Unknown field(s) ignored: {{fields}}.",
+	"import.err.duplicateInFile":
+		'ID/alias "{{value}}" is already used by entry #{{first}} in this file.',
+	"import.err.aliasConflict":
+		'Alias "{{value}}" is already used by another callout ("{{other}}") in your vault.',
+	"import.warn.defaultFoldedAutofix":
+		'"defaultFolded" was true while "foldable" was false; defaultFolded was reset to false.',
 };
