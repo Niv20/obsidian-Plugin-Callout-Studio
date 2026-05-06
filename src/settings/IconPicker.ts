@@ -624,33 +624,13 @@ export class IconPicker extends Modal {
 
 		this.confirmBtn?.toggleClass("is-disabled", false);
 
-		const iconContainer = this.previewEl.createDiv(
-			"icon-picker-preview-icon",
-		);
 		const labelEl = this.previewEl.createDiv("icon-picker-preview-label");
 
 		switch (this.selectedIcon.type) {
 			case "lucide":
-				setIcon(iconContainer, this.selectedIcon.value);
 				labelEl.setText(`lucide: ${this.selectedIcon.value}`);
 				break;
 			case "material": {
-				const span = iconContainer.createSpan({
-					cls: "callout-studio-material-icon",
-					text: this.selectedIcon.value,
-				});
-				const fontFamily = materialFontFamily(
-					this.selectedIcon.style ?? "outlined",
-				);
-				span.setCssProps({
-					"--cs-material-font": `"${fontFamily}"`,
-					"--cs-material-weight": String(
-						this.selectedIcon.weight ?? 400,
-					),
-				});
-				if (this.selectedIcon.style === "filled") {
-					span.setCssProps({ "--cs-material-fill": "1" });
-				}
 				labelEl.setText(
 					`material: ${this.selectedIcon.value} (${this.selectedIcon.style ?? "outlined"}, ${this.selectedIcon.weight ?? 400})`,
 				);
