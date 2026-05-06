@@ -331,16 +331,16 @@ export class CSSInjector {
 	 */
 	private refreshCalloutIconsInDOM(): void {
 		const calloutEls = Array.from(
-			document.querySelectorAll(".callout[data-callout]"),
-		) as HTMLElement[];
+			document.querySelectorAll<HTMLElement>(".callout[data-callout]"),
+		);
 		for (const calloutEl of calloutEls) {
 			const id = calloutEl.getAttribute("data-callout");
 			if (!id) continue;
 			const def = this.registry.get(id);
 			if (!def || def.icon.type !== "lucide") continue;
-			const iconEl = calloutEl.querySelector(
+			const iconEl = calloutEl.querySelector<HTMLElement>(
 				".callout-title .callout-icon",
-			) as HTMLElement | null;
+			);
 			if (!iconEl) continue;
 			setIcon(iconEl, def.icon.value);
 		}
