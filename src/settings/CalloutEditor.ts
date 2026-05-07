@@ -8,6 +8,7 @@ import type {
 	PluginSettings,
 } from "../types";
 import { IconPicker } from "./IconPicker";
+import { renderEditorPreview } from "./CalloutEditorPreview";
 import { blendHex } from "../utils/colorUtils";
 import {
 	COLOR_PALETTES,
@@ -1241,102 +1242,29 @@ export class CalloutEditor extends Modal {
 
 	private updatePreview(): void {
 		if (!this.previewEl) return;
-		this.previewEl.empty();
-
-		const accentColor = this.previewDarkMode
-			? this.colorDark
-			: this.colorLight;
-		const bgColor = this.previewDarkMode
-			? this.bgColorDark
-			: this.bgColorLight;
-		const textColor = this.previewDarkMode
-			? this.textColorDark
-			: this.textColorLight;
-
-		const rgbMatch = /^#([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})$/i.exec(
-			accentColor,
-		);
-		let rgbStr = "68, 138, 255";
-		if (rgbMatch && rgbMatch[1] && rgbMatch[2] && rgbMatch[3]) {
-			rgbStr = `${parseInt(rgbMatch[1], 16)}, ${parseInt(rgbMatch[2], 16)}, ${parseInt(rgbMatch[3], 16)}`;
-		}
-
-		const calloutEl = this.previewEl.createDiv({ cls: "callout" });
-		calloutEl.setAttribute("data-callout", "cs-preview");
-		calloutEl.style.setProperty("--callout-color", rgbStr);
-		calloutEl.style.backgroundColor = bgColor;
-
-		if (this.previewDarkMode) {
-			calloutEl.addClass("callout-studio-preview-dark");
-		}
-
-		const titleEl = calloutEl.createDiv({ cls: "callout-title" });
-
-		// Icon
-		const iconEl = titleEl.createDiv({ cls: "callout-icon" });
-		this.renderIconPreview(iconEl);
-		iconEl.style.color = `rgb(${rgbStr})`;
-
-		// Apply icon transform in preview
-		const transforms: string[] = [];
-		if (this.iconOffsetX !== 0 || this.iconOffsetY !== 0) {
-			transforms.push(
-				`translate(${this.iconOffsetX}px, ${this.iconOffsetY}px)`,
-			);
-		}
-		if (this.iconSize !== 1) {
-			transforms.push(`scale(${this.iconSize})`);
-		}
-		if (transforms.length > 0) {
-			iconEl.setCssProps({
-				"--cs-icon-transform": transforms.join(" "),
-			});
-			iconEl.addClass("callout-studio-icon-transformed");
-		}
-
-		// Title text
-		const titleInner = titleEl.createDiv({ cls: "callout-title-inner" });
-		titleInner.textContent =
-			this.displayName || t("editor.untitledCallout");
-
-		if (this.foldable) {
-			const foldBtn = titleEl.createEl("button", {
-				cls: "callout-studio-preview-fold-toggle",
-				attr: {
-					type: "button",
-					"aria-label": this.previewFoldCollapsed
-						? t("editor.expandPreview")
-						: t("editor.collapsePreview"),
-				},
-			});
-			setIcon(
-				foldBtn,
-				this.previewFoldCollapsed ? "chevron-right" : "chevron-down",
-			);
-			foldBtn.style.color = `rgb(${rgbStr})`;
-			const foldSvg = foldBtn.querySelector("svg");
-			if (foldSvg) {
-				foldSvg.style.color = `rgb(${rgbStr})`;
-				foldSvg.setAttribute("stroke", "currentColor");
-			}
-			foldBtn.addEventListener("click", (ev) => {
-				ev.preventDefault();
-				ev.stopPropagation();
+		renderEditorPreview(
+			this.previewEl,
+			{
+				previewDarkMode: this.previewDarkMode,
+				colorLight: this.colorLight,
+				colorDark: this.colorDark,
+				bgColorLight: this.bgColorLight,
+				bgColorDark: this.bgColorDark,
+				textColorLight: this.textColorLight,
+				textColorDark: this.textColorDark,
+				displayName: this.displayName,
+				foldable: this.foldable,
+				previewFoldCollapsed: this.previewFoldCollapsed,
+				iconOffsetX: this.iconOffsetX,
+				iconOffsetY: this.iconOffsetY,
+				iconSize: this.iconSize,
+			},
+			(iconEl) => this.renderIconPreview(iconEl),
+			() => {
 				this.previewFoldCollapsed = !this.previewFoldCollapsed;
 				this.updatePreview();
-			});
-		}
-
-		// Content
-		if (this.previewFoldCollapsed) {
-			calloutEl.addClass("callout-studio-preview-collapsed");
-		} else {
-			const contentEl = calloutEl.createDiv({ cls: "callout-content" });
-			contentEl.style.color = textColor;
-			const p = contentEl.createEl("p");
-			p.textContent = t("editor.loremIpsum");
-		}
-
+			},
+		);
 		this.updateSaveState();
 	}
 
