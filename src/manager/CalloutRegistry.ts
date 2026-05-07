@@ -109,7 +109,6 @@ export class CalloutRegistry {
 					...DEFAULT_SETTINGS.iconSources,
 					...savedSettings.iconSources,
 				},
-				language: savedSettings.language ?? DEFAULT_SETTINGS.language,
 				fallbackCalloutId:
 					savedSettings.fallbackCalloutId ??
 					DEFAULT_SETTINGS.fallbackCalloutId,

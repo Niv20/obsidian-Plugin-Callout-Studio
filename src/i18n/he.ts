@@ -186,11 +186,6 @@ export const he: Record<string, string> = {
 		"פעולה זו תמחק תיבות הבלטה מותאמות, תאפס מובנות, סגנונות גלובליות וקבצי Material SVG. לא ניתן לבטל. להמשיך?",
 	"notice.resetAllDone": "הכל אופס לברירות המחדל.",
 
-	// Settings — Language
-	"settings.language": "שפה",
-	"settings.languageDesc": "שפת ממשק התוסף",
-	"settings.languageAuto": "אוטומטי (לפי Obsidian)",
-
 	// Notices
 	"notice.importedCSS": "יובאו {{count}} סוגי תיבות הבלטה ממקטעי CSS.",
 	"notice.noNewCSS": "לא נמצאו סוגי תיבות הבלטה חדשים במקטעי ה-CSS.",

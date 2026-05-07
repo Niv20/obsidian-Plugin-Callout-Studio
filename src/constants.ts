@@ -188,7 +188,6 @@ export const DEFAULT_SETTINGS: PluginSettings = {
 		materialWeightDefault: 300,
 		lastMaterialCategory: "Actions",
 	},
-	language: "auto",
 	firstRunCompleted: false,
 	fallbackCalloutId: "note",
 };

@@ -186,11 +186,6 @@ export const en: Record<string, string> = {
 		"This will delete all custom callouts, reset built-in callouts, global styles, and all cached Material SVGs. This action cannot be undone. Are you sure?",
 	"notice.resetAllDone": "Everything has been reset to defaults.",
 
-	// Settings — Language
-	"settings.language": "Language",
-	"settings.languageDesc": "Plugin interface language",
-	"settings.languageAuto": "Auto (follow Obsidian)",
-
 	// Notices
 	"notice.importedCSS":
 		"Imported {{count}} callout type(s) from CSS snippets.",

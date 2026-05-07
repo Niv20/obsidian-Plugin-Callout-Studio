@@ -109,7 +109,6 @@ export interface PluginSettings {
 	contextMenu: ContextMenuSettings;
 	autocomplete: AutocompleteSettings;
 	iconSources: IconSourceSettings;
-	language: string;
 	/** Has the first-run vault scan been completed? */
 	firstRunCompleted?: boolean;
 	/** Callout ID to use as fallback for unrecognized callout types. Empty = Obsidian default */
