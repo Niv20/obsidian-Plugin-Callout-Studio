@@ -73,6 +73,12 @@ export const he: Record<string, string> = {
 	"settings.swapAria":
 		"החלפת {{name}} (ברירת המחדל הנוכחית) בתיבת הבלטה אחרת ב-Vault",
 	"settings.replaceAria": "החלפת {{name}} בכספת בתיבת הבלטה אחרת",
+	"settings.moreRowActionsAria": "פעולות נוספות עבור {{name}}",
+	"settings.usageInfo": "{{count}} שימושים ב-{{files}} קבצים",
+	"settings.replaceAction": "החלפה בכספת…",
+	"settings.deleteAction": "מחיקה…",
+	"settings.resetAction": "איפוס לברירת מחדל",
+	"settings.makeFallbackAction": "החלת עיצוב ברירת המחדל",
 	"settings.deleteConfirm": 'למחוק את תיבת ההבלטה "{{name}}"?',
 	"settings.lightLabel": "בהיר",
 	"settings.darkLabel": "כהה",

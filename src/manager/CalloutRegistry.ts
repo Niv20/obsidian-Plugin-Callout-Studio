@@ -202,6 +202,8 @@ export class CalloutRegistry {
 		const existing = this.callouts.get(id);
 		if (!existing) return false;
 
+		const newId = partial.id && partial.id !== id ? partial.id : id;
+
 		// If the id is being changed, remove old and re-add
 		if (partial.id && partial.id !== id) {
 			if (this.callouts.has(partial.id)) return false;
@@ -209,6 +211,13 @@ export class CalloutRegistry {
 			this.callouts.set(partial.id, { ...existing, ...partial });
 		} else {
 			this.callouts.set(id, { ...existing, ...partial });
+		}
+
+		// If the user just edited the active fallback callout's appearance,
+		// re-mirror it onto every uncustomized fallback-source row so the
+		// change is visible immediately in settings and in the vault.
+		if (newId === this.settings.fallbackCalloutId) {
+			this.restyleUncustomizedFallbackRows();
 		}
 
 		this.notifyChange();
@@ -220,10 +229,77 @@ export class CalloutRegistry {
 		if (!def || def.builtIn) return false;
 		this.callouts.delete(id);
 		// If the removed callout was the active fallback, reset to "note"
+		// and re-mirror uncustomized fallback rows onto the new fallback.
 		if (this.settings.fallbackCalloutId === id) {
 			this.settings.fallbackCalloutId =
 				DEFAULT_SETTINGS.fallbackCalloutId;
+			this.restyleUncustomizedFallbackRows();
 		}
+		this.notifyChange();
+		return true;
+	}
+
+	/**
+	 * Re-style every uncustomized `source: "fallback"` row to mirror the
+	 * current fallback callout's icon, colors, and icon transform. Called
+	 * whenever the fallback selection changes (user-driven via the settings
+	 * dropdown, or implicitly when the active fallback row is deleted and
+	 * resets to the default) or when the fallback callout itself is edited.
+	 * Returns the number of rows updated. Callers decide whether to flush
+	 * (`notifyChange`) afterwards — we emit a notification only when at
+	 * least one row actually changed so settings UI re-renders to reflect
+	 * the new mirror style.
+	 */
+	restyleUncustomizedFallbackRows(): number {
+		const fallbackId =
+			this.settings.fallbackCalloutId ||
+			DEFAULT_SETTINGS.fallbackCalloutId;
+		const fallback = this.callouts.get(fallbackId);
+		if (!fallback) return 0;
+		let updated = 0;
+		for (const def of this.callouts.values()) {
+			if (def.builtIn) continue;
+			if (def.source !== "fallback") continue;
+			if (def.customized === true) continue;
+			if (def.id === fallbackId) continue;
+			this.callouts.set(def.id, {
+				...def,
+				icon: { ...fallback.icon },
+				colorLight: fallback.colorLight,
+				colorDark: fallback.colorDark,
+				bgColorLight: fallback.bgColorLight,
+				bgColorDark: fallback.bgColorDark,
+				textColorLight: fallback.textColorLight,
+				textColorDark: fallback.textColorDark,
+				iconOffsetX: fallback.iconOffsetX,
+				iconOffsetY: fallback.iconOffsetY,
+				iconSize: fallback.iconSize,
+			});
+			updated++;
+		}
+		if (updated > 0) {
+			this.notifyChange();
+		}
+		return updated;
+	}
+
+	/**
+	 * Re-attach a non-builtin callout to the global Default fallback so it
+	 * mirrors the fallback's style going forward. Clears any sticky
+	 * `customized` flag, flips `source` to `"fallback"`, then re-mirrors.
+	 * Returns `true` when the row was converted.
+	 */
+	convertToFallback(id: string): boolean {
+		const existing = this.callouts.get(id);
+		if (!existing || existing.builtIn) return false;
+		if (id === this.settings.fallbackCalloutId) return false;
+		const next: CalloutDefinition = {
+			...existing,
+			source: "fallback",
+		};
+		delete next.customized;
+		this.callouts.set(id, next);
+		this.restyleUncustomizedFallbackRows();
 		this.notifyChange();
 		return true;
 	}

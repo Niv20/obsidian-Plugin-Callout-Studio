@@ -206,6 +206,16 @@ export default class CalloutStudioPlugin extends Plugin {
 	}
 
 	/**
+	 * Re-style all uncustomized `source: "fallback"` rows to mirror the
+	 * current fallback callout's icon and colors. Called after the fallback
+	 * selection changes so previously auto-created mirror rows stay in sync.
+	 * Returns the number of rows updated.
+	 */
+	restyleUncustomizedFallbackRows(): number {
+		return this.registry.restyleUncustomizedFallbackRows();
+	}
+
+	/**
 	 * Add the given unknown callout IDs to the registry as fallback-source rows
 	 * that mirror the current fallback style. Returns the number of new rows
 	 * actually added (some IDs may already exist by the time this runs).

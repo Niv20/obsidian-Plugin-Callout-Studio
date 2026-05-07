@@ -74,6 +74,12 @@ export const en: Record<string, string> = {
 		"Swap {{name}} (current fallback) with another callout in the vault",
 	"settings.replaceAria":
 		"Replace {{name}} in the vault with another callout",
+	"settings.moreRowActionsAria": "More actions for {{name}}",
+	"settings.usageInfo": "{{count}} use(s) in {{files}} file(s)",
+	"settings.replaceAction": "Replace in vault…",
+	"settings.deleteAction": "Delete…",
+	"settings.resetAction": "Reset to default",
+	"settings.makeFallbackAction": "Use default fallback style",
 	"settings.deleteConfirm": 'Delete callout "{{name}}"?',
 	"settings.lightLabel": "L",
 	"settings.darkLabel": "D",

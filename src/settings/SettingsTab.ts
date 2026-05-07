@@ -1,4 +1,5 @@
 import {
+	Menu,
 	Modal,
 	Notice,
 	PluginSettingTab,
@@ -287,7 +288,7 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 			text: def.displayName,
 			attr: { title: def.displayName },
 		});
-		if (def.source === "fallback") {
+		if (def.source === "fallback" && def.customized !== true) {
 			nameLine.createSpan({
 				cls: "cs-fallback-tag",
 				text: t("settings.fallbackTag"),
@@ -356,59 +357,164 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 		});
 
 		if (isBuiltIn) {
-			const modified = this.plugin.registry.isBuiltInModified(def.id);
-			const resetBtn = buttonsEl.createEl("button", {
-				cls: "callout-studio-reset-btn",
+			const moreBtn = buttonsEl.createEl("button", {
+				cls: "callout-studio-more-btn",
 				attr: {
-					"aria-label": t("settings.resetAria", {
+					"aria-label": t("settings.moreRowActionsAria", {
 						name: def.displayName,
 					}),
 				},
 			});
-			setIcon(resetBtn, "rotate-ccw");
-			if (!modified) {
-				resetBtn.setAttribute("disabled", "true");
-				resetBtn.addClass("callout-studio-btn-disabled");
-			}
-			resetBtn.addEventListener("click", () => {
-				if (!modified) return;
-				void this.handleBuiltInReset(def);
+			setIcon(moreBtn, "more-horizontal");
+			moreBtn.addEventListener("click", (event) => {
+				void this.openBuiltInRowMenu(event, def);
 			});
 		} else {
-			// User-defined row: Replace + Trash buttons. Both are always
-			// visible; the trash button opens a confirmation popup that
-			// converts vault occurrences to plain text on confirm.
-			const replaceBtn = buttonsEl.createEl("button", {
-				cls: "callout-studio-replace-btn",
+			// User-defined row: single overflow ("…") menu with Replace,
+			// Delete, and — when the row is currently treated as customized
+			// — "Make default fallback" to opt back into mirroring the
+			// global fallback callout's style.
+			const moreBtn = buttonsEl.createEl("button", {
+				cls: "callout-studio-more-btn",
 				attr: {
-					"aria-label": t("settings.replaceAria", {
+					"aria-label": t("settings.moreRowActionsAria", {
 						name: def.displayName,
 					}),
 				},
 			});
-			setIcon(replaceBtn, "arrow-left-right");
-			replaceBtn.addEventListener("click", () => {
-				void this.handleCalloutReplace(def);
-			});
-
-			const deleteBtn = buttonsEl.createEl("button", {
-				cls: "callout-studio-delete-btn",
-				attr: {
-					"aria-label": t("settings.deleteAria", {
-						name: def.displayName,
-					}),
-				},
-			});
-			setIcon(deleteBtn, "trash-2");
-			deleteBtn.addEventListener("click", () => {
-				void this.handleCalloutDelete(def);
+			setIcon(moreBtn, "more-horizontal");
+			moreBtn.addEventListener("click", (event) => {
+				void this.openRowMenu(event, def);
 			});
 		}
 	}
 
-	private async handleCalloutDelete(def: CalloutDefinition): Promise<void> {
+	private async openBuiltInRowMenu(
+		event: MouseEvent,
+		def: CalloutDefinition,
+	): Promise<void> {
 		const allIds = [def.id, ...(def.aliases ?? [])];
 		const usage = await countCalloutUsages(this.app, allIds);
+		const menu = new Menu();
+		const modified = this.plugin.registry.isBuiltInModified(def.id);
+
+		this.addUsageInfoMenuItem(menu, usage);
+		menu.addSeparator();
+
+		if (modified) {
+			menu.addItem((item) =>
+				item
+					.setTitle(t("settings.resetAction"))
+					.setIcon("rotate-ccw")
+					.onClick(() => {
+						void this.handleBuiltInReset(def);
+					}),
+			);
+		}
+
+		menu.addItem((item) =>
+			item
+				.setTitle(t("settings.replaceAction"))
+				.setIcon("arrow-left-right")
+				.onClick(() => {
+					void this.handleCalloutReplace(def);
+				}),
+		);
+
+		if (usage.fileCount > 0) {
+			menu.addItem((item) =>
+				item
+					.setTitle(t("settings.deleteAction"))
+					.setIcon("trash-2")
+					.onClick(() => {
+						void this.handleBuiltInCalloutDelete(def, usage);
+					}),
+			);
+		}
+
+		menu.showAtMouseEvent(event);
+	}
+
+	private async openRowMenu(
+		event: MouseEvent,
+		def: CalloutDefinition,
+	): Promise<void> {
+		const allIds = [def.id, ...(def.aliases ?? [])];
+		const usage = await countCalloutUsages(this.app, allIds);
+		const menu = new Menu();
+
+		this.addUsageInfoMenuItem(menu, usage);
+		menu.addSeparator();
+
+		menu.addItem((item) =>
+			item
+				.setTitle(t("settings.replaceAction"))
+				.setIcon("arrow-left-right")
+				.onClick(() => {
+					void this.handleCalloutReplace(def);
+				}),
+		);
+
+		menu.addItem((item) =>
+			item
+				.setTitle(t("settings.deleteAction"))
+				.setIcon("trash-2")
+				.onClick(() => {
+					void this.handleCalloutDelete(def, usage);
+				}),
+		);
+
+		const isFallbackTarget =
+			def.id === this.plugin.settings.fallbackCalloutId;
+		const alreadyMirrors =
+			def.source === "fallback" && def.customized !== true;
+		if (!isFallbackTarget && !alreadyMirrors) {
+			menu.addItem((item) =>
+				item
+					.setTitle(t("settings.makeFallbackAction"))
+					.setIcon("sparkles")
+					.onClick(() => {
+						void this.handleConvertToFallback(def);
+					}),
+			);
+		}
+
+		menu.showAtMouseEvent(event);
+	}
+
+	private addUsageInfoMenuItem(
+		menu: Menu,
+		usage: { fileCount: number; totalCount: number },
+	): void {
+		menu.addItem((item) =>
+			item
+				.setTitle(
+					t("settings.usageInfo", {
+						count: String(usage.totalCount),
+						files: String(usage.fileCount),
+					}),
+				)
+				.setIcon("info")
+				.setDisabled(true),
+		);
+	}
+
+	private async handleConvertToFallback(
+		def: CalloutDefinition,
+	): Promise<void> {
+		if (!this.plugin.registry.convertToFallback(def.id)) return;
+		await this.plugin.saveSettings();
+		this.plugin.refreshCallouts();
+		this.display();
+	}
+
+	private async handleCalloutDelete(
+		def: CalloutDefinition,
+		knownUsage?: { fileCount: number; totalCount: number },
+	): Promise<void> {
+		const allIds = [def.id, ...(def.aliases ?? [])];
+		const usage =
+			knownUsage ?? (await countCalloutUsages(this.app, allIds));
 
 		const action = await new DeleteCalloutModal(this.app, {
 			def,
@@ -440,6 +546,40 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 		}
 		this.plugin.registry.remove(def.id);
 		this.plugin.registry.cleanupUnusedMaterialSvgs();
+		this.display();
+	}
+
+	private async handleBuiltInCalloutDelete(
+		def: CalloutDefinition,
+		knownUsage?: { fileCount: number; totalCount: number },
+	): Promise<void> {
+		const allIds = [def.id, ...(def.aliases ?? [])];
+		const usage =
+			knownUsage ?? (await countCalloutUsages(this.app, allIds));
+		if (usage.fileCount === 0) return;
+
+		const action = await new DeleteCalloutModal(this.app, {
+			def,
+			usage,
+		}).prompt();
+
+		if (action === "cancel") return;
+
+		if (action === "replace") {
+			await this.handleCalloutReplace(def);
+			return;
+		}
+
+		const result = await convertCalloutsToPlainTextInVault(
+			this.app,
+			allIds,
+		);
+		new Notice(
+			t("vault.convertedToPlainText", {
+				blocks: String(result.blocks),
+				files: String(result.files),
+			}),
+		);
 		this.display();
 	}
 
@@ -613,8 +753,9 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 				dd.setValue(this.plugin.settings.fallbackCalloutId).onChange(
 					async (val) => {
 						this.plugin.settings.fallbackCalloutId = val;
+						this.plugin.restyleUncustomizedFallbackRows();
 						await this.plugin.saveSettings();
-						this.plugin.cssInjector.inject();
+						this.plugin.refreshCallouts();
 					},
 				);
 			});

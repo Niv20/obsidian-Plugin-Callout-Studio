@@ -80,6 +80,10 @@ export class CalloutEditor extends Modal {
 		this.existingId = existing?.id ?? null;
 		this.isBuiltIn = existing?.builtIn ?? false;
 		this.createFromAutocomplete = options?.createFromAutocomplete === true;
+		const fallbackBase =
+			this.createFromAutocomplete && !existing
+				? this.getFallbackBase()
+				: undefined;
 
 		this.displayName =
 			existing?.displayName ?? options?.seedDisplayName ?? "";
@@ -87,22 +91,40 @@ export class CalloutEditor extends Modal {
 			existing?.id ?? generateId(options?.seedDisplayName ?? "");
 		this.icon = existing?.icon
 			? { ...existing.icon }
-			: { type: "lucide", value: "pencil" };
-		this.colorLight = existing?.colorLight ?? "#448aff";
-		this.colorDark = existing?.colorDark ?? "#448aff";
+			: fallbackBase?.icon
+				? { ...fallbackBase.icon }
+				: { type: "lucide", value: "pencil" };
+		this.colorLight =
+			existing?.colorLight ?? fallbackBase?.colorLight ?? "#448aff";
+		this.colorDark =
+			existing?.colorDark ?? fallbackBase?.colorDark ?? "#448aff";
 		this.bgColorLight =
 			existing?.bgColorLight ??
+			fallbackBase?.bgColorLight ??
 			blendHex(this.colorLight, "#ffffff", 0.88);
 		this.bgColorDark =
-			existing?.bgColorDark ?? blendHex(this.colorDark, "#1e1e1e", 0.88);
+			existing?.bgColorDark ??
+			fallbackBase?.bgColorDark ??
+			blendHex(this.colorDark, "#1e1e1e", 0.88);
 		this.textColorLight =
-			existing?.textColorLight ?? DEFAULT_TEXT_COLOR_LIGHT;
-		this.textColorDark = existing?.textColorDark ?? DEFAULT_TEXT_COLOR_DARK;
-		this.foldable = existing?.foldable ?? false;
-		this.defaultFolded = existing?.defaultFolded ?? false;
-		this.iconOffsetX = existing?.iconOffsetX ?? 0;
-		this.iconOffsetY = existing?.iconOffsetY ?? 0;
-		this.iconSize = Math.max(0.5, Math.min(existing?.iconSize ?? 1, 1.5));
+			existing?.textColorLight ??
+			fallbackBase?.textColorLight ??
+			DEFAULT_TEXT_COLOR_LIGHT;
+		this.textColorDark =
+			existing?.textColorDark ??
+			fallbackBase?.textColorDark ??
+			DEFAULT_TEXT_COLOR_DARK;
+		this.foldable = existing?.foldable ?? fallbackBase?.foldable ?? false;
+		this.defaultFolded =
+			existing?.defaultFolded ?? fallbackBase?.defaultFolded ?? false;
+		this.iconOffsetX =
+			existing?.iconOffsetX ?? fallbackBase?.iconOffsetX ?? 0;
+		this.iconOffsetY =
+			existing?.iconOffsetY ?? fallbackBase?.iconOffsetY ?? 0;
+		this.iconSize = Math.max(
+			0.5,
+			Math.min(existing?.iconSize ?? fallbackBase?.iconSize ?? 1, 1.5),
+		);
 		this.aliases = [...(existing?.aliases ?? [])];
 		this.previewFoldCollapsed = this.foldable && this.defaultFolded;
 		this.hasHadCalloutId =
@@ -202,13 +224,11 @@ export class CalloutEditor extends Modal {
 				this.updateSaveState();
 			},
 			validate: (tag) => {
-				// Check if this ID already exists in the registry (and isn't the one we're editing)
-				if (this.plugin.registry.has(tag) && tag !== this.existingId) {
-					return t("editor.idConflict");
-				}
-				// Also check if ID is an alias of another callout
-				const conflict = this.plugin.registry.findByAlias(tag);
-				if (conflict && conflict.id !== this.existingId) {
+				const role =
+					(this.idsTagInput?.getTags().length ?? 0) === 0
+						? "primary"
+						: "alias";
+				if (!this.canUseCalloutId(tag, role)) {
 					return t("editor.idConflict");
 				}
 				return null;
@@ -996,6 +1016,60 @@ export class CalloutEditor extends Modal {
 		});
 	}
 
+	private hasStateChanges(): boolean {
+		return this.stateSnapshot() !== this.initialSnapshot;
+	}
+
+	private getFallbackBase(): CalloutDefinition | undefined {
+		const fallbackId = this.plugin.settings.fallbackCalloutId || "note";
+		return (
+			this.plugin.registry.get(fallbackId) ??
+			this.plugin.registry.get("note")
+		);
+	}
+
+	private shouldSaveNewAutocompleteCalloutAsFallback(): boolean {
+		return (
+			this.createFromAutocomplete &&
+			this.existingId === null &&
+			!this.hasStateChanges()
+		);
+	}
+
+	/**
+	 * When creating a callout from the autocomplete "Create new" entry, the
+	 * background vault scan may have already auto-added an uncustomized
+	 * `source: "fallback"` row for the same ID. That row is a placeholder
+	 * mirroring the fallback style, not a real conflict, so allow the create
+	 * flow to overwrite it instead of refusing the save.
+	 */
+	private isOverwritingAutoFallbackRow(id: string = this.calloutId): boolean {
+		if (!this.createFromAutocomplete) return false;
+		if (this.existingId !== null) return false;
+		if (!id) return false;
+		const existing = this.plugin.registry.get(id);
+		if (!existing) return false;
+		return existing.source === "fallback" && existing.customized !== true;
+	}
+
+	private canUseCalloutId(id: string, role: "primary" | "alias"): boolean {
+		if (!id) return false;
+		const existing = this.plugin.registry.get(id);
+		const allowedPlaceholder =
+			role === "primary" && this.isOverwritingAutoFallbackRow(id);
+		if (
+			existing &&
+			existing.id !== this.existingId &&
+			!allowedPlaceholder
+		) {
+			return false;
+		}
+
+		const aliasOwner = this.plugin.registry.findByAlias(id);
+		if (aliasOwner && aliasOwner.id !== this.existingId) return false;
+		return true;
+	}
+
 	private isStateValid(): boolean {
 		// Must have at least one ID
 		if (!this.calloutId) return false;
@@ -1006,22 +1080,18 @@ export class CalloutEditor extends Modal {
 		if (!this.isBuiltIn && requireDisplayName && !this.displayName.trim()) {
 			return false;
 		}
-		// ID must not conflict with existing callouts
-		const isIdChanged =
-			this.existingId !== null && this.calloutId !== this.existingId;
-		const isNew = this.existingId === null;
-		if (
-			(isNew || isIdChanged) &&
-			this.plugin.registry.has(this.calloutId)
-		) {
+		if (!this.canUseCalloutId(this.calloutId, "primary")) {
 			return false;
+		}
+		for (const alias of this.aliases) {
+			if (!this.canUseCalloutId(alias, "alias")) return false;
 		}
 		return true;
 	}
 
 	private updateSaveState(): void {
 		if (!this.saveBtn) return;
-		const hasChanges = this.stateSnapshot() !== this.initialSnapshot;
+		const hasChanges = this.hasStateChanges();
 		const isValid = this.isStateValid();
 		// For new callouts: enable if valid (no need for "changes" check)
 		// For existing: enable if valid AND has changes
@@ -1033,9 +1103,15 @@ export class CalloutEditor extends Modal {
 	}
 
 	private showSaveBlockedNotice(): void {
-		const hasChanges = this.stateSnapshot() !== this.initialSnapshot;
+		const hasChanges = this.hasStateChanges();
+		const requireDisplayName =
+			!this.createFromAutocomplete || this.existingId !== null;
 
-		if (!this.existingId && !this.displayName.trim()) {
+		if (
+			!this.existingId &&
+			requireDisplayName &&
+			!this.displayName.trim()
+		) {
 			new Notice(t("editor.nameRequired"));
 			return;
 		}
@@ -1047,6 +1123,18 @@ export class CalloutEditor extends Modal {
 
 		if (!this.calloutId) {
 			new Notice(t("editor.idEmpty"));
+			return;
+		}
+
+		if (!this.canUseCalloutId(this.calloutId, "primary")) {
+			new Notice(t("editor.idConflict"));
+			return;
+		}
+		for (const alias of this.aliases) {
+			if (!this.canUseCalloutId(alias, "alias")) {
+				new Notice(t("editor.idConflict"));
+				return;
+			}
 		}
 	}
 
@@ -1063,14 +1151,7 @@ export class CalloutEditor extends Modal {
 		}
 		this.hasHadCalloutId = true;
 
-		// Check for duplicate (only if new or id changed)
-		const isIdChanged =
-			this.existingId !== null && this.calloutId !== this.existingId;
-		const isNew = this.existingId === null;
-		if (
-			(isNew || isIdChanged) &&
-			this.plugin.registry.has(this.calloutId)
-		) {
+		if (!this.canUseCalloutId(this.calloutId, "primary")) {
 			this.idsTagInput.showExternalError(t("editor.idExists"));
 			return;
 		}
@@ -1245,12 +1326,19 @@ export class CalloutEditor extends Modal {
 		const isIdChanged =
 			this.existingId !== null && this.calloutId !== this.existingId;
 		const isNew = this.existingId === null;
+		const hasChanges = this.hasStateChanges();
+		const saveAsFallback =
+			this.shouldSaveNewAutocompleteCalloutAsFallback();
+		const overwriteAutoFallback = this.isOverwritingAutoFallbackRow();
 
 		if (
 			(isNew || isIdChanged) &&
-			this.plugin.registry.has(this.calloutId)
+			!this.canUseCalloutId(this.calloutId, "primary")
 		) {
 			return; // Duplicate ID
+		}
+		for (const alias of this.aliases) {
+			if (!this.canUseCalloutId(alias, "alias")) return;
 		}
 
 		// Gather old state for vault updates
@@ -1286,47 +1374,63 @@ export class CalloutEditor extends Modal {
 		let customized: boolean | undefined;
 		if (!this.isBuiltIn) {
 			if (this.existingId === null) {
-				customized = true;
+				customized = !saveAsFallback;
 			} else {
 				const existingDef = this.plugin.registry.get(this.existingId);
 				const wasCustomized = existingDef?.customized === true;
-				const hasChanges =
-					this.stateSnapshot() !== this.initialSnapshot;
 				customized = wasCustomized || hasChanges;
 			}
 		}
 
+		const fallbackBase = saveAsFallback
+			? this.getFallbackBase()
+			: undefined;
+
 		const def: CalloutDefinition = {
 			id: this.calloutId,
 			displayName: newDisplayName,
-			icon: { ...this.icon },
-			colorLight: this.colorLight,
-			colorDark: this.colorDark,
-			bgColorLight: this.bgColorLight,
-			bgColorDark: this.bgColorDark,
-			textColorLight: this.textColorLight,
-			textColorDark: this.textColorDark,
-			foldable: this.foldable,
-			defaultFolded: this.defaultFolded,
+			icon: { ...(fallbackBase?.icon ?? this.icon) },
+			colorLight: fallbackBase?.colorLight ?? this.colorLight,
+			colorDark: fallbackBase?.colorDark ?? this.colorDark,
+			bgColorLight: fallbackBase?.bgColorLight ?? this.bgColorLight,
+			bgColorDark: fallbackBase?.bgColorDark ?? this.bgColorDark,
+			textColorLight: fallbackBase?.textColorLight ?? this.textColorLight,
+			textColorDark: fallbackBase?.textColorDark ?? this.textColorDark,
+			foldable: fallbackBase?.foldable ?? this.foldable,
+			defaultFolded: fallbackBase?.defaultFolded ?? this.defaultFolded,
 			builtIn: this.isBuiltIn,
-			source: this.isBuiltIn ? "builtin" : "user",
-			iconOffsetX: this.iconOffsetX,
-			iconOffsetY: this.iconOffsetY,
-			iconSize: this.iconSize,
+			source: this.isBuiltIn
+				? "builtin"
+				: saveAsFallback
+					? "fallback"
+					: "user",
+			iconOffsetX: fallbackBase?.iconOffsetX ?? this.iconOffsetX,
+			iconOffsetY: fallbackBase?.iconOffsetY ?? this.iconOffsetY,
+			iconSize: fallbackBase?.iconSize ?? this.iconSize,
 			aliases: this.aliases.length > 0 ? [...this.aliases] : undefined,
 			...(customized === true ? { customized: true } : {}),
 		};
 
 		// Add/update in registry first so SVG cleanup knows this callout exists
+		let saved = false;
 		if (this.existingId) {
 			if (isIdChanged) {
 				this.plugin.registry.remove(this.existingId);
-				this.plugin.registry.add(def);
+				saved = this.plugin.registry.add(def);
 			} else {
-				this.plugin.registry.update(this.existingId, def);
+				saved = this.plugin.registry.update(this.existingId, def);
 			}
+		} else if (overwriteAutoFallback) {
+			saved = this.plugin.registry.update(this.calloutId, def);
 		} else {
-			this.plugin.registry.add(def);
+			saved = this.plugin.registry.add(def);
+		}
+
+		if (!saved) {
+			new Notice(t("editor.idConflict"));
+			this.updateIdWarning();
+			this.updateSaveState();
+			return;
 		}
 
 		// Download Material SVG after the callout is in the registry
