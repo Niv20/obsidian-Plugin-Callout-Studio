@@ -113,19 +113,16 @@ export default class CalloutStudioPlugin extends Plugin {
 		// session.
 		if (!this.settings.firstRunCompleted) {
 			this.app.workspace.onLayoutReady(() => {
-				void this.runFirstRunDiscovery();
+				void this.runFirstRunDiscovery().finally(() => {
+					this.discovery.registerIncrementalWatchers();
+				});
 			});
 		} else {
 			this.app.workspace.onLayoutReady(() => {
 				this.discovery.schedulePrune(2000);
+				this.discovery.registerIncrementalWatchers();
 			});
 		}
-
-		// Incremental tracking: discover new callout IDs as users save files
-		// or as files arrive via sync / filesystem.
-		this.app.workspace.onLayoutReady(() => {
-			this.discovery.registerIncrementalWatchers();
-		});
 	}
 
 	onunload() {

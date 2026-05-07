@@ -1,6 +1,5 @@
 import { Modal, setIcon } from "obsidian";
 import type { App } from "obsidian";
-import type { CalloutRegistry } from "../manager/CalloutRegistry";
 import type {
 	CalloutIcon,
 	MaterialIconMeta,
@@ -21,9 +20,8 @@ const GRID_PAGE_SIZE = 120;
 
 interface IconPickerPlugin {
 	app: App;
-	registry: CalloutRegistry;
 	settings: PluginSettings;
-	saveData(data: unknown): Promise<void>;
+	saveSettings(): Promise<void>;
 	cacheMaterialSvg(icon: CalloutIcon): Promise<void>;
 }
 
@@ -323,12 +321,10 @@ export class IconPicker extends Modal {
 	private preloadMaterialIcons(): void {
 		if (this.materialIcons.length > 0 || this.materialLoading) return;
 
-		const cacheData = this.plugin.registry.materialIconsCache;
 		this.materialLoading = true;
-		this.materialLoadPromise = loadMaterialIcons(cacheData)
-			.then((data) => {
-				this.materialIcons = data.icons;
-				this.plugin.registry.materialIconsCache = data;
+		this.materialLoadPromise = loadMaterialIcons()
+			.then((icons) => {
+				this.materialIcons = icons;
 				this.materialLoading = false;
 				this.materialError = null;
 			})
@@ -476,7 +472,7 @@ export class IconPicker extends Modal {
 			this.materialCategory = categorySelect.value;
 			this.plugin.settings.iconSources.lastMaterialCategory =
 				this.materialCategory;
-			void this.plugin.saveData(this.plugin.settings);
+			void this.plugin.saveSettings();
 			updateGrid();
 		});
 
@@ -518,14 +514,11 @@ export class IconPicker extends Modal {
 			const fontPromise = this.ensureMaterialFont(this.materialStyle);
 			const dataPromise =
 				this.materialLoadPromise ??
-				loadMaterialIcons(this.plugin.registry.materialIconsCache).then(
-					(data) => {
-						this.materialIcons = data.icons;
-						this.plugin.registry.materialIconsCache = data;
-						this.materialLoading = false;
-						this.materialError = null;
-					},
-				);
+				loadMaterialIcons().then((icons) => {
+					this.materialIcons = icons;
+					this.materialLoading = false;
+					this.materialError = null;
+				});
 
 			Promise.all([fontPromise, dataPromise])
 				.then(() => {

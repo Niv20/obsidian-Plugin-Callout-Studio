@@ -1,10 +1,10 @@
 import { getIconIds, requestUrl } from "obsidian";
 import type {
 	MaterialIconMeta,
-	MaterialIconsCacheData,
 	MaterialIconStyle,
 	CalloutIcon,
 } from "../types";
+import { MATERIAL_ICON_METADATA } from "../data/materialIconsMetadata";
 
 // ── Lucide ──────────────────────────────────────────────────────────────
 
@@ -20,86 +20,19 @@ export function getLucideIcons(filter?: string): string[] {
 
 // ── Material Icons ──────────────────────────────────────────────────────
 
-const MATERIAL_ICONS_API =
-	"https://fonts.google.com/metadata/icons?key=material_symbols&incomplete=true";
-const CACHE_VALIDITY_MS = 30 * 24 * 60 * 60 * 1000; // 30 days
-/** Bump this to force re-fetch when the API URL or parsing changes */
-const METADATA_VERSION = 3;
+const MATERIAL_ICON_STYLES: MaterialIconStyle[] = [
+	"outlined",
+	"rounded",
+	"sharp",
+	"filled",
+];
 
 /**
- * Fetches Material Symbols metadata from Google Fonts CDN.
- * Returns cached data when available and not expired.
+ * Returns bundled Material Symbols metadata used by the icon picker.
+ * SVGs for selected Material icons are still downloaded separately on demand.
  */
-export async function loadMaterialIcons(
-	cache: MaterialIconsCacheData | undefined,
-): Promise<MaterialIconsCacheData> {
-	if (
-		cache &&
-		cache.version === METADATA_VERSION &&
-		Date.now() - cache.fetchedAt < CACHE_VALIDITY_MS
-	) {
-		return cache;
-	}
-
-	let raw: string;
-	try {
-		const response = await requestUrl({ url: MATERIAL_ICONS_API });
-		raw = response.text;
-	} catch {
-		if (cache) return cache; // fallback to stale cache
-		throw new Error("Failed to fetch Material Icons");
-	}
-
-	// Google prefixes JSON with ")]}'\""}, strip it
-	const jsonStart = raw.indexOf("\n");
-	const json = JSON.parse(raw.substring(jsonStart)) as {
-		icons: Array<{
-			name: string;
-			categories: string[];
-			tags: string[];
-			unsupported_families: string[];
-		}>;
-	};
-
-	const STYLE_MAP: Record<string, MaterialIconStyle> = {
-		"Material Symbols Outlined": "outlined",
-		"Material Symbols Rounded": "rounded",
-		"Material Symbols Sharp": "sharp",
-	};
-	const ALL_STYLES: MaterialIconStyle[] = [
-		"outlined",
-		"rounded",
-		"sharp",
-		"filled",
-	];
-
-	const MS_FAMILIES = new Set(Object.keys(STYLE_MAP));
-
-	const seen = new Set<string>();
-	const icons: MaterialIconMeta[] = [];
-	for (const raw of json.icons) {
-		if (seen.has(raw.name)) continue;
-		seen.add(raw.name);
-		const unsupported = new Set(raw.unsupported_families);
-		// Skip icons that don't support ANY Material Symbols family (old Material Icons only)
-		const hasAnyMs = [...MS_FAMILIES].some((f) => !unsupported.has(f));
-		if (!hasAnyMs) continue;
-		const styles = ALL_STYLES.filter((s) => {
-			const familyName = Object.entries(STYLE_MAP).find(
-				([, v]) => v === s,
-			)?.[0];
-			if (!familyName) return true; // "filled" is always supported
-			return !unsupported.has(familyName);
-		});
-		icons.push({
-			name: raw.name,
-			categories: raw.categories,
-			tags: raw.tags,
-			styles,
-		});
-	}
-
-	return { icons, fetchedAt: Date.now(), version: METADATA_VERSION };
+export async function loadMaterialIcons(): Promise<MaterialIconMeta[]> {
+	return MATERIAL_ICON_METADATA;
 }
 
 /**
@@ -118,7 +51,8 @@ export function filterMaterialIcons(
 		.split(/\s+/)
 		.filter((w) => w.length > 0);
 	return icons.filter((icon) => {
-		if (style && !icon.styles.includes(style)) {
+		const styles = icon.styles ?? MATERIAL_ICON_STYLES;
+		if (style && !styles.includes(style)) {
 			return false;
 		}
 		if (category && !icon.categories.includes(category)) {

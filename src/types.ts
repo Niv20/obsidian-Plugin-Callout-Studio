@@ -119,23 +119,21 @@ export interface PluginData {
 	version: number;
 	callouts: CalloutDefinition[];
 	settings: PluginSettings;
-	materialIconsCache?: MaterialIconsCacheData;
+	/** Legacy pre-bundled Material metadata cache; ignored on save. */
+	materialIconsCache?: unknown;
 	/** Locally cached SVGs for selected Material icons */
 	materialSvgCache?: MaterialSvgCacheEntry[];
 }
 
-export interface MaterialIconsCacheData {
-	icons: MaterialIconMeta[];
-	fetchedAt: number;
-	/** Cache format version — bump to force re-fetch after URL changes */
-	version?: number;
-}
-
-export interface MaterialIconMeta {
+export interface MaterialIconMetadataEntry {
 	name: string;
 	categories: string[];
 	tags: string[];
-	styles: MaterialIconStyle[];
+}
+
+export interface MaterialIconMeta extends MaterialIconMetadataEntry {
+	/** Optional legacy/per-icon style support; bundled metadata uses a shared style set. */
+	styles?: MaterialIconStyle[];
 }
 
 export interface MaterialSvgCacheEntry {

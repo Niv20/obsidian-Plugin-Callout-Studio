@@ -17,7 +17,7 @@ Callout Studio is the ultimate callout manager for Obsidian. It lets you create,
 Three icon sources, all selectable from one icon picker:
 
 - **Lucide icons** — Obsidian's built-in set (~1,300 icons). Always available offline.
-- **Google Material Symbols** — ~3,000 icons, with selectable style (Outlined / Filled / Rounded / Sharp) and weight (100 – 700).
+- **Google Material Symbols** — ~3,800 icons, with selectable style (Outlined / Filled / Rounded / Sharp) and weight (100 – 700).
 
 You can also fine-tune each callout's icon size and horizontal/vertical offset.
 
@@ -98,14 +98,13 @@ The plugin UI is available in **English** and **Hebrew**. The active language fo
 
 ## Network usage and privacy
 
-Callout Studio works offline by default and never sends any vault content anywhere. The only network activity is for the **Google Material Symbols** icon source, and it only happens on demand:
+Callout Studio works offline by default and never sends any vault content anywhere. The **Google Material Symbols** icon list and search tags are bundled with the plugin, so opening and searching the Material tab does not fetch icon metadata from Google. The only network activity for Material icons happens on demand:
 
-- When you open the icon picker on the **Material** tab, the plugin fetches the Material Symbols metadata once from `https://fonts.google.com/metadata/icons` and caches it locally for 30 days.
 - When the picker is open, the relevant Google Fonts stylesheet is loaded from `https://fonts.googleapis.com/css2?...` so the icon previews can render with the chosen style and weight.
 - When you actually pick a Material icon for a callout, the plugin downloads that single icon's SVG from `https://fonts.gstatic.com/s/i/short-term/...` and caches the SVG locally so the icon works offline and in PDF export.
 - On startup, if any callout already uses a Material icon whose SVG is missing from the local cache (e.g. after an import), the plugin downloads only those missing SVGs in the background.
 
-If you never use Material icons, no network calls are made. The icon cache lives inside the plugin's `data.json` and you can clear it at any time from settings. No telemetry or analytics is collected.
+If you never use Material icons, no network calls are made. Selected Material SVGs are cached inside the plugin's `data.json` and you can clear them at any time from settings. No telemetry or analytics is collected.
 
 ## Install
 

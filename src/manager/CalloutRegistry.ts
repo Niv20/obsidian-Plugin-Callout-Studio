@@ -2,7 +2,6 @@ import type {
 	CalloutDefinition,
 	ContextMenuSettings,
 	LegacyPopupSettings,
-	MaterialIconsCacheData,
 	MaterialIconStyle,
 	MaterialSvgCacheEntry,
 	PluginData,
@@ -26,7 +25,6 @@ export class CalloutRegistry {
 	private builtInDefaults: Map<string, CalloutDefinition> = new Map();
 	private changeCallbacks: RegistryChangeCallback[] = [];
 	settings: PluginSettings;
-	materialIconsCache?: MaterialIconsCacheData;
 	materialSvgCache: MaterialSvgCacheEntry[] = [];
 
 	constructor() {
@@ -109,16 +107,16 @@ export class CalloutRegistry {
 					...DEFAULT_SETTINGS.iconSources,
 					...savedSettings.iconSources,
 				},
+				firstRunCompleted:
+					savedSettings.firstRunCompleted ??
+					DEFAULT_SETTINGS.firstRunCompleted,
 				fallbackCalloutId:
 					savedSettings.fallbackCalloutId ??
 					DEFAULT_SETTINGS.fallbackCalloutId,
 			};
 		}
 
-		// Restore icon data
-		if (data.materialIconsCache) {
-			this.materialIconsCache = data.materialIconsCache;
-		}
+		// Restore downloaded SVG data for Material icons selected by the user.
 		if (data.materialSvgCache) {
 			this.materialSvgCache = data.materialSvgCache;
 		}
@@ -151,7 +149,6 @@ export class CalloutRegistry {
 			version: CURRENT_DATA_VERSION,
 			callouts: calloutsToSave,
 			settings: this.settings,
-			materialIconsCache: this.materialIconsCache,
 			materialSvgCache:
 				this.materialSvgCache.length > 0
 					? this.materialSvgCache

@@ -31,7 +31,7 @@ interface CalloutEditorPlugin {
 	registry: CalloutRegistry;
 	settings: PluginSettings;
 	pruneSuspended: boolean;
-	saveData(data: unknown): Promise<void>;
+	saveSettings(): Promise<void>;
 	schedulePruneUnusedFallbacks(delayMs?: number): void;
 	cacheMaterialSvg(icon: CalloutIcon): Promise<void>;
 	hasMaterialSvgFailed(

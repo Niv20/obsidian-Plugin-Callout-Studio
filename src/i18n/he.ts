@@ -57,7 +57,7 @@ export const he: Record<string, string> = {
 	"settings.keyboardShortcuts": "קיצורי מקשים",
 	"settings.iconSources": "אייקוני Google Material",
 	"settings.iconSourcesDesc":
-		"אייקוני Material מורדים מ-Google (fonts.gstatic.com, fonts.googleapis.com, fonts.google.com) רק כאשר בוחרים או מציגים אייקון Material, ונשמרים במטמון מקומי לאחר מכן. לא נשלח מידע ל-Google. אייקוני Lucide ו-SVG מותאמים עובדים במלואות במצב לא-מקוון.",
+		"שמות אייקוני Material ותגיות החיפוש מגיעים עם הפלאגין וזמינים במצב לא-מקוון. Google Fonts וקובצי SVG (fonts.googleapis.com, fonts.gstatic.com) נטענים רק כאשר מציגים או בוחרים אייקון Material, ואז ה-SVG שנבחר נשמר מקומית. לא נשלח מידע ל-Google.",
 	"settings.colorMode": "מצב צבע",
 	"settings.importExport": "ייבוא / ייצוא",
 	"settings.import": "ייבוא",
