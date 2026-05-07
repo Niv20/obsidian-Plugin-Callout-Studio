@@ -2,14 +2,22 @@ import {
 	Menu,
 	Modal,
 	Notice,
+	Plugin,
 	PluginSettingTab,
+	type PluginManifest,
 	Setting,
 	setIcon,
 	MarkdownView,
 } from "obsidian";
 import type { App, SliderComponent } from "obsidian";
-import type CalloutStudioPlugin from "../main";
-import type { CalloutDefinition } from "../types";
+import type { CalloutRegistry } from "../manager/CalloutRegistry";
+import type { CSSInjector } from "../manager/CSSInjector";
+import type {
+	CalloutDefinition,
+	CalloutIcon,
+	MaterialIconStyle,
+	PluginSettings,
+} from "../types";
 import { CalloutEditor } from "./CalloutEditor";
 import { ConfirmModal } from "../utils/ConfirmModal";
 import { ReplaceCalloutModal } from "../utils/ReplaceCalloutModal";
@@ -22,6 +30,7 @@ import {
 	replaceCalloutIdsInVault,
 	convertCalloutsToPlainTextInVault,
 	scanStringForUnknownCallouts,
+	type VaultCalloutStatistics,
 	scanVaultCalloutStatistics,
 } from "../utils/vaultCalloutScanner";
 import { VaultCalloutStatisticsModal } from "../utils/VaultCalloutStatisticsModal";
@@ -46,18 +55,73 @@ type AppWithSettingsPane = App & {
 	setting?: ObsidianSettingsPane;
 };
 
+type SettingsTabPlugin = Plugin & {
+	registry: CalloutRegistry;
+	cssInjector: CSSInjector;
+	manifest: PluginManifest;
+	settings: PluginSettings;
+	pruneSuspended: boolean;
+	onMaterialSvgChange(cb: () => void): () => void;
+	schedulePruneUnusedFallbacks(delayMs?: number): void;
+	addUnknownCalloutsAsFallback(unknownIds: string[]): number;
+	saveSettings(): Promise<void>;
+	refreshCallouts(): void;
+	hasMaterialSvgFailed(
+		name: string,
+		style: MaterialIconStyle,
+		weight: number,
+	): boolean;
+	restyleUncustomizedFallbackRows(): number;
+	cacheMaterialSvg(icon: CalloutIcon): Promise<void>;
+	runVaultScan(markFirstRun?: boolean): Promise<number>;
+};
+
+const scanUnknownCalloutsInBuffer = (
+	content: string,
+	knownIds: Set<string>,
+): string[] =>
+	(
+		scanStringForUnknownCallouts as (
+			content: string,
+			knownIds: Set<string>,
+		) => string[]
+	)(content, knownIds);
+
+const convertVaultCalloutsToPlainText = (
+	app: App,
+	ids: string[],
+): Promise<{ files: number; blocks: number }> =>
+	(
+		convertCalloutsToPlainTextInVault as (
+			app: App,
+			ids: string[],
+		) => Promise<{ files: number; blocks: number }>
+	)(app, ids);
+
+const scanVaultStats = (app: App): Promise<VaultCalloutStatistics> =>
+	(
+		scanVaultCalloutStatistics as (
+			app: App,
+		) => Promise<VaultCalloutStatistics>
+	)(app);
+
+const convertRegistryCalloutToFallback = (
+	registry: CalloutRegistry,
+	id: string,
+): boolean => (registry.convertToFallback as (id: string) => boolean)(id);
+
 const HOTKEY_SEARCH_MAX_ATTEMPTS = 12;
 const HOTKEY_SEARCH_RETRY_MS = 50;
 
 export class CalloutStudioSettingsTab extends PluginSettingTab {
-	plugin: CalloutStudioPlugin;
+	plugin: SettingsTabPlugin;
 	private userListEl: HTMLElement | null = null;
 	private builtInListEl: HTMLElement | null = null;
 	private registrySubscription: (() => void) | null = null;
 	private materialSvgUnsubscribe: (() => void) | null = null;
 	private refreshTimer: number | null = null;
 
-	constructor(app: App, plugin: CalloutStudioPlugin) {
+	constructor(app: App, plugin: SettingsTabPlugin) {
 		super(app, plugin);
 		this.plugin = plugin;
 	}
@@ -160,7 +224,7 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 			if (!(view instanceof MarkdownView)) continue;
 			const content = view.editor.getValue();
 			if (!content) continue;
-			for (const id of scanStringForUnknownCallouts(content, known)) {
+			for (const id of scanUnknownCalloutsInBuffer(content, known)) {
 				seen.add(id);
 			}
 		}
@@ -510,7 +574,9 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 	private async handleConvertToFallback(
 		def: CalloutDefinition,
 	): Promise<void> {
-		if (!this.plugin.registry.convertToFallback(def.id)) return;
+		if (!convertRegistryCalloutToFallback(this.plugin.registry, def.id)) {
+			return;
+		}
 		await this.plugin.saveSettings();
 		this.plugin.refreshCallouts();
 		this.display();
@@ -541,7 +607,7 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 		// action === "delete": convert any vault occurrences to plain text
 		// and remove the registry row.
 		if (usage.fileCount > 0) {
-			const result = await convertCalloutsToPlainTextInVault(
+			const result = await convertVaultCalloutsToPlainText(
 				this.app,
 				allIds,
 			);
@@ -578,10 +644,7 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 			return;
 		}
 
-		const result = await convertCalloutsToPlainTextInVault(
-			this.app,
-			allIds,
-		);
+		const result = await convertVaultCalloutsToPlainText(this.app, allIds);
 		new Notice(
 			t("vault.convertedToPlainText", {
 				blocks: String(result.blocks),
@@ -1643,10 +1706,9 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 	}
 
 	private async showVaultStatistics(): Promise<void> {
-		const stats = await scanVaultCalloutStatistics(this.app);
 		new VaultCalloutStatisticsModal(
 			this.app,
-			stats,
+			await scanVaultStats(this.app),
 			this.plugin.registry,
 		).open();
 	}

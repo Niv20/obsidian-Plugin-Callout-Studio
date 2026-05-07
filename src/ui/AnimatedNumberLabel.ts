@@ -1,5 +1,7 @@
-import NumberFlow, { canAnimate } from "number-flow";
-import type { Format } from "number-flow";
+import NumberFlow, {
+	canAnimate,
+	type Format,
+} from "../../node_modules/number-flow";
 
 export type AnimatedNumberLabel = {
 	el: NumberFlow;

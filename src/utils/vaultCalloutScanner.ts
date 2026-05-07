@@ -322,7 +322,8 @@ export async function normalizeFoldMarkersInVault(
 /**
  * Scan every Markdown file once and return the set of callout IDs that
  * are referenced via `> [!id]` syntax but are NOT in the supplied known set.
- */ export async function scanVaultForUnknownCallouts(
+ */
+export async function scanVaultForUnknownCallouts(
 	app: App,
 	knownIds: Set<string>,
 ): Promise<string[]> {
