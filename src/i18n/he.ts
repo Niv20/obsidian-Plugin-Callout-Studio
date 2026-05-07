@@ -42,6 +42,8 @@ export const he: Record<string, string> = {
 	"settings.autocomplete": "השלמה אוטומטית",
 	"settings.keyboardShortcuts": "קיצורי מקשים",
 	"settings.iconSources": "אייקוני Google Material",
+	"settings.iconSourcesDesc":
+		"אייקוני Material מורדים מ-Google (fonts.gstatic.com, fonts.googleapis.com, fonts.google.com) רק כאשר בוחרים או מציגים אייקון Material, ונשמרים במטמון מקומי לאחר מכן. לא נשלח מידע ל-Google. אייקוני Lucide ו-SVG מותאמים עובדים במלואות במצב לא-מקוון.",
 	"settings.colorMode": "מצב צבע",
 	"settings.importExport": "ייבוא / ייצוא",
 	"settings.import": "ייבוא",

@@ -43,6 +43,8 @@ export const en: Record<string, string> = {
 	"settings.autocomplete": "Autocomplete",
 	"settings.keyboardShortcuts": "Keyboard shortcuts",
 	"settings.iconSources": "Google Material Icons",
+	"settings.iconSourcesDesc":
+		"Material icons are downloaded from Google (fonts.gstatic.com, fonts.googleapis.com, fonts.google.com) only when you pick or preview a Material icon, and are cached locally afterwards. No data is sent to Google. Lucide and Custom SVG icons work fully offline.",
 	"settings.colorMode": "Color mode",
 	"settings.importExport": "Import / export",
 	"settings.import": "Import",

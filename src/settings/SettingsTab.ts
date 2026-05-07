@@ -1416,6 +1416,7 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 
 		new Setting(containerEl)
 			.setName(t("settings.iconSources"))
+			.setDesc(t("settings.iconSourcesDesc"))
 			.setHeading();
 
 		new Setting(containerEl)
