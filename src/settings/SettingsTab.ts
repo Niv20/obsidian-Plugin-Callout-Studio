@@ -22,7 +22,9 @@ import {
 	replaceCalloutIdsInVault,
 	convertCalloutsToPlainTextInVault,
 	scanStringForUnknownCallouts,
+	scanVaultCalloutStatistics,
 } from "../utils/vaultCalloutScanner";
+import { VaultCalloutStatisticsModal } from "../utils/VaultCalloutStatisticsModal";
 import { getLocale, t } from "../i18n";
 import {
 	getSortedCalloutIds,
@@ -288,10 +290,15 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 			text: def.displayName,
 			attr: { title: def.displayName },
 		});
-		if (def.source === "fallback" && def.customized !== true) {
+		if (def.id === this.plugin.settings.fallbackCalloutId) {
 			nameLine.createSpan({
 				cls: "cs-fallback-tag",
 				text: t("settings.fallbackTag"),
+			});
+		} else if (def.source === "fallback" && def.customized !== true) {
+			nameLine.createSpan({
+				cls: "cs-fallback-tag",
+				text: t("settings.fallbackTagAuto"),
 			});
 		}
 		const syntaxLine = infoEl.createDiv({
@@ -1632,12 +1639,40 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 		this.display();
 	}
 
+	private async showVaultStatistics(): Promise<void> {
+		const stats = await scanVaultCalloutStatistics(this.app);
+		new VaultCalloutStatisticsModal(
+			this.app,
+			stats,
+			this.plugin.registry,
+		).open();
+	}
+
 	// ─── Section H: (Language section removed; auto-detected) ─────────
 
 	private renderResetSection(containerEl: HTMLElement): void {
 		new Setting(containerEl)
 			.setName(t("settings.vaultMaintenance"))
 			.setHeading();
+
+		new Setting(containerEl)
+			.setName(t("settings.vaultStats"))
+			.setDesc(t("settings.vaultStatsDesc"))
+			.addButton((btn) => {
+				btn.setButtonText(t("settings.vaultStatsButton")).onClick(
+					async () => {
+						btn.setDisabled(true);
+						btn.setButtonText(t("settings.vaultStatsScanning"));
+						try {
+							await this.showVaultStatistics();
+						} finally {
+							btn.setDisabled(false);
+							btn.setButtonText(t("settings.vaultStatsButton"));
+						}
+					},
+				);
+				btn.buttonEl.addClass("cs-settings-neutral-btn");
+			});
 
 		new Setting(containerEl)
 			.setName(t("settings.rescanVault"))

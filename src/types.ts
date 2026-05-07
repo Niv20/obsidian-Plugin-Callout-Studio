@@ -73,6 +73,8 @@ export interface IconSourceSettings {
 	materialStyleDefault: MaterialIconStyle;
 	/** Material Symbols weight default (100–700) */
 	materialWeightDefault: number;
+	/** Last Material category the user had open in the icon picker */
+	lastMaterialCategory: string;
 }
 
 export interface GlobalStyleSettings {

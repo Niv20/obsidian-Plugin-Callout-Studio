@@ -9,7 +9,8 @@ export const en: Record<string, string> = {
 	"autocomplete.createNew": 'Create new callout: "{{name}}"',
 
 	// Vault scan / fallback / delete
-	"settings.fallbackTag": "Default fallback",
+	"settings.fallbackTag": "Default",
+	"settings.fallbackTagAuto": "Default fallback",
 	"settings.rescanVault": "Re-scan vault",
 	"settings.rescanVaultDesc":
 		"Find unrecognized callout IDs used in notes and add them as fallback rows.",
@@ -171,7 +172,12 @@ export const en: Record<string, string> = {
 	"settings.colorFormat": "Color format",
 
 	// Settings — Reset
-	"settings.vaultMaintenance": "Vault maintenance",
+	"settings.vaultMaintenance": "Vault insights & maintenance",
+	"settings.vaultStats": "Callout statistics",
+	"settings.vaultStatsDesc":
+		"Count every callout block in your Markdown notes and group them by type.",
+	"settings.vaultStatsButton": "View statistics",
+	"settings.vaultStatsScanning": "Scanning...",
 	"settings.resetAll": "Reset",
 	"settings.resetAllDesc":
 		"Delete all user callouts, reset built-in callouts, global styles (borders, font scale, shape), and downloaded Material SVGs.",
@@ -327,6 +333,27 @@ export const en: Record<string, string> = {
 	"vault.resetConfirm": "Reset",
 	"vault.resetAllInUse":
 		"⚠ {{count}} callout reference(s) in {{files}} file(s) use custom callout types that will be deleted.",
+
+	// Vault statistics modal
+	"vaultStats.title": "Callout statistics",
+	"vaultStats.totalCallouts": "Total callouts",
+	"vaultStats.typesFound": "Types found",
+	"vaultStats.filesWithCallouts": "Files with callouts",
+	"vaultStats.filesScanned": "Markdown files scanned",
+	"vaultStats.empty": "No callouts were found in Markdown notes.",
+	"vaultStats.columnType": "Type",
+	"vaultStats.columnName": "Name",
+	"vaultStats.columnSource": "Source",
+	"vaultStats.columnCount": "Count",
+	"vaultStats.columnFiles": "Files",
+	"vaultStats.unknown": "Unknown",
+	"vaultStats.sourceBuiltIn": "Built-in",
+	"vaultStats.sourceCustom": "Custom",
+	"vaultStats.sourceAutoFallback": "Auto fallback",
+	"vaultStats.sourceTheme": "CSS snippet",
+	"vaultStats.sourceAlias": "Alias of {{id}}",
+	"vaultStats.sourceUnknown": "Unknown",
+	"vaultStats.close": "Close",
 
 	// Import validation
 	"import.title": "Import issues",

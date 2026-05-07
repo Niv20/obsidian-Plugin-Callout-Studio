@@ -62,8 +62,9 @@ export class IconPicker extends Modal {
 			plugin.settings.iconSources.materialStyleDefault ?? "rounded";
 		this.materialWeight =
 			plugin.settings.iconSources.materialWeightDefault ?? 300;
-		// Default category — "Actions" if available, else "All"
-		this.materialCategory = "Actions";
+		// Restore last-used category (defaults to "Actions" on first use)
+		this.materialCategory =
+			plugin.settings.iconSources.lastMaterialCategory ?? "Actions";
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-misused-promises -- intentional Promise-returning override for modal result
@@ -96,6 +97,11 @@ export class IconPicker extends Modal {
 		this.previewEl = footer.createDiv("icon-picker-preview");
 		this.updatePreview();
 
+		const cancelBtn = footer.createEl("button", {
+			text: t("iconPicker.cancel"),
+		});
+		cancelBtn.addEventListener("click", () => this.cancel());
+
 		this.confirmBtn = footer.createEl("button", {
 			text: t("iconPicker.confirm"),
 			cls: "mod-cta",
@@ -103,11 +109,6 @@ export class IconPicker extends Modal {
 		this.confirmBtn.addEventListener("click", () => {
 			void this.confirm();
 		});
-
-		const cancelBtn = footer.createEl("button", {
-			text: t("iconPicker.cancel"),
-		});
-		cancelBtn.addEventListener("click", () => this.cancel());
 
 		// Render initial tab
 		this.renderTab();
@@ -464,6 +465,9 @@ export class IconPicker extends Modal {
 
 		categorySelect.addEventListener("change", () => {
 			this.materialCategory = categorySelect.value;
+			this.plugin.settings.iconSources.lastMaterialCategory =
+				this.materialCategory;
+			void this.plugin.saveData(this.plugin.settings);
 			updateGrid();
 		});
 
@@ -479,7 +483,10 @@ export class IconPicker extends Modal {
 
 		// Load icons — wait for both metadata AND font before showing the grid
 		if (this.materialIcons.length > 0) {
-			// Metadata cached – just need font
+			// Metadata cached – populate categories synchronously so the
+			// dropdown shows the saved category from the very first frame,
+			// with no intermediate flash of "All Categories".
+			this.populateMaterialCategories(categorySelect);
 			const loadingEl = this.createDelayedLoading(
 				grid,
 				t("iconPicker.iconsLoading"),
@@ -487,7 +494,6 @@ export class IconPicker extends Modal {
 			void this.ensureMaterialFont(this.materialStyle).then(() => {
 				if (this.activeTab !== "material") return;
 				loadingEl.remove();
-				this.populateMaterialCategories(categorySelect);
 				updateGrid();
 				searchInput.focus();
 			});

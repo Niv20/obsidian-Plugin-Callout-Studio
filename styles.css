@@ -1823,6 +1823,156 @@ button.callout-studio-icon-picker-loading {
 	font-size: 0.9em;
 }
 
+/* ─── Vault statistics modal ───────────────────────────────── */
+.callout-studio-vault-stats-modal {
+	max-width: 760px;
+}
+
+.callout-studio-vault-stats .cs-vault-stats-summary {
+	display: grid;
+	grid-template-columns: repeat(4, minmax(0, 1fr));
+	gap: 8px;
+	margin-bottom: 14px;
+}
+
+.callout-studio-vault-stats .cs-vault-stats-metric {
+	padding: 10px 12px;
+	border: 1px solid var(--background-modifier-border);
+	border-radius: 6px;
+	background: var(--background-secondary);
+}
+
+.callout-studio-vault-stats .cs-vault-stats-metric-value {
+	font-size: 1.35em;
+	font-weight: 700;
+	line-height: 1.1;
+	color: var(--text-normal);
+}
+
+.callout-studio-vault-stats .cs-vault-stats-metric-label {
+	margin-top: 3px;
+	font-size: var(--font-ui-smaller);
+	color: var(--text-muted);
+}
+
+.callout-studio-vault-stats .cs-vault-stats-list {
+	max-height: 50vh;
+	overflow-y: auto;
+	border: 1px solid var(--background-modifier-border);
+	border-radius: 6px;
+	background: var(--background-primary);
+}
+
+.callout-studio-vault-stats .cs-vault-stats-row {
+	display: grid;
+	grid-template-columns:
+		minmax(120px, 1.2fr) minmax(120px, 1fr) minmax(100px, 0.9fr)
+		minmax(64px, 0.5fr) minmax(64px, 0.5fr);
+	gap: 10px;
+	align-items: center;
+	padding: 8px 10px;
+	border-bottom: 1px solid var(--background-modifier-border-hover);
+}
+
+.callout-studio-vault-stats .cs-vault-stats-row:last-child {
+	border-bottom: none;
+}
+
+.callout-studio-vault-stats .cs-vault-stats-header {
+	position: sticky;
+	top: 0;
+	z-index: 1;
+	font-size: var(--font-ui-smaller);
+	font-weight: 700;
+	color: var(--text-muted);
+	background: var(--background-secondary);
+}
+
+.callout-studio-vault-stats .cs-vault-stats-type {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	min-width: 0;
+	max-width: 100%;
+	font-size: var(--font-ui-smaller);
+}
+
+.callout-studio-vault-stats .cs-vault-stats-type-icon {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 20px;
+	height: 20px;
+	flex: 0 0 20px;
+	font-size: 16px;
+}
+
+.callout-studio-vault-stats .cs-vault-stats-type-icon svg {
+	width: 16px;
+	height: 16px;
+}
+
+.callout-studio-vault-stats .cs-vault-stats-type-icon.is-unknown {
+	color: var(--text-faint);
+}
+
+.callout-studio-vault-stats .cs-vault-stats-name,
+.callout-studio-vault-stats .cs-vault-stats-source {
+	min-width: 0;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.callout-studio-vault-stats .cs-vault-stats-source {
+	color: var(--text-muted);
+	font-size: var(--font-ui-smaller);
+}
+
+.callout-studio-vault-stats .cs-vault-stats-count,
+.callout-studio-vault-stats .cs-vault-stats-files {
+	font-variant-numeric: tabular-nums;
+	text-align: start;
+}
+
+.callout-studio-vault-stats .cs-vault-stats-empty {
+	margin: 0.5rem 0 1rem;
+	color: var(--text-muted);
+}
+
+@media (max-width: 620px) {
+	.callout-studio-vault-stats .cs-vault-stats-summary {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+
+	.callout-studio-vault-stats .cs-vault-stats-header {
+		display: none;
+	}
+
+	.callout-studio-vault-stats .cs-vault-stats-row {
+		grid-template-columns: minmax(0, 1fr) auto;
+		gap: 4px 10px;
+	}
+
+	.callout-studio-vault-stats .cs-vault-stats-type,
+	.callout-studio-vault-stats .cs-vault-stats-name,
+	.callout-studio-vault-stats .cs-vault-stats-source {
+		grid-column: 1;
+	}
+
+	.callout-studio-vault-stats .cs-vault-stats-count {
+		grid-column: 2;
+		grid-row: 1;
+	}
+
+	.callout-studio-vault-stats .cs-vault-stats-files {
+		grid-column: 2;
+		grid-row: 2;
+		color: var(--text-muted);
+		font-size: var(--font-ui-smaller);
+	}
+}
+
 /* ── Footer ─────────────────────────────────────────────────── */
 .callout-studio-footer {
 	margin-top: 2rem;

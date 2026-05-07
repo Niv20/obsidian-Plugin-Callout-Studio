@@ -10,6 +10,7 @@ export const he: Record<string, string> = {
 
 	// Vault scan / fallback / delete
 	"settings.fallbackTag": "ברירת מחדל",
+	"settings.fallbackTagAuto": "ברירת מחדל אוטומטית",
 	"settings.rescanVault": "סרוק מחדש את המאגר",
 	"settings.rescanVaultDesc":
 		"מחפש מזהי הבלטה לא מזוהים בהערות ומוסיף אותם כשורות בברירת מחדל.",
@@ -171,7 +172,12 @@ export const he: Record<string, string> = {
 	"settings.colorFormat": "פורמט צבע",
 
 	// Settings — Reset
-	"settings.vaultMaintenance": "ניהול נתונים",
+	"settings.vaultMaintenance": "סקירה ותחזוקת Vault",
+	"settings.vaultStats": "סטטיסטיקת תיבות הבלטה",
+	"settings.vaultStatsDesc":
+		"ספירת כל בלוקי תיבות ההבלטה בקבצי Markdown וחלוקה לפי סוג.",
+	"settings.vaultStatsButton": "צפייה בסטטיסטיקה",
+	"settings.vaultStatsScanning": "סורק...",
 	"settings.resetAll": "איפוס",
 	"settings.resetAllDesc":
 		"מחיקת כל תיבות ההבלטה, איפוס מובנות, סגנונות גלובליות (גבולות, קנה מידות, צורה) וקבצי Material SVG שהורדו.",
@@ -310,6 +316,27 @@ export const he: Record<string, string> = {
 	"vault.resetConfirm": "איפוס",
 	"vault.resetAllInUse":
 		"⚠ {{count}} הפניות ב-{{files}} קבצים משתמשות בסוגי תיבות הבלטה שיימחקו.",
+
+	// Vault statistics modal
+	"vaultStats.title": "סטטיסטיקת תיבות הבלטה",
+	"vaultStats.totalCallouts": "סך כל תיבות ההבלטה",
+	"vaultStats.typesFound": "סוגים שנמצאו",
+	"vaultStats.filesWithCallouts": "קבצים עם תיבות הבלטה",
+	"vaultStats.filesScanned": "קבצי Markdown שנסרקו",
+	"vaultStats.empty": "לא נמצאו תיבות הבלטה בקבצי Markdown.",
+	"vaultStats.columnType": "סוג",
+	"vaultStats.columnName": "שם",
+	"vaultStats.columnSource": "מקור",
+	"vaultStats.columnCount": "כמות",
+	"vaultStats.columnFiles": "קבצים",
+	"vaultStats.unknown": "לא מוכר",
+	"vaultStats.sourceBuiltIn": "מובנה",
+	"vaultStats.sourceCustom": "מותאם",
+	"vaultStats.sourceAutoFallback": "ברירת מחדל אוטומטית",
+	"vaultStats.sourceTheme": "CSS snippet",
+	"vaultStats.sourceAlias": "כינוי של {{id}}",
+	"vaultStats.sourceUnknown": "לא מוכר",
+	"vaultStats.close": "סגירה",
 
 	// Import validation
 	"import.title": "בעיות בייבוא",

@@ -4,6 +4,69 @@ function escapeRegex(str: string): string {
 	return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
+export interface VaultCalloutTypeStatistics {
+	id: string;
+	fileCount: number;
+	totalCount: number;
+}
+
+export interface VaultCalloutStatistics {
+	markdownFileCount: number;
+	filesWithCallouts: number;
+	totalCount: number;
+	types: VaultCalloutTypeStatistics[];
+}
+
+export async function scanVaultCalloutStatistics(
+	app: App,
+): Promise<VaultCalloutStatistics> {
+	const regex = /^>\s*(?:>\s*)*\[!([^\]\s]+)\][+-]?/gim;
+	const files = app.vault.getMarkdownFiles();
+	const byId = new Map<string, VaultCalloutTypeStatistics>();
+	let filesWithCallouts = 0;
+	let totalCount = 0;
+
+	for (const file of files) {
+		const content = await app.vault.cachedRead(file);
+		const seenInFile = new Set<string>();
+		regex.lastIndex = 0;
+
+		let match: RegExpExecArray | null;
+		while ((match = regex.exec(content)) !== null) {
+			const id = match[1]?.toLowerCase();
+			if (!id) continue;
+
+			let entry = byId.get(id);
+			if (!entry) {
+				entry = { id, fileCount: 0, totalCount: 0 };
+				byId.set(id, entry);
+			}
+			entry.totalCount++;
+			totalCount++;
+			seenInFile.add(id);
+		}
+
+		if (seenInFile.size > 0) {
+			filesWithCallouts++;
+			for (const id of seenInFile) {
+				const entry = byId.get(id);
+				if (entry) entry.fileCount++;
+			}
+		}
+	}
+
+	const types = Array.from(byId.values()).sort(
+		(a, b) => b.totalCount - a.totalCount || a.id.localeCompare(b.id),
+	);
+
+	return {
+		markdownFileCount: files.length,
+		filesWithCallouts,
+		totalCount,
+		types,
+	};
+}
+
 /**
  * Scan a single Markdown file (cheap; reads from cache) and return the set of
  * callout IDs referenced via `> [!id]` syntax that are NOT in `knownIds`.
