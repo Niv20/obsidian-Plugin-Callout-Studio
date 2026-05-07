@@ -1,0 +1,31 @@
+import { t } from "../../i18n";
+import type { SettingsSectionContext } from "./types";
+
+export function renderFooterSection(
+	ctx: SettingsSectionContext,
+	containerEl: HTMLElement,
+): void {
+	const footer = containerEl.createEl("div", {
+		cls: "callout-studio-footer",
+	});
+	footer.createEl("p", {
+		text: t("footer.tagline"),
+		cls: "callout-studio-footer-tagline",
+	});
+	const links = footer.createEl("p", {
+		cls: "callout-studio-footer-links",
+	});
+	links.createEl("span", { text: t("footer.madeBy") });
+	links.createEl("a", {
+		text: "GitHub",
+		href: "https://github.com/Niv20/obsidian-Plugin-Callout-Studio",
+		attr: { target: "_blank", rel: "noopener noreferrer" },
+	});
+	links.createEl("span", { text: "  •  " });
+	links.createEl("a", {
+		text: "Email",
+		href: "mailto:anivbniv@gmail.com",
+	});
+	links.createEl("span", { text: "  •  " });
+	links.createEl("span", { text: `v${ctx.plugin.manifest.version}` });
+}

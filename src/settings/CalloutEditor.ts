@@ -1,12 +1,5 @@
-import { Modal, Notice, Setting, setIcon, SliderComponent } from "obsidian";
-import type { App } from "obsidian";
-import type { CalloutRegistry } from "../manager/CalloutRegistry";
-import type {
-	CalloutDefinition,
-	CalloutIcon,
-	MaterialIconStyle,
-	PluginSettings,
-} from "../types";
+import { Modal, Notice, Setting, SliderComponent } from "obsidian";
+import type { CalloutDefinition, CalloutIcon } from "../types";
 import { IconPicker } from "./IconPicker";
 import { renderEditorPreview } from "./CalloutEditorPreview";
 import { blendHex } from "../utils/colorUtils";
@@ -19,27 +12,17 @@ import { t } from "../i18n";
 import { TagInput } from "../ui/TagInput";
 import { renderColorCircles } from "../ui/ColorCircles";
 import { createAnimatedNumberLabel } from "../ui/AnimatedNumberLabel";
+import type { CalloutEditorPlugin } from "./editor/types";
 import {
-	countCalloutUsages,
-	normalizeFoldMarkersInVault,
-	replaceCalloutIdsInVault,
-	replaceCalloutTitlesInVault,
-} from "../utils/vaultCalloutScanner";
-
-interface CalloutEditorPlugin {
-	app: App;
-	registry: CalloutRegistry;
-	settings: PluginSettings;
-	pruneSuspended: boolean;
-	saveSettings(): Promise<void>;
-	schedulePruneUnusedFallbacks(delayMs?: number): void;
-	cacheMaterialSvg(icon: CalloutIcon): Promise<void>;
-	hasMaterialSvgFailed(
-		name: string,
-		style: MaterialIconStyle,
-		weight: number,
-	): boolean;
-}
+	buildStateSnapshot,
+	canUseCalloutId,
+	hasStateChanges,
+	isOverwritingAutoFallbackRow,
+	isStateValid,
+	shouldSaveNewAutocompleteCalloutAsFallback,
+} from "./editor/CalloutEditorValidation";
+import { renderCalloutEditorIconPreview } from "./editor/CalloutEditorIconRenderer";
+import { performCalloutEditorSave } from "./editor/CalloutEditorSave";
 
 function generateId(displayName: string): string {
 	return displayName
@@ -1018,7 +1001,7 @@ export class CalloutEditor extends Modal {
 	}
 
 	private stateSnapshot(): string {
-		return JSON.stringify({
+		return buildStateSnapshot({
 			displayName: this.displayName,
 			calloutId: this.calloutId,
 			icon: this.icon,
@@ -1038,7 +1021,7 @@ export class CalloutEditor extends Modal {
 	}
 
 	private hasStateChanges(): boolean {
-		return this.stateSnapshot() !== this.initialSnapshot;
+		return hasStateChanges(this.initialSnapshot, this.stateSnapshot());
 	}
 
 	private getFallbackBase(): CalloutDefinition | undefined {
@@ -1050,11 +1033,13 @@ export class CalloutEditor extends Modal {
 	}
 
 	private shouldSaveNewAutocompleteCalloutAsFallback(): boolean {
-		return (
-			this.createFromAutocomplete &&
-			this.existingId === null &&
-			!this.hasStateChanges()
-		);
+		return shouldSaveNewAutocompleteCalloutAsFallback({
+			createFromAutocomplete: this.createFromAutocomplete,
+			existingId: this.existingId,
+			hasStateChanges: this.hasStateChanges(),
+			getById: (id) => this.plugin.registry.get(id),
+			findByAlias: (id) => this.plugin.registry.findByAlias(id),
+		});
 	}
 
 	/**
@@ -1065,49 +1050,40 @@ export class CalloutEditor extends Modal {
 	 * flow to overwrite it instead of refusing the save.
 	 */
 	private isOverwritingAutoFallbackRow(id: string = this.calloutId): boolean {
-		if (!this.createFromAutocomplete) return false;
-		if (this.existingId !== null) return false;
-		if (!id) return false;
-		const existing = this.plugin.registry.get(id);
-		if (!existing) return false;
-		return existing.source === "fallback" && existing.customized !== true;
+		return isOverwritingAutoFallbackRow({
+			createFromAutocomplete: this.createFromAutocomplete,
+			existingId: this.existingId,
+			id,
+			getById: (targetId) => this.plugin.registry.get(targetId),
+			findByAlias: (targetId) =>
+				this.plugin.registry.findByAlias(targetId),
+		});
 	}
 
 	private canUseCalloutId(id: string, role: "primary" | "alias"): boolean {
-		if (!id) return false;
-		const existing = this.plugin.registry.get(id);
-		const allowedPlaceholder =
-			role === "primary" && this.isOverwritingAutoFallbackRow(id);
-		if (
-			existing &&
-			existing.id !== this.existingId &&
-			!allowedPlaceholder
-		) {
-			return false;
-		}
-
-		const aliasOwner = this.plugin.registry.findByAlias(id);
-		if (aliasOwner && aliasOwner.id !== this.existingId) return false;
-		return true;
+		return canUseCalloutId({
+			createFromAutocomplete: this.createFromAutocomplete,
+			existingId: this.existingId,
+			id,
+			role,
+			getById: (targetId) => this.plugin.registry.get(targetId),
+			findByAlias: (targetId) =>
+				this.plugin.registry.findByAlias(targetId),
+		});
 	}
 
 	private isStateValid(): boolean {
-		// Must have at least one ID
-		if (!this.calloutId) return false;
-		// Allow empty display name only when creating directly from autocomplete.
-		// In that flow, save() falls back to the callout ID for display text.
-		const requireDisplayName =
-			!this.createFromAutocomplete || this.existingId !== null;
-		if (!this.isBuiltIn && requireDisplayName && !this.displayName.trim()) {
-			return false;
-		}
-		if (!this.canUseCalloutId(this.calloutId, "primary")) {
-			return false;
-		}
-		for (const alias of this.aliases) {
-			if (!this.canUseCalloutId(alias, "alias")) return false;
-		}
-		return true;
+		return isStateValid({
+			createFromAutocomplete: this.createFromAutocomplete,
+			existingId: this.existingId,
+			isBuiltIn: this.isBuiltIn,
+			displayName: this.displayName,
+			calloutId: this.calloutId,
+			aliases: this.aliases,
+			getById: (targetId) => this.plugin.registry.get(targetId),
+			findByAlias: (targetId) =>
+				this.plugin.registry.findByAlias(targetId),
+		});
 	}
 
 	private updateSaveState(): void {
@@ -1189,55 +1165,7 @@ export class CalloutEditor extends Modal {
 	}
 
 	private renderIconPreview(container: HTMLElement): void {
-		container.empty();
-		container.removeClass("is-loading");
-		container.removeClass("is-error");
-		switch (this.icon.type) {
-			case "lucide":
-				try {
-					setIcon(container, this.icon.value);
-				} catch {
-					container.textContent = "?";
-				}
-				break;
-			case "material": {
-				// Use cached SVG if available
-				const cached = this.plugin.registry.findMaterialSvg(
-					this.icon.value,
-					this.icon.style ?? "outlined",
-					this.icon.weight ?? 400,
-				);
-				if (cached) {
-					const parser = new DOMParser();
-					const doc = parser.parseFromString(
-						cached.svg,
-						"image/svg+xml",
-					);
-					const svgEl = doc.documentElement;
-					svgEl.setAttribute("fill", "currentColor");
-					container.appendChild(
-						container.doc.importNode(svgEl, true),
-					);
-				} else {
-					const failed = this.plugin.hasMaterialSvgFailed(
-						this.icon.value,
-						this.icon.style ?? "outlined",
-						this.icon.weight ?? 400,
-					);
-					if (failed) {
-						setIcon(container, "circle-help");
-						container.addClass("is-error");
-					} else {
-						setIcon(container, "loader-2");
-						container.addClass("is-loading");
-					}
-				}
-				break;
-			}
-			case "emoji":
-				container.textContent = this.icon.value;
-				break;
-		}
+		renderCalloutEditorIconPreview(this.plugin, this.icon, container);
 	}
 
 	private updatePreview(): void {
@@ -1269,212 +1197,46 @@ export class CalloutEditor extends Modal {
 	}
 
 	private async save(): Promise<void> {
-		if (!this.calloutId) return;
+		const def = await performCalloutEditorSave({
+			app: this.app,
+			plugin: this.plugin,
+			existingId: this.existingId,
+			isBuiltIn: this.isBuiltIn,
+			state: {
+				displayName: this.displayName,
+				calloutId: this.calloutId,
+				icon: this.icon,
+				colorLight: this.colorLight,
+				colorDark: this.colorDark,
+				bgColorLight: this.bgColorLight,
+				bgColorDark: this.bgColorDark,
+				textColorLight: this.textColorLight,
+				textColorDark: this.textColorDark,
+				foldable: this.foldable,
+				defaultFolded: this.defaultFolded,
+				iconOffsetX: this.iconOffsetX,
+				iconOffsetY: this.iconOffsetY,
+				iconSize: this.iconSize,
+				aliases: this.aliases,
+			},
+			hasChanges: this.hasStateChanges(),
+			saveAsFallback: this.shouldSaveNewAutocompleteCalloutAsFallback(),
+			overwriteAutoFallback: this.isOverwritingAutoFallbackRow(),
+			canUseCalloutId: (id, role) => this.canUseCalloutId(id, role),
+			getFallbackBase: () => this.getFallbackBase(),
+			onMaterialDownloadStart: () => {
+				if (this.saveBtn) {
+					this.isSaveActionEnabled = false;
+					this.saveBtn.disabled = true;
+					this.saveBtn.textContent = t("editor.downloadingIcon");
+				}
+			},
+		});
 
-		const isIdChanged =
-			this.existingId !== null && this.calloutId !== this.existingId;
-		const isNew = this.existingId === null;
-		const hasChanges = this.hasStateChanges();
-		const saveAsFallback =
-			this.shouldSaveNewAutocompleteCalloutAsFallback();
-		const overwriteAutoFallback = this.isOverwritingAutoFallbackRow();
-
-		if (
-			(isNew || isIdChanged) &&
-			!this.canUseCalloutId(this.calloutId, "primary")
-		) {
-			return; // Duplicate ID
-		}
-		for (const alias of this.aliases) {
-			if (!this.canUseCalloutId(alias, "alias")) return;
-		}
-
-		// Gather old state for vault updates
-		let removedIds: string[] = [];
-		let oldDisplayName: string | null = null;
-		let oldAllIds: string[] = [];
-		let oldFoldable = false;
-		let oldDefaultFolded = false;
-		if (this.existingId) {
-			const existingDef = this.plugin.registry.get(this.existingId);
-			if (existingDef) {
-				oldDisplayName = existingDef.displayName;
-				oldAllIds = [existingDef.id, ...(existingDef.aliases ?? [])];
-				oldFoldable = existingDef.foldable;
-				oldDefaultFolded = existingDef.defaultFolded;
-				const newIdSet = new Set(
-					[this.calloutId, ...this.aliases].map((s) =>
-						s.toLowerCase(),
-					),
-				);
-				removedIds = oldAllIds.filter(
-					(id) => !newIdSet.has(id.toLowerCase()),
-				);
-			}
-		}
-
-		const newDisplayName = this.displayName || this.calloutId;
-
-		// Determine whether this save should mark the row as "customized" so
-		// it becomes sticky against auto-pruning. New user-created rows are
-		// always customized; existing non-builtin rows become customized when
-		// the user actually changed any field, or were already customized.
-		let customized: boolean | undefined;
-		if (!this.isBuiltIn) {
-			if (this.existingId === null) {
-				customized = !saveAsFallback;
-			} else {
-				const existingDef = this.plugin.registry.get(this.existingId);
-				const wasCustomized = existingDef?.customized === true;
-				customized = wasCustomized || hasChanges;
-			}
-		}
-
-		const fallbackBase = saveAsFallback
-			? this.getFallbackBase()
-			: undefined;
-
-		const def: CalloutDefinition = {
-			id: this.calloutId,
-			displayName: newDisplayName,
-			icon: { ...(fallbackBase?.icon ?? this.icon) },
-			colorLight: fallbackBase?.colorLight ?? this.colorLight,
-			colorDark: fallbackBase?.colorDark ?? this.colorDark,
-			bgColorLight: fallbackBase?.bgColorLight ?? this.bgColorLight,
-			bgColorDark: fallbackBase?.bgColorDark ?? this.bgColorDark,
-			textColorLight: fallbackBase?.textColorLight ?? this.textColorLight,
-			textColorDark: fallbackBase?.textColorDark ?? this.textColorDark,
-			foldable: fallbackBase?.foldable ?? this.foldable,
-			defaultFolded: fallbackBase?.defaultFolded ?? this.defaultFolded,
-			builtIn: this.isBuiltIn,
-			source: this.isBuiltIn
-				? "builtin"
-				: saveAsFallback
-					? "fallback"
-					: "user",
-			iconOffsetX: fallbackBase?.iconOffsetX ?? this.iconOffsetX,
-			iconOffsetY: fallbackBase?.iconOffsetY ?? this.iconOffsetY,
-			iconSize: fallbackBase?.iconSize ?? this.iconSize,
-			aliases: this.aliases.length > 0 ? [...this.aliases] : undefined,
-			...(customized === true ? { customized: true } : {}),
-		};
-
-		// Add/update in registry first so SVG cleanup knows this callout exists
-		let saved = false;
-		if (this.existingId) {
-			if (isIdChanged) {
-				this.plugin.registry.remove(this.existingId);
-				saved = this.plugin.registry.add(def);
-			} else {
-				saved = this.plugin.registry.update(this.existingId, def);
-			}
-		} else if (overwriteAutoFallback) {
-			saved = this.plugin.registry.update(this.calloutId, def);
-		} else {
-			saved = this.plugin.registry.add(def);
-		}
-
-		if (!saved) {
-			new Notice(t("editor.idConflict"));
+		if (!def) {
 			this.updateIdWarning();
 			this.updateSaveState();
 			return;
-		}
-
-		// Download Material SVG after the callout is in the registry
-		if (def.icon.type === "material") {
-			if (this.saveBtn) {
-				this.isSaveActionEnabled = false;
-				this.saveBtn.disabled = true;
-				this.saveBtn.textContent = t("editor.downloadingIcon");
-			}
-			try {
-				await this.plugin.cacheMaterialSvg(def.icon);
-				const cached = this.plugin.registry.findMaterialSvg(
-					def.icon.value,
-					def.icon.style ?? "outlined",
-					def.icon.weight ?? 400,
-				);
-				console.debug(
-					"[CalloutStudio] save: SVG cached?",
-					!!cached,
-					"cache size:",
-					this.plugin.registry.materialSvgCache.length,
-				);
-			} catch (err) {
-				console.warn("[CalloutStudio] save: SVG download failed", err);
-				// Continue even if download fails — will retry on next load
-			}
-		}
-
-		this.plugin.registry.cleanupUnusedMaterialSvgs();
-
-		// Auto-update vault files when IDs changed (no confirmation)
-		if (removedIds.length > 0) {
-			const { fileCount } = await countCalloutUsages(
-				this.app,
-				removedIds,
-			);
-			if (fileCount > 0) {
-				const replaced = await replaceCalloutIdsInVault(
-					this.app,
-					removedIds,
-					this.calloutId,
-				);
-				if (replaced > 0) {
-					new Notice(
-						t("vault.idsUpdated", {
-							count: String(replaced),
-							oldIds: removedIds.join(", "),
-							newId: this.calloutId,
-						}),
-					);
-				}
-			}
-		}
-
-		// Auto-update vault titles when display name changed (no confirmation)
-		if (
-			oldDisplayName &&
-			oldDisplayName !== newDisplayName &&
-			oldAllIds.length > 0
-		) {
-			// Use all current IDs (including aliases) to find matching callouts
-			const allCurrentIds = [this.calloutId, ...this.aliases];
-			const replaced = await replaceCalloutTitlesInVault(
-				this.app,
-				allCurrentIds,
-				oldDisplayName,
-				newDisplayName,
-			);
-			if (replaced > 0) {
-				new Notice(
-					t("vault.titlesUpdated", {
-						count: String(replaced),
-						oldTitle: oldDisplayName,
-						newTitle: newDisplayName,
-					}),
-				);
-			}
-		}
-
-		// Auto-normalize fold markers in vault when fold state changed
-		if (
-			this.existingId &&
-			(oldFoldable !== this.foldable ||
-				oldDefaultFolded !== this.defaultFolded)
-		) {
-			const desiredMarker: "" | "+" | "-" = !this.foldable
-				? ""
-				: this.defaultFolded
-					? "-"
-					: "+";
-			const allCurrentIds = [this.calloutId, ...this.aliases];
-			await normalizeFoldMarkersInVault(
-				this.app,
-				allCurrentIds,
-				desiredMarker,
-			);
 		}
 
 		if (this.resolve) this.resolve(def);

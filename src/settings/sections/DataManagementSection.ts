@@ -1,0 +1,249 @@
+import { Notice, Setting } from "obsidian";
+import { t } from "../../i18n";
+import { ConfirmModal } from "../../utils/ConfirmModal";
+import { ImportReportModal } from "../../utils/ImportReportModal";
+import { validateImportPayload } from "../../utils/importValidator";
+import {
+	countCalloutUsages,
+	scanVaultCalloutStatistics,
+	type VaultCalloutStatistics,
+} from "../../utils/vaultCalloutScanner";
+import { VaultCalloutStatisticsModal } from "../../utils/VaultCalloutStatisticsModal";
+import type { App } from "obsidian";
+import type { SettingsSectionContext } from "./types";
+
+const scanVaultStats = (app: App): Promise<VaultCalloutStatistics> =>
+	(
+		scanVaultCalloutStatistics as (
+			app: App,
+		) => Promise<VaultCalloutStatistics>
+	)(app);
+
+export function renderImportExportSection(
+	ctx: SettingsSectionContext,
+	containerEl: HTMLElement,
+): void {
+	new Setting(containerEl).setName(t("settings.importExport")).setHeading();
+
+	new Setting(containerEl)
+		.setName(t("settings.import"))
+		.setDesc(t("settings.importDesc"))
+		.addButton((btn) => {
+			btn.setButtonText(t("settings.import"))
+				.setIcon("download")
+				.onClick(() => importFromJSON(ctx));
+			btn.buttonEl.addClass("cs-settings-neutral-btn");
+		});
+
+	new Setting(containerEl)
+		.setName(t("settings.export"))
+		.setDesc(t("settings.exportDesc"))
+		.addButton((btn) => {
+			btn.setButtonText(t("settings.export"))
+				.setIcon("upload")
+				.onClick(() => exportCallouts(ctx));
+			btn.buttonEl.addClass("cs-settings-neutral-btn");
+		});
+}
+
+export function renderResetSection(
+	ctx: SettingsSectionContext,
+	containerEl: HTMLElement,
+): void {
+	new Setting(containerEl)
+		.setName(t("settings.vaultMaintenance"))
+		.setHeading();
+
+	new Setting(containerEl)
+		.setName(t("settings.vaultStats"))
+		.setDesc(t("settings.vaultStatsDesc"))
+		.addButton((btn) => {
+			btn.setButtonText(t("settings.vaultStatsButton")).onClick(
+				async () => {
+					btn.setDisabled(true);
+					btn.setButtonText(t("settings.vaultStatsScanning"));
+					try {
+						await showVaultStatistics(ctx);
+					} finally {
+						btn.setDisabled(false);
+						btn.setButtonText(t("settings.vaultStatsButton"));
+					}
+				},
+			);
+			btn.buttonEl.addClass("cs-settings-neutral-btn");
+		});
+
+	new Setting(containerEl)
+		.setName(t("settings.rescanVault"))
+		.setDesc(t("settings.rescanVaultDesc"))
+		.addButton((btn) => {
+			btn.setButtonText(t("settings.rescanVaultHintAction")).onClick(
+				() => {
+					void runVaultRescan(ctx);
+				},
+			);
+			btn.buttonEl.addClass("cs-settings-neutral-btn");
+		});
+
+	new Setting(containerEl)
+		.setName(t("settings.resetAll"))
+		.setDesc(t("settings.resetAllDesc"))
+		.addButton((btn) =>
+			btn
+				.setButtonText(t("settings.resetAllButton"))
+				.setWarning()
+				.onClick(async () => {
+					const userCallouts = ctx.plugin.registry.getUserDefined();
+					const userIds = userCallouts.flatMap((c) => [
+						c.id,
+						...(c.aliases ?? []),
+					]);
+
+					const messageFrag = document.createDocumentFragment();
+					if (userIds.length > 0) {
+						const { fileCount, totalCount } =
+							await countCalloutUsages(ctx.app, userIds);
+						if (fileCount > 0) {
+							messageFrag.createEl("p", {
+								text: t("vault.resetAllInUse", {
+									count: String(totalCount),
+									files: String(fileCount),
+								}),
+								cls: "cs-reset-warning",
+							});
+						}
+					}
+					messageFrag.createEl("p", {
+						text: t("settings.resetAllConfirm"),
+					});
+
+					const confirmed = await new ConfirmModal(
+						ctx.app,
+						messageFrag,
+					).confirm();
+					if (!confirmed) return;
+					ctx.plugin.registry.resetAll();
+					ctx.plugin.cssInjector.inject();
+					await ctx.plugin.saveSettings();
+					new Notice(t("notice.resetAllDone"));
+					ctx.display();
+				}),
+		);
+}
+
+async function runVaultRescan(ctx: SettingsSectionContext): Promise<void> {
+	const added = await ctx.plugin.runVaultScan(false);
+	new Notice(
+		t("settings.rescanComplete", {
+			count: String(added),
+		}),
+	);
+	ctx.display();
+}
+
+async function showVaultStatistics(ctx: SettingsSectionContext): Promise<void> {
+	new VaultCalloutStatisticsModal(
+		ctx.app,
+		await scanVaultStats(ctx.app),
+		ctx.plugin.registry,
+	).open();
+}
+
+function exportCallouts(ctx: SettingsSectionContext): void {
+	const json = ctx.plugin.registry.exportToJSON();
+	const blob = new Blob([json], { type: "application/json" });
+	const url = URL.createObjectURL(blob);
+	const a = document.createElement("a");
+	a.href = url;
+	a.download = "callout-studio-callouts.json";
+	a.click();
+	URL.revokeObjectURL(url);
+	new Notice(t("notice.exported"));
+}
+
+function importFromJSON(ctx: SettingsSectionContext): void {
+	const input = document.createElement("input");
+	input.type = "file";
+	input.accept = ".json";
+	// eslint-disable-next-line @typescript-eslint/no-misused-promises
+	input.addEventListener("change", async () => {
+		const file = input.files?.[0];
+		if (!file) return;
+
+		let parsed: unknown;
+		try {
+			const text = await file.text();
+			parsed = JSON.parse(text);
+		} catch {
+			await new ImportReportModal(
+				ctx.app,
+				[
+					{
+						index: -1,
+						entryLabel: "",
+						level: "error",
+						messageKey: "import.err.parseFailed",
+					},
+				],
+				0,
+				0,
+				true,
+			).prompt();
+			return;
+		}
+
+		const result = validateImportPayload(parsed, ctx.plugin.registry);
+
+		if (result.issues.length > 0 || result.fatal) {
+			const total = Array.isArray(parsed) ? parsed.length : 0;
+			const choice = await new ImportReportModal(
+				ctx.app,
+				result.issues,
+				result.validDefs.length,
+				total,
+				result.fatal,
+			).prompt();
+			if (choice === "cancel") return;
+		}
+
+		const defs = result.validDefs;
+		if (defs.length === 0) {
+			new Notice(t("notice.noNewJSON"));
+			return;
+		}
+
+		let imported = 0;
+		let overwritten = 0;
+		for (const def of defs) {
+			if (ctx.plugin.registry.has(def.id)) {
+				ctx.plugin.registry.update(def.id, def);
+				overwritten++;
+				imported++;
+			} else {
+				const added = ctx.plugin.registry.add(def);
+				if (added) imported++;
+			}
+		}
+		if (imported > 0) {
+			if (overwritten > 0) {
+				new Notice(
+					t("settings.importConflictNotice", {
+						count: imported,
+						overwritten,
+					}),
+				);
+			} else {
+				new Notice(t("notice.importedJSON", { count: imported }));
+			}
+			ctx.display();
+			for (const def of defs) {
+				if (def.icon.type === "material") {
+					void ctx.plugin.cacheMaterialSvg(def.icon);
+				}
+			}
+		} else {
+			new Notice(t("notice.noNewJSON"));
+		}
+	});
+	input.click();
+}
