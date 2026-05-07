@@ -308,7 +308,7 @@ function addItems(
 				.setSection(MENU_SECTION)
 				.onClick(() => {
 					if (!currentDef) return;
-					void new CalloutEditor(plugin, currentDef).open();
+					void new CalloutEditor(plugin, currentDef).openAndWait();
 				});
 		});
 	}
@@ -446,10 +446,8 @@ function copyCalloutMarkdown(editor: Editor, info: CalloutInfo): void {
 }
 
 function openPluginSettings(plugin: CalloutStudioPlugin): void {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
-	(plugin.app as any).setting.open();
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
-	(plugin.app as any).setting.openTabById(plugin.manifest.id);
+	plugin.app.setting.open();
+	plugin.app.setting.openTabById(plugin.manifest.id);
 }
 
 function normalizeCalloutId(value: string): string {

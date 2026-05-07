@@ -1,6 +1,12 @@
 import { Modal, Notice, Setting, setIcon, SliderComponent } from "obsidian";
-import type CalloutStudioPlugin from "../main";
-import type { CalloutDefinition, CalloutIcon } from "../types";
+import type { App } from "obsidian";
+import type { CalloutRegistry } from "../manager/CalloutRegistry";
+import type {
+	CalloutDefinition,
+	CalloutIcon,
+	MaterialIconStyle,
+	PluginSettings,
+} from "../types";
 import { IconPicker } from "./IconPicker";
 import { blendHex } from "../utils/colorUtils";
 import {
@@ -19,6 +25,21 @@ import {
 	replaceCalloutTitlesInVault,
 } from "../utils/vaultCalloutScanner";
 
+interface CalloutEditorPlugin {
+	app: App;
+	registry: CalloutRegistry;
+	settings: PluginSettings;
+	pruneSuspended: boolean;
+	saveData(data: unknown): Promise<void>;
+	schedulePruneUnusedFallbacks(delayMs?: number): void;
+	cacheMaterialSvg(icon: CalloutIcon): Promise<void>;
+	hasMaterialSvgFailed(
+		name: string,
+		style: MaterialIconStyle,
+		weight: number,
+	): boolean;
+}
+
 function generateId(displayName: string): string {
 	return displayName
 		.toLowerCase()
@@ -32,7 +53,7 @@ const DEFAULT_TEXT_COLOR_LIGHT = "#1a1a1a";
 const DEFAULT_TEXT_COLOR_DARK = "#e0e0e0";
 
 export class CalloutEditor extends Modal {
-	private plugin: CalloutStudioPlugin;
+	private plugin: CalloutEditorPlugin;
 	private existingId: string | null;
 	private isBuiltIn: boolean;
 	private createFromAutocomplete: boolean;
@@ -68,7 +89,7 @@ export class CalloutEditor extends Modal {
 	private refreshColorGridVisibility: (() => void) | null = null;
 
 	constructor(
-		plugin: CalloutStudioPlugin,
+		plugin: CalloutEditorPlugin,
 		existing?: CalloutDefinition,
 		options?: {
 			seedDisplayName?: string;
@@ -132,9 +153,8 @@ export class CalloutEditor extends Modal {
 		this.customPresetSelected = true;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-misused-promises -- intentional Promise-returning override for modal result
-	open(): Promise<CalloutDefinition | null> {
-		return new Promise((resolve) => {
+	openAndWait(): Promise<CalloutDefinition | null> {
+		return new Promise<CalloutDefinition | null>((resolve) => {
 			this.resolve = resolve;
 			super.open();
 		});
@@ -252,7 +272,7 @@ export class CalloutEditor extends Modal {
 		iconSetting.addButton((btn) => {
 			btn.setButtonText("Pick icon").onClick(async () => {
 				const picker = new IconPicker(this.plugin, this.icon);
-				const result = await picker.open();
+				const result = await picker.openAndWait();
 				if (result) {
 					this.icon = result;
 					// Material icons are already cached by the IconPicker

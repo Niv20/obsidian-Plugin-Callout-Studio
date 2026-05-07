@@ -194,7 +194,7 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 				.setCta()
 				.onClick(async () => {
 					const editor = new CalloutEditor(this.plugin);
-					await editor.open();
+					await editor.openAndWait();
 					this.display();
 				}),
 		);
@@ -331,36 +331,37 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 			},
 		});
 		setIcon(editBtn, "pencil");
-		// eslint-disable-next-line @typescript-eslint/no-misused-promises
-		editBtn.addEventListener("click", async () => {
-			if (isBuiltIn) {
-				// For built-in: open editor with the current (possibly overridden) values
-				const editorModal = new CalloutEditor(this.plugin, def);
-				const result = await editorModal.open();
-				if (result) {
-					// Apply overrides to built-in — keep it in built-in section
-					this.plugin.registry.update(def.id, {
-						displayName: result.displayName,
-						icon: result.icon,
-						colorLight: result.colorLight,
-						colorDark: result.colorDark,
-						bgColorLight: result.bgColorLight,
-						bgColorDark: result.bgColorDark,
-						textColorLight: result.textColorLight,
-						textColorDark: result.textColorDark,
-						foldable: result.foldable,
-						defaultFolded: result.defaultFolded,
-						iconOffsetX: result.iconOffsetX,
-						iconOffsetY: result.iconOffsetY,
-						iconSize: result.iconSize,
-						aliases: result.aliases,
-					});
+		editBtn.addEventListener("click", () => {
+			void (async () => {
+				if (isBuiltIn) {
+					// For built-in: open editor with the current (possibly overridden) values
+					const editorModal = new CalloutEditor(this.plugin, def);
+					const result = await editorModal.openAndWait();
+					if (result) {
+						// Apply overrides to built-in — keep it in built-in section
+						this.plugin.registry.update(def.id, {
+							displayName: result.displayName,
+							icon: result.icon,
+							colorLight: result.colorLight,
+							colorDark: result.colorDark,
+							bgColorLight: result.bgColorLight,
+							bgColorDark: result.bgColorDark,
+							textColorLight: result.textColorLight,
+							textColorDark: result.textColorDark,
+							foldable: result.foldable,
+							defaultFolded: result.defaultFolded,
+							iconOffsetX: result.iconOffsetX,
+							iconOffsetY: result.iconOffsetY,
+							iconSize: result.iconSize,
+							aliases: result.aliases,
+						});
+					}
+				} else {
+					const editorModal = new CalloutEditor(this.plugin, def);
+					await editorModal.openAndWait();
 				}
-			} else {
-				const editorModal = new CalloutEditor(this.plugin, def);
-				await editorModal.open();
-			}
-			this.display();
+				this.display();
+			})();
 		});
 
 		if (isBuiltIn) {
@@ -939,22 +940,23 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 
 		const sideButtons = new Map<string, HTMLButtonElement>();
 
-		// eslint-disable-next-line @typescript-eslint/no-misused-promises
-		allBtn.addEventListener("click", async () => {
-			const nowAll =
-				globalStyle.borderSides.top &&
-				globalStyle.borderSides.right &&
-				globalStyle.borderSides.bottom &&
-				globalStyle.borderSides.left;
-			const newVal = !nowAll;
-			globalStyle.borderSides.top = newVal;
-			globalStyle.borderSides.right = newVal;
-			globalStyle.borderSides.bottom = newVal;
-			globalStyle.borderSides.left = newVal;
-			await this.plugin.saveSettings();
-			this.plugin.cssInjector.inject();
-			syncBorderUI();
-			updatePreview();
+		allBtn.addEventListener("click", () => {
+			void (async () => {
+				const nowAll =
+					globalStyle.borderSides.top &&
+					globalStyle.borderSides.right &&
+					globalStyle.borderSides.bottom &&
+					globalStyle.borderSides.left;
+				const newVal = !nowAll;
+				globalStyle.borderSides.top = newVal;
+				globalStyle.borderSides.right = newVal;
+				globalStyle.borderSides.bottom = newVal;
+				globalStyle.borderSides.left = newVal;
+				await this.plugin.saveSettings();
+				this.plugin.cssInjector.inject();
+				syncBorderUI();
+				updatePreview();
+			})();
 		});
 
 		for (const side of sides) {
@@ -964,14 +966,15 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 				text: side.label,
 			});
 			sideButtons.set(side.key, btn);
-			// eslint-disable-next-line @typescript-eslint/no-misused-promises
-			btn.addEventListener("click", async () => {
-				globalStyle.borderSides[side.key] =
-					!globalStyle.borderSides[side.key];
-				await this.plugin.saveSettings();
-				this.plugin.cssInjector.inject();
-				syncBorderUI();
-				updatePreview();
+			btn.addEventListener("click", () => {
+				void (async () => {
+					globalStyle.borderSides[side.key] =
+						!globalStyle.borderSides[side.key];
+					await this.plugin.saveSettings();
+					this.plugin.cssInjector.inject();
+					syncBorderUI();
+					updatePreview();
+				})();
 			});
 		}
 

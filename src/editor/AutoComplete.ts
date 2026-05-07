@@ -326,7 +326,7 @@ export class CalloutAutoComplete extends EditorSuggest<CalloutSuggestion> {
 			seedDisplayName: query,
 			createFromAutocomplete: true,
 		});
-		const result = await modal.open();
+		const result = await modal.openAndWait();
 		if (!result) return;
 		const foldMark = result.foldable
 			? result.defaultFolded

@@ -1,9 +1,11 @@
 import { Modal, setIcon } from "obsidian";
-import type CalloutStudioPlugin from "../main";
+import type { App } from "obsidian";
+import type { CalloutRegistry } from "../manager/CalloutRegistry";
 import type {
 	CalloutIcon,
 	MaterialIconMeta,
 	MaterialIconStyle,
+	PluginSettings,
 } from "../types";
 import {
 	getLucideIcons,
@@ -17,8 +19,16 @@ import { t } from "../i18n";
 
 const GRID_PAGE_SIZE = 120;
 
+interface IconPickerPlugin {
+	app: App;
+	registry: CalloutRegistry;
+	settings: PluginSettings;
+	saveData(data: unknown): Promise<void>;
+	cacheMaterialSvg(icon: CalloutIcon): Promise<void>;
+}
+
 export class IconPicker extends Modal {
-	private plugin: CalloutStudioPlugin;
+	private plugin: IconPickerPlugin;
 	private resolve: ((icon: CalloutIcon | null) => void) | null = null;
 	private currentIcon: CalloutIcon | null;
 
@@ -53,7 +63,7 @@ export class IconPicker extends Modal {
 	// Track active loading timers so we can clean them up
 	private loadingTimers: ReturnType<typeof setTimeout>[] = [];
 
-	constructor(plugin: CalloutStudioPlugin, currentIcon?: CalloutIcon) {
+	constructor(plugin: IconPickerPlugin, currentIcon?: CalloutIcon) {
 		super(plugin.app);
 		this.plugin = plugin;
 		this.currentIcon = currentIcon ?? null;
@@ -67,9 +77,8 @@ export class IconPicker extends Modal {
 			plugin.settings.iconSources.lastMaterialCategory ?? "Actions";
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-misused-promises -- intentional Promise-returning override for modal result
-	open(): Promise<CalloutIcon | null> {
-		return new Promise((resolve) => {
+	openAndWait(): Promise<CalloutIcon | null> {
+		return new Promise<CalloutIcon | null>((resolve) => {
 			this.resolve = resolve;
 			super.open();
 		});

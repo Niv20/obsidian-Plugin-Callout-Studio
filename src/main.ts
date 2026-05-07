@@ -92,10 +92,8 @@ export default class CalloutStudioPlugin extends Plugin {
 			id: "open-settings",
 			name: t("cmd.openSettings"),
 			callback: () => {
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
-				(this.app as any).setting.open();
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
-				(this.app as any).setting.openTabById(this.manifest.id);
+				this.app.setting.open();
+				this.app.setting.openTabById(this.manifest.id);
 			},
 		});
 
@@ -103,7 +101,7 @@ export default class CalloutStudioPlugin extends Plugin {
 			id: "create-callout",
 			name: t("cmd.createCallout"),
 			callback: () => {
-				void new CalloutEditor(this).open();
+				void new CalloutEditor(this).openAndWait();
 			},
 		});
 

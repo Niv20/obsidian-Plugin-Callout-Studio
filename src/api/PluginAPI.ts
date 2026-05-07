@@ -64,7 +64,7 @@ export class CalloutStudioAPI {
 		currentIcon?: CalloutIcon,
 	): Promise<CalloutIcon | null> {
 		const picker = new IconPicker(this.plugin, currentIcon);
-		return picker.open();
+		return picker.openAndWait();
 	}
 
 	/**
@@ -74,7 +74,7 @@ export class CalloutStudioAPI {
 		existing?: CalloutDefinition,
 	): Promise<CalloutDefinition | null> {
 		const editor = new CalloutEditor(this.plugin, existing);
-		return editor.open();
+		return editor.openAndWait();
 	}
 
 	/**

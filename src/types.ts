@@ -6,6 +6,15 @@ export interface CalloutIcon {
 	weight?: number;
 }
 
+declare module "obsidian" {
+	interface App {
+		setting: {
+			open(): void;
+			openTabById(id: string): void;
+		};
+	}
+}
+
 export interface CalloutDefinition {
 	id: string;
 	displayName: string;
