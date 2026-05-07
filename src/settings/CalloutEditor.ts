@@ -70,7 +70,10 @@ export class CalloutEditor extends Modal {
 	constructor(
 		plugin: CalloutStudioPlugin,
 		existing?: CalloutDefinition,
-		options?: { seedDisplayName?: string; createFromAutocomplete?: boolean },
+		options?: {
+			seedDisplayName?: string;
+			createFromAutocomplete?: boolean;
+		},
 	) {
 		super(plugin.app);
 		this.plugin = plugin;
@@ -120,6 +123,11 @@ export class CalloutEditor extends Modal {
 		contentEl.empty();
 		contentEl.addClass("callout-studio-editor");
 		this.modalEl.addClass("callout-studio-editor-modal");
+
+		// Suspend automatic prune passes while the user is editing so a
+		// fallback row currently being customized cannot be auto-removed
+		// out from under the modal.
+		this.plugin.pruneSuspended = true;
 
 		// Snapshot initial state for dirty-checking
 		this.initialSnapshot = this.stateSnapshot();
@@ -1271,6 +1279,23 @@ export class CalloutEditor extends Modal {
 
 		const newDisplayName = this.displayName || this.calloutId;
 
+		// Determine whether this save should mark the row as "customized" so
+		// it becomes sticky against auto-pruning. New user-created rows are
+		// always customized; existing non-builtin rows become customized when
+		// the user actually changed any field, or were already customized.
+		let customized: boolean | undefined;
+		if (!this.isBuiltIn) {
+			if (this.existingId === null) {
+				customized = true;
+			} else {
+				const existingDef = this.plugin.registry.get(this.existingId);
+				const wasCustomized = existingDef?.customized === true;
+				const hasChanges =
+					this.stateSnapshot() !== this.initialSnapshot;
+				customized = wasCustomized || hasChanges;
+			}
+		}
+
 		const def: CalloutDefinition = {
 			id: this.calloutId,
 			displayName: newDisplayName,
@@ -1289,6 +1314,7 @@ export class CalloutEditor extends Modal {
 			iconOffsetY: this.iconOffsetY,
 			iconSize: this.iconSize,
 			aliases: this.aliases.length > 0 ? [...this.aliases] : undefined,
+			...(customized === true ? { customized: true } : {}),
 		};
 
 		// Add/update in registry first so SVG cleanup knows this callout exists
@@ -1414,5 +1440,9 @@ export class CalloutEditor extends Modal {
 		this.contentEl.empty();
 		this.modalEl.querySelector(".callout-studio-editor-buttons")?.remove();
 		this.modalEl.removeClass("callout-studio-editor-modal");
+		// Re-enable automatic pruning and run one pass to clean up any
+		// fallback rows the user touched but did not save.
+		this.plugin.pruneSuspended = false;
+		this.plugin.schedulePruneUnusedFallbacks(0);
 	}
 }

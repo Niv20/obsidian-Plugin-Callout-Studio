@@ -12,12 +12,14 @@ import type { CalloutDefinition } from "../types";
 import { CalloutEditor } from "./CalloutEditor";
 import { ConfirmModal } from "../utils/ConfirmModal";
 import { ReplaceCalloutModal } from "../utils/ReplaceCalloutModal";
+import { DeleteCalloutModal } from "../utils/DeleteCalloutModal";
 import { ImportReportModal } from "../utils/ImportReportModal";
 import { validateImportPayload } from "../utils/importValidator";
 import { renderColorCircles } from "../ui/ColorCircles";
 import {
 	countCalloutUsages,
 	replaceCalloutIdsInVault,
+	convertCalloutsToPlainTextInVault,
 	scanStringForUnknownCallouts,
 } from "../utils/vaultCalloutScanner";
 import { getLocale, t } from "../i18n";
@@ -65,6 +67,12 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 		// Pick up callout IDs typed in open editors that haven't been saved
 		// yet. Cheap: scans only in-memory buffers of open Markdown leaves.
 		this.scanOpenEditorsForUnknownCallouts();
+
+		// Prune any auto-created (fallback) rows the user accumulated while
+		// typing but never customized and that no longer exist in the vault.
+		// Debounced + reuses cachedRead — runs in the background without
+		// blocking the settings UI render.
+		this.plugin.schedulePruneUnusedFallbacks(0);
 
 		// Subscribe once to registry changes so the tab refreshes whenever a
 		// callout is created/edited/removed from anywhere (autocomplete,
@@ -367,19 +375,31 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 				void this.handleBuiltInReset(def);
 			});
 		} else {
-			const isFallback =
-				def.id === this.plugin.settings.fallbackCalloutId;
+			// User-defined row: Replace + Trash buttons. Both are always
+			// visible; the trash button opens a confirmation popup that
+			// converts vault occurrences to plain text on confirm.
+			const replaceBtn = buttonsEl.createEl("button", {
+				cls: "callout-studio-replace-btn",
+				attr: {
+					"aria-label": t("settings.replaceAria", {
+						name: def.displayName,
+					}),
+				},
+			});
+			setIcon(replaceBtn, "arrow-left-right");
+			replaceBtn.addEventListener("click", () => {
+				void this.handleCalloutReplace(def);
+			});
+
 			const deleteBtn = buttonsEl.createEl("button", {
 				cls: "callout-studio-delete-btn",
 				attr: {
-					"aria-label": isFallback
-						? t("settings.swapAria", { name: def.displayName })
-						: t("settings.deleteAria", {
-								name: def.displayName,
-							}),
+					"aria-label": t("settings.deleteAria", {
+						name: def.displayName,
+					}),
 				},
 			});
-			setIcon(deleteBtn, isFallback ? "arrow-left-right" : "trash-2");
+			setIcon(deleteBtn, "trash-2");
 			deleteBtn.addEventListener("click", () => {
 				void this.handleCalloutDelete(def);
 			});
@@ -388,72 +408,90 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 
 	private async handleCalloutDelete(def: CalloutDefinition): Promise<void> {
 		const allIds = [def.id, ...(def.aliases ?? [])];
+		const usage = await countCalloutUsages(this.app, allIds);
+
+		const action = await new DeleteCalloutModal(this.app, {
+			def,
+			usage,
+		}).prompt();
+
+		if (action === "cancel") return;
+
+		if (action === "replace") {
+			// Pivot to the replace flow. Reuse the user's confirmation context
+			// — but the replace flow itself can still be canceled.
+			await this.handleCalloutReplace(def);
+			return;
+		}
+
+		// action === "delete": convert any vault occurrences to plain text
+		// and remove the registry row.
+		if (usage.fileCount > 0) {
+			const result = await convertCalloutsToPlainTextInVault(
+				this.app,
+				allIds,
+			);
+			new Notice(
+				t("vault.convertedToPlainText", {
+					blocks: String(result.blocks),
+					files: String(result.files),
+				}),
+			);
+		}
+		this.plugin.registry.remove(def.id);
+		this.plugin.registry.cleanupUnusedMaterialSvgs();
+		this.display();
+	}
+
+	/**
+	 * Replace-only flow triggered by the row's swap button. Picks a target
+	 * callout and rewrites every `> [!sourceId]` occurrence in the vault to
+	 * the chosen target. The source callout row is left in place so the user
+	 * can keep editing it.
+	 */
+	private async handleCalloutReplace(def: CalloutDefinition): Promise<void> {
+		const allIds = [def.id, ...(def.aliases ?? [])];
 		const { fileCount, totalCount } = await countCalloutUsages(
 			this.app,
 			allIds,
 		);
-
-		if (fileCount > 0) {
-			const otherCallouts = this.plugin.registry
-				.getAll()
-				.filter((c) => c.id !== def.id);
-			const isFallback =
-				def.id === this.plugin.settings.fallbackCalloutId;
-			const result = await new ReplaceCalloutModal(
-				this.app,
-				t("vault.deleteInUse", {
-					name: def.displayName,
-					count: String(totalCount),
-					files: String(fileCount),
-				}),
-				otherCallouts,
-				this.plugin.registry,
-				this.plugin.settings.fallbackCalloutId,
-				isFallback,
-			).prompt();
-
-			if (result.action === "cancel") return;
-
-			if (result.action === "replace") {
-				const replaced = await replaceCalloutIdsInVault(
-					this.app,
-					allIds,
-					result.replaceWith,
-				);
-				new Notice(
-					t("vault.filesUpdated", { count: String(replaced) }),
-				);
-				this.plugin.registry.remove(def.id);
-			} else {
-				// "delete without replacing" — degrade user rows to fallback,
-				// fully remove fallback-source rows
-				if (def.source === "user") {
-					this.plugin.registry.update(def.id, {
-						source: "fallback",
-						aliases: undefined,
-						bgColorLight: undefined,
-						bgColorDark: undefined,
-						textColorLight: undefined,
-						textColorDark: undefined,
-						iconOffsetX: undefined,
-						iconOffsetY: undefined,
-						iconSize: undefined,
-					});
-				} else {
-					this.plugin.registry.remove(def.id);
-				}
-			}
-		} else {
-			const confirmed = await new ConfirmModal(
-				this.app,
-				t("settings.deleteConfirm", { name: def.displayName }),
-			).confirm();
-			if (!confirmed) return;
-			this.plugin.registry.remove(def.id);
+		const otherCallouts = this.plugin.registry
+			.getAll()
+			.filter((c) => c.id !== def.id);
+		if (otherCallouts.length === 0) {
+			new Notice(t("vault.noReplacementAvailable"));
+			return;
 		}
 
-		// Drop unused Material SVGs after the deletion
-		this.plugin.registry.cleanupUnusedMaterialSvgs();
+		const message =
+			fileCount > 0
+				? t("vault.replacePromptInUse", {
+						name: def.displayName,
+						count: String(totalCount),
+						files: String(fileCount),
+					})
+				: t("vault.replacePromptUnused", { name: def.displayName });
+
+		const result = await new ReplaceCalloutModal(this.app, {
+			mode: "replace",
+			message,
+			availableCallouts: otherCallouts,
+			registry: this.plugin.registry,
+			fallbackId: this.plugin.settings.fallbackCalloutId,
+		}).prompt();
+
+		if (result.action !== "replace") return;
+
+		if (fileCount > 0) {
+			const replaced = await replaceCalloutIdsInVault(
+				this.app,
+				allIds,
+				result.replaceWith,
+			);
+			new Notice(t("vault.filesUpdated", { count: String(replaced) }));
+		} else {
+			new Notice(t("vault.filesUpdated", { count: "0" }));
+		}
 		this.display();
 	}
 

@@ -75,6 +75,113 @@ export async function countCalloutUsages(
 }
 
 /**
+ * Count how many markdown files reference each of the given callout IDs in a
+ * single vault pass. Returns a Map keyed by lowercased ID. IDs with zero
+ * usages are still present in the map with `{ fileCount: 0, totalCount: 0 }`.
+ */
+export async function countCalloutUsagesMap(
+	app: App,
+	ids: string[],
+): Promise<Map<string, { fileCount: number; totalCount: number }>> {
+	const result = new Map<string, { fileCount: number; totalCount: number }>();
+	for (const id of ids) {
+		result.set(id.toLowerCase(), { fileCount: 0, totalCount: 0 });
+	}
+	if (ids.length === 0) return result;
+
+	const pattern = ids.map(escapeRegex).join("|");
+	const regex = new RegExp(`^>\\s*\\[!(${pattern})\\]`, "gim");
+
+	const files = app.vault.getMarkdownFiles();
+	for (const file of files) {
+		const content = await app.vault.cachedRead(file);
+		const seenInFile = new Set<string>();
+		let m: RegExpExecArray | null;
+		regex.lastIndex = 0;
+		while ((m = regex.exec(content)) !== null) {
+			const id = m[1]?.toLowerCase();
+			if (!id) continue;
+			const entry = result.get(id);
+			if (!entry) continue;
+			entry.totalCount++;
+			seenInFile.add(id);
+		}
+		for (const id of seenInFile) {
+			result.get(id)!.fileCount++;
+		}
+	}
+	return result;
+}
+
+/**
+ * Convert every `> [!id]` block (for any id in `ids`) in the vault into plain
+ * text. The header `[!id]` (and any `+`/`-` fold marker) is stripped while any
+ * trailing title text on that line is preserved as a normal paragraph line.
+ * Subsequent blockquote-continuation lines that belong to the same callout
+ * block lose their leading `> ` so the body becomes plain text.
+ *
+ * Only outermost callout blocks whose id matches are unwrapped; nested
+ * callouts inside non-matching blocks are left untouched.
+ *
+ * Returns `{ files, blocks }` describing how many files were modified and how
+ * many callout blocks were converted in total.
+ */
+export async function convertCalloutsToPlainTextInVault(
+	app: App,
+	ids: string[],
+): Promise<{ files: number; blocks: number }> {
+	if (ids.length === 0) return { files: 0, blocks: 0 };
+
+	const idSet = new Set(ids.map((id) => id.toLowerCase()));
+	const headerRegex = /^(>+)\s*\[!([^\]\s]+)\][+-]?\s*(.*)$/i;
+
+	const files = app.vault.getMarkdownFiles();
+	let modifiedFiles = 0;
+	let totalBlocks = 0;
+
+	for (const file of files) {
+		const content = await app.vault.read(file);
+		const lines = content.split("\n");
+		let blocksInFile = 0;
+		let i = 0;
+
+		while (i < lines.length) {
+			const line = lines[i] ?? "";
+			const headerMatch = line.match(headerRegex);
+			if (headerMatch) {
+				const markers = headerMatch[1] ?? ">";
+				const id = (headerMatch[2] ?? "").toLowerCase();
+				// Only unwrap outermost blocks (single `>`) whose id matches.
+				if (markers.length === 1 && idSet.has(id)) {
+					const title = (headerMatch[3] ?? "").trim();
+					lines[i] = title;
+					i++;
+					// Strip leading `> ` from continuation lines until the
+					// blockquote ends (a non-`>` line, including blank lines).
+					while (i < lines.length) {
+						const cont = lines[i] ?? "";
+						if (!/^>/.test(cont)) break;
+						lines[i] = cont.replace(/^>\s?/, "");
+						i++;
+					}
+					blocksInFile++;
+					continue;
+				}
+			}
+			i++;
+		}
+
+		if (blocksInFile > 0) {
+			totalBlocks += blocksInFile;
+			modifiedFiles++;
+			await app.vault.modify(file, lines.join("\n"));
+		}
+	}
+
+	return { files: modifiedFiles, blocks: totalBlocks };
+}
+
+/**
  * Replace callout IDs in all markdown files.
  * Any occurrence of `> [!oldId]` (for any oldId in `oldIds`) is replaced
  * with `> [!newId]`.

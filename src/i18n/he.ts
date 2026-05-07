@@ -19,6 +19,20 @@ export const he: Record<string, string> = {
 	"settings.rescanComplete": "סיום סריקה: נוספו {{count}} בלוקים חדשים.",
 	"replaceModal.deleteWithoutReplaceSuffix": "(נופל לברירת המחדל)",
 
+	// Delete-callout modal (trash button on user rows)
+	"deleteModal.title": 'למחוק את תיבת ההבלטה "{{name}}"?',
+	"deleteModal.bodyInUse":
+		"תיבת ההבלטה הזו מופיעה {{count}} פעמים ב-{{files}} קבצים.",
+	"deleteModal.bodyInUseExplain":
+		"מחיקה תהפוך את הבלוקים האלה לטקסט רגיל — הם יאבדו את העיצוב ואת כותרת תיבת ההבלטה.",
+	"deleteModal.replaceHint":
+		"אפשר במקום זאת להחליף בתיבת הבלטה אחרת, וכך לשמור את התוכן בכספת כתיבת הבלטה מעוצבת.",
+	"deleteModal.bodyUnused":
+		'"{{name}}" אינה בשימוש באף הערה, אך מדובר בתיבת הבלטה מותאמת אישית שיצרת. מחיקה תסיר אותה מהרשימה.',
+	"deleteModal.replaceInstead": "החלפה במקום…",
+	"deleteModal.deleteInUse": "מחיקה (המרה לטקסט רגיל)",
+	"deleteModal.deleteUnused": "מחיקת תיבת ההבלטה",
+
 	// Settings — Section headings
 	"settings.title": "Callout Studio",
 	"settings.myCalloutTypes": "סוגי תיבות ההבלטה שלי",
@@ -58,6 +72,7 @@ export const he: Record<string, string> = {
 	"settings.deleteAria": "מחיקת {{name}}",
 	"settings.swapAria":
 		"החלפת {{name}} (ברירת המחדל הנוכחית) בתיבת הבלטה אחרת ב-Vault",
+	"settings.replaceAria": "החלפת {{name}} בכספת בתיבת הבלטה אחרת",
 	"settings.deleteConfirm": 'למחוק את תיבת ההבלטה "{{name}}"?',
 	"settings.lightLabel": "בהיר",
 	"settings.darkLabel": "כהה",
@@ -277,6 +292,13 @@ export const he: Record<string, string> = {
 	"vault.replaceAndDelete": "החלפה ומחיקה",
 	"vault.deleteWithout": "מחיקה ללא החלפה",
 	"vault.confirmDelete": "אישור",
+	"vault.confirmReplace": "החלפה",
+	"vault.replacePromptInUse":
+		'"{{name}}" בשימוש {{count}} פעמים ב-{{files}} קבצים. בחר תיבת הבלטה להחלפה:',
+	"vault.replacePromptUnused": 'בחר תיבת הבלטה להחלפת "{{name}}":',
+	"vault.noReplacementAvailable": "אין תיבות הבלטה אחרות זמינות להחלפה.",
+	"vault.convertedToPlainText":
+		"הומרו {{blocks}} בלוקי תיבות הבלטה ב-{{files}} קבצים לטקסט רגיל.",
 	"vault.resetAliasWarning":
 		"{{count}} הפניות ב-{{files}} קבצים משתמשות בכינויים מותאמים: {{aliases}}. הם יפסיקו לעבוד לאחר איפוס. להמשיך?",
 	"vault.resetConfirm": "איפוס",

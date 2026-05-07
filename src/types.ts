@@ -32,6 +32,14 @@ export interface CalloutDefinition {
 	textColorDark?: string;
 	/** Alternative IDs (aliases) that map to this callout */
 	aliases?: string[];
+	/**
+	 * Marks a user-owned callout that the user has explicitly created or
+	 * modified through the editor. Such callouts are sticky: they are never
+	 * auto-pruned even when no vault content references them. Auto-created
+	 * fallback rows start with this flag unset/false and are pruned when
+	 * unused. Has no effect on built-in callouts.
+	 */
+	customized?: boolean;
 	metadata?: Record<string, string>;
 }
 

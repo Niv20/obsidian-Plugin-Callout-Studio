@@ -9,10 +9,27 @@ export type DeleteAction =
 	| { action: "delete" }
 	| { action: "cancel" };
 
+export interface ReplaceCalloutModalOptions {
+	/** "delete" preserves legacy behavior used by the trash flow (allows
+	 * "delete without replacing" + warning copy). "replace" presents a pure
+	 * replacement picker with no delete option. */
+	mode?: "delete" | "replace";
+	/** Heading paragraph above the picker. */
+	message: string;
+	/** Optional override for the confirm-button label. */
+	confirmLabel?: string;
+	/** Selectable callouts (the source callout should already be filtered out). */
+	availableCallouts: CalloutDefinition[];
+	registry: CalloutRegistry;
+	fallbackId: string;
+	/** Force-disable the "delete without replacing" row. Ignored in `replace`
+	 * mode (which never shows that row). */
+	disallowDeleteWithoutReplace?: boolean;
+}
+
 /**
- * Modal shown when deleting a callout that is in use in vault files.
- * Shows a rich scrollable list of callouts (with icons + colors) for
- * choosing a replacement. The fallback callout is pre-selected.
+ * Modal shown when deleting or replacing a callout. Renders a scrollable
+ * list of callouts (with icons + colors) for the user to choose from.
  * Closing without confirming cancels the operation.
  */
 export class ReplaceCalloutModal extends Modal {
@@ -22,15 +39,26 @@ export class ReplaceCalloutModal extends Modal {
 	private itemEls = new Map<string | null, HTMLElement>();
 	private confirmBtn: HTMLButtonElement | null = null;
 
-	constructor(
-		app: App,
-		private message: string,
-		private availableCallouts: CalloutDefinition[],
-		private registry: CalloutRegistry,
-		private fallbackId: string,
-		private disallowDeleteWithoutReplace: boolean = false,
-	) {
+	private mode: "delete" | "replace";
+	private message: string;
+	private confirmLabel?: string;
+	private availableCallouts: CalloutDefinition[];
+	private registry: CalloutRegistry;
+	private fallbackId: string;
+	private disallowDeleteWithoutReplace: boolean;
+
+	constructor(app: App, options: ReplaceCalloutModalOptions) {
 		super(app);
+		this.mode = options.mode ?? "delete";
+		this.message = options.message;
+		this.confirmLabel = options.confirmLabel;
+		this.availableCallouts = options.availableCallouts;
+		this.registry = options.registry;
+		this.fallbackId = options.fallbackId;
+		this.disallowDeleteWithoutReplace =
+			this.mode === "replace"
+				? true
+				: (options.disallowDeleteWithoutReplace ?? false);
 	}
 
 	onOpen(): void {
@@ -92,9 +120,14 @@ export class ReplaceCalloutModal extends Modal {
 		const btnContainer = contentEl.createDiv({
 			cls: "modal-button-container",
 		});
+		const confirmText =
+			this.confirmLabel ??
+			(this.mode === "replace"
+				? t("vault.confirmReplace")
+				: t("vault.confirmDelete"));
 		this.confirmBtn = btnContainer.createEl("button", {
-			text: t("vault.confirmDelete"),
-			cls: "mod-warning",
+			text: confirmText,
+			cls: this.mode === "replace" ? "mod-cta" : "mod-warning",
 		});
 		this.confirmBtn.addEventListener("click", () => {
 			this.resolved = true;

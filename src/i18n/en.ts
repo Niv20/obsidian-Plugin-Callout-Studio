@@ -20,6 +20,20 @@ export const en: Record<string, string> = {
 		"Re-scan complete: {{count}} new callout(s) added.",
 	"replaceModal.deleteWithoutReplaceSuffix": "(falls back to default)",
 
+	// Delete-callout modal (trash button on user rows)
+	"deleteModal.title": 'Delete callout "{{name}}"?',
+	"deleteModal.bodyInUse":
+		"This callout appears {{count}} time(s) across {{files}} file(s).",
+	"deleteModal.bodyInUseExplain":
+		"Deleting will convert those blocks to plain text — they will no longer be styled and will lose the callout header.",
+	"deleteModal.replaceHint":
+		"You can replace it with another callout instead, which keeps your vault content as a styled callout.",
+	"deleteModal.bodyUnused":
+		'"{{name}}" is not used in any note, but it is a custom callout you customized. Deleting will remove it from this list.',
+	"deleteModal.replaceInstead": "Replace instead…",
+	"deleteModal.deleteInUse": "Delete (convert to plain text)",
+	"deleteModal.deleteUnused": "Delete callout",
+
 	// Settings — Section headings
 	"settings.title": "Callout Studio",
 	"settings.myCalloutTypes": "My callout types",
@@ -58,6 +72,8 @@ export const en: Record<string, string> = {
 	"settings.deleteAria": "Delete {{name}}",
 	"settings.swapAria":
 		"Swap {{name}} (current fallback) with another callout in the vault",
+	"settings.replaceAria":
+		"Replace {{name}} in the vault with another callout",
 	"settings.deleteConfirm": 'Delete callout "{{name}}"?',
 	"settings.lightLabel": "L",
 	"settings.darkLabel": "D",
@@ -292,6 +308,14 @@ export const en: Record<string, string> = {
 	"vault.replaceAndDelete": "Replace & delete",
 	"vault.deleteWithout": "Delete without replacing",
 	"vault.confirmDelete": "Confirm",
+	"vault.confirmReplace": "Replace",
+	"vault.replacePromptInUse":
+		'"{{name}}" is used {{count}} time(s) in {{files}} file(s). Pick a callout to replace it with:',
+	"vault.replacePromptUnused": 'Pick a callout to replace "{{name}}" with:',
+	"vault.noReplacementAvailable":
+		"No other callouts are available to replace this one.",
+	"vault.convertedToPlainText":
+		"Converted {{blocks}} callout block(s) in {{files}} file(s) to plain text.",
 	"vault.resetAliasWarning":
 		"{{count}} reference(s) in {{files}} file(s) use custom alias(es): {{aliases}}. These will stop working after reset. Continue?",
 	"vault.resetConfirm": "Reset",

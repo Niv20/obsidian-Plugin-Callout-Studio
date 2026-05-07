@@ -16,6 +16,7 @@ import { downloadMaterialSvg } from "./utils/iconLoader";
 import {
 	scanFileForUnknownCallouts,
 	scanVaultForUnknownCallouts,
+	countCalloutUsagesMap,
 } from "./utils/vaultCalloutScanner";
 import { setLocale, t } from "./i18n";
 
@@ -29,6 +30,10 @@ export default class CalloutStudioPlugin extends Plugin {
 	private materialSvgListeners: Set<() => void> = new Set();
 	/** Pending per-file debounce timers for incremental callout scanning. */
 	private fileScanTimers: Map<string, number> = new Map();
+	/** Debounce timer for {@link pruneUnusedFallbacks}. */
+	private pruneTimer: number | undefined;
+	/** When true, automatic prune passes are skipped (e.g. while the editor modal is open). */
+	pruneSuspended = false;
 
 	/** Subscribe to Material SVG cache updates. Returns an unsubscribe function. */
 	onMaterialSvgChange(cb: () => void): () => void {
@@ -135,6 +140,13 @@ export default class CalloutStudioPlugin extends Plugin {
 			this.app.workspace.onLayoutReady(() => {
 				void this.runVaultScan(true);
 			});
+		} else {
+			// On subsequent loads, opportunistically prune any stale
+			// auto-created rows the user accumulated while typing in a
+			// previous session.
+			this.app.workspace.onLayoutReady(() => {
+				this.schedulePruneUnusedFallbacks(2000);
+			});
 		}
 
 		// Incremental tracking: discover new callout IDs as users save files
@@ -162,6 +174,10 @@ export default class CalloutStudioPlugin extends Plugin {
 			window.clearTimeout(id);
 		}
 		this.fileScanTimers.clear();
+		if (this.pruneTimer !== undefined) {
+			window.clearTimeout(this.pruneTimer);
+			this.pruneTimer = undefined;
+		}
 		this.cssInjector.destroy();
 	}
 
@@ -219,6 +235,67 @@ export default class CalloutStudioPlugin extends Plugin {
 	}
 
 	/**
+	 * Schedule a debounced prune of auto-created (`source: "fallback"`) rows
+	 * that have never been customized and have zero vault usages. Cheap and
+	 * coalesces rapid edits — only one vault pass runs per debounce tick.
+	 */
+	schedulePruneUnusedFallbacks(delayMs = 1500): void {
+		if (this.pruneSuspended) return;
+		if (this.pruneTimer !== undefined) {
+			window.clearTimeout(this.pruneTimer);
+		}
+		this.pruneTimer = window.setTimeout(() => {
+			this.pruneTimer = undefined;
+			void this.pruneUnusedFallbacks();
+		}, delayMs);
+	}
+
+	/**
+	 * Remove auto-created (`source: "fallback"`) callouts that the user has
+	 * never edited and that no longer appear in any markdown file. Safe to
+	 * call concurrently — re-checks the registry before mutating. Skipped
+	 * entirely while {@link pruneSuspended} is true.
+	 */
+	async pruneUnusedFallbacks(): Promise<number> {
+		if (this.pruneSuspended) return 0;
+		const candidates = this.registry
+			.getUserDefined()
+			.filter((d) => d.source === "fallback" && d.customized !== true)
+			.map((d) => d.id);
+		if (candidates.length === 0) return 0;
+
+		let usage: Map<string, { fileCount: number; totalCount: number }>;
+		try {
+			usage = await countCalloutUsagesMap(this.app, candidates);
+		} catch (e) {
+			console.debug("[CalloutStudio] prune usage scan failed", e);
+			return 0;
+		}
+
+		let removed = 0;
+		for (const id of candidates) {
+			const stat = usage.get(id.toLowerCase());
+			if (!stat || stat.fileCount > 0) continue;
+			const def = this.registry.get(id);
+			if (!def) continue;
+			// Re-check: another flow (e.g. settings edit) may have
+			// customized this row while the scan was in flight.
+			if (def.source !== "fallback" || def.customized === true) continue;
+			if (this.registry.remove(id)) removed++;
+		}
+		if (removed > 0) {
+			await this.saveSettings();
+			this.refreshCallouts();
+			console.debug(
+				"[CalloutStudio] pruned",
+				removed,
+				"unused fallback callout(s)",
+			);
+		}
+		return removed;
+	}
+
+	/**
 	 * Scan the vault for callout IDs that are not in the registry and add
 	 * them as fallback-source rows that mirror the current fallback style.
 	 * Returns the number of new rows added.
@@ -260,7 +337,12 @@ export default class CalloutStudioPlugin extends Plugin {
 			console.debug("[CalloutStudio] file scan failed", file.path, e);
 			return;
 		}
-		if (unknown.length === 0) return;
+		if (unknown.length === 0) {
+			// Edit may have removed the last usage of a fallback row. Run
+			// a prune so the settings list stays clean as the user types.
+			this.schedulePruneUnusedFallbacks();
+			return;
+		}
 		const added = this.addUnknownCalloutsAsFallback(unknown);
 		if (added > 0) {
 			console.debug(
@@ -271,6 +353,9 @@ export default class CalloutStudioPlugin extends Plugin {
 			await this.saveSettings();
 			this.refreshCallouts();
 		}
+		// Always schedule a prune pass: even if no new rows were added,
+		// existing fallback rows may now be unused after this edit.
+		this.schedulePruneUnusedFallbacks();
 	}
 
 	/**
