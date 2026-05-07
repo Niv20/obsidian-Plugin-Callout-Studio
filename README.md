@@ -18,7 +18,6 @@ Three icon sources, all selectable from one icon picker:
 
 - **Lucide icons** — Obsidian's built-in set (~1,300 icons). Always available offline.
 - **Google Material Symbols** — ~3,000 icons, with selectable style (Outlined / Filled / Rounded / Sharp) and weight (100 – 700).
-- **Custom SVG** — paste SVG markup or drag-and-drop an SVG file. The SVG is sanitized (script/iframe/event-handler removal) before being used.
 
 You can also fine-tune each callout's icon size and horizontal/vertical offset.
 

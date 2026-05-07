@@ -155,10 +155,7 @@ export class CalloutDiscovery {
 	 */
 	async runVaultScan(markFirstRun = false): Promise<number> {
 		const known = this.buildKnownIds();
-		const unknown = await scanVaultForUnknownCallouts(
-			this.host.app,
-			known,
-		);
+		const unknown = await scanVaultForUnknownCallouts(this.host.app, known);
 		const added = this.addUnknownCalloutsAsFallback(unknown);
 		if (markFirstRun) {
 			this.host.registry.settings.firstRunCompleted = true;
