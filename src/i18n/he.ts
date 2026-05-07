@@ -20,6 +20,20 @@ export const he: Record<string, string> = {
 	"settings.rescanComplete": "סיום סריקה: נוספו {{count}} בלוקים חדשים.",
 	"replaceModal.deleteWithoutReplaceSuffix": "(נופל לברירת המחדל)",
 
+	// פופאפ סריקה ראשונית (מוצג פעם אחת בהתקנה ראשונה ל-Vault גדול)
+	"firstRun.title": "לזהות תיבות הבלטה קיימות ב-Vault שלך?",
+	"firstRun.body":
+		"Callout Studio יכול לסרוק את ה-Vault ולגלות תיבות הבלטה שאתה כבר משתמש בהן, כך שיופיעו ברשימה בהגדרות ויקבלו את עיצוב ברירת המחדל.",
+	"firstRun.heavyVaultNote":
+		"ב-Vault שלך יש {{count}} קבצי Markdown — הסריקה עשויה להימשך כמה שניות.",
+	"firstRun.laterHint":
+		"אפשר תמיד להריץ סריקה גם מאוחר יותר דרך הגדרות ← סקירה ותחזוקת Vault ← סרוק מחדש את המאגר.",
+	"firstRun.scanNow": "סריקה עכשיו",
+	"firstRun.noThanks": "לא צריך, תודה",
+	"firstRun.autoScanComplete":
+		"Callout Studio סרק את ה-Vault והוסיף {{count}} תיבות הבלטה.",
+	"firstRun.scanning": "סורק…",
+
 	// Delete-callout modal (trash button on user rows)
 	"deleteModal.title": 'למחוק את תיבת ההבלטה "{{name}}"?',
 	"deleteModal.bodyInUse":

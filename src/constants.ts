@@ -10,6 +10,22 @@ export const MAX_TAG_LENGTH: number = 10;
 /** Maximum number of IDs (aliases) allowed per callout */
 export const MAX_TAGS_COUNT: number = 4;
 
+/**
+ * First-run vault-scan threshold (number of markdown files).
+ *
+ * On the very first plugin install:
+ * - If `vault.getMarkdownFiles().length < HEAVY_VAULT_FILE_THRESHOLD` →
+ *   the vault is auto-scanned silently in the background (a Notice is
+ *   shown when callouts are found).
+ * - If `>= HEAVY_VAULT_FILE_THRESHOLD` → a one-time modal asks the user
+ *   whether to scan now or skip (they can always run it later from
+ *   Settings → Vault insights & maintenance → Re-scan vault).
+ *
+ * Tweak this value while testing to see both UX paths. Purely a UI/UX
+ * threshold — does not affect what the scan itself does.
+ */
+export const HEAVY_VAULT_FILE_THRESHOLD: number = 500;
+
 export const DEFAULT_CALLOUTS: CalloutDefinition[] = [
 	{
 		id: "note",

@@ -21,6 +21,20 @@ export const en: Record<string, string> = {
 		"Re-scan complete: {{count}} new callout(s) added.",
 	"replaceModal.deleteWithoutReplaceSuffix": "(falls back to default)",
 
+	// First-run scan modal (shown once on first install for large vaults)
+	"firstRun.title": "Find existing callouts in your vault?",
+	"firstRun.body":
+		"Callout Studio can scan your vault to discover callouts you already use, so they appear in your settings list and adopt your fallback style.",
+	"firstRun.heavyVaultNote":
+		"Your vault has {{count}} markdown files — the scan may take a few seconds.",
+	"firstRun.laterHint":
+		"You can always run this later from Settings → Vault insights & maintenance → Re-scan vault.",
+	"firstRun.scanNow": "Scan now",
+	"firstRun.noThanks": "No thanks",
+	"firstRun.autoScanComplete":
+		"Callout Studio scanned your vault and added {{count}} callout(s).",
+	"firstRun.scanning": "Scanning…",
+
 	// Delete-callout modal (trash button on user rows)
 	"deleteModal.title": 'Delete callout "{{name}}"?',
 	"deleteModal.bodyInUse":

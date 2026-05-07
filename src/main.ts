@@ -1,4 +1,4 @@
-import { Plugin } from "obsidian";
+import { Notice, Plugin } from "obsidian";
 import type {
 	CalloutIcon,
 	MaterialIconStyle,
@@ -15,7 +15,9 @@ import { CalloutAutoComplete } from "./editor/AutoComplete";
 import { registerContextMenu } from "./editor/ContextMenu";
 import { registerCalloutCommands } from "./editor/commands";
 import { CalloutStudioAPI } from "./api/PluginAPI";
-import { setLocale } from "./i18n";
+import { FirstRunScanModal } from "./utils/FirstRunScanModal";
+import { HEAVY_VAULT_FILE_THRESHOLD } from "./constants";
+import { setLocale, t } from "./i18n";
 
 export default class CalloutStudioPlugin extends Plugin {
 	registry!: CalloutRegistry;
@@ -96,18 +98,24 @@ export default class CalloutStudioPlugin extends Plugin {
 		// Download missing Material SVGs in background
 		void this.materialSvg.ensureAll();
 
-		// On first run, mark the flag silently — but do NOT scan every
-		// markdown file in the vault on startup. On large vaults / mobile
-		// that would be wasteful and slow. Users can always trigger
-		// "Scan now" from settings, and the incremental watcher below
-		// picks up new IDs as files are edited.
+		// First-run vault discovery.
+		//
+		// Decoupled from initial render so onload stays fast. The flag is
+		// only flipped *after* the chosen path completes, so an interrupted
+		// startup (crash / reload mid-scan) safely re-runs next launch.
+		//
+		// - Small vaults: silent auto-scan in the background.
+		// - Large vaults (>= HEAVY_VAULT_FILE_THRESHOLD): one-time modal
+		//   asks the user before doing anything.
+		//
+		// On subsequent loads (firstRunCompleted=true) we just opportunistically
+		// prune stale auto-created rows accumulated while typing in a previous
+		// session.
 		if (!this.settings.firstRunCompleted) {
-			this.registry.settings.firstRunCompleted = true;
-			void this.saveSettings();
+			this.app.workspace.onLayoutReady(() => {
+				void this.runFirstRunDiscovery();
+			});
 		} else {
-			// On subsequent loads, opportunistically prune any stale
-			// auto-created rows the user accumulated while typing in a
-			// previous session.
 			this.app.workspace.onLayoutReady(() => {
 				this.discovery.schedulePrune(2000);
 			});
@@ -174,5 +182,50 @@ export default class CalloutStudioPlugin extends Plugin {
 		weight: number,
 	): boolean {
 		return this.materialSvg.hasFailed(name, style, weight);
+	}
+
+	/**
+	 * One-time post-install discovery. Picks between a silent auto-scan
+	 * (small vaults) and a consent modal (large vaults). The
+	 * `firstRunCompleted` flag is only persisted after the chosen path
+	 * finishes, so an interrupted run will retry on the next launch.
+	 */
+	private async runFirstRunDiscovery(): Promise<void> {
+		// Re-check the flag — onLayoutReady can fire after another flow
+		// (e.g. an import) already ran a scan and flipped the flag.
+		if (this.settings.firstRunCompleted) return;
+
+		const fileCount = this.app.vault.getMarkdownFiles().length;
+
+		if (fileCount < HEAVY_VAULT_FILE_THRESHOLD) {
+			// Small vault — auto-scan silently.
+			try {
+				const added = await this.runVaultScan(false);
+				if (added > 0) {
+					new Notice(
+						t("firstRun.autoScanComplete", {
+							count: String(added),
+						}),
+					);
+				}
+			} catch (e) {
+				console.error("[CalloutStudio] first-run auto scan failed", e);
+			}
+			this.registry.settings.firstRunCompleted = true;
+			await this.saveSettings();
+			return;
+		}
+
+		// Large vault — ask the user first.
+		await new FirstRunScanModal(this.app, fileCount, async () => {
+			const added = await this.runVaultScan(false);
+			new Notice(
+				t("settings.rescanComplete", {
+					count: String(added),
+				}),
+			);
+		}).prompt();
+		this.registry.settings.firstRunCompleted = true;
+		await this.saveSettings();
 	}
 }
