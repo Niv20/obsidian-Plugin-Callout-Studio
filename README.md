@@ -1,169 +1,138 @@
 # Callout Studio
 
-Callout Studio is an Obsidian community plugin for managing custom callout styles, icons, and editor workflows.
+Callout Studio is the ultimate callout manager for Obsidian. It lets you create, edit, and style your own callout types, override the built-in ones, pick icons from large libraries, and keep callouts under control across your whole vault — all from a single settings tab.
 
-## Context menu architecture
+## Features
 
-Callout Studio injects native Obsidian context menu items by patching `Menu.prototype.showAtMouseEvent` with `monkey-around`. Obsidian routes every right-click menu through that method, so one patch can inspect the click target and add items before the menu is displayed.
+### Custom callout types
 
-```ts
-import { Menu } from "obsidian";
-import { around, dedupe } from "monkey-around";
+- Create new callout types with a display name, one or more IDs (aliases), an icon, and per-mode colors.
+- Edit any built-in or user-defined callout. Changes are reflected everywhere instantly via a live preview.
+- Delete user callouts. If a callout is in use across your vault, Callout Studio offers to replace it with another callout or convert the affected blocks to plain text instead of silently breaking notes.
+- Foldable callouts: choose **Off**, **Open by default**, or **Closed by default** per callout type.
+- Aliases: every callout can have multiple IDs. The autocomplete and the vault statistics treat aliases as the same logical callout.
 
-const uninstall = around(Menu.prototype, {
-	showAtMouseEvent(old) {
-		return dedupe(
-			"your-plugin-context-menu",
-			old,
-			function (this: Menu, event: MouseEvent) {
-				const context = resolveTargetContext(event);
-				if (context) {
-					addCustomMenuItems(this, context);
-				}
+### Icons
 
-				return old?.apply(this, [event]) ?? this;
-			},
-		);
-	},
-});
+Three icon sources, all selectable from one icon picker:
 
-plugin.register(uninstall);
+- **Lucide icons** — Obsidian's built-in set (~1,300 icons). Always available offline.
+- **Google Material Symbols** — ~3,000 icons, with selectable style (Outlined / Filled / Rounded / Sharp) and weight (100 – 700).
+- **Custom SVG** — paste SVG markup or drag-and-drop an SVG file. The SVG is sanitized (script/iframe/event-handler removal) before being used.
+
+You can also fine-tune each callout's icon size and horizontal/vertical offset.
+
+### Per-mode colors
+
+- Separate **Light** and **Dark** colors for every callout — Callout Studio honors Obsidian's current theme automatically.
+- Color presets: Obsidian's original callout palette plus extra curated presets.
+- A **Color application mode** option to follow Obsidian's theme (recommended), or to force the light or dark colors only.
+
+### Global callout style
+
+These settings apply to all callouts:
+
+- **Borders** — pick which sides (top / right / bottom / left, or all) have a visible border.
+- **Border thickness** — width in pixels.
+- **Title scale** and **Content scale** — independent font scales for the title row and the body.
+- **Corner rounding** — border-radius in pixels.
+
+### Default fallback callout
+
+When a note uses a callout ID that doesn't exist in the registry, Callout Studio styles it using the **default fallback callout**. You can pick which callout acts as the fallback in settings.
+
+### Vault discovery
+
+Callout Studio keeps the registry in sync with what's actually used in your vault:
+
+- New callout IDs typed in open notes are picked up automatically.
+- When you open the settings tab, in-memory editor buffers are scanned for unsaved IDs.
+- A **Scan now** button performs a one-shot vault scan that adds any unrecognized IDs as fallback rows so you can see them in the list and customize them.
+- Auto-created fallback rows that are never used and never customized are pruned automatically in the background.
+
+### Right-click context menu
+
+Right-click on a callout in **Reading view**, **Source mode**, or **Live Preview** to get extra actions injected into Obsidian's native menu:
+
+- Edit callout settings
+- Open Callout Studio settings
+- Copy callout Markdown
+
+Each item can be toggled on or off individually.
+
+### `[!` autocomplete
+
+When you type `[!` inside a blockquote, Callout Studio shows a suggestion list of available callouts:
+
+- Optional icon previews next to each suggestion.
+- Optional color previews next to each suggestion.
+- Picking a suggestion inserts a complete callout header.
+- You can confirm a brand-new callout name on the spot — it will be added as a fallback row to the registry.
+
+### Editor commands
+
+Callout Studio adds the following commands. **No keyboard shortcuts are assigned by default**; you can configure them from **Settings → Hotkeys** or from the in-plugin shortcut button.
+
+- **Open settings** — opens the Callout Studio settings tab.
+- **Create new callout type** — opens the callout editor.
+- **Wrap in callout** — wraps the current paragraph or selection in a callout, then triggers the autocomplete so you can pick a type.
+- **Unwrap from callout** — removes one callout level around the cursor or selection.
+
+### Vault insights & maintenance
+
+- **Callout statistics** — scans every Markdown file in the vault and lists every callout type with its usage count, file count, and source (built-in / custom / auto-fallback / CSS snippet / unknown).
+- **Replace in vault** — replace every occurrence of one callout ID with another, in one pass.
+- **Convert to plain text** — strip a callout while preserving its content as a normal paragraph block.
+
+### Import / export
+
+- Export all your custom callout definitions to a JSON file.
+- Import a JSON file produced by Callout Studio. The importer validates every entry, reports issues per row, and lets you import only the valid entries.
+- Import callout definitions detected in your vault's CSS snippets folder.
+
+### Reset
+
+A single **Reset everything** action returns the plugin to defaults: removes user callouts, restores built-in callouts, resets global styles, and clears the downloaded Material SVG cache.
+
+### Localization
+
+The plugin UI is available in **English** and **Hebrew**. The active language follows Obsidian's interface language automatically.
+
+## Network usage and privacy
+
+Callout Studio works offline by default and never sends any vault content anywhere. The only network activity is for the **Google Material Symbols** icon source, and it only happens on demand:
+
+- When you open the icon picker on the **Material** tab, the plugin fetches the Material Symbols metadata once from `https://fonts.google.com/metadata/icons` and caches it locally for 30 days.
+- When the picker is open, the relevant Google Fonts stylesheet is loaded from `https://fonts.googleapis.com/css2?...` so the icon previews can render with the chosen style and weight.
+- When you actually pick a Material icon for a callout, the plugin downloads that single icon's SVG from `https://fonts.gstatic.com/s/i/short-term/...` and caches the SVG locally so the icon works offline and in PDF export.
+- On startup, if any callout already uses a Material icon whose SVG is missing from the local cache (e.g. after an import), the plugin downloads only those missing SVGs in the background.
+
+If you never use Material icons, no network calls are made. The icon cache lives inside the plugin's `data.json` and you can clear it at any time from settings. No telemetry or analytics is collected.
+
+## Install
+
+### Community plugins (recommended)
+
+1. Open **Settings → Community plugins** in Obsidian.
+2. Search for **Callout Studio** and select **Install**, then **Enable**.
+
+### Manual install
+
+1. Download `manifest.json`, `main.js`, and `styles.css` from the latest GitHub release.
+2. Copy them into `<Vault>/.obsidian/plugins/callout-studio/`.
+3. Restart Obsidian and enable **Callout Studio** in **Settings → Community plugins**.
+
+## Development
+
+```bash
+npm install
+npm run dev    # watch build
+npm run build  # production build (typecheck + minified bundle)
+npm run lint   # ESLint with the official obsidianmd plugin rules
 ```
 
-The important rule is that the patch does not decide behavior by itself. It only resolves a clicked target and hands the result to one shared menu builder.
+Source lives under `src/` and is bundled by esbuild into `main.js`. The release artifacts are `main.js`, `manifest.json`, and `styles.css`.
 
-### How the resolver works
+## License
 
-- Source mode and Live Preview: find the nearest `.cm-editor`, resolve the `EditorView` with `EditorView.findFromDOM()`, map click coordinates back to a document offset with `posAtCoords()`, convert that offset to an Obsidian editor position, and then scan upward until the enclosing callout header is found.
-- Reading view: find the nearest `.callout[data-callout]`, ask the preview renderer for `MarkdownSectionInformation`, then locate the matching callout header inside that section and reuse the same action builder.
-- Shared actions: once a callout is resolved, all modes use the same menu composition logic for edit, open settings, and copy markdown.
-
-This is the exact pattern to reuse for another element type: keep the global menu patch, replace the selector and resolver, and keep one shared `addCustomMenuItems()` function.
-
-```ts
-function resolveEditorContext(
-	view: MarkdownView,
-	target: Element,
-	event: MouseEvent,
-) {
-	const cmRoot = target.closest(".cm-editor");
-	if (!(cmRoot instanceof HTMLElement)) return null;
-
-	const editorView = EditorView.findFromDOM(cmRoot);
-	if (!editorView) return null;
-
-	const offset =
-		editorView.posAtCoords({ x: event.clientX, y: event.clientY }) ??
-		editorView.posAtCoords({ x: event.clientX, y: event.clientY }, false);
-	if (offset == null) return null;
-
-	const pos = view.editor.offsetToPos(offset);
-	return findTargetAtLine(view.editor, pos.line);
-}
-```
-
-```ts
-function resolveReadingContext(view: MarkdownView, target: Element) {
-	const element = target.closest(".callout[data-callout]");
-	if (!(element instanceof HTMLElement)) return null;
-
-	const sectionInfo = previewGetSectionInfo(view, element);
-	if (!sectionInfo) return null;
-
-	return findTargetInsideSection(sectionInfo, element.dataset.callout ?? "");
-}
-```
-
-### Notes for other plugin authors
-
-- Use `dedupe()` with a plugin-specific key so hot reloads or duplicate patch registration do not produce duplicate menu items.
-- Always call the original `showAtMouseEvent()` so Obsidian keeps its own items.
-- Keep preview-only lookups narrow. In Callout Studio, the preview section lookup is wrapped in a tiny structural cast because the runtime method exists but is not fully declared on `MarkdownPreviewView`.
-- If you want to support a different rendered element, replace `.callout[data-callout]` with your selector and keep the rest of the pattern intact.
-
-## Callout block tools
-
-The plugin now includes editor commands for wrapping and unwrapping callout blocks:
-
-- `Wrap in callout` (`callout-wrap`): wraps the current paragraph or the selected span in a new Obsidian callout block and places the cursor after `> [!` so the existing autocomplete flow can complete the type.
-- `Unwrap from callout` (`callout-unwrap`): removes one callout level from the callout under the cursor or selection.
-
-Callout Studio does not assign default keyboard shortcuts. Users can choose their own shortcuts in **Settings → Hotkeys** or from the plugin settings shortcut button.
-
-## First time developing plugins?
-
-Quick starting guide for new plugin devs:
-
-- Check if [someone already developed a plugin for what you want](https://obsidian.md/plugins)! There might be an existing plugin similar enough that you can partner up with.
-- Make a copy of this repo as a template with the "Use this template" button (login to GitHub if you don't see it).
-- Clone your repo to a local development folder. For convenience, you can place this folder in your `.obsidian/plugins/your-plugin-name` folder.
-- Install NodeJS, then run `npm i` in the command line under your repo folder.
-- Run `npm run dev` to compile your plugin from `main.ts` to `main.js`.
-- Make changes to `main.ts` (or create new `.ts` files). Those changes should be automatically compiled into `main.js`.
-- Reload Obsidian to load the new version of your plugin.
-- Enable plugin in settings window.
-- For updates to the Obsidian API run `npm update` in the command line under your repo folder.
-
-## Releasing new releases
-
-- Update your `manifest.json` with your new version number, such as `1.0.1`, and the minimum Obsidian version required for your latest release.
-- Update your `versions.json` file with `"new-plugin-version": "minimum-obsidian-version"` so older versions of Obsidian can download an older version of your plugin that's compatible.
-- Create new GitHub release using your new version number as the "Tag version". Use the exact version number, don't include a prefix `v`. See here for an example: https://github.com/obsidianmd/obsidian-sample-plugin/releases
-- Upload the files `manifest.json`, `main.js`, `styles.css` as binary attachments. Note: The manifest.json file must be in two places, first the root path of your repository and also in the release.
-- Publish the release.
-
-> You can simplify the version bump process by running `npm version patch`, `npm version minor` or `npm version major` after updating `minAppVersion` manually in `manifest.json`.
-> The command will bump version in `manifest.json` and `package.json`, and add the entry for the new version to `versions.json`
-
-## Adding your plugin to the community plugin list
-
-- Check the [plugin guidelines](https://docs.obsidian.md/Plugins/Releasing/Plugin+guidelines).
-- Publish an initial version.
-- Make sure you have a `README.md` file in the root of your repo.
-- Make a pull request at https://github.com/obsidianmd/obsidian-releases to add your plugin.
-
-## How to use
-
-- Clone this repo.
-- Make sure your NodeJS is at least v16 (`node --version`).
-- `npm i` or `yarn` to install dependencies.
-- `npm run dev` to start compilation in watch mode.
-
-## Manually installing the plugin
-
-- Copy over `main.js`, `styles.css`, `manifest.json` to your vault `VaultFolder/.obsidian/plugins/your-plugin-id/`.
-
-## Improve code quality with eslint
-
-- [ESLint](https://eslint.org/) is a tool that analyzes your code to quickly find problems. You can run ESLint against your plugin to find common bugs and ways to improve your code.
-- This project already has eslint preconfigured, you can invoke a check by running`npm run lint`
-- Together with a custom eslint [plugin](https://github.com/obsidianmd/eslint-plugin) for Obsidan specific code guidelines.
-- A GitHub action is preconfigured to automatically lint every commit on all branches.
-
-## Funding URL
-
-You can include funding URLs where people who use your plugin can financially support it.
-
-The simple way is to set the `fundingUrl` field to your link in your `manifest.json` file:
-
-```json
-{
-	"fundingUrl": "https://buymeacoffee.com"
-}
-```
-
-If you have multiple URLs, you can also do:
-
-```json
-{
-	"fundingUrl": {
-		"Buy Me a Coffee": "https://buymeacoffee.com",
-		"GitHub Sponsor": "https://github.com/sponsors",
-		"Patreon": "https://www.patreon.com/"
-	}
-}
-```
-
-## API Documentation
-
-See https://docs.obsidian.md
+[0BSD](LICENSE)
