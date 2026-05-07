@@ -164,13 +164,6 @@ export const he: Record<string, string> = {
 	"settings.viewCachedSvgs": "צפייה",
 	"settings.cachedSvgsTitle": "אייקוני Material שמורים",
 
-	// Settings — Color mode
-	"settings.colorAppMode": "מצב החלת צבע",
-	"settings.colorAppModeDesc":
-		"מעקב אוטומטי אחר ערכת הנושא של Obsidian (מומלץ)",
-	"settings.colorAuto": "אוטומטי (מומלץ)",
-	"settings.colorForceLight": "כפיית צבעי מצב בהיר בלבד",
-	"settings.colorForceDark": "כפיית צבעי מצב כהה בלבד",
 	"settings.colorFormat": "פורמט צבע",
 
 	// Settings — Reset

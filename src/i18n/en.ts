@@ -164,13 +164,6 @@ export const en: Record<string, string> = {
 	"settings.viewCachedSvgs": "View",
 	"settings.cachedSvgsTitle": "Cached Material SVGs",
 
-	// Settings — Color mode
-	"settings.colorAppMode": "Color application mode",
-	"settings.colorAppModeDesc":
-		"Auto follows Obsidian's current theme (recommended)",
-	"settings.colorAuto": "Auto (recommended)",
-	"settings.colorForceLight": "Force light colors only",
-	"settings.colorForceDark": "Force dark colors only",
 	"settings.colorFormat": "Color format",
 
 	// Settings — Reset
