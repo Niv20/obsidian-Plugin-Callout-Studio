@@ -1,3 +1,11 @@
+/**
+ * settings/editor/CalloutEditorValidation.ts — Validation helpers for the callout editor.
+ *
+ * Pure functions that check whether the current editor state is valid:
+ * ID availability, alias conflicts, and whether saving would overwrite an
+ * auto-generated fallback row. Also builds a state snapshot string used to
+ * detect unsaved changes. Used exclusively by CalloutEditor.ts.
+ */
 import type { CalloutDefinition } from "../../types";
 
 type ValidationLookup = {

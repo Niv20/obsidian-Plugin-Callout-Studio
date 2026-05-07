@@ -1,3 +1,13 @@
+/**
+ * manager/MaterialSvgManager.ts — Downloads and caches Material Symbols SVGs.
+ *
+ * Fetches SVG files for Material icon callouts on demand, stores them in the
+ * registry's materialSvgCache (persisted to data.json), and notifies UI
+ * listeners when a download completes or permanently fails. Prevents duplicate
+ * requests and surfaces errors without crashing the plugin.
+ * Depends on CSSInjector (to re-inject CSS after a new SVG arrives) and
+ * iconLoader (for the actual network request).
+ */
 import { Notice } from "obsidian";
 import type { CalloutIcon, MaterialIconStyle } from "../types";
 import type { CalloutRegistry } from "./CalloutRegistry";

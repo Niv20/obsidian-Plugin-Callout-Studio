@@ -1,3 +1,12 @@
+/**
+ * utils/importValidator.ts — Validates JSON callout data before import.
+ *
+ * Parses and sanitizes a raw JSON value against the CalloutDefinition schema:
+ * checks required fields, color format, icon type/style/weight ranges, tag
+ * length limits, and alias uniqueness. Returns valid definitions alongside a
+ * structured list of issues (errors + warnings) so the ImportReportModal can
+ * show the user exactly what was wrong before committing anything.
+ */
 import type { CalloutDefinition, CalloutIcon } from "../types";
 import type { CalloutRegistry } from "../manager/CalloutRegistry";
 import { MAX_TAG_LENGTH, MAX_TAGS_COUNT } from "../constants";

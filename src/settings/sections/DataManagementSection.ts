@@ -1,3 +1,11 @@
+/**
+ * settings/sections/DataManagementSection.ts — Import, export, and reset settings.
+ *
+ * Renders the "Vault insights & maintenance" and "Import / Export" sections in
+ * the settings tab. Handles JSON export of all user callouts, JSON import with
+ * validation (via importValidator), vault re-scan, and full data reset.
+ * Uses ImportReportModal to surface validation issues before import.
+ */
 import { Notice, Setting } from "obsidian";
 import { t } from "../../i18n";
 import { ConfirmModal } from "../../utils/ConfirmModal";

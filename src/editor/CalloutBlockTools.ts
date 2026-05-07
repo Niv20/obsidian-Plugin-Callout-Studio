@@ -1,3 +1,12 @@
+/**
+ * editor/CalloutBlockTools.ts — Low-level editor utilities for callout blocks.
+ *
+ * Contains pure functions that operate on an Obsidian Editor instance:
+ * wrapping a text selection inside a new callout block, and unwrapping an
+ * existing callout back to plain text. Also handles nested quote depths and
+ * fenced code/math blocks so edits stay structurally correct.
+ * Used by editor/commands.ts (keyboard commands) and editor/ContextMenu.ts.
+ */
 import { Editor, Notice } from "obsidian";
 import type { EditorPosition } from "obsidian";
 import { t } from "../i18n";

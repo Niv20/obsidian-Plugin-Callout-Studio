@@ -1,3 +1,10 @@
+/**
+ * settings/sections/FooterSection.ts — Settings tab footer.
+ *
+ * Renders the bottom of the settings page: a tagline, links to the GitHub
+ * repository and author email, and the current plugin version number.
+ * Has no interactive logic; purely informational.
+ */
 import { t } from "../../i18n";
 import type { SettingsSectionContext } from "./types";
 

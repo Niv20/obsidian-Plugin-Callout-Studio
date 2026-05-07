@@ -1,3 +1,11 @@
+/**
+ * settings/sections/FallbackSection.ts — Fallback callout selector.
+ *
+ * Renders a single dropdown that lets the user choose which callout type is
+ * used as the fallback for unknown/unrecognized callout IDs in the vault.
+ * Changing the selection immediately re-styles uncustomized fallback rows and
+ * triggers a CSS refresh.
+ */
 import { Setting } from "obsidian";
 import { getLocale, t } from "../../i18n";
 import { sortCalloutsById } from "../../utils/sorting";

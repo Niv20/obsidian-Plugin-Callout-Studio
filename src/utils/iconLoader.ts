@@ -1,3 +1,12 @@
+/**
+ * utils/iconLoader.ts — Icon data loading and SVG download utilities.
+ *
+ * Provides helpers for Lucide icons (reading Obsidian's built-in list) and
+ * Material Symbols icons (reading bundled metadata, filtering by query/category,
+ * downloading individual SVG files from Google Fonts on demand).
+ * Used by IconPicker (browsing), MaterialSvgManager (caching), and
+ * CSSInjector (converting cached SVGs to data URIs for CSS injection).
+ */
 import { getIconIds, requestUrl } from "obsidian";
 import type {
 	MaterialIconMeta,

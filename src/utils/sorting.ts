@@ -1,3 +1,11 @@
+/**
+ * utils/sorting.ts — Locale-aware sorting helpers for callout lists.
+ *
+ * Exports comparators and sort functions (sortCalloutsByDisplayName,
+ * sortCalloutsById, getSortedCalloutIds) that use Intl.Collator with a
+ * locale chain fallback. Used by CalloutRegistry (initial sort on load),
+ * CalloutListsSection (display order), and AutoComplete (suggestion order).
+ */
 import type { CalloutDefinition } from "../types";
 
 const FALLBACK_LOCALE = "en";

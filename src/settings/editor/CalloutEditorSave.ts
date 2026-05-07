@@ -1,3 +1,11 @@
+/**
+ * settings/editor/CalloutEditorSave.ts — Save logic for the callout editor modal.
+ *
+ * Handles the full save flow: writing the definition to the registry,
+ * renaming callout IDs in vault files when the ID changes, updating fold
+ * markers, and normalizing titles. Separated from CalloutEditor.ts to keep
+ * the modal class focused on UI state.
+ */
 import { Notice } from "obsidian";
 import { t } from "../../i18n";
 import type { App } from "obsidian";

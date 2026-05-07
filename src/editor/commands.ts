@@ -1,3 +1,12 @@
+/**
+ * editor/commands.ts — Registers all user-facing Obsidian commands.
+ *
+ * Calls plugin.addCommand() for each stable command ID (open-settings,
+ * create-callout, callout-wrap, callout-unwrap). Command implementations
+ * delegate to CalloutBlockTools or open the CalloutEditor modal.
+ * Command IDs must never be renamed after release because users may have
+ * them bound to hotkeys.
+ */
 import type { Plugin } from "obsidian";
 import { CalloutEditor } from "../settings/CalloutEditor";
 import {

@@ -1,3 +1,12 @@
+/**
+ * types.ts — Shared TypeScript interfaces and type declarations.
+ *
+ * Defines the core data shapes used across the entire plugin:
+ * CalloutDefinition (the main data model), CalloutIcon, and all settings
+ * interfaces (PluginSettings, ContextMenuSettings, AutocompleteSettings, etc.).
+ * Also extends the Obsidian `App` type with the internal `setting` panel API.
+ * Every module that needs to read or write callout data imports from here.
+ */
 export interface CalloutIcon {
 	type: "lucide" | "material" | "emoji";
 	value: string;

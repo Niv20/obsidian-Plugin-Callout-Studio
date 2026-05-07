@@ -1,3 +1,12 @@
+/**
+ * editor/AutoComplete.ts — In-editor autocomplete for callout IDs.
+ *
+ * Extends Obsidian's EditorSuggest to show a dropdown of known callout types
+ * whenever the user types `> [!` inside a note. Selecting a suggestion inserts
+ * the callout header and optionally opens the CalloutEditor to create a new
+ * type on-the-fly. Reads callout data from CalloutRegistry and uses the
+ * sorting helpers from utils/sorting.
+ */
 import {
 	Editor,
 	EditorPosition,

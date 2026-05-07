@@ -1,3 +1,12 @@
+/**
+ * ui/TagInput.ts — Reusable tag-input component for callout IDs and aliases.
+ *
+ * Renders a text input where pressing Enter or Space commits the typed value
+ * as a pill/tag. Tags appear in a row below the input with an × remove button.
+ * Supports validation callbacks, readonly tags (the primary ID cannot be
+ * removed), and configurable max length / max count from constants.ts.
+ * Used by CalloutEditor for the aliases field.
+ */
 import { MAX_TAG_LENGTH, MAX_TAGS_COUNT } from "../constants";
 
 /**

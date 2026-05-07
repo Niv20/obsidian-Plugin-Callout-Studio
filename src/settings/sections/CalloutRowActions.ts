@@ -1,3 +1,12 @@
+/**
+ * settings/sections/CalloutRowActions.ts — Row-level context menus in the settings list.
+ *
+ * Opens a dropdown Menu for a callout row when the user clicks the three-dot
+ * button. User rows get options like Edit, Delete, Convert to fallback; built-in
+ * rows get Reset to default and Convert to fallback. Delete and replace flows
+ * open ConfirmModal / DeleteCalloutModal / ReplaceCalloutModal as needed.
+ * Depends on vaultCalloutScanner for usage counts before destructive actions.
+ */
 import { Menu, Notice } from "obsidian";
 import { ConfirmModal } from "../../utils/ConfirmModal";
 import { DeleteCalloutModal } from "../../utils/DeleteCalloutModal";

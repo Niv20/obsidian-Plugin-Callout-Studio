@@ -1,3 +1,12 @@
+/**
+ * utils/ReplaceCalloutModal.ts — Pick-a-replacement callout modal.
+ *
+ * Shown in two scenarios: (1) during deletion when the callout is used in the
+ * vault and the user chose "Replace instead...", and (2) via a direct "Replace"
+ * action. Renders a scrollable list of available callouts with icons and color
+ * swatches for easy scanning. Returns a DeleteAction to the caller so the
+ * caller can execute the vault-wide replacement.
+ */
 import { Modal, setIcon } from "obsidian";
 import type { App } from "obsidian";
 import type { CalloutDefinition } from "../types";

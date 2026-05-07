@@ -1,3 +1,11 @@
+/**
+ * ui/AnimatedNumberLabel.ts — Animated numeric display using the number-flow library.
+ *
+ * Creates a <number-flow> web component that smoothly animates between numeric
+ * values. Used by GlobalStyleSection to give the slider value labels a polished
+ * transition effect. Falls back to a plain text node when animations are not
+ * supported by the current environment.
+ */
 import NumberFlow, { canAnimate, type Format } from "number-flow";
 
 export type AnimatedNumberLabel = {

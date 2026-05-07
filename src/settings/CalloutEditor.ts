@@ -1,3 +1,12 @@
+/**
+ * settings/CalloutEditor.ts — Modal dialog for creating and editing callouts.
+ *
+ * The main user-facing form: lets the user set a display name, ID/aliases,
+ * icon, accent color, background color, text color, fold behavior, and icon
+ * positioning. Opens the IconPicker for icon selection and renders a live
+ * preview via CalloutEditorPreview. Save logic is delegated to
+ * CalloutEditorSave; validation to CalloutEditorValidation.
+ */
 import { Modal, Notice, Setting, SliderComponent } from "obsidian";
 import type { CalloutDefinition, CalloutIcon } from "../types";
 import { IconPicker } from "./IconPicker";

@@ -1,3 +1,13 @@
+/**
+ * main.ts — Plugin entry point.
+ *
+ * Bootstraps the entire plugin during Obsidian's `onload` lifecycle:
+ * creates the CalloutRegistry, wires up CSSInjector, MaterialSvgManager,
+ * and CalloutDiscovery, registers all commands, the settings tab, the
+ * autocomplete provider, and the context menu.
+ * Keep this file focused on lifecycle only — all feature logic lives in
+ * the sub-modules under manager/, editor/, settings/, etc.
+ */
 import { Notice, Plugin } from "obsidian";
 import type {
 	CalloutIcon,

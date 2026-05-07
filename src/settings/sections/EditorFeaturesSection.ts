@@ -1,3 +1,11 @@
+/**
+ * settings/sections/EditorFeaturesSection.ts — Autocomplete and context-menu settings.
+ *
+ * Renders two collapsible sub-sections: one for the in-editor callout
+ * autocomplete (enable/disable, icon and color previews toggles) and one for
+ * the right-click context menu (enable/disable, which menu items to show).
+ * Changes are saved immediately via ctx.plugin.saveSettings().
+ */
 import { Setting } from "obsidian";
 import { t } from "../../i18n";
 import type { SettingsSectionContext } from "./types";

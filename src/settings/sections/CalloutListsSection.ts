@@ -1,3 +1,11 @@
+/**
+ * settings/sections/CalloutListsSection.ts — Renders the user and built-in callout lists.
+ *
+ * Creates a controller object with render() and refresh() methods used by
+ * SettingsTab to display two separate lists: user-created callouts and
+ * Obsidian's built-in callouts. Each row is rendered via CalloutRowRenderer;
+ * row-level actions are handled by CalloutRowActions.
+ */
 import { Setting } from "obsidian";
 import { getLocale, t } from "../../i18n";
 import { sortCalloutsByDisplayName } from "../../utils/sorting";

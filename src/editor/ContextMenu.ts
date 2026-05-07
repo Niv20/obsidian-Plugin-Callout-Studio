@@ -1,3 +1,12 @@
+/**
+ * editor/ContextMenu.ts — Right-click context menu integration.
+ *
+ * Patches Obsidian's Menu class (via monkey-around) to inject callout-specific
+ * actions when the user right-clicks on a callout block in source view,
+ * live-preview, or reading view. Actions include "Edit callout" and
+ * "Open settings". Reads user preferences from PluginSettings and uses
+ * CalloutEditor to open the edit modal.
+ */
 import { EditorView } from "@codemirror/view";
 import { around, dedupe } from "monkey-around";
 import {

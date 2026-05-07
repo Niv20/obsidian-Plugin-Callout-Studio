@@ -1,3 +1,12 @@
+/**
+ * i18n/index.ts — Internationalization system.
+ *
+ * Manages the active locale and provides the `t(key, params?)` translation
+ * function used everywhere in the plugin. Supports runtime locale registration
+ * (for third-party translation packs) and auto-detection from Obsidian's
+ * moment.locale(). Falls back to English when a key is missing in the active
+ * locale. Currently ships with English (en) and Hebrew (he).
+ */
 import { en } from "./en";
 import { he } from "./he";
 

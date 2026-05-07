@@ -1,3 +1,13 @@
+/**
+ * api/PluginAPI.ts — Public API surface for other Obsidian plugins.
+ *
+ * Exposed at `app.plugins.plugins['callout-studio'].api`.
+ * Provides read access to all registered callouts and lets external plugins
+ * add or remove their own callout definitions at runtime without touching the
+ * registry directly.
+ * Depends on CalloutRegistry (data) and CalloutEditor / IconPicker (UI entry
+ * points that external callers can open programmatically).
+ */
 import type CalloutStudioPlugin from "../main";
 import type { CalloutDefinition, CalloutIcon } from "../types";
 import { CalloutEditor } from "../settings/CalloutEditor";

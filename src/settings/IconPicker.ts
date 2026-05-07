@@ -1,3 +1,12 @@
+/**
+ * settings/IconPicker.ts — Icon selection modal.
+ *
+ * Shows a paginated grid of Obsidian's built-in Lucide icons and a separately
+ * paginated grid of Material Symbols icons. Supports text search, category
+ * filtering, and style/weight selection for Material icons. Returns a
+ * CalloutIcon value to the caller (CalloutEditor) via a Promise.
+ * Uses iconLoader utilities for data and triggers SVG pre-caching on selection.
+ */
 import { Modal, setIcon } from "obsidian";
 import type { App } from "obsidian";
 import type {

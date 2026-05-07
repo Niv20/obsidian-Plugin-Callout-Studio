@@ -1,3 +1,11 @@
+/**
+ * utils/colorUtils.ts — Color manipulation helpers.
+ *
+ * Stateless utility functions for converting between hex, RGB, and HSL color
+ * formats, blending two hex colors together, and producing CSS rgb() strings.
+ * Used by CSSInjector (for dynamic CSS generation), colorPalettes (for
+ * auto-computed backgrounds), and CalloutEditor (for color field handling).
+ */
 export interface RGB {
 	r: number;
 	g: number;

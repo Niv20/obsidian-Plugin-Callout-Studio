@@ -1,3 +1,11 @@
+/**
+ * settings/sections/CalloutRowRenderer.ts — Renders a single callout row in settings.
+ *
+ * Builds the DOM for one row in the callout lists: icon, display name, ID
+ * badges, color circles, and action buttons. Calls back into CalloutRowActions
+ * for the three-dot menu and into CalloutEditor for the edit flow.
+ * Used by CalloutListsSection for both the user list and the built-in list.
+ */
 import { setIcon } from "obsidian";
 import { getLocale, t } from "../../i18n";
 import { getSortedCalloutIds } from "../../utils/sorting";

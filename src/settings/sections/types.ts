@@ -1,3 +1,11 @@
+/**
+ * settings/sections/types.ts — Shared types for all settings section modules.
+ *
+ * Defines SettingsTabPlugin (what the settings tab needs from the plugin) and
+ * SettingsSectionContext (the object passed to every render* function).
+ * Using narrow structural interfaces here instead of the concrete plugin class
+ * avoids tight coupling and potential import cycles.
+ */
 import type { App, Plugin, PluginManifest } from "obsidian";
 import type { CalloutRegistry } from "../../manager/CalloutRegistry";
 import type { CSSInjector } from "../../manager/CSSInjector";

@@ -1,3 +1,10 @@
+/**
+ * settings/sections/HotkeySection.ts — Keyboard shortcut settings section.
+ *
+ * Renders a button that deep-links into Obsidian's built-in Hotkeys pane,
+ * pre-filtered to the Callout Studio plugin commands. Uses a retry loop to
+ * wait for the hotkeys tab to mount before triggering the search filter.
+ */
 import { Notice, Setting } from "obsidian";
 import { t } from "../../i18n";
 import type { App } from "obsidian";

@@ -1,3 +1,13 @@
+/**
+ * settings/SettingsTab.ts — Main plugin settings tab (Obsidian Settings pane).
+ *
+ * Composes all settings sections into a single scrollable tab:
+ * callout lists (user + built-in), global style, icon sources, editor
+ * features, fallback, hotkeys, data management (import/export/reset), and
+ * the footer. Delegates each section to its own module under sections/.
+ * Holds a CalloutListsController for efficient list refresh without full
+ * re-renders.
+ */
 import { MarkdownView, PluginSettingTab } from "obsidian";
 import type { App } from "obsidian";
 import { CalloutEditor } from "./CalloutEditor";

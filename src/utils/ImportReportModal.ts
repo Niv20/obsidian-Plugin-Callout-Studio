@@ -1,3 +1,11 @@
+/**
+ * utils/ImportReportModal.ts — Validation issue report shown before import.
+ *
+ * Displayed after importValidator finds errors or warnings in the user's
+ * JSON file. Groups issues per entry, shows a count of valid vs. total, and
+ * lets the user either cancel the import or proceed with only the valid rows.
+ * A fatal error (unparseable JSON or wrong root type) disables the import button.
+ */
 import { Modal } from "obsidian";
 import type { App } from "obsidian";
 import { t } from "../i18n";

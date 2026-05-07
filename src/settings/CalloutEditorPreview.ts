@@ -1,3 +1,11 @@
+/**
+ * settings/CalloutEditorPreview.ts — Live callout preview inside the editor modal.
+ *
+ * Pure rendering function that takes the current form state (colors, name,
+ * fold flags, icon offsets) and rebuilds the preview DOM element from scratch.
+ * Supports toggling between light and dark mode preview. Called by
+ * CalloutEditor whenever any field changes.
+ */
 import { setIcon } from "obsidian";
 import { t } from "../i18n";
 

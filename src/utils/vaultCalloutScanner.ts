@@ -1,3 +1,12 @@
+/**
+ * utils/vaultCalloutScanner.ts — Scans vault markdown files for callout usage.
+ *
+ * Provides async functions for reading every markdown file in the vault:
+ * discovering unknown callout IDs, counting per-type usage statistics,
+ * bulk-replacing callout IDs or titles, converting callouts to plain text,
+ * and normalizing fold markers. Used by CalloutDiscovery (auto-discovery),
+ * DataManagementSection (re-scan), and CalloutRowActions (pre-delete counts).
+ */
 import type { App, TFile } from "obsidian";
 
 function escapeRegex(str: string): string {

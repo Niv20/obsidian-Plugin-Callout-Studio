@@ -1,3 +1,11 @@
+/**
+ * settings/editor/CalloutEditorIconRenderer.ts — Icon preview inside CalloutEditor.
+ *
+ * Renders the currently selected icon (Lucide, Material SVG, or emoji) into
+ * a container element. Handles loading states and failure fallbacks for
+ * Material icons whose SVG has not yet been downloaded.
+ * Called by CalloutEditor whenever the selected icon changes.
+ */
 import { setIcon } from "obsidian";
 import type { CalloutIcon } from "../../types";
 import type { CalloutEditorPlugin } from "./types";

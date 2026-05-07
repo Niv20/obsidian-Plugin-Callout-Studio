@@ -1,3 +1,11 @@
+/**
+ * settings/sections/IconSourceSection.ts — Icon source preference settings.
+ *
+ * Lets the user choose default Material Symbols style (outlined / filled /
+ * rounded / sharp) and weight (100–700). These defaults are applied when the
+ * user picks a Material icon without explicitly choosing a variant. Settings
+ * are persisted via PluginSettings.iconSources.
+ */
 import { Modal, Setting } from "obsidian";
 import { t } from "../../i18n";
 import type { SettingsSectionContext } from "./types";

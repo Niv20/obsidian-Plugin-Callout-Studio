@@ -1,3 +1,10 @@
+/**
+ * i18n/en.ts — English translation strings.
+ *
+ * The base/fallback locale for the plugin. All translation keys are defined
+ * here first; other locale files (e.g. he.ts) mirror this key set with their
+ * own translated values. Imported by i18n/index.ts.
+ */
 export const en: Record<string, string> = {
 	// Commands
 	"cmd.openSettings": "Open settings",

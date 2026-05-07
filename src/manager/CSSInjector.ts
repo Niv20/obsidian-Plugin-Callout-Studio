@@ -1,3 +1,12 @@
+/**
+ * manager/CSSInjector.ts — Generates and injects dynamic CSS for all callouts.
+ *
+ * Reads every CalloutDefinition from the registry and writes a single
+ * `<style>` element into the document head with per-callout CSS custom
+ * properties (colors, icon offsets, sizes). Debounces rapid successive calls
+ * so the DOM is only updated once after a batch of registry changes.
+ * Also manages the Material Symbols font link element when needed.
+ */
 import { setIcon } from "obsidian";
 import type { App } from "obsidian";
 import type { CalloutDefinition } from "../types";

@@ -1,3 +1,12 @@
+/**
+ * constants.ts — Global constants and default callout definitions.
+ *
+ * Exports compile-time constants (MAX_TAG_LENGTH, HEAVY_VAULT_FILE_THRESHOLD,
+ * DEFAULT_SETTINGS) and the DEFAULT_CALLOUTS array that seeds the registry with
+ * Obsidian's built-in callout types on first load.
+ * Imported by CalloutRegistry (for defaults), main.ts (for threshold checks),
+ * and several utility/settings modules.
+ */
 import type {
 	CalloutDefinition,
 	GlobalStyleSettings,

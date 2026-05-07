@@ -1,3 +1,12 @@
+/**
+ * data/materialIconsMetadata.ts — Bundled Material Symbols icon metadata.
+ *
+ * A large static array of MaterialIconMetadataEntry objects, each describing
+ * one Material Symbols icon: its name, categories, and searchable tags.
+ * Bundled at build time so icon browsing works offline without any network
+ * requests. The actual SVG files are still fetched on demand.
+ * Consumed exclusively by iconLoader.ts.
+ */
 import type { MaterialIconMetadataEntry } from "../types";
 
 export const BUNDLED_MATERIAL_ICONS_VERSION = 3;

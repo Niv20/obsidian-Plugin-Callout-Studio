@@ -1,3 +1,11 @@
+/**
+ * utils/VaultCalloutStatisticsModal.ts — Vault callout usage statistics modal.
+ *
+ * Displays a summary of how many markdown files and callout blocks were found,
+ * broken down by callout type. Each row shows the callout's icon, name, and
+ * counts. Aliases are resolved back to their primary definition via the
+ * registry so duplicates are grouped correctly. Opened from DataManagementSection.
+ */
 import { Modal, setIcon } from "obsidian";
 import type { App } from "obsidian";
 import type { CalloutDefinition } from "../types";

@@ -1,3 +1,12 @@
+/**
+ * utils/colorPalettes.ts — Preset color palettes for the callout editor.
+ *
+ * Defines color palette objects (id, name, light/dark accent and background
+ * colors) grouped into Obsidian-derived palettes and extra preset palettes.
+ * Background colors are auto-computed from the accent color using blendHex
+ * from colorUtils when not explicitly supplied.
+ * Used by CalloutEditor to populate the color preset dropdown.
+ */
 import { blendHex } from "./colorUtils";
 
 export interface ColorPalette {

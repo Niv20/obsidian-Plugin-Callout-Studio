@@ -1,3 +1,10 @@
+/**
+ * i18n/he.ts — Hebrew translation strings.
+ *
+ * Right-to-left locale file. Mirrors all keys from en.ts with Hebrew
+ * translations. Missing keys automatically fall back to the English value
+ * at runtime (handled by i18n/index.ts). Imported by i18n/index.ts.
+ */
 export const he: Record<string, string> = {
 	// Commands
 	"cmd.openSettings": "פתיחת הגדרות",

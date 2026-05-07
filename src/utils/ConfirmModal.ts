@@ -1,3 +1,11 @@
+/**
+ * utils/ConfirmModal.ts — Generic yes/no confirmation dialog.
+ *
+ * A simple reusable modal that presents a message and two buttons (confirm /
+ * cancel) and resolves a Promise<boolean>. Used throughout the settings
+ * sections whenever a destructive action needs user confirmation before
+ * proceeding (e.g. bulk vault edits, data reset).
+ */
 import { Modal } from "obsidian";
 import type { App } from "obsidian";
 import { t } from "../i18n";

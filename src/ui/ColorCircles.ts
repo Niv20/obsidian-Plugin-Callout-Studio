@@ -1,6 +1,11 @@
 /**
- * Shared renderer for the two-circle "light + dark" color visualization
- * used by the settings row and the color preset dropdown.
+ * ui/ColorCircles.ts — Two-circle light/dark color swatch widget.
+ *
+ * Shared renderer used by CalloutRowRenderer (settings list rows) and the
+ * color preset dropdown inside CalloutEditor. Renders two overlapping
+ * half-circles: the left half shows the light-mode accent color and the
+ * right half shows the dark-mode accent color, giving a compact at-a-glance
+ * preview of both values.
  *
  * Renders two overlapping circles where the left half-circle shows the
  * light-mode color and the right half-circle shows the dark-mode color.

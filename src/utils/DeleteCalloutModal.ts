@@ -1,3 +1,12 @@
+/**
+ * utils/DeleteCalloutModal.ts — Confirmation modal for deleting a callout.
+ *
+ * Shown when the user clicks the trash icon on a user-created callout row.
+ * If the callout is used in vault files, it warns about the conversion to
+ * plain text and offers a "Replace instead..." option. If unused, it shows a
+ * simpler delete-only prompt. Returns a DeleteCalloutAction ('cancel' |
+ * 'delete' | 'replace') to the caller in CalloutRowActions.
+ */
 import { Modal } from "obsidian";
 import type { App } from "obsidian";
 import type { CalloutDefinition } from "../types";

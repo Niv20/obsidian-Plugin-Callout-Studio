@@ -1,3 +1,11 @@
+/**
+ * settings/sections/GlobalStyleSection.ts — Global visual style sliders.
+ *
+ * Renders sliders that control vault-wide callout appearance: border radius,
+ * title font size, content font size, and other CSS-level tweaks stored in
+ * PluginSettings.globalStyle. Each slider uses AnimatedNumberLabel from ui/
+ * to show the current value with a smooth animated transition.
+ */
 import { Setting, type SliderComponent } from "obsidian";
 import { t } from "../../i18n";
 import {

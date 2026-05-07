@@ -1,3 +1,12 @@
+/**
+ * manager/CalloutRegistry.ts — Central in-memory store for all callout definitions.
+ *
+ * Holds the live Map of CalloutDefinitions (built-in defaults + user overrides +
+ * auto-discovered fallbacks), exposes CRUD operations, handles data migration
+ * from older saved formats, and fires onChange callbacks when the store mutates.
+ * This is the single source of truth read by CSSInjector, AutoComplete,
+ * SettingsTab, and the public API.
+ */
 import type {
 	CalloutDefinition,
 	ContextMenuSettings,

@@ -1,3 +1,12 @@
+/**
+ * manager/CalloutDiscovery.ts — Vault scanning and auto-discovery of callouts.
+ *
+ * Watches for file-open and file-modify events and incrementally scans changed
+ * files for unrecognized callout IDs, adding them as fallback rows in the
+ * registry. Also runs debounced prune passes to remove auto-created rows that
+ * are no longer used. Owned by main.ts; destroyed in onunload.
+ * Depends on CalloutRegistry, vaultCalloutScanner utilities, and PluginSettings.
+ */
 import { TFile } from "obsidian";
 import type { App, EventRef } from "obsidian";
 import type { CalloutRegistry } from "./CalloutRegistry";
