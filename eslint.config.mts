@@ -5,6 +5,27 @@ import { globalIgnores } from "eslint/config";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
 
+const obsidianRecommended = (() => {
+	const recommended = obsidianmd.configs?.recommended;
+	if (!recommended) {
+		return [];
+	}
+
+	if (Array.isArray(recommended)) {
+		return recommended;
+	}
+
+	if (
+		typeof (recommended as { [Symbol.iterator]?: unknown })[
+			Symbol.iterator
+		] === "function"
+	) {
+		return Array.from(recommended as Iterable<unknown>);
+	}
+
+	return [];
+})();
+
 export default tseslint.config(
 	{
 		files: ["src/**/*.ts"],
@@ -22,9 +43,7 @@ export default tseslint.config(
 		},
 	},
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	...(obsidianmd.configs?.recommended
-		? ([obsidianmd.configs.recommended].flat() as any[])
-		: []),
+	...(obsidianRecommended as any[]),
 	globalIgnores([
 		"node_modules",
 		"dist",
