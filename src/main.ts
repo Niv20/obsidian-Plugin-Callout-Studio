@@ -96,11 +96,14 @@ export default class CalloutStudioPlugin extends Plugin {
 		// Download missing Material SVGs in background
 		void this.materialSvg.ensureAll();
 
-		// First-run vault scan for unrecognized callout IDs
+		// On first run, mark the flag silently — but do NOT scan every
+		// markdown file in the vault on startup. On large vaults / mobile
+		// that would be wasteful and slow. Users can always trigger
+		// "Scan now" from settings, and the incremental watcher below
+		// picks up new IDs as files are edited.
 		if (!this.settings.firstRunCompleted) {
-			this.app.workspace.onLayoutReady(() => {
-				void this.discovery.runVaultScan(true);
-			});
+			this.registry.settings.firstRunCompleted = true;
+			void this.saveSettings();
 		} else {
 			// On subsequent loads, opportunistically prune any stale
 			// auto-created rows the user accumulated while typing in a
