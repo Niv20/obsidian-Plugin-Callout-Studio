@@ -8,7 +8,7 @@ export class ConfirmModal extends Modal {
 
 	constructor(
 		app: App,
-		private message: string,
+		private message: string | DocumentFragment,
 		private confirmLabel?: string,
 		private cancelLabel?: string,
 		private confirmClass: string = "mod-warning",
@@ -18,7 +18,14 @@ export class ConfirmModal extends Modal {
 
 	onOpen(): void {
 		const { contentEl } = this;
-		contentEl.createEl("p", { text: this.message });
+		if (typeof this.message === "string") {
+			const paragraphs = this.message.split(/\n+/);
+			for (const p of paragraphs) {
+				contentEl.createEl("p", { text: p });
+			}
+		} else {
+			contentEl.appendChild(this.message);
+		}
 
 		const btnContainer = contentEl.createDiv({
 			cls: "modal-button-container",

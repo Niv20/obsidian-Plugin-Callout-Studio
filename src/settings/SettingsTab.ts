@@ -1702,24 +1702,27 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 							...(c.aliases ?? []),
 						]);
 
-						let message = t("settings.resetAllConfirm");
+						const messageFrag = document.createDocumentFragment();
 						if (userIds.length > 0) {
 							const { fileCount, totalCount } =
 								await countCalloutUsages(this.app, userIds);
 							if (fileCount > 0) {
-								message =
-									t("vault.resetAllInUse", {
+								messageFrag.createEl("p", {
+									text: t("vault.resetAllInUse", {
 										count: String(totalCount),
 										files: String(fileCount),
-									}) +
-									"\n\n" +
-									message;
+									}),
+									cls: "cs-reset-warning",
+								});
 							}
 						}
+						messageFrag.createEl("p", {
+							text: t("settings.resetAllConfirm"),
+						});
 
 						const confirmed = await new ConfirmModal(
 							this.app,
-							message,
+							messageFrag,
 						).confirm();
 						if (!confirmed) return;
 						this.plugin.registry.resetAll();
@@ -1753,5 +1756,7 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 			text: "Email",
 			href: "mailto:anivbniv@gmail.com",
 		});
+		links.createEl("span", { text: "  •  " });
+		links.createEl("span", { text: `v${this.plugin.manifest.version}` });
 	}
 }

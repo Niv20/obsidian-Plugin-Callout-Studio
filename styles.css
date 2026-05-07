@@ -1982,6 +1982,13 @@ button.callout-studio-icon-picker-loading {
 	color: var(--text-muted);
 	font-size: 0.85em;
 }
+.callout-studio-footer-links {
+	margin-bottom: 0;
+}
+.cs-reset-warning {
+	color: var(--text-error);
+	font-weight: bold;
+}
 .callout-studio-footer a {
 	color: var(--text-accent);
 	text-decoration: none;
