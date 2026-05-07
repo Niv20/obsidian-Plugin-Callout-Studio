@@ -7,6 +7,7 @@ import path from "node:path";
 
 export default tseslint.config(
 	{
+		files: ["src/**/*.ts"],
 		languageOptions: {
 			globals: {
 				...globals.browser,
@@ -29,6 +30,7 @@ export default tseslint.config(
 		"dist",
 		"esbuild.config.mjs",
 		"eslint.config.js",
+		"eslint.config.mts",
 		"version-bump.mjs",
 		"versions.json",
 		"main.js",
