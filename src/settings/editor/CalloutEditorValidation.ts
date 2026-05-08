@@ -55,12 +55,12 @@ export function hasStateChanges(
 }
 
 export function shouldSaveNewAutocompleteCalloutAsFallback(
-	input: ValidationBaseInput & { hasStateChanges: boolean },
+	input: ValidationBaseInput & { hasStyleChanges: boolean },
 ): boolean {
 	return (
 		input.createFromAutocomplete &&
 		input.existingId === null &&
-		!input.hasStateChanges
+		!input.hasStyleChanges
 	);
 }
 

@@ -76,6 +76,7 @@ export class CalloutEditor extends Modal {
 	private saveBtn: HTMLButtonElement | null = null;
 	private isSaveActionEnabled = false;
 	private initialSnapshot: string = "";
+	private initialStyleSnapshot: string = "";
 	private removePopupOutsideClickListener: (() => void) | null = null;
 	/** True when the detailed color grid should be shown. */
 	private customPresetSelected: boolean = false;
@@ -166,6 +167,7 @@ export class CalloutEditor extends Modal {
 
 		// Snapshot initial state for dirty-checking
 		this.initialSnapshot = this.stateSnapshot();
+		this.initialStyleSnapshot = this.styleSnapshot();
 
 		const editorTitle = this.existingId
 			? t("editor.editCallout")
@@ -1029,8 +1031,32 @@ export class CalloutEditor extends Modal {
 		});
 	}
 
+	private styleSnapshot(): string {
+		return buildStateSnapshot({
+			displayName: "",
+			calloutId: "",
+			icon: this.icon,
+			colorLight: this.colorLight,
+			colorDark: this.colorDark,
+			bgColorLight: this.bgColorLight,
+			bgColorDark: this.bgColorDark,
+			textColorLight: this.textColorLight,
+			textColorDark: this.textColorDark,
+			foldable: this.foldable,
+			defaultFolded: this.defaultFolded,
+			iconOffsetX: this.iconOffsetX,
+			iconOffsetY: this.iconOffsetY,
+			iconSize: this.iconSize,
+			aliases: [],
+		});
+	}
+
 	private hasStateChanges(): boolean {
 		return hasStateChanges(this.initialSnapshot, this.stateSnapshot());
+	}
+
+	private hasStyleChanges(): boolean {
+		return hasStateChanges(this.initialStyleSnapshot, this.styleSnapshot());
 	}
 
 	private getFallbackBase(): CalloutDefinition | undefined {
@@ -1045,7 +1071,7 @@ export class CalloutEditor extends Modal {
 		return shouldSaveNewAutocompleteCalloutAsFallback({
 			createFromAutocomplete: this.createFromAutocomplete,
 			existingId: this.existingId,
-			hasStateChanges: this.hasStateChanges(),
+			hasStyleChanges: this.hasStyleChanges(),
 			getById: (id) => this.plugin.registry.get(id),
 			findByAlias: (id) => this.plugin.registry.findByAlias(id),
 		});
@@ -1228,7 +1254,7 @@ export class CalloutEditor extends Modal {
 				iconSize: this.iconSize,
 				aliases: this.aliases,
 			},
-			hasChanges: this.hasStateChanges(),
+			hasStyleChanges: this.hasStyleChanges(),
 			saveAsFallback: this.shouldSaveNewAutocompleteCalloutAsFallback(),
 			overwriteAutoFallback: this.isOverwritingAutoFallbackRow(),
 			canUseCalloutId: (id, role) => this.canUseCalloutId(id, role),

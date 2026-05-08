@@ -42,7 +42,7 @@ export type CalloutEditorSaveInput = {
 	existingId: string | null;
 	isBuiltIn: boolean;
 	state: CalloutEditorSaveState;
-	hasChanges: boolean;
+	hasStyleChanges: boolean;
 	saveAsFallback: boolean;
 	overwriteAutoFallback: boolean;
 	canUseCalloutId: (id: string, role: "primary" | "alias") => boolean;
@@ -59,7 +59,7 @@ export async function performCalloutEditorSave(
 		existingId,
 		isBuiltIn,
 		state,
-		hasChanges,
+		hasStyleChanges,
 		saveAsFallback,
 		overwriteAutoFallback,
 		canUseCalloutId,
@@ -104,15 +104,34 @@ export async function performCalloutEditorSave(
 	}
 
 	const newDisplayName = state.displayName || state.calloutId;
+	const existingDef = existingId
+		? plugin.registry.get(existingId)
+		: undefined;
+
+	let nextSource: CalloutDefinition["source"] = "user";
+	if (isBuiltIn) {
+		nextSource = "builtin";
+	} else if (existingDef) {
+		if (
+			existingDef.source === "fallback" &&
+			existingDef.customized !== true &&
+			!hasStyleChanges
+		) {
+			nextSource = "fallback";
+		} else {
+			nextSource = "user";
+		}
+	} else {
+		nextSource = saveAsFallback ? "fallback" : "user";
+	}
 
 	let customized: boolean | undefined;
 	if (!isBuiltIn) {
 		if (existingId === null) {
 			customized = !saveAsFallback;
 		} else {
-			const existingDef = plugin.registry.get(existingId);
 			const wasCustomized = existingDef?.customized === true;
-			customized = wasCustomized || hasChanges;
+			customized = wasCustomized || hasStyleChanges;
 		}
 	}
 
@@ -131,7 +150,7 @@ export async function performCalloutEditorSave(
 		foldable: fallbackBase?.foldable ?? state.foldable,
 		defaultFolded: fallbackBase?.defaultFolded ?? state.defaultFolded,
 		builtIn: isBuiltIn,
-		source: isBuiltIn ? "builtin" : saveAsFallback ? "fallback" : "user",
+		source: nextSource,
 		iconOffsetX: fallbackBase?.iconOffsetX ?? state.iconOffsetX,
 		iconOffsetY: fallbackBase?.iconOffsetY ?? state.iconOffsetY,
 		iconSize: fallbackBase?.iconSize ?? state.iconSize,
