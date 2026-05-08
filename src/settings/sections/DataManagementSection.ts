@@ -173,7 +173,7 @@ function importFromJSON(ctx: SettingsSectionContext): void {
 	const input = document.createElement("input");
 	input.type = "file";
 	input.accept = ".json";
-	// eslint-disable-next-line @typescript-eslint/no-misused-promises
+	// eslint-disable-next-line @typescript-eslint/no-misused-promises -- DOM change handler is fire-and-forget; async errors are handled inside the callback.
 	input.addEventListener("change", async () => {
 		const file = input.files?.[0];
 		if (!file) return;
