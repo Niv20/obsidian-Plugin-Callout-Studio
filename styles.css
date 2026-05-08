@@ -1404,6 +1404,48 @@ button.callout-studio-icon-picker-loading {
 	}
 }
 
+/*
+ * Progressive hiding of trailing callout IDs as the row narrows further.
+ * Each breakpoint hides one more ID from the end of the list, so the row
+ * degrades gracefully one item at a time instead of all at once.
+ */
+@container (max-width: 420px) {
+	.callout-studio-row-syntax-line
+		.callout-studio-row-syntax:nth-last-child(-n + 1) {
+		display: none;
+	}
+}
+@container (max-width: 380px) {
+	.callout-studio-row-syntax-line
+		.callout-studio-row-syntax:nth-last-child(-n + 2) {
+		display: none;
+	}
+}
+@container (max-width: 340px) {
+	.callout-studio-row-syntax-line
+		.callout-studio-row-syntax:nth-last-child(-n + 3) {
+		display: none;
+	}
+}
+@container (max-width: 300px) {
+	.callout-studio-row-syntax-line
+		.callout-studio-row-syntax:nth-last-child(-n + 4) {
+		display: none;
+	}
+}
+@container (max-width: 270px) {
+	.callout-studio-row-syntax-line {
+		display: none;
+	}
+}
+
+/* When the row gets extremely narrow, drop the display name as a last resort. */
+@container (max-width: 220px) {
+	.callout-studio-row-name {
+		display: none;
+	}
+}
+
 /* ─── Row IDs (Settings List) ─────────────────────────────────── */
 
 .callout-studio-row-syntax-line {
