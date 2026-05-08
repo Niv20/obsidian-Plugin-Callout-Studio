@@ -43,6 +43,7 @@ When a note uses a callout ID that doesn't exist in the registry, Callout Studio
 
 Callout Studio keeps the registry in sync with what's actually used in your vault:
 
+- **Large vaults:** If your vault has 500 or more markdown files, the plugin will ask for your permission before performing a full initial scan. If you decline, files will be scanned individually as you open them.
 - New callout IDs typed in open notes are picked up automatically.
 - When you open the settings tab, in-memory editor buffers are scanned for unsaved IDs.
 - A **Scan now** button performs a one-shot vault scan that adds any unrecognized IDs as fallback rows so you can see them in the list and customize them.
