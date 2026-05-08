@@ -15,6 +15,8 @@ import type {
 } from "../types";
 import { MATERIAL_ICON_METADATA } from "../data/materialIconsMetadata";
 
+const materialFontLoadCache = new Map<string, Promise<void>>();
+
 // ── Lucide ──────────────────────────────────────────────────────────────
 
 /**
@@ -92,6 +94,60 @@ export function materialFontFamily(style: MaterialIconStyle): string {
 		case "filled":
 			return "Material Symbols Outlined"; // filled uses same font, different fill setting
 	}
+}
+
+/**
+ * Loads the Material Symbols variable font for the requested style using
+ * FontFace (without injecting <link> elements).
+ */
+export function ensureMaterialFontLoaded(
+	style: MaterialIconStyle,
+): Promise<void> {
+	const family = materialFontFamily(style);
+	const cached = materialFontLoadCache.get(family);
+	if (cached) return cached;
+
+	const loadPromise = (async () => {
+		const encodedFamily = family.replace(/ /g, "+");
+		const cssUrl =
+			`https://fonts.googleapis.com/css2?family=${encodedFamily}` +
+			`:opsz,wght,FILL,GRAD@24,100..700,0..1,0`;
+
+		const cssResponse = await requestUrl({ url: cssUrl });
+		const css = cssResponse.text;
+
+		const urlMatches = Array.from(
+			css.matchAll(/url\((['"]?)(https:\/\/[^'")]+)\1\)/g),
+		);
+		const woff2Url =
+			urlMatches.find((m) => m[2]?.includes(".woff2"))?.[2] ??
+			urlMatches[0]?.[2];
+		if (!woff2Url) {
+			throw new Error(
+				`Could not resolve font URL for Material family "${family}"`,
+			);
+		}
+
+		const fontFace = new FontFace(
+			family,
+			`url(${woff2Url}) format("woff2")`,
+			{
+				style: "normal",
+			},
+		);
+		await fontFace.load();
+		const fontSet = document.fonts as FontFaceSet & {
+			add(font: FontFace): FontFaceSet;
+		};
+		fontSet.add(fontFace);
+		await document.fonts.ready;
+	})();
+
+	materialFontLoadCache.set(family, loadPromise);
+	return loadPromise.catch((error) => {
+		materialFontLoadCache.delete(family);
+		throw error;
+	});
 }
 
 /**

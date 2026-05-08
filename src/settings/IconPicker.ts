@@ -22,6 +22,7 @@ import {
 	getMaterialCategories,
 	makeIcon,
 	materialFontFamily,
+	ensureMaterialFontLoaded,
 } from "../utils/iconLoader";
 import { t } from "../i18n";
 
@@ -65,8 +66,6 @@ export class IconPicker extends Modal {
 	private previewEl!: HTMLElement;
 	private confirmBtn!: HTMLButtonElement;
 
-	// Track font links added by this picker so we can clean up
-	private addedFontLinks: HTMLLinkElement[] = [];
 	// Track active loading timers so we can clean them up
 	private loadingTimers: ReturnType<typeof setTimeout>[] = [];
 
@@ -135,11 +134,6 @@ export class IconPicker extends Modal {
 			this.resolve(null);
 			this.resolve = null;
 		}
-		// Clean up font links we added
-		for (const link of this.addedFontLinks) {
-			link.remove();
-		}
-		this.addedFontLinks = [];
 		// Clean up loading timers
 		for (const timer of this.loadingTimers) {
 			clearTimeout(timer);
@@ -349,26 +343,8 @@ export class IconPicker extends Modal {
 	 * Tracks added links so they can be removed on close.
 	 */
 	private ensureMaterialFont(style: MaterialIconStyle): Promise<void> {
-		const family = materialFontFamily(style);
-		const encodedFamily = family.replace(/ /g, "+");
-		// Check if a link for this family already exists in the document
-		const selector = `link[href*="family=${encodedFamily}"]`;
-		if (document.querySelector(selector)) {
-			// Link exists – still wait for the font to be usable
-			return document.fonts.ready.then(() => {});
-		}
-
-		return new Promise<void>((resolve) => {
-			// eslint-disable-next-line obsidianmd/no-forbidden-elements -- dynamic font loading requires a link element
-			const link = document.createElement("link");
-			link.rel = "stylesheet";
-			link.href = `https://fonts.googleapis.com/css2?family=${encodedFamily}:opsz,wght,FILL,GRAD@24,100..700,0..1,0`;
-			link.onload = () => {
-				void document.fonts.ready.then(() => resolve());
-			};
-			link.onerror = () => resolve(); // don't block on error
-			document.head.appendChild(link);
-			this.addedFontLinks.push(link);
+		return ensureMaterialFontLoaded(style).catch(() => {
+			// Keep picker responsive even if the remote font fails to load.
 		});
 	}
 

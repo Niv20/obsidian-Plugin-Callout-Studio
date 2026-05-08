@@ -11,15 +11,18 @@ import { setIcon } from "obsidian";
 import type { App } from "obsidian";
 import type { CalloutDefinition } from "../types";
 import { hexToRgbString } from "../utils/colorUtils";
-import { svgToDataUri } from "../utils/iconLoader";
+import { ensureMaterialFontLoaded, svgToDataUri } from "../utils/iconLoader";
 import type { CalloutRegistry } from "./CalloutRegistry";
 
-const STYLE_ELEMENT_ID = "callout-studio-styles";
-const MATERIAL_FONT_LINK_ID = "callout-studio-material-font";
 const DEBOUNCE_MS = 300;
 
+const STYLE_SHEET_REGISTRY_KEY = "__calloutStudioStyleSheet";
+type RegistryWindow = Window & {
+	[STYLE_SHEET_REGISTRY_KEY]?: CSSStyleSheet;
+};
+
 export class CSSInjector {
-	private styleEl: HTMLStyleElement | null = null;
+	private styleSheet: CSSStyleSheet | null = null;
 	private debounceTimer: number | null = null;
 	private injecting = false;
 	private registry: CalloutRegistry;
@@ -31,30 +34,32 @@ export class CSSInjector {
 	}
 
 	initialize(): void {
-		this.ensureStyleElement();
+		this.ensureStyleSheet();
 		this.inject();
 	}
 
-	private ensureStyleElement(): void {
-		if (this.styleEl) return;
-		const existing = document.getElementById(
-			STYLE_ELEMENT_ID,
-		) as HTMLStyleElement | null;
+	private ensureStyleSheet(): void {
+		if (this.styleSheet) return;
+		if (!("adoptedStyleSheets" in document)) return;
+
+		const registryWindow = window as RegistryWindow;
+		const existing = registryWindow[STYLE_SHEET_REGISTRY_KEY];
 		if (existing) {
-			this.styleEl = existing;
+			this.styleSheet = existing;
 			return;
 		}
-		// eslint-disable-next-line obsidianmd/no-forbidden-elements -- dynamic CSS injection requires a style element
-		this.styleEl = document.createElement("style");
-		this.styleEl.id = STYLE_ELEMENT_ID;
-		document.head.appendChild(this.styleEl);
+
+		const sheet = new CSSStyleSheet();
+		document.adoptedStyleSheets = [...document.adoptedStyleSheets, sheet];
+		registryWindow[STYLE_SHEET_REGISTRY_KEY] = sheet;
+		this.styleSheet = sheet;
 	}
 
 	inject(): void {
 		if (this.injecting) return;
 		this.injecting = true;
-		this.ensureStyleElement();
-		if (!this.styleEl) {
+		this.ensureStyleSheet();
+		if (!this.styleSheet) {
 			this.injecting = false;
 			return;
 		}
@@ -79,7 +84,7 @@ export class CSSInjector {
 		// Clean up any leftover material font links (no longer needed for rendering)
 		this.updateMaterialFontLinks(materialFonts);
 
-		this.styleEl.textContent = rules.join("\n\n");
+		this.styleSheet.replaceSync(rules.join("\n\n"));
 
 		// Lucide icon SVGs are static DOM elements injected once by Obsidian during
 		// rendering. Changing --callout-icon via CSS alone does not update them.
@@ -289,46 +294,15 @@ export class CSSInjector {
 	}
 
 	private updateMaterialFontLinks(needed: Set<string>): void {
-		// Map styles to Google Fonts family names
-		const FONT_FAMILIES: Record<string, string> = {
-			outlined: "Material+Symbols+Outlined",
-			rounded: "Material+Symbols+Rounded",
-			sharp: "Material+Symbols+Sharp",
-			// "filled" uses the Outlined font with FILL variation setting
-			filled: "Material+Symbols+Outlined",
-		};
-
-		// Determine which font families are actually needed
-		const neededFamilies = new Set<string>();
 		for (const style of needed) {
-			const family = FONT_FAMILIES[style];
-			if (family) neededFamilies.add(family);
-		}
-
-		// Remove font links that are no longer needed
-		const existingLinks = Array.from(
-			document.querySelectorAll<HTMLLinkElement>(
-				`link[id^="${MATERIAL_FONT_LINK_ID}"]`,
-			),
-		);
-		for (const link of existingLinks) {
-			const family = link.getAttribute("data-family");
-			if (!family || !neededFamilies.has(family)) {
-				link.remove();
-			} else {
-				neededFamilies.delete(family); // already loaded
+			if (
+				style === "outlined" ||
+				style === "rounded" ||
+				style === "sharp" ||
+				style === "filled"
+			) {
+				void ensureMaterialFontLoaded(style);
 			}
-		}
-
-		// Add missing font links
-		for (const family of neededFamilies) {
-			// eslint-disable-next-line obsidianmd/no-forbidden-elements -- dynamic font loading requires a link element
-			const link = document.createElement("link");
-			link.id = `${MATERIAL_FONT_LINK_ID}-${family}`;
-			link.setAttribute("data-family", family);
-			link.rel = "stylesheet";
-			link.href = `https://fonts.googleapis.com/css2?family=${family}:opsz,wght,FILL,GRAD@24,100..700,0..1,0`;
-			document.head.appendChild(link);
 		}
 	}
 
@@ -534,13 +508,13 @@ export class CSSInjector {
 			window.clearTimeout(this.debounceTimer);
 			this.debounceTimer = null;
 		}
-		if (this.styleEl) {
-			this.styleEl.remove();
-			this.styleEl = null;
+		if (this.styleSheet && "adoptedStyleSheets" in document) {
+			document.adoptedStyleSheets = document.adoptedStyleSheets.filter(
+				(sheet) => sheet !== this.styleSheet,
+			);
+			this.styleSheet = null;
 		}
-		// Remove Material font links
-		document
-			.querySelectorAll(`link[id^="${MATERIAL_FONT_LINK_ID}"]`)
-			.forEach((el) => el.remove());
+		const registryWindow = window as RegistryWindow;
+		delete registryWindow[STYLE_SHEET_REGISTRY_KEY];
 	}
 }
