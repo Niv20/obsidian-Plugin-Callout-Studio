@@ -42,8 +42,8 @@ const MATERIAL_ICON_STYLES: MaterialIconStyle[] = [
  * Returns bundled Material Symbols metadata used by the icon picker.
  * SVGs for selected Material icons are still downloaded separately on demand.
  */
-export async function loadMaterialIcons(): Promise<MaterialIconMeta[]> {
-	return MATERIAL_ICON_METADATA;
+export function loadMaterialIcons(): Promise<MaterialIconMeta[]> {
+	return Promise.resolve(MATERIAL_ICON_METADATA);
 }
 
 /**
