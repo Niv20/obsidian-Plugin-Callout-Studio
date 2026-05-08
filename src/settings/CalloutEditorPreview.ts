@@ -23,6 +23,7 @@ export interface EditorPreviewState {
 	iconOffsetX: number;
 	iconOffsetY: number;
 	iconSize: number;
+	iconType: "lucide" | "material" | "emoji";
 }
 
 /**
@@ -56,7 +57,14 @@ export function renderEditorPreview(
 		rgbStr = `${parseInt(rgbMatch[1], 16)}, ${parseInt(rgbMatch[2], 16)}, ${parseInt(rgbMatch[3], 16)}`;
 	}
 
-	const calloutEl = previewEl.createDiv({ cls: "callout" });
+	// Wrap the callout inside .markdown-rendered so Obsidian's callout CSS
+	// (font sizes, --icon-size, padding, title sizing) resolves identically
+	// to how it renders in an actual note. Without this wrapper, the modal's
+	// UI context produces a different layout than the live note.
+	const renderedWrapper = previewEl.createDiv({
+		cls: "markdown-rendered callout-studio-preview-rendered",
+	});
+	const calloutEl = renderedWrapper.createDiv({ cls: "callout" });
 	calloutEl.setAttribute("data-callout", "cs-preview");
 	calloutEl.style.setProperty("--callout-color", rgbStr);
 	calloutEl.style.backgroundColor = bgColor;
@@ -72,11 +80,17 @@ export function renderEditorPreview(
 	renderIconPreview(iconEl);
 	iconEl.style.color = `rgb(${rgbStr})`;
 
-	// Apply icon transform in preview
+	// Apply icon transform in preview.
+	// Material (Google) icons sit 3px lower than Lucide icons in the preview
+	// context, so shift them up by 3px to match live-note rendering.
+	const PREVIEW_MATERIAL_Y_CORRECTION_PX = -3;
+	const adjustedPreviewOffsetY =
+		state.iconOffsetY +
+		(state.iconType === "material" ? PREVIEW_MATERIAL_Y_CORRECTION_PX : 0);
 	const transforms: string[] = [];
-	if (state.iconOffsetX !== 0 || state.iconOffsetY !== 0) {
+	if (state.iconOffsetX !== 0 || adjustedPreviewOffsetY !== 0) {
 		transforms.push(
-			`translate(${state.iconOffsetX}px, ${state.iconOffsetY}px)`,
+			`translate(${state.iconOffsetX}px, ${adjustedPreviewOffsetY}px)`,
 		);
 	}
 	if (state.iconSize !== 1) {

@@ -1221,6 +1221,7 @@ export class CalloutEditor extends Modal {
 				iconOffsetX: this.iconOffsetX,
 				iconOffsetY: this.iconOffsetY,
 				iconSize: this.iconSize,
+				iconType: this.icon.type,
 			},
 			(iconEl) => this.renderIconPreview(iconEl),
 			() => {

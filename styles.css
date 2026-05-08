@@ -354,6 +354,17 @@
 	margin: 0;
 }
 
+/* Wrapper that mimics the actual note rendering context so callout sizing,
+   icon size and padding match what the user sees in a live note. */
+.callout-studio-preview-rendered {
+	padding: 0;
+	margin: 0;
+}
+
+.callout-studio-preview-rendered > .callout {
+	margin: 0;
+}
+
 .callout-studio-preview-dark {
 	background: var(--color-base-20, #1e1e1e);
 	color: var(--color-base-70, #dcddde);

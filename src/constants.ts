@@ -33,7 +33,7 @@ export const MAX_TAGS_COUNT: number = 4;
  * Tweak this value while testing to see both UX paths. Purely a UI/UX
  * threshold — does not affect what the scan itself does.
  */
-export const HEAVY_VAULT_FILE_THRESHOLD: number = 2;
+export const HEAVY_VAULT_FILE_THRESHOLD: number = 500;
 
 export const DEFAULT_CALLOUTS: CalloutDefinition[] = [
 	{
