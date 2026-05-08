@@ -77,7 +77,7 @@ export const en: Record<string, string> = {
 		"Imported {{count}} callout type(s); {{overwritten}} existing entry/entries were overwritten.",
 
 	// Settings — Toolbar
-	"settings.addNewCallout": "+ Add new callout",
+	"settings.addNewCallout": "+ add new callout",
 	"settings.refresh": "Refresh",
 	"settings.moreActions": "More actions",
 	"settings.importCSS": "Import from CSS snippet",
@@ -86,7 +86,7 @@ export const en: Record<string, string> = {
 
 	// Settings — Empty states
 	"settings.noCalloutsYet":
-		'No custom callouts yet. Click "+ Add new callout" to create one.',
+		'No custom callouts yet. Click "+ add new callout" to create one.',
 	"settings.noCalloutsNow": "No custom callouts for now.",
 	"settings.noMatch": "No callouts match your search.",
 
@@ -143,10 +143,10 @@ export const en: Record<string, string> = {
 	// Settings — Context menu
 	"settings.enableContextMenu": "Enable callout context actions",
 	"settings.enableContextMenuDesc":
-		"Add extra actions to Obsidian's right-click menu when you right-click a callout. Works in Reading view, Source mode, and Live Preview.",
-	"settings.showEditCallout": 'Show "Edit callout settings"',
-	"settings.showOpenSettings": 'Show "Open callout studio settings"',
-	"settings.showCopyMarkdown": 'Show "Copy callout Markdown"',
+		"Add extra actions to Obsidian's right-click menu when you right-click a callout. Works in reading view, source mode, and Live Preview.",
+	"settings.showEditCallout": 'Show "edit callout settings"',
+	"settings.showOpenSettings": 'Show "open callout studio settings"',
+	"settings.showCopyMarkdown": 'Show "copy callout Markdown"',
 
 	// Settings — Autocomplete
 	"settings.enableAutocomplete": "Enable [! Autocomplete",
@@ -249,7 +249,7 @@ export const en: Record<string, string> = {
 	"editor.iconColor": "Main color",
 	"editor.palettes": "Presets",
 	"editor.paletteDefault": "Default blue",
-	"editor.paletteNone": "— Select a preset —",
+	"editor.paletteNone": "— select a preset —",
 	"editor.paletteGroupObsidian": "Obsidian callouts",
 	"editor.paletteGroupPresets": "Color presets",
 	"editor.foldable": "Foldable",
@@ -280,9 +280,9 @@ export const en: Record<string, string> = {
 	"iconPicker.cancel": "Cancel",
 	"iconPicker.lucide": "Lucide",
 	"iconPicker.material": "Material",
-	"iconPicker.searchLucide": "Search Lucide icons",
+	"iconPicker.searchLucide": "search Lucide icons",
 	"iconPicker.loadMore": "Load more",
-	"iconPicker.searchMaterial": "Search Material icons",
+	"iconPicker.searchMaterial": "search Material icons",
 	"iconPicker.iconsLoading": "Icons are loading, please wait",
 	"iconPicker.loadFailed": "Failed to load Material icons: {{error}}",
 	"iconPicker.allCategories": "All categories",
@@ -313,7 +313,7 @@ export const en: Record<string, string> = {
 	"vault.deleteInUse":
 		'"{{name}}" is used {{count}} time(s) in {{files}} file(s). Choose how to proceed:',
 	"vault.replaceWith": "Replace with:",
-	"vault.selectCallout": "\u2014 Select a callout \u2014",
+	"vault.selectCallout": "\u2014 select a callout \u2014",
 	"vault.replaceAndDelete": "Replace & delete",
 	"vault.deleteWithout": "Delete without replacing",
 	"vault.confirmDelete": "Confirm",
