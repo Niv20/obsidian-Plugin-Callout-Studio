@@ -39,7 +39,7 @@ export const he: Record<string, string> = {
 	"firstRun.noThanks": "לא צריך, תודה",
 	"firstRun.autoScanComplete":
 		"Callout Studio סרק את ה-Vault והוסיף {{count}} תיבות הבלטה.",
-	"firstRun.scanning": "סורק…",
+	"firstRun.scanning": "סורק",
 
 	// Delete-callout modal (trash button on user rows)
 	"deleteModal.title": 'למחוק את תיבת ההבלטה "{{name}}"?',
@@ -51,7 +51,7 @@ export const he: Record<string, string> = {
 		"אפשר במקום זאת להחליף בתיבת הבלטה אחרת, וכך לשמור את התוכן בכספת כתיבת הבלטה מעוצבת.",
 	"deleteModal.bodyUnused":
 		'"{{name}}" אינה בשימוש באף הערה, אך מדובר בתיבת הבלטה מותאמת אישית שיצרת. מחיקה תסיר אותה מהרשימה.',
-	"deleteModal.replaceInstead": "החלפה במקום…",
+	"deleteModal.replaceInstead": "החלפה במקום",
 	"deleteModal.deleteInUse": "מחיקה (המרה לטקסט רגיל)",
 	"deleteModal.deleteUnused": "מחיקת תיבת ההבלטה",
 
@@ -99,8 +99,8 @@ export const he: Record<string, string> = {
 	"settings.replaceAria": "החלפת {{name}} בכספת בתיבת הבלטה אחרת",
 	"settings.moreRowActionsAria": "פעולות נוספות עבור {{name}}",
 	"settings.usageInfo": "{{count}} שימושים ב-{{files}} קבצים",
-	"settings.replaceAction": "החלפה בכספת…",
-	"settings.deleteAction": "מחיקה…",
+	"settings.replaceAction": "החלפה בכספת",
+	"settings.deleteAction": "מחיקה",
 	"settings.resetAction": "איפוס לברירת מחדל",
 	"settings.makeFallbackAction": "החלת עיצוב ברירת המחדל",
 	"settings.deleteConfirm": 'למחוק את תיבת ההבלטה "{{name}}"?',
@@ -193,7 +193,7 @@ export const he: Record<string, string> = {
 	"settings.vaultStatsDesc":
 		"ספירת כל בלוקי תיבות ההבלטה בקבצי Markdown וחלוקה לפי סוג.",
 	"settings.vaultStatsButton": "צפייה בסטטיסטיקה",
-	"settings.vaultStatsScanning": "סורק...",
+	"settings.vaultStatsScanning": "סורק",
 	"settings.resetAll": "איפוס",
 	"settings.resetAllDesc":
 		"מחיקת כל תיבות ההבלטה, איפוס מובנות, סגנונות גלובליות (גבולות, קנה מידות, צורה) וקבצי Material SVG שהורדו.",
@@ -234,7 +234,7 @@ export const he: Record<string, string> = {
 	"editor.calloutIds": "מזהי תיבת הבלטה (IDs)",
 	"editor.calloutIdsDesc":
 		"כל המזהים לתיבת הבלטה הזו. לחצו Enter או רווח להוספה.",
-	"editor.calloutIdsPlaceholder": "הוספת מזהה...",
+	"editor.calloutIdsPlaceholder": "הוספת מזהה",
 	"editor.icon": "אייקון",
 	"editor.light": "בהיר",
 	"editor.dark": "כהה",
@@ -265,7 +265,7 @@ export const he: Record<string, string> = {
 	"editor.createCallout": "יצירת תיבת הבלטה",
 	"editor.nameRequired": "חובה למלא שם לתצוגה לפני יצירת תיבת הבלטה.",
 	"editor.noChangesToSave": "לא בוצעו שינויים.",
-	"editor.downloadingIcon": "מוריד אייקון…",
+	"editor.downloadingIcon": "מוריד אייקון",
 	"editor.idEmpty": "נדרש לפחות מזהה אחד",
 	"editor.idExists": "תיבת הבלטה עם מזהה זה כבר קיימת",
 	"editor.idConflict": "מזהה זה מתנגש עם תיבת הבלטה קיימת",
@@ -279,10 +279,10 @@ export const he: Record<string, string> = {
 	"iconPicker.cancel": "ביטול",
 	"iconPicker.lucide": "Lucide",
 	"iconPicker.material": "Material",
-	"iconPicker.searchLucide": "חיפוש אייקוני Lucide...",
+	"iconPicker.searchLucide": "חיפוש אייקוני Lucide",
 	"iconPicker.loadMore": "טען עוד",
-	"iconPicker.searchMaterial": "חיפוש אייקוני Material...",
-	"iconPicker.iconsLoading": "האייקונים נטענים, נא להמתין...",
+	"iconPicker.searchMaterial": "חיפוש אייקוני Material",
+	"iconPicker.iconsLoading": "האייקונים נטענים, נא להמתין",
 	"iconPicker.loadFailed": "טעינת אייקוני Material נכשלה: {{error}}",
 	"iconPicker.allCategories": "כל הקטגוריות",
 	"iconPicker.noIconSelected": "לא נבחר אייקון",

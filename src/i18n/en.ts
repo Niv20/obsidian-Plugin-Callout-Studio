@@ -33,14 +33,14 @@ export const en: Record<string, string> = {
 	"firstRun.body":
 		"Callout Studio can scan your vault to discover callouts you already use, so they appear in your settings list and adopt your fallback style.",
 	"firstRun.heavyVaultNote":
-		"Your vault has {{count}} markdown files — the scan may take a few seconds.",
+		"Your vault has {{count}} Markdown files — the scan may take a few seconds.",
 	"firstRun.laterHint":
 		"You can always run this later from Settings → Vault insights & maintenance → Re-scan vault.",
 	"firstRun.scanNow": "Scan now",
 	"firstRun.noThanks": "No thanks",
 	"firstRun.autoScanComplete":
 		"Callout Studio scanned your vault and added {{count}} callout(s).",
-	"firstRun.scanning": "Scanning…",
+	"firstRun.scanning": "Scanning",
 
 	// Delete-callout modal (trash button on user rows)
 	"deleteModal.title": 'Delete callout "{{name}}"?',
@@ -52,7 +52,7 @@ export const en: Record<string, string> = {
 		"You can replace it with another callout instead, which keeps your vault content as a styled callout.",
 	"deleteModal.bodyUnused":
 		'"{{name}}" is not used in any note, but it is a custom callout you customized. Deleting will remove it from this list.',
-	"deleteModal.replaceInstead": "Replace instead…",
+	"deleteModal.replaceInstead": "Replace instead",
 	"deleteModal.deleteInUse": "Delete (convert to plain text)",
 	"deleteModal.deleteUnused": "Delete callout",
 
@@ -63,7 +63,7 @@ export const en: Record<string, string> = {
 	"settings.contextMenu": "Context menu",
 	"settings.autocomplete": "Autocomplete",
 	"settings.keyboardShortcuts": "Keyboard shortcuts",
-	"settings.iconSources": "Google Material Icons",
+	"settings.iconSources": "Google Material icons",
 	"settings.iconSourcesDesc":
 		"Material icon names and search tags are bundled for offline browsing. Google Fonts and SVG files (fonts.googleapis.com, fonts.gstatic.com) are loaded only when you preview or pick a Material icon, then selected SVGs are cached locally. No data is sent to Google.",
 	"settings.colorMode": "Color mode",
@@ -100,8 +100,8 @@ export const en: Record<string, string> = {
 		"Replace {{name}} in the vault with another callout",
 	"settings.moreRowActionsAria": "More actions for {{name}}",
 	"settings.usageInfo": "{{count}} use(s) in {{files}} file(s)",
-	"settings.replaceAction": "Replace in vault…",
-	"settings.deleteAction": "Delete…",
+	"settings.replaceAction": "Replace in vault",
+	"settings.deleteAction": "Delete",
 	"settings.resetAction": "Reset to default",
 	"settings.makeFallbackAction": "Use default fallback style",
 	"settings.deleteConfirm": 'Delete callout "{{name}}"?',
@@ -164,7 +164,7 @@ export const en: Record<string, string> = {
 	// Settings — Icon sources
 	"settings.lucideIcons": "Lucide icons",
 	"settings.lucideIconsDesc": "Built-in Obsidian icons (~1,300 icons)",
-	"settings.materialIcons": "Google material icons",
+	"settings.materialIcons": "Google Material icons",
 	"settings.materialIconsDesc":
 		"Requires internet or local cache (~3,000 icons)",
 	"settings.materialStyleDefault": "Material icons style default",
@@ -193,7 +193,7 @@ export const en: Record<string, string> = {
 	"settings.vaultStatsDesc":
 		"Count every callout block in your Markdown notes and group them by type.",
 	"settings.vaultStatsButton": "View statistics",
-	"settings.vaultStatsScanning": "Scanning...",
+	"settings.vaultStatsScanning": "Scanning",
 	"settings.resetAll": "Reset",
 	"settings.resetAllDesc":
 		"Delete all user callouts, reset built-in callouts, global styles (borders, font scale, shape), and downloaded Material SVGs.",
@@ -234,7 +234,7 @@ export const en: Record<string, string> = {
 	"editor.calloutIds": "Callout IDs",
 	"editor.calloutIdsDesc":
 		"All identifiers for this callout. Press Enter or Space to add.",
-	"editor.calloutIdsPlaceholder": "Add ID...",
+	"editor.calloutIdsPlaceholder": "Add ID",
 	"editor.icon": "Icon",
 	"editor.light": "Light",
 	"editor.dark": "Dark",
@@ -266,7 +266,7 @@ export const en: Record<string, string> = {
 	"editor.nameRequired":
 		"A display name is required before creating a callout.",
 	"editor.noChangesToSave": "No changes were made.",
-	"editor.downloadingIcon": "Downloading icon…",
+	"editor.downloadingIcon": "Downloading icon",
 	"editor.idEmpty": "At least one ID is required",
 	"editor.idExists": "A callout with this ID already exists",
 	"editor.idConflict": "This ID conflicts with an existing callout",
@@ -280,10 +280,10 @@ export const en: Record<string, string> = {
 	"iconPicker.cancel": "Cancel",
 	"iconPicker.lucide": "Lucide",
 	"iconPicker.material": "Material",
-	"iconPicker.searchLucide": "Search Lucide icons...",
+	"iconPicker.searchLucide": "Search Lucide icons",
 	"iconPicker.loadMore": "Load more",
-	"iconPicker.searchMaterial": "Search Material icons...",
-	"iconPicker.iconsLoading": "Icons are loading, please wait\u2026",
+	"iconPicker.searchMaterial": "Search Material icons",
+	"iconPicker.iconsLoading": "Icons are loading, please wait",
 	"iconPicker.loadFailed": "Failed to load Material icons: {{error}}",
 	"iconPicker.allCategories": "All categories",
 	"iconPicker.noIconSelected": "No icon selected",
