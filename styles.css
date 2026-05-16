@@ -287,8 +287,8 @@
 	height: 16px;
 }
 
-.callout-studio-delete-btn:hover {
-	color: var(--text-error) !important;
+.callout-studio-row-buttons .callout-studio-delete-btn:hover {
+	color: var(--text-error);
 }
 
 /* ─── Callout Editor Modal ────────────────────────────────────── */
@@ -427,20 +427,21 @@ button.callout-studio-icon-picker-loading {
 
 /* ─── Editor Buttons (sticky bottom bar) ──────────────────────── */
 
-.callout-studio-editor-modal {
+.modal.callout-studio-editor-modal {
 	display: flex;
 	flex-direction: column;
-	padding-bottom: 0 !important;
-	width: min(720px, 95vw) !important;
-	max-width: min(720px, 95vw) !important;
+	padding-bottom: 0;
+	width: min(720px, 95vw);
+	max-width: min(720px, 95vw);
 }
 
-.callout-studio-editor-modal > .modal-content {
+.modal.callout-studio-editor-modal > .modal-content {
 	flex: 1;
 	overflow-y: auto;
-	padding-bottom: 0 !important;
-	padding-left: clamp(18px, 3vw, 24px) !important;
-	padding-right: clamp(18px, 3vw, 24px) !important;
+	padding-top: 0;
+	padding-bottom: 0;
+	padding-left: clamp(18px, 3vw, 24px);
+	padding-right: clamp(18px, 3vw, 24px);
 }
 
 .callout-studio-editor-modal > .modal-title {
@@ -462,11 +463,6 @@ button.callout-studio-icon-picker-loading {
 	background: var(--modal-background);
 }
 
-/* Remove the default top padding gap on the scrollable content so the
-   content sits flush under the sticky title separator (no empty band). */
-.callout-studio-editor-modal > .modal-content {
-	padding-top: 0 !important;
-}
 
 .callout-studio-editor-modal > .modal-content > :first-child {
 	margin-top: 0;
@@ -565,14 +561,13 @@ button.callout-studio-icon-picker-loading {
 
 .callout-studio-slider-row .setting-item {
 	padding: 0;
-	border: none !important;
-	border-top: none !important;
-	box-shadow: none !important;
+	border: none;
+	box-shadow: none;
 }
 
 .callout-studio-slider-row .setting-item::before,
 .callout-studio-slider-row .setting-item::after {
-	display: none !important;
+	display: none;
 }
 
 .callout-studio-slider-row + .callout-studio-slider-row {
@@ -590,8 +585,8 @@ button.callout-studio-icon-picker-loading {
 
 .callout-studio-slider-row .setting-item-control input[type="range"] {
 	width: 100%;
-	border: none !important;
-	box-shadow: none !important;
+	border: none;
+	box-shadow: none;
 	outline: none;
 }
 
@@ -601,8 +596,8 @@ button.callout-studio-icon-picker-loading {
 .callout-studio-slider-row
 	.setting-item-control
 	input[type="range"]::-moz-range-track {
-	border: none !important;
-	box-shadow: none !important;
+	border: none;
+	box-shadow: none;
 }
 
 .callout-studio-preview .callout-icon,
@@ -613,7 +608,7 @@ button.callout-studio-icon-picker-loading {
 /* Hide slider tooltip bubble */
 .callout-studio-slider-row .slider-tooltip,
 .callout-studio-slider-row [class*="tooltip"] {
-	display: none !important;
+	display: none;
 }
 
 /* ─── Icon Adjustment Sliders ─────────────────────────────────── */
@@ -740,7 +735,7 @@ button.callout-studio-icon-picker-loading {
 	min-width: 100%;
 }
 
-.callout-studio-preview-fold-toggle {
+.callout-studio-preview .callout-studio-preview-fold-toggle {
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
@@ -751,25 +746,25 @@ button.callout-studio-icon-picker-loading {
 	margin-inline-start: 6px;
 	border: none;
 	border-radius: 0;
-	background: transparent !important;
+	background: transparent;
 	color: rgb(var(--callout-color));
 	cursor: pointer;
-	box-shadow: none !important;
+	box-shadow: none;
 	flex-shrink: 0;
 }
 
-.callout-studio-preview-fold-toggle:hover,
-.callout-studio-preview-fold-toggle:focus,
-.callout-studio-preview-fold-toggle:active {
-	background: transparent !important;
+.callout-studio-preview .callout-studio-preview-fold-toggle:hover,
+.callout-studio-preview .callout-studio-preview-fold-toggle:focus,
+.callout-studio-preview .callout-studio-preview-fold-toggle:active {
+	background: transparent;
 	color: rgb(var(--callout-color));
 }
 
-.callout-studio-preview-fold-toggle svg {
+.callout-studio-preview .callout-studio-preview-fold-toggle svg {
 	width: 14px;
 	height: 14px;
 	color: rgb(var(--callout-color));
-	stroke: currentColor !important;
+	stroke: currentColor;
 }
 
 .callout-studio-preview-collapsed > .callout-title {
@@ -1045,6 +1040,7 @@ button.callout-studio-icon-picker-loading {
 
 .icon-picker-tab {
 	padding: 6px 16px;
+	min-height: 32px;
 	background: none;
 	border: none;
 	border-bottom: 2px solid transparent;
@@ -1271,10 +1267,6 @@ button.callout-studio-icon-picker-loading {
 }
 
 /* Minimum 32px touch targets */
-.icon-picker-tab {
-	min-height: 32px;
-}
-
 .icon-picker-search input,
 .icon-picker-toolbar input,
 .icon-picker-toolbar select {
