@@ -59,8 +59,8 @@ export class CalloutAutoComplete extends EditorSuggest<CalloutSuggestion> {
 		super.close();
 
 		if (editor && line >= 0) {
-			window.requestAnimationFrame(() => {
-				setTimeout(() => {
+			activeWindow.requestAnimationFrame(() => {
+				activeWindow.setTimeout(() => {
 					const lineText = editor.getLine(line);
 					const quoteMatch =
 						CALLOUT_QUOTE_PREFIX_REGEX.exec(lineText);

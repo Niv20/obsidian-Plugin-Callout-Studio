@@ -67,7 +67,7 @@ export class IconPicker extends Modal {
 	private confirmBtn!: HTMLButtonElement;
 
 	// Track active loading timers so we can clean them up
-	private loadingTimers: ReturnType<typeof setTimeout>[] = [];
+	private loadingTimers: number[] = [];
 
 	constructor(plugin: IconPickerPlugin, currentIcon?: CalloutIcon) {
 		super(plugin.app);
@@ -136,7 +136,7 @@ export class IconPicker extends Modal {
 		}
 		// Clean up loading timers
 		for (const timer of this.loadingTimers) {
-			clearTimeout(timer);
+			activeWindow.clearTimeout(timer);
 		}
 		this.loadingTimers = [];
 	}
@@ -150,7 +150,7 @@ export class IconPicker extends Modal {
 	): HTMLElement {
 		const el = parent.createDiv("icon-picker-loading");
 		el.setText(text);
-		const timer = setTimeout(() => {
+		const timer = activeWindow.setTimeout(() => {
 			el.addClass("is-visible");
 		}, 1000);
 		this.loadingTimers.push(timer);

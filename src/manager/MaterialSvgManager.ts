@@ -96,7 +96,9 @@ export class MaterialSvgManager {
 			} catch (err) {
 				lastErr = err;
 				if (attempt < maxAttempts) {
-					await new Promise((r) => setTimeout(r, 2000));
+					await new Promise((r) =>
+						activeWindow.setTimeout(r, 2000),
+					);
 				}
 			}
 		}

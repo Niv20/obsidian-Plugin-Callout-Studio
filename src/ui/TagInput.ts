@@ -24,7 +24,7 @@ export class TagInput {
 	private validate?: (tag: string) => string | null;
 	private maxLength: number;
 	private maxTags: number;
-	private errorTimeout: ReturnType<typeof setTimeout> | null = null;
+	private errorTimeout: number | null = null;
 	private placeholder: string;
 	private readonlyTags: Set<string>;
 
@@ -131,7 +131,7 @@ export class TagInput {
 
 	private showPersistentError(msg: string): void {
 		if (this.errorTimeout) {
-			clearTimeout(this.errorTimeout);
+			activeWindow.clearTimeout(this.errorTimeout);
 			this.errorTimeout = null;
 		}
 		this.errorEl.textContent = msg;
@@ -144,7 +144,7 @@ export class TagInput {
 			this.errorEl.removeClass("is-visible");
 			this.errorEl.removeClass("is-persistent");
 			// Clear text after CSS fade-out transition completes
-			setTimeout(() => {
+			activeWindow.setTimeout(() => {
 				if (!this.errorEl.hasClass("is-visible")) {
 					this.errorEl.textContent = "";
 				}
@@ -161,10 +161,10 @@ export class TagInput {
 
 	private showError(msg: string): void {
 		if (this.errorEl.hasClass("is-persistent")) return;
-		if (this.errorTimeout) clearTimeout(this.errorTimeout);
+		if (this.errorTimeout) activeWindow.clearTimeout(this.errorTimeout);
 		this.errorEl.textContent = msg;
 		this.errorEl.addClass("is-visible");
-		this.errorTimeout = setTimeout(() => {
+		this.errorTimeout = activeWindow.setTimeout(() => {
 			this.errorEl.removeClass("is-visible");
 			this.errorTimeout = null;
 		}, 2500);
