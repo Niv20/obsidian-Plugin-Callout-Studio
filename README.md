@@ -97,6 +97,18 @@ A single **Reset everything** action returns the plugin to defaults: removes use
 
 The plugin UI is available in **English** and **Hebrew**. The active language follows Obsidian's interface language automatically.
 
+## Permissions
+
+Callout Studio uses a few Obsidian APIs that touch the vault and the system clipboard. Every use is local to your machine and tied to plugin functionality you can see and control:
+
+- **Vault file enumeration** (`vault.getMarkdownFiles`). Used to power the features listed under **Vault discovery** and **Vault insights & maintenance** above: the optional initial scan, the **Scan now** button, callout statistics, **Replace in vault**, **Convert to plain text**, and the pre-delete usage check that warns you before removing an in-use callout. The plugin reads file contents with the standard `vault.cachedRead` / `vault.read` APIs and never sends them anywhere.
+- **Vault file modification** (`vault.modify`). Only triggered when you explicitly run **Replace in vault**, **Convert to plain text**, or the editor commands (**Wrap in callout** / **Unwrap from callout**).
+- **Clipboard access**. Two narrow, user-initiated uses:
+  - **Copy callout Markdown** writes the selected callout to your clipboard when you click the menu item.
+  - The ID/alias input field reads a paste event's text so you can paste multiple comma- or space-separated IDs at once. Only the text you actively paste into that field is read; the clipboard is never read otherwise.
+
+No vault content, clipboard data, or usage information is ever transmitted off your device.
+
 ## Network usage and privacy
 
 Callout Studio works offline by default and never sends any vault content anywhere. The **Google Material Symbols** icon list and search tags are bundled with the plugin, so opening and searching the Material tab does not fetch icon metadata from Google. The only network activity for Material icons happens on demand:
