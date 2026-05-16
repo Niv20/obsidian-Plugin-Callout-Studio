@@ -173,7 +173,7 @@ export class ReplaceCalloutModal extends Modal {
 			cls: "callout-studio-replace-item",
 		});
 
-		const isDark = document.body.classList.contains("theme-dark");
+		const isDark = activeDocument.body.classList.contains("theme-dark");
 		const color = isDark ? def.colorDark : def.colorLight;
 
 		// Icon

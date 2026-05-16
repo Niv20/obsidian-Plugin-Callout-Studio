@@ -40,7 +40,7 @@ export class CSSInjector {
 
 	private ensureStyleSheet(): void {
 		if (this.styleSheet) return;
-		if (!("adoptedStyleSheets" in document)) return;
+		if (!("adoptedStyleSheets" in activeDocument)) return;
 
 		const registryWindow = window as RegistryWindow;
 		const existing = registryWindow[STYLE_SHEET_REGISTRY_KEY];
@@ -50,7 +50,10 @@ export class CSSInjector {
 		}
 
 		const sheet = new CSSStyleSheet();
-		document.adoptedStyleSheets = [...document.adoptedStyleSheets, sheet];
+		activeDocument.adoptedStyleSheets = [
+			...activeDocument.adoptedStyleSheets,
+			sheet,
+		];
 		registryWindow[STYLE_SHEET_REGISTRY_KEY] = sheet;
 		this.styleSheet = sheet;
 	}
@@ -314,7 +317,9 @@ export class CSSInjector {
 	 */
 	private refreshCalloutIconsInDOM(): void {
 		const calloutEls = Array.from(
-			document.querySelectorAll<HTMLElement>(".callout[data-callout]"),
+			activeDocument.querySelectorAll<HTMLElement>(
+				".callout[data-callout]",
+			),
 		);
 		for (const calloutEl of calloutEls) {
 			const id = calloutEl.getAttribute("data-callout");
@@ -508,10 +513,11 @@ export class CSSInjector {
 			window.clearTimeout(this.debounceTimer);
 			this.debounceTimer = null;
 		}
-		if (this.styleSheet && "adoptedStyleSheets" in document) {
-			document.adoptedStyleSheets = document.adoptedStyleSheets.filter(
-				(sheet) => sheet !== this.styleSheet,
-			);
+		if (this.styleSheet && "adoptedStyleSheets" in activeDocument) {
+			activeDocument.adoptedStyleSheets =
+				activeDocument.adoptedStyleSheets.filter(
+					(sheet) => sheet !== this.styleSheet,
+				);
 			this.styleSheet = null;
 		}
 		const registryWindow = window as RegistryWindow;

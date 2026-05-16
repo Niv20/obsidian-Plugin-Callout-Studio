@@ -187,7 +187,7 @@ export class CalloutAutoComplete extends EditorSuggest<CalloutSuggestion> {
 		el.addClass("callout-studio-suggestion");
 
 		const { autocomplete } = this.plugin.settings;
-		const isDark = document.body.classList.contains("theme-dark");
+		const isDark = activeDocument.body.classList.contains("theme-dark");
 		const color = isDark ? def.colorDark : def.colorLight;
 
 		// Icon

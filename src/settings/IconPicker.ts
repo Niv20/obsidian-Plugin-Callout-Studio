@@ -693,7 +693,7 @@ export class IconPicker extends Modal {
 			const cells = Array.from(
 				grid.querySelectorAll<HTMLElement>(".icon-picker-cell"),
 			);
-			const current = document.activeElement as HTMLElement | null;
+			const current = activeDocument.activeElement as HTMLElement | null;
 			const idx = current ? cells.indexOf(current) : -1;
 			if (idx < 0) return;
 

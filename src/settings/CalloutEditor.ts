@@ -298,7 +298,8 @@ export class CalloutEditor extends Modal {
 		previewHeader.createSpan({ text: t("editor.livePreview") });
 
 		// Segmented Light/Dark toggle — initial state matches current theme.
-		this.previewDarkMode = document.body.classList.contains("theme-dark");
+		this.previewDarkMode =
+			activeDocument.body.classList.contains("theme-dark");
 		const segmented = previewHeader.createDiv({
 			cls: "callout-studio-segmented-toggle",
 		});
@@ -938,9 +939,9 @@ export class CalloutEditor extends Modal {
 			closeFoldMenu();
 		};
 		this.removePopupOutsideClickListener?.();
-		document.addEventListener("click", popupOutsideClick);
+		activeDocument.addEventListener("click", popupOutsideClick);
 		this.removePopupOutsideClickListener = () => {
-			document.removeEventListener("click", popupOutsideClick);
+			activeDocument.removeEventListener("click", popupOutsideClick);
 		};
 		// Action buttons — sticky bottom bar
 		const buttonContainer = this.modalEl.createDiv({

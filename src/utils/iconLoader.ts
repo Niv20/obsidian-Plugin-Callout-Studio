@@ -136,11 +136,11 @@ export function ensureMaterialFontLoaded(
 			},
 		);
 		await fontFace.load();
-		const fontSet = document.fonts as FontFaceSet & {
+		const fontSet = activeDocument.fonts as FontFaceSet & {
 			add(font: FontFace): FontFaceSet;
 		};
 		fontSet.add(fontFace);
-		await document.fonts.ready;
+		await activeDocument.fonts.ready;
 	})();
 
 	materialFontLoadCache.set(family, loadPromise);

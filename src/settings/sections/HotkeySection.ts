@@ -75,7 +75,7 @@ function filterHotkeysToPlugin(
 }
 
 function applyHotkeySearchFilter(query: string): boolean {
-	const settingsModal = document.querySelector<HTMLElement>(
+	const settingsModal = activeDocument.querySelector<HTMLElement>(
 		".modal.mod-settings",
 	);
 	const searchRoot =

@@ -70,7 +70,7 @@ export function registerContextMenu(plugin: CalloutStudioPlugin): void {
 
 	// Capture-phase listener keeps lastTrigger fresh for all three paths below.
 	plugin.registerDomEvent(
-		document,
+		activeDocument,
 		"contextmenu",
 		(event) => {
 			lastTrigger = capturePointerContext(event);

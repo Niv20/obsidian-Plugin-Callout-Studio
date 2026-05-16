@@ -238,7 +238,7 @@ export class VaultCalloutStatisticsModal extends Modal {
 	}
 
 	private getCalloutColor(def: CalloutDefinition): string {
-		return document.body.classList.contains("theme-dark")
+		return activeDocument.body.classList.contains("theme-dark")
 			? def.colorDark
 			: def.colorLight;
 	}
