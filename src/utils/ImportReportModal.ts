@@ -57,7 +57,7 @@ export class ImportReportModal extends Modal {
 			if (issue.entryLabel) labels.set(issue.index, issue.entryLabel);
 		}
 
-		const listEl = contentEl.createEl("div", {
+		const listEl = contentEl.createDiv({
 			cls: "cs-import-report-list",
 		});
 
@@ -67,7 +67,7 @@ export class ImportReportModal extends Modal {
 			const groupEl = listEl.createDiv({ cls: "cs-import-report-group" });
 
 			if (key >= 0) {
-				groupEl.createEl("div", {
+				groupEl.createDiv({
 					cls: "cs-import-report-group-heading",
 					text: t("import.entryHeading", {
 						index: key + 1,

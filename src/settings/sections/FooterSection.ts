@@ -12,7 +12,7 @@ export function renderFooterSection(
 	ctx: SettingsSectionContext,
 	containerEl: HTMLElement,
 ): void {
-	const footer = containerEl.createEl("div", {
+	const footer = containerEl.createDiv({
 		cls: "callout-studio-footer",
 	});
 	footer.createEl("p", {
@@ -22,17 +22,17 @@ export function renderFooterSection(
 	const links = footer.createEl("p", {
 		cls: "callout-studio-footer-links",
 	});
-	links.createEl("span", { text: t("footer.madeBy") });
+	links.createSpan({ text: t("footer.madeBy") });
 	links.createEl("a", {
 		text: "GitHub",
 		href: "https://github.com/Niv20/obsidian-Plugin-Callout-Studio",
 		attr: { target: "_blank", rel: "noopener noreferrer" },
 	});
-	links.createEl("span", { text: "  •  " });
+	links.createSpan({ text: "  •  " });
 	links.createEl("a", {
 		text: "Email",
 		href: "mailto:anivbniv@gmail.com",
 	});
-	links.createEl("span", { text: "  •  " });
-	links.createEl("span", { text: `v${ctx.plugin.manifest.version}` });
+	links.createSpan({ text: "  •  " });
+	links.createSpan({ text: `v${ctx.plugin.manifest.version}` });
 }

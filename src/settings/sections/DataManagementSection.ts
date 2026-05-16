@@ -107,7 +107,7 @@ export function renderResetSection(
 						...(c.aliases ?? []),
 					]);
 
-					const messageFrag = document.createDocumentFragment();
+					const messageFrag = createFragment();
 					if (userIds.length > 0) {
 						const { fileCount, totalCount } =
 							await countCalloutUsages(ctx.app, userIds);
@@ -161,7 +161,7 @@ function exportCallouts(ctx: SettingsSectionContext): void {
 	const json = ctx.plugin.registry.exportToJSON();
 	const blob = new Blob([json], { type: "application/json" });
 	const url = URL.createObjectURL(blob);
-	const a = document.createElement("a");
+	const a = createEl("a");
 	a.href = url;
 	a.download = "callout-studio-callouts.json";
 	a.click();
@@ -170,7 +170,7 @@ function exportCallouts(ctx: SettingsSectionContext): void {
 }
 
 function importFromJSON(ctx: SettingsSectionContext): void {
-	const input = document.createElement("input");
+	const input = createEl("input");
 	input.type = "file";
 	input.accept = ".json";
 	// eslint-disable-next-line @typescript-eslint/no-misused-promises -- DOM change handler is fire-and-forget; async errors are handled inside the callback.

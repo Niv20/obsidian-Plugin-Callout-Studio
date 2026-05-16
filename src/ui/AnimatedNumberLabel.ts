@@ -35,7 +35,7 @@ export function createAnimatedNumberLabel(
 	parentEl: HTMLElement,
 	options: AnimatedNumberLabelOptions,
 ): AnimatedNumberLabel {
-	const flow = document.createElement("number-flow");
+	const flow = createEl("number-flow");
 	flow.classList.add(
 		"callout-studio-slider-value",
 		"callout-studio-number-flow",
