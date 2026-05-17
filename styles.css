@@ -1702,11 +1702,31 @@ button.callout-studio-icon-picker-loading {
 	.callout-studio-preview-panel {
 		grid-template-columns: 1fr;
 	}
+	.callout-studio-preview-col {
+		position: static;
+	}
 	.cs-global-style-wrapper {
 		grid-template-columns: 1fr;
 	}
 	.cs-global-preview-col {
 		position: static;
+	}
+
+	/* Roomier color grid on narrow screens so native color swatches
+	   (iOS renders them as large circles) don't visually overlap. */
+	.callout-studio-color-grid {
+		padding: 8px 12px 12px;
+	}
+	.callout-studio-color-row {
+		padding: 8px 0;
+		min-height: 44px;
+	}
+	.callout-studio-color-row + .callout-studio-color-row {
+		border-top: 1px solid var(--background-modifier-border);
+	}
+	.callout-studio-color-input {
+		width: 36px;
+		height: 36px;
 	}
 }
 
