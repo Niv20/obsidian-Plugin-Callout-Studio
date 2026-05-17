@@ -1106,6 +1106,15 @@ button.callout-studio-icon-picker-loading {
 
 .icon-picker-toolbar select {
 	padding: 6px 8px;
+	flex-shrink: 0;
+}
+
+/* On narrow screens, search takes full width and selects wrap below */
+@media (max-width: 600px) {
+	.icon-picker-toolbar input {
+		flex-basis: 100%;
+		min-width: 100%;
+	}
 }
 
 @keyframes cs-grid-fade-in {
