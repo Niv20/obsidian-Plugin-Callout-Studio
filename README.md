@@ -2,7 +2,7 @@
 
 Callout Studio is the ultimate callout manager for Obsidian. It lets you create, edit, and style your own callout types, override the built-in ones, pick icons from large libraries, and keep callouts under control across your whole vault — all from a single settings tab.
 
-<img width="3024" height="1898" alt="hero" src="https://github.com/user-attachments/assets/e24ff986-cf0c-4f18-95be-33a75283d83a" />
+<img alt="hero" src="https://github.com/user-attachments/assets/e24ff986-cf0c-4f18-95be-33a75283d83a" />
 
 ## Features
 
@@ -28,7 +28,7 @@ You can also fine-tune each callout's icon size and horizontal/vertical offset.
 - Separate **Light** and **Dark** colors for every callout — Callout Studio honors Obsidian's current theme automatically.
 - Color presets: Obsidian's original callout palette plus extra curated presets.
 
-<img width="3024" height="1964" alt="edit callout" src="https://github.com/user-attachments/assets/7d0aef10-b85b-41e4-967d-5eb3a1437e44" />
+<img alt="edit callout" src="https://github.com/user-attachments/assets/7d0aef10-b85b-41e4-967d-5eb3a1437e44" />
 
 
 ### Global callout style
@@ -40,7 +40,7 @@ These settings apply to all callouts:
 - **Title scale** and **Content scale** — independent font scales for the title row and the body.
 - **Corner rounding** — border-radius in pixels.
 
-<img width="3024" height="1898" alt="global callout style" src="https://github.com/user-attachments/assets/867d74c4-392e-4daf-97df-8ba72bf997d1" />
+<img alt="global callout style" src="https://github.com/user-attachments/assets/867d74c4-392e-4daf-97df-8ba72bf997d1" />
 
 
 ### Default fallback callout
@@ -67,7 +67,7 @@ Right-click on a callout in **Reading view**, **Source mode**, or **Live Preview
 
 Each item can be toggled on or off individually.
 
-<img width="3024" height="1964" alt="right-click menu" src="https://github.com/user-attachments/assets/92220a40-4b6e-4654-baf3-1deba141012d" />
+<img alt="right-click menu" src="https://github.com/user-attachments/assets/92220a40-4b6e-4654-baf3-1deba141012d" />
 
 
 ### `[!` autocomplete
@@ -79,7 +79,7 @@ When you type `[!` inside a blockquote, Callout Studio shows a suggestion list o
 - Picking a suggestion inserts a complete callout header.
 - You can confirm a brand-new callout name on the spot — it will be added as a fallback row to the registry.
 
-<img width="3024" height="1964" alt="autocomplete" src="https://github.com/user-attachments/assets/360e2d5b-af4c-4215-8e15-8e2b87b22837" />
+<img alt="autocomplete" src="https://github.com/user-attachments/assets/360e2d5b-af4c-4215-8e15-8e2b87b22837" />
 
 
 ### Editor commands
