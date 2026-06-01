@@ -465,6 +465,17 @@ export class CalloutEditor extends Modal {
 			accentDark?: HTMLInputElement;
 		} = {};
 
+		// Keep each swatch wrapper's background in sync after the input value is
+		// set programmatically (e.g. applying a preset), since that doesn't fire
+		// an "input" event.
+		const syncColorSwatches = (): void => {
+			for (const input of Object.values(colorInputs)) {
+				if (input?.parentElement) {
+					input.parentElement.style.backgroundColor = input.value;
+				}
+			}
+		};
+
 		// Build rich palette dropdown (custom widget with circles + names)
 		const paletteEntries: {
 			id: string;
@@ -543,6 +554,7 @@ export class CalloutEditor extends Modal {
 				colorInputs.textLight.value = this.textColorLight;
 			if (colorInputs.textDark)
 				colorInputs.textDark.value = this.textColorDark;
+			syncColorSwatches();
 			this.updatePreview();
 		};
 
@@ -608,6 +620,7 @@ export class CalloutEditor extends Modal {
 			if (colorInputs.textDark)
 				colorInputs.textDark.value = this.textColorDark;
 
+			syncColorSwatches();
 			this.updatePreview();
 			if (persist) colorStateBeforeMenu = null;
 		};
@@ -987,27 +1000,38 @@ export class CalloutEditor extends Modal {
 		const row = grid.createDiv({ cls: "callout-studio-color-row" });
 		row.createSpan({ text: label });
 
-		const lightInput = row.createEl("input", {
-			type: "color",
-			value: lightVal,
-			cls: "callout-studio-color-input",
-		});
-		lightInput.addEventListener("input", () => {
-			onChange(lightInput.value, undefined);
-			this.customPresetSelected = true;
-			this.updateSaveState();
-		});
+		// The native color input is rendered invisibly on top of a wrapper
+		// whose background-color is the visible swatch. This keeps the swatch a
+		// fully styleable box that renders consistently (and never gets clipped)
+		// on desktop, iPhone and tablets.
+		const makeSwatch = (
+			value: string,
+			onPick: (next: string) => void,
+		): HTMLInputElement => {
+			const wrap = row.createEl("label", {
+				cls: "callout-studio-color-input-wrap",
+			});
+			wrap.style.backgroundColor = value;
+			const input = wrap.createEl("input", {
+				type: "color",
+				value,
+				cls: "callout-studio-color-input",
+			});
+			input.addEventListener("input", () => {
+				wrap.style.backgroundColor = input.value;
+				onPick(input.value);
+				this.customPresetSelected = true;
+				this.updateSaveState();
+			});
+			return input;
+		};
 
-		const darkInput = row.createEl("input", {
-			type: "color",
-			value: darkVal,
-			cls: "callout-studio-color-input",
-		});
-		darkInput.addEventListener("input", () => {
-			onChange(undefined, darkInput.value);
-			this.customPresetSelected = true;
-			this.updateSaveState();
-		});
+		const lightInput = makeSwatch(lightVal, (next) =>
+			onChange(next, undefined),
+		);
+		const darkInput = makeSwatch(darkVal, (next) =>
+			onChange(undefined, next),
+		);
 
 		return { light: lightInput, dark: darkInput };
 	}

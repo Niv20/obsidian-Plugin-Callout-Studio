@@ -882,24 +882,33 @@ button.callout-studio-icon-picker-loading {
 	width: 100%;
 }
 
-.callout-studio-color-input {
+/* The visible swatch is this wrapper's background-color — a box we fully
+   control, so it renders identically on desktop, iPhone and tablets and can
+   never be clipped. The native <input type="color"> sits invisibly on top to
+   keep the OS color-picker behaviour. */
+.callout-studio-color-input-wrap {
+	position: relative;
+	display: inline-block;
 	width: 28px;
 	height: 22px;
-	padding: 0;
 	border: 1px solid var(--background-modifier-border);
 	border-radius: 4px;
 	cursor: pointer;
-	background: none;
 	justify-self: center;
+	overflow: hidden;
 }
 
-.callout-studio-color-input::-webkit-color-swatch-wrapper {
-	padding: 1px;
-}
-
-.callout-studio-color-input::-webkit-color-swatch {
+.callout-studio-color-input {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	margin: 0;
+	padding: 0;
 	border: none;
-	border-radius: 3px;
+	background: none;
+	opacity: 0;
+	cursor: pointer;
 }
 
 /* ─── Replace Callout Modal ───────────────────────────────────── */
@@ -1743,9 +1752,9 @@ button.callout-studio-icon-picker-loading {
 	.callout-studio-color-row + .callout-studio-color-row {
 		border-top: 1px solid var(--background-modifier-border);
 	}
-	.callout-studio-color-input {
-		width: 36px;
-		height: 36px;
+	.callout-studio-color-input-wrap {
+		width: 44px;
+		height: 32px;
 	}
 }
 
