@@ -186,6 +186,9 @@
 .callout-studio-row-icon svg {
 	width: 18px;
 	height: 18px;
+	flex-shrink: 0;
+	/* Same iPadOS WebKit container-paint workaround as the row buttons. */
+	transform: translateZ(0);
 }
 
 .callout-studio-row-icon.is-loading svg {
@@ -285,6 +288,13 @@
 .callout-studio-row-buttons button svg {
 	width: 16px;
 	height: 16px;
+	flex-shrink: 0;
+	/* iPadOS WebKit fails to paint setIcon() SVGs that live inside the row's
+	   `container-type: inline-size` subtree — the button keeps its box (so it
+	   is still tappable) but the glyph never renders. Promoting the SVG to its
+	   own compositing layer forces WebKit to paint it independently of the
+	   container's (buggy) paint pass. Harmless on desktop/phone. */
+	transform: translateZ(0);
 }
 
 .callout-studio-row-buttons .callout-studio-delete-btn:hover {
