@@ -109,7 +109,19 @@ A single **Reset everything** action returns the plugin to defaults: removes use
 
 ### Localization
 
-The plugin UI is available in **English** and **Hebrew**. The active language follows Obsidian's interface language automatically.
+The plugin UI is available in **32 languages**. The active language follows Obsidian's interface language automatically, but you can also select a different language manually from the plugin settings.
+
+**Supported languages:** Arabic (العربية), Bulgarian (Български), Chinese Simplified (中文简体), Chinese Traditional (中文繁體), Czech (Čeština), Danish (Dansk), Dutch (Nederlands), English, Finnish (Suomi), French (Français), German (Deutsch), Greek (Ελληνικά), Hebrew (עברית), Hindi (हिन्दी), Hungarian (Magyar), Indonesian (Bahasa Indonesia), Italian (Italiano), Japanese (日本語), Korean (한국어), Malay (Bahasa Melayu), Norwegian Bokmål (Norsk), Persian (فارسی), Polish (Polski), Portuguese (Português), Romanian (Română), Russian (Русский), Spanish (Español), Swedish (Svenska), Thai (ภาษาไทย), Turkish (Türkçe), Ukrainian (Українська), Vietnamese (Tiếng Việt).
+
+> **Note for native speakers:** All translations except English were generated with AI assistance and may contain errors or unnatural phrasing. If you spot a mistake, contributions are very welcome!
+>
+> **To fix a translation via pull request:**
+>
+> 1. Fork the repository on GitHub.
+> 2. Edit the relevant file in `src/i18n/` (e.g. `fr.ts` for French).
+> 3. Open a pull request with your changes.
+>
+> Alternatively, you can report issues by email at [anivbniv@gmail.com](mailto:anivbniv@gmail.com).
 
 ## Permissions
 
@@ -118,8 +130,8 @@ Callout Studio uses a few Obsidian APIs that touch the vault and the system clip
 - **Vault file enumeration** (`vault.getMarkdownFiles`). Used to power the features listed under **Vault discovery** and **Vault insights & maintenance** above: the optional initial scan, the **Scan now** button, callout statistics, **Replace in vault**, **Convert to plain text**, and the pre-delete usage check that warns you before removing an in-use callout. The plugin reads file contents with the standard `vault.cachedRead` / `vault.read` APIs and never sends them anywhere.
 - **Vault file modification** (`vault.modify`). Only triggered when you explicitly run **Replace in vault**, **Convert to plain text**, or the editor commands (**Wrap in callout** / **Unwrap from callout**).
 - **Clipboard access**. Two narrow, user-initiated uses:
-  - **Copy callout Markdown** writes the selected callout to your clipboard when you click the menu item.
-  - The ID/alias input field reads a paste event's text so you can paste multiple comma- or space-separated IDs at once. Only the text you actively paste into that field is read; the clipboard is never read otherwise.
+    - **Copy callout Markdown** writes the selected callout to your clipboard when you click the menu item.
+    - The ID/alias input field reads a paste event's text so you can paste multiple comma- or space-separated IDs at once. Only the text you actively paste into that field is read; the clipboard is never read otherwise.
 
 No vault content, clipboard data, or usage information is ever transmitted off your device.
 

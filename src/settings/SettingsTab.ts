@@ -24,6 +24,7 @@ import {
 	renderContextMenuSettingsSection,
 } from "./sections/EditorFeaturesSection";
 import { renderFallbackSection } from "./sections/FallbackSection";
+import { renderLanguageSection } from "./sections/LanguageSection";
 import { renderGlobalStyleSection } from "./sections/GlobalStyleSection";
 import {
 	createCalloutListsController,
@@ -140,6 +141,7 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 		renderHotkeySection(sectionCtx, containerEl);
 		renderIconSourceSection(sectionCtx, containerEl);
 		renderImportExportSection(sectionCtx, containerEl);
+		renderLanguageSection(sectionCtx, containerEl);
 		renderResetSection(sectionCtx, containerEl);
 		renderFooterSection(sectionCtx, containerEl);
 	}

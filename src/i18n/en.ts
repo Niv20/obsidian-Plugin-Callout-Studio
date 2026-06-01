@@ -63,6 +63,10 @@ export const en: Record<string, string> = {
 	"settings.contextMenu": "Context menu",
 	"settings.autocomplete": "Autocomplete",
 	"settings.keyboardShortcuts": "Keyboard shortcuts",
+	"settings.language": "Language",
+	"settings.languageDesc":
+		"Display language for Callout Studio. Defaults to Obsidian's interface language.",
+	"settings.languageAuto": "Automatic (match Obsidian)",
 	"settings.iconSources": "Google Material icons",
 	"settings.iconSourcesDesc":
 		"Material icon names and search tags are bundled for offline browsing. Google Fonts and SVG files (fonts.googleapis.com, fonts.gstatic.com) are loaded only when you preview or pick a Material icon, then selected SVGs are cached locally. No data is sent to Google.",

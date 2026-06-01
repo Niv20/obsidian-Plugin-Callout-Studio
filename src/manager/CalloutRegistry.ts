@@ -122,6 +122,8 @@ export class CalloutRegistry {
 				fallbackCalloutId:
 					savedSettings.fallbackCalloutId ??
 					DEFAULT_SETTINGS.fallbackCalloutId,
+				language:
+					savedSettings.language ?? DEFAULT_SETTINGS.language,
 			};
 		}
 

@@ -122,6 +122,11 @@ export interface PluginSettings {
 	firstRunCompleted?: boolean;
 	/** Callout ID to use as fallback for unrecognized callout types. Empty = Obsidian default */
 	fallbackCalloutId: string;
+	/**
+	 * UI display language. `"auto"` follows Obsidian's interface language;
+	 * any other value is a locale code (e.g. `"he"`, `"zh-tw"`).
+	 */
+	language: string;
 }
 
 export interface PluginData {

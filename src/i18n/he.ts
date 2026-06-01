@@ -62,6 +62,10 @@ export const he: Record<string, string> = {
 	"settings.contextMenu": "תפריט הקשר",
 	"settings.autocomplete": "השלמה אוטומטית",
 	"settings.keyboardShortcuts": "קיצורי מקשים",
+	"settings.language": "שפה",
+	"settings.languageDesc":
+		"שפת התצוגה של Callout Studio. ברירת המחדל היא שפת הממשק של אובסידיאן.",
+	"settings.languageAuto": "אוטומטי (לפי אובסידיאן)",
 	"settings.iconSources": "אייקוני Google Material",
 	"settings.iconSourcesDesc":
 		"שמות אייקוני Material ותגיות החיפוש מגיעים עם הפלאגין וזמינים במצב לא-מקוון. Google Fonts וקובצי SVG (fonts.googleapis.com, fonts.gstatic.com) נטענים רק כאשר מציגים או בוחרים אייקון Material, ואז ה-SVG שנבחר נשמר מקומית. לא נשלח מידע ל-Google.",

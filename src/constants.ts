@@ -215,4 +215,5 @@ export const DEFAULT_SETTINGS: PluginSettings = {
 	},
 	firstRunCompleted: false,
 	fallbackCalloutId: "note",
+	language: "auto",
 };

@@ -54,8 +54,9 @@ export default class CalloutStudioPlugin extends Plugin {
 		const savedData = (await this.loadData()) as Partial<PluginData> | null;
 		this.registry.load(savedData);
 
-		// UI locale always follows Obsidian's interface language.
-		setLocale("auto");
+		// UI locale follows the user's saved preference; "auto" (the default)
+		// tracks Obsidian's interface language.
+		setLocale(this.settings.language);
 
 		// Initialize CSS injector
 		this.cssInjector = new CSSInjector(this.app, this.registry);
