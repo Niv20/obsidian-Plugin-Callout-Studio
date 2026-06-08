@@ -58,7 +58,7 @@ export class CSSInjector {
 		this.styleSheet = sheet;
 	}
 
-	inject(): void {
+	inject(emitCssChange = true): void {
 		if (this.injecting) return;
 		this.injecting = true;
 		this.ensureStyleSheet();
@@ -95,8 +95,14 @@ export class CSSInjector {
 		// visible immediately without requiring the user to re-open the note.
 		this.refreshCalloutIconsInDOM();
 
-		// Trigger Obsidian to re-render callouts with updated styles
-		this.app.workspace.trigger("css-change");
+		// Trigger Obsidian to re-render callouts with updated styles — but only
+		// when *we* are the source of the change. When reacting to an external
+		// css-change (theme/snippet, or another plugin), re-emitting would create
+		// a feedback loop with other css-change listeners that also re-emit
+		// (e.g. Style Settings), causing its settings UI to flicker endlessly.
+		if (emitCssChange) {
+			this.app.workspace.trigger("css-change");
+		}
 		this.injecting = false;
 	}
 

@@ -84,10 +84,14 @@ export default class CalloutStudioPlugin extends Plugin {
 			void this.saveSettings();
 		});
 
-		// Re-inject on theme change
+		// Re-inject on theme/snippet change. Pass `false` so we don't re-emit
+		// css-change in response to css-change — that would loop with other
+		// plugins that also listen and re-emit (e.g. Style Settings). The
+		// external css-change already re-renders open notes, so re-emitting is
+		// both redundant and harmful here.
 		this.registerEvent(
 			this.app.workspace.on("css-change", () => {
-				this.cssInjector.inject();
+				this.cssInjector.inject(false);
 			}),
 		);
 
