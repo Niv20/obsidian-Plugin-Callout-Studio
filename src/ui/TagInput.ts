@@ -1,28 +1,34 @@
 /**
  * ui/TagInput.ts — Reusable tag-input component for callout IDs and aliases.
  *
- * Renders a text input where pressing Enter or Space commits the typed value
- * as a pill/tag. Tags appear in a row below the input with an × remove button.
- * Supports validation callbacks, readonly tags (the primary ID cannot be
- * removed), and configurable max length / max count from constants.ts.
- * Used by CalloutEditor for the aliases field.
+ * Renders a text input where pressing Enter (or clicking the + button) commits
+ * the typed value as a pill/tag. Spaces are allowed inside a tag, so they no
+ * longer commit it. Tags appear in a row below the input with an × remove
+ * button. Supports validation callbacks, readonly tags (the primary ID cannot
+ * be removed), and configurable max length / max count from constants.ts.
+ * Used by CalloutEditor for the unified IDs + aliases field.
  */
-import { MAX_TAG_LENGTH, MAX_TAGS_COUNT } from "../constants";
+import { setIcon } from "obsidian";
+import { MAX_TAGS_COUNT } from "../constants";
+import { sanitizeCalloutIdInput } from "../utils/calloutId";
+import { t } from "../i18n";
 
 /**
- * A tag-input component: type text, press Enter/Space to add a tag.
+ * A tag-input component: type text, press Enter or click + to add a tag.
  * Tags are displayed in a separate row below the input field.
  * Each tag has an × button to remove it.
  */
 export class TagInput {
 	private wrapperEl: HTMLElement;
 	private inputEl: HTMLInputElement;
+	private addBtnEl: HTMLButtonElement;
 	private errorEl: HTMLElement;
 	private tagsRowEl: HTMLElement;
 	private tags: string[] = [];
 	private onChange: (tags: string[]) => void;
 	private validate?: (tag: string) => string | null;
-	private maxLength: number;
+	/** Optional per-tag character cap. When undefined, IDs are unlimited. */
+	private maxLength: number | undefined;
 	private maxTags: number;
 	private errorTimeout: number | null = null;
 	private placeholder: string;
@@ -49,20 +55,40 @@ export class TagInput {
 		this.tags = [...(opts.initialTags ?? [])];
 		this.onChange = opts.onChange;
 		this.validate = opts.validate;
-		this.maxLength = opts.maxLength ?? MAX_TAG_LENGTH;
+		this.maxLength = opts.maxLength;
 		this.maxTags = opts.maxTags ?? MAX_TAGS_COUNT;
 		this.placeholder = opts.placeholder ?? "";
 		this.readonlyTags = new Set(opts.readonlyTags ?? []);
 
-		// Wrapper: input → tags row
+		// Wrapper: input row → tags row
 		this.wrapperEl = parentEl.createDiv({ cls: "cs-tag-wrapper" });
 
+		// Input row: text field + explicit Add button (Space no longer commits,
+		// so the button gives a discoverable way to add a tag besides Enter).
+		const inputRow = this.wrapperEl.createDiv({ cls: "cs-tag-input-row" });
+
 		// Input field
-		this.inputEl = this.wrapperEl.createEl("input", {
+		this.inputEl = inputRow.createEl("input", {
 			type: "text",
 			cls: "cs-tag-input-field",
 			placeholder: this.placeholder,
-			attr: { maxlength: String(this.maxLength) },
+			attr:
+				this.maxLength !== undefined
+					? { maxlength: String(this.maxLength) }
+					: {},
+		});
+
+		// Add button
+		this.addBtnEl = inputRow.createEl("button", {
+			cls: "cs-tag-add-btn",
+			attr: { type: "button", "aria-label": t("editor.addId") },
+		});
+		this.addBtnEl.setAttribute("title", t("editor.addId"));
+		setIcon(this.addBtnEl, "plus");
+		this.addBtnEl.addEventListener("click", (e) => {
+			e.preventDefault();
+			this.commitInput();
+			this.inputEl.focus();
 		});
 
 		// Tags row (below input)
@@ -85,18 +111,18 @@ export class TagInput {
 		this.updateInputState();
 
 		this.inputEl.addEventListener("keydown", (e) => {
-			if (e.key === "Enter" || e.key === " " || e.key === ",") {
+			// Space is intentionally NOT a commit key — IDs may contain spaces.
+			if (e.key === "Enter" || e.key === ",") {
 				e.preventDefault();
 				this.commitInput();
 			}
 		});
 
-		// Show error when user tries to type past maxLength
+		// Show error when user tries to type past maxLength (if a cap is set)
 		this.inputEl.addEventListener("input", () => {
-			if (this.inputEl.value.length >= this.maxLength) {
-				this.showError(
-					`ID must be ${this.maxLength} characters or less`,
-				);
+			const cap = this.maxLength;
+			if (cap !== undefined && this.inputEl.value.length >= cap) {
+				this.showError(`ID must be ${cap} characters or less`);
 			}
 		});
 
@@ -104,11 +130,15 @@ export class TagInput {
 			this.commitInput();
 		});
 
-		// Handle paste with multiple comma/space separated values
+		// Handle paste with multiple comma/newline separated values. Spaces are
+		// kept (IDs may contain them) — only commas and line breaks split tags.
 		this.inputEl.addEventListener("paste", (e) => {
 			e.preventDefault();
 			const text = e.clipboardData?.getData("text") ?? "";
-			const parts = text.split(/[\s,]+/).filter(Boolean);
+			const parts = text
+				.split(/[,\n\r]+/)
+				.map((p) => p.trim())
+				.filter(Boolean);
 			for (const part of parts) {
 				this.addTag(part);
 			}
@@ -118,12 +148,14 @@ export class TagInput {
 	private updateInputState(): void {
 		if (this.tags.length >= this.maxTags) {
 			this.inputEl.disabled = true;
+			this.addBtnEl.disabled = true;
 			this.inputEl.placeholder = "";
 			this.showPersistentError(
 				`Maximum ${this.maxTags} IDs. Delete one to add another.`,
 			);
 		} else {
 			this.inputEl.disabled = false;
+			this.addBtnEl.disabled = false;
 			this.inputEl.placeholder = this.placeholder;
 			this.clearPersistentError();
 		}
@@ -173,15 +205,11 @@ export class TagInput {
 	private addTag(raw: string): void {
 		if (this.tags.length >= this.maxTags) return;
 
-		const tag = raw
-			.toLowerCase()
-			.replace(/[^\p{L}\p{N}-]/gu, "")
-			.replace(/-+/g, "-")
-			.replace(/^-|-$/g, "");
+		const tag = sanitizeCalloutIdInput(raw);
 		if (!tag) return;
 
-		// Check max length
-		if (tag.length > this.maxLength) {
+		// Check max length (only when a cap is configured)
+		if (this.maxLength !== undefined && tag.length > this.maxLength) {
 			this.showError(`ID must be ${this.maxLength} characters or less`);
 			return;
 		}
@@ -224,6 +252,9 @@ export class TagInput {
 	private renderTag(tag: string): void {
 		const tagEl = this.tagsRowEl.createDiv({ cls: "cs-tag-chip" });
 		tagEl.setAttribute("data-tag", tag);
+		// Long IDs are truncated with an ellipsis in CSS; the full value is
+		// shown on hover via the native tooltip.
+		tagEl.setAttribute("title", tag);
 
 		const isReadonly = this.readonlyTags.has(tag);
 		if (isReadonly) tagEl.addClass("is-readonly");

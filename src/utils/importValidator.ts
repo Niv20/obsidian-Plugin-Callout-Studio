@@ -10,6 +10,7 @@
 import type { CalloutDefinition, CalloutIcon } from "../types";
 import type { CalloutRegistry } from "../manager/CalloutRegistry";
 import { MAX_TAG_LENGTH, MAX_TAGS_COUNT } from "../constants";
+import { normalizeCalloutId } from "./calloutId";
 
 /** Severity used by the report modal to style each row. */
 export type IssueLevel = "error" | "warning";
@@ -38,7 +39,9 @@ export interface ValidationResult {
 }
 
 const HEX_COLOR_RE = /^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/;
-const ID_BAD_CHAR_RE = /[\s|\][]/;
+// IDs may contain normal spaces (multi-word labels). Still reject pipes,
+// brackets, and non-space whitespace (tabs / line breaks).
+const ID_BAD_CHAR_RE = /[|\][\t\n\r]/;
 const VALID_ICON_TYPES = new Set(["lucide", "material", "emoji"]);
 const VALID_MATERIAL_STYLES = new Set([
 	"outlined",
@@ -392,7 +395,10 @@ export function validateImportPayload(
 		}
 
 		// ── id ─────────────────────────────────────────────────
-		const idRaw = typeof entry.id === "string" ? entry.id.trim() : "";
+		// Canonicalize (trim, collapse whitespace, lowercase) so imported IDs
+		// match the form the editor produces and the vault scanner expects.
+		const idRaw =
+			typeof entry.id === "string" ? normalizeCalloutId(entry.id) : "";
 		if (typeof entry.id === "string") {
 			if (!validateIdString(idRaw, push, "id")) entryOk = false;
 		}
@@ -517,7 +523,7 @@ export function validateImportPayload(
 						entryOk = false;
 						return;
 					}
-					const trimmed = alias.trim();
+					const trimmed = normalizeCalloutId(alias);
 					if (!validateIdString(trimmed, push, `aliases[${ai}]`)) {
 						entryOk = false;
 						return;

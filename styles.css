@@ -1333,8 +1333,15 @@ button.callout-studio-icon-picker-loading {
 	margin-top: 4px;
 }
 
-.cs-tag-wrapper > .cs-tag-input-field {
-	min-width: 100px;
+.cs-tag-input-row {
+	display: flex;
+	align-items: stretch;
+	gap: 4px;
+}
+
+.cs-tag-input-row > .cs-tag-input-field {
+	flex: 1 1 auto;
+	min-width: 80px;
 	border: 1px solid var(--background-modifier-border);
 	border-radius: var(--radius-s);
 	background: var(--background-primary);
@@ -1346,20 +1353,52 @@ button.callout-studio-icon-picker-loading {
 	box-sizing: border-box;
 }
 
-.cs-tag-wrapper > .cs-tag-input-field:focus {
+.cs-tag-input-row > .cs-tag-input-field:focus {
 	border-color: var(--interactive-accent);
 	box-shadow: 0 0 0 2px rgba(var(--interactive-accent-rgb), 0.2);
 }
 
-.cs-tag-wrapper > .cs-tag-input-field:disabled {
+.cs-tag-input-row > .cs-tag-input-field:disabled {
 	color: var(--text-faint);
 	opacity: 0.5;
 	cursor: not-allowed;
 	background: var(--background-secondary);
 }
 
-.cs-tag-wrapper > .cs-tag-input-field::placeholder {
+.cs-tag-input-row > .cs-tag-input-field::placeholder {
 	color: var(--text-faint);
+}
+
+.cs-tag-add-btn {
+	flex: 0 0 auto;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 36px;
+	min-height: 36px;
+	padding: 0;
+	border: 1px solid var(--background-modifier-border);
+	border-radius: var(--radius-s);
+	background: var(--background-primary);
+	color: var(--text-muted);
+	cursor: pointer;
+	box-sizing: border-box;
+}
+
+.cs-tag-add-btn:hover:not(:disabled) {
+	color: var(--text-normal);
+	border-color: var(--interactive-accent);
+	background: var(--background-modifier-hover);
+}
+
+.cs-tag-add-btn:disabled {
+	opacity: 0.5;
+	cursor: not-allowed;
+}
+
+.cs-tag-add-btn .svg-icon {
+	width: 16px;
+	height: 16px;
 }
 
 .cs-tag-row {
@@ -1385,6 +1424,12 @@ button.callout-studio-icon-picker-loading {
 
 .cs-tag-chip-text {
 	pointer-events: none;
+	display: inline-block;
+	max-width: 140px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	vertical-align: bottom;
 }
 
 .cs-tag-chip-remove {

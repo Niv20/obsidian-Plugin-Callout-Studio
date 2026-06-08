@@ -8,6 +8,7 @@
  * DataManagementSection (re-scan), and CalloutRowActions (pre-delete counts).
  */
 import type { App, TFile } from "obsidian";
+import { normalizeCalloutId } from "./calloutId";
 
 function escapeRegex(str: string): string {
 	return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -29,7 +30,7 @@ export interface VaultCalloutStatistics {
 export async function scanVaultCalloutStatistics(
 	app: App,
 ): Promise<VaultCalloutStatistics> {
-	const regex = /^>\s*(?:>\s*)*\[!([^\]\s]+)\][+-]?/gim;
+	const regex = /^>\s*(?:>\s*)*\[!([^\]\n\r]+)\][+-]?/gim;
 	const files = app.vault.getMarkdownFiles();
 	const byId = new Map<string, VaultCalloutTypeStatistics>();
 	let filesWithCallouts = 0;
@@ -42,7 +43,7 @@ export async function scanVaultCalloutStatistics(
 
 		let match: RegExpExecArray | null;
 		while ((match = regex.exec(content)) !== null) {
-			const id = match[1]?.toLowerCase();
+			const id = match[1] ? normalizeCalloutId(match[1]) : "";
 			if (!id) continue;
 
 			let entry = byId.get(id);
@@ -86,12 +87,12 @@ export async function scanFileForUnknownCallouts(
 	file: TFile,
 	knownIds: Set<string>,
 ): Promise<string[]> {
-	const regex = /^>\s*\[!([^\]\s]+)\]/gim;
+	const regex = /^>\s*\[!([^\]\n\r]+)\]/gim;
 	const content = await app.vault.cachedRead(file);
 	const found = new Set<string>();
 	let m: RegExpExecArray | null;
 	while ((m = regex.exec(content)) !== null) {
-		const id = m[1]?.toLowerCase();
+		const id = m[1] ? normalizeCalloutId(m[1]) : "";
 		if (!id) continue;
 		if (!knownIds.has(id)) found.add(id);
 	}
@@ -106,11 +107,11 @@ export function scanStringForUnknownCallouts(
 	content: string,
 	knownIds: Set<string>,
 ): string[] {
-	const regex = /^>\s*\[!([^\]\s]+)\]/gim;
+	const regex = /^>\s*\[!([^\]\n\r]+)\]/gim;
 	const found = new Set<string>();
 	let m: RegExpExecArray | null;
 	while ((m = regex.exec(content)) !== null) {
-		const id = m[1]?.toLowerCase();
+		const id = m[1] ? normalizeCalloutId(m[1]) : "";
 		if (!id) continue;
 		if (!knownIds.has(id)) found.add(id);
 	}
@@ -157,7 +158,7 @@ export async function countCalloutUsagesMap(
 ): Promise<Map<string, { fileCount: number; totalCount: number }>> {
 	const result = new Map<string, { fileCount: number; totalCount: number }>();
 	for (const id of ids) {
-		result.set(id.toLowerCase(), { fileCount: 0, totalCount: 0 });
+		result.set(normalizeCalloutId(id), { fileCount: 0, totalCount: 0 });
 	}
 	if (ids.length === 0) return result;
 
@@ -171,7 +172,7 @@ export async function countCalloutUsagesMap(
 		let m: RegExpExecArray | null;
 		regex.lastIndex = 0;
 		while ((m = regex.exec(content)) !== null) {
-			const id = m[1]?.toLowerCase();
+			const id = m[1] ? normalizeCalloutId(m[1]) : "";
 			if (!id) continue;
 			const entry = result.get(id);
 			if (!entry) continue;
@@ -204,8 +205,8 @@ export async function convertCalloutsToPlainTextInVault(
 ): Promise<{ files: number; blocks: number }> {
 	if (ids.length === 0) return { files: 0, blocks: 0 };
 
-	const idSet = new Set(ids.map((id) => id.toLowerCase()));
-	const headerRegex = /^(>+)\s*\[!([^\]\s]+)\][+-]?\s*(.*)$/i;
+	const idSet = new Set(ids.map((id) => normalizeCalloutId(id)));
+	const headerRegex = /^(>+)\s*\[!([^\]\n\r]+)\][+-]?\s*(.*)$/i;
 
 	const files = app.vault.getMarkdownFiles();
 	let modifiedFiles = 0;
@@ -222,7 +223,7 @@ export async function convertCalloutsToPlainTextInVault(
 			const headerMatch = line.match(headerRegex);
 			if (headerMatch) {
 				const markers = headerMatch[1] ?? ">";
-				const id = (headerMatch[2] ?? "").toLowerCase();
+				const id = normalizeCalloutId(headerMatch[2] ?? "");
 				// Only unwrap outermost blocks (single `>`) whose id matches.
 				if (markers.length === 1 && idSet.has(id)) {
 					const title = (headerMatch[3] ?? "").trim();
@@ -336,14 +337,14 @@ export async function scanVaultForUnknownCallouts(
 	app: App,
 	knownIds: Set<string>,
 ): Promise<string[]> {
-	const regex = /^>\s*\[!([^\]\s]+)\]/gim;
+	const regex = /^>\s*\[!([^\]\n\r]+)\]/gim;
 	const files = app.vault.getMarkdownFiles();
 	const found = new Set<string>();
 	for (const file of files) {
 		const content = await app.vault.cachedRead(file);
 		let m: RegExpExecArray | null;
 		while ((m = regex.exec(content)) !== null) {
-			const id = m[1]?.toLowerCase();
+			const id = m[1] ? normalizeCalloutId(m[1]) : "";
 			if (!id) continue;
 			if (!knownIds.has(id)) found.add(id);
 		}

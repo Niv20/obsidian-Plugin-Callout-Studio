@@ -236,8 +236,9 @@ export const he: Record<string, string> = {
 	"editor.displayNamePlaceholder": "תיבת־ההבלטה שלי",
 	"editor.calloutIds": "מזהי תיבת־הבלטה (IDs)",
 	"editor.calloutIdsDesc":
-		"כל המזהים המשויכים לתיבת־הבלטה זו. לחצו על Enter או רווח כדי להוסיף.",
+		"כל המזהים המשויכים לתיבת־הבלטה זו. ניתן להשתמש ברווחים.\nלחצו על Enter או על כפתור ה־+ כדי להוסיף.",
 	"editor.calloutIdsPlaceholder": "הוספת מזהה",
+	"editor.addId": "הוספת מזהה",
 	"editor.icon": "אייקון",
 	"editor.light": "בהיר",
 	"editor.dark": "כהה",
@@ -371,7 +372,7 @@ export const he: Record<string, string> = {
 	"import.err.idTooLong":
 		'ה־ID "{{value}}" ארוך מדי ({{length}} תווים); המקסימום המותר הוא {{max}}.',
 	"import.err.idBadChar":
-		'ה־ID "{{value}}" מכיל תווים לא חוקיים (רווחים, "|", "[" או "]" אינם מורשים).',
+		'ה־ID "{{value}}" מכיל תווים לא חוקיים ("|", "[", "]", טאבים ומעברי שורה אינם מורשים).',
 	"import.err.displayNameEmpty": "שם התצוגה לא יכול להיות ריק.",
 	"import.err.displayNameTooLong":
 		"שם התצוגה ארוך מדי ({{length}} תווים); המקסימום המותר הוא {{max}}.",

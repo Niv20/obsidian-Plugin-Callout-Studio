@@ -18,6 +18,7 @@ import {
 } from "obsidian";
 import type CalloutStudioPlugin from "../main";
 import { t } from "../i18n";
+import { normalizeCalloutId } from "../utils/calloutId";
 import { CalloutEditor } from "../settings/CalloutEditor";
 
 // ─── Layer 1: Constants ──────────────────────────────────────────────────────
@@ -457,10 +458,6 @@ function copyCalloutMarkdown(editor: Editor, info: CalloutInfo): void {
 function openPluginSettings(plugin: CalloutStudioPlugin): void {
 	plugin.app.setting.open();
 	plugin.app.setting.openTabById(plugin.manifest.id);
-}
-
-function normalizeCalloutId(value: string): string {
-	return value.trim().toLowerCase();
 }
 
 function countQuoteDepth(prefix: string): number {

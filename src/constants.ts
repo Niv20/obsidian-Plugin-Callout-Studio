@@ -13,8 +13,12 @@ import type {
 	PluginSettings,
 } from "./types";
 
-/** Maximum characters allowed per callout ID */
-export const MAX_TAG_LENGTH: number = 10;
+/**
+ * Generous safety cap on callout-ID length, applied only when validating
+ * imported JSON (untrusted data). The editor itself enforces no length limit —
+ * long IDs are truncated with an ellipsis in the UI and shown in full on hover.
+ */
+export const MAX_TAG_LENGTH: number = 200;
 
 /** Maximum number of IDs (aliases) allowed per callout */
 export const MAX_TAGS_COUNT: number = 4;

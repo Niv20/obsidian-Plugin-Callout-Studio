@@ -12,6 +12,7 @@ import type { App, EventRef } from "obsidian";
 import type { CalloutRegistry } from "./CalloutRegistry";
 import type { PluginSettings } from "../types";
 import { DEFAULT_CALLOUTS } from "../constants";
+import { normalizeCalloutId } from "../utils/calloutId";
 import {
 	scanFileForUnknownCallouts,
 	scanVaultForUnknownCallouts,
@@ -58,8 +59,9 @@ export class CalloutDiscovery {
 	buildKnownIds(): Set<string> {
 		const known = new Set<string>();
 		for (const def of this.host.registry.getAll()) {
-			known.add(def.id.toLowerCase());
-			for (const a of def.aliases ?? []) known.add(a.toLowerCase());
+			known.add(normalizeCalloutId(def.id));
+			for (const a of def.aliases ?? [])
+				known.add(normalizeCalloutId(a));
 		}
 		return known;
 	}
@@ -137,7 +139,7 @@ export class CalloutDiscovery {
 
 		let removed = 0;
 		for (const id of candidates) {
-			const stat = usage.get(id.toLowerCase());
+			const stat = usage.get(normalizeCalloutId(id));
 			if (!stat || stat.fileCount > 0) continue;
 			const def = this.host.registry.get(id);
 			if (!def) continue;
@@ -223,9 +225,10 @@ export class CalloutDiscovery {
 		if (!active?.editor || active.file !== file) return null;
 		const editor = active.editor;
 		const line = editor.getLine(editor.getCursor().line); // live buffer
-		// Same id shape as the vault scanner (`[^\]\s]+` + closing `]`).
-		const m = /^\s*>[\s>]*\[!([^\]\s]+)\]/.exec(line);
-		return m ? m[1]!.toLowerCase() : null;
+		// Same id shape as the vault scanner (`[^\]\n\r]+` + closing `]`),
+		// so multi-word IDs with spaces are captured and normalized identically.
+		const m = /^\s*>[\s>]*\[!([^\]\n\r]+)\]/.exec(line);
+		return m ? normalizeCalloutId(m[1]!) : null;
 	}
 
 	private async scanFileNow(file: TFile): Promise<void> {

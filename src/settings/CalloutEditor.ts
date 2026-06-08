@@ -18,6 +18,7 @@ import {
 	EXTRA_PALETTES,
 } from "../utils/colorPalettes";
 import { t } from "../i18n";
+import { sanitizeCalloutIdInput } from "../utils/calloutId";
 import { TagInput } from "../ui/TagInput";
 import { renderColorCircles } from "../ui/ColorCircles";
 import { createAnimatedNumberLabel } from "../ui/AnimatedNumberLabel";
@@ -33,13 +34,11 @@ import {
 import { renderCalloutEditorIconPreview } from "./editor/CalloutEditorIconRenderer";
 import { performCalloutEditorSave } from "./editor/CalloutEditorSave";
 
+// Derive a callout ID from the display name. Spaces are preserved (the ID may
+// be a human-readable, multi-word label like "multi word callout"); the shared
+// sanitizer just lowercases, restricts the charset, and collapses/trims runs.
 function generateId(displayName: string): string {
-	return displayName
-		.toLowerCase()
-		.replace(/[^\p{L}\p{N}\s-]/gu, "")
-		.replace(/\s+/g, "-")
-		.replace(/-+/g, "-")
-		.replace(/^-|-$/g, "");
+	return sanitizeCalloutIdInput(displayName);
 }
 
 const DEFAULT_TEXT_COLOR_LIGHT = "#1a1a1a";
@@ -220,7 +219,18 @@ export class CalloutEditor extends Modal {
 		const initialIds = [this.calloutId, ...this.aliases].filter(Boolean);
 		const idsSetting = new Setting(contentEl)
 			.setName(t("editor.calloutIds"))
-			.setDesc(t("editor.calloutIdsDesc"));
+			.setDesc(
+				createFragment((frag) => {
+					// Render each newline-separated line of the description on
+					// its own row (e.g. the "Press Enter…" hint sits below).
+					t("editor.calloutIdsDesc")
+						.split("\n")
+						.forEach((line, i) => {
+							if (i > 0) frag.createEl("br");
+							frag.appendText(line);
+						});
+				}),
+			);
 
 		// Error element lives in the left description area
 		const idsErrorEl = idsSetting.descEl.createDiv();

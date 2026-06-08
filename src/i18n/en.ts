@@ -237,8 +237,9 @@ export const en: Record<string, string> = {
 	"editor.displayNamePlaceholder": "My callout",
 	"editor.calloutIds": "Callout IDs",
 	"editor.calloutIdsDesc":
-		"All identifiers for this callout. Press Enter or Space to add.",
+		"All identifiers for this callout. Spaces are allowed.\nPress Enter or the + button to add.",
 	"editor.calloutIdsPlaceholder": "Add ID",
+	"editor.addId": "Add ID",
 	"editor.icon": "Icon",
 	"editor.light": "Light",
 	"editor.dark": "Dark",
@@ -378,7 +379,7 @@ export const en: Record<string, string> = {
 	"import.err.idTooLong":
 		'ID "{{value}}" is {{length}} characters; the maximum is {{max}}.',
 	"import.err.idBadChar":
-		'ID "{{value}}" contains invalid characters (whitespace, "|", "[", or "]" are not allowed).',
+		'ID "{{value}}" contains invalid characters ("|", "[", "]", tabs, and line breaks are not allowed).',
 	"import.err.displayNameEmpty": "Display name must not be empty.",
 	"import.err.displayNameTooLong":
 		"Display name is {{length}} characters; the maximum is {{max}}.",
