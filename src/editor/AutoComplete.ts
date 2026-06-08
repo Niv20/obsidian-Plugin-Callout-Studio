@@ -124,10 +124,18 @@ export class CalloutAutoComplete extends EditorSuggest<CalloutSuggestion> {
 		// Allow: "", ">", "> ", ">> ", etc. (any level of blockquote)
 		if (prefix !== "" && !/^>[\s>]*$/.test(prefix)) return null;
 
-		const query = textBefore.slice(triggerIdx + 2);
+		// Capture the full id token (from `[!` to the next `]`, or end of line),
+		// independent of where the cursor sits within it. Reading only up to the
+		// cursor would mis-filter a mid-token cursor (e.g. `[!dang|aaaaa]` would
+		// match "Danger" instead of offering "Create new: dangaaaaa").
+		const afterTrigger = line.slice(triggerIdx + 2);
+		const closeIdx = afterTrigger.indexOf("]");
+		const query =
+			closeIdx === -1 ? afterTrigger : afterTrigger.slice(0, closeIdx);
 
-		// Don't trigger if there's a closing `]` already in the query portion
-		if (query.includes("]")) return null;
+		// Stop once the cursor moves past the id into the fold mark / title.
+		const idEndCh = triggerIdx + 2 + query.length;
+		if (cursor.ch > idEndCh) return null;
 
 		return {
 			start: { line: cursor.line, ch: triggerIdx },
@@ -267,15 +275,17 @@ export class CalloutAutoComplete extends EditorSuggest<CalloutSuggestion> {
 		const def = item;
 		const { editor, start, end, query } = this.context;
 
-		const line = editor.getLine(end.line);
+		const line = editor.getLine(start.line);
 
-		// Consume a stray ']' that Obsidian may have auto-inserted
-		const afterCursor = line.slice(end.ch);
-
-		// Parse what already exists after the `[!...]` on the line
-		// Pattern: optional ']', optional fold mark (+/-), optional ' Title...'
-		const restMatch = /^(\]?)([+-]?)\s*(.*)$/.exec(afterCursor);
-		const existingTitle = restMatch?.[3]?.trim() ?? "";
+		// Parse what already exists after the `[!...]` on the line, starting from
+		// the header (not the cursor) so a mid-token cursor doesn't truncate the
+		// title detection. Pattern after `]`: optional fold mark (+/-), optional title.
+		const afterTrigger = line.slice(start.ch + 2);
+		const closeIdx = afterTrigger.indexOf("]");
+		const afterHeader =
+			closeIdx === -1 ? "" : afterTrigger.slice(closeIdx + 1);
+		const restMatch = /^([+-]?)\s*(.*)$/.exec(afterHeader);
+		const existingTitle = restMatch?.[2]?.trim() ?? "";
 
 		// Detect if this is a brand-new callout (no title text after the header)
 		const isNewCallout = existingTitle === "";

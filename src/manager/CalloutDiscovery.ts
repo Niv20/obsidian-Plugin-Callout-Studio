@@ -210,6 +210,24 @@ export class CalloutDiscovery {
 		this.fileScanTimers.set(path, timerId);
 	}
 
+	/**
+	 * If the active editor is editing this file and the cursor sits on a
+	 * `[!id]` header line, return that header's (lowercased) id. While the
+	 * cursor stays on the line the id is "in progress" and must not be
+	 * auto-created yet: doing so would feed the half-typed name straight back
+	 * into the autocomplete dropdown. Discovery happens once the cursor leaves
+	 * the line (treated as the user having committed the name).
+	 */
+	private getActiveTypingCalloutId(file: TFile): string | null {
+		const active = this.host.app.workspace.activeEditor;
+		if (!active?.editor || active.file !== file) return null;
+		const editor = active.editor;
+		const line = editor.getLine(editor.getCursor().line); // live buffer
+		// Same id shape as the vault scanner (`[^\]\s]+` + closing `]`).
+		const m = /^\s*>[\s>]*\[!([^\]\s]+)\]/.exec(line);
+		return m ? m[1]!.toLowerCase() : null;
+	}
+
 	private async scanFileNow(file: TFile): Promise<void> {
 		if (this.host.app.vault.getAbstractFileByPath(file.path) !== file)
 			return;
@@ -225,6 +243,10 @@ export class CalloutDiscovery {
 			console.debug("[CalloutStudio] file scan failed", file.path, e);
 			return;
 		}
+		// Skip the header the user is actively typing — it gets discovered once
+		// they commit it (Enter, move past the header, or switch files).
+		const inProgress = this.getActiveTypingCalloutId(file);
+		if (inProgress) unknown = unknown.filter((id) => id !== inProgress);
 		if (unknown.length === 0) {
 			// Edit may have removed the last usage of a fallback row. Run
 			// a prune so the settings list stays clean as the user types.
