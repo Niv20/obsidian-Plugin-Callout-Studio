@@ -136,7 +136,7 @@ export class IconPicker extends Modal {
 		}
 		// Clean up loading timers
 		for (const timer of this.loadingTimers) {
-			activeWindow.clearTimeout(timer);
+			window.clearTimeout(timer);
 		}
 		this.loadingTimers = [];
 	}
@@ -150,7 +150,7 @@ export class IconPicker extends Modal {
 	): HTMLElement {
 		const el = parent.createDiv("icon-picker-loading");
 		el.setText(text);
-		const timer = activeWindow.setTimeout(() => {
+		const timer = window.setTimeout(() => {
 			el.addClass("is-visible");
 		}, 1000);
 		this.loadingTimers.push(timer);

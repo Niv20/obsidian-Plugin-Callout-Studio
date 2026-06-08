@@ -131,7 +131,7 @@ export class TagInput {
 
 	private showPersistentError(msg: string): void {
 		if (this.errorTimeout) {
-			activeWindow.clearTimeout(this.errorTimeout);
+			window.clearTimeout(this.errorTimeout);
 			this.errorTimeout = null;
 		}
 		this.errorEl.textContent = msg;
@@ -144,7 +144,7 @@ export class TagInput {
 			this.errorEl.removeClass("is-visible");
 			this.errorEl.removeClass("is-persistent");
 			// Clear text after CSS fade-out transition completes
-			activeWindow.setTimeout(() => {
+			window.setTimeout(() => {
 				if (!this.errorEl.hasClass("is-visible")) {
 					this.errorEl.textContent = "";
 				}
@@ -161,10 +161,10 @@ export class TagInput {
 
 	private showError(msg: string): void {
 		if (this.errorEl.hasClass("is-persistent")) return;
-		if (this.errorTimeout) activeWindow.clearTimeout(this.errorTimeout);
+		if (this.errorTimeout) window.clearTimeout(this.errorTimeout);
 		this.errorEl.textContent = msg;
 		this.errorEl.addClass("is-visible");
-		this.errorTimeout = activeWindow.setTimeout(() => {
+		this.errorTimeout = window.setTimeout(() => {
 			this.errorEl.removeClass("is-visible");
 			this.errorTimeout = null;
 		}, 2500);
