@@ -10,7 +10,7 @@
 import { setIcon } from "obsidian";
 import type { App } from "obsidian";
 import type { CalloutDefinition } from "../types";
-import { hexToRgbString } from "../utils/colorUtils";
+import { calloutColorValue, hexToRgbString } from "../utils/colorUtils";
 import { ensureMaterialFontLoaded, svgToDataUri } from "../utils/iconLoader";
 import type { CalloutRegistry } from "./CalloutRegistry";
 
@@ -128,8 +128,14 @@ export class CSSInjector {
 
 		const parts: string[] = [];
 
-		// Light mode (default)
-		const lightProps: string[] = [`  --callout-color: ${lightRgb};`];
+		// Light mode (default).
+		// --callout-color: full color (Obsidian 1.13+) or RGB triplet (≤1.12),
+		// for Obsidian's own callout chrome. --cs-color-rgb: always a triplet,
+		// for our own rgb()/rgba() consumers (borders, Material icon fill).
+		const lightProps: string[] = [
+			`  --callout-color: ${calloutColorValue(def.colorLight)};`,
+			`  --cs-color-rgb: ${lightRgb};`,
+		];
 		if (iconCSS) lightProps.push(`  --callout-icon: ${iconCSS};`);
 		if (def.bgColorLight) {
 			lightProps.push(`  background-color: ${def.bgColorLight};`);
@@ -143,7 +149,10 @@ export class CSSInjector {
 			def.colorLight !== def.colorDark ||
 			def.bgColorLight !== def.bgColorDark
 		) {
-			const darkProps: string[] = [`  --callout-color: ${darkRgb};`];
+			const darkProps: string[] = [
+				`  --callout-color: ${calloutColorValue(def.colorDark)};`,
+				`  --cs-color-rgb: ${darkRgb};`,
+			];
 			if (def.bgColorDark) {
 				darkProps.push(`  background-color: ${def.bgColorDark};`);
 			}
@@ -200,7 +209,8 @@ export class CSSInjector {
 					def.bgColorLight !== def.bgColorDark
 				) {
 					const aliasDarkProps: string[] = [
-						`  --callout-color: ${darkRgb};`,
+						`  --callout-color: ${calloutColorValue(def.colorDark)};`,
+						`  --cs-color-rgb: ${darkRgb};`,
 					];
 					if (def.bgColorDark) {
 						aliasDarkProps.push(
@@ -312,7 +322,7 @@ export class CSSInjector {
 			`  mask-size: contain;\n` +
 			`  -webkit-mask-repeat: no-repeat;\n` +
 			`  mask-repeat: no-repeat;\n` +
-			`  background-color: rgb(var(--callout-color));\n` +
+			`  background-color: rgb(var(--cs-color-rgb));\n` +
 			`}`
 		);
 	}
@@ -379,7 +389,7 @@ export class CSSInjector {
 		const { top, right, bottom, left } = gs.borderSides;
 		const allSides = top && right && bottom && left;
 		const anySide = top || right || bottom || left;
-		const bStyle = `${gs.borderWidth}px solid rgba(var(--callout-color), 0.45)`;
+		const bStyle = `${gs.borderWidth}px solid rgba(var(--cs-color-rgb), 0.45)`;
 
 		if (allSides) {
 			props.push(`  border: ${bStyle};`);
@@ -454,7 +464,8 @@ export class CSSInjector {
 		// Use `body` prefix + `!important` so the fallback wins over Obsidian's
 		// built-in callout color/icon definitions.
 		const lightProps: string[] = [
-			`  --callout-color: ${lightRgb} !important;`,
+			`  --callout-color: ${calloutColorValue(fallbackDef.colorLight)} !important;`,
+			`  --cs-color-rgb: ${lightRgb} !important;`,
 		];
 		if (iconCSS)
 			lightProps.push(`  --callout-icon: ${iconCSS} !important;`);
@@ -472,7 +483,8 @@ export class CSSInjector {
 			fallbackDef.bgColorLight !== fallbackDef.bgColorDark
 		) {
 			const darkProps: string[] = [
-				`  --callout-color: ${darkRgb} !important;`,
+				`  --callout-color: ${calloutColorValue(fallbackDef.colorDark)} !important;`,
+				`  --cs-color-rgb: ${darkRgb} !important;`,
 			];
 			if (fallbackDef.bgColorDark) {
 				darkProps.push(
@@ -520,7 +532,7 @@ export class CSSInjector {
 						`  mask-size: contain;\n` +
 						`  -webkit-mask-repeat: no-repeat;\n` +
 						`  mask-repeat: no-repeat;\n` +
-						`  background-color: rgb(var(--callout-color)) !important;\n` +
+						`  background-color: rgb(var(--cs-color-rgb)) !important;\n` +
 						`}`,
 				);
 			}

@@ -6,6 +6,8 @@
  * Used by CSSInjector (for dynamic CSS generation), colorPalettes (for
  * auto-computed backgrounds), and CalloutEditor (for color field handling).
  */
+import { requireApiVersion } from "obsidian";
+
 export interface RGB {
 	r: number;
 	g: number;
@@ -67,6 +69,76 @@ export function hslToRgb(h: number, s: number, l: number): RGB {
 export function hexToRgbString(hex: string): string {
 	const { r, g, b } = hexToRgb(hex);
 	return `${r}, ${g}, ${b}`;
+}
+
+/**
+ * Cached result of the Obsidian version check used by `calloutColorValue`.
+ * `null` until first computed; avoids calling `requireApiVersion` for every
+ * callout on every CSS inject.
+ */
+let calloutColorIsRaw: boolean | null = null;
+
+/**
+ * Returns the value to assign to Obsidian's `--callout-color` variable for the
+ * current Obsidian version.
+ *
+ * Obsidian 1.13 changed `--callout-color` from a raw RGB triplet
+ * (`255, 0, 0`, wrapped by Obsidian in `rgb(...)`) to a full CSS color
+ * (`#ff0000`, used directly). We emit the right format for the running version
+ * so a single release works on both ≤1.12 and 1.13+.
+ */
+export function calloutColorValue(hex: string): string {
+	if (calloutColorIsRaw === null) {
+		calloutColorIsRaw = !requireApiVersion("1.13.0");
+	}
+	return calloutColorIsRaw ? hexToRgbString(hex) : hex;
+}
+
+function rgbTripletToHex(r: string, g: string, b: string): string {
+	return rgbToHex(parseInt(r, 10), parseInt(g, 10), parseInt(b, 10));
+}
+
+/**
+ * Parses a CSS color value as it may appear in a `--callout-color` declaration
+ * into a `#rrggbb` hex string. Handles the formats that occur in callout CSS
+ * snippets across Obsidian versions:
+ *   - hex: `#rgb`, `#rrggbb`
+ *   - functional: `rgb(255, 0, 0)`, `rgba(255 0 0 / 0.5)`
+ *   - bare RGB triplet (pre-1.13): `255, 0, 0`
+ *
+ * Returns `null` for anything else (named colors, `oklch()`, etc.), which the
+ * caller should skip rather than import with a broken color.
+ */
+export function parseCssColorToHex(value: string): string | null {
+	const v = value.trim();
+
+	// #rgb or #rrggbb
+	const hexMatch = /^#([0-9a-f]{3}|[0-9a-f]{6})$/i.exec(v);
+	if (hexMatch && hexMatch[1]) {
+		let h = hexMatch[1].toLowerCase();
+		if (h.length === 3) {
+			h = h
+				.split("")
+				.map((c) => c + c)
+				.join("");
+		}
+		return "#" + h;
+	}
+
+	// rgb()/rgba() with comma- or space-separated channels (alpha ignored)
+	const fnMatch =
+		/^rgba?\(\s*(\d{1,3})[\s,]+(\d{1,3})[\s,]+(\d{1,3})/i.exec(v);
+	if (fnMatch && fnMatch[1] && fnMatch[2] && fnMatch[3]) {
+		return rgbTripletToHex(fnMatch[1], fnMatch[2], fnMatch[3]);
+	}
+
+	// Bare RGB triplet (pre-1.13 format): 255, 0, 0
+	const tripletMatch = /^(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})$/.exec(v);
+	if (tripletMatch && tripletMatch[1] && tripletMatch[2] && tripletMatch[3]) {
+		return rgbTripletToHex(tripletMatch[1], tripletMatch[2], tripletMatch[3]);
+	}
+
+	return null;
 }
 
 /**

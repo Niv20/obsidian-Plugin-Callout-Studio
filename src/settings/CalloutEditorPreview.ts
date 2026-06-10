@@ -8,6 +8,7 @@
  */
 import { setIcon } from "obsidian";
 import { t } from "../i18n";
+import { calloutColorValue } from "../utils/colorUtils";
 
 export interface EditorPreviewState {
 	previewDarkMode: boolean;
@@ -53,8 +54,10 @@ export function renderEditorPreview(
 		accentColor,
 	);
 	let rgbStr = "68, 138, 255";
+	let accentHex = "#448aff";
 	if (rgbMatch && rgbMatch[1] && rgbMatch[2] && rgbMatch[3]) {
 		rgbStr = `${parseInt(rgbMatch[1], 16)}, ${parseInt(rgbMatch[2], 16)}, ${parseInt(rgbMatch[3], 16)}`;
+		accentHex = accentColor;
 	}
 
 	// Wrap the callout inside .markdown-rendered so Obsidian's callout CSS
@@ -66,7 +69,10 @@ export function renderEditorPreview(
 	});
 	const calloutEl = renderedWrapper.createDiv({ cls: "callout" });
 	calloutEl.setAttribute("data-callout", "cs-preview");
-	calloutEl.style.setProperty("--callout-color", rgbStr);
+	// --cs-color-rgb (triplet) drives our own preview CSS; --callout-color
+	// (version-aware) drives Obsidian's own callout chrome inside markdown-rendered.
+	calloutEl.style.setProperty("--cs-color-rgb", rgbStr);
+	calloutEl.style.setProperty("--callout-color", calloutColorValue(accentHex));
 	calloutEl.style.backgroundColor = bgColor;
 
 	if (state.previewDarkMode) {

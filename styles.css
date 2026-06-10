@@ -612,7 +612,7 @@ button.callout-studio-icon-picker-loading {
 
 .callout-studio-preview .callout-icon,
 .callout-studio-preview-fold-toggle {
-	color: rgb(var(--callout-color));
+	color: rgb(var(--cs-color-rgb));
 }
 
 /* Hide slider tooltip bubble */
@@ -757,7 +757,7 @@ button.callout-studio-icon-picker-loading {
 	border: none;
 	border-radius: 0;
 	background: transparent;
-	color: rgb(var(--callout-color));
+	color: rgb(var(--cs-color-rgb));
 	cursor: pointer;
 	box-shadow: none;
 	flex-shrink: 0;
@@ -767,13 +767,13 @@ button.callout-studio-icon-picker-loading {
 .callout-studio-preview .callout-studio-preview-fold-toggle:focus,
 .callout-studio-preview .callout-studio-preview-fold-toggle:active {
 	background: transparent;
-	color: rgb(var(--callout-color));
+	color: rgb(var(--cs-color-rgb));
 }
 
 .callout-studio-preview .callout-studio-preview-fold-toggle svg {
 	width: 14px;
 	height: 14px;
-	color: rgb(var(--callout-color));
+	color: rgb(var(--cs-color-rgb));
 	stroke: currentColor;
 }
 
@@ -1573,8 +1573,8 @@ button.callout-studio-icon-picker-loading {
 
 /* Preview callout mock — neutral gray */
 .cs-global-preview-callout {
-	--callout-color: 158, 158, 158;
-	background: rgba(var(--callout-color), 0.1);
+	--cs-color-rgb: 158, 158, 158;
+	background: rgba(var(--cs-color-rgb), 0.1);
 	padding: 0;
 	margin: 0;
 	overflow: hidden;
@@ -1592,7 +1592,7 @@ button.callout-studio-icon-picker-loading {
 	gap: 8px;
 	padding: 8px 12px;
 	font-weight: var(--font-semibold);
-	color: rgb(var(--callout-color));
+	color: rgb(var(--cs-color-rgb));
 }
 
 .cs-global-preview-callout > .callout-title > .callout-icon {
@@ -1600,7 +1600,7 @@ button.callout-studio-icon-picker-loading {
 	align-items: center;
 	justify-content: center;
 	flex-shrink: 0;
-	color: rgb(var(--callout-color));
+	color: rgb(var(--cs-color-rgb));
 }
 
 .cs-global-preview-callout > .callout-title > .callout-icon svg {
@@ -1624,7 +1624,7 @@ button.callout-studio-icon-picker-loading {
 	width: 14px;
 	height: 14px;
 	border-radius: 2px;
-	background: rgb(var(--callout-color));
+	background: rgb(var(--cs-color-rgb));
 }
 
 .cs-global-preview-callout > .callout-content p {

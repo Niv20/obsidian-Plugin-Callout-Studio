@@ -75,13 +75,13 @@ export function renderGlobalStyleSection(
 
 		callout.setCssProps({
 			"--cs-preview-radius": `${globalStyle.borderRadius}px`,
-			"--callout-color": "136, 136, 136",
+			"--cs-color-rgb": "136, 136, 136",
 		});
 
 		const { top, right, bottom, left } = globalStyle.borderSides;
 		const allSides = top && right && bottom && left;
 		const anySide = top || right || bottom || left;
-		const bStyle = `${globalStyle.borderWidth}px solid rgba(var(--callout-color), 0.45)`;
+		const bStyle = `${globalStyle.borderWidth}px solid rgba(var(--cs-color-rgb), 0.45)`;
 
 		if (allSides) {
 			callout.setCssProps({

@@ -17,6 +17,7 @@ import type {
 	PluginSettings,
 } from "../types";
 import { DEFAULT_CALLOUTS, DEFAULT_SETTINGS } from "../constants";
+import { parseCssColorToHex } from "../utils/colorUtils";
 import { sortCalloutsByDisplayName } from "../utils/sorting";
 
 const CURRENT_DATA_VERSION = 2;
@@ -429,30 +430,26 @@ export class CalloutRegistry {
 
 	importFromCSS(cssText: string): CalloutDefinition[] {
 		const imported: CalloutDefinition[] = [];
-		// Match patterns like: .callout[data-callout="name"] { --callout-color: R, G, B; }
+		// Match patterns like: .callout[data-callout="name"] { --callout-color: <color> }
+		// The color is captured raw and parsed below, so both the pre-1.13 RGB
+		// triplet (255, 0, 0) and the 1.13+ formats (#ff0000, rgb(255,0,0)) work.
 		const regex =
-			/\.callout\[data-callout=["']([^"']+)["']\]\s*\{[^}]*--callout-color:\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)/g;
+			/\.callout\[data-callout=["']([^"']+)["']\]\s*\{[^}]*--callout-color:\s*([^;}]+)/g;
 		let match: RegExpExecArray | null;
 
 		while ((match = regex.exec(cssText)) !== null) {
 			const id = match[1];
-			const r = match[2];
-			const g = match[3];
-			const b = match[4];
-			if (!id || !r || !g || !b) continue;
+			const rawColor = match[2];
+			if (!id || !rawColor) continue;
 			if (this.callouts.has(id)) continue;
 			// Skip if ID conflicts with an existing alias
 			if (this.findByAlias(id)) continue;
 
-			const rN = parseInt(r, 10);
-			const gN = parseInt(g, 10);
-			const bN = parseInt(b, 10);
+			// Skip colors we can't safely convert to hex (named colors, oklch(), …)
+			// rather than importing a callout with a broken color value.
+			const hex = parseCssColorToHex(rawColor);
+			if (!hex) continue;
 
-			const hex =
-				"#" +
-				[rN, gN, bN]
-					.map((c) => c.toString(16).padStart(2, "0"))
-					.join("");
 			const def: CalloutDefinition = {
 				id,
 				displayName: id
