@@ -96,22 +96,11 @@ export class CalloutRegistry {
 						savedSettings.contextMenu?.enabled ??
 						legacyPopup?.enabled ??
 						DEFAULT_SETTINGS.contextMenu.enabled,
-					showEditCallout:
-						savedSettings.contextMenu?.showEditCallout ??
-						legacyPopup?.showEditCallout ??
-						DEFAULT_SETTINGS.contextMenu.showEditCallout,
-					showOpenSettings:
-						savedSettings.contextMenu?.showOpenSettings ??
-						legacyPopup?.showOpenSettings ??
-						DEFAULT_SETTINGS.contextMenu.showOpenSettings,
-					showCopyMarkdown:
-						savedSettings.contextMenu?.showCopyMarkdown ??
-						legacyPopup?.showCopyMarkdown ??
-						DEFAULT_SETTINGS.contextMenu.showCopyMarkdown,
 				},
 				autocomplete: {
-					...DEFAULT_SETTINGS.autocomplete,
-					...savedSettings.autocomplete,
+					enabled:
+						savedSettings.autocomplete?.enabled ??
+						DEFAULT_SETTINGS.autocomplete.enabled,
 				},
 				iconSources: {
 					...DEFAULT_SETTINGS.iconSources,

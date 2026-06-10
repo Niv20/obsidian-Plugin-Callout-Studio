@@ -1,9 +1,9 @@
 /**
  * settings/sections/EditorFeaturesSection.ts — Autocomplete and context-menu settings.
  *
- * Renders two collapsible sub-sections: one for the in-editor callout
- * autocomplete (enable/disable, icon and color previews toggles) and one for
- * the right-click context menu (enable/disable, which menu items to show).
+ * Renders two sections: one for the in-editor callout autocomplete and one for
+ * the right-click context menu. Each exposes a single enable/disable toggle;
+ * their sub-features (icon/color previews, individual menu items) are always on.
  * Changes are saved immediately via ctx.plugin.saveSettings().
  */
 import { Setting } from "obsidian";
@@ -18,46 +18,6 @@ export function renderContextMenuSettingsSection(
 
 	new Setting(containerEl).setName(t("settings.contextMenu")).setHeading();
 
-	const itemsContainer = containerEl.createDiv();
-
-	const renderItems = (): void => {
-		itemsContainer.empty();
-		if (!contextMenu.enabled) return;
-
-		new Setting(itemsContainer)
-			.setName(t("settings.showEditCallout"))
-			.addToggle((tog) =>
-				tog
-					.setValue(contextMenu.showEditCallout)
-					.onChange(async (v) => {
-						contextMenu.showEditCallout = v;
-						await ctx.plugin.saveSettings();
-					}),
-			);
-
-		new Setting(itemsContainer)
-			.setName(t("settings.showOpenSettings"))
-			.addToggle((tog) =>
-				tog
-					.setValue(contextMenu.showOpenSettings)
-					.onChange(async (v) => {
-						contextMenu.showOpenSettings = v;
-						await ctx.plugin.saveSettings();
-					}),
-			);
-
-		new Setting(itemsContainer)
-			.setName(t("settings.showCopyMarkdown"))
-			.addToggle((tog) =>
-				tog
-					.setValue(contextMenu.showCopyMarkdown)
-					.onChange(async (v) => {
-						contextMenu.showCopyMarkdown = v;
-						await ctx.plugin.saveSettings();
-					}),
-			);
-	};
-
 	new Setting(containerEl)
 		.setName(t("settings.enableContextMenu"))
 		.setDesc(t("settings.enableContextMenuDesc"))
@@ -65,12 +25,8 @@ export function renderContextMenuSettingsSection(
 			tog.setValue(contextMenu.enabled).onChange(async (v) => {
 				contextMenu.enabled = v;
 				await ctx.plugin.saveSettings();
-				renderItems();
 			}),
 		);
-
-	containerEl.appendChild(itemsContainer);
-	renderItems();
 }
 
 export function renderAutocompleteSettingsSection(
@@ -81,35 +37,6 @@ export function renderAutocompleteSettingsSection(
 
 	new Setting(containerEl).setName(t("settings.autocomplete")).setHeading();
 
-	const itemsContainer = containerEl.createDiv();
-
-	const renderItems = (): void => {
-		itemsContainer.empty();
-		if (!autocomplete.enabled) return;
-
-		new Setting(itemsContainer)
-			.setName(t("settings.showIconPreviews"))
-			.addToggle((tog) =>
-				tog
-					.setValue(autocomplete.showIconPreviews)
-					.onChange(async (v) => {
-						autocomplete.showIconPreviews = v;
-						await ctx.plugin.saveSettings();
-					}),
-			);
-
-		new Setting(itemsContainer)
-			.setName(t("settings.showColorPreviews"))
-			.addToggle((tog) =>
-				tog
-					.setValue(autocomplete.showColorPreviews)
-					.onChange(async (v) => {
-						autocomplete.showColorPreviews = v;
-						await ctx.plugin.saveSettings();
-					}),
-			);
-	};
-
 	new Setting(containerEl)
 		.setName(t("settings.enableAutocomplete"))
 		.setDesc(t("settings.enableAutocompleteDesc"))
@@ -117,10 +44,6 @@ export function renderAutocompleteSettingsSection(
 			tog.setValue(autocomplete.enabled).onChange(async (v) => {
 				autocomplete.enabled = v;
 				await ctx.plugin.saveSettings();
-				renderItems();
 			}),
 		);
-
-	containerEl.appendChild(itemsContainer);
-	renderItems();
 }

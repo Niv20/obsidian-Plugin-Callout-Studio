@@ -146,16 +146,11 @@ export const he: Record<string, string> = {
 	"settings.enableContextMenu": "פעולות תפריט־הקשר עבור תיבות־הבלטה",
 	"settings.enableContextMenuDesc":
 		"הוספת פעולות נוספות לתפריט הלחיצה הימנית של Obsidian בעת לחיצה על תיבת־הבלטה. פועל ב־Reading view, ב־Source mode וב־Live Preview.",
-	"settings.showEditCallout": 'הצגת "עריכת הגדרות תיבת־הבלטה"',
-	"settings.showOpenSettings": 'הצגת "פתיחת הגדרות של Callout Studio"',
-	"settings.showCopyMarkdown": 'הצגת "העתקת קוד Markdown"',
 
 	// Settings — Autocomplete
 	"settings.enableAutocomplete": "השלמה אוטומטית בעת הקלדת [!",
 	"settings.enableAutocompleteDesc":
 		'מציג הצעות בעת הקלדת "[!" בתוך בלוק ציטוט בעורך. בחירה של סוג מתוך הרשימה תשלים אוטומטית את כותרת תיבת־ההבלטה.',
-	"settings.showIconPreviews": "תצוגה מקדימה של אייקונים בהשלמה האוטומטית",
-	"settings.showColorPreviews": "תצוגה מקדימה של צבעים",
 
 	// Settings — Keyboard shortcuts
 	"settings.openHotkeys": "קיצורי המקלדת של Callout Studio",

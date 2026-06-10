@@ -108,14 +108,9 @@ export const fr: Record<string, string> = {
 
 	"settings.enableContextMenu": "Activer les actions du menu contextuel pour les callouts",
 	"settings.enableContextMenuDesc": "Ajoute des actions supplémentaires au menu clic droit d'Obsidian lors d'un clic droit sur un callout. Fonctionne en vue lecture, mode source et aperçu en direct.",
-	"settings.showEditCallout": 'Afficher "modifier les paramètres du callout"',
-	"settings.showOpenSettings": 'Afficher "ouvrir les paramètres de Callout Studio"',
-	"settings.showCopyMarkdown": 'Afficher "copier le Markdown du callout"',
 
 	"settings.enableAutocomplete": "Activer la saisie automatique [!",
 	"settings.enableAutocompleteDesc": 'Affiche des suggestions lorsque vous tapez "[!" dans une citation de l\'éditeur. Choisissez un type de callout dans la liste pour insérer un en-tête de callout complet.',
-	"settings.showIconPreviews": "Afficher les aperçus d'icônes dans la saisie automatique",
-	"settings.showColorPreviews": "Afficher les aperçus de couleurs",
 
 	"settings.openHotkeys": "Raccourcis de Callout Studio",
 	"settings.openHotkeysDesc": "Ouvre les paramètres de raccourcis d'Obsidian pour les commandes de Callout Studio, où vous pouvez choisir vos propres raccourcis pour Créer un type, Ouvrir les paramètres, Retirer le callout et Envelopper dans un callout. Aucun raccourci n'est attribué par défaut.",

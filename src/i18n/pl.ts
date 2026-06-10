@@ -108,14 +108,9 @@ export const pl: Record<string, string> = {
 
 	"settings.enableContextMenu": "Włącz akcje menu kontekstowego callout",
 	"settings.enableContextMenuDesc": "Dodaje dodatkowe akcje do menu prawego przycisku myszy Obsidian po kliknięciu prawym przyciskiem myszy na callout. Działa w widoku czytania, trybie źródłowym i podglądzie na żywo.",
-	"settings.showEditCallout": 'Pokaż "edytuj ustawienia callout"',
-	"settings.showOpenSettings": 'Pokaż "otwórz ustawienia Callout Studio"',
-	"settings.showCopyMarkdown": 'Pokaż "kopiuj Markdown callout"',
 
 	"settings.enableAutocomplete": "Włącz autouzupełnianie [!",
 	"settings.enableAutocompleteDesc": 'Wyświetla sugestie przy wpisywaniu "[!" w bloku cytatu w edytorze. Wybierz typ callout z listy, aby wstawić pełny nagłówek callout.',
-	"settings.showIconPreviews": "Pokaż podglądy ikon w autouzupełnianiu",
-	"settings.showColorPreviews": "Pokaż podglądy kolorów",
 
 	"settings.openHotkeys": "Skróty klawiszowe Callout Studio",
 	"settings.openHotkeysDesc": "Otwiera ustawienia skrótów klawiszowych Obsidian dla poleceń Callout Studio, gdzie możesz wybrać własne skróty dla Utwórz nowy typ, Otwórz ustawienia, Usuń callout i Owiń w callout. Domyślnie nie są przypisane żadne skróty.",

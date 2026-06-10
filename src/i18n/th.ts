@@ -108,14 +108,9 @@ export const th: Record<string, string> = {
 
 	"settings.enableContextMenu": "เปิดใช้การดำเนินการเมนูบริบท callout",
 	"settings.enableContextMenuDesc": "เพิ่มการดำเนินการพิเศษในเมนูคลิกขวาของ Obsidian เมื่อคุณคลิกขวาที่ callout ใช้งานได้ในมุมมองการอ่าน โหมดต้นฉบับ และ Live Preview",
-	"settings.showEditCallout": 'แสดง "แก้ไขการตั้งค่า callout"',
-	"settings.showOpenSettings": 'แสดง "เปิดการตั้งค่า Callout Studio"',
-	"settings.showCopyMarkdown": 'แสดง "คัดลอก Markdown callout"',
 
 	"settings.enableAutocomplete": "เปิดใช้การเติมข้อความอัตโนมัติ [!",
 	"settings.enableAutocompleteDesc": 'แสดงคำแนะนำเมื่อพิมพ์ "[!" ในบล็อกอ้างอิงในตัวแก้ไข เลือกประเภท callout จากรายการเพื่อแทรกส่วนหัว callout ที่สมบูรณ์',
-	"settings.showIconPreviews": "แสดงตัวอย่างไอคอนในการเติมข้อความอัตโนมัติ",
-	"settings.showColorPreviews": "แสดงตัวอย่างสี",
 
 	"settings.openHotkeys": "แป้นพิมพ์ลัด Callout Studio",
 	"settings.openHotkeysDesc": "เปิดการตั้งค่าแป้นพิมพ์ลัดของ Obsidian สำหรับคำสั่ง Callout Studio ซึ่งคุณสามารถเลือกแป้นพิมพ์ลัดของคุณเองสำหรับการสร้างประเภทใหม่ เปิดการตั้งค่า นำ callout ออก และห่อใน callout ไม่มีการกำหนดแป้นพิมพ์ลัดโดยค่าเริ่มต้น",

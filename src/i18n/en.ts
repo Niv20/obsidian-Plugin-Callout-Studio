@@ -148,16 +148,11 @@ export const en: Record<string, string> = {
 	"settings.enableContextMenu": "Enable callout context actions",
 	"settings.enableContextMenuDesc":
 		"Add extra actions to Obsidian's right-click menu when you right-click a callout. Works in reading view, source mode, and Live Preview.",
-	"settings.showEditCallout": 'Show "Edit callout settings"',
-	"settings.showOpenSettings": 'Show "Open Callout Studio settings"',
-	"settings.showCopyMarkdown": 'Show "Copy callout Markdown"',
 
 	// Settings — Autocomplete
 	"settings.enableAutocomplete": "Enable [! Autocomplete",
 	"settings.enableAutocompleteDesc":
 		'Show suggestions when you type "[!" inside a blockquote in the editor. Pick a callout type from the list to insert a complete callout header.',
-	"settings.showIconPreviews": "Show icon previews in autocomplete",
-	"settings.showColorPreviews": "Show color previews",
 
 	// Settings — Keyboard shortcuts
 	"settings.openHotkeys": "Callout Studio hotkeys",

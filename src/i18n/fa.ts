@@ -108,14 +108,9 @@ export const fa: Record<string, string> = {
 
 	"settings.enableContextMenu": "فعال‌سازی اقدامات منوی زمینه callout",
 	"settings.enableContextMenuDesc": "هنگام کلیک راست روی callout، اقدامات اضافی به منوی کلیک راست Obsidian اضافه می‌کند. در حالت خواندن، حالت منبع و Live Preview کار می‌کند.",
-	"settings.showEditCallout": 'نمایش "ویرایش تنظیمات callout"',
-	"settings.showOpenSettings": 'نمایش "باز کردن تنظیمات Callout Studio"',
-	"settings.showCopyMarkdown": 'نمایش "کپی Markdown callout"',
 
 	"settings.enableAutocomplete": "فعال‌سازی تکمیل خودکار [!",
 	"settings.enableAutocompleteDesc": 'هنگام تایپ "[!" در یک بلوک نقل‌قول در ویرایشگر، پیشنهادات نمایش می‌دهد. یک نوع callout از لیست انتخاب کنید تا سرتیتر کامل callout درج شود.',
-	"settings.showIconPreviews": "نمایش پیش‌نمایش آیکون در تکمیل خودکار",
-	"settings.showColorPreviews": "نمایش پیش‌نمایش رنگ",
 
 	"settings.openHotkeys": "میانبرهای Callout Studio",
 	"settings.openHotkeysDesc": "تنظیمات میانبرهای Obsidian را برای دستورات Callout Studio باز می‌کند، جایی که می‌توانید میانبرهای خود را برای ایجاد نوع جدید، باز کردن تنظیمات، حذف callout و پیچیدن در callout انتخاب کنید. به صورت پیش‌فرض هیچ میانبری اختصاص داده نشده است.",

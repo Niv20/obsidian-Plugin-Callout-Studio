@@ -108,14 +108,9 @@ export const hi: Record<string, string> = {
 
 	"settings.enableContextMenu": "callout संदर्भ मेनू क्रियाएँ सक्षम करें",
 	"settings.enableContextMenuDesc": "callout पर राइट-क्लिक करने पर Obsidian के राइट-क्लिक मेनू में अतिरिक्त क्रियाएँ जोड़ता है। रीडिंग व्यू, सोर्स मोड और लाइव प्रीव्यू में काम करता है।",
-	"settings.showEditCallout": '"callout सेटिंग संपादित करें" दिखाएँ',
-	"settings.showOpenSettings": '"Callout Studio सेटिंग खोलें" दिखाएँ',
-	"settings.showCopyMarkdown": '"callout Markdown कॉपी करें" दिखाएँ',
 
 	"settings.enableAutocomplete": "[! स्वतः पूर्णता सक्षम करें",
 	"settings.enableAutocompleteDesc": 'एडिटर में ब्लॉककोट के अंदर "[!" टाइप करने पर सुझाव दिखाता है। पूरा callout हेडर डालने के लिए सूची से callout प्रकार चुनें।',
-	"settings.showIconPreviews": "स्वतः पूर्णता में आइकन पूर्वावलोकन दिखाएँ",
-	"settings.showColorPreviews": "रंग पूर्वावलोकन दिखाएँ",
 
 	"settings.openHotkeys": "Callout Studio शॉर्टकट",
 	"settings.openHotkeysDesc": "Callout Studio कमांड के लिए Obsidian की हॉटकी सेटिंग खोलता है, जहाँ आप नया callout प्रकार बनाएँ, सेटिंग खोलें, callout हटाएँ और callout में लपेटें के लिए अपने शॉर्टकट चुन सकते हैं। डिफ़ॉल्ट रूप से कोई शॉर्टकट असाइन नहीं है।",

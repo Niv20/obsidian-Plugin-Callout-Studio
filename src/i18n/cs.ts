@@ -108,14 +108,9 @@ export const cs: Record<string, string> = {
 
 	"settings.enableContextMenu": "Povolit akce kontextového menu callout",
 	"settings.enableContextMenuDesc": "Přidá do kontextového menu Obsidian při kliknutí pravým tlačítkem na callout další akce. Funguje v zobrazení pro čtení, zdrojovém režimu a živém náhledu.",
-	"settings.showEditCallout": 'Zobrazit "upravit nastavení callout"',
-	"settings.showOpenSettings": 'Zobrazit "otevřít nastavení Callout Studio"',
-	"settings.showCopyMarkdown": 'Zobrazit "kopírovat Markdown callout"',
 
 	"settings.enableAutocomplete": "Povolit automatické doplňování [!",
 	"settings.enableAutocompleteDesc": 'Zobrazuje návrhy při psaní "[!" v bloku citace v editoru. Vyberte typ callout ze seznamu a vložte úplnou hlavičku callout.',
-	"settings.showIconPreviews": "Zobrazit náhledy ikon v automatickém doplňování",
-	"settings.showColorPreviews": "Zobrazit náhledy barev",
 
 	"settings.openHotkeys": "Klávesové zkratky Callout Studio",
 	"settings.openHotkeysDesc": "Otevře nastavení klávesových zkratek Obsidian pro příkazy Callout Studio, kde si můžete zvolit vlastní zkratky pro Vytvořit nový typ, Otevřít nastavení, Odebrat callout a Zabalit do callout. Ve výchozím nastavení nejsou přiřazeny žádné zkratky.",

@@ -108,14 +108,9 @@ export const nl: Record<string, string> = {
 
 	"settings.enableContextMenu": "Callout-contextmenu-acties inschakelen",
 	"settings.enableContextMenuDesc": "Voegt extra acties toe aan het rechtsklikmenu van Obsidian wanneer u rechtsklikt op een callout. Werkt in leesweergave, bronmodus en Live Preview.",
-	"settings.showEditCallout": '"Callout-instellingen bewerken" tonen',
-	"settings.showOpenSettings": '"Callout Studio-instellingen openen" tonen',
-	"settings.showCopyMarkdown": '"Callout Markdown kopiëren" tonen',
 
 	"settings.enableAutocomplete": "[! Automatisch aanvullen inschakelen",
 	"settings.enableAutocompleteDesc": 'Toont suggesties wanneer u "[!" typt in een blokcitaat in de editor. Kies een callout-type uit de lijst om een volledig callout-koptekst in te voegen.',
-	"settings.showIconPreviews": "Pictogramvoorbeelden tonen in automatisch aanvullen",
-	"settings.showColorPreviews": "Kleurvoorbeelden tonen",
 
 	"settings.openHotkeys": "Callout Studio-sneltoetsen",
 	"settings.openHotkeysDesc": "Opent de sneltoetseninstellingen van Obsidian voor Callout Studio-opdrachten, waar u uw eigen sneltoetsen kunt kiezen voor Nieuw callout-type aanmaken, Instellingen openen, Callout verwijderen en In callout inpakken. Standaard zijn er geen sneltoetsen toegewezen.",

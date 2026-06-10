@@ -306,44 +306,37 @@ function addItems(
 	menu: Menu,
 	context: ResolvedCalloutContext,
 ): void {
-	const { contextMenu } = plugin.settings;
 	const currentDef =
 		plugin.registry.get(context.callout.id) ??
 		plugin.registry.findByAlias(context.callout.id);
 
-	if (contextMenu.showEditCallout) {
-		menu.addItem((item) => {
-			item.setTitle(t("contextMenu.editCallout"))
-				.setIcon("pencil")
-				.setSection(MENU_SECTION)
-				.onClick(() => {
-					if (!currentDef) return;
-					void new CalloutEditor(plugin, currentDef).openAndWait();
-				});
-		});
-	}
+	menu.addItem((item) => {
+		item.setTitle(t("contextMenu.editCallout"))
+			.setIcon("pencil")
+			.setSection(MENU_SECTION)
+			.onClick(() => {
+				if (!currentDef) return;
+				void new CalloutEditor(plugin, currentDef).openAndWait();
+			});
+	});
 
-	if (contextMenu.showOpenSettings) {
-		menu.addItem((item) => {
-			item.setTitle(t("contextMenu.openSettings"))
-				.setIcon("settings")
-				.setSection(MENU_SECTION)
-				.onClick(() => {
-					openPluginSettings(plugin);
-				});
-		});
-	}
+	menu.addItem((item) => {
+		item.setTitle(t("contextMenu.openSettings"))
+			.setIcon("settings")
+			.setSection(MENU_SECTION)
+			.onClick(() => {
+				openPluginSettings(plugin);
+			});
+	});
 
-	if (contextMenu.showCopyMarkdown) {
-		menu.addItem((item) => {
-			item.setTitle(t("contextMenu.copyMarkdown"))
-				.setIcon("clipboard-copy")
-				.setSection(MENU_SECTION)
-				.onClick(() => {
-					copyCalloutMarkdown(context.editor, context.callout);
-				});
-		});
-	}
+	menu.addItem((item) => {
+		item.setTitle(t("contextMenu.copyMarkdown"))
+			.setIcon("clipboard-copy")
+			.setSection(MENU_SECTION)
+			.onClick(() => {
+				copyCalloutMarkdown(context.editor, context.callout);
+			});
+	});
 }
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────

@@ -108,14 +108,9 @@ export const zh: Record<string, string> = {
 
 	"settings.enableContextMenu": "启用 callout 右键操作",
 	"settings.enableContextMenuDesc": "当您右键点击 callout 时，在 Obsidian 的右键菜单中添加额外操作。在阅读视图、源代码模式和实时预览中均有效。",
-	"settings.showEditCallout": '显示"编辑 callout 设置"',
-	"settings.showOpenSettings": '显示"打开 Callout Studio 设置"',
-	"settings.showCopyMarkdown": '显示"复制 callout Markdown"',
 
 	"settings.enableAutocomplete": "启用 [! 自动完成",
 	"settings.enableAutocompleteDesc": '在编辑器块引用中输入"[!"时显示建议。从列表中选择 callout 类型以插入完整的 callout 标题。',
-	"settings.showIconPreviews": "在自动完成中显示图标预览",
-	"settings.showColorPreviews": "显示颜色预览",
 
 	"settings.openHotkeys": "Callout Studio 快捷键",
 	"settings.openHotkeysDesc": "打开 Obsidian 的快捷键设置，在那里您可以为「创建新 callout 类型」、「打开设置」、「从 callout 中解包」和「用 callout 包裹」设置快捷键。默认不分配快捷键。",

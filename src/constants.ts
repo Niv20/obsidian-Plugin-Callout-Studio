@@ -203,14 +203,9 @@ export const DEFAULT_SETTINGS: PluginSettings = {
 	} satisfies GlobalStyleSettings,
 	contextMenu: {
 		enabled: true,
-		showEditCallout: true,
-		showOpenSettings: true,
-		showCopyMarkdown: true,
 	},
 	autocomplete: {
 		enabled: true,
-		showIconPreviews: true,
-		showColorPreviews: true,
 	},
 	iconSources: {
 		materialStyleDefault: "rounded",

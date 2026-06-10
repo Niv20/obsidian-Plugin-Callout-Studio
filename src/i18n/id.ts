@@ -108,14 +108,9 @@ export const id: Record<string, string> = {
 
 	"settings.enableContextMenu": "Aktifkan tindakan menu konteks callout",
 	"settings.enableContextMenuDesc": "Menambahkan tindakan ekstra ke menu klik kanan Obsidian saat Anda mengklik kanan pada callout. Berfungsi di tampilan baca, mode sumber, dan Pratinjau Langsung.",
-	"settings.showEditCallout": 'Tampilkan "edit pengaturan callout"',
-	"settings.showOpenSettings": 'Tampilkan "buka pengaturan Callout Studio"',
-	"settings.showCopyMarkdown": 'Tampilkan "salin Markdown callout"',
 
 	"settings.enableAutocomplete": "Aktifkan pelengkapan otomatis [!",
 	"settings.enableAutocompleteDesc": 'Menampilkan saran saat Anda mengetik "[!" di dalam blockquote di editor. Pilih tipe callout dari daftar untuk menyisipkan header callout lengkap.',
-	"settings.showIconPreviews": "Tampilkan pratinjau ikon di pelengkapan otomatis",
-	"settings.showColorPreviews": "Tampilkan pratinjau warna",
 
 	"settings.openHotkeys": "Pintasan Callout Studio",
 	"settings.openHotkeysDesc": "Membuka pengaturan pintasan Obsidian untuk perintah Callout Studio, di mana Anda dapat memilih pintasan sendiri untuk Buat tipe baru, Buka pengaturan, Hapus callout, dan Bungkus dalam callout. Tidak ada pintasan yang ditetapkan secara default.",

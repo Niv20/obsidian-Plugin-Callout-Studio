@@ -108,14 +108,9 @@ export const vi: Record<string, string> = {
 
 	"settings.enableContextMenu": "Bật hành động menu ngữ cảnh callout",
 	"settings.enableContextMenuDesc": "Thêm các hành động bổ sung vào menu nhấp chuột phải của Obsidian khi bạn nhấp chuột phải vào callout. Hoạt động trong chế độ đọc, chế độ nguồn và Xem trước trực tiếp.",
-	"settings.showEditCallout": 'Hiển thị "chỉnh sửa cài đặt callout"',
-	"settings.showOpenSettings": 'Hiển thị "mở cài đặt Callout Studio"',
-	"settings.showCopyMarkdown": 'Hiển thị "sao chép Markdown callout"',
 
 	"settings.enableAutocomplete": "Bật tự động hoàn thành [!",
 	"settings.enableAutocompleteDesc": 'Hiển thị gợi ý khi bạn gõ "[!" trong trích dẫn khối trong trình soạn thảo. Chọn loại callout từ danh sách để chèn tiêu đề callout đầy đủ.',
-	"settings.showIconPreviews": "Hiển thị xem trước biểu tượng trong tự động hoàn thành",
-	"settings.showColorPreviews": "Hiển thị xem trước màu sắc",
 
 	"settings.openHotkeys": "Phím tắt Callout Studio",
 	"settings.openHotkeysDesc": "Mở cài đặt phím tắt Obsidian cho các lệnh Callout Studio, nơi bạn có thể chọn phím tắt riêng cho Tạo loại mới, Mở cài đặt, Bỏ callout và Bọc trong callout. Không có phím tắt nào được gán theo mặc định.",

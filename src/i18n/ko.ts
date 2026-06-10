@@ -108,14 +108,9 @@ export const ko: Record<string, string> = {
 
 	"settings.enableContextMenu": "callout 컨텍스트 메뉴 작업 활성화",
 	"settings.enableContextMenuDesc": "callout을 마우스 오른쪽 버튼으로 클릭할 때 Obsidian의 마우스 오른쪽 버튼 메뉴에 추가 작업을 추가합니다. 읽기 보기, 소스 모드, 라이브 미리 보기에서 작동합니다.",
-	"settings.showEditCallout": '"callout 설정 편집" 표시',
-	"settings.showOpenSettings": '"Callout Studio 설정 열기" 표시',
-	"settings.showCopyMarkdown": '"callout Markdown 복사" 표시',
 
 	"settings.enableAutocomplete": "[! 자동 완성 활성화",
 	"settings.enableAutocompleteDesc": '편집기의 인용 블록에서 "[!"를 입력하면 제안을 표시합니다. 목록에서 callout 유형을 선택하여 완전한 callout 헤더를 삽입합니다.',
-	"settings.showIconPreviews": "자동 완성에서 아이콘 미리 보기 표시",
-	"settings.showColorPreviews": "색상 미리 보기 표시",
 
 	"settings.openHotkeys": "Callout Studio 단축키",
 	"settings.openHotkeysDesc": "Callout Studio 명령어에 대한 Obsidian 단축키 설정을 엽니다. 새 callout 유형 만들기, 설정 열기, callout 제거, callout으로 감싸기에 대한 단축키를 설정할 수 있습니다. 기본적으로 단축키가 할당되어 있지 않습니다.",

@@ -108,14 +108,9 @@ export const sv: Record<string, string> = {
 
 	"settings.enableContextMenu": "Aktivera callout snabbmenyåtgärder",
 	"settings.enableContextMenuDesc": "Lägger till extra åtgärder i Obsidians högerklicksmeny när du högerklickar på en callout. Fungerar i läsvy, källäge och Live Preview.",
-	"settings.showEditCallout": 'Visa "redigera callout-inställningar"',
-	"settings.showOpenSettings": 'Visa "öppna Callout Studio-inställningar"',
-	"settings.showCopyMarkdown": 'Visa "kopiera callout Markdown"',
 
 	"settings.enableAutocomplete": "Aktivera [! autokomplettering",
 	"settings.enableAutocompleteDesc": 'Visar förslag när du skriver "[!" i ett blockcitat i editorn. Välj en callout-typ från listan för att infoga en komplett callout-rubrik.',
-	"settings.showIconPreviews": "Visa ikonförhandsvisningar i autokomplettering",
-	"settings.showColorPreviews": "Visa färgförhandsvisningar",
 
 	"settings.openHotkeys": "Callout Studio-genvägar",
 	"settings.openHotkeysDesc": "Öppnar Obsidians genväginställningar för Callout Studio-kommandon, där du kan välja egna genvägar för Skapa ny typ, Öppna inställningar, Ta bort callout och Lägg i callout. Inga genvägar tilldelas som standard.",

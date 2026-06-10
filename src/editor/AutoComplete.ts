@@ -194,47 +194,42 @@ export class CalloutAutoComplete extends EditorSuggest<CalloutSuggestion> {
 		const def = item;
 		el.addClass("callout-studio-suggestion");
 
-		const { autocomplete } = this.plugin.settings;
 		const isDark = activeDocument.body.classList.contains("theme-dark");
 		const color = isDark ? def.colorDark : def.colorLight;
 
 		// Icon
-		if (autocomplete.showIconPreviews) {
-			const iconEl = el.createDiv({
-				cls: "callout-studio-suggestion-icon",
-			});
-			if (autocomplete.showColorPreviews) {
-				iconEl.style.color = color;
-			}
-			try {
-				if (def.icon.type === "lucide") {
-					setIcon(iconEl, def.icon.value);
-				} else if (def.icon.type === "emoji") {
-					iconEl.textContent = def.icon.value;
-				} else if (def.icon.type === "material") {
-					const cached = this.plugin.registry.findMaterialSvg(
-						def.icon.value,
-						def.icon.style ?? "outlined",
-						def.icon.weight ?? 400,
+		const iconEl = el.createDiv({
+			cls: "callout-studio-suggestion-icon",
+		});
+		iconEl.style.color = color;
+		try {
+			if (def.icon.type === "lucide") {
+				setIcon(iconEl, def.icon.value);
+			} else if (def.icon.type === "emoji") {
+				iconEl.textContent = def.icon.value;
+			} else if (def.icon.type === "material") {
+				const cached = this.plugin.registry.findMaterialSvg(
+					def.icon.value,
+					def.icon.style ?? "outlined",
+					def.icon.weight ?? 400,
+				);
+				if (cached) {
+					const parser = new DOMParser();
+					const doc = parser.parseFromString(
+						cached.svg,
+						"image/svg+xml",
 					);
-					if (cached) {
-						const parser = new DOMParser();
-						const doc = parser.parseFromString(
-							cached.svg,
-							"image/svg+xml",
-						);
-						const svgEl = doc.documentElement;
-						svgEl.setAttribute("fill", "currentColor");
-						iconEl.appendChild(iconEl.doc.importNode(svgEl, true));
-					} else {
-						setIcon(iconEl, "pencil");
-					}
+					const svgEl = doc.documentElement;
+					svgEl.setAttribute("fill", "currentColor");
+					iconEl.appendChild(iconEl.doc.importNode(svgEl, true));
 				} else {
 					setIcon(iconEl, "pencil");
 				}
-			} catch {
-				iconEl.textContent = "📝";
+			} else {
+				setIcon(iconEl, "pencil");
 			}
+		} catch {
+			iconEl.textContent = "📝";
 		}
 
 		// Text container
@@ -243,9 +238,7 @@ export class CalloutAutoComplete extends EditorSuggest<CalloutSuggestion> {
 			cls: "callout-studio-suggestion-name",
 			text: def.displayName,
 		});
-		if (autocomplete.showColorPreviews) {
-			nameEl.style.color = color;
-		}
+		nameEl.style.color = color;
 
 		// Show all IDs (main + aliases) on the same line
 		const allIds = getSortedCalloutIds(def, getLocale());

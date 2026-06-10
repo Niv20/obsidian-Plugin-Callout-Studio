@@ -108,14 +108,9 @@ export const hu: Record<string, string> = {
 
 	"settings.enableContextMenu": "Callout helyi menü műveletek engedélyezése",
 	"settings.enableContextMenuDesc": "Extra műveleteket ad az Obsidian jobb gombos menüjéhez, ha callout-ra jobb gombbal kattint. Olvasó nézetben, forrás módban és élő előnézetben is működik.",
-	"settings.showEditCallout": '"Callout-beállítások szerkesztése" megjelenítése',
-	"settings.showOpenSettings": '"Callout Studio beállítások megnyitása" megjelenítése',
-	"settings.showCopyMarkdown": '"Callout Markdown másolása" megjelenítése',
 
 	"settings.enableAutocomplete": "[! Automatikus kiegészítés engedélyezése",
 	"settings.enableAutocompleteDesc": 'Javaslatokat jelenít meg, amikor "[!" szöveget gépel egy blokkidézet-belsejébe a szerkesztőben. Válasszon callout-típust a listából egy teljes callout fejléc beillesztéséhez.',
-	"settings.showIconPreviews": "Ikon-előnézetek megjelenítése az automatikus kiegészítésben",
-	"settings.showColorPreviews": "Szín-előnézetek megjelenítése",
 
 	"settings.openHotkeys": "Callout Studio billentyűparancsok",
 	"settings.openHotkeysDesc": "Megnyitja az Obsidian billentyűparancs-beállításait a Callout Studio parancsaihoz, ahol saját parancsokat rendelhet az Új típus létrehozása, Beállítások megnyitása, Callout eltávolítása és Callout-ba csomagolás funkciókhoz. Alapértelmezés szerint nincs hozzárendelt parancs.",

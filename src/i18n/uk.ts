@@ -108,14 +108,9 @@ export const uk: Record<string, string> = {
 
 	"settings.enableContextMenu": "Увімкнути дії контекстного меню callout",
 	"settings.enableContextMenuDesc": "Додає додаткові дії до контекстного меню Obsidian при правому кліку на callout. Працює в режимі читання, вихідному режимі та живому попередньому перегляді.",
-	"settings.showEditCallout": 'Показати «редагувати налаштування callout»',
-	"settings.showOpenSettings": 'Показати «відкрити налаштування Callout Studio»',
-	"settings.showCopyMarkdown": 'Показати «копіювати Markdown callout»',
 
 	"settings.enableAutocomplete": "Увімкнути автодоповнення [!",
 	"settings.enableAutocompleteDesc": 'Показує підказки при введенні «[!» у блоку цитати в редакторі. Виберіть тип callout зі списку, щоб вставити повний заголовок callout.',
-	"settings.showIconPreviews": "Показувати попередній перегляд іконок в автодоповненні",
-	"settings.showColorPreviews": "Показувати попередній перегляд кольорів",
 
 	"settings.openHotkeys": "Гарячі клавіші Callout Studio",
 	"settings.openHotkeysDesc": "Відкриває налаштування гарячих клавіш Obsidian для команд Callout Studio, де можна встановити власні клавіші для створення нового типу, відкриття налаштувань, видалення та обгортання callout. За замовчуванням гарячі клавіші не призначені.",

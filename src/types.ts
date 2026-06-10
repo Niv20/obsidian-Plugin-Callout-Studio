@@ -65,9 +65,6 @@ export type MaterialIconStyle = "outlined" | "filled" | "rounded" | "sharp";
 
 export interface ContextMenuSettings {
 	enabled: boolean;
-	showEditCallout: boolean;
-	showOpenSettings: boolean;
-	showCopyMarkdown: boolean;
 }
 
 export interface LegacyPopupSettings extends ContextMenuSettings {
@@ -83,8 +80,6 @@ export interface LegacyPopupSettings extends ContextMenuSettings {
 
 export interface AutocompleteSettings {
 	enabled: boolean;
-	showIconPreviews: boolean;
-	showColorPreviews: boolean;
 }
 
 export interface IconSourceSettings {

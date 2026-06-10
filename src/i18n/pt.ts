@@ -108,14 +108,9 @@ export const pt: Record<string, string> = {
 
 	"settings.enableContextMenu": "Habilitar ações do menu de contexto para callout",
 	"settings.enableContextMenuDesc": "Adiciona ações extras ao menu de clique direito do Obsidian ao clicar com o botão direito em um callout. Funciona na visualização de leitura, modo de fonte e Pré-visualização ao vivo.",
-	"settings.showEditCallout": 'Mostrar "editar configurações do callout"',
-	"settings.showOpenSettings": 'Mostrar "abrir configurações do Callout Studio"',
-	"settings.showCopyMarkdown": 'Mostrar "copiar Markdown do callout"',
 
 	"settings.enableAutocomplete": "Habilitar preenchimento automático [!",
 	"settings.enableAutocompleteDesc": 'Mostra sugestões quando você digita "[!" dentro de uma citação no editor. Escolha um tipo de callout da lista para inserir um cabeçalho de callout completo.',
-	"settings.showIconPreviews": "Mostrar pré-visualizações de ícones no preenchimento automático",
-	"settings.showColorPreviews": "Mostrar pré-visualizações de cores",
 
 	"settings.openHotkeys": "Atalhos do Callout Studio",
 	"settings.openHotkeysDesc": "Abre as configurações de atalhos do Obsidian para comandos do Callout Studio, onde você pode escolher seus próprios atalhos para Criar novo tipo de callout, Abrir configurações, Remover callout e Envolver em callout. Nenhum atalho é atribuído por padrão.",

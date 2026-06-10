@@ -108,14 +108,9 @@ export const ro: Record<string, string> = {
 
 	"settings.enableContextMenu": "Activați acțiunile din meniul contextual callout",
 	"settings.enableContextMenuDesc": "Adaugă acțiuni suplimentare în meniul clic dreapta al Obsidian când faceți clic dreapta pe un callout. Funcționează în vizualizarea de lectură, modul sursă și Live Preview.",
-	"settings.showEditCallout": 'Afișați "editați setările callout"',
-	"settings.showOpenSettings": 'Afișați "deschideți setările Callout Studio"',
-	"settings.showCopyMarkdown": 'Afișați "copiați Markdown callout"',
 
 	"settings.enableAutocomplete": "Activați completarea automată [!",
 	"settings.enableAutocompleteDesc": 'Afișează sugestii când tastați "[!" într-un citat bloc în editor. Alegeți un tip de callout din listă pentru a insera un antet callout complet.',
-	"settings.showIconPreviews": "Afișați previzualizări pictograme în completarea automată",
-	"settings.showColorPreviews": "Afișați previzualizări culori",
 
 	"settings.openHotkeys": "Scurtături Callout Studio",
 	"settings.openHotkeysDesc": "Deschide setările de scurtături Obsidian pentru comenzile Callout Studio, unde puteți alege propriile scurtături pentru Creare tip nou, Deschide setări, Elimină callout și Înfășoară în callout. Implicit nu sunt atribuite scurtături.",

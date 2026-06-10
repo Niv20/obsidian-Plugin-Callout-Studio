@@ -108,14 +108,9 @@ export const tr: Record<string, string> = {
 
 	"settings.enableContextMenu": "Callout bağlam menüsü eylemlerini etkinleştir",
 	"settings.enableContextMenuDesc": "Bir callout'a sağ tıkladığınızda Obsidian'ın sağ tıklama menüsüne ek eylemler ekler. Okuma görünümünde, kaynak modunda ve Canlı Önizleme'de çalışır.",
-	"settings.showEditCallout": '"Callout ayarlarını düzenle" göster',
-	"settings.showOpenSettings": '"Callout Studio ayarlarını aç" göster',
-	"settings.showCopyMarkdown": '"Callout Markdown\'ı kopyala" göster',
 
 	"settings.enableAutocomplete": "[! Otomatik tamamlamayı etkinleştir",
 	"settings.enableAutocompleteDesc": 'Düzenleyicide blok alıntı içinde "[!" yazdığınızda öneriler gösterir. Tam bir callout başlığı eklemek için listeden bir callout türü seçin.',
-	"settings.showIconPreviews": "Otomatik tamamlamada simge önizlemelerini göster",
-	"settings.showColorPreviews": "Renk önizlemelerini göster",
 
 	"settings.openHotkeys": "Callout Studio kısayolları",
 	"settings.openHotkeysDesc": "Callout Studio komutları için Obsidian kısayol ayarlarını açar; burada Yeni callout türü oluştur, Ayarları aç, Callout'u kaldır ve Callout'a sar için kendi kısayollarınızı belirleyebilirsiniz. Varsayılan olarak kısayol atanmamıştır.",

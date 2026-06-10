@@ -108,14 +108,9 @@ export const ja: Record<string, string> = {
 
 	"settings.enableContextMenu": "calloutコンテキストメニュー操作を有効にする",
 	"settings.enableContextMenuDesc": "calloutを右クリックしたときにObsidianの右クリックメニューに追加の操作を追加します。閲覧ビュー、ソースモード、ライブプレビューで機能します。",
-	"settings.showEditCallout": '"callout設定を編集"を表示',
-	"settings.showOpenSettings": '"Callout Studio設定を開く"を表示',
-	"settings.showCopyMarkdown": '"callout Markdownをコピー"を表示',
 
 	"settings.enableAutocomplete": "[! オートコンプリートを有効にする",
 	"settings.enableAutocompleteDesc": 'エディターの引用ブロック内で"[!"と入力すると候補を表示します。リストからcalloutタイプを選択して完全なcalloutヘッダーを挿入します。',
-	"settings.showIconPreviews": "オートコンプリートでアイコンプレビューを表示",
-	"settings.showColorPreviews": "カラープレビューを表示",
 
 	"settings.openHotkeys": "Callout Studioショートカット",
 	"settings.openHotkeysDesc": "Callout StudioコマンドのObsidianホットキー設定を開きます。新しいcalloutタイプの作成、設定を開く、callout解除、calloutで囲むの独自ショートカットを設定できます。デフォルトではショートカットは割り当てられていません。",

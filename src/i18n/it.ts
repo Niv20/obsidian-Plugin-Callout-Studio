@@ -108,14 +108,9 @@ export const it: Record<string, string> = {
 
 	"settings.enableContextMenu": "Abilita azioni menu contestuale callout",
 	"settings.enableContextMenuDesc": "Aggiunge azioni extra al menu tasto destro di Obsidian quando si fa clic destro su un callout. Funziona in visualizzazione lettura, modalità sorgente e anteprima live.",
-	"settings.showEditCallout": 'Mostra "modifica impostazioni callout"',
-	"settings.showOpenSettings": 'Mostra "apri impostazioni Callout Studio"',
-	"settings.showCopyMarkdown": 'Mostra "copia Markdown callout"',
 
 	"settings.enableAutocomplete": "Abilita completamento automatico [!",
 	"settings.enableAutocompleteDesc": 'Mostra suggerimenti quando si digita "[!" in una citazione nell\'editor. Scegli un tipo di callout dall\'elenco per inserire un\'intestazione callout completa.',
-	"settings.showIconPreviews": "Mostra anteprime icone nel completamento automatico",
-	"settings.showColorPreviews": "Mostra anteprime colori",
 
 	"settings.openHotkeys": "Scorciatoie Callout Studio",
 	"settings.openHotkeysDesc": "Apre le impostazioni scorciatoie di Obsidian per i comandi di Callout Studio, dove puoi scegliere le tue scorciatoie per Crea nuovo tipo, Apri impostazioni, Rimuovi callout e Racchiudi in callout. Nessuna scorciatoia assegnata per impostazione predefinita.",

@@ -108,14 +108,9 @@ export const ru: Record<string, string> = {
 
 	"settings.enableContextMenu": "Включить действия контекстного меню callout",
 	"settings.enableContextMenuDesc": "Добавляет дополнительные действия в контекстное меню Obsidian при правом клике на callout. Работает в режиме чтения, режиме источника и в живом предпросмотре.",
-	"settings.showEditCallout": 'Показать "редактировать настройки callout"',
-	"settings.showOpenSettings": 'Показать "открыть настройки Callout Studio"',
-	"settings.showCopyMarkdown": 'Показать "копировать Markdown callout"',
 
 	"settings.enableAutocomplete": "Включить автодополнение [!",
 	"settings.enableAutocompleteDesc": 'Показывает предложения при вводе "[!" в блочной цитате в редакторе. Выберите тип callout из списка, чтобы вставить полный заголовок callout.',
-	"settings.showIconPreviews": "Показывать предпросмотр иконок в автодополнении",
-	"settings.showColorPreviews": "Показывать предпросмотр цветов",
 
 	"settings.openHotkeys": "Сочетания клавиш Callout Studio",
 	"settings.openHotkeysDesc": "Открывает настройки сочетаний клавиш Obsidian для команд Callout Studio, где можно задать собственные сочетания для создания нового типа, открытия настроек, удаления и добавления callout. По умолчанию сочетания не назначены.",

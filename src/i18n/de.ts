@@ -108,14 +108,9 @@ export const de: Record<string, string> = {
 
 	"settings.enableContextMenu": "Callout-Kontextmenü-Aktionen aktivieren",
 	"settings.enableContextMenuDesc": "Fügt Obsidians Rechtsklick-Menü zusätzliche Aktionen hinzu, wenn Sie auf einen Callout rechtsklicken. Funktioniert in der Leseansicht, im Quellmodus und in der Live-Vorschau.",
-	"settings.showEditCallout": '"Callout-Einstellungen bearbeiten" anzeigen',
-	"settings.showOpenSettings": '"Callout Studio-Einstellungen öffnen" anzeigen',
-	"settings.showCopyMarkdown": '"Callout-Markdown kopieren" anzeigen',
 
 	"settings.enableAutocomplete": "[! Autovervollständigung aktivieren",
 	"settings.enableAutocompleteDesc": 'Zeigt Vorschläge an, wenn Sie "[!" in einem Blockzitat im Editor eingeben. Wählen Sie einen Callout-Typ aus der Liste, um eine vollständige Callout-Überschrift einzufügen.',
-	"settings.showIconPreviews": "Symbolvorschauen in der Autovervollständigung anzeigen",
-	"settings.showColorPreviews": "Farbvorschauen anzeigen",
 
 	"settings.openHotkeys": "Callout Studio-Tastaturkürzel",
 	"settings.openHotkeysDesc": "Öffnet Obsidians Tastaturkürzel-Einstellungen für Callout Studio-Befehle, wo Sie eigene Kürzel für Neuen Callout-Typ erstellen, Einstellungen öffnen, Aus Callout entfernen und In Callout einbetten festlegen können. Standardmäßig sind keine Kürzel zugewiesen.",

@@ -108,14 +108,9 @@ export const ar: Record<string, string> = {
 
 	"settings.enableContextMenu": "تفعيل إجراءات قائمة سياق الـ callout",
 	"settings.enableContextMenuDesc": "يضيف إجراءات إضافية إلى قائمة النقر بزر الماوس الأيمن في Obsidian عند النقر بزر الماوس الأيمن على callout. يعمل في وضع القراءة وضع المصدر والمعاينة المباشرة.",
-	"settings.showEditCallout": 'إظهار "تعديل إعدادات الـ callout"',
-	"settings.showOpenSettings": 'إظهار "فتح إعدادات Callout Studio"',
-	"settings.showCopyMarkdown": 'إظهار "نسخ Markdown الـ callout"',
 
 	"settings.enableAutocomplete": "تفعيل الإكمال التلقائي [!",
 	"settings.enableAutocompleteDesc": 'يعرض اقتراحات عند كتابة "[!" داخل اقتباس محظور في المحرر. اختر نوع callout من القائمة لإدراج عنوان callout كامل.',
-	"settings.showIconPreviews": "إظهار معاينة الأيقونات في الإكمال التلقائي",
-	"settings.showColorPreviews": "إظهار معاينة الألوان",
 
 	"settings.openHotkeys": "اختصارات Callout Studio",
 	"settings.openHotkeysDesc": "يفتح إعدادات الاختصارات في Obsidian لأوامر Callout Studio، حيث يمكنك اختيار اختصاراتك الخاصة لإنشاء نوع جديد وفتح الإعدادات وإزالة الـ callout والالتفاف فيه. لا يتم تعيين أي اختصارات افتراضياً.",
