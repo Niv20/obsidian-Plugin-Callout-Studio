@@ -23,6 +23,7 @@ type RegistryWindow = Window & {
 
 export class CSSInjector {
 	private styleSheet: CSSStyleSheet | null = null;
+	private styleDoc: Document | null = null;
 	private debounceTimer: number | null = null;
 	private injecting = false;
 	private registry: CalloutRegistry;
@@ -49,13 +50,27 @@ export class CSSInjector {
 			return;
 		}
 
-		const sheet = new CSSStyleSheet();
-		activeDocument.adoptedStyleSheets = [
-			...activeDocument.adoptedStyleSheets,
-			sheet,
-		];
+		const doc = activeDocument;
+		// Construct the sheet using the target document's window realm.
+		// Using the global CSSStyleSheet constructor when activeDocument belongs
+		// to a pop-out window (a different realm) causes a
+		// "Sharing constructed stylesheets in multiple documents" error in older
+		// Electron builds where cross-realm sheet adoption is not permitted.
+		const win = doc.defaultView ?? window;
+		const sheet = new win.CSSStyleSheet();
+
+		try {
+			doc.adoptedStyleSheets = [...doc.adoptedStyleSheets, sheet];
+		} catch {
+			// Fallback: existing sheets in adoptedStyleSheets may have been
+			// adopted by a different document (e.g. orphaned from a closed
+			// pop-out). Replace the array with only our sheet.
+			doc.adoptedStyleSheets = [sheet];
+		}
+
 		registryWindow[STYLE_SHEET_REGISTRY_KEY] = sheet;
 		this.styleSheet = sheet;
+		this.styleDoc = doc;
 	}
 
 	inject(emitCssChange = true): void {
@@ -519,12 +534,13 @@ export class CSSInjector {
 			window.clearTimeout(this.debounceTimer);
 			this.debounceTimer = null;
 		}
-		if (this.styleSheet && "adoptedStyleSheets" in activeDocument) {
-			activeDocument.adoptedStyleSheets =
-				activeDocument.adoptedStyleSheets.filter(
-					(sheet) => sheet !== this.styleSheet,
-				);
+		const doc = this.styleDoc ?? activeDocument;
+		if (this.styleSheet && "adoptedStyleSheets" in doc) {
+			doc.adoptedStyleSheets = doc.adoptedStyleSheets.filter(
+				(sheet) => sheet !== this.styleSheet,
+			);
 			this.styleSheet = null;
+			this.styleDoc = null;
 		}
 		const registryWindow = window as RegistryWindow;
 		delete registryWindow[STYLE_SHEET_REGISTRY_KEY];
