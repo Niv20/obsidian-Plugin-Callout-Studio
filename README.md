@@ -1,6 +1,8 @@
 # Callout Studio
 
-Callout Studio is the ultimate callout manager for Obsidian. It lets you create, edit, and style your own callout types, override the built-in ones, pick icons from large libraries, and keep callouts under control across your whole vault — all from a single settings tab.
+Callout Studio is a powerful callout management **plugin** for [Obsidian.](https://obsidian.md)
+
+It lets you create, edit, and style your own callout types, override the built-in ones, pick icons from large libraries, and keep callouts under control across your whole vault - all from a single settings tab!
 
 <img alt="hero" src="https://github.com/user-attachments/assets/e24ff986-cf0c-4f18-95be-33a75283d83a" />
 
@@ -30,6 +32,14 @@ You can also fine-tune each callout's icon size and horizontal/vertical offset.
 
 <img alt="edit callout" src="https://github.com/user-attachments/assets/7d0aef10-b85b-41e4-967d-5eb3a1437e44" />
 
+### `[!` autocomplete
+
+When you type `[!` inside a blockquote, Callout Studio shows a suggestion list of available callouts:
+
+- Picking a suggestion inserts a complete callout header.
+- You can confirm a brand-new callout name on the spot — it will be added as a fallback row to the registry.
+
+<img alt="autocomplete" src="https://github.com/user-attachments/assets/360e2d5b-af4c-4215-8e15-8e2b87b22837" />
 
 ### Global callout style
 
@@ -59,27 +69,13 @@ Callout Studio keeps the registry in sync with what's actually used in your vaul
 
 ### Right-click context menu
 
-Right-click on a callout in **Reading view**, **Source mode**, or **Live Preview** to get extra actions injected into Obsidian's native menu:
+Right-click on a callout to get extra actions injected into Obsidian's native menu:
 
 - Edit callout settings
 - Open Callout Studio settings
 - Copy callout Markdown
 
-Each item can be toggled on or off individually.
-
 <img alt="right-click menu" src="https://github.com/user-attachments/assets/92220a40-4b6e-4654-baf3-1deba141012d" />
-
-
-### `[!` autocomplete
-
-When you type `[!` inside a blockquote, Callout Studio shows a suggestion list of available callouts:
-
-- Optional icon previews next to each suggestion.
-- Optional color previews next to each suggestion.
-- Picking a suggestion inserts a complete callout header.
-- You can confirm a brand-new callout name on the spot — it will be added as a fallback row to the registry.
-
-<img alt="autocomplete" src="https://github.com/user-attachments/assets/360e2d5b-af4c-4215-8e15-8e2b87b22837" />
 
 
 ### Editor commands
