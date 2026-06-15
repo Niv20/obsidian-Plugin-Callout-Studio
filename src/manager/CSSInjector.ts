@@ -21,9 +21,12 @@ type RegistryWindow = Window & {
 	[STYLE_SHEET_REGISTRY_KEY]?: CSSStyleSheet;
 };
 
+const STYLE_EL_ID = "callout-studio-dynamic-css";
+
 export class CSSInjector {
 	private styleSheet: CSSStyleSheet | null = null;
 	private styleDoc: Document | null = null;
+	private styleEl: HTMLStyleElement | null = null;
 	private debounceTimer: number | null = null;
 	private injecting = false;
 	private registry: CalloutRegistry;
@@ -73,14 +76,37 @@ export class CSSInjector {
 		this.styleDoc = doc;
 	}
 
+	/**
+	 * Ensure a real `<style>` element exists in the MAIN window's <head>.
+	 *
+	 * This is the critical part for PDF export: Obsidian's "Export to PDF"
+	 * renders in a context that honors `<style>`/snippet CSS in <head> but
+	 * IGNORES `adoptedStyleSheets` (constructed stylesheets). So writing the same
+	 * CSS into a `<style>` element is what makes callout colors and material/emoji
+	 * icons actually appear in exported PDFs.
+	 */
+	private ensureStyleEl(): void {
+		if (this.styleEl && this.styleEl.isConnected) return;
+		// Use the main renderer document (where Export to PDF operates), not
+		// activeDocument (which may transiently be a pop-out window). The
+		// workspace container always lives in the main window, so its
+		// ownerDocument is the main renderer document.
+		const doc = this.app.workspace.containerEl.ownerDocument;
+		const existing = doc.getElementById(STYLE_EL_ID);
+		if (existing instanceof HTMLStyleElement) {
+			this.styleEl = existing;
+			return;
+		}
+		const el = doc.createElement("style");
+		el.id = STYLE_EL_ID;
+		doc.head.appendChild(el);
+		this.styleEl = el;
+	}
+
 	inject(emitCssChange = true): void {
 		if (this.injecting) return;
 		this.injecting = true;
 		this.ensureStyleSheet();
-		if (!this.styleSheet) {
-			this.injecting = false;
-			return;
-		}
 
 		const callouts = this.registry.getAll();
 		const rules: string[] = [
@@ -89,6 +115,20 @@ export class CSSInjector {
 
 		// Global callout style rules
 		rules.push(this.generateGlobalStyleCSS());
+
+		// The DOM inline-SVG/emoji copies that paintIcons bakes in are the icons
+		// shown in PDF export (print). Hide them on screen (live view uses the
+		// ::after icon above); `@media screen` means they reveal themselves in
+		// print, where they render far more reliably than a CSS mask.
+		rules.push(
+			"@media screen {\n" +
+				".callout > .callout-title > .callout-icon > .cs-export-icon { display: none; }\n" +
+				"}\n" +
+				// Size the baked emoji copy via a class instead of an inline style;
+				// this rule ships in the same <style> element Obsidian honors when
+				// exporting to PDF (see bakeEmojiExportIcon).
+				".callout > .callout-title > .callout-icon > span.cs-export-icon { font-size: var(--icon-size, 1.2em); line-height: 1; }",
+		);
 
 		const materialFonts = new Set<string>();
 
@@ -102,13 +142,20 @@ export class CSSInjector {
 		// Clean up any leftover material font links (no longer needed for rendering)
 		this.updateMaterialFontLinks(materialFonts);
 
-		this.styleSheet.replaceSync(rules.join("\n\n"));
+		const cssText = rules.join("\n\n");
+		// Write the CSS to BOTH targets:
+		//  1. adoptedStyleSheets — fast path for live Reading view / Live Preview
+		//     (and pop-out windows).
+		//  2. a real <style> in <head> — the ONLY one Obsidian's PDF export
+		//     honors (it ignores adoptedStyleSheets), so this is what makes
+		//     colors + material/emoji icons render correctly in exported PDFs.
+		if (this.styleSheet) this.styleSheet.replaceSync(cssText);
+		this.ensureStyleEl();
+		if (this.styleEl) this.styleEl.textContent = cssText;
 
-		// Lucide icon SVGs are static DOM elements injected once by Obsidian during
-		// rendering. Changing --callout-icon via CSS alone does not update them.
-		// Re-inject icons for all currently rendered callouts so the change is
-		// visible immediately without requiring the user to re-open the note.
-		this.refreshCalloutIconsInDOM();
+		// Re-paint DOM icons: keeps Lucide icons in sync after edits, and bakes
+		// the hidden material/emoji export fallback nodes (see paintIcon).
+		this.paintIcons();
 
 		// Trigger Obsidian to re-render callouts with updated styles — but only
 		// when *we* are the source of the change. When reacting to an external
@@ -177,7 +224,10 @@ export class CSSInjector {
 			);
 		}
 
-		// Material icon SVG override (uses mask-image with cached SVG data URI)
+		// Material icon SVG override (uses mask-image with cached SVG data URI).
+		// This drives the *live* (Reading view / Live Preview) rendering. A
+		// hidden DOM copy is also baked in by paintIcons for PDF export, where
+		// this adopted stylesheet is dropped.
 		if (def.icon.type === "material") {
 			const cached = this.registry.findMaterialSvg(
 				def.icon.value,
@@ -189,6 +239,11 @@ export class CSSInjector {
 					this.generateMaterialSvgOverride(def.id, cached.svg),
 				);
 			}
+		}
+
+		// Emoji icon override (renders the glyph via ::after) for live view.
+		if (def.icon.type === "emoji") {
+			parts.push(this.generateEmojiOverride(def.id, def.icon.value));
 		}
 
 		// Icon position/size transform
@@ -249,6 +304,11 @@ export class CSSInjector {
 						);
 					}
 				}
+				if (def.icon.type === "emoji") {
+					parts.push(
+						this.generateEmojiOverride(alias, def.icon.value),
+					);
+				}
 				const aliasTransform = this.getIconTransformCSS({
 					...def,
 					id: alias,
@@ -286,21 +346,24 @@ export class CSSInjector {
 			case "lucide":
 				// getIconIds() already returns IDs with the "lucide-" prefix
 				return def.icon.value;
-			case "material": {
-				// Always use pencil fallback for --callout-icon.
-				// The actual icon is rendered via ::after mask-image when SVG is cached.
-				return `lucide-pencil`;
-			}
+			case "material":
 			case "emoji":
-				return `"${def.icon.value}"`;
+				// Use a valid Lucide id as the placeholder --callout-icon so
+				// Obsidian always renders *something* at first paint. The real
+				// glyph is then painted into the DOM by paintIcons (which also
+				// makes it survive PDF export).
+				return `lucide-pencil`;
 			default:
 				return "";
 		}
 	}
 
 	/**
-	 * Generates CSS that renders a Material icon from a cached SVG data URI
-	 * using mask-image. Works in PDF export (no external font needed).
+	 * Generates CSS that renders a Material icon via a mask-image ::after, for
+	 * the live (Reading view / Live Preview) rendering. Wrapped in `@media screen`
+	 * so it does NOT apply to PDF export (print media): there, the inline-SVG copy
+	 * baked into the DOM by paintIcons is shown instead, which is far more
+	 * reliable in Chromium's print pipeline than a CSS mask.
 	 */
 	private generateMaterialSvgOverride(
 		calloutId: string,
@@ -308,6 +371,7 @@ export class CSSInjector {
 	): string {
 		const dataUri = svgToDataUri(svg);
 		return (
+			`@media screen {\n` +
 			`.callout[data-callout="${calloutId}"] > .callout-title > .callout-icon > svg {\n` +
 			`  display: none;\n` +
 			`}\n` +
@@ -323,6 +387,32 @@ export class CSSInjector {
 			`  -webkit-mask-repeat: no-repeat;\n` +
 			`  mask-repeat: no-repeat;\n` +
 			`  background-color: rgb(var(--cs-color-rgb));\n` +
+			`}\n` +
+			`}`
+		);
+	}
+
+	/**
+	 * Generates CSS that renders an emoji glyph via the icon element's ::after,
+	 * for live view. Wrapped in `@media screen` so it does not apply to PDF export
+	 * (print): there the DOM <span> baked by paintIcons is shown instead. Emojis
+	 * keep their own colors, so no mask/background-color is applied.
+	 */
+	private generateEmojiOverride(calloutId: string, emoji: string): string {
+		// Defensive escaping for the CSS string literal (emojis contain neither
+		// backslashes nor quotes, but keep it safe against future data changes).
+		const safe = emoji.replace(/\\/g, "\\\\").replace(/"/g, '\\"');
+		return (
+			`@media screen {\n` +
+			`.callout[data-callout="${calloutId}"] > .callout-title > .callout-icon > svg {\n` +
+			`  display: none;\n` +
+			`}\n` +
+			`.callout[data-callout="${calloutId}"] > .callout-title > .callout-icon::after {\n` +
+			`  content: "${safe}";\n` +
+			`  display: inline-block;\n` +
+			`  font-size: var(--icon-size, 1.2em);\n` +
+			`  line-height: 1;\n` +
+			`}\n` +
 			`}`
 		);
 	}
@@ -341,28 +431,168 @@ export class CSSInjector {
 	}
 
 	/**
-	 * Walk all rendered callout elements in the document and re-inject their
-	 * Lucide SVG icons. Obsidian reads --callout-icon only once at render time,
-	 * so the CSS variable change alone does not update the already-rendered SVG.
-	 * Material and emoji icons are handled purely by CSS and do not need this.
+	 * Walk rendered callouts and (re)apply DOM-level icon work.
+	 *
+	 * For Lucide this keeps the visible SVG in sync after edits. For material and
+	 * emoji it bakes a *hidden* self-contained copy of the icon (see paintIcon)
+	 * that only appears in Obsidian's PDF export clone, where our adopted
+	 * stylesheet — and thus the CSS that draws the live icon — is dropped.
+	 *
+	 * `root` may be the document (full sweep, on inject), a rendered container
+	 * (from a markdown post-processor), or a single callout element.
 	 */
-	private refreshCalloutIconsInDOM(): void {
-		const calloutEls = Array.from(
-			activeDocument.querySelectorAll<HTMLElement>(
-				".callout[data-callout]",
+	paintIcons(root: ParentNode = activeDocument): void {
+		const calloutEls: HTMLElement[] = [];
+		// A post-processor can hand us the callout element itself.
+		if (
+			(root as Element).nodeType === 1 &&
+			(root as Element).matches(".callout[data-callout]")
+		) {
+			calloutEls.push(root as HTMLElement);
+		}
+		calloutEls.push(
+			...Array.from(
+				root.querySelectorAll<HTMLElement>(".callout[data-callout]"),
 			),
 		);
+
 		for (const calloutEl of calloutEls) {
 			const id = calloutEl.getAttribute("data-callout");
-			if (!id) continue;
-			const def = this.registry.get(id);
-			if (!def || def.icon.type !== "lucide") continue;
+			// Skip the settings-tab preview marker; it manages its own icon.
+			if (!id || id === "cs-preview") continue;
+			const def = this.resolveDef(id);
+			if (!def) continue;
 			const iconEl = calloutEl.querySelector<HTMLElement>(
 				".callout-title .callout-icon",
 			);
 			if (!iconEl) continue;
-			setIcon(iconEl, def.icon.value);
+			this.paintIcon(iconEl, def);
 		}
+	}
+
+	/**
+	 * Resolve a callout id to its definition: direct id, then alias, then the
+	 * configured fallback callout (so unknown ids paint the fallback icon, the
+	 * DOM equivalent of generateFallbackCSS).
+	 */
+	private resolveDef(id: string): CalloutDefinition | undefined {
+		return (
+			this.registry.get(id) ??
+			this.registry.findByAlias(id) ??
+			this.registry.get(this.registry.settings.fallbackCalloutId)
+		);
+	}
+
+	/**
+	 * Prepare a `.callout-icon` for PDF export.
+	 *
+	 * Live view (Reading view / Live Preview = screen media) renders material/emoji
+	 * via CSS `::after` (see generateMaterialSvgOverride/generateEmojiOverride),
+	 * which we wrap in `@media screen`. Here we bake a self-contained, concretely
+	 * coloured copy of the icon into the DOM. The hide rules are screen-only, so in
+	 * PDF export (print media) those CSS icons disappear and this DOM copy becomes
+	 * the visible icon — an inline SVG / text node renders far more reliably in
+	 * Chromium's print pipeline than a CSS mask, and carries its own colour.
+	 *
+	 * Lucide icons are visible DOM SVGs and already survive export, so they are
+	 * painted normally.
+	 */
+	private paintIcon(iconEl: HTMLElement, def: CalloutDefinition): void {
+		switch (def.icon.type) {
+			case "lucide":
+				// Visible icon; works in PDF natively. setIcon is an Obsidian
+				// helper — guard against an export realm where it is unavailable.
+				try {
+					setIcon(iconEl, def.icon.value);
+				} catch {
+					/* leave Obsidian's own rendering in place */
+				}
+				break;
+			case "material":
+				this.bakeMaterialExportIcon(iconEl, def);
+				break;
+			case "emoji":
+				this.bakeEmojiExportIcon(
+					iconEl,
+					def.icon.value,
+					iconEl.ownerDocument,
+				);
+				break;
+		}
+	}
+
+	/**
+	 * Bake a hidden, self-contained Material SVG copy as a DOM-level fallback for
+	 * export paths that carry the rendered DOM but not our CSS. The callout color
+	 * is baked as an **inline style with `!important`** on the root and every
+	 * shape — a presentation `fill` attribute would lose to core/theme CSS (which
+	 * colors the icon via `currentColor` → `--callout-color`, defaulting to blue
+	 * in an export that lacks our stylesheet), whereas an inline `!important`
+	 * declaration outranks any selector rule. Native DOM only, for realm safety.
+	 *
+	 * If the SVG is not cached yet, leaves Obsidian's pencil placeholder; the
+	 * download later triggers a re-inject which repaints.
+	 */
+	private bakeMaterialExportIcon(
+		iconEl: HTMLElement,
+		def: CalloutDefinition,
+	): void {
+		if (def.icon.type !== "material") return;
+		const cached = this.registry.findMaterialSvg(
+			def.icon.value,
+			def.icon.style ?? "outlined",
+			def.icon.weight ?? 400,
+		);
+		if (!cached) return; // leave pencil placeholder; repaint on download
+		const doc = iconEl.ownerDocument;
+		const parsed = new DOMParser().parseFromString(
+			cached.svg,
+			"image/svg+xml",
+		);
+		const svgEl = parsed.documentElement;
+		if (
+			parsed.querySelector("parsererror") ||
+			svgEl.nodeName.toLowerCase() !== "svg"
+		) {
+			return;
+		}
+		const imported = doc.importNode(svgEl, true);
+		imported.classList.add("cs-export-icon");
+		const isDark = doc.body?.classList.contains("theme-dark") ?? false;
+		const color = isDark ? def.colorDark : def.colorLight;
+		// Root: size + color (inline !important beats core/theme CSS).
+		imported.setAttribute(
+			"style",
+			`width:var(--icon-size, 1.2em);height:var(--icon-size, 1.2em);fill:${color} !important`,
+		);
+		// Every shape: inline !important fill so a core rule targeting paths
+		// directly can't override it.
+		for (const shape of Array.from(
+			imported.querySelectorAll(
+				"path, circle, rect, polygon, ellipse, line, polyline, g",
+			),
+		)) {
+			shape.setAttribute("style", `fill:${color} !important`);
+		}
+		// Replaces Obsidian's pencil <svg> (and any prior copy) with our hidden one.
+		iconEl.replaceChildren(imported);
+	}
+
+	/**
+	 * Bake a hidden emoji copy (self-colored) for PDF export. Uses textContent,
+	 * never innerHTML, since the emoji is untrusted data; native DOM only.
+	 * Sizing comes from the `span.cs-export-icon` rule injected in inject(),
+	 * which ships in the <style> element Obsidian honors during PDF export.
+	 */
+	private bakeEmojiExportIcon(
+		iconEl: HTMLElement,
+		emoji: string,
+		doc: Document,
+	): void {
+		const span = doc.createElement("span");
+		span.classList.add("cs-export-icon");
+		span.textContent = emoji;
+		iconEl.replaceChildren(span);
 	}
 
 	scheduleInject(): void {
@@ -510,7 +740,8 @@ export class CSSInjector {
 			);
 		}
 
-		// Material SVG icon override for fallback
+		// Material SVG icon override for fallback (live view; PDF uses the hidden
+		// DOM copy baked by paintIcons via resolveDef).
 		if (fallbackDef.icon.type === "material") {
 			const cached = this.registry.findMaterialSvg(
 				fallbackDef.icon.value,
@@ -520,7 +751,8 @@ export class CSSInjector {
 			if (cached) {
 				const dataUri = svgToDataUri(cached.svg);
 				parts.push(
-					`body .callout${notSelectors} > .callout-title > .callout-icon > svg {\n  display: none !important;\n}\n` +
+					`@media screen {\n` +
+						`body .callout${notSelectors} > .callout-title > .callout-icon > svg {\n  display: none !important;\n}\n` +
 						`body .callout${notSelectors} > .callout-title > .callout-icon::after {\n` +
 						`  content: "";\n` +
 						`  display: inline-block;\n` +
@@ -533,9 +765,28 @@ export class CSSInjector {
 						`  -webkit-mask-repeat: no-repeat;\n` +
 						`  mask-repeat: no-repeat;\n` +
 						`  background-color: rgb(var(--cs-color-rgb)) !important;\n` +
+						`}\n` +
 						`}`,
 				);
 			}
+		}
+
+		// Emoji icon override for fallback (live view).
+		if (fallbackDef.icon.type === "emoji") {
+			const safe = fallbackDef.icon.value
+				.replace(/\\/g, "\\\\")
+				.replace(/"/g, '\\"');
+			parts.push(
+				`@media screen {\n` +
+					`body .callout${notSelectors} > .callout-title > .callout-icon > svg {\n  display: none !important;\n}\n` +
+					`body .callout${notSelectors} > .callout-title > .callout-icon::after {\n` +
+					`  content: "${safe}";\n` +
+					`  display: inline-block;\n` +
+					`  font-size: var(--icon-size, 1.2em);\n` +
+					`  line-height: 1;\n` +
+					`}\n` +
+					`}`,
+			);
 		}
 
 		return parts.join("\n\n");
@@ -556,5 +807,8 @@ export class CSSInjector {
 		}
 		const registryWindow = window as RegistryWindow;
 		delete registryWindow[STYLE_SHEET_REGISTRY_KEY];
+
+		this.styleEl?.remove();
+		this.styleEl = null;
 	}
 }

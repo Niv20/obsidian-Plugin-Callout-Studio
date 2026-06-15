@@ -12,8 +12,10 @@ import type {
 	MaterialIconMeta,
 	MaterialIconStyle,
 	CalloutIcon,
+	EmojiEntry,
 } from "../types";
 import { MATERIAL_ICON_METADATA } from "../data/materialIconsMetadata";
+import { EMOJI_DATA } from "../data/emojiData";
 
 const materialFontLoadCache = new Map<string, Promise<void>>();
 
@@ -27,6 +29,39 @@ export function getLucideIcons(filter?: string): string[] {
 	if (!filter) return all;
 	const lc = filter.toLowerCase();
 	return all.filter((id) => id.toLowerCase().includes(lc));
+}
+
+// ── Emoji ───────────────────────────────────────────────────────────────
+
+/**
+ * Returns the bundled emoji dataset, optionally filtered by a search query.
+ * The query is split on whitespace so each word must match (label or tags),
+ * mirroring the Material icon search behavior.
+ */
+export function getEmojis(query?: string): EmojiEntry[] {
+	const words = (query ?? "")
+		.toLowerCase()
+		.split(/\s+/)
+		.filter((w) => w.length > 0);
+	if (words.length === 0) return EMOJI_DATA;
+	return EMOJI_DATA.filter((e) => {
+		const label = e.label.toLowerCase();
+		return words.every(
+			(w) => label.includes(w) || e.tags.some((t) => t.includes(w)),
+		);
+	});
+}
+
+/**
+ * Resolves an emoji glyph for a given skin tone. Tone 0 is the default glyph;
+ * tones 1–5 (light → dark) return the matching skin variant when the emoji
+ * supports skin tones, otherwise the base glyph.
+ */
+export function applyEmojiSkin(entry: EmojiEntry, tone: number): string {
+	if (tone >= 1 && tone <= 5 && entry.skins) {
+		return entry.skins[tone - 1] ?? entry.emoji;
+	}
+	return entry.emoji;
 }
 
 // ── Material Icons ──────────────────────────────────────────────────────

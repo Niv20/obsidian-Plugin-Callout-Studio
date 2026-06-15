@@ -1212,6 +1212,43 @@ button.callout-studio-icon-picker-loading {
 	font-variation-settings: "FILL" var(--cs-material-fill, 0);
 }
 
+.icon-picker-emoji-cell {
+	font-size: 24px;
+	line-height: 1;
+}
+
+/* Skin-tone selector — swatches previewing a sample glyph per tone */
+.icon-picker-skin-row {
+	display: flex;
+	align-items: center;
+	gap: 2px;
+	flex-shrink: 0;
+}
+
+.icon-picker-skin-btn {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 32px;
+	height: 32px;
+	padding: 0;
+	font-size: 18px;
+	line-height: 1;
+	border-radius: var(--radius-s);
+	background-color: transparent;
+	box-shadow: none;
+	cursor: pointer;
+}
+
+.icon-picker-skin-btn:hover {
+	background-color: var(--background-modifier-hover);
+}
+
+.icon-picker-skin-btn.is-active {
+	background-color: var(--background-modifier-hover);
+	box-shadow: inset 0 0 0 2px var(--interactive-accent);
+}
+
 .icon-picker-load-more {
 	text-align: center;
 	padding: 12px;

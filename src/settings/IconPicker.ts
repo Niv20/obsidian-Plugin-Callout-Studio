@@ -11,12 +11,15 @@ import { Modal, setIcon } from "obsidian";
 import type { App } from "obsidian";
 import type {
 	CalloutIcon,
+	EmojiEntry,
 	MaterialIconMeta,
 	MaterialIconStyle,
 	PluginSettings,
 } from "../types";
 import {
 	getLucideIcons,
+	getEmojis,
+	applyEmojiSkin,
 	loadMaterialIcons,
 	filterMaterialIcons,
 	getMaterialCategories,
@@ -27,6 +30,12 @@ import {
 import { t } from "../i18n";
 
 const GRID_PAGE_SIZE = 120;
+
+/**
+ * Representative glyph (raised hand) in each skin tone, indexed by tone:
+ * 0 = default, 1–5 = light → dark. Used for the skin-tone selector swatches.
+ */
+const SKIN_TONE_SAMPLES = ["✋", "✋🏻", "✋🏼", "✋🏽", "✋🏾", "✋🏿"];
 
 interface IconPickerPlugin {
 	app: App;
@@ -41,13 +50,19 @@ export class IconPicker extends Modal {
 	private currentIcon: CalloutIcon | null;
 
 	// State
-	private activeTab: "lucide" | "material" = "lucide";
+	private activeTab: "lucide" | "material" | "emoji" = "lucide";
 	private searchQuery = "";
 	private selectedIcon: CalloutIcon | null = null;
 
 	// Lucide state
 	private lucideIcons: string[] = [];
 	private lucideDisplayed = 0;
+
+	// Emoji state
+	private emojiList: EmojiEntry[] = [];
+	private emojiDisplayed = 0;
+	private emojiSkinTone = 0;
+	private selectedEmojiEntry: EmojiEntry | null = null;
 
 	// Material state
 	private materialIcons: MaterialIconMeta[] = [];
@@ -81,6 +96,9 @@ export class IconPicker extends Modal {
 		// Restore last-used category (defaults to "Actions" on first use)
 		this.materialCategory =
 			plugin.settings.iconSources.lastMaterialCategory ?? "Actions";
+		// Restore last-used emoji skin tone (0 = default)
+		this.emojiSkinTone =
+			plugin.settings.iconSources.lastEmojiSkinTone ?? 0;
 	}
 
 	openAndWait(): Promise<CalloutIcon | null> {
@@ -164,11 +182,12 @@ export class IconPicker extends Modal {
 		this.tabsEl.setAttribute("role", "tablist");
 
 		const tabs: Array<{
-			id: "lucide" | "material";
+			id: "lucide" | "material" | "emoji";
 			label: string;
 		}> = [
 			{ id: "lucide", label: t("iconPicker.lucide") },
 			{ id: "material", label: t("iconPicker.material") },
+			{ id: "emoji", label: t("iconPicker.emoji") },
 		];
 
 		for (const tab of tabs) {
@@ -187,6 +206,7 @@ export class IconPicker extends Modal {
 				this.activeTab = tab.id;
 				this.searchQuery = "";
 				this.selectedIcon = null;
+				this.selectedEmojiEntry = null;
 				this.buildTabs();
 				this.renderTab();
 				this.updatePreview();
@@ -205,6 +225,9 @@ export class IconPicker extends Modal {
 				break;
 			case "material":
 				this.renderMaterialTab();
+				break;
+			case "emoji":
+				this.renderEmojiTab();
 				break;
 		}
 	}
@@ -312,6 +335,172 @@ export class IconPicker extends Modal {
 		);
 		const cell = grid.querySelector(`[aria-label="${iconId}"]`);
 		cell?.addClass("is-selected");
+		this.updatePreview();
+	}
+
+	// ── Emoji Tab ───────────────────────────────────────────────────────
+
+	private renderEmojiTab(): void {
+		const toolbar = this.tabContentEl.createDiv("icon-picker-toolbar");
+
+		const searchInput = toolbar.createEl("input", {
+			type: "text",
+			placeholder: t("iconPicker.searchEmoji"),
+			value: this.searchQuery,
+		});
+
+		// Skin-tone selector: one swatch per tone, each previewing a sample
+		// glyph in that tone (0 = default, 1–5 = light → dark).
+		const skinRow = toolbar.createDiv({
+			cls: "icon-picker-skin-row",
+			attr: { role: "group", "aria-label": t("iconPicker.skinTone") },
+		});
+		const skinButtons: HTMLButtonElement[] = [];
+		SKIN_TONE_SAMPLES.forEach((sample, tone) => {
+			const isActive = tone === this.emojiSkinTone;
+			const btn = skinRow.createEl("button", {
+				text: sample,
+				cls: `icon-picker-skin-btn${isActive ? " is-active" : ""}`,
+				attr: {
+					"aria-label": t("iconPicker.skinTone"),
+					"aria-pressed": String(isActive),
+				},
+			});
+			skinButtons.push(btn);
+			btn.addEventListener("click", () => {
+				this.emojiSkinTone = tone;
+				this.plugin.settings.iconSources.lastEmojiSkinTone = tone;
+				void this.plugin.saveSettings();
+				skinButtons.forEach((b, i) => {
+					b.toggleClass("is-active", i === tone);
+					b.setAttribute("aria-pressed", String(i === tone));
+				});
+				// Retint the visible cells in place (preserves scroll position
+				// and loaded pages) instead of rebuilding the grid.
+				this.refreshEmojiTones(grid);
+				// Keep the current selection on the same emoji, re-toned.
+				if (this.selectedEmojiEntry) {
+					this.selectedIcon = makeIcon(
+						"emoji",
+						applyEmojiSkin(this.selectedEmojiEntry, tone),
+					);
+					this.updatePreview();
+				}
+			});
+		});
+
+		const grid = this.tabContentEl.createDiv("icon-picker-grid");
+		grid.setAttribute("role", "grid");
+		this.enableGridKeyNav(grid);
+
+		const loadMoreContainer = this.tabContentEl.createDiv(
+			"icon-picker-load-more",
+		);
+		const loadMoreBtn = loadMoreContainer.createEl("button", {
+			text: t("iconPicker.loadMore"),
+		});
+		loadMoreBtn.addEventListener("click", () => {
+			this.appendEmojiIcons(grid);
+			if (this.emojiDisplayed >= this.emojiList.length) {
+				loadMoreContainer.hide();
+			}
+		});
+
+		const updateGrid = () => {
+			this.emojiList = getEmojis(this.searchQuery);
+			this.emojiDisplayed = 0;
+			grid.empty();
+			grid.removeClass("is-loaded");
+			this.appendEmojiIcons(grid);
+			grid.addClass("is-loaded");
+			if (this.emojiList.length === 0 && this.searchQuery) {
+				grid.createDiv("icon-picker-empty").setText(
+					t("iconPicker.noResults"),
+				);
+			}
+			if (this.emojiDisplayed >= this.emojiList.length) {
+				loadMoreContainer.hide();
+			} else {
+				loadMoreContainer.show();
+			}
+		};
+
+		searchInput.addEventListener("input", () => {
+			this.searchQuery = searchInput.value;
+			updateGrid();
+		});
+
+		updateGrid();
+		searchInput.focus();
+	}
+
+	private appendEmojiIcons(grid: HTMLElement): void {
+		const end = Math.min(
+			this.emojiDisplayed + GRID_PAGE_SIZE,
+			this.emojiList.length,
+		);
+		for (let i = this.emojiDisplayed; i < end; i++) {
+			const entry = this.emojiList[i];
+			if (!entry) continue;
+			const glyph = applyEmojiSkin(entry, this.emojiSkinTone);
+			const cell = grid.createDiv({
+				cls: "icon-picker-cell icon-picker-emoji-cell",
+				attr: {
+					"aria-label": entry.label,
+					tabindex: "0",
+					role: "button",
+				},
+			});
+			cell.setText(glyph);
+			if (
+				this.selectedIcon?.type === "emoji" &&
+				this.selectedIcon.value === glyph
+			) {
+				cell.addClass("is-selected");
+			}
+			cell.addEventListener("click", () =>
+				this.selectEmoji(entry, cell, grid),
+			);
+			cell.addEventListener("keydown", (e) => {
+				if (e.key === "Enter" || e.key === " ") {
+					e.preventDefault();
+					this.selectEmoji(entry, cell, grid);
+				}
+			});
+		}
+		this.emojiDisplayed = end;
+	}
+
+	/**
+	 * Re-applies the current skin tone to the already-rendered emoji cells
+	 * without rebuilding the grid, so scroll position and loaded pages are
+	 * preserved. Cells map to emojiList by index.
+	 */
+	private refreshEmojiTones(grid: HTMLElement): void {
+		const cells = grid.querySelectorAll<HTMLElement>(
+			".icon-picker-emoji-cell",
+		);
+		cells.forEach((cell, i) => {
+			const entry = this.emojiList[i];
+			if (!entry) return;
+			cell.setText(applyEmojiSkin(entry, this.emojiSkinTone));
+		});
+	}
+
+	private selectEmoji(
+		entry: EmojiEntry,
+		cell: HTMLElement,
+		grid: HTMLElement,
+	): void {
+		this.selectedEmojiEntry = entry;
+		this.selectedIcon = makeIcon(
+			"emoji",
+			applyEmojiSkin(entry, this.emojiSkinTone),
+		);
+		grid.querySelectorAll(".is-selected").forEach((el) =>
+			el.removeClass("is-selected"),
+		);
+		cell.addClass("is-selected");
 		this.updatePreview();
 	}
 
@@ -629,6 +818,9 @@ export class IconPicker extends Modal {
 				);
 				break;
 			}
+			case "emoji":
+				labelEl.setText(`emoji: ${this.selectedIcon.value}`);
+				break;
 		}
 	}
 

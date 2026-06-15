@@ -62,6 +62,14 @@ export default class CalloutStudioPlugin extends Plugin {
 		this.cssInjector = new CSSInjector(this.app, this.registry);
 		this.cssInjector.initialize();
 
+		// Paint callout icons (Lucide/Material/emoji) directly into the DOM for
+		// every rendered note. Material and emoji glyphs are baked into the DOM
+		// here rather than drawn via CSS so they survive Obsidian's PDF export,
+		// which clones the rendered DOM but drops our adopted stylesheet.
+		this.registerMarkdownPostProcessor((el) => {
+			this.cssInjector.paintIcons(el);
+		});
+
 		// Sub-managers (composition keeps main.ts focused on lifecycle).
 		this.materialSvg = new MaterialSvgManager({
 			registry: this.registry,

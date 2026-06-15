@@ -63,6 +63,18 @@ export interface CalloutDefinition {
 
 export type MaterialIconStyle = "outlined" | "filled" | "rounded" | "sharp";
 
+/**
+ * A single entry in the bundled emoji dataset (see data/emojiData.ts).
+ * `skins` is present only for skin-tone-capable emojis: the 5 fully-qualified
+ * variant glyphs ordered light → dark.
+ */
+export interface EmojiEntry {
+	emoji: string;
+	label: string;
+	tags: string[];
+	skins?: string[];
+}
+
 export interface ContextMenuSettings {
 	enabled: boolean;
 }
@@ -88,6 +100,8 @@ export interface IconSourceSettings {
 	materialWeightDefault: number;
 	/** Last Material category the user had open in the icon picker */
 	lastMaterialCategory: string;
+	/** Last emoji skin tone the user selected (0 = default, 1–5 = light→dark) */
+	lastEmojiSkinTone?: number;
 }
 
 export interface GlobalStyleSettings {

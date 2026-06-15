@@ -211,6 +211,7 @@ export const DEFAULT_SETTINGS: PluginSettings = {
 		materialStyleDefault: "rounded",
 		materialWeightDefault: 300,
 		lastMaterialCategory: "Actions",
+		lastEmojiSkinTone: 0,
 	},
 	firstRunCompleted: false,
 	fallbackCalloutId: "note",

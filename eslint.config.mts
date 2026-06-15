@@ -5,28 +5,9 @@ import { globalIgnores } from "eslint/config";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
 
-const obsidianRecommended = (() => {
-	const recommended = obsidianmd.configs?.recommended;
-	if (!recommended) {
-		return [];
-	}
-
-	if (Array.isArray(recommended)) {
-		return recommended;
-	}
-
-	if (
-		typeof (recommended as { [Symbol.iterator]?: unknown })[
-			Symbol.iterator
-		] === "function"
-	) {
-		return Array.from(recommended as Iterable<unknown>);
-	}
-
-	return [];
-})();
-
 export default tseslint.config(
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	...(obsidianmd.configs.recommended as any[]),
 	{
 		files: ["src/**/*.ts"],
 		languageOptions: {
@@ -41,22 +22,37 @@ export default tseslint.config(
 				createFragment: "readonly",
 			},
 			parserOptions: {
-				projectService: {
-					allowDefaultProject: ["eslint.config.js", "manifest.json"],
-				},
+				projectService: true,
 				tsconfigRootDir: path.dirname(fileURLToPath(import.meta.url)),
-				extraFileExtensions: [".json"],
 			},
 		},
 	},
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	...(obsidianRecommended as any[]),
+	{
+		// The recommended config lints package.json/manifest.json (for
+		// validate-manifest) but leaves them without a TS parser. Parse them so
+		// the manifest rules can run, and turn off the type-aware obsidianmd
+		// rules here — they require type info that JSON files don't have, and are
+		// irrelevant to JSON anyway (otherwise they crash, see block scoped
+		// `files: undefined` in the recommended config).
+		files: ["package.json", "manifest.json"],
+		languageOptions: {
+			parser: tseslint.parser,
+			parserOptions: { extraFileExtensions: [".json"] },
+		},
+		rules: {
+			"obsidianmd/no-plugin-as-component": "off",
+			"obsidianmd/no-unsupported-api": "off",
+			"obsidianmd/no-view-references-in-plugin": "off",
+			"obsidianmd/prefer-file-manager-trash-file": "off",
+			"obsidianmd/prefer-instanceof": "off",
+		},
+	},
 	globalIgnores([
 		"node_modules",
 		"dist",
+		"scripts",
 		"esbuild.config.mjs",
 		"eslint.config.js",
-		"eslint.config.mts",
 		"version-bump.mjs",
 		"versions.json",
 		"main.js",

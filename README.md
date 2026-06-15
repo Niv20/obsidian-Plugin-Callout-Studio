@@ -22,6 +22,7 @@ Three icon sources, all selectable from one icon picker:
 
 - **Lucide icons** — Obsidian's built-in set (~1,300 icons). Always available offline.
 - **Google Material Symbols** — ~3,800 icons, with selectable style (Outlined / Filled / Rounded / Sharp) and weight (100 – 700).
+- **Emoji** — Any Unicode emoji, with skin-tone selector.
 
 You can also fine-tune each callout's icon size and horizontal/vertical offset.
 
@@ -52,7 +53,6 @@ These settings apply to all callouts:
 
 <img alt="global callout style" src="https://github.com/user-attachments/assets/867d74c4-392e-4daf-97df-8ba72bf997d1" />
 
-
 ### Default fallback callout
 
 When a note uses a callout ID that doesn't exist in the registry, Callout Studio styles it using the **default fallback callout**. You can pick which callout acts as the fallback in settings.
@@ -76,7 +76,6 @@ Right-click on a callout to get extra actions injected into Obsidian's native me
 - Copy callout Markdown
 
 <img alt="right-click menu" src="https://github.com/user-attachments/assets/92220a40-4b6e-4654-baf3-1deba141012d" />
-
 
 ### Editor commands
 
