@@ -158,7 +158,7 @@ export const zh: Record<string, string> = {
 	"notice.noNewJSON": "未导入新的 callout 类型（ID 可能已存在）。",
 	"notice.failedJSON": "解析 JSON 文件失败。",
 	"notice.svgCacheCleared": "Material SVG 缓存已清除。",
-	"notice.iconDownloadFailed": '下载 Material 图标"{{name}}"失败。请检查网络连接。',
+	"notice.iconDownloadFailed": '无法下载 Material 图标"{{name}}"。该图标可能不支持此样式/字重，或您的网络连接已断开。',
 	"notice.nothingToWrap": "没有可包裹的内容。",
 	"notice.selectionContainsNoContent": "选区不包含内容。",
 	"notice.cursorNotInsideCallout": "光标不在 callout 内部。",

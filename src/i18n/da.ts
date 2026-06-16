@@ -141,7 +141,7 @@ export const da: Record<string, string> = {
 	"notice.noNewJSON": "Ingen nye callout-typer importeret (ID'er eksisterer muligvis allerede).",
 	"notice.failedJSON": "Kunne ikke parse JSON-filen.",
 	"notice.svgCacheCleared": "Material-SVG-cache ryddet.",
-	"notice.iconDownloadFailed": 'Kunne ikke downloade Material-ikonet "{{name}}". Kontrollér din internetforbindelse.',
+	"notice.iconDownloadFailed": 'Kunne ikke downloade Material-ikonet "{{name}}". Det er muligvis ikke tilgængeligt for denne stil/vægt, eller din forbindelse er offline.',
 	"notice.nothingToWrap": "Intet at indpakke.",
 	"notice.selectionContainsNoContent": "Markeringen indeholder intet indhold.",
 	"notice.cursorNotInsideCallout": "Markøren er ikke inde i en callout.",

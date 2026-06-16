@@ -158,7 +158,7 @@ export const de: Record<string, string> = {
 	"notice.noNewJSON": "Keine neuen Callout-Typen importiert (IDs möglicherweise bereits vorhanden).",
 	"notice.failedJSON": "JSON-Datei konnte nicht geparst werden.",
 	"notice.svgCacheCleared": "Material-SVG-Cache geleert.",
-	"notice.iconDownloadFailed": 'Material-Symbol "{{name}}" konnte nicht heruntergeladen werden. Prüfen Sie Ihre Internetverbindung.',
+	"notice.iconDownloadFailed": 'Material-Symbol "{{name}}" konnte nicht heruntergeladen werden. Es ist möglicherweise für diesen Stil/diese Stärke nicht verfügbar oder Sie sind offline.',
 	"notice.nothingToWrap": "Nichts zum Einbetten.",
 	"notice.selectionContainsNoContent": "Die Auswahl enthält keinen Inhalt.",
 	"notice.cursorNotInsideCallout": "Der Cursor befindet sich nicht in einem Callout.",

@@ -158,7 +158,7 @@ export const ru: Record<string, string> = {
 	"notice.noNewJSON": "Новые типы callout не импортированы (ID могут уже существовать).",
 	"notice.failedJSON": "Не удалось разобрать JSON-файл.",
 	"notice.svgCacheCleared": "Кеш SVG Material очищен.",
-	"notice.iconDownloadFailed": 'Не удалось загрузить иконку Material "{{name}}". Проверьте подключение к интернету.',
+	"notice.iconDownloadFailed": 'Не удалось загрузить иконку Material "{{name}}". Она может быть недоступна для данного стиля/насыщенности или отсутствует подключение к сети.',
 	"notice.nothingToWrap": "Нечего оборачивать.",
 	"notice.selectionContainsNoContent": "Выделение не содержит содержимого.",
 	"notice.cursorNotInsideCallout": "Курсор не находится внутри callout.",

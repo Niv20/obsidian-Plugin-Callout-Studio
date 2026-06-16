@@ -158,7 +158,7 @@ export const cs: Record<string, string> = {
 	"notice.noNewJSON": "Žádné nové typy callout nebyly importovány (ID mohou již existovat).",
 	"notice.failedJSON": "Soubor JSON nelze analyzovat.",
 	"notice.svgCacheCleared": "Mezipaměť SVG Material vymazána.",
-	"notice.iconDownloadFailed": 'Ikonu Material "{{name}}" nelze stáhnout. Zkontrolujte připojení k internetu.',
+	"notice.iconDownloadFailed": 'Ikonu Material "{{name}}" nelze stáhnout. Může být nedostupná pro tento styl/tloušťku nebo jste offline.',
 	"notice.nothingToWrap": "Není co zabalit.",
 	"notice.selectionContainsNoContent": "Výběr neobsahuje žádný obsah.",
 	"notice.cursorNotInsideCallout": "Kurzor není uvnitř callout.",

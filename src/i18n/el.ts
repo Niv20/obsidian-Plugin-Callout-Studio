@@ -141,7 +141,7 @@ export const el: Record<string, string> = {
 	"notice.noNewJSON": "Δεν εισήχθησαν νέοι τύποι callout (τα IDs μπορεί να υπάρχουν ήδη).",
 	"notice.failedJSON": "Αποτυχία ανάλυσης αρχείου JSON.",
 	"notice.svgCacheCleared": "Η κρυφή μνήμη SVG Material εκκαθαρίστηκε.",
-	"notice.iconDownloadFailed": 'Αποτυχία λήψης εικονιδίου Material "{{name}}". Ελέγξτε τη σύνδεσή σας στο διαδίκτυο.',
+	"notice.iconDownloadFailed": 'Αποτυχία λήψης εικονιδίου Material "{{name}}". Ενδέχεται να μην είναι διαθέσιμο για αυτό το στυλ/βάρος ή η σύνδεσή σας να είναι εκτός σύνδεσης.',
 	"notice.nothingToWrap": "Δεν υπάρχει τίποτα για αναδίπλωση.",
 	"notice.selectionContainsNoContent": "Η επιλογή δεν περιέχει περιεχόμενο.",
 	"notice.cursorNotInsideCallout": "Ο κέρσορας δεν βρίσκεται μέσα σε callout.",

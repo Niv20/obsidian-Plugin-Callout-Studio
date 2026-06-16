@@ -158,7 +158,7 @@ export const vi: Record<string, string> = {
 	"notice.noNewJSON": "Không có loại callout mới nào được nhập (ID có thể đã tồn tại).",
 	"notice.failedJSON": "Không thể phân tích cú pháp tệp JSON.",
 	"notice.svgCacheCleared": "Đã xóa bộ nhớ cache SVG Material.",
-	"notice.iconDownloadFailed": 'Tải biểu tượng Material "{{name}}" thất bại. Kiểm tra kết nối internet của bạn.',
+	"notice.iconDownloadFailed": 'Không thể tải biểu tượng Material "{{name}}". Nó có thể không có sẵn cho kiểu/độ dày này, hoặc kết nối của bạn đang ngoại tuyến.',
 	"notice.nothingToWrap": "Không có gì để bọc.",
 	"notice.selectionContainsNoContent": "Vùng chọn không có nội dung.",
 	"notice.cursorNotInsideCallout": "Con trỏ không nằm trong callout.",

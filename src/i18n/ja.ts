@@ -158,7 +158,7 @@ export const ja: Record<string, string> = {
 	"notice.noNewJSON": "新しいcalloutタイプはインポートされませんでした（IDがすでに存在する可能性があります）。",
 	"notice.failedJSON": "JSONファイルの解析に失敗しました。",
 	"notice.svgCacheCleared": "Material SVGキャッシュをクリアしました。",
-	"notice.iconDownloadFailed": 'Materialアイコン"{{name}}"のダウンロードに失敗しました。インターネット接続を確認してください。',
+	"notice.iconDownloadFailed": 'Materialアイコン"{{name}}"をダウンロードできませんでした。このスタイル/ウェイトでは利用できないか、接続がオフラインの可能性があります。',
 	"notice.nothingToWrap": "囲むものがありません。",
 	"notice.selectionContainsNoContent": "選択範囲にコンテンツがありません。",
 	"notice.cursorNotInsideCallout": "カーソルがcallout内にありません。",

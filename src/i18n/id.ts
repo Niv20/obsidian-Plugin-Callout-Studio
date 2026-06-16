@@ -158,7 +158,7 @@ export const id: Record<string, string> = {
 	"notice.noNewJSON": "Tidak ada tipe callout baru yang diimpor (ID mungkin sudah ada).",
 	"notice.failedJSON": "Gagal mengurai file JSON.",
 	"notice.svgCacheCleared": "Cache SVG Material dihapus.",
-	"notice.iconDownloadFailed": 'Gagal mengunduh ikon Material "{{name}}". Periksa koneksi internet Anda.',
+	"notice.iconDownloadFailed": 'Gagal mengunduh ikon Material "{{name}}". Ikon ini mungkin tidak tersedia untuk gaya/ketebalan ini, atau koneksi Anda sedang offline.',
 	"notice.nothingToWrap": "Tidak ada yang perlu dibungkus.",
 	"notice.selectionContainsNoContent": "Seleksi tidak mengandung konten.",
 	"notice.cursorNotInsideCallout": "Kursor tidak berada di dalam callout.",

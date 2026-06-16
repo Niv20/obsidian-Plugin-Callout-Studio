@@ -158,7 +158,7 @@ export const tr: Record<string, string> = {
 	"notice.noNewJSON": "Yeni callout türü içe aktarılmadı (ID'ler zaten mevcut olabilir).",
 	"notice.failedJSON": "JSON dosyası ayrıştırılamadı.",
 	"notice.svgCacheCleared": "Material SVG önbelleği temizlendi.",
-	"notice.iconDownloadFailed": '"{{name}}" Material simgesi indirilemedi. İnternet bağlantınızı kontrol edin.',
+	"notice.iconDownloadFailed": '"{{name}}" Material simgesi indirilemedi. Bu stil/ağırlık için mevcut olmayabilir veya bağlantınız çevrimdışı olabilir.',
 	"notice.nothingToWrap": "Sarılacak bir şey yok.",
 	"notice.selectionContainsNoContent": "Seçim içerik içermiyor.",
 	"notice.cursorNotInsideCallout": "İmleç callout içinde değil.",

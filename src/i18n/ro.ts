@@ -158,7 +158,7 @@ export const ro: Record<string, string> = {
 	"notice.noNewJSON": "Nu au fost importate tipuri noi de callout (ID-urile pot exista deja).",
 	"notice.failedJSON": "Nu s-a putut analiza fișierul JSON.",
 	"notice.svgCacheCleared": "Cache SVG Material șters.",
-	"notice.iconDownloadFailed": 'Nu s-a putut descărca pictograma Material "{{name}}". Verificați conexiunea la internet.',
+	"notice.iconDownloadFailed": 'Nu s-a putut descărca pictograma Material "{{name}}". Poate fi indisponibilă pentru acest stil/grosime sau conexiunea este offline.',
 	"notice.nothingToWrap": "Nimic de înfășurat.",
 	"notice.selectionContainsNoContent": "Selecția nu conține conținut.",
 	"notice.cursorNotInsideCallout": "Cursorul nu este în interiorul unui callout.",

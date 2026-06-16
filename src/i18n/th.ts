@@ -158,7 +158,7 @@ export const th: Record<string, string> = {
 	"notice.noNewJSON": "ไม่มีประเภท callout ใหม่ที่นำเข้า (ID อาจมีอยู่แล้ว)",
 	"notice.failedJSON": "ไม่สามารถแยกวิเคราะห์ไฟล์ JSON ได้",
 	"notice.svgCacheCleared": "ล้างแคช SVG Material แล้ว",
-	"notice.iconDownloadFailed": 'ดาวน์โหลดไอคอน Material "{{name}}" ล้มเหลว ตรวจสอบการเชื่อมต่ออินเทอร์เน็ตของคุณ',
+	"notice.iconDownloadFailed": 'ไม่สามารถดาวน์โหลดไอคอน Material "{{name}}" ได้ อาจไม่มีให้บริการสำหรับสไตล์/น้ำหนักนี้ หรือการเชื่อมต่อของคุณออฟไลน์อยู่',
 	"notice.nothingToWrap": "ไม่มีอะไรให้ห่อ",
 	"notice.selectionContainsNoContent": "การเลือกไม่มีเนื้อหา",
 	"notice.cursorNotInsideCallout": "เคอร์เซอร์ไม่อยู่ใน callout",

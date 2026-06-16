@@ -141,7 +141,7 @@ export const bg: Record<string, string> = {
 	"notice.noNewJSON": "Не са импортирани нови типове callout (ID-тата може вече да съществуват).",
 	"notice.failedJSON": "Неуспешно анализиране на JSON файла.",
 	"notice.svgCacheCleared": "Кешът на SVG файловете на Material е изчистен.",
-	"notice.iconDownloadFailed": 'Неуспешно изтегляне на икона Material "{{name}}". Проверете интернет връзката си.',
+	"notice.iconDownloadFailed": 'Неуспешно изтегляне на икона Material "{{name}}". Може да е недостъпна за този стил/тегло или да нямате интернет връзка.',
 	"notice.nothingToWrap": "Няма какво да се обвие.",
 	"notice.selectionContainsNoContent": "Селекцията не съдържа съдържание.",
 	"notice.cursorNotInsideCallout": "Курсорът не е вътре в callout.",

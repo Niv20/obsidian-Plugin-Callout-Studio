@@ -214,7 +214,7 @@ export const en: Record<string, string> = {
 	"notice.failedJSON": "Failed to parse JSON file.",
 	"notice.svgCacheCleared": "Material SVG cache cleared.",
 	"notice.iconDownloadFailed":
-		'Failed to download Material icon "{{name}}". Check your internet connection.',
+		'Could not download Material icon "{{name}}". It may be unavailable for this style/weight, or your connection may be offline.',
 	"notice.nothingToWrap": "Nothing to wrap.",
 	"notice.selectionContainsNoContent": "Selection contains no content.",
 	"notice.cursorNotInsideCallout": "Cursor is not inside a callout.",

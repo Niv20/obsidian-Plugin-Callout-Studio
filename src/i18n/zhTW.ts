@@ -141,7 +141,7 @@ export const zhTW: Record<string, string> = {
 	"notice.noNewJSON": "未匯入新的 callout 類型（ID 可能已存在）。",
 	"notice.failedJSON": "解析 JSON 檔案失敗。",
 	"notice.svgCacheCleared": "Material SVG 快取已清除。",
-	"notice.iconDownloadFailed": '下載 Material 圖示「{{name}}」失敗。請檢查網路連線。',
+	"notice.iconDownloadFailed": '無法下載 Material 圖示「{{name}}」。該圖示可能不支援此樣式/字重，或您的網路連線已中斷。',
 	"notice.nothingToWrap": "沒有可包覆的內容。",
 	"notice.selectionContainsNoContent": "選取範圍不包含內容。",
 	"notice.cursorNotInsideCallout": "游標不在 callout 內部。",

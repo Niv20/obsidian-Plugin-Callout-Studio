@@ -158,7 +158,7 @@ export const fa: Record<string, string> = {
 	"notice.noNewJSON": "هیچ نوع callout جدیدی وارد نشد (شناسه‌ها ممکن است از قبل وجود داشته باشند).",
 	"notice.failedJSON": "تجزیه فایل JSON ناموفق بود.",
 	"notice.svgCacheCleared": "حافظه نهان SVG Material پاک شد.",
-	"notice.iconDownloadFailed": 'دانلود آیکون Material "{{name}}" ناموفق بود. اتصال اینترنت خود را بررسی کنید.',
+	"notice.iconDownloadFailed": 'دانلود آیکون Material "{{name}}" ناموفق بود. ممکن است برای این سبک/وزن در دسترس نباشد، یا اتصال شما قطع باشد.',
 	"notice.nothingToWrap": "چیزی برای پیچیدن وجود ندارد.",
 	"notice.selectionContainsNoContent": "انتخاب حاوی محتوا نیست.",
 	"notice.cursorNotInsideCallout": "مکان‌نما داخل callout نیست.",

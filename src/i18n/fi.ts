@@ -141,7 +141,7 @@ export const fi: Record<string, string> = {
 	"notice.noNewJSON": "Uusia callout-tyyppejä ei tuotu (tunnukset voivat jo olla olemassa).",
 	"notice.failedJSON": "JSON-tiedoston jäsentäminen epäonnistui.",
 	"notice.svgCacheCleared": "Material-SVG-välimuisti tyhjennetty.",
-	"notice.iconDownloadFailed": 'Material-kuvakkeen "{{name}}" lataaminen epäonnistui. Tarkista internet-yhteys.',
+	"notice.iconDownloadFailed": 'Material-kuvakkeen "{{name}}" lataaminen epäonnistui. Se ei ehkä ole saatavilla tälle tyylille/painolle tai yhteys on poikki.',
 	"notice.nothingToWrap": "Ei mitään kääriä.",
 	"notice.selectionContainsNoContent": "Valinnassa ei ole sisältöä.",
 	"notice.cursorNotInsideCallout": "Kursori ei ole calloutin sisällä.",

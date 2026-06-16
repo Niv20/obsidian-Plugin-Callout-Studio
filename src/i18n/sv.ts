@@ -158,7 +158,7 @@ export const sv: Record<string, string> = {
 	"notice.noNewJSON": "Inga nya callout-typer importerades (ID:n kan redan finnas).",
 	"notice.failedJSON": "Det gick inte att tolka JSON-filen.",
 	"notice.svgCacheCleared": "Material-SVG-cache rensad.",
-	"notice.iconDownloadFailed": 'Det gick inte att ladda ned Material-ikonen "{{name}}". Kontrollera din internetanslutning.',
+	"notice.iconDownloadFailed": 'Det gick inte att ladda ned Material-ikonen "{{name}}". Den kanske inte är tillgänglig för den här stilen/vikten, eller så är anslutningen offline.',
 	"notice.nothingToWrap": "Inget att lägga i callout.",
 	"notice.selectionContainsNoContent": "Markeringen innehåller inget innehåll.",
 	"notice.cursorNotInsideCallout": "Markören är inte inne i en callout.",

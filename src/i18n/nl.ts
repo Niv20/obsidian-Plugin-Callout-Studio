@@ -158,7 +158,7 @@ export const nl: Record<string, string> = {
 	"notice.noNewJSON": "Geen nieuwe callout-types geïmporteerd (ID's bestaan mogelijk al).",
 	"notice.failedJSON": "JSON-bestand kon niet worden geparsed.",
 	"notice.svgCacheCleared": "Material SVG-cache gewist.",
-	"notice.iconDownloadFailed": 'Kan Material-pictogram "{{name}}" niet downloaden. Controleer uw internetverbinding.',
+	"notice.iconDownloadFailed": 'Kan Material-pictogram "{{name}}" niet downloaden. Het is mogelijk niet beschikbaar voor deze stijl/dikte, of uw verbinding is offline.',
 	"notice.nothingToWrap": "Niets om in te pakken.",
 	"notice.selectionContainsNoContent": "De selectie bevat geen inhoud.",
 	"notice.cursorNotInsideCallout": "De cursor bevindt zich niet in een callout.",

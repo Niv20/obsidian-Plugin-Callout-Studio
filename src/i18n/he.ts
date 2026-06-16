@@ -212,7 +212,7 @@ export const he: Record<string, string> = {
 	"notice.failedJSON": "פענוח קובץ ה־JSON נכשל.",
 	"notice.svgCacheCleared": "מטמון ה־SVG של Material נוקה.",
 	"notice.iconDownloadFailed":
-		'הורדת אייקון Material "{{name}}" נכשלה. נא לבדוק את החיבור לאינטרנט.',
+		'לא ניתן להוריד את אייקון Material "{{name}}". ייתכן שאינו זמין בסגנון/משקל הזה, או שאין חיבור לאינטרנט.',
 	"notice.nothingToWrap": "אין תוכן לעטוף.",
 	"notice.selectionContainsNoContent": "האזור הנבחר אינו מכיל תוכן.",
 	"notice.cursorNotInsideCallout": "הסמן אינו נמצא בתוך תיבת־הבלטה.",

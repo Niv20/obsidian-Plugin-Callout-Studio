@@ -158,7 +158,7 @@ export const ar: Record<string, string> = {
 	"notice.noNewJSON": "لم يتم استيراد أنواع callout جديدة (قد تكون المعرّفات موجودة بالفعل).",
 	"notice.failedJSON": "فشل تحليل ملف JSON.",
 	"notice.svgCacheCleared": "تم مسح ذاكرة التخزين المؤقت لـ SVG Material.",
-	"notice.iconDownloadFailed": 'فشل تحميل أيقونة Material "{{name}}". تحقق من اتصالك بالإنترنت.',
+	"notice.iconDownloadFailed": 'تعذّر تنزيل أيقونة Material "{{name}}". قد تكون غير متاحة لهذا الأسلوب/الوزن، أو قد يكون اتصالك بالإنترنت منقطعًا.',
 	"notice.nothingToWrap": "لا يوجد شيء للالتفاف.",
 	"notice.selectionContainsNoContent": "التحديد لا يحتوي على محتوى.",
 	"notice.cursorNotInsideCallout": "المؤشر ليس داخل callout.",

@@ -158,7 +158,7 @@ export const hu: Record<string, string> = {
 	"notice.noNewJSON": "Nem importáltunk új callout-típust (az azonosítók már létezhetnek).",
 	"notice.failedJSON": "A JSON-fájl elemzése nem sikerült.",
 	"notice.svgCacheCleared": "Material SVG gyorsítótár törölve.",
-	"notice.iconDownloadFailed": 'A "{{name}}" Material ikon letöltése nem sikerült. Ellenőrizze az internetkapcsolatát.',
+	"notice.iconDownloadFailed": 'A "{{name}}" Material ikon letöltése nem sikerült. Lehet, hogy ez a stílus/vastagság nem érhető el, vagy nincs internetkapcsolata.',
 	"notice.nothingToWrap": "Nincs mit becsomagolni.",
 	"notice.selectionContainsNoContent": "A kijelölés nem tartalmaz tartalmat.",
 	"notice.cursorNotInsideCallout": "A kurzor nem callout-on belül van.",

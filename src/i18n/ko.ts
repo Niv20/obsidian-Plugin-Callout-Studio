@@ -158,7 +158,7 @@ export const ko: Record<string, string> = {
 	"notice.noNewJSON": "새로운 callout 유형을 가져오지 못했습니다 (ID가 이미 존재할 수 있습니다).",
 	"notice.failedJSON": "JSON 파일 파싱에 실패했습니다.",
 	"notice.svgCacheCleared": "Material SVG 캐시가 지워졌습니다.",
-	"notice.iconDownloadFailed": 'Material 아이콘 "{{name}}" 다운로드에 실패했습니다. 인터넷 연결을 확인하세요.',
+	"notice.iconDownloadFailed": 'Material 아이콘 "{{name}}"을(를) 다운로드할 수 없습니다. 이 스타일/굵기에서 사용할 수 없거나 연결이 오프라인 상태일 수 있습니다.',
 	"notice.nothingToWrap": "감쌀 내용이 없습니다.",
 	"notice.selectionContainsNoContent": "선택 범위에 내용이 없습니다.",
 	"notice.cursorNotInsideCallout": "커서가 callout 안에 있지 않습니다.",

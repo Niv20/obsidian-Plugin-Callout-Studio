@@ -158,7 +158,7 @@ export const hi: Record<string, string> = {
 	"notice.noNewJSON": "कोई नए callout प्रकार आयात नहीं हुए (ID पहले से मौजूद हो सकते हैं)।",
 	"notice.failedJSON": "JSON फ़ाइल पार्स करने में विफल।",
 	"notice.svgCacheCleared": "Material SVG कैश साफ़ हो गया।",
-	"notice.iconDownloadFailed": 'Material आइकन "{{name}}" डाउनलोड करने में विफल। अपना इंटरनेट कनेक्शन जाँचें।',
+	"notice.iconDownloadFailed": 'Material आइकन "{{name}}" डाउनलोड नहीं हो सका। यह इस स्टाइल/वेट के लिए उपलब्ध नहीं हो सकता, या आपका कनेक्शन ऑफलाइन हो सकता है।',
 	"notice.nothingToWrap": "लपेटने के लिए कुछ नहीं।",
 	"notice.selectionContainsNoContent": "चयन में कोई सामग्री नहीं है।",
 	"notice.cursorNotInsideCallout": "कर्सर callout के अंदर नहीं है।",

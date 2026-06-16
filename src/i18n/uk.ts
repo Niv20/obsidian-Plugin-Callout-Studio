@@ -158,7 +158,7 @@ export const uk: Record<string, string> = {
 	"notice.noNewJSON": "Нові типи callout не імпортовано (ID можуть вже існувати).",
 	"notice.failedJSON": "Не вдалося розібрати JSON-файл.",
 	"notice.svgCacheCleared": "Кеш SVG Material очищено.",
-	"notice.iconDownloadFailed": 'Не вдалося завантажити іконку Material «{{name}}». Перевірте підключення до інтернету.',
+	"notice.iconDownloadFailed": 'Не вдалося завантажити іконку Material «{{name}}». Вона може бути недоступна для цього стилю/товщини або відсутнє підключення до мережі.',
 	"notice.nothingToWrap": "Нічого для обгортання.",
 	"notice.selectionContainsNoContent": "Виділення не містить вмісту.",
 	"notice.cursorNotInsideCallout": "Курсор не знаходиться всередині callout.",

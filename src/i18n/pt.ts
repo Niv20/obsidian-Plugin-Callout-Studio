@@ -158,7 +158,7 @@ export const pt: Record<string, string> = {
 	"notice.noNewJSON": "Nenhum novo tipo de callout foi importado (os IDs podem já existir).",
 	"notice.failedJSON": "Falha ao analisar arquivo JSON.",
 	"notice.svgCacheCleared": "Cache SVG Material limpo.",
-	"notice.iconDownloadFailed": 'Falha ao baixar ícone Material "{{name}}". Verifique sua conexão com a internet.',
+	"notice.iconDownloadFailed": 'Não foi possível baixar o ícone Material "{{name}}". Pode estar indisponível para este estilo/peso, ou sua conexão pode estar offline.',
 	"notice.nothingToWrap": "Nada para envolver.",
 	"notice.selectionContainsNoContent": "A seleção não contém conteúdo.",
 	"notice.cursorNotInsideCallout": "O cursor não está dentro de um callout.",

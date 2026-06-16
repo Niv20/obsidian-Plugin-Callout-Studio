@@ -132,8 +132,11 @@ export function materialFontFamily(style: MaterialIconStyle): string {
 }
 
 /**
- * Loads the Material Symbols variable font for the requested style using
- * FontFace (without injecting <link> elements).
+ * Loads the Material Symbols variable font for the requested style by injecting
+ * a Google Fonts stylesheet <link>. The browser fetches the CSS with its own
+ * (Chrome) User-Agent, which is required for Google to return the variable woff2
+ * build that carries the FILL axis — fetching via requestUrl returns per-weight
+ * static TTFs with no fill, so the font cannot render filled glyphs.
  */
 export function ensureMaterialFontLoaded(
 	style: MaterialIconStyle,
@@ -142,47 +145,43 @@ export function ensureMaterialFontLoaded(
 	const cached = materialFontLoadCache.get(family);
 	if (cached) return cached;
 
-	const loadPromise = (async () => {
+	const loadPromise = new Promise<void>((resolve) => {
+		const doc = activeDocument;
 		const encodedFamily = family.replace(/ /g, "+");
-		const cssUrl =
+		const href =
 			`https://fonts.googleapis.com/css2?family=${encodedFamily}` +
 			`:opsz,wght,FILL,GRAD@24,100..700,0..1,0`;
 
-		const cssResponse = await requestUrl({ url: cssUrl });
-		const css = cssResponse.text;
+		// Force the @font-face to actually download so glyphs are ready on first
+		// paint (resolving on link load alone can resolve before the font fetch).
+		const ready = () =>
+			doc.fonts
+				.load(`24px "${family}"`)
+				.then(() => resolve())
+				.catch(() => resolve());
 
-		const urlMatches = Array.from(
-			css.matchAll(/url\((['"]?)(https:\/\/[^'")]+)\1\)/g),
+		// Reuse an existing link (e.g. after a reload or in a popout window)
+		// instead of appending a duplicate.
+		const existing = doc.head.querySelector<HTMLLinkElement>(
+			`link[data-cs-material-font="${family}"]`,
 		);
-		const woff2Url =
-			urlMatches.find((m) => m[2]?.includes(".woff2"))?.[2] ??
-			urlMatches[0]?.[2];
-		if (!woff2Url) {
-			throw new Error(
-				`Could not resolve font URL for Material family "${family}"`,
-			);
+		if (existing) {
+			void ready();
+			return;
 		}
 
-		const fontFace = new FontFace(
-			family,
-			`url(${woff2Url}) format("woff2")`,
-			{
-				style: "normal",
-			},
-		);
-		await fontFace.load();
-		const fontSet = activeDocument.fonts as FontFaceSet & {
-			add(font: FontFace): FontFaceSet;
-		};
-		fontSet.add(fontFace);
-		await activeDocument.fonts.ready;
-	})();
+		const link = doc.createElement("link");
+		link.rel = "stylesheet";
+		link.href = href;
+		link.setAttribute("data-cs-material-font", family);
+		link.onload = () => void ready();
+		// Don't block the picker on a failed/offline font load.
+		link.onerror = () => resolve();
+		doc.head.appendChild(link);
+	});
 
 	materialFontLoadCache.set(family, loadPromise);
-	return loadPromise.catch((error) => {
-		materialFontLoadCache.delete(family);
-		throw error;
-	});
+	return loadPromise;
 }
 
 /**
@@ -209,18 +208,14 @@ function getMaterialSvgUrl(
 	weight: number,
 ): string {
 	const family = style === "filled" ? "outlined" : style;
-	const isFilled = style === "filled";
 
-	let variant: string;
-	if (isFilled && weight !== 400) {
-		variant = `fill1wght${weight}`;
-	} else if (isFilled) {
-		variant = "fill1";
-	} else if (weight !== 400) {
-		variant = `wght${weight}`;
-	} else {
-		variant = "default";
-	}
+	// gstatic serves the weight segment before the fill segment
+	// (e.g. "wght300fill1", not "fill1wght300"). Weight 400 is the default and
+	// is omitted; with no segments the variant is "default".
+	const parts: string[] = [];
+	if (weight !== 400) parts.push(`wght${weight}`);
+	if (style === "filled") parts.push("fill1");
+	const variant = parts.length ? parts.join("") : "default";
 
 	return `https://fonts.gstatic.com/s/i/short-term/release/materialsymbols${family}/${name}/${variant}/24px.svg`;
 }

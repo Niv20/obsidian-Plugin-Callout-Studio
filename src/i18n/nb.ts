@@ -141,7 +141,7 @@ export const nb: Record<string, string> = {
 	"notice.noNewJSON": "Ingen nye callout-typer importert (ID-er kan allerede eksistere).",
 	"notice.failedJSON": "Kunne ikke parse JSON-filen.",
 	"notice.svgCacheCleared": "Material-SVG-cache tømt.",
-	"notice.iconDownloadFailed": 'Kunne ikke laste ned Material-ikonet "{{name}}". Sjekk internettilkoblingen din.',
+	"notice.iconDownloadFailed": 'Kunne ikke laste ned Material-ikonet "{{name}}". Det kan være utilgjengelig for denne stilen/vekten, eller tilkoblingen er frakoblet.',
 	"notice.nothingToWrap": "Ingenting å pakke inn.",
 	"notice.selectionContainsNoContent": "Markeringen inneholder ikke innhold.",
 	"notice.cursorNotInsideCallout": "Markøren er ikke inne i en callout.",
