@@ -99,6 +99,38 @@ export class IconPicker extends Modal {
 		// Restore last-used emoji skin tone (0 = default)
 		this.emojiSkinTone =
 			plugin.settings.iconSources.lastEmojiSkinTone ?? 0;
+
+		// When re-opening with an existing icon, seed the picker so it lands on
+		// the matching tab with that icon already selected (and later scrolled
+		// into view — see revealSelected).
+		if (this.currentIcon) {
+			this.activeTab = this.currentIcon.type;
+
+			if (this.currentIcon.type === "material") {
+				// Match the grid's style/weight filter so the cell renders and
+				// highlights…
+				this.materialStyle =
+					this.currentIcon.style ?? this.materialStyle;
+				this.materialWeight =
+					this.currentIcon.weight ?? this.materialWeight;
+				// …and show "All categories" so the icon is never filtered out.
+				// In-memory only — the saved lastMaterialCategory is untouched.
+				this.materialCategory = "";
+			} else if (this.currentIcon.type === "emoji") {
+				// Find the dataset entry and the skin tone its glyph belongs to,
+				// so the grid renders the exact glyph (highlight matches) and
+				// skin re-tinting keeps tracking the selection.
+				const value = this.currentIcon.value;
+				const entry = getEmojis().find(
+					(e) => e.emoji === value || e.skins?.includes(value),
+				);
+				if (entry) {
+					this.selectedEmojiEntry = entry;
+					const skinIdx = entry.skins?.indexOf(value) ?? -1;
+					this.emojiSkinTone = skinIdx >= 0 ? skinIdx + 1 : 0;
+				}
+			}
+		}
 	}
 
 	openAndWait(): Promise<CalloutIcon | null> {
@@ -288,6 +320,17 @@ export class IconPicker extends Modal {
 			loadMoreContainer.hide();
 		}
 
+		// Reveal a pre-selected icon (re-opening on an existing Lucide icon).
+		if (this.selectedIcon?.type === "lucide") {
+			this.revealSelected(
+				grid,
+				loadMoreContainer,
+				this.lucideIcons.indexOf(this.selectedIcon.value),
+				this.lucideIcons.length,
+				() => this.appendLucideIcons(grid),
+			);
+		}
+
 		// Focus search
 		searchInput.focus();
 	}
@@ -431,6 +474,18 @@ export class IconPicker extends Modal {
 		});
 
 		updateGrid();
+
+		// Reveal a pre-selected emoji (re-opening on an existing emoji icon).
+		if (this.selectedIcon?.type === "emoji") {
+			this.revealSelected(
+				grid,
+				loadMoreContainer,
+				this.emojiList.indexOf(this.selectedEmojiEntry as EmojiEntry),
+				this.emojiList.length,
+				() => this.appendEmojiIcons(grid),
+			);
+		}
+
 		searchInput.focus();
 	}
 
@@ -660,6 +715,20 @@ export class IconPicker extends Modal {
 			}
 		});
 
+		// Reveal a pre-selected Material icon once the grid is first populated.
+		const revealMaterial = () => {
+			if (this.selectedIcon?.type !== "material") return;
+			this.revealSelected(
+				grid,
+				loadMoreContainer,
+				this.materialFiltered.findIndex(
+					(m) => m.name === this.selectedIcon?.value,
+				),
+				this.materialFiltered.length,
+				() => this.appendMaterialIcons(grid),
+			);
+		};
+
 		// Load icons — wait for both metadata AND font before showing the grid
 		if (this.materialIcons.length > 0) {
 			// Metadata cached – populate categories synchronously so the
@@ -674,6 +743,7 @@ export class IconPicker extends Modal {
 				if (this.activeTab !== "material") return;
 				loadingEl.remove();
 				updateGrid();
+				revealMaterial();
 				searchInput.focus();
 			});
 		} else if (this.materialError) {
@@ -699,6 +769,7 @@ export class IconPicker extends Modal {
 					if (this.activeTab !== "material") return;
 					this.populateMaterialCategories(categorySelect);
 					updateGrid();
+					revealMaterial();
 					searchInput.focus();
 				})
 				.catch((err: Error) => {
@@ -875,6 +946,38 @@ export class IconPicker extends Modal {
 			this.resolve = null;
 		}
 		this.close();
+	}
+
+	/**
+	 * After a tab's first render, pages icons in until the pre-selected icon is
+	 * rendered, then scrolls its (already `.is-selected`) cell into view. The
+	 * scroll container is `.icon-picker-content`; centering keeps the cell clear
+	 * of the sticky search/toolbar. No-op when nothing is pre-selected.
+	 */
+	private revealSelected(
+		grid: HTMLElement,
+		loadMore: HTMLElement,
+		targetIndex: number,
+		total: number,
+		appendPage: () => void,
+	): void {
+		if (targetIndex < 0) return;
+		// appendXIcons() renders GRID_PAGE_SIZE more cells each call; page until
+		// the target index is on screen (guard caps it for safety).
+		let guard = 0;
+		while (
+			grid.querySelectorAll(".icon-picker-cell").length <= targetIndex &&
+			guard++ < 500
+		) {
+			appendPage();
+		}
+		// Re-evaluate "Load more" visibility after the extra pages.
+		if (grid.querySelectorAll(".icon-picker-cell").length >= total) {
+			loadMore.hide();
+		}
+		grid
+			.querySelector<HTMLElement>(".icon-picker-cell.is-selected")
+			?.scrollIntoView({ block: "center" });
 	}
 
 	/**
