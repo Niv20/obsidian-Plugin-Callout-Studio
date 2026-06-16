@@ -102,6 +102,8 @@ export const fr: Record<string, string> = {
 	"settings.shapeGroup": "Forme",
 	"settings.borderRadius": "Arrondi des coins",
 	"settings.borderRadiusDesc": "Rayon de bordure en pixels pour les coins du callout",
+	"settings.layoutGroup": "Mise en page",
+	"settings.alignContent": "Aligner le contenu avec le titre",
 	"settings.previewTitle": "Aperçu",
 	"settings.previewCalloutTitle": "Callout d'exemple",
 	"settings.previewCalloutContent": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",

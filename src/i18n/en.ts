@@ -139,6 +139,8 @@ export const en: Record<string, string> = {
 	"settings.shapeGroup": "Shape",
 	"settings.borderRadius": "Corner rounding",
 	"settings.borderRadiusDesc": "Border-radius in pixels for callout corners",
+	"settings.alignGroup": "Align",
+	"settings.alignContent": "Align content with title",
 	"settings.previewTitle": "Preview",
 	"settings.previewCalloutTitle": "Example callout",
 	"settings.previewCalloutContent":

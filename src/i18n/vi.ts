@@ -102,6 +102,8 @@ export const vi: Record<string, string> = {
 	"settings.shapeGroup": "Hình dạng",
 	"settings.borderRadius": "Độ bo góc",
 	"settings.borderRadiusDesc": "Bán kính viền tính bằng pixel cho các góc callout",
+	"settings.layoutGroup": "Bố cục",
+	"settings.alignContent": "Căn chỉnh nội dung với tiêu đề",
 	"settings.previewTitle": "Xem trước",
 	"settings.previewCalloutTitle": "Callout mẫu",
 	"settings.previewCalloutContent": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",

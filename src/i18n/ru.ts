@@ -102,6 +102,8 @@ export const ru: Record<string, string> = {
 	"settings.shapeGroup": "Форма",
 	"settings.borderRadius": "Скругление углов",
 	"settings.borderRadiusDesc": "Радиус скругления углов callout в пикселях",
+	"settings.layoutGroup": "Макет",
+	"settings.alignContent": "Выровнять содержимое по заголовку",
 	"settings.previewTitle": "Предпросмотр",
 	"settings.previewCalloutTitle": "Пример callout",
 	"settings.previewCalloutContent": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",

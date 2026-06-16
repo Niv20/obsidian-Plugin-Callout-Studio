@@ -102,6 +102,8 @@ export const tr: Record<string, string> = {
 	"settings.shapeGroup": "Şekil",
 	"settings.borderRadius": "Köşe yuvarlaklığı",
 	"settings.borderRadiusDesc": "Callout köşeleri için piksel cinsinden kenarlık yarıçapı",
+	"settings.layoutGroup": "Düzen",
+	"settings.alignContent": "İçeriği başlıkla hizala",
 	"settings.previewTitle": "Önizleme",
 	"settings.previewCalloutTitle": "Örnek callout",
 	"settings.previewCalloutContent": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",

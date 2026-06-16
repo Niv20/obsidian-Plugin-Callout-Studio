@@ -102,6 +102,8 @@ export const ja: Record<string, string> = {
 	"settings.shapeGroup": "形状",
 	"settings.borderRadius": "角の丸み",
 	"settings.borderRadiusDesc": "calloutの角のボーダー半径（ピクセル）",
+	"settings.layoutGroup": "レイアウト",
+	"settings.alignContent": "コンテンツをタイトルに合わせて整列",
 	"settings.previewTitle": "プレビュー",
 	"settings.previewCalloutTitle": "サンプルcallout",
 	"settings.previewCalloutContent": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",

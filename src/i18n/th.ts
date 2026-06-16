@@ -102,6 +102,8 @@ export const th: Record<string, string> = {
 	"settings.shapeGroup": "รูปร่าง",
 	"settings.borderRadius": "ความโค้งมุม",
 	"settings.borderRadiusDesc": "รัศมีขอบเป็นพิกเซลสำหรับมุม callout",
+	"settings.layoutGroup": "เค้าโครง",
+	"settings.alignContent": "จัดเนื้อหาให้ตรงกับชื่อเรื่อง",
 	"settings.previewTitle": "ตัวอย่าง",
 	"settings.previewCalloutTitle": "callout ตัวอย่าง",
 	"settings.previewCalloutContent": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",

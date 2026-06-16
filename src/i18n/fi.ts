@@ -92,6 +92,8 @@ export const fi: Record<string, string> = {
 	"settings.shapeGroup": "Muoto",
 	"settings.borderRadius": "Kulmien pyöristys",
 	"settings.borderRadiusDesc": "Reunasäde pikseleinä callout-kulmille",
+	"settings.layoutGroup": "Asettelu",
+	"settings.alignContent": "Tasaa sisältö otsikon kanssa",
 	"settings.previewTitle": "Esikatselu",
 	"settings.previewCalloutTitle": "Esimerkkicallout",
 	"settings.previewCalloutContent": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",

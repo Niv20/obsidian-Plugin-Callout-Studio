@@ -200,6 +200,7 @@ export const DEFAULT_SETTINGS: PluginSettings = {
 		titleScale: 1,
 		contentScale: 1,
 		borderRadius: 4,
+		alignContentWithTitle: false,
 	} satisfies GlobalStyleSettings,
 	contextMenu: {
 		enabled: true,

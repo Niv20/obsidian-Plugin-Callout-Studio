@@ -102,6 +102,8 @@ export const hi: Record<string, string> = {
 	"settings.shapeGroup": "आकार",
 	"settings.borderRadius": "कोने का गोलापन",
 	"settings.borderRadiusDesc": "callout के कोनों के लिए पिक्सेल में बॉर्डर रेडियस",
+	"settings.layoutGroup": "लेआउट",
+	"settings.alignContent": "सामग्री को शीर्षक के साथ संरेखित करें",
 	"settings.previewTitle": "पूर्वावलोकन",
 	"settings.previewCalloutTitle": "उदाहरण callout",
 	"settings.previewCalloutContent": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",

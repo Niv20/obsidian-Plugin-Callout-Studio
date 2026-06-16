@@ -102,6 +102,8 @@ export const nl: Record<string, string> = {
 	"settings.shapeGroup": "Vorm",
 	"settings.borderRadius": "Hoekafronding",
 	"settings.borderRadiusDesc": "Randradius in pixels voor callout-hoeken",
+	"settings.layoutGroup": "Opmaak",
+	"settings.alignContent": "Inhoud uitlijnen met titel",
 	"settings.previewTitle": "Voorbeeld",
 	"settings.previewCalloutTitle": "Voorbeeld callout",
 	"settings.previewCalloutContent": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",

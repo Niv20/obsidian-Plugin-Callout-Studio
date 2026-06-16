@@ -102,6 +102,8 @@ export const ko: Record<string, string> = {
 	"settings.shapeGroup": "모양",
 	"settings.borderRadius": "모서리 둥글기",
 	"settings.borderRadiusDesc": "callout 모서리의 픽셀 단위 테두리 반지름",
+	"settings.layoutGroup": "레이아웃",
+	"settings.alignContent": "제목에 맞게 내용 정렬",
 	"settings.previewTitle": "미리 보기",
 	"settings.previewCalloutTitle": "예시 callout",
 	"settings.previewCalloutContent": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",

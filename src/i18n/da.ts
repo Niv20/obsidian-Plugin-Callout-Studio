@@ -92,6 +92,8 @@ export const da: Record<string, string> = {
 	"settings.shapeGroup": "Form",
 	"settings.borderRadius": "Hjørneafrunding",
 	"settings.borderRadiusDesc": "Kantradius i pixels for callout-hjørner",
+	"settings.layoutGroup": "Layout",
+	"settings.alignContent": "Juster indhold med titel",
 	"settings.previewTitle": "Forhåndsvisning",
 	"settings.previewCalloutTitle": "Eksempel-callout",
 	"settings.previewCalloutContent": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",

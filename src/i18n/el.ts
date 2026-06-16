@@ -92,6 +92,8 @@ export const el: Record<string, string> = {
 	"settings.shapeGroup": "Σχήμα",
 	"settings.borderRadius": "Στρογγυλοποίηση γωνιών",
 	"settings.borderRadiusDesc": "Ακτίνα περιγράμματος σε pixel για τις γωνίες callout",
+	"settings.layoutGroup": "Διάταξη",
+	"settings.alignContent": "Στοίχιση περιεχομένου με τον τίτλο",
 	"settings.previewTitle": "Προεπισκόπηση",
 	"settings.previewCalloutTitle": "Παράδειγμα callout",
 	"settings.previewCalloutContent": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",

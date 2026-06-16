@@ -1649,8 +1649,9 @@ button.callout-studio-icon-picker-loading {
 	font-size: var(--cs-preview-title-size, 1em);
 }
 
-.cs-global-preview-callout > .callout-content {
-	padding: 0 12px 10px 12px;
+.callout.cs-global-preview-callout > .callout-content {
+	padding: 0 12px 10px;
+	padding-inline-start: var(--cs-preview-content-indent, 12px);
 	color: var(--text-normal);
 	line-height: 1.5;
 	font-size: var(--cs-preview-content-size, 1em);
@@ -1752,6 +1753,20 @@ button.callout-studio-icon-picker-loading {
 .cs-settings-group > .setting-item {
 	padding: 8px 10px;
 	border-top: none;
+}
+
+/* The Align group holds a plain toggle (not a slider row). Strip the default
+   setting-item chrome so the toggle's row blends into the box like the slider
+   rows, instead of showing its own default background/border. */
+.cs-settings-group.cs-layout-group > .setting-item {
+	background: transparent;
+	border: none;
+	box-shadow: none;
+}
+
+.cs-settings-group.cs-layout-group > .setting-item::before,
+.cs-settings-group.cs-layout-group > .setting-item::after {
+	display: none;
 }
 
 /* Extra breathing room between slider title and the slider track —

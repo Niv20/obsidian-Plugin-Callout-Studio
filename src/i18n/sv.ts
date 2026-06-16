@@ -102,6 +102,8 @@ export const sv: Record<string, string> = {
 	"settings.shapeGroup": "Form",
 	"settings.borderRadius": "Hörnrundning",
 	"settings.borderRadiusDesc": "Kantradius i pixlar för callout-hörn",
+	"settings.layoutGroup": "Layout",
+	"settings.alignContent": "Justera innehåll med rubrik",
 	"settings.previewTitle": "Förhandsvisning",
 	"settings.previewCalloutTitle": "Exempelcallout",
 	"settings.previewCalloutContent": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",

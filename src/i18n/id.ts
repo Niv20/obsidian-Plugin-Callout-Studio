@@ -102,6 +102,8 @@ export const id: Record<string, string> = {
 	"settings.shapeGroup": "Bentuk",
 	"settings.borderRadius": "Pembulatan sudut",
 	"settings.borderRadiusDesc": "Radius batas dalam piksel untuk sudut callout",
+	"settings.layoutGroup": "Tata letak",
+	"settings.alignContent": "Sejajarkan konten dengan judul",
 	"settings.previewTitle": "Pratinjau",
 	"settings.previewCalloutTitle": "Callout contoh",
 	"settings.previewCalloutContent": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",

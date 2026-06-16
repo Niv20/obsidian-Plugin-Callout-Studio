@@ -92,6 +92,8 @@ export const bg: Record<string, string> = {
 	"settings.shapeGroup": "Форма",
 	"settings.borderRadius": "Закръгляне на ъглите",
 	"settings.borderRadiusDesc": "Радиус на границата в пиксели за ъглите на callout",
+	"settings.layoutGroup": "Оформление",
+	"settings.alignContent": "Подравни съдържанието с заглавието",
 	"settings.previewTitle": "Преглед",
 	"settings.previewCalloutTitle": "Примерен callout",
 	"settings.previewCalloutContent": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",

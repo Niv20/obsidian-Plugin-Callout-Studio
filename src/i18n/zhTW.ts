@@ -92,6 +92,8 @@ export const zhTW: Record<string, string> = {
 	"settings.shapeGroup": "形狀",
 	"settings.borderRadius": "圓角",
 	"settings.borderRadiusDesc": "callout 角落的邊框半徑（像素）",
+	"settings.layoutGroup": "版面配置",
+	"settings.alignContent": "將內容與標題對齊",
 	"settings.previewTitle": "預覽",
 	"settings.previewCalloutTitle": "範例 callout",
 	"settings.previewCalloutContent": "Lorem ipsum dolor sit amet，consectetur adipiscing elit。",

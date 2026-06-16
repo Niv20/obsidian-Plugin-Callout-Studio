@@ -654,6 +654,18 @@ export class CSSInjector {
 			);
 		}
 
+		// Indent the body so it lines up under the title text (icon width +
+		// title gap) instead of under the icon. Logical property keeps it
+		// correct in RTL; written to both adoptedStyleSheets and the <style>
+		// element so it applies in Reading view, Live Preview, and PDF export.
+		if (gs.alignContentWithTitle) {
+			parts.push(
+				`.callout > .callout-content {\n` +
+					`  padding-inline-start: calc(var(--icon-size, 1.2em) + 0.2em);\n` +
+					`}`,
+			);
+		}
+
 		return parts.join("\n\n");
 	}
 

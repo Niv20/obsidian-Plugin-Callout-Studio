@@ -102,6 +102,8 @@ export const uk: Record<string, string> = {
 	"settings.shapeGroup": "Форма",
 	"settings.borderRadius": "Заокруглення кутів",
 	"settings.borderRadiusDesc": "Радіус заокруглення кутів callout у пікселях",
+	"settings.layoutGroup": "Макет",
+	"settings.alignContent": "Вирівняти вміст за заголовком",
 	"settings.previewTitle": "Попередній перегляд",
 	"settings.previewCalloutTitle": "Приклад callout",
 	"settings.previewCalloutContent": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",

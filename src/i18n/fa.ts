@@ -102,6 +102,8 @@ export const fa: Record<string, string> = {
 	"settings.shapeGroup": "شکل",
 	"settings.borderRadius": "گردی گوشه‌ها",
 	"settings.borderRadiusDesc": "شعاع حاشیه به پیکسل برای گوشه‌های callout",
+	"settings.layoutGroup": "چیدمان",
+	"settings.alignContent": "تراز کردن محتوا با عنوان",
 	"settings.previewTitle": "پیش‌نمایش",
 	"settings.previewCalloutTitle": "callout نمونه",
 	"settings.previewCalloutContent": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",

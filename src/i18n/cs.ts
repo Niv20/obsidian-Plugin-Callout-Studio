@@ -102,6 +102,8 @@ export const cs: Record<string, string> = {
 	"settings.shapeGroup": "Tvar",
 	"settings.borderRadius": "Zaoblení rohů",
 	"settings.borderRadiusDesc": "Poloměr ohraničení v pixelech pro rohy callout",
+	"settings.layoutGroup": "Rozložení",
+	"settings.alignContent": "Zarovnat obsah s nadpisem",
 	"settings.previewTitle": "Náhled",
 	"settings.previewCalloutTitle": "Ukázkový callout",
 	"settings.previewCalloutContent": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",

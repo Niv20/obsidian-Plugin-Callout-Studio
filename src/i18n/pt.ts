@@ -102,6 +102,8 @@ export const pt: Record<string, string> = {
 	"settings.shapeGroup": "Forma",
 	"settings.borderRadius": "Arredondamento de cantos",
 	"settings.borderRadiusDesc": "Raio de borda em pixels para cantos do callout",
+	"settings.layoutGroup": "Layout",
+	"settings.alignContent": "Alinhar conteúdo com o título",
 	"settings.previewTitle": "Pré-visualização",
 	"settings.previewCalloutTitle": "Callout de exemplo",
 	"settings.previewCalloutContent": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",

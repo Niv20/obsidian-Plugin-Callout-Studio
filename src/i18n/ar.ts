@@ -102,6 +102,8 @@ export const ar: Record<string, string> = {
 	"settings.shapeGroup": "الشكل",
 	"settings.borderRadius": "تدوير الزوايا",
 	"settings.borderRadiusDesc": "نصف قطر الحدود بالبكسل لزوايا الـ callout",
+	"settings.layoutGroup": "التخطيط",
+	"settings.alignContent": "محاذاة المحتوى مع العنوان",
 	"settings.previewTitle": "معاينة",
 	"settings.previewCalloutTitle": "callout نموذجي",
 	"settings.previewCalloutContent": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",

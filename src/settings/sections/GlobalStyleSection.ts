@@ -126,6 +126,10 @@ export function renderGlobalStyleSection(
 		p.setText(t("settings.previewCalloutContent"));
 		content.setCssProps({
 			"--cs-preview-content-size": `${globalStyle.contentScale}em`,
+			// 12px base padding + 14px icon + 8px gap (preview mock metrics).
+			"--cs-preview-content-indent": globalStyle.alignContentWithTitle
+				? "34px"
+				: "12px",
 		});
 	};
 
@@ -350,4 +354,25 @@ export function renderGlobalStyleSection(
 			});
 		},
 	);
+
+	const layoutGroupEl = controlsCol.createDiv({
+		cls: "callout-studio-adjust-section cs-settings-group cs-layout-group",
+	});
+	layoutGroupEl.createDiv({
+		cls: "callout-studio-adjust-header cs-settings-group-header",
+		text: t("settings.alignGroup"),
+	});
+
+	new Setting(layoutGroupEl)
+		.setName(t("settings.alignContent"))
+		.addToggle((toggle) => {
+			toggle
+				.setValue(globalStyle.alignContentWithTitle)
+				.onChange(async (v) => {
+					globalStyle.alignContentWithTitle = v;
+					await ctx.plugin.saveSettings();
+					ctx.plugin.cssInjector.inject();
+					updatePreview();
+				});
+		});
 }

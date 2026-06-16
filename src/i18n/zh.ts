@@ -102,6 +102,8 @@ export const zh: Record<string, string> = {
 	"settings.shapeGroup": "形状",
 	"settings.borderRadius": "圆角",
 	"settings.borderRadiusDesc": "callout 角落的边框半径（像素）",
+	"settings.layoutGroup": "布局",
+	"settings.alignContent": "将内容与标题对齐",
 	"settings.previewTitle": "预览",
 	"settings.previewCalloutTitle": "示例 callout",
 	"settings.previewCalloutContent": "Lorem ipsum dolor sit amet，consectetur adipiscing elit。",

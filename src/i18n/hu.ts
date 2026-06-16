@@ -102,6 +102,8 @@ export const hu: Record<string, string> = {
 	"settings.shapeGroup": "Alak",
 	"settings.borderRadius": "Sarokkerekítés",
 	"settings.borderRadiusDesc": "Szegélyrádiusz pixelben a callout sarkaihoz",
+	"settings.layoutGroup": "Elrendezés",
+	"settings.alignContent": "Tartalom igazítása a címhez",
 	"settings.previewTitle": "Előnézet",
 	"settings.previewCalloutTitle": "Minta callout",
 	"settings.previewCalloutContent": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",

@@ -120,6 +120,8 @@ export interface GlobalStyleSettings {
 	contentScale: number;
 	/** Border-radius in px for callout corners */
 	borderRadius: number;
+	/** When true, indent callout body to align under the title text (not the icon) */
+	alignContentWithTitle: boolean;
 }
 
 export interface PluginSettings {

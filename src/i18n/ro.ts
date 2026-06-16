@@ -102,6 +102,8 @@ export const ro: Record<string, string> = {
 	"settings.shapeGroup": "Formă",
 	"settings.borderRadius": "Rotunjirea colțurilor",
 	"settings.borderRadiusDesc": "Raza bordurii în pixeli pentru colțurile callout",
+	"settings.layoutGroup": "Aspect",
+	"settings.alignContent": "Aliniați conținutul cu titlul",
 	"settings.previewTitle": "Previzualizare",
 	"settings.previewCalloutTitle": "Callout exemplu",
 	"settings.previewCalloutContent": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",

@@ -137,6 +137,8 @@ export const he: Record<string, string> = {
 	"settings.shapeGroup": "צורה",
 	"settings.borderRadius": "עיגול הפינות",
 	"settings.borderRadiusDesc": "רדיוס הפינות בפיקסלים של תיבת־ההבלטה",
+	"settings.alignGroup": "יישור",
+	"settings.alignContent": "יישור התוכן לכותרת",
 	"settings.previewTitle": "תצוגה מקדימה",
 	"settings.previewCalloutTitle": "תיבת־הבלטה לדוגמה",
 	"settings.previewCalloutContent":
