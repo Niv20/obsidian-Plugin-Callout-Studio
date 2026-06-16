@@ -681,6 +681,10 @@ export class IconPicker extends Modal {
 
 		styleSelect.addEventListener("change", () => {
 			this.materialStyle = styleSelect.value as MaterialIconStyle;
+			// Push the new style onto the current selection up front so the
+			// preview updates instantly and the highlight survives the re-render
+			// (the highlight check compares selectedIcon.style to materialStyle).
+			this.syncSelectedMaterial();
 			// Show loading while font downloads, then refresh grid
 			grid.empty();
 			grid.removeClass("is-loaded");
@@ -688,13 +692,18 @@ export class IconPicker extends Modal {
 			void this.ensureMaterialFont(this.materialStyle).then(() => {
 				if (this.activeTab !== "material") return;
 				updateGrid();
+				revealMaterial();
 			});
 		});
 
 		weightSelect.addEventListener("change", () => {
 			this.materialWeight = parseInt(weightSelect.value, 10);
-			// Weight changes don't require re-loading fonts; just refresh selection
+			// Weight changes don't require re-loading fonts. Push the new weight
+			// onto the current selection so Confirm saves it without a re-click,
+			// then re-render and keep the selected cell in view.
+			this.syncSelectedMaterial();
 			updateGrid();
+			revealMaterial();
 		});
 
 		categorySelect.addEventListener("change", () => {
@@ -861,6 +870,18 @@ export class IconPicker extends Modal {
 		);
 		const cell = grid.querySelector(`[aria-label="${name}"]`);
 		cell?.addClass("is-selected");
+		this.updatePreview();
+	}
+
+	/**
+	 * Re-applies the current style/weight controls to the existing Material
+	 * selection (if any) and refreshes the preview. Lets weight/style changes
+	 * update the active selection without forcing the user to re-click the icon.
+	 */
+	private syncSelectedMaterial(): void {
+		if (this.selectedIcon?.type !== "material") return;
+		this.selectedIcon.style = this.materialStyle;
+		this.selectedIcon.weight = this.materialWeight;
 		this.updatePreview();
 	}
 
