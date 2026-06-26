@@ -24,6 +24,7 @@ import { CalloutEditor } from "../settings/CalloutEditor";
 // ─── Layer 1: Constants ──────────────────────────────────────────────────────
 
 const CALLOUT_HEADER_REGEX = /^(\s*>[\s>]*)\[!([^\]]+)\]/;
+const CALLOUT_FOLD_MARK_REGEX = /^(\s*>[\s>]*)\[!([^\]]+)\]([+-])?/;
 const LIVE_PREVIEW_SELECTOR = ".markdown-source-view.is-live-preview";
 const READING_CALLOUT_SELECTOR = ".callout[data-callout]";
 const MENU_SECTION = "callout-studio";
@@ -46,7 +47,7 @@ interface CalloutInfo {
 interface ResolvedCalloutContext {
 	callout: CalloutInfo;
 	editor: Editor;
-	view: MarkdownView;
+	view: MarkdownView | null;
 	surface: "source" | "live-preview" | "reading";
 	targetEl: Element;
 }
@@ -61,6 +62,15 @@ interface PointerContext {
 
 interface PreviewSectionLookup {
 	getSectionInfo(el: HTMLElement): MarkdownSectionInformation | null;
+}
+
+interface CalloutWidgetElement extends HTMLElement {
+	cmView?: {
+		widget?: {
+			editor?: { editor?: Editor };
+			start?: number;
+		};
+	};
 }
 
 // ─── Layer 2: Entry point ────────────────────────────────────────────────────
@@ -83,8 +93,14 @@ export function registerContextMenu(plugin: CalloutStudioPlugin): void {
 	// right-clicks. Most reliable for editor surfaces.
 	plugin.registerEvent(
 		plugin.app.workspace.on("editor-menu", (menu, _editor, info) => {
-			if (!(info instanceof MarkdownView)) return;
-			const trigger = getRecentTriggerForView(lastTrigger, info);
+			const view =
+				info instanceof MarkdownView
+					? info
+					: lastTrigger
+						? findMarkdownViewForTarget(plugin, lastTrigger.targetEl)
+						: null;
+			if (!view) return;
+			const trigger = getRecentTriggerForView(lastTrigger, view);
 			if (!trigger) return;
 			maybeAddItems(plugin, menu, trigger, injectedMenus);
 		}),
@@ -144,6 +160,9 @@ function resolveContext(
 	plugin: CalloutStudioPlugin,
 	trigger: PointerContext,
 ): ResolvedCalloutContext | null {
+	const widgetContext = resolveCalloutWidgetContext(plugin, trigger.targetEl);
+	if (widgetContext) return widgetContext;
+
 	const view = findMarkdownViewForTarget(plugin, trigger.targetEl);
 	if (!view) return null;
 
@@ -151,6 +170,36 @@ function resolveContext(
 		resolveEditorContext(view, trigger) ??
 		resolveReadingContext(view, trigger.targetEl)
 	);
+}
+
+function resolveCalloutWidgetContext(
+	plugin: CalloutStudioPlugin,
+	targetEl: Element,
+): ResolvedCalloutContext | null {
+	const calloutEl = targetEl.closest<CalloutWidgetElement>(".cm-callout");
+	const widget = calloutEl?.cmView?.widget;
+	const editor = widget?.editor?.editor;
+	if (!calloutEl || !editor || widget.start === undefined) return null;
+
+	const headerLine = editor.offsetToPos(widget.start).line;
+	const text = editor.getLine(headerLine);
+	const match = CALLOUT_HEADER_REGEX.exec(text);
+	if (!match || match[1] === undefined || match[2] === undefined) return null;
+
+	const view = findMarkdownViewForTarget(plugin, targetEl);
+	const prefix = match[1];
+	return {
+		callout: {
+			id: normalizeCalloutId(match[2]),
+			headerLine,
+			prefix,
+			quoteDepth: countQuoteDepth(prefix),
+		},
+		editor,
+		view,
+		surface: targetEl.closest(LIVE_PREVIEW_SELECTOR) ? "live-preview" : "source",
+		targetEl,
+	};
 }
 
 // Source mode and Live Preview: use the official CM6 API to map click
@@ -337,6 +386,33 @@ function addItems(
 				copyCalloutMarkdown(context.editor, context.callout);
 			});
 	});
+
+	menu.addItem((item) => {
+		item.setTitle(t("contextMenu.setFoldClosed"))
+			.setIcon("minus")
+			.setSection(MENU_SECTION)
+			.onClick(() => {
+				setCalloutFoldMark(context.editor, context.callout, "-");
+			});
+	});
+
+	menu.addItem((item) => {
+		item.setTitle(t("contextMenu.setFoldOpen"))
+			.setIcon("plus")
+			.setSection(MENU_SECTION)
+			.onClick(() => {
+				setCalloutFoldMark(context.editor, context.callout, "+");
+			});
+	});
+
+	menu.addItem((item) => {
+		item.setTitle(t("contextMenu.setFoldNone"))
+			.setIcon("ban")
+			.setSection(MENU_SECTION)
+			.onClick(() => {
+				setCalloutFoldMark(context.editor, context.callout, "");
+			});
+	});
 }
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
@@ -446,6 +522,25 @@ function copyCalloutMarkdown(editor: Editor, info: CalloutInfo): void {
 	}
 
 	void navigator.clipboard.writeText(lines.join("\n"));
+}
+
+function setCalloutFoldMark(
+	editor: Editor,
+	info: CalloutInfo,
+	mark: "" | "+" | "-",
+): void {
+	const line = editor.getLine(info.headerLine);
+	const nextLine = line.replace(
+		CALLOUT_FOLD_MARK_REGEX,
+		(_match, prefix: string, id: string) => `${prefix}[!${id}]${mark}`,
+	);
+
+	if (nextLine === line) return;
+	editor.replaceRange(
+		nextLine,
+		{ line: info.headerLine, ch: 0 },
+		{ line: info.headerLine, ch: line.length },
+	);
 }
 
 function openPluginSettings(plugin: CalloutStudioPlugin): void {
