@@ -132,7 +132,7 @@ No vault content, clipboard data, or usage information is ever transmitted off y
 
 ## Network usage and privacy
 
-Callout Studio works offline by default and never sends any vault content anywhere. The **Google Material Symbols** icon list and search tags are bundled with the plugin, so opening and searching the Material tab does not fetch icon metadata from Google. The only network activity for Material icons happens on demand:
+Callout Studio works offline by default and never sends any vault content anywhere. The **Google Material Symbols** icon list and search tags are bundled with the plugin, so opening and searching the Material tab does not fetch icon metadata from Google. The **Emoji** list and search tags are likewise bundled with the plugin (generated from [emojibase-data](https://github.com/milesj/emojibase)), so the Emoji tab works fully offline with no network access at all, no matter which emoji you pick. The only network activity for Material icons happens on demand:
 
 - When the picker is open, the relevant Google Fonts stylesheet is loaded from `https://fonts.googleapis.com/css2?...` so the icon previews can render with the chosen style and weight.
 - When you actually pick a Material icon for a callout, the plugin downloads that single icon's SVG from `https://fonts.gstatic.com/s/i/short-term/...` and caches the SVG locally so the icon works offline and in PDF export.
