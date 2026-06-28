@@ -387,32 +387,37 @@ function addItems(
 			});
 	});
 
-	menu.addItem((item) => {
-		item.setTitle(t("contextMenu.setFoldClosed"))
-			.setIcon("minus")
-			.setSection(MENU_SECTION)
-			.onClick(() => {
-				setCalloutFoldMark(context.editor, context.callout, "-");
-			});
-	});
+	const headerText = context.editor.getLine(context.callout.headerLine);
+	const currentMark = (headerText.match(CALLOUT_FOLD_MARK_REGEX)?.[3] ?? "") as
+		| ""
+		| "+"
+		| "-";
 
-	menu.addItem((item) => {
-		item.setTitle(t("contextMenu.setFoldOpen"))
-			.setIcon("plus")
-			.setSection(MENU_SECTION)
-			.onClick(() => {
-				setCalloutFoldMark(context.editor, context.callout, "+");
-			});
-	});
+	const foldOptions: Array<{
+		mark: "" | "+" | "-";
+		title: string;
+		icon: string;
+	}> = [
+		{ mark: "-", title: t("contextMenu.setFoldClosed"), icon: "minus" },
+		{ mark: "+", title: t("contextMenu.setFoldOpen"), icon: "plus" },
+		{ mark: "", title: t("contextMenu.setFoldNone"), icon: "ban" },
+	];
 
-	menu.addItem((item) => {
-		item.setTitle(t("contextMenu.setFoldNone"))
-			.setIcon("ban")
-			.setSection(MENU_SECTION)
-			.onClick(() => {
-				setCalloutFoldMark(context.editor, context.callout, "");
-			});
-	});
+	for (const option of foldOptions) {
+		if (option.mark === currentMark) continue;
+		menu.addItem((item) => {
+			item.setTitle(option.title)
+				.setIcon(option.icon)
+				.setSection(MENU_SECTION)
+				.onClick(() => {
+					setCalloutFoldMark(
+						context.editor,
+						context.callout,
+						option.mark,
+					);
+				});
+		});
+	}
 }
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────

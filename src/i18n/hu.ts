@@ -234,6 +234,9 @@ export const hu: Record<string, string> = {
 	"contextMenu.editCallout": "Callout-beállítások szerkesztése",
 	"contextMenu.copyMarkdown": "Callout Markdown másolása",
 	"contextMenu.openSettings": "Callout Studio beállítások megnyitása",
+	"contextMenu.setFoldClosed": "Callout beállítása zártra (-)",
+	"contextMenu.setFoldOpen": "Callout beállítása nyitottra (+)",
+	"contextMenu.setFoldNone": "Callout összecsukhatatlanná tétele",
 
 	"confirm.ok": "Törlés",
 	"confirm.cancel": "Mégse",

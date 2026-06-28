@@ -234,6 +234,9 @@ export const ro: Record<string, string> = {
 	"contextMenu.editCallout": "Editați setările callout",
 	"contextMenu.copyMarkdown": "Copiați Markdown callout",
 	"contextMenu.openSettings": "Deschideți setările Callout Studio",
+	"contextMenu.setFoldClosed": "Setați callout ca închis (-)",
+	"contextMenu.setFoldOpen": "Setați callout ca deschis (+)",
+	"contextMenu.setFoldNone": "Setați callout ca nepliabil",
 
 	"confirm.ok": "Șterge",
 	"confirm.cancel": "Anulare",

@@ -234,6 +234,9 @@ export const tr: Record<string, string> = {
 	"contextMenu.editCallout": "Callout ayarlarını düzenle",
 	"contextMenu.copyMarkdown": "Callout Markdown'ı kopyala",
 	"contextMenu.openSettings": "Callout Studio ayarlarını aç",
+	"contextMenu.setFoldClosed": "Callout'u kapalı olarak ayarla (-)",
+	"contextMenu.setFoldOpen": "Callout'u açık olarak ayarla (+)",
+	"contextMenu.setFoldNone": "Callout'u katlanamaz yap",
 
 	"confirm.ok": "Sil",
 	"confirm.cancel": "İptal",

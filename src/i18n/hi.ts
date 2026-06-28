@@ -234,6 +234,9 @@ export const hi: Record<string, string> = {
 	"contextMenu.editCallout": "callout सेटिंग संपादित करें",
 	"contextMenu.copyMarkdown": "callout Markdown कॉपी करें",
 	"contextMenu.openSettings": "Callout Studio सेटिंग खोलें",
+	"contextMenu.setFoldClosed": "callout को बंद (-) पर सेट करें",
+	"contextMenu.setFoldOpen": "callout को खुला (+) पर सेट करें",
+	"contextMenu.setFoldNone": "callout को मोड़ने योग्य न बनाएं",
 
 	"confirm.ok": "हटाएँ",
 	"confirm.cancel": "रद्द करें",

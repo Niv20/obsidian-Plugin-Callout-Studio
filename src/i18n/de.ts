@@ -234,6 +234,9 @@ export const de: Record<string, string> = {
 	"contextMenu.editCallout": "Callout-Einstellungen bearbeiten",
 	"contextMenu.copyMarkdown": "Callout-Markdown kopieren",
 	"contextMenu.openSettings": "Callout Studio-Einstellungen öffnen",
+	"contextMenu.setFoldClosed": "Callout als geschlossen festlegen (-)",
+	"contextMenu.setFoldOpen": "Callout als geöffnet festlegen (+)",
+	"contextMenu.setFoldNone": "Callout nicht faltbar machen",
 
 	"confirm.ok": "Löschen",
 	"confirm.cancel": "Abbrechen",

@@ -234,6 +234,9 @@ export const vi: Record<string, string> = {
 	"contextMenu.editCallout": "Chỉnh sửa cài đặt callout",
 	"contextMenu.copyMarkdown": "Sao chép Markdown callout",
 	"contextMenu.openSettings": "Mở cài đặt Callout Studio",
+	"contextMenu.setFoldClosed": "Đặt callout thành đóng (-)",
+	"contextMenu.setFoldOpen": "Đặt callout thành mở (+)",
+	"contextMenu.setFoldNone": "Làm cho callout không thể gập",
 
 	"confirm.ok": "Xóa",
 	"confirm.cancel": "Hủy",

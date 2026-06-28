@@ -234,6 +234,9 @@ export const th: Record<string, string> = {
 	"contextMenu.editCallout": "แก้ไขการตั้งค่า callout",
 	"contextMenu.copyMarkdown": "คัดลอก Markdown callout",
 	"contextMenu.openSettings": "เปิดการตั้งค่า Callout Studio",
+	"contextMenu.setFoldClosed": "ตั้งค่า callout เป็นปิด (-)",
+	"contextMenu.setFoldOpen": "ตั้งค่า callout เป็นเปิด (+)",
+	"contextMenu.setFoldNone": "ทำให้ callout พับไม่ได้",
 
 	"confirm.ok": "ลบ",
 	"confirm.cancel": "ยกเลิก",

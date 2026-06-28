@@ -234,6 +234,9 @@ export const fa: Record<string, string> = {
 	"contextMenu.editCallout": "ویرایش تنظیمات callout",
 	"contextMenu.copyMarkdown": "کپی Markdown callout",
 	"contextMenu.openSettings": "باز کردن تنظیمات Callout Studio",
+	"contextMenu.setFoldClosed": "تنظیم callout به‌صورت بسته (-)",
+	"contextMenu.setFoldOpen": "تنظیم callout به‌صورت باز (+)",
+	"contextMenu.setFoldNone": "تنظیم callout به‌صورت غیرقابل جمع‌شدن",
 
 	"confirm.ok": "حذف",
 	"confirm.cancel": "لغو",

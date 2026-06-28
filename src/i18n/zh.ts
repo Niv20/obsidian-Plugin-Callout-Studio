@@ -234,6 +234,9 @@ export const zh: Record<string, string> = {
 	"contextMenu.editCallout": "编辑 callout 设置",
 	"contextMenu.copyMarkdown": "复制 callout Markdown",
 	"contextMenu.openSettings": "打开 Callout Studio 设置",
+	"contextMenu.setFoldClosed": "将 callout 设置为关闭 (-)",
+	"contextMenu.setFoldOpen": "将 callout 设置为打开 (+)",
+	"contextMenu.setFoldNone": "使 callout 不可折叠",
 
 	"confirm.ok": "删除",
 	"confirm.cancel": "取消",

@@ -234,6 +234,9 @@ export const fr: Record<string, string> = {
 	"contextMenu.editCallout": "Modifier les paramètres du callout",
 	"contextMenu.copyMarkdown": "Copier le Markdown du callout",
 	"contextMenu.openSettings": "Ouvrir les paramètres de Callout Studio",
+	"contextMenu.setFoldClosed": "Définir le callout comme fermé (-)",
+	"contextMenu.setFoldOpen": "Définir le callout comme ouvert (+)",
+	"contextMenu.setFoldNone": "Rendre le callout non repliable",
 
 	"confirm.ok": "Supprimer",
 	"confirm.cancel": "Annuler",

@@ -297,6 +297,9 @@ export const he: Record<string, string> = {
 	"contextMenu.editCallout": "עריכת הגדרות תיבת־הבלטה",
 	"contextMenu.copyMarkdown": "העתקת קוד Markdown",
 	"contextMenu.openSettings": "פתיחת הגדרות של Callout Studio",
+	"contextMenu.setFoldClosed": "הגדרת תיבת־ההבלטה כסגורה (-)",
+	"contextMenu.setFoldOpen": "הגדרת תיבת־ההבלטה כפתוחה (+)",
+	"contextMenu.setFoldNone": "הפיכת תיבת־ההבלטה לבלתי ניתנת לקיפול",
 
 	// Confirm modal
 	"confirm.ok": "מחיקה",

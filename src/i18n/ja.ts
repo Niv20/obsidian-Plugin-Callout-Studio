@@ -234,6 +234,9 @@ export const ja: Record<string, string> = {
 	"contextMenu.editCallout": "callout設定を編集",
 	"contextMenu.copyMarkdown": "callout Markdownをコピー",
 	"contextMenu.openSettings": "Callout Studio設定を開く",
+	"contextMenu.setFoldClosed": "calloutを閉じた状態に設定 (-)",
+	"contextMenu.setFoldOpen": "calloutを開いた状態に設定 (+)",
+	"contextMenu.setFoldNone": "calloutを折りたたみ不可にする",
 
 	"confirm.ok": "削除",
 	"confirm.cancel": "キャンセル",

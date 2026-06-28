@@ -234,6 +234,9 @@ export const id: Record<string, string> = {
 	"contextMenu.editCallout": "Edit pengaturan callout",
 	"contextMenu.copyMarkdown": "Salin Markdown callout",
 	"contextMenu.openSettings": "Buka pengaturan Callout Studio",
+	"contextMenu.setFoldClosed": "Atur callout menjadi tertutup (-)",
+	"contextMenu.setFoldOpen": "Atur callout menjadi terbuka (+)",
+	"contextMenu.setFoldNone": "Jadikan callout tidak dapat dilipat",
 
 	"confirm.ok": "Hapus",
 	"confirm.cancel": "Batal",

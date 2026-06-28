@@ -301,7 +301,7 @@ export const en: Record<string, string> = {
 	"contextMenu.openSettings": "Open Callout Studio settings",
 	"contextMenu.setFoldClosed": "Set callout closed (-)",
 	"contextMenu.setFoldOpen": "Set callout open (+)",
-	"contextMenu.setFoldNone": "Set callout none",
+	"contextMenu.setFoldNone": "Make callout non-collapsible",
 
 	// Confirm modal
 	"confirm.ok": "Delete",

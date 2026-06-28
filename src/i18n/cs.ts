@@ -234,6 +234,9 @@ export const cs: Record<string, string> = {
 	"contextMenu.editCallout": "Upravit nastavení callout",
 	"contextMenu.copyMarkdown": "Kopírovat Markdown callout",
 	"contextMenu.openSettings": "Otevřít nastavení Callout Studio",
+	"contextMenu.setFoldClosed": "Nastavit callout jako zavřený (-)",
+	"contextMenu.setFoldOpen": "Nastavit callout jako otevřený (+)",
+	"contextMenu.setFoldNone": "Nastavit callout jako nesbalitelný",
 
 	"confirm.ok": "Smazat",
 	"confirm.cancel": "Zrušit",
