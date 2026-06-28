@@ -299,6 +299,9 @@ export const en: Record<string, string> = {
 	"contextMenu.editCallout": "Edit callout settings",
 	"contextMenu.copyMarkdown": "Copy callout Markdown",
 	"contextMenu.openSettings": "Open Callout Studio settings",
+	"contextMenu.setFoldClosed": "Set callout closed (-)",
+	"contextMenu.setFoldOpen": "Set callout open (+)",
+	"contextMenu.setFoldNone": "Set callout none",
 
 	// Confirm modal
 	"confirm.ok": "Delete",

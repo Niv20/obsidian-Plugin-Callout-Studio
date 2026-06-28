@@ -18,5 +18,8 @@ main.js
 # obsidian
 data.json
 
+# local agent state
+.serena/
+
 # Exclude macOS Finder (System Explorer) View States
 .DS_Store

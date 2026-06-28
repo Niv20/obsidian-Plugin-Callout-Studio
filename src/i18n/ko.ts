@@ -234,6 +234,9 @@ export const ko: Record<string, string> = {
 	"contextMenu.editCallout": "callout 설정 편집",
 	"contextMenu.copyMarkdown": "callout Markdown 복사",
 	"contextMenu.openSettings": "Callout Studio 설정 열기",
+	"contextMenu.setFoldClosed": "callout 닫힘(-)으로 설정",
+	"contextMenu.setFoldOpen": "callout 열림(+)으로 설정",
+	"contextMenu.setFoldNone": "callout none으로 설정",
 
 	"confirm.ok": "삭제",
 	"confirm.cancel": "취소",
