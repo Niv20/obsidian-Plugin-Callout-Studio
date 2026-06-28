@@ -45,35 +45,35 @@ npm run build
 - **Organize code into multiple files**: Split functionality across separate modules rather than putting everything in `main.ts`.
 - Source lives in `src/`. Keep `main.ts` small and focused on plugin lifecycle (loading, unloading, registering commands).
 - **Example file structure**:
-  ```
-  src/
-    main.ts           # Plugin entry point, lifecycle management
-    settings.ts       # Settings interface and defaults
-    commands/         # Command implementations
-      command1.ts
-      command2.ts
-    ui/              # UI components, modals, views
-      modal.ts
-      view.ts
-    utils/           # Utility functions, helpers
-      helpers.ts
-      constants.ts
-    types.ts         # TypeScript interfaces and types
-  ```
+    ```
+    src/
+      main.ts           # Plugin entry point, lifecycle management
+      settings.ts       # Settings interface and defaults
+      commands/         # Command implementations
+        command1.ts
+        command2.ts
+      ui/              # UI components, modals, views
+        modal.ts
+        view.ts
+      utils/           # Utility functions, helpers
+        helpers.ts
+        constants.ts
+      types.ts         # TypeScript interfaces and types
+    ```
 - **Do not commit build artifacts**: Never commit `node_modules/`, `main.js`, or other generated files to version control.
 - Keep the plugin small. Avoid large dependencies. Prefer browser-compatible packages.
 - Generated output should be placed at the plugin root or `dist/` depending on your build setup. Release artifacts must end up at the top level of the plugin folder in the vault (`main.js`, `manifest.json`, `styles.css`).
 
 ## Manifest rules (`manifest.json`)
 
-- Must include (non-exhaustive):  
-  - `id` (plugin ID; for local dev it should match the folder name)  
-  - `name`  
-  - `version` (Semantic Versioning `x.y.z`)  
-  - `minAppVersion`  
-  - `description`  
-  - `isDesktopOnly` (boolean)  
-  - Optional: `author`, `authorUrl`, `fundingUrl` (string or map)
+- Must include (non-exhaustive):
+    - `id` (plugin ID; for local dev it should match the folder name)
+    - `name`
+    - `version` (Semantic Versioning `x.y.z`)
+    - `minAppVersion`
+    - `description`
+    - `isDesktopOnly` (boolean)
+    - Optional: `author`, `authorUrl`, `fundingUrl` (string or map)
 - Never change `id` after release. Treat it as stable API.
 - Keep `minAppVersion` accurate when using newer APIs.
 - Canonical requirements are coded here: https://github.com/obsidianmd/obsidian-releases/blob/master/.github/workflows/validate-plugin-entry.yml
@@ -81,9 +81,9 @@ npm run build
 ## Testing
 
 - Manual install for testing: copy `main.js`, `manifest.json`, `styles.css` (if any) to:
-  ```
-  <Vault>/.obsidian/plugins/<plugin-id>/
-  ```
+    ```
+    <Vault>/.obsidian/plugins/<plugin-id>/
+    ```
 - Reload Obsidian and enable the plugin in **Settings → Community plugins**.
 
 ## Commands & settings
@@ -121,6 +121,13 @@ Follow Obsidian's **Developer Policies** and **Plugin Guidelines**. In particula
 - Use arrow notation for navigation: **Settings → Community plugins**.
 - Keep in-app strings short, consistent, and free of jargon.
 
+## Localization (i18n)
+
+- This plugin supports many languages — see `src/i18n/` for the full list of locale files plus `index.ts` for the loading/fallback logic.
+- All user-facing strings must go through the `t()` helper — never hardcode UI text directly in components.
+- When writing or editing code, only add or update strings in the English file (`en.ts`).
+- Don't re-translate all locale files on every small change — that wastes effort while the wording is still in flux. Wait until the user confirms they're happy with the new/changed string, then offer to translate it into the other locale files.
+
 ## Performance
 
 - Keep startup light. Defer heavy work until needed.
@@ -147,12 +154,14 @@ Follow Obsidian's **Developer Policies** and **Plugin Guidelines**. In particula
 ## Agent do/don't
 
 **Do**
+
 - Add commands with stable IDs (don't rename once released).
 - Provide defaults and validation in settings.
 - Write idempotent code paths so reload/unload doesn't leak listeners or intervals.
 - Use `this.register*` helpers for everything that needs cleanup.
 
 **Don't**
+
 - Introduce network calls without an obvious user-facing reason and documentation.
 - Ship features that require cloud services without clear disclosure and explicit opt-in.
 - Store or transmit vault contents unless essential and consented.
@@ -162,45 +171,52 @@ Follow Obsidian's **Developer Policies** and **Plugin Guidelines**. In particula
 ### Organize code across multiple files
 
 **main.ts** (minimal, lifecycle only):
+
 ```ts
 import { Plugin } from "obsidian";
 import { MySettings, DEFAULT_SETTINGS } from "./settings";
 import { registerCommands } from "./commands";
 
 export default class MyPlugin extends Plugin {
-  settings: MySettings;
+	settings: MySettings;
 
-  async onload() {
-    this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
-    registerCommands(this);
-  }
+	async onload() {
+		this.settings = Object.assign(
+			{},
+			DEFAULT_SETTINGS,
+			await this.loadData(),
+		);
+		registerCommands(this);
+	}
 }
 ```
 
 **settings.ts**:
+
 ```ts
 export interface MySettings {
-  enabled: boolean;
-  apiKey: string;
+	enabled: boolean;
+	apiKey: string;
 }
 
 export const DEFAULT_SETTINGS: MySettings = {
-  enabled: true,
-  apiKey: "",
+	enabled: true,
+	apiKey: "",
 };
 ```
 
 **commands/index.ts**:
+
 ```ts
 import { Plugin } from "obsidian";
 import { doSomething } from "./my-command";
 
 export function registerCommands(plugin: Plugin) {
-  plugin.addCommand({
-    id: "do-something",
-    name: "Do something",
-    callback: () => doSomething(plugin),
-  });
+	plugin.addCommand({
+		id: "do-something",
+		name: "Do something",
+		callback: () => doSomething(plugin),
+	});
 }
 ```
 
@@ -208,9 +224,9 @@ export function registerCommands(plugin: Plugin) {
 
 ```ts
 this.addCommand({
-  id: "your-command-id",
-  name: "Do the thing",
-  callback: () => this.doTheThing(),
+	id: "your-command-id",
+	name: "Do the thing",
+	callback: () => this.doTheThing(),
 });
 ```
 
@@ -229,14 +245,24 @@ async onload() {
 ### Register listeners safely
 
 ```ts
-this.registerEvent(this.app.workspace.on("file-open", f => { /* ... */ }));
-this.registerDomEvent(window, "resize", () => { /* ... */ });
-this.registerInterval(window.setInterval(() => { /* ... */ }, 1000));
+this.registerEvent(
+	this.app.workspace.on("file-open", (f) => {
+		/* ... */
+	}),
+);
+this.registerDomEvent(window, "resize", () => {
+	/* ... */
+});
+this.registerInterval(
+	window.setInterval(() => {
+		/* ... */
+	}, 1000),
+);
 ```
 
 ## Troubleshooting
 
-- Plugin doesn't load after build: ensure `main.js` and `manifest.json` are at the top level of the plugin folder under `<Vault>/.obsidian/plugins/<plugin-id>/`. 
+- Plugin doesn't load after build: ensure `main.js` and `manifest.json` are at the top level of the plugin folder under `<Vault>/.obsidian/plugins/<plugin-id>/`.
 - Build issues: if `main.js` is missing, run `npm run build` or `npm run dev` to compile your TypeScript source code.
 - Commands not appearing: verify `addCommand` runs after `onload` and IDs are unique.
 - Settings not persisting: ensure `loadData`/`saveData` are awaited and you re-render the UI after changes.
