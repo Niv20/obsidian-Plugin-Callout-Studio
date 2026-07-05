@@ -210,6 +210,7 @@ export const he: Record<string, string> = {
 	"notice.exported": "תיבות־ההבלטה יוצאו לקובץ callout-studio-callouts.json",
 	"notice.invalidJSON": "פורמט JSON לא תקין: צפוי מערך (Array).",
 	"notice.importedJSON": "יובאו {{count}} סוגי תיבות־הבלטה מתוך JSON.",
+	"notice.importedSettings": "הגדרות התוסף יובאו.",
 	"notice.noNewJSON":
 		"לא יובאו תיבות־הבלטה חדשות (ייתכן שהמזהים כבר קיימים).",
 	"notice.failedJSON": "פענוח קובץ ה־JSON נכשל.",
@@ -301,6 +302,42 @@ export const he: Record<string, string> = {
 	"contextMenu.setFoldClosed": "הגדרת תיבת־ההבלטה כסגורה (-)",
 	"contextMenu.setFoldOpen": "הגדרת תיבת־ההבלטה כפתוחה (+)",
 	"contextMenu.setFoldNone": "הפיכת תיבת־ההבלטה לבלתי ניתנת לקיפול",
+	"contextMenu.cutSection": "גזירת מקטע הכותרת",
+	"contextMenu.copySection": "העתקת מקטע הכותרת",
+	"contextMenu.deleteSection": "מחיקת מקטע הכותרת",
+
+	// Callout types section
+	"settings.calloutTypes": "סוגי תיבות־הבלטה",
+	"settings.calloutTypeRegular": "תיבת־הבלטה רגילה",
+	"settings.calloutTypeRegularDesc":
+		"תיבת־הבלטה עם תוכן בתוך ציטוט: ‎> [!name]‎. תמיד פעילה.",
+	"settings.calloutTypeHeading": "תיבת־הבלטה ככותרת",
+	"settings.calloutTypeHeadingDesc":
+		"כותרת שהתוכן הראשון בה הוא הסימון, למשל ‎## [!name]‎. מוצגת כפס צבעוני בגודל הפונט של הכותרת. סימון ‎+‎ / ‎-‎ אחרי הסימון פותח/סוגר את כל המקטע בעת פתיחת הקובץ.",
+	"settings.calloutTypeInline": "תיבת־הבלטה מוטבעת",
+	"settings.calloutTypeInlineDesc":
+		"סימון ‎[!name]‎ באמצע שורה, מוצג כגלולה קטנה. ללא כותרת וללא תוכן.",
+
+	// Context menu customization
+	"settings.customizeMenu": "התאמת פריטי התפריט",
+	"settings.customizeMenuDesc":
+		"בחירה אילו פעולות קליק־ימני יופיעו לכל סוג תיבת־הבלטה ושינוי סדרן.",
+	"settings.customizeMenuButton": "התאמת פריטי התפריט",
+	"menuCustomize.title": "התאמת תפריט הקליק־הימני",
+	"menuCustomize.desc":
+		"הפעלה או כיבוי של פעולות ושינוי סדרן באמצעות החצים. השינויים נשמרים אוטומטית.",
+	"menuCustomize.regular": "תיבת־הבלטה רגילה",
+	"menuCustomize.heading": "תיבת־הבלטה ככותרת",
+	"menuCustomize.inline": "תיבת־הבלטה מוטבעת",
+	"menuCustomize.moveUp": "העברה למעלה",
+	"menuCustomize.moveDown": "העברה למטה",
+	"menuItem.edit": "עריכת תיבת־ההבלטה",
+	"menuItem.openSettings": "פתיחת ההגדרות",
+	"menuItem.copyMarkdown": "העתקת Markdown",
+	"menuItem.foldDefaults": "ברירות מחדל לקיפול (פתוח / סגור / ללא)",
+	"menuItem.cutSection": "גזירת המקטע",
+	"menuItem.copySection": "העתקת המקטע",
+	"menuItem.deleteSection": "מחיקת המקטע",
 
 	// Confirm modal
 	"confirm.ok": "מחיקה",
@@ -369,6 +406,10 @@ export const he: Record<string, string> = {
 	"import.btnCancel": "ביטול",
 	"import.btnImportValid": "ייבוא הרשומות התקינות בלבד ({{count}})",
 	"import.err.notArray": "הערך הראשי חייב להיות מערך (Array) של הגדרות תיבת־הבלטה.",
+	"import.err.notRecognized":
+		"קובץ לא מזוהה: נדרש מערך של הגדרות תיבת־הבלטה או קובץ ייצוא של Callout Studio.",
+	"import.warn.settingsIgnored":
+		"מקטע ההגדרות לא היה אובייקט תקין ולכן לא יובא.",
 	"import.err.parseFailed": "הקובץ אינו JSON תקין ולכן לא ניתן לפענח אותו.",
 	"import.err.entryNotObject": "כל רשומה חייבת להיות אובייקט (Object).",
 	"import.err.requiredMissing": 'שדה החובה "{{field}}" חסר או שסוגו שגוי.',

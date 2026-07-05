@@ -12,6 +12,16 @@ import type { App } from "obsidian";
 import type { CalloutDefinition } from "../types";
 import { calloutColorValue, hexToRgbString } from "../utils/colorUtils";
 import { ensureMaterialFontLoaded, svgToDataUri } from "../utils/iconLoader";
+import {
+	CSS_HEADING_LINE,
+	CSS_HEADING_TOKEN,
+	CSS_INLINE_TOKEN,
+	CSS_TOKEN_ICON,
+	CSS_TOKEN_NAME,
+	CSS_UNKNOWN,
+	paintRoleIcon,
+	resolveCalloutDef,
+} from "../editor/renderShared";
 import type { CalloutRegistry } from "./CalloutRegistry";
 
 const DEBOUNCE_MS = 300;
@@ -252,6 +262,9 @@ export class CSSInjector {
 			parts.push(iconTransform);
 		}
 
+		// Heading-bar / inline-pill colors for this callout (both surfaces).
+		parts.push(this.generateTokenColorCSS(def));
+
 		// Generate alias selectors that reference the same styles
 		if (def.aliases && def.aliases.length > 0) {
 			for (const alias of def.aliases) {
@@ -319,6 +332,37 @@ export class CSSInjector {
 			}
 		}
 
+		return parts.join("\n\n");
+	}
+
+	/**
+	 * Per-callout accent color for the heading-bar and inline-pill DOM.
+	 * The structural rules (layout, radius, background alpha) are static in
+	 * styles.css; only `--cs-color-rgb` is per-callout. Covers the main id
+	 * and every alias in one selector list.
+	 */
+	private generateTokenColorCSS(def: CalloutDefinition): string {
+		const lightRgb = hexToRgbString(def.colorLight);
+		const darkRgb = hexToRgbString(def.colorDark);
+		const ids = [def.id, ...(def.aliases ?? [])];
+
+		const selectorsFor = (themePrefix: string): string =>
+			ids
+				.map(
+					(id) =>
+						`${themePrefix}.${CSS_INLINE_TOKEN}[data-callout="${id}"], ` +
+						`${themePrefix}.${CSS_HEADING_LINE}[data-callout="${id}"]`,
+				)
+				.join(",\n");
+
+		const parts: string[] = [
+			`${selectorsFor("")} {\n  --cs-color-rgb: ${lightRgb};\n}`,
+		];
+		if (def.colorLight !== def.colorDark) {
+			parts.push(
+				`${selectorsFor(".theme-dark ")} {\n  --cs-color-rgb: ${darkRgb};\n}`,
+			);
+		}
 		return parts.join("\n\n");
 	}
 
@@ -467,6 +511,38 @@ export class CSSInjector {
 			);
 			if (!iconEl) continue;
 			this.paintIcon(iconEl, def);
+		}
+
+		// Heading/inline token DOM (Live Preview widgets and reading-view
+		// pills share these classes; see renderShared.buildCalloutTokenDom).
+		// Keeps icons and display names in sync after definition edits and
+		// after Material SVG downloads complete.
+		const tokenEls = root.querySelectorAll<HTMLElement>(
+			`.${CSS_INLINE_TOKEN}[data-callout], .${CSS_HEADING_TOKEN}[data-callout]`,
+		);
+		for (const tokenEl of Array.from(tokenEls)) {
+			this.paintTokenEl(tokenEl);
+		}
+	}
+
+	/** Repaint one heading/inline token's icon (and name, for known ids). */
+	private paintTokenEl(tokenEl: HTMLElement): void {
+		const id = tokenEl.getAttribute("data-callout");
+		if (!id) return;
+		const { def, unknown } = resolveCalloutDef(this.registry, id);
+		if (!def) return;
+		const iconEl = tokenEl.querySelector<HTMLElement>(
+			`.${CSS_TOKEN_ICON}`,
+		);
+		if (iconEl) paintRoleIcon(iconEl, def, this.registry);
+		// Unknown tokens keep showing the raw id the user typed.
+		if (!unknown) {
+			const nameEl = tokenEl.querySelector<HTMLElement>(
+				`.${CSS_TOKEN_NAME}`,
+			);
+			if (nameEl && nameEl.textContent !== def.displayName) {
+				nameEl.textContent = def.displayName;
+			}
 		}
 	}
 
@@ -798,6 +874,17 @@ export class CSSInjector {
 					`  line-height: 1;\n` +
 					`}\n` +
 					`}`,
+			);
+		}
+
+		// Unknown heading/inline tokens: the token renderer tags unresolved ids
+		// with .cs-unknown, so a plain class rule suffices — no :not() chain.
+		parts.push(
+			`.${CSS_INLINE_TOKEN}.${CSS_UNKNOWN}, .${CSS_HEADING_LINE}.${CSS_UNKNOWN} {\n  --cs-color-rgb: ${lightRgb};\n}`,
+		);
+		if (fallbackDef.colorLight !== fallbackDef.colorDark) {
+			parts.push(
+				`.theme-dark .${CSS_INLINE_TOKEN}.${CSS_UNKNOWN}, .theme-dark .${CSS_HEADING_LINE}.${CSS_UNKNOWN} {\n  --cs-color-rgb: ${darkRgb};\n}`,
 			);
 		}
 

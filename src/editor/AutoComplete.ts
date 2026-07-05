@@ -2,10 +2,12 @@
  * editor/AutoComplete.ts — In-editor autocomplete for callout IDs.
  *
  * Extends Obsidian's EditorSuggest to show a dropdown of known callout types
- * whenever the user types `> [!` inside a note. Selecting a suggestion inserts
- * the callout header and optionally opens the CalloutEditor to create a new
- * type on-the-fly. Reads callout data from CalloutRegistry and uses the
- * sorting helpers from utils/sorting.
+ * whenever the user types `[!` in any of the three role positions: after a
+ * blockquote prefix (`> [!` — regular callout), after heading hashes
+ * (`## [!` — heading callout), or mid-line (inline pill). Selecting a
+ * suggestion inserts role-appropriate markdown, and Enter placement differs
+ * per role (see close()/selectSuggestion). The "Create new" row opens the
+ * CalloutEditor pre-filled with the typed query in all three contexts.
  */
 import {
 	Editor,
@@ -17,7 +19,7 @@ import {
 	setIcon,
 } from "obsidian";
 import type CalloutStudioPlugin from "../main";
-import type { CalloutDefinition } from "../types";
+import type { CalloutDefinition, CalloutRenderRole } from "../types";
 import { CalloutEditor } from "../settings/CalloutEditor";
 import { getLocale, t } from "../i18n";
 import {
@@ -29,6 +31,23 @@ const CALLOUT_QUOTE_PREFIX_REGEX = /^((?:\s*> ?|\t)+)/;
 
 const countQuoteTokens = (prefix: string): number =>
 	(prefix.match(/>/g) ?? []).length;
+
+/** Heading hashes + whitespace and nothing else before the `[!` trigger. */
+const HEADING_TRIGGER_PREFIX_REGEX = /^#{1,6}[ \t]+$/;
+
+/**
+ * Move the cursor to the start of the line below `line`, creating a plain
+ * new line at end-of-document. Used after a heading-callout selection.
+ */
+function moveCursorToLineBelow(editor: Editor, line: number): void {
+	const nextLine = line + 1;
+	if (nextLine < editor.lineCount()) {
+		editor.setCursor({ line: nextLine, ch: 0 });
+		return;
+	}
+	editor.replaceRange("\n", { line, ch: editor.getLine(line).length });
+	editor.setCursor({ line: nextLine, ch: 0 });
+}
 
 interface CreateNewSuggestion {
 	__createNew: true;
@@ -45,6 +64,10 @@ export class CalloutAutoComplete extends EditorSuggest<CalloutSuggestion> {
 	private plugin: CalloutStudioPlugin;
 	private pendingEditor: Editor | null = null;
 	private pendingLine = -1;
+	/** Role of the pending post-close cursor placement. */
+	private pendingRole: CalloutRenderRole = "regular";
+	/** Role classified by the latest onTrigger; read by selectSuggestion. */
+	private triggerRole: CalloutRenderRole = "regular";
 
 	constructor(plugin: CalloutStudioPlugin) {
 		super(plugin.app);
@@ -54,13 +77,23 @@ export class CalloutAutoComplete extends EditorSuggest<CalloutSuggestion> {
 	close(): void {
 		const editor = this.pendingEditor;
 		const line = this.pendingLine;
+		const role = this.pendingRole;
 		this.pendingEditor = null;
 		this.pendingLine = -1;
+		this.pendingRole = "regular";
 		super.close();
 
 		if (editor && line >= 0) {
 			window.requestAnimationFrame(() => {
 				window.setTimeout(() => {
+					if (role === "heading") {
+						// Heading callout: Enter drops the cursor to the
+						// START of the next line — plain, with NO `>` prefix
+						// (a heading callout has no body of its own).
+						moveCursorToLineBelow(editor, line);
+						return;
+					}
+
 					const lineText = editor.getLine(line);
 					const quoteMatch =
 						CALLOUT_QUOTE_PREFIX_REGEX.exec(lineText);
@@ -150,17 +183,39 @@ export class CalloutAutoComplete extends EditorSuggest<CalloutSuggestion> {
 		if (!this.plugin.settings.autocomplete.enabled) return null;
 
 		const line = editor.getLine(cursor.line);
-		// Look for `[!` pattern — could be at start of blockquote or standalone
-		// We scan backward from cursor to find the `[!` trigger
+		// Look for the `[!` trigger by scanning backward from the cursor. Its
+		// position on the line decides which render role is being typed.
 		const textBefore = line.slice(0, cursor.ch);
 		const triggerIdx = textBefore.lastIndexOf("[!");
 
 		if (triggerIdx === -1) return null;
 
-		// The trigger must either be at line start (optionally after "> ") or be a callout header
-		const prefix = textBefore.slice(0, triggerIdx).trimStart();
-		// Allow: "", ">", "> ", ">> ", etc. (any level of blockquote)
-		if (prefix !== "" && !/^>[\s>]*$/.test(prefix)) return null;
+		// Never trigger for escaped tokens (`\[!`) or wikilinks (`[[!`).
+		const charBefore = triggerIdx > 0 ? textBefore[triggerIdx - 1] : "";
+		if (charBefore === "\\" || charBefore === "[") return null;
+
+		// Classify the trigger position into a render role.
+		const rawPrefix = textBefore.slice(0, triggerIdx);
+		const trimmedPrefix = rawPrefix.trimStart();
+		const { headingCallouts, inlineCallouts } = this.plugin.settings;
+		let role: CalloutRenderRole;
+		if (/^>[\s>]*$/.test(trimmedPrefix)) {
+			// "> [!", ">> [!", … — a native blockquote callout header.
+			role = "regular";
+		} else if (HEADING_TRIGGER_PREFIX_REGEX.test(rawPrefix)) {
+			// "## [!" — heading callout; no popup while the role is off.
+			if (!headingCallouts.enabled) return null;
+			role = "heading";
+		} else if (trimmedPrefix === "") {
+			// Bare "[!" at line start: an inline pill when the role is on;
+			// otherwise keep the legacy regular-callout behavior.
+			role = inlineCallouts.enabled ? "inline" : "regular";
+		} else {
+			// Any other text before the token — inline pill mid-line.
+			if (!inlineCallouts.enabled) return null;
+			role = "inline";
+		}
+		this.triggerRole = role;
 
 		// Capture the full id token (from `[!` to the next `]`, or end of line),
 		// independent of where the cursor sits within it. Reading only up to the
@@ -308,6 +363,21 @@ export class CalloutAutoComplete extends EditorSuggest<CalloutSuggestion> {
 
 		const line = editor.getLine(start.line);
 
+		// If the user typed an alias, use that alias as the ID
+		const queryLower = query.toLowerCase();
+		const allIds = [def.id, ...(def.aliases ?? [])];
+		const matchedId =
+			allIds.find((id) => id.toLowerCase() === queryLower) ??
+			allIds.find((id) => id.toLowerCase().startsWith(queryLower)) ??
+			def.id;
+
+		// Inline pill: only the token itself is written; Enter continues on
+		// the same line (see insertInlineToken).
+		if (this.triggerRole === "inline") {
+			this.insertInlineToken(editor, start, end, line, matchedId);
+			return;
+		}
+
 		// Parse what already exists after the `[!...]` on the line, starting from
 		// the header (not the cursor) so a mid-token cursor doesn't truncate the
 		// title detection. Pattern after `]`: optional fold mark (+/-), optional title.
@@ -318,6 +388,30 @@ export class CalloutAutoComplete extends EditorSuggest<CalloutSuggestion> {
 		const restMatch = /^([+-]?)\s*(.*)$/.exec(afterHeader);
 		const existingTitle = restMatch?.[2]?.trim() ?? "";
 
+		const foldMark = def.foldable ? (def.defaultFolded ? "-" : "+") : "";
+
+		// Replace from trigger start to end of line
+		const lineEnd: EditorPosition = {
+			line: end.line,
+			ch: line.length,
+		};
+
+		// Heading callout: the rendered token already shows the display name,
+		// so no title text is inserted; a custom title the user already wrote
+		// is preserved. Enter then moves to the start of the next line (no
+		// `>` prefix — heading callouts have no body), via close().
+		if (this.triggerRole === "heading") {
+			const replacement =
+				`[!${matchedId}]${foldMark}` +
+				(existingTitle ? ` ${existingTitle}` : "");
+			editor.replaceRange(replacement, start, lineEnd);
+			this.pendingEditor = editor;
+			this.pendingLine = start.line;
+			this.pendingRole = "heading";
+			return;
+		}
+
+		// Regular callout header.
 		// Detect if this is a brand-new callout (no title text after the header)
 		const isNewCallout = existingTitle === "";
 
@@ -327,14 +421,6 @@ export class CalloutAutoComplete extends EditorSuggest<CalloutSuggestion> {
 			(d) => d.displayName.toLowerCase() === existingTitle.toLowerCase(),
 		);
 
-		// If the user typed an alias, use that alias as the ID
-		const queryLower = query.toLowerCase();
-		const allIds = [def.id, ...(def.aliases ?? [])];
-		const matchedId =
-			allIds.find((id) => id.toLowerCase() === queryLower) ??
-			allIds.find((id) => id.toLowerCase().startsWith(queryLower)) ??
-			def.id;
-
 		// Decide what title to use
 		let title: string;
 		if (existingTitle === "" || isKnownCalloutName) {
@@ -343,27 +429,54 @@ export class CalloutAutoComplete extends EditorSuggest<CalloutSuggestion> {
 			title = existingTitle;
 		}
 
-		const foldMark = def.foldable ? (def.defaultFolded ? "-" : "+") : "";
-
-		// Replace from trigger start to end of line
-		const lineEnd: EditorPosition = {
-			line: end.line,
-			ch: line.length,
-		};
-
 		const replacement = `[!${matchedId}]${foldMark} ${title}`;
 		editor.replaceRange(replacement, start, lineEnd);
 
 		if (isNewCallout) {
 			this.pendingEditor = editor;
 			this.pendingLine = start.line;
+			this.pendingRole = "regular";
 		}
+	}
+
+	/**
+	 * Insert an inline `[!id]` pill token: replaces only the typed token
+	 * (never the rest of the line), guarantees one space after the `]`, and
+	 * parks the cursor after that space so the user keeps writing on the
+	 * SAME line — pressing Enter on a pill suggestion must not break the
+	 * paragraph.
+	 */
+	private insertInlineToken(
+		editor: Editor,
+		start: EditorPosition,
+		contextEnd: EditorPosition,
+		line: string,
+		insertId: string,
+	): void {
+		const afterTrigger = line.slice(start.ch + 2);
+		const closeIdx = afterTrigger.indexOf("]");
+		const tokenEnd: EditorPosition =
+			closeIdx === -1
+				? contextEnd
+				: { line: start.line, ch: start.ch + 2 + closeIdx + 1 };
+		const token = `[!${insertId}]`;
+		editor.replaceRange(token, start, tokenEnd);
+
+		const afterCh = start.ch + token.length;
+		const newLine = editor.getLine(start.line);
+		if (newLine[afterCh] !== " ") {
+			editor.replaceRange(" ", { line: start.line, ch: afterCh });
+		}
+		editor.setCursor({ line: start.line, ch: afterCh + 1 });
 	}
 
 	private async openCreateForQuery(
 		query: string,
 		ctx: EditorSuggestContext,
 	): Promise<void> {
+		// Snapshot the role now: close() and the modal round-trip may let
+		// another onTrigger run and overwrite triggerRole.
+		const role = this.triggerRole;
 		this.close();
 		const editor = ctx.editor;
 		const start = ctx.start;
@@ -378,14 +491,39 @@ export class CalloutAutoComplete extends EditorSuggest<CalloutSuggestion> {
 		});
 		const result = await modal.openAndWait();
 		if (!result) return;
+
+		if (role === "inline") {
+			editor.focus();
+			this.insertInlineToken(
+				editor,
+				start,
+				end,
+				editor.getLine(start.line),
+				result.id,
+			);
+			return;
+		}
+
 		const foldMark = result.foldable
 			? result.defaultFolded
 				? "-"
 				: "+"
 			: "";
+
+		if (role === "heading") {
+			// No title text — the rendered token shows the display name.
+			editor.replaceRange(`[!${result.id}]${foldMark}`, start, lineEnd);
+			// close() already ran (before the modal), so place the cursor
+			// directly rather than via the pending mechanism.
+			editor.focus();
+			moveCursorToLineBelow(editor, start.line);
+			return;
+		}
+
 		const replacement = `[!${result.id}]${foldMark} ${result.displayName}`;
 		editor.replaceRange(replacement, start, lineEnd);
 		this.pendingEditor = editor;
 		this.pendingLine = start.line;
+		this.pendingRole = "regular";
 	}
 }

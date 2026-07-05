@@ -9,7 +9,11 @@
  * points that external callers can open programmatically).
  */
 import type CalloutStudioPlugin from "../main";
-import type { CalloutDefinition, CalloutIcon } from "../types";
+import type {
+	CalloutDefinition,
+	CalloutIcon,
+	CalloutRenderRole,
+} from "../types";
 import { CalloutEditor } from "../settings/CalloutEditor";
 import { IconPicker } from "../settings/IconPicker";
 
@@ -94,5 +98,20 @@ export class CalloutStudioAPI {
 	onCalloutChange(callback: () => void): () => void {
 		this.plugin.registry.onChange(callback);
 		return () => this.plugin.registry.offChange(callback);
+	}
+
+	/**
+	 * Reports whether a given render role is currently enabled. "regular" is
+	 * always enabled; "heading" and "inline" follow their settings toggles.
+	 */
+	isRoleEnabled(role: CalloutRenderRole): boolean {
+		switch (role) {
+			case "heading":
+				return this.plugin.settings.headingCallouts.enabled;
+			case "inline":
+				return this.plugin.settings.inlineCallouts.enabled;
+			default:
+				return true;
+		}
 	}
 }

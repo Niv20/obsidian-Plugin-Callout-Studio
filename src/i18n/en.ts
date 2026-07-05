@@ -212,6 +212,7 @@ export const en: Record<string, string> = {
 	"notice.exported": "Callouts exported to callout-studio-callouts.json",
 	"notice.invalidJSON": "Invalid JSON format: expected an array.",
 	"notice.importedJSON": "Imported {{count}} callout type(s) from JSON.",
+	"notice.importedSettings": "Imported plugin settings.",
 	"notice.noNewJSON":
 		"No new callout types were imported (ids may already exist).",
 	"notice.failedJSON": "Failed to parse JSON file.",
@@ -303,6 +304,42 @@ export const en: Record<string, string> = {
 	"contextMenu.setFoldClosed": "Set callout closed (-)",
 	"contextMenu.setFoldOpen": "Set callout open (+)",
 	"contextMenu.setFoldNone": "Make callout non-collapsible",
+	"contextMenu.cutSection": "Cut heading section",
+	"contextMenu.copySection": "Copy heading section",
+	"contextMenu.deleteSection": "Delete heading section",
+
+	// Callout types section
+	"settings.calloutTypes": "Callout types",
+	"settings.calloutTypeRegular": "Regular callout",
+	"settings.calloutTypeRegularDesc":
+		"A blockquote callout with content: > [!name]. Always enabled.",
+	"settings.calloutTypeHeading": "Heading callout",
+	"settings.calloutTypeHeadingDesc":
+		"A heading whose first content is the token, e.g. ## [!name]. Rendered as a colored bar at the heading's font size. Use + / - after the token to open/close the whole section on file open.",
+	"settings.calloutTypeInline": "Inline callout",
+	"settings.calloutTypeInlineDesc":
+		"A [!name] token in the middle of a line, rendered as a small pill. No title or content.",
+
+	// Context menu customization
+	"settings.customizeMenu": "Customize menu items",
+	"settings.customizeMenuDesc":
+		"Choose which right-click actions appear for each callout type and reorder them.",
+	"settings.customizeMenuButton": "Customize menu items",
+	"menuCustomize.title": "Customize right-click menu",
+	"menuCustomize.desc":
+		"Toggle actions on or off and reorder them with the arrows. Changes are saved automatically.",
+	"menuCustomize.regular": "Regular callout",
+	"menuCustomize.heading": "Heading callout",
+	"menuCustomize.inline": "Inline callout",
+	"menuCustomize.moveUp": "Move up",
+	"menuCustomize.moveDown": "Move down",
+	"menuItem.edit": "Edit callout",
+	"menuItem.openSettings": "Open settings",
+	"menuItem.copyMarkdown": "Copy Markdown",
+	"menuItem.foldDefaults": "Fold defaults (open / closed / none)",
+	"menuItem.cutSection": "Cut section",
+	"menuItem.copySection": "Copy section",
+	"menuItem.deleteSection": "Delete section",
 
 	// Confirm modal
 	"confirm.ok": "Delete",
@@ -374,6 +411,10 @@ export const en: Record<string, string> = {
 	"import.btnImportValid": "Import valid only ({{count}})",
 	"import.err.notArray":
 		"The top-level value must be an array of callout definitions.",
+	"import.err.notRecognized":
+		"Unrecognized file: expected a callout definitions array or a Callout Studio export.",
+	"import.warn.settingsIgnored":
+		"The settings block was not a valid object and was ignored.",
 	"import.err.parseFailed":
 		"The file is not valid JSON and could not be parsed.",
 	"import.err.entryNotObject": "Entry must be an object.",

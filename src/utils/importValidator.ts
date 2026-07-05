@@ -7,10 +7,16 @@
  * structured list of issues (errors + warnings) so the ImportReportModal can
  * show the user exactly what was wrong before committing anything.
  */
-import type { CalloutDefinition, CalloutIcon } from "../types";
+import type {
+	CalloutDefinition,
+	CalloutIcon,
+	PluginSettings,
+} from "../types";
 import type { CalloutRegistry } from "../manager/CalloutRegistry";
+import { EXPORT_FORMAT_ID } from "../manager/CalloutRegistry";
 import { MAX_TAG_LENGTH, MAX_TAGS_COUNT } from "../constants";
 import { normalizeCalloutId } from "./calloutId";
+import { sanitizeImportedSettings } from "./settingsValidator";
 
 /** Severity used by the report modal to style each row. */
 export type IssueLevel = "error" | "warning";
@@ -36,6 +42,11 @@ export interface ValidationResult {
 	issues: ValidationIssue[];
 	/** True when the top-level structure is unusable (e.g. not an array). */
 	fatal: boolean;
+	/**
+	 * Sanitized plugin settings from a v2 export envelope, if present.
+	 * `undefined` for legacy flat-array files (which carry no settings).
+	 */
+	settings?: PluginSettings;
 }
 
 const HEX_COLOR_RE = /^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/;
@@ -315,22 +326,80 @@ function validateMetadata(
  * Collects every issue encountered (does not bail early) so the report modal
  * can show the user the full picture in one pass.
  */
+/**
+ * Validate an import payload. Accepts BOTH shapes:
+ * - Legacy: a flat `CalloutDefinition[]` array (callouts only).
+ * - v2: an object envelope `{ format, formatVersion, callouts, settings }`
+ *   carrying callouts AND full plugin settings.
+ */
 export function validateImportPayload(
 	raw: unknown,
 	registry: CalloutRegistry,
 ): ValidationResult {
+	// v2 object envelope.
+	if (isPlainObject(raw) && !Array.isArray(raw)) {
+		const looksLikeV2 =
+			raw.format === EXPORT_FORMAT_ID ||
+			typeof raw.formatVersion === "number" ||
+			Array.isArray(raw.callouts);
+		if (!looksLikeV2) {
+			return {
+				validDefs: [],
+				issues: [
+					{
+						index: -1,
+						entryLabel: "",
+						level: "error",
+						messageKey: "import.err.notRecognized",
+					},
+				],
+				fatal: true,
+			};
+		}
+		const calloutsRaw = raw.callouts;
+		const base = Array.isArray(calloutsRaw)
+			? validateCalloutArray(calloutsRaw, registry)
+			: { validDefs: [], issues: [] };
+		const settingsResult = sanitizeImportedSettings(raw.settings);
+		return {
+			validDefs: base.validDefs,
+			issues: [...base.issues, ...settingsResult.issues],
+			fatal: false,
+			settings: settingsResult.settings ?? undefined,
+		};
+	}
+
+	// Legacy flat array.
+	if (!Array.isArray(raw)) {
+		return {
+			validDefs: [],
+			issues: [
+				{
+					index: -1,
+					entryLabel: "",
+					level: "error",
+					messageKey: "import.err.notRecognized",
+				},
+			],
+			fatal: true,
+		};
+	}
+
+	const base = validateCalloutArray(raw, registry);
+	return { ...base, fatal: false };
+}
+
+/**
+ * Validate a flat array of raw callout entries into safe CalloutDefinitions,
+ * collecting every issue (never bailing early) so the report modal can show
+ * the full picture in one pass.
+ */
+function validateCalloutArray(
+	raw: unknown[],
+	registry: CalloutRegistry,
+): { validDefs: CalloutDefinition[]; issues: ValidationIssue[] } {
 	const issues: ValidationIssue[] = [];
 	const validDefs: CalloutDefinition[] = [];
-
-	if (!Array.isArray(raw)) {
-		issues.push({
-			index: -1,
-			entryLabel: "",
-			level: "error",
-			messageKey: "import.err.notArray",
-		});
-		return { validDefs, issues, fatal: true };
-	}
 
 	// Track ids/aliases declared inside the file (case-insensitive).
 	const seenInFile = new Map<string, number>();
@@ -697,5 +766,5 @@ export function validateImportPayload(
 		}
 	});
 
-	return { validDefs, issues, fatal: false };
+	return { validDefs, issues };
 }

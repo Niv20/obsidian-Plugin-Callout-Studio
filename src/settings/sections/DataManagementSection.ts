@@ -158,7 +158,8 @@ async function showVaultStatistics(ctx: SettingsSectionContext): Promise<void> {
 }
 
 function exportCallouts(ctx: SettingsSectionContext): void {
-	const json = ctx.plugin.registry.exportToJSON();
+	// v2 export: callouts + all plugin settings (menu config, role toggles, …).
+	const json = ctx.plugin.registry.exportToJSONv2();
 	const blob = new Blob([json], { type: "application/json" });
 	const url = URL.createObjectURL(blob);
 	const a = createEl("a");
@@ -203,7 +204,7 @@ function importFromJSON(ctx: SettingsSectionContext): void {
 		const result = validateImportPayload(parsed, ctx.plugin.registry);
 
 		if (result.issues.length > 0 || result.fatal) {
-			const total = Array.isArray(parsed) ? parsed.length : 0;
+			const total = countImportedCallouts(parsed);
 			const choice = await new ImportReportModal(
 				ctx.app,
 				result.issues,
@@ -215,10 +216,6 @@ function importFromJSON(ctx: SettingsSectionContext): void {
 		}
 
 		const defs = result.validDefs;
-		if (defs.length === 0) {
-			new Notice(t("notice.noNewJSON"));
-			return;
-		}
 
 		let imported = 0;
 		let overwritten = 0;
@@ -232,6 +229,17 @@ function importFromJSON(ctx: SettingsSectionContext): void {
 				if (added) imported++;
 			}
 		}
+
+		// v2 files also carry plugin settings; apply them field-by-field
+		// (result.settings is already merged against defaults, so unknown
+		// fields are impossible here).
+		const settingsImported = !!result.settings;
+		if (result.settings) {
+			Object.assign(ctx.plugin.registry.settings, result.settings);
+			await ctx.plugin.saveSettings();
+			ctx.plugin.refreshRenderModes();
+		}
+
 		if (imported > 0) {
 			if (overwritten > 0) {
 				new Notice(
@@ -249,9 +257,25 @@ function importFromJSON(ctx: SettingsSectionContext): void {
 					void ctx.plugin.cacheMaterialSvg(def.icon);
 				}
 			}
+		} else if (settingsImported) {
+			new Notice(t("notice.importedSettings"));
+			ctx.display();
 		} else {
 			new Notice(t("notice.noNewJSON"));
 		}
 	});
 	input.click();
+}
+
+/** Number of callout entries in either import shape (for the report modal). */
+function countImportedCallouts(parsed: unknown): number {
+	if (Array.isArray(parsed)) return parsed.length;
+	if (
+		parsed &&
+		typeof parsed === "object" &&
+		Array.isArray((parsed as { callouts?: unknown }).callouts)
+	) {
+		return (parsed as { callouts: unknown[] }).callouts.length;
+	}
+	return 0;
 }

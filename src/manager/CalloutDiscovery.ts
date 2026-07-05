@@ -13,6 +13,7 @@ import type { CalloutRegistry } from "./CalloutRegistry";
 import type { PluginSettings } from "../types";
 import { DEFAULT_CALLOUTS } from "../constants";
 import { normalizeCalloutId } from "../utils/calloutId";
+import { scanLineForCalloutTokens } from "../editor/calloutTokens";
 import {
 	scanFileForUnknownCallouts,
 	scanVaultForUnknownCallouts,
@@ -213,22 +214,26 @@ export class CalloutDiscovery {
 	}
 
 	/**
-	 * If the active editor is editing this file and the cursor sits on a
-	 * `[!id]` header line, return that header's (lowercased) id. While the
-	 * cursor stays on the line the id is "in progress" and must not be
-	 * auto-created yet: doing so would feed the half-typed name straight back
-	 * into the autocomplete dropdown. Discovery happens once the cursor leaves
-	 * the line (treated as the user having committed the name).
+	 * If the active editor is editing this file, return the (lowercased) ids
+	 * of every callout token — regular, heading, or inline — on the cursor's
+	 * line. While the cursor stays on the line those ids are "in progress"
+	 * and must not be auto-created yet: doing so would feed a half-typed name
+	 * straight back into the autocomplete dropdown. Discovery happens once
+	 * the cursor leaves the line (treated as the user having committed it).
 	 */
-	private getActiveTypingCalloutId(file: TFile): string | null {
+	private getActiveTypingCalloutIds(file: TFile): Set<string> | null {
 		const active = this.host.app.workspace.activeEditor;
 		if (!active?.editor || active.file !== file) return null;
 		const editor = active.editor;
 		const line = editor.getLine(editor.getCursor().line); // live buffer
-		// Same id shape as the vault scanner (`[^\]\n\r]+` + closing `]`),
-		// so multi-word IDs with spaces are captured and normalized identically.
-		const m = /^\s*>[\s>]*\[!([^\]\n\r]+)\]/.exec(line);
-		return m ? normalizeCalloutId(m[1]!) : null;
+		const ids = new Set<string>();
+		// Token ids are normalized exactly like the vault scanner's, so
+		// multi-word IDs with spaces match identically.
+		for (const token of scanLineForCalloutTokens(line)) {
+			const id = normalizeCalloutId(token.rawId);
+			if (id) ids.add(id);
+		}
+		return ids.size > 0 ? ids : null;
 	}
 
 	private async scanFileNow(file: TFile): Promise<void> {
@@ -246,10 +251,10 @@ export class CalloutDiscovery {
 			console.debug("[CalloutStudio] file scan failed", file.path, e);
 			return;
 		}
-		// Skip the header the user is actively typing — it gets discovered once
-		// they commit it (Enter, move past the header, or switch files).
-		const inProgress = this.getActiveTypingCalloutId(file);
-		if (inProgress) unknown = unknown.filter((id) => id !== inProgress);
+		// Skip tokens the user is actively typing — they get discovered once
+		// they commit them (Enter, move off the line, or switch files).
+		const inProgress = this.getActiveTypingCalloutIds(file);
+		if (inProgress) unknown = unknown.filter((id) => !inProgress.has(id));
 		if (unknown.length === 0) {
 			// Edit may have removed the last usage of a fallback row. Run
 			// a prune so the settings list stays clean as the user types.

@@ -8,7 +8,7 @@
  * Keep this file focused on lifecycle only — all feature logic lives in
  * the sub-modules under manager/, editor/, settings/, etc.
  */
-import { Notice, Plugin } from "obsidian";
+import { MarkdownView, Notice, Plugin } from "obsidian";
 import type {
 	CalloutIcon,
 	MaterialIconStyle,
@@ -22,7 +22,11 @@ import { CalloutDiscovery } from "./manager/CalloutDiscovery";
 import { CalloutStudioSettingsTab } from "./settings/SettingsTab";
 import { CalloutEditor } from "./settings/CalloutEditor";
 import { CalloutAutoComplete } from "./editor/AutoComplete";
-import { registerContextMenu } from "./editor/ContextMenu";
+import { registerContextMenu } from "./editor/contextmenu";
+import { createCalloutViewPlugin } from "./editor/livepreview/calloutViewPlugin";
+import { refreshAllMarkdownEditors } from "./editor/livepreview/refresh";
+import { registerHeadingFoldManager } from "./editor/headingFoldManager";
+import { createCalloutReadingPostProcessor } from "./reading/calloutPostProcessor";
 import { registerCalloutCommands } from "./editor/commands";
 import { CalloutStudioAPI } from "./api/PluginAPI";
 import { FirstRunScanModal } from "./utils/FirstRunScanModal";
@@ -70,6 +74,17 @@ export default class CalloutStudioPlugin extends Plugin {
 		this.registerMarkdownPostProcessor((el) => {
 			this.cssInjector.paintIcons(el);
 		});
+
+		// Reading-view rendering for heading callouts and inline pills.
+		this.registerMarkdownPostProcessor(
+			createCalloutReadingPostProcessor(this),
+		);
+
+		// Live Preview rendering for heading callouts and inline pills.
+		this.registerEditorExtension(createCalloutViewPlugin(this));
+
+		// Apply heading-callout fold defaults (`## [!id]±`) on file open.
+		registerHeadingFoldManager(this);
 
 		// Sub-managers (composition keeps main.ts focused on lifecycle).
 		this.materialSvg = new MaterialSvgManager({
@@ -166,6 +181,23 @@ export default class CalloutStudioPlugin extends Plugin {
 	refreshCallouts(): void {
 		this.cssInjector.inject();
 		this.app.workspace.trigger("css-change");
+		// Rebuild Live Preview heading/inline decorations: registry changes
+		// don't touch the document, so CodeMirror won't rebuild them itself.
+		refreshAllMarkdownEditors(this.app);
+	}
+
+	/**
+	 * Fully re-render both preview modes. Used when a render-role toggle
+	 * flips: unlike refreshCallouts(), this also re-runs reading-view
+	 * post-processors (via previewMode.rerender) so already-baked pills and
+	 * heading bars are added or stripped immediately.
+	 */
+	refreshRenderModes(): void {
+		refreshAllMarkdownEditors(this.app);
+		for (const leaf of this.app.workspace.getLeavesOfType("markdown")) {
+			const view = leaf.view;
+			if (view instanceof MarkdownView) view.previewMode?.rerender(true);
+		}
 	}
 
 	// ── Forwarders that keep the public plugin surface stable ──

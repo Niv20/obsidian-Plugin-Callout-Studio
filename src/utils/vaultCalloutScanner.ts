@@ -6,9 +6,17 @@
  * bulk-replacing callout IDs or titles, converting callouts to plain text,
  * and normalizing fold markers. Used by CalloutDiscovery (auto-discovery),
  * DataManagementSection (re-scan), and CalloutRowActions (pre-delete counts).
+ *
+ * The read-only scanners (statistics, unknown discovery, usage counting) go
+ * through forEachCalloutToken and therefore see all three render roles —
+ * regular (`> [!id]`), heading (`## [!id]`), and inline (`[!id]` mid-line).
+ * The WRITE operations (bulk id/title replacement, plain-text conversion,
+ * fold-marker normalization) intentionally remain blockquote-only: rewriting
+ * heading/inline usages is a separate, riskier feature.
  */
 import type { App, TFile } from "obsidian";
 import { normalizeCalloutId } from "./calloutId";
+import { forEachCalloutToken } from "../editor/calloutTokens";
 
 function escapeRegex(str: string): string {
 	return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -30,7 +38,6 @@ export interface VaultCalloutStatistics {
 export async function scanVaultCalloutStatistics(
 	app: App,
 ): Promise<VaultCalloutStatistics> {
-	const regex = /^>\s*(?:>\s*)*\[!([^\]\n\r]+)\][+-]?/gim;
 	const files = app.vault.getMarkdownFiles();
 	const byId = new Map<string, VaultCalloutTypeStatistics>();
 	let filesWithCallouts = 0;
@@ -39,12 +46,10 @@ export async function scanVaultCalloutStatistics(
 	for (const file of files) {
 		const content = await app.vault.cachedRead(file);
 		const seenInFile = new Set<string>();
-		regex.lastIndex = 0;
 
-		let match: RegExpExecArray | null;
-		while ((match = regex.exec(content)) !== null) {
-			const id = match[1] ? normalizeCalloutId(match[1]) : "";
-			if (!id) continue;
+		forEachCalloutToken(content, (rawId) => {
+			const id = normalizeCalloutId(rawId);
+			if (!id) return;
 
 			let entry = byId.get(id);
 			if (!entry) {
@@ -54,7 +59,7 @@ export async function scanVaultCalloutStatistics(
 			entry.totalCount++;
 			totalCount++;
 			seenInFile.add(id);
-		}
+		});
 
 		if (seenInFile.size > 0) {
 			filesWithCallouts++;
@@ -79,42 +84,32 @@ export async function scanVaultCalloutStatistics(
 
 /**
  * Scan a single Markdown file (cheap; reads from cache) and return the set of
- * callout IDs referenced via `> [!id]` syntax that are NOT in `knownIds`.
- * Used for incremental tracking on file save / create.
+ * callout IDs referenced in any role (regular / heading / inline) that are
+ * NOT in `knownIds`. Used for incremental tracking on file save / create.
  */
 export async function scanFileForUnknownCallouts(
 	app: App,
 	file: TFile,
 	knownIds: Set<string>,
 ): Promise<string[]> {
-	const regex = /^>\s*\[!([^\]\n\r]+)\]/gim;
 	const content = await app.vault.cachedRead(file);
-	const found = new Set<string>();
-	let m: RegExpExecArray | null;
-	while ((m = regex.exec(content)) !== null) {
-		const id = m[1] ? normalizeCalloutId(m[1]) : "";
-		if (!id) continue;
-		if (!knownIds.has(id)) found.add(id);
-	}
-	return Array.from(found);
+	return scanStringForUnknownCallouts(content, knownIds);
 }
 
 /**
  * Synchronously scan an in-memory string (e.g. an open editor's current
- * buffer that may be unsaved) and return unknown callout IDs.
+ * buffer that may be unsaved) and return unknown callout IDs from any role.
  */
 export function scanStringForUnknownCallouts(
 	content: string,
 	knownIds: Set<string>,
 ): string[] {
-	const regex = /^>\s*\[!([^\]\n\r]+)\]/gim;
 	const found = new Set<string>();
-	let m: RegExpExecArray | null;
-	while ((m = regex.exec(content)) !== null) {
-		const id = m[1] ? normalizeCalloutId(m[1]) : "";
-		if (!id) continue;
+	forEachCalloutToken(content, (rawId) => {
+		const id = normalizeCalloutId(rawId);
+		if (!id) return;
 		if (!knownIds.has(id)) found.add(id);
-	}
+	});
 	return Array.from(found);
 }
 
@@ -128,19 +123,20 @@ export async function countCalloutUsages(
 ): Promise<{ fileCount: number; totalCount: number }> {
 	if (ids.length === 0) return { fileCount: 0, totalCount: 0 };
 
-	const pattern = ids.map(escapeRegex).join("|");
-	const regex = new RegExp(`^>\\s*\\[!(${pattern})\\]`, "gim");
-
+	const idSet = new Set(ids.map((id) => normalizeCalloutId(id)));
 	const files = app.vault.getMarkdownFiles();
 	let fileCount = 0;
 	let totalCount = 0;
 
 	for (const file of files) {
 		const content = await app.vault.cachedRead(file);
-		const matches = content.match(regex);
-		if (matches && matches.length > 0) {
+		let countInFile = 0;
+		forEachCalloutToken(content, (rawId) => {
+			if (idSet.has(normalizeCalloutId(rawId))) countInFile++;
+		});
+		if (countInFile > 0) {
 			fileCount++;
-			totalCount += matches.length;
+			totalCount += countInFile;
 		}
 	}
 
@@ -162,23 +158,18 @@ export async function countCalloutUsagesMap(
 	}
 	if (ids.length === 0) return result;
 
-	const pattern = ids.map(escapeRegex).join("|");
-	const regex = new RegExp(`^>\\s*\\[!(${pattern})\\]`, "gim");
-
 	const files = app.vault.getMarkdownFiles();
 	for (const file of files) {
 		const content = await app.vault.cachedRead(file);
 		const seenInFile = new Set<string>();
-		let m: RegExpExecArray | null;
-		regex.lastIndex = 0;
-		while ((m = regex.exec(content)) !== null) {
-			const id = m[1] ? normalizeCalloutId(m[1]) : "";
-			if (!id) continue;
+		forEachCalloutToken(content, (rawId) => {
+			const id = normalizeCalloutId(rawId);
+			if (!id) return;
 			const entry = result.get(id);
-			if (!entry) continue;
+			if (!entry) return;
 			entry.totalCount++;
 			seenInFile.add(id);
-		}
+		});
 		for (const id of seenInFile) {
 			result.get(id)!.fileCount++;
 		}
@@ -330,23 +321,20 @@ export async function normalizeFoldMarkersInVault(
 }
 
 /**
- * Scan every Markdown file once and return the set of callout IDs that
- * are referenced via `> [!id]` syntax but are NOT in the supplied known set.
+ * Scan every Markdown file once and return the set of callout IDs that are
+ * referenced in any role (regular / heading / inline) but are NOT in the
+ * supplied known set.
  */
 export async function scanVaultForUnknownCallouts(
 	app: App,
 	knownIds: Set<string>,
 ): Promise<string[]> {
-	const regex = /^>\s*\[!([^\]\n\r]+)\]/gim;
 	const files = app.vault.getMarkdownFiles();
 	const found = new Set<string>();
 	for (const file of files) {
 		const content = await app.vault.cachedRead(file);
-		let m: RegExpExecArray | null;
-		while ((m = regex.exec(content)) !== null) {
-			const id = m[1] ? normalizeCalloutId(m[1]) : "";
-			if (!id) continue;
-			if (!knownIds.has(id)) found.add(id);
+		for (const id of scanStringForUnknownCallouts(content, knownIds)) {
+			found.add(id);
 		}
 	}
 	return Array.from(found);

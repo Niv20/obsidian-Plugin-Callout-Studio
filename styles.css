@@ -2186,3 +2186,58 @@ button.callout-studio-icon-picker-loading {
 .callout-studio-footer a:hover {
 	text-decoration: underline;
 }
+
+/* ══ Heading & inline callout tokens ═══════════════════════════ */
+/* Structural rules only — per-callout colors (--cs-color-rgb) are
+   injected dynamically by CSSInjector, keyed by data-callout.     */
+
+/* Inline pill: icon + display name at body-text scale. */
+.cs-inline-callout {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.3em;
+	padding: 0.05em 0.5em;
+	border-radius: 1em;
+	font-size: 0.9em;
+	line-height: 1.4;
+	vertical-align: baseline;
+	color: rgb(var(--cs-color-rgb, 68, 138, 255));
+	background-color: rgba(var(--cs-color-rgb, 68, 138, 255), 0.12);
+	font-weight: var(--font-medium, 500);
+	white-space: nowrap;
+	/* Keep the pill visually stable inside RTL paragraphs. */
+	unicode-bidi: isolate;
+}
+
+/* Heading callout bar: applied to the hN element (reading view) or the
+   .cm-line (Live Preview). Font size is inherited from the heading itself,
+   so H1 bars render larger than H6 bars with no extra rules. */
+.cs-heading-callout {
+	background-color: rgba(var(--cs-color-rgb, 68, 138, 255), 0.12);
+	border-radius: var(--radius-s, 4px);
+	padding: 0.1em 0.45em;
+	color: rgb(var(--cs-color-rgb, 68, 138, 255));
+}
+
+/* The [!id] token inside a heading bar (icon + optional name). */
+.cs-heading-token {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.35em;
+	vertical-align: baseline;
+	unicode-bidi: isolate;
+}
+
+/* Icon boxes scale with the surrounding font (pill text or heading). */
+.cs-inline-callout .cs-callout-icon,
+.cs-heading-token .cs-callout-icon {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	line-height: 1;
+}
+.cs-inline-callout .cs-callout-icon svg,
+.cs-heading-token .cs-callout-icon svg {
+	width: 1em;
+	height: 1em;
+}

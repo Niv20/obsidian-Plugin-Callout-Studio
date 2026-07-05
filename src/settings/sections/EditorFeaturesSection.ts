@@ -8,6 +8,7 @@
  */
 import { Setting } from "obsidian";
 import { t } from "../../i18n";
+import { MenuCustomizationModal } from "../MenuCustomizationModal";
 import type { SettingsSectionContext } from "./types";
 
 export function renderContextMenuSettingsSection(
@@ -25,6 +26,15 @@ export function renderContextMenuSettingsSection(
 			tog.setValue(contextMenu.enabled).onChange(async (v) => {
 				contextMenu.enabled = v;
 				await ctx.plugin.saveSettings();
+			}),
+		);
+
+	new Setting(containerEl)
+		.setName(t("settings.customizeMenu"))
+		.setDesc(t("settings.customizeMenuDesc"))
+		.addButton((btn) =>
+			btn.setButtonText(t("settings.customizeMenuButton")).onClick(() => {
+				new MenuCustomizationModal(ctx.app, ctx.plugin).open();
 			}),
 		);
 }

@@ -9,6 +9,8 @@
  */
 import type {
 	CalloutDefinition,
+	ContextMenuItemConfig,
+	ContextMenuItemId,
 	ContextMenuSettings,
 	LegacyPopupSettings,
 	MaterialIconStyle,
@@ -16,17 +18,131 @@ import type {
 	PluginData,
 	PluginSettings,
 } from "../types";
-import { DEFAULT_CALLOUTS, DEFAULT_SETTINGS } from "../constants";
+import {
+	DEFAULT_CALLOUTS,
+	DEFAULT_CONTEXT_MENU_ITEMS,
+	DEFAULT_SETTINGS,
+} from "../constants";
 import { parseCssColorToHex } from "../utils/colorUtils";
 import { sortCalloutsByDisplayName } from "../utils/sorting";
 
 const CURRENT_DATA_VERSION = 2;
 const SORTED_DEFAULT_CALLOUTS = sortCalloutsByDisplayName(DEFAULT_CALLOUTS);
 
+/** Identifier stamped into v2 export files so the importer can recognize them. */
+export const EXPORT_FORMAT_ID = "callout-studio";
+export const EXPORT_FORMAT_VERSION = 2;
+
 type LegacySavedSettings = Partial<PluginSettings> & {
 	popup?: Partial<LegacyPopupSettings>;
 	contextMenu?: Partial<ContextMenuSettings>;
 };
+
+/**
+ * Merges a saved per-role menu item list against that role's defaults:
+ * keeps the user's order, drops unknown ids and duplicates, and appends
+ * items introduced by newer plugin versions at the end. Tolerates arbitrary
+ * junk (saved data and import files are untrusted).
+ */
+function mergeMenuItems(
+	saved: unknown,
+	defaults: ContextMenuItemConfig[],
+): ContextMenuItemConfig[] {
+	const knownIds = new Set<string>(defaults.map((d) => d.id));
+	const merged: ContextMenuItemConfig[] = [];
+	if (Array.isArray(saved)) {
+		for (const entry of saved) {
+			if (!entry || typeof entry !== "object") continue;
+			const id = (entry as { id?: unknown }).id;
+			if (typeof id !== "string" || !knownIds.has(id)) continue;
+			if (merged.some((m) => m.id === id)) continue;
+			merged.push({
+				id: id as ContextMenuItemId,
+				enabled: (entry as { enabled?: unknown }).enabled !== false,
+			});
+		}
+	}
+	for (const def of defaults) {
+		if (!merged.some((m) => m.id === def.id)) merged.push({ ...def });
+	}
+	return merged;
+}
+
+/**
+ * Rebuilds a complete PluginSettings object from possibly-partial/legacy
+ * saved data. Every field is merged explicitly against DEFAULT_SETTINGS —
+ * a new settings field MUST be handled here (and added to DEFAULT_SETTINGS)
+ * or it will be silently dropped on load. Shared by the registry loader and
+ * the settings importer (import/export v2).
+ */
+export function mergeSavedSettings(
+	savedSettings: LegacySavedSettings,
+): PluginSettings {
+	const savedGlobal = savedSettings.globalStyle as
+		| Partial<PluginSettings["globalStyle"]>
+		| undefined;
+	const legacyPopup = savedSettings.popup;
+	const savedMenuItems = savedSettings.contextMenu?.items;
+	return {
+		globalStyle: {
+			...DEFAULT_SETTINGS.globalStyle,
+			...savedGlobal,
+			// Ensure borderSides is always a proper object
+			borderSides: {
+				...DEFAULT_SETTINGS.globalStyle.borderSides,
+				...(savedGlobal?.borderSides as
+					| Record<string, boolean>
+					| undefined),
+			},
+		},
+		contextMenu: {
+			enabled:
+				savedSettings.contextMenu?.enabled ??
+				legacyPopup?.enabled ??
+				DEFAULT_SETTINGS.contextMenu.enabled,
+			items: {
+				regular: mergeMenuItems(
+					savedMenuItems?.regular,
+					DEFAULT_CONTEXT_MENU_ITEMS.regular,
+				),
+				heading: mergeMenuItems(
+					savedMenuItems?.heading,
+					DEFAULT_CONTEXT_MENU_ITEMS.heading,
+				),
+				inline: mergeMenuItems(
+					savedMenuItems?.inline,
+					DEFAULT_CONTEXT_MENU_ITEMS.inline,
+				),
+			},
+		},
+		autocomplete: {
+			enabled:
+				savedSettings.autocomplete?.enabled ??
+				DEFAULT_SETTINGS.autocomplete.enabled,
+		},
+		iconSources: {
+			...DEFAULT_SETTINGS.iconSources,
+			...savedSettings.iconSources,
+		},
+		headingCallouts: {
+			enabled:
+				savedSettings.headingCallouts?.enabled ??
+				DEFAULT_SETTINGS.headingCallouts.enabled,
+		},
+		inlineCallouts: {
+			enabled:
+				savedSettings.inlineCallouts?.enabled ??
+				DEFAULT_SETTINGS.inlineCallouts.enabled,
+		},
+		firstRunCompleted:
+			savedSettings.firstRunCompleted ??
+			DEFAULT_SETTINGS.firstRunCompleted,
+		fallbackCalloutId:
+			savedSettings.fallbackCalloutId ??
+			DEFAULT_SETTINGS.fallbackCalloutId,
+		language: savedSettings.language ?? DEFAULT_SETTINGS.language,
+	};
+}
 
 export type RegistryChangeCallback = () => void;
 
@@ -72,49 +188,11 @@ export class CalloutRegistry {
 			}
 		}
 
-		// Merge settings
+		// Merge settings (field-by-field against defaults; see mergeSavedSettings)
 		if (data.settings) {
-			const savedSettings = data.settings as LegacySavedSettings;
-			const savedGlobal = savedSettings.globalStyle as
-				| Partial<PluginSettings["globalStyle"]>
-				| undefined;
-			const legacyPopup = savedSettings.popup;
-			this.settings = {
-				globalStyle: {
-					...DEFAULT_SETTINGS.globalStyle,
-					...savedGlobal,
-					// Ensure borderSides is always a proper object
-					borderSides: {
-						...DEFAULT_SETTINGS.globalStyle.borderSides,
-						...(savedGlobal?.borderSides as
-							| Record<string, boolean>
-							| undefined),
-					},
-				},
-				contextMenu: {
-					enabled:
-						savedSettings.contextMenu?.enabled ??
-						legacyPopup?.enabled ??
-						DEFAULT_SETTINGS.contextMenu.enabled,
-				},
-				autocomplete: {
-					enabled:
-						savedSettings.autocomplete?.enabled ??
-						DEFAULT_SETTINGS.autocomplete.enabled,
-				},
-				iconSources: {
-					...DEFAULT_SETTINGS.iconSources,
-					...savedSettings.iconSources,
-				},
-				firstRunCompleted:
-					savedSettings.firstRunCompleted ??
-					DEFAULT_SETTINGS.firstRunCompleted,
-				fallbackCalloutId:
-					savedSettings.fallbackCalloutId ??
-					DEFAULT_SETTINGS.fallbackCalloutId,
-				language:
-					savedSettings.language ?? DEFAULT_SETTINGS.language,
-			};
+			this.settings = mergeSavedSettings(
+				data.settings as LegacySavedSettings,
+			);
 		}
 
 		// Restore downloaded SVG data for Material icons selected by the user.
@@ -409,6 +487,12 @@ export class CalloutRegistry {
 		this.settings.contextMenu = structuredClone(
 			DEFAULT_SETTINGS.contextMenu,
 		);
+		this.settings.headingCallouts = structuredClone(
+			DEFAULT_SETTINGS.headingCallouts,
+		);
+		this.settings.inlineCallouts = structuredClone(
+			DEFAULT_SETTINGS.inlineCallouts,
+		);
 		// Reset fallback callout – the previously-selected callout may no
 		// longer exist after the reset, which would leave the dropdown blank.
 		this.settings.fallbackCalloutId = DEFAULT_SETTINGS.fallbackCalloutId;
@@ -466,6 +550,25 @@ export class CalloutRegistry {
 
 	exportToJSON(): string {
 		return JSON.stringify(this.getUserDefined(), null, 2);
+	}
+
+	/**
+	 * v2 export: callout definitions plus the full plugin settings, wrapped
+	 * in a versioned envelope. The legacy `exportToJSON()` (flat definitions
+	 * array) is kept because it is part of the public plugin API surface;
+	 * the importer accepts both shapes.
+	 */
+	exportToJSONv2(): string {
+		return JSON.stringify(
+			{
+				format: EXPORT_FORMAT_ID,
+				formatVersion: EXPORT_FORMAT_VERSION,
+				callouts: this.getUserDefined(),
+				settings: this.settings,
+			},
+			null,
+			2,
+		);
 	}
 
 	onChange(callback: RegistryChangeCallback): void {

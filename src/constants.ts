@@ -9,6 +9,8 @@
  */
 import type {
 	CalloutDefinition,
+	CalloutRenderRole,
+	ContextMenuItemConfig,
 	GlobalStyleSettings,
 	PluginSettings,
 } from "./types";
@@ -193,6 +195,35 @@ export const DEFAULT_CALLOUTS: CalloutDefinition[] = [
 	},
 ];
 
+/**
+ * Default right-click menu layout per render role. Array order = menu order.
+ * The settings loader merges saved lists against these (unknown ids dropped,
+ * newly introduced ids appended), so extending a list here is upgrade-safe.
+ */
+export const DEFAULT_CONTEXT_MENU_ITEMS: Record<
+	CalloutRenderRole,
+	ContextMenuItemConfig[]
+> = {
+	regular: [
+		{ id: "edit", enabled: true },
+		{ id: "openSettings", enabled: true },
+		{ id: "copyMarkdown", enabled: true },
+		{ id: "foldDefaults", enabled: true },
+	],
+	heading: [
+		{ id: "edit", enabled: true },
+		{ id: "cutSection", enabled: true },
+		{ id: "copySection", enabled: true },
+		{ id: "deleteSection", enabled: true },
+		{ id: "foldDefaults", enabled: true },
+		{ id: "openSettings", enabled: true },
+	],
+	inline: [
+		{ id: "edit", enabled: true },
+		{ id: "openSettings", enabled: true },
+	],
+};
+
 export const DEFAULT_SETTINGS: PluginSettings = {
 	globalStyle: {
 		borderSides: { top: false, right: false, bottom: false, left: false },
@@ -204,6 +235,7 @@ export const DEFAULT_SETTINGS: PluginSettings = {
 	} satisfies GlobalStyleSettings,
 	contextMenu: {
 		enabled: true,
+		items: DEFAULT_CONTEXT_MENU_ITEMS,
 	},
 	autocomplete: {
 		enabled: true,
@@ -214,6 +246,8 @@ export const DEFAULT_SETTINGS: PluginSettings = {
 		lastMaterialCategory: "Actions",
 		lastEmojiSkinTone: 0,
 	},
+	headingCallouts: { enabled: true },
+	inlineCallouts: { enabled: true },
 	firstRunCompleted: false,
 	fallbackCalloutId: "note",
 	language: "auto",

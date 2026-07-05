@@ -26,6 +26,7 @@ import {
 import { renderFallbackSection } from "./sections/FallbackSection";
 import { renderLanguageSection } from "./sections/LanguageSection";
 import { renderGlobalStyleSection } from "./sections/GlobalStyleSection";
+import { renderCalloutTypesSection } from "./sections/CalloutTypesSection";
 import {
 	createCalloutListsController,
 	type CalloutListsController,
@@ -136,6 +137,7 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 
 		renderFallbackSection(sectionCtx, containerEl);
 		renderGlobalStyleSection(sectionCtx, containerEl);
+		renderCalloutTypesSection(sectionCtx, containerEl);
 		renderAutocompleteSettingsSection(sectionCtx, containerEl);
 		renderContextMenuSettingsSection(sectionCtx, containerEl);
 		renderHotkeySection(sectionCtx, containerEl);

@@ -75,8 +75,49 @@ export interface EmojiEntry {
 	skins?: string[];
 }
 
+/**
+ * The three rendering roles a single callout definition can play:
+ * - "regular": the native blockquote callout (`> [!name]`)
+ * - "heading": a heading line whose first content is the token (`## [!name]`)
+ * - "inline": a `[!name]` token in the middle of any other line, shown as a pill
+ * One shared definition list serves all roles; only the rendering differs.
+ */
+export type CalloutRenderRole = "regular" | "heading" | "inline";
+
+/** Enable/disable switch for an optional render role (heading / inline). */
+export interface RoleToggleSettings {
+	enabled: boolean;
+}
+
+/**
+ * Identifiers for the right-click menu entries. `foldDefaults` covers the
+ * whole open/closed/normal fold-default group as one toggleable unit; the
+ * `*Section` items operate on an entire heading section (heading line +
+ * everything until the next same-or-higher-level heading).
+ */
+export type ContextMenuItemId =
+	| "edit"
+	| "openSettings"
+	| "copyMarkdown"
+	| "foldDefaults"
+	| "cutSection"
+	| "copySection"
+	| "deleteSection";
+
+/** One row in a per-role context-menu configuration. Array order = menu order. */
+export interface ContextMenuItemConfig {
+	id: ContextMenuItemId;
+	enabled: boolean;
+}
+
 export interface ContextMenuSettings {
 	enabled: boolean;
+	/**
+	 * Per-role ordered menu item lists (user-customizable via the settings
+	 * modal). Merged with defaults on load: unknown ids are dropped, items
+	 * introduced by newer plugin versions are appended at the end.
+	 */
+	items: Record<CalloutRenderRole, ContextMenuItemConfig[]>;
 }
 
 export interface LegacyPopupSettings extends ContextMenuSettings {
@@ -129,6 +170,10 @@ export interface PluginSettings {
 	contextMenu: ContextMenuSettings;
 	autocomplete: AutocompleteSettings;
 	iconSources: IconSourceSettings;
+	/** Heading callouts (`## [!name]`) — optional role, can be disabled. */
+	headingCallouts: RoleToggleSettings;
+	/** Inline callout pills (`[!name]` mid-line) — optional role, can be disabled. */
+	inlineCallouts: RoleToggleSettings;
 	/** Has the first-run vault scan been completed? */
 	firstRunCompleted?: boolean;
 	/** Callout ID to use as fallback for unrecognized callout types. Empty = Obsidian default */

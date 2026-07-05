@@ -26,6 +26,7 @@ export type SettingsTabPlugin = Plugin & {
 	addUnknownCalloutsAsFallback(unknownIds: string[]): number;
 	saveSettings(): Promise<void>;
 	refreshCallouts(): void;
+	refreshRenderModes(): void;
 	hasMaterialSvgFailed(
 		name: string,
 		style: MaterialIconStyle,
