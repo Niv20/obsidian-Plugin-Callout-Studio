@@ -104,6 +104,44 @@ export class CalloutAutoComplete extends EditorSuggest<CalloutSuggestion> {
 		}
 	}
 
+	/**
+	 * Opens the suggest popover for a `[!` that was inserted programmatically
+	 * (by the "Insert empty callout" / "Wrap in callout" commands). Obsidian's
+	 * suggest manager only re-evaluates `onTrigger` on real keystrokes, so
+	 * those commands otherwise leave the cursor after `[!` with no popup.
+	 *
+	 * We route through the workspace's internal EditorSuggests manager rather
+	 * than calling `open()` ourselves. That is what registers us as the
+	 * manager's `currentSuggest`, so the popover then behaves exactly like a
+	 * natively-typed `!`: it follows the editor on scroll and auto-closes when
+	 * the `!` is deleted. Calling `open()` directly produces a detached popover
+	 * that ignores scroll, never closes on delete, and stays stuck on screen.
+	 *
+	 * The `true` third argument forces the manager to fetch suggestions and set
+	 * itself as the current suggest even though we aren't already open. Deferred
+	 * a frame so CM6 has flushed the insert and (when run from the command
+	 * palette) focus has returned to the editor — the manager no-ops unless the
+	 * editor is focused, hence the explicit `focus()`.
+	 */
+	triggerNow(editor: Editor, file: TFile | null): void {
+		if (!file) return;
+		window.requestAnimationFrame(() => {
+			editor.focus();
+			const manager = (
+				this.app.workspace as unknown as {
+					editorSuggest?: {
+						trigger?: (
+							editor: Editor,
+							file: TFile,
+							manual: boolean,
+						) => void;
+					};
+				}
+			).editorSuggest;
+			manager?.trigger?.(editor, file, true);
+		});
+	}
+
 	onTrigger(
 		cursor: EditorPosition,
 		editor: Editor,

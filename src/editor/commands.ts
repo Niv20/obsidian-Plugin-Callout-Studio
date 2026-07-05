@@ -9,6 +9,7 @@
  */
 import type { Plugin } from "obsidian";
 import { CalloutEditor } from "../settings/CalloutEditor";
+import type { CalloutAutoComplete } from "./AutoComplete";
 import {
 	insertEmptyCallout,
 	unwrapCalloutAtSelection,
@@ -23,6 +24,7 @@ interface SettingsApi {
 
 interface CommandHostPlugin extends Plugin {
 	app: Plugin["app"] & { setting?: SettingsApi };
+	autoComplete: CalloutAutoComplete;
 }
 
 /**
@@ -54,7 +56,12 @@ export function registerCalloutCommands(
 		id: "insert-empty-callout",
 		name: t("cmd.insertEmptyCallout"),
 		editorCallback: (editor) => {
-			insertEmptyCallout(editor);
+			if (insertEmptyCallout(editor)) {
+				plugin.autoComplete.triggerNow(
+					editor,
+					plugin.app.workspace.getActiveFile(),
+				);
+			}
 		},
 	});
 
@@ -62,7 +69,12 @@ export function registerCalloutCommands(
 		id: "callout-wrap",
 		name: t("cmd.calloutWrap"),
 		editorCallback: (editor) => {
-			wrapSelectionInCallout(editor);
+			if (wrapSelectionInCallout(editor)) {
+				plugin.autoComplete.triggerNow(
+					editor,
+					plugin.app.workspace.getActiveFile(),
+				);
+			}
 		},
 	});
 

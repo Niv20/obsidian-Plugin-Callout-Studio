@@ -33,6 +33,7 @@ export default class CalloutStudioPlugin extends Plugin {
 	registry!: CalloutRegistry;
 	cssInjector!: CSSInjector;
 	api!: CalloutStudioAPI;
+	autoComplete!: CalloutAutoComplete;
 	private materialSvg!: MaterialSvgManager;
 	private discovery!: CalloutDiscovery;
 
@@ -110,7 +111,8 @@ export default class CalloutStudioPlugin extends Plugin {
 		registerCalloutCommands(this, () => new CalloutEditor(this));
 
 		// Editor autocomplete on [! trigger
-		this.registerEditorSuggest(new CalloutAutoComplete(this));
+		this.autoComplete = new CalloutAutoComplete(this);
+		this.registerEditorSuggest(this.autoComplete);
 
 		// Right-click context menu for callout blocks
 		registerContextMenu(this);
