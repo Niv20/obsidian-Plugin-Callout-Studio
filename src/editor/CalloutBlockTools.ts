@@ -330,10 +330,7 @@ export const wrapSelectionInCallout = (
 	options?: { requireSelection?: boolean },
 ): boolean => {
 	const lineCount = editor.lineCount();
-	if (
-		lineCount === 0 ||
-		(lineCount === 1 && editor.getLine(0).trim() === "")
-	) {
+	if (lineCount === 0) {
 		new Notice(t("notice.nothingToWrap"));
 		return false;
 	}
@@ -375,16 +372,10 @@ export const wrapSelectionInCallout = (
 	startLine = expandStartLine(editor, startLine, fenceBlocks, frontmatterEnd);
 	endLine = expandEndLine(editor, endLine, fenceBlocks);
 
-	if (startLine > endLine) {
-		new Notice(t("notice.selectionContainsNoContent"));
-		return false;
-	}
-
-	const firstContentLine = findFirstNonEmptyLine(editor, startLine, endLine);
-	if (firstContentLine < 0) {
-		new Notice(t("notice.selectionContainsNoContent"));
-		return false;
-	}
+	const foundContentLine = findFirstNonEmptyLine(editor, startLine, endLine);
+	// On a blank line (nothing to expand into) fall back to the cursor line and
+	// build an empty callout there, so the user can type inside it right away.
+	const firstContentLine = foundContentLine >= 0 ? foundContentLine : startLine;
 
 	const contentStartLine = firstContentLine;
 	const nestLevel = countLeadingQuoteTokens(editor.getLine(firstContentLine));
