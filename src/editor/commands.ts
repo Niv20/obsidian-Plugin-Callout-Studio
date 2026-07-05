@@ -10,6 +10,7 @@
 import type { Plugin } from "obsidian";
 import { CalloutEditor } from "../settings/CalloutEditor";
 import {
+	insertEmptyCallout,
 	unwrapCalloutAtSelection,
 	wrapSelectionInCallout,
 } from "./CalloutBlockTools";
@@ -46,6 +47,14 @@ export function registerCalloutCommands(
 		name: t("cmd.createCallout"),
 		callback: () => {
 			void openEditor().openAndWait();
+		},
+	});
+
+	plugin.addCommand({
+		id: "insert-empty-callout",
+		name: t("cmd.insertEmptyCallout"),
+		editorCallback: (editor) => {
+			insertEmptyCallout(editor);
 		},
 	});
 

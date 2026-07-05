@@ -1,6 +1,7 @@
 export const zhTW: Record<string, string> = {
 	"cmd.openSettings": "開啟設定",
 	"cmd.createCallout": "建立新的 callout 類型",
+	"cmd.insertEmptyCallout": "插入空白 callout",
 	"cmd.calloutWrap": "以 callout 包覆",
 	"cmd.calloutUnwrap": "移除 callout",
 	"autocomplete.createNew": '建立新 callout：「{{name}}」',

@@ -1,6 +1,7 @@
 export const bg: Record<string, string> = {
 	"cmd.openSettings": "Отваряне на настройките",
 	"cmd.createCallout": "Създаване на нов тип callout",
+	"cmd.insertEmptyCallout": "Вмъкване на празен callout",
 	"cmd.calloutWrap": "Обвиване в callout",
 	"cmd.calloutUnwrap": "Премахване на callout",
 	"autocomplete.createNew": 'Създаване на нов callout: "{{name}}"',

@@ -1,6 +1,7 @@
 export const ro: Record<string, string> = {
 	"cmd.openSettings": "Deschide setări",
 	"cmd.createCallout": "Creează tip callout nou",
+	"cmd.insertEmptyCallout": "Inserează callout gol",
 	"cmd.calloutWrap": "Înfășoară în callout",
 	"cmd.calloutUnwrap": "Elimină callout",
 

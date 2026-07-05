@@ -1,6 +1,7 @@
 export const ko: Record<string, string> = {
 	"cmd.openSettings": "설정 열기",
 	"cmd.createCallout": "새 callout 유형 만들기",
+	"cmd.insertEmptyCallout": "빈 callout 삽입",
 	"cmd.calloutWrap": "callout으로 감싸기",
 	"cmd.calloutUnwrap": "callout 제거",
 

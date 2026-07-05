@@ -1,6 +1,7 @@
 export const sv: Record<string, string> = {
 	"cmd.openSettings": "Öppna inställningar",
 	"cmd.createCallout": "Skapa ny callout-typ",
+	"cmd.insertEmptyCallout": "Infoga tom callout",
 	"cmd.calloutWrap": "Lägg i callout",
 	"cmd.calloutUnwrap": "Ta bort callout",
 

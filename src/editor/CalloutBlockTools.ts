@@ -417,6 +417,44 @@ export const wrapSelectionInCallout = (
 	return true;
 };
 
+export const insertEmptyCallout = (editor: Editor): boolean => {
+	const head = editor.getCursor("head");
+	const lineText = editor.getLine(head.line);
+	const nestLevel = countLeadingQuoteTokens(lineText);
+	const prefix = buildPrefix(nestLevel);
+	const header = `${prefix}> [!`;
+
+	if (isBlankCalloutLine(lineText)) {
+		// Blank line (or blank callout line): drop the header in place so the
+		// user lands right after `[!` and the type autocomplete opens.
+		editor.replaceRange(
+			header,
+			{ line: head.line, ch: 0 },
+			{ line: head.line, ch: lineText.length },
+		);
+		editor.setCursor({ line: head.line, ch: header.length });
+		return true;
+	}
+
+	// Line has content: append the callout below, separated by a blank line so
+	// it renders as its own block. The separator keeps the current quote depth
+	// when inserting inside an existing blockquote/callout. Guard the trailing
+	// side too when the next line has content — otherwise it would be swallowed
+	// into the empty callout as a lazy blockquote continuation.
+	const separator = nestLevel > 0 ? prefix.trimEnd() : "";
+	const nextLine = head.line + 1;
+	const nextHasContent =
+		nextLine < editor.lineCount() &&
+		editor.getLine(nextLine).trim() !== "";
+	const trailing = nextHasContent ? `\n${separator}` : "";
+	const lineEnd = { line: head.line, ch: lineText.length };
+	editor.replaceRange(`\n${separator}\n${header}${trailing}`, lineEnd);
+	const headerLine = head.line + 2;
+	editor.setCursor({ line: headerLine, ch: header.length });
+
+	return true;
+};
+
 export const unwrapCalloutAtSelection = (editor: Editor): boolean => {
 	const { head, startLine } = getOrderedCursorLines(editor);
 	const currentLine = hasSelection(editor) ? startLine : head.line;

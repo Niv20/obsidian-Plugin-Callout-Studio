@@ -1,6 +1,7 @@
 export const cs: Record<string, string> = {
 	"cmd.openSettings": "Otevřít nastavení",
 	"cmd.createCallout": "Vytvořit nový typ callout",
+	"cmd.insertEmptyCallout": "Vložit prázdný callout",
 	"cmd.calloutWrap": "Zabalit do callout",
 	"cmd.calloutUnwrap": "Odebrat callout",
 

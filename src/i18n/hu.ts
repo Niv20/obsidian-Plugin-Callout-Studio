@@ -1,6 +1,7 @@
 export const hu: Record<string, string> = {
 	"cmd.openSettings": "Beállítások megnyitása",
 	"cmd.createCallout": "Új callout-típus létrehozása",
+	"cmd.insertEmptyCallout": "Üres callout beszúrása",
 	"cmd.calloutWrap": "Callout-ba csomagolás",
 	"cmd.calloutUnwrap": "Callout eltávolítása",
 

@@ -1,6 +1,7 @@
 export const ms: Record<string, string> = {
 	"cmd.openSettings": "Buka tetapan",
 	"cmd.createCallout": "Cipta jenis callout baharu",
+	"cmd.insertEmptyCallout": "Masukkan callout kosong",
 	"cmd.calloutWrap": "Balut dalam callout",
 	"cmd.calloutUnwrap": "Buang callout",
 	"autocomplete.createNew": 'Cipta callout baharu: "{{name}}"',

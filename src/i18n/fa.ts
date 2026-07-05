@@ -1,6 +1,7 @@
 export const fa: Record<string, string> = {
 	"cmd.openSettings": "باز کردن تنظیمات",
 	"cmd.createCallout": "ایجاد نوع callout جدید",
+	"cmd.insertEmptyCallout": "درج callout خالی",
 	"cmd.calloutWrap": "پیچیدن در callout",
 	"cmd.calloutUnwrap": "حذف callout",
 

@@ -1,6 +1,7 @@
 export const vi: Record<string, string> = {
 	"cmd.openSettings": "Mở cài đặt",
 	"cmd.createCallout": "Tạo loại callout mới",
+	"cmd.insertEmptyCallout": "Chèn callout trống",
 	"cmd.calloutWrap": "Bọc trong callout",
 	"cmd.calloutUnwrap": "Bỏ callout",
 

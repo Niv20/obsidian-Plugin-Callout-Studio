@@ -1,6 +1,7 @@
 export const th: Record<string, string> = {
 	"cmd.openSettings": "เปิดการตั้งค่า",
 	"cmd.createCallout": "สร้างประเภท callout ใหม่",
+	"cmd.insertEmptyCallout": "แทรก callout ว่าง",
 	"cmd.calloutWrap": "ห่อใน callout",
 	"cmd.calloutUnwrap": "นำ callout ออก",
 

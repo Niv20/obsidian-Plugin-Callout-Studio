@@ -1,6 +1,7 @@
 export const nl: Record<string, string> = {
 	"cmd.openSettings": "Instellingen openen",
 	"cmd.createCallout": "Nieuw callout-type aanmaken",
+	"cmd.insertEmptyCallout": "Lege callout invoegen",
 	"cmd.calloutWrap": "In callout inpakken",
 	"cmd.calloutUnwrap": "Callout verwijderen",
 

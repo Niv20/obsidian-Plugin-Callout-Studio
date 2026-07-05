@@ -1,6 +1,7 @@
 export const ar: Record<string, string> = {
 	"cmd.openSettings": "فتح الإعدادات",
 	"cmd.createCallout": "إنشاء نوع callout جديد",
+	"cmd.insertEmptyCallout": "إدراج callout فارغ",
 	"cmd.calloutWrap": "التفاف في callout",
 	"cmd.calloutUnwrap": "إزالة callout",
 

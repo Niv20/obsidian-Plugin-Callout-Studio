@@ -1,6 +1,7 @@
 export const zh: Record<string, string> = {
 	"cmd.openSettings": "打开设置",
 	"cmd.createCallout": "创建新的 callout 类型",
+	"cmd.insertEmptyCallout": "插入空 callout",
 	"cmd.calloutWrap": "用 callout 包裹",
 	"cmd.calloutUnwrap": "从 callout 中解包",
 

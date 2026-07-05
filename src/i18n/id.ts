@@ -1,6 +1,7 @@
 export const id: Record<string, string> = {
 	"cmd.openSettings": "Buka pengaturan",
 	"cmd.createCallout": "Buat tipe callout baru",
+	"cmd.insertEmptyCallout": "Sisipkan callout kosong",
 	"cmd.calloutWrap": "Bungkus dalam callout",
 	"cmd.calloutUnwrap": "Hapus callout",
 

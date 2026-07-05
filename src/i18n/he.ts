@@ -9,6 +9,7 @@ export const he: Record<string, string> = {
 	// Commands
 	"cmd.openSettings": "פתיחת הגדרות",
 	"cmd.createCallout": "יצירת סוג תיבת־הבלטה חדש",
+	"cmd.insertEmptyCallout": "הוספת callout ריק",
 	"cmd.calloutWrap": "עטיפה ב־callout",
 	"cmd.calloutUnwrap": "חילוץ מתוך callout",
 

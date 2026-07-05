@@ -9,6 +9,7 @@ export const en: Record<string, string> = {
 	// Commands
 	"cmd.openSettings": "Open settings",
 	"cmd.createCallout": "Create new callout type",
+	"cmd.insertEmptyCallout": "Insert empty callout",
 	"cmd.calloutWrap": "Wrap in callout",
 	"cmd.calloutUnwrap": "Unwrap from callout",
 

@@ -1,6 +1,7 @@
 export const tr: Record<string, string> = {
 	"cmd.openSettings": "Ayarları aç",
 	"cmd.createCallout": "Yeni callout türü oluştur",
+	"cmd.insertEmptyCallout": "Boş callout ekle",
 	"cmd.calloutWrap": "Callout'a sar",
 	"cmd.calloutUnwrap": "Callout'u kaldır",
 

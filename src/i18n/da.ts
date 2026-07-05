@@ -1,6 +1,7 @@
 export const da: Record<string, string> = {
 	"cmd.openSettings": "Åbn indstillinger",
 	"cmd.createCallout": "Opret ny callout-type",
+	"cmd.insertEmptyCallout": "Indsæt tom callout",
 	"cmd.calloutWrap": "Indpak i callout",
 	"cmd.calloutUnwrap": "Fjern callout",
 	"autocomplete.createNew": 'Opret ny callout: "{{name}}"',

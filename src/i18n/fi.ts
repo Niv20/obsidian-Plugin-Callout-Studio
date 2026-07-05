@@ -1,6 +1,7 @@
 export const fi: Record<string, string> = {
 	"cmd.openSettings": "Avaa asetukset",
 	"cmd.createCallout": "Luo uusi callout-tyyppi",
+	"cmd.insertEmptyCallout": "Lisää tyhjä callout",
 	"cmd.calloutWrap": "Kääri calloutiin",
 	"cmd.calloutUnwrap": "Poista callout",
 	"autocomplete.createNew": 'Luo uusi callout: "{{name}}"',

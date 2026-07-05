@@ -1,6 +1,7 @@
 export const el: Record<string, string> = {
 	"cmd.openSettings": "Άνοιγμα ρυθμίσεων",
 	"cmd.createCallout": "Δημιουργία νέου τύπου callout",
+	"cmd.insertEmptyCallout": "Εισαγωγή κενού callout",
 	"cmd.calloutWrap": "Αναδίπλωση σε callout",
 	"cmd.calloutUnwrap": "Αφαίρεση callout",
 	"autocomplete.createNew": 'Δημιουργία νέου callout: "{{name}}"',

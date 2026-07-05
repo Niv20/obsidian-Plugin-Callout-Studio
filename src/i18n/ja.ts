@@ -1,6 +1,7 @@
 export const ja: Record<string, string> = {
 	"cmd.openSettings": "設定を開く",
 	"cmd.createCallout": "新しいcalloutタイプを作成",
+	"cmd.insertEmptyCallout": "空のcalloutを挿入",
 	"cmd.calloutWrap": "calloutで囲む",
 	"cmd.calloutUnwrap": "calloutを解除",
 

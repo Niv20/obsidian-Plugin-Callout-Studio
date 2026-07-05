@@ -1,6 +1,7 @@
 export const uk: Record<string, string> = {
 	"cmd.openSettings": "Відкрити налаштування",
 	"cmd.createCallout": "Створити новий тип callout",
+	"cmd.insertEmptyCallout": "Вставити порожній callout",
 	"cmd.calloutWrap": "Обгорнути в callout",
 	"cmd.calloutUnwrap": "Видалити callout",
 
