@@ -1811,56 +1811,6 @@ button.callout-studio-icon-picker-loading {
 	}
 }
 
-/* ─── Material SVG Cache Modal ──────────────────────────────── */
-
-.callout-studio-cache-modal .modal-content {
-	max-height: 60vh;
-	overflow-y: auto;
-}
-
-.callout-studio-cache-grid {
-	display: grid;
-	grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
-	gap: 8px;
-}
-
-.callout-studio-cache-cell {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	gap: 4px;
-	padding: 8px 4px;
-	border-radius: 6px;
-	background: var(--background-primary);
-	border: 1px solid var(--background-modifier-border);
-}
-
-.callout-studio-cache-icon {
-	width: 24px;
-	height: 24px;
-}
-
-.callout-studio-cache-icon svg {
-	width: 24px;
-	height: 24px;
-}
-
-.callout-studio-cache-label {
-	font-size: var(--font-smallest);
-	font-weight: 500;
-	text-align: center;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	white-space: nowrap;
-	max-width: 100%;
-}
-
-.callout-studio-cache-meta {
-	font-size: 10px;
-	color: var(--text-muted);
-	text-align: center;
-}
-
 /* ─── Icon Picker Weight Select ─────────────────────────────── */
 
 .icon-picker-weight-select {

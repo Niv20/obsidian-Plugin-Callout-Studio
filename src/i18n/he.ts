@@ -67,9 +67,6 @@ export const he: Record<string, string> = {
 	"settings.languageDesc":
 		"שפת התצוגה של Callout Studio. ברירת־המחדל היא שפת הממשק של Obsidian.",
 	"settings.languageAuto": "אוטומטי (לפי Obsidian)",
-	"settings.iconSources": "אייקוני Google Material",
-	"settings.iconSourcesDesc":
-		"שמות אייקוני Material ותגיות החיפוש כלולים בתוסף וזמינים ללא חיבור לאינטרנט. משיכת גופנים מ־Google וקובצי SVG נטענים רק בעת הצגה או בחירה של אייקון Material, שלאחריו ה־SVG נשמר מקומית. שום מידע לא נשלח ל־Google.",
 	"settings.colorMode": "מצב צבע",
 	"settings.importExport": "ייבוא / ייצוא",
 	"settings.import": "ייבוא",
@@ -160,31 +157,6 @@ export const he: Record<string, string> = {
 	"settings.openHotkeysDesc":
 		"פתיחת מסך קיצורי המקלדת של Obsidian עבור פקודות Callout Studio, שם תוכלו לבחור קיצורים ליצירת סוג חדש, פתיחת הגדרות, עטיפה בתוך או חילוץ מתיבת־הבלטה. כברירת־מחדל, לא מוגדרים קיצורי מקלדת.",
 	"settings.openHotkeysButton": "פתיחת הגדרות",
-
-	// Settings — Icon sources
-	"settings.lucideIcons": "אייקוני Lucide",
-	"settings.lucideIconsDesc":
-		"אייקונים מובנים של Obsidian (כ־1,300 אייקונים)",
-	"settings.materialIcons": "אייקוני Google Material",
-	"settings.materialIconsDesc":
-		"מצריך חיבור לאינטרנט או מטמון מקומי (כ־3,000 אייקונים)",
-	"settings.materialStyleDefault": "סגנון ברירת־מחדל לאייקוני Material",
-	"settings.styleOutlined": "קו־מתאר (Outlined)",
-	"settings.styleFilled": "מלא (Filled)",
-	"settings.styleRounded": "מעוגל (Rounded)",
-	"settings.styleSharp": "חד (Sharp)",
-	"settings.materialWeightDefault": "משקל ברירת־מחדל לאייקוני Material",
-	"settings.materialWeightDefaultDesc":
-		"עובי הקו של אייקוני Material (100 = דק, 700 = עבה)",
-	"settings.materialCache": "מטמון אייקוני Material (Cache)",
-	"settings.materialCacheDesc":
-		"קובצי SVG בודדים של אייקוני Material מורדים ברגע שבוחרים בהם עבור תיבת־הבלטה, כדי שיעבדו גם ללא חיבור לאינטרנט ובעת ייצוא ל־PDF.",
-	"settings.svgCache": "קובצי SVG שהורדו",
-	"settings.svgCacheInfo": "{{count}} אייקונים · {{size}}",
-	"settings.svgCacheEmpty": "אין עדיין אייקוני SVG של Material במטמון.",
-	"settings.clearSvgCache": "ניקוי",
-	"settings.viewCachedSvgs": "צפייה",
-	"settings.cachedSvgsTitle": "אייקוני Material שמורים",
 
 	"settings.colorFormat": "פורמט צבע",
 

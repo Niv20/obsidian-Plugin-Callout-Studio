@@ -13,7 +13,6 @@ import type { App } from "obsidian";
 import { CalloutEditor } from "./CalloutEditor";
 import { scanStringForUnknownCallouts } from "../utils/vaultCalloutScanner";
 import { renderHotkeySection } from "./sections/HotkeySection";
-import { renderIconSourceSection } from "./sections/IconSourceSection";
 import { renderFooterSection } from "./sections/FooterSection";
 import {
 	renderImportExportSection,
@@ -144,7 +143,6 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 		renderAutocompleteSettingsSection(sectionCtx, containerEl);
 		renderContextMenuSettingsSection(sectionCtx, containerEl);
 		renderHotkeySection(sectionCtx, containerEl);
-		renderIconSourceSection(sectionCtx, containerEl);
 		renderImportExportSection(sectionCtx, containerEl);
 		renderLanguageSection(sectionCtx, containerEl);
 		renderResetSection(sectionCtx, containerEl);

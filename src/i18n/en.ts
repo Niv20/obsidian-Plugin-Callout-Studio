@@ -68,9 +68,6 @@ export const en: Record<string, string> = {
 	"settings.languageDesc":
 		"Display language for Callout Studio. Defaults to Obsidian's interface language.",
 	"settings.languageAuto": "Automatic (match Obsidian)",
-	"settings.iconSources": "Google Material icons",
-	"settings.iconSourcesDesc":
-		"Material icon names and search tags are bundled for offline browsing. Google Fonts and SVG files (fonts.googleapis.com, fonts.gstatic.com) are loaded only when you preview or pick a Material icon, then selected SVGs are cached locally. No data is sent to Google.",
 	"settings.colorMode": "Color mode",
 	"settings.importExport": "Import / export",
 	"settings.import": "Import",
@@ -162,30 +159,6 @@ export const en: Record<string, string> = {
 	"settings.openHotkeysDesc":
 		"Open Obsidian's hotkeys settings for Callout Studio commands, where you can choose your own shortcuts for Create new callout type, Open settings, Unwrap from callout, and Wrap in callout. No shortcuts are assigned by default.",
 	"settings.openHotkeysButton": "Open hotkey settings",
-
-	// Settings — Icon sources
-	"settings.lucideIcons": "Lucide icons",
-	"settings.lucideIconsDesc": "Built-in Obsidian icons (~1,300 icons)",
-	"settings.materialIcons": "Google Material icons",
-	"settings.materialIconsDesc":
-		"Requires internet or local cache (~3,000 icons)",
-	"settings.materialStyleDefault": "Material icons style default",
-	"settings.styleOutlined": "Outlined",
-	"settings.styleFilled": "Filled",
-	"settings.styleRounded": "Rounded",
-	"settings.styleSharp": "Sharp",
-	"settings.materialWeightDefault": "Material icons weight default",
-	"settings.materialWeightDefaultDesc":
-		"Stroke thickness for Material icons (100 = thin, 700 = bold)",
-	"settings.materialCache": "Material icon cache",
-	"settings.materialCacheDesc":
-		"Individual Material icon SVGs are downloaded when you select one for a callout, so they work offline and in PDF export.",
-	"settings.svgCache": "Downloaded SVGs",
-	"settings.svgCacheInfo": "{{count}} icons · {{size}}",
-	"settings.svgCacheEmpty": "No Material SVGs cached yet.",
-	"settings.clearSvgCache": "Clear",
-	"settings.viewCachedSvgs": "View",
-	"settings.cachedSvgsTitle": "Cached Material SVGs",
 
 	"settings.colorFormat": "Color format",
 
