@@ -985,6 +985,11 @@ button.callout-studio-icon-picker-loading {
 	white-space: nowrap;
 }
 
+/* Characters around the matched run of an id/alias fade out. */
+.callout-studio-suggestion-id-dim {
+	color: var(--text-faint);
+}
+
 /* ─── Icon Picker Modal ──────────────────────────────────────── */
 
 .callout-studio-icon-picker .modal-content {
