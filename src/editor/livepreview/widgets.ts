@@ -7,6 +7,7 @@
  */
 import { WidgetType } from "@codemirror/view";
 import type { EditorView } from "@codemirror/view";
+import { EditorSelection } from "@codemirror/state";
 import type { CalloutRegistry } from "../../manager/CalloutRegistry";
 import { buildCalloutTokenDom, resolveCalloutDef } from "../renderShared";
 
@@ -61,12 +62,35 @@ export class CalloutTokenWidget extends WidgetType {
 	}
 
 	override toDOM(view: EditorView): HTMLElement {
-		return buildCalloutTokenDom(view.dom.ownerDocument, {
+		const el = buildCalloutTokenDom(view.dom.ownerDocument, {
 			rawId: this.rawId,
 			registry: this.registry,
 			variant: this.variant,
 			showName: this.showName,
 		});
+		// Inline pills give no editing feedback on click. Left-clicking one
+		// drops the caret just before the id's first char (right after `[!`),
+		// which reveals the raw `[!id]` — the decoration is skipped while the
+		// selection touches the token. Heading tokens already show a caret
+		// from the line click, so they keep the default behavior.
+		if (this.variant === "inline") {
+			el.addEventListener("mousedown", (evt) => {
+				if (evt.button !== 0) return; // left click only; right-click → context menu
+				evt.preventDefault(); // take over focus/selection ourselves
+				// posAtDOM may resolve to either edge of the replaced range;
+				// normalize to the `[` that opens `[!id]` before offsetting.
+				const pos = view.posAtDOM(el);
+				const doc = view.state.doc;
+				const tokenLen = this.rawId.length + 3; // `[!` + id + `]`
+				const from =
+					doc.sliceString(pos, pos + 2) === "[!"
+						? pos
+						: pos - tokenLen;
+				view.dispatch({ selection: EditorSelection.cursor(from + 2) });
+				view.focus();
+			});
+		}
+		return el;
 	}
 
 	override ignoreEvent(): boolean {

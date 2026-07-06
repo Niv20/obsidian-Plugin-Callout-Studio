@@ -2155,6 +2155,8 @@ button.callout-studio-icon-picker-loading {
 	background-color: rgba(var(--cs-color-rgb, 68, 138, 255), 0.12);
 	font-weight: var(--font-medium, 500);
 	white-space: nowrap;
+	/* Hint that clicking the pill drops the caret into the id for editing. */
+	cursor: text;
 	/* Keep the pill visually stable inside RTL paragraphs. */
 	unicode-bidi: isolate;
 }
