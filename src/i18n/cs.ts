@@ -213,6 +213,8 @@ export const cs: Record<string, string> = {
 	"editor.idConflict": "Toto ID je v konfliktu s existujícím callout",
 	"editor.untitledCallout": "Callout bez názvu",
 	"editor.loremIpsum": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+	"editor.sampleInlineText": "Zde je vložená pilulka [!{id}] uvnitř odstavce.",
+	"editor.previewReadOnly": "Živý náhled nelze upravovat",
 
 	"iconPicker.pickIcon": "Vybrat ikonu",
 	"iconPicker.confirm": "Potvrdit",

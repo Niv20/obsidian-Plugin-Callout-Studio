@@ -213,6 +213,8 @@ export const ko: Record<string, string> = {
 	"editor.idConflict": "이 ID는 기존 callout과 충돌합니다",
 	"editor.untitledCallout": "제목 없는 Callout",
 	"editor.loremIpsum": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+	"editor.sampleInlineText": "다음은 단락 안에 있는 인라인 [!{id}] 필입니다.",
+	"editor.previewReadOnly": "실시간 미리보기는 편집할 수 없습니다",
 
 	"iconPicker.pickIcon": "아이콘 선택",
 	"iconPicker.confirm": "확인",

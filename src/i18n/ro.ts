@@ -213,6 +213,8 @@ export const ro: Record<string, string> = {
 	"editor.idConflict": "Acest ID intră în conflict cu un callout existent",
 	"editor.untitledCallout": "Callout fără titlu",
 	"editor.loremIpsum": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+	"editor.sampleInlineText": "Iată o pastilă [!{id}] inline în interiorul unui paragraf.",
+	"editor.previewReadOnly": "Previzualizarea live nu poate fi editată",
 
 	"iconPicker.pickIcon": "Alegeți o pictogramă",
 	"iconPicker.confirm": "Confirmare",

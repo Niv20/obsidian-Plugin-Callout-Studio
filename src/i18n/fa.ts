@@ -213,6 +213,8 @@ export const fa: Record<string, string> = {
 	"editor.idConflict": "این شناسه با یک callout موجود تعارض دارد",
 	"editor.untitledCallout": "Callout بدون عنوان",
 	"editor.loremIpsum": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+	"editor.sampleInlineText": "در اینجا یک قرص [!{id}] درون‌خطی در داخل یک پاراگراف وجود دارد.",
+	"editor.previewReadOnly": "پیش‌نمایش زنده قابل ویرایش نیست",
 
 	"iconPicker.pickIcon": "انتخاب آیکون",
 	"iconPicker.confirm": "تأیید",

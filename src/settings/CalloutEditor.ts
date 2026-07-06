@@ -3,14 +3,15 @@
  *
  * The main user-facing form: lets the user set a display name, ID/aliases,
  * icon, accent color, background color, text color, fold behavior, and icon
- * positioning. Opens the IconPicker for icon selection and renders a live
- * preview via CalloutEditorPreview. Save logic is delegated to
+ * positioning. Opens the IconPicker for icon selection and renders an editable,
+ * real-Obsidian live preview via LiveCalloutPreview. Save logic is delegated to
  * CalloutEditorSave; validation to CalloutEditorValidation.
  */
 import { Modal, Notice, Setting, SliderComponent } from "obsidian";
 import type { CalloutDefinition, CalloutIcon } from "../types";
 import { IconPicker } from "./IconPicker";
-import { renderEditorPreview } from "./CalloutEditorPreview";
+import { LiveCalloutPreview } from "./LiveCalloutPreview";
+import { PREVIEW_PLACEHOLDER_ID } from "../constants";
 import { blendHex } from "../utils/colorUtils";
 import {
 	COLOR_PALETTES,
@@ -67,8 +68,7 @@ export class CalloutEditor extends Modal {
 	private iconOffsetY: number;
 	private iconSize: number;
 	private aliases: string[];
-	private previewEl: HTMLElement | null = null;
-	private previewDarkMode = false;
+	private preview: LiveCalloutPreview | null = null;
 	private previewFoldCollapsed = false;
 	private idsTagInput: TagInput | null = null;
 	private hasHadCalloutId = false;
@@ -295,53 +295,26 @@ export class CalloutEditor extends Modal {
 			cls: "callout-studio-preview-panel",
 		});
 
-		// Left column: Live Preview
+		// Left column: single, real-Obsidian rendered preview.
 		const previewCol = previewPanel.createDiv({
 			cls: "callout-studio-preview-col",
 		});
-		const previewContainer = previewCol.createDiv({
-			cls: "callout-studio-preview-container",
+		this.preview = new LiveCalloutPreview(this.app, previewCol, {
+			title: t("editor.livePreview"),
+			initialText: this.buildSampleText(),
+			// Push the in-progress edit into the registry under the reserved
+			// preview ID and re-inject CSS so colours/icons render live.
+			beforeRender: () => {
+				this.plugin.registry.setPreviewDefinition(
+					this.buildPreviewDefinition(),
+				);
+				this.plugin.cssInjector.inject(false);
+			},
+			onDestroy: () => {
+				this.plugin.registry.setPreviewDefinition(null);
+				this.plugin.cssInjector.inject(false);
+			},
 		});
-		const previewHeader = previewContainer.createDiv({
-			cls: "callout-studio-preview-header",
-		});
-		previewHeader.createSpan({ text: t("editor.livePreview") });
-
-		// Segmented Light/Dark toggle — initial state matches current theme.
-		this.previewDarkMode =
-			activeDocument.body.classList.contains("theme-dark");
-		const segmented = previewHeader.createDiv({
-			cls: "callout-studio-segmented-toggle",
-		});
-		const lightBtn = segmented.createEl("button", {
-			cls:
-				"callout-studio-seg-btn" +
-				(this.previewDarkMode ? "" : " is-active"),
-			text: t("editor.light"),
-		});
-		const darkBtn = segmented.createEl("button", {
-			cls:
-				"callout-studio-seg-btn" +
-				(this.previewDarkMode ? " is-active" : ""),
-			text: t("editor.dark"),
-		});
-		lightBtn.addEventListener("click", () => {
-			this.previewDarkMode = false;
-			lightBtn.addClass("is-active");
-			darkBtn.removeClass("is-active");
-			this.updatePreview();
-		});
-		darkBtn.addEventListener("click", () => {
-			this.previewDarkMode = true;
-			darkBtn.addClass("is-active");
-			lightBtn.removeClass("is-active");
-			this.updatePreview();
-		});
-
-		this.previewEl = previewContainer.createDiv({
-			cls: "callout-studio-preview",
-		});
-		this.updatePreview();
 
 		// Right column: Adjustments
 		const adjustCol = previewPanel.createDiv({
@@ -1239,35 +1212,66 @@ export class CalloutEditor extends Modal {
 	}
 
 	private updatePreview(): void {
-		if (!this.previewEl) return;
-		renderEditorPreview(
-			this.previewEl,
-			{
-				previewDarkMode: this.previewDarkMode,
-				colorLight: this.colorLight,
-				colorDark: this.colorDark,
-				bgColorLight: this.bgColorLight,
-				bgColorDark: this.bgColorDark,
-				textColorLight: this.textColorLight,
-				textColorDark: this.textColorDark,
-				displayName: this.displayName,
-				foldable: this.foldable,
-				previewFoldCollapsed: this.previewFoldCollapsed,
-				iconOffsetX: this.iconOffsetX,
-				iconOffsetY: this.iconOffsetY,
-				iconSize: this.iconSize,
-				iconType: this.icon.type,
-			},
-			(iconEl) => this.renderIconPreview(iconEl),
-			() => {
-				this.previewFoldCollapsed = !this.previewFoldCollapsed;
-				this.updatePreview();
-			},
-		);
+		if (!this.preview) return;
+		// Keep the sample's titles tracking the display-name field.
+		this.preview.setText(this.buildSampleText());
+		this.preview.refresh();
 		this.updateSaveState();
 	}
 
+	/**
+	 * The callout ID the live preview should render under: the real primary ID
+	 * being edited, or a readable placeholder while it is still empty (a brand-new
+	 * callout before the user types a name).
+	 */
+	private currentPreviewId(): string {
+		return this.calloutId.trim() || PREVIEW_PLACEHOLDER_ID;
+	}
+
+	/** The sample markdown seeding the preview: all three roles. */
+	private buildSampleText(): string {
+		const id = this.currentPreviewId();
+		const name = this.displayName.trim() || t("editor.untitledCallout");
+		// Reflect the fold setting so a folded default previews collapsed.
+		const mark = this.foldable ? (this.defaultFolded ? "-" : "+") : "";
+		return [
+			`> [!${id}]${mark} ${name}`,
+			`> ${t("editor.loremIpsum")}`,
+			"",
+			`## [!${id}]${mark} ${name}`,
+			"",
+			t("editor.sampleInlineText").replace("{id}", id),
+		].join("\n");
+	}
+
+	/** Snapshot the current form state as a transient preview definition. */
+	private buildPreviewDefinition(): CalloutDefinition {
+		return {
+			id: this.currentPreviewId(),
+			displayName: this.displayName.trim() || t("editor.untitledCallout"),
+			icon: { ...this.icon },
+			colorLight: this.colorLight,
+			colorDark: this.colorDark,
+			bgColorLight: this.bgColorLight,
+			bgColorDark: this.bgColorDark,
+			textColorLight: this.textColorLight,
+			textColorDark: this.textColorDark,
+			foldable: this.foldable,
+			defaultFolded: this.defaultFolded,
+			iconOffsetX: this.iconOffsetX,
+			iconOffsetY: this.iconOffsetY,
+			iconSize: this.iconSize,
+			aliases: [],
+			builtIn: false,
+			source: "user",
+		};
+	}
+
 	private async save(): Promise<void> {
+		// Clear the transient preview registration first, restoring any real
+		// callout it was shadowing, so the save flow mutates the real definition
+		// (not the in-progress preview) and onClose can't later revert the save.
+		this.plugin.registry.setPreviewDefinition(null);
 		const def = await performCalloutEditorSave({
 			app: this.app,
 			plugin: this.plugin,
@@ -1307,6 +1311,10 @@ export class CalloutEditor extends Modal {
 		if (!def) {
 			this.updateIdWarning();
 			this.updateSaveState();
+			// Save was rejected and the modal stays open — re-register the
+			// transient preview definition (cleared above) so the live preview
+			// keeps showing the in-progress style.
+			this.updatePreview();
 			return;
 		}
 
@@ -1316,6 +1324,8 @@ export class CalloutEditor extends Modal {
 	}
 
 	onClose(): void {
+		this.preview?.destroy();
+		this.preview = null;
 		this.removePopupOutsideClickListener?.();
 		this.removePopupOutsideClickListener = null;
 		if (this.resolve) {

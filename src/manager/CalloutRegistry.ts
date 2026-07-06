@@ -153,6 +153,20 @@ export class CalloutRegistry {
 	settings: PluginSettings;
 	materialSvgCache: MaterialSvgCacheEntry[] = [];
 
+	/**
+	 * The callout ID currently occupied by the transient settings-preview
+	 * definition (see {@link setPreviewDefinition}), or null when no preview is
+	 * active. The preview registers under the *real* ID being edited so the live
+	 * preview renders `> [!<real-id>]` with the in-progress style.
+	 */
+	private previewActiveId: string | null = null;
+	/**
+	 * When the preview ID collides with an existing real callout (editing an
+	 * existing type), the original definition we shadowed — restored when the
+	 * preview clears so the real callout is never lost.
+	 */
+	private previewShadowedDef: CalloutDefinition | null = null;
+
 	constructor() {
 		this.settings = structuredClone(DEFAULT_SETTINGS);
 		for (const def of SORTED_DEFAULT_CALLOUTS) {
@@ -212,7 +226,16 @@ export class CalloutRegistry {
 	toSaveData(): PluginData {
 		const calloutsToSave: CalloutDefinition[] = [];
 
-		for (const [id, def] of this.callouts) {
+		for (const [id, entry] of this.callouts) {
+			// The transient settings-preview definition is never persisted. When
+			// it shadows a real callout (editing an existing type), persist the
+			// original we shadowed instead so a background save mid-edit can't
+			// drop the real definition or leak the in-progress preview.
+			let def = entry;
+			if (id === this.previewActiveId) {
+				if (!this.previewShadowedDef) continue;
+				def = this.previewShadowedDef;
+			}
 			if (def.builtIn) {
 				// Only save built-in if it was modified from default
 				const original = this.builtInDefaults.get(id);
@@ -423,6 +446,46 @@ export class CalloutRegistry {
 			if (def.aliases && def.aliases.includes(alias)) return def;
 		}
 		return undefined;
+	}
+
+	/**
+	 * Register (or clear, with `null`) the transient live-preview definition
+	 * under its own `def.id` — the *real* callout ID being edited — so the
+	 * settings live preview renders `> [!<real-id>]` with the in-progress style
+	 * through the real pipeline (CSS + reading post-processors).
+	 *
+	 * Bookkeeping keeps this safe:
+	 * - The previous transient entry is always undone first (restoring any
+	 *   shadowed real callout), so rapid ID changes while typing a name leave no
+	 *   orphan rows.
+	 * - If the new ID collides with a real callout, the original is remembered in
+	 *   {@link previewShadowedDef} and restored on clear.
+	 * - {@link toSaveData} skips (or substitutes the shadowed original for) the
+	 *   active preview ID, so the in-progress edit can never reach disk.
+	 *
+	 * Deliberately does NOT call `notifyChange()`: that would trigger the
+	 * `onChange` → `saveSettings` write and force every open note to re-render.
+	 * The caller instead requests a targeted `cssInjector.inject(false)`.
+	 */
+	setPreviewDefinition(def: CalloutDefinition | null): void {
+		// Undo the previous transient registration first, restoring any real
+		// callout it shadowed.
+		if (this.previewActiveId !== null) {
+			if (this.previewShadowedDef) {
+				this.callouts.set(this.previewActiveId, this.previewShadowedDef);
+			} else {
+				this.callouts.delete(this.previewActiveId);
+			}
+			this.previewActiveId = null;
+			this.previewShadowedDef = null;
+		}
+
+		if (def) {
+			const existing = this.callouts.get(def.id);
+			this.previewShadowedDef = existing ?? null;
+			this.previewActiveId = def.id;
+			this.callouts.set(def.id, def);
+		}
 	}
 
 	// ── Material SVG cache ───────────────────────────────────

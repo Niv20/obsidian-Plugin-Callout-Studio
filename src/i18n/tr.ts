@@ -213,6 +213,8 @@ export const tr: Record<string, string> = {
 	"editor.idConflict": "Bu ID mevcut bir callout ile çakışıyor",
 	"editor.untitledCallout": "Başlıksız Callout",
 	"editor.loremIpsum": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+	"editor.sampleInlineText": "İşte bir paragraf içinde satır içi bir [!{id}] hapı.",
+	"editor.previewReadOnly": "Canlı önizleme düzenlenemez",
 
 	"iconPicker.pickIcon": "Simge seç",
 	"iconPicker.confirm": "Onayla",

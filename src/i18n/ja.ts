@@ -213,6 +213,8 @@ export const ja: Record<string, string> = {
 	"editor.idConflict": "このIDは既存のcalloutと競合します",
 	"editor.untitledCallout": "タイトルなしCallout",
 	"editor.loremIpsum": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+	"editor.sampleInlineText": "段落内にインラインの [!{id}] ピルがあります。",
+	"editor.previewReadOnly": "ライブプレビューは編集できません",
 
 	"iconPicker.pickIcon": "アイコンを選択",
 	"iconPicker.confirm": "確認",

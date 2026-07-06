@@ -26,6 +26,15 @@ export const MAX_TAG_LENGTH: number = 200;
 export const MAX_TAGS_COUNT: number = 4;
 
 /**
+ * Placeholder callout ID shown in the settings live preview only while the
+ * callout being created has no ID yet (empty name). Once the user types a name,
+ * the preview switches to the real ID being edited. Kept as a readable word so
+ * that, on the rare empty-state moment, the preview reads as an intentional
+ * example rather than an internal marker.
+ */
+export const PREVIEW_PLACEHOLDER_ID = "example";
+
+/**
  * First-run vault-scan threshold (number of markdown files).
  *
  * On the very first plugin install:

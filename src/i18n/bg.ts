@@ -195,6 +195,8 @@ export const bg: Record<string, string> = {
 	"editor.idConflict": "Това ID е в конфликт с вече съществуващ callout",
 	"editor.untitledCallout": "Callout без заглавие",
 	"editor.loremIpsum": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+	"editor.sampleInlineText": "Ето вградена [!{id}] капсула вътре в абзац.",
+	"editor.previewReadOnly": "Прегледът на живо не може да се редактира",
 	"iconPicker.pickIcon": "Избор на икона",
 	"iconPicker.confirm": "Потвърждаване",
 	"iconPicker.cancel": "Отказ",

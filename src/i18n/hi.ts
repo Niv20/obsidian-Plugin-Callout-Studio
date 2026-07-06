@@ -213,6 +213,8 @@ export const hi: Record<string, string> = {
 	"editor.idConflict": "यह ID किसी मौजूदा callout से टकराती है",
 	"editor.untitledCallout": "बिना शीर्षक Callout",
 	"editor.loremIpsum": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+	"editor.sampleInlineText": "यहाँ एक पैराग्राफ के भीतर एक इनलाइन [!{id}] पिल है।",
+	"editor.previewReadOnly": "लाइव पूर्वावलोकन संपादित नहीं किया जा सकता",
 
 	"iconPicker.pickIcon": "आइकन चुनें",
 	"iconPicker.confirm": "पुष्टि करें",

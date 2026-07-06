@@ -327,57 +327,48 @@
 	font-weight: var(--font-semibold);
 }
 
-/* Segmented Light/Dark toggle */
-.callout-studio-segmented-toggle {
-	display: inline-flex;
-	gap: 6px;
-}
+/* ─── Live callout preview (LiveCalloutPreview) ───────────────── */
 
-.callout-studio-seg-btn {
-	font-size: var(--font-ui-smaller);
-	padding: 2px 12px;
-	min-height: 24px;
-	border: 1px solid var(--background-modifier-border);
+/* Frame ONLY. The preview hosts a real embedded Obsidian editor (or, as a
+   fallback, a static render); its content is rendered by Obsidian + the injected
+   CSS exactly like a note, so this card sets nothing that affects content
+   rendering (no colours, fonts, or callout padding) — only the surrounding box.
+   That is what keeps the preview 1:1 with a note across themes. */
+.cs-live-preview-body {
+	min-height: 120px;
+	max-height: 340px;
+	overflow: auto;
+	background: var(--background-primary);
 	border-radius: 6px;
+}
+
+/* Editable path: let the embedded editor own its own layout. Keep its surface
+   transparent so the card background shows through, and release the fixed
+   full-pane height it would otherwise claim so it sizes to its content. */
+.cs-live-preview-body.cs-live-preview-editable .markdown-source-view,
+.cs-live-preview-body.cs-live-preview-editable .cm-editor {
 	background: transparent;
-	color: var(--text-muted);
-	cursor: pointer;
-	transition:
-		background 0.12s ease,
-		color 0.12s ease;
+	height: auto;
+	min-height: 116px;
 }
 
-.callout-studio-seg-btn:hover {
-	background: var(--background-modifier-hover);
+.cs-live-preview-body.cs-live-preview-editable .cm-scroller {
+	overflow: visible;
 }
 
-.callout-studio-seg-btn.is-active {
-	background: var(--interactive-accent);
-	color: var(--text-on-accent);
+/* Fallback (static render) path: contain reading-view chrome inside the card and
+   trim only the outermost block margins so the card edges stay tight; interior
+   spacing is left to Obsidian's own rules so it matches a real note. */
+.cs-live-preview-body.markdown-preview-view {
+	padding: 12px 16px;
 }
 
-.callout-studio-preview {
-	padding: 12px;
+.cs-live-preview-render > :first-child {
+	margin-top: 0;
 }
 
-.callout-studio-preview .callout {
-	margin: 0;
-}
-
-/* Wrapper that mimics the actual note rendering context so callout sizing,
-   icon size and padding match what the user sees in a live note. */
-.callout-studio-preview-rendered {
-	padding: 0;
-	margin: 0;
-}
-
-.callout-studio-preview-rendered > .callout {
-	margin: 0;
-}
-
-.callout-studio-preview-dark {
-	background: var(--color-base-20, #1e1e1e);
-	color: var(--color-base-70, #dcddde);
+.cs-live-preview-render > :last-child {
+	margin-bottom: 0;
 }
 
 /* ─── Icon Preview in Editor ──────────────────────────────────── */
@@ -610,11 +601,6 @@ button.callout-studio-icon-picker-loading {
 	box-shadow: none;
 }
 
-.callout-studio-preview .callout-icon,
-.callout-studio-preview-fold-toggle {
-	color: rgb(var(--cs-color-rgb));
-}
-
 /* Hide slider tooltip bubble */
 .callout-studio-slider-row .slider-tooltip,
 .callout-studio-slider-row [class*="tooltip"] {
@@ -743,42 +729,6 @@ button.callout-studio-icon-picker-loading {
 
 .cs-fold-menu {
 	min-width: 100%;
-}
-
-.callout-studio-preview .callout-studio-preview-fold-toggle {
-	display: inline-flex;
-	align-items: center;
-	justify-content: center;
-	width: 18px;
-	height: 18px;
-	min-height: 18px;
-	padding: 0;
-	margin-inline-start: 6px;
-	border: none;
-	border-radius: 0;
-	background: transparent;
-	color: rgb(var(--cs-color-rgb));
-	cursor: pointer;
-	box-shadow: none;
-	flex-shrink: 0;
-}
-
-.callout-studio-preview .callout-studio-preview-fold-toggle:hover,
-.callout-studio-preview .callout-studio-preview-fold-toggle:focus,
-.callout-studio-preview .callout-studio-preview-fold-toggle:active {
-	background: transparent;
-	color: rgb(var(--cs-color-rgb));
-}
-
-.callout-studio-preview .callout-studio-preview-fold-toggle svg {
-	width: 14px;
-	height: 14px;
-	color: rgb(var(--cs-color-rgb));
-	stroke: currentColor;
-}
-
-.callout-studio-preview-collapsed > .callout-title {
-	padding-bottom: var(--callout-title-padding, 0.5em);
 }
 
 .cs-palette-menu-hidden {

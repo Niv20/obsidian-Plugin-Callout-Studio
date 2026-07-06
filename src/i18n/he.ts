@@ -275,6 +275,8 @@ export const he: Record<string, string> = {
 	"editor.untitledCallout": "תיבת־הבלטה ללא שם",
 	"editor.loremIpsum":
 		"לורם איפסום דולור סיט אמט, קונסקטורר אדיפיסינג אלית. סד דו איוסמוד טמפור אינסידידונט אוט לבורה את דולורה מגנה אליקווה.",
+	"editor.sampleInlineText": "כאן יש תגית [!{id}] מוטבעת בתוך פסקה.",
+	"editor.previewReadOnly": "לא ניתן לערוך את התצוגה המקדימה",
 
 	// Icon Picker
 	"iconPicker.pickIcon": "בחירת אייקון",

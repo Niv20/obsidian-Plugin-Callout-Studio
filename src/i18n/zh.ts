@@ -213,6 +213,8 @@ export const zh: Record<string, string> = {
 	"editor.idConflict": "此 ID 与现有 callout 冲突",
 	"editor.untitledCallout": "未命名 Callout",
 	"editor.loremIpsum": "Lorem ipsum dolor sit amet，consectetur adipiscing elit。",
+	"editor.sampleInlineText": "这是一个嵌入在段落中的行内 [!{id}] 徽标。",
+	"editor.previewReadOnly": "实时预览无法编辑",
 
 	"iconPicker.pickIcon": "选择图标",
 	"iconPicker.confirm": "确认",

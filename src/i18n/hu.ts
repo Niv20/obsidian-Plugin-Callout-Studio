@@ -213,6 +213,8 @@ export const hu: Record<string, string> = {
 	"editor.idConflict": "Ez az azonosító ütközik egy meglévő callout-tal",
 	"editor.untitledCallout": "Névtelen callout",
 	"editor.loremIpsum": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+	"editor.sampleInlineText": "Íme egy soron belüli [!{id}] pirula egy bekezdésen belül.",
+	"editor.previewReadOnly": "Az élő előnézet nem szerkeszthető",
 
 	"iconPicker.pickIcon": "Ikon kiválasztása",
 	"iconPicker.confirm": "Megerősítés",

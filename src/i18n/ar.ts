@@ -213,6 +213,8 @@ export const ar: Record<string, string> = {
 	"editor.idConflict": "هذا المعرّف يتعارض مع callout موجود",
 	"editor.untitledCallout": "Callout بدون عنوان",
 	"editor.loremIpsum": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+	"editor.sampleInlineText": "إليك شارة [!{id}] مضمّنة داخل فقرة.",
+	"editor.previewReadOnly": "لا يمكن تعديل المعاينة المباشرة",
 
 	"iconPicker.pickIcon": "اختيار أيقونة",
 	"iconPicker.confirm": "تأكيد",

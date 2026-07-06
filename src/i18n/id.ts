@@ -213,6 +213,8 @@ export const id: Record<string, string> = {
 	"editor.idConflict": "ID ini bertentangan dengan callout yang ada",
 	"editor.untitledCallout": "Callout Tanpa Judul",
 	"editor.loremIpsum": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+	"editor.sampleInlineText": "Berikut adalah pil [!{id}] sebaris di dalam sebuah paragraf.",
+	"editor.previewReadOnly": "Pratinjau langsung tidak dapat diedit",
 
 	"iconPicker.pickIcon": "Pilih ikon",
 	"iconPicker.confirm": "Konfirmasi",

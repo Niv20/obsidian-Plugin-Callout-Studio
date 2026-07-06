@@ -213,6 +213,8 @@ export const nl: Record<string, string> = {
 	"editor.idConflict": "Deze ID is in conflict met een bestaande callout",
 	"editor.untitledCallout": "Naamloze callout",
 	"editor.loremIpsum": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+	"editor.sampleInlineText": "Hier is een inline [!{id}] pil binnen een alinea.",
+	"editor.previewReadOnly": "De live-voorvertoning kan niet worden bewerkt",
 
 	"iconPicker.pickIcon": "Een pictogram kiezen",
 	"iconPicker.confirm": "Bevestigen",

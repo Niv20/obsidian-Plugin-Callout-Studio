@@ -213,6 +213,8 @@ export const sv: Record<string, string> = {
 	"editor.idConflict": "Detta ID krockar med en befintlig callout",
 	"editor.untitledCallout": "Namnlös Callout",
 	"editor.loremIpsum": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+	"editor.sampleInlineText": "Här är en infogad [!{id}]-pill inuti ett stycke.",
+	"editor.previewReadOnly": "Livevyn kan inte redigeras",
 
 	"iconPicker.pickIcon": "Välj en ikon",
 	"iconPicker.confirm": "Bekräfta",

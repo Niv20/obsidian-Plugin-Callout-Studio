@@ -213,6 +213,8 @@ export const th: Record<string, string> = {
 	"editor.idConflict": "ID นี้ขัดแย้งกับ callout ที่มีอยู่",
 	"editor.untitledCallout": "Callout ไม่มีชื่อ",
 	"editor.loremIpsum": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+	"editor.sampleInlineText": "นี่คือแคปซูล [!{id}] แบบอินไลน์ภายในย่อหน้า",
+	"editor.previewReadOnly": "ไม่สามารถแก้ไขตัวอย่างสดได้",
 
 	"iconPicker.pickIcon": "เลือกไอคอน",
 	"iconPicker.confirm": "ยืนยัน",

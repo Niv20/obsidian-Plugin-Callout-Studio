@@ -41,4 +41,10 @@ export type SettingsSectionContext = {
 	app: App;
 	plugin: SettingsTabPlugin;
 	display: () => void;
+	/**
+	 * Register a cleanup callback tied to the current settings render. Run when
+	 * the tab is hidden or re-displayed — sections use it to unload long-lived
+	 * resources (e.g. a live-preview Component) instead of leaking them.
+	 */
+	registerDisposer: (dispose: () => void) => void;
 };

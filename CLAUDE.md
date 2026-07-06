@@ -35,7 +35,7 @@ Callout Studio is an Obsidian plugin that lets users create and manage custom ca
 
 ### Settings UI (`src/settings/`)
 
-`SettingsTab.ts` composes 11 section modules under `settings/sections/`. `CalloutEditor.ts` is the edit/create modal with live preview via `CalloutEditorPreview.ts`. `IconPicker.ts` handles Lucide, Material Symbols, and emoji selection.
+`SettingsTab.ts` composes 11 section modules under `settings/sections/`. `CalloutEditor.ts` is the edit/create modal with a real, editable Live Preview via `LiveCalloutPreview.ts`, which hosts an embedded Obsidian markdown editor (`EmbeddableMarkdownEditor.ts`) so callouts render 1:1 with a note in the active theme; it falls back to a static `MarkdownRenderer` render if the (undocumented) embed API is unavailable. `IconPicker.ts` handles Lucide, Material Symbols, and emoji selection.
 
 ### Editor integrations (`src/editor/`)
 

@@ -8,6 +8,7 @@
  */
 import type { App } from "obsidian";
 import type { CalloutRegistry } from "../../manager/CalloutRegistry";
+import type { CSSInjector } from "../../manager/CSSInjector";
 import type {
 	CalloutIcon,
 	MaterialIconStyle,
@@ -17,6 +18,7 @@ import type {
 export interface CalloutEditorPlugin {
 	app: App;
 	registry: CalloutRegistry;
+	cssInjector: CSSInjector;
 	settings: PluginSettings;
 	pruneSuspended: boolean;
 	saveSettings(): Promise<void>;

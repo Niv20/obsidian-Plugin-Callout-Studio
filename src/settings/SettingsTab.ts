@@ -55,6 +55,7 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 	private materialSvgUnsubscribe: (() => void) | null = null;
 	private refreshTimer: number | null = null;
 	private calloutLists: CalloutListsController | null = null;
+	private sectionDisposers: (() => void)[] = [];
 
 	constructor(app: App, plugin: SettingsTabPlugin) {
 		super(app, plugin);
@@ -63,6 +64,8 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 
 	display(): void {
 		const { containerEl } = this;
+		// Tear down any resources from a previous render before rebuilding.
+		this.runSectionDisposers();
 		containerEl.empty();
 		containerEl.addClass("callout-studio-settings");
 
@@ -153,10 +156,23 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 			app: this.app,
 			plugin: this.plugin,
 			display: () => this.display(),
+			registerDisposer: (dispose) => this.sectionDisposers.push(dispose),
 		};
 	}
 
+	private runSectionDisposers(): void {
+		for (const dispose of this.sectionDisposers) {
+			try {
+				dispose();
+			} catch {
+				/* ignore disposer failures */
+			}
+		}
+		this.sectionDisposers = [];
+	}
+
 	hide(): void {
+		this.runSectionDisposers();
 		if (this.registrySubscription) {
 			this.plugin.registry.offChange(this.registrySubscription);
 			this.registrySubscription = null;

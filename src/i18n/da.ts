@@ -195,6 +195,8 @@ export const da: Record<string, string> = {
 	"editor.idConflict": "Dette ID er i konflikt med en eksisterende callout",
 	"editor.untitledCallout": "Navnløs Callout",
 	"editor.loremIpsum": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+	"editor.sampleInlineText": "Her er en indlejret [!{id}] pille inde i et afsnit.",
+	"editor.previewReadOnly": "Livevisningen kan ikke redigeres",
 	"iconPicker.pickIcon": "Vælg et ikon",
 	"iconPicker.confirm": "Bekræft",
 	"iconPicker.cancel": "Annuller",

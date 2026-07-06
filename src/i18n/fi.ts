@@ -195,6 +195,8 @@ export const fi: Record<string, string> = {
 	"editor.idConflict": "Tämä tunnus on ristiriidassa olemassa olevan calloutin kanssa",
 	"editor.untitledCallout": "Nimetön Callout",
 	"editor.loremIpsum": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+	"editor.sampleInlineText": "Tässä on upotettu [!{id}] -pilleri kappaleen sisällä.",
+	"editor.previewReadOnly": "Live-esikatselua ei voi muokata",
 	"iconPicker.pickIcon": "Valitse kuvake",
 	"iconPicker.confirm": "Vahvista",
 	"iconPicker.cancel": "Peruuta",

@@ -213,6 +213,8 @@ export const pt: Record<string, string> = {
 	"editor.idConflict": "Este ID entra em conflito com um callout existente",
 	"editor.untitledCallout": "Callout sem título",
 	"editor.loremIpsum": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+	"editor.sampleInlineText": "Aqui está uma pílula [!{id}] embutida dentro de um parágrafo.",
+	"editor.previewReadOnly": "A pré-visualização ao vivo não pode ser editada",
 
 	"iconPicker.pickIcon": "Escolher um ícone",
 	"iconPicker.confirm": "Confirmar",

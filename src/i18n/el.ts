@@ -195,6 +195,8 @@ export const el: Record<string, string> = {
 	"editor.idConflict": "Αυτό το ID έρχεται σε σύγκρουση με υπάρχον callout",
 	"editor.untitledCallout": "Callout χωρίς τίτλο",
 	"editor.loremIpsum": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+	"editor.sampleInlineText": "Εδώ υπάρχει ένα ενσωματωμένο [!{id}] χάπι μέσα σε μια παράγραφο.",
+	"editor.previewReadOnly": "Η ζωντανή προεπισκόπηση δεν μπορεί να επεξεργαστεί",
 	"iconPicker.pickIcon": "Επιλογή εικονιδίου",
 	"iconPicker.confirm": "Επιβεβαίωση",
 	"iconPicker.cancel": "Ακύρωση",

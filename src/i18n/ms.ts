@@ -195,6 +195,8 @@ export const ms: Record<string, string> = {
 	"editor.idConflict": "ID ini bercanggah dengan callout sedia ada",
 	"editor.untitledCallout": "Callout Tanpa Tajuk",
 	"editor.loremIpsum": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+	"editor.sampleInlineText": "Berikut ialah pil [!{id}] sebaris di dalam perenggan.",
+	"editor.previewReadOnly": "Pratonton langsung tidak boleh diedit",
 	"iconPicker.pickIcon": "Pilih ikon",
 	"iconPicker.confirm": "Sahkan",
 	"iconPicker.cancel": "Batal",

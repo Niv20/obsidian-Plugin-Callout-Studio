@@ -213,6 +213,8 @@ export const ru: Record<string, string> = {
 	"editor.idConflict": "Этот ID конфликтует с существующим callout",
 	"editor.untitledCallout": "Callout без названия",
 	"editor.loremIpsum": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+	"editor.sampleInlineText": "Вот встроенная капсула [!{id}] внутри абзаца.",
+	"editor.previewReadOnly": "Живой предпросмотр нельзя редактировать",
 
 	"iconPicker.pickIcon": "Выбрать иконку",
 	"iconPicker.confirm": "Подтвердить",

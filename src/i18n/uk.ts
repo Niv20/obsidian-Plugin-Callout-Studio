@@ -213,6 +213,8 @@ export const uk: Record<string, string> = {
 	"editor.idConflict": "Цей ID конфліктує з існуючим callout",
 	"editor.untitledCallout": "Callout без назви",
 	"editor.loremIpsum": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+	"editor.sampleInlineText": "Ось вбудована капсула [!{id}] всередині абзацу.",
+	"editor.previewReadOnly": "Живий перегляд не можна редагувати",
 
 	"iconPicker.pickIcon": "Вибрати іконку",
 	"iconPicker.confirm": "Підтвердити",

@@ -195,6 +195,8 @@ export const zhTW: Record<string, string> = {
 	"editor.idConflict": "此 ID 與現有 callout 衝突",
 	"editor.untitledCallout": "未命名 Callout",
 	"editor.loremIpsum": "Lorem ipsum dolor sit amet，consectetur adipiscing elit。",
+	"editor.sampleInlineText": "這是一個嵌入在段落中的行內 [!{id}] 徽標。",
+	"editor.previewReadOnly": "即時預覽無法編輯",
 	"iconPicker.pickIcon": "選擇圖示",
 	"iconPicker.confirm": "確認",
 	"iconPicker.cancel": "取消",

@@ -213,6 +213,8 @@ export const vi: Record<string, string> = {
 	"editor.idConflict": "ID này xung đột với callout hiện có",
 	"editor.untitledCallout": "Callout chưa đặt tên",
 	"editor.loremIpsum": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+	"editor.sampleInlineText": "Đây là một viên [!{id}] nội tuyến bên trong một đoạn văn.",
+	"editor.previewReadOnly": "Không thể chỉnh sửa bản xem trước trực tiếp",
 
 	"iconPicker.pickIcon": "Chọn biểu tượng",
 	"iconPicker.confirm": "Xác nhận",

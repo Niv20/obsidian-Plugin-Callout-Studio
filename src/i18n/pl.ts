@@ -213,6 +213,8 @@ export const pl: Record<string, string> = {
 	"editor.idConflict": "To ID koliduje z istniejącym callout",
 	"editor.untitledCallout": "Callout bez tytułu",
 	"editor.loremIpsum": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+	"editor.sampleInlineText": "Oto wbudowana pigułka [!{id}] wewnątrz akapitu.",
+	"editor.previewReadOnly": "Podglądu na żywo nie można edytować",
 
 	"iconPicker.pickIcon": "Wybierz ikonę",
 	"iconPicker.confirm": "Potwierdź",

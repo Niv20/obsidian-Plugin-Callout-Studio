@@ -502,8 +502,7 @@ export class CSSInjector {
 
 		for (const calloutEl of calloutEls) {
 			const id = calloutEl.getAttribute("data-callout");
-			// Skip the settings-tab preview marker; it manages its own icon.
-			if (!id || id === "cs-preview") continue;
+			if (!id) continue;
 			const def = this.resolveDef(id);
 			if (!def) continue;
 			const iconEl = calloutEl.querySelector<HTMLElement>(
@@ -757,15 +756,14 @@ export class CSSInjector {
 		const fallbackDef = callouts.find((c) => c.id === fallbackId);
 		if (!fallbackDef) return "";
 
-		// Collect all known callout IDs and aliases
+		// Collect all known callout IDs and aliases. The transient settings-
+		// preview definition is registered under its real ID, so it is already
+		// included here and thus excluded from the fallback tint.
 		const knownIds: string[] = [];
 		for (const def of callouts) {
 			knownIds.push(def.id);
 			if (def.aliases) knownIds.push(...def.aliases);
 		}
-		// Always exclude the settings-tab preview marker so the gray preview
-		// is never tinted by the fallback callout.
-		knownIds.push("cs-preview");
 
 		const notSelectors = knownIds
 			.map((id) => `:not([data-callout="${id}"])`)

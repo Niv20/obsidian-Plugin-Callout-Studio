@@ -277,6 +277,8 @@ export const en: Record<string, string> = {
 	"editor.untitledCallout": "Untitled Callout",
 	"editor.loremIpsum":
 		"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.",
+	"editor.sampleInlineText": "Here is an inline [!{id}] pill inside a paragraph.",
+	"editor.previewReadOnly": "The live preview can't be edited",
 
 	// Icon Picker
 	"iconPicker.pickIcon": "Pick an icon",
