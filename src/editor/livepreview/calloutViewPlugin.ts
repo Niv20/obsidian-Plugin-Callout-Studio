@@ -29,19 +29,28 @@ import {
 import { RangeSetBuilder, type EditorSelection } from "@codemirror/state";
 import { syntaxTree } from "@codemirror/language";
 import { editorLivePreviewField } from "obsidian";
+import type { App } from "obsidian";
 import type { PluginSettings } from "../../types";
 import type { CalloutRegistry } from "../../manager/CalloutRegistry";
 import { scanLineForCalloutTokens } from "../calloutTokens";
 import { CSS_HEADING_LINE, CSS_UNKNOWN, resolveCalloutDef } from "../renderShared";
+import {
+	getFoldedHeadingLines,
+	isHeadingFoldEnabled,
+	resolveMarkdownView,
+} from "../headingFold";
 import { normalizeCalloutId } from "../../utils/calloutId";
-import { CalloutTokenWidget } from "./widgets";
+import { CalloutTokenWidget, HeadingFoldArrowWidget } from "./widgets";
 import { calloutStudioRefresh } from "./refresh";
 
 /** Narrow structural host type (avoids importing the concrete plugin class). */
 export interface LivePreviewHost {
+	app: App;
 	registry: CalloutRegistry;
 	settings: PluginSettings;
 }
+
+const NO_FOLDS: ReadonlySet<number> = new Set();
 
 /** Syntax-tree node names whose content must never be decorated. */
 const SKIP_NODE_RE = /codeblock|frontmatter|yaml|inline-code|math/i;
@@ -92,6 +101,16 @@ function buildDecorations(
 	const selection = view.state.selection;
 	const tree = syntaxTree(view.state);
 
+	// Heading fold state: only relevant when heading callouts render AND the
+	// core "Fold heading" setting is on (native folding is otherwise absent, so
+	// we draw no chevron). Resolved once per rebuild.
+	const foldEnabled = headingEnabled && isHeadingFoldEnabled(host.app);
+	let foldedLines: ReadonlySet<number> = NO_FOLDS;
+	if (foldEnabled) {
+		const mdView = resolveMarkdownView(host.app, view);
+		if (mdView) foldedLines = getFoldedHeadingLines(mdView);
+	}
+
 	for (const range of view.visibleRanges) {
 		let pos = range.from;
 		while (pos <= range.to) {
@@ -108,6 +127,8 @@ function buildDecorations(
 					line.text,
 					headingEnabled,
 					inlineEnabled,
+					foldEnabled,
+					foldedLines,
 				);
 			}
 			pos = line.to + 1;
@@ -127,6 +148,8 @@ function decorateLine(
 	lineText: string,
 	headingEnabled: boolean,
 	inlineEnabled: boolean,
+	foldEnabled: boolean,
+	foldedLines: ReadonlySet<number>,
 ): void {
 	// Skip whole lines inside fenced code / frontmatter.
 	if (SKIP_NODE_RE.test(tree.resolveInner(lineFrom, 1).name)) return;
@@ -136,6 +159,12 @@ function decorateLine(
 
 	const selectionTouches = (from: number, to: number): boolean =>
 		selection.ranges.some((r) => r.from <= to && r.to >= from);
+
+	// The heading fold chevron sits at the end of the line, but the same line
+	// can carry inline tokens after the heading token (e.g. a pill in the
+	// title). RangeSetBuilder needs sorted insertion, so we remember the
+	// chevron here and add it once, last, below the token loop.
+	let pendingFoldArrow: HeadingFoldArrowWidget | null = null;
 
 	for (const token of tokens) {
 		// Native blockquote callouts belong to Obsidian's own rendering.
@@ -164,6 +193,7 @@ function decorateLine(
 			// …but the token collapses to icon(+name) only while the caret
 			// is elsewhere, so the raw syntax is editable in place.
 			if (!selectionTouches(lineFrom, lineTo)) {
+				const headingLine = view.state.doc.lineAt(lineFrom).number - 1;
 				builder.add(
 					from,
 					to,
@@ -176,6 +206,17 @@ function decorateLine(
 						),
 					}),
 				);
+				// The fold chevron trails the whole heading (after the title
+				// text), so it is a separate end-of-line widget rather than part
+				// of the token. Only drawn when native "Fold heading" is on;
+				// added after the loop to keep builder insertion sorted.
+				if (foldEnabled) {
+					pendingFoldArrow = new HeadingFoldArrowWidget(
+						host.app,
+						token.rawId,
+						foldedLines.has(headingLine),
+					);
+				}
 			}
 			continue;
 		}
@@ -197,6 +238,16 @@ function decorateLine(
 					true,
 				),
 			}),
+		);
+	}
+
+	// End-of-line fold chevron, added last so it never precedes an inline token
+	// that also sits on this heading line.
+	if (pendingFoldArrow) {
+		builder.add(
+			lineTo,
+			lineTo,
+			Decoration.widget({ side: 1, widget: pendingFoldArrow }),
 		);
 	}
 }

@@ -2148,3 +2148,40 @@ button.callout-studio-icon-picker-loading {
 	width: 1em;
 	height: 1em;
 }
+
+/* Fold chevron trailing a heading callout (Live Preview). Rendered as an
+   end-of-line widget after the heading title, so it mirrors a regular callout's
+   disclosure arrow. Sized to the heading font, tinted with the callout's own
+   color (like the icon and name), subtle until hover, and rotated when its
+   section is folded. Only rendered when the core "Fold heading" setting is on. */
+.cs-heading-callout .cs-fold-arrow {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	vertical-align: middle;
+	margin-inline-start: 0.4em;
+	line-height: 1;
+	cursor: pointer;
+	color: rgb(var(--cs-color-rgb, 68, 138, 255));
+	opacity: 0.65;
+	transition:
+		transform 100ms ease,
+		opacity 100ms ease;
+}
+.cs-heading-callout .cs-fold-arrow:hover {
+	opacity: 1;
+}
+.cs-heading-callout .cs-fold-arrow svg {
+	width: 0.85em;
+	height: 0.85em;
+}
+.cs-heading-callout .cs-fold-arrow.cs-collapsed {
+	transform: rotate(-90deg);
+}
+
+/* Reading view already renders Obsidian's native heading collapse indicator
+   inside the hN; tint it with the callout color so it matches the Live Preview
+   chevron. */
+.cs-heading-callout .heading-collapse-indicator {
+	color: rgb(var(--cs-color-rgb, 68, 138, 255));
+}

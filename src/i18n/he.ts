@@ -280,6 +280,9 @@ export const he: Record<string, string> = {
 	"contextMenu.copySection": "העתקת מקטע הכותרת",
 	"contextMenu.deleteSection": "מחיקת מקטע הכותרת",
 
+	// Heading callouts
+	"heading.toggleFold": "החלפת מצב קיפול",
+
 	// Callout types section
 	"settings.calloutTypes": "סוגי תיבות־הבלטה",
 	"settings.calloutTypeRegular": "תיבת־הבלטה רגילה",

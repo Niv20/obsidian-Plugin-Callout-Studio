@@ -283,6 +283,9 @@ export const en: Record<string, string> = {
 	"contextMenu.copySection": "Copy heading section",
 	"contextMenu.deleteSection": "Delete heading section",
 
+	// Heading callouts
+	"heading.toggleFold": "Toggle fold",
+
 	// Callout types section
 	"settings.calloutTypes": "Callout types",
 	"settings.calloutTypeRegular": "Regular callout",
