@@ -347,6 +347,12 @@ export const en: Record<string, string> = {
 	"settings.calloutTypeInline": "Inline callout",
 	"settings.calloutTypeInlineDesc":
 		"A [!name] token in the middle of a line, rendered as a small pill. No title or content.",
+	"settings.refCleanTitles": "Clean titles in outline and links",
+	"settings.refCleanTitlesDesc":
+		"Hide the [!name] token wherever a heading callout is referenced: the outline pane, links to the heading (including tables of contents), and the link suggestion popup. Headings without a title show the callout's display name.",
+	"settings.refShowIcon": "Show icon in outline and links",
+	"settings.refShowIconDesc":
+		"Show the callout's colored icon before the cleaned title in those places.",
 
 	// Context menu customization
 	"settings.customizeMenu": "Customize menu items",

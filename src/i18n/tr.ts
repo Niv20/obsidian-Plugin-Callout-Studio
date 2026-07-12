@@ -233,6 +233,10 @@ export const tr: Record<string, string> = {
 	"settings.calloutTypeHeadingDesc": "İlk içeriği belirteç olan bir başlık, örn. ## [!name]. Başlığın yazı tipi boyutunda renkli bir çubuk olarak gösterilir. Dosya açıldığında tüm bölümü açmak/kapatmak için belirteçten sonra + / - kullanın.",
 	"settings.calloutTypeInline": "Satır içi callout",
 	"settings.calloutTypeInlineDesc": "Bir satırın ortasında yer alan [!name] belirteci, küçük bir hap olarak gösterilir. Başlık veya içerik yoktur.",
+	"settings.refCleanTitles": "Anahat ve bağlantılarda başlıkları temizle",
+	"settings.refCleanTitlesDesc": "Bir başlık callout'una referans verilen her yerde [!name] belirtecini gizler: anahat paneli, başlığa giden bağlantılar (içindekiler dahil) ve bağlantı önerileri açılır penceresi. Başlık metni olmayan başlıklar, callout'un görünen adını gösterir.",
+	"settings.refShowIcon": "Anahat ve bağlantılarda simgeyi göster",
+	"settings.refShowIconDesc": "Bu yerlerde temizlenmiş başlıktan önce callout'un renkli simgesini gösterir.",
 
 	"settings.customizeMenu": "Menü öğelerini özelleştir",
 	"settings.customizeMenuDesc": "Her callout türü için hangi sağ tık eylemlerinin görüneceğini seçin ve sırasını değiştirin.",

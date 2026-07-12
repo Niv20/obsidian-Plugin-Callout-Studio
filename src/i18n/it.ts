@@ -233,6 +233,10 @@ export const it: Record<string, string> = {
 	"settings.calloutTypeHeadingDesc": "Un'intestazione il cui primo contenuto è il token, ad es. ## [!name]. Viene visualizzata come una barra colorata alla dimensione del carattere dell'intestazione. Usa + / - dopo il token per aprire/chiudere l'intera sezione all'apertura del file.",
 	"settings.calloutTypeInline": "Callout in linea",
 	"settings.calloutTypeInlineDesc": "Un token [!name] al centro di una riga, visualizzato come una piccola pillola. Senza titolo né contenuto.",
+	"settings.refCleanTitles": "Pulisci i titoli nello schema e nei link",
+	"settings.refCleanTitlesDesc": "Nasconde il token [!name] ovunque venga fatto riferimento a un callout di intestazione: il pannello schema, i link all'intestazione (inclusi gli indici) e il popup dei suggerimenti dei link. Le intestazioni senza testo del titolo mostrano il nome visualizzato del callout.",
+	"settings.refShowIcon": "Mostra l'icona nello schema e nei link",
+	"settings.refShowIconDesc": "Mostra l'icona colorata del callout prima del titolo pulito in quei punti.",
 
 	"settings.customizeMenu": "Personalizza voci di menu",
 	"settings.customizeMenuDesc": "Scegli quali azioni del clic destro appaiono per ciascun tipo di callout e riordinale.",

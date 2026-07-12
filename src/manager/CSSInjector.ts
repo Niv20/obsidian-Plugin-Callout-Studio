@@ -16,6 +16,7 @@ import {
 	CSS_HEADING_LINE,
 	CSS_HEADING_TOKEN,
 	CSS_INLINE_TOKEN,
+	CSS_REF_TOKEN,
 	CSS_TOKEN_ICON,
 	CSS_TOKEN_NAME,
 	CSS_UNKNOWN,
@@ -351,7 +352,8 @@ export class CSSInjector {
 				.map(
 					(id) =>
 						`${themePrefix}.${CSS_INLINE_TOKEN}[data-callout="${id}"], ` +
-						`${themePrefix}.${CSS_HEADING_LINE}[data-callout="${id}"]`,
+						`${themePrefix}.${CSS_HEADING_LINE}[data-callout="${id}"], ` +
+						`${themePrefix}.${CSS_REF_TOKEN}[data-callout="${id}"]`,
 				)
 				.join(",\n");
 
@@ -878,11 +880,11 @@ export class CSSInjector {
 		// Unknown heading/inline tokens: the token renderer tags unresolved ids
 		// with .cs-unknown, so a plain class rule suffices — no :not() chain.
 		parts.push(
-			`.${CSS_INLINE_TOKEN}.${CSS_UNKNOWN}, .${CSS_HEADING_LINE}.${CSS_UNKNOWN} {\n  --cs-color-rgb: ${lightRgb};\n}`,
+			`.${CSS_INLINE_TOKEN}.${CSS_UNKNOWN}, .${CSS_HEADING_LINE}.${CSS_UNKNOWN}, .${CSS_REF_TOKEN}.${CSS_UNKNOWN} {\n  --cs-color-rgb: ${lightRgb};\n}`,
 		);
 		if (fallbackDef.colorLight !== fallbackDef.colorDark) {
 			parts.push(
-				`.theme-dark .${CSS_INLINE_TOKEN}.${CSS_UNKNOWN}, .theme-dark .${CSS_HEADING_LINE}.${CSS_UNKNOWN} {\n  --cs-color-rgb: ${darkRgb};\n}`,
+				`.theme-dark .${CSS_INLINE_TOKEN}.${CSS_UNKNOWN}, .theme-dark .${CSS_HEADING_LINE}.${CSS_UNKNOWN}, .theme-dark .${CSS_REF_TOKEN}.${CSS_UNKNOWN} {\n  --cs-color-rgb: ${darkRgb};\n}`,
 			);
 		}
 

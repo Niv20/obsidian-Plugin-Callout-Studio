@@ -233,6 +233,10 @@ export const ja: Record<string, string> = {
 	"settings.calloutTypeHeadingDesc": "最初のコンテンツがトークンである見出し（例: ## [!name]）。見出しのフォントサイズで色付きのバーとして表示されます。トークンの後に + / - を付けると、ファイルを開いたときにセクション全体を開閉できます。",
 	"settings.calloutTypeInline": "インラインcallout",
 	"settings.calloutTypeInlineDesc": "行の途中にある [!name] トークンで、小さなピルとして表示されます。タイトルやコンテンツはありません。",
+	"settings.refCleanTitles": "アウトラインとリンクでタイトルをクリーンにする",
+	"settings.refCleanTitlesDesc": "見出しcalloutが参照される場所（アウトラインパネル、見出しへのリンク（目次を含む）、リンク候補のポップアップ）で [!name] トークンを非表示にします。タイトルのない見出しにはcalloutの表示名が表示されます。",
+	"settings.refShowIcon": "アウトラインとリンクでアイコンを表示する",
+	"settings.refShowIconDesc": "それらの場所で、クリーンにされたタイトルの前にcalloutの色付きアイコンを表示します。",
 
 	"settings.customizeMenu": "メニュー項目をカスタマイズ",
 	"settings.customizeMenuDesc": "各calloutタイプに表示する右クリック操作を選択し、順序を並べ替えます。",

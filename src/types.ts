@@ -109,6 +109,19 @@ export interface RoleToggleSettings {
 }
 
 /**
+ * Heading-callout role settings. The ref fields control how references to
+ * heading callouts display outside the heading itself — the Outline pane,
+ * rendered internal links (including TOC plugins), and the `[[` link
+ * suggestion popup; both are inert while `enabled` is false.
+ */
+export interface HeadingCalloutSettings extends RoleToggleSettings {
+	/** Strip the `[!id]` token from references, showing only the title. */
+	refCleanTitles: boolean;
+	/** Show the callout's colored icon before the cleaned reference title. */
+	refShowIcon: boolean;
+}
+
+/**
  * Identifiers for the right-click menu entries. `foldDefaults` covers the
  * whole open/closed/normal fold-default group as one toggleable unit; the
  * `*Section` items operate on an entire heading section (heading line +
@@ -190,7 +203,7 @@ export interface PluginSettings {
 	autocomplete: AutocompleteSettings;
 	iconSources: IconSourceSettings;
 	/** Heading callouts (`## [!name]`) — optional role, can be disabled. */
-	headingCallouts: RoleToggleSettings;
+	headingCallouts: HeadingCalloutSettings;
 	/** Inline callout pills (`[!name]` mid-line) — optional role, can be disabled. */
 	inlineCallouts: RoleToggleSettings;
 	/** Has the first-run vault scan been completed? */

@@ -233,6 +233,10 @@ export const zh: Record<string, string> = {
 	"settings.calloutTypeHeadingDesc": "第一部分内容为标记的标题，例如 ## [!name]。以标题字号大小的彩色条形式显示。在标记后使用 + / - 可在打开文件时展开/折叠整个部分。",
 	"settings.calloutTypeInline": "行内 callout",
 	"settings.calloutTypeInlineDesc": "位于行中间的 [!name] 标记，显示为小徽标。没有标题或内容。",
+	"settings.refCleanTitles": "在大纲和链接中清理标题",
+	"settings.refCleanTitlesDesc": "在引用标题 callout 的任何地方隐藏 [!name] 标记：大纲面板、指向该标题的链接（包括目录），以及链接建议弹出窗口。没有标题文本的标题会显示 callout 的显示名称。",
+	"settings.refShowIcon": "在大纲和链接中显示图标",
+	"settings.refShowIconDesc": "在这些位置的已清理标题前显示 callout 的彩色图标。",
 
 	"settings.customizeMenu": "自定义菜单项",
 	"settings.customizeMenuDesc": "选择每种 callout 类型显示哪些右键操作，并调整它们的顺序。",

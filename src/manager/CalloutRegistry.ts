@@ -129,6 +129,12 @@ export function mergeSavedSettings(
 			enabled:
 				savedSettings.headingCallouts?.enabled ??
 				DEFAULT_SETTINGS.headingCallouts.enabled,
+			refCleanTitles:
+				savedSettings.headingCallouts?.refCleanTitles ??
+				DEFAULT_SETTINGS.headingCallouts.refCleanTitles,
+			refShowIcon:
+				savedSettings.headingCallouts?.refShowIcon ??
+				DEFAULT_SETTINGS.headingCallouts.refShowIcon,
 		},
 		inlineCallouts: {
 			enabled:

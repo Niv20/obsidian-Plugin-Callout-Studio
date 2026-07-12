@@ -255,7 +255,11 @@ export const DEFAULT_SETTINGS: PluginSettings = {
 		lastMaterialCategory: "Actions",
 		lastEmojiSkinTone: 0,
 	},
-	headingCallouts: { enabled: true },
+	headingCallouts: {
+		enabled: true,
+		refCleanTitles: true,
+		refShowIcon: true,
+	},
 	inlineCallouts: { enabled: true },
 	firstRunCompleted: false,
 	fallbackCalloutId: "note",

@@ -294,6 +294,12 @@ export const he: Record<string, string> = {
 	"settings.calloutTypeInline": "תיבת־הבלטה מוטבעת",
 	"settings.calloutTypeInlineDesc":
 		"סימון ‎[!name]‎ באמצע שורה, מוצג כגלולה קטנה. ללא כותרת וללא תוכן.",
+	"settings.refCleanTitles": "ניקוי כותרות במתאר ובקישורים",
+	"settings.refCleanTitlesDesc":
+		"הסתרת הסימון ‎[!name]‎ בכל מקום שבו יש הפניה לתיבת־הבלטה מסוג כותרת: חלונית המתאר, קישורים לכותרת (כולל תוכני עניינים), וחלונית הצעות הקישורים. כותרות ללא טקסט כותרת מציגות את השם לתצוגה של תיבת־ההבלטה.",
+	"settings.refShowIcon": "הצגת סמל במתאר ובקישורים",
+	"settings.refShowIconDesc":
+		"הצגת הסמל הצבעוני של תיבת־ההבלטה לפני הכותרת המנוקה במקומות אלו.",
 
 	// Context menu customization
 	"settings.customizeMenu": "התאמת פריטי התפריט",

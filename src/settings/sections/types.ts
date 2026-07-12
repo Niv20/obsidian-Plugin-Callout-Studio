@@ -9,6 +9,7 @@
 import type { App, Plugin, PluginManifest } from "obsidian";
 import type { CalloutRegistry } from "../../manager/CalloutRegistry";
 import type { CSSInjector } from "../../manager/CSSInjector";
+import type { OutlineDecorator } from "../../outline/OutlineDecorator";
 import type {
 	CalloutIcon,
 	MaterialIconStyle,
@@ -18,6 +19,7 @@ import type {
 export type SettingsTabPlugin = Plugin & {
 	registry: CalloutRegistry;
 	cssInjector: CSSInjector;
+	outlineDecorator: OutlineDecorator;
 	manifest: PluginManifest;
 	settings: PluginSettings;
 	pruneSuspended: boolean;

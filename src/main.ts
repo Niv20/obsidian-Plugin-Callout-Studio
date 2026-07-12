@@ -22,10 +22,12 @@ import { CalloutDiscovery } from "./manager/CalloutDiscovery";
 import { CalloutStudioSettingsTab } from "./settings/SettingsTab";
 import { CalloutEditor } from "./settings/CalloutEditor";
 import { CalloutAutoComplete } from "./editor/AutoComplete";
+import { LinkSuggestDecorator } from "./editor/LinkSuggestDecorator";
 import { registerContextMenu } from "./editor/contextmenu";
 import { createCalloutViewPlugin } from "./editor/livepreview/calloutViewPlugin";
 import { refreshAllMarkdownEditors } from "./editor/livepreview/refresh";
 import { registerHeadingFoldManager } from "./editor/headingFoldManager";
+import { OutlineDecorator } from "./outline/OutlineDecorator";
 import { createCalloutReadingPostProcessor } from "./reading/calloutPostProcessor";
 import { registerCalloutCommands } from "./editor/commands";
 import { CalloutStudioAPI } from "./api/PluginAPI";
@@ -38,8 +40,10 @@ export default class CalloutStudioPlugin extends Plugin {
 	cssInjector!: CSSInjector;
 	api!: CalloutStudioAPI;
 	autoComplete!: CalloutAutoComplete;
+	outlineDecorator!: OutlineDecorator;
 	private materialSvg!: MaterialSvgManager;
 	private discovery!: CalloutDiscovery;
+	private linkSuggestDecorator!: LinkSuggestDecorator;
 
 	get settings(): PluginSettings {
 		return this.registry.settings;
@@ -101,10 +105,22 @@ export default class CalloutStudioPlugin extends Plugin {
 			registerEvent: (ref) => this.registerEvent(ref),
 		});
 
+		// Clean heading-callout titles in the Outline pane.
+		this.outlineDecorator = new OutlineDecorator(this);
+		this.app.workspace.onLayoutReady(() => this.outlineDecorator.attachAll());
+		this.registerEvent(
+			this.app.workspace.on("layout-change", () =>
+				this.outlineDecorator.attachAll(),
+			),
+		);
+		this.register(() => this.outlineDecorator.destroy());
+
 		// Re-inject CSS when registry changes
 		this.registry.onChange(() => {
 			this.cssInjector.scheduleInject();
 			this.app.workspace.trigger("css-change");
+			// Icon/color/display-name edits must repaint outline items too.
+			this.outlineDecorator.refreshAll();
 			void this.saveSettings();
 		});
 
@@ -128,6 +144,15 @@ export default class CalloutStudioPlugin extends Plugin {
 		// Editor autocomplete on [! trigger
 		this.autoComplete = new CalloutAutoComplete(this);
 		this.registerEditorSuggest(this.autoComplete);
+
+		// Clean heading-callout titles in the [[# link suggestion popup.
+		// Installed on layout-ready so the core link suggester exists; our own
+		// autocomplete is skipped (it renders callout suggestions itself).
+		this.linkSuggestDecorator = new LinkSuggestDecorator(this);
+		this.app.workspace.onLayoutReady(() =>
+			this.linkSuggestDecorator.install([this.autoComplete]),
+		);
+		this.register(() => this.linkSuggestDecorator.uninstall());
 
 		// Right-click context menu for callout blocks
 		registerContextMenu(this);

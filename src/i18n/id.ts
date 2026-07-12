@@ -233,6 +233,10 @@ export const id: Record<string, string> = {
 	"settings.calloutTypeHeadingDesc": "Heading yang konten pertamanya adalah token, misalnya ## [!name]. Ditampilkan sebagai bilah berwarna pada ukuran font heading tersebut. Gunakan + / - setelah token untuk membuka/menutup seluruh bagian saat file dibuka.",
 	"settings.calloutTypeInline": "Callout sebaris",
 	"settings.calloutTypeInlineDesc": "Token [!name] di tengah baris, ditampilkan sebagai pil kecil. Tanpa judul atau konten.",
+	"settings.refCleanTitles": "Bersihkan judul di outline dan tautan",
+	"settings.refCleanTitlesDesc": "Sembunyikan token [!name] di mana pun callout heading dirujuk: panel outline, tautan ke heading (termasuk daftar isi), dan popup saran tautan. Heading tanpa teks judul menampilkan nama tampilan callout.",
+	"settings.refShowIcon": "Tampilkan ikon di outline dan tautan",
+	"settings.refShowIconDesc": "Tampilkan ikon berwarna callout sebelum judul yang telah dibersihkan di tempat-tempat tersebut.",
 
 	"settings.customizeMenu": "Sesuaikan item menu",
 	"settings.customizeMenuDesc": "Pilih tindakan klik kanan mana yang muncul untuk setiap tipe callout dan atur ulang urutannya.",

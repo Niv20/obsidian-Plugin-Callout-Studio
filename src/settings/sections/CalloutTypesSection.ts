@@ -36,6 +36,40 @@ export function renderCalloutTypesSection(
 					settings.headingCallouts.enabled = v;
 					await ctx.plugin.saveSettings();
 					ctx.plugin.refreshRenderModes();
+					// The outline cleanup is gated on this toggle too.
+					ctx.plugin.outlineDecorator.refreshAll();
+				}),
+		);
+
+	// Heading-callout references (outline pane, rendered links, suggestion
+	// popup): strip the [!name] token, showing only the title.
+	new Setting(containerEl)
+		.setName(t("settings.refCleanTitles"))
+		.setDesc(t("settings.refCleanTitlesDesc"))
+		.addToggle((tog) =>
+			tog
+				.setValue(settings.headingCallouts.refCleanTitles)
+				.onChange(async (v) => {
+					settings.headingCallouts.refCleanTitles = v;
+					await ctx.plugin.saveSettings();
+					// Links render in both preview modes, not just the outline.
+					ctx.plugin.refreshRenderModes();
+					ctx.plugin.outlineDecorator.refreshAll();
+				}),
+		);
+
+	// Colored callout icon before the cleaned reference title.
+	new Setting(containerEl)
+		.setName(t("settings.refShowIcon"))
+		.setDesc(t("settings.refShowIconDesc"))
+		.addToggle((tog) =>
+			tog
+				.setValue(settings.headingCallouts.refShowIcon)
+				.onChange(async (v) => {
+					settings.headingCallouts.refShowIcon = v;
+					await ctx.plugin.saveSettings();
+					ctx.plugin.refreshRenderModes();
+					ctx.plugin.outlineDecorator.refreshAll();
 				}),
 		);
 

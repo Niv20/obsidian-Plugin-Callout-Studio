@@ -233,6 +233,10 @@ export const ko: Record<string, string> = {
 	"settings.calloutTypeHeadingDesc": "첫 번째 내용이 토큰인 제목입니다(예: ## [!name]). 제목의 글꼴 크기로 색이 있는 막대로 표시됩니다. 토큰 뒤에 + / - 를 사용하면 파일을 열 때 전체 섹션을 열거나 닫을 수 있습니다.",
 	"settings.calloutTypeInline": "인라인 callout",
 	"settings.calloutTypeInlineDesc": "줄 중간에 있는 [!name] 토큰으로, 작은 필로 표시됩니다. 제목이나 내용이 없습니다.",
+	"settings.refCleanTitles": "개요와 링크에서 제목 정리",
+	"settings.refCleanTitlesDesc": "제목 callout이 참조되는 모든 곳에서 [!name] 토큰을 숨깁니다: 개요 패널, 제목으로의 링크(목차 포함), 링크 제안 팝업. 제목 텍스트가 없는 제목은 callout의 표시 이름을 보여줍니다.",
+	"settings.refShowIcon": "개요와 링크에서 아이콘 표시",
+	"settings.refShowIconDesc": "해당 위치에서 정리된 제목 앞에 callout의 색상 아이콘을 표시합니다.",
 
 	"settings.customizeMenu": "메뉴 항목 사용자 지정",
 	"settings.customizeMenuDesc": "각 callout 유형에 표시할 마우스 오른쪽 버튼 작업을 선택하고 순서를 변경합니다.",

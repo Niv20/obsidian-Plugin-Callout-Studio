@@ -22,6 +22,22 @@ export const CSS_HEADING_TOKEN = "cs-heading-token";
 export const CSS_TOKEN_ICON = "cs-callout-icon";
 export const CSS_TOKEN_NAME = "cs-callout-name";
 export const CSS_UNKNOWN = "cs-unknown";
+/**
+ * Token shown where a heading callout is REFERENCED: Outline-pane items,
+ * rendered internal links (incl. TOC plugins), and the link suggestion popup.
+ */
+export const CSS_REF_TOKEN = "cs-ref-token";
+/**
+ * Extra class on a ref token that sits inside a rendered internal link —
+ * marks the icon as a click-to-navigate surface (pointer cursor).
+ * Outline/popup tokens never carry it.
+ */
+export const CSS_REF_TOKEN_LINK = "cs-ref-token-link";
+/**
+ * Live Preview widget replacing a whole title-less reference link
+ * (`[[#[!id]]]`) — styled like an internal link (color + underline).
+ */
+export const CSS_REF_LINK = "cs-ref-link";
 
 export interface ResolvedCalloutDef {
 	/** Definition to render with (fallback def when the id is unrecognized). */
@@ -102,14 +118,27 @@ export function paintRoleIcon(
 	}
 }
 
+/** Where a callout token DOM is rendered — decides its root class. */
+export type CalloutTokenVariant = "inline" | "heading" | "ref";
+
+const VARIANT_CLASS: Record<CalloutTokenVariant, string> = {
+	inline: CSS_INLINE_TOKEN,
+	heading: CSS_HEADING_TOKEN,
+	ref: CSS_REF_TOKEN,
+};
+
 export interface CalloutTokenDomOptions {
 	rawId: string;
 	registry: CalloutRegistry;
-	/** "inline" renders the pill; "heading" renders the in-heading token. */
-	variant: "inline" | "heading";
 	/**
-	 * Heading tokens hide the display name when the heading carries a custom
-	 * title (the title text itself renders after the token).
+	 * "inline" renders the pill; "heading" renders the in-heading token;
+	 * "ref" renders the compact icon(+name) used where a heading callout is
+	 * referenced (outline pane, links, suggestion popup).
+	 */
+	variant: CalloutTokenVariant;
+	/**
+	 * Heading/ref tokens hide the display name when a custom title renders
+	 * after the token.
 	 */
 	showName: boolean;
 }
@@ -132,9 +161,7 @@ export function buildCalloutTokenDom(
 	const { def, unknown } = resolveCalloutDef(registry, rawId);
 
 	const root = doc.createElement("span");
-	root.classList.add(
-		variant === "inline" ? CSS_INLINE_TOKEN : CSS_HEADING_TOKEN,
-	);
+	root.classList.add(VARIANT_CLASS[variant]);
 	if (unknown) root.classList.add(CSS_UNKNOWN);
 	root.setAttribute("data-callout", normalizeCalloutId(rawId));
 

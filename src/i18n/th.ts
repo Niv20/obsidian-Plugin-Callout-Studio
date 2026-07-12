@@ -233,6 +233,10 @@ export const th: Record<string, string> = {
 	"settings.calloutTypeHeadingDesc": "หัวข้อที่มีเนื้อหาแรกเป็นโทเค็น เช่น ## [!name] แสดงผลเป็นแถบสีตามขนาดตัวอักษรของหัวข้อ ใช้ + / - หลังโทเค็นเพื่อเปิด/ปิดทั้งส่วนเมื่อเปิดไฟล์",
 	"settings.calloutTypeInline": "Callout อินไลน์",
 	"settings.calloutTypeInlineDesc": "โทเค็น [!name] กลางบรรทัด แสดงผลเป็นแคปซูลขนาดเล็ก ไม่มีหัวเรื่องหรือเนื้อหา",
+	"settings.refCleanTitles": "ล้างชื่อเรื่องในโครงร่างและลิงก์",
+	"settings.refCleanTitlesDesc": "ซ่อนโทเค็น [!name] ในทุกที่ที่มีการอ้างอิงถึง callout หัวข้อ: แผงโครงร่าง ลิงก์ไปยังหัวข้อ (รวมถึงสารบัญ) และป๊อปอัปคำแนะนำลิงก์ หัวข้อที่ไม่มีข้อความหัวข้อจะแสดงชื่อที่แสดงของ callout",
+	"settings.refShowIcon": "แสดงไอคอนในโครงร่างและลิงก์",
+	"settings.refShowIconDesc": "แสดงไอคอนสีของ callout ก่อนชื่อเรื่องที่ล้างแล้วในสถานที่เหล่านั้น",
 
 	"settings.customizeMenu": "ปรับแต่งรายการเมนู",
 	"settings.customizeMenuDesc": "เลือกว่าการดำเนินการคลิกขวาใดจะปรากฏสำหรับแต่ละประเภท callout และจัดลำดับใหม่",

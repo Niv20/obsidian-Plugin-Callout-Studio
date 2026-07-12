@@ -233,6 +233,10 @@ export const vi: Record<string, string> = {
 	"settings.calloutTypeHeadingDesc": "Tiêu đề có nội dung đầu tiên là token, ví dụ ## [!name]. Hiển thị dưới dạng thanh màu ở kích thước phông chữ của tiêu đề. Dùng + / - sau token để mở/đóng toàn bộ phần khi mở tệp.",
 	"settings.calloutTypeInline": "Callout nội tuyến",
 	"settings.calloutTypeInlineDesc": "Token [!name] ở giữa dòng, hiển thị dưới dạng viên nhỏ. Không có tiêu đề hoặc nội dung.",
+	"settings.refCleanTitles": "Dọn dẹp tiêu đề trong dàn ý và liên kết",
+	"settings.refCleanTitlesDesc": "Ẩn token [!name] ở bất cứ đâu callout tiêu đề được tham chiếu: bảng điều khiển dàn ý, liên kết đến tiêu đề (bao gồm mục lục), và cửa sổ bật lên gợi ý liên kết. Tiêu đề không có văn bản tiêu đề sẽ hiển thị tên hiển thị của callout.",
+	"settings.refShowIcon": "Hiển thị biểu tượng trong dàn ý và liên kết",
+	"settings.refShowIconDesc": "Hiển thị biểu tượng có màu của callout trước tiêu đề đã dọn dẹp ở những nơi đó.",
 
 	"settings.customizeMenu": "Tùy chỉnh mục menu",
 	"settings.customizeMenuDesc": "Chọn những hành động chuột phải nào xuất hiện cho từng loại callout và sắp xếp lại thứ tự.",

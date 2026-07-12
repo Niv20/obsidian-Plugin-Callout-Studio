@@ -2295,3 +2295,48 @@ input.cs-input-invalid:focus {
 .cs-heading-callout .heading-collapse-indicator {
 	color: rgb(var(--cs-color-rgb, 68, 138, 255));
 }
+
+/* Compact token (icon + optional name) shown where a heading callout is
+   referenced: Outline-pane items, rendered internal links (incl. TOC
+   plugins), and the link suggestion popup. Colored by the per-callout
+   --cs-color-rgb injected on the element itself. */
+.cs-ref-token {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.35em;
+	vertical-align: -0.125em;
+	line-height: 1;
+	margin-inline-end: 0.35em;
+	unicode-bidi: isolate;
+	color: rgb(var(--cs-color-rgb, 68, 138, 255));
+}
+.cs-ref-token .cs-callout-icon {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	line-height: 1;
+}
+.cs-ref-token .cs-callout-icon svg {
+	width: 1em;
+	height: 1em;
+}
+
+/* Ref token sitting inside a rendered internal link (Live Preview widget or
+   reading-view anchor): clicking the icon navigates to the link target, so it
+   presents as clickable. No underline — the icon deliberately breaks the
+   link's text-decoration (not painted under atomic inline boxes). */
+.cs-ref-token-link {
+	cursor: pointer;
+}
+
+/* Live Preview widget replacing a whole title-less reference link
+   ([[#[!id]]]) — prefix + icon + display name styled like an internal link.
+   Reading view needs no equivalent: there the name is real anchor text. The
+   name/prefix underline comes from text-decoration (currentColor); the icon
+   stays underline-free. */
+.cs-ref-link {
+	color: var(--link-color, var(--text-accent));
+	text-decoration-line: var(--link-decoration, underline);
+	cursor: text;
+	unicode-bidi: isolate;
+}
