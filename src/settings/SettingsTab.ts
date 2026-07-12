@@ -9,7 +9,7 @@
  * re-renders.
  */
 import { MarkdownView, PluginSettingTab } from "obsidian";
-import type { App } from "obsidian";
+import type { App, EventRef } from "obsidian";
 import { CalloutEditor } from "./CalloutEditor";
 import { scanStringForUnknownCallouts } from "../utils/vaultCalloutScanner";
 import { renderHotkeySection } from "./sections/HotkeySection";
@@ -25,6 +25,7 @@ import {
 import { renderFallbackSection } from "./sections/FallbackSection";
 import { renderLanguageSection } from "./sections/LanguageSection";
 import { renderGlobalStyleSection } from "./sections/GlobalStyleSection";
+import { renderCustomPalettesSection } from "./sections/CustomPalettesSection";
 import { renderCalloutTypesSection } from "./sections/CalloutTypesSection";
 import {
 	createCalloutListsController,
@@ -52,6 +53,7 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 	plugin: SettingsTabPlugin;
 	private registrySubscription: (() => void) | null = null;
 	private materialSvgUnsubscribe: (() => void) | null = null;
+	private cssChangeRef: EventRef | null = null;
 	private refreshTimer: number | null = null;
 	private calloutLists: CalloutListsController | null = null;
 	private sectionDisposers: (() => void)[] = [];
@@ -72,32 +74,23 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 		this.plugin.schedulePruneUnusedFallbacks(0);
 
 		if (!this.registrySubscription) {
-			const sub = () => {
-				if (!containerEl.isConnected) return;
-				if (this.refreshTimer !== null) {
-					window.clearTimeout(this.refreshTimer);
-				}
-				this.refreshTimer = window.setTimeout(() => {
-					this.refreshTimer = null;
-					if (containerEl.isConnected) this.refreshLists();
-				}, 60);
-			};
+			const sub = () => this.scheduleListRefresh();
 			this.plugin.registry.onChange(sub);
 			this.registrySubscription = sub;
 		}
 
 		if (!this.materialSvgUnsubscribe) {
-			this.materialSvgUnsubscribe = this.plugin.onMaterialSvgChange(
-				() => {
-					if (!containerEl.isConnected) return;
-					if (this.refreshTimer !== null) {
-						window.clearTimeout(this.refreshTimer);
-					}
-					this.refreshTimer = window.setTimeout(() => {
-						this.refreshTimer = null;
-						if (containerEl.isConnected) this.refreshLists();
-					}, 60);
-				},
+			this.materialSvgUnsubscribe = this.plugin.onMaterialSvgChange(() =>
+				this.scheduleListRefresh(),
+			);
+		}
+
+		// Row swatches show the CURRENT theme mode's accent/background, so a
+		// live theme flip must re-render them. Refresh only (never a full
+		// display()): CSSInjector fires "css-change" after every inject.
+		if (!this.cssChangeRef) {
+			this.cssChangeRef = this.app.workspace.on("css-change", () =>
+				this.scheduleListRefresh(),
 			);
 		}
 
@@ -139,6 +132,7 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 
 		renderFallbackSection(sectionCtx, containerEl);
 		renderGlobalStyleSection(sectionCtx, containerEl);
+		renderCustomPalettesSection(sectionCtx, containerEl);
 		renderCalloutTypesSection(sectionCtx, containerEl);
 		renderAutocompleteSettingsSection(sectionCtx, containerEl);
 		renderContextMenuSettingsSection(sectionCtx, containerEl);
@@ -178,6 +172,10 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 		if (this.materialSvgUnsubscribe) {
 			this.materialSvgUnsubscribe();
 			this.materialSvgUnsubscribe = null;
+		}
+		if (this.cssChangeRef) {
+			this.app.workspace.offref(this.cssChangeRef);
+			this.cssChangeRef = null;
 		}
 		if (this.refreshTimer !== null) {
 			window.clearTimeout(this.refreshTimer);
@@ -221,6 +219,18 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 
 	private refreshLists(): void {
 		this.calloutLists?.refresh();
+	}
+
+	/** Debounced list refresh shared by all change subscriptions. */
+	private scheduleListRefresh(): void {
+		if (!this.containerEl.isConnected) return;
+		if (this.refreshTimer !== null) {
+			window.clearTimeout(this.refreshTimer);
+		}
+		this.refreshTimer = window.setTimeout(() => {
+			this.refreshTimer = null;
+			if (this.containerEl.isConnected) this.refreshLists();
+		}, 60);
 	}
 
 	private scanOpenEditorsForUnknownCallouts(): void {

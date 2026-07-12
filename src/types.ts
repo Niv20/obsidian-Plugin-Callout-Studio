@@ -61,6 +61,25 @@ export interface CalloutDefinition {
 	metadata?: Record<string, string>;
 }
 
+/**
+ * A user-saved color palette, shown in the "Custom" group of the callout
+ * editor's palette dropdown and managed from the settings tab. All six colors
+ * are stored as concrete `#rrggbb` hex values (baked at save time — applying,
+ * editing, or deleting a palette never affects callouts that already used it).
+ */
+export interface CustomPalette {
+	/** Stable unique id (`cp-` prefix). Never shown to the user. */
+	id: string;
+	/** User-visible palette name. */
+	name: string;
+	colorLight: string;
+	colorDark: string;
+	bgColorLight: string;
+	bgColorDark: string;
+	textColorLight: string;
+	textColorDark: string;
+}
+
 export type MaterialIconStyle = "outlined" | "filled" | "rounded" | "sharp";
 
 /**
@@ -183,6 +202,8 @@ export interface PluginSettings {
 	 * any other value is a locale code (e.g. `"he"`, `"zh-tw"`).
 	 */
 	language: string;
+	/** User-saved color palettes, selectable in the callout editor. */
+	customPalettes: CustomPalette[];
 }
 
 export interface PluginData {

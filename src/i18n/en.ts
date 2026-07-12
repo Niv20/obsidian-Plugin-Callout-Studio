@@ -111,7 +111,7 @@ export const en: Record<string, string> = {
 	"settings.darkLabel": "D",
 	"settings.lightColorAria": "Light: {{color}}",
 	"settings.darkColorAria": "Dark: {{color}}",
-	"settings.colorPairAria": "Light: {{light}} · Dark: {{dark}}",
+	"settings.colorSwatchAria": "Accent: {{accent}} · Background: {{bg}}",
 
 	// Settings — Fallback callout
 	"settings.fallbackCallout": "Default fallback callout",
@@ -143,6 +143,18 @@ export const en: Record<string, string> = {
 	"settings.previewCalloutTitle": "Example callout",
 	"settings.previewCalloutContent":
 		"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.",
+
+	// Settings — Saved color palettes
+	"settings.customPalettes": "Saved color palettes",
+	"settings.customPalettesDesc":
+		"Reusable color sets available in the callout editor's preset list. Editing or deleting a palette never changes callouts that already use its colors.",
+	"settings.newPalette": "New palette",
+	"settings.customPalettesEmpty":
+		"No saved palettes yet. Create one here, or pick a new color in the callout editor and save it.",
+	"settings.editPaletteAria": "Edit palette {{name}}",
+	"settings.deletePaletteAria": "Delete palette {{name}}",
+	"settings.deletePaletteConfirm":
+		'Delete palette "{{name}}"?\nCallouts that use its colors are not affected.',
 
 	// Settings — Context menu
 	"settings.enableContextMenu": "Enable callout context actions",
@@ -220,15 +232,18 @@ export const en: Record<string, string> = {
 	"editor.size": "Size",
 	"editor.horizontalOffset": "Horizontal offset",
 	"editor.verticalOffset": "Vertical offset",
-	"editor.colors": "Colors",
+	"editor.colors": "Color",
 	"editor.background": "Background",
 	"editor.text": "Text",
 	"editor.iconColor": "Main color",
-	"editor.palettes": "Presets",
-	"editor.paletteDefault": "Default blue",
+	"editor.paletteDeleted": "Deleted color",
 	"editor.paletteNone": "— select a preset —",
 	"editor.paletteGroupObsidian": "Obsidian callouts",
 	"editor.paletteGroupPresets": "Color presets",
+	"editor.paletteGroupCustom": "Custom",
+	"editor.paletteNewColor": "New color…",
+	"editor.contrastWarning":
+		"Low contrast against the background — may be hard to read",
 	"editor.foldable": "Foldable",
 	"editor.foldableDesc":
 		"Choose whether the callout can be folded and which default state to apply across the vault.",
@@ -252,6 +267,41 @@ export const en: Record<string, string> = {
 		"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.",
 	"editor.sampleInlineText": "Here is an inline [!{id}] pill inside a paragraph.",
 	"editor.previewReadOnly": "The live preview can't be edited",
+
+	// Palette editor modal
+	"palette.newTitle": "New color palette",
+	"palette.editTitle": "Edit color palette",
+	"palette.name": "Name",
+	"palette.namePlaceholder": "My palette",
+	"palette.nameExists": "A palette with this name already exists",
+	"palette.baseColor": "Base color",
+	"palette.baseColorDesc":
+		"Pick one color — light/dark accents, backgrounds, and text colors are derived automatically.",
+	"palette.advanced": "Customize all colors",
+	"palette.advancedDesc":
+		"Fine-tune each color individually. Turning this off re-derives everything from the base color.",
+	"palette.save": "Save",
+
+	// Color name suggestions (used to prefill palette names)
+	"colorName.red": "Red",
+	"colorName.orange": "Orange",
+	"colorName.amber": "Amber",
+	"colorName.yellow": "Yellow",
+	"colorName.lime": "Lime",
+	"colorName.green": "Green",
+	"colorName.teal": "Teal",
+	"colorName.cyan": "Cyan",
+	"colorName.sky": "Sky",
+	"colorName.blue": "Blue",
+	"colorName.indigo": "Indigo",
+	"colorName.violet": "Violet",
+	"colorName.purple": "Purple",
+	"colorName.pink": "Pink",
+	"colorName.rose": "Rose",
+	"colorName.brown": "Brown",
+	"colorName.gray": "Gray",
+	"colorName.black": "Black",
+	"colorName.white": "White",
 
 	// Icon Picker
 	"iconPicker.pickIcon": "Pick an icon",

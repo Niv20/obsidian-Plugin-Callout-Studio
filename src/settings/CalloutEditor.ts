@@ -7,21 +7,31 @@
  * real-Obsidian live preview via LiveCalloutPreview. Save logic is delegated to
  * CalloutEditorSave; validation to CalloutEditorValidation.
  */
-import { Modal, Notice, Setting, SliderComponent } from "obsidian";
-import type { CalloutDefinition, CalloutIcon } from "../types";
+import { Modal, Notice, Setting, SliderComponent, setIcon } from "obsidian";
+import type { CalloutDefinition, CalloutIcon, CustomPalette } from "../types";
 import { IconPicker } from "./IconPicker";
 import { LiveCalloutPreview } from "./LiveCalloutPreview";
 import { PREVIEW_PLACEHOLDER_ID } from "../constants";
-import { blendHex } from "../utils/colorUtils";
 import {
-	COLOR_PALETTES,
+	blendHex,
+	DEFAULT_TEXT_COLOR_LIGHT,
+	DEFAULT_TEXT_COLOR_DARK,
+} from "../utils/colorUtils";
+import {
 	OBSIDIAN_PALETTES,
 	EXTRA_PALETTES,
+	customPaletteToColorPalette,
+	generatePaletteId,
+	type ColorPalette,
 } from "../utils/colorPalettes";
 import { t } from "../i18n";
 import { sanitizeCalloutIdInput } from "../utils/calloutId";
 import { TagInput } from "../ui/TagInput";
-import { renderColorCircles } from "../ui/ColorCircles";
+import {
+	renderColorCircles,
+	resolveCurrentModeColors,
+} from "../ui/ColorCircles";
+import { PaletteEditorModal } from "./PaletteEditorModal";
 import { createAnimatedNumberLabel } from "../ui/AnimatedNumberLabel";
 import type { CalloutEditorPlugin } from "./editor/types";
 import {
@@ -41,9 +51,6 @@ import { performCalloutEditorSave } from "./editor/CalloutEditorSave";
 function generateId(displayName: string): string {
 	return sanitizeCalloutIdInput(displayName);
 }
-
-const DEFAULT_TEXT_COLOR_LIGHT = "#1a1a1a";
-const DEFAULT_TEXT_COLOR_DARK = "#e0e0e0";
 
 export class CalloutEditor extends Modal {
 	private plugin: CalloutEditorPlugin;
@@ -77,9 +84,6 @@ export class CalloutEditor extends Modal {
 	private initialSnapshot: string = "";
 	private initialStyleSnapshot: string = "";
 	private removePopupOutsideClickListener: (() => void) | null = null;
-	/** True when the detailed color grid should be shown. */
-	private customPresetSelected: boolean = false;
-	private refreshColorGridVisibility: (() => void) | null = null;
 
 	constructor(
 		plugin: CalloutEditorPlugin,
@@ -143,7 +147,6 @@ export class CalloutEditor extends Modal {
 		this.previewFoldCollapsed = this.foldable && this.defaultFolded;
 		this.hasHadCalloutId =
 			this.calloutId.trim().length > 0 || this.aliases.length > 0;
-		this.customPresetSelected = true;
 	}
 
 	openAndWait(): Promise<CalloutDefinition | null> {
@@ -290,6 +293,12 @@ export class CalloutEditor extends Modal {
 			});
 		});
 
+		// ── Color row ───────────────────────────────────────────────
+		// Standard setting row (matching Display name / Callout IDs / Icon).
+		// The palette dropdown is built further down — after the live preview
+		// exists, since selecting a palette refreshes it — and lands here.
+		const colorSetting = new Setting(contentEl).setName(t("editor.colors"));
+
 		// ── Preview + Adjustments Panel (two-column) ────────────────
 		const previewPanel = contentEl.createDiv({
 			cls: "callout-studio-preview-panel",
@@ -405,82 +414,51 @@ export class CalloutEditor extends Modal {
 				});
 		});
 
-		// ── Colors section ──
-		const colorsSection = adjustCol.createDiv({
-			cls: "callout-studio-adjust-section",
-		});
-		colorsSection.createDiv({
-			cls: "callout-studio-adjust-header",
-			text: t("editor.colors"),
-		});
-
-		// ── Palette Presets ──
-		const paletteContainer = colorsSection.createDiv({
-			cls: "cs-palette-container",
-		});
-		paletteContainer.createDiv({
-			cls: "cs-palette-label",
-			text: t("editor.palettes"),
-		});
-
-		const paletteRow = paletteContainer.createDiv({
-			cls: "cs-palette-row",
-		});
-
-		const colorGrid = colorsSection.createDiv({
-			cls: "callout-studio-color-grid",
-		});
-		this.refreshColorGridVisibility = () => {
-			colorGrid.toggleClass(
-				"cs-color-grid-hidden",
-				!this.customPresetSelected,
-			);
-		};
-		this.refreshColorGridVisibility();
-
-		// Track color inputs so palette selection can update them
-		const colorInputs: {
-			bgLight?: HTMLInputElement;
-			bgDark?: HTMLInputElement;
-			textLight?: HTMLInputElement;
-			textDark?: HTMLInputElement;
-			accentLight?: HTMLInputElement;
-			accentDark?: HTMLInputElement;
-		} = {};
-
-		// Keep each swatch wrapper's background in sync after the input value is
-		// set programmatically (e.g. applying a preset), since that doesn't fire
-		// an "input" event.
-		const syncColorSwatches = (): void => {
-			for (const input of Object.values(colorInputs)) {
-				if (input?.parentElement) {
-					input.parentElement.style.backgroundColor = input.value;
-				}
-			}
-		};
-
-		// Build rich palette dropdown (custom widget with circles + names)
-		const paletteEntries: {
+		// ── Palette dropdown (fills the Color row created above the preview) ──
+		// Build rich palette dropdown (custom widget with circles + names).
+		// Rebuilt on every menu open so palettes saved mid-session appear.
+		type PaletteEntry = {
 			id: string;
 			name: string;
-			group: "obsidian" | "preset";
-			palette: (typeof COLOR_PALETTES)[number];
-		}[] = [
-			...OBSIDIAN_PALETTES.map((p) => ({
-				id: p.id,
-				name: p.name,
-				group: "obsidian" as const,
-				palette: p,
-			})),
-			...EXTRA_PALETTES.map((p) => ({
-				id: p.id,
-				name: p.name,
-				group: "preset" as const,
-				palette: p,
-			})),
-		];
+			group: ColorPalette["group"];
+			palette: ColorPalette;
+		};
+		const paletteEntries: PaletteEntry[] = [];
+		const rebuildPaletteEntries = (): void => {
+			paletteEntries.length = 0;
+			paletteEntries.push(
+				// Custom palettes are user-named, so list them A→Z; the preset
+				// groups below keep their curated (non-alphabetical) order.
+				...[...this.plugin.settings.customPalettes]
+					.sort((a, b) => a.name.localeCompare(b.name))
+					.map((p) => {
+						const palette = customPaletteToColorPalette(p);
+						return {
+							id: palette.id,
+							name: palette.name,
+							group: "custom" as const,
+							palette,
+						};
+					}),
+				...OBSIDIAN_PALETTES.map((p) => ({
+					id: p.id,
+					name: p.name,
+					group: "obsidian" as const,
+					palette: p,
+				})),
+				...EXTRA_PALETTES.map((p) => ({
+					id: p.id,
+					name: p.name,
+					group: "preset" as const,
+					palette: p,
+				})),
+			);
+		};
+		rebuildPaletteEntries();
 
-		const dropdown = paletteRow.createDiv({ cls: "cs-palette-dropdown" });
+		const dropdown = colorSetting.controlEl.createDiv({
+			cls: "cs-palette-dropdown",
+		});
 		const trigger = dropdown.createEl("button", {
 			cls: "cs-palette-trigger",
 			attr: { type: "button", "aria-haspopup": "listbox" },
@@ -488,9 +466,11 @@ export class CalloutEditor extends Modal {
 		const triggerCircles = trigger.createDiv({
 			cls: "cs-palette-trigger-circles",
 		});
+		// Fallback label for colors that match no palette — typically a custom
+		// palette that was deleted after being applied (colors are baked in).
 		const triggerLabel = trigger.createSpan({
 			cls: "cs-palette-trigger-label",
-			text: t("editor.paletteDefault"),
+			text: t("editor.paletteDeleted"),
 		});
 		const triggerCaret = trigger.createSpan({
 			cls: "cs-palette-trigger-caret",
@@ -498,8 +478,10 @@ export class CalloutEditor extends Modal {
 		});
 		void triggerCaret;
 
+		// Opens downward: the colors section now sits near the top of the
+		// modal, so an upward menu would clip against the modal edge.
 		const menu = dropdown.createDiv({
-			cls: "cs-palette-menu cs-palette-menu-up cs-palette-menu-hidden",
+			cls: "cs-palette-menu cs-palette-menu-hidden",
 			attr: { role: "listbox", tabindex: "-1" },
 		});
 
@@ -526,34 +508,20 @@ export class CalloutEditor extends Modal {
 			this.bgColorDark = state.bgColorDark;
 			this.textColorLight = state.textColorLight;
 			this.textColorDark = state.textColorDark;
-			if (colorInputs.accentLight)
-				colorInputs.accentLight.value = this.colorLight;
-			if (colorInputs.accentDark)
-				colorInputs.accentDark.value = this.colorDark;
-			if (colorInputs.bgLight)
-				colorInputs.bgLight.value = this.bgColorLight;
-			if (colorInputs.bgDark) colorInputs.bgDark.value = this.bgColorDark;
-			if (colorInputs.textLight)
-				colorInputs.textLight.value = this.textColorLight;
-			if (colorInputs.textDark)
-				colorInputs.textDark.value = this.textColorDark;
-			syncColorSwatches();
 			this.updatePreview();
 		};
 
-		const renderTriggerCircles = (
-			lightColor: string | null,
-			darkColor: string | null,
-		): void => {
+		// The trigger swatch mirrors the row swatches: accent + background
+		// for the current theme mode.
+		const renderTriggerCircles = (accent: string, bg: string): void => {
 			triggerCircles.empty();
-			if (lightColor === null || darkColor === null) return;
-			renderColorCircles(triggerCircles, lightColor, darkColor, {
-				size: 16,
-			});
+			renderColorCircles(triggerCircles, accent, bg, { size: 16 });
 		};
-		const matchesPalette = (
-			palette: (typeof COLOR_PALETTES)[number],
-		): boolean =>
+		const renderTriggerCirclesFromState = (): void => {
+			const { accent, bg } = resolveCurrentModeColors(readColorState());
+			renderTriggerCircles(accent, bg);
+		};
+		const matchesPalette = (palette: ColorPalette): boolean =>
 			palette.colorLight.toLowerCase() ===
 				this.colorLight.toLowerCase() &&
 			palette.colorDark.toLowerCase() === this.colorDark.toLowerCase() &&
@@ -568,16 +536,16 @@ export class CalloutEditor extends Modal {
 		if (matchedEntry) {
 			selectedId = matchedEntry.id;
 			triggerLabel.setText(matchedEntry.name);
-			renderTriggerCircles(
-				matchedEntry.palette.colorLight,
-				matchedEntry.palette.colorDark,
+			const { accent, bg } = resolveCurrentModeColors(
+				matchedEntry.palette,
 			);
+			renderTriggerCircles(accent, bg);
 		} else {
-			renderTriggerCircles(this.colorLight, this.colorDark);
+			renderTriggerCirclesFromState();
 		}
 
 		const applyPaletteColors = (
-			palette: (typeof COLOR_PALETTES)[number],
+			palette: ColorPalette,
 			persist: boolean,
 		): void => {
 			this.colorLight = palette.colorLight;
@@ -588,22 +556,12 @@ export class CalloutEditor extends Modal {
 			if (palette.bgColorDark !== undefined) {
 				this.bgColorDark = palette.bgColorDark;
 			}
-			this.textColorLight = DEFAULT_TEXT_COLOR_LIGHT;
-			this.textColorDark = DEFAULT_TEXT_COLOR_DARK;
-
-			if (colorInputs.accentLight)
-				colorInputs.accentLight.value = this.colorLight;
-			if (colorInputs.accentDark)
-				colorInputs.accentDark.value = this.colorDark;
-			if (colorInputs.bgLight)
-				colorInputs.bgLight.value = this.bgColorLight;
-			if (colorInputs.bgDark) colorInputs.bgDark.value = this.bgColorDark;
-			if (colorInputs.textLight)
-				colorInputs.textLight.value = this.textColorLight;
-			if (colorInputs.textDark)
-				colorInputs.textDark.value = this.textColorDark;
-
-			syncColorSwatches();
+			// Custom palettes carry their own text colors; presets fall back
+			// to the defaults, as before.
+			this.textColorLight =
+				palette.textColorLight ?? DEFAULT_TEXT_COLOR_LIGHT;
+			this.textColorDark =
+				palette.textColorDark ?? DEFAULT_TEXT_COLOR_DARK;
 			this.updatePreview();
 			if (persist) colorStateBeforeMenu = null;
 		};
@@ -644,12 +602,8 @@ export class CalloutEditor extends Modal {
 			selectedId = entry.id;
 			applyPaletteColors(entry.palette, true);
 			triggerLabel.setText(entry.name);
-			renderTriggerCircles(
-				entry.palette.colorLight,
-				entry.palette.colorDark,
-			);
-			this.customPresetSelected = true;
-			this.refreshColorGridVisibility?.();
+			const { accent, bg } = resolveCurrentModeColors(entry.palette);
+			renderTriggerCircles(accent, bg);
 			this.updateSaveState();
 			closeMenu();
 		};
@@ -658,7 +612,11 @@ export class CalloutEditor extends Modal {
 			menu.empty();
 			itemEls.length = 0;
 
-			const groupSpec: { key: "obsidian" | "preset"; label: string }[] = [
+			const groupSpec: {
+				key: ColorPalette["group"];
+				label: string;
+			}[] = [
+				{ key: "custom", label: t("editor.paletteGroupCustom") },
 				{ key: "obsidian", label: t("editor.paletteGroupObsidian") },
 				{ key: "preset", label: t("editor.paletteGroupPresets") },
 			];
@@ -679,12 +637,8 @@ export class CalloutEditor extends Modal {
 						cls: "cs-palette-menu-item",
 						attr: { role: "option", "data-index": String(i) },
 					});
-					renderColorCircles(
-						item,
-						e.palette.colorLight,
-						e.palette.colorDark,
-						{ size: 16 },
-					);
+					const { accent, bg } = resolveCurrentModeColors(e.palette);
+					renderColorCircles(item, accent, bg, { size: 16 });
 					item.createSpan({
 						cls: "cs-palette-menu-item-label",
 						text: e.name,
@@ -695,6 +649,56 @@ export class CalloutEditor extends Modal {
 					if (e.id === selectedId) item.addClass("is-selected");
 				}
 			}
+
+			// "+ New color…" — opens the palette editor to create a named
+			// custom palette, which is then applied to this callout. Kept out
+			// of itemEls so arrow-key navigation stays within real palettes.
+			const newColorItem = menu.createDiv({
+				cls: "cs-palette-menu-item cs-palette-menu-new-color",
+				attr: { role: "option" },
+			});
+			const newColorIcon = newColorItem.createSpan({
+				cls: "cs-palette-new-color-icon",
+			});
+			setIcon(newColorIcon, "plus");
+			newColorItem.createSpan({
+				cls: "cs-palette-menu-item-label",
+				text: t("editor.paletteNewColor"),
+			});
+			newColorItem.addEventListener("click", () =>
+				void pickNewPaletteColor(),
+			);
+		};
+
+		// ── "+ New color…" flow ──
+		// Opens the same palette editor the settings section uses; saving the
+		// new palette immediately selects and applies it to this callout.
+		const pickNewPaletteColor = async (): Promise<void> => {
+			// Drop any uncommitted hover-preview colors before the modal opens.
+			if (colorStateBeforeMenu) {
+				applyColorState(colorStateBeforeMenu);
+				colorStateBeforeMenu = null;
+			}
+			closeMenu();
+			const result = await new PaletteEditorModal(this.app, {
+				takenNames: this.plugin.settings.customPalettes.map(
+					(p) => p.name,
+				),
+			}).openAndWait();
+			if (!result) return;
+			const palette: CustomPalette = {
+				id: generatePaletteId(),
+				...result,
+			};
+			this.plugin.settings.customPalettes.push(palette);
+			await this.plugin.saveSettings();
+			rebuildPaletteEntries();
+			selectedId = palette.id;
+			applyPaletteColors(customPaletteToColorPalette(palette), true);
+			triggerLabel.setText(palette.name);
+			const { accent, bg } = resolveCurrentModeColors(palette);
+			renderTriggerCircles(accent, bg);
+			this.updateSaveState();
 		};
 
 		const openMenu = (): void => {
@@ -702,6 +706,7 @@ export class CalloutEditor extends Modal {
 			closeFoldMenu();
 			menuOpen = true;
 			colorStateBeforeMenu = readColorState();
+			rebuildPaletteEntries();
 			buildMenu();
 			menu.removeClass("cs-palette-menu-hidden");
 			trigger.addClass("is-open");
@@ -734,59 +739,6 @@ export class CalloutEditor extends Modal {
 				closeMenu();
 			}
 		});
-
-		// Header row
-		const gridHeader = colorGrid.createDiv({
-			cls: "callout-studio-color-grid-header",
-		});
-		gridHeader.createSpan({ text: "" }); // spacer
-		gridHeader.createSpan({ text: t("editor.light") });
-		gridHeader.createSpan({ text: t("editor.dark") });
-
-		// Background row
-		const bgInputs = this.addColorRow(
-			colorGrid,
-			t("editor.background"),
-			this.bgColorLight,
-			this.bgColorDark,
-			(light, dark) => {
-				if (light !== undefined) this.bgColorLight = light;
-				if (dark !== undefined) this.bgColorDark = dark;
-				this.updatePreview();
-			},
-		);
-		colorInputs.bgLight = bgInputs.light;
-		colorInputs.bgDark = bgInputs.dark;
-
-		// Text row
-		const textInputs = this.addColorRow(
-			colorGrid,
-			t("editor.text"),
-			this.textColorLight,
-			this.textColorDark,
-			(light, dark) => {
-				if (light !== undefined) this.textColorLight = light;
-				if (dark !== undefined) this.textColorDark = dark;
-				this.updatePreview();
-			},
-		);
-		colorInputs.textLight = textInputs.light;
-		colorInputs.textDark = textInputs.dark;
-
-		// Icon/accent row
-		const accentInputs = this.addColorRow(
-			colorGrid,
-			t("editor.iconColor"),
-			this.colorLight,
-			this.colorDark,
-			(light, dark) => {
-				if (light !== undefined) this.colorLight = light;
-				if (dark !== undefined) this.colorDark = dark;
-				this.updatePreview();
-			},
-		);
-		colorInputs.accentLight = accentInputs.light;
-		colorInputs.accentDark = accentInputs.dark;
 
 		// Foldable — dropdown in the same adjustment column.
 		const foldSection = adjustCol.createDiv({
@@ -968,55 +920,6 @@ export class CalloutEditor extends Modal {
 
 		// Set initial save button state
 		this.updateSaveState();
-	}
-
-	/**
-	 * Adds a row to the colour grid with a label plus Light and Dark colour inputs.
-	 */
-	private addColorRow(
-		grid: HTMLElement,
-		label: string,
-		lightVal: string,
-		darkVal: string,
-		onChange: (light?: string, dark?: string) => void,
-	): { light: HTMLInputElement; dark: HTMLInputElement } {
-		const row = grid.createDiv({ cls: "callout-studio-color-row" });
-		row.createSpan({ text: label });
-
-		// The native color input is rendered invisibly on top of a wrapper
-		// whose background-color is the visible swatch. This keeps the swatch a
-		// fully styleable box that renders consistently (and never gets clipped)
-		// on desktop, iPhone and tablets.
-		const makeSwatch = (
-			value: string,
-			onPick: (next: string) => void,
-		): HTMLInputElement => {
-			const wrap = row.createEl("label", {
-				cls: "callout-studio-color-input-wrap",
-			});
-			wrap.style.backgroundColor = value;
-			const input = wrap.createEl("input", {
-				type: "color",
-				value,
-				cls: "callout-studio-color-input",
-			});
-			input.addEventListener("input", () => {
-				wrap.style.backgroundColor = input.value;
-				onPick(input.value);
-				this.customPresetSelected = true;
-				this.updateSaveState();
-			});
-			return input;
-		};
-
-		const lightInput = makeSwatch(lightVal, (next) =>
-			onChange(next, undefined),
-		);
-		const darkInput = makeSwatch(darkVal, (next) =>
-			onChange(undefined, next),
-		);
-
-		return { light: lightInput, dark: darkInput };
 	}
 
 	private stateSnapshot(): string {

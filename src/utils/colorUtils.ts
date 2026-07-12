@@ -154,3 +154,80 @@ export function blendHex(hex1: string, hex2: string, amount: number): string {
 		c1.b + (c2.b - c1.b) * amount,
 	);
 }
+
+/** Default callout content text colors (shared by the editor and palette derivation). */
+export const DEFAULT_TEXT_COLOR_LIGHT = "#1a1a1a";
+export const DEFAULT_TEXT_COLOR_DARK = "#e0e0e0";
+
+/** True for a normalized `#rrggbb` hex color string. */
+export function isValidHexColor(value: unknown): value is string {
+	return typeof value === "string" && /^#[0-9a-f]{6}$/i.test(value);
+}
+
+/** WCAG 2.x relative luminance (0..1) of an `#rrggbb` color. */
+export function relativeLuminance(hex: string): number {
+	const { r, g, b } = hexToRgb(hex);
+	const channel = (c: number): number => {
+		const s = c / 255;
+		return s <= 0.03928 ? s / 12.92 : Math.pow((s + 0.055) / 1.055, 2.4);
+	};
+	return 0.2126 * channel(r) + 0.7152 * channel(g) + 0.0722 * channel(b);
+}
+
+/** WCAG contrast ratio between two hex colors (1..21). */
+export function contrastRatio(hex1: string, hex2: string): number {
+	const l1 = relativeLuminance(hex1);
+	const l2 = relativeLuminance(hex2);
+	return (Math.max(l1, l2) + 0.05) / (Math.min(l1, l2) + 0.05);
+}
+
+/**
+ * Returns `hex` adjusted so it reads against `bg`: blends the ORIGINAL color
+ * toward `towards` in 5% steps (non-compounding) until the contrast ratio
+ * reaches `minRatio`, capping at fully-`towards`. Always terminates: the
+ * endpoint (#000000 on a pale background / #ffffff on a dark one) exceeds any
+ * ratio this plugin asks for.
+ */
+export function ensureContrast(
+	hex: string,
+	bg: string,
+	towards: string,
+	minRatio = 3,
+): string {
+	if (contrastRatio(hex, bg) >= minRatio) return hex;
+	for (let step = 1; step <= 20; step++) {
+		const candidate = blendHex(hex, towards, step * 0.05);
+		if (contrastRatio(candidate, bg) >= minRatio) return candidate;
+	}
+	return towards;
+}
+
+/** The six callout colors derived from a single base color. */
+export interface DerivedPalette {
+	colorLight: string;
+	colorDark: string;
+	bgColorLight: string;
+	bgColorDark: string;
+	textColorLight: string;
+	textColorDark: string;
+}
+
+/**
+ * Derives a full palette from one base color. Backgrounds are pale tints of
+ * the ORIGINAL color (same blend as makePalette in colorPalettes.ts) so the
+ * hue is preserved; the accents are then auto-corrected per mode — a too-light
+ * pick is darkened for light mode, a too-dark pick is lightened for dark mode
+ * — so titles and icons always stay readable (>= 3:1, the WCAG non-text bar).
+ */
+export function derivePaletteFromColor(hex: string): DerivedPalette {
+	const bgColorLight = blendHex(hex, "#ffffff", 0.88);
+	const bgColorDark = blendHex(hex, "#1e1e1e", 0.88);
+	return {
+		colorLight: ensureContrast(hex, bgColorLight, "#000000", 3),
+		colorDark: ensureContrast(hex, bgColorDark, "#ffffff", 3),
+		bgColorLight,
+		bgColorDark,
+		textColorLight: DEFAULT_TEXT_COLOR_LIGHT,
+		textColorDark: DEFAULT_TEXT_COLOR_DARK,
+	};
+}

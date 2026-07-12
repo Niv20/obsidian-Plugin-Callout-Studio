@@ -7,13 +7,14 @@
  * from colorUtils when not explicitly supplied.
  * Used by CalloutEditor to populate the color preset dropdown.
  */
-import { blendHex } from "./colorUtils";
+import { blendHex, isValidHexColor } from "./colorUtils";
+import type { CustomPalette } from "../types";
 
 export interface ColorPalette {
 	id: string;
 	name: string;
 	/** Group label for the dropdown */
-	group: "obsidian" | "preset";
+	group: "obsidian" | "preset" | "custom";
 	/** Accent / icon color – light mode */
 	colorLight: string;
 	/** Accent / icon color – dark mode */
@@ -22,6 +23,10 @@ export interface ColorPalette {
 	bgColorLight?: string;
 	/** Background – dark mode (optional) */
 	bgColorDark?: string;
+	/** Content text – light mode (only custom palettes carry text colors) */
+	textColorLight?: string;
+	/** Content text – dark mode (only custom palettes carry text colors) */
+	textColorDark?: string;
 }
 
 function makePalette(
@@ -148,3 +153,67 @@ export const COLOR_PALETTES: ColorPalette[] = [
 	...OBSIDIAN_PALETTES,
 	...EXTRA_PALETTES,
 ];
+
+/** Adapts a user-saved palette to the dropdown's ColorPalette shape. */
+export function customPaletteToColorPalette(p: CustomPalette): ColorPalette {
+	return {
+		id: p.id,
+		name: p.name,
+		group: "custom",
+		colorLight: p.colorLight,
+		colorDark: p.colorDark,
+		bgColorLight: p.bgColorLight,
+		bgColorDark: p.bgColorDark,
+		textColorLight: p.textColorLight,
+		textColorDark: p.textColorDark,
+	};
+}
+
+/**
+ * Unique id for a new custom palette. The `cp-` prefix guarantees no
+ * collision with the fixed preset ids ("note", "ocean", …).
+ */
+export function generatePaletteId(): string {
+	return `cp-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
+}
+
+/**
+ * Validates untrusted saved/imported palette data: keeps only entries with a
+ * non-empty string id + name and six valid `#rrggbb` colors, deduped by id
+ * (first wins). Invalid entries are dropped silently, matching the tolerance
+ * of the rest of the settings loader.
+ */
+export function sanitizeCustomPalettes(raw: unknown): CustomPalette[] {
+	if (!Array.isArray(raw)) return [];
+	const result: CustomPalette[] = [];
+	const seenIds = new Set<string>();
+	for (const entry of raw) {
+		if (!entry || typeof entry !== "object") continue;
+		const p = entry as Partial<CustomPalette>;
+		if (typeof p.id !== "string" || p.id.length === 0) continue;
+		if (typeof p.name !== "string" || p.name.length === 0) continue;
+		if (seenIds.has(p.id)) continue;
+		if (
+			!isValidHexColor(p.colorLight) ||
+			!isValidHexColor(p.colorDark) ||
+			!isValidHexColor(p.bgColorLight) ||
+			!isValidHexColor(p.bgColorDark) ||
+			!isValidHexColor(p.textColorLight) ||
+			!isValidHexColor(p.textColorDark)
+		) {
+			continue;
+		}
+		seenIds.add(p.id);
+		result.push({
+			id: p.id,
+			name: p.name,
+			colorLight: p.colorLight,
+			colorDark: p.colorDark,
+			bgColorLight: p.bgColorLight,
+			bgColorDark: p.bgColorDark,
+			textColorLight: p.textColorLight,
+			textColorDark: p.textColorDark,
+		});
+	}
+	return result;
+}

@@ -635,25 +635,16 @@ button.callout-studio-icon-picker-loading {
 
 /* ─── Color Palette Presets ───────────────────────────────────── */
 
-.cs-palette-container {
-	padding: 4px 10px 8px;
-}
-
-.cs-palette-label {
-	font-size: var(--font-ui-smaller);
-	color: var(--text-muted);
-	margin-bottom: 6px;
-}
-
-.cs-palette-row {
-	display: flex;
-	align-items: center;
-	gap: 8px;
-}
-
 .cs-palette-dropdown {
 	flex: 1;
 	position: relative;
+}
+
+/* The editor's Color row hosts the dropdown in a standard setting
+   control; cap its width so it reads like the other row controls. */
+.callout-studio-editor .setting-item-control .cs-palette-dropdown {
+	min-width: 220px;
+	max-width: 280px;
 }
 
 .cs-palette-trigger {
@@ -783,12 +774,21 @@ button.callout-studio-icon-picker-loading {
 	width: var(--cs-circle-size);
 	height: var(--cs-circle-size);
 	border-radius: 50%;
-	border: 1.5px solid var(--background-primary);
+	/* Visible border: the right circle shows the callout BACKGROUND color,
+	   which is pale and would otherwise vanish against the panel. */
+	border: 1px solid var(--background-modifier-border);
+	box-shadow: 0 0 0 1.5px var(--background-primary);
 	box-sizing: border-box;
+	position: relative;
 }
 
 .cs-color-circle + .cs-color-circle {
 	margin-inline-start: calc(var(--cs-circle-size) * -0.4);
+}
+
+/* The accent (main) circle stacks ABOVE the background circle. */
+.cs-color-circle-l {
+	z-index: 1;
 }
 
 /* Color grid hidden state until a preset is chosen */
@@ -1306,6 +1306,13 @@ button.callout-studio-icon-picker-loading {
 	max-width: 220px;
 }
 
+/* Invalid text input (e.g. duplicate palette name) — red like an ID error */
+input.cs-input-invalid,
+input.cs-input-invalid:focus {
+	border-color: var(--text-error);
+	box-shadow: 0 0 0 1px var(--text-error);
+}
+
 .cs-tag-error {
 	color: var(--text-error);
 	font-size: var(--font-ui-smaller);
@@ -1814,6 +1821,109 @@ button.callout-studio-icon-picker-loading {
 	.callout-studio-preview-panel {
 		grid-template-columns: minmax(0, 1fr) 250px;
 	}
+}
+
+/* ─── Custom Color Palettes ─────────────────────────────────── */
+
+/* Grid cell wrapping a swatch + its low-contrast warning badge */
+.cs-color-cell {
+	position: relative;
+	display: inline-block;
+	justify-self: center;
+	line-height: 0;
+}
+
+.cs-contrast-warning {
+	position: absolute;
+	top: -6px;
+	right: -8px;
+	display: none;
+	color: var(--text-warning);
+	background: var(--background-primary);
+	border-radius: 50%;
+	line-height: 0;
+	padding: 1px;
+	pointer-events: auto;
+}
+
+.cs-contrast-warning.is-visible {
+	display: inline-flex;
+}
+
+.cs-contrast-warning svg {
+	width: 11px;
+	height: 11px;
+}
+
+/* "+ New color…" entry pinned at the bottom of the palette menu */
+.cs-palette-menu-new-color {
+	border-top: 1px solid var(--background-modifier-border);
+	margin-top: 4px;
+	color: var(--text-muted);
+}
+
+.cs-palette-new-color-icon {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 16px;
+	line-height: 0;
+	flex-shrink: 0;
+}
+
+.cs-palette-new-color-icon svg {
+	width: 14px;
+	height: 14px;
+}
+
+/* Saved palettes list (settings section) */
+.cs-palettes-desc {
+	margin-bottom: 8px;
+}
+
+.cs-palette-list {
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+	margin-bottom: 12px;
+}
+
+.cs-palette-list-empty {
+	color: var(--text-muted);
+	font-size: var(--font-ui-smaller);
+	padding: 4px 12px 8px;
+}
+
+.cs-palette-list-row .cs-palette-list-name {
+	flex: 1;
+	min-width: 0;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+/* Palette editor modal */
+.callout-studio-palette-editor .cs-palette-derived-preview {
+	display: flex;
+	align-items: center;
+	gap: 20px;
+	padding: 10px 0 14px;
+}
+
+.cs-palette-preview-pair {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.cs-palette-preview-label {
+	font-size: var(--font-ui-smaller);
+	color: var(--text-muted);
+}
+
+.callout-studio-palette-editor .cs-palette-editor-grid {
+	max-width: 320px;
+	margin-bottom: 8px;
 }
 
 /* ─── Icon Picker Weight Select ─────────────────────────────── */

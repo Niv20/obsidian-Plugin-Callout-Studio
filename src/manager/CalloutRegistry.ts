@@ -24,6 +24,7 @@ import {
 	DEFAULT_SETTINGS,
 } from "../constants";
 import { parseCssColorToHex } from "../utils/colorUtils";
+import { sanitizeCustomPalettes } from "../utils/colorPalettes";
 import { sortCalloutsByDisplayName } from "../utils/sorting";
 
 const CURRENT_DATA_VERSION = 2;
@@ -141,6 +142,7 @@ export function mergeSavedSettings(
 			savedSettings.fallbackCalloutId ??
 			DEFAULT_SETTINGS.fallbackCalloutId,
 		language: savedSettings.language ?? DEFAULT_SETTINGS.language,
+		customPalettes: sanitizeCustomPalettes(savedSettings.customPalettes),
 	};
 }
 
@@ -559,6 +561,7 @@ export class CalloutRegistry {
 		// Reset fallback callout – the previously-selected callout may no
 		// longer exist after the reset, which would leave the dropdown blank.
 		this.settings.fallbackCalloutId = DEFAULT_SETTINGS.fallbackCalloutId;
+		this.settings.customPalettes = [];
 		// Clear SVG caches
 		this.materialSvgCache = [];
 		this.notifyChange();

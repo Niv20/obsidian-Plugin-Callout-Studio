@@ -9,7 +9,10 @@
 import { setIcon } from "obsidian";
 import { getLocale, t } from "../../i18n";
 import { getSortedCalloutIds } from "../../utils/sorting";
-import { renderColorCircles } from "../../ui/ColorCircles";
+import {
+	renderColorCircles,
+	resolveCurrentModeColors,
+} from "../../ui/ColorCircles";
 import type { CalloutDefinition } from "../../types";
 import type { SettingsSectionContext } from "./types";
 
@@ -63,12 +66,10 @@ export function renderCalloutRow(
 	}
 
 	const colorsEl = row.createDiv({ cls: "callout-studio-row-colors" });
-	renderColorCircles(colorsEl, def.colorLight, def.colorDark, {
+	const { accent, bg } = resolveCurrentModeColors(def);
+	renderColorCircles(colorsEl, accent, bg, {
 		size: 18,
-		ariaLabel: t("settings.colorPairAria", {
-			light: def.colorLight,
-			dark: def.colorDark,
-		}),
+		ariaLabel: t("settings.colorSwatchAria", { accent, bg }),
 	});
 
 	const buttonsEl = row.createDiv({ cls: "callout-studio-row-buttons" });
