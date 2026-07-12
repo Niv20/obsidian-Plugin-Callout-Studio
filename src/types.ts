@@ -177,24 +177,55 @@ export interface IconSourceSettings {
 	lastEmojiSkinTone?: number;
 }
 
-export interface GlobalStyleSettings {
-	/** Which border sides are enabled */
-	borderSides: {
-		top: boolean;
-		right: boolean;
-		bottom: boolean;
-		left: boolean;
-	};
+/** Per-side border toggles shared by every render role's frame style. */
+export interface BorderSidesSettings {
+	top: boolean;
+	right: boolean;
+	bottom: boolean;
+	left: boolean;
+}
+
+/**
+ * Frame styling for an optional render role's surface (heading bar / inline
+ * pill): which border sides to draw, how thick, and the corner rounding.
+ */
+export interface RoleFrameStyleSettings {
+	borderSides: BorderSidesSettings;
 	/** Border thickness in px */
+	borderWidth: number;
+	/** Border-radius in px */
+	borderRadius: number;
+}
+
+/**
+ * Heading-bar frame styling plus the vertical text spacing inside the bar.
+ * Both paddings are in em (relative to the heading's own font size) so the
+ * bar scales with the heading level.
+ */
+export interface HeadingFrameStyleSettings extends RoleFrameStyleSettings {
+	/** Space above the heading text inside the bar, in em. */
+	paddingTop: number;
+	/** Space below the heading text inside the bar, in em. */
+	paddingBottom: number;
+}
+
+export interface GlobalStyleSettings {
+	/** Which border sides are enabled (regular callouts) */
+	borderSides: BorderSidesSettings;
+	/** Border thickness in px (regular callouts) */
 	borderWidth: number;
 	/** Scale factor for callout title font size (e.g. 0.8 – 1.5) */
 	titleScale: number;
 	/** Scale factor for callout content font size (e.g. 0.8 – 1.5) */
 	contentScale: number;
-	/** Border-radius in px for callout corners */
+	/** Border-radius in px for callout corners (regular callouts) */
 	borderRadius: number;
 	/** When true, indent callout body to align under the title text (not the icon) */
 	alignContentWithTitle: boolean;
+	/** Vault-wide frame style for heading callout bars. */
+	heading: HeadingFrameStyleSettings;
+	/** Vault-wide frame style for inline callout pills. */
+	inline: RoleFrameStyleSettings;
 }
 
 export interface PluginSettings {

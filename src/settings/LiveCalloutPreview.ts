@@ -21,8 +21,9 @@
  * editable — so the plugin never breaks.
  *
  * Shared by the callout editor modal (previewing an in-progress edit via the
- * reserved preview ID) and the global-style settings section (previewing real
- * built-in callouts under the vault-wide geometry).
+ * reserved preview ID), the callout type cards (one role each), and the
+ * per-role global style popups (previewing the neutral demo callout under
+ * the vault-wide geometry).
  */
 import { Component, MarkdownRenderer, Notice, type App } from "obsidian";
 import { EmbeddableMarkdownEditor } from "./EmbeddableMarkdownEditor";
@@ -36,8 +37,9 @@ const RENDER_DEBOUNCE_MS = 150;
 const READ_ONLY_NOTICE_THROTTLE_MS = 1500;
 
 export interface LiveCalloutPreviewOptions {
-	/** Header label shown above the preview. */
-	title: string;
+	/** Header label shown above the preview. Omit for a headerless preview
+	 * (e.g. inside a card that carries its own title). */
+	title?: string;
 	/** Initial sample markdown to render. */
 	initialText: string;
 	/**
@@ -147,10 +149,12 @@ export class LiveCalloutPreview {
 			cls: "callout-studio-preview-container cs-live-preview-container",
 		});
 
-		const header = container.createDiv({
-			cls: "callout-studio-preview-header",
-		});
-		header.createSpan({ text: this.opts.title });
+		if (this.opts.title) {
+			const header = container.createDiv({
+				cls: "callout-studio-preview-header",
+			});
+			header.createSpan({ text: this.opts.title });
+		}
 
 		const body = container.createDiv({
 			cls: "cs-live-preview-body",

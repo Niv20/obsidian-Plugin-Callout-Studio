@@ -379,8 +379,17 @@ export class CSSInjector {
 			transforms.push(`translate(${ox}px, ${oy}px)`);
 		if (scale !== 1) transforms.push(`scale(${scale})`);
 
+		// The adjustment applies to every surface the callout's icon renders
+		// on: the regular callout title, the heading-bar token, and the inline
+		// pill (ref tokens in outline/links stay untouched — they are too
+		// small for pixel offsets to make sense).
+		const selectors = [
+			`.callout[data-callout="${def.id}"] > .callout-title > .callout-icon`,
+			`.${CSS_HEADING_TOKEN}[data-callout="${def.id}"] > .${CSS_TOKEN_ICON}`,
+			`.${CSS_INLINE_TOKEN}[data-callout="${def.id}"] > .${CSS_TOKEN_ICON}`,
+		];
 		return (
-			`.callout[data-callout="${def.id}"] > .callout-title > .callout-icon {\n` +
+			`${selectors.join(",\n")} {\n` +
 			`  transform: ${transforms.join(" ")};\n` +
 			`  transform-origin: center;\n` +
 			`}`
@@ -743,7 +752,74 @@ export class CSSInjector {
 			);
 		}
 
+		// Heading-bar frame. Borders are drawn directly; radius and vertical
+		// text spacing go through CSS variables consumed by the static
+		// .cs-heading-callout rule in styles.css (whose fallbacks are the
+		// defaults, so nothing is emitted while a value is untouched).
+		const headingProps = this.roleBorderProps(gs.heading);
+		if (gs.heading.borderRadius !== 4) {
+			headingProps.push(
+				`  --cs-heading-radius: ${gs.heading.borderRadius}px;`,
+			);
+		}
+		if (gs.heading.paddingTop !== 0.25) {
+			headingProps.push(
+				`  --cs-heading-pad-top: ${gs.heading.paddingTop}em;`,
+			);
+		}
+		if (gs.heading.paddingBottom !== 0.25) {
+			headingProps.push(
+				`  --cs-heading-pad-bottom: ${gs.heading.paddingBottom}em;`,
+			);
+		}
+		if (headingProps.length > 0) {
+			parts.push(
+				`.${CSS_HEADING_LINE} {\n${headingProps.join("\n")}\n}`,
+			);
+		}
+
+		// Inline-pill frame. Radius 16px ≈ the default 1em pill shape, so the
+		// static rule's fallback keeps the classic pill until the user moves it.
+		const inlineProps = this.roleBorderProps(gs.inline);
+		if (gs.inline.borderRadius !== 16) {
+			inlineProps.push(
+				`  --cs-inline-radius: ${gs.inline.borderRadius}px;`,
+			);
+		}
+		if (inlineProps.length > 0) {
+			parts.push(`.${CSS_INLINE_TOKEN} {\n${inlineProps.join("\n")}\n}`);
+		}
+
 		return parts.join("\n\n");
+	}
+
+	/**
+	 * Border declarations for a role frame (heading bar / inline pill),
+	 * mirroring the regular-callout border logic: tinted by the element's own
+	 * per-callout accent (--cs-color-rgb). Empty when no side is enabled.
+	 */
+	private roleBorderProps(frame: {
+		borderSides: {
+			top: boolean;
+			right: boolean;
+			bottom: boolean;
+			left: boolean;
+		};
+		borderWidth: number;
+	}): string[] {
+		const { top, right, bottom, left } = frame.borderSides;
+		const anySide = top || right || bottom || left;
+		if (!anySide) return [];
+		const bStyle = `${frame.borderWidth}px solid rgba(var(--cs-color-rgb, 68, 138, 255), 0.45)`;
+		if (top && right && bottom && left) {
+			return [`  border: ${bStyle};`];
+		}
+		const props: string[] = [`  border: none;`];
+		if (top) props.push(`  border-top: ${bStyle};`);
+		if (right) props.push(`  border-right: ${bStyle};`);
+		if (bottom) props.push(`  border-bottom: ${bStyle};`);
+		if (left) props.push(`  border-left: ${bStyle};`);
+		return props;
 	}
 
 	/**

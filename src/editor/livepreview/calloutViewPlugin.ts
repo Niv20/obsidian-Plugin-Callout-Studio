@@ -112,7 +112,8 @@ export function createCalloutViewPlugin(host: LivePreviewHost) {
 					update.viewportChanged ||
 					refreshed ||
 					mouseReleased ||
-					(update.selectionSet && !mousedown)
+					((update.selectionSet || update.focusChanged) &&
+						!mousedown)
 				) {
 					this.decorations = buildDecorations(update.view, host);
 				}
@@ -216,7 +217,13 @@ function decorateLine(
 	// Native blockquote callouts belong to Obsidian's own rendering.
 	if (tokens.some((t) => t.role === "regular")) return;
 
+	// Raw-syntax reveal follows the caret only while the editor is focused,
+	// matching core Live Preview (which re-collapses formatting on blur). This
+	// also keeps unfocused embedded previews (settings cards) fully rendered:
+	// their caret parks at position 0, which would otherwise permanently
+	// reveal a token on the first line.
 	const selectionTouches = (from: number, to: number): boolean =>
+		view.hasFocus &&
 		selection.ranges.some((r) => r.from <= to && r.to >= from);
 
 	// The heading fold chevron sits at the end of the line, but the same line

@@ -2,9 +2,10 @@
  * settings/SettingsTab.ts — Main plugin settings tab (Obsidian Settings pane).
  *
  * Composes all settings sections into a single scrollable tab:
- * callout lists (user + built-in), global style, icon sources, editor
- * features, fallback, hotkeys, data management (import/export/reset), and
- * the footer. Delegates each section to its own module under sections/.
+ * callout lists (user + built-in), callout type cards (with the per-role
+ * global style popups), editor features, fallback, hotkeys, data management
+ * (import/export/reset), and the footer. Delegates each section to its own
+ * module under sections/.
  * Holds a CalloutListsController for efficient list refresh without full
  * re-renders.
  */
@@ -24,7 +25,6 @@ import {
 } from "./sections/EditorFeaturesSection";
 import { renderFallbackSection } from "./sections/FallbackSection";
 import { renderLanguageSection } from "./sections/LanguageSection";
-import { renderGlobalStyleSection } from "./sections/GlobalStyleSection";
 import { renderCustomPalettesSection } from "./sections/CustomPalettesSection";
 import { renderCalloutTypesSection } from "./sections/CalloutTypesSection";
 import {
@@ -131,9 +131,8 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 		this.calloutLists.render(containerEl);
 
 		renderFallbackSection(sectionCtx, containerEl);
-		renderGlobalStyleSection(sectionCtx, containerEl);
-		renderCustomPalettesSection(sectionCtx, containerEl);
 		renderCalloutTypesSection(sectionCtx, containerEl);
+		renderCustomPalettesSection(sectionCtx, containerEl);
 		renderAutocompleteSettingsSection(sectionCtx, containerEl);
 		renderContextMenuSettingsSection(sectionCtx, containerEl);
 		renderHotkeySection(sectionCtx, containerEl);

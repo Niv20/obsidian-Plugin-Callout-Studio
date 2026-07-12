@@ -95,6 +95,29 @@ export function mergeSavedSettings(
 					| Record<string, boolean>
 					| undefined),
 			},
+			// Nested role frame styles need their own deep merge — a spread of
+			// savedGlobal would replace them wholesale (dropping fields added
+			// in newer versions) or leave them undefined on legacy data.
+			heading: {
+				...DEFAULT_SETTINGS.globalStyle.heading,
+				...savedGlobal?.heading,
+				borderSides: {
+					...DEFAULT_SETTINGS.globalStyle.heading.borderSides,
+					...(savedGlobal?.heading?.borderSides as
+						| Record<string, boolean>
+						| undefined),
+				},
+			},
+			inline: {
+				...DEFAULT_SETTINGS.globalStyle.inline,
+				...savedGlobal?.inline,
+				borderSides: {
+					...DEFAULT_SETTINGS.globalStyle.inline.borderSides,
+					...(savedGlobal?.inline?.borderSides as
+						| Record<string, boolean>
+						| undefined),
+				},
+			},
 		},
 		contextMenu: {
 			enabled:
@@ -434,7 +457,20 @@ export class CalloutRegistry {
 	}
 
 	getUserDefined(): CalloutDefinition[] {
-		return this.getAll().filter((d) => !d.builtIn);
+		return this.getAll().filter(
+			(d) => !d.builtIn && !this.isUnshadowedPreview(d.id),
+		);
+	}
+
+	/**
+	 * True for the transient settings-preview definition when it does NOT
+	 * stand in for a real callout (nothing shadowed): a brand-new callout
+	 * being drafted in the editor, or the style popups' neutral demo callout.
+	 * Such entries must render through the CSS/preview pipeline (getAll) but
+	 * must not surface as rows in the settings lists.
+	 */
+	private isUnshadowedPreview(id: string): boolean {
+		return id === this.previewActiveId && this.previewShadowedDef === null;
 	}
 
 	getBuiltIn(): CalloutDefinition[] {

@@ -241,6 +241,32 @@ export const DEFAULT_SETTINGS: PluginSettings = {
 		contentScale: 1,
 		borderRadius: 4,
 		alignContentWithTitle: false,
+		heading: {
+			borderSides: {
+				top: false,
+				right: false,
+				bottom: false,
+				left: false,
+			},
+			borderWidth: 1.5,
+			borderRadius: 4,
+			// Equal top/bottom spacing so the heading text sits vertically
+			// centered in the bar (overriding Obsidian's editor padding that
+			// pushes heading text toward the bottom).
+			paddingTop: 0.25,
+			paddingBottom: 0.25,
+		},
+		inline: {
+			borderSides: {
+				top: false,
+				right: false,
+				bottom: false,
+				left: false,
+			},
+			borderWidth: 1.5,
+			// ≈1em at the pill's 0.9em font size → keeps the default pill shape.
+			borderRadius: 16,
+		},
 	} satisfies GlobalStyleSettings,
 	contextMenu: {
 		enabled: true,

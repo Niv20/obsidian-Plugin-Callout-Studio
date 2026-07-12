@@ -1131,19 +1131,26 @@ export class CalloutEditor extends Modal {
 		return this.calloutId.trim() || PREVIEW_PLACEHOLDER_ID;
 	}
 
-	/** The sample markdown seeding the preview: all three roles. */
+	/**
+	 * The sample markdown seeding the preview: a mini-document exercising all
+	 * three roles. A titled heading callout opens it, an inline pill sits in
+	 * the paragraph below, then the regular callout, and a title-less heading
+	 * closes it (showing the display name the token renders on its own).
+	 */
 	private buildSampleText(): string {
 		const id = this.currentPreviewId();
 		const name = this.displayName.trim() || t("editor.untitledCallout");
 		// Reflect the fold setting so a folded default previews collapsed.
 		const mark = this.foldable ? (this.defaultFolded ? "-" : "+") : "";
 		return [
-			`> [!${id}]${mark} ${name}`,
-			`> ${t("editor.loremIpsum")}`,
-			"",
 			`## [!${id}]${mark} ${name}`,
 			"",
 			t("editor.sampleInlineText").replace("{id}", id),
+			"",
+			`> [!${id}]${mark} ${name}`,
+			`> ${t("editor.loremIpsumShort")}`,
+			"",
+			`## [!${id}]${mark}`,
 		].join("\n");
 	}
 

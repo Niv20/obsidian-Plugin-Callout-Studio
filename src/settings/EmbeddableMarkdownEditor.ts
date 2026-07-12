@@ -18,7 +18,12 @@
  */
 import { Component, type App, type TFile } from "obsidian";
 import { EditorView } from "@codemirror/view";
-import { EditorState, Prec, StateEffect } from "@codemirror/state";
+import {
+	EditorSelection,
+	EditorState,
+	Prec,
+	StateEffect,
+} from "@codemirror/state";
 
 /** Minimal shape of the internal edit view we touch. */
 interface InternalMarkdownEditor extends Component {
@@ -116,6 +121,7 @@ export interface EmbeddableMarkdownEditorOptions {
  */
 export class EmbeddableMarkdownEditor {
 	private readonly instance: InternalMarkdownEditor;
+	private readonly readOnly: boolean;
 
 	constructor(
 		app: App,
@@ -141,8 +147,10 @@ export class EmbeddableMarkdownEditor {
 			throw new Error("embedded editor did not mount");
 		}
 
-		if (options.readOnly) {
+		this.readOnly = options.readOnly ?? false;
+		if (this.readOnly) {
 			this.applyReadOnly(options.onEditAttempt);
+			this.parkCursor();
 		}
 	}
 
@@ -153,6 +161,13 @@ export class EmbeddableMarkdownEditor {
 	 *
 	 * `readOnly` is the real guarantee that nothing lands; the high-precedence
 	 * DOM handlers exist to surface the notice and stop the browser's default.
+	 *
+	 * Focus policy for previews:
+	 * - `tabindex="-1"` on the content element keeps Obsidian's modal
+	 *   focus-first pass (which skips `[tabindex="-1"]`) from dropping the
+	 *   caret into the preview when a popup opens. Clicking still focuses.
+	 * - On blur the caret is parked at the end of the document (see
+	 *   {@link parkCursor} for why it must not idle inside a callout).
 	 */
 	private applyReadOnly(onEditAttempt?: () => void): void {
 		const cm = this.cm;
@@ -165,6 +180,15 @@ export class EmbeddableMarkdownEditor {
 		cm.dispatch({
 			effects: StateEffect.appendConfig.of([
 				EditorState.readOnly.of(true),
+				EditorView.contentAttributes.of({ tabindex: "-1" }),
+				EditorView.domEventHandlers({
+					blur: () => {
+						// Deferred: let CodeMirror finish processing the focus
+						// change before we move the selection.
+						window.setTimeout(() => this.parkCursor(), 0);
+						return false;
+					},
+				}),
 				Prec.highest(
 					EditorView.domEventHandlers({
 						beforeinput: block,
@@ -176,6 +200,29 @@ export class EmbeddableMarkdownEditor {
 		});
 	}
 
+	/**
+	 * Move the caret to the end of the document without scrolling or focusing.
+	 *
+	 * A read-only preview's caret must never idle INSIDE a `> [!id]` block
+	 * while the editor is unfocused: Obsidian then collapses the callout into
+	 * a widget but keeps a caret line whose hanging indent it measures against
+	 * the widget's full width, and that bogus width is cached and applied to
+	 * the raw source lines the next time a click reveals them (every wrapped
+	 * row squeezed to ~one character). Sample texts therefore end outside any
+	 * regular callout, and the caret is parked there on build, reseed and blur.
+	 */
+	private parkCursor(): void {
+		const cm = this.cm;
+		if (!cm) return;
+		try {
+			cm.dispatch({
+				selection: EditorSelection.cursor(cm.state.doc.length),
+			});
+		} catch {
+			/* editor mid-teardown — ignore */
+		}
+	}
+
 	/** Underlying CM6 view, for dispatching state effects (may be null early). */
 	get cm(): EditorView | null {
 		return this.instance.editor?.cm ?? this.instance.cm ?? null;
@@ -184,6 +231,9 @@ export class EmbeddableMarkdownEditor {
 	/** Replace the whole document. */
 	setValue(value: string): void {
 		this.instance.set(value, false);
+		// set() leaves the caret at position 0 — inside a callout when the
+		// sample starts with one (see parkCursor).
+		if (this.readOnly) this.parkCursor();
 	}
 
 	destroy(): void {

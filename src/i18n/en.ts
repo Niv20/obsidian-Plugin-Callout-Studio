@@ -139,6 +139,11 @@ export const en: Record<string, string> = {
 	"settings.borderRadiusDesc": "Border-radius in pixels for callout corners",
 	"settings.alignGroup": "Align",
 	"settings.alignContent": "Align content with title",
+	"settings.headingSpacingGroup": "Text spacing",
+	"settings.headingPadTop": "Space above text",
+	"settings.headingPadBottom": "Space below text",
+	"settings.refGroup": "Outline and links",
+	"settings.styleDemoName": "Example",
 	"settings.previewTitle": "Preview",
 	"settings.previewCalloutTitle": "Example callout",
 	"settings.previewCalloutContent":
@@ -265,6 +270,8 @@ export const en: Record<string, string> = {
 	"editor.untitledCallout": "Untitled Callout",
 	"editor.loremIpsum":
 		"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.",
+	"editor.loremIpsumShort":
+		"Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
 	"editor.sampleInlineText": "Here is an inline [!{id}] pill inside a paragraph.",
 	"editor.previewReadOnly": "The live preview can't be edited",
 
@@ -340,13 +347,16 @@ export const en: Record<string, string> = {
 	"settings.calloutTypes": "Callout types",
 	"settings.calloutTypeRegular": "Regular callout",
 	"settings.calloutTypeRegularDesc":
-		"A blockquote callout with content: > [!name]. Always enabled.",
+		"A blockquote callout with content: `> [!name]`. Always enabled.",
+	"settings.calloutTypeRegularLocked":
+		"Regular callouts are Obsidian's native rendering and can't be turned off.",
+	"settings.roleEnabled": "Enabled",
 	"settings.calloutTypeHeading": "Heading callout",
 	"settings.calloutTypeHeadingDesc":
-		"A heading whose first content is the token, e.g. ## [!name]. Rendered as a colored bar at the heading's font size. Use + / - after the token to open/close the whole section on file open.",
+		"A heading whose first content is the token, e.g. `## [!name]`. Rendered as a colored bar at the heading's font size. Use `+` / `-` after the token to open/close the whole section on file open.",
 	"settings.calloutTypeInline": "Inline callout",
 	"settings.calloutTypeInlineDesc":
-		"A [!name] token in the middle of a line, rendered as a small pill. No title or content.",
+		"A `[!name]` token in the middle of a line, rendered as a small pill. No title or content.",
 	"settings.refCleanTitles": "Clean titles in outline and links",
 	"settings.refCleanTitlesDesc":
 		"Hide the [!name] token wherever a heading callout is referenced: the outline pane, links to the heading (including tables of contents), and the link suggestion popup. Headings without a title show the callout's display name.",
