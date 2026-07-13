@@ -2217,7 +2217,12 @@ input.cs-input-invalid:focus {
 	   text toward the bottom of the bar); equal defaults center it. */
 	padding-top: var(--cs-heading-pad-top, 0.25em) !important;
 	padding-bottom: var(--cs-heading-pad-bottom, 0.25em) !important;
-	padding-inline: 0.45em;
+	/* Start inset is user-tunable in px (Heading → Icon indent) so the icon
+	   sits off the corner; end keeps the classic em inset. !important for the
+	   same reason as the vertical paddings: Obsidian's higher-specificity
+	   .mod-cm6 .cm-line { padding: 0 } rule zeroes these otherwise. */
+	padding-inline-start: var(--cs-heading-pad-start, 10px) !important;
+	padding-inline-end: 0.45em !important;
 	/* !important so the callout tint survives PDF export: Obsidian's print
 	   stylesheet forces heading text to black for legibility, which otherwise
 	   overrides this and leaves the title text — and Lucide icons, which

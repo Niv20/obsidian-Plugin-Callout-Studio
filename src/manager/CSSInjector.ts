@@ -772,6 +772,11 @@ export class CSSInjector {
 				`  --cs-heading-pad-bottom: ${gs.heading.paddingBottom}em;`,
 			);
 		}
+		if (gs.heading.paddingStart !== 10) {
+			headingProps.push(
+				`  --cs-heading-pad-start: ${gs.heading.paddingStart}px;`,
+			);
+		}
 		if (headingProps.length > 0) {
 			parts.push(
 				`.${CSS_HEADING_LINE} {\n${headingProps.join("\n")}\n}`,

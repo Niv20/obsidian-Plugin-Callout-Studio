@@ -176,48 +176,47 @@ export class GlobalStyleModal extends Modal {
 			},
 		);
 
-		// Vertical spacing of the text inside the bar. Equal values center
-		// the heading text (the shipped default).
+		// Vertical spacing of the text inside the bar. A single slider drives
+		// both the top and bottom padding symmetrically, so the heading text
+		// always stays vertically centered in the bar.
 		const spacingGroup = createControlGroup(
 			col,
 			t("settings.headingSpacingGroup"),
 		);
-		const emSlider = (
-			label: string,
-			get: () => number,
-			set: (v: number) => void,
-		): void => {
-			addStyleSlider(this.plugin, spacingGroup, {
-				label,
-				min: 0,
-				max: 1,
-				step: 0.05,
-				decimals: 2,
-				numberOptions: {
-					suffix: "em",
-					format: {
-						minimumFractionDigits: 2,
-						maximumFractionDigits: 2,
-					},
+		addStyleSlider(this.plugin, spacingGroup, {
+			label: t("settings.headingPadVertical"),
+			min: 0,
+			max: 1,
+			step: 0.05,
+			decimals: 2,
+			numberOptions: {
+				suffix: "em",
+				format: {
+					minimumFractionDigits: 2,
+					maximumFractionDigits: 2,
 				},
-				get,
-				set,
-			});
-		};
-		emSlider(
-			t("settings.headingPadTop"),
-			() => heading.paddingTop,
-			(v) => {
-				heading.paddingTop = v;
 			},
-		);
-		emSlider(
-			t("settings.headingPadBottom"),
-			() => heading.paddingBottom,
-			(v) => {
+			get: () => heading.paddingTop,
+			set: (v) => {
+				heading.paddingTop = v;
 				heading.paddingBottom = v;
 			},
-		);
+		});
+
+		// Horizontal inset pushing the icon in from the bar's start edge (px,
+		// so it stays constant across heading levels).
+		addStyleSlider(this.plugin, spacingGroup, {
+			label: t("settings.headingIconIndent"),
+			min: 0,
+			max: 40,
+			step: 1,
+			decimals: 0,
+			numberOptions: { suffix: "px" },
+			get: () => heading.paddingStart,
+			set: (v) => {
+				heading.paddingStart = v;
+			},
+		});
 	}
 
 	private renderInlineControls(col: HTMLElement): void {

@@ -207,6 +207,11 @@ export interface HeadingFrameStyleSettings extends RoleFrameStyleSettings {
 	paddingTop: number;
 	/** Space below the heading text inside the bar, in em. */
 	paddingBottom: number;
+	/**
+	 * Horizontal inset of the icon (and title) from the bar's start edge, in
+	 * px. Keeps the icon off the very edge; independent of heading font size.
+	 */
+	paddingStart: number;
 }
 
 /**
