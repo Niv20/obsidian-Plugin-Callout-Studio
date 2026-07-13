@@ -4,9 +4,9 @@
  * Heading callouts (`## [!id] Title`) fold through Obsidian's own heading
  * folding, driven by the undocumented-but-stable
  * `view.currentMode.getFoldInfo()/applyFoldInfo()` pair (the same API the
- * Creases plugin uses). Two consumers share these helpers: the on-open default
- * applier (headingFoldManager.ts) and the in-bar fold arrow's click handler
- * (livepreview/widgets.ts).
+ * Creases plugin uses). The in-bar fold arrow's click handler
+ * (livepreview/widgets.ts) drives them, and the view plugin reads the current
+ * fold state to orient the chevron.
  *
  * Native heading folding only exists when the core "Fold heading" setting is
  * on; every call here is optional-chained and try/catch-guarded so a disabled

@@ -26,7 +26,6 @@ import { LinkSuggestDecorator } from "./editor/LinkSuggestDecorator";
 import { registerContextMenu } from "./editor/contextmenu";
 import { createCalloutViewPlugin } from "./editor/livepreview/calloutViewPlugin";
 import { refreshAllMarkdownEditors } from "./editor/livepreview/refresh";
-import { registerHeadingFoldManager } from "./editor/headingFoldManager";
 import { OutlineDecorator } from "./outline/OutlineDecorator";
 import { createCalloutReadingPostProcessor } from "./reading/calloutPostProcessor";
 import { registerCalloutCommands } from "./editor/commands";
@@ -86,9 +85,6 @@ export default class CalloutStudioPlugin extends Plugin {
 
 		// Live Preview rendering for heading callouts and inline pills.
 		this.registerEditorExtension(createCalloutViewPlugin(this));
-
-		// Apply heading-callout fold defaults (`## [!id]±`) on file open.
-		registerHeadingFoldManager(this);
 
 		// Sub-managers (composition keeps main.ts focused on lifecycle).
 		this.materialSvg = new MaterialSvgManager({

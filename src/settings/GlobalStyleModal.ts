@@ -218,53 +218,20 @@ export class GlobalStyleModal extends Modal {
 				heading.paddingBottom = v;
 			},
 		);
-
-		// How heading-callout references display in the outline pane and
-		// rendered links (moved here from the Callout types list).
-		const refsGroup = createControlGroup(
-			col,
-			t("settings.refGroup"),
-			"cs-layout-group",
-		);
-		const { headingCallouts } = this.plugin.settings;
-		new Setting(refsGroup)
-			.setName(t("settings.refCleanTitles"))
-			.setDesc(t("settings.refCleanTitlesDesc"))
-			.addToggle((tog) =>
-				tog
-					.setValue(headingCallouts.refCleanTitles)
-					.onChange(async (v) => {
-						headingCallouts.refCleanTitles = v;
-						await this.plugin.saveSettings();
-						// Links render in both preview modes, not just the outline.
-						this.plugin.refreshRenderModes();
-						this.plugin.outlineDecorator.refreshAll();
-					}),
-			);
-		new Setting(refsGroup)
-			.setName(t("settings.refShowIcon"))
-			.setDesc(t("settings.refShowIconDesc"))
-			.addToggle((tog) =>
-				tog
-					.setValue(headingCallouts.refShowIcon)
-					.onChange(async (v) => {
-						headingCallouts.refShowIcon = v;
-						await this.plugin.saveSettings();
-						this.plugin.refreshRenderModes();
-						this.plugin.outlineDecorator.refreshAll();
-					}),
-			);
 	}
 
 	private renderInlineControls(col: HTMLElement): void {
 		const inline = this.plugin.settings.globalStyle.inline;
 		renderBordersGroup(this.plugin, col, inline);
+		// Inline pills are small; corner rounding above ~10px has no visible
+		// effect, so cap the slider there instead of the default 24.
 		this.renderShapeGroup(
 			col,
 			() => inline.borderRadius,
 			(v) => {
 				inline.borderRadius = v;
 			},
+			10,
 		);
 	}
 
@@ -272,12 +239,13 @@ export class GlobalStyleModal extends Modal {
 		col: HTMLElement,
 		get: () => number,
 		set: (v: number) => void,
+		max = 24,
 	): void {
 		const shapeGroup = createControlGroup(col, t("settings.shapeGroup"));
 		addStyleSlider(this.plugin, shapeGroup, {
 			label: t("settings.borderRadius"),
 			min: 0,
-			max: 24,
+			max,
 			step: 1,
 			decimals: 0,
 			numberOptions: {
@@ -315,8 +283,11 @@ export class GlobalStyleModal extends Modal {
 					"",
 				].join("\n");
 			case "heading":
+				// Two body paragraphs so the fold arrow visibly hides content.
 				return [
 					`## [!${STYLE_DEMO_ID}] ${name}`,
+					"",
+					t("editor.loremIpsum"),
 					"",
 					t("editor.loremIpsum"),
 				].join("\n");

@@ -10,7 +10,7 @@
  * Decoration strategy:
  * - Heading line  → Decoration.line adds the bar class + data-callout (kept
  *   even while the caret is on the line, mirroring how native callouts keep
- *   their frame during editing) + a replace widget over the `[!id]±` token
+ *   their frame during editing) + a replace widget over the `[!id]` token
  *   when the caret is elsewhere.
  * - Inline token  → replace widget (pill) unless the selection touches it,
  *   in which case the raw text is revealed for editing.
@@ -48,6 +48,7 @@ import {
 	HeadingFoldArrowWidget,
 	HeadingRefLinkWidget,
 } from "./widgets";
+import { getPreviewFoldedLines } from "./previewFold";
 import { calloutStudioRefresh } from "./refresh";
 
 /** Narrow structural host type (avoids importing the concrete plugin class). */
@@ -157,7 +158,11 @@ function buildDecorations(
 	let foldedLines: ReadonlySet<number> = NO_FOLDS;
 	if (foldEnabled) {
 		const mdView = resolveMarkdownView(host.app, view);
-		if (mdView) foldedLines = getFoldedHeadingLines(mdView);
+		// Real note → native fold state; settings preview (no workspace view) →
+		// the CodeMirror-level preview fold state.
+		foldedLines = mdView
+			? getFoldedHeadingLines(mdView)
+			: getPreviewFoldedLines(view);
 	}
 
 	for (const range of view.visibleRanges) {

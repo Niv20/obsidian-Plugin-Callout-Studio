@@ -30,6 +30,7 @@ import {
 	resolveMarkdownView,
 	toggleHeadingFold,
 } from "../headingFold";
+import { previewSectionEnd, togglePreviewFold } from "./previewFold";
 import { calloutStudioRefresh } from "./refresh";
 
 export class CalloutTokenWidget extends WidgetType {
@@ -364,24 +365,34 @@ export class HeadingFoldArrowWidget extends WidgetType {
 	}
 
 	/**
-	 * Toggle the fold of the heading section this arrow trails. Resolves the
-	 * MarkdownView hosting this editor, locates the heading line from the
-	 * widget's document position, and delegates to Obsidian's native fold; then
-	 * dispatches the refresh effect so the chevron re-reflects the new state.
+	 * Toggle the fold of the heading section this arrow trails, then dispatch the
+	 * refresh effect so the chevron re-reflects the new state. In a real note it
+	 * delegates to Obsidian's native heading fold; in the settings preview (an
+	 * embedded editor with no workspace MarkdownView) it falls back to the
+	 * CodeMirror-level preview fold.
 	 */
 	private toggleFold(view: EditorView, el: HTMLElement): void {
-		const mdView = resolveMarkdownView(this.app, view);
-		if (!mdView?.file) return;
 		const pos = view.posAtDOM(el);
 		const headingLine = view.state.doc.lineAt(pos).number - 1; // 0-based
-		const headings =
-			this.app.metadataCache.getFileCache(mdView.file)?.headings ?? [];
-		const idx = headings.findIndex(
-			(h) => h.position.start.line === headingLine,
-		);
-		const endLine =
-			idx >= 0 ? headingSectionEnd(headings, idx) : Number.MAX_SAFE_INTEGER;
-		toggleHeadingFold(mdView, headingLine, endLine);
+		const mdView = resolveMarkdownView(this.app, view);
+		if (mdView?.file) {
+			const headings =
+				this.app.metadataCache.getFileCache(mdView.file)?.headings ?? [];
+			const idx = headings.findIndex(
+				(h) => h.position.start.line === headingLine,
+			);
+			const endLine =
+				idx >= 0
+					? headingSectionEnd(headings, idx)
+					: Number.MAX_SAFE_INTEGER;
+			toggleHeadingFold(mdView, headingLine, endLine);
+		} else {
+			togglePreviewFold(
+				view,
+				headingLine,
+				previewSectionEnd(view, headingLine),
+			);
+		}
 		view.dispatch({ effects: calloutStudioRefresh.of(null) });
 	}
 

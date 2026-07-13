@@ -12,7 +12,6 @@ import type CalloutStudioPlugin from "../../main";
 import type { CalloutRenderRole, ContextMenuItemId } from "../../types";
 import { t } from "../../i18n";
 import { CalloutEditor } from "../../settings/CalloutEditor";
-import { HEADING_FOLD_MARK_RE } from "../calloutTokens";
 import {
 	CALLOUT_FOLD_MARK_REGEX,
 	type CalloutInfo,
@@ -93,27 +92,6 @@ const buildRegularFoldDefaults: ItemBuilder = (_plugin, menu, context) => {
 
 // ─── Heading-callout item builders ───────────────────────────────────────────
 
-const buildHeadingFoldDefaults: ItemBuilder = (_plugin, menu, context) => {
-	if (context.role !== "heading") return;
-	const { editor, headingLine } = context;
-	const headerText = editor.getLine(headingLine);
-	const currentMark = (headerText.match(HEADING_FOLD_MARK_RE)?.[3] ?? "") as
-		| ""
-		| "+"
-		| "-";
-	for (const option of foldOptions()) {
-		if (option.mark === currentMark) continue;
-		menu.addItem((item) => {
-			item.setTitle(option.title)
-				.setIcon(option.icon)
-				.setSection(MENU_SECTION)
-				.onClick(() =>
-					setHeadingFoldMark(editor, headingLine, option.mark),
-				);
-		});
-	}
-};
-
 const buildCutSection: ItemBuilder = (_plugin, menu, context) => {
 	if (context.role !== "heading") return;
 	menu.addItem((item) => {
@@ -180,7 +158,6 @@ const BUILDERS: Record<
 	heading: {
 		edit: buildEdit,
 		openSettings: buildOpenSettings,
-		foldDefaults: buildHeadingFoldDefaults,
 		cutSection: buildCutSection,
 		copySection: buildCopySection,
 		deleteSection: buildDeleteSection,
@@ -250,26 +227,6 @@ function setRegularFoldMark(
 		nextLine,
 		{ line: info.headerLine, ch: 0 },
 		{ line: info.headerLine, ch: line.length },
-	);
-}
-
-function setHeadingFoldMark(
-	editor: Editor,
-	headingLine: number,
-	mark: "" | "+" | "-",
-): void {
-	const line = editor.getLine(headingLine);
-	// Group 1 is the hashes + `[!id]`; group 3 is the existing (optional) mark,
-	// so this single replace both adds and removes the mark.
-	const nextLine = line.replace(
-		HEADING_FOLD_MARK_RE,
-		(_match, head: string) => `${head}${mark}`,
-	);
-	if (nextLine === line) return;
-	editor.replaceRange(
-		nextLine,
-		{ line: headingLine, ch: 0 },
-		{ line: headingLine, ch: line.length },
 	);
 }
 

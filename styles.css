@@ -1694,11 +1694,22 @@ input.cs-input-invalid:focus {
 
 /* The Align group holds a plain toggle (not a slider row). Strip the default
    setting-item chrome so the toggle's row blends into the box like the slider
-   rows, instead of showing its own default background/border. */
+   rows, instead of showing its own default background/border.
+   The `.modal …` selector matches the specificity (0,5,0) of Obsidian's own
+   `.modal:not(.mod-settings) .setting-item:not(.setting-item-heading)` rules
+   (plus their :first/:last-child variants), which otherwise win the cascade
+   and zero the row's horizontal + bottom padding — pinning the label and
+   toggle flush against the box edges. */
+.modal
+	.cs-settings-group.cs-layout-group
+	> .setting-item:not(.setting-item-heading),
 .cs-settings-group.cs-layout-group > .setting-item {
 	background: transparent;
 	border: none;
 	box-shadow: none;
+	padding: 12px 14px;
+	gap: 12px;
+	margin-bottom: 0;
 }
 
 .cs-settings-group.cs-layout-group > .setting-item::before,

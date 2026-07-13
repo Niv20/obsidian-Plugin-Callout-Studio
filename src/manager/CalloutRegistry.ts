@@ -152,12 +152,10 @@ export function mergeSavedSettings(
 			enabled:
 				savedSettings.headingCallouts?.enabled ??
 				DEFAULT_SETTINGS.headingCallouts.enabled,
-			refCleanTitles:
-				savedSettings.headingCallouts?.refCleanTitles ??
-				DEFAULT_SETTINGS.headingCallouts.refCleanTitles,
-			refShowIcon:
-				savedSettings.headingCallouts?.refShowIcon ??
-				DEFAULT_SETTINGS.headingCallouts.refShowIcon,
+			// Outline/link cleaning + icons are always on and no longer
+			// user-configurable; ignore any saved-off value from old data.
+			refCleanTitles: true,
+			refShowIcon: true,
 		},
 		inlineCallouts: {
 			enabled:

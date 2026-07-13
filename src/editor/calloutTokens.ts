@@ -30,13 +30,6 @@ export const HEADING_CALLOUT_RE =
 	/^(#{1,6})[ \t]+\[!([^\]\n\r]+)\]([+-])?[ \t]*(.*)$/;
 
 /**
- * Rewrites the fold mark of a heading callout header. Captures:
- * 1=everything up to and including `]`, 2=raw id, 3=existing mark (optional).
- * Group 3 being optional lets one `replace` both add and remove marks.
- */
-export const HEADING_FOLD_MARK_RE = /^(#{1,6}[ \t]+\[!([^\]\n\r]+)\])([+-])?/;
-
-/**
  * Native blockquote callout header prefix (any nesting depth). Lines matching
  * this belong to Obsidian's own callout rendering — the heading/inline logic
  * must leave them alone. Captures: 1=quote prefix.

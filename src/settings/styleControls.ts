@@ -68,13 +68,27 @@ export function addStyleSlider(
 	const factor = Math.pow(10, spec.decimals);
 	const round = (v: number): number => Math.round(v * factor) / factor;
 
+	// Coalesce the per-move live reflow to at most one inject per animation
+	// frame, so even a fast drag updates the preview every frame (~60fps)
+	// instead of stalling behind a debounce until the thumb stops.
+	let rafId: number | null = null;
+	const scheduleLiveInject = (): void => {
+		if (rafId !== null) return;
+		rafId = window.requestAnimationFrame(() => {
+			rafId = null;
+			// `false` = skip the css-change re-render: geometry rides CSS
+			// variables and reflows on stylesheet replace, so this stays cheap.
+			plugin.cssInjector.inject(false);
+		});
+	};
+
 	new Setting(row).addSlider((slider) => {
 		slider.setLimits(spec.min, spec.max, spec.step).setValue(spec.get());
 		slider.sliderEl.addEventListener("input", () => {
 			const v = round(parseFloat(slider.sliderEl.value));
 			spec.set(v);
 			valueLabel.update(v);
-			plugin.cssInjector.scheduleInject();
+			scheduleLiveInject();
 		});
 		slider.onChange(async (v) => {
 			spec.set(round(v));

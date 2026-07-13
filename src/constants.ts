@@ -224,7 +224,6 @@ export const DEFAULT_CONTEXT_MENU_ITEMS: Record<
 		{ id: "cutSection", enabled: true },
 		{ id: "copySection", enabled: true },
 		{ id: "deleteSection", enabled: true },
-		{ id: "foldDefaults", enabled: true },
 		{ id: "openSettings", enabled: true },
 	],
 	inline: [
