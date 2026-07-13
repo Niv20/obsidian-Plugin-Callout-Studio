@@ -85,8 +85,17 @@ export function createCalloutReadingPostProcessor(
 		};
 
 		if (headingEnabled) {
-			const h = el.querySelector<HTMLElement>("h1,h2,h3,h4,h5,h6");
-			if (h) transformHeading(h, host, getSectionLines);
+			const headings =
+				el.querySelectorAll<HTMLElement>("h1,h2,h3,h4,h5,h6");
+			// Source lines are only authoritative when el is a single
+			// reading-view block (one heading). A multi-heading el is the
+			// print/PDF-export path, where getSectionInfo is null anyway —
+			// trust the rendered text there.
+			const linesGetter =
+				headings.length === 1 ? getSectionLines : () => null;
+			for (const h of Array.from(headings)) {
+				transformHeading(h, host, linesGetter);
+			}
 		}
 		if (headingEnabled && host.settings.headingCallouts.refCleanTitles) {
 			transformHeadingRefLinks(el, host);
@@ -254,6 +263,21 @@ function transformHeadingRefLinks(
 	}
 }
 
+/**
+ * True when `node` is the leading text node of a heading element. A token
+ * starting there is heading-role by definition (it followed `#…` in source)
+ * and must never degrade into an inline pill — even when transformHeading
+ * skipped the heading (export DOM shapes, unexpected chrome before the text).
+ * After a successful heading transform the token DOM element precedes the
+ * remaining title text, so findLeadingTextNode returns null and genuine
+ * inline tokens inside the title are unaffected.
+ */
+function isHeadingLeadingTextNode(node: Text): boolean {
+	const h = node.parentElement?.closest<HTMLElement>("h1,h2,h3,h4,h5,h6");
+	if (!h) return false;
+	return findLeadingTextNode(h) === node;
+}
+
 /** A pill candidate found in the rendered DOM. */
 interface PillCandidate {
 	node: Text;
@@ -297,6 +321,13 @@ function transformInlinePills(
 		// token the shared classifier finds here is an inline candidate.
 		for (const token of scanLineForCalloutTokens(text)) {
 			if (token.role !== "inline") continue;
+			if (
+				token.from === 0 &&
+				host.settings.headingCallouts.enabled &&
+				isHeadingLeadingTextNode(node as Text)
+			) {
+				continue;
+			}
 			candidates.push({
 				node: node as Text,
 				from: token.from,

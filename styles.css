@@ -2190,7 +2190,10 @@ input.cs-input-invalid:focus {
 	font-size: 0.9em;
 	line-height: 1.4;
 	vertical-align: baseline;
-	color: rgb(var(--cs-color-rgb, 68, 138, 255));
+	/* !important for the same PDF-export reason as .cs-heading-callout: keep
+	   the pill's text (and Lucide icon, via currentColor) tinted when print
+	   CSS would otherwise force it black. */
+	color: rgb(var(--cs-color-rgb, 68, 138, 255)) !important;
 	background-color: rgba(var(--cs-color-rgb, 68, 138, 255), 0.12);
 	font-weight: var(--font-medium, 500);
 	white-space: nowrap;
@@ -2213,7 +2216,12 @@ input.cs-input-invalid:focus {
 	padding-top: var(--cs-heading-pad-top, 0.25em) !important;
 	padding-bottom: var(--cs-heading-pad-bottom, 0.25em) !important;
 	padding-inline: 0.45em;
-	color: rgb(var(--cs-color-rgb, 68, 138, 255));
+	/* !important so the callout tint survives PDF export: Obsidian's print
+	   stylesheet forces heading text to black for legibility, which otherwise
+	   overrides this and leaves the title text — and Lucide icons, which
+	   inherit it via currentColor — black on the colored bar. Baked
+	   material/emoji export icons carry their own inline !important color. */
+	color: rgb(var(--cs-color-rgb, 68, 138, 255)) !important;
 }
 
 /* The [!id] token inside a heading bar (icon + optional name). */
