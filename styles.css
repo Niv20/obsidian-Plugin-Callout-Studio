@@ -2187,7 +2187,9 @@ input.cs-input-invalid:focus {
 	/* Corner rounding is user-tunable (Callout types → Inline → Global
 	   callout style); the fallback keeps the classic full-pill shape. */
 	border-radius: var(--cs-inline-radius, 1em);
-	font-size: 0.9em;
+	/* Base 0.9em pill text, multiplied by a user-tunable scale (Callout types →
+	   Inline → Global callout style); the icon tracks it via its 1em sizing. */
+	font-size: calc(0.9em * var(--cs-inline-scale, 1));
 	line-height: 1.4;
 	vertical-align: baseline;
 	/* !important for the same PDF-export reason as .cs-heading-callout: keep

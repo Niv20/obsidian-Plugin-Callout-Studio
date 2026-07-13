@@ -265,6 +265,7 @@ export const DEFAULT_SETTINGS: PluginSettings = {
 			borderWidth: 1.5,
 			// ≈1em at the pill's 0.9em font size → keeps the default pill shape.
 			borderRadius: 16,
+			fontScale: 1,
 		},
 	} satisfies GlobalStyleSettings,
 	contextMenu: {

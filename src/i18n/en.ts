@@ -134,6 +134,7 @@ export const en: Record<string, string> = {
 	"settings.fontScaleGroup": "Font scale",
 	"settings.titleScale": "Title",
 	"settings.contentScale": "Content",
+	"settings.inlineTextScale": "Text",
 	"settings.shapeGroup": "Shape",
 	"settings.borderRadius": "Corner rounding",
 	"settings.borderRadiusDesc": "Border-radius in pixels for callout corners",

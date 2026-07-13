@@ -786,6 +786,9 @@ export class CSSInjector {
 				`  --cs-inline-radius: ${gs.inline.borderRadius}px;`,
 			);
 		}
+		if (gs.inline.fontScale !== 1) {
+			inlineProps.push(`  --cs-inline-scale: ${gs.inline.fontScale};`);
+		}
 		if (inlineProps.length > 0) {
 			parts.push(`.${CSS_INLINE_TOKEN} {\n${inlineProps.join("\n")}\n}`);
 		}

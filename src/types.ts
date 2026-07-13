@@ -209,6 +209,16 @@ export interface HeadingFrameStyleSettings extends RoleFrameStyleSettings {
 	paddingBottom: number;
 }
 
+/**
+ * Inline-pill frame styling plus a font scale for the pill's text and icon.
+ * The scale multiplies the pill's base font size (0.9em) so the pill grows or
+ * shrinks relative to the surrounding paragraph text.
+ */
+export interface InlineFrameStyleSettings extends RoleFrameStyleSettings {
+	/** Scale factor for the inline pill's font size (e.g. 0.8 – 1.5) */
+	fontScale: number;
+}
+
 export interface GlobalStyleSettings {
 	/** Which border sides are enabled (regular callouts) */
 	borderSides: BorderSidesSettings;
@@ -225,7 +235,7 @@ export interface GlobalStyleSettings {
 	/** Vault-wide frame style for heading callout bars. */
 	heading: HeadingFrameStyleSettings;
 	/** Vault-wide frame style for inline callout pills. */
-	inline: RoleFrameStyleSettings;
+	inline: InlineFrameStyleSettings;
 }
 
 export interface PluginSettings {

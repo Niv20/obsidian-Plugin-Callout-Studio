@@ -223,6 +223,27 @@ export class GlobalStyleModal extends Modal {
 	private renderInlineControls(col: HTMLElement): void {
 		const inline = this.plugin.settings.globalStyle.inline;
 		renderBordersGroup(this.plugin, col, inline);
+
+		const fontGroup = createControlGroup(col, t("settings.fontScaleGroup"));
+		addStyleSlider(this.plugin, fontGroup, {
+			label: t("settings.inlineTextScale"),
+			min: 0.5,
+			max: 1.5,
+			step: 0.05,
+			decimals: 2,
+			numberOptions: {
+				prefix: "×",
+				format: {
+					minimumFractionDigits: 2,
+					maximumFractionDigits: 2,
+				},
+			},
+			get: () => inline.fontScale,
+			set: (v) => {
+				inline.fontScale = v;
+			},
+		});
+
 		// Inline pills are small; corner rounding above ~10px has no visible
 		// effect, so cap the slider there instead of the default 24.
 		this.renderShapeGroup(
