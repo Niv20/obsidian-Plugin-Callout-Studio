@@ -4,17 +4,17 @@
  * A single callout definition can render as a regular blockquote callout, a
  * heading callout, or an inline pill. Each role gets a card (the cards stack
  * vertically) holding two parts: an info column (role name + description +
- * enable toggle + a button opening the per-role "Global callout style" popup,
+ * a button opening the per-role "Global callout style" popup,
  * {@link GlobalStyleModal}) and a live preview of that role. On wide panes
  * (desktop / tablet) the two sit side by side — info column next to the
  * preview; on narrow panes (phone) the info column stacks above the preview.
  *
- * Regular rendering is always on (it is Obsidian's native behavior): its
- * toggle bounces back on and raises a notice instead of switching off.
- * Heading and inline rendering can each be disabled; toggling re-renders both
- * preview modes and the card's own preview live.
+ * Each role also has an `enabled` setting (regular is always on; heading and
+ * inline can each be disabled) that still gates rendering, but it is no longer
+ * exposed as a toggle in this UI. The spec's getEnabled/setEnabled hooks are
+ * kept wired so the toggle can be re-added later without further changes.
  */
-import { ButtonComponent, Notice, Setting } from "obsidian";
+import { ButtonComponent, Setting } from "obsidian";
 import { t } from "../../i18n";
 import type { CalloutRenderRole } from "../../types";
 import { GlobalStyleModal } from "../GlobalStyleModal";
@@ -135,29 +135,9 @@ function renderRoleCard(
 	});
 	ctx.registerDisposer(() => preview.destroy());
 
-	const footer = info.createDiv({ cls: "cs-role-card-footer" });
-	new Setting(footer)
-		.setName(t("settings.roleEnabled"))
-		.addToggle((tog) => {
-			tog.setValue(spec.getEnabled());
-			const setEnabled = spec.setEnabled;
-			if (!setEnabled) {
-				// Always-on role: bounce the toggle back on and explain why.
-				// (Re-setting to true re-fires onChange with true, which is a
-				// no-op here.)
-				tog.onChange((v) => {
-					if (v) return;
-					tog.setValue(true);
-					new Notice(t("settings.calloutTypeRegularLocked"));
-				});
-				return;
-			}
-			tog.onChange(async (v) => {
-				await setEnabled(v);
-				// Show the role appearing/disappearing right in the card.
-				preview.refresh();
-			});
-		});
+	// The per-role enable/disable toggle is intentionally not exposed in the
+	// UI. The `enabled` settings and the spec's getEnabled/setEnabled hooks are
+	// kept wired so the toggle can be re-added here later without other changes.
 
 	new ButtonComponent(info)
 		.setButtonText(t("settings.globalStyle"))
