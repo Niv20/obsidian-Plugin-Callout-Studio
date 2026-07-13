@@ -235,7 +235,27 @@ function importFromJSON(ctx: SettingsSectionContext): void {
 		// fields are impossible here).
 		const settingsImported = !!result.settings;
 		if (result.settings) {
-			Object.assign(ctx.plugin.registry.settings, result.settings);
+			// Merge saved palettes by id rather than letting Object.assign
+			// replace the array wholesale — otherwise importing a file with
+			// no palettes would silently wipe the user's existing ones. This
+			// mirrors how callouts are merged (add new / overwrite same id).
+			const { customPalettes: importedPalettes, ...restSettings } =
+				result.settings;
+			Object.assign(ctx.plugin.registry.settings, restSettings);
+			if (importedPalettes) {
+				const byId = new Map(
+					ctx.plugin.registry.settings.customPalettes.map((p) => [
+						p.id,
+						p,
+					]),
+				);
+				for (const palette of importedPalettes) {
+					byId.set(palette.id, palette);
+				}
+				ctx.plugin.registry.settings.customPalettes = [
+					...byId.values(),
+				];
+			}
 			await ctx.plugin.saveSettings();
 			ctx.plugin.refreshRenderModes();
 		}
