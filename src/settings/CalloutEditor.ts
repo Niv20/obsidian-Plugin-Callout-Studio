@@ -665,8 +665,9 @@ export class CalloutEditor extends Modal {
 				cls: "cs-palette-menu-item-label",
 				text: t("editor.paletteNewColor"),
 			});
-			newColorItem.addEventListener("click", () =>
-				void pickNewPaletteColor(),
+			newColorItem.addEventListener(
+				"click",
+				() => void pickNewPaletteColor(),
 			);
 		};
 
@@ -1154,7 +1155,7 @@ export class CalloutEditor extends Modal {
 			`> [!${id}]${mark} ${name}`,
 			`> ${t("editor.loremIpsumShort")}`,
 			"",
-			`## [!${id}]${mark}`,
+			t("editor.loremIpsum"),
 		].join("\n");
 	}
 
