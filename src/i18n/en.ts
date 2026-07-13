@@ -354,7 +354,7 @@ export const en: Record<string, string> = {
 	"settings.roleEnabled": "Enabled",
 	"settings.calloutTypeHeading": "Heading callout",
 	"settings.calloutTypeHeadingDesc":
-		"A heading whose first content is the token, e.g. `## [!name]`. Rendered as a colored bar at the heading's font size. Use `+` / `-` after the token to open/close the whole section on file open.",
+		"A heading whose first content is the token, e.g. `## [!name]`. Rendered as a colored bar at the heading's font size.",
 	"settings.calloutTypeInline": "Inline callout",
 	"settings.calloutTypeInlineDesc":
 		"A `[!name]` token in the middle of a line, rendered as a small pill. No title or content.",
