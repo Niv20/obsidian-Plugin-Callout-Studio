@@ -741,9 +741,13 @@ export class CalloutEditor extends Modal {
 		});
 
 		// Foldable — dropdown in the same adjustment column.
+		// NOTE: The foldable option is currently hidden from the Edit callout
+		// UI. All the code below is intentionally left intact so the feature
+		// can be re-enabled by removing the `foldSection.hide()` call.
 		const foldSection = adjustCol.createDiv({
 			cls: "callout-studio-adjust-section callout-studio-fold-section",
 		});
+		foldSection.hide();
 		foldSection.createDiv({
 			cls: "callout-studio-adjust-header",
 			text: t("editor.foldable"),
