@@ -349,18 +349,24 @@ export interface WikilinkCalloutRef {
 	linkTo: number;
 	/** True when the link carries a `|alias` (Obsidian displays only that). */
 	hasAlias: boolean;
+	/** True when the token sits in the alias (display) text, not the target. */
+	inAlias: boolean;
 	/** True when title text follows the token inside its subpath segment. */
 	hasTitle: boolean;
 }
 
 /**
  * Finds every `[!id]` token inside the wikilinks of one raw markdown line.
- * Only tokens directly after a `#` count — those sit in a heading reference;
- * a token elsewhere in a link is part of a file name and stays untouched.
+ * In the target, only tokens directly after a `#` count — those sit in a
+ * heading reference; a token elsewhere is part of a file name and stays
+ * untouched. In the alias, only a token opening the alias of a link whose
+ * target has a `#` counts (TOC plugins alias heading links with the bare
+ * heading text) — mirroring what `parseHeadingRefDisplayText` accepts.
  * Inline-code spans are ignored; unclosed links (mid-typing) yield nothing.
  */
 export function findWikilinkCalloutRefs(rawLine: string): WikilinkCalloutRef[] {
-	if (rawLine.indexOf("#[!") === -1 || rawLine.indexOf("[[") === -1) {
+	if (rawLine.indexOf("[[") === -1) return [];
+	if (rawLine.indexOf("#[!") === -1 && rawLine.indexOf("|[!") === -1) {
 		return [];
 	}
 	const line = stripInlineCode(rawLine);
@@ -404,10 +410,48 @@ export function findWikilinkCalloutRefs(rawLine: string): WikilinkCalloutRef[] {
 				linkFrom: link.index,
 				linkTo: link.index + link[0].length,
 				hasAlias: pipeIdx !== -1,
+				inAlias: false,
 				hasTitle: target.slice(to, segEnd).trim().length > 0,
 			});
 			search = close + 1;
 		}
+		// Alias side: a token opening the alias of a heading link (the shape
+		// TOC plugins generate — `[[#[!id]|[!id]]]`). Position 0 only and a
+		// `#` in the target, matching parseHeadingRefDisplayText, so Live
+		// Preview and reading view agree on what renders.
+		if (pipeIdx === -1 || !target.includes("#")) continue;
+		const alias = inner.slice(pipeIdx + 1);
+		if (!alias.startsWith("[!")) continue;
+		const aliasClose = alias.indexOf("]", 2);
+		if (aliasClose === -1) continue;
+		const aliasId = alias.slice(2, aliasClose);
+		if (!aliasId.trim() || aliasId.includes("[")) continue;
+		let aliasTo = aliasClose + 1;
+		let aliasMark: "" | "+" | "-" = "";
+		const aliasMarkCh = alias[aliasTo];
+		if (aliasMarkCh === "+" || aliasMarkCh === "-") {
+			aliasMark = aliasMarkCh;
+			aliasTo++;
+		}
+		while (
+			aliasTo < alias.length &&
+			(alias[aliasTo] === " " || alias[aliasTo] === "\t")
+		) {
+			aliasTo++;
+		}
+		const aliasStart = innerStart + pipeIdx + 1;
+		refs.push({
+			rawId: aliasId,
+			foldMark: aliasMark,
+			from: aliasStart,
+			to: aliasStart + aliasTo,
+			linkFrom: link.index,
+			linkTo: link.index + link[0].length,
+			hasAlias: true,
+			inAlias: true,
+			// A `#` in an alias is literal text — the title runs to its end.
+			hasTitle: alias.slice(aliasTo).trim().length > 0,
+		});
 	}
 	return refs;
 }

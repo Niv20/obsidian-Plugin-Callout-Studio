@@ -184,13 +184,14 @@ export class CalloutTokenWidget extends WidgetType {
 
 /**
  * Whole-link replacement for a title-less heading-callout reference
- * (`[[#[!id]]]`). Obsidian's own parsers mishandle the trailing `]]]` run
- * (both the CM6 tokenizer and the reading parser cut the link at the FIRST
- * `]]`), so decorating just the token inside the link is not enough — the
- * entire link is replaced with this widget: prefix (`Note#`; a same-file `#`
- * is dropped), the callout's icon, and its display name, styled like an
- * internal link. Reading view produces the same display via
- * transformHeadingRefLinks.
+ * (`[[#[!id]]]`) or for a bare-token alias (`[[#[!id]|[!id]]]`, the shape
+ * TOC plugins generate). Obsidian's own parsers mishandle the trailing `]]]`
+ * run (both the CM6 tokenizer and the reading parser cut the link at the
+ * FIRST `]]`), so decorating just the token inside the link is not enough —
+ * the entire link is replaced with this widget: prefix (`Note#`; a same-file
+ * `#` is dropped, and an alias token has none), the callout's icon, and its
+ * display name, styled like an internal link. Reading view produces the same
+ * display via transformHeadingRefLinks.
  */
 export class HeadingRefLinkWidget extends WidgetType {
 	/** Snapshot for eq(); same strategy as CalloutTokenWidget.renderKey. */

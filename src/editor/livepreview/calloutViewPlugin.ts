@@ -327,8 +327,10 @@ function decorateLine(
 			curLinkFrom = ref.linkFrom;
 			curLinkStartIdx = replaces.length;
 		}
-		// Aliased links display only the alias — Obsidian hides the target.
-		if (ref.hasAlias) continue;
+		// Aliased links display only the alias — Obsidian hides the target,
+		// so target-side tokens stay skipped; alias-side tokens (TOC-plugin
+		// links) render like their target-side counterparts.
+		if (ref.hasAlias && !ref.inAlias) continue;
 		// The whole link reveals raw while the selection touches it (matching
 		// Obsidian revealing the `[[`/`]]` brackets), so no token decoration.
 		if (
@@ -340,7 +342,7 @@ function decorateLine(
 		// the leading `#` is swallowed into the replacement and the link
 		// displays as just the title. `Note#` and nested-path `#` separators
 		// stay visible.
-		const hideHash = ref.from === ref.linkFrom + 3 ? 1 : 0;
+		const hideHash = !ref.inAlias && ref.from === ref.linkFrom + 3 ? 1 : 0;
 		const from = lineFrom + ref.from - hideHash;
 		const to = lineFrom + ref.to;
 		if (SKIP_NODE_RE.test(tree.resolveInner(from + 1, 0).name)) continue;
@@ -351,8 +353,15 @@ function decorateLine(
 		// name — the same output reading view produces.
 		if (!ref.hasTitle && ref.to === ref.linkTo - 2) {
 			// Same-file `#` prefix is dropped from the display (`Note#` stays),
-			// matching the titled-ref hash hiding below.
-			const rawPrefix = lineText.slice(ref.linkFrom + 2, ref.from);
+			// matching the titled-ref hash hiding below. An alias token shows
+			// nothing before itself.
+			const rawPrefix = ref.inAlias
+				? ""
+				: lineText.slice(ref.linkFrom + 2, ref.from);
+			// Navigation target is the inner up to the alias pipe — untruncated
+			// even for `]]]` runs and nested `#[!a]#[!b]` paths.
+			const inner = lineText.slice(ref.linkFrom + 2, ref.linkTo - 2);
+			const pipeIdx = inner.indexOf("|");
 			replaces.length = curLinkStartIdx;
 			replaces.push({
 				from: lineFrom + ref.linkFrom,
@@ -363,7 +372,7 @@ function decorateLine(
 						ref.rawId,
 						host.registry,
 						rawPrefix === "#" ? "" : rawPrefix,
-						lineText.slice(ref.linkFrom + 2, ref.linkTo - 2),
+						pipeIdx === -1 ? inner : inner.slice(0, pipeIdx),
 						refSettings.refShowIcon,
 					),
 				}),
