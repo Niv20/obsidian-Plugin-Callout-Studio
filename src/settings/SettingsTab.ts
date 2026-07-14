@@ -131,8 +131,8 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 		this.calloutLists.render(containerEl);
 
 		renderFallbackSection(sectionCtx, containerEl);
-		renderGlobalSettingsSection(sectionCtx, containerEl);
 		renderCustomPalettesSection(sectionCtx, containerEl);
+		renderGlobalSettingsSection(sectionCtx, containerEl);
 		renderAutocompleteSettingsSection(sectionCtx, containerEl);
 		renderContextMenuSettingsSection(sectionCtx, containerEl);
 		renderHotkeySection(sectionCtx, containerEl);
