@@ -242,7 +242,7 @@ export const ko: Record<string, string> = {
 	"settings.customizeMenuDesc": "각 callout 유형에 표시할 마우스 오른쪽 버튼 작업을 선택하고 순서를 변경합니다. 읽기 보기, 소스 모드, 라이브 미리 보기에서 작동합니다.",
 	"settings.customizeMenuButton": "메뉴 항목 사용자 지정",
 	"menuCustomize.title": "마우스 오른쪽 버튼 메뉴 사용자 지정",
-	"menuCustomize.desc": "작업을 켜거나 끄고 화살표로 순서를 변경합니다. 변경 사항은 자동으로 저장됩니다.",
+	"menuCustomize.desc": "작업을 켜거나 끄고 핸들을 드래그하여 순서를 변경합니다. 변경 사항은 자동으로 저장됩니다.",
 	"menuCustomize.regular": "일반 callout",
 	"menuCustomize.heading": "제목 callout",
 	"menuCustomize.inline": "인라인 callout",

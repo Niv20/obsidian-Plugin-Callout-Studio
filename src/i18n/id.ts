@@ -242,7 +242,7 @@ export const id: Record<string, string> = {
 	"settings.customizeMenuDesc": "Pilih tindakan klik kanan mana yang muncul untuk setiap tipe callout dan atur ulang urutannya. Berfungsi di tampilan baca, mode sumber, dan Pratinjau Langsung.",
 	"settings.customizeMenuButton": "Sesuaikan item menu",
 	"menuCustomize.title": "Sesuaikan menu klik kanan",
-	"menuCustomize.desc": "Aktifkan atau nonaktifkan tindakan dan atur ulang urutannya dengan panah. Perubahan disimpan secara otomatis.",
+	"menuCustomize.desc": "Aktifkan atau nonaktifkan tindakan dan seret gagang untuk mengatur ulang urutannya. Perubahan disimpan secara otomatis.",
 	"menuCustomize.regular": "Callout reguler",
 	"menuCustomize.heading": "Callout heading",
 	"menuCustomize.inline": "Callout sebaris",

@@ -238,7 +238,7 @@ export const cs: Record<string, string> = {
 	"settings.customizeMenuDesc": "Vyberte, které akce kontextové nabídky se zobrazí pro každý typ callout, a změňte jejich pořadí. Funguje v zobrazení pro čtení, zdrojovém režimu a živém náhledu.",
 	"settings.customizeMenuButton": "Přizpůsobit položky menu",
 	"menuCustomize.title": "Přizpůsobit kontextovou nabídku",
-	"menuCustomize.desc": "Zapínejte nebo vypínejte akce a měňte jejich pořadí pomocí šipek. Změny se ukládají automaticky.",
+	"menuCustomize.desc": "Zapínejte nebo vypínejte akce a přetažením úchytu je přeuspořádejte. Změny se ukládají automaticky.",
 	"menuCustomize.regular": "Běžný callout",
 	"menuCustomize.heading": "Callout nadpisu",
 	"menuCustomize.inline": "Vložený callout",

@@ -238,7 +238,7 @@ export const ar: Record<string, string> = {
 	"settings.customizeMenuDesc": "اختر الإجراءات التي تظهر عند النقر بزر الماوس الأيمن لكل نوع callout، وأعد ترتيبها. يعمل في وضع القراءة وضع المصدر والمعاينة المباشرة.",
 	"settings.customizeMenuButton": "تخصيص عناصر القائمة",
 	"menuCustomize.title": "تخصيص قائمة النقر بزر الماوس الأيمن",
-	"menuCustomize.desc": "فعّل الإجراءات أو عطّلها وأعد ترتيبها باستخدام الأسهم. تُحفظ التغييرات تلقائياً.",
+	"menuCustomize.desc": "قم بتفعيل الإجراءات أو تعطيلها واسحب المقبض لإعادة ترتيبها. تُحفظ التغييرات تلقائياً.",
 	"menuCustomize.regular": "callout عادي",
 	"menuCustomize.heading": "callout العنوان",
 	"menuCustomize.inline": "callout مضمّن",

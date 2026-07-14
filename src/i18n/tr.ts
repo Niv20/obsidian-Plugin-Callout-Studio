@@ -246,7 +246,7 @@ export const tr: Record<string, string> = {
 	"settings.customizeMenuDesc": "Her callout türü için hangi sağ tık eylemlerinin görüneceğini seçin ve sırasını değiştirin. Okuma görünümünde, kaynak modunda ve Canlı Önizleme'de çalışır.",
 	"settings.customizeMenuButton": "Menü öğelerini özelleştir",
 	"menuCustomize.title": "Sağ tık menüsünü özelleştir",
-	"menuCustomize.desc": "Eylemleri açıp kapatın ve oklarla yeniden sıralayın. Değişiklikler otomatik olarak kaydedilir.",
+	"menuCustomize.desc": "Eylemleri açıp kapatın ve yeniden sıralamak için tutamacı sürükleyin. Değişiklikler otomatik olarak kaydedilir.",
 	"menuCustomize.regular": "Normal callout",
 	"menuCustomize.heading": "Başlık callout'u",
 	"menuCustomize.inline": "Satır içi callout",

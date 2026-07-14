@@ -238,7 +238,7 @@ export const sv: Record<string, string> = {
 	"settings.customizeMenuDesc": "Välj vilka högerklicksåtgärder som visas för varje callout-typ och ändra deras ordning. Fungerar i läsvy, källäge och Live Preview.",
 	"settings.customizeMenuButton": "Anpassa menyalternativ",
 	"menuCustomize.title": "Anpassa högerklicksmenyn",
-	"menuCustomize.desc": "Aktivera eller inaktivera åtgärder och ändra deras ordning med pilarna. Ändringar sparas automatiskt.",
+	"menuCustomize.desc": "Aktivera eller inaktivera åtgärder och dra i handtaget för att ändra ordningen. Ändringar sparas automatiskt.",
 	"menuCustomize.regular": "Vanlig callout",
 	"menuCustomize.heading": "Rubrik-callout",
 	"menuCustomize.inline": "Infogad callout",

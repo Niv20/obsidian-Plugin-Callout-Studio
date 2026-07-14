@@ -223,7 +223,7 @@ export const zhTW: Record<string, string> = {
 	"settings.customizeMenuDesc": "選擇每種 callout 類型顯示哪些右鍵操作，並調整其順序。 在閱讀檢視、原始碼模式和即時預覽中均有效。",
 	"settings.customizeMenuButton": "自訂選單項目",
 	"menuCustomize.title": "自訂右鍵選單",
-	"menuCustomize.desc": "啟用或停用操作，並使用箭頭調整順序。變更會自動儲存。",
+	"menuCustomize.desc": "啟用或停用操作，並拖曳把手調整順序。變更會自動儲存。",
 	"menuCustomize.regular": "一般 callout",
 	"menuCustomize.heading": "標題 callout",
 	"menuCustomize.inline": "行內 callout",

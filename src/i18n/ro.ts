@@ -238,7 +238,7 @@ export const ro: Record<string, string> = {
 	"settings.customizeMenuDesc": "Alegeți ce acțiuni de clic dreapta apar pentru fiecare tip de callout și reordonați-le. Funcționează în vizualizarea de lectură, modul sursă și Live Preview.",
 	"settings.customizeMenuButton": "Personalizați elementele meniului",
 	"menuCustomize.title": "Personalizare meniu clic dreapta",
-	"menuCustomize.desc": "Activați sau dezactivați acțiuni și reordonați-le cu săgețile. Modificările sunt salvate automat.",
+	"menuCustomize.desc": "Activați sau dezactivați acțiuni și trageți mânerul pentru a le reordona. Modificările sunt salvate automat.",
 	"menuCustomize.regular": "Callout obișnuit",
 	"menuCustomize.heading": "Callout tip titlu",
 	"menuCustomize.inline": "Callout inline",

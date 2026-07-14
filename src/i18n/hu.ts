@@ -238,7 +238,7 @@ export const hu: Record<string, string> = {
 	"settings.customizeMenuDesc": "Válassza ki, mely jobb gombos műveletek jelenjenek meg az egyes callout-típusoknál, és rendezze át őket. Olvasó nézetben, forrás módban és élő előnézetben is működik.",
 	"settings.customizeMenuButton": "Menüelemek testreszabása",
 	"menuCustomize.title": "Jobb gombos menü testreszabása",
-	"menuCustomize.desc": "Kapcsolja be vagy ki a műveleteket, és rendezze át őket a nyilakkal. A módosítások automatikusan mentésre kerülnek.",
+	"menuCustomize.desc": "Kapcsolja be vagy ki a műveleteket, és húzza a fogantyút az átrendezéshez. A módosítások automatikusan mentésre kerülnek.",
 	"menuCustomize.regular": "Normál callout",
 	"menuCustomize.heading": "Címsor callout",
 	"menuCustomize.inline": "Beágyazott callout",

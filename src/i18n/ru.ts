@@ -238,7 +238,7 @@ export const ru: Record<string, string> = {
 	"settings.customizeMenuDesc": "Выберите, какие действия контекстного меню отображаются для каждого типа callout, и измените их порядок. Работает в режиме чтения, режиме источника и в живом предпросмотре.",
 	"settings.customizeMenuButton": "Настройка пунктов меню",
 	"menuCustomize.title": "Настройка контекстного меню",
-	"menuCustomize.desc": "Включайте и отключайте действия и меняйте их порядок с помощью стрелок. Изменения сохраняются автоматически.",
+	"menuCustomize.desc": "Включайте и отключайте действия и перетаскивайте маркер, чтобы изменить их порядок. Изменения сохраняются автоматически.",
 	"menuCustomize.regular": "Обычный callout",
 	"menuCustomize.heading": "Callout-заголовок",
 	"menuCustomize.inline": "Встроенный callout",

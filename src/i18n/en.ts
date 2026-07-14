@@ -395,7 +395,7 @@ export const en: Record<string, string> = {
 	"settings.customizeMenuButton": "Customize menu items",
 	"menuCustomize.title": "Customize right-click menu",
 	"menuCustomize.desc":
-		"Toggle actions on or off and drag the handle to reorder them. Disabled actions drop to the bottom. Changes are saved automatically.",
+		"Toggle actions on or off and drag the handle to reorder them. Changes are saved automatically.",
 	"menuCustomize.regular": "Regular callout",
 	"menuCustomize.heading": "Heading callout",
 	"menuCustomize.inline": "Inline callout",

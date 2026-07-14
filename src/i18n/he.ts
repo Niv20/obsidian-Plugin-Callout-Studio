@@ -312,7 +312,7 @@ export const he: Record<string, string> = {
 	"settings.customizeMenuButton": "התאמת פריטי התפריט",
 	"menuCustomize.title": "התאמת תפריט הקליק־הימני",
 	"menuCustomize.desc":
-		"הפעלה או כיבוי של פעולות ושינוי סדרן באמצעות החצים. השינויים נשמרים אוטומטית.",
+		"הפעלה או כיבוי של פעולות וגרירת הידית כדי לשנות את סדרן. השינויים נשמרים אוטומטית.",
 	"menuCustomize.regular": "תיבת־הבלטה רגילה",
 	"menuCustomize.heading": "תיבת־הבלטה ככותרת",
 	"menuCustomize.inline": "תיבת־הבלטה מוטבעת",

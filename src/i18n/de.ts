@@ -238,7 +238,7 @@ export const de: Record<string, string> = {
 	"settings.customizeMenuDesc": "Wählen Sie, welche Rechtsklick-Aktionen für jeden Callout-Typ angezeigt werden, und ordnen Sie sie neu an. Funktioniert in der Leseansicht, im Quellmodus und in der Live-Vorschau.",
 	"settings.customizeMenuButton": "Menüelemente anpassen",
 	"menuCustomize.title": "Rechtsklickmenü anpassen",
-	"menuCustomize.desc": "Aktionen ein- oder ausschalten und mit den Pfeilen neu anordnen. Änderungen werden automatisch gespeichert.",
+	"menuCustomize.desc": "Aktionen ein- oder ausschalten und den Griff ziehen, um sie neu anzuordnen. Änderungen werden automatisch gespeichert.",
 	"menuCustomize.regular": "Regulärer Callout",
 	"menuCustomize.heading": "Überschrift-Callout",
 	"menuCustomize.inline": "Inline-Callout",

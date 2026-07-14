@@ -220,7 +220,7 @@ export const nb: Record<string, string> = {
 	"settings.customizeMenuDesc": "Velg hvilke høyreklikkhandlinger som vises for hver callout-type, og endre rekkefølgen på dem. Fungerer i lesevisning, kildemodus og Live Preview.",
 	"settings.customizeMenuButton": "Tilpass menyelementer",
 	"menuCustomize.title": "Tilpass høyreklikkmenyen",
-	"menuCustomize.desc": "Slå handlinger av eller på, og endre rekkefølgen med pilene. Endringer lagres automatisk.",
+	"menuCustomize.desc": "Slå handlinger av eller på, og dra i håndtaket for å endre rekkefølgen. Endringer lagres automatisk.",
 	"menuCustomize.regular": "Vanlig callout",
 	"menuCustomize.heading": "Overskrift-callout",
 	"menuCustomize.inline": "Innebygd callout",

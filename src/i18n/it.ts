@@ -242,7 +242,7 @@ export const it: Record<string, string> = {
 	"settings.customizeMenuDesc": "Scegli quali azioni del clic destro appaiono per ciascun tipo di callout e riordinale. Funziona in visualizzazione lettura, modalità sorgente e anteprima live.",
 	"settings.customizeMenuButton": "Personalizza voci di menu",
 	"menuCustomize.title": "Personalizza il menu del clic destro",
-	"menuCustomize.desc": "Attiva o disattiva le azioni e riordinale con le frecce. Le modifiche vengono salvate automaticamente.",
+	"menuCustomize.desc": "Attiva o disattiva le azioni e trascina la maniglia per riordinarle. Le modifiche vengono salvate automaticamente.",
 	"menuCustomize.regular": "Callout normale",
 	"menuCustomize.heading": "Callout di intestazione",
 	"menuCustomize.inline": "Callout in linea",

@@ -246,7 +246,7 @@ export const th: Record<string, string> = {
 	"settings.customizeMenuDesc": "เลือกว่าการดำเนินการคลิกขวาใดจะปรากฏสำหรับแต่ละประเภท callout และจัดลำดับใหม่ ใช้งานได้ในมุมมองการอ่าน โหมดต้นฉบับ และ Live Preview",
 	"settings.customizeMenuButton": "ปรับแต่งรายการเมนู",
 	"menuCustomize.title": "ปรับแต่งเมนูคลิกขวา",
-	"menuCustomize.desc": "เปิดหรือปิดการดำเนินการและจัดลำดับใหม่ด้วยลูกศร การเปลี่ยนแปลงจะถูกบันทึกโดยอัตโนมัติ",
+	"menuCustomize.desc": "เปิดหรือปิดการดำเนินการและลากที่จับเพื่อจัดลำดับใหม่ การเปลี่ยนแปลงจะถูกบันทึกโดยอัตโนมัติ",
 	"menuCustomize.regular": "Callout ปกติ",
 	"menuCustomize.heading": "Callout หัวข้อ",
 	"menuCustomize.inline": "Callout อินไลน์",

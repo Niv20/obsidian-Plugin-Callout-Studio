@@ -238,7 +238,7 @@ export const pl: Record<string, string> = {
 	"settings.customizeMenuDesc": "Wybierz, które akcje menu kontekstowego pojawiają się dla każdego typu callout, i zmień ich kolejność. Działa w widoku czytania, trybie źródłowym i podglądzie na żywo.",
 	"settings.customizeMenuButton": "Dostosuj elementy menu",
 	"menuCustomize.title": "Dostosuj menu kontekstowe",
-	"menuCustomize.desc": "Włączaj lub wyłączaj akcje i zmieniaj ich kolejność za pomocą strzałek. Zmiany są zapisywane automatycznie.",
+	"menuCustomize.desc": "Włączaj lub wyłączaj akcje i przeciągaj uchwyt, aby zmienić ich kolejność. Zmiany są zapisywane automatycznie.",
 	"menuCustomize.regular": "Zwykły callout",
 	"menuCustomize.heading": "Callout-nagłówek",
 	"menuCustomize.inline": "Callout śródtekstowy",

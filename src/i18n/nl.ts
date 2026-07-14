@@ -238,7 +238,7 @@ export const nl: Record<string, string> = {
 	"settings.customizeMenuDesc": "Kies welke rechtsklikacties worden weergegeven voor elk callout-type en wijzig de volgorde. Werkt in leesweergave, bronmodus en Live Preview.",
 	"settings.customizeMenuButton": "Menu-items aanpassen",
 	"menuCustomize.title": "Rechtsklikmenu aanpassen",
-	"menuCustomize.desc": "Schakel acties in of uit en wijzig de volgorde met de pijlen. Wijzigingen worden automatisch opgeslagen.",
+	"menuCustomize.desc": "Schakel acties in of uit en sleep de handgreep om de volgorde te wijzigen. Wijzigingen worden automatisch opgeslagen.",
 	"menuCustomize.regular": "Gewone callout",
 	"menuCustomize.heading": "Kop-callout",
 	"menuCustomize.inline": "Inline callout",

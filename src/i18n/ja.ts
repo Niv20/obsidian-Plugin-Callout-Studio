@@ -242,7 +242,7 @@ export const ja: Record<string, string> = {
 	"settings.customizeMenuDesc": "各calloutタイプに表示する右クリック操作を選択し、順序を並べ替えます。 閲覧ビュー、ソースモード、ライブプレビューで機能します。",
 	"settings.customizeMenuButton": "メニュー項目をカスタマイズ",
 	"menuCustomize.title": "右クリックメニューをカスタマイズ",
-	"menuCustomize.desc": "矢印を使って操作のオン/オフ切り替えと並べ替えができます。変更は自動的に保存されます。",
+	"menuCustomize.desc": "操作のオン/オフを切り替え、ハンドルをドラッグして並べ替えます。変更は自動的に保存されます。",
 	"menuCustomize.regular": "通常のcallout",
 	"menuCustomize.heading": "見出しcallout",
 	"menuCustomize.inline": "インラインcallout",

@@ -220,7 +220,7 @@ export const fi: Record<string, string> = {
 	"settings.customizeMenuDesc": "Valitse, mitkä hiiren kakkospainikkeen toiminnot näkyvät kullekin callout-tyypille, ja järjestä ne uudelleen. Toimii lukemisnäkymässä, lähdetilassa ja Live Preview -tilassa.",
 	"settings.customizeMenuButton": "Mukauta valikon kohteita",
 	"menuCustomize.title": "Mukauta hiiren kakkospainikkeen valikkoa",
-	"menuCustomize.desc": "Ota toimintoja käyttöön tai pois käytöstä ja järjestä niitä nuolilla. Muutokset tallennetaan automaattisesti.",
+	"menuCustomize.desc": "Ota toimintoja käyttöön tai pois käytöstä ja järjestä niitä uudelleen vetämällä kahvasta. Muutokset tallennetaan automaattisesti.",
 	"menuCustomize.regular": "Tavallinen callout",
 	"menuCustomize.heading": "Otsikko-callout",
 	"menuCustomize.inline": "Rivinsisäinen callout",

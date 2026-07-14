@@ -220,7 +220,7 @@ export const da: Record<string, string> = {
 	"settings.customizeMenuDesc": "Vælg hvilke højreklikhandlinger der vises for hver callout-type, og omarranger dem. Virker i læsevisning, kildetilstand og Live Preview.",
 	"settings.customizeMenuButton": "Tilpas menupunkter",
 	"menuCustomize.title": "Tilpas højreklikmenuen",
-	"menuCustomize.desc": "Slå handlinger til eller fra, og omarranger dem med pilene. Ændringer gemmes automatisk.",
+	"menuCustomize.desc": "Slå handlinger til eller fra, og træk i håndtaget for at omarrangere dem. Ændringer gemmes automatisk.",
 	"menuCustomize.regular": "Almindelig callout",
 	"menuCustomize.heading": "Overskrift-callout",
 	"menuCustomize.inline": "Indlejret callout",

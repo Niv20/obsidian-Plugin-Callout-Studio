@@ -220,7 +220,7 @@ export const bg: Record<string, string> = {
 	"settings.customizeMenuDesc": "Изберете кои действия от контекстното меню да се показват за всеки тип callout и променете реда им. Работи в режим на четене, режим на изходен код и Live Preview.",
 	"settings.customizeMenuButton": "Персонализиране на елементите на менюто",
 	"menuCustomize.title": "Персонализиране на контекстното меню",
-	"menuCustomize.desc": "Включвайте или изключвайте действия и променяйте реда им със стрелките. Промените се запазват автоматично.",
+	"menuCustomize.desc": "Включвайте или изключвайте действията и плъзгайте дръжката, за да ги пренаредите. Промените се запазват автоматично.",
 	"menuCustomize.regular": "Обикновен callout",
 	"menuCustomize.heading": "Callout-заглавие",
 	"menuCustomize.inline": "Вграден callout",

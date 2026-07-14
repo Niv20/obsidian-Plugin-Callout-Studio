@@ -238,7 +238,7 @@ export const hi: Record<string, string> = {
 	"settings.customizeMenuDesc": "चुनें कि प्रत्येक callout प्रकार के लिए कौन-सी राइट-क्लिक क्रियाएँ दिखाई दें और उनका क्रम बदलें। रीडिंग व्यू, सोर्स मोड और लाइव प्रीव्यू में काम करता है।",
 	"settings.customizeMenuButton": "मेनू आइटम कस्टमाइज़ करें",
 	"menuCustomize.title": "राइट-क्लिक मेनू कस्टमाइज़ करें",
-	"menuCustomize.desc": "क्रियाओं को चालू या बंद करें और तीरों से उनका क्रम बदलें। परिवर्तन स्वतः सहेजे जाते हैं।",
+	"menuCustomize.desc": "क्रियाओं को चालू या बंद करें और उन्हें पुनः क्रमबद्ध करने के लिए हैंडल को खींचें। परिवर्तन स्वतः सहेजे जाते हैं।",
 	"menuCustomize.regular": "सामान्य callout",
 	"menuCustomize.heading": "शीर्षक callout",
 	"menuCustomize.inline": "इनलाइन callout",

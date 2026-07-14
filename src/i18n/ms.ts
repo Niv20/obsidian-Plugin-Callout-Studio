@@ -220,7 +220,7 @@ export const ms: Record<string, string> = {
 	"settings.customizeMenuDesc": "Pilih tindakan klik kanan yang dipaparkan untuk setiap jenis callout dan susun semula. Berfungsi dalam paparan baca, mod sumber, dan Pratonton Langsung.",
 	"settings.customizeMenuButton": "Sesuaikan item menu",
 	"menuCustomize.title": "Sesuaikan menu klik kanan",
-	"menuCustomize.desc": "Hidupkan atau matikan tindakan dan susun semula menggunakan anak panah. Perubahan disimpan secara automatik.",
+	"menuCustomize.desc": "Hidupkan atau matikan tindakan dan seret pemegang untuk menyusun semula. Perubahan disimpan secara automatik.",
 	"menuCustomize.regular": "Callout biasa",
 	"menuCustomize.heading": "Callout tajuk",
 	"menuCustomize.inline": "Callout sebaris",

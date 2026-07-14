@@ -238,7 +238,7 @@ export const es: Record<string, string> = {
 	"settings.customizeMenuDesc": "Elija qué acciones de clic derecho aparecen para cada tipo de callout y reordénelas. Funciona en vista de lectura, modo fuente y Vista previa en vivo.",
 	"settings.customizeMenuButton": "Personalizar elementos del menú",
 	"menuCustomize.title": "Personalizar menú de clic derecho",
-	"menuCustomize.desc": "Active o desactive acciones y reordénelas con las flechas. Los cambios se guardan automáticamente.",
+	"menuCustomize.desc": "Active o desactive acciones y arrastre el asa para reordenarlas. Los cambios se guardan automáticamente.",
 	"menuCustomize.regular": "Callout regular",
 	"menuCustomize.heading": "Callout de encabezado",
 	"menuCustomize.inline": "Callout en línea",
