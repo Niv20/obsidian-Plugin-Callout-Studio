@@ -21,6 +21,21 @@ export const fi: Record<string, string> = {
 	"firstRun.noThanks": "Ei kiitos",
 	"firstRun.autoScanComplete": "Callout Studio skannasi holvisi ja lisäsi {{count}} callouttia.",
 	"firstRun.scanning": "Skannataan",
+
+	"welcome.tooltip": "Tietoja Callout Studiosta",
+	"welcome.title": "Tervetuloa Callout Studioon",
+	"welcome.tagline": "Täydellinen ratkaisusi Obsidian-callouttien hallintaan.",
+	"welcome.previewTitle": "Näe se toiminnassa",
+	"welcome.sample":
+		"Callout Studion avulla voit luoda callouteja mukautetulla kuvakkeella, väreillä ja nimellä.\n\n" +
+		"Voit käyttää samaa calloutia **kolmella** eri tavalla:\n\n" +
+		"## [!tip] Otsikkona\n" +
+		"Muuttaaksesi minkä tahansa otsikon callout-tyyliseksi otsikoksi, lisää `[!type]` heti `#`-merkkien jälkeen.\n\n" +
+		"Haluatko tällaisen upotetun calloutin [!warning]? Lisää vain `[!type]` keskelle lausetta, kirjoituksen kulkua katkaisematta.\n\n" +
+		"> [!note] Tavallinen callout\n" +
+		"> Klassinen callout toimii tietysti täsmälleen samalla syntaksilla, johon olet jo tottunut: `> [!type]`.\n\n" +
+		"Callout Studiolla on paljon muutakin tarjottavaa! [Lue lisää]({{repoUrl}}).\n",
+
 	"deleteModal.title": 'Poistetaanko callout "{{name}}"?',
 	"deleteModal.bodyInUse": "Tämä callout esiintyy {{count}} kertaa {{files}} tiedostossa.",
 	"deleteModal.bodyInUseExplain": "Poistaminen muuntaa nämä lohkot tavalliseksi tekstiksi — ne menettävät tyylinsä ja callout-otsikkonsa.",

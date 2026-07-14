@@ -25,6 +25,20 @@ export const tr: Record<string, string> = {
 	"firstRun.autoScanComplete": "Callout Studio vault'unuzu taradı ve {{count}} callout ekledi.",
 	"firstRun.scanning": "Taranıyor",
 
+	"welcome.tooltip": "Callout Studio hakkında",
+	"welcome.title": "Callout Studio'ya hoş geldiniz",
+	"welcome.tagline": "Obsidian callout'larını yönetmek için eksiksiz çözümünüz.",
+	"welcome.previewTitle": "Aksiyon halinde görün",
+	"welcome.sample":
+		"Callout Studio, özel bir simge, renkler ve ad ile callout'lar oluşturmanızı sağlar.\n\n" +
+		"Aynı callout'u **üç** farklı şekilde kullanabilirsiniz:\n\n" +
+		"## [!tip] Başlık olarak\n" +
+		"Herhangi bir başlığı callout stiline dönüştürmek için `#` işaretlerinin hemen ardından `[!type]` ekleyin.\n\n" +
+		"Bunun gibi satır içi bir callout mu istiyorsunuz [!warning]? Akışınızı bozmadan bir cümlenin ortasına `[!type]` eklemeniz yeterli.\n\n" +
+		"> [!note] Normal callout\n" +
+		"> Elbette, klasik callout zaten alışık olduğunuz aynı sözdizimiyle çalışır: `> [!type]`.\n\n" +
+		"Callout Studio'nun sunacağı çok daha fazlası var! [Daha fazla bilgi]({{repoUrl}}).\n",
+
 	"deleteModal.title": '"{{name}}" callout\'unu sil?',
 	"deleteModal.bodyInUse": "Bu callout {{files}} dosyada {{count}} kez görünüyor.",
 	"deleteModal.bodyInUseExplain": "Silmek, bu blokları düz metne dönüştürür — stil ve callout başlığını kaybeder.",

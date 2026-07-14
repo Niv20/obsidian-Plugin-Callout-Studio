@@ -21,6 +21,21 @@ export const el: Record<string, string> = {
 	"firstRun.noThanks": "Όχι, ευχαριστώ",
 	"firstRun.autoScanComplete": "Το Callout Studio σάρωσε το vault σας και πρόσθεσε {{count}} callout(s).",
 	"firstRun.scanning": "Σάρωση",
+
+	"welcome.tooltip": "Σχετικά με το Callout Studio",
+	"welcome.title": "Καλώς ήρθατε στο Callout Studio",
+	"welcome.tagline": "Η ολοκληρωμένη λύση σας για τη διαχείριση callouts στο Obsidian.",
+	"welcome.previewTitle": "Δείτε το σε δράση",
+	"welcome.sample":
+		"Το Callout Studio σάς επιτρέπει να δημιουργείτε callouts με προσαρμοσμένο εικονίδιο, χρώματα και όνομα.\n\n" +
+		"Μπορείτε να χρησιμοποιήσετε το ίδιο callout με **τρεις** διαφορετικούς τρόπους:\n\n" +
+		"## [!tip] Ως επικεφαλίδα\n" +
+		"Για να μετατρέψετε οποιαδήποτε επικεφαλίδα σε επικεφαλίδα στυλ callout, προσθέστε `[!type]` αμέσως μετά τα `#`.\n\n" +
+		"Θέλετε ένα ενσωματωμένο callout σαν κι αυτό [!warning]; Απλώς προσθέστε `[!type]` στη μέση μιας πρότασης, χωρίς να διακόψετε τη ροή σας.\n\n" +
+		"> [!note] Κανονικό callout\n" +
+		"> Φυσικά, το κλασικό callout λειτουργεί με ακριβώς την ίδια σύνταξη που ήδη γνωρίζετε: `> [!type]`.\n\n" +
+		"Το Callout Studio έχει πολλά περισσότερα να προσφέρει! [Μάθετε περισσότερα]({{repoUrl}}).\n",
+
 	"deleteModal.title": 'Διαγραφή callout "{{name}}";',
 	"deleteModal.bodyInUse": "Αυτό το callout εμφανίζεται {{count}} φορά/φορές σε {{files}} αρχείο/α.",
 	"deleteModal.bodyInUseExplain": "Η διαγραφή θα μετατρέψει αυτά τα μπλοκ σε απλό κείμενο — θα χάσουν το στυλ και την επικεφαλίδα callout.",

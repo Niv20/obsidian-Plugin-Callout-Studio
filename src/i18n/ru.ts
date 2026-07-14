@@ -25,6 +25,20 @@ export const ru: Record<string, string> = {
 	"firstRun.autoScanComplete": "Callout Studio просканировал хранилище и добавил {{count}} callout.",
 	"firstRun.scanning": "Сканирование",
 
+	"welcome.tooltip": "О Callout Studio",
+	"welcome.title": "Добро пожаловать в Callout Studio",
+	"welcome.tagline": "Ваше полное решение для управления callout в Obsidian.",
+	"welcome.previewTitle": "Посмотреть в действии",
+	"welcome.sample":
+		"Callout Studio позволяет создавать callout с собственной иконкой, цветами и названием.\n\n" +
+		"Один и тот же callout можно использовать **тремя** разными способами:\n\n" +
+		"## [!tip] Как заголовок\n" +
+		"Чтобы превратить любой заголовок в заголовок в стиле callout, добавьте `[!type]` сразу после `#`.\n\n" +
+		"Хотите встроенный callout, как этот [!warning]? Просто добавьте `[!type]` прямо в середину предложения, не прерывая свой текст.\n\n" +
+		"> [!note] Обычный callout\n" +
+		"> Разумеется, классический callout работает по тому же самому синтаксису, к которому вы уже привыкли: `> [!type]`.\n\n" +
+		"Callout Studio может предложить намного больше! [Узнать больше]({{repoUrl}}).\n",
+
 	"deleteModal.title": 'Удалить callout "{{name}}"?',
 	"deleteModal.bodyInUse": "Этот callout встречается {{count}} раз(а) в {{files}} файле(ах).",
 	"deleteModal.bodyInUseExplain": "При удалении эти блоки будут преобразованы в обычный текст — они потеряют оформление и заголовок callout.",

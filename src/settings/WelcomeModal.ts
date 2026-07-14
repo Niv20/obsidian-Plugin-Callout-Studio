@@ -7,11 +7,12 @@
  * reopenable any time from the info icon next to the "Callout Studio" title in
  * settings.
  *
- * Left column: the plugin name, a one-line slogan, and two buttons — "Learn
- * more" (opens the GitHub repo) and "Continue" (closes the modal). Right
+ * Left column: the plugin name, icon, and a one-line slogan, centered. Right
  * column: a real {@link LiveCalloutPreview} rendering a short sample whose copy
- * itself explains the three callout roles (heading, inline, regular), so the
- * preview both demonstrates and describes what the plugin can do.
+ * itself explains the three callout roles (heading, inline, regular) and links
+ * back to the GitHub repo, so the preview both demonstrates and describes what
+ * the plugin can do. Closing the modal (Escape, click-outside, or the preview's
+ * own link) resolves the first-run `prompt()` promise the same way.
  */
 import { Modal, setIcon } from "obsidian";
 import { t } from "../i18n";
@@ -36,7 +37,7 @@ export class WelcomeModal extends Modal {
 
 		const panel = this.contentEl.createDiv({ cls: "cs-welcome-panel" });
 
-		// ── Left column: hero + slogan + actions ───────────────────────
+		// ── Left column: hero + slogan, centered ────────────────────────
 		const left = panel.createDiv({ cls: "cs-welcome-left" });
 		const hero = left.createDiv({ cls: "cs-welcome-hero" });
 		const icon = hero.createDiv({ cls: "cs-welcome-icon" });
@@ -50,24 +51,11 @@ export class WelcomeModal extends Modal {
 			text: t("welcome.tagline"),
 		});
 
-		const actions = left.createDiv({ cls: "cs-welcome-actions" });
-		const learnBtn = actions.createEl("button", {
-			text: t("welcome.learnMore"),
-		});
-		learnBtn.addEventListener("click", () => {
-			window.open(REPO_URL, "_blank");
-		});
-		const continueBtn = actions.createEl("button", {
-			text: t("welcome.continue"),
-			cls: "mod-cta",
-		});
-		continueBtn.addEventListener("click", () => this.close());
-
 		// ── Right column: self-describing live preview ─────────────────
 		const right = panel.createDiv({ cls: "cs-welcome-right" });
 		this.preview = new LiveCalloutPreview(this.app, right, {
 			title: t("welcome.previewTitle"),
-			initialText: t("welcome.sample"),
+			initialText: t("welcome.sample", { repoUrl: REPO_URL }),
 		});
 	}
 

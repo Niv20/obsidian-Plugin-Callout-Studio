@@ -21,6 +21,21 @@ export const zhTW: Record<string, string> = {
 	"firstRun.noThanks": "不，謝謝",
 	"firstRun.autoScanComplete": "Callout Studio 已掃描您的 vault 並新增了 {{count}} 個 callout。",
 	"firstRun.scanning": "掃描中",
+
+	"welcome.tooltip": "關於 Callout Studio",
+	"welcome.title": "歡迎使用 Callout Studio",
+	"welcome.tagline": "管理 Obsidian callout 的完整解決方案。",
+	"welcome.previewTitle": "查看實際效果",
+	"welcome.sample":
+		"Callout Studio 讓您可以建立具有自訂圖示、顏色與名稱的 callout。\n\n" +
+		"同一個 callout 可以用**三**種不同的方式使用：\n\n" +
+		"## [!tip] 作為標題\n" +
+		"只要在 `#` 後面直接加上 `[!type]`，就能把任何標題變成 callout 樣式的標題。\n\n" +
+		"想要像這樣的行內 callout [!warning] 嗎？只需在句子中加入 `[!type]`，不會打斷您的書寫節奏。\n\n" +
+		"> [!note] 一般 callout\n" +
+		"> 當然，經典的 callout 仍使用您熟悉的語法：`> [!type]`。\n\n" +
+		"Callout Studio 還有更多功能等您發掘！[深入了解]({{repoUrl}})。\n",
+
 	"deleteModal.title": '刪除 callout「{{name}}」？',
 	"deleteModal.bodyInUse": "此 callout 在 {{files}} 個檔案中出現了 {{count}} 次。",
 	"deleteModal.bodyInUseExplain": "刪除後這些區塊將轉換為純文字——它們將失去樣式和 callout 標題。",

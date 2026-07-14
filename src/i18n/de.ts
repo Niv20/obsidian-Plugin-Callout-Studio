@@ -25,6 +25,20 @@ export const de: Record<string, string> = {
 	"firstRun.autoScanComplete": "Callout Studio hat Ihren Vault gescannt und {{count}} Callout(s) hinzugefügt.",
 	"firstRun.scanning": "Scannt",
 
+	"welcome.tooltip": "Über Callout Studio",
+	"welcome.title": "Willkommen bei Callout Studio",
+	"welcome.tagline": "Ihre umfassende Lösung zur Verwaltung von Obsidian-Callouts.",
+	"welcome.previewTitle": "In Aktion sehen",
+	"welcome.sample":
+		"Mit Callout Studio können Sie Callouts mit eigenem Symbol, eigenen Farben und Namen erstellen.\n\n" +
+		"Sie können denselben Callout auf **drei** verschiedene Arten verwenden:\n\n" +
+		"## [!tip] Als Überschrift\n" +
+		"Um eine Überschrift in eine Callout-Überschrift zu verwandeln, fügen Sie `[!type]` direkt nach den `#` ein.\n\n" +
+		"Möchten Sie einen Inline-Callout wie diesen [!warning]? Fügen Sie einfach `[!type]` mitten in einem Satz ein, ohne Ihren Lesefluss zu unterbrechen.\n\n" +
+		"> [!note] Regulärer Callout\n" +
+		"> Natürlich funktioniert der klassische Callout mit genau der gleichen Syntax, die Sie bereits kennen: `> [!type]`.\n\n" +
+		"Callout Studio hat noch viel mehr zu bieten! [Mehr erfahren]({{repoUrl}}).\n",
+
 	"deleteModal.title": 'Callout "{{name}}" löschen?',
 	"deleteModal.bodyInUse": "Dieser Callout erscheint {{count}} Mal in {{files}} Datei(en).",
 	"deleteModal.bodyInUseExplain": "Beim Löschen werden diese Blöcke in einfachen Text umgewandelt – sie verlieren ihre Formatierung und die Callout-Überschrift.",

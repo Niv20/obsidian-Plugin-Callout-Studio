@@ -25,6 +25,20 @@ export const id: Record<string, string> = {
 	"firstRun.autoScanComplete": "Callout Studio memindai vault Anda dan menambahkan {{count}} callout.",
 	"firstRun.scanning": "Memindai",
 
+	"welcome.tooltip": "Tentang Callout Studio",
+	"welcome.title": "Selamat datang di Callout Studio",
+	"welcome.tagline": "Solusi lengkap Anda untuk mengelola callout Obsidian.",
+	"welcome.previewTitle": "Lihat dalam aksi",
+	"welcome.sample":
+		"Callout Studio memungkinkan Anda membuat callout dengan ikon, warna, dan nama khusus.\n\n" +
+		"Anda dapat menggunakan callout yang sama dengan **tiga** cara berbeda:\n\n" +
+		"## [!tip] Sebagai judul\n" +
+		"Untuk mengubah judul apa pun menjadi judul bergaya callout, tambahkan `[!type]` tepat setelah `#`.\n\n" +
+		"Ingin callout inline seperti ini [!warning]? Cukup tambahkan `[!type]` di tengah kalimat, tanpa mengganggu alur tulisan Anda.\n\n" +
+		"> [!note] Callout biasa\n" +
+		"> Tentu saja, callout klasik tetap berfungsi dengan sintaks yang sama persis seperti yang sudah Anda kenal: `> [!type]`.\n\n" +
+		"Callout Studio masih punya banyak hal lain untuk ditawarkan! [Pelajari lebih lanjut]({{repoUrl}}).\n",
+
 	"deleteModal.title": 'Hapus callout "{{name}}"?',
 	"deleteModal.bodyInUse": "Callout ini muncul {{count}} kali di {{files}} file.",
 	"deleteModal.bodyInUseExplain": "Menghapus akan mengubah blok tersebut menjadi teks biasa — mereka akan kehilangan gaya dan header callout.",

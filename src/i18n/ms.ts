@@ -21,6 +21,21 @@ export const ms: Record<string, string> = {
 	"firstRun.noThanks": "Tidak, terima kasih",
 	"firstRun.autoScanComplete": "Callout Studio mengimbas vault anda dan menambah {{count}} callout.",
 	"firstRun.scanning": "Mengimbas",
+
+	"welcome.tooltip": "Tentang Callout Studio",
+	"welcome.title": "Selamat datang ke Callout Studio",
+	"welcome.tagline": "Penyelesaian lengkap anda untuk menguruskan callout Obsidian.",
+	"welcome.previewTitle": "Lihat ia beraksi",
+	"welcome.sample":
+		"Callout Studio membolehkan anda mencipta callout dengan ikon, warna dan nama tersendiri.\n\n" +
+		"Anda boleh menggunakan callout yang sama dengan **tiga** cara berbeza:\n\n" +
+		"## [!tip] Sebagai tajuk\n" +
+		"Untuk menukar mana-mana tajuk kepada tajuk bergaya callout, tambah `[!type]` sejurus selepas `#`.\n\n" +
+		"Mahukan callout dalam talian seperti ini [!warning]? Cuma tambah `[!type]` di tengah-tengah ayat, tanpa mengganggu aliran penulisan anda.\n\n" +
+		"> [!note] Callout biasa\n" +
+		"> Sudah tentu, callout klasik berfungsi dengan sintaks yang sama seperti yang anda sudah biasa: `> [!type]`.\n\n" +
+		"Callout Studio ada lebih banyak lagi untuk ditawarkan! [Ketahui lebih lanjut]({{repoUrl}}).\n",
+
 	"deleteModal.title": 'Padam callout "{{name}}"?',
 	"deleteModal.bodyInUse": "Callout ini muncul {{count}} kali dalam {{files}} fail.",
 	"deleteModal.bodyInUseExplain": "Pemadaman akan menukar blok tersebut kepada teks biasa — mereka akan kehilangan gaya dan pengepala callout.",

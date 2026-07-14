@@ -25,6 +25,20 @@ export const hi: Record<string, string> = {
 	"firstRun.autoScanComplete": "Callout Studio ने आपका vault स्कैन किया और {{count}} callout जोड़े।",
 	"firstRun.scanning": "स्कैन हो रहा है",
 
+	"welcome.tooltip": "Callout Studio के बारे में",
+	"welcome.title": "Callout Studio में आपका स्वागत है",
+	"welcome.tagline": "Obsidian callouts प्रबंधित करने के लिए आपका संपूर्ण समाधान।",
+	"welcome.previewTitle": "इसे कार्य में देखें",
+	"welcome.sample":
+		"Callout Studio से आप कस्टम आइकन, रंग और नाम के साथ callouts बना सकते हैं।\n\n" +
+		"आप एक ही callout को **तीन** अलग-अलग तरीकों से उपयोग कर सकते हैं:\n\n" +
+		"## [!tip] हेडिंग के रूप में\n" +
+		"किसी भी हेडिंग को callout-शैली की हेडिंग बनाने के लिए, `#` के ठीक बाद `[!type]` जोड़ें।\n\n" +
+		"क्या आप इस जैसा इनलाइन callout चाहते हैं [!warning]? बस किसी वाक्य के बीच में `[!type]` जोड़ें, अपने लेखन के प्रवाह को बिना तोड़े।\n\n" +
+		"> [!note] सामान्य callout\n" +
+		"> बेशक, क्लासिक callout ठीक उसी सिंटैक्स के साथ काम करता है जिसके आप पहले से ही आदी हैं: `> [!type]`।\n\n" +
+		"Callout Studio के पास पेश करने के लिए और भी बहुत कुछ है! [और जानें]({{repoUrl}})।\n",
+
 	"deleteModal.title": 'callout "{{name}}" हटाएँ?',
 	"deleteModal.bodyInUse": "यह callout {{files}} फ़ाइल(ों) में {{count}} बार दिखता है।",
 	"deleteModal.bodyInUseExplain": "हटाने पर वे ब्लॉक सादे टेक्स्ट में बदल जाएँगे — उनकी स्टाइल और callout शीर्षक खो जाएगा।",

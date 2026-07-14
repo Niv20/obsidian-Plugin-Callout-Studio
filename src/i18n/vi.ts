@@ -25,6 +25,20 @@ export const vi: Record<string, string> = {
 	"firstRun.autoScanComplete": "Callout Studio đã quét vault và thêm {{count}} callout.",
 	"firstRun.scanning": "Đang quét",
 
+	"welcome.tooltip": "Giới thiệu về Callout Studio",
+	"welcome.title": "Chào mừng đến với Callout Studio",
+	"welcome.tagline": "Giải pháp toàn diện của bạn để quản lý callout trong Obsidian.",
+	"welcome.previewTitle": "Xem nó hoạt động",
+	"welcome.sample":
+		"Callout Studio cho phép bạn tạo callout với biểu tượng, màu sắc và tên tùy chỉnh.\n\n" +
+		"Bạn có thể sử dụng cùng một callout theo **ba** cách khác nhau:\n\n" +
+		"## [!tip] Làm tiêu đề\n" +
+		"Để biến bất kỳ tiêu đề nào thành tiêu đề kiểu callout, hãy thêm `[!type]` ngay sau các dấu `#`.\n\n" +
+		"Muốn có một callout nội dòng như thế này [!warning]? Chỉ cần thêm `[!type]` vào giữa câu, mà không làm gián đoạn mạch viết của bạn.\n\n" +
+		"> [!note] Callout thông thường\n" +
+		"> Tất nhiên, callout cổ điển vẫn hoạt động với đúng cú pháp mà bạn đã quen thuộc: `> [!type]`.\n\n" +
+		"Callout Studio còn có nhiều thứ hơn thế để mang lại! [Tìm hiểu thêm]({{repoUrl}}).\n",
+
 	"deleteModal.title": 'Xóa callout "{{name}}"?',
 	"deleteModal.bodyInUse": "Callout này xuất hiện {{count}} lần trong {{files}} tệp.",
 	"deleteModal.bodyInUseExplain": "Xóa sẽ chuyển đổi các khối đó thành văn bản thường — chúng sẽ mất kiểu và tiêu đề callout.",

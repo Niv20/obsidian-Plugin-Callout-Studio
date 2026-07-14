@@ -21,6 +21,21 @@ export const nb: Record<string, string> = {
 	"firstRun.noThanks": "Nei takk",
 	"firstRun.autoScanComplete": "Callout Studio skannet valvet ditt og la til {{count}} callout(er).",
 	"firstRun.scanning": "Skanner",
+
+	"welcome.tooltip": "Om Callout Studio",
+	"welcome.title": "Velkommen til Callout Studio",
+	"welcome.tagline": "Din komplette løsning for å administrere Obsidian-callouts.",
+	"welcome.previewTitle": "Se det i aksjon",
+	"welcome.sample":
+		"Med Callout Studio kan du lage callouts med eget ikon, farger og navn.\n\n" +
+		"Du kan bruke den samme callout-en på **tre** forskjellige måter:\n\n" +
+		"## [!tip] Som overskrift\n" +
+		"For å gjøre en overskrift om til en overskrift i callout-stil, legg til `[!type]` rett etter `#`-tegnene.\n\n" +
+		"Vil du ha en innebygd callout som denne [!warning]? Bare legg til `[!type]` midt i en setning, uten å bryte skriveflyten.\n\n" +
+		"> [!note] Vanlig callout\n" +
+		"> Den klassiske callout-en fungerer selvfølgelig med akkurat den samme syntaksen du allerede er vant til: `> [!type]`.\n\n" +
+		"Callout Studio har mye mer å tilby! [Les mer]({{repoUrl}}).\n",
+
 	"deleteModal.title": 'Slett callout "{{name}}"?',
 	"deleteModal.bodyInUse": "Denne callout-en vises {{count}} gang(er) i {{files}} fil(er).",
 	"deleteModal.bodyInUseExplain": "Sletting konverterer disse blokkene til ren tekst — de mister stil og callout-overskrift.",

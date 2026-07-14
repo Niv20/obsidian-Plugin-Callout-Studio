@@ -2495,6 +2495,7 @@ input.cs-input-invalid:focus {
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
+	text-align: left;
 	gap: 12px;
 	min-width: 0;
 }
@@ -2523,15 +2524,6 @@ input.cs-input-invalid:focus {
 	line-height: 1.5;
 }
 
-/* Buttons sit just below the tagline; the whole column is vertically
-   centered within the panel. */
-.cs-welcome-actions {
-	display: flex;
-	flex-wrap: wrap;
-	gap: 8px;
-	padding-top: 8px;
-}
-
 .cs-welcome-right {
 	min-width: 0;
 	display: flex;
@@ -2551,9 +2543,5 @@ input.cs-input-invalid:focus {
 @media (max-width: 640px) {
 	.cs-welcome-panel {
 		grid-template-columns: 1fr;
-	}
-
-	.cs-welcome-actions {
-		margin-top: 4px;
 	}
 }

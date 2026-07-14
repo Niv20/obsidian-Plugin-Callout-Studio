@@ -25,6 +25,20 @@ export const ar: Record<string, string> = {
 	"firstRun.autoScanComplete": "قام Callout Studio بمسح مخزنك وأضاف {{count}} callout.",
 	"firstRun.scanning": "جارٍ المسح",
 
+	"welcome.tooltip": "حول Callout Studio",
+	"welcome.title": "مرحبًا بك في Callout Studio",
+	"welcome.tagline": "حلّك الشامل لإدارة callouts في Obsidian.",
+	"welcome.previewTitle": "شاهده أثناء العمل",
+	"welcome.sample":
+		"يتيح لك Callout Studio إنشاء callouts بأيقونة وألوان واسم مخصصة.\n\n" +
+		"يمكنك استخدام نفس الـ callout بـ **ثلاث** طرق مختلفة:\n\n" +
+		"## [!tip] كعنوان\n" +
+		"لتحويل أي عنوان إلى عنوان بنمط callout، أضف `[!type]` مباشرة بعد علامات `#`.\n\n" +
+		"هل تريد callout مضمّنًا مثل هذا [!warning]؟ فقط أضف `[!type]` داخل الجملة، دون كسر تسلسل الكتابة.\n\n" +
+		"> [!note] callout عادي\n" +
+		"> بالطبع، الـ callout الكلاسيكي يعمل بنفس الصيغة التي اعتدت عليها تمامًا: `> [!type]`.\n\n" +
+		"هناك الكثير مما يقدمه Callout Studio! [معرفة المزيد]({{repoUrl}}).\n",
+
 	"deleteModal.title": 'حذف callout "{{name}}"؟',
 	"deleteModal.bodyInUse": "يظهر هذا الـ callout {{count}} مرة في {{files}} ملف.",
 	"deleteModal.bodyInUseExplain": "سيؤدي الحذف إلى تحويل تلك الكتل إلى نص عادي — ستفقد تنسيقها وعنوان الـ callout.",

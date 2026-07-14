@@ -25,6 +25,20 @@ export const ja: Record<string, string> = {
 	"firstRun.autoScanComplete": "Callout Studioがvaultをスキャンし、{{count}}件のcalloutを追加しました。",
 	"firstRun.scanning": "スキャン中",
 
+	"welcome.tooltip": "Callout Studioについて",
+	"welcome.title": "Callout Studioへようこそ",
+	"welcome.tagline": "Obsidianのcalloutを管理するための総合ソリューション。",
+	"welcome.previewTitle": "実際の動作を見る",
+	"welcome.sample":
+		"Callout Studioを使えば、アイコン・色・名前をカスタマイズしたcalloutを作成できます。\n\n" +
+		"同じcalloutは**3つ**の異なる方法で使用できます。\n\n" +
+		"## [!tip] 見出しとして\n" +
+		"見出しをcallout風にするには、`#`の直後に`[!type]`を追加します。\n\n" +
+		"この[!warning]のようなインラインcalloutにしたい場合は、文章の途中に`[!type]`を追加するだけです。流れを止める必要はありません。\n\n" +
+		"> [!note] 通常のcallout\n" +
+		"> もちろん、従来のcalloutもこれまでと同じ構文でそのまま使えます：`> [!type]`。\n\n" +
+		"Callout Studioにはまだまだ多くの機能があります！[詳しく見る]({{repoUrl}})。\n",
+
 	"deleteModal.title": 'callout "{{name}}" を削除しますか？',
 	"deleteModal.bodyInUse": "このcalloutは{{files}}個のファイルに{{count}}回出現しています。",
 	"deleteModal.bodyInUseExplain": "削除すると、これらのブロックはプレーンテキストに変換されます。スタイルとcalloutヘッダーが失われます。",

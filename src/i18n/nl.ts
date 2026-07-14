@@ -25,6 +25,20 @@ export const nl: Record<string, string> = {
 	"firstRun.autoScanComplete": "Callout Studio heeft uw vault gescand en {{count}} callout(s) toegevoegd.",
 	"firstRun.scanning": "Scannen",
 
+	"welcome.tooltip": "Over Callout Studio",
+	"welcome.title": "Welkom bij Callout Studio",
+	"welcome.tagline": "Uw complete oplossing voor het beheren van Obsidian-callouts.",
+	"welcome.previewTitle": "Bekijk het in actie",
+	"welcome.sample":
+		"Met Callout Studio kunt u callouts maken met een eigen icoon, kleuren en naam.\n\n" +
+		"U kunt dezelfde callout op **drie** verschillende manieren gebruiken:\n\n" +
+		"## [!tip] Als kop\n" +
+		"Om een kop om te zetten in een kop in callout-stijl, voegt u `[!type]` direct na de `#`'s toe.\n\n" +
+		"Wilt u een inline callout zoals deze [!warning]? Voeg gewoon `[!type]` midden in een zin toe, zonder uw schrijfflow te onderbreken.\n\n" +
+		"> [!note] Reguliere callout\n" +
+		"> Natuurlijk werkt de klassieke callout met precies dezelfde syntaxis die u al gewend bent: `> [!type]`.\n\n" +
+		"Callout Studio heeft nog veel meer te bieden! [Meer informatie]({{repoUrl}}).\n",
+
 	"deleteModal.title": 'Callout "{{name}}" verwijderen?',
 	"deleteModal.bodyInUse": "Deze callout verschijnt {{count}} keer in {{files}} bestand(en).",
 	"deleteModal.bodyInUseExplain": "Verwijderen converteert deze blokken naar platte tekst — ze verliezen hun stijl en callout-koptekst.",

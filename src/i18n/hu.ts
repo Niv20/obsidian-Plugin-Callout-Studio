@@ -25,6 +25,20 @@ export const hu: Record<string, string> = {
 	"firstRun.autoScanComplete": "A Callout Studio beszkennelte a tárat, és {{count}} callout-ot hozzáadott.",
 	"firstRun.scanning": "Szkennelés",
 
+	"welcome.tooltip": "A Callout Studio névjegye",
+	"welcome.title": "Üdvözöljük a Callout Studióban",
+	"welcome.tagline": "Az Ön teljes körű megoldása az Obsidian callout-ok kezelésére.",
+	"welcome.previewTitle": "Nézze meg működés közben",
+	"welcome.sample":
+		"A Callout Studio segítségével egyéni ikonnal, színekkel és névvel hozhat létre callout-okat.\n\n" +
+		"Ugyanazt a callout-ot **három** különböző módon használhatja:\n\n" +
+		"## [!tip] Címsorként\n" +
+		"Ahhoz, hogy bármely címsort callout stílusú címsorrá alakítsa, adja hozzá a `[!type]`-ot közvetlenül a `#` jelek után.\n\n" +
+		"Szeretne egy ilyen beágyazott callout-ot, mint ez [!warning]? Egyszerűen illessze be a `[!type]`-ot egy mondat közepére, anélkül, hogy megszakítaná az írás menetét.\n\n" +
+		"> [!note] Normál callout\n" +
+		"> A klasszikus callout természetesen ugyanazzal a szintaxissal működik, amit már megszokott: `> [!type]`.\n\n" +
+		"A Callout Studio ennél sokkal többet is kínál! [Tudjon meg többet]({{repoUrl}}).\n",
+
 	"deleteModal.title": '"{{name}}" callout törlése?',
 	"deleteModal.bodyInUse": "Ez a callout {{count}} alkalommal szerepel {{files}} fájlban.",
 	"deleteModal.bodyInUseExplain": "A törlés ezeket a blokkokat egyszerű szöveggé alakítja – elveszítik a stílusukat és a callout fejlécét.",

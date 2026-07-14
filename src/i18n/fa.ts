@@ -25,6 +25,20 @@ export const fa: Record<string, string> = {
 	"firstRun.autoScanComplete": "Callout Studio vault شما را اسکان کرد و {{count}} callout اضافه کرد.",
 	"firstRun.scanning": "در حال اسکان",
 
+	"welcome.tooltip": "درباره‌ی Callout Studio",
+	"welcome.title": "به Callout Studio خوش آمدید",
+	"welcome.tagline": "راه‌حل کامل شما برای مدیریت callout‌های Obsidian.",
+	"welcome.previewTitle": "آن را در عمل ببینید",
+	"welcome.sample":
+		"Callout Studio به شما امکان می‌دهد callout‌هایی با آیکون، رنگ‌ها و نام دلخواه بسازید.\n\n" +
+		"می‌توانید از یک callout به **سه** روش متفاوت استفاده کنید:\n\n" +
+		"## [!tip] به‌عنوان یک تیتر\n" +
+		"برای تبدیل هر تیتر به تیتری با سبک callout، بلافاصله بعد از `#`ها عبارت `[!type]` را اضافه کنید.\n\n" +
+		"می‌خواهید یک callout درون‌خطی مثل این [!warning] داشته باشید؟ فقط `[!type]` را وسط یک جمله اضافه کنید، بدون آنکه روند نوشتن قطع شود.\n\n" +
+		"> [!note] callout معمولی\n" +
+		"> البته، callout کلاسیک دقیقاً با همان نحوی که به آن عادت دارید کار می‌کند: `> [!type]`.\n\n" +
+		"Callout Studio قابلیت‌های بیشتری هم دارد! [بیشتر بدانید]({{repoUrl}}).\n",
+
 	"deleteModal.title": 'callout "{{name}}" حذف شود؟',
 	"deleteModal.bodyInUse": "این callout {{count}} بار در {{files}} فایل ظاهر می‌شود.",
 	"deleteModal.bodyInUseExplain": "حذف کردن آن بلوک‌ها را به متن ساده تبدیل می‌کند — سبک و سرتیتر callout را از دست می‌دهند.",

@@ -47,16 +47,16 @@ export const en: Record<string, string> = {
 	"welcome.tooltip": "About Callout Studio",
 	"welcome.title": "Welcome to Callout Studio",
 	"welcome.tagline": "Your complete solution for managing Obsidian callouts.",
-	"welcome.learnMore": "Learn more",
-	"welcome.continue": "Continue",
 	"welcome.previewTitle": "See it in action",
 	"welcome.sample":
-		"Callout Studio lets you use the same callout in **three** different ways.\n\n" +
+		"Callout Studio lets you create callouts with a custom icon, colors, and name.\n\n" +
+		"You can use the same callout in **three** different ways:\n\n" +
 		"## [!tip] As a heading\n" +
-		"Turn any callout into a section heading with `## [!type]` — perfect for structuring long notes, and it shows up in the outline.\n\n" +
-		"Want something subtler? Tuck an [!warning] inline pill right into a sentence with `[!type]` to flag a word without breaking your flow.\n\n" +
-		"> [!note] Or a regular block\n" +
-		"> The classic callout, written as `> [!type]`. Give it an icon, colors, and a name, then reuse it anywhere.\n",
+		"To turn any heading into a callout-style heading, add `[!type]` right after the `#`s.\n\n" +
+		"Want an inline callout like this [!warning]? Just add `[!type]` right in a sentence, without breaking your flow.\n\n" +
+		"> [!note] Regular callout\n" +
+		"> Of course, the classic callout works with the exact same syntax you're already used to: `> [!type]`.\n\n" +
+		"There's a lot more Callout Studio has to offer! [Learn more]({{repoUrl}}).\n",
 
 	// Delete-callout modal (trash button on user rows)
 	"deleteModal.title": 'Delete callout "{{name}}"?',

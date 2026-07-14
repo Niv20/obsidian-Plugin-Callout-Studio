@@ -25,6 +25,20 @@ export const sv: Record<string, string> = {
 	"firstRun.autoScanComplete": "Callout Studio skannade ditt vault och lade till {{count}} callout(s).",
 	"firstRun.scanning": "Skannar",
 
+	"welcome.tooltip": "Om Callout Studio",
+	"welcome.title": "Välkommen till Callout Studio",
+	"welcome.tagline": "Din kompletta lösning för att hantera Obsidian-callouts.",
+	"welcome.previewTitle": "Se det i action",
+	"welcome.sample":
+		"Med Callout Studio kan du skapa callouts med egen ikon, färger och namn.\n\n" +
+		"Du kan använda samma callout på **tre** olika sätt:\n\n" +
+		"## [!tip] Som rubrik\n" +
+		"För att göra en rubrik till en rubrik i callout-stil, lägg till `[!type]` direkt efter `#`-tecknen.\n\n" +
+		"Vill du ha en infogad callout som denna [!warning]? Lägg bara till `[!type]` mitt i en mening, utan att bryta ditt flyt.\n\n" +
+		"> [!note] Vanlig callout\n" +
+		"> Den klassiska callouten fungerar förstås med exakt samma syntax som du redan är van vid: `> [!type]`.\n\n" +
+		"Callout Studio har mycket mer att erbjuda! [Läs mer]({{repoUrl}}).\n",
+
 	"deleteModal.title": 'Ta bort callout "{{name}}"?',
 	"deleteModal.bodyInUse": "Denna callout förekommer {{count}} gång(er) i {{files}} fil(er).",
 	"deleteModal.bodyInUseExplain": "Borttagning konverterar dessa block till vanlig text — de förlorar sin stil och callout-rubrik.",

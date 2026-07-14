@@ -42,6 +42,21 @@ export const he: Record<string, string> = {
 		"Callout Studio סרק את הכספת והוסיף {{count}} תיבות־הבלטה.",
 	"firstRun.scanning": "סורק...",
 
+	// Welcome / splash screen (shown once on first load; reopen via header icon)
+	"welcome.tooltip": "אודות Callout Studio",
+	"welcome.title": "ברוכים הבאים ל־Callout Studio",
+	"welcome.tagline": "הפתרון המלא שלכם לניהול תיבות־הבלטה ב־Obsidian.",
+	"welcome.previewTitle": "לראות איך זה עובד",
+	"welcome.sample":
+		"Callout Studio מאפשר לכם ליצור תיבות־הבלטה עם אייקון, צבעים ושם מותאמים אישית.\n\n" +
+		"אפשר להשתמש באותה תיבת־הבלטה ב־**שלוש** דרכים שונות:\n\n" +
+		"## [!tip] ככותרת\n" +
+		"כדי להפוך כל כותרת לכותרת בסגנון תיבת־הבלטה, הוסיפו `[!type]` מיד אחרי סימני ה־`#`.\n\n" +
+		"רוצים תיבת־הבלטה מוטבעת כמו זו [!warning]? פשוט הוסיפו `[!type]` באמצע משפט, בלי לשבור את הזרימה.\n\n" +
+		"> [!note] תיבת־הבלטה רגילה\n" +
+		"> כמובן, תיבת־ההבלטה הקלאסית פועלת לפי אותו תחביר בדיוק שאתם כבר מכירים: `> [!type]`.\n\n" +
+		"ל־Callout Studio יש עוד הרבה מה להציע! [למידע נוסף]({{repoUrl}}).\n",
+
 	// Delete-callout modal (trash button on user rows)
 	"deleteModal.title": 'למחוק את תיבת־ההבלטה "{{name}}"?',
 	"deleteModal.bodyInUse":

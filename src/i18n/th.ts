@@ -25,6 +25,20 @@ export const th: Record<string, string> = {
 	"firstRun.autoScanComplete": "Callout Studio สแกน vault ของคุณและเพิ่ม {{count}} callout แล้ว",
 	"firstRun.scanning": "กำลังสแกน",
 
+	"welcome.tooltip": "เกี่ยวกับ Callout Studio",
+	"welcome.title": "ยินดีต้อนรับสู่ Callout Studio",
+	"welcome.tagline": "โซลูชันครบวงจรของคุณสำหรับจัดการ callout ใน Obsidian",
+	"welcome.previewTitle": "ดูการทำงานจริง",
+	"welcome.sample":
+		"Callout Studio ช่วยให้คุณสร้าง callout ที่มีไอคอน สี และชื่อที่กำหนดเองได้\n\n" +
+		"คุณสามารถใช้ callout เดียวกันได้ **สาม** รูปแบบที่แตกต่างกัน:\n\n" +
+		"## [!tip] เป็นหัวข้อ\n" +
+		"หากต้องการเปลี่ยนหัวข้อใดๆ ให้เป็นหัวข้อสไตล์ callout ให้เพิ่ม `[!type]` ต่อจาก `#` ทันที\n\n" +
+		"ต้องการ callout แบบอินไลน์แบบนี้ [!warning] ไหม? แค่เพิ่ม `[!type]` กลางประโยคได้เลย โดยไม่ต้องขัดจังหวะการเขียนของคุณ\n\n" +
+		"> [!note] callout ปกติ\n" +
+		"> แน่นอนว่า callout แบบคลาสสิกยังคงทำงานด้วยไวยากรณ์แบบเดียวกับที่คุณคุ้นเคยอยู่แล้ว: `> [!type]`\n\n" +
+		"Callout Studio ยังมีอะไรให้มากกว่านี้อีกมาก! [เรียนรู้เพิ่มเติม]({{repoUrl}})\n",
+
 	"deleteModal.title": 'ลบ callout "{{name}}" หรือไม่?',
 	"deleteModal.bodyInUse": "callout นี้ปรากฏ {{count}} ครั้งใน {{files}} ไฟล์",
 	"deleteModal.bodyInUseExplain": "การลบจะแปลงบล็อกเหล่านั้นเป็นข้อความธรรมดา — จะสูญเสียสไตล์และหัว callout",

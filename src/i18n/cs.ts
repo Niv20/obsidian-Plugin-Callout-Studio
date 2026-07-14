@@ -25,6 +25,20 @@ export const cs: Record<string, string> = {
 	"firstRun.autoScanComplete": "Callout Studio prohledal váš vault a přidal {{count}} callout(ů).",
 	"firstRun.scanning": "Prohledávání",
 
+	"welcome.tooltip": "O aplikaci Callout Studio",
+	"welcome.title": "Vítejte v Callout Studio",
+	"welcome.tagline": "Vaše komplexní řešení pro správu calloutů v Obsidianu.",
+	"welcome.previewTitle": "Podívejte se na to v akci",
+	"welcome.sample":
+		"Callout Studio vám umožňuje vytvářet callouty s vlastní ikonou, barvami a názvem.\n\n" +
+		"Stejný callout můžete použít **třemi** různými způsoby:\n\n" +
+		"## [!tip] Jako nadpis\n" +
+		"Chcete-li proměnit jakýkoli nadpis v nadpis ve stylu callout, přidejte `[!type]` hned za `#`.\n\n" +
+		"Chcete vložený callout, jako je tento [!warning]? Stačí přidat `[!type]` doprostřed věty, aniž byste přerušili plynulost textu.\n\n" +
+		"> [!note] Běžný callout\n" +
+		"> Klasický callout samozřejmě funguje se stejnou syntaxí, na kterou jste už zvyklí: `> [!type]`.\n\n" +
+		"Callout Studio má mnohem víc co nabídnout! [Zjistit více]({{repoUrl}}).\n",
+
 	"deleteModal.title": 'Smazat callout "{{name}}"?',
 	"deleteModal.bodyInUse": "Tento callout se vyskytuje {{count}}krát v {{files}} souboru(ech).",
 	"deleteModal.bodyInUseExplain": "Smazáním se tyto bloky převedou na prostý text — ztratí styl a nadpis callout.",
