@@ -43,9 +43,7 @@ export function renderColorCircles(
 	const size = options.size ?? 16;
 	const wrap = parent.createDiv({
 		cls: "cs-color-circles",
-		attr: options.ariaLabel
-			? { "aria-label": options.ariaLabel, title: options.ariaLabel }
-			: {},
+		attr: options.ariaLabel ? { "aria-label": options.ariaLabel } : {},
 	});
 	wrap.style.setProperty("--cs-circle-size", `${size}px`);
 
