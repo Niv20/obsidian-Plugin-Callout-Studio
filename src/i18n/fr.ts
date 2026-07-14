@@ -106,16 +106,12 @@ export const fr: Record<string, string> = {
 	"settings.previewCalloutTitle": "Callout d'exemple",
 	"settings.previewCalloutContent": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
 
-	"settings.enableContextMenu": "Activer les actions du menu contextuel pour les callouts",
-	"settings.enableContextMenuDesc": "Ajoute des actions supplémentaires au menu clic droit d'Obsidian lors d'un clic droit sur un callout. Fonctionne en vue lecture, mode source et aperçu en direct.",
-
 	"settings.enableAutocomplete": "Activer la saisie automatique [!",
 	"settings.enableAutocompleteDesc": 'Affiche des suggestions lorsque vous tapez "[!" dans une citation de l\'éditeur. Choisissez un type de callout dans la liste pour insérer un en-tête de callout complet.',
 
 	"settings.openHotkeys": "Raccourcis de Callout Studio",
 	"settings.openHotkeysDesc": "Ouvre les paramètres de raccourcis d'Obsidian pour les commandes de Callout Studio, où vous pouvez choisir vos propres raccourcis pour Créer un type, Ouvrir les paramètres, Retirer le callout et Envelopper dans un callout. Aucun raccourci n'est attribué par défaut.",
 	"settings.openHotkeysButton": "Ouvrir les raccourcis",
-
 
 	"settings.colorFormat": "Format de couleur",
 
@@ -239,7 +235,7 @@ export const fr: Record<string, string> = {
 	"settings.refShowIcon": "Afficher l'icône dans le plan et les liens",
 	"settings.refShowIconDesc": "Affiche l'icône colorée du callout avant le titre nettoyé à ces endroits.",
 	"settings.customizeMenu": "Personnaliser les éléments du menu",
-	"settings.customizeMenuDesc": "Choisissez quelles actions du clic droit apparaissent pour chaque type de callout et réorganisez-les.",
+	"settings.customizeMenuDesc": "Choisissez quelles actions du clic droit apparaissent pour chaque type de callout et réorganisez-les. Fonctionne en vue lecture, mode source et aperçu en direct.",
 	"settings.customizeMenuButton": "Personnaliser les éléments du menu",
 	"menuCustomize.title": "Personnaliser le menu du clic droit",
 	"menuCustomize.desc": "Activez ou désactivez les actions et réorganisez-les avec les flèches. Les modifications sont enregistrées automatiquement.",

@@ -106,16 +106,12 @@ export const pt: Record<string, string> = {
 	"settings.previewCalloutTitle": "Callout de exemplo",
 	"settings.previewCalloutContent": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
 
-	"settings.enableContextMenu": "Habilitar ações do menu de contexto para callout",
-	"settings.enableContextMenuDesc": "Adiciona ações extras ao menu de clique direito do Obsidian ao clicar com o botão direito em um callout. Funciona na visualização de leitura, modo de fonte e Pré-visualização ao vivo.",
-
 	"settings.enableAutocomplete": "Habilitar preenchimento automático [!",
 	"settings.enableAutocompleteDesc": 'Mostra sugestões quando você digita "[!" dentro de uma citação no editor. Escolha um tipo de callout da lista para inserir um cabeçalho de callout completo.',
 
 	"settings.openHotkeys": "Atalhos do Callout Studio",
 	"settings.openHotkeysDesc": "Abre as configurações de atalhos do Obsidian para comandos do Callout Studio, onde você pode escolher seus próprios atalhos para Criar novo tipo de callout, Abrir configurações, Remover callout e Envolver em callout. Nenhum atalho é atribuído por padrão.",
 	"settings.openHotkeysButton": "Abrir configurações de atalhos",
-
 
 	"settings.colorFormat": "Formato de cor",
 
@@ -239,7 +235,7 @@ export const pt: Record<string, string> = {
 	"settings.refShowIcon": "Mostrar ícone no esquema e nos links",
 	"settings.refShowIconDesc": "Mostra o ícone colorido do callout antes do título limpo nesses lugares.",
 	"settings.customizeMenu": "Personalizar itens do menu",
-	"settings.customizeMenuDesc": "Escolha quais ações de clique direito aparecem para cada tipo de callout e reordene-as.",
+	"settings.customizeMenuDesc": "Escolha quais ações de clique direito aparecem para cada tipo de callout e reordene-as. Funciona na visualização de leitura, modo de fonte e Pré-visualização ao vivo.",
 	"settings.customizeMenuButton": "Personalizar itens do menu",
 	"menuCustomize.title": "Personalizar menu de clique direito",
 	"menuCustomize.desc": "Ative ou desative ações e reordene-as com as setas. As alterações são salvas automaticamente.",

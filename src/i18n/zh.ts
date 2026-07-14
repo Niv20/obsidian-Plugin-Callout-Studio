@@ -106,16 +106,12 @@ export const zh: Record<string, string> = {
 	"settings.previewCalloutTitle": "示例 callout",
 	"settings.previewCalloutContent": "Lorem ipsum dolor sit amet，consectetur adipiscing elit。",
 
-	"settings.enableContextMenu": "启用 callout 右键操作",
-	"settings.enableContextMenuDesc": "当您右键点击 callout 时，在 Obsidian 的右键菜单中添加额外操作。在阅读视图、源代码模式和实时预览中均有效。",
-
 	"settings.enableAutocomplete": "启用 [! 自动完成",
 	"settings.enableAutocompleteDesc": '在编辑器块引用中输入"[!"时显示建议。从列表中选择 callout 类型以插入完整的 callout 标题。',
 
 	"settings.openHotkeys": "Callout Studio 快捷键",
 	"settings.openHotkeysDesc": "打开 Obsidian 的快捷键设置，在那里您可以为「创建新 callout 类型」、「打开设置」、「从 callout 中解包」和「用 callout 包裹」设置快捷键。默认不分配快捷键。",
 	"settings.openHotkeysButton": "打开快捷键设置",
-
 
 	"settings.colorFormat": "颜色格式",
 
@@ -247,7 +243,7 @@ export const zh: Record<string, string> = {
 	"settings.refShowIconDesc": "在这些位置的已清理标题前显示 callout 的彩色图标。",
 
 	"settings.customizeMenu": "自定义菜单项",
-	"settings.customizeMenuDesc": "选择每种 callout 类型显示哪些右键操作，并调整它们的顺序。",
+	"settings.customizeMenuDesc": "选择每种 callout 类型显示哪些右键操作，并调整它们的顺序。 在阅读视图、源代码模式和实时预览中均有效。",
 	"settings.customizeMenuButton": "自定义菜单项",
 	"menuCustomize.title": "自定义右键菜单",
 	"menuCustomize.desc": "启用或禁用操作，并使用箭头调整顺序。更改会自动保存。",

@@ -141,11 +141,6 @@ export const he: Record<string, string> = {
 	"settings.previewCalloutContent":
 		"לורם איפסום דולור סיט אמט, קונסקטורר אדיפיסינג אלית. סד דו אייסמוד טמפור אינסידידונט אוט לבורה את דולורה מגנה אליקה. אוט אנים אד מינים ונאים, קויס נוסטרוד אקסרסיטאשן אולמקו לבוריס.",
 
-	// Settings — Context menu
-	"settings.enableContextMenu": "פעולות תפריט־הקשר עבור תיבות־הבלטה",
-	"settings.enableContextMenuDesc":
-		"הוספת פעולות נוספות לתפריט הלחיצה הימנית של Obsidian בעת לחיצה על תיבת־הבלטה. פועל ב־Reading view, ב־Source mode וב־Live Preview.",
-
 	// Settings — Autocomplete
 	"settings.enableAutocomplete": "השלמה אוטומטית בעת הקלדת [!",
 	"settings.enableAutocompleteDesc":
@@ -313,7 +308,7 @@ export const he: Record<string, string> = {
 	// Context menu customization
 	"settings.customizeMenu": "התאמת פריטי התפריט",
 	"settings.customizeMenuDesc":
-		"בחירה אילו פעולות קליק־ימני יופיעו לכל סוג תיבת־הבלטה ושינוי סדרן.",
+		"בחירה אילו פעולות קליק־ימני יופיעו לכל סוג תיבת־הבלטה ושינוי סדרן. פועל ב־Reading view, ב־Source mode וב־Live Preview.",
 	"settings.customizeMenuButton": "התאמת פריטי התפריט",
 	"menuCustomize.title": "התאמת תפריט הקליק־הימני",
 	"menuCustomize.desc":

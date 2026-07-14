@@ -106,16 +106,12 @@ export const pl: Record<string, string> = {
 	"settings.previewCalloutTitle": "Przykładowy callout",
 	"settings.previewCalloutContent": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
 
-	"settings.enableContextMenu": "Włącz akcje menu kontekstowego callout",
-	"settings.enableContextMenuDesc": "Dodaje dodatkowe akcje do menu prawego przycisku myszy Obsidian po kliknięciu prawym przyciskiem myszy na callout. Działa w widoku czytania, trybie źródłowym i podglądzie na żywo.",
-
 	"settings.enableAutocomplete": "Włącz autouzupełnianie [!",
 	"settings.enableAutocompleteDesc": 'Wyświetla sugestie przy wpisywaniu "[!" w bloku cytatu w edytorze. Wybierz typ callout z listy, aby wstawić pełny nagłówek callout.',
 
 	"settings.openHotkeys": "Skróty klawiszowe Callout Studio",
 	"settings.openHotkeysDesc": "Otwiera ustawienia skrótów klawiszowych Obsidian dla poleceń Callout Studio, gdzie możesz wybrać własne skróty dla Utwórz nowy typ, Otwórz ustawienia, Usuń callout i Owiń w callout. Domyślnie nie są przypisane żadne skróty.",
 	"settings.openHotkeysButton": "Otwórz ustawienia skrótów",
-
 
 	"settings.colorFormat": "Format koloru",
 
@@ -239,7 +235,7 @@ export const pl: Record<string, string> = {
 	"settings.refShowIcon": "Pokaż ikonę w konspekcie i linkach",
 	"settings.refShowIconDesc": "Pokazuje kolorową ikonę callout przed wyczyszczonym tytułem w tych miejscach.",
 	"settings.customizeMenu": "Dostosuj elementy menu",
-	"settings.customizeMenuDesc": "Wybierz, które akcje menu kontekstowego pojawiają się dla każdego typu callout, i zmień ich kolejność.",
+	"settings.customizeMenuDesc": "Wybierz, które akcje menu kontekstowego pojawiają się dla każdego typu callout, i zmień ich kolejność. Działa w widoku czytania, trybie źródłowym i podglądzie na żywo.",
 	"settings.customizeMenuButton": "Dostosuj elementy menu",
 	"menuCustomize.title": "Dostosuj menu kontekstowe",
 	"menuCustomize.desc": "Włączaj lub wyłączaj akcje i zmieniaj ich kolejność za pomocą strzałek. Zmiany są zapisywane automatycznie.",

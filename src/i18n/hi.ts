@@ -106,16 +106,12 @@ export const hi: Record<string, string> = {
 	"settings.previewCalloutTitle": "उदाहरण callout",
 	"settings.previewCalloutContent": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
 
-	"settings.enableContextMenu": "callout संदर्भ मेनू क्रियाएँ सक्षम करें",
-	"settings.enableContextMenuDesc": "callout पर राइट-क्लिक करने पर Obsidian के राइट-क्लिक मेनू में अतिरिक्त क्रियाएँ जोड़ता है। रीडिंग व्यू, सोर्स मोड और लाइव प्रीव्यू में काम करता है।",
-
 	"settings.enableAutocomplete": "[! स्वतः पूर्णता सक्षम करें",
 	"settings.enableAutocompleteDesc": 'एडिटर में ब्लॉककोट के अंदर "[!" टाइप करने पर सुझाव दिखाता है। पूरा callout हेडर डालने के लिए सूची से callout प्रकार चुनें।',
 
 	"settings.openHotkeys": "Callout Studio शॉर्टकट",
 	"settings.openHotkeysDesc": "Callout Studio कमांड के लिए Obsidian की हॉटकी सेटिंग खोलता है, जहाँ आप नया callout प्रकार बनाएँ, सेटिंग खोलें, callout हटाएँ और callout में लपेटें के लिए अपने शॉर्टकट चुन सकते हैं। डिफ़ॉल्ट रूप से कोई शॉर्टकट असाइन नहीं है।",
 	"settings.openHotkeysButton": "हॉटकी सेटिंग खोलें",
-
 
 	"settings.colorFormat": "रंग प्रारूप",
 
@@ -239,7 +235,7 @@ export const hi: Record<string, string> = {
 	"settings.refShowIcon": "आउटलाइन और लिंक में आइकन दिखाएं",
 	"settings.refShowIconDesc": "उन जगहों पर साफ़ किए गए शीर्षक से पहले callout का रंगीन आइकन दिखाता है।",
 	"settings.customizeMenu": "मेनू आइटम कस्टमाइज़ करें",
-	"settings.customizeMenuDesc": "चुनें कि प्रत्येक callout प्रकार के लिए कौन-सी राइट-क्लिक क्रियाएँ दिखाई दें और उनका क्रम बदलें।",
+	"settings.customizeMenuDesc": "चुनें कि प्रत्येक callout प्रकार के लिए कौन-सी राइट-क्लिक क्रियाएँ दिखाई दें और उनका क्रम बदलें। रीडिंग व्यू, सोर्स मोड और लाइव प्रीव्यू में काम करता है।",
 	"settings.customizeMenuButton": "मेनू आइटम कस्टमाइज़ करें",
 	"menuCustomize.title": "राइट-क्लिक मेनू कस्टमाइज़ करें",
 	"menuCustomize.desc": "क्रियाओं को चालू या बंद करें और तीरों से उनका क्रम बदलें। परिवर्तन स्वतः सहेजे जाते हैं।",

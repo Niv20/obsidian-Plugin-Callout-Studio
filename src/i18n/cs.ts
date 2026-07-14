@@ -106,16 +106,12 @@ export const cs: Record<string, string> = {
 	"settings.previewCalloutTitle": "Ukázkový callout",
 	"settings.previewCalloutContent": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
 
-	"settings.enableContextMenu": "Povolit akce kontextového menu callout",
-	"settings.enableContextMenuDesc": "Přidá do kontextového menu Obsidian při kliknutí pravým tlačítkem na callout další akce. Funguje v zobrazení pro čtení, zdrojovém režimu a živém náhledu.",
-
 	"settings.enableAutocomplete": "Povolit automatické doplňování [!",
 	"settings.enableAutocompleteDesc": 'Zobrazuje návrhy při psaní "[!" v bloku citace v editoru. Vyberte typ callout ze seznamu a vložte úplnou hlavičku callout.',
 
 	"settings.openHotkeys": "Klávesové zkratky Callout Studio",
 	"settings.openHotkeysDesc": "Otevře nastavení klávesových zkratek Obsidian pro příkazy Callout Studio, kde si můžete zvolit vlastní zkratky pro Vytvořit nový typ, Otevřít nastavení, Odebrat callout a Zabalit do callout. Ve výchozím nastavení nejsou přiřazeny žádné zkratky.",
 	"settings.openHotkeysButton": "Otevřít nastavení zkratek",
-
 
 	"settings.colorFormat": "Formát barvy",
 
@@ -239,7 +235,7 @@ export const cs: Record<string, string> = {
 	"settings.refShowIcon": "Zobrazit ikonu v osnově a odkazech",
 	"settings.refShowIconDesc": "Zobrazí barevnou ikonu callout před vyčištěným názvem na těchto místech.",
 	"settings.customizeMenu": "Přizpůsobit položky menu",
-	"settings.customizeMenuDesc": "Vyberte, které akce kontextové nabídky se zobrazí pro každý typ callout, a změňte jejich pořadí.",
+	"settings.customizeMenuDesc": "Vyberte, které akce kontextové nabídky se zobrazí pro každý typ callout, a změňte jejich pořadí. Funguje v zobrazení pro čtení, zdrojovém režimu a živém náhledu.",
 	"settings.customizeMenuButton": "Přizpůsobit položky menu",
 	"menuCustomize.title": "Přizpůsobit kontextovou nabídku",
 	"menuCustomize.desc": "Zapínejte nebo vypínejte akce a měňte jejich pořadí pomocí šipek. Změny se ukládají automaticky.",

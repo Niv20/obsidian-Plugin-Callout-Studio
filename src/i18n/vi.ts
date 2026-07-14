@@ -106,16 +106,12 @@ export const vi: Record<string, string> = {
 	"settings.previewCalloutTitle": "Callout mẫu",
 	"settings.previewCalloutContent": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
 
-	"settings.enableContextMenu": "Bật hành động menu ngữ cảnh callout",
-	"settings.enableContextMenuDesc": "Thêm các hành động bổ sung vào menu nhấp chuột phải của Obsidian khi bạn nhấp chuột phải vào callout. Hoạt động trong chế độ đọc, chế độ nguồn và Xem trước trực tiếp.",
-
 	"settings.enableAutocomplete": "Bật tự động hoàn thành [!",
 	"settings.enableAutocompleteDesc": 'Hiển thị gợi ý khi bạn gõ "[!" trong trích dẫn khối trong trình soạn thảo. Chọn loại callout từ danh sách để chèn tiêu đề callout đầy đủ.',
 
 	"settings.openHotkeys": "Phím tắt Callout Studio",
 	"settings.openHotkeysDesc": "Mở cài đặt phím tắt Obsidian cho các lệnh Callout Studio, nơi bạn có thể chọn phím tắt riêng cho Tạo loại mới, Mở cài đặt, Bỏ callout và Bọc trong callout. Không có phím tắt nào được gán theo mặc định.",
 	"settings.openHotkeysButton": "Mở cài đặt phím tắt",
-
 
 	"settings.colorFormat": "Định dạng màu",
 
@@ -247,7 +243,7 @@ export const vi: Record<string, string> = {
 	"settings.refShowIconDesc": "Hiển thị biểu tượng có màu của callout trước tiêu đề đã dọn dẹp ở những nơi đó.",
 
 	"settings.customizeMenu": "Tùy chỉnh mục menu",
-	"settings.customizeMenuDesc": "Chọn những hành động chuột phải nào xuất hiện cho từng loại callout và sắp xếp lại thứ tự.",
+	"settings.customizeMenuDesc": "Chọn những hành động chuột phải nào xuất hiện cho từng loại callout và sắp xếp lại thứ tự. Hoạt động trong chế độ đọc, chế độ nguồn và Xem trước trực tiếp.",
 	"settings.customizeMenuButton": "Tùy chỉnh mục menu",
 	"menuCustomize.title": "Tùy chỉnh menu chuột phải",
 	"menuCustomize.desc": "Bật hoặc tắt các hành động và sắp xếp lại bằng các mũi tên. Thay đổi được lưu tự động.",

@@ -106,16 +106,12 @@ export const sv: Record<string, string> = {
 	"settings.previewCalloutTitle": "Exempelcallout",
 	"settings.previewCalloutContent": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
 
-	"settings.enableContextMenu": "Aktivera callout snabbmenyåtgärder",
-	"settings.enableContextMenuDesc": "Lägger till extra åtgärder i Obsidians högerklicksmeny när du högerklickar på en callout. Fungerar i läsvy, källäge och Live Preview.",
-
 	"settings.enableAutocomplete": "Aktivera [! autokomplettering",
 	"settings.enableAutocompleteDesc": 'Visar förslag när du skriver "[!" i ett blockcitat i editorn. Välj en callout-typ från listan för att infoga en komplett callout-rubrik.',
 
 	"settings.openHotkeys": "Callout Studio-genvägar",
 	"settings.openHotkeysDesc": "Öppnar Obsidians genväginställningar för Callout Studio-kommandon, där du kan välja egna genvägar för Skapa ny typ, Öppna inställningar, Ta bort callout och Lägg i callout. Inga genvägar tilldelas som standard.",
 	"settings.openHotkeysButton": "Öppna genväginställningar",
-
 
 	"settings.colorFormat": "Färgformat",
 
@@ -239,7 +235,7 @@ export const sv: Record<string, string> = {
 	"settings.refShowIcon": "Visa ikon i disposition och länkar",
 	"settings.refShowIconDesc": "Visar calloutens färgade ikon före den rensade titeln på dessa platser.",
 	"settings.customizeMenu": "Anpassa menyalternativ",
-	"settings.customizeMenuDesc": "Välj vilka högerklicksåtgärder som visas för varje callout-typ och ändra deras ordning.",
+	"settings.customizeMenuDesc": "Välj vilka högerklicksåtgärder som visas för varje callout-typ och ändra deras ordning. Fungerar i läsvy, källäge och Live Preview.",
 	"settings.customizeMenuButton": "Anpassa menyalternativ",
 	"menuCustomize.title": "Anpassa högerklicksmenyn",
 	"menuCustomize.desc": "Aktivera eller inaktivera åtgärder och ändra deras ordning med pilarna. Ändringar sparas automatiskt.",

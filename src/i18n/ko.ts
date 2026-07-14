@@ -106,16 +106,12 @@ export const ko: Record<string, string> = {
 	"settings.previewCalloutTitle": "예시 callout",
 	"settings.previewCalloutContent": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
 
-	"settings.enableContextMenu": "callout 컨텍스트 메뉴 작업 활성화",
-	"settings.enableContextMenuDesc": "callout을 마우스 오른쪽 버튼으로 클릭할 때 Obsidian의 마우스 오른쪽 버튼 메뉴에 추가 작업을 추가합니다. 읽기 보기, 소스 모드, 라이브 미리 보기에서 작동합니다.",
-
 	"settings.enableAutocomplete": "[! 자동 완성 활성화",
 	"settings.enableAutocompleteDesc": '편집기의 인용 블록에서 "[!"를 입력하면 제안을 표시합니다. 목록에서 callout 유형을 선택하여 완전한 callout 헤더를 삽입합니다.',
 
 	"settings.openHotkeys": "Callout Studio 단축키",
 	"settings.openHotkeysDesc": "Callout Studio 명령어에 대한 Obsidian 단축키 설정을 엽니다. 새 callout 유형 만들기, 설정 열기, callout 제거, callout으로 감싸기에 대한 단축키를 설정할 수 있습니다. 기본적으로 단축키가 할당되어 있지 않습니다.",
 	"settings.openHotkeysButton": "단축키 설정 열기",
-
 
 	"settings.colorFormat": "색상 형식",
 
@@ -243,7 +239,7 @@ export const ko: Record<string, string> = {
 	"settings.refShowIconDesc": "해당 위치에서 정리된 제목 앞에 callout의 색상 아이콘을 표시합니다.",
 
 	"settings.customizeMenu": "메뉴 항목 사용자 지정",
-	"settings.customizeMenuDesc": "각 callout 유형에 표시할 마우스 오른쪽 버튼 작업을 선택하고 순서를 변경합니다.",
+	"settings.customizeMenuDesc": "각 callout 유형에 표시할 마우스 오른쪽 버튼 작업을 선택하고 순서를 변경합니다. 읽기 보기, 소스 모드, 라이브 미리 보기에서 작동합니다.",
 	"settings.customizeMenuButton": "메뉴 항목 사용자 지정",
 	"menuCustomize.title": "마우스 오른쪽 버튼 메뉴 사용자 지정",
 	"menuCustomize.desc": "작업을 켜거나 끄고 화살표로 순서를 변경합니다. 변경 사항은 자동으로 저장됩니다.",

@@ -106,16 +106,12 @@ export const es: Record<string, string> = {
 	"settings.previewCalloutTitle": "Callout de ejemplo",
 	"settings.previewCalloutContent": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
 
-	"settings.enableContextMenu": "Habilitar acciones del menú contextual para callout",
-	"settings.enableContextMenuDesc": "Añade acciones extra al menú de clic derecho de Obsidian cuando hace clic derecho en un callout. Funciona en vista de lectura, modo fuente y Vista previa en vivo.",
-
 	"settings.enableAutocomplete": "Habilitar autocompletar [!",
 	"settings.enableAutocompleteDesc": 'Muestra sugerencias cuando escribe "[!" dentro de una cita en el editor. Elija un tipo de callout de la lista para insertar un encabezado de callout completo.',
 
 	"settings.openHotkeys": "Atajos de Callout Studio",
 	"settings.openHotkeysDesc": "Abre los ajustes de atajos de Obsidian para los comandos de Callout Studio, donde puede elegir sus propios atajos para Crear nuevo tipo de callout, Abrir ajustes, Desenvolver del callout y Envolver en callout. No hay atajos asignados por defecto.",
 	"settings.openHotkeysButton": "Abrir ajustes de atajos",
-
 
 	"settings.colorFormat": "Formato de color",
 
@@ -239,7 +235,7 @@ export const es: Record<string, string> = {
 	"settings.refShowIcon": "Mostrar icono en el esquema y los enlaces",
 	"settings.refShowIconDesc": "Muestra el icono coloreado del callout antes del título limpio en esos lugares.",
 	"settings.customizeMenu": "Personalizar elementos del menú",
-	"settings.customizeMenuDesc": "Elija qué acciones de clic derecho aparecen para cada tipo de callout y reordénelas.",
+	"settings.customizeMenuDesc": "Elija qué acciones de clic derecho aparecen para cada tipo de callout y reordénelas. Funciona en vista de lectura, modo fuente y Vista previa en vivo.",
 	"settings.customizeMenuButton": "Personalizar elementos del menú",
 	"menuCustomize.title": "Personalizar menú de clic derecho",
 	"menuCustomize.desc": "Active o desactive acciones y reordénelas con las flechas. Los cambios se guardan automáticamente.",

@@ -106,16 +106,12 @@ export const ru: Record<string, string> = {
 	"settings.previewCalloutTitle": "Пример callout",
 	"settings.previewCalloutContent": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
 
-	"settings.enableContextMenu": "Включить действия контекстного меню callout",
-	"settings.enableContextMenuDesc": "Добавляет дополнительные действия в контекстное меню Obsidian при правом клике на callout. Работает в режиме чтения, режиме источника и в живом предпросмотре.",
-
 	"settings.enableAutocomplete": "Включить автодополнение [!",
 	"settings.enableAutocompleteDesc": 'Показывает предложения при вводе "[!" в блочной цитате в редакторе. Выберите тип callout из списка, чтобы вставить полный заголовок callout.',
 
 	"settings.openHotkeys": "Сочетания клавиш Callout Studio",
 	"settings.openHotkeysDesc": "Открывает настройки сочетаний клавиш Obsidian для команд Callout Studio, где можно задать собственные сочетания для создания нового типа, открытия настроек, удаления и добавления callout. По умолчанию сочетания не назначены.",
 	"settings.openHotkeysButton": "Открыть настройки сочетаний клавиш",
-
 
 	"settings.colorFormat": "Формат цвета",
 
@@ -239,7 +235,7 @@ export const ru: Record<string, string> = {
 	"settings.refShowIcon": "Показывать значок в плане и ссылках",
 	"settings.refShowIconDesc": "Показывает цветной значок callout'а перед очищенным заголовком в этих местах.",
 	"settings.customizeMenu": "Настройка пунктов меню",
-	"settings.customizeMenuDesc": "Выберите, какие действия контекстного меню отображаются для каждого типа callout, и измените их порядок.",
+	"settings.customizeMenuDesc": "Выберите, какие действия контекстного меню отображаются для каждого типа callout, и измените их порядок. Работает в режиме чтения, режиме источника и в живом предпросмотре.",
 	"settings.customizeMenuButton": "Настройка пунктов меню",
 	"menuCustomize.title": "Настройка контекстного меню",
 	"menuCustomize.desc": "Включайте и отключайте действия и меняйте их порядок с помощью стрелок. Изменения сохраняются автоматически.",

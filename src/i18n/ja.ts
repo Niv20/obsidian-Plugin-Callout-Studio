@@ -106,16 +106,12 @@ export const ja: Record<string, string> = {
 	"settings.previewCalloutTitle": "サンプルcallout",
 	"settings.previewCalloutContent": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
 
-	"settings.enableContextMenu": "calloutコンテキストメニュー操作を有効にする",
-	"settings.enableContextMenuDesc": "calloutを右クリックしたときにObsidianの右クリックメニューに追加の操作を追加します。閲覧ビュー、ソースモード、ライブプレビューで機能します。",
-
 	"settings.enableAutocomplete": "[! オートコンプリートを有効にする",
 	"settings.enableAutocompleteDesc": 'エディターの引用ブロック内で"[!"と入力すると候補を表示します。リストからcalloutタイプを選択して完全なcalloutヘッダーを挿入します。',
 
 	"settings.openHotkeys": "Callout Studioショートカット",
 	"settings.openHotkeysDesc": "Callout StudioコマンドのObsidianホットキー設定を開きます。新しいcalloutタイプの作成、設定を開く、callout解除、calloutで囲むの独自ショートカットを設定できます。デフォルトではショートカットは割り当てられていません。",
 	"settings.openHotkeysButton": "ホットキー設定を開く",
-
 
 	"settings.colorFormat": "カラーフォーマット",
 
@@ -243,7 +239,7 @@ export const ja: Record<string, string> = {
 	"settings.refShowIconDesc": "それらの場所で、クリーンにされたタイトルの前にcalloutの色付きアイコンを表示します。",
 
 	"settings.customizeMenu": "メニュー項目をカスタマイズ",
-	"settings.customizeMenuDesc": "各calloutタイプに表示する右クリック操作を選択し、順序を並べ替えます。",
+	"settings.customizeMenuDesc": "各calloutタイプに表示する右クリック操作を選択し、順序を並べ替えます。 閲覧ビュー、ソースモード、ライブプレビューで機能します。",
 	"settings.customizeMenuButton": "メニュー項目をカスタマイズ",
 	"menuCustomize.title": "右クリックメニューをカスタマイズ",
 	"menuCustomize.desc": "矢印を使って操作のオン/オフ切り替えと並べ替えができます。変更は自動的に保存されます。",

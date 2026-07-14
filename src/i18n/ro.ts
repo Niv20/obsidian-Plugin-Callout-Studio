@@ -106,16 +106,12 @@ export const ro: Record<string, string> = {
 	"settings.previewCalloutTitle": "Callout exemplu",
 	"settings.previewCalloutContent": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
 
-	"settings.enableContextMenu": "Activați acțiunile din meniul contextual callout",
-	"settings.enableContextMenuDesc": "Adaugă acțiuni suplimentare în meniul clic dreapta al Obsidian când faceți clic dreapta pe un callout. Funcționează în vizualizarea de lectură, modul sursă și Live Preview.",
-
 	"settings.enableAutocomplete": "Activați completarea automată [!",
 	"settings.enableAutocompleteDesc": 'Afișează sugestii când tastați "[!" într-un citat bloc în editor. Alegeți un tip de callout din listă pentru a insera un antet callout complet.',
 
 	"settings.openHotkeys": "Scurtături Callout Studio",
 	"settings.openHotkeysDesc": "Deschide setările de scurtături Obsidian pentru comenzile Callout Studio, unde puteți alege propriile scurtături pentru Creare tip nou, Deschide setări, Elimină callout și Înfășoară în callout. Implicit nu sunt atribuite scurtături.",
 	"settings.openHotkeysButton": "Deschide setările de scurtături",
-
 
 	"settings.colorFormat": "Format culoare",
 
@@ -239,7 +235,7 @@ export const ro: Record<string, string> = {
 	"settings.refShowIcon": "Afișează pictograma în schiță și linkuri",
 	"settings.refShowIconDesc": "Afișează pictograma colorată a callout-ului înaintea titlului curățat în acele locuri.",
 	"settings.customizeMenu": "Personalizați elementele meniului",
-	"settings.customizeMenuDesc": "Alegeți ce acțiuni de clic dreapta apar pentru fiecare tip de callout și reordonați-le.",
+	"settings.customizeMenuDesc": "Alegeți ce acțiuni de clic dreapta apar pentru fiecare tip de callout și reordonați-le. Funcționează în vizualizarea de lectură, modul sursă și Live Preview.",
 	"settings.customizeMenuButton": "Personalizați elementele meniului",
 	"menuCustomize.title": "Personalizare meniu clic dreapta",
 	"menuCustomize.desc": "Activați sau dezactivați acțiuni și reordonați-le cu săgețile. Modificările sunt salvate automat.",

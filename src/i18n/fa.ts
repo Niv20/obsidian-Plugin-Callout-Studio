@@ -106,16 +106,12 @@ export const fa: Record<string, string> = {
 	"settings.previewCalloutTitle": "callout نمونه",
 	"settings.previewCalloutContent": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
 
-	"settings.enableContextMenu": "فعال‌سازی اقدامات منوی زمینه callout",
-	"settings.enableContextMenuDesc": "هنگام کلیک راست روی callout، اقدامات اضافی به منوی کلیک راست Obsidian اضافه می‌کند. در حالت خواندن، حالت منبع و Live Preview کار می‌کند.",
-
 	"settings.enableAutocomplete": "فعال‌سازی تکمیل خودکار [!",
 	"settings.enableAutocompleteDesc": 'هنگام تایپ "[!" در یک بلوک نقل‌قول در ویرایشگر، پیشنهادات نمایش می‌دهد. یک نوع callout از لیست انتخاب کنید تا سرتیتر کامل callout درج شود.',
 
 	"settings.openHotkeys": "میانبرهای Callout Studio",
 	"settings.openHotkeysDesc": "تنظیمات میانبرهای Obsidian را برای دستورات Callout Studio باز می‌کند، جایی که می‌توانید میانبرهای خود را برای ایجاد نوع جدید، باز کردن تنظیمات، حذف callout و پیچیدن در callout انتخاب کنید. به صورت پیش‌فرض هیچ میانبری اختصاص داده نشده است.",
 	"settings.openHotkeysButton": "باز کردن تنظیمات میانبر",
-
 
 	"settings.colorFormat": "قالب رنگ",
 
@@ -239,7 +235,7 @@ export const fa: Record<string, string> = {
 	"settings.refShowIcon": "نمایش نماد در طرح‌کلی و پیوندها",
 	"settings.refShowIconDesc": "نماد رنگی callout را پیش از عنوان پاک‌شده در آن مکان‌ها نمایش می‌دهد.",
 	"settings.customizeMenu": "سفارشی‌سازی موارد منو",
-	"settings.customizeMenuDesc": "انتخاب کنید کدام اقدامات کلیک راست برای هر نوع callout نمایش داده شود و ترتیب آن‌ها را تغییر دهید.",
+	"settings.customizeMenuDesc": "انتخاب کنید کدام اقدامات کلیک راست برای هر نوع callout نمایش داده شود و ترتیب آن‌ها را تغییر دهید. در حالت خواندن، حالت منبع و Live Preview کار می‌کند.",
 	"settings.customizeMenuButton": "سفارشی‌سازی موارد منو",
 	"menuCustomize.title": "سفارشی‌سازی منوی کلیک راست",
 	"menuCustomize.desc": "اقدامات را روشن یا خاموش کنید و با فلش‌ها ترتیب آن‌ها را تغییر دهید. تغییرات به‌طور خودکار ذخیره می‌شوند.",

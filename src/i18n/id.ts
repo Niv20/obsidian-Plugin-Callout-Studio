@@ -106,16 +106,12 @@ export const id: Record<string, string> = {
 	"settings.previewCalloutTitle": "Callout contoh",
 	"settings.previewCalloutContent": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
 
-	"settings.enableContextMenu": "Aktifkan tindakan menu konteks callout",
-	"settings.enableContextMenuDesc": "Menambahkan tindakan ekstra ke menu klik kanan Obsidian saat Anda mengklik kanan pada callout. Berfungsi di tampilan baca, mode sumber, dan Pratinjau Langsung.",
-
 	"settings.enableAutocomplete": "Aktifkan pelengkapan otomatis [!",
 	"settings.enableAutocompleteDesc": 'Menampilkan saran saat Anda mengetik "[!" di dalam blockquote di editor. Pilih tipe callout dari daftar untuk menyisipkan header callout lengkap.',
 
 	"settings.openHotkeys": "Pintasan Callout Studio",
 	"settings.openHotkeysDesc": "Membuka pengaturan pintasan Obsidian untuk perintah Callout Studio, di mana Anda dapat memilih pintasan sendiri untuk Buat tipe baru, Buka pengaturan, Hapus callout, dan Bungkus dalam callout. Tidak ada pintasan yang ditetapkan secara default.",
 	"settings.openHotkeysButton": "Buka pengaturan pintasan",
-
 
 	"settings.colorFormat": "Format warna",
 
@@ -243,7 +239,7 @@ export const id: Record<string, string> = {
 	"settings.refShowIconDesc": "Tampilkan ikon berwarna callout sebelum judul yang telah dibersihkan di tempat-tempat tersebut.",
 
 	"settings.customizeMenu": "Sesuaikan item menu",
-	"settings.customizeMenuDesc": "Pilih tindakan klik kanan mana yang muncul untuk setiap tipe callout dan atur ulang urutannya.",
+	"settings.customizeMenuDesc": "Pilih tindakan klik kanan mana yang muncul untuk setiap tipe callout dan atur ulang urutannya. Berfungsi di tampilan baca, mode sumber, dan Pratinjau Langsung.",
 	"settings.customizeMenuButton": "Sesuaikan item menu",
 	"menuCustomize.title": "Sesuaikan menu klik kanan",
 	"menuCustomize.desc": "Aktifkan atau nonaktifkan tindakan dan atur ulang urutannya dengan panah. Perubahan disimpan secara otomatis.",

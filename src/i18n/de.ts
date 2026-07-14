@@ -106,16 +106,12 @@ export const de: Record<string, string> = {
 	"settings.previewCalloutTitle": "Beispiel-Callout",
 	"settings.previewCalloutContent": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
 
-	"settings.enableContextMenu": "Callout-Kontextmenü-Aktionen aktivieren",
-	"settings.enableContextMenuDesc": "Fügt Obsidians Rechtsklick-Menü zusätzliche Aktionen hinzu, wenn Sie auf einen Callout rechtsklicken. Funktioniert in der Leseansicht, im Quellmodus und in der Live-Vorschau.",
-
 	"settings.enableAutocomplete": "[! Autovervollständigung aktivieren",
 	"settings.enableAutocompleteDesc": 'Zeigt Vorschläge an, wenn Sie "[!" in einem Blockzitat im Editor eingeben. Wählen Sie einen Callout-Typ aus der Liste, um eine vollständige Callout-Überschrift einzufügen.',
 
 	"settings.openHotkeys": "Callout Studio-Tastaturkürzel",
 	"settings.openHotkeysDesc": "Öffnet Obsidians Tastaturkürzel-Einstellungen für Callout Studio-Befehle, wo Sie eigene Kürzel für Neuen Callout-Typ erstellen, Einstellungen öffnen, Aus Callout entfernen und In Callout einbetten festlegen können. Standardmäßig sind keine Kürzel zugewiesen.",
 	"settings.openHotkeysButton": "Tastaturkürzel öffnen",
-
 
 	"settings.colorFormat": "Farbformat",
 
@@ -239,7 +235,7 @@ export const de: Record<string, string> = {
 	"settings.refShowIcon": "Symbol in Gliederung und Links anzeigen",
 	"settings.refShowIconDesc": "Zeigt das farbige Symbol des Callouts vor dem bereinigten Titel an diesen Stellen.",
 	"settings.customizeMenu": "Menüelemente anpassen",
-	"settings.customizeMenuDesc": "Wählen Sie, welche Rechtsklick-Aktionen für jeden Callout-Typ angezeigt werden, und ordnen Sie sie neu an.",
+	"settings.customizeMenuDesc": "Wählen Sie, welche Rechtsklick-Aktionen für jeden Callout-Typ angezeigt werden, und ordnen Sie sie neu an. Funktioniert in der Leseansicht, im Quellmodus und in der Live-Vorschau.",
 	"settings.customizeMenuButton": "Menüelemente anpassen",
 	"menuCustomize.title": "Rechtsklickmenü anpassen",
 	"menuCustomize.desc": "Aktionen ein- oder ausschalten und mit den Pfeilen neu anordnen. Änderungen werden automatisch gespeichert.",

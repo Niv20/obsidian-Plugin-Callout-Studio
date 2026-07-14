@@ -106,16 +106,12 @@ export const uk: Record<string, string> = {
 	"settings.previewCalloutTitle": "Приклад callout",
 	"settings.previewCalloutContent": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
 
-	"settings.enableContextMenu": "Увімкнути дії контекстного меню callout",
-	"settings.enableContextMenuDesc": "Додає додаткові дії до контекстного меню Obsidian при правому кліку на callout. Працює в режимі читання, вихідному режимі та живому попередньому перегляді.",
-
 	"settings.enableAutocomplete": "Увімкнути автодоповнення [!",
 	"settings.enableAutocompleteDesc": 'Показує підказки при введенні «[!» у блоку цитати в редакторі. Виберіть тип callout зі списку, щоб вставити повний заголовок callout.',
 
 	"settings.openHotkeys": "Гарячі клавіші Callout Studio",
 	"settings.openHotkeysDesc": "Відкриває налаштування гарячих клавіш Obsidian для команд Callout Studio, де можна встановити власні клавіші для створення нового типу, відкриття налаштувань, видалення та обгортання callout. За замовчуванням гарячі клавіші не призначені.",
 	"settings.openHotkeysButton": "Відкрити налаштування гарячих клавіш",
-
 
 	"settings.colorFormat": "Формат кольору",
 
@@ -247,7 +243,7 @@ export const uk: Record<string, string> = {
 	"settings.refShowIconDesc": "Показує кольоровий значок callout перед очищеним заголовком у цих місцях.",
 
 	"settings.customizeMenu": "Налаштувати пункти меню",
-	"settings.customizeMenuDesc": "Виберіть, які дії контекстного меню з'являються для кожного типу callout, і змініть їх порядок.",
+	"settings.customizeMenuDesc": "Виберіть, які дії контекстного меню з'являються для кожного типу callout, і змініть їх порядок. Працює в режимі читання, вихідному режимі та живому попередньому перегляді.",
 	"settings.customizeMenuButton": "Налаштувати пункти меню",
 	"menuCustomize.title": "Налаштування контекстного меню",
 	"menuCustomize.desc": "Вмикайте або вимикайте дії та змінюйте їх порядок за допомогою стрілок. Зміни зберігаються автоматично.",

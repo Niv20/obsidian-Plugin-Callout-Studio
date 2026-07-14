@@ -106,16 +106,12 @@ export const hu: Record<string, string> = {
 	"settings.previewCalloutTitle": "Minta callout",
 	"settings.previewCalloutContent": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
 
-	"settings.enableContextMenu": "Callout helyi menü műveletek engedélyezése",
-	"settings.enableContextMenuDesc": "Extra műveleteket ad az Obsidian jobb gombos menüjéhez, ha callout-ra jobb gombbal kattint. Olvasó nézetben, forrás módban és élő előnézetben is működik.",
-
 	"settings.enableAutocomplete": "[! Automatikus kiegészítés engedélyezése",
 	"settings.enableAutocompleteDesc": 'Javaslatokat jelenít meg, amikor "[!" szöveget gépel egy blokkidézet-belsejébe a szerkesztőben. Válasszon callout-típust a listából egy teljes callout fejléc beillesztéséhez.',
 
 	"settings.openHotkeys": "Callout Studio billentyűparancsok",
 	"settings.openHotkeysDesc": "Megnyitja az Obsidian billentyűparancs-beállításait a Callout Studio parancsaihoz, ahol saját parancsokat rendelhet az Új típus létrehozása, Beállítások megnyitása, Callout eltávolítása és Callout-ba csomagolás funkciókhoz. Alapértelmezés szerint nincs hozzárendelt parancs.",
 	"settings.openHotkeysButton": "Billentyűparancs-beállítások megnyitása",
-
 
 	"settings.colorFormat": "Színformátum",
 
@@ -239,7 +235,7 @@ export const hu: Record<string, string> = {
 	"settings.refShowIcon": "Ikon megjelenítése a vázlatban és a linkekben",
 	"settings.refShowIconDesc": "Megjeleníti a callout színes ikonját a megtisztított cím előtt ezeken a helyeken.",
 	"settings.customizeMenu": "Menüelemek testreszabása",
-	"settings.customizeMenuDesc": "Válassza ki, mely jobb gombos műveletek jelenjenek meg az egyes callout-típusoknál, és rendezze át őket.",
+	"settings.customizeMenuDesc": "Válassza ki, mely jobb gombos műveletek jelenjenek meg az egyes callout-típusoknál, és rendezze át őket. Olvasó nézetben, forrás módban és élő előnézetben is működik.",
 	"settings.customizeMenuButton": "Menüelemek testreszabása",
 	"menuCustomize.title": "Jobb gombos menü testreszabása",
 	"menuCustomize.desc": "Kapcsolja be vagy ki a műveleteket, és rendezze át őket a nyilakkal. A módosítások automatikusan mentésre kerülnek.",

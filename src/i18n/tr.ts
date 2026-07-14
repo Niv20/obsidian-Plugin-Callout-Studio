@@ -106,16 +106,12 @@ export const tr: Record<string, string> = {
 	"settings.previewCalloutTitle": "Örnek callout",
 	"settings.previewCalloutContent": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
 
-	"settings.enableContextMenu": "Callout bağlam menüsü eylemlerini etkinleştir",
-	"settings.enableContextMenuDesc": "Bir callout'a sağ tıkladığınızda Obsidian'ın sağ tıklama menüsüne ek eylemler ekler. Okuma görünümünde, kaynak modunda ve Canlı Önizleme'de çalışır.",
-
 	"settings.enableAutocomplete": "[! Otomatik tamamlamayı etkinleştir",
 	"settings.enableAutocompleteDesc": 'Düzenleyicide blok alıntı içinde "[!" yazdığınızda öneriler gösterir. Tam bir callout başlığı eklemek için listeden bir callout türü seçin.',
 
 	"settings.openHotkeys": "Callout Studio kısayolları",
 	"settings.openHotkeysDesc": "Callout Studio komutları için Obsidian kısayol ayarlarını açar; burada Yeni callout türü oluştur, Ayarları aç, Callout'u kaldır ve Callout'a sar için kendi kısayollarınızı belirleyebilirsiniz. Varsayılan olarak kısayol atanmamıştır.",
 	"settings.openHotkeysButton": "Kısayol ayarlarını aç",
-
 
 	"settings.colorFormat": "Renk biçimi",
 
@@ -247,7 +243,7 @@ export const tr: Record<string, string> = {
 	"settings.refShowIconDesc": "Bu yerlerde temizlenmiş başlıktan önce callout'un renkli simgesini gösterir.",
 
 	"settings.customizeMenu": "Menü öğelerini özelleştir",
-	"settings.customizeMenuDesc": "Her callout türü için hangi sağ tık eylemlerinin görüneceğini seçin ve sırasını değiştirin.",
+	"settings.customizeMenuDesc": "Her callout türü için hangi sağ tık eylemlerinin görüneceğini seçin ve sırasını değiştirin. Okuma görünümünde, kaynak modunda ve Canlı Önizleme'de çalışır.",
 	"settings.customizeMenuButton": "Menü öğelerini özelleştir",
 	"menuCustomize.title": "Sağ tık menüsünü özelleştir",
 	"menuCustomize.desc": "Eylemleri açıp kapatın ve oklarla yeniden sıralayın. Değişiklikler otomatik olarak kaydedilir.",

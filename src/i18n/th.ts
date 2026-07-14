@@ -106,16 +106,12 @@ export const th: Record<string, string> = {
 	"settings.previewCalloutTitle": "callout ตัวอย่าง",
 	"settings.previewCalloutContent": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
 
-	"settings.enableContextMenu": "เปิดใช้การดำเนินการเมนูบริบท callout",
-	"settings.enableContextMenuDesc": "เพิ่มการดำเนินการพิเศษในเมนูคลิกขวาของ Obsidian เมื่อคุณคลิกขวาที่ callout ใช้งานได้ในมุมมองการอ่าน โหมดต้นฉบับ และ Live Preview",
-
 	"settings.enableAutocomplete": "เปิดใช้การเติมข้อความอัตโนมัติ [!",
 	"settings.enableAutocompleteDesc": 'แสดงคำแนะนำเมื่อพิมพ์ "[!" ในบล็อกอ้างอิงในตัวแก้ไข เลือกประเภท callout จากรายการเพื่อแทรกส่วนหัว callout ที่สมบูรณ์',
 
 	"settings.openHotkeys": "แป้นพิมพ์ลัด Callout Studio",
 	"settings.openHotkeysDesc": "เปิดการตั้งค่าแป้นพิมพ์ลัดของ Obsidian สำหรับคำสั่ง Callout Studio ซึ่งคุณสามารถเลือกแป้นพิมพ์ลัดของคุณเองสำหรับการสร้างประเภทใหม่ เปิดการตั้งค่า นำ callout ออก และห่อใน callout ไม่มีการกำหนดแป้นพิมพ์ลัดโดยค่าเริ่มต้น",
 	"settings.openHotkeysButton": "เปิดการตั้งค่าแป้นพิมพ์ลัด",
-
 
 	"settings.colorFormat": "รูปแบบสี",
 
@@ -247,7 +243,7 @@ export const th: Record<string, string> = {
 	"settings.refShowIconDesc": "แสดงไอคอนสีของ callout ก่อนชื่อเรื่องที่ล้างแล้วในสถานที่เหล่านั้น",
 
 	"settings.customizeMenu": "ปรับแต่งรายการเมนู",
-	"settings.customizeMenuDesc": "เลือกว่าการดำเนินการคลิกขวาใดจะปรากฏสำหรับแต่ละประเภท callout และจัดลำดับใหม่",
+	"settings.customizeMenuDesc": "เลือกว่าการดำเนินการคลิกขวาใดจะปรากฏสำหรับแต่ละประเภท callout และจัดลำดับใหม่ ใช้งานได้ในมุมมองการอ่าน โหมดต้นฉบับ และ Live Preview",
 	"settings.customizeMenuButton": "ปรับแต่งรายการเมนู",
 	"menuCustomize.title": "ปรับแต่งเมนูคลิกขวา",
 	"menuCustomize.desc": "เปิดหรือปิดการดำเนินการและจัดลำดับใหม่ด้วยลูกศร การเปลี่ยนแปลงจะถูกบันทึกโดยอัตโนมัติ",

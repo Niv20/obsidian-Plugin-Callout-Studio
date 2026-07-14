@@ -106,16 +106,12 @@ export const nl: Record<string, string> = {
 	"settings.previewCalloutTitle": "Voorbeeld callout",
 	"settings.previewCalloutContent": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
 
-	"settings.enableContextMenu": "Callout-contextmenu-acties inschakelen",
-	"settings.enableContextMenuDesc": "Voegt extra acties toe aan het rechtsklikmenu van Obsidian wanneer u rechtsklikt op een callout. Werkt in leesweergave, bronmodus en Live Preview.",
-
 	"settings.enableAutocomplete": "[! Automatisch aanvullen inschakelen",
 	"settings.enableAutocompleteDesc": 'Toont suggesties wanneer u "[!" typt in een blokcitaat in de editor. Kies een callout-type uit de lijst om een volledig callout-koptekst in te voegen.',
 
 	"settings.openHotkeys": "Callout Studio-sneltoetsen",
 	"settings.openHotkeysDesc": "Opent de sneltoetseninstellingen van Obsidian voor Callout Studio-opdrachten, waar u uw eigen sneltoetsen kunt kiezen voor Nieuw callout-type aanmaken, Instellingen openen, Callout verwijderen en In callout inpakken. Standaard zijn er geen sneltoetsen toegewezen.",
 	"settings.openHotkeysButton": "Sneltoetseninstellingen openen",
-
 
 	"settings.colorFormat": "Kleurindeling",
 
@@ -239,7 +235,7 @@ export const nl: Record<string, string> = {
 	"settings.refShowIcon": "Pictogram tonen in overzicht en links",
 	"settings.refShowIconDesc": "Toont het gekleurde pictogram van de callout vóór de opgeschoonde titel op die plekken.",
 	"settings.customizeMenu": "Menu-items aanpassen",
-	"settings.customizeMenuDesc": "Kies welke rechtsklikacties worden weergegeven voor elk callout-type en wijzig de volgorde.",
+	"settings.customizeMenuDesc": "Kies welke rechtsklikacties worden weergegeven voor elk callout-type en wijzig de volgorde. Werkt in leesweergave, bronmodus en Live Preview.",
 	"settings.customizeMenuButton": "Menu-items aanpassen",
 	"menuCustomize.title": "Rechtsklikmenu aanpassen",
 	"menuCustomize.desc": "Schakel acties in of uit en wijzig de volgorde met de pijlen. Wijzigingen worden automatisch opgeslagen.",

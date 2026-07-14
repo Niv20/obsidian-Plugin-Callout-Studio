@@ -106,16 +106,12 @@ export const ar: Record<string, string> = {
 	"settings.previewCalloutTitle": "callout نموذجي",
 	"settings.previewCalloutContent": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
 
-	"settings.enableContextMenu": "تفعيل إجراءات قائمة سياق الـ callout",
-	"settings.enableContextMenuDesc": "يضيف إجراءات إضافية إلى قائمة النقر بزر الماوس الأيمن في Obsidian عند النقر بزر الماوس الأيمن على callout. يعمل في وضع القراءة وضع المصدر والمعاينة المباشرة.",
-
 	"settings.enableAutocomplete": "تفعيل الإكمال التلقائي [!",
 	"settings.enableAutocompleteDesc": 'يعرض اقتراحات عند كتابة "[!" داخل اقتباس محظور في المحرر. اختر نوع callout من القائمة لإدراج عنوان callout كامل.',
 
 	"settings.openHotkeys": "اختصارات Callout Studio",
 	"settings.openHotkeysDesc": "يفتح إعدادات الاختصارات في Obsidian لأوامر Callout Studio، حيث يمكنك اختيار اختصاراتك الخاصة لإنشاء نوع جديد وفتح الإعدادات وإزالة الـ callout والالتفاف فيه. لا يتم تعيين أي اختصارات افتراضياً.",
 	"settings.openHotkeysButton": "فتح إعدادات الاختصارات",
-
 
 	"settings.colorFormat": "تنسيق اللون",
 
@@ -239,7 +235,7 @@ export const ar: Record<string, string> = {
 	"settings.refShowIcon": "إظهار الأيقونة في المخطط التفصيلي والروابط",
 	"settings.refShowIconDesc": "إظهار الأيقونة الملونة لـ callout قبل العنوان المنظف في تلك الأماكن.",
 	"settings.customizeMenu": "تخصيص عناصر القائمة",
-	"settings.customizeMenuDesc": "اختر الإجراءات التي تظهر عند النقر بزر الماوس الأيمن لكل نوع callout، وأعد ترتيبها.",
+	"settings.customizeMenuDesc": "اختر الإجراءات التي تظهر عند النقر بزر الماوس الأيمن لكل نوع callout، وأعد ترتيبها. يعمل في وضع القراءة وضع المصدر والمعاينة المباشرة.",
 	"settings.customizeMenuButton": "تخصيص عناصر القائمة",
 	"menuCustomize.title": "تخصيص قائمة النقر بزر الماوس الأيمن",
 	"menuCustomize.desc": "فعّل الإجراءات أو عطّلها وأعد ترتيبها باستخدام الأسهم. تُحفظ التغييرات تلقائياً.",

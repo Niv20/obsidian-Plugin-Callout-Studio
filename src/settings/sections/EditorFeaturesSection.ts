@@ -2,8 +2,8 @@
  * settings/sections/EditorFeaturesSection.ts — Autocomplete and context-menu settings.
  *
  * Renders two sections: one for the in-editor callout autocomplete and one for
- * the right-click context menu. Each exposes a single enable/disable toggle;
- * their sub-features (icon/color previews, individual menu items) are always on.
+ * the right-click context menu. The context menu is always enabled and only
+ * exposes menu-item customization; autocomplete exposes an enable/disable toggle.
  * Changes are saved immediately via ctx.plugin.saveSettings().
  */
 import { Setting } from "obsidian";
@@ -15,19 +15,7 @@ export function renderContextMenuSettingsSection(
 	ctx: SettingsSectionContext,
 	containerEl: HTMLElement,
 ): void {
-	const { contextMenu } = ctx.plugin.settings;
-
 	new Setting(containerEl).setName(t("settings.contextMenu")).setHeading();
-
-	new Setting(containerEl)
-		.setName(t("settings.enableContextMenu"))
-		.setDesc(t("settings.enableContextMenuDesc"))
-		.addToggle((tog) =>
-			tog.setValue(contextMenu.enabled).onChange(async (v) => {
-				contextMenu.enabled = v;
-				await ctx.plugin.saveSettings();
-			}),
-		);
 
 	new Setting(containerEl)
 		.setName(t("settings.customizeMenu"))

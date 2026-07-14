@@ -106,16 +106,12 @@ export const it: Record<string, string> = {
 	"settings.previewCalloutTitle": "Callout di esempio",
 	"settings.previewCalloutContent": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
 
-	"settings.enableContextMenu": "Abilita azioni menu contestuale callout",
-	"settings.enableContextMenuDesc": "Aggiunge azioni extra al menu tasto destro di Obsidian quando si fa clic destro su un callout. Funziona in visualizzazione lettura, modalità sorgente e anteprima live.",
-
 	"settings.enableAutocomplete": "Abilita completamento automatico [!",
 	"settings.enableAutocompleteDesc": 'Mostra suggerimenti quando si digita "[!" in una citazione nell\'editor. Scegli un tipo di callout dall\'elenco per inserire un\'intestazione callout completa.',
 
 	"settings.openHotkeys": "Scorciatoie Callout Studio",
 	"settings.openHotkeysDesc": "Apre le impostazioni scorciatoie di Obsidian per i comandi di Callout Studio, dove puoi scegliere le tue scorciatoie per Crea nuovo tipo, Apri impostazioni, Rimuovi callout e Racchiudi in callout. Nessuna scorciatoia assegnata per impostazione predefinita.",
 	"settings.openHotkeysButton": "Apri impostazioni scorciatoie",
-
 
 	"settings.colorFormat": "Formato colore",
 
@@ -243,7 +239,7 @@ export const it: Record<string, string> = {
 	"settings.refShowIconDesc": "Mostra l'icona colorata del callout prima del titolo pulito in quei punti.",
 
 	"settings.customizeMenu": "Personalizza voci di menu",
-	"settings.customizeMenuDesc": "Scegli quali azioni del clic destro appaiono per ciascun tipo di callout e riordinale.",
+	"settings.customizeMenuDesc": "Scegli quali azioni del clic destro appaiono per ciascun tipo di callout e riordinale. Funziona in visualizzazione lettura, modalità sorgente e anteprima live.",
 	"settings.customizeMenuButton": "Personalizza voci di menu",
 	"menuCustomize.title": "Personalizza il menu del clic destro",
 	"menuCustomize.desc": "Attiva o disattiva le azioni e riordinale con le frecce. Le modifiche vengono salvate automaticamente.",
