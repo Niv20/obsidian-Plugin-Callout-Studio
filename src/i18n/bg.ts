@@ -116,7 +116,7 @@ export const bg: Record<string, string> = {
 	"notice.importedCSS": "Импортирани са {{count}} тип(а) callout от CSS фрагменти.",
 	"notice.noNewCSS": "Не са намерени нови типове callout в CSS фрагментите.",
 	"notice.failedCSS": "Неуспешно четене на папката с CSS фрагменти.",
-	"notice.exported": "Callout-ите са експортирани в callout-studio-callouts.json",
+	"notice.exported": "Callout-ите са експортирани в callout-studio-export.json",
 	"notice.invalidJSON": "Невалиден JSON формат: очаквала се масив.",
 	"notice.importedJSON": "Импортирани са {{count}} тип(а) callout от JSON.",
 	"notice.importedSettings": "Импортирани са настройките на приставката.",

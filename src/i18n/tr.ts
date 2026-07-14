@@ -133,7 +133,7 @@ export const tr: Record<string, string> = {
 	"notice.importedCSS": "CSS snippet'lerinden {{count}} callout türü içe aktarıldı.",
 	"notice.noNewCSS": "CSS snippet'lerinde yeni callout türü bulunamadı.",
 	"notice.failedCSS": "CSS snippet'leri klasörü okunamadı.",
-	"notice.exported": "Callout'lar callout-studio-callouts.json dosyasına dışa aktarıldı",
+	"notice.exported": "Callout'lar callout-studio-export.json dosyasına dışa aktarıldı",
 	"notice.invalidJSON": "Geçersiz JSON biçimi: bir dizi bekleniyordu.",
 	"notice.importedJSON": "JSON'dan {{count}} callout türü içe aktarıldı.",
 	"notice.importedSettings": "Eklenti ayarları içe aktarıldı.",

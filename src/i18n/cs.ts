@@ -133,7 +133,7 @@ export const cs: Record<string, string> = {
 	"notice.importedCSS": "Importováno {{count}} typ(ů) callout z fragmentů CSS.",
 	"notice.noNewCSS": "V fragmentech CSS nebyly nalezeny žádné nové typy callout.",
 	"notice.failedCSS": "Nelze číst složku fragmentů CSS.",
-	"notice.exported": "Callouts exportovány do callout-studio-callouts.json",
+	"notice.exported": "Callouts exportovány do callout-studio-export.json",
 	"notice.invalidJSON": "Neplatný formát JSON: očekávalo se pole.",
 	"notice.importedJSON": "Importováno {{count}} typ(ů) callout z JSON.",
 	"notice.importedSettings": "Importováno nastavení doplňku.",

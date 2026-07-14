@@ -116,7 +116,7 @@ export const el: Record<string, string> = {
 	"notice.importedCSS": "Εισήχθησαν {{count}} τύπος/τύποι callout από αποσπάσματα CSS.",
 	"notice.noNewCSS": "Δεν βρέθηκαν νέοι τύποι callout σε αποσπάσματα CSS.",
 	"notice.failedCSS": "Αποτυχία ανάγνωσης φακέλου αποσπασμάτων CSS.",
-	"notice.exported": "Τα callouts εξήχθησαν στο callout-studio-callouts.json",
+	"notice.exported": "Τα callouts εξήχθησαν στο callout-studio-export.json",
 	"notice.invalidJSON": "Μη έγκυρη μορφή JSON: αναμενόταν πίνακας.",
 	"notice.importedJSON": "Εισήχθησαν {{count}} τύπος/τύποι callout από JSON.",
 	"notice.importedSettings": "Οι ρυθμίσεις του προσθέτου εισήχθησαν.",

@@ -133,7 +133,7 @@ export const es: Record<string, string> = {
 	"notice.importedCSS": "Se importaron {{count}} tipo(s) de callout desde fragmentos CSS.",
 	"notice.noNewCSS": "No se encontraron nuevos tipos de callout en los fragmentos CSS.",
 	"notice.failedCSS": "Error al leer la carpeta de fragmentos CSS.",
-	"notice.exported": "Callouts exportados a callout-studio-callouts.json",
+	"notice.exported": "Callouts exportados a callout-studio-export.json",
 	"notice.invalidJSON": "Formato JSON inválido: se esperaba un array.",
 	"notice.importedJSON": "Se importaron {{count}} tipo(s) de callout desde JSON.",
 	"notice.importedSettings": "Se importó la configuración del complemento.",

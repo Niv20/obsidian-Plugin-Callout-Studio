@@ -133,7 +133,7 @@ export const ko: Record<string, string> = {
 	"notice.importedCSS": "CSS 스니펫에서 {{count}}개의 callout 유형을 가져왔습니다.",
 	"notice.noNewCSS": "CSS 스니펫에서 새로운 callout 유형을 찾지 못했습니다.",
 	"notice.failedCSS": "CSS 스니펫 폴더를 읽지 못했습니다.",
-	"notice.exported": "callout을 callout-studio-callouts.json으로 내보냈습니다",
+	"notice.exported": "callout을 callout-studio-export.json으로 내보냈습니다",
 	"notice.invalidJSON": "유효하지 않은 JSON 형식: 배열이 필요합니다.",
 	"notice.importedJSON": "JSON에서 {{count}}개의 callout 유형을 가져왔습니다.",
 	"notice.importedSettings": "플러그인 설정을 가져왔습니다.",

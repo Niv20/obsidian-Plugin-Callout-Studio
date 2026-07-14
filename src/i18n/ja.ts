@@ -133,7 +133,7 @@ export const ja: Record<string, string> = {
 	"notice.importedCSS": "CSSスニペットから{{count}}件のcalloutタイプをインポートしました。",
 	"notice.noNewCSS": "CSSスニペットに新しいcalloutタイプは見つかりませんでした。",
 	"notice.failedCSS": "CSSスニペットフォルダーの読み込みに失敗しました。",
-	"notice.exported": "calloutをcallout-studio-callouts.jsonにエクスポートしました",
+	"notice.exported": "calloutをcallout-studio-export.jsonにエクスポートしました",
 	"notice.invalidJSON": "無効なJSON形式: 配列が期待されます。",
 	"notice.importedJSON": "JSONから{{count}}件のcalloutタイプをインポートしました。",
 	"notice.importedSettings": "プラグインの設定をインポートしました。",

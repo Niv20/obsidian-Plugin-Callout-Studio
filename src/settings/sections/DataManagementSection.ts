@@ -164,7 +164,7 @@ function exportCallouts(ctx: SettingsSectionContext): void {
 	const url = URL.createObjectURL(blob);
 	const a = createEl("a");
 	a.href = url;
-	a.download = "callout-studio-callouts.json";
+	a.download = "callout-studio-export.json";
 	a.click();
 	URL.revokeObjectURL(url);
 	new Notice(t("notice.exported"));

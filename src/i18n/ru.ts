@@ -133,7 +133,7 @@ export const ru: Record<string, string> = {
 	"notice.importedCSS": "Импортировано {{count}} типов callout из CSS-сниппетов.",
 	"notice.noNewCSS": "Новые типы callout в CSS-сниппетах не найдены.",
 	"notice.failedCSS": "Не удалось прочитать папку CSS-сниппетов.",
-	"notice.exported": "Callout экспортированы в callout-studio-callouts.json",
+	"notice.exported": "Callout экспортированы в callout-studio-export.json",
 	"notice.invalidJSON": "Неверный формат JSON: ожидался массив.",
 	"notice.importedJSON": "Импортировано {{count}} типов callout из JSON.",
 	"notice.importedSettings": "Настройки плагина импортированы.",

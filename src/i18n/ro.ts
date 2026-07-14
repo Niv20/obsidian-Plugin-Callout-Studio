@@ -133,7 +133,7 @@ export const ro: Record<string, string> = {
 	"notice.importedCSS": "Au fost importate {{count}} tip(uri) de callout din fragmentele CSS.",
 	"notice.noNewCSS": "Nu au fost găsite tipuri noi de callout în fragmentele CSS.",
 	"notice.failedCSS": "Nu s-a putut citi folderul fragmentelor CSS.",
-	"notice.exported": "Callouts exportate în callout-studio-callouts.json",
+	"notice.exported": "Callouts exportate în callout-studio-export.json",
 	"notice.invalidJSON": "Format JSON invalid: se aștepta un array.",
 	"notice.importedJSON": "Au fost importate {{count}} tip(uri) de callout din JSON.",
 	"notice.importedSettings": "Au fost importate setările pluginului.",

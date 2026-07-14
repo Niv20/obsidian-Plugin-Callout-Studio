@@ -116,7 +116,7 @@ export const da: Record<string, string> = {
 	"notice.importedCSS": "{{count}} callout-type(r) importeret fra CSS-uddrag.",
 	"notice.noNewCSS": "Ingen nye callout-typer fundet i CSS-uddrag.",
 	"notice.failedCSS": "Kunne ikke læse CSS-uddrag-mappen.",
-	"notice.exported": "Callouts eksporteret til callout-studio-callouts.json",
+	"notice.exported": "Callouts eksporteret til callout-studio-export.json",
 	"notice.invalidJSON": "Ugyldigt JSON-format: forventede et array.",
 	"notice.importedJSON": "{{count}} callout-type(r) importeret fra JSON.",
 	"notice.importedSettings": "Plugin-indstillinger importeret.",

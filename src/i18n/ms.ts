@@ -116,7 +116,7 @@ export const ms: Record<string, string> = {
 	"notice.importedCSS": "{{count}} jenis callout diimport dari coretan CSS.",
 	"notice.noNewCSS": "Tiada jenis callout baharu ditemui dalam coretan CSS.",
 	"notice.failedCSS": "Gagal membaca folder coretan CSS.",
-	"notice.exported": "Callouts dieksport ke callout-studio-callouts.json",
+	"notice.exported": "Callouts dieksport ke callout-studio-export.json",
 	"notice.invalidJSON": "Format JSON tidak sah: jangkaan array.",
 	"notice.importedJSON": "{{count}} jenis callout diimport dari JSON.",
 	"notice.importedSettings": "Tetapan plugin diimport.",

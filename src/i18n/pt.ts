@@ -133,7 +133,7 @@ export const pt: Record<string, string> = {
 	"notice.importedCSS": "{{count}} tipo(s) de callout importado(s) de trechos CSS.",
 	"notice.noNewCSS": "Nenhum novo tipo de callout encontrado em trechos CSS.",
 	"notice.failedCSS": "Falha ao ler a pasta de trechos CSS.",
-	"notice.exported": "Callouts exportados para callout-studio-callouts.json",
+	"notice.exported": "Callouts exportados para callout-studio-export.json",
 	"notice.invalidJSON": "Formato JSON inválido: era esperado um array.",
 	"notice.importedJSON": "{{count}} tipo(s) de callout importado(s) de JSON.",
 	"notice.importedSettings": "Configurações do plugin importadas.",

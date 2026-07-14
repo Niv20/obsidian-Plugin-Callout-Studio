@@ -133,7 +133,7 @@ export const zh: Record<string, string> = {
 	"notice.importedCSS": "已从 CSS 片段导入 {{count}} 个 callout 类型。",
 	"notice.noNewCSS": "在 CSS 片段中未找到新的 callout 类型。",
 	"notice.failedCSS": "读取 CSS 片段文件夹失败。",
-	"notice.exported": "Callout 已导出到 callout-studio-callouts.json",
+	"notice.exported": "Callout 已导出到 callout-studio-export.json",
 	"notice.invalidJSON": "无效的 JSON 格式：期望一个数组。",
 	"notice.importedJSON": "已从 JSON 导入 {{count}} 个 callout 类型。",
 	"notice.importedSettings": "已导入插件设置。",

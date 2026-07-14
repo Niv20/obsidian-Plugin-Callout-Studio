@@ -133,7 +133,7 @@ export const vi: Record<string, string> = {
 	"notice.importedCSS": "Đã nhập {{count}} loại callout từ đoạn CSS.",
 	"notice.noNewCSS": "Không tìm thấy loại callout mới trong đoạn CSS.",
 	"notice.failedCSS": "Không đọc được thư mục đoạn CSS.",
-	"notice.exported": "Đã xuất callouts vào callout-studio-callouts.json",
+	"notice.exported": "Đã xuất callouts vào callout-studio-export.json",
 	"notice.invalidJSON": "Định dạng JSON không hợp lệ: cần một mảng.",
 	"notice.importedJSON": "Đã nhập {{count}} loại callout từ JSON.",
 	"notice.importedSettings": "Đã nhập cài đặt plugin.",

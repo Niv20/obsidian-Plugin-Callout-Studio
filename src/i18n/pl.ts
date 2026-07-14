@@ -133,7 +133,7 @@ export const pl: Record<string, string> = {
 	"notice.importedCSS": "Zaimportowano {{count}} typ(ów) callout z fragmentów CSS.",
 	"notice.noNewCSS": "Nie znaleziono nowych typów callout w fragmentach CSS.",
 	"notice.failedCSS": "Nie można odczytać folderu fragmentów CSS.",
-	"notice.exported": "Callouts wyeksportowane do callout-studio-callouts.json",
+	"notice.exported": "Callouts wyeksportowane do callout-studio-export.json",
 	"notice.invalidJSON": "Nieprawidłowy format JSON: oczekiwano tablicy.",
 	"notice.importedJSON": "Zaimportowano {{count}} typ(ów) callout z JSON.",
 	"notice.importedSettings": "Zaimportowano ustawienia wtyczki.",

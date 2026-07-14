@@ -133,7 +133,7 @@ export const id: Record<string, string> = {
 	"notice.importedCSS": "{{count}} tipe callout diimpor dari cuplikan CSS.",
 	"notice.noNewCSS": "Tidak ada tipe callout baru yang ditemukan di cuplikan CSS.",
 	"notice.failedCSS": "Gagal membaca folder cuplikan CSS.",
-	"notice.exported": "Callout diekspor ke callout-studio-callouts.json",
+	"notice.exported": "Callout diekspor ke callout-studio-export.json",
 	"notice.invalidJSON": "Format JSON tidak valid: diharapkan array.",
 	"notice.importedJSON": "{{count}} tipe callout diimpor dari JSON.",
 	"notice.importedSettings": "Pengaturan plugin diimpor.",

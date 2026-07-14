@@ -133,7 +133,7 @@ export const hu: Record<string, string> = {
 	"notice.importedCSS": "{{count}} callout-típus importálva CSS-részletekből.",
 	"notice.noNewCSS": "Nem találhatók új callout-típusok a CSS-részletekben.",
 	"notice.failedCSS": "A CSS-részletek mappa nem olvasható.",
-	"notice.exported": "A callout-ok exportálva: callout-studio-callouts.json",
+	"notice.exported": "A callout-ok exportálva: callout-studio-export.json",
 	"notice.invalidJSON": "Érvénytelen JSON-formátum: tömböt vártunk.",
 	"notice.importedJSON": "{{count}} callout-típus importálva JSON-ból.",
 	"notice.importedSettings": "A bővítmény beállításai importálva.",

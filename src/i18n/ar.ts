@@ -133,7 +133,7 @@ export const ar: Record<string, string> = {
 	"notice.importedCSS": "تم استيراد {{count}} نوع callout من مقتطفات CSS.",
 	"notice.noNewCSS": "لم يتم العثور على أنواع callout جديدة في مقتطفات CSS.",
 	"notice.failedCSS": "فشل قراءة مجلد مقتطفات CSS.",
-	"notice.exported": "تم تصدير الـ callouts إلى callout-studio-callouts.json",
+	"notice.exported": "تم تصدير الـ callouts إلى callout-studio-export.json",
 	"notice.invalidJSON": "تنسيق JSON غير صالح: كان متوقعاً مصفوفة.",
 	"notice.importedJSON": "تم استيراد {{count}} نوع callout من JSON.",
 	"notice.importedSettings": "تم استيراد إعدادات الإضافة.",

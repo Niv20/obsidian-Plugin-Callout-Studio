@@ -133,7 +133,7 @@ export const th: Record<string, string> = {
 	"notice.importedCSS": "นำเข้า {{count}} ประเภท callout จาก CSS snippet แล้ว",
 	"notice.noNewCSS": "ไม่พบประเภท callout ใหม่ใน CSS snippet",
 	"notice.failedCSS": "ไม่สามารถอ่านโฟลเดอร์ CSS snippet ได้",
-	"notice.exported": "ส่งออก callout ไปยัง callout-studio-callouts.json แล้ว",
+	"notice.exported": "ส่งออก callout ไปยัง callout-studio-export.json แล้ว",
 	"notice.invalidJSON": "รูปแบบ JSON ไม่ถูกต้อง: คาดว่าเป็น array",
 	"notice.importedJSON": "นำเข้า {{count}} ประเภท callout จาก JSON แล้ว",
 	"notice.importedSettings": "นำเข้าการตั้งค่าปลั๊กอินแล้ว",

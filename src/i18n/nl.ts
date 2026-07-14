@@ -133,7 +133,7 @@ export const nl: Record<string, string> = {
 	"notice.importedCSS": "{{count}} callout-type(s) geïmporteerd uit CSS-fragmenten.",
 	"notice.noNewCSS": "Geen nieuwe callout-types gevonden in CSS-fragmenten.",
 	"notice.failedCSS": "Kan de map met CSS-fragmenten niet lezen.",
-	"notice.exported": "Callouts geëxporteerd naar callout-studio-callouts.json",
+	"notice.exported": "Callouts geëxporteerd naar callout-studio-export.json",
 	"notice.invalidJSON": "Ongeldig JSON-formaat: een array werd verwacht.",
 	"notice.importedJSON": "{{count}} callout-type(s) geïmporteerd uit JSON.",
 	"notice.importedSettings": "Plugin-instellingen geïmporteerd.",

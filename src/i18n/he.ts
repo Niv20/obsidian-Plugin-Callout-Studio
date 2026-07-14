@@ -178,7 +178,7 @@ export const he: Record<string, string> = {
 	"notice.importedCSS": "יובאו {{count}} סוגי תיבות־הבלטה ממקטעי CSS.",
 	"notice.noNewCSS": "לא נמצאו סוגי תיבות־הבלטה חדשים במקטעי ה־CSS.",
 	"notice.failedCSS": "קריאת תיקיית מקטעי ה־CSS נכשלה.",
-	"notice.exported": "תיבות־ההבלטה יוצאו לקובץ callout-studio-callouts.json",
+	"notice.exported": "תיבות־ההבלטה יוצאו לקובץ callout-studio-export.json",
 	"notice.invalidJSON": "פורמט JSON לא תקין: צפוי מערך (Array).",
 	"notice.importedJSON": "יובאו {{count}} סוגי תיבות־הבלטה מתוך JSON.",
 	"notice.importedSettings": "הגדרות התוסף יובאו.",

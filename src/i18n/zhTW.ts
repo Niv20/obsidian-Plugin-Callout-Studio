@@ -116,7 +116,7 @@ export const zhTW: Record<string, string> = {
 	"notice.importedCSS": "已從 CSS 片段匯入 {{count}} 個 callout 類型。",
 	"notice.noNewCSS": "在 CSS 片段中未找到新的 callout 類型。",
 	"notice.failedCSS": "讀取 CSS 片段資料夾失敗。",
-	"notice.exported": "Callout 已匯出到 callout-studio-callouts.json",
+	"notice.exported": "Callout 已匯出到 callout-studio-export.json",
 	"notice.invalidJSON": "無效的 JSON 格式：期望一個陣列。",
 	"notice.importedJSON": "已從 JSON 匯入 {{count}} 個 callout 類型。",
 	"notice.importedSettings": "已匯入外掛設定。",

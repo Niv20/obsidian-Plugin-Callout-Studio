@@ -133,7 +133,7 @@ export const fa: Record<string, string> = {
 	"notice.importedCSS": "{{count}} نوع callout از قطعات CSS وارد شد.",
 	"notice.noNewCSS": "هیچ نوع callout جدیدی در قطعات CSS یافت نشد.",
 	"notice.failedCSS": "خواندن پوشه قطعات CSS انجام نشد.",
-	"notice.exported": "callout‌ها در callout-studio-callouts.json صادر شدند",
+	"notice.exported": "callout‌ها در callout-studio-export.json صادر شدند",
 	"notice.invalidJSON": "قالب JSON نامعتبر: آرایه مورد انتظار بود.",
 	"notice.importedJSON": "{{count}} نوع callout از JSON وارد شد.",
 	"notice.importedSettings": "تنظیمات افزونه وارد شد.",

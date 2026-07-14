@@ -116,7 +116,7 @@ export const fi: Record<string, string> = {
 	"notice.importedCSS": "{{count}} callout-tyyppiä tuotu CSS-katkelmista.",
 	"notice.noNewCSS": "CSS-katkelmista ei löydetty uusia callout-tyyppejä.",
 	"notice.failedCSS": "CSS-katkelmakansion lukeminen epäonnistui.",
-	"notice.exported": "Calloutit viety tiedostoon callout-studio-callouts.json",
+	"notice.exported": "Calloutit viety tiedostoon callout-studio-export.json",
 	"notice.invalidJSON": "Virheellinen JSON-muoto: odotettiin taulukkoa.",
 	"notice.importedJSON": "{{count}} callout-tyyppiä tuotu JSONista.",
 	"notice.importedSettings": "Lisäosan asetukset tuotu.",

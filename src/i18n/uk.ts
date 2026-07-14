@@ -133,7 +133,7 @@ export const uk: Record<string, string> = {
 	"notice.importedCSS": "Імпортовано {{count}} тип(ів) callout зі сніппетів CSS.",
 	"notice.noNewCSS": "Нових типів callout у сніппетах CSS не знайдено.",
 	"notice.failedCSS": "Не вдалося прочитати папку сніппетів CSS.",
-	"notice.exported": "Callout експортовано до callout-studio-callouts.json",
+	"notice.exported": "Callout експортовано до callout-studio-export.json",
 	"notice.invalidJSON": "Неправильний формат JSON: очікувався масив.",
 	"notice.importedJSON": "Імпортовано {{count}} тип(ів) callout з JSON.",
 	"notice.importedSettings": "Імпортовано налаштування плагіна.",

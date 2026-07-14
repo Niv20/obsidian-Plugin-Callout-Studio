@@ -133,7 +133,7 @@ export const sv: Record<string, string> = {
 	"notice.importedCSS": "{{count}} callout-typ(er) importerade från CSS-kodavsnitt.",
 	"notice.noNewCSS": "Inga nya callout-typer hittades i CSS-kodavsnitt.",
 	"notice.failedCSS": "Det gick inte att läsa mappen med CSS-kodavsnitt.",
-	"notice.exported": "Callouts exporterade till callout-studio-callouts.json",
+	"notice.exported": "Callouts exporterade till callout-studio-export.json",
 	"notice.invalidJSON": "Ogiltigt JSON-format: en array förväntades.",
 	"notice.importedJSON": "{{count}} callout-typ(er) importerade från JSON.",
 	"notice.importedSettings": "Tilläggets inställningar importerade.",

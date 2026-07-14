@@ -133,7 +133,7 @@ export const hi: Record<string, string> = {
 	"notice.importedCSS": "CSS स्निपेट से {{count}} callout प्रकार आयात किए गए।",
 	"notice.noNewCSS": "CSS स्निपेट में कोई नए callout प्रकार नहीं मिले।",
 	"notice.failedCSS": "CSS स्निपेट फ़ोल्डर पढ़ने में विफल।",
-	"notice.exported": "Callouts को callout-studio-callouts.json में निर्यात किया गया",
+	"notice.exported": "Callouts को callout-studio-export.json में निर्यात किया गया",
 	"notice.invalidJSON": "अमान्य JSON प्रारूप: array अपेक्षित था।",
 	"notice.importedJSON": "JSON से {{count}} callout प्रकार आयात किए गए।",
 	"notice.importedSettings": "प्लगइन सेटिंग आयात की गईं।",

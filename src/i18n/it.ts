@@ -133,7 +133,7 @@ export const it: Record<string, string> = {
 	"notice.importedCSS": "Importato/i {{count}} tipo/i di callout dagli snippet CSS.",
 	"notice.noNewCSS": "Nessun nuovo tipo di callout trovato negli snippet CSS.",
 	"notice.failedCSS": "Impossibile leggere la cartella degli snippet CSS.",
-	"notice.exported": "Callout esportati in callout-studio-callouts.json",
+	"notice.exported": "Callout esportati in callout-studio-export.json",
 	"notice.invalidJSON": "Formato JSON non valido: atteso un array.",
 	"notice.importedJSON": "Importato/i {{count}} tipo/i di callout da JSON.",
 	"notice.importedSettings": "Impostazioni del plugin importate.",
