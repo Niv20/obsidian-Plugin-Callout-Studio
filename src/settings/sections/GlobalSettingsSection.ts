@@ -68,10 +68,11 @@ export function renderGlobalSettingsSection(
 		new Setting(containerEl)
 			.setName(label)
 			.setDesc(renderDescWithCode(desc))
-			.addButton((btn) =>
+			.addButton((btn) => {
 				btn
 					.setButtonText(t("settings.globalSettingsCustomize"))
-					.onClick(() => new GlobalStyleModal(ctx.plugin, role).open()),
-			);
+					.onClick(() => new GlobalStyleModal(ctx.plugin, role).open());
+				btn.buttonEl.addClass("cs-settings-neutral-btn");
+			});
 	}
 }
