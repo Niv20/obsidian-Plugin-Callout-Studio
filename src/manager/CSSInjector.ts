@@ -374,26 +374,46 @@ export class CSSInjector {
 		const scale = def.iconSize ?? 1;
 		if (ox === 0 && oy === 0 && scale === 1) return "";
 
-		const transforms: string[] = [];
-		if (ox !== 0 || oy !== 0)
-			transforms.push(`translate(${ox}px, ${oy}px)`);
-		if (scale !== 1) transforms.push(`scale(${scale})`);
+		const buildTransform = (extraY?: string): string => {
+			const transforms: string[] = [];
+			if (ox !== 0 || oy !== 0 || extraY) {
+				const y = extraY ? `calc(${oy}px + ${extraY})` : `${oy}px`;
+				transforms.push(`translate(${ox}px, ${y})`);
+			}
+			if (scale !== 1) transforms.push(`scale(${scale})`);
+			return transforms.join(" ");
+		};
 
 		// The adjustment applies to every surface the callout's icon renders
 		// on: the regular callout title, the heading-bar token, and the inline
 		// pill (ref tokens in outline/links stay untouched — they are too
-		// small for pixel offsets to make sense).
-		const selectors = [
+		// small for pixel offsets to make sense). The heading token also
+		// bakes in the static default optical nudge from styles.css
+		// (--cs-heading-icon-offset) — this rule has higher specificity than
+		// that default and would otherwise silently cancel it out the moment
+		// the user touches any offset/scale slider.
+		const baseSelectors = [
 			`.callout[data-callout="${def.id}"] > .callout-title > .callout-icon`,
-			`.${CSS_HEADING_TOKEN}[data-callout="${def.id}"] > .${CSS_TOKEN_ICON}`,
 			`.${CSS_INLINE_TOKEN}[data-callout="${def.id}"] > .${CSS_TOKEN_ICON}`,
 		];
-		return (
-			`${selectors.join(",\n")} {\n` +
-			`  transform: ${transforms.join(" ")};\n` +
-			`  transform-origin: center;\n` +
-			`}`
-		);
+		const headingSelector = `.${CSS_HEADING_TOKEN}[data-callout="${def.id}"] > .${CSS_TOKEN_ICON}`;
+
+		const parts: string[] = [
+			`${headingSelector} {\n` +
+				`  transform: ${buildTransform("var(--cs-heading-icon-offset, 0.06em)")};\n` +
+				`  transform-origin: center;\n` +
+				`}`,
+		];
+		const baseTransform = buildTransform();
+		if (baseTransform) {
+			parts.unshift(
+				`${baseSelectors.join(",\n")} {\n` +
+					`  transform: ${baseTransform};\n` +
+					`  transform-origin: center;\n` +
+					`}`,
+			);
+		}
+		return parts.join("\n\n");
 	}
 
 	private getIconCSS(def: CalloutDefinition): string {

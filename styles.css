@@ -578,7 +578,6 @@ button.callout-studio-icon-picker-loading {
 	background: var(--modal-background);
 }
 
-
 .callout-studio-editor-modal > .modal-content > :first-child {
 	margin-top: 0;
 	padding-top: 8px;
@@ -2351,6 +2350,15 @@ input.cs-input-invalid:focus {
 .cs-heading-token .cs-callout-icon svg {
 	width: 1em;
 	height: 1em;
+}
+
+/* Nudge the heading callout icon down by a small default. With the icon
+   vertically centered on the text line-box it reads a touch high against the
+   heading's cap-height, so this offset drops it slightly to line up optically
+   with the regular and inline callout icons. Baked-in default (no UI control);
+   overridable via the --cs-heading-icon-offset var in a CSS snippet. */
+.cs-heading-token .cs-callout-icon {
+	transform: translateY(var(--cs-heading-icon-offset, 0.1em));
 }
 
 /* Fold chevron trailing a heading callout (Live Preview). Rendered as an
