@@ -106,6 +106,8 @@ export const zh: Record<string, string> = {
 	"settings.previewCalloutTitle": "示例 callout",
 	"settings.previewCalloutContent": "Lorem ipsum dolor sit amet，consectetur adipiscing elit。",
 
+	// Settings — Saved color palettes
+	"settings.customPalettesEmpty": "当前没有已保存的调色板。",
 	"settings.enableAutocomplete": "启用 [! 自动完成",
 	"settings.enableAutocompleteDesc": '在编辑器块引用中输入"[!"时显示建议。从列表中选择 callout 类型以插入完整的 callout 标题。',
 

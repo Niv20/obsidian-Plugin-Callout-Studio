@@ -95,6 +95,8 @@ export const da: Record<string, string> = {
 	"settings.previewTitle": "Forhåndsvisning",
 	"settings.previewCalloutTitle": "Eksempel-callout",
 	"settings.previewCalloutContent": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+	// Settings — Saved color palettes
+	"settings.customPalettesEmpty": "Ingen gemte paletter i øjeblikket.",
 	"settings.enableAutocomplete": "Aktivér [! autofuldførelse",
 	"settings.enableAutocompleteDesc": 'Viser forslag, når du skriver "[!" inde i et blokcitat i editoren. Vælg en callout-type fra listen for at indsætte en komplet callout-overskrift.',
 	"settings.openHotkeys": "Callout Studio-genveje",

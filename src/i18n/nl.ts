@@ -106,6 +106,8 @@ export const nl: Record<string, string> = {
 	"settings.previewCalloutTitle": "Voorbeeld callout",
 	"settings.previewCalloutContent": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
 
+	// Settings — Saved color palettes
+	"settings.customPalettesEmpty": "Momenteel geen opgeslagen paletten.",
 	"settings.enableAutocomplete": "[! Automatisch aanvullen inschakelen",
 	"settings.enableAutocompleteDesc": 'Toont suggesties wanneer u "[!" typt in een blokcitaat in de editor. Kies een callout-type uit de lijst om een volledig callout-koptekst in te voegen.',
 

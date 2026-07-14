@@ -95,6 +95,8 @@ export const fi: Record<string, string> = {
 	"settings.previewTitle": "Esikatselu",
 	"settings.previewCalloutTitle": "Esimerkkicallout",
 	"settings.previewCalloutContent": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+	// Settings — Saved color palettes
+	"settings.customPalettesEmpty": "Ei tallennettuja paletteja tällä hetkellä.",
 	"settings.enableAutocomplete": "Ota [! automaattinen täydennys käyttöön",
 	"settings.enableAutocompleteDesc": 'Näyttää ehdotuksia, kun kirjoitat "[!" lainausblokissa editorissa. Valitse callout-tyyppi luettelosta lisätäksesi täydellisen callout-otsikon.',
 	"settings.openHotkeys": "Callout Studio -oikotiet",

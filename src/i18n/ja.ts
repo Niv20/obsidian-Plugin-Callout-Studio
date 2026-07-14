@@ -106,6 +106,8 @@ export const ja: Record<string, string> = {
 	"settings.previewCalloutTitle": "サンプルcallout",
 	"settings.previewCalloutContent": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
 
+	// Settings — Saved color palettes
+	"settings.customPalettesEmpty": "現在保存済みのパレットはありません。",
 	"settings.enableAutocomplete": "[! オートコンプリートを有効にする",
 	"settings.enableAutocompleteDesc": 'エディターの引用ブロック内で"[!"と入力すると候補を表示します。リストからcalloutタイプを選択して完全なcalloutヘッダーを挿入します。',
 

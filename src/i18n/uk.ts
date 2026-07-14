@@ -106,6 +106,8 @@ export const uk: Record<string, string> = {
 	"settings.previewCalloutTitle": "Приклад callout",
 	"settings.previewCalloutContent": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
 
+	// Settings — Saved color palettes
+	"settings.customPalettesEmpty": "Наразі немає збережених палітр.",
 	"settings.enableAutocomplete": "Увімкнути автодоповнення [!",
 	"settings.enableAutocompleteDesc": 'Показує підказки при введенні «[!» у блоку цитати в редакторі. Виберіть тип callout зі списку, щоб вставити повний заголовок callout.',
 

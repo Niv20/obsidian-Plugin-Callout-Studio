@@ -106,6 +106,8 @@ export const vi: Record<string, string> = {
 	"settings.previewCalloutTitle": "Callout mẫu",
 	"settings.previewCalloutContent": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
 
+	// Settings — Saved color palettes
+	"settings.customPalettesEmpty": "Hiện không có bảng màu đã lưu.",
 	"settings.enableAutocomplete": "Bật tự động hoàn thành [!",
 	"settings.enableAutocompleteDesc": 'Hiển thị gợi ý khi bạn gõ "[!" trong trích dẫn khối trong trình soạn thảo. Chọn loại callout từ danh sách để chèn tiêu đề callout đầy đủ.',
 

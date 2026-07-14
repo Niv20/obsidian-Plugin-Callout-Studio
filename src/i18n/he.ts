@@ -141,6 +141,8 @@ export const he: Record<string, string> = {
 	"settings.previewCalloutContent":
 		"לורם איפסום דולור סיט אמט, קונסקטורר אדיפיסינג אלית. סד דו אייסמוד טמפור אינסידידונט אוט לבורה את דולורה מגנה אליקה. אוט אנים אד מינים ונאים, קויס נוסטרוד אקסרסיטאשן אולמקו לבוריס.",
 
+	// Settings — Saved color palettes
+	"settings.customPalettesEmpty": "כרגע אין פלטות צבעים שמורות.",
 	// Settings — Autocomplete
 	"settings.enableAutocomplete": "השלמה אוטומטית בעת הקלדת [!",
 	"settings.enableAutocompleteDesc":

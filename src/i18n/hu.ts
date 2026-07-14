@@ -106,6 +106,8 @@ export const hu: Record<string, string> = {
 	"settings.previewCalloutTitle": "Minta callout",
 	"settings.previewCalloutContent": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
 
+	// Settings — Saved color palettes
+	"settings.customPalettesEmpty": "Jelenleg nincs mentett paletta.",
 	"settings.enableAutocomplete": "[! Automatikus kiegészítés engedélyezése",
 	"settings.enableAutocompleteDesc": 'Javaslatokat jelenít meg, amikor "[!" szöveget gépel egy blokkidézet-belsejébe a szerkesztőben. Válasszon callout-típust a listából egy teljes callout fejléc beillesztéséhez.',
 

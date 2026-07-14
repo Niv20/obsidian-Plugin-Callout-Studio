@@ -106,6 +106,8 @@ export const ar: Record<string, string> = {
 	"settings.previewCalloutTitle": "callout نموذجي",
 	"settings.previewCalloutContent": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
 
+	// Settings — Saved color palettes
+	"settings.customPalettesEmpty": "لا توجد لوحات ألوان محفوظة حالياً.",
 	"settings.enableAutocomplete": "تفعيل الإكمال التلقائي [!",
 	"settings.enableAutocompleteDesc": 'يعرض اقتراحات عند كتابة "[!" داخل اقتباس محظور في المحرر. اختر نوع callout من القائمة لإدراج عنوان callout كامل.',
 

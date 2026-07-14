@@ -106,6 +106,8 @@ export const hi: Record<string, string> = {
 	"settings.previewCalloutTitle": "उदाहरण callout",
 	"settings.previewCalloutContent": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
 
+	// Settings — Saved color palettes
+	"settings.customPalettesEmpty": "फिलहाल कोई सहेजा गया पैलेट नहीं।",
 	"settings.enableAutocomplete": "[! स्वतः पूर्णता सक्षम करें",
 	"settings.enableAutocompleteDesc": 'एडिटर में ब्लॉककोट के अंदर "[!" टाइप करने पर सुझाव दिखाता है। पूरा callout हेडर डालने के लिए सूची से callout प्रकार चुनें।',
 

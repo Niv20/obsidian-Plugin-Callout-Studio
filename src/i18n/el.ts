@@ -95,6 +95,8 @@ export const el: Record<string, string> = {
 	"settings.previewTitle": "Προεπισκόπηση",
 	"settings.previewCalloutTitle": "Παράδειγμα callout",
 	"settings.previewCalloutContent": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+	// Settings — Saved color palettes
+	"settings.customPalettesEmpty": "Δεν υπάρχουν αποθηκευμένες παλέτες προς το παρόν.",
 	"settings.enableAutocomplete": "Ενεργοποίηση αυτόματης συμπλήρωσης [!",
 	"settings.enableAutocompleteDesc": 'Εμφανίζει προτάσεις όταν πληκτρολογείτε "[!" μέσα σε αποσπασματική παράθεση στον επεξεργαστή. Επιλέξτε τύπο callout από τη λίστα για εισαγωγή πλήρους επικεφαλίδας callout.',
 	"settings.openHotkeys": "Συντομεύσεις Callout Studio",

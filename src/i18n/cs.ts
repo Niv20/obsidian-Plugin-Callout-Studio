@@ -106,6 +106,8 @@ export const cs: Record<string, string> = {
 	"settings.previewCalloutTitle": "Ukázkový callout",
 	"settings.previewCalloutContent": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
 
+	// Settings — Saved color palettes
+	"settings.customPalettesEmpty": "Momentálně žádné uložené palety.",
 	"settings.enableAutocomplete": "Povolit automatické doplňování [!",
 	"settings.enableAutocompleteDesc": 'Zobrazuje návrhy při psaní "[!" v bloku citace v editoru. Vyberte typ callout ze seznamu a vložte úplnou hlavičku callout.',
 

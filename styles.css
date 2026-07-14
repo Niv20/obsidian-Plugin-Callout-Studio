@@ -1958,21 +1958,11 @@ input.cs-input-invalid:focus {
 }
 
 /* Saved palettes list (settings section) */
-.cs-palettes-desc {
-	margin-bottom: 8px;
-}
-
 .cs-palette-list {
 	display: flex;
 	flex-direction: column;
 	gap: 6px;
 	margin-bottom: 12px;
-}
-
-.cs-palette-list-empty {
-	color: var(--text-muted);
-	font-size: var(--font-ui-smaller);
-	padding: 4px 12px 8px;
 }
 
 .cs-palette-list-row .cs-palette-list-name {

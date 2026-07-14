@@ -106,6 +106,8 @@ export const th: Record<string, string> = {
 	"settings.previewCalloutTitle": "callout ตัวอย่าง",
 	"settings.previewCalloutContent": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
 
+	// Settings — Saved color palettes
+	"settings.customPalettesEmpty": "ยังไม่มีชุดสีที่บันทึกไว้ในขณะนี้",
 	"settings.enableAutocomplete": "เปิดใช้การเติมข้อความอัตโนมัติ [!",
 	"settings.enableAutocompleteDesc": 'แสดงคำแนะนำเมื่อพิมพ์ "[!" ในบล็อกอ้างอิงในตัวแก้ไข เลือกประเภท callout จากรายการเพื่อแทรกส่วนหัว callout ที่สมบูรณ์',
 

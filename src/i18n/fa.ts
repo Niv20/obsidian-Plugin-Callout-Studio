@@ -106,6 +106,8 @@ export const fa: Record<string, string> = {
 	"settings.previewCalloutTitle": "callout نمونه",
 	"settings.previewCalloutContent": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
 
+	// Settings — Saved color palettes
+	"settings.customPalettesEmpty": "در حال حاضر پالت ذخیره‌شده‌ای وجود ندارد.",
 	"settings.enableAutocomplete": "فعال‌سازی تکمیل خودکار [!",
 	"settings.enableAutocompleteDesc": 'هنگام تایپ "[!" در یک بلوک نقل‌قول در ویرایشگر، پیشنهادات نمایش می‌دهد. یک نوع callout از لیست انتخاب کنید تا سرتیتر کامل callout درج شود.',
 

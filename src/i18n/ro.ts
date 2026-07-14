@@ -106,6 +106,8 @@ export const ro: Record<string, string> = {
 	"settings.previewCalloutTitle": "Callout exemplu",
 	"settings.previewCalloutContent": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
 
+	// Settings — Saved color palettes
+	"settings.customPalettesEmpty": "Nicio paletă salvată deocamdată.",
 	"settings.enableAutocomplete": "Activați completarea automată [!",
 	"settings.enableAutocompleteDesc": 'Afișează sugestii când tastați "[!" într-un citat bloc în editor. Alegeți un tip de callout din listă pentru a insera un antet callout complet.',
 

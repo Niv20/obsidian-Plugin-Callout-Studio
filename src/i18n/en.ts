@@ -167,11 +167,8 @@ export const en: Record<string, string> = {
 
 	// Settings — Saved color palettes
 	"settings.customPalettes": "Saved color palettes",
-	"settings.customPalettesDesc":
-		"Reusable color sets available in the callout editor's preset list. Editing or deleting a palette never changes callouts that already use its colors.",
 	"settings.newPalette": "New palette",
-	"settings.customPalettesEmpty":
-		"No saved palettes yet. Create one here, or pick a new color in the callout editor and save it.",
+	"settings.customPalettesEmpty": "No saved palettes yet.",
 	"settings.editPaletteAria": "Edit palette {{name}}",
 	"settings.deletePaletteAria": "Delete palette {{name}}",
 	"settings.deletePaletteConfirm":

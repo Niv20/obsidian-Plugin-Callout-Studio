@@ -106,6 +106,8 @@ export const ru: Record<string, string> = {
 	"settings.previewCalloutTitle": "Пример callout",
 	"settings.previewCalloutContent": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
 
+	// Settings — Saved color palettes
+	"settings.customPalettesEmpty": "Сохранённых палитр пока нет.",
 	"settings.enableAutocomplete": "Включить автодополнение [!",
 	"settings.enableAutocompleteDesc": 'Показывает предложения при вводе "[!" в блочной цитате в редакторе. Выберите тип callout из списка, чтобы вставить полный заголовок callout.',
 

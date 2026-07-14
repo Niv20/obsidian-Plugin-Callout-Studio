@@ -95,6 +95,8 @@ export const bg: Record<string, string> = {
 	"settings.previewTitle": "Преглед",
 	"settings.previewCalloutTitle": "Примерен callout",
 	"settings.previewCalloutContent": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+	// Settings — Saved color palettes
+	"settings.customPalettesEmpty": "Засега няма запазени палитри.",
 	"settings.enableAutocomplete": "Активиране на автоматично довършване [!",
 	"settings.enableAutocompleteDesc": 'Показва предложения при въвеждане на "[!" в блоков цитат в редактора. Изберете тип callout от списъка, за да вмъкнете пълно заглавие на callout.',
 	"settings.openHotkeys": "Клавишни комбинации на Callout Studio",

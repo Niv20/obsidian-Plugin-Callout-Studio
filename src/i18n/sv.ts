@@ -106,6 +106,8 @@ export const sv: Record<string, string> = {
 	"settings.previewCalloutTitle": "Exempelcallout",
 	"settings.previewCalloutContent": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
 
+	// Settings — Saved color palettes
+	"settings.customPalettesEmpty": "Inga sparade paletter för tillfället.",
 	"settings.enableAutocomplete": "Aktivera [! autokomplettering",
 	"settings.enableAutocompleteDesc": 'Visar förslag när du skriver "[!" i ett blockcitat i editorn. Välj en callout-typ från listan för att infoga en komplett callout-rubrik.',
 

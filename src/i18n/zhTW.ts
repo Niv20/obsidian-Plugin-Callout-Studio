@@ -95,6 +95,8 @@ export const zhTW: Record<string, string> = {
 	"settings.previewTitle": "預覽",
 	"settings.previewCalloutTitle": "範例 callout",
 	"settings.previewCalloutContent": "Lorem ipsum dolor sit amet，consectetur adipiscing elit。",
+	// Settings — Saved color palettes
+	"settings.customPalettesEmpty": "目前沒有已儲存的調色盤。",
 	"settings.enableAutocomplete": "啟用 [! 自動完成",
 	"settings.enableAutocompleteDesc": '在編輯器區塊引用中輸入「[!」時顯示建議。從清單中選擇 callout 類型以插入完整的 callout 標題。',
 	"settings.openHotkeys": "Callout Studio 快速鍵",

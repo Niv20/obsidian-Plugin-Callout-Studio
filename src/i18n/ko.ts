@@ -106,6 +106,8 @@ export const ko: Record<string, string> = {
 	"settings.previewCalloutTitle": "예시 callout",
 	"settings.previewCalloutContent": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
 
+	// Settings — Saved color palettes
+	"settings.customPalettesEmpty": "현재 저장된 팔레트가 없습니다.",
 	"settings.enableAutocomplete": "[! 자동 완성 활성화",
 	"settings.enableAutocompleteDesc": '편집기의 인용 블록에서 "[!"를 입력하면 제안을 표시합니다. 목록에서 callout 유형을 선택하여 완전한 callout 헤더를 삽입합니다.',
 

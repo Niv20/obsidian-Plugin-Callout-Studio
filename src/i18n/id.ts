@@ -106,6 +106,8 @@ export const id: Record<string, string> = {
 	"settings.previewCalloutTitle": "Callout contoh",
 	"settings.previewCalloutContent": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
 
+	// Settings — Saved color palettes
+	"settings.customPalettesEmpty": "Tidak ada palet tersimpan untuk saat ini.",
 	"settings.enableAutocomplete": "Aktifkan pelengkapan otomatis [!",
 	"settings.enableAutocompleteDesc": 'Menampilkan saran saat Anda mengetik "[!" di dalam blockquote di editor. Pilih tipe callout dari daftar untuk menyisipkan header callout lengkap.',
 

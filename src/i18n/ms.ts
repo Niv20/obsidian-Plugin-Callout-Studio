@@ -95,6 +95,8 @@ export const ms: Record<string, string> = {
 	"settings.previewTitle": "Pratonton",
 	"settings.previewCalloutTitle": "Callout contoh",
 	"settings.previewCalloutContent": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+	// Settings — Saved color palettes
+	"settings.customPalettesEmpty": "Tiada palet tersimpan buat masa ini.",
 	"settings.enableAutocomplete": "Aktifkan lengkap automatik [!",
 	"settings.enableAutocompleteDesc": 'Menunjukkan cadangan apabila anda menaip "[!" dalam sebutan blok dalam editor. Pilih jenis callout dari senarai untuk memasukkan pengepala callout lengkap.',
 	"settings.openHotkeys": "Pintasan Callout Studio",

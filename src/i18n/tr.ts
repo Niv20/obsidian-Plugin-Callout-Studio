@@ -106,6 +106,8 @@ export const tr: Record<string, string> = {
 	"settings.previewCalloutTitle": "Örnek callout",
 	"settings.previewCalloutContent": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
 
+	// Settings — Saved color palettes
+	"settings.customPalettesEmpty": "Şu an kaydedilmiş palet yok.",
 	"settings.enableAutocomplete": "[! Otomatik tamamlamayı etkinleştir",
 	"settings.enableAutocompleteDesc": 'Düzenleyicide blok alıntı içinde "[!" yazdığınızda öneriler gösterir. Tam bir callout başlığı eklemek için listeden bir callout türü seçin.',
 

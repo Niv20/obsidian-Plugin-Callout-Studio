@@ -106,6 +106,8 @@ export const es: Record<string, string> = {
 	"settings.previewCalloutTitle": "Callout de ejemplo",
 	"settings.previewCalloutContent": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
 
+	// Settings — Saved color palettes
+	"settings.customPalettesEmpty": "Por ahora no hay paletas guardadas.",
 	"settings.enableAutocomplete": "Habilitar autocompletar [!",
 	"settings.enableAutocompleteDesc": 'Muestra sugerencias cuando escribe "[!" dentro de una cita en el editor. Elija un tipo de callout de la lista para insertar un encabezado de callout completo.',
 

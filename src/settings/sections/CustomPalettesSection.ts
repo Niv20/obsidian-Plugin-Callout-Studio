@@ -49,11 +49,6 @@ export function renderCustomPalettesSection(
 				renderList();
 			}),
 	);
-	containerEl.createDiv({
-		cls: "setting-item-description cs-palettes-desc",
-		text: t("settings.customPalettesDesc"),
-	});
-
 	const listEl = containerEl.createDiv({ cls: "cs-palette-list" });
 
 	const editPalette = async (palette: CustomPalette): Promise<void> => {
@@ -89,7 +84,7 @@ export function renderCustomPalettesSection(
 		);
 		if (palettes.length === 0) {
 			listEl.createDiv({
-				cls: "cs-palette-list-empty",
+				cls: "callout-studio-empty-state",
 				text: t("settings.customPalettesEmpty"),
 			});
 			return;
