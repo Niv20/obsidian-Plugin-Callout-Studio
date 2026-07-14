@@ -125,9 +125,9 @@ export const ar: Record<string, string> = {
 	"settings.vaultStatsButton": "عرض الإحصائيات",
 	"settings.vaultStatsScanning": "جارٍ المسح",
 	"settings.resetAll": "إعادة التعيين",
-	"settings.resetAllDesc": "يحذف جميع callouts المستخدم، ويعيد تعيين الـ callouts المدمجة والأنماط العامة (الحدود ومقياس الخط والشكل) وSVGs Material المحملة.",
+	"settings.resetAllDesc": "يحذف جميع callouts المستخدم، ويعيد تعيين الـ callouts المدمجة والأنماط العامة (الحدود ومقياس الخط والشكل)، ولوحات الألوان المحفوظة، وتخصيص قائمة النقر بزر الماوس الأيمن، وSVGs Material المحملة.",
 	"settings.resetAllButton": "إعادة تعيين الكل",
-	"settings.resetAllConfirm": "سيؤدي هذا إلى حذف جميع الـ callouts المخصصة، وإعادة تعيين الـ callouts المدمجة والأنماط العامة وجميع SVGs Material المخزنة مؤقتاً. لا يمكن التراجع عن هذا الإجراء. هل أنت متأكد؟",
+	"settings.resetAllConfirm": "سيؤدي هذا إلى حذف جميع الـ callouts المخصصة، وإعادة تعيين الـ callouts المدمجة والأنماط العامة، ولوحات الألوان المحفوظة، وتخصيص قائمة النقر بزر الماوس الأيمن، وجميع SVGs Material المخزنة مؤقتاً. لا يمكن التراجع عن هذا الإجراء. هل أنت متأكد؟",
 	"notice.resetAllDone": "تمت إعادة تعيين كل شيء إلى الإعدادات الافتراضية.",
 
 	"notice.importedCSS": "تم استيراد {{count}} نوع callout من مقتطفات CSS.",

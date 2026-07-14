@@ -204,10 +204,10 @@ export const en: Record<string, string> = {
 	"settings.vaultStatsScanning": "Scanning",
 	"settings.resetAll": "Reset",
 	"settings.resetAllDesc":
-		"Delete all user callouts, reset built-in callouts, global styles (borders, font scale, shape), and downloaded Material SVGs.",
+		"Delete all user callouts, reset built-in callouts, global styles (borders, font scale, shape), saved color palettes, the right-click menu customization, and downloaded Material SVGs.",
 	"settings.resetAllButton": "Reset everything",
 	"settings.resetAllConfirm":
-		"This will delete all custom callouts, reset built-in callouts, global styles, and all cached Material SVGs. This action cannot be undone. Are you sure?",
+		"This will delete all custom callouts, reset built-in callouts, global styles, saved color palettes, the right-click menu customization, and all cached Material SVGs. This action cannot be undone. Are you sure?",
 	"notice.resetAllDone": "Everything has been reset to defaults.",
 
 	// Notices

@@ -125,9 +125,9 @@ export const hu: Record<string, string> = {
 	"settings.vaultStatsButton": "Statisztikák megtekintése",
 	"settings.vaultStatsScanning": "Szkennelés",
 	"settings.resetAll": "Visszaállítás",
-	"settings.resetAllDesc": "Törli az összes felhasználói callout-ot, visszaállítja a beépített callout-okat, a globális stílusokat (szegélyek, betűméret-arány, alak) és a letöltött Material SVG-ket.",
+	"settings.resetAllDesc": "Törli az összes felhasználói callout-ot, visszaállítja a beépített callout-okat, a globális stílusokat (szegélyek, betűméret-arány, alak), a mentett színpalettákat, a jobb gombos menü testreszabását és a letöltött Material SVG-ket.",
 	"settings.resetAllButton": "Mindent visszaállít",
-	"settings.resetAllConfirm": "Ez törli az összes egyéni callout-ot, visszaállítja a beépített callout-okat, a globális stílusokat és az összes gyorsítótárazott Material SVG-t. Ez a művelet nem vonható vissza. Biztos benne?",
+	"settings.resetAllConfirm": "Ez törli az összes egyéni callout-ot, visszaállítja a beépített callout-okat, a globális stílusokat, a mentett színpalettákat, a jobb gombos menü testreszabását és az összes gyorsítótárazott Material SVG-t. Ez a művelet nem vonható vissza. Biztos benne?",
 	"notice.resetAllDone": "Minden visszaállt az alapértelmezettekre.",
 
 	"notice.importedCSS": "{{count}} callout-típus importálva CSS-részletekből.",

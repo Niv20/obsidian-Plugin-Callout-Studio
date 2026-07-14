@@ -125,9 +125,9 @@ export const fr: Record<string, string> = {
 	"settings.vaultStatsButton": "Voir les statistiques",
 	"settings.vaultStatsScanning": "Scan en cours",
 	"settings.resetAll": "Réinitialiser",
-	"settings.resetAllDesc": "Supprime tous les callouts utilisateur, réinitialise les callouts intégrés, les styles globaux (bordures, échelle de police, forme) et les SVG Material téléchargés.",
+	"settings.resetAllDesc": "Supprime tous les callouts utilisateur, réinitialise les callouts intégrés, les styles globaux (bordures, échelle de police, forme), les palettes de couleurs enregistrées, la personnalisation du menu du clic droit et les SVG Material téléchargés.",
 	"settings.resetAllButton": "Tout réinitialiser",
-	"settings.resetAllConfirm": "Cela supprimera tous les callouts personnalisés, réinitialisera les callouts intégrés, les styles globaux et tous les SVG Material en cache. Cette action est irréversible. Êtes-vous sûr ?",
+	"settings.resetAllConfirm": "Cela supprimera tous les callouts personnalisés, réinitialisera les callouts intégrés, les styles globaux, les palettes de couleurs enregistrées, la personnalisation du menu du clic droit et tous les SVG Material en cache. Cette action est irréversible. Êtes-vous sûr ?",
 	"notice.resetAllDone": "Tout a été réinitialisé aux valeurs par défaut.",
 
 	"notice.importedCSS": "{{count}} type(s) de callout importé(s) depuis des snippets CSS.",

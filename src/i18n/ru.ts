@@ -125,9 +125,9 @@ export const ru: Record<string, string> = {
 	"settings.vaultStatsButton": "Посмотреть статистику",
 	"settings.vaultStatsScanning": "Сканирование",
 	"settings.resetAll": "Сбросить",
-	"settings.resetAllDesc": "Удаляет все пользовательские callout, сбрасывает встроенные callout, глобальные стили (рамки, масштаб шрифта, форма) и загруженные SVG Material.",
+	"settings.resetAllDesc": "Удаляет все пользовательские callout, сбрасывает встроенные callout, глобальные стили (рамки, масштаб шрифта, форма), сохранённые цветовые палитры, настройку контекстного меню и загруженные SVG Material.",
 	"settings.resetAllButton": "Сбросить всё",
-	"settings.resetAllConfirm": "Это удалит все пользовательские callout, сбросит встроенные callout, глобальные стили и все кешированные SVG Material. Действие нельзя отменить. Вы уверены?",
+	"settings.resetAllConfirm": "Это удалит все пользовательские callout, сбросит встроенные callout, глобальные стили, сохранённые цветовые палитры, настройку контекстного меню и все кешированные SVG Material. Действие нельзя отменить. Вы уверены?",
 	"notice.resetAllDone": "Всё сброшено до значений по умолчанию.",
 
 	"notice.importedCSS": "Импортировано {{count}} типов callout из CSS-сниппетов.",

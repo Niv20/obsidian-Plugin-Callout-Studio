@@ -125,9 +125,9 @@ export const nl: Record<string, string> = {
 	"settings.vaultStatsButton": "Statistieken bekijken",
 	"settings.vaultStatsScanning": "Scannen",
 	"settings.resetAll": "Terugzetten",
-	"settings.resetAllDesc": "Verwijdert alle gebruikerscallouts, zet ingebouwde callouts, globale stijlen (randen, lettertypeschaal, vorm) en gedownloade Material SVG's terug.",
+	"settings.resetAllDesc": "Verwijdert alle gebruikerscallouts, zet ingebouwde callouts, globale stijlen (randen, lettertypeschaal, vorm), opgeslagen kleurenpaletten, de aanpassing van het rechtsklikmenu en gedownloade Material SVG's terug.",
 	"settings.resetAllButton": "Alles terugzetten",
-	"settings.resetAllConfirm": "Dit verwijdert alle aangepaste callouts, zet ingebouwde callouts, globale stijlen en alle gecachte Material SVG's terug. Deze actie kan niet ongedaan worden gemaakt. Weet u het zeker?",
+	"settings.resetAllConfirm": "Dit verwijdert alle aangepaste callouts, zet ingebouwde callouts, globale stijlen, opgeslagen kleurenpaletten, de aanpassing van het rechtsklikmenu en alle gecachte Material SVG's terug. Deze actie kan niet ongedaan worden gemaakt. Weet u het zeker?",
 	"notice.resetAllDone": "Alles is teruggezet naar de standaardinstellingen.",
 
 	"notice.importedCSS": "{{count}} callout-type(s) geïmporteerd uit CSS-fragmenten.",

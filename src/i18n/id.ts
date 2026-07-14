@@ -125,9 +125,9 @@ export const id: Record<string, string> = {
 	"settings.vaultStatsButton": "Lihat statistik",
 	"settings.vaultStatsScanning": "Memindai",
 	"settings.resetAll": "Reset",
-	"settings.resetAllDesc": "Menghapus semua callout pengguna, mereset callout bawaan, gaya global (batas, skala font, bentuk), dan SVG Material yang diunduh.",
+	"settings.resetAllDesc": "Menghapus semua callout pengguna, mereset callout bawaan, gaya global (batas, skala font, bentuk), palet warna tersimpan, penyesuaian menu klik kanan, dan SVG Material yang diunduh.",
 	"settings.resetAllButton": "Reset semua",
-	"settings.resetAllConfirm": "Ini akan menghapus semua callout kustom, mereset callout bawaan, gaya global, dan semua SVG Material yang di-cache. Tindakan ini tidak dapat dibatalkan. Apakah Anda yakin?",
+	"settings.resetAllConfirm": "Ini akan menghapus semua callout kustom, mereset callout bawaan, gaya global, palet warna tersimpan, penyesuaian menu klik kanan, dan semua SVG Material yang di-cache. Tindakan ini tidak dapat dibatalkan. Apakah Anda yakin?",
 	"notice.resetAllDone": "Semua telah direset ke default.",
 
 	"notice.importedCSS": "{{count}} tipe callout diimpor dari cuplikan CSS.",

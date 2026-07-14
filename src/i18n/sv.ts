@@ -125,9 +125,9 @@ export const sv: Record<string, string> = {
 	"settings.vaultStatsButton": "Visa statistik",
 	"settings.vaultStatsScanning": "Skannar",
 	"settings.resetAll": "Återställ",
-	"settings.resetAllDesc": "Tar bort alla användarcallouts, återställer inbyggda callouts, globala stilar (kanter, typsnittsskala, form) och nedladdade Material-SVG:er.",
+	"settings.resetAllDesc": "Tar bort alla användarcallouts, återställer inbyggda callouts, globala stilar (kanter, typsnittsskala, form), sparade färgpaletter, anpassningen av högerklicksmenyn och nedladdade Material-SVG:er.",
 	"settings.resetAllButton": "Återställ allt",
-	"settings.resetAllConfirm": "Detta tar bort alla anpassade callouts, återställer inbyggda callouts, globala stilar och alla cachade Material-SVG:er. Åtgärden kan inte ångras. Är du säker?",
+	"settings.resetAllConfirm": "Detta tar bort alla anpassade callouts, återställer inbyggda callouts, globala stilar, sparade färgpaletter, anpassningen av högerklicksmenyn och alla cachade Material-SVG:er. Åtgärden kan inte ångras. Är du säker?",
 	"notice.resetAllDone": "Allt har återställts till standard.",
 
 	"notice.importedCSS": "{{count}} callout-typ(er) importerade från CSS-kodavsnitt.",

@@ -125,9 +125,9 @@ export const es: Record<string, string> = {
 	"settings.vaultStatsButton": "Ver estadísticas",
 	"settings.vaultStatsScanning": "Escaneando",
 	"settings.resetAll": "Restablecer",
-	"settings.resetAllDesc": "Elimina todos los callouts de usuario, restablece los callouts integrados, los estilos globales (bordes, escala de fuente, forma) y los SVG de Material descargados.",
+	"settings.resetAllDesc": "Elimina todos los callouts de usuario, restablece los callouts integrados, los estilos globales (bordes, escala de fuente, forma), las paletas de colores guardadas, la personalización del menú de clic derecho y los SVG de Material descargados.",
 	"settings.resetAllButton": "Restablecer todo",
-	"settings.resetAllConfirm": "Esto eliminará todos los callouts personalizados, restablecerá los callouts integrados, los estilos globales y todos los SVG de Material en caché. Esta acción no se puede deshacer. ¿Está seguro?",
+	"settings.resetAllConfirm": "Esto eliminará todos los callouts personalizados, restablecerá los callouts integrados, los estilos globales, las paletas de colores guardadas, la personalización del menú de clic derecho y todos los SVG de Material en caché. Esta acción no se puede deshacer. ¿Está seguro?",
 	"notice.resetAllDone": "Todo se ha restablecido a los valores predeterminados.",
 
 	"notice.importedCSS": "Se importaron {{count}} tipo(s) de callout desde fragmentos CSS.",

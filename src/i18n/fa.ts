@@ -125,9 +125,9 @@ export const fa: Record<string, string> = {
 	"settings.vaultStatsButton": "مشاهده آمار",
 	"settings.vaultStatsScanning": "در حال اسکان",
 	"settings.resetAll": "بازنشانی",
-	"settings.resetAllDesc": "همه callout‌های کاربر را حذف می‌کند، callout‌های داخلی، سبک‌های کلی (حاشیه، مقیاس فونت، شکل) و SVG‌های Material دانلود شده را بازنشانی می‌کند.",
+	"settings.resetAllDesc": "همه callout‌های کاربر را حذف می‌کند، callout‌های داخلی، سبک‌های کلی (حاشیه، مقیاس فونت، شکل)، پالت‌های رنگ ذخیره‌شده، سفارشی‌سازی منوی کلیک راست و SVG‌های Material دانلود شده را بازنشانی می‌کند.",
 	"settings.resetAllButton": "بازنشانی همه چیز",
-	"settings.resetAllConfirm": "این عمل همه callout‌های سفارشی را حذف می‌کند، callout‌های داخلی، سبک‌های کلی و همه SVG‌های Material در حافظه نهان را بازنشانی می‌کند. این عمل قابل برگشت نیست. مطمئن هستید؟",
+	"settings.resetAllConfirm": "این عمل همه callout‌های سفارشی را حذف می‌کند، callout‌های داخلی، سبک‌های کلی، پالت‌های رنگ ذخیره‌شده، سفارشی‌سازی منوی کلیک راست و همه SVG‌های Material در حافظه نهان را بازنشانی می‌کند. این عمل قابل برگشت نیست. مطمئن هستید؟",
 	"notice.resetAllDone": "همه چیز به پیش‌فرض بازنشانی شد.",
 
 	"notice.importedCSS": "{{count}} نوع callout از قطعات CSS وارد شد.",

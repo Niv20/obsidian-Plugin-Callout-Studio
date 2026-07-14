@@ -125,9 +125,9 @@ export const ja: Record<string, string> = {
 	"settings.vaultStatsButton": "統計を表示",
 	"settings.vaultStatsScanning": "スキャン中",
 	"settings.resetAll": "リセット",
-	"settings.resetAllDesc": "すべてのユーザーcalloutを削除し、組み込みcallout、グローバルスタイル（ボーダー、フォントスケール、形状）、ダウンロード済みMaterial SVGをリセットします。",
+	"settings.resetAllDesc": "すべてのユーザーcalloutを削除し、組み込みcallout、グローバルスタイル（ボーダー、フォントスケール、形状）、保存済みのカラーパレット、右クリックメニューのカスタマイズ、ダウンロード済みMaterial SVGをリセットします。",
 	"settings.resetAllButton": "すべてリセット",
-	"settings.resetAllConfirm": "すべてのカスタムcalloutを削除し、組み込みcallout、グローバルスタイル、キャッシュ済みMaterial SVGをリセットします。この操作は元に戻せません。よろしいですか？",
+	"settings.resetAllConfirm": "すべてのカスタムcalloutを削除し、組み込みcallout、グローバルスタイル、保存済みのカラーパレット、右クリックメニューのカスタマイズ、キャッシュ済みMaterial SVGをリセットします。この操作は元に戻せません。よろしいですか？",
 	"notice.resetAllDone": "すべてデフォルトにリセットされました。",
 
 	"notice.importedCSS": "CSSスニペットから{{count}}件のcalloutタイプをインポートしました。",

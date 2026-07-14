@@ -125,9 +125,9 @@ export const uk: Record<string, string> = {
 	"settings.vaultStatsButton": "Переглянути статистику",
 	"settings.vaultStatsScanning": "Сканування",
 	"settings.resetAll": "Скинути",
-	"settings.resetAllDesc": "Видаляє всі користувацькі callout, скидає вбудовані callout, глобальні стилі (рамки, масштаб шрифту, форма) і завантажені SVG Material.",
+	"settings.resetAllDesc": "Видаляє всі користувацькі callout, скидає вбудовані callout, глобальні стилі (рамки, масштаб шрифту, форма), збережені колірні палітри, налаштування контекстного меню і завантажені SVG Material.",
 	"settings.resetAllButton": "Скинути все",
-	"settings.resetAllConfirm": "Це видалить усі користувацькі callout, скине вбудовані callout, глобальні стилі та всі кешовані SVG Material. Дію не можна скасувати. Ви впевнені?",
+	"settings.resetAllConfirm": "Це видалить усі користувацькі callout, скине вбудовані callout, глобальні стилі, збережені колірні палітри, налаштування контекстного меню та всі кешовані SVG Material. Дію не можна скасувати. Ви впевнені?",
 	"notice.resetAllDone": "Все скинуто до типових значень.",
 
 	"notice.importedCSS": "Імпортовано {{count}} тип(ів) callout зі сніппетів CSS.",

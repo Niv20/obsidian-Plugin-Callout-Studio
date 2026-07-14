@@ -125,9 +125,9 @@ export const th: Record<string, string> = {
 	"settings.vaultStatsButton": "ดูสถิติ",
 	"settings.vaultStatsScanning": "กำลังสแกน",
 	"settings.resetAll": "รีเซ็ต",
-	"settings.resetAllDesc": "ลบ callout ผู้ใช้ทั้งหมด รีเซ็ต callout ในตัว สไตล์ส่วนกลาง (ขอบ ขนาดตัวอักษร รูปร่าง) และ SVG Material ที่ดาวน์โหลด",
+	"settings.resetAllDesc": "ลบ callout ผู้ใช้ทั้งหมด รีเซ็ต callout ในตัว สไตล์ส่วนกลาง (ขอบ ขนาดตัวอักษร รูปร่าง) ชุดสีที่บันทึกไว้ การปรับแต่งเมนูคลิกขวา และ SVG Material ที่ดาวน์โหลด",
 	"settings.resetAllButton": "รีเซ็ตทั้งหมด",
-	"settings.resetAllConfirm": "การดำเนินการนี้จะลบ callout แบบกำหนดเองทั้งหมด รีเซ็ต callout ในตัว สไตล์ส่วนกลาง และ SVG Material ที่แคชทั้งหมด ไม่สามารถยกเลิกได้ คุณแน่ใจหรือไม่?",
+	"settings.resetAllConfirm": "การดำเนินการนี้จะลบ callout แบบกำหนดเองทั้งหมด รีเซ็ต callout ในตัว สไตล์ส่วนกลาง ชุดสีที่บันทึกไว้ การปรับแต่งเมนูคลิกขวา และ SVG Material ที่แคชทั้งหมด ไม่สามารถยกเลิกได้ คุณแน่ใจหรือไม่?",
 	"notice.resetAllDone": "รีเซ็ตทุกอย่างเป็นค่าเริ่มต้นแล้ว",
 
 	"notice.importedCSS": "นำเข้า {{count}} ประเภท callout จาก CSS snippet แล้ว",

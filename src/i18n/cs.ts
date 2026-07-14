@@ -125,9 +125,9 @@ export const cs: Record<string, string> = {
 	"settings.vaultStatsButton": "Zobrazit statistiky",
 	"settings.vaultStatsScanning": "Prohledávání",
 	"settings.resetAll": "Obnovit",
-	"settings.resetAllDesc": "Odstraní všechny callouts uživatele, obnoví vestavěné callouts, globální styly (ohraničení, měřítko písma, tvar) a stažené SVG Material.",
+	"settings.resetAllDesc": "Odstraní všechny callouts uživatele, obnoví vestavěné callouts, globální styly (ohraničení, měřítko písma, tvar), uložené barevné palety, přizpůsobení kontextové nabídky a stažené SVG Material.",
 	"settings.resetAllButton": "Obnovit vše",
-	"settings.resetAllConfirm": "Tím se odstraní všechny vlastní callouts, obnoví vestavěné callouts, globální styly a všechny SVG Material v mezipaměti. Tuto akci nelze vrátit zpět. Jste si jisti?",
+	"settings.resetAllConfirm": "Tím se odstraní všechny vlastní callouts, obnoví vestavěné callouts, globální styly, uložené barevné palety, přizpůsobení kontextové nabídky a všechny SVG Material v mezipaměti. Tuto akci nelze vrátit zpět. Jste si jisti?",
 	"notice.resetAllDone": "Vše bylo obnoveno na výchozí hodnoty.",
 
 	"notice.importedCSS": "Importováno {{count}} typ(ů) callout z fragmentů CSS.",

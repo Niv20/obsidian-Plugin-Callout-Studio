@@ -125,9 +125,9 @@ export const vi: Record<string, string> = {
 	"settings.vaultStatsButton": "Xem thống kê",
 	"settings.vaultStatsScanning": "Đang quét",
 	"settings.resetAll": "Đặt lại",
-	"settings.resetAllDesc": "Xóa tất cả callouts người dùng, đặt lại callouts tích hợp, kiểu toàn cục (viền, tỷ lệ phông, hình dạng) và SVG Material đã tải.",
+	"settings.resetAllDesc": "Xóa tất cả callouts người dùng, đặt lại callouts tích hợp, kiểu toàn cục (viền, tỷ lệ phông, hình dạng), bảng màu đã lưu, tùy chỉnh menu chuột phải và SVG Material đã tải.",
 	"settings.resetAllButton": "Đặt lại tất cả",
-	"settings.resetAllConfirm": "Điều này sẽ xóa tất cả callouts tùy chỉnh, đặt lại callouts tích hợp, kiểu toàn cục và tất cả SVG Material đã cache. Hành động này không thể hoàn tác. Bạn có chắc không?",
+	"settings.resetAllConfirm": "Điều này sẽ xóa tất cả callouts tùy chỉnh, đặt lại callouts tích hợp, kiểu toàn cục, bảng màu đã lưu, tùy chỉnh menu chuột phải và tất cả SVG Material đã cache. Hành động này không thể hoàn tác. Bạn có chắc không?",
 	"notice.resetAllDone": "Đã đặt lại tất cả về mặc định.",
 
 	"notice.importedCSS": "Đã nhập {{count}} loại callout từ đoạn CSS.",

@@ -125,9 +125,9 @@ export const hi: Record<string, string> = {
 	"settings.vaultStatsButton": "आँकड़े देखें",
 	"settings.vaultStatsScanning": "स्कैन हो रहा है",
 	"settings.resetAll": "रीसेट",
-	"settings.resetAllDesc": "सभी उपयोगकर्ता callouts हटाता है, बिल्ट-इन callouts, वैश्विक स्टाइल (बॉर्डर, फ़ॉन्ट स्केल, आकार) और डाउनलोड किए गए Material SVG रीसेट करता है।",
+	"settings.resetAllDesc": "सभी उपयोगकर्ता callouts हटाता है, बिल्ट-इन callouts, वैश्विक स्टाइल (बॉर्डर, फ़ॉन्ट स्केल, आकार), सहेजे गए रंग पैलेट, राइट-क्लिक मेनू का कस्टमाइज़ेशन और डाउनलोड किए गए Material SVG रीसेट करता है।",
 	"settings.resetAllButton": "सब रीसेट करें",
-	"settings.resetAllConfirm": "इससे सभी कस्टम callouts हट जाएँगे, बिल्ट-इन callouts, वैश्विक स्टाइल और सभी कैश किए गए Material SVG रीसेट हो जाएँगे। यह क्रिया पूर्ववत नहीं की जा सकती। क्या आप सुनिश्चित हैं?",
+	"settings.resetAllConfirm": "इससे सभी कस्टम callouts हट जाएँगे, बिल्ट-इन callouts, वैश्विक स्टाइल, सहेजे गए रंग पैलेट, राइट-क्लिक मेनू का कस्टमाइज़ेशन और सभी कैश किए गए Material SVG रीसेट हो जाएँगे। यह क्रिया पूर्ववत नहीं की जा सकती। क्या आप सुनिश्चित हैं?",
 	"notice.resetAllDone": "सब कुछ डिफ़ॉल्ट पर रीसेट हो गया।",
 
 	"notice.importedCSS": "CSS स्निपेट से {{count}} callout प्रकार आयात किए गए।",

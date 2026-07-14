@@ -125,9 +125,9 @@ export const tr: Record<string, string> = {
 	"settings.vaultStatsButton": "İstatistikleri görüntüle",
 	"settings.vaultStatsScanning": "Taranıyor",
 	"settings.resetAll": "Sıfırla",
-	"settings.resetAllDesc": "Tüm kullanıcı callout'larını siler, yerleşik callout'ları, global stilleri (kenarlıklar, yazı tipi ölçeği, şekil) ve indirilen Material SVG'leri sıfırlar.",
+	"settings.resetAllDesc": "Tüm kullanıcı callout'larını siler, yerleşik callout'ları, global stilleri (kenarlıklar, yazı tipi ölçeği, şekil), kaydedilmiş renk paletlerini, sağ tık menüsü özelleştirmesini ve indirilen Material SVG'leri sıfırlar.",
 	"settings.resetAllButton": "Her şeyi sıfırla",
-	"settings.resetAllConfirm": "Bu işlem tüm özel callout'ları siler, yerleşik callout'ları, global stilleri ve önbelleğe alınmış tüm Material SVG'leri sıfırlar. Bu işlem geri alınamaz. Emin misiniz?",
+	"settings.resetAllConfirm": "Bu işlem tüm özel callout'ları siler, yerleşik callout'ları, global stilleri, kaydedilmiş renk paletlerini, sağ tık menüsü özelleştirmesini ve önbelleğe alınmış tüm Material SVG'leri sıfırlar. Bu işlem geri alınamaz. Emin misiniz?",
 	"notice.resetAllDone": "Her şey varsayılanlara sıfırlandı.",
 
 	"notice.importedCSS": "CSS snippet'lerinden {{count}} callout türü içe aktarıldı.",

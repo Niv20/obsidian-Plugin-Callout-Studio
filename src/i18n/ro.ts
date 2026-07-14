@@ -125,9 +125,9 @@ export const ro: Record<string, string> = {
 	"settings.vaultStatsButton": "Vizualizare statistici",
 	"settings.vaultStatsScanning": "Scanare",
 	"settings.resetAll": "Resetați",
-	"settings.resetAllDesc": "Șterge toate callouts utilizator, resetează callouts integrate, stilurile globale (borduri, scara fontului, formă) și SVG-urile Material descărcate.",
+	"settings.resetAllDesc": "Șterge toate callouts utilizator, resetează callouts integrate, stilurile globale (borduri, scara fontului, formă), paletele de culori salvate, personalizarea meniului clic dreapta și SVG-urile Material descărcate.",
 	"settings.resetAllButton": "Resetați tot",
-	"settings.resetAllConfirm": "Aceasta va șterge toate callouts personalizate, va reseta callouts integrate, stilurile globale și toate SVG-urile Material din cache. Această acțiune nu poate fi anulată. Ești sigur?",
+	"settings.resetAllConfirm": "Aceasta va șterge toate callouts personalizate, va reseta callouts integrate, stilurile globale, paletele de culori salvate, personalizarea meniului clic dreapta și toate SVG-urile Material din cache. Această acțiune nu poate fi anulată. Ești sigur?",
 	"notice.resetAllDone": "Totul a fost resetat la valorile implicite.",
 
 	"notice.importedCSS": "Au fost importate {{count}} tip(uri) de callout din fragmentele CSS.",

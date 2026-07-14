@@ -125,9 +125,9 @@ export const zh: Record<string, string> = {
 	"settings.vaultStatsButton": "查看统计",
 	"settings.vaultStatsScanning": "扫描中",
 	"settings.resetAll": "重置",
-	"settings.resetAllDesc": "删除所有用户 callout，重置内置 callout、全局样式（边框、字体缩放、形状）和已下载的 Material SVG。",
+	"settings.resetAllDesc": "删除所有用户 callout，重置内置 callout、全局样式（边框、字体缩放、形状）、已保存的调色板、右键菜单自定义设置和已下载的 Material SVG。",
 	"settings.resetAllButton": "重置所有内容",
-	"settings.resetAllConfirm": "此操作将删除所有自定义 callout，重置内置 callout、全局样式和所有缓存的 Material SVG。此操作无法撤销。确定吗？",
+	"settings.resetAllConfirm": "此操作将删除所有自定义 callout，重置内置 callout、全局样式、已保存的调色板、右键菜单自定义设置和所有缓存的 Material SVG。此操作无法撤销。确定吗？",
 	"notice.resetAllDone": "所有内容已重置为默认值。",
 
 	"notice.importedCSS": "已从 CSS 片段导入 {{count}} 个 callout 类型。",

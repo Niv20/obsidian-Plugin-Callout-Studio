@@ -125,9 +125,9 @@ export const ko: Record<string, string> = {
 	"settings.vaultStatsButton": "통계 보기",
 	"settings.vaultStatsScanning": "스캔 중",
 	"settings.resetAll": "재설정",
-	"settings.resetAllDesc": "모든 사용자 callout을 삭제하고, 기본 제공 callout, 전역 스타일 (테두리, 폰트 크기, 모양) 및 다운로드된 Material SVG를 재설정합니다.",
+	"settings.resetAllDesc": "모든 사용자 callout을 삭제하고, 기본 제공 callout, 전역 스타일 (테두리, 폰트 크기, 모양), 저장된 색상 팔레트, 마우스 오른쪽 버튼 메뉴 사용자 지정 및 다운로드된 Material SVG를 재설정합니다.",
 	"settings.resetAllButton": "모두 재설정",
-	"settings.resetAllConfirm": "모든 사용자 정의 callout이 삭제되고 기본 제공 callout, 전역 스타일, 캐시된 Material SVG가 재설정됩니다. 이 작업은 취소할 수 없습니다. 계속하시겠습니까?",
+	"settings.resetAllConfirm": "모든 사용자 정의 callout이 삭제되고 기본 제공 callout, 전역 스타일, 저장된 색상 팔레트, 마우스 오른쪽 버튼 메뉴 사용자 지정, 캐시된 Material SVG가 재설정됩니다. 이 작업은 취소할 수 없습니다. 계속하시겠습니까?",
 	"notice.resetAllDone": "모든 항목이 기본값으로 재설정되었습니다.",
 
 	"notice.importedCSS": "CSS 스니펫에서 {{count}}개의 callout 유형을 가져왔습니다.",
