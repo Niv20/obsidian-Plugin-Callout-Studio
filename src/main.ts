@@ -44,14 +44,6 @@ export default class CalloutStudioPlugin extends Plugin {
 	private materialSvg!: MaterialSvgManager;
 	private discovery!: CalloutDiscovery;
 	private linkSuggestDecorator!: LinkSuggestDecorator;
-	/**
-	 * True when the welcome screen is waiting to be shown the next time the
-	 * settings tab opens — i.e. an existing user who just updated into the
-	 * version that introduces the welcome screen. Never persisted: recomputed
-	 * each launch from `welcomeSeen`, so it stays pending until they actually
-	 * open settings, then clears for good.
-	 */
-	private welcomePendingInSettings = false;
 
 	get settings(): PluginSettings {
 		return this.registry.settings;
@@ -220,48 +212,25 @@ export default class CalloutStudioPlugin extends Plugin {
 	}
 
 	/**
-	 * First-run welcome routing, evaluated once at launch:
-	 *
-	 * - Fresh install → greet immediately, right after layout is ready.
-	 * - Existing user updating into this version → defer the greeting to the
-	 *   next time they open the settings tab (see maybeShowWelcomeInSettings),
-	 *   so an update never pops a modal over their vault on startup.
-	 *
-	 * Either way the screen appears exactly once per user, ever: once
-	 * `welcomeSeen` is persisted it is never shown again, including after any
-	 * future plugin update.
+	 * First-run welcome routing, evaluated once at launch. The screen greets
+	 * a brand-new install immediately, right after layout is ready — and only
+	 * a brand-new install. A user who merely updated into this version (they
+	 * already have a `data.json`) never sees it. It appears exactly once per
+	 * fresh install: once `welcomeSeen` is persisted it is never shown again.
 	 */
 	private async maybeShowWelcomeOnLaunch(
 		isFreshInstall: boolean,
 	): Promise<void> {
-		if (this.settings.welcomeSeen) return;
-		if (!isFreshInstall) {
-			// Updater — hold the welcome until they open settings.
-			this.welcomePendingInSettings = true;
-			return;
-		}
+		if (this.settings.welcomeSeen || !isFreshInstall) return;
 		await this.showWelcomeOnce();
 	}
 
 	/**
-	 * Show the deferred welcome screen for a user who updated into this
-	 * version, the first time they open the settings tab. No-op otherwise.
-	 * Called by the settings tab on every `display()`; the guards keep it to
-	 * a single showing (and cost nothing on every later open).
-	 */
-	maybeShowWelcomeInSettings(): void {
-		if (!this.welcomePendingInSettings || this.settings.welcomeSeen) return;
-		void this.showWelcomeOnce();
-	}
-
-	/**
-	 * Open the welcome screen once. The `welcomeSeen` flag is persisted and the
-	 * pending flag cleared *before* opening (synchronously, ahead of any await)
-	 * so an interrupted startup won't re-show it and a re-entrant `display()`
-	 * can't open a second copy.
+	 * Open the welcome screen once. The `welcomeSeen` flag is persisted
+	 * *before* opening (synchronously, ahead of any await) so an interrupted
+	 * startup won't re-show it.
 	 */
 	private async showWelcomeOnce(): Promise<void> {
-		this.welcomePendingInSettings = false;
 		this.registry.settings.welcomeSeen = true;
 		await this.saveSettings();
 		await new WelcomeModal(this).prompt();

@@ -1,11 +1,10 @@
 /**
  * settings/WelcomeModal.ts — First-run welcome / splash screen.
  *
- * A friendly two-column intro to the plugin. Shown automatically once per user
- * (gated by the `welcomeSeen` setting): on first load for a fresh install, or on
- * the first settings-tab open for someone updating into this version. Also
- * reopenable any time from the info icon next to the "Callout Studio" title in
- * settings.
+ * A friendly two-column intro to the plugin. Shown automatically once, on first
+ * load for a fresh install only (gated by the `welcomeSeen` setting); a user who
+ * merely updates into this version never sees it. Also reopenable any time from
+ * the info icon next to the "Callout Studio" title in settings.
  *
  * Left column: the plugin name, icon, and a one-line slogan, centered. Right
  * column: a real {@link LiveCalloutPreview} rendering a short sample whose copy

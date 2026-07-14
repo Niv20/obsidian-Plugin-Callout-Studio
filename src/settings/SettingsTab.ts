@@ -140,10 +140,6 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 		renderLanguageSection(sectionCtx, containerEl);
 		renderResetSection(sectionCtx, containerEl);
 		renderFooterSection(sectionCtx, containerEl);
-
-		// Existing users who just updated into this version see the welcome
-		// screen here, once, instead of on launch. No-op for everyone else.
-		this.plugin.maybeShowWelcomeInSettings();
 	}
 
 	private getSectionContext(): SettingsSectionContext {
