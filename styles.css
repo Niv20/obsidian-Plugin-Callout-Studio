@@ -301,6 +301,115 @@
 	color: var(--text-error);
 }
 
+/* ─── Customize Right-Click Menu Modal ────────────────────────── */
+
+/* Role section headers: clearly a heading, spaced from the list above,
+   left-aligned with the row cards below. */
+.cs-menu-customize .setting-item.setting-item-heading {
+	margin-top: 28px;
+	padding: 0 0 6px 0;
+	border: none;
+	border-bottom: 1px solid var(--background-modifier-border);
+	border-radius: 0;
+}
+
+.cs-menu-customize .setting-item.setting-item-heading .setting-item-name {
+	font-size: var(--font-ui-smaller);
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 0.06em;
+	color: var(--text-muted);
+}
+
+/* First header sits closer to the intro description. */
+.cs-menu-customize
+	.setting-item-description
+	+ .setting-item.setting-item-heading {
+	margin-top: 18px;
+}
+
+.cs-menu-customize-list {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+	margin-top: 8px;
+	margin-bottom: 4px;
+}
+
+/* Rows reuse .callout-studio-row; this only tweaks the menu-specific bits. */
+.cs-menu-row.is-disabled {
+	opacity: 0.55;
+}
+
+.cs-menu-row-toggle {
+	display: flex;
+	align-items: center;
+	flex-shrink: 0;
+}
+
+/* Standalone separator between the enabled group and the sunk-to-bottom
+   disabled group. A dedicated sibling element — not a decoration on the first
+   disabled row — so dragging that row leaves the divider fixed at the boundary. */
+.cs-menu-band-divider {
+	height: 1px;
+	margin: 5px 0;
+	background: var(--background-modifier-border);
+	/* Purely decorative: never intercept a pointer that starts a drag. */
+	pointer-events: none;
+}
+
+/* Drag handle (grip). touch-action:none keeps a touch drag from scrolling. */
+.cs-drag-handle {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 32px;
+	height: 32px;
+	flex-shrink: 0;
+	color: var(--text-faint);
+	cursor: grab;
+	border-radius: 6px;
+	touch-action: none;
+	user-select: none;
+	-webkit-user-select: none;
+}
+
+.cs-drag-handle:hover,
+.cs-drag-handle:focus-visible {
+	color: var(--text-normal);
+	background: var(--background-modifier-hover);
+}
+
+.cs-drag-handle svg {
+	width: 18px;
+	height: 18px;
+	flex-shrink: 0;
+	/* Same iPadOS WebKit container-paint workaround as the row icons/buttons. */
+	transform: translateZ(0);
+}
+
+/* While a drag is active. */
+.cs-menu-customize-list.cs-dragging {
+	user-select: none;
+	-webkit-user-select: none;
+}
+
+.cs-menu-customize-list.cs-dragging .cs-drag-handle {
+	cursor: grabbing;
+}
+
+.callout-studio-row.is-dragging {
+	opacity: 0.9;
+	box-shadow: var(--shadow-s, 0 2px 8px rgba(0, 0, 0, 0.3));
+	background: var(--background-secondary-alt);
+	position: relative;
+	z-index: 1;
+	/* No CSS transition so the row tracks the pointer with zero lag; the release
+	   "settle" is a Web Animations API slide, unaffected by this. */
+	transition: none;
+	will-change: transform;
+}
+
 /* ─── Callout Editor Modal ────────────────────────────────────── */
 
 .callout-studio-editor .modal-content {

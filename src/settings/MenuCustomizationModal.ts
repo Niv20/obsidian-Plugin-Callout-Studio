@@ -2,15 +2,19 @@
  * settings/MenuCustomizationModal.ts — Customize the right-click menu.
  *
  * Presents three stacked sections (one per render role). Each lists that
- * role's menu items with an enable/disable toggle and up/down reorder
- * buttons. Reordering uses buttons rather than HTML5 drag because the plugin
- * also runs on mobile (isDesktopOnly: false), where drag-to-reorder is
- * awkward. Every change is saved immediately (matching the plugin's
- * save-on-change convention) — there is no OK/Cancel.
+ * role's menu items with an enable/disable toggle and a drag handle for
+ * reordering. Dragging uses Pointer Events (see ui/DragSortList.ts) so it works
+ * with mouse and touch — the plugin also runs on mobile (isDesktopOnly: false).
+ * The handle is keyboard-operable too (ArrowUp / ArrowDown). Toggling an item
+ * off drops it to the bottom of its list; toggling it on floats it back up as
+ * the last enabled item. Every change is saved immediately (matching the
+ * plugin's save-on-change convention) — there is no OK/Cancel.
  */
-import { Modal, Setting } from "obsidian";
+import { Modal, Setting, ToggleComponent, setIcon } from "obsidian";
 import type { App } from "obsidian";
 import { t } from "../i18n";
+import { makeDragSortable } from "../ui/DragSortList";
+import { animateReorder } from "../ui/flip";
 import type {
 	CalloutRenderRole,
 	ContextMenuItemConfig,
@@ -45,6 +49,9 @@ const ITEM_LABEL_KEY: Record<ContextMenuItemId, string> = {
 };
 
 export class MenuCustomizationModal extends Modal {
+	/** Detach functions for the per-role drag listeners, run on close. */
+	private dragCleanups: Array<() => void> = [];
+
 	constructor(
 		app: App,
 		private readonly host: MenuCustomizationHost,
@@ -53,6 +60,7 @@ export class MenuCustomizationModal extends Modal {
 	}
 
 	onOpen(): void {
+		this.contentEl.addClass("cs-menu-customize");
 		this.titleEl.setText(t("menuCustomize.title"));
 		this.contentEl.createEl("p", {
 			text: t("menuCustomize.desc"),
@@ -62,6 +70,8 @@ export class MenuCustomizationModal extends Modal {
 	}
 
 	onClose(): void {
+		for (const cleanup of this.dragCleanups) cleanup();
+		this.dragCleanups = [];
 		this.contentEl.empty();
 	}
 
@@ -71,6 +81,25 @@ export class MenuCustomizationModal extends Modal {
 			cls: "cs-menu-customize-list",
 		});
 		this.renderRoleList(role, listEl);
+
+		// Attach drag once to the persistent list container; rows re-render into
+		// it in place, so the listener survives every rerender().
+		this.dragCleanups.push(
+			makeDragSortable(listEl, {
+				rowSelector: ".cs-menu-row",
+				handleSelector: ".cs-drag-handle",
+				// Keep enabled and disabled items in separate bands: a drag can
+				// reorder within a band but never cross the divider. Only the
+				// toggle moves an item between bands.
+				groupOf: (row) => row.hasClass("is-disabled"),
+				onReorder: (from, to) => {
+					const items = this.host.settings.contextMenu.items[role];
+					moveItem(items, from, to);
+					void this.host.saveSettings();
+					this.renderRoleList(role, listEl);
+				},
+			}),
+		);
 	}
 
 	/** (Re)render a single role's item rows in place. */
@@ -78,6 +107,13 @@ export class MenuCustomizationModal extends Modal {
 		listEl.empty();
 		const items = this.host.settings.contextMenu.items[role];
 		items.forEach((item, index) => {
+			// Separator between the enabled group and the sunk-to-bottom disabled
+			// group. It is its own sibling element (not a decoration on the first
+			// disabled row) so lifting that row during a drag never carries the
+			// divider along with it — the divider stays fixed at the band boundary.
+			if (!item.enabled && index > 0 && items[index - 1]?.enabled) {
+				listEl.createDiv({ cls: "cs-menu-band-divider" });
+			}
 			this.renderRow(role, listEl, item, index, items.length);
 		});
 	}
@@ -92,43 +128,113 @@ export class MenuCustomizationModal extends Modal {
 		const rerender = (): void => this.renderRoleList(role, listEl);
 		const items = this.host.settings.contextMenu.items[role];
 
-		new Setting(listEl)
-			.setName(t(ITEM_LABEL_KEY[item.id]))
-			.addExtraButton((btn) =>
-				btn
-					.setIcon("chevron-up")
-					.setTooltip(t("menuCustomize.moveUp"))
-					.setDisabled(index === 0)
-					.onClick(async () => {
-						if (index === 0) return;
+		const row = listEl.createDiv({ cls: "callout-studio-row cs-menu-row" });
+		row.dataset.csItemId = item.id; // stable identity for FLIP reorder animation
+		if (!item.enabled) row.addClass("is-disabled");
+
+		// Drag handle (also keyboard-operable, replacing the old up/down arrows).
+		const handle = row.createDiv({ cls: "cs-drag-handle" });
+		handle.setAttribute("role", "button");
+		handle.setAttribute("tabindex", "0");
+		handle.setAttribute("aria-label", t("menuCustomize.dragHandle"));
+		setIcon(handle, "grip-vertical");
+		handle.addEventListener("keydown", (e) => {
+			// Reorder only within this item's band: the neighbour must share its
+			// enabled state, so a row never crosses the divider by keyboard —
+			// exactly as the pointer drag is constrained (see groupOf above).
+			if (
+				e.key === "ArrowUp" &&
+				index > 0 &&
+				items[index - 1]?.enabled === item.enabled
+			) {
+				e.preventDefault();
+				animateReorder(
+					listEl,
+					() => {
 						swap(items, index, index - 1);
-						await this.host.saveSettings();
 						rerender();
-					}),
-			)
-			.addExtraButton((btn) =>
-				btn
-					.setIcon("chevron-down")
-					.setTooltip(t("menuCustomize.moveDown"))
-					.setDisabled(index === count - 1)
-					.onClick(async () => {
-						if (index === count - 1) return;
+					},
+					{ keyOf: ROW_KEY },
+				);
+				void this.host.saveSettings();
+				focusHandleAt(listEl, index - 1);
+			} else if (
+				e.key === "ArrowDown" &&
+				index < count - 1 &&
+				items[index + 1]?.enabled === item.enabled
+			) {
+				e.preventDefault();
+				animateReorder(
+					listEl,
+					() => {
 						swap(items, index, index + 1);
-						await this.host.saveSettings();
 						rerender();
-					}),
-			)
-			.addToggle((tog) =>
-				tog.setValue(item.enabled).onChange(async (v) => {
-					item.enabled = v;
-					await this.host.saveSettings();
-				}),
-			);
+					},
+					{ keyOf: ROW_KEY },
+				);
+				void this.host.saveSettings();
+				focusHandleAt(listEl, index + 1);
+			}
+		});
+
+		// Label
+		const info = row.createDiv({ cls: "callout-studio-row-info" });
+		info.createSpan({
+			cls: "callout-studio-row-name",
+			text: t(ITEM_LABEL_KEY[item.id]),
+		});
+
+		// Enable/disable toggle — flips the item, then repositions it: off sinks
+		// to the bottom, on floats up to just after the last enabled item.
+		const toggleWrap = row.createDiv({ cls: "cs-menu-row-toggle" });
+		new ToggleComponent(toggleWrap)
+			.setValue(item.enabled)
+			.onChange(async (v) => {
+				item.enabled = v;
+				animateReorder(
+					listEl,
+					() => {
+						const from = items.indexOf(item);
+						if (from !== -1) items.splice(from, 1);
+						if (v) {
+							let lastEnabled = -1;
+							items.forEach((it, i) => {
+								if (it.enabled) lastEnabled = i;
+							});
+							items.splice(lastEnabled + 1, 0, item);
+						} else {
+							items.push(item);
+						}
+						rerender();
+					},
+					{ keyOf: ROW_KEY },
+				);
+				await this.host.saveSettings();
+			});
 	}
+}
+
+/** FLIP identity for a row — matches an item across a full list rebuild. */
+const ROW_KEY = (el: HTMLElement): unknown => el.dataset.csItemId;
+
+/** Move an array element from one index to another, in place. */
+function moveItem<T>(arr: T[], from: number, to: number): void {
+	const item = arr[from];
+	if (item === undefined) return;
+	arr.splice(from, 1);
+	arr.splice(to, 0, item);
 }
 
 function swap<T>(arr: T[], a: number, b: number): void {
 	const tmp = arr[a]!;
 	arr[a] = arr[b]!;
 	arr[b] = tmp;
+}
+
+/** Return focus to the drag handle at a given row index after a rerender. */
+function focusHandleAt(listEl: HTMLElement, index: number): void {
+	const handles = Array.from(
+		listEl.querySelectorAll<HTMLElement>(".cs-drag-handle"),
+	);
+	handles[index]?.focus();
 }
