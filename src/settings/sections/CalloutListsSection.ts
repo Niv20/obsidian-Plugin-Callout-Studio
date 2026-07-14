@@ -9,6 +9,7 @@
 import { Setting } from "obsidian";
 import { getLocale, t } from "../../i18n";
 import { sortCalloutsByDisplayName } from "../../utils/sorting";
+import { WelcomeModal } from "../WelcomeModal";
 import type { CalloutDefinition } from "../../types";
 import type { SettingsSectionContext } from "./types";
 
@@ -82,6 +83,13 @@ export function createCalloutListsController(
 				.setName(t("settings.title"))
 				.setHeading();
 			headerSetting.settingEl.addClass("cs-header-row");
+			// Info icon opposite the title — reopens the welcome/splash screen.
+			headerSetting.addExtraButton((btn) =>
+				btn
+					.setIcon("info")
+					.setTooltip(t("welcome.tooltip"))
+					.onClick(() => new WelcomeModal(ctx.plugin).open()),
+			);
 
 			const subSetting = new Setting(containerEl)
 				.setName(t("settings.myCalloutTypes"))

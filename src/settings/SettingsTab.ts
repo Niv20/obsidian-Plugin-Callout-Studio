@@ -26,7 +26,7 @@ import {
 import { renderFallbackSection } from "./sections/FallbackSection";
 import { renderLanguageSection } from "./sections/LanguageSection";
 import { renderCustomPalettesSection } from "./sections/CustomPalettesSection";
-import { renderCalloutTypesSection } from "./sections/CalloutTypesSection";
+import { renderGlobalSettingsSection } from "./sections/GlobalSettingsSection";
 import {
 	createCalloutListsController,
 	type CalloutListsController,
@@ -131,7 +131,7 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 		this.calloutLists.render(containerEl);
 
 		renderFallbackSection(sectionCtx, containerEl);
-		renderCalloutTypesSection(sectionCtx, containerEl);
+		renderGlobalSettingsSection(sectionCtx, containerEl);
 		renderCustomPalettesSection(sectionCtx, containerEl);
 		renderAutocompleteSettingsSection(sectionCtx, containerEl);
 		renderContextMenuSettingsSection(sectionCtx, containerEl);
@@ -140,6 +140,10 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 		renderLanguageSection(sectionCtx, containerEl);
 		renderResetSection(sectionCtx, containerEl);
 		renderFooterSection(sectionCtx, containerEl);
+
+		// Existing users who just updated into this version see the welcome
+		// screen here, once, instead of on launch. No-op for everyone else.
+		this.plugin.maybeShowWelcomeInSettings();
 	}
 
 	private getSectionContext(): SettingsSectionContext {

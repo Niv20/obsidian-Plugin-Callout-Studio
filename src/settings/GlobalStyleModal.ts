@@ -1,8 +1,8 @@
 /**
  * settings/GlobalStyleModal.ts — Per-role "Global callout style" popup.
  *
- * Opened from the Callout types cards in the settings tab, one modal per
- * render role. Two-column layout: a live preview (left) of a neutral demo
+ * Opened from the Global settings section's per-role buttons in the settings
+ * tab, one modal per render role. Two-column layout: a live preview (left) of a neutral demo
  * callout — gray accent, solid Lucide square icon — and the role's style
  * control groups (right):
  *   - regular: borders, font scale, shape, align

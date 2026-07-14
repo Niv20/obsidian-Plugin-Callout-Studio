@@ -20,6 +20,7 @@ import { CSSInjector } from "./manager/CSSInjector";
 import { MaterialSvgManager } from "./manager/MaterialSvgManager";
 import { CalloutDiscovery } from "./manager/CalloutDiscovery";
 import { CalloutStudioSettingsTab } from "./settings/SettingsTab";
+import { WelcomeModal } from "./settings/WelcomeModal";
 import { CalloutEditor } from "./settings/CalloutEditor";
 import { CalloutAutoComplete } from "./editor/AutoComplete";
 import { LinkSuggestDecorator } from "./editor/LinkSuggestDecorator";
@@ -43,6 +44,14 @@ export default class CalloutStudioPlugin extends Plugin {
 	private materialSvg!: MaterialSvgManager;
 	private discovery!: CalloutDiscovery;
 	private linkSuggestDecorator!: LinkSuggestDecorator;
+	/**
+	 * True when the welcome screen is waiting to be shown the next time the
+	 * settings tab opens — i.e. an existing user who just updated into the
+	 * version that introduces the welcome screen. Never persisted: recomputed
+	 * each launch from `welcomeSeen`, so it stays pending until they actually
+	 * open settings, then clears for good.
+	 */
+	private welcomePendingInSettings = false;
 
 	get settings(): PluginSettings {
 		return this.registry.settings;
@@ -61,6 +70,13 @@ export default class CalloutStudioPlugin extends Plugin {
 		this.registry = new CalloutRegistry();
 		const savedData = (await this.loadData()) as Partial<PluginData> | null;
 		this.registry.load(savedData);
+
+		// Distinguish a brand-new install (no data.json yet) from an existing
+		// user updating into this version. This drives WHERE the welcome screen
+		// appears — see maybeShowWelcomeOnLaunch(). Computed once, cheaply, from
+		// the data we already loaded.
+		const isFreshInstall =
+			savedData == null || Object.keys(savedData).length === 0;
 
 		// UI locale follows the user's saved preference; "auto" (the default)
 		// tracks Obsidian's interface language.
@@ -134,6 +150,12 @@ export default class CalloutStudioPlugin extends Plugin {
 		// Settings tab
 		this.addSettingTab(new CalloutStudioSettingsTab(this.app, this));
 
+		// Dev/test convenience: from a terminal, `open "obsidian://callout-studio-welcome"`
+		// re-opens the welcome modal on demand (bypasses the welcomeSeen flag).
+		this.registerObsidianProtocolHandler("callout-studio-welcome", () => {
+			void this.openWelcome();
+		});
+
 		// Commands
 		registerCalloutCommands(this, () => new CalloutEditor(this));
 
@@ -172,18 +194,77 @@ export default class CalloutStudioPlugin extends Plugin {
 		// On subsequent loads (firstRunCompleted=true) we just opportunistically
 		// prune stale auto-created rows accumulated while typing in a previous
 		// session.
-		if (!this.settings.firstRunCompleted) {
-			this.app.workspace.onLayoutReady(() => {
-				void this.runFirstRunDiscovery().finally(() => {
-					this.discovery.registerIncrementalWatchers();
-				});
-			});
-		} else {
-			this.app.workspace.onLayoutReady(() => {
-				this.discovery.schedulePrune(2000);
+		this.app.workspace.onLayoutReady(async () => {
+			try {
+				// Welcome first, so it never stacks on top of the first-run
+				// scan modal (which only appears for large vaults).
+				await this.maybeShowWelcomeOnLaunch(isFreshInstall);
+				if (!this.settings.firstRunCompleted) {
+					await this.runFirstRunDiscovery();
+				} else {
+					this.discovery.schedulePrune(2000);
+				}
+			} finally {
 				this.discovery.registerIncrementalWatchers();
-			});
+			}
+		});
+	}
+
+	/**
+	 * Open the welcome/splash screen on demand, ignoring the `welcomeSeen`
+	 * flag. Handy for testing — call it from the DevTools console:
+	 *   app.plugins.plugins["callout-studio"].openWelcome()
+	 */
+	openWelcome(): Promise<void> {
+		return new WelcomeModal(this).prompt();
+	}
+
+	/**
+	 * First-run welcome routing, evaluated once at launch:
+	 *
+	 * - Fresh install → greet immediately, right after layout is ready.
+	 * - Existing user updating into this version → defer the greeting to the
+	 *   next time they open the settings tab (see maybeShowWelcomeInSettings),
+	 *   so an update never pops a modal over their vault on startup.
+	 *
+	 * Either way the screen appears exactly once per user, ever: once
+	 * `welcomeSeen` is persisted it is never shown again, including after any
+	 * future plugin update.
+	 */
+	private async maybeShowWelcomeOnLaunch(
+		isFreshInstall: boolean,
+	): Promise<void> {
+		if (this.settings.welcomeSeen) return;
+		if (!isFreshInstall) {
+			// Updater — hold the welcome until they open settings.
+			this.welcomePendingInSettings = true;
+			return;
 		}
+		await this.showWelcomeOnce();
+	}
+
+	/**
+	 * Show the deferred welcome screen for a user who updated into this
+	 * version, the first time they open the settings tab. No-op otherwise.
+	 * Called by the settings tab on every `display()`; the guards keep it to
+	 * a single showing (and cost nothing on every later open).
+	 */
+	maybeShowWelcomeInSettings(): void {
+		if (!this.welcomePendingInSettings || this.settings.welcomeSeen) return;
+		void this.showWelcomeOnce();
+	}
+
+	/**
+	 * Open the welcome screen once. The `welcomeSeen` flag is persisted and the
+	 * pending flag cleared *before* opening (synchronously, ahead of any await)
+	 * so an interrupted startup won't re-show it and a re-entrant `display()`
+	 * can't open a second copy.
+	 */
+	private async showWelcomeOnce(): Promise<void> {
+		this.welcomePendingInSettings = false;
+		this.registry.settings.welcomeSeen = true;
+		await this.saveSettings();
+		await new WelcomeModal(this).prompt();
 	}
 
 	onunload() {

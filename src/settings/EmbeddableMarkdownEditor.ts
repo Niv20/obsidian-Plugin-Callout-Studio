@@ -16,7 +16,7 @@
  * rendering, our heading/inline ViewPlugin, and the injected per-callout CSS —
  * i.e. it renders exactly like a real note, in the active theme, for free.
  */
-import { Component, type App, type TFile } from "obsidian";
+import { Component, type App, type Editor, type TFile } from "obsidian";
 import { EditorView } from "@codemirror/view";
 import {
 	EditorSelection,
@@ -32,7 +32,7 @@ interface InternalMarkdownEditor extends Component {
 	showEditor?(): void;
 	set(content: string, focus?: boolean): void;
 	destroy?(): void;
-	editor?: { cm?: EditorView };
+	editor?: Editor & { cm?: EditorView };
 	cm?: EditorView;
 }
 
@@ -41,6 +41,25 @@ interface EditorOwner {
 	app: App;
 	onMarkdownScroll: () => void;
 	getMode: () => "source" | "preview";
+	/**
+	 * The real Obsidian editor. This owner becomes `app.workspace.activeEditor`
+	 * whenever the embedded editor is focused/clicked, so it must expose a full
+	 * `Editor`, for two independent consumers:
+	 *
+	 * - Word Count core plugin: listens on every `editor-selection-change` and
+	 *   runs `info.editor.getSelection()`, where `info` is this owner. A missing
+	 *   editor throws — surfaced asynchronously (and thus "uncaught") because
+	 *   Obsidian's `tryTrigger` re-throws listener errors via `setTimeout`.
+	 * - Command Palette: `listCommands()` runs every command's `checkCallback`,
+	 *   and the editor commands (`editor:follow-link`, `editor:toggle-fold`, …)
+	 *   call `activeEditor.editor.getCursor()` / `hasFocus()`. A partial shim
+	 *   without those methods throws `TypeError: … is not a function`.
+	 *
+	 * So the owner exposes the genuine underlying `Editor` (see the `get editor`
+	 * accessor in the constructor). Read-only is still enforced by
+	 * `EditorState.readOnly`, so a command reaching the preview cannot mutate it.
+	 */
+	readonly editor: Editor;
 }
 
 type MarkdownEditorCtor = new (
@@ -129,14 +148,31 @@ export class EmbeddableMarkdownEditor {
 		options: EmbeddableMarkdownEditorOptions,
 	) {
 		const Ctor = resolveMarkdownEditorCtor(app);
+		// Arrow closures so the `get editor` accessor (whose own `this` is the
+		// owner object) can still reach this instance — without aliasing `this`.
+		const instanceEditor = (): Editor | undefined => this.instance?.editor;
+		const selectionText = (): string => this.currentSelectionText();
 		// getMode "source" = an editing surface (Live-Preview vs. raw source
 		// follows the vault's own setting, exactly like the user's notes), NOT
 		// the reading view.
-		this.instance = new Ctor(app, container, {
+		const owner: EditorOwner = {
 			app,
 			onMarkdownScroll: () => {},
 			getMode: () => "source",
-		});
+			// Once mounted, expose the REAL Obsidian editor (see EditorOwner.editor
+			// for why the owner must be a full editor: Word Count and the Command
+			// Palette both call methods on `activeEditor.editor`). Before mount —
+			// `this.instance` is still undefined during the base constructor — fall
+			// back to a selection-only shim, which is enough for the Word Count
+			// listener that fires on the initial `parkCursor` selection dispatch.
+			get editor(): Editor {
+				return (
+					instanceEditor() ??
+					({ getSelection: selectionText } as Editor)
+				);
+			},
+		};
+		this.instance = new Ctor(app, container, owner);
 		this.instance.set(options.value, false);
 
 		// A shape change could let construction "succeed" without mounting any
@@ -225,7 +261,24 @@ export class EmbeddableMarkdownEditor {
 
 	/** Underlying CM6 view, for dispatching state effects (may be null early). */
 	get cm(): EditorView | null {
-		return this.instance.editor?.cm ?? this.instance.cm ?? null;
+		return this.instance?.editor?.cm ?? this.instance?.cm ?? null;
+	}
+
+	/**
+	 * Text of the current primary selection ("" if none / not ready). Consumed
+	 * by the owner's `editor.getSelection()` shim (see {@link EditorOwner}).
+	 * Fully defensive: it can be called mid-construction (before `this.instance`
+	 * is assigned) or mid-teardown, and must never throw.
+	 */
+	private currentSelectionText(): string {
+		try {
+			const cm = this.cm;
+			if (!cm) return "";
+			const { from, to } = cm.state.selection.main;
+			return cm.state.sliceDoc(from, to);
+		} catch {
+			return "";
+		}
 	}
 
 	/** Replace the whole document. */

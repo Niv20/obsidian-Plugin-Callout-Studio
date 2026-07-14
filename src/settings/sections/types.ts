@@ -37,6 +37,8 @@ export type SettingsTabPlugin = Plugin & {
 	restyleUncustomizedFallbackRows(): number;
 	cacheMaterialSvg(icon: CalloutIcon): Promise<void>;
 	runVaultScan(markFirstRun?: boolean): Promise<number>;
+	/** Shows the deferred welcome screen once for users who updated in. */
+	maybeShowWelcomeInSettings(): void;
 };
 
 export type SettingsSectionContext = {

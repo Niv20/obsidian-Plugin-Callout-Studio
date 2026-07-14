@@ -43,6 +43,21 @@ export const en: Record<string, string> = {
 		"Callout Studio scanned your vault and added {{count}} callout(s).",
 	"firstRun.scanning": "Scanning",
 
+	// Welcome / splash screen (shown once on first load; reopen via header icon)
+	"welcome.tooltip": "About Callout Studio",
+	"welcome.title": "Welcome to Callout Studio",
+	"welcome.tagline": "Your complete solution for managing Obsidian callouts.",
+	"welcome.learnMore": "Learn more",
+	"welcome.continue": "Continue",
+	"welcome.previewTitle": "See it in action",
+	"welcome.sample":
+		"Callout Studio lets you use the same callout in **three** different ways.\n\n" +
+		"## [!tip] As a heading\n" +
+		"Turn any callout into a section heading with `## [!type]` — perfect for structuring long notes, and it shows up in the outline.\n\n" +
+		"Want something subtler? Tuck an [!warning] inline pill right into a sentence with `[!type]` to flag a word without breaking your flow.\n\n" +
+		"> [!note] Or a regular block\n" +
+		"> The classic callout, written as `> [!type]`. Give it an icon, colors, and a name, then reuse it anywhere.\n",
+
 	// Delete-callout modal (trash button on user rows)
 	"deleteModal.title": 'Delete callout "{{name}}"?',
 	"deleteModal.bodyInUse":
@@ -343,6 +358,11 @@ export const en: Record<string, string> = {
 
 	// Heading callouts
 	"heading.toggleFold": "Toggle fold",
+
+	// Global settings section (per-role style popups)
+	"settings.globalSettings": "Global settings",
+	"settings.globalSettingsDesc":
+		"Fine-tune how each callout type looks across your whole vault. Choose a type to adjust its borders, spacing, shape, and more.",
 
 	// Callout types section
 	"settings.calloutTypes": "Callout types",

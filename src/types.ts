@@ -254,6 +254,8 @@ export interface PluginSettings {
 	inlineCallouts: RoleToggleSettings;
 	/** Has the first-run vault scan been completed? */
 	firstRunCompleted?: boolean;
+	/** Has the welcome/splash screen been shown at least once? */
+	welcomeSeen?: boolean;
 	/** Callout ID to use as fallback for unrecognized callout types. Empty = Obsidian default */
 	fallbackCalloutId: string;
 	/**

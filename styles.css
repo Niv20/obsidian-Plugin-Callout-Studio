@@ -2336,116 +2336,21 @@ input.cs-input-invalid:focus {
 	unicode-bidi: isolate;
 }
 
-/* ══ Callout type cards & per-role style modals ═══════════════════ */
+/* ══ Global settings section & per-role style modals ══════════════ */
 
-/* Three cards (regular / heading / inline), always stacked vertically.
-   Inside each card, the info column (title + description + toggle + style
-   button) and the live preview stack on narrow panes (phone) — info first —
-   and sit side by side on wide panes (desktop / tablet): info column beside
-   the preview. The split is driven by a container query on the card list so
-   it tracks the actual settings-pane width, not the window. */
-.cs-role-cards {
-	display: flex;
-	flex-direction: column;
-	gap: 12px;
-	margin: 12px 0 24px;
-	container-type: inline-size;
-}
-
-.cs-role-card {
-	display: flex;
-	flex-direction: column;
-	gap: 8px;
-	min-width: 0;
-	padding: 12px;
-	border: 1px solid var(--background-modifier-border);
-	border-radius: 10px;
-	background: var(--background-primary);
-}
-
-.cs-role-card-info {
-	display: flex;
-	flex-direction: column;
-	gap: 8px;
-	min-width: 0;
-}
-
-.cs-role-card-title {
-	font-weight: var(--font-semibold);
-}
-
-.cs-role-card-desc {
+/* "Global settings" section: an intro line followed by a row of per-role
+   buttons, each opening the matching "Global callout style" popup. */
+.cs-global-settings-desc {
+	margin: 4px 0 12px;
 	font-size: var(--font-ui-smaller);
 	color: var(--text-muted);
 }
 
-.cs-role-card-preview {
-	min-width: 0;
-	margin-top: 2px;
-}
-
-/* Wide panes: two columns — info | preview (mirrors automatically in RTL).
-   The footer + style button anchor to the column bottom so the controls line
-   up with the preview's lower edge, and the preview stretches to match the
-   info column's height. */
-@container (min-width: 560px) {
-	.cs-role-card {
-		flex-direction: row;
-		align-items: stretch;
-		gap: 16px;
-	}
-
-	.cs-role-card-info {
-		flex: 1 1 0;
-	}
-
-	.cs-role-card-info .cs-role-card-footer {
-		margin-top: auto;
-	}
-
-	.cs-role-card-preview {
-		flex: 1.4 1 0;
-		margin-top: 0;
-		display: flex;
-		flex-direction: column;
-	}
-
-	.cs-role-card-preview .cs-live-preview-body {
-		flex-grow: 1;
-	}
-}
-
-.cs-role-card-preview .cs-live-preview-body {
-	min-height: 88px;
-}
-
-.cs-role-card-preview
-	.cs-live-preview-body.cs-live-preview-editable
-	.markdown-source-view,
-.cs-role-card-preview
-	.cs-live-preview-body.cs-live-preview-editable
-	.cm-editor {
-	min-height: 84px;
-}
-
-/* Enable-toggle row: a bare Obsidian setting stripped of its own chrome so
-   it blends into the card. */
-.cs-role-card-footer {
-	border-top: 1px solid var(--background-modifier-border);
-	padding-top: 4px;
-}
-
-.cs-role-card-footer .setting-item {
-	border: none;
-	padding: 6px 0;
-}
-
-.cs-role-card-footer .setting-item-name {
-	font-size: var(--font-ui-small);
-}
-
-.cs-role-card-style-btn {
-	width: 100%;
+.cs-global-settings-buttons {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+	margin-bottom: 24px;
 }
 
 /* Per-role "Global callout style" popup: same footprint as the callout
@@ -2468,4 +2373,87 @@ input.cs-input-invalid:focus {
 .cs-heading-token[data-callout="global-style-demo"] .cs-callout-icon svg,
 .cs-inline-callout[data-callout="global-style-demo"] .cs-callout-icon svg {
 	fill: currentColor;
+}
+
+/* ══ Welcome / splash screen ══════════════════════════════════════ */
+
+/* Two columns: an intro + actions on the left, a self-describing live
+   preview on the right. Collapses to a single column on narrow screens. */
+.modal.cs-welcome-modal {
+	width: min(760px, 95vw);
+	max-width: min(760px, 95vw);
+}
+
+.cs-welcome-panel {
+	display: grid;
+	grid-template-columns: 1fr 1.2fr;
+	gap: 24px;
+	align-items: stretch;
+}
+
+.cs-welcome-left {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	gap: 12px;
+	min-width: 0;
+}
+
+.cs-welcome-icon {
+	color: var(--interactive-accent);
+	line-height: 0;
+}
+
+.cs-welcome-icon .svg-icon {
+	width: 2.4em;
+	height: 2.4em;
+}
+
+.cs-welcome-title {
+	margin: 8px 0 0;
+	font-size: 1.6em;
+	font-weight: 700;
+	color: var(--text-normal);
+}
+
+.cs-welcome-tagline {
+	margin: 0;
+	font-size: var(--font-ui-medium);
+	color: var(--text-muted);
+	line-height: 1.5;
+}
+
+/* Buttons sit just below the tagline; the whole column is vertically
+   centered within the panel. */
+.cs-welcome-actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+	padding-top: 8px;
+}
+
+.cs-welcome-right {
+	min-width: 0;
+	display: flex;
+	flex-direction: column;
+}
+
+.cs-welcome-right .cs-live-preview-container {
+	flex: 1;
+}
+
+.cs-welcome-right .cs-live-preview-body {
+	min-height: 200px;
+	max-height: 340px;
+	overflow-y: auto;
+}
+
+@media (max-width: 640px) {
+	.cs-welcome-panel {
+		grid-template-columns: 1fr;
+	}
+
+	.cs-welcome-actions {
+		margin-top: 4px;
+	}
 }

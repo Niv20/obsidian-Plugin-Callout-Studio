@@ -165,6 +165,8 @@ export function mergeSavedSettings(
 		firstRunCompleted:
 			savedSettings.firstRunCompleted ??
 			DEFAULT_SETTINGS.firstRunCompleted,
+		welcomeSeen:
+			savedSettings.welcomeSeen ?? DEFAULT_SETTINGS.welcomeSeen,
 		fallbackCalloutId:
 			savedSettings.fallbackCalloutId ??
 			DEFAULT_SETTINGS.fallbackCalloutId,

@@ -292,6 +292,7 @@ export const DEFAULT_SETTINGS: PluginSettings = {
 	},
 	inlineCallouts: { enabled: true },
 	firstRunCompleted: false,
+	welcomeSeen: false,
 	fallbackCalloutId: "note",
 	language: "auto",
 	customPalettes: [],
