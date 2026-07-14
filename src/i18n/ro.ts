@@ -235,7 +235,7 @@ export const ro: Record<string, string> = {
 	"settings.refShowIcon": "Afișează pictograma în schiță și linkuri",
 	"settings.refShowIconDesc": "Afișează pictograma colorată a callout-ului înaintea titlului curățat în acele locuri.",
 	"settings.customizeMenu": "Personalizați elementele meniului",
-	"settings.customizeMenuDesc": "Alegeți ce acțiuni de clic dreapta apar pentru fiecare tip de callout și reordonați-le. Funcționează în vizualizarea de lectură, modul sursă și Live Preview.",
+	"settings.customizeMenuDesc": "Alegeți ce acțiuni de clic dreapta apar pentru fiecare tip de callout și reordonați-le. Funcționează în modul sursă și Live Preview.",
 	"settings.customizeMenuButton": "Personalizați elementele meniului",
 	"menuCustomize.title": "Personalizare meniu clic dreapta",
 	"menuCustomize.desc": "Activați sau dezactivați acțiuni și trageți mânerul pentru a le reordona. Modificările sunt salvate automat.",

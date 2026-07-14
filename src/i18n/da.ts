@@ -217,7 +217,7 @@ export const da: Record<string, string> = {
 	"settings.refShowIcon": "Vis ikon i disposition og links",
 	"settings.refShowIconDesc": "Viser calloutens farvede ikon før den ryddede titel på disse steder.",
 	"settings.customizeMenu": "Tilpas menupunkter",
-	"settings.customizeMenuDesc": "Vælg hvilke højreklikhandlinger der vises for hver callout-type, og omarranger dem. Virker i læsevisning, kildetilstand og Live Preview.",
+	"settings.customizeMenuDesc": "Vælg hvilke højreklikhandlinger der vises for hver callout-type, og omarranger dem. Virker i kildetilstand og Live Preview.",
 	"settings.customizeMenuButton": "Tilpas menupunkter",
 	"menuCustomize.title": "Tilpas højreklikmenuen",
 	"menuCustomize.desc": "Slå handlinger til eller fra, og træk i håndtaget for at omarrangere dem. Ændringer gemmes automatisk.",

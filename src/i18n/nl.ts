@@ -235,7 +235,7 @@ export const nl: Record<string, string> = {
 	"settings.refShowIcon": "Pictogram tonen in overzicht en links",
 	"settings.refShowIconDesc": "Toont het gekleurde pictogram van de callout vóór de opgeschoonde titel op die plekken.",
 	"settings.customizeMenu": "Menu-items aanpassen",
-	"settings.customizeMenuDesc": "Kies welke rechtsklikacties worden weergegeven voor elk callout-type en wijzig de volgorde. Werkt in leesweergave, bronmodus en Live Preview.",
+	"settings.customizeMenuDesc": "Kies welke rechtsklikacties worden weergegeven voor elk callout-type en wijzig de volgorde. Werkt in bronmodus en Live Preview.",
 	"settings.customizeMenuButton": "Menu-items aanpassen",
 	"menuCustomize.title": "Rechtsklikmenu aanpassen",
 	"menuCustomize.desc": "Schakel acties in of uit en sleep de handgreep om de volgorde te wijzigen. Wijzigingen worden automatisch opgeslagen.",

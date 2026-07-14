@@ -243,7 +243,7 @@ export const zh: Record<string, string> = {
 	"settings.refShowIconDesc": "在这些位置的已清理标题前显示 callout 的彩色图标。",
 
 	"settings.customizeMenu": "自定义菜单项",
-	"settings.customizeMenuDesc": "选择每种 callout 类型显示哪些右键操作，并调整它们的顺序。 在阅读视图、源代码模式和实时预览中均有效。",
+	"settings.customizeMenuDesc": "选择每种 callout 类型显示哪些右键操作，并调整它们的顺序。 在源代码模式和实时预览中均有效。",
 	"settings.customizeMenuButton": "自定义菜单项",
 	"menuCustomize.title": "自定义右键菜单",
 	"menuCustomize.desc": "启用或禁用操作，并拖动手柄调整顺序。更改会自动保存。",

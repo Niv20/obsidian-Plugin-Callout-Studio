@@ -235,7 +235,7 @@ export const sv: Record<string, string> = {
 	"settings.refShowIcon": "Visa ikon i disposition och länkar",
 	"settings.refShowIconDesc": "Visar calloutens färgade ikon före den rensade titeln på dessa platser.",
 	"settings.customizeMenu": "Anpassa menyalternativ",
-	"settings.customizeMenuDesc": "Välj vilka högerklicksåtgärder som visas för varje callout-typ och ändra deras ordning. Fungerar i läsvy, källäge och Live Preview.",
+	"settings.customizeMenuDesc": "Välj vilka högerklicksåtgärder som visas för varje callout-typ och ändra deras ordning. Fungerar i källäge och Live Preview.",
 	"settings.customizeMenuButton": "Anpassa menyalternativ",
 	"menuCustomize.title": "Anpassa högerklicksmenyn",
 	"menuCustomize.desc": "Aktivera eller inaktivera åtgärder och dra i handtaget för att ändra ordningen. Ändringar sparas automatiskt.",

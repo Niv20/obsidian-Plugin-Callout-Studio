@@ -239,7 +239,7 @@ export const it: Record<string, string> = {
 	"settings.refShowIconDesc": "Mostra l'icona colorata del callout prima del titolo pulito in quei punti.",
 
 	"settings.customizeMenu": "Personalizza voci di menu",
-	"settings.customizeMenuDesc": "Scegli quali azioni del clic destro appaiono per ciascun tipo di callout e riordinale. Funziona in visualizzazione lettura, modalità sorgente e anteprima live.",
+	"settings.customizeMenuDesc": "Scegli quali azioni del clic destro appaiono per ciascun tipo di callout e riordinale. Funziona in modalità sorgente e anteprima live.",
 	"settings.customizeMenuButton": "Personalizza voci di menu",
 	"menuCustomize.title": "Personalizza il menu del clic destro",
 	"menuCustomize.desc": "Attiva o disattiva le azioni e trascina la maniglia per riordinarle. Le modifiche vengono salvate automaticamente.",

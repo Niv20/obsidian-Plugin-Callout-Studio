@@ -220,7 +220,7 @@ export const zhTW: Record<string, string> = {
 	"settings.refShowIcon": "在大綱和連結中顯示圖示",
 	"settings.refShowIconDesc": "在這些位置的已清理標題前顯示 callout 的彩色圖示。",
 	"settings.customizeMenu": "自訂選單項目",
-	"settings.customizeMenuDesc": "選擇每種 callout 類型顯示哪些右鍵操作，並調整其順序。 在閱讀檢視、原始碼模式和即時預覽中均有效。",
+	"settings.customizeMenuDesc": "選擇每種 callout 類型顯示哪些右鍵操作，並調整其順序。 在原始碼模式和即時預覽中均有效。",
 	"settings.customizeMenuButton": "自訂選單項目",
 	"menuCustomize.title": "自訂右鍵選單",
 	"menuCustomize.desc": "啟用或停用操作，並拖曳把手調整順序。變更會自動儲存。",

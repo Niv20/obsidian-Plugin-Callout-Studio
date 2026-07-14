@@ -235,7 +235,7 @@ export const fa: Record<string, string> = {
 	"settings.refShowIcon": "نمایش نماد در طرح‌کلی و پیوندها",
 	"settings.refShowIconDesc": "نماد رنگی callout را پیش از عنوان پاک‌شده در آن مکان‌ها نمایش می‌دهد.",
 	"settings.customizeMenu": "سفارشی‌سازی موارد منو",
-	"settings.customizeMenuDesc": "انتخاب کنید کدام اقدامات کلیک راست برای هر نوع callout نمایش داده شود و ترتیب آن‌ها را تغییر دهید. در حالت خواندن، حالت منبع و Live Preview کار می‌کند.",
+	"settings.customizeMenuDesc": "انتخاب کنید کدام اقدامات کلیک راست برای هر نوع callout نمایش داده شود و ترتیب آن‌ها را تغییر دهید. در حالت منبع و Live Preview کار می‌کند.",
 	"settings.customizeMenuButton": "سفارشی‌سازی موارد منو",
 	"menuCustomize.title": "سفارشی‌سازی منوی کلیک راست",
 	"menuCustomize.desc": "اقدامات را روشن یا خاموش کنید و با کشیدن دستگیره ترتیب آن‌ها را تغییر دهید. تغییرات به‌طور خودکار ذخیره می‌شوند.",

@@ -217,7 +217,7 @@ export const fi: Record<string, string> = {
 	"settings.refShowIcon": "Näytä kuvake jäsennyksessä ja linkeissä",
 	"settings.refShowIconDesc": "Näyttää calloutin värillisen kuvakkeen siistityn otsikon edessä näissä paikoissa.",
 	"settings.customizeMenu": "Mukauta valikon kohteita",
-	"settings.customizeMenuDesc": "Valitse, mitkä hiiren kakkospainikkeen toiminnot näkyvät kullekin callout-tyypille, ja järjestä ne uudelleen. Toimii lukemisnäkymässä, lähdetilassa ja Live Preview -tilassa.",
+	"settings.customizeMenuDesc": "Valitse, mitkä hiiren kakkospainikkeen toiminnot näkyvät kullekin callout-tyypille, ja järjestä ne uudelleen. Toimii lähdetilassa ja Live Preview -tilassa.",
 	"settings.customizeMenuButton": "Mukauta valikon kohteita",
 	"menuCustomize.title": "Mukauta hiiren kakkospainikkeen valikkoa",
 	"menuCustomize.desc": "Ota toimintoja käyttöön tai pois käytöstä ja järjestä niitä uudelleen vetämällä kahvasta. Muutokset tallennetaan automaattisesti.",

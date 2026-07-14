@@ -243,7 +243,7 @@ export const vi: Record<string, string> = {
 	"settings.refShowIconDesc": "Hiển thị biểu tượng có màu của callout trước tiêu đề đã dọn dẹp ở những nơi đó.",
 
 	"settings.customizeMenu": "Tùy chỉnh mục menu",
-	"settings.customizeMenuDesc": "Chọn những hành động chuột phải nào xuất hiện cho từng loại callout và sắp xếp lại thứ tự. Hoạt động trong chế độ đọc, chế độ nguồn và Xem trước trực tiếp.",
+	"settings.customizeMenuDesc": "Chọn những hành động chuột phải nào xuất hiện cho từng loại callout và sắp xếp lại thứ tự. Hoạt động trong chế độ nguồn và Xem trước trực tiếp.",
 	"settings.customizeMenuButton": "Tùy chỉnh mục menu",
 	"menuCustomize.title": "Tùy chỉnh menu chuột phải",
 	"menuCustomize.desc": "Bật hoặc tắt các hành động và kéo tay cầm để sắp xếp lại. Thay đổi được lưu tự động.",

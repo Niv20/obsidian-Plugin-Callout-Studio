@@ -217,7 +217,7 @@ export const ms: Record<string, string> = {
 	"settings.refShowIcon": "Tunjukkan ikon dalam outline dan pautan",
 	"settings.refShowIconDesc": "Tunjukkan ikon berwarna callout sebelum tajuk yang dibersihkan di tempat-tempat tersebut.",
 	"settings.customizeMenu": "Sesuaikan item menu",
-	"settings.customizeMenuDesc": "Pilih tindakan klik kanan yang dipaparkan untuk setiap jenis callout dan susun semula. Berfungsi dalam paparan baca, mod sumber, dan Pratonton Langsung.",
+	"settings.customizeMenuDesc": "Pilih tindakan klik kanan yang dipaparkan untuk setiap jenis callout dan susun semula. Berfungsi dalam mod sumber dan Pratonton Langsung.",
 	"settings.customizeMenuButton": "Sesuaikan item menu",
 	"menuCustomize.title": "Sesuaikan menu klik kanan",
 	"menuCustomize.desc": "Hidupkan atau matikan tindakan dan seret pemegang untuk menyusun semula. Perubahan disimpan secara automatik.",

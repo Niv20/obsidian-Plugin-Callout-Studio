@@ -235,7 +235,7 @@ export const pl: Record<string, string> = {
 	"settings.refShowIcon": "Pokaż ikonę w konspekcie i linkach",
 	"settings.refShowIconDesc": "Pokazuje kolorową ikonę callout przed wyczyszczonym tytułem w tych miejscach.",
 	"settings.customizeMenu": "Dostosuj elementy menu",
-	"settings.customizeMenuDesc": "Wybierz, które akcje menu kontekstowego pojawiają się dla każdego typu callout, i zmień ich kolejność. Działa w widoku czytania, trybie źródłowym i podglądzie na żywo.",
+	"settings.customizeMenuDesc": "Wybierz, które akcje menu kontekstowego pojawiają się dla każdego typu callout, i zmień ich kolejność. Działa w trybie źródłowym i podglądzie na żywo.",
 	"settings.customizeMenuButton": "Dostosuj elementy menu",
 	"menuCustomize.title": "Dostosuj menu kontekstowe",
 	"menuCustomize.desc": "Włączaj lub wyłączaj akcje i przeciągaj uchwyt, aby zmienić ich kolejność. Zmiany są zapisywane automatycznie.",

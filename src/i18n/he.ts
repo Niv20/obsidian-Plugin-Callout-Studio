@@ -308,7 +308,7 @@ export const he: Record<string, string> = {
 	// Context menu customization
 	"settings.customizeMenu": "התאמת פריטי התפריט",
 	"settings.customizeMenuDesc":
-		"בחירה אילו פעולות קליק־ימני יופיעו לכל סוג תיבת־הבלטה ושינוי סדרן. פועל ב־Reading view, ב־Source mode וב־Live Preview.",
+		"בחירה אילו פעולות קליק־ימני יופיעו לכל סוג תיבת־הבלטה ושינוי סדרן. פועל ב־Source mode וב־Live Preview.",
 	"settings.customizeMenuButton": "התאמת פריטי התפריט",
 	"menuCustomize.title": "התאמת תפריט הקליק־הימני",
 	"menuCustomize.desc":

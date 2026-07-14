@@ -243,7 +243,7 @@ export const tr: Record<string, string> = {
 	"settings.refShowIconDesc": "Bu yerlerde temizlenmiş başlıktan önce callout'un renkli simgesini gösterir.",
 
 	"settings.customizeMenu": "Menü öğelerini özelleştir",
-	"settings.customizeMenuDesc": "Her callout türü için hangi sağ tık eylemlerinin görüneceğini seçin ve sırasını değiştirin. Okuma görünümünde, kaynak modunda ve Canlı Önizleme'de çalışır.",
+	"settings.customizeMenuDesc": "Her callout türü için hangi sağ tık eylemlerinin görüneceğini seçin ve sırasını değiştirin. Kaynak modunda ve Canlı Önizleme'de çalışır.",
 	"settings.customizeMenuButton": "Menü öğelerini özelleştir",
 	"menuCustomize.title": "Sağ tık menüsünü özelleştir",
 	"menuCustomize.desc": "Eylemleri açıp kapatın ve yeniden sıralamak için tutamacı sürükleyin. Değişiklikler otomatik olarak kaydedilir.",

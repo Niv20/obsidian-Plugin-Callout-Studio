@@ -391,7 +391,7 @@ export const en: Record<string, string> = {
 	// Context menu customization
 	"settings.customizeMenu": "Customize menu items",
 	"settings.customizeMenuDesc":
-		"Choose which right-click actions appear for each callout type and reorder them. Works in reading view, source mode, and Live Preview.",
+		"Choose which right-click actions appear for each callout type and reorder them. Works in source mode and Live Preview.",
 	"settings.customizeMenuButton": "Customize menu items",
 	"menuCustomize.title": "Customize right-click menu",
 	"menuCustomize.desc":

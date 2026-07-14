@@ -235,7 +235,7 @@ export const es: Record<string, string> = {
 	"settings.refShowIcon": "Mostrar icono en el esquema y los enlaces",
 	"settings.refShowIconDesc": "Muestra el icono coloreado del callout antes del título limpio en esos lugares.",
 	"settings.customizeMenu": "Personalizar elementos del menú",
-	"settings.customizeMenuDesc": "Elija qué acciones de clic derecho aparecen para cada tipo de callout y reordénelas. Funciona en vista de lectura, modo fuente y Vista previa en vivo.",
+	"settings.customizeMenuDesc": "Elija qué acciones de clic derecho aparecen para cada tipo de callout y reordénelas. Funciona en modo fuente y Vista previa en vivo.",
 	"settings.customizeMenuButton": "Personalizar elementos del menú",
 	"menuCustomize.title": "Personalizar menú de clic derecho",
 	"menuCustomize.desc": "Active o desactive acciones y arrastre el asa para reordenarlas. Los cambios se guardan automáticamente.",

@@ -235,7 +235,7 @@ export const ar: Record<string, string> = {
 	"settings.refShowIcon": "إظهار الأيقونة في المخطط التفصيلي والروابط",
 	"settings.refShowIconDesc": "إظهار الأيقونة الملونة لـ callout قبل العنوان المنظف في تلك الأماكن.",
 	"settings.customizeMenu": "تخصيص عناصر القائمة",
-	"settings.customizeMenuDesc": "اختر الإجراءات التي تظهر عند النقر بزر الماوس الأيمن لكل نوع callout، وأعد ترتيبها. يعمل في وضع القراءة وضع المصدر والمعاينة المباشرة.",
+	"settings.customizeMenuDesc": "اختر الإجراءات التي تظهر عند النقر بزر الماوس الأيمن لكل نوع callout، وأعد ترتيبها. يعمل في وضع المصدر والمعاينة المباشرة.",
 	"settings.customizeMenuButton": "تخصيص عناصر القائمة",
 	"menuCustomize.title": "تخصيص قائمة النقر بزر الماوس الأيمن",
 	"menuCustomize.desc": "قم بتفعيل الإجراءات أو تعطيلها واسحب المقبض لإعادة ترتيبها. تُحفظ التغييرات تلقائياً.",

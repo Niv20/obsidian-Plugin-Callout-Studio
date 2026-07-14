@@ -217,7 +217,7 @@ export const nb: Record<string, string> = {
 	"settings.refShowIcon": "Vis ikon i disposisjon og lenker",
 	"settings.refShowIconDesc": "Viser calloutens fargede ikon foran den ryddede tittelen på disse stedene.",
 	"settings.customizeMenu": "Tilpass menyelementer",
-	"settings.customizeMenuDesc": "Velg hvilke høyreklikkhandlinger som vises for hver callout-type, og endre rekkefølgen på dem. Fungerer i lesevisning, kildemodus og Live Preview.",
+	"settings.customizeMenuDesc": "Velg hvilke høyreklikkhandlinger som vises for hver callout-type, og endre rekkefølgen på dem. Fungerer i kildemodus og Live Preview.",
 	"settings.customizeMenuButton": "Tilpass menyelementer",
 	"menuCustomize.title": "Tilpass høyreklikkmenyen",
 	"menuCustomize.desc": "Slå handlinger av eller på, og dra i håndtaket for å endre rekkefølgen. Endringer lagres automatisk.",

@@ -239,7 +239,7 @@ export const ja: Record<string, string> = {
 	"settings.refShowIconDesc": "それらの場所で、クリーンにされたタイトルの前にcalloutの色付きアイコンを表示します。",
 
 	"settings.customizeMenu": "メニュー項目をカスタマイズ",
-	"settings.customizeMenuDesc": "各calloutタイプに表示する右クリック操作を選択し、順序を並べ替えます。 閲覧ビュー、ソースモード、ライブプレビューで機能します。",
+	"settings.customizeMenuDesc": "各calloutタイプに表示する右クリック操作を選択し、順序を並べ替えます。 ソースモード、ライブプレビューで機能します。",
 	"settings.customizeMenuButton": "メニュー項目をカスタマイズ",
 	"menuCustomize.title": "右クリックメニューをカスタマイズ",
 	"menuCustomize.desc": "操作のオン/オフを切り替え、ハンドルをドラッグして並べ替えます。変更は自動的に保存されます。",

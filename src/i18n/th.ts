@@ -243,7 +243,7 @@ export const th: Record<string, string> = {
 	"settings.refShowIconDesc": "แสดงไอคอนสีของ callout ก่อนชื่อเรื่องที่ล้างแล้วในสถานที่เหล่านั้น",
 
 	"settings.customizeMenu": "ปรับแต่งรายการเมนู",
-	"settings.customizeMenuDesc": "เลือกว่าการดำเนินการคลิกขวาใดจะปรากฏสำหรับแต่ละประเภท callout และจัดลำดับใหม่ ใช้งานได้ในมุมมองการอ่าน โหมดต้นฉบับ และ Live Preview",
+	"settings.customizeMenuDesc": "เลือกว่าการดำเนินการคลิกขวาใดจะปรากฏสำหรับแต่ละประเภท callout และจัดลำดับใหม่ ใช้งานได้ในโหมดต้นฉบับ และ Live Preview",
 	"settings.customizeMenuButton": "ปรับแต่งรายการเมนู",
 	"menuCustomize.title": "ปรับแต่งเมนูคลิกขวา",
 	"menuCustomize.desc": "เปิดหรือปิดการดำเนินการและลากที่จับเพื่อจัดลำดับใหม่ การเปลี่ยนแปลงจะถูกบันทึกโดยอัตโนมัติ",

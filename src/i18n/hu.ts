@@ -235,7 +235,7 @@ export const hu: Record<string, string> = {
 	"settings.refShowIcon": "Ikon megjelenítése a vázlatban és a linkekben",
 	"settings.refShowIconDesc": "Megjeleníti a callout színes ikonját a megtisztított cím előtt ezeken a helyeken.",
 	"settings.customizeMenu": "Menüelemek testreszabása",
-	"settings.customizeMenuDesc": "Válassza ki, mely jobb gombos műveletek jelenjenek meg az egyes callout-típusoknál, és rendezze át őket. Olvasó nézetben, forrás módban és élő előnézetben is működik.",
+	"settings.customizeMenuDesc": "Válassza ki, mely jobb gombos műveletek jelenjenek meg az egyes callout-típusoknál, és rendezze át őket. Forrás módban és élő előnézetben is működik.",
 	"settings.customizeMenuButton": "Menüelemek testreszabása",
 	"menuCustomize.title": "Jobb gombos menü testreszabása",
 	"menuCustomize.desc": "Kapcsolja be vagy ki a műveleteket, és húzza a fogantyút az átrendezéshez. A módosítások automatikusan mentésre kerülnek.",

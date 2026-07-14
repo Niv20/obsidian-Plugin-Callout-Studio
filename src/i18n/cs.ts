@@ -235,7 +235,7 @@ export const cs: Record<string, string> = {
 	"settings.refShowIcon": "Zobrazit ikonu v osnově a odkazech",
 	"settings.refShowIconDesc": "Zobrazí barevnou ikonu callout před vyčištěným názvem na těchto místech.",
 	"settings.customizeMenu": "Přizpůsobit položky menu",
-	"settings.customizeMenuDesc": "Vyberte, které akce kontextové nabídky se zobrazí pro každý typ callout, a změňte jejich pořadí. Funguje v zobrazení pro čtení, zdrojovém režimu a živém náhledu.",
+	"settings.customizeMenuDesc": "Vyberte, které akce kontextové nabídky se zobrazí pro každý typ callout, a změňte jejich pořadí. Funguje ve zdrojovém režimu a živém náhledu.",
 	"settings.customizeMenuButton": "Přizpůsobit položky menu",
 	"menuCustomize.title": "Přizpůsobit kontextovou nabídku",
 	"menuCustomize.desc": "Zapínejte nebo vypínejte akce a přetažením úchytu je přeuspořádejte. Změny se ukládají automaticky.",
