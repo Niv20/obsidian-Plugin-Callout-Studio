@@ -41,13 +41,7 @@ import type {
 const scanUnknownCalloutsInBuffer = (
 	content: string,
 	knownIds: Set<string>,
-): string[] =>
-	(
-		scanStringForUnknownCallouts as (
-			content: string,
-			knownIds: Set<string>,
-		) => string[]
-	)(content, knownIds);
+): string[] => scanStringForUnknownCallouts(content, knownIds);
 
 export class CalloutStudioSettingsTab extends PluginSettingTab {
 	plugin: SettingsTabPlugin;

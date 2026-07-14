@@ -21,11 +21,7 @@ import type { App } from "obsidian";
 import type { SettingsSectionContext } from "./types";
 
 const scanVaultStats = (app: App): Promise<VaultCalloutStatistics> =>
-	(
-		scanVaultCalloutStatistics as (
-			app: App,
-		) => Promise<VaultCalloutStatistics>
-	)(app);
+	scanVaultCalloutStatistics(app);
 
 export function renderImportExportSection(
 	ctx: SettingsSectionContext,

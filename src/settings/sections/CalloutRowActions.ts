@@ -25,18 +25,12 @@ const convertVaultCalloutsToPlainText = (
 	app: App,
 	ids: string[],
 ): Promise<{ files: number; blocks: number }> =>
-	(
-		convertCalloutsToPlainTextInVault as (
-			app: App,
-			ids: string[],
-		) => Promise<{ files: number; blocks: number }>
-	)(app, ids);
+	convertCalloutsToPlainTextInVault(app, ids);
 
 const convertRegistryCalloutToFallback = (
 	ctx: SettingsSectionContext,
 	id: string,
-): boolean =>
-	(ctx.plugin.registry.convertToFallback as (id: string) => boolean)(id);
+): boolean => ctx.plugin.registry.convertToFallback(id);
 
 export async function openBuiltInRowMenu(
 	ctx: SettingsSectionContext,
