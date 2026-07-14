@@ -71,7 +71,6 @@ export const zhTW: Record<string, string> = {
 	"settings.darkLabel": "暗",
 	"settings.lightColorAria": "亮色：{{color}}",
 	"settings.darkColorAria": "暗色：{{color}}",
-	"settings.colorPairAria": "亮色：{{light}} · 暗色：{{dark}}",
 	"settings.fallbackCallout": "預設備用 callout",
 	"settings.fallbackCalloutDesc": "vault 中無法辨識的 callout 類型將繼承此 callout 的樣式。",
 	"settings.globalStyle": "全域 callout 樣式",
@@ -152,8 +151,6 @@ export const zhTW: Record<string, string> = {
 	"editor.background": "背景",
 	"editor.text": "文字",
 	"editor.iconColor": "主色",
-	"editor.palettes": "預設",
-	"editor.paletteDefault": "預設藍色",
 	"editor.paletteNone": "— 選擇預設 —",
 	"editor.paletteGroupObsidian": "Obsidian callout",
 	"editor.paletteGroupPresets": "色彩預設",
@@ -204,6 +201,15 @@ export const zhTW: Record<string, string> = {
 	"contextMenu.copySection": "複製標題部分",
 	"contextMenu.deleteSection": "刪除標題部分",
 	"heading.toggleFold": "切換折疊",
+	"settings.globalSettings": "全域設定",
+	"settings.globalSettingsDesc": "微調每種 callout 類型在整個 vault 中的外觀。",
+	"settings.globalSettingsRegularDesc":
+		"在區塊引用中新增 callout 標記（例如 `> [!type]`）以顯示為 Obsidian 原生的 callout 框。您可以調整其邊框、圓角、字型縮放和對齊方式。",
+	"settings.globalSettingsHeadingDesc":
+		"在標題井號後直接新增 callout 標記（例如 `## [!type]`）以將其顯示為帶樣式的 callout 標題。您可以調整其邊框、形狀和垂直間距。",
+	"settings.globalSettingsInlineDesc":
+		"在文字行中的任意位置新增 callout 標記（例如 `[!type]`）以將其顯示為小型行內徽標。您可以調整其邊框和形狀。",
+	"settings.globalSettingsCustomize": "自訂",
 	"settings.calloutTypes": "Callout 類型",
 	"settings.calloutTypeRegular": "一般 callout",
 	"settings.calloutTypeRegularDesc": "帶內容的區塊引用 callout：> [!name]。永遠啟用。",

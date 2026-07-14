@@ -79,7 +79,6 @@ export const id: Record<string, string> = {
 	"settings.darkLabel": "G",
 	"settings.lightColorAria": "Terang: {{color}}",
 	"settings.darkColorAria": "Gelap: {{color}}",
-	"settings.colorPairAria": "Terang: {{light}} · Gelap: {{dark}}",
 
 	"settings.fallbackCallout": "Callout fallback default",
 	"settings.fallbackCalloutDesc": "Tipe callout yang tidak dikenal di vault Anda akan mewarisi gaya callout ini.",
@@ -170,8 +169,6 @@ export const id: Record<string, string> = {
 	"editor.background": "Latar belakang",
 	"editor.text": "Teks",
 	"editor.iconColor": "Warna utama",
-	"editor.palettes": "Preset",
-	"editor.paletteDefault": "Biru default",
 	"editor.paletteNone": "— pilih preset —",
 	"editor.paletteGroupObsidian": "Callout Obsidian",
 	"editor.paletteGroupPresets": "Preset warna",
@@ -225,6 +222,13 @@ export const id: Record<string, string> = {
 	"contextMenu.deleteSection": "Hapus bagian heading",
 
 	"heading.toggleFold": "Alihkan lipatan",
+
+	"settings.globalSettings": "Pengaturan global",
+	"settings.globalSettingsDesc": "Sesuaikan tampilan setiap tipe callout di seluruh vault Anda.",
+	"settings.globalSettingsRegularDesc": "Tambahkan token callout ke blockquote (mis., `> [!type]`) untuk menampilkan kotak callout native Obsidian. Anda dapat menyesuaikan batas, radius, skala font, dan perataannya.",
+	"settings.globalSettingsHeadingDesc": "Tambahkan token callout tepat setelah tanda pagar heading (mis., `## [!type]`) untuk menampilkannya sebagai heading callout bergaya. Anda dapat menyesuaikan batas, bentuk, dan jarak vertikalnya.",
+	"settings.globalSettingsInlineDesc": "Tambahkan token callout di mana saja di dalam baris teks (mis., `[!type]`) untuk menampilkannya sebagai pil sebaris kecil. Anda dapat menyesuaikan batas dan bentuknya.",
+	"settings.globalSettingsCustomize": "Sesuaikan",
 
 	"settings.calloutTypes": "Tipe callout",
 	"settings.calloutTypeRegular": "Callout reguler",

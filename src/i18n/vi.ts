@@ -79,7 +79,6 @@ export const vi: Record<string, string> = {
 	"settings.darkLabel": "T",
 	"settings.lightColorAria": "Sáng: {{color}}",
 	"settings.darkColorAria": "Tối: {{color}}",
-	"settings.colorPairAria": "Sáng: {{light}} · Tối: {{dark}}",
 
 	"settings.fallbackCallout": "Callout dự phòng mặc định",
 	"settings.fallbackCalloutDesc": "Các loại callout không nhận dạng được trong vault sẽ kế thừa kiểu của callout này.",
@@ -170,8 +169,6 @@ export const vi: Record<string, string> = {
 	"editor.background": "Nền",
 	"editor.text": "Văn bản",
 	"editor.iconColor": "Màu chính",
-	"editor.palettes": "Cài đặt trước",
-	"editor.paletteDefault": "Xanh mặc định",
 	"editor.paletteNone": "— chọn cài đặt trước —",
 	"editor.paletteGroupObsidian": "Callouts Obsidian",
 	"editor.paletteGroupPresets": "Cài đặt màu trước",
@@ -225,6 +222,17 @@ export const vi: Record<string, string> = {
 	"contextMenu.deleteSection": "Xóa phần tiêu đề",
 
 	"heading.toggleFold": "Chuyển đổi gập",
+
+	"settings.globalSettings": "Cài đặt toàn cục",
+	"settings.globalSettingsDesc":
+		"Tinh chỉnh cách mỗi loại callout hiển thị trên toàn bộ vault của bạn.",
+	"settings.globalSettingsRegularDesc":
+		"Thêm token callout vào một trích dẫn khối (ví dụ: `> [!type]`) để hiển thị dưới dạng hộp callout gốc của Obsidian. Bạn có thể điều chỉnh viền, độ bo góc, tỷ lệ phông và căn chỉnh của nó.",
+	"settings.globalSettingsHeadingDesc":
+		"Thêm token callout ngay sau các dấu # của tiêu đề (ví dụ: `## [!type]`) để hiển thị dưới dạng tiêu đề callout được tạo kiểu. Bạn có thể điều chỉnh viền, hình dạng và khoảng cách dọc của nó.",
+	"settings.globalSettingsInlineDesc":
+		"Thêm token callout vào bất kỳ đâu trong một dòng văn bản (ví dụ: `[!type]`) để hiển thị dưới dạng viên nội tuyến nhỏ. Bạn có thể điều chỉnh viền và hình dạng của nó.",
+	"settings.globalSettingsCustomize": "Tùy chỉnh",
 
 	"settings.calloutTypes": "Các loại callout",
 	"settings.calloutTypeRegular": "Callout thông thường",

@@ -79,7 +79,6 @@ export const ko: Record<string, string> = {
 	"settings.darkLabel": "어",
 	"settings.lightColorAria": "밝음: {{color}}",
 	"settings.darkColorAria": "어두움: {{color}}",
-	"settings.colorPairAria": "밝음: {{light}} · 어두움: {{dark}}",
 
 	"settings.fallbackCallout": "기본 폴백 callout",
 	"settings.fallbackCalloutDesc": "볼트에서 인식되지 않는 callout 유형은 이 callout의 스타일을 상속합니다.",
@@ -170,8 +169,6 @@ export const ko: Record<string, string> = {
 	"editor.background": "배경",
 	"editor.text": "텍스트",
 	"editor.iconColor": "기본 색상",
-	"editor.palettes": "사전 설정",
-	"editor.paletteDefault": "기본 파란색",
 	"editor.paletteNone": "— 사전 설정 선택 —",
 	"editor.paletteGroupObsidian": "Obsidian callout",
 	"editor.paletteGroupPresets": "색상 사전 설정",
@@ -225,6 +222,13 @@ export const ko: Record<string, string> = {
 	"contextMenu.deleteSection": "제목 섹션 삭제",
 
 	"heading.toggleFold": "접기 전환",
+
+	"settings.globalSettings": "전역 설정",
+	"settings.globalSettingsDesc": "볼트 전체에서 각 callout 유형이 어떻게 보이는지 세밀하게 조정합니다.",
+	"settings.globalSettingsRegularDesc": "인용 블록에 callout 토큰을 추가하면(예: `> [!type]`) Obsidian 기본 callout 상자로 표시됩니다. 테두리, 반지름, 폰트 크기, 정렬을 조정할 수 있습니다.",
+	"settings.globalSettingsHeadingDesc": "제목의 # 기호 바로 뒤에 callout 토큰을 추가하면(예: `## [!type]`) 스타일이 적용된 제목 callout으로 표시됩니다. 테두리, 모양, 수직 간격을 조정할 수 있습니다.",
+	"settings.globalSettingsInlineDesc": "텍스트 줄 안 어디든 callout 토큰을 추가하면(예: `[!type]`) 작은 인라인 필로 표시됩니다. 테두리와 모양을 조정할 수 있습니다.",
+	"settings.globalSettingsCustomize": "사용자 지정",
 
 	"settings.calloutTypes": "callout 유형",
 	"settings.calloutTypeRegular": "일반 callout",

@@ -2338,19 +2338,12 @@ input.cs-input-invalid:focus {
 
 /* ══ Global settings section & per-role style modals ══════════════ */
 
-/* "Global settings" section: an intro line followed by a row of per-role
-   buttons, each opening the matching "Global callout style" popup. */
+/* "Global settings" section: an intro line followed by one Setting row per
+   role, each opening the matching "Global callout style" popup. */
 .cs-global-settings-desc {
 	margin: 4px 0 12px;
 	font-size: var(--font-ui-smaller);
 	color: var(--text-muted);
-}
-
-.cs-global-settings-buttons {
-	display: flex;
-	flex-wrap: wrap;
-	gap: 8px;
-	margin-bottom: 24px;
 }
 
 /* Per-role "Global callout style" popup: same footprint as the callout

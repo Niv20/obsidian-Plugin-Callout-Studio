@@ -79,7 +79,6 @@ export const it: Record<string, string> = {
 	"settings.darkLabel": "S",
 	"settings.lightColorAria": "Chiaro: {{color}}",
 	"settings.darkColorAria": "Scuro: {{color}}",
-	"settings.colorPairAria": "Chiaro: {{light}} · Scuro: {{dark}}",
 
 	"settings.fallbackCallout": "Callout di fallback predefinito",
 	"settings.fallbackCalloutDesc": "I tipi di callout non riconosciuti nel vault erediteranno lo stile di questo callout.",
@@ -170,8 +169,6 @@ export const it: Record<string, string> = {
 	"editor.background": "Sfondo",
 	"editor.text": "Testo",
 	"editor.iconColor": "Colore principale",
-	"editor.palettes": "Preimpostazioni",
-	"editor.paletteDefault": "Blu predefinito",
 	"editor.paletteNone": "— seleziona preimpostazione —",
 	"editor.paletteGroupObsidian": "Callout Obsidian",
 	"editor.paletteGroupPresets": "Preimpostazioni colore",
@@ -225,6 +222,13 @@ export const it: Record<string, string> = {
 	"contextMenu.deleteSection": "Elimina sezione di intestazione",
 
 	"heading.toggleFold": "Attiva/disattiva la piegatura",
+
+	"settings.globalSettings": "Impostazioni globali",
+	"settings.globalSettingsDesc": "Perfeziona l'aspetto di ogni tipo di callout in tutto il tuo vault.",
+	"settings.globalSettingsRegularDesc": "Aggiungi un token callout a una citazione (ad es. `> [!type]`) per visualizzare il riquadro callout nativo di Obsidian. Puoi regolarne bordo, raggio, scala font e allineamento.",
+	"settings.globalSettingsHeadingDesc": "Aggiungi un token callout subito dopo i cancelletti dell'intestazione (ad es. `## [!type]`) per visualizzarlo come un'intestazione callout stilizzata. Puoi regolarne bordo, forma e spaziatura verticale.",
+	"settings.globalSettingsInlineDesc": "Aggiungi un token callout in un punto qualsiasi di una riga di testo (ad es. `[!type]`) per visualizzarlo come una piccola pillola in linea. Puoi regolarne bordo e forma.",
+	"settings.globalSettingsCustomize": "Personalizza",
 
 	"settings.calloutTypes": "Tipi di callout",
 	"settings.calloutTypeRegular": "Callout normale",

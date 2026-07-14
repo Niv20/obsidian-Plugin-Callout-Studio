@@ -79,7 +79,6 @@ export const uk: Record<string, string> = {
 	"settings.darkLabel": "Т",
 	"settings.lightColorAria": "Світлий: {{color}}",
 	"settings.darkColorAria": "Темний: {{color}}",
-	"settings.colorPairAria": "Світлий: {{light}} · Темний: {{dark}}",
 
 	"settings.fallbackCallout": "Резервний callout за замовчуванням",
 	"settings.fallbackCalloutDesc": "Нерозпізнані типи callout у сховищі успадкують стиль цього callout.",
@@ -170,8 +169,6 @@ export const uk: Record<string, string> = {
 	"editor.background": "Фон",
 	"editor.text": "Текст",
 	"editor.iconColor": "Основний колір",
-	"editor.palettes": "Пресети",
-	"editor.paletteDefault": "Синій за замовчуванням",
 	"editor.paletteNone": "— вибрати пресет —",
 	"editor.paletteGroupObsidian": "Callout Obsidian",
 	"editor.paletteGroupPresets": "Колірні пресети",
@@ -225,6 +222,17 @@ export const uk: Record<string, string> = {
 	"contextMenu.deleteSection": "Видалити розділ заголовка",
 
 	"heading.toggleFold": "Перемкнути складання",
+
+	"settings.globalSettings": "Глобальні налаштування",
+	"settings.globalSettingsDesc":
+		"Точно налаштуйте, як виглядає кожен тип callout у всьому вашому сховищі.",
+	"settings.globalSettingsRegularDesc":
+		"Додайте токен callout до цитати (напр., `> [!type]`), щоб відобразити стандартний блок callout Obsidian. Ви можете налаштувати його рамку, заокруглення кутів, масштаб шрифту та вирівнювання.",
+	"settings.globalSettingsHeadingDesc":
+		"Додайте токен callout одразу після символів заголовка (напр., `## [!type]`), щоб відобразити його як стилізований заголовок callout. Ви можете налаштувати його рамку, форму та вертикальний інтервал.",
+	"settings.globalSettingsInlineDesc":
+		"Додайте токен callout будь-де всередині рядка тексту (напр., `[!type]`), щоб відобразити його як маленьку вбудовану капсулу. Ви можете налаштувати його рамку та форму.",
+	"settings.globalSettingsCustomize": "Налаштувати",
 
 	"settings.calloutTypes": "Типи callout",
 	"settings.calloutTypeRegular": "Звичайний callout",

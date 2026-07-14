@@ -79,7 +79,6 @@ export const th: Record<string, string> = {
 	"settings.darkLabel": "ม",
 	"settings.lightColorAria": "สว่าง: {{color}}",
 	"settings.darkColorAria": "มืด: {{color}}",
-	"settings.colorPairAria": "สว่าง: {{light}} · มืด: {{dark}}",
 
 	"settings.fallbackCallout": "Callout สำรองเริ่มต้น",
 	"settings.fallbackCalloutDesc": "ประเภท callout ที่ไม่รู้จักใน vault จะสืบทอดสไตล์ของ callout นี้",
@@ -170,8 +169,6 @@ export const th: Record<string, string> = {
 	"editor.background": "พื้นหลัง",
 	"editor.text": "ข้อความ",
 	"editor.iconColor": "สีหลัก",
-	"editor.palettes": "ค่าที่ตั้งไว้ล่วงหน้า",
-	"editor.paletteDefault": "น้ำเงินเริ่มต้น",
 	"editor.paletteNone": "— เลือกค่าที่ตั้งไว้ล่วงหน้า —",
 	"editor.paletteGroupObsidian": "Callout Obsidian",
 	"editor.paletteGroupPresets": "ค่าสีที่ตั้งไว้ล่วงหน้า",
@@ -225,6 +222,17 @@ export const th: Record<string, string> = {
 	"contextMenu.deleteSection": "ลบส่วนหัวข้อ",
 
 	"heading.toggleFold": "สลับการพับ",
+
+	"settings.globalSettings": "การตั้งค่าส่วนกลาง",
+	"settings.globalSettingsDesc":
+		"ปรับแต่งรูปลักษณ์ของ callout แต่ละประเภทอย่างละเอียดทั่วทั้ง vault ของคุณ",
+	"settings.globalSettingsRegularDesc":
+		"เพิ่มโทเค็น callout ลงในบล็อกอ้างอิง (เช่น `> [!type]`) เพื่อแสดงผลเป็นกล่อง callout ดั้งเดิมของ Obsidian คุณสามารถปรับขอบ ความโค้งมุม ขนาดตัวอักษร และการจัดแนวได้",
+	"settings.globalSettingsHeadingDesc":
+		"เพิ่มโทเค็น callout ต่อจากเครื่องหมาย # ของหัวข้อโดยตรง (เช่น `## [!type]`) เพื่อแสดงผลเป็นหัวข้อ callout ที่จัดรูปแบบไว้ คุณสามารถปรับขอบ รูปร่าง และระยะห่างแนวตั้งได้",
+	"settings.globalSettingsInlineDesc":
+		"เพิ่มโทเค็น callout ที่ใดก็ได้ภายในบรรทัดข้อความ (เช่น `[!type]`) เพื่อแสดงผลเป็นแคปซูลอินไลน์ขนาดเล็ก คุณสามารถปรับขอบและรูปร่างได้",
+	"settings.globalSettingsCustomize": "ปรับแต่ง",
 
 	"settings.calloutTypes": "ประเภท callout",
 	"settings.calloutTypeRegular": "Callout ปกติ",

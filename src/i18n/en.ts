@@ -288,7 +288,8 @@ export const en: Record<string, string> = {
 		"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.",
 	"editor.loremIpsumShort":
 		"Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-	"editor.sampleInlineText": "Here is an inline [!{id}] pill inside a paragraph.",
+	"editor.sampleInlineText":
+		"Here is an inline [!{id}] pill inside a paragraph.",
 	"editor.previewReadOnly": "The live preview can't be edited",
 
 	// Palette editor modal
@@ -362,25 +363,32 @@ export const en: Record<string, string> = {
 	// Global settings section (per-role style popups)
 	"settings.globalSettings": "Global settings",
 	"settings.globalSettingsDesc":
-		"Fine-tune how each callout type looks across your whole vault. Choose a type to adjust its borders, spacing, shape, and more.",
+		"Fine-tune how each callout type looks across your whole vault.",
+	"settings.globalSettingsRegularDesc":
+		"Add a callout token to a blockquote (e.g., `> [!type]`) to render Obsidian's native callout box. You can adjust its border, radius, font scale, and alignment.",
+	"settings.globalSettingsHeadingDesc":
+		"Add a callout token directly after the heading hashes (e.g., `## [!type]`) to render it as a styled callout heading. You can adjust its border, shape, and vertical spacing.",
+	"settings.globalSettingsInlineDesc":
+		"Add a callout token anywhere inside a line of text (e.g., `[!type]`) to render it as a small inline pill. You can adjust its border and shape.",
+	"settings.globalSettingsCustomize": "Customize",
 
 	// Callout types section
 	"settings.calloutTypes": "Callout types",
 	"settings.calloutTypeRegular": "Regular callout",
 	"settings.calloutTypeRegularDesc":
-		"A blockquote callout with content: `> [!name]`. Always enabled.",
+		"A blockquote callout with content: `> [!type]`.",
 	"settings.calloutTypeRegularLocked":
 		"Regular callouts are Obsidian's native rendering and can't be turned off.",
 	"settings.roleEnabled": "Enabled",
 	"settings.calloutTypeHeading": "Heading callout",
 	"settings.calloutTypeHeadingDesc":
-		"A heading whose first content is the token, e.g. `## [!name]`. Rendered as a colored bar at the heading's font size.",
+		"A heading whose first content is the token, e.g. `## [!type]`. Rendered as a colored bar at the heading's font size.",
 	"settings.calloutTypeInline": "Inline callout",
 	"settings.calloutTypeInlineDesc":
-		"A `[!name]` token in the middle of a line, rendered as a small pill. No title or content.",
+		"A `[!type]` token in the middle of a line, rendered as a small pill. No title or content.",
 	"settings.refCleanTitles": "Clean titles in outline and links",
 	"settings.refCleanTitlesDesc":
-		"Hide the [!name] token wherever a heading callout is referenced: the outline pane, links to the heading (including tables of contents), and the link suggestion popup. Headings without a title show the callout's display name.",
+		"Hide the [!type] token wherever a heading callout is referenced: the outline pane, links to the heading (including tables of contents), and the link suggestion popup. Headings without a title show the callout's display name.",
 	"settings.refShowIcon": "Show icon in outline and links",
 	"settings.refShowIconDesc":
 		"Show the callout's colored icon before the cleaned title in those places.",

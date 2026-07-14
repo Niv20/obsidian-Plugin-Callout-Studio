@@ -110,7 +110,6 @@ export const he: Record<string, string> = {
 	"settings.darkLabel": "כהה",
 	"settings.lightColorAria": "בהיר: {{color}}",
 	"settings.darkColorAria": "כהה: {{color}}",
-	"settings.colorPairAria": "בהיר: {{light}} · כהה: {{dark}}",
 
 	// Settings — Fallback callout
 	"settings.fallbackCallout": "ברירת־מחדל לתיבות־הבלטה",
@@ -222,8 +221,6 @@ export const he: Record<string, string> = {
 	"editor.background": "רקע",
 	"editor.text": "טקסט",
 	"editor.iconColor": "צבע ראשי",
-	"editor.palettes": "תבניות מוכנות",
-	"editor.paletteDefault": "כחול ברירת־מחדל",
 	"editor.paletteNone": "— בחירת תבנית —",
 	"editor.paletteGroupObsidian": "תיבות־הבלטה של Obsidian",
 	"editor.paletteGroupPresets": "תבניות צבע",
@@ -282,6 +279,18 @@ export const he: Record<string, string> = {
 
 	// Heading callouts
 	"heading.toggleFold": "החלפת מצב קיפול",
+
+	// Global settings section (per-role style popups)
+	"settings.globalSettings": "הגדרות גלובליות",
+	"settings.globalSettingsDesc":
+		"כיוונון עדין של המראה של כל סוג תיבת־הבלטה בכל רחבי הכספת שלכם.",
+	"settings.globalSettingsRegularDesc":
+		"הוספת סימון תיבת־הבלטה לתוך ציטוט (למשל, `> [!type]`) תציג את תיבת־ההבלטה המובנית של Obsidian. ניתן להתאים את המסגרת, עיגול הפינות, קנה־המידה של הגופן והיישור.",
+	"settings.globalSettingsHeadingDesc":
+		"הוספת סימון תיבת־הבלטה מיד אחרי הסולמיות של הכותרת (למשל, `## [!type]`) תציג אותה ככותרת מעוצבת. ניתן להתאים את המסגרת, הצורה והריווח האנכי.",
+	"settings.globalSettingsInlineDesc":
+		"הוספת סימון תיבת־הבלטה בכל מקום בתוך שורת טקסט (למשל, `[!type]`) תציג אותה כגלולה קטנה מוטבעת. ניתן להתאים את המסגרת והצורה שלה.",
+	"settings.globalSettingsCustomize": "התאמה אישית",
 
 	// Callout types section
 	"settings.calloutTypes": "סוגי תיבות־הבלטה",

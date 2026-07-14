@@ -79,7 +79,6 @@ export const zh: Record<string, string> = {
 	"settings.darkLabel": "暗",
 	"settings.lightColorAria": "亮色：{{color}}",
 	"settings.darkColorAria": "暗色：{{color}}",
-	"settings.colorPairAria": "亮色：{{light}} · 暗色：{{dark}}",
 
 	"settings.fallbackCallout": "默认回退 callout",
 	"settings.fallbackCalloutDesc": "库中无法识别的 callout 类型将继承此 callout 的样式。",
@@ -170,8 +169,6 @@ export const zh: Record<string, string> = {
 	"editor.background": "背景",
 	"editor.text": "文本",
 	"editor.iconColor": "主色",
-	"editor.palettes": "预设",
-	"editor.paletteDefault": "默认蓝色",
 	"editor.paletteNone": "— 选择预设 —",
 	"editor.paletteGroupObsidian": "Obsidian callout",
 	"editor.paletteGroupPresets": "颜色预设",
@@ -225,6 +222,17 @@ export const zh: Record<string, string> = {
 	"contextMenu.deleteSection": "删除标题部分",
 
 	"heading.toggleFold": "切换折叠",
+
+	"settings.globalSettings": "全局设置",
+	"settings.globalSettingsDesc":
+		"微调每种 callout 类型在整个库中的外观。",
+	"settings.globalSettingsRegularDesc":
+		"在引用块中添加 callout 标记（例如 `> [!type]`）以显示为 Obsidian 原生的 callout 框。您可以调整其边框、圆角、字体缩放和对齐方式。",
+	"settings.globalSettingsHeadingDesc":
+		"在标题井号后直接添加 callout 标记（例如 `## [!type]`）以将其显示为带样式的 callout 标题。您可以调整其边框、形状和垂直间距。",
+	"settings.globalSettingsInlineDesc":
+		"在文本行中的任意位置添加 callout 标记（例如 `[!type]`）以将其显示为小型行内徽标。您可以调整其边框和形状。",
+	"settings.globalSettingsCustomize": "自定义",
 
 	"settings.calloutTypes": "Callout 类型",
 	"settings.calloutTypeRegular": "常规 callout",

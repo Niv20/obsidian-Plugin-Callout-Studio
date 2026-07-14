@@ -79,7 +79,6 @@ export const tr: Record<string, string> = {
 	"settings.darkLabel": "K",
 	"settings.lightColorAria": "Açık: {{color}}",
 	"settings.darkColorAria": "Koyu: {{color}}",
-	"settings.colorPairAria": "Açık: {{light}} · Koyu: {{dark}}",
 
 	"settings.fallbackCallout": "Varsayılan geri dönüş callout'u",
 	"settings.fallbackCalloutDesc": "Vault'unuzdaki tanınmayan callout türleri bu callout'un stilini devralır.",
@@ -170,8 +169,6 @@ export const tr: Record<string, string> = {
 	"editor.background": "Arka plan",
 	"editor.text": "Metin",
 	"editor.iconColor": "Ana renk",
-	"editor.palettes": "Ön ayarlar",
-	"editor.paletteDefault": "Varsayılan mavi",
 	"editor.paletteNone": "— bir ön ayar seçin —",
 	"editor.paletteGroupObsidian": "Obsidian callout'ları",
 	"editor.paletteGroupPresets": "Renk ön ayarları",
@@ -225,6 +222,17 @@ export const tr: Record<string, string> = {
 	"contextMenu.deleteSection": "Başlık bölümünü sil",
 
 	"heading.toggleFold": "Katlamayı aç/kapat",
+
+	"settings.globalSettings": "Genel ayarlar",
+	"settings.globalSettingsDesc":
+		"Her callout türünün vault'unuz genelinde nasıl göründüğünü ince ayarlayın.",
+	"settings.globalSettingsRegularDesc":
+		"Obsidian'ın yerel callout kutusu olarak görüntülemek için bir blok alıntıya callout belirteci ekleyin (örn. `> [!type]`). Kenarlığını, köşe yuvarlaklığını, yazı tipi ölçeğini ve hizalamasını ayarlayabilirsiniz.",
+	"settings.globalSettingsHeadingDesc":
+		"Stilli bir callout başlığı olarak görüntülemek için callout belirtecini başlık işaretlerinden hemen sonra ekleyin (örn. `## [!type]`). Kenarlığını, şeklini ve dikey boşluğunu ayarlayabilirsiniz.",
+	"settings.globalSettingsInlineDesc":
+		"Küçük bir satır içi hap olarak görüntülemek için callout belirtecini bir metin satırının herhangi bir yerine ekleyin (örn. `[!type]`). Kenarlığını ve şeklini ayarlayabilirsiniz.",
+	"settings.globalSettingsCustomize": "Özelleştir",
 
 	"settings.calloutTypes": "Callout türleri",
 	"settings.calloutTypeRegular": "Normal callout",

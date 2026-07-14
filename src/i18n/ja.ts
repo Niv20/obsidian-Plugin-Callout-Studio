@@ -79,7 +79,6 @@ export const ja: Record<string, string> = {
 	"settings.darkLabel": "暗",
 	"settings.lightColorAria": "ライト: {{color}}",
 	"settings.darkColorAria": "ダーク: {{color}}",
-	"settings.colorPairAria": "ライト: {{light}} · ダーク: {{dark}}",
 
 	"settings.fallbackCallout": "デフォルトフォールバックcallout",
 	"settings.fallbackCalloutDesc": "vaultで認識されないcalloutタイプはこのcalloutのスタイルを継承します。",
@@ -170,8 +169,6 @@ export const ja: Record<string, string> = {
 	"editor.background": "背景",
 	"editor.text": "テキスト",
 	"editor.iconColor": "メインカラー",
-	"editor.palettes": "プリセット",
-	"editor.paletteDefault": "デフォルトブルー",
 	"editor.paletteNone": "— プリセットを選択 —",
 	"editor.paletteGroupObsidian": "Obsidian callout",
 	"editor.paletteGroupPresets": "カラープリセット",
@@ -225,6 +222,13 @@ export const ja: Record<string, string> = {
 	"contextMenu.deleteSection": "見出しセクションを削除",
 
 	"heading.toggleFold": "折りたたみを切り替え",
+
+	"settings.globalSettings": "グローバル設定",
+	"settings.globalSettingsDesc": "vault全体で各calloutタイプの見た目を細かく調整します。",
+	"settings.globalSettingsRegularDesc": "引用ブロックにcalloutトークンを追加すると（例: `> [!type]`）、Obsidianのネイティブなcalloutボックスとして表示されます。ボーダー、半径、フォントスケール、整列を調整できます。",
+	"settings.globalSettingsHeadingDesc": "見出しの # の直後にcalloutトークンを追加すると（例: `## [!type]`）、スタイル付きの見出しcalloutとして表示されます。ボーダー、形状、垂直方向の間隔を調整できます。",
+	"settings.globalSettingsInlineDesc": "テキスト行の中のどこかにcalloutトークンを追加すると（例: `[!type]`）、小さなインラインピルとして表示されます。ボーダーと形状を調整できます。",
+	"settings.globalSettingsCustomize": "カスタマイズ",
 
 	"settings.calloutTypes": "calloutタイプ",
 	"settings.calloutTypeRegular": "通常のcallout",
