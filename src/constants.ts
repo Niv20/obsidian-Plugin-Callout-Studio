@@ -214,16 +214,16 @@ export const DEFAULT_CONTEXT_MENU_ITEMS: Record<
 	ContextMenuItemConfig[]
 > = {
 	regular: [
-		{ id: "edit", enabled: true },
-		{ id: "openSettings", enabled: true },
 		{ id: "copyMarkdown", enabled: true },
 		{ id: "foldDefaults", enabled: true },
+		{ id: "edit", enabled: true },
+		{ id: "openSettings", enabled: true },
 	],
 	heading: [
-		{ id: "edit", enabled: true },
 		{ id: "cutSection", enabled: true },
 		{ id: "copySection", enabled: true },
 		{ id: "deleteSection", enabled: true },
+		{ id: "edit", enabled: true },
 		{ id: "openSettings", enabled: true },
 	],
 	inline: [
