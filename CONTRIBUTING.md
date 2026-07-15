@@ -1,6 +1,12 @@
 # Contributing to Callout Studio
 
-Thanks for taking an interest in the project. This is a one-person plugin maintained in spare time, so the bar for contributing is low — found a bug, want a feature, want to fix a bad translation? Open an issue or a PR.
+Thank you so much for taking an interest in this project! This is a one-person plugin developed and maintained in my spare time, but I do my absolute best to respond to and handle every issue, suggestion, and pull request as quickly as possible.
+
+Contributions of any kind and size are warmly welcomed - whether you found a bug, want to fix a translation, or have an idea for a new feature. You don't need to be an expert developer to get involved; simple feedback and bug reports are just as valuable to me as code contributions!
+
+I am always looking for ways to expand and improve the plugin. At the same time, I want to keep it clean and easy to use without overloading it with too many features. Finding the right balance is key! Because of this, I apologize in advance if a specific feature suggestion doesn't end up making it into the plugin - but I would still love to chat, hear your thoughts, and read your feedback either way.
+
+Every piece of feedback, bug report, or pull request is a wonderful gift to this project. As a small token of my gratitude for taking your time to help improve it, I would be honored to add your name to my [💖 Special Thanks](https://github.com/Niv20/obsidian-Plugin-Callout-Studio#-special-thanks) list!
 
 ## Setup
 
