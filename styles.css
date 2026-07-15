@@ -1973,22 +1973,8 @@ input.cs-input-invalid:focus {
 }
 
 /* Palette editor modal */
-.callout-studio-palette-editor .cs-palette-derived-preview {
-	display: flex;
-	align-items: center;
-	gap: 20px;
-	padding: 10px 0 14px;
-}
-
-.cs-palette-preview-pair {
-	display: inline-flex;
-	align-items: center;
-	gap: 8px;
-}
-
-.cs-palette-preview-label {
-	font-size: var(--font-ui-smaller);
-	color: var(--text-muted);
+.callout-studio-palette-editor .cs-palette-live-preview {
+	margin: 10px 0 14px;
 }
 
 .callout-studio-palette-editor .cs-palette-editor-grid {

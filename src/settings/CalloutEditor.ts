@@ -681,7 +681,7 @@ export class CalloutEditor extends Modal {
 				colorStateBeforeMenu = null;
 			}
 			closeMenu();
-			const result = await new PaletteEditorModal(this.app, {
+			const result = await new PaletteEditorModal(this.plugin, {
 				takenNames: this.plugin.settings.customPalettes.map(
 					(p) => p.name,
 				),

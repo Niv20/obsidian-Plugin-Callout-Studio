@@ -532,6 +532,18 @@ export class CalloutRegistry {
 		}
 	}
 
+	/**
+	 * The transient preview definition currently registered, or null. Lets a
+	 * nested modal (e.g. the palette editor opened over the callout editor)
+	 * capture the outer preview on open and restore it on close, rather than
+	 * clearing the single preview slot to null.
+	 */
+	getPreviewDefinition(): CalloutDefinition | null {
+		return this.previewActiveId !== null
+			? (this.callouts.get(this.previewActiveId) ?? null)
+			: null;
+	}
+
 	// ── Material SVG cache ───────────────────────────────────
 
 	findMaterialSvg(

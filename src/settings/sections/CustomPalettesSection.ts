@@ -37,7 +37,7 @@ export function renderCustomPalettesSection(
 			.setButtonText(t("settings.newPalette"))
 			.setCta()
 			.onClick(async () => {
-				const result = await new PaletteEditorModal(ctx.app, {
+				const result = await new PaletteEditorModal(ctx.plugin, {
 					takenNames: takenNamesExcept(),
 				}).openAndWait();
 				if (!result) return;
@@ -52,7 +52,7 @@ export function renderCustomPalettesSection(
 	const listEl = containerEl.createDiv({ cls: "cs-palette-list" });
 
 	const editPalette = async (palette: CustomPalette): Promise<void> => {
-		const result = await new PaletteEditorModal(ctx.app, {
+		const result = await new PaletteEditorModal(ctx.plugin, {
 			existing: palette,
 			takenNames: takenNamesExcept(palette.id),
 		}).openAndWait();

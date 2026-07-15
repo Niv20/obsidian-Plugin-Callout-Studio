@@ -11,7 +11,7 @@
  */
 import { Modal, Setting } from "obsidian";
 import type { App } from "obsidian";
-import type { CustomPalette } from "../types";
+import type { CalloutDefinition, CustomPalette } from "../types";
 import {
 	contrastRatio,
 	derivePaletteFromColor,
@@ -21,12 +21,22 @@ import {
 	createColorSwatchInput,
 	setContrastWarning,
 } from "../ui/ColorSwatchInput";
-import { renderColorCircles } from "../ui/ColorCircles";
+import { LiveCalloutPreview } from "./LiveCalloutPreview";
+import { PREVIEW_PLACEHOLDER_ID } from "../constants";
 import { suggestColorName } from "../utils/colorNames";
 import { OBSIDIAN_PALETTES, EXTRA_PALETTES } from "../utils/colorPalettes";
 import { t } from "../i18n";
+import type { CalloutRegistry } from "../manager/CalloutRegistry";
+import type { CSSInjector } from "../manager/CSSInjector";
 
 export type PaletteEditorResult = Omit<CustomPalette, "id">;
+
+/** Minimal plugin surface the palette editor needs to drive the live preview. */
+interface PaletteEditorPlugin {
+	app: App;
+	registry: CalloutRegistry;
+	cssInjector: CSSInjector;
+}
 
 const DEFAULT_BASE_COLOR = "#448aff";
 /** Keeps the name readable in the dropdown/list rows, which truncate past this. */
@@ -49,6 +59,9 @@ export class PaletteEditorModal extends Modal {
 	// UI refs for cross-updates between the simple and advanced views.
 	private gridEl: HTMLElement | null = null;
 	private previewEl: HTMLElement | null = null;
+	private preview: LiveCalloutPreview | null = null;
+	/** Preview the caller had registered before this modal took the slot. */
+	private outerPreview: CalloutDefinition | null = null;
 	private gridInputs: Partial<
 		Record<keyof DerivedPalette, HTMLInputElement>
 	> = {};
@@ -63,10 +76,10 @@ export class PaletteEditorModal extends Modal {
 	private saveBtnEl: HTMLButtonElement | null = null;
 
 	constructor(
-		app: App,
+		private plugin: PaletteEditorPlugin,
 		options: { existing?: CustomPalette; takenNames?: string[] } = {},
 	) {
-		super(app);
+		super(plugin.app);
 		this.existing = options.existing ?? null;
 		// Callers pass the other CUSTOM palette names; the fixed preset names
 		// are merged here so a custom palette can't shadow "Ocean" etc.
@@ -119,6 +132,8 @@ export class PaletteEditorModal extends Modal {
 					.onChange((v) => {
 						this.name = v;
 						this.updateNameValidity();
+						// Keep the preview callout's title in sync with the name.
+						this.preview?.setText(this.buildSampleText());
 					});
 			});
 		// Error line in the info column, mirroring the callout IDs error.
@@ -137,9 +152,28 @@ export class PaletteEditorModal extends Modal {
 		);
 
 		this.previewEl = contentEl.createDiv({
-			cls: "cs-palette-derived-preview",
+			cls: "cs-palette-live-preview",
 		});
-		this.renderDerivedPreview();
+		// Capture any preview the caller already registered (e.g. the callout
+		// editor's, when this modal is opened over it) so it can be restored on
+		// close instead of clearing the registry's single preview slot to null.
+		this.outerPreview = this.plugin.registry.getPreviewDefinition();
+		this.preview = new LiveCalloutPreview(this.plugin.app, this.previewEl, {
+			title: t("editor.livePreview"),
+			initialText: this.buildSampleText(),
+			// Push the derived palette into the registry under the reserved
+			// preview ID and re-inject CSS so the callout renders live.
+			beforeRender: () => {
+				this.plugin.registry.setPreviewDefinition(
+					this.buildPreviewDefinition(),
+				);
+				this.plugin.cssInjector.inject(false);
+			},
+			onDestroy: () => {
+				this.plugin.registry.setPreviewDefinition(this.outerPreview);
+				this.plugin.cssInjector.inject(false);
+			},
+		});
 
 		new Setting(contentEl)
 			.setName(t("palette.advanced"))
@@ -194,7 +228,7 @@ export class PaletteEditorModal extends Modal {
 	private applyDerived(): void {
 		this.colors = derivePaletteFromColor(this.baseColor);
 		this.syncGridInputs();
-		this.renderDerivedPreview();
+		this.preview?.refresh();
 		this.updateWarnings();
 	}
 
@@ -225,7 +259,7 @@ export class PaletteEditorModal extends Modal {
 				(key: keyof DerivedPalette) =>
 				(next: string): void => {
 					this.colors[key] = next;
-					this.renderDerivedPreview();
+					this.preview?.refresh();
 					this.updateWarnings();
 				};
 			const light = createColorSwatchInput(
@@ -273,32 +307,38 @@ export class PaletteEditorModal extends Modal {
 		}
 	}
 
-	/** Light and dark accent/background circle pairs previewing the palette. */
-	private renderDerivedPreview(): void {
-		if (!this.previewEl) return;
-		this.previewEl.empty();
-		const pairs: { label: string; accent: string; bg: string }[] = [
-			{
-				label: t("editor.light"),
-				accent: this.colors.colorLight,
-				bg: this.colors.bgColorLight,
-			},
-			{
-				label: t("editor.dark"),
-				accent: this.colors.colorDark,
-				bg: this.colors.bgColorDark,
-			},
-		];
-		for (const pair of pairs) {
-			const pairEl = this.previewEl.createDiv({
-				cls: "cs-palette-preview-pair",
-			});
-			pairEl.createSpan({
-				cls: "cs-palette-preview-label",
-				text: pair.label,
-			});
-			renderColorCircles(pairEl, pair.accent, pair.bg, { size: 18 });
-		}
+	/**
+	 * The sample markdown seeding the read-only preview: one regular callout in
+	 * the palette's colors. The trailing blank line keeps the read-only caret
+	 * parked outside the block (see LiveCalloutPreview's focus policy).
+	 */
+	private buildSampleText(): string {
+		const name = this.name.trim() || t("editor.untitledCallout");
+		return [
+			`> [!${PREVIEW_PLACEHOLDER_ID}] ${name}`,
+			`> ${t("editor.loremIpsumShort")}`,
+			"",
+		].join("\n");
+	}
+
+	/** Snapshot the derived palette colors as a transient preview definition. */
+	private buildPreviewDefinition(): CalloutDefinition {
+		return {
+			id: PREVIEW_PLACEHOLDER_ID,
+			displayName: this.name.trim() || t("editor.untitledCallout"),
+			icon: { type: "lucide", value: "palette" },
+			colorLight: this.colors.colorLight,
+			colorDark: this.colors.colorDark,
+			bgColorLight: this.colors.bgColorLight,
+			bgColorDark: this.colors.bgColorDark,
+			textColorLight: this.colors.textColorLight,
+			textColorDark: this.colors.textColorDark,
+			foldable: false,
+			defaultFolded: false,
+			aliases: [],
+			builtIn: false,
+			source: "user",
+		};
 	}
 
 	/** Same non-blocking thresholds as the callout editor's grid. */
@@ -363,6 +403,10 @@ export class PaletteEditorModal extends Modal {
 	}
 
 	onClose(): void {
+		// Destroys the embedded editor and, via onDestroy, restores the outer
+		// preview registration (if any) and re-injects CSS.
+		this.preview?.destroy();
+		this.preview = null;
 		this.contentEl.empty();
 		if (this.resolve) {
 			this.resolve(null);
