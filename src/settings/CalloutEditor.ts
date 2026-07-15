@@ -1140,8 +1140,9 @@ export class CalloutEditor extends Modal {
 	/**
 	 * The sample markdown seeding the preview: a mini-document exercising all
 	 * three roles. A titled heading callout opens it, an inline pill sits in
-	 * the paragraph below, then the regular callout, and a title-less heading
-	 * closes it (showing the display name the token renders on its own).
+	 * the paragraph below, then the regular callout closes it. The trailing
+	 * blank line keeps the read-only caret parked outside that last block (see
+	 * LiveCalloutPreview's focus policy).
 	 */
 	private buildSampleText(): string {
 		const id = this.currentPreviewId();
@@ -1156,7 +1157,6 @@ export class CalloutEditor extends Modal {
 			`> [!${id}]${mark} ${name}`,
 			`> ${t("editor.loremIpsumShort")}`,
 			"",
-			t("editor.loremIpsum"),
 		].join("\n");
 	}
 

@@ -132,8 +132,6 @@ export class PaletteEditorModal extends Modal {
 					.onChange((v) => {
 						this.name = v;
 						this.updateNameValidity();
-						// Keep the preview callout's title in sync with the name.
-						this.preview?.setText(this.buildSampleText());
 					});
 			});
 		// Error line in the info column, mirroring the callout IDs error.
@@ -308,14 +306,24 @@ export class PaletteEditorModal extends Modal {
 	}
 
 	/**
-	 * The sample markdown seeding the read-only preview: one regular callout in
-	 * the palette's colors. The trailing blank line keeps the read-only caret
-	 * parked outside the block (see LiveCalloutPreview's focus policy).
+	 * The sample markdown seeding the read-only preview: the same mini-document
+	 * as the callout editor's preview — a titled heading callout, an inline pill,
+	 * then the regular callout — all in the palette's colors, so a saved palette
+	 * can be checked against every render role at once. The title is a fixed
+	 * placeholder, deliberately not tied to the "Name" field above (that field
+	 * names the *palette*, e.g. "Ocean", not this demo callout). The trailing
+	 * blank line keeps the read-only caret parked outside the last block (see
+	 * LiveCalloutPreview's focus policy).
 	 */
 	private buildSampleText(): string {
-		const name = this.name.trim() || t("editor.untitledCallout");
+		const id = PREVIEW_PLACEHOLDER_ID;
+		const name = t("editor.untitledCallout");
 		return [
-			`> [!${PREVIEW_PLACEHOLDER_ID}] ${name}`,
+			`## [!${id}] ${name}`,
+			"",
+			t("editor.sampleInlineText").replace("{id}", id),
+			"",
+			`> [!${id}] ${name}`,
 			`> ${t("editor.loremIpsumShort")}`,
 			"",
 		].join("\n");
@@ -325,7 +333,7 @@ export class PaletteEditorModal extends Modal {
 	private buildPreviewDefinition(): CalloutDefinition {
 		return {
 			id: PREVIEW_PLACEHOLDER_ID,
-			displayName: this.name.trim() || t("editor.untitledCallout"),
+			displayName: t("editor.untitledCallout"),
 			icon: { type: "lucide", value: "palette" },
 			colorLight: this.colors.colorLight,
 			colorDark: this.colors.colorDark,
