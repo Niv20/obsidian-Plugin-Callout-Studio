@@ -605,6 +605,20 @@ export class CalloutRegistry {
 			: null;
 	}
 
+	/**
+	 * Like `get`, but sees through the transient live-preview shadow: if `id`
+	 * is the one currently being drafted in the callout editor, returns the
+	 * real callout it is shadowing (or undefined if nothing was there) instead
+	 * of the in-progress preview stand-in. Used by ID-conflict validation so
+	 * the editor's own draft never counts as a conflict with itself.
+	 */
+	getReal(id: string): CalloutDefinition | undefined {
+		if (id === this.previewActiveId) {
+			return this.previewShadowedDef ?? undefined;
+		}
+		return this.callouts.get(id);
+	}
+
 	// ── Material SVG cache ───────────────────────────────────
 
 	findMaterialSvg(

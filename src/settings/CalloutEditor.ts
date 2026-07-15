@@ -1018,7 +1018,7 @@ export class CalloutEditor extends Modal {
 			createFromAutocomplete: this.createFromAutocomplete,
 			existingId: this.existingId,
 			id,
-			getById: (targetId) => this.plugin.registry.get(targetId),
+			getById: (targetId) => this.plugin.registry.getReal(targetId),
 			findByAlias: (targetId) =>
 				this.plugin.registry.findByAlias(targetId),
 		});
@@ -1030,7 +1030,7 @@ export class CalloutEditor extends Modal {
 			existingId: this.existingId,
 			id,
 			role,
-			getById: (targetId) => this.plugin.registry.get(targetId),
+			getById: (targetId) => this.plugin.registry.getReal(targetId),
 			findByAlias: (targetId) =>
 				this.plugin.registry.findByAlias(targetId),
 		});
@@ -1044,7 +1044,7 @@ export class CalloutEditor extends Modal {
 			displayName: this.displayName,
 			calloutId: this.calloutId,
 			aliases: this.aliases,
-			getById: (targetId) => this.plugin.registry.get(targetId),
+			getById: (targetId) => this.plugin.registry.getReal(targetId),
 			findByAlias: (targetId) =>
 				this.plugin.registry.findByAlias(targetId),
 		});
