@@ -239,7 +239,17 @@ export class CalloutAutoComplete extends EditorSuggest<CalloutSuggestion> {
 
 	getSuggestions(context: EditorSuggestContext): CalloutSuggestion[] {
 		const query = context.query.toLowerCase();
-		const all = this.plugin.registry.getAll();
+		// Exclude auto-created fallback rows only once Discovery's prune scan
+		// has actually confirmed they're unused nowhere in the vault — e.g. a
+		// token typed and abandoned before the async prune catches up. A
+		// fallback row that's genuinely used elsewhere (just never adopted
+		// via the editor) still autocompletes normally.
+		const all = this.plugin.registry.getAll().filter(
+			(d) =>
+				d.source !== "fallback" ||
+				d.customized === true ||
+				!this.plugin.isKnownZeroUsageFallback(d.id),
+		);
 
 		// Filter
 		const filtered = all.filter(

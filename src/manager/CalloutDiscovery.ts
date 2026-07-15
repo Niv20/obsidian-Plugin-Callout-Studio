@@ -42,6 +42,15 @@ export class CalloutDiscovery {
 	private readonly fileScanTimers: Map<string, number> = new Map();
 	/** Debounce timer for {@link pruneUnused}. */
 	private pruneTimer: number | undefined;
+	/**
+	 * Normalized ids of uncustomized fallback rows the last prune scan
+	 * confirmed have zero usages anywhere in the vault. Kept in sync by
+	 * {@link pruneUnused} and {@link addUnknownCalloutsAsFallback}; consulted
+	 * by autocomplete so it can hide only *confirmed-gone* fallback rows
+	 * instead of every unadopted one, without re-scanning the vault on every
+	 * keystroke.
+	 */
+	private readonly zeroUsageFallbackIds = new Set<string>();
 
 	constructor(private readonly host: DiscoveryHost) {}
 
@@ -54,6 +63,17 @@ export class CalloutDiscovery {
 			window.clearTimeout(this.pruneTimer);
 			this.pruneTimer = undefined;
 		}
+	}
+
+	/**
+	 * True if `id` is an uncustomized fallback callout that the last prune
+	 * scan confirmed has zero usages anywhere in the vault. Ids that were
+	 * never scanned (just typed, or scanned but still in use) are NOT
+	 * considered zero-usage — callers should treat "unknown" as "might be
+	 * real" rather than excluding it.
+	 */
+	isKnownZeroUsageFallback(id: string): boolean {
+		return this.zeroUsageFallbackIds.has(normalizeCalloutId(id));
 	}
 
 	/** Build a Set of all callout IDs and aliases currently known to the registry. */
@@ -98,7 +118,13 @@ export class CalloutDiscovery {
 				builtIn: false,
 				source: "fallback" as const,
 			};
-			if (this.host.registry.add(def)) added++;
+			if (this.host.registry.add(def)) {
+				added++;
+				// Being (re)discovered means it currently appears in file
+				// content — any stale "confirmed zero usage" verdict from an
+				// earlier scan no longer applies.
+				this.zeroUsageFallbackIds.delete(normalizeCalloutId(id));
+			}
 		}
 		return added;
 	}
@@ -140,8 +166,14 @@ export class CalloutDiscovery {
 
 		let removed = 0;
 		for (const id of candidates) {
-			const stat = usage.get(normalizeCalloutId(id));
-			if (!stat || stat.fileCount > 0) continue;
+			const normalized = normalizeCalloutId(id);
+			const stat = usage.get(normalized);
+			const hasUsage = stat !== undefined && stat.fileCount > 0;
+			if (hasUsage) {
+				this.zeroUsageFallbackIds.delete(normalized);
+				continue;
+			}
+			this.zeroUsageFallbackIds.add(normalized);
 			const def = this.host.registry.get(id);
 			if (!def) continue;
 			// Re-check: another flow (e.g. settings edit) may have

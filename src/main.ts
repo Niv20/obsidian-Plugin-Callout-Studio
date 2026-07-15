@@ -277,6 +277,10 @@ export default class CalloutStudioPlugin extends Plugin {
 		return this.discovery.restyleUncustomizedFallbackRows();
 	}
 
+	isKnownZeroUsageFallback(id: string): boolean {
+		return this.discovery.isKnownZeroUsageFallback(id);
+	}
+
 	addUnknownCalloutsAsFallback(unknownIds: string[]): number {
 		return this.discovery.addUnknownCalloutsAsFallback(unknownIds);
 	}
