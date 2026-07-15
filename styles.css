@@ -1897,6 +1897,41 @@ input.cs-input-invalid:focus {
 	}
 }
 
+/* On phone, Obsidian's own core CSS (`.is-phone .setting-item-control input,
+   select, button:not(.clickable-icon) { width: 100% }`) forces every input
+   and button inside a setting's control column to full width — regardless of
+   viewport size, since it's keyed off the device class (.is-phone on <body>),
+   not a media query. That fight is what pushed the + button off-screen /
+   smeared it full-width. Scope the fix to .is-phone (not a width breakpoint)
+   so desktop — including a narrow desktop window — is untouched, and reassert
+   our intended sizing (input grows, + stays a 36px square) with enough weight
+   to win over Obsidian's rule. Obsidian's own responsive stacking (info row
+   above, control row below) already applies here and needs no duplicate
+   handling. */
+.is-phone .cs-callout-ids-setting .cs-tag-wrapper {
+	max-width: none;
+	width: 100%;
+}
+.is-phone .cs-callout-ids-setting .cs-tag-input-field {
+	width: auto !important;
+	flex: 1 1 auto !important;
+}
+.is-phone .cs-callout-ids-setting .cs-tag-add-btn {
+	width: 36px !important;
+	flex: 0 0 36px !important;
+}
+
+/* On iPad, Obsidian's core CSS (`.is-tablet button:not(.clickable-icon) {
+   padding: var(--size-4-1) var(--size-4-5) }`, i.e. 4px 20px) outranks our
+   `.cs-tag-add-btn` padding by specificity (two classes + a type selector
+   beats our one class). 40px of forced horizontal padding inside a button
+   fixed at 36px wide leaves ~0px for the centered 16px "+" icon, so it gets
+   squeezed out — intermittently, depending on how the browser resolves the
+   overconstrained box. Reassert zero padding for tablets specifically. */
+.is-tablet .cs-callout-ids-setting .cs-tag-add-btn {
+	padding: 0 !important;
+}
+
 @media (min-width: 701px) and (max-width: 760px) {
 	.callout-studio-preview-panel {
 		grid-template-columns: minmax(0, 1fr) 250px;

@@ -222,6 +222,7 @@ export class CalloutEditor extends Modal {
 		const initialIds = [this.calloutId, ...this.aliases].filter(Boolean);
 		const idsSetting = new Setting(contentEl)
 			.setName(t("editor.calloutIds"))
+			.setClass("cs-callout-ids-setting")
 			.setDesc(
 				createFragment((frag) => {
 					// Render each newline-separated line of the description on
