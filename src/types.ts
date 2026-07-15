@@ -51,6 +51,14 @@ export interface CalloutDefinition {
 	/** Alternative IDs (aliases) that map to this callout */
 	aliases?: string[];
 	/**
+	 * Id of the `CustomPalette` this callout's colors were last applied from,
+	 * if any. Lets a later edit to that palette (see
+	 * `CalloutRegistry.applyPaletteColors`) cascade onto this callout instead
+	 * of leaving it stuck with a stale, baked-in copy. Left stale (pointing at
+	 * nothing) if the palette is later deleted — colors then stay as last set.
+	 */
+	paletteId?: string;
+	/**
 	 * Marks a user-owned callout that the user has explicitly created or
 	 * modified through the editor. Such callouts are sticky: they are never
 	 * auto-pruned even when no vault content references them. Auto-created
@@ -64,8 +72,11 @@ export interface CalloutDefinition {
 /**
  * A user-saved color palette, shown in the "Custom" group of the callout
  * editor's palette dropdown and managed from the settings tab. All six colors
- * are stored as concrete `#rrggbb` hex values (baked at save time — applying,
- * editing, or deleting a palette never affects callouts that already used it).
+ * are stored as concrete `#rrggbb` hex values, baked into every callout that
+ * applies the palette. Editing a palette cascades the new colors onto every
+ * callout still linked to it via `CalloutDefinition.paletteId` (see
+ * `CalloutRegistry.applyPaletteColors`); deleting a palette leaves linked
+ * callouts with their last-known baked colors, unlinked.
  */
 export interface CustomPalette {
 	/** Stable unique id (`cp-` prefix). Never shown to the user. */

@@ -252,6 +252,30 @@ export class CalloutRegistry {
 				def.icon = { type: "lucide", value: "pencil" };
 			}
 		}
+		// Migration: link any callout saved before `paletteId` existed but whose
+		// baked colors still exactly match a saved custom palette, so an edit to
+		// that palette (applyPaletteColors) cascades onto it too.
+		if (this.settings.customPalettes.length > 0) {
+			for (const def of this.callouts.values()) {
+				if (def.paletteId) continue;
+				const match = this.settings.customPalettes.find(
+					(p) =>
+						p.colorLight.toLowerCase() ===
+							def.colorLight.toLowerCase() &&
+						p.colorDark.toLowerCase() ===
+							def.colorDark.toLowerCase() &&
+						p.bgColorLight.toLowerCase() ===
+							(def.bgColorLight ?? "").toLowerCase() &&
+						p.bgColorDark.toLowerCase() ===
+							(def.bgColorDark ?? "").toLowerCase() &&
+						p.textColorLight.toLowerCase() ===
+							(def.textColorLight ?? "").toLowerCase() &&
+						p.textColorDark.toLowerCase() ===
+							(def.textColorDark ?? "").toLowerCase(),
+				);
+				if (match) def.paletteId = match.id;
+			}
+		}
 	}
 
 	toSaveData(): PluginData {
@@ -405,6 +429,43 @@ export class CalloutRegistry {
 				iconSize: fallback.iconSize,
 			});
 			updated++;
+		}
+		if (updated > 0) {
+			this.notifyChange();
+		}
+		return updated;
+	}
+
+	/**
+	 * Cascades an edited custom palette's colors onto every callout still
+	 * linked to it (`paletteId` match), so a palette edit updates every
+	 * callout using it instead of leaving them with a stale baked-in copy.
+	 * If the active fallback callout is among them, also re-mirrors the
+	 * uncustomized fallback rows that copy its appearance. Returns the
+	 * number of callouts updated.
+	 */
+	applyPaletteColors(
+		paletteId: string,
+		colors: Pick<
+			CalloutDefinition,
+			| "colorLight"
+			| "colorDark"
+			| "bgColorLight"
+			| "bgColorDark"
+			| "textColorLight"
+			| "textColorDark"
+		>,
+	): number {
+		let updated = 0;
+		let touchedFallback = false;
+		for (const def of this.callouts.values()) {
+			if (def.paletteId !== paletteId) continue;
+			this.callouts.set(def.id, { ...def, ...colors });
+			updated++;
+			if (def.id === this.settings.fallbackCalloutId) touchedFallback = true;
+		}
+		if (touchedFallback) {
+			this.restyleUncustomizedFallbackRows();
 		}
 		if (updated > 0) {
 			this.notifyChange();

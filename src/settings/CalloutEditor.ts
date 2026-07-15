@@ -75,6 +75,8 @@ export class CalloutEditor extends Modal {
 	private iconOffsetY: number;
 	private iconSize: number;
 	private aliases: string[];
+	/** Id of the palette (custom or preset) currently applied, if any. */
+	private paletteId: string | undefined;
 	private preview: LiveCalloutPreview | null = null;
 	private previewFoldCollapsed = false;
 	private idsTagInput: TagInput | null = null;
@@ -144,6 +146,7 @@ export class CalloutEditor extends Modal {
 			Math.min(existing?.iconSize ?? fallbackBase?.iconSize ?? 1, 1.5),
 		);
 		this.aliases = [...(existing?.aliases ?? [])];
+		this.paletteId = existing?.paletteId ?? fallbackBase?.paletteId;
 		this.previewFoldCollapsed = this.foldable && this.defaultFolded;
 		this.hasHadCalloutId =
 			this.calloutId.trim().length > 0 || this.aliases.length > 0;
@@ -531,17 +534,24 @@ export class CalloutEditor extends Modal {
 			(palette.bgColorDark?.toLowerCase() ?? "") ===
 				this.bgColorDark.toLowerCase();
 
-		const matchedEntry = paletteEntries.find(({ palette }) =>
-			matchesPalette(palette),
-		);
+		// Prefer the stable paletteId link (survives a palette's colors being
+		// edited); fall back to hex matching for definitions saved before that
+		// link existed. Either way, remember the resolved id going forward.
+		const matchedEntry =
+			(this.paletteId
+				? paletteEntries.find((e) => e.id === this.paletteId)
+				: undefined) ??
+			paletteEntries.find(({ palette }) => matchesPalette(palette));
 		if (matchedEntry) {
 			selectedId = matchedEntry.id;
+			this.paletteId = matchedEntry.id;
 			triggerLabel.setText(matchedEntry.name);
 			const { accent, bg } = resolveCurrentModeColors(
 				matchedEntry.palette,
 			);
 			renderTriggerCircles(accent, bg);
 		} else {
+			this.paletteId = undefined;
 			renderTriggerCirclesFromState();
 		}
 
@@ -601,6 +611,7 @@ export class CalloutEditor extends Modal {
 			const entry = paletteEntries[index];
 			if (!entry) return;
 			selectedId = entry.id;
+			this.paletteId = entry.id;
 			applyPaletteColors(entry.palette, true);
 			triggerLabel.setText(entry.name);
 			const { accent, bg } = resolveCurrentModeColors(entry.palette);
@@ -696,6 +707,7 @@ export class CalloutEditor extends Modal {
 			await this.plugin.saveSettings();
 			rebuildPaletteEntries();
 			selectedId = palette.id;
+			this.paletteId = palette.id;
 			applyPaletteColors(customPaletteToColorPalette(palette), true);
 			triggerLabel.setText(palette.name);
 			const { accent, bg } = resolveCurrentModeColors(palette);
@@ -1209,6 +1221,7 @@ export class CalloutEditor extends Modal {
 				iconOffsetY: this.iconOffsetY,
 				iconSize: this.iconSize,
 				aliases: this.aliases,
+				paletteId: this.paletteId,
 			},
 			hasStyleChanges: this.hasStyleChanges(),
 			saveAsFallback: this.shouldSaveNewAutocompleteCalloutAsFallback(),

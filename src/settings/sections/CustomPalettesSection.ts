@@ -5,8 +5,9 @@
  * name + edit/delete) with a "New palette" button opening PaletteEditorModal.
  * Palettes are stored in settings.customPalettes and surfaced in the callout
  * editor's palette dropdown under the "Custom" group. Colors are baked into
- * callouts at apply time, so editing or deleting a palette never changes
- * existing callouts.
+ * callouts at apply time; editing a palette here cascades the new colors onto
+ * every callout still linked to it (registry.applyPaletteColors), while
+ * deleting a palette leaves existing callouts as-is.
  */
 import { Setting, setIcon } from "obsidian";
 import { t } from "../../i18n";
@@ -58,6 +59,22 @@ export function renderCustomPalettesSection(
 		}).openAndWait();
 		if (!result) return;
 		Object.assign(palette, result);
+		const {
+			colorLight,
+			colorDark,
+			bgColorLight,
+			bgColorDark,
+			textColorLight,
+			textColorDark,
+		} = result;
+		ctx.plugin.registry.applyPaletteColors(palette.id, {
+			colorLight,
+			colorDark,
+			bgColorLight,
+			bgColorDark,
+			textColorLight,
+			textColorDark,
+		});
 		await ctx.plugin.saveSettings();
 		renderList();
 	};

@@ -34,6 +34,8 @@ export type CalloutEditorSaveState = {
 	iconOffsetY: number;
 	iconSize: number;
 	aliases: string[];
+	/** Id of the custom/preset palette these colors were applied from, if any. */
+	paletteId?: string;
 };
 
 export type CalloutEditorSaveInput = {
@@ -155,6 +157,7 @@ export async function performCalloutEditorSave(
 		iconOffsetY: fallbackBase?.iconOffsetY ?? state.iconOffsetY,
 		iconSize: fallbackBase?.iconSize ?? state.iconSize,
 		aliases: state.aliases.length > 0 ? [...state.aliases] : undefined,
+		paletteId: fallbackBase ? fallbackBase.paletteId : state.paletteId,
 		...(customized === true ? { customized: true } : {}),
 	};
 
