@@ -5,6 +5,9 @@
 *.iml
 .idea
 
+# my own stuff...
+video-scripts
+
 # npm
 node_modules
 
