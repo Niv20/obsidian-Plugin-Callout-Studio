@@ -20,6 +20,8 @@ data.json
 
 # local agent state
 .serena/
+graphify-out/
+.claude/
 
 # Exclude macOS Finder (System Explorer) View States
 .DS_Store
