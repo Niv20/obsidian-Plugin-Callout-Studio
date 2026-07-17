@@ -33,6 +33,7 @@ export type SnapshotInput = {
 	colorDark: string;
 	bgColorLight: string;
 	bgColorDark: string;
+	bgGradient?: CalloutDefinition["bgGradient"];
 	textColorLight: string;
 	textColorDark: string;
 	foldable: boolean;

@@ -16,6 +16,7 @@ import type { CalloutRegistry } from "../manager/CalloutRegistry";
 import { EXPORT_FORMAT_ID } from "../manager/CalloutRegistry";
 import { MAX_TAG_LENGTH, MAX_TAGS_COUNT } from "../constants";
 import { normalizeCalloutId } from "./calloutId";
+import { sanitizeBgGradient } from "./colorUtils";
 import { sanitizeImportedSettings } from "./settingsValidator";
 
 /** Severity used by the report modal to style each row. */
@@ -78,6 +79,7 @@ const KNOWN_FIELDS = new Set<string>([
 	"iconSize",
 	"bgColorLight",
 	"bgColorDark",
+	"bgGradient",
 	"textColorLight",
 	"textColorDark",
 	"aliases",
@@ -528,6 +530,20 @@ function validateCalloutArray(
 		if (!validateColor(entry.textColorDark, "textColorDark", push, false))
 			entryOk = false;
 
+		// ── background gradient (optional) ───────────────────
+		// Warning-level only: a broken gradient degrades the entry to a solid
+		// background instead of blocking the import.
+		if (
+			entry.bgGradient !== undefined &&
+			sanitizeBgGradient(entry.bgGradient) === null
+		) {
+			push({
+				field: "bgGradient",
+				level: "warning",
+				messageKey: "import.warn.invalidGradient",
+			});
+		}
+
 		// ── optional numeric fields ──────────────────────────
 		if (entry.iconOffsetX !== undefined) {
 			if (
@@ -745,6 +761,8 @@ function validateCalloutArray(
 				def.bgColorLight = entry.bgColorLight;
 			if (typeof entry.bgColorDark === "string")
 				def.bgColorDark = entry.bgColorDark;
+			const bgGradientClean = sanitizeBgGradient(entry.bgGradient);
+			if (bgGradientClean) def.bgGradient = bgGradientClean;
 			if (typeof entry.textColorLight === "string")
 				def.textColorLight = entry.textColorLight;
 			if (typeof entry.textColorDark === "string")

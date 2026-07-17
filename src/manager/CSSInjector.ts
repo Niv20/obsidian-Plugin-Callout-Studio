@@ -10,7 +10,11 @@
 import { setIcon } from "obsidian";
 import type { App } from "obsidian";
 import type { CalloutDefinition } from "../types";
-import { calloutColorValue, hexToRgbString } from "../utils/colorUtils";
+import {
+	bgGradientCss,
+	calloutColorValue,
+	hexToRgbString,
+} from "../utils/colorUtils";
 import { ensureMaterialFontLoaded, svgToDataUri } from "../utils/iconLoader";
 import {
 	CSS_HEADING_LINE,
@@ -179,6 +183,50 @@ export class CSSInjector {
 		this.injecting = false;
 	}
 
+	/**
+	 * Background declarations for one theme mode: the solid color plus, when a
+	 * gradient is set, the gradient image layered on top. The solid
+	 * `background-color` doubles as the fallback if a renderer drops the
+	 * image; `print-color-adjust: exact` keeps the gradient from being
+	 * stripped when exporting to PDF / printing. Empty when the mode has no
+	 * background color (a gradient alone has no start stop to render from).
+	 */
+	private bgProps(
+		def: CalloutDefinition,
+		mode: "light" | "dark",
+		important = false,
+	): string[] {
+		const bg = mode === "dark" ? def.bgColorDark : def.bgColorLight;
+		if (!bg) return [];
+		const imp = important ? " !important" : "";
+		const props = [`  background-color: ${bg}${imp};`];
+		if (def.bgGradient) {
+			const to =
+				mode === "dark"
+					? def.bgGradient.toColorDark
+					: def.bgGradient.toColorLight;
+			props.push(
+				`  background-image: ${bgGradientCss(bg, to, def.bgGradient)}${imp};`,
+				`  -webkit-print-color-adjust: exact${imp};`,
+				`  print-color-adjust: exact${imp};`,
+			);
+		}
+		return props;
+	}
+
+	/**
+	 * True when the def needs a `.theme-dark` override block — any of its
+	 * mode-dependent colors (accent, background, gradient end) differ.
+	 */
+	private needsDarkBlock(def: CalloutDefinition): boolean {
+		return (
+			def.colorLight !== def.colorDark ||
+			def.bgColorLight !== def.bgColorDark ||
+			(!!def.bgGradient &&
+				def.bgGradient.toColorLight !== def.bgGradient.toColorDark)
+		);
+	}
+
 	private generateCalloutCSS(def: CalloutDefinition): string {
 		const lightRgb = hexToRgbString(def.colorLight);
 		const darkRgb = hexToRgbString(def.colorDark);
@@ -195,25 +243,18 @@ export class CSSInjector {
 			`  --cs-color-rgb: ${lightRgb};`,
 		];
 		if (iconCSS) lightProps.push(`  --callout-icon: ${iconCSS};`);
-		if (def.bgColorLight) {
-			lightProps.push(`  background-color: ${def.bgColorLight};`);
-		}
+		lightProps.push(...this.bgProps(def, "light"));
 		parts.push(
 			`.callout[data-callout="${def.id}"] {\n${lightProps.join("\n")}\n}`,
 		);
 
 		// Dark mode override
-		if (
-			def.colorLight !== def.colorDark ||
-			def.bgColorLight !== def.bgColorDark
-		) {
+		if (this.needsDarkBlock(def)) {
 			const darkProps: string[] = [
 				`  --callout-color: ${calloutColorValue(def.colorDark)};`,
 				`  --cs-color-rgb: ${darkRgb};`,
 			];
-			if (def.bgColorDark) {
-				darkProps.push(`  background-color: ${def.bgColorDark};`);
-			}
+			darkProps.push(...this.bgProps(def, "dark"));
 			parts.push(
 				`.theme-dark .callout[data-callout="${def.id}"] {\n${darkProps.join("\n")}\n}`,
 			);
@@ -273,19 +314,12 @@ export class CSSInjector {
 					`/* alias: ${alias} → ${def.id} */\n` +
 						`.callout[data-callout="${alias}"] {\n${lightProps.join("\n")}\n}`,
 				);
-				if (
-					def.colorLight !== def.colorDark ||
-					def.bgColorLight !== def.bgColorDark
-				) {
+				if (this.needsDarkBlock(def)) {
 					const aliasDarkProps: string[] = [
 						`  --callout-color: ${calloutColorValue(def.colorDark)};`,
 						`  --cs-color-rgb: ${darkRgb};`,
 					];
-					if (def.bgColorDark) {
-						aliasDarkProps.push(
-							`  background-color: ${def.bgColorDark};`,
-						);
-					}
+					aliasDarkProps.push(...this.bgProps(def, "dark"));
 					parts.push(
 						`.theme-dark .callout[data-callout="${alias}"] {\n${aliasDarkProps.join("\n")}\n}`,
 					);
@@ -364,6 +398,38 @@ export class CSSInjector {
 			parts.push(
 				`${selectorsFor(".theme-dark ")} {\n  --cs-color-rgb: ${darkRgb};\n}`,
 			);
+		}
+
+		// A gradient background replaces the static accent tint on heading bars
+		// and inline pills too, so all three render roles share one look. Solid
+		// custom backgrounds intentionally do NOT reach these roles (the tint is
+		// their designed default); ref tokens are bare icons with no surface to
+		// paint. The [data-callout] attribute outranks the styles.css tint rule
+		// (2 selectors vs 1), so no !important is needed.
+		if (def.bgGradient) {
+			const bgSelectorsFor = (themePrefix: string): string =>
+				ids
+					.map(
+						(id) =>
+							`${themePrefix}.${CSS_INLINE_TOKEN}[data-callout="${id}"], ` +
+							`${themePrefix}.${CSS_HEADING_LINE}[data-callout="${id}"]`,
+					)
+					.join(",\n");
+			const lightBg = this.bgProps(def, "light");
+			if (lightBg.length > 0) {
+				parts.push(
+					`${bgSelectorsFor("")} {\n${lightBg.join("\n")}\n}`,
+				);
+			}
+			const darkBg = this.bgProps(def, "dark");
+			// Same explicit-undefined cascade as regular callouts: no dark bg
+			// set → the light rule (unscoped, so it matches both themes) keeps
+			// applying in dark mode; identical dark values → skip the no-op.
+			if (darkBg.length > 0 && darkBg.join("") !== lightBg.join("")) {
+				parts.push(
+					`${bgSelectorsFor(".theme-dark ")} {\n${darkBg.join("\n")}\n}`,
+				);
+			}
 		}
 		return parts.join("\n\n");
 	}
@@ -891,28 +957,17 @@ export class CSSInjector {
 		];
 		if (iconCSS)
 			lightProps.push(`  --callout-icon: ${iconCSS} !important;`);
-		if (fallbackDef.bgColorLight) {
-			lightProps.push(
-				`  background-color: ${fallbackDef.bgColorLight} !important;`,
-			);
-		}
+		lightProps.push(...this.bgProps(fallbackDef, "light", true));
 		parts.push(
 			`body .callout${notSelectors} {\n${lightProps.join("\n")}\n}`,
 		);
 
-		if (
-			fallbackDef.colorLight !== fallbackDef.colorDark ||
-			fallbackDef.bgColorLight !== fallbackDef.bgColorDark
-		) {
+		if (this.needsDarkBlock(fallbackDef)) {
 			const darkProps: string[] = [
 				`  --callout-color: ${calloutColorValue(fallbackDef.colorDark)} !important;`,
 				`  --cs-color-rgb: ${darkRgb} !important;`,
 			];
-			if (fallbackDef.bgColorDark) {
-				darkProps.push(
-					`  background-color: ${fallbackDef.bgColorDark} !important;`,
-				);
-			}
+			darkProps.push(...this.bgProps(fallbackDef, "dark", true));
 			parts.push(
 				`body.theme-dark .callout${notSelectors} {\n${darkProps.join("\n")}\n}`,
 			);
@@ -990,6 +1045,28 @@ export class CSSInjector {
 			parts.push(
 				`.theme-dark .${CSS_INLINE_TOKEN}.${CSS_UNKNOWN}, .theme-dark .${CSS_HEADING_LINE}.${CSS_UNKNOWN}, .theme-dark .${CSS_REF_TOKEN}.${CSS_UNKNOWN} {\n  --cs-color-rgb: ${darkRgb};\n}`,
 			);
+		}
+
+		// Fallback gradient background on unknown heading bars / inline pills,
+		// mirroring generateTokenColorCSS for registered ids (ref tokens have
+		// no surface to paint). The .cs-unknown class doubles the class count,
+		// so this outranks the static styles.css tint without !important.
+		if (fallbackDef.bgGradient) {
+			const unknownBgSelectors = (themePrefix: string): string =>
+				`${themePrefix}.${CSS_INLINE_TOKEN}.${CSS_UNKNOWN}, ` +
+				`${themePrefix}.${CSS_HEADING_LINE}.${CSS_UNKNOWN}`;
+			const lightBg = this.bgProps(fallbackDef, "light");
+			if (lightBg.length > 0) {
+				parts.push(
+					`${unknownBgSelectors("")} {\n${lightBg.join("\n")}\n}`,
+				);
+			}
+			const darkBg = this.bgProps(fallbackDef, "dark");
+			if (darkBg.length > 0 && darkBg.join("") !== lightBg.join("")) {
+				parts.push(
+					`${unknownBgSelectors(".theme-dark ")} {\n${darkBg.join("\n")}\n}`,
+				);
+			}
 		}
 
 		return parts.join("\n\n");

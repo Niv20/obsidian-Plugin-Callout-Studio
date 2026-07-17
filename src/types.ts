@@ -24,6 +24,24 @@ declare module "obsidian" {
 	}
 }
 
+/**
+ * Two-stop background gradient. Stop 1 is the owner's existing
+ * `bgColorLight`/`bgColorDark`; this object adds the end color per mode.
+ * Absent = solid background, so all pre-gradient data keeps its meaning.
+ * Only the background uses gradients — title, text and icon stay solid
+ * (readability + PDF-export safety).
+ */
+export interface BgGradient {
+	/** "linear" uses `angleDeg`; "radial" renders a centered ellipse and ignores it. */
+	type: "linear" | "radial";
+	/** CSS gradient angle in degrees (0 = to top, 90 = to right). */
+	angleDeg: number;
+	/** Gradient end color – light mode (`#rrggbb`). */
+	toColorLight: string;
+	/** Gradient end color – dark mode (`#rrggbb`). */
+	toColorDark: string;
+}
+
 export interface CalloutDefinition {
 	id: string;
 	displayName: string;
@@ -44,6 +62,12 @@ export interface CalloutDefinition {
 	bgColorLight?: string;
 	/** Custom background color – dark mode */
 	bgColorDark?: string;
+	/**
+	 * Optional two-stop background gradient starting at
+	 * `bgColorLight`/`bgColorDark`. Only rendered when the matching mode's
+	 * bg color is set.
+	 */
+	bgGradient?: BgGradient;
 	/** Custom content text color – light mode */
 	textColorLight?: string;
 	/** Custom content text color – dark mode */
@@ -89,6 +113,12 @@ export interface CustomPalette {
 	bgColorDark: string;
 	textColorLight: string;
 	textColorDark: string;
+	/**
+	 * Optional two-stop background gradient starting at the palette's
+	 * `bgColorLight`/`bgColorDark`. Baked onto callouts together with the
+	 * six colors when the palette is applied.
+	 */
+	bgGradient?: BgGradient;
 }
 
 export type MaterialIconStyle = "outlined" | "filled" | "rounded" | "sharp";

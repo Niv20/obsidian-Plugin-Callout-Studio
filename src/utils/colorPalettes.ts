@@ -7,8 +7,8 @@
  * from colorUtils when not explicitly supplied.
  * Used by CalloutEditor to populate the color preset dropdown.
  */
-import { blendHex, isValidHexColor } from "./colorUtils";
-import type { CustomPalette } from "../types";
+import { blendHex, isValidHexColor, sanitizeBgGradient } from "./colorUtils";
+import type { BgGradient, CustomPalette } from "../types";
 
 export interface ColorPalette {
 	id: string;
@@ -27,6 +27,8 @@ export interface ColorPalette {
 	textColorLight?: string;
 	/** Content text – dark mode (only custom palettes carry text colors) */
 	textColorDark?: string;
+	/** Background gradient (only custom palettes carry gradients) */
+	bgGradient?: BgGradient;
 }
 
 function makePalette(
@@ -166,6 +168,7 @@ export function customPaletteToColorPalette(p: CustomPalette): ColorPalette {
 		bgColorDark: p.bgColorDark,
 		textColorLight: p.textColorLight,
 		textColorDark: p.textColorDark,
+		bgGradient: p.bgGradient ? { ...p.bgGradient } : undefined,
 	};
 }
 
@@ -204,6 +207,9 @@ export function sanitizeCustomPalettes(raw: unknown): CustomPalette[] {
 			continue;
 		}
 		seenIds.add(p.id);
+		// A malformed gradient degrades the palette to solid instead of
+		// dropping it — the six colors are still perfectly usable.
+		const bgGradient = sanitizeBgGradient(p.bgGradient);
 		result.push({
 			id: p.id,
 			name: p.name,
@@ -213,6 +219,7 @@ export function sanitizeCustomPalettes(raw: unknown): CustomPalette[] {
 			bgColorDark: p.bgColorDark,
 			textColorLight: p.textColorLight,
 			textColorDark: p.textColorDark,
+			...(bgGradient ? { bgGradient } : {}),
 		});
 	}
 	return result;

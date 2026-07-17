@@ -8,11 +8,17 @@
  * CalloutEditorSave; validation to CalloutEditorValidation.
  */
 import { Modal, Notice, Setting, SliderComponent, setIcon } from "obsidian";
-import type { CalloutDefinition, CalloutIcon, CustomPalette } from "../types";
+import type {
+	BgGradient,
+	CalloutDefinition,
+	CalloutIcon,
+	CustomPalette,
+} from "../types";
 import { IconPicker } from "./IconPicker";
 import { LiveCalloutPreview } from "./LiveCalloutPreview";
 import { PREVIEW_PLACEHOLDER_ID } from "../constants";
 import {
+	bgGradientsEqual,
 	blendHex,
 	DEFAULT_TEXT_COLOR_LIGHT,
 	DEFAULT_TEXT_COLOR_DARK,
@@ -67,6 +73,8 @@ export class CalloutEditor extends Modal {
 	private colorDark: string;
 	private bgColorLight: string;
 	private bgColorDark: string;
+	/** Background gradient baked from the applied palette, if any. */
+	private bgGradient: BgGradient | undefined;
 	private textColorLight: string;
 	private textColorDark: string;
 	private foldable: boolean;
@@ -126,6 +134,8 @@ export class CalloutEditor extends Modal {
 			existing?.bgColorDark ??
 			fallbackBase?.bgColorDark ??
 			blendHex(this.colorDark, "#1e1e1e", 0.88);
+		const baseGradient = existing?.bgGradient ?? fallbackBase?.bgGradient;
+		this.bgGradient = baseGradient ? { ...baseGradient } : undefined;
 		this.textColorLight =
 			existing?.textColorLight ??
 			fallbackBase?.textColorLight ??
@@ -498,6 +508,7 @@ export class CalloutEditor extends Modal {
 			colorDark: this.colorDark,
 			bgColorLight: this.bgColorLight,
 			bgColorDark: this.bgColorDark,
+			bgGradient: this.bgGradient ? { ...this.bgGradient } : undefined,
 			textColorLight: this.textColorLight,
 			textColorDark: this.textColorDark,
 		});
@@ -510,6 +521,9 @@ export class CalloutEditor extends Modal {
 			this.colorDark = state.colorDark;
 			this.bgColorLight = state.bgColorLight;
 			this.bgColorDark = state.bgColorDark;
+			this.bgGradient = state.bgGradient
+				? { ...state.bgGradient }
+				: undefined;
 			this.textColorLight = state.textColorLight;
 			this.textColorDark = state.textColorDark;
 			this.updatePreview();
@@ -517,13 +531,22 @@ export class CalloutEditor extends Modal {
 
 		// The trigger swatch mirrors the row swatches: accent + background
 		// for the current theme mode.
-		const renderTriggerCircles = (accent: string, bg: string): void => {
+		const renderTriggerCircles = (
+			accent: string,
+			bg: string,
+			bgImage?: string,
+		): void => {
 			triggerCircles.empty();
-			renderColorCircles(triggerCircles, accent, bg, { size: 16 });
+			renderColorCircles(triggerCircles, accent, bg, {
+				size: 16,
+				bgImage,
+			});
 		};
 		const renderTriggerCirclesFromState = (): void => {
-			const { accent, bg } = resolveCurrentModeColors(readColorState());
-			renderTriggerCircles(accent, bg);
+			const { accent, bg, bgImage } = resolveCurrentModeColors(
+				readColorState(),
+			);
+			renderTriggerCircles(accent, bg, bgImage);
 		};
 		const matchesPalette = (palette: ColorPalette): boolean =>
 			palette.colorLight.toLowerCase() ===
@@ -532,7 +555,8 @@ export class CalloutEditor extends Modal {
 			(palette.bgColorLight?.toLowerCase() ?? "") ===
 				this.bgColorLight.toLowerCase() &&
 			(palette.bgColorDark?.toLowerCase() ?? "") ===
-				this.bgColorDark.toLowerCase();
+				this.bgColorDark.toLowerCase() &&
+			bgGradientsEqual(palette.bgGradient, this.bgGradient);
 
 		// Prefer the stable paletteId link (survives a palette's colors being
 		// edited); fall back to hex matching for definitions saved before that
@@ -546,10 +570,10 @@ export class CalloutEditor extends Modal {
 			selectedId = matchedEntry.id;
 			this.paletteId = matchedEntry.id;
 			triggerLabel.setText(matchedEntry.name);
-			const { accent, bg } = resolveCurrentModeColors(
+			const { accent, bg, bgImage } = resolveCurrentModeColors(
 				matchedEntry.palette,
 			);
-			renderTriggerCircles(accent, bg);
+			renderTriggerCircles(accent, bg, bgImage);
 		} else {
 			this.paletteId = undefined;
 			renderTriggerCirclesFromState();
@@ -567,6 +591,11 @@ export class CalloutEditor extends Modal {
 			if (palette.bgColorDark !== undefined) {
 				this.bgColorDark = palette.bgColorDark;
 			}
+			// Unconditional: switching to a solid palette must clear a
+			// previously applied gradient, not leave it behind.
+			this.bgGradient = palette.bgGradient
+				? { ...palette.bgGradient }
+				: undefined;
 			// Custom palettes carry their own text colors; presets fall back
 			// to the defaults, as before.
 			this.textColorLight =
@@ -614,8 +643,10 @@ export class CalloutEditor extends Modal {
 			this.paletteId = entry.id;
 			applyPaletteColors(entry.palette, true);
 			triggerLabel.setText(entry.name);
-			const { accent, bg } = resolveCurrentModeColors(entry.palette);
-			renderTriggerCircles(accent, bg);
+			const { accent, bg, bgImage } = resolveCurrentModeColors(
+				entry.palette,
+			);
+			renderTriggerCircles(accent, bg, bgImage);
 			this.updateSaveState();
 			closeMenu();
 		};
@@ -649,8 +680,13 @@ export class CalloutEditor extends Modal {
 						cls: "cs-palette-menu-item",
 						attr: { role: "option", "data-index": String(i) },
 					});
-					const { accent, bg } = resolveCurrentModeColors(e.palette);
-					renderColorCircles(item, accent, bg, { size: 16 });
+					const { accent, bg, bgImage } = resolveCurrentModeColors(
+						e.palette,
+					);
+					renderColorCircles(item, accent, bg, {
+						size: 16,
+						bgImage,
+					});
 					item.createSpan({
 						cls: "cs-palette-menu-item-label",
 						text: e.name,
@@ -710,8 +746,8 @@ export class CalloutEditor extends Modal {
 			this.paletteId = palette.id;
 			applyPaletteColors(customPaletteToColorPalette(palette), true);
 			triggerLabel.setText(palette.name);
-			const { accent, bg } = resolveCurrentModeColors(palette);
-			renderTriggerCircles(accent, bg);
+			const { accent, bg, bgImage } = resolveCurrentModeColors(palette);
+			renderTriggerCircles(accent, bg, bgImage);
 			this.updateSaveState();
 		};
 
@@ -949,6 +985,7 @@ export class CalloutEditor extends Modal {
 			colorDark: this.colorDark,
 			bgColorLight: this.bgColorLight,
 			bgColorDark: this.bgColorDark,
+			bgGradient: this.bgGradient,
 			textColorLight: this.textColorLight,
 			textColorDark: this.textColorDark,
 			foldable: this.foldable,
@@ -969,6 +1006,7 @@ export class CalloutEditor extends Modal {
 			colorDark: this.colorDark,
 			bgColorLight: this.bgColorLight,
 			bgColorDark: this.bgColorDark,
+			bgGradient: this.bgGradient,
 			textColorLight: this.textColorLight,
 			textColorDark: this.textColorDark,
 			foldable: this.foldable,
@@ -1182,6 +1220,7 @@ export class CalloutEditor extends Modal {
 			colorDark: this.colorDark,
 			bgColorLight: this.bgColorLight,
 			bgColorDark: this.bgColorDark,
+			bgGradient: this.bgGradient,
 			textColorLight: this.textColorLight,
 			textColorDark: this.textColorDark,
 			foldable: this.foldable,
@@ -1213,6 +1252,7 @@ export class CalloutEditor extends Modal {
 				colorDark: this.colorDark,
 				bgColorLight: this.bgColorLight,
 				bgColorDark: this.bgColorDark,
+				bgGradient: this.bgGradient,
 				textColorLight: this.textColorLight,
 				textColorDark: this.textColorDark,
 				foldable: this.foldable,

@@ -66,9 +66,10 @@ export function renderCalloutRow(
 	}
 
 	const colorsEl = row.createDiv({ cls: "callout-studio-row-colors" });
-	const { accent, bg } = resolveCurrentModeColors(def);
+	const { accent, bg, bgImage } = resolveCurrentModeColors(def);
 	renderColorCircles(colorsEl, accent, bg, {
 		size: 18,
+		bgImage,
 		ariaLabel: t("settings.colorSwatchAria", { accent, bg }),
 	});
 

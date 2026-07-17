@@ -320,6 +320,9 @@ export class CalloutRegistry {
 		const aliasesChanged =
 			JSON.stringify(current.aliases ?? []) !==
 			JSON.stringify(original.aliases ?? []);
+		const gradientChanged =
+			JSON.stringify(current.bgGradient ?? null) !==
+			JSON.stringify(original.bgGradient ?? null);
 		return (
 			current.displayName !== original.displayName ||
 			current.colorLight !== original.colorLight ||
@@ -329,7 +332,8 @@ export class CalloutRegistry {
 			current.icon.style !== original.icon.style ||
 			current.foldable !== original.foldable ||
 			current.defaultFolded !== original.defaultFolded ||
-			aliasesChanged
+			aliasesChanged ||
+			gradientChanged
 		);
 	}
 
@@ -422,6 +426,9 @@ export class CalloutRegistry {
 				colorDark: fallback.colorDark,
 				bgColorLight: fallback.bgColorLight,
 				bgColorDark: fallback.bgColorDark,
+				bgGradient: fallback.bgGradient
+					? { ...fallback.bgGradient }
+					: undefined,
 				textColorLight: fallback.textColorLight,
 				textColorDark: fallback.textColorDark,
 				iconOffsetX: fallback.iconOffsetX,
@@ -452,6 +459,9 @@ export class CalloutRegistry {
 			| "colorDark"
 			| "bgColorLight"
 			| "bgColorDark"
+			// Callers pass bgGradient explicitly (possibly undefined) so the
+			// spread below clears a stale gradient when the palette went solid.
+			| "bgGradient"
 			| "textColorLight"
 			| "textColorDark"
 		>,

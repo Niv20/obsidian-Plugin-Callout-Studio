@@ -59,6 +59,10 @@ export function renderCustomPalettesSection(
 		}).openAndWait();
 		if (!result) return;
 		Object.assign(palette, result);
+		// Object.assign never removes keys: when the edit switched the palette
+		// back to a solid background, the absent bgGradient must still clear
+		// the stored one (and cascade as an explicit undefined below).
+		palette.bgGradient = result.bgGradient;
 		const {
 			colorLight,
 			colorDark,
@@ -66,6 +70,7 @@ export function renderCustomPalettesSection(
 			bgColorDark,
 			textColorLight,
 			textColorDark,
+			bgGradient,
 		} = result;
 		ctx.plugin.registry.applyPaletteColors(palette.id, {
 			colorLight,
@@ -74,6 +79,7 @@ export function renderCustomPalettesSection(
 			bgColorDark,
 			textColorLight,
 			textColorDark,
+			bgGradient,
 		});
 		await ctx.plugin.saveSettings();
 		renderList();
@@ -113,9 +119,10 @@ export function renderCustomPalettesSection(
 			const colorsEl = row.createDiv({
 				cls: "callout-studio-row-colors",
 			});
-			const { accent, bg } = resolveCurrentModeColors(palette);
+			const { accent, bg, bgImage } = resolveCurrentModeColors(palette);
 			renderColorCircles(colorsEl, accent, bg, {
 				size: 18,
+				bgImage,
 				ariaLabel: t("settings.colorSwatchAria", { accent, bg }),
 			});
 			row.createSpan({

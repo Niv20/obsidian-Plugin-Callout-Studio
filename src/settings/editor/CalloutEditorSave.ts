@@ -26,6 +26,7 @@ export type CalloutEditorSaveState = {
 	colorDark: string;
 	bgColorLight: string;
 	bgColorDark: string;
+	bgGradient?: CalloutDefinition["bgGradient"];
 	textColorLight: string;
 	textColorDark: string;
 	foldable: boolean;
@@ -147,6 +148,9 @@ export async function performCalloutEditorSave(
 		colorDark: fallbackBase?.colorDark ?? state.colorDark,
 		bgColorLight: fallbackBase?.bgColorLight ?? state.bgColorLight,
 		bgColorDark: fallbackBase?.bgColorDark ?? state.bgColorDark,
+		// Like paletteId below: when mirroring the fallback style, its (possibly
+		// absent) gradient wins outright rather than falling through to state.
+		bgGradient: fallbackBase ? fallbackBase.bgGradient : state.bgGradient,
 		textColorLight: fallbackBase?.textColorLight ?? state.textColorLight,
 		textColorDark: fallbackBase?.textColorDark ?? state.textColorDark,
 		foldable: fallbackBase?.foldable ?? state.foldable,

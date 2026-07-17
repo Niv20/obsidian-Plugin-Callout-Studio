@@ -7,6 +7,7 @@
  * auto-computed backgrounds), and CalloutEditor (for color field handling).
  */
 import { requireApiVersion } from "obsidian";
+import type { BgGradient } from "../types";
 
 export interface RGB {
 	r: number;
@@ -200,6 +201,99 @@ export function ensureContrast(
 		if (contrastRatio(candidate, bg) >= minRatio) return candidate;
 	}
 	return towards;
+}
+
+/** HSL (h 0..360, s/l 0..100) of an `#rrggbb` color. Inverse of hslToRgb. */
+function hexToHsl(hex: string): { h: number; s: number; l: number } {
+	const { r, g, b } = hexToRgb(hex);
+	const rN = r / 255;
+	const gN = g / 255;
+	const bN = b / 255;
+	const max = Math.max(rN, gN, bN);
+	const min = Math.min(rN, gN, bN);
+	const l = (max + min) / 2;
+	const d = max - min;
+	let h = 0;
+	let s = 0;
+	if (d !== 0) {
+		s = d / (1 - Math.abs(2 * l - 1));
+		if (max === rN) {
+			h = 60 * (((gN - bN) / d) % 6);
+		} else if (max === gN) {
+			h = 60 * ((bN - rN) / d + 2);
+		} else {
+			h = 60 * ((rN - gN) / d + 4);
+		}
+	}
+	return { h: normalizeAngleDeg(h), s: s * 100, l: l * 100 };
+}
+
+/**
+ * Rotates a color's hue by `deg`, keeping saturation and lightness. Used to
+ * suggest a pleasant default gradient end color from the palette's base color.
+ */
+export function rotateHue(hex: string, deg: number): string {
+	const { h, s, l } = hexToHsl(hex);
+	const { r, g, b } = hslToRgb(normalizeAngleDeg(h + deg), s, l);
+	return rgbToHex(r, g, b);
+}
+
+/** Normalizes any finite angle into [0, 360). */
+export function normalizeAngleDeg(deg: number): number {
+	return ((deg % 360) + 360) % 360;
+}
+
+/**
+ * CSS background-image value for a two-stop gradient starting at `from`
+ * (the solid bg color of the current mode) and ending at `to`. Radial
+ * gradients are a centered ellipse; the angle only applies to linear ones.
+ */
+export function bgGradientCss(
+	from: string,
+	to: string,
+	gradient: BgGradient,
+): string {
+	return gradient.type === "radial"
+		? `radial-gradient(ellipse at center, ${from}, ${to})`
+		: `linear-gradient(${normalizeAngleDeg(gradient.angleDeg)}deg, ${from}, ${to})`;
+}
+
+/**
+ * Validates an untrusted `bgGradient` value (saved settings, imports).
+ * Returns a clean copy — type narrowed, angle normalized to [0, 360), both
+ * end colors verified `#rrggbb` — or `null` when the value is unusable, in
+ * which case callers should fall back to a solid background.
+ */
+export function sanitizeBgGradient(raw: unknown): BgGradient | null {
+	if (!raw || typeof raw !== "object" || Array.isArray(raw)) return null;
+	const g = raw as Partial<BgGradient>;
+	if (g.type !== "linear" && g.type !== "radial") return null;
+	if (typeof g.angleDeg !== "number" || !Number.isFinite(g.angleDeg)) {
+		return null;
+	}
+	if (!isValidHexColor(g.toColorLight) || !isValidHexColor(g.toColorDark)) {
+		return null;
+	}
+	return {
+		type: g.type,
+		angleDeg: normalizeAngleDeg(g.angleDeg),
+		toColorLight: g.toColorLight,
+		toColorDark: g.toColorDark,
+	};
+}
+
+/** True when both are the same gradient (or both absent). */
+export function bgGradientsEqual(
+	a: BgGradient | undefined,
+	b: BgGradient | undefined,
+): boolean {
+	if (!a || !b) return !a && !b;
+	return (
+		a.type === b.type &&
+		normalizeAngleDeg(a.angleDeg) === normalizeAngleDeg(b.angleDeg) &&
+		a.toColorLight.toLowerCase() === b.toColorLight.toLowerCase() &&
+		a.toColorDark.toLowerCase() === b.toColorDark.toLowerCase()
+	);
 }
 
 /** The six callout colors derived from a single base color. */

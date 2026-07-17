@@ -247,6 +247,7 @@ export const en: Record<string, string> = {
 	"editor.verticalOffset": "Vertical offset",
 	"editor.colors": "Color",
 	"editor.background": "Background",
+	"editor.gradientEnd": "Gradient end",
 	"editor.text": "Text",
 	"editor.iconColor": "Main color",
 	"editor.paletteDeleted": "Deleted color",
@@ -296,6 +297,16 @@ export const en: Record<string, string> = {
 	"palette.advanced": "Customize all colors",
 	"palette.advancedDesc":
 		"Fine-tune each color individually. Turning this off re-derives everything from the base color.",
+	"palette.bgStyle": "Background style",
+	"palette.bgSolid": "Solid",
+	"palette.bgGradient": "Gradient",
+	"palette.gradientTo": "Second color",
+	"palette.gradientToDesc":
+		"The background blends from the base color's tint into this color's tint.",
+	"palette.gradientType": "Gradient type",
+	"palette.gradientLinear": "Linear",
+	"palette.gradientRadial": "Radial",
+	"palette.gradientDirection": "Direction",
 	"palette.save": "Save",
 
 	// Color name suggestions (used to prefill palette names)
@@ -481,6 +492,8 @@ export const en: Record<string, string> = {
 		"Unrecognized file: expected a callout definitions array or a Callout Studio export.",
 	"import.warn.settingsIgnored":
 		"The settings block was not a valid object and was ignored.",
+	"import.warn.invalidGradient":
+		"The background gradient was invalid and was ignored.",
 	"import.err.parseFailed":
 		"The file is not valid JSON and could not be parsed.",
 	"import.err.entryNotObject": "Entry must be an object.",
