@@ -56,16 +56,16 @@ export async function openBuiltInRowMenu(
 		);
 	}
 
-	menu.addItem((item) =>
-		item
-			.setTitle(t("settings.replaceAction"))
-			.setIcon("arrow-left-right")
-			.onClick(() => {
-				void handleCalloutReplace(ctx, def);
-			}),
-	);
-
 	if (usage.fileCount > 0) {
+		menu.addItem((item) =>
+			item
+				.setTitle(t("settings.replaceAction"))
+				.setIcon("arrow-left-right")
+				.onClick(() => {
+					void handleCalloutReplace(ctx, def);
+				}),
+		);
+
 		menu.addItem((item) =>
 			item
 				.setTitle(t("settings.deleteAction"))
@@ -91,14 +91,16 @@ export async function openRowMenu(
 	addUsageInfoMenuItem(menu, usage);
 	menu.addSeparator();
 
-	menu.addItem((item) =>
-		item
-			.setTitle(t("settings.replaceAction"))
-			.setIcon("arrow-left-right")
-			.onClick(() => {
-				void handleCalloutReplace(ctx, def);
-			}),
-	);
+	if (usage.fileCount > 0) {
+		menu.addItem((item) =>
+			item
+				.setTitle(t("settings.replaceAction"))
+				.setIcon("arrow-left-right")
+				.onClick(() => {
+					void handleCalloutReplace(ctx, def);
+				}),
+		);
+	}
 
 	menu.addItem((item) =>
 		item
