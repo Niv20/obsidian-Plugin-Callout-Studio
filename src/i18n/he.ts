@@ -274,6 +274,7 @@ export const he: Record<string, string> = {
 	"palette.namePlaceholder": "הפלטה שלי",
 	"palette.nameExists": "כבר קיימת פלטה בשם הזה",
 	"palette.baseColor": "צבע בסיס",
+	"palette.bgIntensity": "עוצמה",
 	"palette.bgStyle": "סגנון",
 	"palette.bgSolid": "אחיד",
 	"palette.bgGradient": "גרדיאנט",

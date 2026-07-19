@@ -219,6 +219,7 @@ export const fa: Record<string, string> = {
 	"palette.namePlaceholder": "پالت من",
 	"palette.nameExists": "پالتی با این نام از قبل وجود دارد",
 	"palette.baseColor": "رنگ پایه",
+	"palette.bgIntensity": "شدت",
 	"palette.bgStyle": "سبک",
 	"palette.bgSolid": "یکدست",
 	"palette.bgGradient": "گرادیان",

@@ -219,6 +219,7 @@ export const nl: Record<string, string> = {
 	"palette.namePlaceholder": "Mijn palet",
 	"palette.nameExists": "Er bestaat al een palet met deze naam",
 	"palette.baseColor": "Basiskleur",
+	"palette.bgIntensity": "Intensiteit",
 	"palette.bgStyle": "Stijl",
 	"palette.bgSolid": "Effen",
 	"palette.bgGradient": "Verloop",

@@ -219,6 +219,7 @@ export const sv: Record<string, string> = {
 	"palette.namePlaceholder": "Min palett",
 	"palette.nameExists": "En palett med detta namn finns redan",
 	"palette.baseColor": "Basfärg",
+	"palette.bgIntensity": "Intensitet",
 	"palette.bgStyle": "Stil",
 	"palette.bgSolid": "Enfärgad",
 	"palette.bgGradient": "Gradient",

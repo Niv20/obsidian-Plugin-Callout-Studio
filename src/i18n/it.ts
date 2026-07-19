@@ -219,6 +219,7 @@ export const it: Record<string, string> = {
 	"palette.namePlaceholder": "La mia tavolozza",
 	"palette.nameExists": "Esiste già una tavolozza con questo nome",
 	"palette.baseColor": "Colore di base",
+	"palette.bgIntensity": "Intensità",
 	"palette.bgStyle": "Stile",
 	"palette.bgSolid": "Tinta unita",
 	"palette.bgGradient": "Sfumatura",

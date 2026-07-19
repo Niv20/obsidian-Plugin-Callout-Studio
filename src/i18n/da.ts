@@ -203,6 +203,7 @@ export const da: Record<string, string> = {
 	"palette.namePlaceholder": "Min palet",
 	"palette.nameExists": "Der findes allerede en palet med dette navn",
 	"palette.baseColor": "Basisfarve",
+	"palette.bgIntensity": "Intensitet",
 	"palette.bgStyle": "Stil",
 	"palette.bgSolid": "Ensfarvet",
 	"palette.bgGradient": "Gradient",

@@ -219,6 +219,7 @@ export const de: Record<string, string> = {
 	"palette.namePlaceholder": "Meine Palette",
 	"palette.nameExists": "Es gibt bereits eine Palette mit diesem Namen",
 	"palette.baseColor": "Basisfarbe",
+	"palette.bgIntensity": "Intensität",
 	"palette.bgStyle": "Stil",
 	"palette.bgSolid": "Einfarbig",
 	"palette.bgGradient": "Verlauf",

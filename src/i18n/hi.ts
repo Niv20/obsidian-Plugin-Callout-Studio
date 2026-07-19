@@ -219,6 +219,7 @@ export const hi: Record<string, string> = {
 	"palette.namePlaceholder": "मेरा पैलेट",
 	"palette.nameExists": "इस नाम का पैलेट पहले से मौजूद है",
 	"palette.baseColor": "आधार रंग",
+	"palette.bgIntensity": "तीव्रता",
 	"palette.bgStyle": "शैली",
 	"palette.bgSolid": "ठोस",
 	"palette.bgGradient": "ग्रेडिएंट",

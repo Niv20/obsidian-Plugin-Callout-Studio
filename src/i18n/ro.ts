@@ -219,6 +219,7 @@ export const ro: Record<string, string> = {
 	"palette.namePlaceholder": "Paleta mea",
 	"palette.nameExists": "Există deja o paletă cu acest nume",
 	"palette.baseColor": "Culoare de bază",
+	"palette.bgIntensity": "Intensitate",
 	"palette.bgStyle": "Stil",
 	"palette.bgSolid": "Uniformă",
 	"palette.bgGradient": "Degrade",

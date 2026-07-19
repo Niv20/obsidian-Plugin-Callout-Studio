@@ -219,6 +219,7 @@ export const tr: Record<string, string> = {
 	"palette.namePlaceholder": "Paletim",
 	"palette.nameExists": "Bu adla bir palet zaten var",
 	"palette.baseColor": "Temel renk",
+	"palette.bgIntensity": "Yoğunluk",
 	"palette.bgStyle": "Stil",
 	"palette.bgSolid": "Düz renk",
 	"palette.bgGradient": "Gradyan",

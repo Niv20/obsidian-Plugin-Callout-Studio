@@ -219,6 +219,7 @@ export const hu: Record<string, string> = {
 	"palette.namePlaceholder": "Saját paletta",
 	"palette.nameExists": "Már létezik paletta ezzel a névvel",
 	"palette.baseColor": "Alapszín",
+	"palette.bgIntensity": "Intenzitás",
 	"palette.bgStyle": "Stílus",
 	"palette.bgSolid": "Egyszínű",
 	"palette.bgGradient": "Színátmenet",

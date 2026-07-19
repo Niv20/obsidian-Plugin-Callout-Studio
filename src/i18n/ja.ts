@@ -219,6 +219,7 @@ export const ja: Record<string, string> = {
 	"palette.namePlaceholder": "マイパレット",
 	"palette.nameExists": "この名前のパレットはすでに存在します",
 	"palette.baseColor": "ベースカラー",
+	"palette.bgIntensity": "強度",
 	"palette.bgStyle": "スタイル",
 	"palette.bgSolid": "単色",
 	"palette.bgGradient": "グラデーション",

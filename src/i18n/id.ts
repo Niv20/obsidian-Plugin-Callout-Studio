@@ -219,6 +219,7 @@ export const id: Record<string, string> = {
 	"palette.namePlaceholder": "Palet saya",
 	"palette.nameExists": "Palet dengan nama ini sudah ada",
 	"palette.baseColor": "Warna dasar",
+	"palette.bgIntensity": "Intensitas",
 	"palette.bgStyle": "Gaya",
 	"palette.bgSolid": "Polos",
 	"palette.bgGradient": "Gradien",

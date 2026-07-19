@@ -203,6 +203,7 @@ export const el: Record<string, string> = {
 	"palette.namePlaceholder": "Η παλέτα μου",
 	"palette.nameExists": "Υπάρχει ήδη παλέτα με αυτό το όνομα",
 	"palette.baseColor": "Βασικό χρώμα",
+	"palette.bgIntensity": "Ένταση",
 	"palette.bgStyle": "Στυλ",
 	"palette.bgSolid": "Συμπαγές",
 	"palette.bgGradient": "Διαβάθμιση",

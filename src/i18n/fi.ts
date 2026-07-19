@@ -203,6 +203,7 @@ export const fi: Record<string, string> = {
 	"palette.namePlaceholder": "Oma paletti",
 	"palette.nameExists": "Tämän niminen paletti on jo olemassa",
 	"palette.baseColor": "Perusväri",
+	"palette.bgIntensity": "Voimakkuus",
 	"palette.bgStyle": "Tyyli",
 	"palette.bgSolid": "Yksivärinen",
 	"palette.bgGradient": "Liukuväri",

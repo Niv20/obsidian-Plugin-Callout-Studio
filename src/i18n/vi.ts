@@ -219,6 +219,7 @@ export const vi: Record<string, string> = {
 	"palette.namePlaceholder": "Bảng màu của tôi",
 	"palette.nameExists": "Đã tồn tại bảng màu với tên này",
 	"palette.baseColor": "Màu gốc",
+	"palette.bgIntensity": "Cường độ",
 	"palette.bgStyle": "Kiểu",
 	"palette.bgSolid": "Màu đơn",
 	"palette.bgGradient": "Chuyển sắc",

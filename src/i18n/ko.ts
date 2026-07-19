@@ -219,6 +219,7 @@ export const ko: Record<string, string> = {
 	"palette.namePlaceholder": "내 팔레트",
 	"palette.nameExists": "이 이름의 팔레트가 이미 있습니다",
 	"palette.baseColor": "기본 색상",
+	"palette.bgIntensity": "강도",
 	"palette.bgStyle": "스타일",
 	"palette.bgSolid": "단색",
 	"palette.bgGradient": "그라데이션",

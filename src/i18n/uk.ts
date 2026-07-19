@@ -219,6 +219,7 @@ export const uk: Record<string, string> = {
 	"palette.namePlaceholder": "Моя палітра",
 	"palette.nameExists": "Палітра з такою назвою вже існує",
 	"palette.baseColor": "Базовий колір",
+	"palette.bgIntensity": "Інтенсивність",
 	"palette.bgStyle": "Стиль",
 	"palette.bgSolid": "Суцільний",
 	"palette.bgGradient": "Градієнт",

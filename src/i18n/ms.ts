@@ -203,6 +203,7 @@ export const ms: Record<string, string> = {
 	"palette.namePlaceholder": "Palet saya",
 	"palette.nameExists": "Palet dengan nama ini sudah wujud",
 	"palette.baseColor": "Warna asas",
+	"palette.bgIntensity": "Keamatan",
 	"palette.bgStyle": "Gaya",
 	"palette.bgSolid": "Warna pejal",
 	"palette.bgGradient": "Gradien",

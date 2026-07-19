@@ -219,6 +219,7 @@ export const ar: Record<string, string> = {
 	"palette.namePlaceholder": "لوحتي",
 	"palette.nameExists": "توجد بالفعل لوحة ألوان بهذا الاسم",
 	"palette.baseColor": "اللون الأساسي",
+	"palette.bgIntensity": "الشدة",
 	"palette.bgStyle": "النمط",
 	"palette.bgSolid": "لون واحد",
 	"palette.bgGradient": "تدرج لوني",

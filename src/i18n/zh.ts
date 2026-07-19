@@ -219,6 +219,7 @@ export const zh: Record<string, string> = {
 	"palette.namePlaceholder": "我的调色板",
 	"palette.nameExists": "已存在同名的调色板",
 	"palette.baseColor": "基础颜色",
+	"palette.bgIntensity": "强度",
 	"palette.bgStyle": "样式",
 	"palette.bgSolid": "纯色",
 	"palette.bgGradient": "渐变",

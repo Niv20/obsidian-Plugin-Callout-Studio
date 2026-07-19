@@ -203,6 +203,7 @@ export const bg: Record<string, string> = {
 	"palette.namePlaceholder": "Моята палитра",
 	"palette.nameExists": "Вече съществува палитра с това име",
 	"palette.baseColor": "Основен цвят",
+	"palette.bgIntensity": "Интензивност",
 	"palette.bgStyle": "Стил",
 	"palette.bgSolid": "Плътен цвят",
 	"palette.bgGradient": "Градиент",

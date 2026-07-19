@@ -219,6 +219,7 @@ export const ru: Record<string, string> = {
 	"palette.namePlaceholder": "Моя палитра",
 	"palette.nameExists": "Палитра с таким названием уже существует",
 	"palette.baseColor": "Базовый цвет",
+	"palette.bgIntensity": "Интенсивность",
 	"palette.bgStyle": "Стиль",
 	"palette.bgSolid": "Однотонный",
 	"palette.bgGradient": "Градиент",

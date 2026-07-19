@@ -203,6 +203,7 @@ export const zhTW: Record<string, string> = {
 	"palette.namePlaceholder": "我的調色盤",
 	"palette.nameExists": "已存在同名的調色盤",
 	"palette.baseColor": "基礎顏色",
+	"palette.bgIntensity": "強度",
 	"palette.bgStyle": "樣式",
 	"palette.bgSolid": "純色",
 	"palette.bgGradient": "漸層",

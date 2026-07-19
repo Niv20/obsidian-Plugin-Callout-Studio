@@ -219,6 +219,7 @@ export const th: Record<string, string> = {
 	"palette.namePlaceholder": "ชุดสีของฉัน",
 	"palette.nameExists": "มีชุดสีชื่อนี้อยู่แล้ว",
 	"palette.baseColor": "สีพื้นฐาน",
+	"palette.bgIntensity": "ความเข้ม",
 	"palette.bgStyle": "รูปแบบ",
 	"palette.bgSolid": "สีพื้น",
 	"palette.bgGradient": "ไล่ระดับสี",
