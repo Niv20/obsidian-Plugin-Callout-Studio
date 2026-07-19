@@ -34,6 +34,7 @@ import {
 	resolveCalloutDef,
 } from "../editor/renderShared";
 import type { CalloutRegistry } from "./CalloutRegistry";
+import { StartupStyleCache } from "./StartupStyleCache";
 
 const DEBOUNCE_MS = 300;
 
@@ -57,15 +58,34 @@ export class CSSInjector {
 	private injecting = false;
 	private registry: CalloutRegistry;
 	private app: App;
+	private startupCache: StartupStyleCache;
 
 	constructor(app: App, registry: CalloutRegistry) {
 		this.app = app;
 		this.registry = registry;
+		this.startupCache = new StartupStyleCache(app);
 	}
 
 	initialize(): void {
 		this.ensureStyleSheet();
 		this.inject();
+	}
+
+	/**
+	 * Startup fast path: synchronously re-apply the CSS snapshot cached by the
+	 * previous session (see StartupStyleCache). Called as the very first step
+	 * of plugin onload, BEFORE `loadData()` is awaited, so styling lands
+	 * without waiting on disk IO or CSS generation. The registry is still
+	 * empty at this point — no css-change is emitted and no icons are painted;
+	 * the real inject() replaces this snapshot moments later.
+	 */
+	injectFromCache(): void {
+		const cached = this.startupCache.loadCachedCss();
+		if (!cached) return;
+		this.ensureStyleSheet();
+		if (this.styleSheet) this.styleSheet.replaceSync(cached);
+		this.ensureStyleEl();
+		if (this.styleEl) this.styleEl.textContent = cached;
 	}
 
 	private ensureStyleSheet(): void {
@@ -178,6 +198,10 @@ export class CSSInjector {
 		if (this.styleSheet) this.styleSheet.replaceSync(cssText);
 		this.ensureStyleEl();
 		if (this.styleEl) this.styleEl.textContent = cssText;
+
+		// Snapshot the same text for next launch's startup fast path
+		// (localStorage + CSS snippet — see StartupStyleCache).
+		this.startupCache.persist(cssText);
 
 		// Re-paint DOM icons: keeps Lucide icons in sync after edits, and bakes
 		// the hidden material/emoji export fallback nodes (see paintIcon).
@@ -1501,6 +1525,7 @@ export class CSSInjector {
 	}
 
 	destroy(): void {
+		this.startupCache.destroy();
 		if (this.debounceTimer !== null) {
 			window.clearTimeout(this.debounceTimer);
 			this.debounceTimer = null;

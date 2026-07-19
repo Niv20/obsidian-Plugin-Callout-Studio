@@ -58,8 +58,19 @@ export default class CalloutStudioPlugin extends Plugin {
 	}
 
 	async onload() {
-		// Initialize registry and load persisted data
 		this.registry = new CalloutRegistry();
+
+		// Startup fast path — synchronously re-apply last session's CSS from
+		// localStorage BEFORE the first await, so on slow startups (mobile,
+		// where the note renders before plugins finish loading) custom callout
+		// styling lands as early as this plugin possibly can. Works together
+		// with the auto-generated CSS snippet, which Obsidian applies even
+		// earlier — before community plugins load at all. See
+		// StartupStyleCache for the full picture.
+		this.cssInjector = new CSSInjector(this.app, this.registry);
+		this.cssInjector.injectFromCache();
+
+		// Load persisted data
 		const savedData = (await this.loadData()) as Partial<PluginData> | null;
 		this.registry.load(savedData);
 
@@ -74,8 +85,8 @@ export default class CalloutStudioPlugin extends Plugin {
 		// tracks Obsidian's interface language.
 		setLocale(this.settings.language);
 
-		// Initialize CSS injector
-		this.cssInjector = new CSSInjector(this.app, this.registry);
+		// Full CSS inject now that the registry holds real definitions
+		// (replaces the startup snapshot applied above).
 		this.cssInjector.initialize();
 
 		// Paint callout icons (Lucide/Material/emoji) directly into the DOM for

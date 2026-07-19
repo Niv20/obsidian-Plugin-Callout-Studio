@@ -152,6 +152,8 @@ Callout Studio works offline by default and never sends any vault content anywhe
 
 If you never use Material icons, no network calls are made. Selected Material SVGs are cached inside the plugin's `data.json` and you can clear them at any time from settings. No telemetry or analytics is collected.
 
+**What is stored locally:** to remove the brief flash of unstyled callouts on slow startups (mainly mobile), the plugin keeps two snapshots of its generated CSS on your device — an auto-generated snippet at `.obsidian/snippets/callout-studio-do-not-delete.css`, which Obsidian applies before community plugins load, and a small per-device localStorage cache. Both contain only generated styling, never vault content, and never leave your device. The snippet is self-healing: if it is deleted or turned off (accidentally or by a vault cleanup), the plugin recreates and re-enables it automatically the next time it loads, so the startup flash never silently comes back.
+
 ## 💖 Special Thanks
 
 A huge thank you to all the wonderful people from around the world who helped shape this project! Whether by participating in discussions, reporting bugs, suggesting new features, or submitting pull requests — your contributions and support mean the world.
