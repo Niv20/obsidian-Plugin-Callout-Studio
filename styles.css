@@ -169,6 +169,14 @@
 	container-type: inline-size;
 }
 
+/* On iPhone/iPad in light mode the settings pane background nearly matches
+   --background-secondary, leaving the row "pill" invisible. Nudge its resting
+   background one step darker there — the hover shade, which touch devices
+   never show anyway — instead of drawing a border. */
+.is-mobile.theme-light .callout-studio-row {
+	background: var(--background-secondary-alt);
+}
+
 .callout-studio-row:hover {
 	background: var(--background-secondary-alt);
 }
