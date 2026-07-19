@@ -160,6 +160,48 @@ export function blendHex(hex1: string, hex2: string, amount: number): string {
 export const DEFAULT_TEXT_COLOR_LIGHT = "#1a1a1a";
 export const DEFAULT_TEXT_COLOR_DARK = "#e0e0e0";
 
+/**
+ * How much of the accent color a derived background tint keeps (0..1); the rest
+ * is the mode's base (white in light, near-black in dark). Higher = a bolder,
+ * less transparent-looking background. The single source of truth for the tint
+ * strength across the plugin (presets, per-callout defaults, palette editor).
+ */
+export const DEFAULT_BG_COLOR_AMOUNT = 0.18;
+/** Bounds for the palette editor's background-intensity slider. */
+export const MIN_BG_COLOR_AMOUNT = 0.05;
+export const MAX_BG_COLOR_AMOUNT = 0.4;
+/**
+ * Default intensity-slider position for a brand-new palette in the Palette
+ * Editor, split by background style: a two-stop gradient reads fainter than
+ * a solid fill at the same blend amount, so it defaults higher. Only seeds a
+ * fresh palette — an existing one always keeps its own saved intensity, and
+ * the user can drag the slider to override either default.
+ */
+export const DEFAULT_BG_INTENSITY_SOLID = 0.1;
+export const DEFAULT_BG_INTENSITY_GRADIENT = 0.2;
+
+/**
+ * The pale background tint for an accent color, resolved for one theme mode.
+ * `amount` is the share of accent kept (see {@link DEFAULT_BG_COLOR_AMOUNT}).
+ */
+export function bgTintFor(
+	accent: string,
+	isDark: boolean,
+	amount = DEFAULT_BG_COLOR_AMOUNT,
+): string {
+	return blendHex(accent, isDark ? "#1e1e1e" : "#ffffff", 1 - amount);
+}
+
+/**
+ * Clamps an untrusted background-intensity value (saved settings, imports) into
+ * the valid range, or returns `undefined` when it isn't a usable number so the
+ * caller falls back to {@link DEFAULT_BG_COLOR_AMOUNT}.
+ */
+export function clampBgIntensity(value: unknown): number | undefined {
+	if (typeof value !== "number" || !Number.isFinite(value)) return undefined;
+	return Math.min(MAX_BG_COLOR_AMOUNT, Math.max(MIN_BG_COLOR_AMOUNT, value));
+}
+
 /** True for a normalized `#rrggbb` hex color string. */
 export function isValidHexColor(value: unknown): value is string {
 	return typeof value === "string" && /^#[0-9a-f]{6}$/i.test(value);
@@ -328,10 +370,17 @@ export interface DerivedPalette {
  * hue is preserved; the accents are then auto-corrected per mode — a too-light
  * pick is darkened for light mode, a too-dark pick is lightened for dark mode
  * — so titles and icons always stay readable (>= 3:1, the WCAG non-text bar).
+ *
+ * `amount` controls how strongly the background shows (see
+ * {@link DEFAULT_BG_COLOR_AMOUNT}); the contrast auto-fix runs against the
+ * resulting bg, so accents stay readable at any intensity.
  */
-export function derivePaletteFromColor(hex: string): DerivedPalette {
-	const bgColorLight = blendHex(hex, "#ffffff", 0.88);
-	const bgColorDark = blendHex(hex, "#1e1e1e", 0.88);
+export function derivePaletteFromColor(
+	hex: string,
+	amount = DEFAULT_BG_COLOR_AMOUNT,
+): DerivedPalette {
+	const bgColorLight = bgTintFor(hex, false, amount);
+	const bgColorDark = bgTintFor(hex, true, amount);
 	return {
 		colorLight: ensureContrast(hex, bgColorLight, "#000000", 3),
 		colorDark: ensureContrast(hex, bgColorDark, "#ffffff", 3),

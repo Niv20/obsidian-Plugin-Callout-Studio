@@ -14,11 +14,15 @@
  * cancel/close.
  */
 import { Modal, Setting, setIcon } from "obsidian";
-import type { App } from "obsidian";
+import type { App, SliderComponent } from "obsidian";
 import type { BgGradient, CalloutDefinition, CustomPalette } from "../types";
 import {
-	blendHex,
+	bgTintFor,
+	DEFAULT_BG_INTENSITY_GRADIENT,
+	DEFAULT_BG_INTENSITY_SOLID,
 	derivePaletteFromColor,
+	MAX_BG_COLOR_AMOUNT,
+	MIN_BG_COLOR_AMOUNT,
 	rotateHue,
 	type DerivedPalette,
 } from "../utils/colorUtils";
@@ -68,6 +72,11 @@ export class PaletteEditorModal extends Modal {
 	private baseColor: string;
 	private colors: DerivedPalette;
 	private bgStyle: BgStyle;
+	/** How strongly the background color shows; steers all bg-tint derivation. */
+	private bgIntensity: number;
+	/** Once the user drags the slider, style toggles stop overwriting it with a per-style default. */
+	private bgIntensityTouched: boolean;
+	private bgIntensitySlider: SliderComponent | null = null;
 	// Gradient state. The end (stop-2) colors are tints of gradientToBase,
 	// derived exactly like the six colors are derived from the base color.
 	private angleDeg: number;
@@ -112,6 +121,19 @@ export class PaletteEditorModal extends Modal {
 		);
 		this.name = this.existing?.name ?? "";
 		this.baseColor = this.existing?.colorLight ?? DEFAULT_BASE_COLOR;
+		const g = this.existing?.bgGradient;
+		this.bgStyle = g ? "gradient" : "solid";
+		// Set before any derivation below: deriveGradientEnd() and the new-palette
+		// branch both read this to decide how strong the background reads. A
+		// fresh palette seeds from the per-style default (gradients default
+		// higher — a two-stop sweep reads fainter than a solid fill at the same
+		// amount); a saved value is the user's own choice and always wins.
+		this.bgIntensityTouched = this.existing?.bgIntensity !== undefined;
+		this.bgIntensity =
+			this.existing?.bgIntensity ??
+			(this.bgStyle === "gradient"
+				? DEFAULT_BG_INTENSITY_GRADIENT
+				: DEFAULT_BG_INTENSITY_SOLID);
 		this.colors = this.existing
 			? {
 					colorLight: this.existing.colorLight,
@@ -121,9 +143,7 @@ export class PaletteEditorModal extends Modal {
 					textColorLight: this.existing.textColorLight,
 					textColorDark: this.existing.textColorDark,
 				}
-			: derivePaletteFromColor(this.baseColor);
-		const g = this.existing?.bgGradient;
-		this.bgStyle = g ? "gradient" : "solid";
+			: derivePaletteFromColor(this.baseColor, this.bgIntensity);
 		this.angleDeg = g?.angleDeg ?? DEFAULT_GRADIENT_ANGLE;
 		// A saved gradient's end colors are authoritative (derivation is not
 		// invertible); a fresh gradient starts from a hue-shifted base color
@@ -205,7 +225,11 @@ export class PaletteEditorModal extends Modal {
 			},
 		);
 
-		this.buildGradientControls(adjustCol);
+		this.buildGradientToRow(adjustCol);
+
+		this.buildBgIntensityRow(adjustCol);
+
+		this.buildGradientDirectionAndTextRows(adjustCol);
 
 		this.previewEl = previewCol.createDiv({
 			cls: "cs-palette-live-preview",
@@ -267,7 +291,7 @@ export class PaletteEditorModal extends Modal {
 
 	/** Re-derives all six colors from the base color and refreshes the UI. */
 	private applyDerived(): void {
-		this.colors = derivePaletteFromColor(this.baseColor);
+		this.colors = derivePaletteFromColor(this.baseColor, this.bgIntensity);
 		// The gradient end follows the base color until the user picks their
 		// own second color; its tints are then re-derived either way (same
 		// "re-derive overwrites manual tweaks" contract as the six colors).
@@ -290,8 +314,8 @@ export class PaletteEditorModal extends Modal {
 	 * gradient title are as readable as any other accent in the palette.
 	 */
 	private deriveGradientEnd(): void {
-		this.toColorLight = blendHex(this.gradientToBase, "#ffffff", 0.88);
-		this.toColorDark = blendHex(this.gradientToBase, "#1e1e1e", 0.88);
+		this.toColorLight = bgTintFor(this.gradientToBase, false, this.bgIntensity);
+		this.toColorDark = bgTintFor(this.gradientToBase, true, this.bgIntensity);
 		const accents = derivePaletteFromColor(this.gradientToBase);
 		this.textToColorLight = accents.colorLight;
 		this.textToColorDark = accents.colorDark;
@@ -328,17 +352,64 @@ export class PaletteEditorModal extends Modal {
 			this.bgStyle,
 			(v) => {
 				this.bgStyle = v;
+				// Follow the per-style default until the user drags the slider
+				// themselves; once touched, their chosen intensity sticks across
+				// style toggles instead of being overwritten.
+				if (!this.bgIntensityTouched) {
+					this.bgIntensity =
+						v === "gradient"
+							? DEFAULT_BG_INTENSITY_GRADIENT
+							: DEFAULT_BG_INTENSITY_SOLID;
+					this.bgIntensitySlider?.setValue(
+						Math.round(this.bgIntensity * 100),
+					);
+					this.applyDerived();
+				} else {
+					this.preview?.refresh();
+				}
 				this.updateGradientVisibility();
-				this.preview?.refresh();
 			},
 		);
 	}
 
 	/**
-	 * Gradient-only rows, shown while the Gradient style is selected: the
-	 * second color, the direction picker, and the title-text sweep toggle.
+	 * Background-intensity slider: how strongly the color shows. Applies to
+	 * BOTH solid and gradient backgrounds, so — unlike the gradient-only rows
+	 * around it — it is always visible: sits right under Base color in Solid
+	 * (the hidden Second color row above it takes no space), and under Second
+	 * color in Gradient. Works in whole percent; the stored value is a 0..1
+	 * fraction. Re-deriving on change overwrites the six colors and gradient
+	 * tints (the same contract as changing the base color).
 	 */
-	private buildGradientControls(parent: HTMLElement): void {
+	private buildBgIntensityRow(parent: HTMLElement): void {
+		new Setting(parent)
+			.setName(t("palette.bgIntensity"))
+			.addSlider((slider) => {
+				this.bgIntensitySlider = slider;
+				slider
+					.setLimits(
+						Math.round(MIN_BG_COLOR_AMOUNT * 100),
+						Math.round(MAX_BG_COLOR_AMOUNT * 100),
+						1,
+					)
+					.setValue(Math.round(this.bgIntensity * 100))
+					.setDynamicTooltip()
+					.setInstant(true)
+					.onChange((v) => {
+						this.bgIntensity = v / 100;
+						this.bgIntensityTouched = true;
+						this.applyDerived();
+					});
+			});
+	}
+
+	/**
+	 * Gradient-only row for the second color. Built separately from the rest
+	 * of the gradient controls so the always-visible Intensity row can sit
+	 * directly below it (falls back to right after Base color when Solid is
+	 * selected, since this row is hidden and takes no space then).
+	 */
+	private buildGradientToRow(parent: HTMLElement): void {
 		const toSetting = new Setting(parent).setName(t("palette.gradientTo"));
 		this.gradToInput = createColorSwatchInput(
 			toSetting.controlEl,
@@ -352,7 +423,13 @@ export class PaletteEditorModal extends Modal {
 			},
 		).input;
 		this.gradientRows.push(toSetting.settingEl);
+	}
 
+	/**
+	 * Gradient-only rows, shown while the Gradient style is selected: the
+	 * direction picker and the title-text sweep toggle.
+	 */
+	private buildGradientDirectionAndTextRows(parent: HTMLElement): void {
 		const dirSetting = new Setting(parent).setName(
 			t("palette.gradientDirection"),
 		);
@@ -526,6 +603,7 @@ export class PaletteEditorModal extends Modal {
 			result = {
 				name,
 				...this.colors,
+				bgIntensity: this.bgIntensity,
 				...(gradient ? { bgGradient: gradient } : {}),
 			};
 		}

@@ -19,7 +19,7 @@ import { LiveCalloutPreview } from "./LiveCalloutPreview";
 import { PREVIEW_PLACEHOLDER_ID } from "../constants";
 import {
 	bgGradientsEqual,
-	blendHex,
+	bgTintFor,
 	DEFAULT_TEXT_COLOR_LIGHT,
 	DEFAULT_TEXT_COLOR_DARK,
 } from "../utils/colorUtils";
@@ -130,11 +130,11 @@ export class CalloutEditor extends Modal {
 		this.bgColorLight =
 			existing?.bgColorLight ??
 			fallbackBase?.bgColorLight ??
-			blendHex(this.colorLight, "#ffffff", 0.88);
+			bgTintFor(this.colorLight, false);
 		this.bgColorDark =
 			existing?.bgColorDark ??
 			fallbackBase?.bgColorDark ??
-			blendHex(this.colorDark, "#1e1e1e", 0.88);
+			bgTintFor(this.colorDark, true);
 		const baseGradient = existing?.bgGradient ?? fallbackBase?.bgGradient;
 		this.bgGradient = baseGradient ? { ...baseGradient } : undefined;
 		this.textColorLight =

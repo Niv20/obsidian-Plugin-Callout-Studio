@@ -138,6 +138,14 @@ export interface CustomPalette {
 	 * six colors when the palette is applied.
 	 */
 	bgGradient?: BgGradient;
+	/**
+	 * Share of the accent color mixed into the background tint (0..1). Absent =
+	 * `DEFAULT_BG_COLOR_AMOUNT`. Higher = a bolder, less transparent-looking
+	 * background. Applies to the solid bg AND both gradient stops. Only steers
+	 * derivation inside the palette editor — the resulting strength is baked into
+	 * `bgColorLight`/`bgColorDark` (and the gradient tints) when applied.
+	 */
+	bgIntensity?: number;
 }
 
 export type MaterialIconStyle = "outlined" | "filled" | "rounded" | "sharp";

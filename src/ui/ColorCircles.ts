@@ -8,7 +8,7 @@
  * for the CURRENT theme mode, so the swatch previews what the callout
  * actually looks like right now.
  */
-import { blendHex } from "../utils/colorUtils";
+import { bgTintFor } from "../utils/colorUtils";
 import type { BgGradient } from "../types";
 
 /**
@@ -58,7 +58,7 @@ export function resolveCurrentModeColors(source: {
 	const accent = isDark ? source.colorDark : source.colorLight;
 	const bg =
 		(isDark ? source.bgColorDark : source.bgColorLight) ??
-		blendHex(accent, isDark ? "#1e1e1e" : "#ffffff", 0.88);
+		bgTintFor(accent, isDark);
 	const gradient = source.bgGradient;
 	return {
 		accent,

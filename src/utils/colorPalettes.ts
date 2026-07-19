@@ -7,7 +7,12 @@
  * from colorUtils when not explicitly supplied.
  * Used by CalloutEditor to populate the color preset dropdown.
  */
-import { blendHex, isValidHexColor, sanitizeBgGradient } from "./colorUtils";
+import {
+	bgTintFor,
+	clampBgIntensity,
+	isValidHexColor,
+	sanitizeBgGradient,
+} from "./colorUtils";
 import type { BgGradient, CustomPalette } from "../types";
 
 export interface ColorPalette {
@@ -46,8 +51,8 @@ function makePalette(
 		group,
 		colorLight,
 		colorDark,
-		bgColorLight: bgColorLight ?? blendHex(colorLight, "#ffffff", 0.88),
-		bgColorDark: bgColorDark ?? blendHex(colorDark, "#1e1e1e", 0.88),
+		bgColorLight: bgColorLight ?? bgTintFor(colorLight, false),
+		bgColorDark: bgColorDark ?? bgTintFor(colorDark, true),
 	};
 }
 
@@ -146,6 +151,9 @@ export function sanitizeCustomPalettes(raw: unknown): CustomPalette[] {
 		// A malformed gradient degrades the palette to solid instead of
 		// dropping it — the six colors are still perfectly usable.
 		const bgGradient = sanitizeBgGradient(p.bgGradient);
+		// A bad intensity is dropped (undefined), not fatal: the baked bg colors
+		// already carry the palette's look; the editor then shows the default.
+		const bgIntensity = clampBgIntensity(p.bgIntensity);
 		result.push({
 			id: p.id,
 			name: p.name,
@@ -156,6 +164,7 @@ export function sanitizeCustomPalettes(raw: unknown): CustomPalette[] {
 			textColorLight: p.textColorLight,
 			textColorDark: p.textColorDark,
 			...(bgGradient ? { bgGradient } : {}),
+			...(bgIntensity !== undefined ? { bgIntensity } : {}),
 		});
 	}
 	return result;
