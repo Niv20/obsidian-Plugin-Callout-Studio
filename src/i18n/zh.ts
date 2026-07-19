@@ -94,6 +94,7 @@ export const zh: Record<string, string> = {
 	"settings.lightColorAria": "亮色：{{color}}",
 	"settings.darkColorAria": "暗色：{{color}}",
 
+	"settings.colorSwatchAria": "强调色：{{accent}} · 背景：{{bg}}",
 	"settings.fallbackCallout": "默认回退 callout",
 	"settings.fallbackCalloutDesc": "库中无法识别的 callout 类型将继承此 callout 的样式。",
 
@@ -121,7 +122,13 @@ export const zh: Record<string, string> = {
 	"settings.previewCalloutContent": "Lorem ipsum dolor sit amet，consectetur adipiscing elit。",
 
 	// Settings — Saved color palettes
+	"settings.customPalettes": "已保存的调色板",
+	"settings.newPalette": "新建调色板",
 	"settings.customPalettesEmpty": "当前没有已保存的调色板。",
+	"settings.editPaletteAria": "编辑调色板 {{name}}",
+	"settings.deletePaletteAria": "删除调色板 {{name}}",
+	"settings.deletePaletteConfirm":
+		'删除调色板 "{{name}}"？\n使用其颜色的 callout 不受影响。',
 	"settings.enableAutocomplete": "启用 [! 自动完成",
 	"settings.enableAutocompleteDesc": '在编辑器块引用中输入"[!"时显示建议。从列表中选择 callout 类型以插入完整的 callout 标题。',
 
@@ -204,6 +211,42 @@ export const zh: Record<string, string> = {
 	"editor.loremIpsum": "Lorem ipsum dolor sit amet，consectetur adipiscing elit。",
 	"editor.sampleInlineText": "这是一个嵌入在段落中的行内 [!{id}] 徽标。",
 	"editor.previewReadOnly": "实时预览无法编辑",
+
+	// Palette editor modal
+	"palette.newTitle": "新建调色板",
+	"palette.editTitle": "编辑调色板",
+	"palette.name": "名称",
+	"palette.namePlaceholder": "我的调色板",
+	"palette.nameExists": "已存在同名的调色板",
+	"palette.baseColor": "基础颜色",
+	"palette.bgStyle": "样式",
+	"palette.bgSolid": "纯色",
+	"palette.bgGradient": "渐变",
+	"palette.gradientTo": "第二种颜色",
+	"palette.gradientDirection": "方向",
+	"palette.gradientText": "标题文字渐变",
+	"palette.save": "保存",
+
+	// Color name suggestions (used to prefill palette names)
+	"colorName.red": "红色",
+	"colorName.orange": "橙色",
+	"colorName.amber": "琥珀色",
+	"colorName.yellow": "黄色",
+	"colorName.lime": "青柠色",
+	"colorName.green": "绿色",
+	"colorName.teal": "蓝绿色",
+	"colorName.cyan": "青色",
+	"colorName.sky": "天蓝色",
+	"colorName.blue": "蓝色",
+	"colorName.indigo": "靛蓝色",
+	"colorName.violet": "紫罗兰色",
+	"colorName.purple": "紫色",
+	"colorName.pink": "粉色",
+	"colorName.rose": "玫瑰色",
+	"colorName.brown": "棕色",
+	"colorName.gray": "灰色",
+	"colorName.black": "黑色",
+	"colorName.white": "白色",
 
 	"iconPicker.pickIcon": "选择图标",
 	"iconPicker.confirm": "确认",

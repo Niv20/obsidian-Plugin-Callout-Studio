@@ -17,7 +17,13 @@ import {
 } from "../utils/colorUtils";
 import { ensureMaterialFontLoaded, svgToDataUri } from "../utils/iconLoader";
 import {
+	applyTitleGradient,
+	clearGradientChars,
+} from "../reading/gradientTitleText";
+import {
+	CSS_FOLD_ARROW,
 	CSS_HEADING_LINE,
+	CSS_HEADING_TITLE,
 	CSS_HEADING_TOKEN,
 	CSS_INLINE_TOKEN,
 	CSS_REF_TOKEN,
@@ -37,6 +43,11 @@ type RegistryWindow = Window & {
 };
 
 const STYLE_EL_ID = "callout-studio-dynamic-css";
+
+/** One `background-image` layer: a gradient sweep. */
+interface BgLayer {
+	image: string;
+}
 
 export class CSSInjector {
 	private styleSheet: CSSStyleSheet | null = null;
@@ -185,11 +196,11 @@ export class CSSInjector {
 
 	/**
 	 * Background declarations for one theme mode: the solid color plus, when a
-	 * gradient is set, the gradient image layered on top. The solid
-	 * `background-color` doubles as the fallback if a renderer drops the
-	 * image; `print-color-adjust: exact` keeps the gradient from being
-	 * stripped when exporting to PDF / printing. Empty when the mode has no
-	 * background color (a gradient alone has no start stop to render from).
+	 * gradient is set, the image layered on top. The solid `background-color`
+	 * doubles as the fallback if a renderer drops the image;
+	 * `print-color-adjust: exact` keeps the image from being stripped when
+	 * exporting to PDF / printing. Empty when the mode has no background
+	 * color (a gradient alone has no base to render on).
 	 */
 	private bgProps(
 		def: CalloutDefinition,
@@ -200,18 +211,135 @@ export class CSSInjector {
 		if (!bg) return [];
 		const imp = important ? " !important" : "";
 		const props = [`  background-color: ${bg}${imp};`];
-		if (def.bgGradient) {
-			const to =
-				mode === "dark"
-					? def.bgGradient.toColorDark
-					: def.bgGradient.toColorLight;
+		const layer = this.bgImageFor(def, mode);
+		if (layer) {
 			props.push(
-				`  background-image: ${bgGradientCss(bg, to, def.bgGradient)}${imp};`,
+				`  background-image: ${layer.image}${imp};`,
 				`  -webkit-print-color-adjust: exact${imp};`,
 				`  print-color-adjust: exact${imp};`,
 			);
 		}
 		return props;
+	}
+
+	/**
+	 * The `background-image` layer for one mode: the gradient sweep, or null
+	 * when the def has no gradient, or when the mode has no background color
+	 * to sweep from.
+	 */
+	private bgImageFor(
+		def: CalloutDefinition,
+		mode: "light" | "dark",
+	): BgLayer | null {
+		const bg = mode === "dark" ? def.bgColorDark : def.bgColorLight;
+		if (!bg) return null;
+		if (!def.bgGradient) return null;
+		const to =
+			mode === "dark"
+				? def.bgGradient.toColorDark
+				: def.bgGradient.toColorLight;
+		return { image: bgGradientCss(bg, to, def.bgGradient) };
+	}
+
+	/**
+	 * The text sweep for one mode, or null when the def has no gradient, its
+	 * text sweep is off, or the accent-strength end color is missing.
+	 *
+	 * Runs from the mode's ACCENT color to `textToColor*` — deliberately not
+	 * the background's own stops, which are pale tints designed to sit behind
+	 * text and would be all but invisible painted through the glyphs.
+	 */
+	private textGradientCss(
+		def: CalloutDefinition,
+		mode: "light" | "dark",
+	): string | null {
+		const g = def.bgGradient;
+		if (!g?.textGradient) return null;
+		const to = mode === "dark" ? g.textToColorDark : g.textToColorLight;
+		if (!to) return null;
+		const from = mode === "dark" ? def.colorDark : def.colorLight;
+		return bgGradientCss(from, to, g);
+	}
+
+	/**
+	 * Declarations that paint `image` through an element's own glyphs while
+	 * keeping what it already had behind them — two background layers: the
+	 * sweep clipped to the text, over `under` clipped normally.
+	 *
+	 * The trailing `border-box` is load-bearing: `background-clip` governs
+	 * `background-color` too (via the LAST layer's value), so a lone
+	 * `background-clip: text` would clip an element's solid background to its
+	 * text as well — erasing the heading bar and the inline pill. Keeping a
+	 * final `none` layer gives the color a `border-box` clip to use.
+	 *
+	 * One sweep is declared per element, never per child, so it runs across
+	 * the whole title in one pass instead of restarting on every glyph.
+	 * `-webkit-text-fill-color` is what hides the flat text under the sweep;
+	 * `color` is left alone so icons keep tracking it through `currentColor`.
+	 */
+	private textSweepProps(image: string, under: string | null): string[] {
+		return [
+			`  background-image: ${image}, ${under ?? "none"};`,
+			`  -webkit-background-clip: text, border-box;`,
+			`  background-clip: text, border-box;`,
+			`  -webkit-text-fill-color: transparent;`,
+			`  -webkit-print-color-adjust: exact;`,
+			`  print-color-adjust: exact;`,
+		];
+	}
+
+	/**
+	 * The text-sweep rules for one render role, light + dark. Mirrors the
+	 * background rules' explicit-undefined cascade: the light rule is left
+	 * unscoped so it keeps applying in dark mode when the def has no
+	 * dark-specific colors, and an identical dark rule is skipped as a no-op.
+	 *
+	 * `ownsBackground` must say whether the swept element is the one carrying
+	 * the callout's background layer — the pill root does, a title span nested
+	 * inside a painted bar does not. Re-declaring the layer under an element
+	 * that never had it would squeeze a second copy of the gradient into that
+	 * element's own (much narrower) box, on top of the real one.
+	 */
+	private textSweepRules(
+		def: CalloutDefinition,
+		selectorsFor: (themePrefix: string) => string,
+		ownsBackground: boolean,
+	): string[] {
+		const light = this.textGradientCss(def, "light");
+		if (!light) return [];
+		const under = (mode: "light" | "dark"): string | null =>
+			ownsBackground ? (this.bgImageFor(def, mode)?.image ?? null) : null;
+		const lightProps = this.textSweepProps(light, under("light"));
+		const rules = [`${selectorsFor("")} {\n${lightProps.join("\n")}\n}`];
+		const dark = this.textGradientCss(def, "dark");
+		if (dark) {
+			const darkProps = this.textSweepProps(dark, under("dark"));
+			if (darkProps.join("") !== lightProps.join("")) {
+				rules.push(
+					`${selectorsFor(".theme-dark ")} {\n${darkProps.join("\n")}\n}`,
+				);
+			}
+		}
+		// PDF export: Chromium's print engine does not support
+		// `background-clip: text` — in print the sweep paints as an unclipped
+		// block over the title instead of through the glyphs, and the
+		// transparent text fill leaves garbage. There is no way to make the
+		// technique itself print, so print drops the sweep entirely and the
+		// per-grapheme solid colors take over (spans painted by
+		// gradientTitleText.ts + the `.cs-grad-ch` print rule in styles.css).
+		// The pill's own background gradient is restored by its print-only
+		// ::before (see pillPrintGradientCSS), never by this element again.
+		// Both theme prefixes are grouped so this later rule outranks the
+		// screen rules above in either mode by source order / specificity.
+		rules.push(
+			`@media print {\n${selectorsFor("")},\n${selectorsFor(".theme-dark ")} {\n` +
+				`  background-image: none;\n` +
+				`  -webkit-background-clip: border-box;\n` +
+				`  background-clip: border-box;\n` +
+				`  -webkit-text-fill-color: currentColor;\n` +
+				`}\n}`,
+		);
+		return rules;
 	}
 
 	/**
@@ -304,8 +432,32 @@ export class CSSInjector {
 			parts.push(iconTransform);
 		}
 
+		// Gradient title text, when the palette opted in. Scoped to
+		// .callout-title-inner (which hugs the title) rather than the
+		// full-width .callout-title, so the sweep spans the words themselves;
+		// the sibling .callout-icon is outside it and stays solid. The
+		// callout's background lives on the .callout root, not here.
+		parts.push(
+			...this.textSweepRules(
+				def,
+				(themePrefix) =>
+					[def.id, ...(def.aliases ?? [])]
+						.map(
+							(id) =>
+								`${themePrefix}.callout[data-callout="${id}"] > ` +
+								`.callout-title > .callout-title-inner`,
+						)
+						.join(",\n"),
+				false,
+			),
+		);
+
 		// Heading-bar / inline-pill colors for this callout (both surfaces).
 		parts.push(this.generateTokenColorCSS(def));
+
+		// Fold chevron in the palette's second color (gradients only).
+		const foldCSS = this.generateFoldArrowCSS(def);
+		if (foldCSS) parts.push(foldCSS);
 
 		// Generate alias selectors that reference the same styles
 		if (def.aliases && def.aliases.length > 0) {
@@ -371,6 +523,61 @@ export class CSSInjector {
 	}
 
 	/**
+	 * Fold-chevron color for gradient palettes, across both foldable roles: the
+	 * regular callout's disclosure arrow and the heading callout's chevron (the
+	 * Live Preview widget and, in reading view, Obsidian's own collapse
+	 * indicator). All three default to the accent color — where the palette's
+	 * sweep STARTS — so they take the second color instead and the arrow closes
+	 * the sweep the title opens.
+	 *
+	 * Gated on the `textGradient` (Gradient title text) option: the recoloring
+	 * exists to echo the title's own sweep, so with that option off there is no
+	 * title sweep to close and the arrow keeps the default accent color. This
+	 * matches where the title sweep itself is honored (`textGradientCss`,
+	 * `applyTitleGradient`), both of which also require `textGradient`.
+	 *
+	 * Uses the accent-strength second color (`textToColor*`), never the pale
+	 * `toColor*` tints: those are the background's own end stop, and an arrow
+	 * painted in one would disappear into the corner it sits on. Gradients
+	 * carrying no accent-strength pair (pre-text-sweep or imported data) keep the
+	 * accent-colored arrow rather than risking an invisible one.
+	 *
+	 * Empty when the def has no gradient or the title sweep is off — the
+	 * styles.css defaults then stand.
+	 */
+	private generateFoldArrowCSS(def: CalloutDefinition): string {
+		const g = def.bgGradient;
+		if (!g?.textGradient) return "";
+		const light = g.textToColorLight;
+		if (!light) return "";
+		const dark = g.textToColorDark ?? light;
+		const ids = [def.id, ...(def.aliases ?? [])];
+
+		const selectorsFor = (themePrefix: string): string =>
+			ids
+				.map(
+					(id) =>
+						`${themePrefix}.callout[data-callout="${id}"] > ` +
+						`.callout-title > .callout-fold, ` +
+						`${themePrefix}.${CSS_HEADING_LINE}[data-callout="${id}"] ` +
+						`.${CSS_FOLD_ARROW}, ` +
+						`${themePrefix}.${CSS_HEADING_LINE}[data-callout="${id}"] ` +
+						`.heading-collapse-indicator`,
+				)
+				.join(",\n");
+
+		// The chevrons are `currentColor` SVGs, so `color` alone repaints them.
+		// Same explicit-undefined cascade as the background rules: the light rule
+		// is left unscoped so it keeps applying in dark mode when the gradient has
+		// no dark-specific end, and an identical dark rule is skipped as a no-op.
+		const parts = [`${selectorsFor("")} {\n  color: ${light};\n}`];
+		if (dark !== light) {
+			parts.push(`${selectorsFor(".theme-dark ")} {\n  color: ${dark};\n}`);
+		}
+		return parts.join("\n\n");
+	}
+
+	/**
 	 * Per-callout accent color for the heading-bar and inline-pill DOM.
 	 * The structural rules (layout, radius, background alpha) are static in
 	 * styles.css; only `--cs-color-rgb` is per-callout. Covers the main id
@@ -400,38 +607,138 @@ export class CSSInjector {
 			);
 		}
 
-		// A gradient background replaces the static accent tint on heading bars
-		// and inline pills too, so all three render roles share one look. Solid
-		// custom backgrounds intentionally do NOT reach these roles (the tint is
-		// their designed default); ref tokens are bare icons with no surface to
-		// paint. The [data-callout] attribute outranks the styles.css tint rule
-		// (2 selectors vs 1), so no !important is needed.
-		if (def.bgGradient) {
-			const bgSelectorsFor = (themePrefix: string): string =>
+		// The callout's background — solid color OR gradient — is applied to
+		// heading bars and inline pills too, so all three render roles share the
+		// exact same background. bgProps emits nothing when the def has no custom
+		// bg, leaving those roles on the static accent tint from styles.css as
+		// their default; ref tokens are bare icons with no surface to paint. The
+		// [data-callout] attribute outranks the styles.css tint rule (2 selectors
+		// vs 1), so no !important is needed.
+		const bgSelectorsFor = (themePrefix: string): string =>
+			ids
+				.map(
+					(id) =>
+						`${themePrefix}.${CSS_INLINE_TOKEN}[data-callout="${id}"], ` +
+						`${themePrefix}.${CSS_HEADING_LINE}[data-callout="${id}"]`,
+				)
+				.join(",\n");
+		const lightBg = this.bgProps(def, "light");
+		if (lightBg.length > 0) {
+			parts.push(`${bgSelectorsFor("")} {\n${lightBg.join("\n")}\n}`);
+		}
+		const darkBg = this.bgProps(def, "dark");
+		// Same explicit-undefined cascade as regular callouts: no dark bg set →
+		// the light rule (unscoped, so it matches both themes) keeps applying in
+		// dark mode; identical dark values → skip the no-op.
+		if (darkBg.length > 0 && darkBg.join("") !== lightBg.join("")) {
+			parts.push(
+				`${bgSelectorsFor(".theme-dark ")} {\n${darkBg.join("\n")}\n}`,
+			);
+		}
+		// Only gradient backgrounds need the PDF-export ::before repaint on the
+		// pill; the method returns "" for solid backgrounds.
+		const pillPrint = this.pillPrintGradientCSS(
+			def,
+			(themePrefix, suffix) =>
 				ids
 					.map(
 						(id) =>
-							`${themePrefix}.${CSS_INLINE_TOKEN}[data-callout="${id}"], ` +
-							`${themePrefix}.${CSS_HEADING_LINE}[data-callout="${id}"]`,
+							`${themePrefix}.${CSS_INLINE_TOKEN}[data-callout="${id}"]${suffix}`,
 					)
-					.join(",\n");
-			const lightBg = this.bgProps(def, "light");
-			if (lightBg.length > 0) {
-				parts.push(
-					`${bgSelectorsFor("")} {\n${lightBg.join("\n")}\n}`,
-				);
-			}
-			const darkBg = this.bgProps(def, "dark");
-			// Same explicit-undefined cascade as regular callouts: no dark bg
-			// set → the light rule (unscoped, so it matches both themes) keeps
-			// applying in dark mode; identical dark values → skip the no-op.
-			if (darkBg.length > 0 && darkBg.join("") !== lightBg.join("")) {
-				parts.push(
-					`${bgSelectorsFor(".theme-dark ")} {\n${darkBg.join("\n")}\n}`,
-				);
-			}
-		}
+					.join(",\n"),
+		);
+		if (pillPrint) parts.push(pillPrint);
+
+		// Gradient title text for the inline pill: ONE sweep on the pill root,
+		// which hugs its own content, so the gradient runs edge to edge across
+		// the pill. It carries the background layer, so that layer is restated
+		// underneath. The class is repeated to reach 3 selectors, outranking
+		// the bg rules above (2). Ref tokens are bare icons — nothing to sweep.
+		parts.push(
+			...this.textSweepRules(
+				def,
+				(themePrefix) =>
+					ids
+						.map(
+							(id) =>
+								`${themePrefix}.${CSS_INLINE_TOKEN}.${CSS_INLINE_TOKEN}[data-callout="${id}"]`,
+						)
+						.join(",\n"),
+				true,
+			),
+		);
+
+		// Gradient title text for the heading bar. The bar is a full-width
+		// block, so sweeping it directly would stretch the gradient across the
+		// whole line and leave the text showing only its opening slice —
+		// instead each of the two text runs a bar can hold is swept on its own
+		// hugging inline box, and the gradient lands its end color on the last
+		// letter. The two are mutually exclusive: the token drops its name as
+		// soon as the heading has a title of its own (`showName: !hasTitle`),
+		// so only ever one of these rules paints, and the sweep never restarts
+		// mid-bar. Neither element carries the bar's background.
+		const headingTextSelectors = (themePrefix: string): string =>
+			ids
+				.map(
+					(id) =>
+						`${themePrefix}.${CSS_HEADING_LINE}[data-callout="${id}"] .${CSS_HEADING_TITLE},\n` +
+						`${themePrefix}.${CSS_HEADING_TOKEN}[data-callout="${id}"] > .${CSS_TOKEN_NAME}`,
+				)
+				.join(",\n");
+		parts.push(...this.textSweepRules(def, headingTextSelectors, false));
+
 		return parts.join("\n\n");
+	}
+
+	/**
+	 * PDF-export repaint of the inline pill's background gradient.
+	 *
+	 * Chromium's print pipeline resolves a degenerate gradient box for a
+	 * gradient `background-image` on an inline-level box (the pill is
+	 * `inline-flex`) and paints the whole pill in the gradient's END color —
+	 * on screen the same rule renders fine, and block boxes (regular
+	 * callouts, heading bars) print fine too, so only the pill needs this.
+	 * In print the gradient therefore moves to an absolutely-positioned
+	 * `::before`: a block-level box with well-defined geometry, layered
+	 * between the pill's `background-color` (the first stop, kept as the
+	 * fallback) and its content. Empty when the mode has no bg color (then
+	 * there is no gradient on screen either).
+	 */
+	private pillPrintGradientCSS(
+		def: CalloutDefinition,
+		pillSel: (themePrefix: string, suffix: string) => string,
+	): string {
+		const light = this.bgImageFor(def, "light");
+		if (!light) return "";
+		const beforeProps = (image: string): string =>
+			`  content: "";\n` +
+			`  position: absolute;\n` +
+			`  inset: 0;\n` +
+			`  z-index: -1;\n` +
+			`  border-radius: inherit;\n` +
+			`  background-image: ${image};\n` +
+			`  -webkit-print-color-adjust: exact;\n` +
+			`  print-color-adjust: exact;`;
+		// z-index: 0 scopes the ::before's -1 to the pill's own stacking
+		// context, so it sits above the pill's background-color but under its
+		// text and icon. Both theme prefixes are grouped so this later rule
+		// wins over the screen bg rules in either mode; the ::before then
+		// follows the usual explicit-undefined cascade (unscoped light rule,
+		// dark override only when the gradient differs).
+		const rules = [
+			`${pillSel("", "")},\n${pillSel(".theme-dark ", "")} {\n` +
+				`  background-image: none;\n` +
+				`  position: relative;\n` +
+				`  z-index: 0;\n}`,
+			`${pillSel("", "::before")} {\n${beforeProps(light.image)}\n}`,
+		];
+		const dark = this.bgImageFor(def, "dark");
+		if (dark && dark.image !== light.image) {
+			rules.push(
+				`${pillSel(".theme-dark ", "::before")} {\n${beforeProps(dark.image)}\n}`,
+			);
+		}
+		return `@media print {\n${rules.join("\n\n")}\n}`;
 	}
 
 	private getIconTransformCSS(def: CalloutDefinition): string {
@@ -605,8 +912,34 @@ export class CSSInjector {
 			const iconEl = calloutEl.querySelector<HTMLElement>(
 				".callout-title .callout-icon",
 			);
-			if (!iconEl) continue;
-			this.paintIcon(iconEl, def);
+			if (iconEl) this.paintIcon(iconEl, def);
+			// Per-grapheme print colors for a gradient title (PDF export
+			// support — see gradientTitleText.ts).
+			const titleInner = calloutEl.querySelector<HTMLElement>(
+				".callout-title .callout-title-inner",
+			);
+			if (titleInner) this.syncTitleGradient(titleInner, def);
+		}
+
+		// Heading-bar title spans: reading view wraps the heading's own
+		// title in .cs-heading-title (see calloutPostProcessor), the element
+		// the title sweep runs on. Live Preview heading bars are CodeMirror's
+		// own .cm-line DOM — its text nodes must never be rewrapped (CM owns
+		// them, and Live Preview never reaches PDF export anyway). Unknown
+		// ids get no sweep CSS, so they must not get print colors either.
+		const headingEls = root.querySelectorAll<HTMLElement>(
+			`.${CSS_HEADING_LINE}[data-callout]`,
+		);
+		for (const headingEl of Array.from(headingEls)) {
+			if (headingEl.classList.contains("cm-line")) continue;
+			const id = headingEl.getAttribute("data-callout");
+			if (!id) continue;
+			const { def, unknown } = resolveCalloutDef(this.registry, id);
+			if (!def || unknown) continue;
+			const titleEl = headingEl.querySelector<HTMLElement>(
+				`.${CSS_HEADING_TITLE}`,
+			);
+			if (titleEl) this.syncTitleGradient(titleEl, def);
 		}
 
 		// Heading/inline token DOM (Live Preview widgets and reading-view
@@ -631,15 +964,31 @@ export class CSSInjector {
 			`.${CSS_TOKEN_ICON}`,
 		);
 		if (iconEl) paintRoleIcon(iconEl, def, this.registry);
-		// Unknown tokens keep showing the raw id the user typed.
-		if (!unknown) {
-			const nameEl = tokenEl.querySelector<HTMLElement>(
-				`.${CSS_TOKEN_NAME}`,
-			);
-			if (nameEl && nameEl.textContent !== def.displayName) {
-				nameEl.textContent = def.displayName;
-			}
+		const nameEl = tokenEl.querySelector<HTMLElement>(`.${CSS_TOKEN_NAME}`);
+		if (!nameEl) return;
+		// Unknown tokens keep showing the raw id the user typed. (The
+		// comparison reads through any char spans — textContent concatenates
+		// descendants — while a real rename rewrites the node and strips
+		// them, which is why the gradient sync below runs after it.)
+		if (!unknown && nameEl.textContent !== def.displayName) {
+			nameEl.textContent = def.displayName;
 		}
+		// Per-grapheme print colors for the swept name (PDF export — see
+		// gradientTitleText.ts). The pill root carries the sweep but its name
+		// holds the text; the heading token sweeps its name directly. Unknown
+		// ids get no sweep CSS, so they must not get print colors either.
+		if (unknown) {
+			clearGradientChars(nameEl);
+		} else {
+			this.syncTitleGradient(nameEl, def);
+		}
+	}
+
+	/** Per-grapheme PDF-export colors for one swept title (see
+	 * gradientTitleText.applyTitleGradient, shared with the reading
+	 * post-processor). */
+	private syncTitleGradient(el: HTMLElement, def: CalloutDefinition): void {
+		applyTitleGradient(el, def);
 	}
 
 	/**
@@ -1047,27 +1396,38 @@ export class CSSInjector {
 			);
 		}
 
-		// Fallback gradient background on unknown heading bars / inline pills,
-		// mirroring generateTokenColorCSS for registered ids (ref tokens have
-		// no surface to paint). The .cs-unknown class doubles the class count,
-		// so this outranks the static styles.css tint without !important.
-		if (fallbackDef.bgGradient) {
-			const unknownBgSelectors = (themePrefix: string): string =>
-				`${themePrefix}.${CSS_INLINE_TOKEN}.${CSS_UNKNOWN}, ` +
-				`${themePrefix}.${CSS_HEADING_LINE}.${CSS_UNKNOWN}`;
-			const lightBg = this.bgProps(fallbackDef, "light");
-			if (lightBg.length > 0) {
-				parts.push(
-					`${unknownBgSelectors("")} {\n${lightBg.join("\n")}\n}`,
-				);
-			}
-			const darkBg = this.bgProps(fallbackDef, "dark");
-			if (darkBg.length > 0 && darkBg.join("") !== lightBg.join("")) {
-				parts.push(
-					`${unknownBgSelectors(".theme-dark ")} {\n${darkBg.join("\n")}\n}`,
-				);
-			}
+		// Fallback background (solid OR gradient) on unknown heading bars /
+		// inline pills, mirroring generateTokenColorCSS for registered ids so all
+		// three roles share one background (ref tokens have no surface to paint).
+		// The .cs-unknown class doubles the class count, so this outranks the
+		// static styles.css tint without !important. bgProps emits nothing when
+		// the fallback has no custom bg, leaving the static tint in place.
+		const unknownBgSelectors = (themePrefix: string): string =>
+			`${themePrefix}.${CSS_INLINE_TOKEN}.${CSS_UNKNOWN}, ` +
+			`${themePrefix}.${CSS_HEADING_LINE}.${CSS_UNKNOWN}`;
+		const unknownLightBg = this.bgProps(fallbackDef, "light");
+		if (unknownLightBg.length > 0) {
+			parts.push(
+				`${unknownBgSelectors("")} {\n${unknownLightBg.join("\n")}\n}`,
+			);
 		}
+		const unknownDarkBg = this.bgProps(fallbackDef, "dark");
+		if (
+			unknownDarkBg.length > 0 &&
+			unknownDarkBg.join("") !== unknownLightBg.join("")
+		) {
+			parts.push(
+				`${unknownBgSelectors(".theme-dark ")} {\n${unknownDarkBg.join("\n")}\n}`,
+			);
+		}
+		// Only gradient backgrounds need the PDF-export ::before repaint on the
+		// pill; the method returns "" for solid backgrounds.
+		const unknownPillPrint = this.pillPrintGradientCSS(
+			fallbackDef,
+			(themePrefix, suffix) =>
+				`${themePrefix}.${CSS_INLINE_TOKEN}.${CSS_UNKNOWN}${suffix}`,
+		);
+		if (unknownPillPrint) parts.push(unknownPillPrint);
 
 		return parts.join("\n\n");
 	}

@@ -94,6 +94,7 @@ export const uk: Record<string, string> = {
 	"settings.lightColorAria": "Світлий: {{color}}",
 	"settings.darkColorAria": "Темний: {{color}}",
 
+	"settings.colorSwatchAria": "Акцент: {{accent}} · Фон: {{bg}}",
 	"settings.fallbackCallout": "Резервний callout за замовчуванням",
 	"settings.fallbackCalloutDesc": "Нерозпізнані типи callout у сховищі успадкують стиль цього callout.",
 
@@ -121,7 +122,13 @@ export const uk: Record<string, string> = {
 	"settings.previewCalloutContent": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
 
 	// Settings — Saved color palettes
+	"settings.customPalettes": "Збережені кольорові палітри",
+	"settings.newPalette": "Нова палітра",
 	"settings.customPalettesEmpty": "Наразі немає збережених палітр.",
+	"settings.editPaletteAria": "Редагувати палітру {{name}}",
+	"settings.deletePaletteAria": "Видалити палітру {{name}}",
+	"settings.deletePaletteConfirm":
+		'Видалити палітру "{{name}}"?\nБлоки callout, які використовують її кольори, не зміняться.',
 	"settings.enableAutocomplete": "Увімкнути автодоповнення [!",
 	"settings.enableAutocompleteDesc": 'Показує підказки при введенні «[!» у блоку цитати в редакторі. Виберіть тип callout зі списку, щоб вставити повний заголовок callout.',
 
@@ -204,6 +211,42 @@ export const uk: Record<string, string> = {
 	"editor.loremIpsum": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
 	"editor.sampleInlineText": "Ось вбудована капсула [!{id}] всередині абзацу.",
 	"editor.previewReadOnly": "Живий перегляд не можна редагувати",
+
+	// Palette editor modal
+	"palette.newTitle": "Нова кольорова палітра",
+	"palette.editTitle": "Редагувати кольорову палітру",
+	"palette.name": "Назва",
+	"palette.namePlaceholder": "Моя палітра",
+	"palette.nameExists": "Палітра з такою назвою вже існує",
+	"palette.baseColor": "Базовий колір",
+	"palette.bgStyle": "Стиль",
+	"palette.bgSolid": "Суцільний",
+	"palette.bgGradient": "Градієнт",
+	"palette.gradientTo": "Другий колір",
+	"palette.gradientDirection": "Напрямок",
+	"palette.gradientText": "Текст заголовка градієнтом",
+	"palette.save": "Зберегти",
+
+	// Color name suggestions (used to prefill palette names)
+	"colorName.red": "Червоний",
+	"colorName.orange": "Оранжевий",
+	"colorName.amber": "Бурштиновий",
+	"colorName.yellow": "Жовтий",
+	"colorName.lime": "Лаймовий",
+	"colorName.green": "Зелений",
+	"colorName.teal": "Бірюзовий",
+	"colorName.cyan": "Ціан",
+	"colorName.sky": "Небесний",
+	"colorName.blue": "Синій",
+	"colorName.indigo": "Індиго",
+	"colorName.violet": "Фіолетовий",
+	"colorName.purple": "Пурпуровий",
+	"colorName.pink": "Рожевий",
+	"colorName.rose": "Малиновий",
+	"colorName.brown": "Коричневий",
+	"colorName.gray": "Сірий",
+	"colorName.black": "Чорний",
+	"colorName.white": "Білий",
 
 	"iconPicker.pickIcon": "Вибрати іконку",
 	"iconPicker.confirm": "Підтвердити",

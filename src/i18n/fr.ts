@@ -93,6 +93,7 @@ export const fr: Record<string, string> = {
 	"settings.darkLabel": "S",
 	"settings.lightColorAria": "Clair : {{color}}",
 	"settings.darkColorAria": "Sombre : {{color}}",
+	"settings.colorSwatchAria": "Accent : {{accent}} · Arrière-plan : {{bg}}",
 
 	"settings.fallbackCallout": "Callout de secours par défaut",
 	"settings.fallbackCalloutDesc": "Les types de callout non reconnus dans votre vault hériteront du style de ce callout.",
@@ -121,7 +122,13 @@ export const fr: Record<string, string> = {
 	"settings.previewCalloutContent": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
 
 	// Settings — Saved color palettes
+	"settings.customPalettes": "Palettes de couleurs enregistrées",
+	"settings.newPalette": "Nouvelle palette",
 	"settings.customPalettesEmpty": "Aucune palette enregistrée pour le moment.",
+	"settings.editPaletteAria": "Modifier la palette {{name}}",
+	"settings.deletePaletteAria": "Supprimer la palette {{name}}",
+	"settings.deletePaletteConfirm":
+		'Supprimer la palette "{{name}}" ?\nLes callouts qui utilisent ses couleurs ne sont pas affectés.',
 	"settings.enableAutocomplete": "Activer la saisie automatique [!",
 	"settings.enableAutocompleteDesc": 'Affiche des suggestions lorsque vous tapez "[!" dans une citation de l\'éditeur. Choisissez un type de callout dans la liste pour insérer un en-tête de callout complet.',
 
@@ -204,6 +211,42 @@ export const fr: Record<string, string> = {
 	"editor.loremIpsum": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
 	"editor.sampleInlineText": "Voici une pastille [!{id}] intégrée dans un paragraphe.",
 	"editor.previewReadOnly": "L'aperçu en direct ne peut pas être modifié",
+
+	// Palette editor modal
+	"palette.newTitle": "Nouvelle palette de couleurs",
+	"palette.editTitle": "Modifier la palette de couleurs",
+	"palette.name": "Nom",
+	"palette.namePlaceholder": "Ma palette",
+	"palette.nameExists": "Une palette portant ce nom existe déjà",
+	"palette.baseColor": "Couleur de base",
+	"palette.bgStyle": "Style",
+	"palette.bgSolid": "Uni",
+	"palette.bgGradient": "Dégradé",
+	"palette.gradientTo": "Deuxième couleur",
+	"palette.gradientDirection": "Direction",
+	"palette.gradientText": "Texte du titre en dégradé",
+	"palette.save": "Enregistrer",
+
+	// Color name suggestions (used to prefill palette names)
+	"colorName.red": "Rouge",
+	"colorName.orange": "Orange",
+	"colorName.amber": "Ambre",
+	"colorName.yellow": "Jaune",
+	"colorName.lime": "Citron vert",
+	"colorName.green": "Vert",
+	"colorName.teal": "Sarcelle",
+	"colorName.cyan": "Cyan",
+	"colorName.sky": "Bleu ciel",
+	"colorName.blue": "Bleu",
+	"colorName.indigo": "Indigo",
+	"colorName.violet": "Violet",
+	"colorName.purple": "Pourpre",
+	"colorName.pink": "Rose",
+	"colorName.rose": "Fuchsia",
+	"colorName.brown": "Marron",
+	"colorName.gray": "Gris",
+	"colorName.black": "Noir",
+	"colorName.white": "Blanc",
 
 	"iconPicker.pickIcon": "Choisir une icône",
 	"iconPicker.confirm": "Confirmer",

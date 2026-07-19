@@ -94,6 +94,7 @@ export const vi: Record<string, string> = {
 	"settings.lightColorAria": "Sáng: {{color}}",
 	"settings.darkColorAria": "Tối: {{color}}",
 
+	"settings.colorSwatchAria": "Điểm nhấn: {{accent}} · Nền: {{bg}}",
 	"settings.fallbackCallout": "Callout dự phòng mặc định",
 	"settings.fallbackCalloutDesc": "Các loại callout không nhận dạng được trong vault sẽ kế thừa kiểu của callout này.",
 
@@ -121,7 +122,13 @@ export const vi: Record<string, string> = {
 	"settings.previewCalloutContent": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
 
 	// Settings — Saved color palettes
+	"settings.customPalettes": "Bảng màu đã lưu",
+	"settings.newPalette": "Bảng màu mới",
 	"settings.customPalettesEmpty": "Hiện không có bảng màu đã lưu.",
+	"settings.editPaletteAria": "Chỉnh sửa bảng màu {{name}}",
+	"settings.deletePaletteAria": "Xóa bảng màu {{name}}",
+	"settings.deletePaletteConfirm":
+		'Xóa bảng màu "{{name}}"?\nCác callout dùng màu này sẽ không bị ảnh hưởng.',
 	"settings.enableAutocomplete": "Bật tự động hoàn thành [!",
 	"settings.enableAutocompleteDesc": 'Hiển thị gợi ý khi bạn gõ "[!" trong trích dẫn khối trong trình soạn thảo. Chọn loại callout từ danh sách để chèn tiêu đề callout đầy đủ.',
 
@@ -204,6 +211,42 @@ export const vi: Record<string, string> = {
 	"editor.loremIpsum": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
 	"editor.sampleInlineText": "Đây là một viên [!{id}] nội tuyến bên trong một đoạn văn.",
 	"editor.previewReadOnly": "Không thể chỉnh sửa bản xem trước trực tiếp",
+
+	// Palette editor modal
+	"palette.newTitle": "Bảng màu mới",
+	"palette.editTitle": "Chỉnh sửa bảng màu",
+	"palette.name": "Tên",
+	"palette.namePlaceholder": "Bảng màu của tôi",
+	"palette.nameExists": "Đã tồn tại bảng màu với tên này",
+	"palette.baseColor": "Màu gốc",
+	"palette.bgStyle": "Kiểu",
+	"palette.bgSolid": "Màu đơn",
+	"palette.bgGradient": "Chuyển sắc",
+	"palette.gradientTo": "Màu thứ hai",
+	"palette.gradientDirection": "Hướng",
+	"palette.gradientText": "Văn bản tiêu đề chuyển sắc",
+	"palette.save": "Lưu",
+
+	// Color name suggestions (used to prefill palette names)
+	"colorName.red": "Đỏ",
+	"colorName.orange": "Cam",
+	"colorName.amber": "Hổ phách",
+	"colorName.yellow": "Vàng",
+	"colorName.lime": "Xanh chanh",
+	"colorName.green": "Xanh lá",
+	"colorName.teal": "Xanh mòng két",
+	"colorName.cyan": "Xanh lơ",
+	"colorName.sky": "Xanh da trời",
+	"colorName.blue": "Xanh dương",
+	"colorName.indigo": "Chàm",
+	"colorName.violet": "Tím oải hương",
+	"colorName.purple": "Tím",
+	"colorName.pink": "Hồng",
+	"colorName.rose": "Hồng đậm",
+	"colorName.brown": "Nâu",
+	"colorName.gray": "Xám",
+	"colorName.black": "Đen",
+	"colorName.white": "Trắng",
 
 	"iconPicker.pickIcon": "Chọn biểu tượng",
 	"iconPicker.confirm": "Xác nhận",

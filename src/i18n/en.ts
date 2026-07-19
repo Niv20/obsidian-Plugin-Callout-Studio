@@ -292,21 +292,12 @@ export const en: Record<string, string> = {
 	"palette.namePlaceholder": "My palette",
 	"palette.nameExists": "A palette with this name already exists",
 	"palette.baseColor": "Base color",
-	"palette.baseColorDesc":
-		"Pick one color — light/dark accents, backgrounds, and text colors are derived automatically.",
-	"palette.advanced": "Customize all colors",
-	"palette.advancedDesc":
-		"Fine-tune each color individually. Turning this off re-derives everything from the base color.",
-	"palette.bgStyle": "Background style",
+	"palette.bgStyle": "Style",
 	"palette.bgSolid": "Solid",
 	"palette.bgGradient": "Gradient",
 	"palette.gradientTo": "Second color",
-	"palette.gradientToDesc":
-		"The background blends from the base color's tint into this color's tint.",
-	"palette.gradientType": "Gradient type",
-	"palette.gradientLinear": "Linear",
-	"palette.gradientRadial": "Radial",
 	"palette.gradientDirection": "Direction",
+	"palette.gradientText": "Gradient title text",
 	"palette.save": "Save",
 
 	// Color name suggestions (used to prefill palette names)

@@ -94,6 +94,7 @@ export const ru: Record<string, string> = {
 	"settings.lightColorAria": "Светлый: {{color}}",
 	"settings.darkColorAria": "Тёмный: {{color}}",
 
+	"settings.colorSwatchAria": "Акцент: {{accent}} · Фон: {{bg}}",
 	"settings.fallbackCallout": "Резервный callout по умолчанию",
 	"settings.fallbackCalloutDesc": "Нераспознанные типы callout в хранилище унаследуют стиль этого callout.",
 
@@ -121,7 +122,13 @@ export const ru: Record<string, string> = {
 	"settings.previewCalloutContent": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
 
 	// Settings — Saved color palettes
+	"settings.customPalettes": "Сохранённые цветовые палитры",
+	"settings.newPalette": "Новая палитра",
 	"settings.customPalettesEmpty": "Сохранённых палитр пока нет.",
+	"settings.editPaletteAria": "Редактировать палитру {{name}}",
+	"settings.deletePaletteAria": "Удалить палитру {{name}}",
+	"settings.deletePaletteConfirm":
+		'Удалить палитру "{{name}}"?\nБлоки callout, которые используют её цвета, не изменятся.',
 	"settings.enableAutocomplete": "Включить автодополнение [!",
 	"settings.enableAutocompleteDesc": 'Показывает предложения при вводе "[!" в блочной цитате в редакторе. Выберите тип callout из списка, чтобы вставить полный заголовок callout.',
 
@@ -204,6 +211,42 @@ export const ru: Record<string, string> = {
 	"editor.loremIpsum": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
 	"editor.sampleInlineText": "Вот встроенная капсула [!{id}] внутри абзаца.",
 	"editor.previewReadOnly": "Живой предпросмотр нельзя редактировать",
+
+	// Palette editor modal
+	"palette.newTitle": "Новая цветовая палитра",
+	"palette.editTitle": "Редактировать цветовую палитру",
+	"palette.name": "Название",
+	"palette.namePlaceholder": "Моя палитра",
+	"palette.nameExists": "Палитра с таким названием уже существует",
+	"palette.baseColor": "Базовый цвет",
+	"palette.bgStyle": "Стиль",
+	"palette.bgSolid": "Однотонный",
+	"palette.bgGradient": "Градиент",
+	"palette.gradientTo": "Второй цвет",
+	"palette.gradientDirection": "Направление",
+	"palette.gradientText": "Текст заголовка градиентом",
+	"palette.save": "Сохранить",
+
+	// Color name suggestions (used to prefill palette names)
+	"colorName.red": "Красный",
+	"colorName.orange": "Оранжевый",
+	"colorName.amber": "Янтарный",
+	"colorName.yellow": "Жёлтый",
+	"colorName.lime": "Лаймовый",
+	"colorName.green": "Зелёный",
+	"colorName.teal": "Бирюзовый",
+	"colorName.cyan": "Циан",
+	"colorName.sky": "Небесный",
+	"colorName.blue": "Синий",
+	"colorName.indigo": "Индиго",
+	"colorName.violet": "Фиолетовый",
+	"colorName.purple": "Пурпурный",
+	"colorName.pink": "Розовый",
+	"colorName.rose": "Малиновый",
+	"colorName.brown": "Коричневый",
+	"colorName.gray": "Серый",
+	"colorName.black": "Чёрный",
+	"colorName.white": "Белый",
 
 	"iconPicker.pickIcon": "Выбрать иконку",
 	"iconPicker.confirm": "Подтвердить",

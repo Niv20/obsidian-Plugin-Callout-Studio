@@ -94,6 +94,7 @@ export const ar: Record<string, string> = {
 	"settings.lightColorAria": "فاتح: {{color}}",
 	"settings.darkColorAria": "غامق: {{color}}",
 
+	"settings.colorSwatchAria": "التمييز: {{accent}} · الخلفية: {{bg}}",
 	"settings.fallbackCallout": "Callout الاحتياطي الافتراضي",
 	"settings.fallbackCalloutDesc": "ستَرِث أنواع الـ callout غير المعروفة في مخزنك نمط هذا الـ callout.",
 
@@ -121,7 +122,13 @@ export const ar: Record<string, string> = {
 	"settings.previewCalloutContent": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
 
 	// Settings — Saved color palettes
+	"settings.customPalettes": "لوحات الألوان المحفوظة",
+	"settings.newPalette": "لوحة ألوان جديدة",
 	"settings.customPalettesEmpty": "لا توجد لوحات ألوان محفوظة حالياً.",
+	"settings.editPaletteAria": "تعديل لوحة الألوان {{name}}",
+	"settings.deletePaletteAria": "حذف لوحة الألوان {{name}}",
+	"settings.deletePaletteConfirm":
+		'حذف لوحة الألوان "{{name}}"؟\nلن تتأثر عناصر callout التي تستخدم هذه الألوان.',
 	"settings.enableAutocomplete": "تفعيل الإكمال التلقائي [!",
 	"settings.enableAutocompleteDesc": 'يعرض اقتراحات عند كتابة "[!" داخل اقتباس محظور في المحرر. اختر نوع callout من القائمة لإدراج عنوان callout كامل.',
 
@@ -204,6 +211,42 @@ export const ar: Record<string, string> = {
 	"editor.loremIpsum": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
 	"editor.sampleInlineText": "إليك شارة [!{id}] مضمّنة داخل فقرة.",
 	"editor.previewReadOnly": "لا يمكن تعديل المعاينة المباشرة",
+
+	// Palette editor modal
+	"palette.newTitle": "لوحة ألوان جديدة",
+	"palette.editTitle": "تعديل لوحة الألوان",
+	"palette.name": "الاسم",
+	"palette.namePlaceholder": "لوحتي",
+	"palette.nameExists": "توجد بالفعل لوحة ألوان بهذا الاسم",
+	"palette.baseColor": "اللون الأساسي",
+	"palette.bgStyle": "النمط",
+	"palette.bgSolid": "لون واحد",
+	"palette.bgGradient": "تدرج لوني",
+	"palette.gradientTo": "اللون الثاني",
+	"palette.gradientDirection": "الاتجاه",
+	"palette.gradientText": "نص العنوان بتدرج لوني",
+	"palette.save": "حفظ",
+
+	// Color name suggestions (used to prefill palette names)
+	"colorName.red": "أحمر",
+	"colorName.orange": "برتقالي",
+	"colorName.amber": "كهرماني",
+	"colorName.yellow": "أصفر",
+	"colorName.lime": "ليموني",
+	"colorName.green": "أخضر",
+	"colorName.teal": "أزرق مخضر",
+	"colorName.cyan": "سيان",
+	"colorName.sky": "أزرق سماوي",
+	"colorName.blue": "أزرق",
+	"colorName.indigo": "نيلي",
+	"colorName.violet": "بنفسجي",
+	"colorName.purple": "أرجواني",
+	"colorName.pink": "وردي",
+	"colorName.rose": "زهري",
+	"colorName.brown": "بني",
+	"colorName.gray": "رمادي",
+	"colorName.black": "أسود",
+	"colorName.white": "أبيض",
 
 	"iconPicker.pickIcon": "اختيار أيقونة",
 	"iconPicker.confirm": "تأكيد",

@@ -94,6 +94,7 @@ export const hi: Record<string, string> = {
 	"settings.lightColorAria": "उजला: {{color}}",
 	"settings.darkColorAria": "गाढ़ा: {{color}}",
 
+	"settings.colorSwatchAria": "एक्सेंट: {{accent}} · पृष्ठभूमि: {{bg}}",
 	"settings.fallbackCallout": "डिफ़ॉल्ट फ़ॉलबैक callout",
 	"settings.fallbackCalloutDesc": "vault में अज्ञात callout प्रकार इस callout की स्टाइल विरासत में लेंगे।",
 
@@ -121,7 +122,13 @@ export const hi: Record<string, string> = {
 	"settings.previewCalloutContent": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
 
 	// Settings — Saved color palettes
+	"settings.customPalettes": "सहेजे गए रंग पैलेट",
+	"settings.newPalette": "नया पैलेट",
 	"settings.customPalettesEmpty": "फिलहाल कोई सहेजा गया पैलेट नहीं।",
+	"settings.editPaletteAria": "पैलेट {{name}} संपादित करें",
+	"settings.deletePaletteAria": "पैलेट {{name}} हटाएँ",
+	"settings.deletePaletteConfirm":
+		'पैलेट "{{name}}" हटाएँ?\nइसके रंगों का उपयोग करने वाले callout प्रभावित नहीं होंगे.',
 	"settings.enableAutocomplete": "[! स्वतः पूर्णता सक्षम करें",
 	"settings.enableAutocompleteDesc": 'एडिटर में ब्लॉककोट के अंदर "[!" टाइप करने पर सुझाव दिखाता है। पूरा callout हेडर डालने के लिए सूची से callout प्रकार चुनें।',
 
@@ -204,6 +211,42 @@ export const hi: Record<string, string> = {
 	"editor.loremIpsum": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
 	"editor.sampleInlineText": "यहाँ एक पैराग्राफ के भीतर एक इनलाइन [!{id}] पिल है।",
 	"editor.previewReadOnly": "लाइव पूर्वावलोकन संपादित नहीं किया जा सकता",
+
+	// Palette editor modal
+	"palette.newTitle": "नया रंग पैलेट",
+	"palette.editTitle": "रंग पैलेट संपादित करें",
+	"palette.name": "नाम",
+	"palette.namePlaceholder": "मेरा पैलेट",
+	"palette.nameExists": "इस नाम का पैलेट पहले से मौजूद है",
+	"palette.baseColor": "आधार रंग",
+	"palette.bgStyle": "शैली",
+	"palette.bgSolid": "ठोस",
+	"palette.bgGradient": "ग्रेडिएंट",
+	"palette.gradientTo": "दूसरा रंग",
+	"palette.gradientDirection": "दिशा",
+	"palette.gradientText": "ग्रेडिएंट वाला शीर्षक टेक्स्ट",
+	"palette.save": "सहेजें",
+
+	// Color name suggestions (used to prefill palette names)
+	"colorName.red": "लाल",
+	"colorName.orange": "नारंगी",
+	"colorName.amber": "एम्बर",
+	"colorName.yellow": "पीला",
+	"colorName.lime": "लाइम",
+	"colorName.green": "हरा",
+	"colorName.teal": "टील",
+	"colorName.cyan": "सायन",
+	"colorName.sky": "आसमानी",
+	"colorName.blue": "नीला",
+	"colorName.indigo": "नील",
+	"colorName.violet": "बैंगनी",
+	"colorName.purple": "जामुनी",
+	"colorName.pink": "गुलाबी",
+	"colorName.rose": "गहरा गुलाबी",
+	"colorName.brown": "भूरा",
+	"colorName.gray": "धूसर",
+	"colorName.black": "काला",
+	"colorName.white": "सफेद",
 
 	"iconPicker.pickIcon": "आइकन चुनें",
 	"iconPicker.confirm": "पुष्टि करें",

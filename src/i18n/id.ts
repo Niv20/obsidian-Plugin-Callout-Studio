@@ -94,6 +94,7 @@ export const id: Record<string, string> = {
 	"settings.lightColorAria": "Terang: {{color}}",
 	"settings.darkColorAria": "Gelap: {{color}}",
 
+	"settings.colorSwatchAria": "Aksen: {{accent}} · Latar belakang: {{bg}}",
 	"settings.fallbackCallout": "Callout fallback default",
 	"settings.fallbackCalloutDesc": "Tipe callout yang tidak dikenal di vault Anda akan mewarisi gaya callout ini.",
 
@@ -121,7 +122,13 @@ export const id: Record<string, string> = {
 	"settings.previewCalloutContent": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
 
 	// Settings — Saved color palettes
+	"settings.customPalettes": "Palet warna tersimpan",
+	"settings.newPalette": "Palet baru",
 	"settings.customPalettesEmpty": "Tidak ada palet tersimpan untuk saat ini.",
+	"settings.editPaletteAria": "Edit palet {{name}}",
+	"settings.deletePaletteAria": "Hapus palet {{name}}",
+	"settings.deletePaletteConfirm":
+		'Hapus palet "{{name}}"?\nCallout yang menggunakan warna ini tidak terpengaruh.',
 	"settings.enableAutocomplete": "Aktifkan pelengkapan otomatis [!",
 	"settings.enableAutocompleteDesc": 'Menampilkan saran saat Anda mengetik "[!" di dalam blockquote di editor. Pilih tipe callout dari daftar untuk menyisipkan header callout lengkap.',
 
@@ -204,6 +211,42 @@ export const id: Record<string, string> = {
 	"editor.loremIpsum": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
 	"editor.sampleInlineText": "Berikut adalah pil [!{id}] sebaris di dalam sebuah paragraf.",
 	"editor.previewReadOnly": "Pratinjau langsung tidak dapat diedit",
+
+	// Palette editor modal
+	"palette.newTitle": "Palet warna baru",
+	"palette.editTitle": "Edit palet warna",
+	"palette.name": "Nama",
+	"palette.namePlaceholder": "Palet saya",
+	"palette.nameExists": "Palet dengan nama ini sudah ada",
+	"palette.baseColor": "Warna dasar",
+	"palette.bgStyle": "Gaya",
+	"palette.bgSolid": "Polos",
+	"palette.bgGradient": "Gradien",
+	"palette.gradientTo": "Warna kedua",
+	"palette.gradientDirection": "Arah",
+	"palette.gradientText": "Teks judul bergradien",
+	"palette.save": "Simpan",
+
+	// Color name suggestions (used to prefill palette names)
+	"colorName.red": "Merah",
+	"colorName.orange": "Oranye",
+	"colorName.amber": "Amber",
+	"colorName.yellow": "Kuning",
+	"colorName.lime": "Hijau limau",
+	"colorName.green": "Hijau",
+	"colorName.teal": "Toska",
+	"colorName.cyan": "Sian",
+	"colorName.sky": "Biru langit",
+	"colorName.blue": "Biru",
+	"colorName.indigo": "Nila",
+	"colorName.violet": "Lembayung",
+	"colorName.purple": "Ungu",
+	"colorName.pink": "Merah muda",
+	"colorName.rose": "Merah mawar",
+	"colorName.brown": "Cokelat",
+	"colorName.gray": "Abu-abu",
+	"colorName.black": "Hitam",
+	"colorName.white": "Putih",
 
 	"iconPicker.pickIcon": "Pilih ikon",
 	"iconPicker.confirm": "Konfirmasi",

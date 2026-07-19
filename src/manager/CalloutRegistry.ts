@@ -460,7 +460,8 @@ export class CalloutRegistry {
 			| "bgColorLight"
 			| "bgColorDark"
 			// Callers pass bgGradient explicitly (possibly undefined) so the
-			// spread below clears a stale gradient when the palette went solid.
+			// spread below clears a stale value when the palette switched
+			// background style.
 			| "bgGradient"
 			| "textColorLight"
 			| "textColorDark"

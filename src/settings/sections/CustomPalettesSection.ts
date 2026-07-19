@@ -60,7 +60,7 @@ export function renderCustomPalettesSection(
 		if (!result) return;
 		Object.assign(palette, result);
 		// Object.assign never removes keys: when the edit switched the palette
-		// back to a solid background, the absent bgGradient must still clear
+		// to another background style, the absent bgGradient must still clear
 		// the stored one (and cascade as an explicit undefined below).
 		palette.bgGradient = result.bgGradient;
 		const {
@@ -119,11 +119,13 @@ export function renderCustomPalettesSection(
 			const colorsEl = row.createDiv({
 				cls: "callout-studio-row-colors",
 			});
-			const { accent, bg, bgImage } = resolveCurrentModeColors(palette);
-			renderColorCircles(colorsEl, accent, bg, {
+			const colors = resolveCurrentModeColors(palette);
+			renderColorCircles(colorsEl, colors, {
 				size: 18,
-				bgImage,
-				ariaLabel: t("settings.colorSwatchAria", { accent, bg }),
+				ariaLabel: t("settings.colorSwatchAria", {
+					accent: colors.accent,
+					bg: colors.bg,
+				}),
 			});
 			row.createSpan({
 				cls: "cs-palette-list-name",

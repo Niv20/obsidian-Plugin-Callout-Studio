@@ -93,6 +93,7 @@ export const sv: Record<string, string> = {
 	"settings.darkLabel": "M",
 	"settings.lightColorAria": "Ljus: {{color}}",
 	"settings.darkColorAria": "Mörk: {{color}}",
+	"settings.colorSwatchAria": "Accent: {{accent}} · Bakgrund: {{bg}}",
 
 	"settings.fallbackCallout": "Standard reservcallout",
 	"settings.fallbackCalloutDesc": "Okända callout-typer i ditt vault ärver stilen från denna callout.",
@@ -121,7 +122,13 @@ export const sv: Record<string, string> = {
 	"settings.previewCalloutContent": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
 
 	// Settings — Saved color palettes
+	"settings.customPalettes": "Sparade färgpaletter",
+	"settings.newPalette": "Ny palett",
 	"settings.customPalettesEmpty": "Inga sparade paletter för tillfället.",
+	"settings.editPaletteAria": "Redigera palett {{name}}",
+	"settings.deletePaletteAria": "Ta bort palett {{name}}",
+	"settings.deletePaletteConfirm":
+		'Ta bort paletten "{{name}}"?\nCallouts som använder dess färger påverkas inte.',
 	"settings.enableAutocomplete": "Aktivera [! autokomplettering",
 	"settings.enableAutocompleteDesc": 'Visar förslag när du skriver "[!" i ett blockcitat i editorn. Välj en callout-typ från listan för att infoga en komplett callout-rubrik.',
 
@@ -204,6 +211,42 @@ export const sv: Record<string, string> = {
 	"editor.loremIpsum": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
 	"editor.sampleInlineText": "Här är en infogad [!{id}]-pill inuti ett stycke.",
 	"editor.previewReadOnly": "Livevyn kan inte redigeras",
+
+	// Palette editor modal
+	"palette.newTitle": "Ny färgpalett",
+	"palette.editTitle": "Redigera färgpalett",
+	"palette.name": "Namn",
+	"palette.namePlaceholder": "Min palett",
+	"palette.nameExists": "En palett med detta namn finns redan",
+	"palette.baseColor": "Basfärg",
+	"palette.bgStyle": "Stil",
+	"palette.bgSolid": "Enfärgad",
+	"palette.bgGradient": "Gradient",
+	"palette.gradientTo": "Andra färgen",
+	"palette.gradientDirection": "Riktning",
+	"palette.gradientText": "Titeltext med gradient",
+	"palette.save": "Spara",
+
+	// Color name suggestions (used to prefill palette names)
+	"colorName.red": "Röd",
+	"colorName.orange": "Orange",
+	"colorName.amber": "Bärnsten",
+	"colorName.yellow": "Gul",
+	"colorName.lime": "Lime",
+	"colorName.green": "Grön",
+	"colorName.teal": "Petrol",
+	"colorName.cyan": "Cyan",
+	"colorName.sky": "Himmelsblå",
+	"colorName.blue": "Blå",
+	"colorName.indigo": "Indigo",
+	"colorName.violet": "Violett",
+	"colorName.purple": "Lila",
+	"colorName.pink": "Rosa",
+	"colorName.rose": "Cerise",
+	"colorName.brown": "Brun",
+	"colorName.gray": "Grå",
+	"colorName.black": "Svart",
+	"colorName.white": "Vit",
 
 	"iconPicker.pickIcon": "Välj en ikon",
 	"iconPicker.confirm": "Bekräfta",

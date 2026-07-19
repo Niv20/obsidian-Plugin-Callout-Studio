@@ -36,6 +36,7 @@ import { TagInput } from "../ui/TagInput";
 import {
 	renderColorCircles,
 	resolveCurrentModeColors,
+	type SwatchColors,
 } from "../ui/ColorCircles";
 import { PaletteEditorModal } from "./PaletteEditorModal";
 import { createAnimatedNumberLabel } from "../ui/AnimatedNumberLabel";
@@ -531,22 +532,12 @@ export class CalloutEditor extends Modal {
 
 		// The trigger swatch mirrors the row swatches: accent + background
 		// for the current theme mode.
-		const renderTriggerCircles = (
-			accent: string,
-			bg: string,
-			bgImage?: string,
-		): void => {
+		const renderTriggerCircles = (colors: SwatchColors): void => {
 			triggerCircles.empty();
-			renderColorCircles(triggerCircles, accent, bg, {
-				size: 16,
-				bgImage,
-			});
+			renderColorCircles(triggerCircles, colors, { size: 16 });
 		};
 		const renderTriggerCirclesFromState = (): void => {
-			const { accent, bg, bgImage } = resolveCurrentModeColors(
-				readColorState(),
-			);
-			renderTriggerCircles(accent, bg, bgImage);
+			renderTriggerCircles(resolveCurrentModeColors(readColorState()));
 		};
 		const matchesPalette = (palette: ColorPalette): boolean =>
 			palette.colorLight.toLowerCase() ===
@@ -570,10 +561,9 @@ export class CalloutEditor extends Modal {
 			selectedId = matchedEntry.id;
 			this.paletteId = matchedEntry.id;
 			triggerLabel.setText(matchedEntry.name);
-			const { accent, bg, bgImage } = resolveCurrentModeColors(
-				matchedEntry.palette,
+			renderTriggerCircles(
+				resolveCurrentModeColors(matchedEntry.palette),
 			);
-			renderTriggerCircles(accent, bg, bgImage);
 		} else {
 			this.paletteId = undefined;
 			renderTriggerCirclesFromState();
@@ -591,8 +581,8 @@ export class CalloutEditor extends Modal {
 			if (palette.bgColorDark !== undefined) {
 				this.bgColorDark = palette.bgColorDark;
 			}
-			// Unconditional: switching to a solid palette must clear a
-			// previously applied gradient, not leave it behind.
+			// Unconditional: switching to another background style must clear
+			// a previously applied gradient, not leave it behind.
 			this.bgGradient = palette.bgGradient
 				? { ...palette.bgGradient }
 				: undefined;
@@ -619,12 +609,17 @@ export class CalloutEditor extends Modal {
 			}
 		};
 
-		const setActive = (index: number): void => {
-			if (index < 0 || index >= itemEls.length) return;
+		const clearActive = (): void => {
 			const prev = itemEls[activeIndex];
 			if (activeIndex >= 0 && prev) {
 				prev.removeClass("is-active");
 			}
+			activeIndex = -1;
+		};
+
+		const setActive = (index: number): void => {
+			if (index < 0 || index >= itemEls.length) return;
+			clearActive();
 			activeIndex = index;
 			const el = itemEls[index];
 			if (!el) return;
@@ -643,10 +638,7 @@ export class CalloutEditor extends Modal {
 			this.paletteId = entry.id;
 			applyPaletteColors(entry.palette, true);
 			triggerLabel.setText(entry.name);
-			const { accent, bg, bgImage } = resolveCurrentModeColors(
-				entry.palette,
-			);
-			renderTriggerCircles(accent, bg, bgImage);
+			renderTriggerCircles(resolveCurrentModeColors(entry.palette));
 			this.updateSaveState();
 			closeMenu();
 		};
@@ -680,12 +672,8 @@ export class CalloutEditor extends Modal {
 						cls: "cs-palette-menu-item",
 						attr: { role: "option", "data-index": String(i) },
 					});
-					const { accent, bg, bgImage } = resolveCurrentModeColors(
-						e.palette,
-					);
-					renderColorCircles(item, accent, bg, {
+					renderColorCircles(item, resolveCurrentModeColors(e.palette), {
 						size: 16,
-						bgImage,
 					});
 					item.createSpan({
 						cls: "cs-palette-menu-item-label",
@@ -713,6 +701,7 @@ export class CalloutEditor extends Modal {
 				cls: "cs-palette-menu-item-label",
 				text: t("editor.paletteNewColor"),
 			});
+			newColorItem.addEventListener("mouseenter", clearActive);
 			newColorItem.addEventListener(
 				"click",
 				() => void pickNewPaletteColor(),
@@ -746,8 +735,7 @@ export class CalloutEditor extends Modal {
 			this.paletteId = palette.id;
 			applyPaletteColors(customPaletteToColorPalette(palette), true);
 			triggerLabel.setText(palette.name);
-			const { accent, bg, bgImage } = resolveCurrentModeColors(palette);
-			renderTriggerCircles(accent, bg, bgImage);
+			renderTriggerCircles(resolveCurrentModeColors(palette));
 			this.updateSaveState();
 		};
 

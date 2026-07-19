@@ -127,6 +127,7 @@ export const he: Record<string, string> = {
 	"settings.darkColorAria": "כהה: {{color}}",
 
 	// Settings — Fallback callout
+	"settings.colorSwatchAria": "הדגשה: {{accent}} · רקע: {{bg}}",
 	"settings.fallbackCallout": "ברירת־מחדל לתיבות־הבלטה",
 	"settings.fallbackCalloutDesc":
 		"סוגי תיבות־הבלטה לא מוכרות יקבלו את העיצוב של תיבת־הבלטה זו.",
@@ -157,8 +158,14 @@ export const he: Record<string, string> = {
 		"לורם איפסום דולור סיט אמט, קונסקטורר אדיפיסינג אלית. סד דו אייסמוד טמפור אינסידידונט אוט לבורה את דולורה מגנה אליקה. אוט אנים אד מינים ונאים, קויס נוסטרוד אקסרסיטאשן אולמקו לבוריס.",
 
 	// Settings — Saved color palettes
+	"settings.customPalettes": "פלטות צבעים שמורות",
+	"settings.newPalette": "פלטה חדשה",
 	"settings.customPalettesEmpty": "כרגע אין פלטות צבעים שמורות.",
 	// Settings — Autocomplete
+	"settings.editPaletteAria": "עריכת פלטה {{name}}",
+	"settings.deletePaletteAria": "מחיקת פלטה {{name}}",
+	"settings.deletePaletteConfirm":
+		'למחוק את הפלטה "{{name}}"?\nתיבות־הבלטה שמשתמשות בצבעים שלה לא יושפעו.',
 	"settings.enableAutocomplete": "השלמה אוטומטית בעת הקלדת [!",
 	"settings.enableAutocompleteDesc":
 		'מציג הצעות בעת הקלדת "[!" בתוך בלוק ציטוט בעורך. בחירה של סוג מתוך הרשימה תשלים אוטומטית את כותרת תיבת־ההבלטה.',
@@ -260,6 +267,42 @@ export const he: Record<string, string> = {
 	"editor.previewReadOnly": "לא ניתן לערוך את התצוגה המקדימה",
 
 	// Icon Picker
+	// Palette editor modal
+	"palette.newTitle": "פלטת צבעים חדשה",
+	"palette.editTitle": "עריכת פלטת צבעים",
+	"palette.name": "שם",
+	"palette.namePlaceholder": "הפלטה שלי",
+	"palette.nameExists": "כבר קיימת פלטה בשם הזה",
+	"palette.baseColor": "צבע בסיס",
+	"palette.bgStyle": "סגנון",
+	"palette.bgSolid": "אחיד",
+	"palette.bgGradient": "גרדיאנט",
+	"palette.gradientTo": "צבע שני",
+	"palette.gradientDirection": "כיוון",
+	"palette.gradientText": "טקסט כותרת בגרדיאנט",
+	"palette.save": "שמירה",
+
+	// Color name suggestions (used to prefill palette names)
+	"colorName.red": "אדום",
+	"colorName.orange": "כתום",
+	"colorName.amber": "ענבר",
+	"colorName.yellow": "צהוב",
+	"colorName.lime": "ליים",
+	"colorName.green": "ירוק",
+	"colorName.teal": "טורקיז",
+	"colorName.cyan": "ציאן",
+	"colorName.sky": "תכלת",
+	"colorName.blue": "כחול",
+	"colorName.indigo": "אינדיגו",
+	"colorName.violet": "סגול",
+	"colorName.purple": "ארגמן",
+	"colorName.pink": "ורוד",
+	"colorName.rose": "ורדרד",
+	"colorName.brown": "חום",
+	"colorName.gray": "אפור",
+	"colorName.black": "שחור",
+	"colorName.white": "לבן",
+
 	"iconPicker.pickIcon": "בחירת אייקון",
 	"iconPicker.confirm": "אישור",
 	"iconPicker.cancel": "ביטול",

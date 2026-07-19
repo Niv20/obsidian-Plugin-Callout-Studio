@@ -94,6 +94,7 @@ export const hu: Record<string, string> = {
 	"settings.lightColorAria": "Világos: {{color}}",
 	"settings.darkColorAria": "Sötét: {{color}}",
 
+	"settings.colorSwatchAria": "Kiemelés: {{accent}} · Háttér: {{bg}}",
 	"settings.fallbackCallout": "Alapértelmezett tartalék callout",
 	"settings.fallbackCalloutDesc": "A tárban fel nem ismert callout-típusok öröklik ennek a callout-nak a stílusát.",
 
@@ -121,7 +122,13 @@ export const hu: Record<string, string> = {
 	"settings.previewCalloutContent": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
 
 	// Settings — Saved color palettes
+	"settings.customPalettes": "Mentett színpaletták",
+	"settings.newPalette": "Új paletta",
 	"settings.customPalettesEmpty": "Jelenleg nincs mentett paletta.",
+	"settings.editPaletteAria": "{{name}} paletta szerkesztése",
+	"settings.deletePaletteAria": "{{name}} paletta törlése",
+	"settings.deletePaletteConfirm":
+		'"{{name}}" paletta törlése?\nAz ezt a színt használó callout-ok nem változnak.',
 	"settings.enableAutocomplete": "[! Automatikus kiegészítés engedélyezése",
 	"settings.enableAutocompleteDesc": 'Javaslatokat jelenít meg, amikor "[!" szöveget gépel egy blokkidézet-belsejébe a szerkesztőben. Válasszon callout-típust a listából egy teljes callout fejléc beillesztéséhez.',
 
@@ -204,6 +211,42 @@ export const hu: Record<string, string> = {
 	"editor.loremIpsum": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
 	"editor.sampleInlineText": "Íme egy soron belüli [!{id}] pirula egy bekezdésen belül.",
 	"editor.previewReadOnly": "Az élő előnézet nem szerkeszthető",
+
+	// Palette editor modal
+	"palette.newTitle": "Új színpaletta",
+	"palette.editTitle": "Színpaletta szerkesztése",
+	"palette.name": "Név",
+	"palette.namePlaceholder": "Saját paletta",
+	"palette.nameExists": "Már létezik paletta ezzel a névvel",
+	"palette.baseColor": "Alapszín",
+	"palette.bgStyle": "Stílus",
+	"palette.bgSolid": "Egyszínű",
+	"palette.bgGradient": "Színátmenet",
+	"palette.gradientTo": "Második szín",
+	"palette.gradientDirection": "Irány",
+	"palette.gradientText": "Címszöveg színátmenettel",
+	"palette.save": "Mentés",
+
+	// Color name suggestions (used to prefill palette names)
+	"colorName.red": "Piros",
+	"colorName.orange": "Narancs",
+	"colorName.amber": "Borostyán",
+	"colorName.yellow": "Sárga",
+	"colorName.lime": "Lime",
+	"colorName.green": "Zöld",
+	"colorName.teal": "Petróleumkék",
+	"colorName.cyan": "Cián",
+	"colorName.sky": "Égkék",
+	"colorName.blue": "Kék",
+	"colorName.indigo": "Indigó",
+	"colorName.violet": "Ibolya",
+	"colorName.purple": "Lila",
+	"colorName.pink": "Rózsaszín",
+	"colorName.rose": "Rózsa",
+	"colorName.brown": "Barna",
+	"colorName.gray": "Szürke",
+	"colorName.black": "Fekete",
+	"colorName.white": "Fehér",
 
 	"iconPicker.pickIcon": "Ikon kiválasztása",
 	"iconPicker.confirm": "Megerősítés",

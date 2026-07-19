@@ -94,6 +94,7 @@ export const ko: Record<string, string> = {
 	"settings.lightColorAria": "밝음: {{color}}",
 	"settings.darkColorAria": "어두움: {{color}}",
 
+	"settings.colorSwatchAria": "강조색: {{accent}} · 배경: {{bg}}",
 	"settings.fallbackCallout": "기본 폴백 callout",
 	"settings.fallbackCalloutDesc": "볼트에서 인식되지 않는 callout 유형은 이 callout의 스타일을 상속합니다.",
 
@@ -121,7 +122,13 @@ export const ko: Record<string, string> = {
 	"settings.previewCalloutContent": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
 
 	// Settings — Saved color palettes
+	"settings.customPalettes": "저장된 색상 팔레트",
+	"settings.newPalette": "새 팔레트",
 	"settings.customPalettesEmpty": "현재 저장된 팔레트가 없습니다.",
+	"settings.editPaletteAria": "팔레트 {{name}} 편집",
+	"settings.deletePaletteAria": "팔레트 {{name}} 삭제",
+	"settings.deletePaletteConfirm":
+		'팔레트 "{{name}}"을(를) 삭제하시겠습니까?\n이 색상을 사용하는 callout은 영향을 받지 않습니다.',
 	"settings.enableAutocomplete": "[! 자동 완성 활성화",
 	"settings.enableAutocompleteDesc": '편집기의 인용 블록에서 "[!"를 입력하면 제안을 표시합니다. 목록에서 callout 유형을 선택하여 완전한 callout 헤더를 삽입합니다.',
 
@@ -204,6 +211,42 @@ export const ko: Record<string, string> = {
 	"editor.loremIpsum": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
 	"editor.sampleInlineText": "다음은 단락 안에 있는 인라인 [!{id}] 필입니다.",
 	"editor.previewReadOnly": "실시간 미리보기는 편집할 수 없습니다",
+
+	// Palette editor modal
+	"palette.newTitle": "새 색상 팔레트",
+	"palette.editTitle": "색상 팔레트 편집",
+	"palette.name": "이름",
+	"palette.namePlaceholder": "내 팔레트",
+	"palette.nameExists": "이 이름의 팔레트가 이미 있습니다",
+	"palette.baseColor": "기본 색상",
+	"palette.bgStyle": "스타일",
+	"palette.bgSolid": "단색",
+	"palette.bgGradient": "그라데이션",
+	"palette.gradientTo": "두 번째 색상",
+	"palette.gradientDirection": "방향",
+	"palette.gradientText": "그라데이션 제목 텍스트",
+	"palette.save": "저장",
+
+	// Color name suggestions (used to prefill palette names)
+	"colorName.red": "빨강",
+	"colorName.orange": "주황",
+	"colorName.amber": "호박색",
+	"colorName.yellow": "노랑",
+	"colorName.lime": "라임",
+	"colorName.green": "초록",
+	"colorName.teal": "틸",
+	"colorName.cyan": "시안",
+	"colorName.sky": "하늘색",
+	"colorName.blue": "파랑",
+	"colorName.indigo": "인디고",
+	"colorName.violet": "바이올렛",
+	"colorName.purple": "보라",
+	"colorName.pink": "분홍",
+	"colorName.rose": "로즈",
+	"colorName.brown": "갈색",
+	"colorName.gray": "회색",
+	"colorName.black": "검정",
+	"colorName.white": "흰색",
 
 	"iconPicker.pickIcon": "아이콘 선택",
 	"iconPicker.confirm": "확인",

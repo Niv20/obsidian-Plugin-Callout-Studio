@@ -94,6 +94,7 @@ export const pl: Record<string, string> = {
 	"settings.lightColorAria": "Jasny: {{color}}",
 	"settings.darkColorAria": "Ciemny: {{color}}",
 
+	"settings.colorSwatchAria": "Akcent: {{accent}} · Tło: {{bg}}",
 	"settings.fallbackCallout": "Domyślny zapasowy callout",
 	"settings.fallbackCalloutDesc": "Nierozpoznane typy callout w vault odziedziczą styl tego callout.",
 
@@ -121,7 +122,13 @@ export const pl: Record<string, string> = {
 	"settings.previewCalloutContent": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
 
 	// Settings — Saved color palettes
+	"settings.customPalettes": "Zapisane palety kolorów",
+	"settings.newPalette": "Nowa paleta",
 	"settings.customPalettesEmpty": "Brak zapisanych palet na razie.",
+	"settings.editPaletteAria": "Edytuj paletę {{name}}",
+	"settings.deletePaletteAria": "Usuń paletę {{name}}",
+	"settings.deletePaletteConfirm":
+		'Usunąć paletę "{{name}}"?\nCallouty korzystające z jej kolorów nie zostaną zmienione.',
 	"settings.enableAutocomplete": "Włącz autouzupełnianie [!",
 	"settings.enableAutocompleteDesc": 'Wyświetla sugestie przy wpisywaniu "[!" w bloku cytatu w edytorze. Wybierz typ callout z listy, aby wstawić pełny nagłówek callout.',
 
@@ -204,6 +211,42 @@ export const pl: Record<string, string> = {
 	"editor.loremIpsum": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
 	"editor.sampleInlineText": "Oto wbudowana pigułka [!{id}] wewnątrz akapitu.",
 	"editor.previewReadOnly": "Podglądu na żywo nie można edytować",
+
+	// Palette editor modal
+	"palette.newTitle": "Nowa paleta kolorów",
+	"palette.editTitle": "Edytuj paletę kolorów",
+	"palette.name": "Nazwa",
+	"palette.namePlaceholder": "Moja paleta",
+	"palette.nameExists": "Paleta o tej nazwie już istnieje",
+	"palette.baseColor": "Kolor bazowy",
+	"palette.bgStyle": "Styl",
+	"palette.bgSolid": "Jednolity",
+	"palette.bgGradient": "Gradient",
+	"palette.gradientTo": "Drugi kolor",
+	"palette.gradientDirection": "Kierunek",
+	"palette.gradientText": "Tekst tytułu w gradiencie",
+	"palette.save": "Zapisz",
+
+	// Color name suggestions (used to prefill palette names)
+	"colorName.red": "Czerwony",
+	"colorName.orange": "Pomarańczowy",
+	"colorName.amber": "Bursztynowy",
+	"colorName.yellow": "Żółty",
+	"colorName.lime": "Limonkowy",
+	"colorName.green": "Zielony",
+	"colorName.teal": "Morski",
+	"colorName.cyan": "Cyjan",
+	"colorName.sky": "Błękitny",
+	"colorName.blue": "Niebieski",
+	"colorName.indigo": "Indygo",
+	"colorName.violet": "Fioletowy",
+	"colorName.purple": "Purpurowy",
+	"colorName.pink": "Różowy",
+	"colorName.rose": "Różany",
+	"colorName.brown": "Brązowy",
+	"colorName.gray": "Szary",
+	"colorName.black": "Czarny",
+	"colorName.white": "Biały",
 
 	"iconPicker.pickIcon": "Wybierz ikonę",
 	"iconPicker.confirm": "Potwierdź",

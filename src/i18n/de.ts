@@ -93,6 +93,7 @@ export const de: Record<string, string> = {
 	"settings.darkLabel": "D",
 	"settings.lightColorAria": "Hell: {{color}}",
 	"settings.darkColorAria": "Dunkel: {{color}}",
+	"settings.colorSwatchAria": "Akzent: {{accent}} · Hintergrund: {{bg}}",
 
 	"settings.fallbackCallout": "Standard-Fallback-Callout",
 	"settings.fallbackCalloutDesc": "Unbekannte Callout-Typen im Vault übernehmen den Stil dieses Callouts.",
@@ -121,7 +122,13 @@ export const de: Record<string, string> = {
 	"settings.previewCalloutContent": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
 
 	// Settings — Saved color palettes
+	"settings.customPalettes": "Gespeicherte Farbpaletten",
+	"settings.newPalette": "Neue Palette",
 	"settings.customPalettesEmpty": "Derzeit keine gespeicherten Paletten.",
+	"settings.editPaletteAria": "Palette {{name}} bearbeiten",
+	"settings.deletePaletteAria": "Palette {{name}} löschen",
+	"settings.deletePaletteConfirm":
+		'Palette "{{name}}" löschen?\nCallouts, die ihre Farben verwenden, sind davon nicht betroffen.',
 	"settings.enableAutocomplete": "[! Autovervollständigung aktivieren",
 	"settings.enableAutocompleteDesc": 'Zeigt Vorschläge an, wenn Sie "[!" in einem Blockzitat im Editor eingeben. Wählen Sie einen Callout-Typ aus der Liste, um eine vollständige Callout-Überschrift einzufügen.',
 
@@ -204,6 +211,42 @@ export const de: Record<string, string> = {
 	"editor.loremIpsum": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
 	"editor.sampleInlineText": "Hier ist eine eingebettete [!{id}] Pille innerhalb eines Absatzes.",
 	"editor.previewReadOnly": "Die Live-Vorschau kann nicht bearbeitet werden",
+
+	// Palette editor modal
+	"palette.newTitle": "Neue Farbpalette",
+	"palette.editTitle": "Farbpalette bearbeiten",
+	"palette.name": "Name",
+	"palette.namePlaceholder": "Meine Palette",
+	"palette.nameExists": "Es gibt bereits eine Palette mit diesem Namen",
+	"palette.baseColor": "Basisfarbe",
+	"palette.bgStyle": "Stil",
+	"palette.bgSolid": "Einfarbig",
+	"palette.bgGradient": "Verlauf",
+	"palette.gradientTo": "Zweite Farbe",
+	"palette.gradientDirection": "Richtung",
+	"palette.gradientText": "Verlaufs-Titeltext",
+	"palette.save": "Speichern",
+
+	// Color name suggestions (used to prefill palette names)
+	"colorName.red": "Rot",
+	"colorName.orange": "Orange",
+	"colorName.amber": "Bernstein",
+	"colorName.yellow": "Gelb",
+	"colorName.lime": "Limette",
+	"colorName.green": "Grün",
+	"colorName.teal": "Petrol",
+	"colorName.cyan": "Cyan",
+	"colorName.sky": "Himmelblau",
+	"colorName.blue": "Blau",
+	"colorName.indigo": "Indigo",
+	"colorName.violet": "Violett",
+	"colorName.purple": "Lila",
+	"colorName.pink": "Pink",
+	"colorName.rose": "Rosé",
+	"colorName.brown": "Braun",
+	"colorName.gray": "Grau",
+	"colorName.black": "Schwarz",
+	"colorName.white": "Weiß",
 
 	"iconPicker.pickIcon": "Symbol auswählen",
 	"iconPicker.confirm": "Bestätigen",

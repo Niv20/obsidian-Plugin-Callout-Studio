@@ -94,6 +94,7 @@ export const tr: Record<string, string> = {
 	"settings.lightColorAria": "Açık: {{color}}",
 	"settings.darkColorAria": "Koyu: {{color}}",
 
+	"settings.colorSwatchAria": "Vurgu: {{accent}} · Arka plan: {{bg}}",
 	"settings.fallbackCallout": "Varsayılan geri dönüş callout'u",
 	"settings.fallbackCalloutDesc": "Vault'unuzdaki tanınmayan callout türleri bu callout'un stilini devralır.",
 
@@ -121,7 +122,13 @@ export const tr: Record<string, string> = {
 	"settings.previewCalloutContent": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
 
 	// Settings — Saved color palettes
+	"settings.customPalettes": "Kaydedilmiş renk paletleri",
+	"settings.newPalette": "Yeni palet",
 	"settings.customPalettesEmpty": "Şu an kaydedilmiş palet yok.",
+	"settings.editPaletteAria": "{{name}} paletini düzenle",
+	"settings.deletePaletteAria": "{{name}} paletini sil",
+	"settings.deletePaletteConfirm":
+		'"{{name}}" paletini sil?\nBu renkleri kullanan callout öğeleri etkilenmez.',
 	"settings.enableAutocomplete": "[! Otomatik tamamlamayı etkinleştir",
 	"settings.enableAutocompleteDesc": 'Düzenleyicide blok alıntı içinde "[!" yazdığınızda öneriler gösterir. Tam bir callout başlığı eklemek için listeden bir callout türü seçin.',
 
@@ -204,6 +211,42 @@ export const tr: Record<string, string> = {
 	"editor.loremIpsum": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
 	"editor.sampleInlineText": "İşte bir paragraf içinde satır içi bir [!{id}] hapı.",
 	"editor.previewReadOnly": "Canlı önizleme düzenlenemez",
+
+	// Palette editor modal
+	"palette.newTitle": "Yeni renk paleti",
+	"palette.editTitle": "Renk paletini düzenle",
+	"palette.name": "Ad",
+	"palette.namePlaceholder": "Paletim",
+	"palette.nameExists": "Bu adla bir palet zaten var",
+	"palette.baseColor": "Temel renk",
+	"palette.bgStyle": "Stil",
+	"palette.bgSolid": "Düz renk",
+	"palette.bgGradient": "Gradyan",
+	"palette.gradientTo": "İkinci renk",
+	"palette.gradientDirection": "Yön",
+	"palette.gradientText": "Gradyanlı başlık metni",
+	"palette.save": "Kaydet",
+
+	// Color name suggestions (used to prefill palette names)
+	"colorName.red": "Kırmızı",
+	"colorName.orange": "Turuncu",
+	"colorName.amber": "Kehribar",
+	"colorName.yellow": "Sarı",
+	"colorName.lime": "Limon yeşili",
+	"colorName.green": "Yeşil",
+	"colorName.teal": "Deniz mavisi",
+	"colorName.cyan": "Camgöbeği",
+	"colorName.sky": "Gök mavisi",
+	"colorName.blue": "Mavi",
+	"colorName.indigo": "Çivit mavisi",
+	"colorName.violet": "Eflatun",
+	"colorName.purple": "Mor",
+	"colorName.pink": "Pembe",
+	"colorName.rose": "Gül kurusu",
+	"colorName.brown": "Kahverengi",
+	"colorName.gray": "Gri",
+	"colorName.black": "Siyah",
+	"colorName.white": "Beyaz",
 
 	"iconPicker.pickIcon": "Simge seç",
 	"iconPicker.confirm": "Onayla",

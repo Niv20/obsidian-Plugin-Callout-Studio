@@ -33,13 +33,16 @@ import {
 } from "../editor/calloutTokens";
 import {
 	CSS_HEADING_LINE,
+	CSS_HEADING_TITLE,
 	CSS_HEADING_TOKEN,
 	CSS_INLINE_TOKEN,
 	CSS_REF_TOKEN_LINK,
+	CSS_TOKEN_NAME,
 	CSS_UNKNOWN,
 	buildCalloutTokenDom,
 	resolveCalloutDef,
 } from "../editor/renderShared";
+import { applyTitleGradient } from "./gradientTitleText";
 import { normalizeCalloutId } from "../utils/calloutId";
 
 /** Narrow structural host type (avoids importing the concrete plugin class). */
@@ -168,7 +171,7 @@ function transformHeading(
 		if (!rawId.trim()) return;
 	}
 
-	const { unknown } = resolveCalloutDef(host.registry, rawId);
+	const { def, unknown } = resolveCalloutDef(host.registry, rawId);
 	h.classList.add(CSS_HEADING_LINE);
 	if (unknown) h.classList.add(CSS_UNKNOWN);
 	h.setAttribute("data-callout", normalizeCalloutId(rawId));
@@ -185,6 +188,32 @@ function transformHeading(
 		showName: !hasTitle,
 	});
 	h.insertBefore(tokenEl, textNode);
+
+	// Give the title its own inline box, hugging the words, so a gradient
+	// title sweep can end on the last letter instead of at the far edge of the
+	// full-width bar (see CSS_HEADING_TITLE). Everything trailing the token is
+	// the title — inline markup included. Obsidian's native collapse indicator
+	// is prepended to the hN, so it stays ahead of the token either way.
+	if (hasTitle) {
+		const titleEl = h.ownerDocument.createElement("span");
+		titleEl.classList.add(CSS_HEADING_TITLE);
+		h.insertBefore(titleEl, tokenEl.nextSibling);
+		while (titleEl.nextSibling) titleEl.appendChild(titleEl.nextSibling);
+	}
+
+	// PDF export: bake the swept title's per-grapheme fallback colors now,
+	// while these nodes exist. This post-processor is registered AFTER the
+	// one that runs CSSInjector.paintIcons, so paintIcons already swept the
+	// container before the heading token/title were built — it never sees
+	// them during export. (Regular-callout titles are Obsidian's own DOM,
+	// present when paintIcons runs, and are handled there instead.) On screen
+	// the sweep is pure CSS and these spans stay inert. See gradientTitleText.
+	if (def && !unknown && def.bgGradient?.textGradient) {
+		const swept = hasTitle
+			? h.querySelector<HTMLElement>(`.${CSS_HEADING_TITLE}`)
+			: tokenEl.querySelector<HTMLElement>(`.${CSS_TOKEN_NAME}`);
+		if (swept) applyTitleGradient(swept, def);
+	}
 }
 
 /**
@@ -385,6 +414,16 @@ function transformInlinePills(
 			showName: true,
 		});
 		tokenPart.replaceWith(pill);
+
+		// PDF export: bake the pill label's per-grapheme colors now (same
+		// reason as the heading token above — paintIcons ran before this pill
+		// existed). The sweep lives on the pill root but the text is in its
+		// name span, so that is what gets wrapped.
+		const { def, unknown } = resolveCalloutDef(host.registry, c.rawId);
+		if (def && !unknown && def.bgGradient?.textGradient) {
+			const nameEl = pill.querySelector<HTMLElement>(`.${CSS_TOKEN_NAME}`);
+			if (nameEl) applyTitleGradient(nameEl, def);
+		}
 	}
 }
 

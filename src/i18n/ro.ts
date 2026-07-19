@@ -94,6 +94,7 @@ export const ro: Record<string, string> = {
 	"settings.lightColorAria": "Deschis: {{color}}",
 	"settings.darkColorAria": "Închis: {{color}}",
 
+	"settings.colorSwatchAria": "Accent: {{accent}} · Fundal: {{bg}}",
 	"settings.fallbackCallout": "Callout de rezervă implicit",
 	"settings.fallbackCalloutDesc": "Tipurile de callout nerecunoscute din vault vor moșteni stilul acestui callout.",
 
@@ -121,7 +122,13 @@ export const ro: Record<string, string> = {
 	"settings.previewCalloutContent": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
 
 	// Settings — Saved color palettes
+	"settings.customPalettes": "Palete de culori salvate",
+	"settings.newPalette": "Paletă nouă",
 	"settings.customPalettesEmpty": "Nicio paletă salvată deocamdată.",
+	"settings.editPaletteAria": "Editați paleta {{name}}",
+	"settings.deletePaletteAria": "Ștergeți paleta {{name}}",
+	"settings.deletePaletteConfirm":
+		'Ștergeți paleta "{{name}}"?\nCallout-urile care îi folosesc culorile nu sunt afectate.',
 	"settings.enableAutocomplete": "Activați completarea automată [!",
 	"settings.enableAutocompleteDesc": 'Afișează sugestii când tastați "[!" într-un citat bloc în editor. Alegeți un tip de callout din listă pentru a insera un antet callout complet.',
 
@@ -204,6 +211,42 @@ export const ro: Record<string, string> = {
 	"editor.loremIpsum": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
 	"editor.sampleInlineText": "Iată o pastilă [!{id}] inline în interiorul unui paragraf.",
 	"editor.previewReadOnly": "Previzualizarea live nu poate fi editată",
+
+	// Palette editor modal
+	"palette.newTitle": "Paletă de culori nouă",
+	"palette.editTitle": "Editați paleta de culori",
+	"palette.name": "Nume",
+	"palette.namePlaceholder": "Paleta mea",
+	"palette.nameExists": "Există deja o paletă cu acest nume",
+	"palette.baseColor": "Culoare de bază",
+	"palette.bgStyle": "Stil",
+	"palette.bgSolid": "Uniformă",
+	"palette.bgGradient": "Degrade",
+	"palette.gradientTo": "A doua culoare",
+	"palette.gradientDirection": "Direcție",
+	"palette.gradientText": "Text de titlu cu degrade",
+	"palette.save": "Salvare",
+
+	// Color name suggestions (used to prefill palette names)
+	"colorName.red": "Roșu",
+	"colorName.orange": "Portocaliu",
+	"colorName.amber": "Chihlimbariu",
+	"colorName.yellow": "Galben",
+	"colorName.lime": "Verde-lime",
+	"colorName.green": "Verde",
+	"colorName.teal": "Turcoaz",
+	"colorName.cyan": "Cyan",
+	"colorName.sky": "Bleu",
+	"colorName.blue": "Albastru",
+	"colorName.indigo": "Indigo",
+	"colorName.violet": "Violet",
+	"colorName.purple": "Mov",
+	"colorName.pink": "Roz",
+	"colorName.rose": "Roz-închis",
+	"colorName.brown": "Maro",
+	"colorName.gray": "Gri",
+	"colorName.black": "Negru",
+	"colorName.white": "Alb",
 
 	"iconPicker.pickIcon": "Alegeți o pictogramă",
 	"iconPicker.confirm": "Confirmare",

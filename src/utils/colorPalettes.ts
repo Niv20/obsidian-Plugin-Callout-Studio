@@ -70,84 +70,20 @@ export const OBSIDIAN_PALETTES: ColorPalette[] = [
 	makePalette("quote", "Quote", "obsidian", "#9e9e9e", "#9e9e9e"),
 ];
 
-/** Additional curated color presets */
+/**
+ * Additional curated color presets. Deliberately kept to hues Obsidian's
+ * built-in callouts don't already cover (chartreuse, brown, and the
+ * warm/purple/pink family) so the presets add variety instead of duplicating
+ * note-blue, tip-teal, success-green, failure-red or quote-gray.
+ */
 export const EXTRA_PALETTES: ColorPalette[] = [
-	makePalette("ocean", "Ocean", "preset", "#1a73e8", "#8ab4f8"),
-	makePalette(
-		"sky",
-		"Sky",
-		"preset",
-		"#039be5",
-		"#4fc3f7",
-		"#e1f5fe",
-		"#0a1929",
-	),
-	makePalette("cobalt", "Cobalt", "preset", "#304ffe", "#8c9eff"),
-	makePalette("emerald", "Emerald", "preset", "#00897b", "#4db6ac"),
-	makePalette(
-		"forest",
-		"Forest",
-		"preset",
-		"#2e7d32",
-		"#66bb6a",
-		"#e8f5e9",
-		"#0d1f12",
-	),
-	makePalette("mint", "Mint", "preset", "#00bfa5", "#64ffda"),
-	makePalette("rose", "Rose", "preset", "#d32f2f", "#ef5350"),
-	makePalette(
-		"crimson",
-		"Crimson",
-		"preset",
-		"#b71c1c",
-		"#e57373",
-		"#fce4ec",
-		"#1a0a0e",
-	),
 	makePalette("coral", "Coral", "preset", "#ff5722", "#ff8a65"),
-	makePalette(
-		"lavender",
-		"Lavender",
-		"preset",
-		"#7c4dff",
-		"#b388ff",
-		"#ede7f6",
-		"#1a0f29",
-	),
+	makePalette("amber", "Amber", "preset", "#ff8f00", "#ffd54f"),
+	makePalette("lime", "Lime", "preset", "#afb42b", "#dce775"),
+	makePalette("brown", "Brown", "preset", "#795548", "#a1887f"),
 	makePalette("grape", "Grape", "preset", "#9c27b0", "#ce93d8"),
 	makePalette("plum", "Plum", "preset", "#6a1b9a", "#ab47bc"),
-	makePalette("amber", "Amber", "preset", "#ff8f00", "#ffd54f"),
-	makePalette(
-		"sunset",
-		"Sunset",
-		"preset",
-		"#e65100",
-		"#ffb74d",
-		"#fff3e0",
-		"#1f1008",
-	),
-	makePalette("gold", "Gold", "preset", "#f9a825", "#fff176"),
-	makePalette("slate", "Slate", "preset", "#546e7a", "#90a4ae"),
-	makePalette(
-		"graphite",
-		"Graphite",
-		"preset",
-		"#37474f",
-		"#78909c",
-		"#eceff1",
-		"#141a1e",
-	),
-	makePalette("storm", "Storm", "preset", "#455a64", "#b0bec5"),
 	makePalette("bubblegum", "Bubblegum", "preset", "#e91e63", "#f48fb1"),
-	makePalette(
-		"teal",
-		"Teal",
-		"preset",
-		"#00838f",
-		"#4dd0e1",
-		"#e0f7fa",
-		"#0a1a1e",
-	),
 ];
 
 /** All available palettes */

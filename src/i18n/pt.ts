@@ -93,6 +93,7 @@ export const pt: Record<string, string> = {
 	"settings.darkLabel": "E",
 	"settings.lightColorAria": "Claro: {{color}}",
 	"settings.darkColorAria": "Escuro: {{color}}",
+	"settings.colorSwatchAria": "Destaque: {{accent}} · Fundo: {{bg}}",
 
 	"settings.fallbackCallout": "Callout de fallback padrão",
 	"settings.fallbackCalloutDesc": "Tipos de callout não reconhecidos no seu vault herdarão o estilo deste callout.",
@@ -121,7 +122,13 @@ export const pt: Record<string, string> = {
 	"settings.previewCalloutContent": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
 
 	// Settings — Saved color palettes
+	"settings.customPalettes": "Paletas de cores salvas",
+	"settings.newPalette": "Nova paleta",
 	"settings.customPalettesEmpty": "Por enquanto não há paletas salvas.",
+	"settings.editPaletteAria": "Editar paleta {{name}}",
+	"settings.deletePaletteAria": "Excluir paleta {{name}}",
+	"settings.deletePaletteConfirm":
+		'Excluir a paleta "{{name}}"?\nOs callouts que usam essas cores não são afetados.',
 	"settings.enableAutocomplete": "Habilitar preenchimento automático [!",
 	"settings.enableAutocompleteDesc": 'Mostra sugestões quando você digita "[!" dentro de uma citação no editor. Escolha um tipo de callout da lista para inserir um cabeçalho de callout completo.',
 
@@ -204,6 +211,42 @@ export const pt: Record<string, string> = {
 	"editor.loremIpsum": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
 	"editor.sampleInlineText": "Aqui está uma pílula [!{id}] embutida dentro de um parágrafo.",
 	"editor.previewReadOnly": "A pré-visualização ao vivo não pode ser editada",
+
+	// Palette editor modal
+	"palette.newTitle": "Nova paleta de cores",
+	"palette.editTitle": "Editar paleta de cores",
+	"palette.name": "Nome",
+	"palette.namePlaceholder": "Minha paleta",
+	"palette.nameExists": "Já existe uma paleta com esse nome",
+	"palette.baseColor": "Cor base",
+	"palette.bgStyle": "Estilo",
+	"palette.bgSolid": "Sólido",
+	"palette.bgGradient": "Gradiente",
+	"palette.gradientTo": "Segunda cor",
+	"palette.gradientDirection": "Direção",
+	"palette.gradientText": "Texto do título em gradiente",
+	"palette.save": "Salvar",
+
+	// Color name suggestions (used to prefill palette names)
+	"colorName.red": "Vermelho",
+	"colorName.orange": "Laranja",
+	"colorName.amber": "Âmbar",
+	"colorName.yellow": "Amarelo",
+	"colorName.lime": "Verde-limão",
+	"colorName.green": "Verde",
+	"colorName.teal": "Verde-azulado",
+	"colorName.cyan": "Ciano",
+	"colorName.sky": "Azul-celeste",
+	"colorName.blue": "Azul",
+	"colorName.indigo": "Índigo",
+	"colorName.violet": "Violeta",
+	"colorName.purple": "Roxo",
+	"colorName.pink": "Rosa",
+	"colorName.rose": "Rosé",
+	"colorName.brown": "Marrom",
+	"colorName.gray": "Cinza",
+	"colorName.black": "Preto",
+	"colorName.white": "Branco",
 
 	"iconPicker.pickIcon": "Escolher um ícone",
 	"iconPicker.confirm": "Confirmar",

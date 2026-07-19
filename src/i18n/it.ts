@@ -93,6 +93,7 @@ export const it: Record<string, string> = {
 	"settings.darkLabel": "S",
 	"settings.lightColorAria": "Chiaro: {{color}}",
 	"settings.darkColorAria": "Scuro: {{color}}",
+	"settings.colorSwatchAria": "Accento: {{accent}} · Sfondo: {{bg}}",
 
 	"settings.fallbackCallout": "Callout di fallback predefinito",
 	"settings.fallbackCalloutDesc": "I tipi di callout non riconosciuti nel vault erediteranno lo stile di questo callout.",
@@ -121,7 +122,13 @@ export const it: Record<string, string> = {
 	"settings.previewCalloutContent": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
 
 	// Settings — Saved color palettes
+	"settings.customPalettes": "Tavolozze di colori salvate",
+	"settings.newPalette": "Nuova tavolozza",
 	"settings.customPalettesEmpty": "Per ora nessuna tavolozza salvata.",
+	"settings.editPaletteAria": "Modifica tavolozza {{name}}",
+	"settings.deletePaletteAria": "Elimina tavolozza {{name}}",
+	"settings.deletePaletteConfirm":
+		'Eliminare la tavolozza "{{name}}"?\nI callout che usano i suoi colori non vengono modificati.',
 	"settings.enableAutocomplete": "Abilita completamento automatico [!",
 	"settings.enableAutocompleteDesc": 'Mostra suggerimenti quando si digita "[!" in una citazione nell\'editor. Scegli un tipo di callout dall\'elenco per inserire un\'intestazione callout completa.',
 
@@ -204,6 +211,42 @@ export const it: Record<string, string> = {
 	"editor.loremIpsum": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
 	"editor.sampleInlineText": "Ecco una pillola [!{id}] incorporata all'interno di un paragrafo.",
 	"editor.previewReadOnly": "L'anteprima dal vivo non può essere modificata",
+
+	// Palette editor modal
+	"palette.newTitle": "Nuova tavolozza di colori",
+	"palette.editTitle": "Modifica tavolozza di colori",
+	"palette.name": "Nome",
+	"palette.namePlaceholder": "La mia tavolozza",
+	"palette.nameExists": "Esiste già una tavolozza con questo nome",
+	"palette.baseColor": "Colore di base",
+	"palette.bgStyle": "Stile",
+	"palette.bgSolid": "Tinta unita",
+	"palette.bgGradient": "Sfumatura",
+	"palette.gradientTo": "Secondo colore",
+	"palette.gradientDirection": "Direzione",
+	"palette.gradientText": "Testo del titolo sfumato",
+	"palette.save": "Salva",
+
+	// Color name suggestions (used to prefill palette names)
+	"colorName.red": "Rosso",
+	"colorName.orange": "Arancione",
+	"colorName.amber": "Ambra",
+	"colorName.yellow": "Giallo",
+	"colorName.lime": "Lime",
+	"colorName.green": "Verde",
+	"colorName.teal": "Verde acqua",
+	"colorName.cyan": "Ciano",
+	"colorName.sky": "Azzurro",
+	"colorName.blue": "Blu",
+	"colorName.indigo": "Indaco",
+	"colorName.violet": "Violetto",
+	"colorName.purple": "Viola",
+	"colorName.pink": "Rosa",
+	"colorName.rose": "Rosé",
+	"colorName.brown": "Marrone",
+	"colorName.gray": "Grigio",
+	"colorName.black": "Nero",
+	"colorName.white": "Bianco",
 
 	"iconPicker.pickIcon": "Scegli un'icona",
 	"iconPicker.confirm": "Conferma",

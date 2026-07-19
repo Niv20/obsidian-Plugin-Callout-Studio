@@ -19,9 +19,25 @@ import { normalizeCalloutId } from "../utils/calloutId";
 export const CSS_INLINE_TOKEN = "cs-inline-callout";
 export const CSS_HEADING_LINE = "cs-heading-callout";
 export const CSS_HEADING_TOKEN = "cs-heading-token";
+/**
+ * The heading's own title text (everything after the `[!id]` token), wrapped
+ * so it has an inline box that hugs the words. The heading bar itself is a
+ * full-width block, so a gradient title sweep declared on the bar would only
+ * ever show its opening slice through the text; declared on this span, the
+ * sweep starts on the first letter and finishes on the last one. Both render
+ * surfaces produce it: reading view wraps the trailing nodes, Live Preview
+ * marks the title range.
+ */
+export const CSS_HEADING_TITLE = "cs-heading-title";
 export const CSS_TOKEN_ICON = "cs-callout-icon";
 export const CSS_TOKEN_NAME = "cs-callout-name";
 export const CSS_UNKNOWN = "cs-unknown";
+/**
+ * The fold chevron trailing a heading callout in Live Preview. Reading view
+ * uses Obsidian's own `.heading-collapse-indicator` instead, so both surfaces
+ * are tinted together (see CSSInjector's fold-arrow rules).
+ */
+export const CSS_FOLD_ARROW = "cs-fold-arrow";
 /**
  * Token shown where a heading callout is REFERENCED: Outline-pane items,
  * rendered internal links (incl. TOC plugins), and the link suggestion popup.

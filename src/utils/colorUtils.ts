@@ -245,41 +245,53 @@ export function normalizeAngleDeg(deg: number): number {
 
 /**
  * CSS background-image value for a two-stop gradient starting at `from`
- * (the solid bg color of the current mode) and ending at `to`. Radial
- * gradients are a centered ellipse; the angle only applies to linear ones.
+ * (the solid bg color of the current mode) and ending at `to`.
  */
 export function bgGradientCss(
 	from: string,
 	to: string,
 	gradient: BgGradient,
 ): string {
-	return gradient.type === "radial"
-		? `radial-gradient(ellipse at center, ${from}, ${to})`
-		: `linear-gradient(${normalizeAngleDeg(gradient.angleDeg)}deg, ${from}, ${to})`;
+	return `linear-gradient(${normalizeAngleDeg(gradient.angleDeg)}deg, ${from}, ${to})`;
 }
 
 /**
  * Validates an untrusted `bgGradient` value (saved settings, imports).
- * Returns a clean copy — type narrowed, angle normalized to [0, 360), both
- * end colors verified `#rrggbb` — or `null` when the value is unusable, in
- * which case callers should fall back to a solid background.
+ * Returns a clean copy — angle normalized to [0, 360), both end colors
+ * verified `#rrggbb` — or `null` when the value is unusable, in which case
+ * callers should fall back to a solid background.
+ *
+ * Gradients are always linear. Data written while a `type` field still existed
+ * carries an angle either way, so a legacy `"radial"` value is simply dropped
+ * and the gradient renders along its stored direction.
+ *
+ * The text-sweep fields degrade rather than reject: an unusable text end color
+ * pair drops `textGradient` alone, leaving a working background gradient,
+ * since a missing text sweep is a far smaller loss than no gradient at all.
  */
 export function sanitizeBgGradient(raw: unknown): BgGradient | null {
 	if (!raw || typeof raw !== "object" || Array.isArray(raw)) return null;
 	const g = raw as Partial<BgGradient>;
-	if (g.type !== "linear" && g.type !== "radial") return null;
 	if (typeof g.angleDeg !== "number" || !Number.isFinite(g.angleDeg)) {
 		return null;
 	}
 	if (!isValidHexColor(g.toColorLight) || !isValidHexColor(g.toColorDark)) {
 		return null;
 	}
-	return {
-		type: g.type,
+	const clean: BgGradient = {
 		angleDeg: normalizeAngleDeg(g.angleDeg),
 		toColorLight: g.toColorLight,
 		toColorDark: g.toColorDark,
 	};
+	// The text end colors are kept even while the toggle is off: they are the
+	// user's own second color at accent strength, and re-deriving them from
+	// the pale `toColor*` tints is not possible (that blend is lossy).
+	if (isValidHexColor(g.textToColorLight) && isValidHexColor(g.textToColorDark)) {
+		clean.textToColorLight = g.textToColorLight;
+		clean.textToColorDark = g.textToColorDark;
+		if (g.textGradient === true) clean.textGradient = true;
+	}
+	return clean;
 }
 
 /** True when both are the same gradient (or both absent). */
@@ -288,11 +300,15 @@ export function bgGradientsEqual(
 	b: BgGradient | undefined,
 ): boolean {
 	if (!a || !b) return !a && !b;
+	const sameHex = (x?: string, y?: string): boolean =>
+		(x ?? "").toLowerCase() === (y ?? "").toLowerCase();
 	return (
-		a.type === b.type &&
 		normalizeAngleDeg(a.angleDeg) === normalizeAngleDeg(b.angleDeg) &&
 		a.toColorLight.toLowerCase() === b.toColorLight.toLowerCase() &&
-		a.toColorDark.toLowerCase() === b.toColorDark.toLowerCase()
+		a.toColorDark.toLowerCase() === b.toColorDark.toLowerCase() &&
+		!!a.textGradient === !!b.textGradient &&
+		sameHex(a.textToColorLight, b.textToColorLight) &&
+		sameHex(a.textToColorDark, b.textToColorDark)
 	);
 }
 

@@ -94,6 +94,7 @@ export const ja: Record<string, string> = {
 	"settings.lightColorAria": "ライト: {{color}}",
 	"settings.darkColorAria": "ダーク: {{color}}",
 
+	"settings.colorSwatchAria": "アクセント: {{accent}} · 背景: {{bg}}",
 	"settings.fallbackCallout": "デフォルトフォールバックcallout",
 	"settings.fallbackCalloutDesc": "vaultで認識されないcalloutタイプはこのcalloutのスタイルを継承します。",
 
@@ -121,7 +122,13 @@ export const ja: Record<string, string> = {
 	"settings.previewCalloutContent": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
 
 	// Settings — Saved color palettes
+	"settings.customPalettes": "保存済みのカラーパレット",
+	"settings.newPalette": "新規パレット",
 	"settings.customPalettesEmpty": "現在保存済みのパレットはありません。",
+	"settings.editPaletteAria": "パレット {{name}} を編集",
+	"settings.deletePaletteAria": "パレット {{name}} を削除",
+	"settings.deletePaletteConfirm":
+		'パレット "{{name}}" を削除しますか？\nこの色を使用しているcalloutには影響しません。',
 	"settings.enableAutocomplete": "[! オートコンプリートを有効にする",
 	"settings.enableAutocompleteDesc": 'エディターの引用ブロック内で"[!"と入力すると候補を表示します。リストからcalloutタイプを選択して完全なcalloutヘッダーを挿入します。',
 
@@ -204,6 +211,42 @@ export const ja: Record<string, string> = {
 	"editor.loremIpsum": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
 	"editor.sampleInlineText": "段落内にインラインの [!{id}] ピルがあります。",
 	"editor.previewReadOnly": "ライブプレビューは編集できません",
+
+	// Palette editor modal
+	"palette.newTitle": "新しいカラーパレット",
+	"palette.editTitle": "カラーパレットを編集",
+	"palette.name": "名前",
+	"palette.namePlaceholder": "マイパレット",
+	"palette.nameExists": "この名前のパレットはすでに存在します",
+	"palette.baseColor": "ベースカラー",
+	"palette.bgStyle": "スタイル",
+	"palette.bgSolid": "単色",
+	"palette.bgGradient": "グラデーション",
+	"palette.gradientTo": "2番目の色",
+	"palette.gradientDirection": "方向",
+	"palette.gradientText": "グラデーションタイトルテキスト",
+	"palette.save": "保存",
+
+	// Color name suggestions (used to prefill palette names)
+	"colorName.red": "赤",
+	"colorName.orange": "オレンジ",
+	"colorName.amber": "アンバー",
+	"colorName.yellow": "黄",
+	"colorName.lime": "ライム",
+	"colorName.green": "緑",
+	"colorName.teal": "ティール",
+	"colorName.cyan": "シアン",
+	"colorName.sky": "スカイブルー",
+	"colorName.blue": "青",
+	"colorName.indigo": "インディゴ",
+	"colorName.violet": "バイオレット",
+	"colorName.purple": "紫",
+	"colorName.pink": "ピンク",
+	"colorName.rose": "ローズ",
+	"colorName.brown": "茶色",
+	"colorName.gray": "グレー",
+	"colorName.black": "黒",
+	"colorName.white": "白",
 
 	"iconPicker.pickIcon": "アイコンを選択",
 	"iconPicker.confirm": "確認",

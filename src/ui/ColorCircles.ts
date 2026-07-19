@@ -8,15 +8,44 @@
  * for the CURRENT theme mode, so the swatch previews what the callout
  * actually looks like right now.
  */
-import { bgGradientCss, blendHex } from "../utils/colorUtils";
+import { blendHex } from "../utils/colorUtils";
 import type { BgGradient } from "../types";
+
+/**
+ * The colors one swatch shows, already resolved for the current theme mode.
+ *
+ * A swatch is ~16px wide and the accent circle covers 40% of the background
+ * circle, so a background effect has only a ~10px crescent to read in — far
+ * too little room to *preview* one literally. Rendering a real gradient there
+ * never reaches either end color (the eye only ever sees the blend's midpoint,
+ * so two pale stops look exactly like a plain background). So the swatch encodes
+ * a gradient instead, with the real colors but exaggerated geometry: it adds a
+ * whole extra circle ({@link bgTo}).
+ */
+export interface SwatchColors {
+	/** Title/icon color for the current theme mode. */
+	accent: string;
+	/** Callout background color — a gradient's first stop — for that mode. */
+	bg: string;
+	/**
+	 * A background gradient's second stop, which gets its own circle behind
+	 * {@link bg}. One circle per color is the widget's existing grammar, and a
+	 * gradient really is one more color; giving it a bead of its own means the
+	 * swatch can be *counted* rather than squinted at, and the circle's own
+	 * border keeps the two stops apart even when they are near-identical tints
+	 * (where a blend or a seam between them would show nothing at all).
+	 *
+	 * The gradient's angle is deliberately not encoded: it is illegible at this
+	 * size, and the editor previews it for real.
+	 */
+	bgTo?: string;
+}
 
 /**
  * Resolves the accent/background pair to display for the current theme mode.
  * When the source has no explicit background for that mode, falls back to the
- * same pale tint the callout editor derives by default. When the source has a
- * background gradient, `bgImage` carries its current-mode CSS so the swatch
- * can preview it on the background circle.
+ * same pale tint the callout editor derives by default. A background gradient
+ * additionally sets the field that draws it — see {@link SwatchColors}.
  */
 export function resolveCurrentModeColors(source: {
 	colorLight: string;
@@ -24,33 +53,34 @@ export function resolveCurrentModeColors(source: {
 	bgColorLight?: string;
 	bgColorDark?: string;
 	bgGradient?: BgGradient;
-}): { accent: string; bg: string; bgImage?: string } {
+}): SwatchColors {
 	const isDark = activeDocument.body.classList.contains("theme-dark");
 	const accent = isDark ? source.colorDark : source.colorLight;
 	const bg =
 		(isDark ? source.bgColorDark : source.bgColorLight) ??
 		blendHex(accent, isDark ? "#1e1e1e" : "#ffffff", 0.88);
 	const gradient = source.bgGradient;
-	const bgImage = gradient
-		? bgGradientCss(
-				bg,
-				isDark ? gradient.toColorDark : gradient.toColorLight,
-				gradient,
-			)
-		: undefined;
-	return { accent, bg, bgImage };
+	return {
+		accent,
+		bg,
+		bgTo: gradient
+			? isDark
+				? gradient.toColorDark
+				: gradient.toColorLight
+			: undefined,
+	};
 }
 
 /**
- * Renders two overlapping circles: the accent (main) color in front, the
- * background color peeking out behind it. Callers resolve the pair for the
- * current mode via {@link resolveCurrentModeColors}.
+ * Renders the accent (main) color in front and the background color peeking
+ * out behind it, plus a third circle further back for a gradient's second
+ * stop. Callers resolve the colors for the current mode via
+ * {@link resolveCurrentModeColors}.
  */
 export function renderColorCircles(
 	parent: HTMLElement,
-	accentColor: string,
-	bgColor: string,
-	options: { size?: number; ariaLabel?: string; bgImage?: string } = {},
+	colors: SwatchColors,
+	options: { size?: number; ariaLabel?: string } = {},
 ): HTMLElement {
 	const size = options.size ?? 16;
 	const wrap = parent.createDiv({
@@ -60,11 +90,17 @@ export function renderColorCircles(
 	wrap.style.setProperty("--cs-circle-size", `${size}px`);
 
 	const left = wrap.createDiv({ cls: "cs-color-circle cs-color-circle-l" });
-	left.style.backgroundColor = accentColor;
+	left.style.backgroundColor = colors.accent;
 
 	const right = wrap.createDiv({ cls: "cs-color-circle cs-color-circle-r" });
-	right.style.backgroundColor = bgColor;
-	if (options.bgImage) right.style.backgroundImage = options.bgImage;
+	right.style.backgroundColor = colors.bg;
+
+	if (colors.bgTo) {
+		const far = wrap.createDiv({
+			cls: "cs-color-circle cs-color-circle-r2",
+		});
+		far.style.backgroundColor = colors.bgTo;
+	}
 
 	return wrap;
 }

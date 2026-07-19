@@ -93,6 +93,7 @@ export const nl: Record<string, string> = {
 	"settings.darkLabel": "D",
 	"settings.lightColorAria": "Licht: {{color}}",
 	"settings.darkColorAria": "Donker: {{color}}",
+	"settings.colorSwatchAria": "Accent: {{accent}} · Achtergrond: {{bg}}",
 
 	"settings.fallbackCallout": "Standaard fallback-callout",
 	"settings.fallbackCalloutDesc": "Niet-herkende callout-types in uw vault nemen de stijl van deze callout over.",
@@ -121,7 +122,13 @@ export const nl: Record<string, string> = {
 	"settings.previewCalloutContent": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
 
 	// Settings — Saved color palettes
+	"settings.customPalettes": "Opgeslagen kleurenpaletten",
+	"settings.newPalette": "Nieuw palet",
 	"settings.customPalettesEmpty": "Momenteel geen opgeslagen paletten.",
+	"settings.editPaletteAria": "Palet {{name}} bewerken",
+	"settings.deletePaletteAria": "Palet {{name}} verwijderen",
+	"settings.deletePaletteConfirm":
+		'Palet "{{name}}" verwijderen?\nCallouts die de kleuren ervan gebruiken, worden niet beïnvloed.',
 	"settings.enableAutocomplete": "[! Automatisch aanvullen inschakelen",
 	"settings.enableAutocompleteDesc": 'Toont suggesties wanneer u "[!" typt in een blokcitaat in de editor. Kies een callout-type uit de lijst om een volledig callout-koptekst in te voegen.',
 
@@ -204,6 +211,42 @@ export const nl: Record<string, string> = {
 	"editor.loremIpsum": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
 	"editor.sampleInlineText": "Hier is een inline [!{id}] pil binnen een alinea.",
 	"editor.previewReadOnly": "De live-voorvertoning kan niet worden bewerkt",
+
+	// Palette editor modal
+	"palette.newTitle": "Nieuw kleurenpalet",
+	"palette.editTitle": "Kleurenpalet bewerken",
+	"palette.name": "Naam",
+	"palette.namePlaceholder": "Mijn palet",
+	"palette.nameExists": "Er bestaat al een palet met deze naam",
+	"palette.baseColor": "Basiskleur",
+	"palette.bgStyle": "Stijl",
+	"palette.bgSolid": "Effen",
+	"palette.bgGradient": "Verloop",
+	"palette.gradientTo": "Tweede kleur",
+	"palette.gradientDirection": "Richting",
+	"palette.gradientText": "Titeltekst met verloop",
+	"palette.save": "Opslaan",
+
+	// Color name suggestions (used to prefill palette names)
+	"colorName.red": "Rood",
+	"colorName.orange": "Oranje",
+	"colorName.amber": "Amber",
+	"colorName.yellow": "Geel",
+	"colorName.lime": "Limoen",
+	"colorName.green": "Groen",
+	"colorName.teal": "Blauwgroen",
+	"colorName.cyan": "Cyaan",
+	"colorName.sky": "Hemelsblauw",
+	"colorName.blue": "Blauw",
+	"colorName.indigo": "Indigo",
+	"colorName.violet": "Violet",
+	"colorName.purple": "Paars",
+	"colorName.pink": "Roze",
+	"colorName.rose": "Oudroze",
+	"colorName.brown": "Bruin",
+	"colorName.gray": "Grijs",
+	"colorName.black": "Zwart",
+	"colorName.white": "Wit",
 
 	"iconPicker.pickIcon": "Een pictogram kiezen",
 	"iconPicker.confirm": "Bevestigen",

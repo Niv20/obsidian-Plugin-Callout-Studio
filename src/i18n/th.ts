@@ -94,6 +94,7 @@ export const th: Record<string, string> = {
 	"settings.lightColorAria": "สว่าง: {{color}}",
 	"settings.darkColorAria": "มืด: {{color}}",
 
+	"settings.colorSwatchAria": "จุดเน้น: {{accent}} · พื้นหลัง: {{bg}}",
 	"settings.fallbackCallout": "Callout สำรองเริ่มต้น",
 	"settings.fallbackCalloutDesc": "ประเภท callout ที่ไม่รู้จักใน vault จะสืบทอดสไตล์ของ callout นี้",
 
@@ -121,7 +122,13 @@ export const th: Record<string, string> = {
 	"settings.previewCalloutContent": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
 
 	// Settings — Saved color palettes
+	"settings.customPalettes": "ชุดสีที่บันทึกไว้",
+	"settings.newPalette": "ชุดสีใหม่",
 	"settings.customPalettesEmpty": "ยังไม่มีชุดสีที่บันทึกไว้ในขณะนี้",
+	"settings.editPaletteAria": "แก้ไขชุดสี {{name}}",
+	"settings.deletePaletteAria": "ลบชุดสี {{name}}",
+	"settings.deletePaletteConfirm":
+		'ลบชุดสี "{{name}}" หรือไม่?\nCallout ที่ใช้สีนี้จะไม่ได้รับผลกระทบ',
 	"settings.enableAutocomplete": "เปิดใช้การเติมข้อความอัตโนมัติ [!",
 	"settings.enableAutocompleteDesc": 'แสดงคำแนะนำเมื่อพิมพ์ "[!" ในบล็อกอ้างอิงในตัวแก้ไข เลือกประเภท callout จากรายการเพื่อแทรกส่วนหัว callout ที่สมบูรณ์',
 
@@ -204,6 +211,42 @@ export const th: Record<string, string> = {
 	"editor.loremIpsum": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
 	"editor.sampleInlineText": "นี่คือแคปซูล [!{id}] แบบอินไลน์ภายในย่อหน้า",
 	"editor.previewReadOnly": "ไม่สามารถแก้ไขตัวอย่างสดได้",
+
+	// Palette editor modal
+	"palette.newTitle": "ชุดสีใหม่",
+	"palette.editTitle": "แก้ไขชุดสี",
+	"palette.name": "ชื่อ",
+	"palette.namePlaceholder": "ชุดสีของฉัน",
+	"palette.nameExists": "มีชุดสีชื่อนี้อยู่แล้ว",
+	"palette.baseColor": "สีพื้นฐาน",
+	"palette.bgStyle": "รูปแบบ",
+	"palette.bgSolid": "สีพื้น",
+	"palette.bgGradient": "ไล่ระดับสี",
+	"palette.gradientTo": "สีที่สอง",
+	"palette.gradientDirection": "ทิศทาง",
+	"palette.gradientText": "ข้อความหัวเรื่องแบบไล่ระดับสี",
+	"palette.save": "บันทึก",
+
+	// Color name suggestions (used to prefill palette names)
+	"colorName.red": "แดง",
+	"colorName.orange": "ส้ม",
+	"colorName.amber": "อำพัน",
+	"colorName.yellow": "เหลือง",
+	"colorName.lime": "เขียวมะนาว",
+	"colorName.green": "เขียว",
+	"colorName.teal": "เขียวอมฟ้า",
+	"colorName.cyan": "ฟ้าอมเขียว",
+	"colorName.sky": "ฟ้า",
+	"colorName.blue": "น้ำเงิน",
+	"colorName.indigo": "คราม",
+	"colorName.violet": "ม่วงน้ำเงิน",
+	"colorName.purple": "ม่วง",
+	"colorName.pink": "ชมพู",
+	"colorName.rose": "กุหลาบ",
+	"colorName.brown": "น้ำตาล",
+	"colorName.gray": "เทา",
+	"colorName.black": "ดำ",
+	"colorName.white": "ขาว",
 
 	"iconPicker.pickIcon": "เลือกไอคอน",
 	"iconPicker.confirm": "ยืนยัน",

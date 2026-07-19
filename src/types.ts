@@ -25,21 +25,40 @@ declare module "obsidian" {
 }
 
 /**
- * Two-stop background gradient. Stop 1 is the owner's existing
+ * Two-stop linear background gradient. Stop 1 is the owner's existing
  * `bgColorLight`/`bgColorDark`; this object adds the end color per mode.
  * Absent = solid background, so all pre-gradient data keeps its meaning.
- * Only the background uses gradients — title, text and icon stay solid
- * (readability + PDF-export safety).
+ * The background always uses the gradient; the title text only does when
+ * `textGradient` is on (off by default — icons stay solid either way).
  */
 export interface BgGradient {
-	/** "linear" uses `angleDeg`; "radial" renders a centered ellipse and ignores it. */
-	type: "linear" | "radial";
 	/** CSS gradient angle in degrees (0 = to top, 90 = to right). */
 	angleDeg: number;
 	/** Gradient end color – light mode (`#rrggbb`). */
 	toColorLight: string;
 	/** Gradient end color – dark mode (`#rrggbb`). */
 	toColorDark: string;
+	/**
+	 * Paint the same sweep THROUGH the title text of all three render roles —
+	 * the regular callout's title, the heading callout's title, and the inline
+	 * pill's label — on top of whatever background each surface already has.
+	 * One sweep per element, so it runs across the whole title at once rather
+	 * than restarting on each glyph. Off by default: gradient text is a
+	 * deliberate accent and it costs some legibility.
+	 *
+	 * Only honored together with `textToColorLight`/`textToColorDark`.
+	 */
+	textGradient?: boolean;
+	/**
+	 * End color of the TEXT sweep – light mode (`#rrggbb`). Separate from
+	 * `toColorLight` because that one is a pale tint meant to sit behind text:
+	 * painted through the glyphs themselves it would be invisible. The text
+	 * sweep therefore runs between accent-strength colors instead
+	 * (`colorLight` → here), derived from the same user-chosen second color.
+	 */
+	textToColorLight?: string;
+	/** End color of the TEXT sweep – dark mode (`#rrggbb`). See `textToColorLight`. */
+	textToColorDark?: string;
 }
 
 export interface CalloutDefinition {

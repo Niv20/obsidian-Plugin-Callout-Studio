@@ -94,6 +94,7 @@ export const cs: Record<string, string> = {
 	"settings.lightColorAria": "Světlý: {{color}}",
 	"settings.darkColorAria": "Tmavý: {{color}}",
 
+	"settings.colorSwatchAria": "Akcent: {{accent}} · Pozadí: {{bg}}",
 	"settings.fallbackCallout": "Výchozí záložní callout",
 	"settings.fallbackCalloutDesc": "Nerozpoznané typy callout ve vaultu zdědí styl tohoto callout.",
 
@@ -121,7 +122,13 @@ export const cs: Record<string, string> = {
 	"settings.previewCalloutContent": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
 
 	// Settings — Saved color palettes
+	"settings.customPalettes": "Uložené barevné palety",
+	"settings.newPalette": "Nová paleta",
 	"settings.customPalettesEmpty": "Momentálně žádné uložené palety.",
+	"settings.editPaletteAria": "Upravit paletu {{name}}",
+	"settings.deletePaletteAria": "Smazat paletu {{name}}",
+	"settings.deletePaletteConfirm":
+		'Smazat paletu "{{name}}"?\nCallouty používající její barvy nebudou ovlivněny.',
 	"settings.enableAutocomplete": "Povolit automatické doplňování [!",
 	"settings.enableAutocompleteDesc": 'Zobrazuje návrhy při psaní "[!" v bloku citace v editoru. Vyberte typ callout ze seznamu a vložte úplnou hlavičku callout.',
 
@@ -204,6 +211,42 @@ export const cs: Record<string, string> = {
 	"editor.loremIpsum": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
 	"editor.sampleInlineText": "Zde je vložená pilulka [!{id}] uvnitř odstavce.",
 	"editor.previewReadOnly": "Živý náhled nelze upravovat",
+
+	// Palette editor modal
+	"palette.newTitle": "Nová barevná paleta",
+	"palette.editTitle": "Upravit barevnou paletu",
+	"palette.name": "Název",
+	"palette.namePlaceholder": "Moje paleta",
+	"palette.nameExists": "Paleta s tímto názvem již existuje",
+	"palette.baseColor": "Základní barva",
+	"palette.bgStyle": "Styl",
+	"palette.bgSolid": "Jednobarevný",
+	"palette.bgGradient": "Přechod",
+	"palette.gradientTo": "Druhá barva",
+	"palette.gradientDirection": "Směr",
+	"palette.gradientText": "Text nadpisu s přechodem",
+	"palette.save": "Uložit",
+
+	// Color name suggestions (used to prefill palette names)
+	"colorName.red": "Červená",
+	"colorName.orange": "Oranžová",
+	"colorName.amber": "Jantarová",
+	"colorName.yellow": "Žlutá",
+	"colorName.lime": "Limetková",
+	"colorName.green": "Zelená",
+	"colorName.teal": "Petrolejová",
+	"colorName.cyan": "Azurová",
+	"colorName.sky": "Nebeská",
+	"colorName.blue": "Modrá",
+	"colorName.indigo": "Indigová",
+	"colorName.violet": "Fialová",
+	"colorName.purple": "Purpurová",
+	"colorName.pink": "Růžová",
+	"colorName.rose": "Starorůžová",
+	"colorName.brown": "Hnědá",
+	"colorName.gray": "Šedá",
+	"colorName.black": "Černá",
+	"colorName.white": "Bílá",
 
 	"iconPicker.pickIcon": "Vybrat ikonu",
 	"iconPicker.confirm": "Potvrdit",

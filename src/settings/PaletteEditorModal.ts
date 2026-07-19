@@ -1,31 +1,28 @@
 /**
  * settings/PaletteEditorModal.ts — Create/edit a custom color palette.
  *
- * Small modal opened from the "Saved color palettes" settings section. Default
- * (simple) mode: the user picks ONE base color and the full palette — light/
- * dark accents, backgrounds, text — is auto-derived with contrast correction
- * (see derivePaletteFromColor). An "Advanced" toggle reveals the same six-swatch
- * grid as the callout editor for full manual control, with the same
- * non-blocking low-contrast warnings. The background can optionally be a
- * two-stop gradient (linear with 8 preset directions, or centered radial):
- * simple mode picks one "second color" whose light/dark tints are derived
- * like the background's; the advanced grid exposes both end colors directly.
- * Resolves the palette (without id) on save, or null on cancel/close.
+ * Modal opened from the "Saved color palettes" settings section. Two-column
+ * body (same panel classes as the callout editor): options on the left, a
+ * sticky live preview on the right. Default (simple) mode: the user picks ONE
+ * base color and the full palette — light/dark accents, backgrounds, text —
+ * is auto-derived with contrast correction (see derivePaletteFromColor). The
+ * background style is a 2-way choice: solid or a two-stop linear gradient
+ * (preset directions). For the gradient, the user picks one "second color"
+ * whose light/dark tints are derived like the background's, and an
+ * off-by-default toggle extends the sweep through the title text of all three
+ * render roles. Resolves the palette (without id) on save, or null on
+ * cancel/close.
  */
 import { Modal, Setting, setIcon } from "obsidian";
 import type { App } from "obsidian";
 import type { BgGradient, CalloutDefinition, CustomPalette } from "../types";
 import {
 	blendHex,
-	contrastRatio,
 	derivePaletteFromColor,
 	rotateHue,
 	type DerivedPalette,
 } from "../utils/colorUtils";
-import {
-	createColorSwatchInput,
-	setContrastWarning,
-} from "../ui/ColorSwatchInput";
+import { createColorSwatchInput } from "../ui/ColorSwatchInput";
 import { LiveCalloutPreview } from "./LiveCalloutPreview";
 import { PREVIEW_PLACEHOLDER_ID } from "../constants";
 import { suggestColorName } from "../utils/colorNames";
@@ -47,21 +44,18 @@ const DEFAULT_BASE_COLOR = "#448aff";
 /** Keeps the name readable in the dropdown/list rows, which truncate past this. */
 const MAX_NAME_LENGTH = 30;
 
-/** The 8 preset linear-gradient directions, clockwise from "to top" (0°). */
+/** The preset linear-gradient directions, clockwise from "to top" (0°). */
 const GRADIENT_DIRECTIONS: { deg: number; icon: string }[] = [
-	{ deg: 0, icon: "arrow-up" },
 	{ deg: 45, icon: "arrow-up-right" },
 	{ deg: 90, icon: "arrow-right" },
 	{ deg: 135, icon: "arrow-down-right" },
-	{ deg: 180, icon: "arrow-down" },
-	{ deg: 225, icon: "arrow-down-left" },
-	{ deg: 270, icon: "arrow-left" },
-	{ deg: 315, icon: "arrow-up-left" },
 ];
 /** Top-left → bottom-right, the classic presentation-software default. */
 const DEFAULT_GRADIENT_ANGLE = 135;
 /** Hue offset for the auto-suggested gradient second color. */
 const GRADIENT_HUE_SHIFT = 45;
+
+type BgStyle = "solid" | "gradient";
 
 /** Names are compared case-insensitively, ignoring surrounding whitespace. */
 const normalizeName = (name: string): string => name.trim().toLowerCase();
@@ -73,48 +67,33 @@ export class PaletteEditorModal extends Modal {
 	private name: string;
 	private baseColor: string;
 	private colors: DerivedPalette;
-	private advanced: boolean;
+	private bgStyle: BgStyle;
 	// Gradient state. The end (stop-2) colors are tints of gradientToBase,
-	// derived exactly like the six colors are derived from the base color;
-	// the advanced grid can then override them per mode.
-	private gradientOn: boolean;
-	private gradientType: BgGradient["type"];
+	// derived exactly like the six colors are derived from the base color.
 	private angleDeg: number;
 	private gradientToBase: string;
 	/** Once the user picks a second color it stops auto-following the base. */
 	private gradientToTouched: boolean;
 	private toColorLight = "";
 	private toColorDark = "";
+	/** Opt-in: paint the gradient through the title text of all three roles. */
+	private textGradient: boolean;
+	// Accent-strength counterparts of toColor*, for the text sweep.
+	private textToColorLight = "";
+	private textToColorDark = "";
 	private resolve: ((result: PaletteEditorResult | null) => void) | null =
 		null;
 
-	// UI refs for cross-updates between the simple and advanced views.
-	private gridEl: HTMLElement | null = null;
 	private previewEl: HTMLElement | null = null;
 	private preview: LiveCalloutPreview | null = null;
 	/** Preview the caller had registered before this modal took the slot. */
 	private outerPreview: CalloutDefinition | null = null;
-	private gridInputs: Partial<
-		Record<keyof DerivedPalette, HTMLInputElement>
-	> = {};
-	private warnEls: {
-		textLight?: HTMLElement;
-		textDark?: HTMLElement;
-		accentLight?: HTMLElement;
-		accentDark?: HTMLElement;
-	} = {};
 	private nameInputEl: HTMLInputElement | null = null;
 	private nameErrorEl: HTMLElement | null = null;
 	private saveBtnEl: HTMLButtonElement | null = null;
 	// Gradient UI refs for show/hide and programmatic color sync.
 	private gradientRows: HTMLElement[] = [];
-	private gradientDirRow: HTMLElement | null = null;
-	private gradientEndGridRow: HTMLElement | null = null;
 	private gradToInput: HTMLInputElement | null = null;
-	private gradEndInputs: {
-		light?: HTMLInputElement;
-		dark?: HTMLInputElement;
-	} = {};
 
 	constructor(
 		private plugin: PaletteEditorPlugin,
@@ -143,13 +122,8 @@ export class PaletteEditorModal extends Modal {
 					textColorDark: this.existing.textColorDark,
 				}
 			: derivePaletteFromColor(this.baseColor);
-		// Editing opens in advanced mode: a six-color set generally cannot be
-		// reproduced from a single base color.
-		this.advanced = this.existing !== null;
-
 		const g = this.existing?.bgGradient;
-		this.gradientOn = !!g;
-		this.gradientType = g?.type ?? "linear";
+		this.bgStyle = g ? "gradient" : "solid";
 		this.angleDeg = g?.angleDeg ?? DEFAULT_GRADIENT_ANGLE;
 		// A saved gradient's end colors are authoritative (derivation is not
 		// invertible); a fresh gradient starts from a hue-shifted base color
@@ -157,11 +131,20 @@ export class PaletteEditorModal extends Modal {
 		this.gradientToTouched = !!g;
 		this.gradientToBase =
 			g?.toColorLight ?? rotateHue(this.baseColor, GRADIENT_HUE_SHIFT);
+		this.textGradient = g?.textGradient ?? false;
+		// Derive first, then let a saved gradient's own colors win: derivation
+		// is not invertible, so the stored values are authoritative wherever
+		// they exist. Gradients saved before the text sweep existed carry no
+		// text ends, and gradientToBase is then the pale toColorLight — the
+		// derivation only darkens that tint to a readable strength instead of
+		// recovering the original second color, which is enough to make the
+		// toggle usable until the second color picker is touched.
+		this.deriveGradientEnd();
 		if (g) {
 			this.toColorLight = g.toColorLight;
 			this.toColorDark = g.toColorDark;
-		} else {
-			this.deriveGradientEnd();
+			this.textToColorLight = g.textToColorLight ?? this.textToColorLight;
+			this.textToColorDark = g.textToColorDark ?? this.textToColorDark;
 		}
 	}
 
@@ -179,8 +162,23 @@ export class PaletteEditorModal extends Modal {
 		const { contentEl } = this;
 		contentEl.empty();
 		contentEl.addClass("callout-studio-palette-editor");
+		// Same flex shell as the callout editor: sticky title, scrolling
+		// content (the sticky preview column relies on that scroll container),
+		// and a fixed footer for the buttons.
+		this.modalEl.addClass("callout-studio-editor-modal");
 
-		const nameSetting = new Setting(contentEl)
+		// Two-column body from the very first row: options (including the name)
+		// on the left, sticky live preview on the right — the callout editor's
+		// panel classes.
+		const panel = contentEl.createDiv({
+			cls: "callout-studio-preview-panel",
+		});
+		const adjustCol = panel.createDiv({ cls: "callout-studio-adjust-col" });
+		const previewCol = panel.createDiv({
+			cls: "callout-studio-preview-col",
+		});
+
+		const nameSetting = new Setting(adjustCol)
 			.setName(t("palette.name"))
 			.addText((text) => {
 				this.nameInputEl = text.inputEl;
@@ -195,9 +193,9 @@ export class PaletteEditorModal extends Modal {
 		// Error line in the info column, mirroring the callout IDs error.
 		this.nameErrorEl = nameSetting.descEl.createDiv({ cls: "cs-tag-error" });
 
-		const baseSetting = new Setting(contentEl)
-			.setName(t("palette.baseColor"))
-			.setDesc(t("palette.baseColorDesc"));
+		this.buildBgStyleRow(adjustCol);
+
+		const baseSetting = new Setting(adjustCol).setName(t("palette.baseColor"));
 		createColorSwatchInput(
 			baseSetting.controlEl,
 			this.baseColor,
@@ -207,9 +205,9 @@ export class PaletteEditorModal extends Modal {
 			},
 		);
 
-		this.buildGradientControls(contentEl);
+		this.buildGradientControls(adjustCol);
 
-		this.previewEl = contentEl.createDiv({
+		this.previewEl = previewCol.createDiv({
 			cls: "cs-palette-live-preview",
 		});
 		// Capture any preview the caller already registered (e.g. the callout
@@ -233,25 +231,10 @@ export class PaletteEditorModal extends Modal {
 			},
 		});
 
-		new Setting(contentEl)
-			.setName(t("palette.advanced"))
-			.setDesc(t("palette.advancedDesc"))
-			.addToggle((toggle) => {
-				toggle.setValue(this.advanced).onChange((on) => {
-					this.advanced = on;
-					if (!on) {
-						// Leaving advanced re-derives everything from the base
-						// color, overwriting manual tweaks (stated in the desc).
-						this.applyDerived();
-					}
-					this.gridEl?.toggleClass("cs-color-grid-hidden", !on);
-				});
-			});
-
-		this.buildGrid(contentEl);
-		this.gridEl?.toggleClass("cs-color-grid-hidden", !this.advanced);
-
-		const buttons = contentEl.createDiv({ cls: "modal-button-container" });
+		// Footer outside the scrolling content, like the callout editor's.
+		const buttons = this.modalEl.createDiv({
+			cls: "callout-studio-editor-buttons",
+		});
 		buttons
 			.createEl("button", { text: t("editor.cancel") })
 			.addEventListener("click", () => this.finish(false));
@@ -295,58 +278,68 @@ export class PaletteEditorModal extends Modal {
 			);
 		}
 		this.deriveGradientEnd();
-		this.syncGridInputs();
 		this.syncGradientInputs();
 		this.preview?.refresh();
-		this.updateWarnings();
-	}
-
-	/** Recomputes the gradient end colors as tints of the second base color. */
-	private deriveGradientEnd(): void {
-		this.toColorLight = blendHex(this.gradientToBase, "#ffffff", 0.88);
-		this.toColorDark = blendHex(this.gradientToBase, "#1e1e1e", 0.88);
-	}
-
-	/** The gradient to preview/persist, or null when Solid is selected. */
-	private currentGradient(): BgGradient | null {
-		if (!this.gradientOn) return null;
-		return {
-			type: this.gradientType,
-			// The angle is kept even for radial so switching back to linear
-			// restores the user's direction.
-			angleDeg: this.angleDeg,
-			toColorLight: this.toColorLight,
-			toColorDark: this.toColorDark,
-		};
 	}
 
 	/**
-	 * Background style controls: Solid|Gradient segmented switch, then —
-	 * gradient only — the second color, Linear|Radial type, and (linear only)
-	 * an 8-arrow direction picker.
+	 * Recomputes both end-color pairs from the second base color: the pale
+	 * tints the background sweep ends on, and their accent-strength
+	 * counterparts for the text sweep — derived exactly the way the palette's
+	 * own accent is derived from its base color, so the two stops of a
+	 * gradient title are as readable as any other accent in the palette.
 	 */
-	private buildGradientControls(contentEl: HTMLElement): void {
-		const bgStyleSetting = new Setting(contentEl).setName(
+	private deriveGradientEnd(): void {
+		this.toColorLight = blendHex(this.gradientToBase, "#ffffff", 0.88);
+		this.toColorDark = blendHex(this.gradientToBase, "#1e1e1e", 0.88);
+		const accents = derivePaletteFromColor(this.gradientToBase);
+		this.textToColorLight = accents.colorLight;
+		this.textToColorDark = accents.colorDark;
+	}
+
+	/** The gradient to preview/persist, or null unless Gradient is selected. */
+	private currentGradient(): BgGradient | null {
+		if (this.bgStyle !== "gradient") return null;
+		const gradient: BgGradient = {
+			angleDeg: this.angleDeg,
+			toColorLight: this.toColorLight,
+			toColorDark: this.toColorDark,
+			// Persisted even while the sweep is off, so turning it on later
+			// paints with the user's real second color instead of a lossy
+			// re-derivation from the pale tints above.
+			textToColorLight: this.textToColorLight,
+			textToColorDark: this.textToColorDark,
+		};
+		if (this.textGradient) gradient.textGradient = true;
+		return gradient;
+	}
+
+	/** Solid|Gradient segmented switch — sits above the base color. */
+	private buildBgStyleRow(parent: HTMLElement): void {
+		const bgStyleSetting = new Setting(parent).setName(
 			t("palette.bgStyle"),
 		);
-		this.buildSegmented(
+		this.buildSegmented<BgStyle>(
 			bgStyleSetting.controlEl,
 			[
 				{ value: "solid", label: t("palette.bgSolid") },
 				{ value: "gradient", label: t("palette.bgGradient") },
 			],
-			this.gradientOn ? "gradient" : "solid",
+			this.bgStyle,
 			(v) => {
-				this.gradientOn = v === "gradient";
+				this.bgStyle = v;
 				this.updateGradientVisibility();
 				this.preview?.refresh();
-				this.updateWarnings();
 			},
 		);
+	}
 
-		const toSetting = new Setting(contentEl)
-			.setName(t("palette.gradientTo"))
-			.setDesc(t("palette.gradientToDesc"));
+	/**
+	 * Gradient-only rows, shown while the Gradient style is selected: the
+	 * second color, the direction picker, and the title-text sweep toggle.
+	 */
+	private buildGradientControls(parent: HTMLElement): void {
+		const toSetting = new Setting(parent).setName(t("palette.gradientTo"));
 		this.gradToInput = createColorSwatchInput(
 			toSetting.controlEl,
 			this.gradientToBase,
@@ -356,33 +349,41 @@ export class PaletteEditorModal extends Modal {
 				this.deriveGradientEnd();
 				this.syncGradientInputs();
 				this.preview?.refresh();
-				this.updateWarnings();
 			},
 		).input;
 		this.gradientRows.push(toSetting.settingEl);
 
-		const typeSetting = new Setting(contentEl).setName(
-			t("palette.gradientType"),
-		);
-		this.buildSegmented(
-			typeSetting.controlEl,
-			[
-				{ value: "linear", label: t("palette.gradientLinear") },
-				{ value: "radial", label: t("palette.gradientRadial") },
-			],
-			this.gradientType,
-			(v) => {
-				this.gradientType = v;
-				this.updateGradientVisibility();
-				this.preview?.refresh();
-			},
-		);
-		this.gradientRows.push(typeSetting.settingEl);
-
-		const dirSetting = new Setting(contentEl).setName(
+		const dirSetting = new Setting(parent).setName(
 			t("palette.gradientDirection"),
 		);
-		const dirWrap = dirSetting.controlEl.createDiv({
+		this.buildDirectionPicker(dirSetting.controlEl, this.angleDeg, (deg) => {
+			this.angleDeg = deg;
+			this.preview?.refresh();
+		});
+		this.gradientRows.push(dirSetting.settingEl);
+
+		const textSetting = new Setting(parent)
+			.setName(t("palette.gradientText"))
+			.addToggle((toggle) => {
+				toggle.setValue(this.textGradient).onChange((on) => {
+					this.textGradient = on;
+					this.preview?.refresh();
+				});
+			});
+		this.gradientRows.push(textSetting.settingEl);
+		this.updateGradientVisibility();
+	}
+
+	/**
+	 * Arrow direction picker for the linear gradient's angle. Manages its
+	 * own active-button state.
+	 */
+	private buildDirectionPicker(
+		parent: HTMLElement,
+		initialDeg: number,
+		onPick: (deg: number) => void,
+	): void {
+		const dirWrap = parent.createDiv({
 			cls: "cs-gradient-dir-row",
 		});
 		const dirBtns = new Map<number, HTMLButtonElement>();
@@ -392,21 +393,18 @@ export class PaletteEditorModal extends Modal {
 				attr: { "aria-label": `${deg}°`, title: `${deg}°` },
 			});
 			setIcon(btn, icon);
-			if (deg === this.angleDeg) btn.addClass("is-active");
+			if (deg === initialDeg) btn.addClass("is-active");
 			btn.addEventListener("click", (e) => {
 				e.preventDefault();
-				this.angleDeg = deg;
 				for (const b of dirBtns.values()) b.removeClass("is-active");
 				btn.addClass("is-active");
-				this.preview?.refresh();
+				onPick(deg);
 			});
 			dirBtns.set(deg, btn);
 		}
-		this.gradientDirRow = dirSetting.settingEl;
-		this.updateGradientVisibility();
 	}
 
-	/** Two-option segmented control that manages its own active state. */
+	/** Segmented control that manages its own active state. */
 	private buildSegmented<T extends string>(
 		parent: HTMLElement,
 		options: { value: T; label: string }[],
@@ -432,132 +430,21 @@ export class PaletteEditorModal extends Modal {
 		}
 	}
 
-	/** Shows/hides the gradient rows to match the current toggle state. */
+	/** Shows/hides the gradient rows to match the current style choice. */
 	private updateGradientVisibility(): void {
+		const off = this.bgStyle !== "gradient";
 		for (const row of this.gradientRows) {
-			row.toggleClass("cs-gradient-hidden", !this.gradientOn);
+			row.toggleClass("cs-gradient-hidden", off);
 		}
-		this.gradientDirRow?.toggleClass(
-			"cs-gradient-hidden",
-			!this.gradientOn || this.gradientType !== "linear",
-		);
-		this.gradientEndGridRow?.toggleClass(
-			"cs-gradient-hidden",
-			!this.gradientOn,
-		);
 	}
 
 	/** Pushes gradient colors into their swatches after a programmatic change. */
 	private syncGradientInputs(): void {
 		const entries: [HTMLInputElement | null | undefined, string][] = [
 			[this.gradToInput, this.gradientToBase],
-			[this.gradEndInputs.light, this.toColorLight],
-			[this.gradEndInputs.dark, this.toColorDark],
 		];
 		for (const [input, value] of entries) {
 			if (!input) continue;
-			input.value = value;
-			if (input.parentElement) {
-				input.parentElement.style.backgroundColor = value;
-			}
-		}
-	}
-
-	private buildGrid(parent: HTMLElement): void {
-		// Same classes as the callout editor's grid so the existing CSS applies.
-		const grid = parent.createDiv({
-			cls: "callout-studio-color-grid cs-palette-editor-grid",
-		});
-		this.gridEl = grid;
-		const header = grid.createDiv({
-			cls: "callout-studio-color-grid-header",
-		});
-		header.createSpan({ text: "" });
-		header.createSpan({ text: t("editor.light") });
-		header.createSpan({ text: t("editor.dark") });
-
-		const addRow = (
-			label: string,
-			lightKey: keyof DerivedPalette,
-			darkKey: keyof DerivedPalette,
-		): {
-			light: ReturnType<typeof createColorSwatchInput>;
-			dark: ReturnType<typeof createColorSwatchInput>;
-		} => {
-			const row = grid.createDiv({ cls: "callout-studio-color-row" });
-			row.createSpan({ text: label });
-			const onPick =
-				(key: keyof DerivedPalette) =>
-				(next: string): void => {
-					this.colors[key] = next;
-					this.preview?.refresh();
-					this.updateWarnings();
-				};
-			const light = createColorSwatchInput(
-				row,
-				this.colors[lightKey],
-				onPick(lightKey),
-			);
-			const dark = createColorSwatchInput(
-				row,
-				this.colors[darkKey],
-				onPick(darkKey),
-			);
-			this.gridInputs[lightKey] = light.input;
-			this.gridInputs[darkKey] = dark.input;
-			return { light, dark };
-		};
-
-		addRow(t("editor.background"), "bgColorLight", "bgColorDark");
-
-		// Gradient end row (stop 2) — same layout as the six-color rows but
-		// backed by the gradient fields; shown only while Gradient is on.
-		const gradientEndRow = grid.createDiv({
-			cls: "callout-studio-color-row",
-		});
-		gradientEndRow.createSpan({ text: t("editor.gradientEnd") });
-		const onPickEnd =
-			(key: "toColorLight" | "toColorDark") =>
-			(next: string): void => {
-				this[key] = next;
-				this.preview?.refresh();
-				this.updateWarnings();
-			};
-		this.gradEndInputs.light = createColorSwatchInput(
-			gradientEndRow,
-			this.toColorLight,
-			onPickEnd("toColorLight"),
-		).input;
-		this.gradEndInputs.dark = createColorSwatchInput(
-			gradientEndRow,
-			this.toColorDark,
-			onPickEnd("toColorDark"),
-		).input;
-		this.gradientEndGridRow = gradientEndRow;
-		this.updateGradientVisibility();
-
-		const textRow = addRow(
-			t("editor.text"),
-			"textColorLight",
-			"textColorDark",
-		);
-		const accentRow = addRow(
-			t("editor.iconColor"),
-			"colorLight",
-			"colorDark",
-		);
-		this.warnEls.textLight = textRow.light.warnEl;
-		this.warnEls.textDark = textRow.dark.warnEl;
-		this.warnEls.accentLight = accentRow.light.warnEl;
-		this.warnEls.accentDark = accentRow.dark.warnEl;
-		this.updateWarnings();
-	}
-
-	/** Pushes this.colors into the grid inputs after a programmatic change. */
-	private syncGridInputs(): void {
-		for (const [key, input] of Object.entries(this.gridInputs)) {
-			if (!input) continue;
-			const value = this.colors[key as keyof DerivedPalette];
 			input.value = value;
 			if (input.parentElement) {
 				input.parentElement.style.backgroundColor = value;
@@ -608,45 +495,6 @@ export class PaletteEditorModal extends Modal {
 			builtIn: false,
 			source: "user",
 		};
-	}
-
-	/**
-	 * Same non-blocking thresholds as the callout editor's grid. With a
-	 * gradient on, text/accent must read against BOTH stops, so the worse
-	 * (lower) of the two ratios decides the warning.
-	 */
-	private updateWarnings(): void {
-		const warn = this.warnEls;
-		const c = this.colors;
-		const worstLight = (fg: string): number =>
-			this.gradientOn
-				? Math.min(
-						contrastRatio(fg, c.bgColorLight),
-						contrastRatio(fg, this.toColorLight),
-					)
-				: contrastRatio(fg, c.bgColorLight);
-		const worstDark = (fg: string): number =>
-			this.gradientOn
-				? Math.min(
-						contrastRatio(fg, c.bgColorDark),
-						contrastRatio(fg, this.toColorDark),
-					)
-				: contrastRatio(fg, c.bgColorDark);
-		if (warn.textLight) {
-			setContrastWarning(
-				warn.textLight,
-				worstLight(c.textColorLight) < 4.5,
-			);
-		}
-		if (warn.textDark) {
-			setContrastWarning(warn.textDark, worstDark(c.textColorDark) < 4.5);
-		}
-		if (warn.accentLight) {
-			setContrastWarning(warn.accentLight, worstLight(c.colorLight) < 3);
-		}
-		if (warn.accentDark) {
-			setContrastWarning(warn.accentDark, worstDark(c.colorDark) < 3);
-		}
 	}
 
 	/**

@@ -36,7 +36,12 @@ import {
 	findWikilinkCalloutRefs,
 	scanLineForCalloutTokens,
 } from "../calloutTokens";
-import { CSS_HEADING_LINE, CSS_UNKNOWN, resolveCalloutDef } from "../renderShared";
+import {
+	CSS_HEADING_LINE,
+	CSS_HEADING_TITLE,
+	CSS_UNKNOWN,
+	resolveCalloutDef,
+} from "../renderShared";
 import {
 	getFoldedHeadingLines,
 	isHeadingFoldEnabled,
@@ -62,6 +67,11 @@ const NO_FOLDS: ReadonlySet<number> = new Set();
 
 /** Syntax-tree node names whose content must never be decorated. */
 const SKIP_NODE_RE = /codeblock|frontmatter|yaml|inline-code|math/i;
+
+/** True when `text[i]` is a space or tab (bounds-safe). */
+function isSpaceAt(text: string, i: number): boolean {
+	return text[i] === " " || text[i] === "\t";
+}
 
 export function createCalloutViewPlugin(host: LivePreviewHost) {
 	return ViewPlugin.fromClass(
@@ -237,10 +247,10 @@ function decorateLine(
 	// chevron here and add it once, last, below the token loop.
 	let pendingFoldArrow: HeadingFoldArrowWidget | null = null;
 
-	// Mid-line replace decorations. Pills and wikilink refs interleave in
-	// arbitrary order, so they are collected first and added sorted —
-	// RangeSetBuilder requires sorted insertion.
-	const replaces: Array<{ from: number; to: number; deco: Decoration }> = [];
+	// Mid-line decorations. Pills, wikilink refs and the heading-title mark
+	// interleave in arbitrary order, so they are collected first and added
+	// sorted — RangeSetBuilder requires sorted insertion.
+	const midLine: Array<{ from: number; to: number; deco: Decoration }> = [];
 
 	for (const token of tokens) {
 		const from = lineFrom + token.from;
@@ -263,11 +273,33 @@ function decorateLine(
 					},
 				}),
 			);
+			// The title gets its own inline box, hugging the words, so a
+			// gradient title sweep can end on the last letter instead of at
+			// the far edge of the full-width bar (see CSS_HEADING_TITLE).
+			// Marked in both editing states — the sweep should not blink off
+			// when the caret lands on the line. Surrounding whitespace is left
+			// out so it never pads the swept box, and the mark stops short of
+			// the end-of-line fold chevron (its side beats the mark's endSide).
+			if (token.hasTitle) {
+				let titleFrom = token.to;
+				while (isSpaceAt(lineText, titleFrom)) titleFrom++;
+				let titleTo = lineText.length;
+				while (titleTo > titleFrom && isSpaceAt(lineText, titleTo - 1)) {
+					titleTo--;
+				}
+				if (titleFrom < titleTo) {
+					midLine.push({
+						from: lineFrom + titleFrom,
+						to: lineFrom + titleTo,
+						deco: Decoration.mark({ class: CSS_HEADING_TITLE }),
+					});
+				}
+			}
 			// …but the token collapses to icon(+name) only while the caret
 			// is elsewhere, so the raw syntax is editable in place.
 			if (!selectionTouches(lineFrom, lineTo)) {
 				const headingLine = view.state.doc.lineAt(lineFrom).number - 1;
-				replaces.push({
+				midLine.push({
 					from,
 					to,
 					deco: Decoration.replace({
@@ -301,7 +333,7 @@ function decorateLine(
 		// Per-token guard for constructs the line-level check can't see
 		// (inline code via multi-backtick spans, inline math, …).
 		if (SKIP_NODE_RE.test(tree.resolveInner(from + 1, 0).name)) continue;
-		replaces.push({
+		midLine.push({
 			from,
 			to,
 			deco: Decoration.replace({
@@ -316,7 +348,7 @@ function decorateLine(
 		});
 	}
 
-	// Index into `replaces` where the current link's ref entries begin; a
+	// Index into `midLine` where the current link's ref entries begin; a
 	// whole-link replacement drops that link's earlier token entries, since
 	// overlapping replace decorations are illegal in one RangeSet.
 	let curLinkFrom = -1;
@@ -325,7 +357,7 @@ function decorateLine(
 	for (const ref of refs) {
 		if (ref.linkFrom !== curLinkFrom) {
 			curLinkFrom = ref.linkFrom;
-			curLinkStartIdx = replaces.length;
+			curLinkStartIdx = midLine.length;
 		}
 		// Aliased links display only the alias — Obsidian hides the target,
 		// so target-side tokens stay skipped; alias-side tokens (TOC-plugin
@@ -362,8 +394,8 @@ function decorateLine(
 			// even for `]]]` runs and nested `#[!a]#[!b]` paths.
 			const inner = lineText.slice(ref.linkFrom + 2, ref.linkTo - 2);
 			const pipeIdx = inner.indexOf("|");
-			replaces.length = curLinkStartIdx;
-			replaces.push({
+			midLine.length = curLinkStartIdx;
+			midLine.push({
 				from: lineFrom + ref.linkFrom,
 				to: lineFrom + ref.linkTo,
 				deco: Decoration.replace({
@@ -382,7 +414,7 @@ function decorateLine(
 
 		// Icon (plus display name when the heading has no title of its own),
 		// or a bare hide when reference icons are off.
-		replaces.push({
+		midLine.push({
 			from,
 			to,
 			deco: refSettings.refShowIcon
@@ -399,8 +431,11 @@ function decorateLine(
 		});
 	}
 
-	replaces.sort((a, b) => a.from - b.from);
-	for (const r of replaces) builder.add(r.from, r.to, r.deco);
+	// startSide breaks `from` ties: a mark and a replace can legally open at the
+	// same offset (`## [!info][!tip] …`), and RangeSetBuilder rejects them in
+	// the wrong order — a non-inclusive replace opens before a mark.
+	midLine.sort((a, b) => a.from - b.from || a.deco.startSide - b.deco.startSide);
+	for (const r of midLine) builder.add(r.from, r.to, r.deco);
 
 	// End-of-line fold chevron, added last so it never precedes an inline token
 	// that also sits on this heading line.

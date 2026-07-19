@@ -94,6 +94,7 @@ export const fa: Record<string, string> = {
 	"settings.lightColorAria": "روشن: {{color}}",
 	"settings.darkColorAria": "تاریک: {{color}}",
 
+	"settings.colorSwatchAria": "برجسته: {{accent}} · پس‌زمینه: {{bg}}",
 	"settings.fallbackCallout": "callout پشتیبان پیش‌فرض",
 	"settings.fallbackCalloutDesc": "انواع callout ناشناخته در vault سبک این callout را به ارث می‌برند.",
 
@@ -121,7 +122,13 @@ export const fa: Record<string, string> = {
 	"settings.previewCalloutContent": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
 
 	// Settings — Saved color palettes
+	"settings.customPalettes": "پالت‌های رنگ ذخیره‌شده",
+	"settings.newPalette": "پالت جدید",
 	"settings.customPalettesEmpty": "در حال حاضر پالت ذخیره‌شده‌ای وجود ندارد.",
+	"settings.editPaletteAria": "ویرایش پالت {{name}}",
+	"settings.deletePaletteAria": "حذف پالت {{name}}",
+	"settings.deletePaletteConfirm":
+		'پالت "{{name}}" حذف شود؟\nبلوک‌های callout که از رنگ‌های آن استفاده می‌کنند تغییر نمی‌کنند.',
 	"settings.enableAutocomplete": "فعال‌سازی تکمیل خودکار [!",
 	"settings.enableAutocompleteDesc": 'هنگام تایپ "[!" در یک بلوک نقل‌قول در ویرایشگر، پیشنهادات نمایش می‌دهد. یک نوع callout از لیست انتخاب کنید تا سرتیتر کامل callout درج شود.',
 
@@ -204,6 +211,42 @@ export const fa: Record<string, string> = {
 	"editor.loremIpsum": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
 	"editor.sampleInlineText": "در اینجا یک قرص [!{id}] درون‌خطی در داخل یک پاراگراف وجود دارد.",
 	"editor.previewReadOnly": "پیش‌نمایش زنده قابل ویرایش نیست",
+
+	// Palette editor modal
+	"palette.newTitle": "پالت رنگ جدید",
+	"palette.editTitle": "ویرایش پالت رنگ",
+	"palette.name": "نام",
+	"palette.namePlaceholder": "پالت من",
+	"palette.nameExists": "پالتی با این نام از قبل وجود دارد",
+	"palette.baseColor": "رنگ پایه",
+	"palette.bgStyle": "سبک",
+	"palette.bgSolid": "یکدست",
+	"palette.bgGradient": "گرادیان",
+	"palette.gradientTo": "رنگ دوم",
+	"palette.gradientDirection": "جهت",
+	"palette.gradientText": "متن عنوان با گرادیان",
+	"palette.save": "ذخیره",
+
+	// Color name suggestions (used to prefill palette names)
+	"colorName.red": "قرمز",
+	"colorName.orange": "نارنجی",
+	"colorName.amber": "کهربایی",
+	"colorName.yellow": "زرد",
+	"colorName.lime": "لیمویی",
+	"colorName.green": "سبز",
+	"colorName.teal": "سبزآبی تیره",
+	"colorName.cyan": "فیروزه‌ای",
+	"colorName.sky": "آبی آسمانی",
+	"colorName.blue": "آبی",
+	"colorName.indigo": "نیلی",
+	"colorName.violet": "ارغوانی",
+	"colorName.purple": "بنفش",
+	"colorName.pink": "صورتی",
+	"colorName.rose": "سرخابی",
+	"colorName.brown": "قهوه‌ای",
+	"colorName.gray": "خاکستری",
+	"colorName.black": "مشکی",
+	"colorName.white": "سفید",
 
 	"iconPicker.pickIcon": "انتخاب آیکون",
 	"iconPicker.confirm": "تأیید",

@@ -19,6 +19,7 @@ import type { CalloutRegistry } from "../../manager/CalloutRegistry";
 import { findWikilinkCalloutRefs } from "../calloutTokens";
 import { t } from "../../i18n";
 import {
+	CSS_FOLD_ARROW,
 	CSS_REF_LINK,
 	CSS_REF_TOKEN_LINK,
 	buildCalloutTokenDom,
@@ -349,7 +350,7 @@ export class HeadingFoldArrowWidget extends WidgetType {
 
 	override toDOM(view: EditorView): HTMLElement {
 		const arrow = view.dom.ownerDocument.createElement("span");
-		arrow.className = "cs-fold-arrow";
+		arrow.className = CSS_FOLD_ARROW;
 		if (this.folded) arrow.classList.add("cs-collapsed");
 		setIcon(arrow, "chevron-down");
 		arrow.setAttribute("aria-label", t("heading.toggleFold"));
