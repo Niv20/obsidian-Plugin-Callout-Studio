@@ -235,9 +235,7 @@ export class CalloutRegistry {
 
 		// Merge settings (field-by-field against defaults; see mergeSavedSettings)
 		if (data.settings) {
-			this.settings = mergeSavedSettings(
-				data.settings as LegacySavedSettings,
-			);
+			this.settings = mergeSavedSettings(data.settings);
 		}
 
 		// Restore downloaded SVG data for Material icons selected by the user.

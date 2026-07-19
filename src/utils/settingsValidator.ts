@@ -41,7 +41,7 @@ export function sanitizeImportedSettings(
 	// DEFAULT_SETTINGS and tolerates arbitrary junk, so passing the raw
 	// object straight through is safe.
 	return {
-		settings: mergeSavedSettings(raw as Parameters<typeof mergeSavedSettings>[0]),
+		settings: mergeSavedSettings(raw),
 		issues: [],
 	};
 }

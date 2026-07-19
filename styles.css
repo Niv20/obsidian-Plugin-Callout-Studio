@@ -76,7 +76,7 @@
 	font-size: var(--font-smallest);
 	font-weight: 400;
 	line-height: 1;
-	text-decoration: underline;
+	text-decoration-line: underline;
 	cursor: pointer;
 }
 
@@ -899,14 +899,20 @@ button.callout-studio-icon-picker-loading {
 	margin-inline-start: calc(var(--cs-circle-size) * -0.4);
 }
 
-/* The accent (main) circle stacks ABOVE the background circle. */
+/* Circles stack front-to-back in reading order: accent, then the background,
+   then a gradient's second stop furthest back. Each one's own border is what
+   separates it from the next, so the stops stay distinct even when they are
+   near-identical tints. */
 .cs-color-circle-l {
+	z-index: 2;
+}
+
+.cs-color-circle-r {
 	z-index: 1;
 }
 
-/* Color grid hidden state until a preset is chosen */
-.callout-studio-color-grid.cs-color-grid-hidden {
-	display: none;
+.cs-color-circle-r2 {
+	z-index: 0;
 }
 
 /* ─── Compact Color Grid ──────────────────────────────────────── */
@@ -1875,6 +1881,11 @@ input.cs-input-invalid:focus {
 	.callout-studio-preview-panel {
 		grid-template-columns: 1fr;
 	}
+	/* The palette editor's 2-class width override outranks the generic
+	   stack rule above, so restate the stack at equal specificity. */
+	.callout-studio-palette-editor .callout-studio-preview-panel {
+		grid-template-columns: 1fr;
+	}
 	.callout-studio-preview-col {
 		position: static;
 	}
@@ -1904,32 +1915,42 @@ input.cs-input-invalid:focus {
    not a media query. That fight is what pushed the + button off-screen /
    smeared it full-width. Scope the fix to .is-phone (not a width breakpoint)
    so desktop — including a narrow desktop window — is untouched, and reassert
-   our intended sizing (input grows, + stays a 36px square) with enough weight
-   to win over Obsidian's rule. Obsidian's own responsive stacking (info row
-   above, control row below) already applies here and needs no duplicate
-   handling. */
+   our intended sizing (input grows, + stays a 36px square) via selector
+   specificity instead of !important. Obsidian's own responsive stacking
+   (info row above, control row below) already applies here and needs no
+   duplicate handling. */
 .is-phone .cs-callout-ids-setting .cs-tag-wrapper {
 	max-width: none;
 	width: 100%;
 }
+/* Our 3 plain classes (.is-phone .cs-callout-ids-setting .cs-tag-input-field)
+   already outrank Obsidian's `input` line above on class count alone (3 > 2),
+   regardless of its extra type selector — no !important needed. */
 .is-phone .cs-callout-ids-setting .cs-tag-input-field {
-	width: auto !important;
-	flex: 1 1 auto !important;
+	width: auto;
+	flex: 1 1 auto;
 }
-.is-phone .cs-callout-ids-setting .cs-tag-add-btn {
-	width: 36px !important;
-	flex: 0 0 36px !important;
+/* Obsidian's `button:not(.clickable-icon)` variant of the rule above counts
+   as 3 classes (.is-phone, .setting-item-control, the :not() argument) plus
+   the `button` type selector, tying our 3 plain classes and then winning on
+   that extra type selector. Repeat our own class once to add a 4th class
+   instead — still an unconditional win, and unlike !important it stays
+   correct if Obsidian ever tweaks that rule's padding/margin too. */
+.is-phone .cs-callout-ids-setting .cs-tag-add-btn.cs-tag-add-btn {
+	width: 36px;
+	flex: 0 0 36px;
 }
 
 /* On iPad, Obsidian's core CSS (`.is-tablet button:not(.clickable-icon) {
-   padding: var(--size-4-1) var(--size-4-5) }`, i.e. 4px 20px) outranks our
-   `.cs-tag-add-btn` padding by specificity (two classes + a type selector
-   beats our one class). 40px of forced horizontal padding inside a button
-   fixed at 36px wide leaves ~0px for the centered 16px "+" icon, so it gets
-   squeezed out — intermittently, depending on how the browser resolves the
-   overconstrained box. Reassert zero padding for tablets specifically. */
+   padding: var(--size-4-1) var(--size-4-5) }`, i.e. 4px 20px) is 2 classes +
+   1 type selector. Our 3-class selector below already outranks it on class
+   count alone, so plain specificity reasserts zero padding with no
+   !important needed. Without this, 40px of forced horizontal padding inside
+   a button fixed at 36px wide leaves ~0px for the centered 16px "+" icon, so
+   it gets squeezed out — intermittently, depending on how the browser
+   resolves the overconstrained box. */
 .is-tablet .cs-callout-ids-setting .cs-tag-add-btn {
-	padding: 0 !important;
+	padding: 0;
 }
 
 @media (min-width: 701px) and (max-width: 760px) {
@@ -2007,14 +2028,144 @@ input.cs-input-invalid:focus {
 	white-space: nowrap;
 }
 
-/* Palette editor modal */
-.callout-studio-palette-editor .cs-palette-live-preview {
-	margin: 10px 0 14px;
+/* A palette *is* its colors, so the swatch must always show — even on a narrow
+   phone row, where the shared @container rule (max-width: 450px) hides
+   .callout-studio-row-colors for the main callout list. Higher specificity
+   re-shows it here regardless of width; the name absorbs the squeeze by
+   truncating with an ellipsis (rule above), whether the swatch is two circles
+   or three (gradient). */
+.cs-palette-list-row .callout-studio-row-colors {
+	display: flex;
 }
 
-.callout-studio-palette-editor .cs-palette-editor-grid {
-	max-width: 320px;
-	margin-bottom: 8px;
+/* Palette editor modal — two-column body: options (left, narrow) + sticky
+   preview (right, flexible). Columns follow DOM order, so only the widths
+   need overriding vs. the callout editor's panel. */
+.callout-studio-palette-editor .callout-studio-preview-panel {
+	grid-template-columns: 240px minmax(0, 1fr);
+	justify-content: stretch;
+}
+
+/* Unlike the callout editor (whose panel sits below several rows), this
+   panel IS .modal-content's first child, so the shared :first-child rule
+   (zeroing its top margin in favor of an 8px pad, to sit closer to the
+   sticky title) leaves only 8px above the rows vs. the panel's own 16px
+   bottom margin below them. Restore 16px so the gap to both bars matches. */
+.callout-studio-editor-modal
+	> .modal-content.callout-studio-palette-editor
+	> .callout-studio-preview-panel:first-child {
+	padding-top: 16px;
+}
+
+.callout-studio-palette-editor .cs-palette-live-preview {
+	margin: 0;
+}
+
+/* "Customize all colors" collapsible card header. The button element keeps
+   the shared adjust-header look; these rules strip Obsidian's default button
+   chrome and add the open/closed chevron. */
+.cs-collapse-header {
+	appearance: none;
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	width: 100%;
+	margin: 0;
+	border: none;
+	box-shadow: none;
+	cursor: pointer;
+	text-align: start;
+}
+
+/* Collapsed: the header IS the whole card, so round all corners. */
+.cs-collapse-header:not(.is-open) {
+	border-radius: 7px;
+}
+
+.cs-collapse-header:hover {
+	color: var(--text-normal);
+}
+
+.cs-collapse-chevron {
+	display: inline-flex;
+	transition: transform 120ms ease;
+}
+
+.cs-collapse-chevron .svg-icon {
+	width: 14px;
+	height: 14px;
+}
+
+.cs-collapse-header.is-open .cs-collapse-chevron {
+	transform: rotate(90deg);
+}
+
+/* Rows/controls shown only while the gradient background is enabled */
+.cs-gradient-hidden {
+	display: none !important;
+}
+
+/* Two-option segmented control (Solid|Gradient, Linear|Radial) */
+.cs-segmented {
+	display: inline-flex;
+	border: 1px solid var(--background-modifier-border);
+	border-radius: var(--radius-s, 4px);
+	overflow: hidden;
+}
+.cs-segmented-btn {
+	appearance: none;
+	margin: 0;
+	padding: 4px 12px;
+	border: none;
+	border-radius: 0;
+	box-shadow: none;
+	background: var(--background-secondary);
+	color: var(--text-muted);
+	font-size: var(--font-small);
+	cursor: pointer;
+}
+.cs-segmented-btn + .cs-segmented-btn {
+	border-inline-start: 1px solid var(--background-modifier-border);
+}
+.cs-segmented-btn:hover {
+	color: var(--text-normal);
+}
+.cs-segmented-btn.is-active {
+	background: var(--interactive-accent);
+	color: var(--text-on-accent);
+}
+
+/* linear-gradient direction picker */
+.cs-gradient-dir-row {
+	display: flex;
+	gap: 4px;
+	flex-wrap: wrap;
+}
+.cs-gradient-dir-btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 26px;
+	height: 26px;
+	padding: 0;
+	box-shadow: none;
+	background: var(--background-secondary);
+	border: 1px solid var(--background-modifier-border);
+	border-radius: var(--radius-s, 4px);
+	color: var(--text-muted);
+	cursor: pointer;
+}
+.cs-gradient-dir-btn:hover {
+	color: var(--text-normal);
+}
+.cs-gradient-dir-btn.is-active {
+	background: var(--interactive-accent);
+	border-color: var(--interactive-accent);
+	color: var(--text-on-accent);
+}
+.cs-gradient-dir-btn .svg-icon {
+	width: 14px;
+	height: 14px;
 }
 
 /* ─── Icon Picker Weight Select ─────────────────────────────── */
@@ -2287,10 +2438,10 @@ input.cs-input-invalid:focus {
 }
 .callout-studio-footer a {
 	color: var(--text-accent);
-	text-decoration: none;
+	text-decoration-line: none;
 }
 .callout-studio-footer a:hover {
-	text-decoration: underline;
+	text-decoration-line: underline;
 }
 
 /* ══ Heading & inline callout tokens ═══════════════════════════ */
@@ -2362,6 +2513,17 @@ input.cs-input-invalid:focus {
 /* Icon boxes scale with the surrounding font (pill text or heading). */
 .cs-inline-callout .cs-callout-icon,
 .cs-heading-token .cs-callout-icon {
+	/* Keep icons out of a gradient title sweep. When a palette turns on
+	   gradient title text, CSSInjector makes the swept box's text fill
+	   transparent so the clipped gradient shows through the glyphs — and an
+	   emoji icon is text, so it would be swept along and vanish. That box is
+	   the whole pill, and a pill can also sit inside a swept heading title.
+	   Heading tokens sweep their name only, never the icon beside it, so the
+	   heading half of this selector is defensive. Lucide and Material icons
+	   are SVG and ignore text-fill-color, so this only ever matters for
+	   emoji; everywhere else it re-states the initial value and does
+	   nothing. */
+	-webkit-text-fill-color: currentColor;
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
@@ -2371,6 +2533,21 @@ input.cs-input-invalid:focus {
 .cs-heading-token .cs-callout-icon svg {
 	width: 1em;
 	height: 1em;
+}
+
+/* PDF export only. Chromium's print engine cannot paint the
+   `background-clip: text` technique the on-screen gradient titles rely on
+   (the sweep comes out as an unclipped block instead of showing through the
+   glyphs), so gradientTitleText.ts wraps every swept grapheme in one of
+   these spans with its own color sampled along the gradient (--cs-gch, set
+   inline). On screen this rule never applies and the spans are inert; in
+   print — where CSSInjector also drops the sweep itself — it swaps each
+   glyph's fill from the sweep's transparent to its sampled color, and the
+   exported title reads as a smooth per-character ramp. */
+@media print {
+	.cs-grad-ch {
+		-webkit-text-fill-color: var(--cs-gch, currentColor);
+	}
 }
 
 /* Nudge the heading callout icon down by a small default. With the icon
