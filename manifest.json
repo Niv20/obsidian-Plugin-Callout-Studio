@@ -1,7 +1,7 @@
 {
 	"id": "callout-studio",
 	"name": "Callout Studio",
-	"version": "2.1.1",
+	"version": "2.1.2",
 	"minAppVersion": "1.6.6",
 	"description": "Manage callouts with custom types, Material icons, native context menu actions, and full light and dark mode color control.",
 	"author": "Niv Libovitch",
