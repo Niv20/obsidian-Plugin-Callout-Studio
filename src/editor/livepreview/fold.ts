@@ -1,24 +1,28 @@
 /**
- * editor/livepreview/previewFold.ts — heading fold for the settings live
- * preview.
+ * editor/livepreview/fold.ts — heading-callout folding.
  *
- * Heading callouts in real notes fold through Obsidian's view-level fold API
- * (headingFold.ts), which needs a workspace MarkdownView. The embedded editor
- * in the settings previews (settings/LiveCalloutPreview.ts) is a genuine
- * CodeMirror EditorView but NOT a workspace leaf, so that path can't reach it
- * and the in-bar fold arrow would no-op there.
+ * The single fold path for every editor the in-bar fold arrow appears in:
+ * real notes and the embedded settings preview alike. The section range comes
+ * from `foldable()` of `@codemirror/language`, which queries the fold service
+ * Obsidian registers for headings — so the arrow folds EXACTLY the range
+ * Obsidian's own pre-heading fold arrow would fold.
  *
- * Instead the preview drives CodeMirror's own fold state directly with
- * `foldEffect`/`unfoldEffect`. `@codemirror/language` is an esbuild external
- * supplied by Obsidian at runtime, so these are the SAME effect/field
- * instances Obsidian's built-in pre-heading fold arrow dispatches — folding
- * here collapses the section exactly like that native arrow (which does work
- * in the embedded preview). If an editor ever lacks the fold field,
- * `codeFolding()` is appended on demand; its parts are module-level
- * singletons, so re-adding is a deduped no-op in editors that already fold.
+ * `@codemirror/language` is an esbuild external supplied by Obsidian at
+ * runtime, so `foldable`/`foldEffect`/`foldedRanges` are the SAME service and
+ * effect/field instances the native arrow uses: folds made here are
+ * indistinguishable from native ones (persisted and restored the same way),
+ * and reading `foldedRanges` reflects native-arrow folds too.
+ *
+ * The settings preview editor may lack Obsidian's fold service and even the
+ * fold StateField. When `foldable()` returns null the range falls back to a
+ * document-text scan, and if a dispatched fold effect is dropped because the
+ * field is missing, `codeFolding()` is appended on demand; its parts are
+ * module-level singletons, so re-adding is a deduped no-op in editors that
+ * already fold.
  */
 import {
 	codeFolding,
+	foldable,
 	foldEffect,
 	foldedRanges,
 	unfoldEffect,
@@ -49,7 +53,7 @@ function foldStartingAt(
 }
 
 /** The set of heading start-lines (0-based) currently folded in this editor. */
-export function getPreviewFoldedLines(view: EditorView): ReadonlySet<number> {
+export function getFoldedLines(view: EditorView): ReadonlySet<number> {
 	const lines = new Set<number>();
 	const doc = view.state.doc;
 	foldedRanges(view.state).between(0, doc.length, (from) => {
@@ -58,27 +62,32 @@ export function getPreviewFoldedLines(view: EditorView): ReadonlySet<number> {
 	return lines;
 }
 
-/** Toggle the fold of one heading section in the preview editor. */
-export function togglePreviewFold(
+/** Toggle the fold of the heading section starting on the given 0-based line. */
+export function toggleHeadingFold(
 	view: EditorView,
 	headingLine: number,
-	endLine: number,
 ): void {
-	if (endLine <= headingLine) return; // empty section — nothing to fold
-
 	const existing = foldStartingAt(view, headingLine);
 	if (existing) {
 		view.dispatch({ effects: unfoldEffect.of(existing) });
 		return;
 	}
 
-	// Same shape as a native heading fold: from the end of the heading line to
-	// the end of the section's last line.
 	const doc = view.state.doc;
-	const range = {
-		from: doc.line(headingLine + 1).to,
-		to: doc.line(Math.min(endLine, doc.lines - 1) + 1).to,
-	};
+	const line = doc.line(headingLine + 1);
+	let range = foldable(view.state, line.from, line.to);
+	if (!range) {
+		// No fold service in this editor (settings preview) — bound the
+		// section by scanning the document text instead.
+		const endLine = scanSectionEnd(view, headingLine);
+		if (endLine <= headingLine) return; // empty section — nothing to fold
+		range = {
+			from: line.to,
+			to: doc.line(Math.min(endLine, doc.lines - 1) + 1).to,
+		};
+	}
+	if (range.to <= range.from) return;
+
 	view.dispatch({ effects: foldEffect.of(range) });
 	if (!foldStartingAt(view, headingLine)) {
 		// The fold StateField wasn't in this editor's config, so the effect
@@ -93,12 +102,9 @@ export function togglePreviewFold(
 /**
  * Last line (0-based) of a heading's section within the editor document: the
  * line before the next heading of the same or a higher level, else the last
- * line. Used in the preview where there is no metadataCache to consult.
+ * line. Regex fallback for editors without Obsidian's fold service.
  */
-export function previewSectionEnd(
-	view: EditorView,
-	headingLine: number,
-): number {
+function scanSectionEnd(view: EditorView, headingLine: number): number {
 	const doc = view.state.doc;
 	const headText = doc.line(headingLine + 1).text;
 	const level = headText.match(/^(#{1,6})\s/)?.[1]?.length ?? 6;

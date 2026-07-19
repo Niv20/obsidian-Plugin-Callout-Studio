@@ -26,12 +26,8 @@ import {
 	resolveCalloutDef,
 	type CalloutTokenVariant,
 } from "../renderShared";
-import {
-	headingSectionEnd,
-	resolveMarkdownView,
-	toggleHeadingFold,
-} from "../headingFold";
-import { previewSectionEnd, togglePreviewFold } from "./previewFold";
+import { resolveMarkdownView } from "../headingFold";
+import { toggleHeadingFold } from "./fold";
 import { calloutStudioRefresh } from "./refresh";
 
 export class CalloutTokenWidget extends WidgetType {
@@ -330,12 +326,11 @@ export class HeadingRefLinkWidget extends WidgetType {
  * Standalone fold chevron for a heading callout, rendered as an end-of-line
  * widget so it trails the whole heading (icon + name/title) — mirroring a
  * regular callout's disclosure arrow, which follows the label. Built only when
- * the core "Fold heading" setting is on; clicking it toggles Obsidian's native
- * heading fold for the section.
+ * the core "Fold heading" setting is on; clicking it folds the same section
+ * Obsidian's native pre-heading arrow folds.
  */
 export class HeadingFoldArrowWidget extends WidgetType {
 	constructor(
-		private readonly app: App,
 		/** Normalized callout id — part of eq() so id edits refresh the arrow. */
 		private readonly rawId: string,
 		/** Current fold state — rotates the chevron. */
@@ -367,34 +362,18 @@ export class HeadingFoldArrowWidget extends WidgetType {
 	}
 
 	/**
-	 * Toggle the fold of the heading section this arrow trails, then dispatch the
-	 * refresh effect so the chevron re-reflects the new state. In a real note it
-	 * delegates to Obsidian's native heading fold; in the settings preview (an
-	 * embedded editor with no workspace MarkdownView) it falls back to the
-	 * CodeMirror-level preview fold.
+	 * Toggle the fold of the heading section this arrow trails, then dispatch
+	 * the refresh effect so the chevron re-reflects the new state.
 	 */
 	private toggleFold(view: EditorView, el: HTMLElement): void {
 		const pos = view.posAtDOM(el);
 		const headingLine = view.state.doc.lineAt(pos).number - 1; // 0-based
-		const mdView = resolveMarkdownView(this.app, view);
-		if (mdView?.file) {
-			const headings =
-				this.app.metadataCache.getFileCache(mdView.file)?.headings ?? [];
-			const idx = headings.findIndex(
-				(h) => h.position.start.line === headingLine,
-			);
-			const endLine =
-				idx >= 0
-					? headingSectionEnd(headings, idx)
-					: Number.MAX_SAFE_INTEGER;
-			toggleHeadingFold(mdView, headingLine, endLine);
-		} else {
-			togglePreviewFold(
-				view,
-				headingLine,
-				previewSectionEnd(view, headingLine),
-			);
+		// Touch hit-testing can resolve the trailing widget to a neighboring
+		// line; only fold when the resolved line really is an ATX heading.
+		if (!/^#{1,6}\s/.test(view.state.doc.line(headingLine + 1).text)) {
+			return;
 		}
+		toggleHeadingFold(view, headingLine);
 		view.dispatch({ effects: calloutStudioRefresh.of(null) });
 	}
 

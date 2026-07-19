@@ -42,18 +42,14 @@ import {
 	CSS_UNKNOWN,
 	resolveCalloutDef,
 } from "../renderShared";
-import {
-	getFoldedHeadingLines,
-	isHeadingFoldEnabled,
-	resolveMarkdownView,
-} from "../headingFold";
+import { isHeadingFoldEnabled } from "../headingFold";
 import { normalizeCalloutId } from "../../utils/calloutId";
 import {
 	CalloutTokenWidget,
 	HeadingFoldArrowWidget,
 	HeadingRefLinkWidget,
 } from "./widgets";
-import { getPreviewFoldedLines } from "./previewFold";
+import { getFoldedLines } from "./fold";
 import { calloutStudioRefresh } from "./refresh";
 
 /** Narrow structural host type (avoids importing the concrete plugin class). */
@@ -165,15 +161,9 @@ function buildDecorations(
 	// core "Fold heading" setting is on (native folding is otherwise absent, so
 	// we draw no chevron). Resolved once per rebuild.
 	const foldEnabled = headingEnabled && isHeadingFoldEnabled(host.app);
-	let foldedLines: ReadonlySet<number> = NO_FOLDS;
-	if (foldEnabled) {
-		const mdView = resolveMarkdownView(host.app, view);
-		// Real note → native fold state; settings preview (no workspace view) →
-		// the CodeMirror-level preview fold state.
-		foldedLines = mdView
-			? getFoldedHeadingLines(mdView)
-			: getPreviewFoldedLines(view);
-	}
+	const foldedLines: ReadonlySet<number> = foldEnabled
+		? getFoldedLines(view)
+		: NO_FOLDS;
 
 	for (const range of view.visibleRanges) {
 		let pos = range.from;
@@ -318,7 +308,6 @@ function decorateLine(
 				// added after the loop to keep builder insertion sorted.
 				if (foldEnabled) {
 					pendingFoldArrow = new HeadingFoldArrowWidget(
-						host.app,
 						token.rawId,
 						foldedLines.has(headingLine),
 					);
