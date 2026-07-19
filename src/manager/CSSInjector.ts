@@ -459,6 +459,22 @@ export class CSSInjector {
 		const foldCSS = this.generateFoldArrowCSS(def);
 		if (foldCSS) parts.push(foldCSS);
 
+		// PDF-export repaint of the background gradient (covers aliases too):
+		// Preview/CoreGraphics truncates the vector shading Chromium prints,
+		// so print rasterizes the sweep on a ::before — see printGradientCSS.
+		const calloutPrint = this.printGradientCSS(
+			def,
+			(themePrefix, suffix) =>
+				[def.id, ...(def.aliases ?? [])]
+					.map(
+						(id) =>
+							`${themePrefix}.callout[data-callout="${id}"]${suffix}`,
+					)
+					.join(",\n"),
+			false,
+		);
+		if (calloutPrint) parts.push(calloutPrint);
+
 		// Generate alias selectors that reference the same styles
 		if (def.aliases && def.aliases.length > 0) {
 			for (const alias of def.aliases) {
@@ -635,9 +651,11 @@ export class CSSInjector {
 				`${bgSelectorsFor(".theme-dark ")} {\n${darkBg.join("\n")}\n}`,
 			);
 		}
-		// Only gradient backgrounds need the PDF-export ::before repaint on the
-		// pill; the method returns "" for solid backgrounds.
-		const pillPrint = this.pillPrintGradientCSS(
+		// Only gradient backgrounds need the PDF-export ::before repaint; the
+		// method returns "" for solid backgrounds. The pill also hides its own
+		// gradient in print (inline boxes print in the end color), the heading
+		// bar keeps its as a fragmentation fallback — see printGradientCSS.
+		const pillPrint = this.printGradientCSS(
 			def,
 			(themePrefix, suffix) =>
 				ids
@@ -646,8 +664,21 @@ export class CSSInjector {
 							`${themePrefix}.${CSS_INLINE_TOKEN}[data-callout="${id}"]${suffix}`,
 					)
 					.join(",\n"),
+			true,
 		);
 		if (pillPrint) parts.push(pillPrint);
+		const headingPrint = this.printGradientCSS(
+			def,
+			(themePrefix, suffix) =>
+				ids
+					.map(
+						(id) =>
+							`${themePrefix}.${CSS_HEADING_LINE}[data-callout="${id}"]${suffix}`,
+					)
+					.join(",\n"),
+			false,
+		);
+		if (headingPrint) parts.push(headingPrint);
 
 		// Gradient title text for the inline pill: ONE sweep on the pill root,
 		// which hugs its own content, so the gradient runs edge to edge across
@@ -691,22 +722,37 @@ export class CSSInjector {
 	}
 
 	/**
-	 * PDF-export repaint of the inline pill's background gradient.
+	 * PDF-export repaint of a background gradient, for every render role.
 	 *
-	 * Chromium's print pipeline resolves a degenerate gradient box for a
-	 * gradient `background-image` on an inline-level box (the pill is
-	 * `inline-flex`) and paints the whole pill in the gradient's END color —
-	 * on screen the same rule renders fine, and block boxes (regular
-	 * callouts, heading bars) print fine too, so only the pill needs this.
-	 * In print the gradient therefore moves to an absolutely-positioned
-	 * `::before`: a block-level box with well-defined geometry, layered
-	 * between the pill's `background-color` (the first stop, kept as the
-	 * fallback) and its content. Empty when the mode has no bg color (then
-	 * there is no gradient on screen either).
+	 * Two print-pipeline problems force this, both invisible on screen:
+	 *
+	 * 1. Chromium resolves a degenerate gradient box for a gradient
+	 *    `background-image` on an inline-level box (the pill is
+	 *    `inline-flex`) and paints the whole pill in the gradient's END
+	 *    color. Moving the gradient to an absolutely-positioned `::before` —
+	 *    a block box with well-defined geometry — sidesteps that.
+	 * 2. On ANY box, Chromium writes the gradient into the PDF as a vector
+	 *    axial shading, which macOS CoreGraphics (Preview, Quick Look)
+	 *    renders truncated: only about the first half of the ramp shows, so
+	 *    pale sweeps collapse into a near-uniform start color. The
+	 *    `filter: opacity(0.999)` is the fix — a filter cannot be expressed
+	 *    in PDF vector operators, so Chromium rasterizes the `::before` and
+	 *    the bitmap renders identically in every viewer. The value is not a
+	 *    no-op, so the filter can't be optimized away, yet the alpha change
+	 *    is invisible; text is above the `::before` and stays vector.
+	 *
+	 * `hideElementGradient` drops the element's own `background-image` in
+	 * print: required for the pill (problem 1 paints it in the end color
+	 * otherwise); left off for block roles (regular callout, heading bar) so
+	 * a callout fragmented across pages keeps at least the vector gradient
+	 * where the `::before` doesn't reach. The `background-color` (first
+	 * stop) always stays on the element as the fallback. Empty when the mode
+	 * has no bg color (then there is no gradient on screen either).
 	 */
-	private pillPrintGradientCSS(
+	private printGradientCSS(
 		def: CalloutDefinition,
-		pillSel: (themePrefix: string, suffix: string) => string,
+		selFor: (themePrefix: string, suffix: string) => string,
+		hideElementGradient: boolean,
 	): string {
 		const light = this.bgImageFor(def, "light");
 		if (!light) return "";
@@ -717,25 +763,28 @@ export class CSSInjector {
 			`  z-index: -1;\n` +
 			`  border-radius: inherit;\n` +
 			`  background-image: ${image};\n` +
+			`  filter: opacity(0.999);\n` +
 			`  -webkit-print-color-adjust: exact;\n` +
 			`  print-color-adjust: exact;`;
-		// z-index: 0 scopes the ::before's -1 to the pill's own stacking
-		// context, so it sits above the pill's background-color but under its
-		// text and icon. Both theme prefixes are grouped so this later rule
-		// wins over the screen bg rules in either mode; the ::before then
-		// follows the usual explicit-undefined cascade (unscoped light rule,
-		// dark override only when the gradient differs).
+		// z-index: 0 scopes the ::before's -1 to the element's own stacking
+		// context, so it sits above the background-color but under text and
+		// icon. Both theme prefixes are grouped so this later rule wins over
+		// the screen bg rules in either mode; the ::before then follows the
+		// usual explicit-undefined cascade (unscoped light rule, dark
+		// override only when the gradient differs).
+		const hostProps = [
+			...(hideElementGradient ? ["  background-image: none;"] : []),
+			"  position: relative;",
+			"  z-index: 0;",
+		].join("\n");
 		const rules = [
-			`${pillSel("", "")},\n${pillSel(".theme-dark ", "")} {\n` +
-				`  background-image: none;\n` +
-				`  position: relative;\n` +
-				`  z-index: 0;\n}`,
-			`${pillSel("", "::before")} {\n${beforeProps(light.image)}\n}`,
+			`${selFor("", "")},\n${selFor(".theme-dark ", "")} {\n${hostProps}\n}`,
+			`${selFor("", "::before")} {\n${beforeProps(light.image)}\n}`,
 		];
 		const dark = this.bgImageFor(def, "dark");
 		if (dark && dark.image !== light.image) {
 			rules.push(
-				`${pillSel(".theme-dark ", "::before")} {\n${beforeProps(dark.image)}\n}`,
+				`${selFor(".theme-dark ", "::before")} {\n${beforeProps(dark.image)}\n}`,
 			);
 		}
 		return `@media print {\n${rules.join("\n\n")}\n}`;
@@ -1420,14 +1469,33 @@ export class CSSInjector {
 				`${unknownBgSelectors(".theme-dark ")} {\n${unknownDarkBg.join("\n")}\n}`,
 			);
 		}
-		// Only gradient backgrounds need the PDF-export ::before repaint on the
-		// pill; the method returns "" for solid backgrounds.
-		const unknownPillPrint = this.pillPrintGradientCSS(
+		// Only gradient backgrounds need the PDF-export ::before repaint; the
+		// method returns "" for solid backgrounds. Mirrors the known-id calls:
+		// pill hides its own gradient in print, block roles keep theirs.
+		const unknownPillPrint = this.printGradientCSS(
 			fallbackDef,
 			(themePrefix, suffix) =>
 				`${themePrefix}.${CSS_INLINE_TOKEN}.${CSS_UNKNOWN}${suffix}`,
+			true,
 		);
 		if (unknownPillPrint) parts.push(unknownPillPrint);
+		const unknownHeadingPrint = this.printGradientCSS(
+			fallbackDef,
+			(themePrefix, suffix) =>
+				`${themePrefix}.${CSS_HEADING_LINE}.${CSS_UNKNOWN}${suffix}`,
+			false,
+		);
+		if (unknownHeadingPrint) parts.push(unknownHeadingPrint);
+		// Unknown regular callouts: the fallback tint carries the gradient too,
+		// so it needs the same Preview-safe raster repaint. The selector mirrors
+		// the fallback rules above (`body` prefix + :not() list).
+		const unknownCalloutPrint = this.printGradientCSS(
+			fallbackDef,
+			(themePrefix, suffix) =>
+				`body${themePrefix ? ".theme-dark" : ""} .callout${notSelectors}${suffix}`,
+			false,
+		);
+		if (unknownCalloutPrint) parts.push(unknownCalloutPrint);
 
 		return parts.join("\n\n");
 	}
