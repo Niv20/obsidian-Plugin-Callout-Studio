@@ -168,8 +168,8 @@ export const DEFAULT_TEXT_COLOR_DARK = "#e0e0e0";
  */
 export const DEFAULT_BG_COLOR_AMOUNT = 0.18;
 /** Bounds for the palette editor's background-intensity slider. */
-export const MIN_BG_COLOR_AMOUNT = 0.05;
-export const MAX_BG_COLOR_AMOUNT = 0.4;
+export const MIN_BG_COLOR_AMOUNT = 0.1;
+export const MAX_BG_COLOR_AMOUNT = 0.3;
 /**
  * Default intensity-slider position for a brand-new palette in the Palette
  * Editor, split by background style: a two-stop gradient reads fainter than
