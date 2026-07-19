@@ -1576,6 +1576,18 @@ input.cs-input-invalid:focus {
 	font-style: italic;
 }
 
+/* The name-linked primary ID: looks exactly like any other chip. Its lock
+   reuses .cs-tag-chip-remove positioning so it sits where the × normally is. */
+.cs-tag-chip-lock {
+	display: inline-flex;
+	align-items: center;
+}
+
+.cs-tag-chip-lock .svg-icon {
+	width: 13px;
+	height: 13px;
+}
+
 /* ─── Disabled Display Name (Built-in) ───────────────────── */
 
 .setting-item input[type="text"]:disabled {

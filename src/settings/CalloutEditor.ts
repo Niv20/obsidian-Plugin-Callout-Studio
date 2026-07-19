@@ -8,6 +8,7 @@
  * CalloutEditorSave; validation to CalloutEditorValidation.
  */
 import { Modal, Notice, Setting, SliderComponent, setIcon } from "obsidian";
+import type { TextComponent } from "obsidian";
 import type {
 	BgGradient,
 	CalloutDefinition,
@@ -59,6 +60,14 @@ function generateId(displayName: string): string {
 	return sanitizeCalloutIdInput(displayName);
 }
 
+// Derive a display name from a user-typed ID: sentence-case the first letter
+// and keep everything else (spaces, dashes) intact so generateId() on the
+// result round-trips to the same ID. Caseless scripts (e.g. Hebrew) pass
+// through unchanged.
+function deriveDisplayNameFromId(id: string): string {
+	return id.replace(/^\p{L}/u, (c) => c.toUpperCase());
+}
+
 export class CalloutEditor extends Modal {
 	private plugin: CalloutEditorPlugin;
 	private existingId: string | null;
@@ -89,6 +98,9 @@ export class CalloutEditor extends Modal {
 	private preview: LiveCalloutPreview | null = null;
 	private previewFoldCollapsed = false;
 	private idsTagInput: TagInput | null = null;
+	private nameTextInput: TextComponent | null = null;
+	/** The last display name auto-filled live from ID-field typing (reverse link). */
+	private idDrivenName = "";
 	private hasHadCalloutId = false;
 	private saveBtn: HTMLButtonElement | null = null;
 	private isSaveActionEnabled = false;
@@ -181,6 +193,11 @@ export class CalloutEditor extends Modal {
 		// out from under the modal.
 		this.plugin.pruneSuspended = true;
 
+		// Enforce the name↔ID invariant (the primary ID mirrors the display
+		// name) before snapshotting, so legacy rows normalize without creating
+		// phantom "unsaved changes".
+		if (!this.isBuiltIn) this.normalizeNameIdLink();
+
 		// Snapshot initial state for dirty-checking
 		this.initialSnapshot = this.stateSnapshot();
 		this.initialStyleSnapshot = this.styleSnapshot();
@@ -199,6 +216,7 @@ export class CalloutEditor extends Modal {
 					: t("editor.displayNameDesc"),
 			)
 			.addText((text) => {
+				this.nameTextInput = text;
 				text.setPlaceholder(
 					t("editor.displayNamePlaceholder"),
 				).setValue(this.displayName);
@@ -207,24 +225,29 @@ export class CalloutEditor extends Modal {
 				} else {
 					text.onChange((value) => {
 						this.displayName = value;
-						if (!this.existingId) {
-							this.calloutId = generateId(value);
-							if (this.idsTagInput) {
-								const currentTags = this.idsTagInput.getTags();
-								if (this.calloutId) {
-									this.hasHadCalloutId = true;
-									this.idsTagInput.setTags([
-										this.calloutId,
-										...currentTags.slice(1),
-									]);
-								} else if (currentTags.length > 0) {
-									this.idsTagInput.setTags(
-										currentTags.slice(1),
-									);
-								}
-							}
-							this.updateIdWarning();
+						// The pinned primary ID mirrors the name; only that
+						// slot is replaced — other IDs are never touched.
+						const newPinned = generateId(value);
+						if (newPinned) {
+							this.calloutId = newPinned;
+							this.hasHadCalloutId = true;
+							this.idsTagInput?.setPinnedTag(newPinned);
+						} else if (!value.trim()) {
+							// Name fully cleared: drop the pinned slot
+							// (aliases stay).
+							this.calloutId = "";
+							this.idsTagInput?.setPinnedTag(null);
 						}
+						// else: the name holds only characters the ID
+						// sanitizer strips (e.g. emoji) — keep the current
+						// pinned primary rather than orphaning the row.
+						if (this.idsTagInput) {
+							const pinned = this.idsTagInput.getPinnedTag();
+							this.aliases = this.idsTagInput
+								.getTags()
+								.filter((tag) => tag !== pinned);
+						}
+						this.updateIdWarning();
 						this.updatePreview();
 						this.updateSaveState();
 					});
@@ -255,22 +278,58 @@ export class CalloutEditor extends Modal {
 
 		this.idsTagInput = new TagInput(idsSetting.controlEl, {
 			initialTags: initialIds,
+			initialPinnedTag:
+				!this.isBuiltIn && this.calloutId ? this.calloutId : undefined,
 			placeholder: t("editor.calloutIdsPlaceholder"),
 			errorEl: idsErrorEl,
 			readonlyTags: this.isBuiltIn ? initialIds : undefined,
 			onChange: (tags) => {
 				if (tags.length > 0) this.hasHadCalloutId = true;
-				this.calloutId = tags[0] ?? "";
-				this.aliases = tags.slice(1);
+				const pinned = this.idsTagInput?.getPinnedTag() ?? null;
+				if (pinned !== null || !this.isBuiltIn) {
+					// The pinned tag is the primary; everything else is an
+					// alias. With no pinned tag (name cleared) there is no
+					// primary and saving stays blocked.
+					this.calloutId = pinned ?? "";
+					this.aliases = tags.filter((tag) => tag !== pinned);
+				} else {
+					// Built-ins have no pinned tag; the readonly first tag is
+					// the primary.
+					this.calloutId = tags[0] ?? "";
+					this.aliases = tags.slice(1);
+				}
 				this.updateIdWarning();
 				this.updatePreview();
 				this.updateSaveState();
 			},
+			onTagAdded: (tag) => {
+				// Reverse sync: while there is no pinned primary, the first ID
+				// the user adds becomes it — and fills in the display name
+				// when that is still empty.
+				if (this.isBuiltIn) return;
+				if (this.idsTagInput?.getPinnedTag() != null) return;
+				if (!this.displayName.trim()) {
+					this.displayName = deriveDisplayNameFromId(tag);
+					this.nameTextInput?.setValue(this.displayName);
+				}
+				this.idsTagInput?.setPinnedTag(tag);
+				this.calloutId = tag;
+				this.aliases =
+					this.idsTagInput
+						?.getTags()
+						.filter((other) => other !== tag) ?? [];
+				this.updateIdWarning();
+				this.updatePreview();
+				this.updateSaveState();
+			},
+			onInput: (value) => this.syncNameFromIdInput(value),
 			validate: (tag) => {
-				const role =
-					(this.idsTagInput?.getTags().length ?? 0) === 0
-						? "primary"
-						: "alias";
+				// A tag added while no pinned primary exists will be promoted
+				// to primary by the reverse sync above.
+				const willBePinned =
+					!this.isBuiltIn &&
+					this.idsTagInput?.getPinnedTag() == null;
+				const role = willBePinned ? "primary" : "alias";
 				if (!this.canUseCalloutId(tag, role)) {
 					return t("editor.idConflict");
 				}
@@ -1123,6 +1182,56 @@ export class CalloutEditor extends Modal {
 				return;
 			}
 		}
+	}
+
+	/**
+	 * Enforce the name↔ID invariant on the loaded state: the ID derived from
+	 * the display name is the primary (first, pinned). For legacy rows where
+	 * it is missing, the old primary is demoted to the first alias; nothing is
+	 * persisted until the user saves. When the name is empty but an ID exists
+	 * (e.g. seeded from autocomplete), the name is derived from the ID instead.
+	 */
+	private normalizeNameIdLink(): void {
+		const name = this.displayName.trim();
+		if (!name) {
+			if (this.calloutId) {
+				this.displayName = deriveDisplayNameFromId(this.calloutId);
+			}
+			return;
+		}
+		// A name that sanitizes to nothing (e.g. "!!!") keeps the current
+		// primary pinned instead.
+		const pinned = generateId(name) || this.calloutId;
+		if (!pinned || pinned === this.calloutId) return;
+		const rest = [this.calloutId, ...this.aliases].filter(
+			(id) => id && id !== pinned,
+		);
+		this.calloutId = pinned;
+		this.aliases = [...new Set(rest)];
+	}
+
+	/**
+	 * Live reverse-link: while the callout has no primary ID pinned and no
+	 * display name of its own, mirror what the user types in the ID field into
+	 * the display name, character by character (first letter capitalized, the
+	 * same derivation used when a tag is committed). It stops the moment a
+	 * primary ID is pinned or the user gives the name its own value.
+	 */
+	private syncNameFromIdInput(rawValue: string): void {
+		if (this.isBuiltIn) return;
+		// A primary ID already exists → the link is established the normal way.
+		if (this.idsTagInput?.getPinnedTag() != null) return;
+		// Only auto-fill while the name is empty or still exactly what we last
+		// wrote — never clobber a name the user typed themselves.
+		if (this.displayName !== "" && this.displayName !== this.idDrivenName) {
+			return;
+		}
+		const derived = deriveDisplayNameFromId(generateId(rawValue));
+		this.displayName = derived;
+		this.idDrivenName = derived;
+		this.nameTextInput?.setValue(derived);
+		this.updatePreview();
+		this.updateSaveState();
 	}
 
 	private updateIdWarning(): void {

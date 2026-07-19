@@ -147,11 +147,17 @@ export const he: Record<string, string> = {
 	"settings.fontScaleGroup": "קנה־מידה לגופנים",
 	"settings.titleScale": "כותרת",
 	"settings.contentScale": "תוכן",
+	"settings.inlineTextScale": "טקסט",
 	"settings.shapeGroup": "צורה",
 	"settings.borderRadius": "עיגול הפינות",
 	"settings.borderRadiusDesc": "רדיוס הפינות בפיקסלים של תיבת־ההבלטה",
 	"settings.alignGroup": "יישור",
 	"settings.alignContent": "יישור התוכן לכותרת",
+	"settings.headingSpacingGroup": "ריווח הכותרת",
+	"settings.headingPadVertical": "ריווח אנכי",
+	"settings.headingIconIndent": "הזחת האייקון",
+	"settings.refGroup": "מתאר וקישורים",
+	"settings.styleDemoName": "דוגמה",
 	"settings.previewTitle": "תצוגה מקדימה",
 	"settings.previewCalloutTitle": "תיבת־הבלטה לדוגמה",
 	"settings.previewCalloutContent":
@@ -228,6 +234,9 @@ export const he: Record<string, string> = {
 		"כל המזהים המשויכים לתיבת־הבלטה זו. ניתן להשתמש ברווחים.\nלחצו על Enter או על כפתור ה־+ כדי להוסיף.",
 	"editor.calloutIdsPlaceholder": "הוספת מזהה",
 	"editor.addId": "הוספת מזהה",
+	"editor.idLinkedToName": "מקושר לשם התצוגה",
+	"editor.idCannotDelete":
+		"לא ניתן למחוק מזהה זה — הוא מקושר לשם התצוגה. כדי לשנותו, ערכו את השם",
 	"editor.icon": "אייקון",
 	"editor.light": "בהיר",
 	"editor.dark": "כהה",
@@ -238,11 +247,17 @@ export const he: Record<string, string> = {
 	"editor.verticalOffset": "היסט אנכי",
 	"editor.colors": "צבעים",
 	"editor.background": "רקע",
+	"editor.gradientEnd": "סוף הגרדיאנט",
 	"editor.text": "טקסט",
 	"editor.iconColor": "צבע ראשי",
+	"editor.paletteDeleted": "צבע שנמחק",
 	"editor.paletteNone": "— בחירת תבנית —",
 	"editor.paletteGroupObsidian": "תיבות־הבלטה של Obsidian",
 	"editor.paletteGroupPresets": "תבניות צבע",
+	"editor.paletteGroupCustom": "מותאם אישית",
+	"editor.paletteNewColor": "צבע חדש…",
+	"editor.contrastWarning":
+		"ניגודיות נמוכה מול הרקע — הטקסט עלול להיות קשה לקריאה",
 	"editor.foldable": "ניתן לקיפול",
 	"editor.foldableDesc":
 		"האם תיבת־ההבלטה ניתנת לקיפול ומה יהיה מצב ברירת־המחדל שלה ברחבי הכספת.",
@@ -263,6 +278,7 @@ export const he: Record<string, string> = {
 	"editor.untitledCallout": "תיבת־הבלטה ללא שם",
 	"editor.loremIpsum":
 		"לורם איפסום דולור סיט אמט, קונסקטורר אדיפיסינג אלית. סד דו איוסמוד טמפור אינסידידונט אוט לבורה את דולורה מגנה אליקווה.",
+	"editor.loremIpsumShort": "לורם איפסום דולור סיט אמט, קונסקטורר אדיפיסינג אלית.",
 	"editor.sampleInlineText": "כאן יש תגית [!{id}] מוטבעת בתוך פסקה.",
 	"editor.previewReadOnly": "לא ניתן לערוך את התצוגה המקדימה",
 
@@ -353,6 +369,9 @@ export const he: Record<string, string> = {
 	"settings.calloutTypeRegular": "תיבת־הבלטה רגילה",
 	"settings.calloutTypeRegularDesc":
 		"תיבת־הבלטה עם תוכן בתוך ציטוט: ‎> [!name]‎. תמיד פעילה.",
+	"settings.calloutTypeRegularLocked":
+		"תיבות־הבלטה רגילות הן הרינדור המובנה של Obsidian ולא ניתן לכבות אותן.",
+	"settings.roleEnabled": "מופעל",
 	"settings.calloutTypeHeading": "תיבת־הבלטה ככותרת",
 	"settings.calloutTypeHeadingDesc":
 		"כותרת שהתוכן הראשון בה הוא הסימון, למשל ‎## [!name]‎. מוצגת כפס צבעוני בגודל הפונט של הכותרת. סימון ‎+‎ / ‎-‎ אחרי הסימון פותח/סוגר את כל המקטע בעת פתיחת הקובץ.",
@@ -377,6 +396,7 @@ export const he: Record<string, string> = {
 	"menuCustomize.regular": "תיבת־הבלטה רגילה",
 	"menuCustomize.heading": "תיבת־הבלטה ככותרת",
 	"menuCustomize.inline": "תיבת־הבלטה מוטבעת",
+	"menuCustomize.dragHandle": "גררו כדי לשנות סדר",
 	"menuCustomize.moveUp": "העברה למעלה",
 	"menuCustomize.moveDown": "העברה למטה",
 	"menuItem.edit": "עריכת תיבת־ההבלטה",
@@ -458,6 +478,8 @@ export const he: Record<string, string> = {
 		"קובץ לא מזוהה: נדרש מערך של הגדרות תיבת־הבלטה או קובץ ייצוא של Callout Studio.",
 	"import.warn.settingsIgnored":
 		"מקטע ההגדרות לא היה אובייקט תקין ולכן לא יובא.",
+	"import.warn.invalidGradient":
+		"גרדיאנט הרקע לא היה תקין ולכן לא נלקח בחשבון.",
 	"import.err.parseFailed": "הקובץ אינו JSON תקין ולכן לא ניתן לפענח אותו.",
 	"import.err.entryNotObject": "כל רשומה חייבת להיות אובייקט (Object).",
 	"import.err.requiredMissing": 'שדה החובה "{{field}}" חסר או שסוגו שגוי.',

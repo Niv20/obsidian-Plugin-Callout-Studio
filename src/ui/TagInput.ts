@@ -4,11 +4,13 @@
  * Renders a text input where pressing Enter (or clicking the + button) commits
  * the typed value as a pill/tag. Spaces are allowed inside a tag, so they no
  * longer commit it. Tags appear in a row below the input with an × remove
- * button. Supports validation callbacks, readonly tags (the primary ID cannot
- * be removed), and configurable max length / max count from constants.ts.
+ * button. Supports validation callbacks, readonly tags (built-in IDs cannot
+ * be removed), a pinned tag (the name-linked primary ID: always rendered
+ * first, not removable, replaced in place via setPinnedTag), and configurable
+ * max length / max count from constants.ts.
  * Used by CalloutEditor for the unified IDs + aliases field.
  */
-import { setIcon } from "obsidian";
+import { Notice, setIcon } from "obsidian";
 import { MAX_TAGS_COUNT } from "../constants";
 import { sanitizeCalloutIdInput } from "../utils/calloutId";
 import { t } from "../i18n";
@@ -25,7 +27,11 @@ export class TagInput {
 	private errorEl: HTMLElement;
 	private tagsRowEl: HTMLElement;
 	private tags: string[] = [];
+	/** The name-linked primary ID: always first in `tags`, never removable. */
+	private pinnedTag: string | null = null;
 	private onChange: (tags: string[]) => void;
+	private onTagAdded?: (tag: string) => void;
+	private onInput?: (value: string) => void;
 	private validate?: (tag: string) => string | null;
 	/** Optional per-tag character cap. When undefined, IDs are unlimited. */
 	private maxLength: number | undefined;
@@ -38,8 +44,14 @@ export class TagInput {
 		parentEl: HTMLElement,
 		opts: {
 			initialTags?: string[];
+			/** Tag pinned to the first slot (the name-linked primary ID). */
+			initialPinnedTag?: string;
 			placeholder?: string;
 			onChange: (tags: string[]) => void;
+			/** Fired after the user commits a new tag (not on programmatic changes). */
+			onTagAdded?: (tag: string) => void;
+			/** Fired on every keystroke in the input field, with the raw value. */
+			onInput?: (value: string) => void;
 			/** Return an error string if invalid, or null if ok */
 			validate?: (tag: string) => string | null;
 			/** Max characters per tag */
@@ -53,7 +65,17 @@ export class TagInput {
 		},
 	) {
 		this.tags = [...(opts.initialTags ?? [])];
+		this.pinnedTag = opts.initialPinnedTag ?? null;
+		if (this.pinnedTag) {
+			// Keep the pinned tag present and first regardless of input order.
+			this.tags = [
+				this.pinnedTag,
+				...this.tags.filter((t) => t !== this.pinnedTag),
+			];
+		}
 		this.onChange = opts.onChange;
+		this.onTagAdded = opts.onTagAdded;
+		this.onInput = opts.onInput;
 		this.validate = opts.validate;
 		this.maxLength = opts.maxLength;
 		this.maxTags = opts.maxTags ?? MAX_TAGS_COUNT;
@@ -120,6 +142,7 @@ export class TagInput {
 
 		// Show error when user tries to type past maxLength (if a cap is set)
 		this.inputEl.addEventListener("input", () => {
+			this.onInput?.(this.inputEl.value);
 			const cap = this.maxLength;
 			if (cap !== undefined && this.inputEl.value.length >= cap) {
 				this.showError(`ID must be ${cap} characters or less`);
@@ -232,10 +255,12 @@ export class TagInput {
 		this.renderTag(tag);
 		this.onChange([...this.tags]);
 		this.updateInputState();
+		this.onTagAdded?.(tag);
 	}
 
 	private removeTag(tag: string): void {
 		if (this.readonlyTags.has(tag)) return;
+		if (tag === this.pinnedTag) return;
 		const idx = this.tags.indexOf(tag);
 		if (idx === -1) return;
 		this.tags.splice(idx, 1);
@@ -252,6 +277,26 @@ export class TagInput {
 	private renderTag(tag: string): void {
 		const tagEl = this.tagsRowEl.createDiv({ cls: "cs-tag-chip" });
 		tagEl.setAttribute("data-tag", tag);
+
+		const isPinned = tag === this.pinnedTag;
+		if (isPinned) {
+			// The name-linked primary: identical chip to any other, but the ×
+			// affordance is replaced by a lock sitting in the same slot. Clicking
+			// it explains why the ID can't be removed.
+			tagEl.addClass("is-pinned");
+			tagEl.setAttribute("title", t("editor.idLinkedToName"));
+			tagEl.createSpan({ cls: "cs-tag-chip-text", text: tag });
+			const lockEl = tagEl.createSpan({
+				cls: "cs-tag-chip-remove cs-tag-chip-lock",
+			});
+			setIcon(lockEl, "lock");
+			lockEl.addEventListener("click", (e) => {
+				e.stopPropagation();
+				new Notice(t("editor.idCannotDelete"));
+			});
+			return;
+		}
+
 		// Long IDs are truncated with an ellipsis in CSS; the full value is
 		// shown on hover via the native tooltip.
 		tagEl.setAttribute("title", tag);
@@ -275,15 +320,51 @@ export class TagInput {
 		return [...this.tags];
 	}
 
+	getPinnedTag(): string | null {
+		return this.pinnedTag;
+	}
+
+	/**
+	 * Replace the pinned (name-linked) tag in place, leaving all other tags
+	 * untouched. `null` removes the pinned slot only. If the new value already
+	 * exists as a regular tag it is promoted (deduped) rather than duplicated.
+	 * Does not fire onChange — mirrors the setTags contract.
+	 */
+	setPinnedTag(tag: string | null): void {
+		if (tag === this.pinnedTag) return;
+		const old = this.pinnedTag;
+		this.pinnedTag = tag;
+		const rest = this.tags.filter((t) => t !== old && t !== tag);
+		this.tags = tag ? [tag, ...rest] : rest;
+		this.rerenderTags();
+		this.updateInputState();
+	}
+
 	setTags(tags: string[]): void {
+		this.tags = [...tags];
+		if (this.pinnedTag) {
+			// Preserve the pinned-first invariant; a pinned tag absent from the
+			// new list is no longer pinned.
+			if (this.tags.includes(this.pinnedTag)) {
+				this.tags = [
+					this.pinnedTag,
+					...this.tags.filter((t) => t !== this.pinnedTag),
+				];
+			} else {
+				this.pinnedTag = null;
+			}
+		}
+		this.rerenderTags();
+		this.updateInputState();
+	}
+
+	private rerenderTags(): void {
 		this.tagsRowEl
 			.querySelectorAll(".cs-tag-chip")
 			.forEach((el) => el.remove());
-		this.tags = [...tags];
 		for (const tag of this.tags) {
 			this.renderTag(tag);
 		}
-		this.updateInputState();
 	}
 
 	/** Show an error from external code (e.g. "At least one ID is required") */
