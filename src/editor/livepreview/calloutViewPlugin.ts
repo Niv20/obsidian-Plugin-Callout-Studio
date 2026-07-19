@@ -49,7 +49,7 @@ import {
 	HeadingFoldArrowWidget,
 	HeadingRefLinkWidget,
 } from "./widgets";
-import { getFoldedLines } from "./fold";
+import { getFoldedLines, foldsChanged } from "./fold";
 import { calloutStudioRefresh } from "./refresh";
 
 /** Narrow structural host type (avoids importing the concrete plugin class). */
@@ -114,11 +114,22 @@ export function createCalloutViewPlugin(host: LivePreviewHost) {
 					tr.effects.some((e) => e.is(calloutStudioRefresh)),
 				);
 				const mouseReleased = this.wasMousedown && !mousedown;
+				// A fold/unfold made anywhere — crucially including Obsidian's own
+				// pre-heading fold arrow — changes the folded-range set but need
+				// not touch the doc, viewport or selection. Rebuild so the in-bar
+				// chevron rotates in lockstep with the native arrow (on iOS a
+				// native fold tap trips none of the other triggers, leaving the
+				// chevron stale). Cheap identity check; only meaningful when
+				// heading callouts draw the chevron at all.
+				const foldChanged =
+					host.settings.headingCallouts.enabled &&
+					foldsChanged(update.startState, update.state);
 				if (
 					update.docChanged ||
 					update.viewportChanged ||
 					refreshed ||
 					mouseReleased ||
+					foldChanged ||
 					((update.selectionSet || update.focusChanged) &&
 						!mousedown)
 				) {

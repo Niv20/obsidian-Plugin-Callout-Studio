@@ -28,11 +28,26 @@ import {
 	unfoldEffect,
 } from "@codemirror/language";
 import { StateEffect } from "@codemirror/state";
+import type { EditorState } from "@codemirror/state";
 import type { EditorView } from "@codemirror/view";
 
 interface FoldRange {
 	from: number;
 	to: number;
+}
+
+/**
+ * Whether the folded-range set differs between two editor states. The fold
+ * StateField reuses its RangeSet by reference while nothing fold-related
+ * happens (no effect, no doc change), so an identity check is enough — and it
+ * catches EVERY fold change regardless of origin, including ones dispatched by
+ * Obsidian's own pre-heading fold arrow. Used by the Live Preview ViewPlugin to
+ * rebuild the in-bar chevron in lockstep with the native arrow: on iOS a native
+ * fold tap doesn't otherwise trip any of the plugin's rebuild triggers, so the
+ * chevron would keep its stale direction.
+ */
+export function foldsChanged(a: EditorState, b: EditorState): boolean {
+	return foldedRanges(a) !== foldedRanges(b);
 }
 
 /** The folded range that starts on the given 0-based line, if any. */
