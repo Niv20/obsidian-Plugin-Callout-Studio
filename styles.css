@@ -1881,9 +1881,15 @@ input.cs-input-invalid:focus {
 	.callout-studio-preview-panel {
 		grid-template-columns: 1fr;
 	}
-	/* The palette editor's 2-class width override outranks the generic
-	   stack rule above, so restate the stack at equal specificity. */
-	.callout-studio-palette-editor .callout-studio-preview-panel {
+	/* The palette editor's own 2-class width override (its base grid rule)
+	   lives LATER in this file, so at equal specificity it would win the
+	   source-order tie-break and keep the panel two-column on phone. Restate
+	   the stack at HIGHER specificity (add the modal class → 3 classes) so it
+	   beats that base rule regardless of source order, and the live preview
+	   drops below the options — matching the callout editor on phone. */
+	.callout-studio-editor-modal
+		.callout-studio-palette-editor
+		.callout-studio-preview-panel {
 		grid-template-columns: 1fr;
 	}
 	.callout-studio-preview-col {
