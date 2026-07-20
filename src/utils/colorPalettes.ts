@@ -165,6 +165,7 @@ export function sanitizeCustomPalettes(raw: unknown): CustomPalette[] {
 			textColorDark: p.textColorDark,
 			...(bgGradient ? { bgGradient } : {}),
 			...(bgIntensity !== undefined ? { bgIntensity } : {}),
+			...(p.colorMode === "advanced" ? { colorMode: "advanced" as const } : {}),
 		});
 	}
 	return result;

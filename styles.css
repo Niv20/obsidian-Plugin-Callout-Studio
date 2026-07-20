@@ -2183,6 +2183,62 @@ input.cs-input-invalid:focus {
 	display: none !important;
 }
 
+/* Generic row-hide utility (e.g. the Intensity slider while the palette
+   editor's advanced per-color grid is showing) */
+.cs-row-hidden {
+	display: none !important;
+}
+
+/* Low-emphasis text-link button, e.g. the palette editor's simple/advanced
+   color view toggle */
+/* Obsidian's .setting-item button rule (higher specificity than a bare
+   class) otherwise wins and applies its normal button padding/min-height,
+   which is what made this look like a big button — every box property is
+   reset here with !important to guarantee the low-profile text-link look. */
+.setting-item .cs-link-btn {
+	display: block;
+	appearance: none;
+	width: auto;
+	min-height: 0 !important;
+	margin: 4px 0 0;
+	padding: 0 !important;
+	border: none !important;
+	border-radius: 0 !important;
+	background: none !important;
+	box-shadow: none !important;
+	color: var(--text-accent);
+	font-size: var(--font-smaller);
+	font-family: inherit;
+	font-weight: normal;
+	line-height: 1.2;
+	height: auto;
+	cursor: pointer;
+}
+.setting-item .cs-link-btn:hover {
+	color: var(--text-accent-hover);
+	background: none !important;
+	text-decoration: underline;
+}
+
+/* Sentence + inline link inside a setting's description (e.g. the palette
+   editor's auto-background hint and "revert to a single color" hint) */
+.cs-inline-hint {
+	margin-top: 4px;
+}
+.setting-item .cs-link-btn-inline {
+	display: inline;
+	margin: 0;
+	padding: 0 !important;
+	font-size: inherit;
+}
+
+/* Fixed divider under the palette editor's Style row, shown regardless of
+   Solid/Gradient — modals suppress Obsidian's default setting-item
+   border-top, so this needs an explicit rule instead. */
+.cs-palette-divider {
+	border-top: 1px solid var(--background-modifier-border);
+}
+
 /* Two-option segmented control (Solid|Gradient, Linear|Radial) */
 .cs-segmented {
 	display: inline-flex;

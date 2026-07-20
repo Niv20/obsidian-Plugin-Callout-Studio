@@ -18,15 +18,20 @@ import type { App, SliderComponent } from "obsidian";
 import type { BgGradient, CalloutDefinition, CustomPalette } from "../types";
 import {
 	bgTintFor,
+	contrastRatio,
 	DEFAULT_BG_INTENSITY_GRADIENT,
 	DEFAULT_BG_INTENSITY_SOLID,
 	derivePaletteFromColor,
+	inferOppositeModeColor,
 	MAX_BG_COLOR_AMOUNT,
 	MIN_BG_COLOR_AMOUNT,
 	rotateHue,
 	type DerivedPalette,
 } from "../utils/colorUtils";
-import { createColorSwatchInput } from "../ui/ColorSwatchInput";
+import {
+	createColorSwatchInput,
+	setContrastWarning,
+} from "../ui/ColorSwatchInput";
 import { LiveCalloutPreview } from "./LiveCalloutPreview";
 import { PREVIEW_PLACEHOLDER_ID } from "../constants";
 import { suggestColorName } from "../utils/colorNames";
@@ -77,6 +82,17 @@ export class PaletteEditorModal extends Modal {
 	/** Once the user drags the slider, style toggles stop overwriting it with a per-style default. */
 	private bgIntensityTouched: boolean;
 	private bgIntensitySlider: SliderComponent | null = null;
+	/** Row element for the Intensity slider, hidden while the advanced per-color grid is showing (it only steers derivation, which the advanced grid bypasses). */
+	private bgIntensityRowEl: HTMLElement | null = null;
+	/**
+	 * Whether the color section shows the advanced per-color grid instead of
+	 * the single Base color control. Only takes effect while `bgStyle` is
+	 * "solid" (see renderColorSection); toggling it never changes any color
+	 * value, only which controls are shown.
+	 */
+	private advancedColors: boolean;
+	/** Container rebuilt by renderColorSection() whenever advancedColors or bgStyle changes. */
+	private colorSectionEl: HTMLElement | null = null;
 	// Gradient state. The end (stop-2) colors are tints of gradientToBase,
 	// derived exactly like the six colors are derived from the base color.
 	private angleDeg: number;
@@ -144,6 +160,7 @@ export class PaletteEditorModal extends Modal {
 					textColorDark: this.existing.textColorDark,
 				}
 			: derivePaletteFromColor(this.baseColor, this.bgIntensity);
+		this.advancedColors = this.existing?.colorMode === "advanced";
 		this.angleDeg = g?.angleDeg ?? DEFAULT_GRADIENT_ANGLE;
 		// A saved gradient's end colors are authoritative (derivation is not
 		// invertible); a fresh gradient starts from a hue-shifted base color
@@ -214,16 +231,15 @@ export class PaletteEditorModal extends Modal {
 		this.nameErrorEl = nameSetting.descEl.createDiv({ cls: "cs-tag-error" });
 
 		this.buildBgStyleRow(adjustCol);
+		// Always visible, regardless of Solid/Gradient: modals suppress
+		// Obsidian's default setting-item border-top (see buildBgStyleRow's
+		// neighbors), so this needs an explicit rule instead.
+		adjustCol.createDiv({ cls: "cs-palette-divider" });
 
-		const baseSetting = new Setting(adjustCol).setName(t("palette.baseColor"));
-		createColorSwatchInput(
-			baseSetting.controlEl,
-			this.baseColor,
-			(hex) => {
-				this.baseColor = hex;
-				this.applyDerived();
-			},
-		);
+		this.colorSectionEl = adjustCol.createDiv({
+			cls: "cs-palette-color-section",
+		});
+		this.renderColorSection();
 
 		this.buildGradientToRow(adjustCol);
 
@@ -368,6 +384,10 @@ export class PaletteEditorModal extends Modal {
 					this.preview?.refresh();
 				}
 				this.updateGradientVisibility();
+				// The advanced grid and the Intensity row are Solid-only; a switch
+				// to Gradient hides them (colors/intensity stay exactly as they
+				// were, ready to reappear if the user switches back to Solid).
+				this.renderColorSection();
 			},
 		);
 	}
@@ -380,27 +400,221 @@ export class PaletteEditorModal extends Modal {
 	 * color in Gradient. Works in whole percent; the stored value is a 0..1
 	 * fraction. Re-deriving on change overwrites the six colors and gradient
 	 * tints (the same contract as changing the base color).
+	 *
+	 * Hidden while the advanced per-color grid is showing: intensity only
+	 * steers the Base-color derivation, which the advanced grid bypasses
+	 * (its rows write colors directly).
 	 */
 	private buildBgIntensityRow(parent: HTMLElement): void {
-		new Setting(parent)
-			.setName(t("palette.bgIntensity"))
-			.addSlider((slider) => {
-				this.bgIntensitySlider = slider;
-				slider
-					.setLimits(
-						Math.round(MIN_BG_COLOR_AMOUNT * 100),
-						Math.round(MAX_BG_COLOR_AMOUNT * 100),
-						1,
-					)
-					.setValue(Math.round(this.bgIntensity * 100))
-					.setDynamicTooltip()
-					.setInstant(true)
-					.onChange((v) => {
-						this.bgIntensity = v / 100;
-						this.bgIntensityTouched = true;
-						this.applyDerived();
-					});
-			});
+		const setting = new Setting(parent).setName(t("palette.bgIntensity"));
+		this.bgIntensityRowEl = setting.settingEl;
+		this.bgIntensityRowEl.toggleClass(
+			"cs-row-hidden",
+			this.advancedColors && this.bgStyle === "solid",
+		);
+		setting.addSlider((slider) => {
+			this.bgIntensitySlider = slider;
+			slider
+				.setLimits(
+					Math.round(MIN_BG_COLOR_AMOUNT * 100),
+					Math.round(MAX_BG_COLOR_AMOUNT * 100),
+					1,
+				)
+				.setValue(Math.round(this.bgIntensity * 100))
+				.setDynamicTooltip()
+				.setInstant(true)
+				.onChange((v) => {
+					this.bgIntensity = v / 100;
+					this.bgIntensityTouched = true;
+					this.applyDerived();
+				});
+		});
+	}
+
+	/**
+	 * Rebuilds the color section: the single Base color control, or — only
+	 * while Solid and opted in — the advanced per-color grid. Called on open
+	 * and whenever advancedColors or bgStyle changes; never touches any
+	 * color value, purely a view switch (see the class-level doc on
+	 * advancedColors).
+	 */
+	private renderColorSection(): void {
+		if (!this.colorSectionEl) return;
+		this.colorSectionEl.empty();
+		const showAdvanced = this.advancedColors && this.bgStyle === "solid";
+		this.bgIntensityRowEl?.toggleClass("cs-row-hidden", showAdvanced);
+		if (showAdvanced) {
+			this.buildAdvancedColorRows(this.colorSectionEl);
+		} else {
+			this.buildSimpleColorRow(this.colorSectionEl);
+		}
+	}
+
+	/**
+	 * The default color control: one Base color swatch that derives all six
+	 * colors (see applyDerived). While Solid, an inline hint explains the
+	 * auto-matched background and offers the advanced per-color grid via a
+	 * short link — hidden in Gradient mode, which has no advanced view
+	 * (requirement: Gradient is never affected by this feature).
+	 */
+	private buildSimpleColorRow(parent: HTMLElement): void {
+		const baseSetting = new Setting(parent).setName(t("palette.baseColor"));
+		createColorSwatchInput(baseSetting.controlEl, this.baseColor, (hex) => {
+			this.baseColor = hex;
+			this.applyDerived();
+		});
+		if (this.bgStyle === "solid") {
+			this.renderInlineLinkHint(
+				baseSetting.descEl,
+				"palette.baseColorHint",
+				"palette.baseColorHintLink",
+				() => {
+					this.advancedColors = true;
+					this.renderColorSection();
+				},
+			);
+		}
+	}
+
+	/**
+	 * Renders `t(textKey)` — which must contain a literal "{{link}}" token —
+	 * as plain text with a single low-emphasis inline link standing in for
+	 * the token, instead of a full-width button. Used for the Base color
+	 * auto-background hint and the advanced grid's "revert to a single
+	 * color" hint.
+	 */
+	private renderInlineLinkHint(
+		parent: HTMLElement,
+		textKey: string,
+		linkKey: string,
+		onClick: () => void,
+	): void {
+		const [before, after] = t(textKey).split("{{link}}");
+		const line = parent.createDiv({ cls: "cs-inline-hint" });
+		if (before) line.createSpan({ text: before });
+		const link = line.createEl("button", {
+			cls: "cs-link-btn cs-link-btn-inline",
+			text: t(linkKey),
+		});
+		link.addEventListener("click", (e) => {
+			e.preventDefault();
+			onClick();
+		});
+		if (after) line.createSpan({ text: after });
+	}
+
+	/**
+	 * Advanced per-color grid: independent Accent/Background/Text swatches
+	 * for ONLY the current Obsidian theme mode. Editing one infers a
+	 * matching value for the hidden mode via inferOppositeModeColor (mirror
+	 * lightness, then contrast-correct for Accent/Text — see that
+	 * function's doc). Deliberately per-channel: editing Accent never
+	 * touches Background or Text. Contrast is enforced as a non-blocking
+	 * warning badge, not an auto-fix, so an edit here never silently
+	 * changes a value the user didn't touch.
+	 */
+	private buildAdvancedColorRows(parent: HTMLElement): void {
+		const isDark = activeDocument.body.classList.contains("theme-dark");
+
+		const header = new Setting(parent).setName(t("palette.advancedColors"));
+		header.setDesc(
+			t("palette.advancedColorsHint", {
+				mode: isDark ? t("palette.darkMode") : t("palette.lightMode"),
+			}),
+		);
+		this.renderInlineLinkHint(
+			header.descEl,
+			"palette.revertHint",
+			"palette.revertHintLink",
+			() => {
+				this.advancedColors = false;
+				this.renderColorSection();
+			},
+		);
+
+		const accentKey: "colorLight" | "colorDark" = isDark
+			? "colorDark"
+			: "colorLight";
+		const accentOppositeKey: "colorLight" | "colorDark" = isDark
+			? "colorLight"
+			: "colorDark";
+		const bgKey: "bgColorLight" | "bgColorDark" = isDark
+			? "bgColorDark"
+			: "bgColorLight";
+		const bgOppositeKey: "bgColorLight" | "bgColorDark" = isDark
+			? "bgColorLight"
+			: "bgColorDark";
+		const textKey: "textColorLight" | "textColorDark" = isDark
+			? "textColorDark"
+			: "textColorLight";
+		const textOppositeKey: "textColorLight" | "textColorDark" = isDark
+			? "textColorLight"
+			: "textColorDark";
+
+		const accentSwatch = createColorSwatchInput(
+			new Setting(parent).setName(t("palette.accentColor")).controlEl,
+			this.colors[accentKey],
+			(hex) => {
+				this.colors[accentKey] = hex;
+				this.colors[accentOppositeKey] = inferOppositeModeColor(
+					hex,
+					isDark,
+					this.colors[bgOppositeKey],
+					3,
+				);
+				refreshWarnings();
+				this.preview?.refresh();
+			},
+		);
+
+		createColorSwatchInput(
+			new Setting(parent).setName(t("palette.backgroundColorChannel"))
+				.controlEl,
+			this.colors[bgKey],
+			(hex) => {
+				this.colors[bgKey] = hex;
+				this.colors[bgOppositeKey] = inferOppositeModeColor(
+					hex,
+					isDark,
+					null,
+					null,
+				);
+				refreshWarnings();
+				this.preview?.refresh();
+			},
+		);
+
+		const textSwatch = createColorSwatchInput(
+			new Setting(parent).setName(t("palette.textColorChannel")).controlEl,
+			this.colors[textKey],
+			(hex) => {
+				this.colors[textKey] = hex;
+				this.colors[textOppositeKey] = inferOppositeModeColor(
+					hex,
+					isDark,
+					this.colors[bgOppositeKey],
+					4.5,
+				);
+				refreshWarnings();
+				this.preview?.refresh();
+			},
+		);
+
+		// Re-checks the two contrast-dependent swatches (Accent >=3:1, Text
+		// >=4.5:1) against the current mode's bg after any of the three rows
+		// changes — a non-blocking heads-up, never a block on Save.
+		const refreshWarnings = (): void => {
+			const bg = this.colors[bgKey];
+			setContrastWarning(
+				accentSwatch.warnEl,
+				contrastRatio(this.colors[accentKey], bg) < 3,
+			);
+			setContrastWarning(
+				textSwatch.warnEl,
+				contrastRatio(this.colors[textKey], bg) < 4.5,
+			);
+		};
+		refreshWarnings();
 	}
 
 	/**
@@ -605,6 +819,10 @@ export class PaletteEditorModal extends Modal {
 				...this.colors,
 				bgIntensity: this.bgIntensity,
 				...(gradient ? { bgGradient: gradient } : {}),
+				// Saved regardless of the current bgStyle so a palette left in
+				// advanced mode while Gradient was selected still reopens
+				// advanced if the user switches back to Solid later.
+				...(this.advancedColors ? { colorMode: "advanced" as const } : {}),
 			};
 		}
 		this.close();

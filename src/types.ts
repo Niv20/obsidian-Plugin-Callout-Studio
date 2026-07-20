@@ -146,6 +146,16 @@ export interface CustomPalette {
 	 * `bgColorLight`/`bgColorDark` (and the gradient tints) when applied.
 	 */
 	bgIntensity?: number;
+	/**
+	 * Which color-editing view the Palette Editor should open in. `"advanced"`
+	 * shows independent Accent/Background/Text rows for the current theme mode
+	 * (each edit infers the opposite mode's value); absent/`"simple"` shows the
+	 * single Base color control that derives all six colors. Purely editor UI
+	 * state - never read by `CSSInjector` or baked onto a `CalloutDefinition`.
+	 * Only meaningful while the background is Solid; a Gradient palette ignores
+	 * it (Gradient has no advanced per-color view).
+	 */
+	colorMode?: "simple" | "advanced";
 }
 
 export type MaterialIconStyle = "outlined" | "filled" | "rounded" | "sharp";

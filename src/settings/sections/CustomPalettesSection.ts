@@ -61,8 +61,12 @@ export function renderCustomPalettesSection(
 		Object.assign(palette, result);
 		// Object.assign never removes keys: when the edit switched the palette
 		// to another background style, the absent bgGradient must still clear
-		// the stored one (and cascade as an explicit undefined below).
+		// the stored one (and cascade as an explicit undefined below). Same
+		// reasoning for colorMode: toggling back to simple and saving must
+		// actually clear a stale "advanced" flag, not leave the editor
+		// auto-expanded next time it's opened.
 		palette.bgGradient = result.bgGradient;
+		palette.colorMode = result.colorMode;
 		const {
 			colorLight,
 			colorDark,
