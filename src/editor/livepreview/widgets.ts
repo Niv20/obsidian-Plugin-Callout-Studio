@@ -19,10 +19,12 @@ import type { CalloutRegistry } from "../../manager/CalloutRegistry";
 import { findWikilinkCalloutRefs } from "../calloutTokens";
 import { t } from "../../i18n";
 import {
+	CSS_ANIM_IN,
 	CSS_FOLD_ARROW,
 	CSS_REF_LINK,
 	CSS_REF_TOKEN_LINK,
 	buildCalloutTokenDom,
+	isStartupEntranceActive,
 	resolveCalloutDef,
 	type CalloutTokenVariant,
 } from "../renderShared";
@@ -347,6 +349,9 @@ export class HeadingFoldArrowWidget extends WidgetType {
 		const arrow = view.dom.ownerDocument.createElement("span");
 		arrow.className = CSS_FOLD_ARROW;
 		if (this.folded) arrow.classList.add("cs-collapsed");
+		// Fade the chevron in during the startup entrance window (trails the
+		// bar and token — see the staggered delays in styles.css).
+		if (isStartupEntranceActive()) arrow.classList.add(CSS_ANIM_IN);
 		setIcon(arrow, "chevron-down");
 		arrow.setAttribute("aria-label", t("heading.toggleFold"));
 		arrow.setAttribute("title", t("heading.toggleFold"));

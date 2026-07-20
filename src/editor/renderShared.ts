@@ -55,6 +55,48 @@ export const CSS_REF_TOKEN_LINK = "cs-ref-token-link";
  */
 export const CSS_REF_LINK = "cs-ref-link";
 
+/**
+ * Class stamped on freshly built inline pills / heading tokens / reading-view
+ * heading bars / fold chevrons while the startup entrance window is open, so
+ * they animate in (see styles.css). Never stamped once the window has closed —
+ * ordinary file opens, scrolling and typing must not animate.
+ */
+export const CSS_ANIM_IN = "cs-anim-in";
+
+/**
+ * Startup entrance state. When the plugin loads while the UI is already
+ * visible (mobile FOUC, or a desktop enable/reload where a note is on screen),
+ * the callout DOM transforms arrive AFTER the raw text was painted, so we let
+ * them animate in gently instead of snapping. The window is time-boxed; once
+ * it closes, rendering is instantaneous again.
+ */
+let startupEntranceActive = false;
+
+/** True while the startup entrance window is open (see beginStartupEntranceWindow). */
+export function isStartupEntranceActive(): boolean {
+	return startupEntranceActive;
+}
+
+/**
+ * Open the startup entrance window: tag `<body>` with `cs-anim-window` (arms
+ * the Live Preview heading-bar transition, which needs a class on an ancestor
+ * because the bar element already exists) and flip the module flag so newly
+ * built token/bar/chevron DOM gets `cs-anim-in`. Returns a cleanup that closes
+ * the window; call it from both the auto-close timeout and plugin unload.
+ * Idempotent-safe: cleanup only clears state it set.
+ */
+export function beginStartupEntranceWindow(doc: Document): () => void {
+	startupEntranceActive = true;
+	doc.body?.classList.add("cs-anim-window");
+	let closed = false;
+	return () => {
+		if (closed) return;
+		closed = true;
+		startupEntranceActive = false;
+		doc.body?.classList.remove("cs-anim-window");
+	};
+}
+
 export interface ResolvedCalloutDef {
 	/** Definition to render with (fallback def when the id is unrecognized). */
 	def: CalloutDefinition | undefined;
@@ -179,6 +221,11 @@ export function buildCalloutTokenDom(
 	const root = doc.createElement("span");
 	root.classList.add(VARIANT_CLASS[variant]);
 	if (unknown) root.classList.add(CSS_UNKNOWN);
+	// Animate the pill / heading token in during the startup entrance window.
+	// Ref tokens (outline, links) load late and are excluded by design.
+	if (variant !== "ref" && startupEntranceActive) {
+		root.classList.add(CSS_ANIM_IN);
+	}
 	root.setAttribute("data-callout", normalizeCalloutId(rawId));
 
 	const iconEl = doc.createElement("span");

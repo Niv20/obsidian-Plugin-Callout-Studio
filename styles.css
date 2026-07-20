@@ -2683,6 +2683,82 @@ input.cs-input-invalid:focus {
 	unicode-bidi: isolate;
 }
 
+/* ══ Startup entrance animation ═══════════════════════════════════ */
+
+/* On a slow launch (mobile every time, desktop on a mid-session enable /
+   reload) the note's raw text paints before the plugin transforms it, so the
+   heading bar, pill, icon and fold chevron would otherwise SNAP into place.
+   During the time-boxed entrance window (main.ts opens it by tagging <body>
+   with .cs-anim-window and stamping fresh token/bar/chevron DOM with
+   .cs-anim-in) they instead ease in. One-shot, opacity/transform/background
+   only, on a handful of elements — negligible cost, and nothing animates once
+   the window closes (ordinary file opens, scrolling and typing never do). */
+@keyframes cs-token-in {
+	from {
+		opacity: 0;
+		transform: scale(0.92);
+	}
+}
+@keyframes cs-bar-in {
+	from {
+		background-color: transparent;
+	}
+}
+@keyframes cs-fade-in {
+	from {
+		opacity: 0;
+	}
+}
+
+/* Live Preview heading bar: the .cm-line already exists (it held the raw
+   text), the view plugin just adds .cs-heading-callout to it — so a transition
+   scoped to the open window fires on that class flip, and never on lines that
+   are built already-styled. It also sidesteps the bar's !important padding/
+   color, which a keyframe could not override. */
+body.cs-anim-window .cs-heading-callout {
+	transition:
+		background-color 350ms ease-out,
+		color 350ms ease-out,
+		padding 250ms ease-out;
+}
+
+/* Reading-view heading bar: the hN is created fresh WITH the bar class, so a
+   transition has no prior state to animate from — use a keyframe instead. */
+.cs-heading-callout.cs-anim-in {
+	animation: cs-bar-in 350ms ease-out;
+}
+
+/* Pill and in-heading token: fade + a small scale from the element centre
+   (symmetric, so it is safe under RTL). Applied to the token ROOT, never the
+   icon box, whose own translateY offset must be preserved. Staggered a beat
+   after the bar. `backwards` holds the start frame through the delay. */
+.cs-inline-callout.cs-anim-in,
+.cs-heading-token.cs-anim-in {
+	animation: cs-token-in 300ms ease-out backwards;
+	animation-delay: 60ms;
+}
+
+/* Fold chevron trails the bar and token. */
+.cs-fold-arrow.cs-anim-in {
+	animation: cs-fade-in 300ms ease-out backwards;
+	animation-delay: 120ms;
+}
+
+/* Respect reduced-motion, and never animate into a print/PDF snapshot. */
+@media (prefers-reduced-motion: reduce) {
+	body.cs-anim-window .cs-heading-callout {
+		transition: none;
+	}
+	.cs-anim-in {
+		animation: none;
+	}
+}
+@media print {
+	.cs-anim-in {
+		animation: none;
+	}
+}
+
 /* ══ Global settings section & per-role style modals ══════════════ */
 
 /* "Global settings" section: an intro line followed by one Setting row per

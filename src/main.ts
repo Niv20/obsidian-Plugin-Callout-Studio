@@ -8,7 +8,7 @@
  * Keep this file focused on lifecycle only — all feature logic lives in
  * the sub-modules under manager/, editor/, settings/, etc.
  */
-import { MarkdownView, Notice, Plugin } from "obsidian";
+import { MarkdownView, Notice, Platform, Plugin } from "obsidian";
 import type {
 	CalloutIcon,
 	MaterialIconStyle,
@@ -26,6 +26,7 @@ import { CalloutAutoComplete } from "./editor/AutoComplete";
 import { LinkSuggestDecorator } from "./editor/LinkSuggestDecorator";
 import { registerContextMenu } from "./editor/contextmenu";
 import { createCalloutViewPlugin } from "./editor/livepreview/calloutViewPlugin";
+import { beginStartupEntranceWindow } from "./editor/renderShared";
 import { refreshAllMarkdownEditors } from "./editor/livepreview/refresh";
 import { OutlineDecorator } from "./outline/OutlineDecorator";
 import { createCalloutReadingPostProcessor } from "./reading/calloutPostProcessor";
@@ -34,6 +35,13 @@ import { CalloutStudioAPI } from "./api/PluginAPI";
 import { FirstRunScanModal } from "./utils/FirstRunScanModal";
 import { HEAVY_VAULT_FILE_THRESHOLD } from "./constants";
 import { setLocale, t } from "./i18n";
+
+/**
+ * How long the startup entrance animation window stays open. Long enough to
+ * cover the initial FOUC render (and a beat of early scrolling) on a slow
+ * mobile launch, short enough that ordinary interaction never animates.
+ */
+const STARTUP_ENTRANCE_MS = 3000;
 
 export default class CalloutStudioPlugin extends Plugin {
 	registry!: CalloutRegistry;
@@ -58,6 +66,13 @@ export default class CalloutStudioPlugin extends Plugin {
 	}
 
 	async onload() {
+		// Was the UI already on screen when we loaded? True on mobile every
+		// launch (plugins load after the note paints) and on desktop only for a
+		// mid-session enable/reload or a lazy-loader — exactly the cases where
+		// our DOM transforms arrive late and should animate in (see the startup
+		// entrance window opened at the end of onload). Read before any await.
+		const uiWasVisible = this.app.workspace.layoutReady;
+
 		this.registry = new CalloutRegistry();
 
 		// Startup fast path — synchronously re-apply last session's CSS from
@@ -104,6 +119,20 @@ export default class CalloutStudioPlugin extends Plugin {
 
 		// Live Preview rendering for heading callouts and inline pills.
 		this.registerEditorExtension(createCalloutViewPlugin(this));
+
+		// Open the startup entrance window if the UI was already visible, so the
+		// heading bars, pills, icons and fold chevrons that these render surfaces
+		// are about to build animate in gently instead of snapping over the raw
+		// text the user briefly saw. Done here — synchronously, before the first
+		// render pass — so `body.cs-anim-window` and the flag are set in time.
+		if (Platform.isMobile || uiWasVisible) {
+			const closeEntrance = beginStartupEntranceWindow(activeDocument);
+			const timer = window.setTimeout(closeEntrance, STARTUP_ENTRANCE_MS);
+			this.register(() => {
+				window.clearTimeout(timer);
+				closeEntrance();
+			});
+		}
 
 		// Sub-managers (composition keeps main.ts focused on lifecycle).
 		this.materialSvg = new MaterialSvgManager({

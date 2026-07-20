@@ -32,6 +32,7 @@ import {
 	stripInlineCode,
 } from "../editor/calloutTokens";
 import {
+	CSS_ANIM_IN,
 	CSS_HEADING_LINE,
 	CSS_HEADING_TITLE,
 	CSS_HEADING_TOKEN,
@@ -40,6 +41,7 @@ import {
 	CSS_TOKEN_NAME,
 	CSS_UNKNOWN,
 	buildCalloutTokenDom,
+	isStartupEntranceActive,
 	resolveCalloutDef,
 } from "../editor/renderShared";
 import { applyTitleGradient } from "./gradientTitleText";
@@ -174,6 +176,10 @@ function transformHeading(
 	const { def, unknown } = resolveCalloutDef(host.registry, rawId);
 	h.classList.add(CSS_HEADING_LINE);
 	if (unknown) h.classList.add(CSS_UNKNOWN);
+	// This hN is created fresh with the bar class, so the Live Preview
+	// background-color transition can't fire on it — animate via keyframe
+	// instead, but only during the startup entrance window.
+	if (isStartupEntranceActive()) h.classList.add(CSS_ANIM_IN);
 	h.setAttribute("data-callout", normalizeCalloutId(rawId));
 
 	// Strip the `[!id]± ` prefix from the rendered text and put the token
