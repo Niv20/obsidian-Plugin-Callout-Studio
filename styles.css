@@ -76,7 +76,7 @@
 	font-size: var(--font-smallest);
 	font-weight: 400;
 	line-height: 1;
-	text-decoration-line: underline;
+	text-decoration: underline;
 	cursor: pointer;
 }
 
@@ -2588,10 +2588,10 @@ input.cs-input-invalid:focus {
 }
 .callout-studio-footer a {
 	color: var(--text-accent);
-	text-decoration-line: none;
+	text-decoration: none;
 }
 .callout-studio-footer a:hover {
-	text-decoration-line: underline;
+	text-decoration: underline;
 }
 
 /* ══ Heading & inline callout tokens ═══════════════════════════ */
@@ -2819,7 +2819,7 @@ input.cs-input-invalid:focus {
    stays underline-free. */
 .cs-ref-link {
 	color: var(--link-color, var(--text-accent));
-	text-decoration-line: var(--link-decoration, underline);
+	text-decoration: var(--link-decoration, underline);
 	cursor: text;
 	unicode-bidi: isolate;
 }
