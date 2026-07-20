@@ -121,6 +121,7 @@ export const ar: Record<string, string> = {
 	"settings.headingSpacingGroup": "تباعد العنوان",
 	"settings.headingPadVertical": "التباعد الرأسي",
 	"settings.headingIconIndent": "المسافة البادئة للأيقونة",
+	"settings.headingGap": "المسافة بين العناوين",
 	"settings.refGroup": "المخطط التفصيلي والروابط",
 	"settings.styleDemoName": "مثال",
 	"settings.previewTitle": "معاينة",

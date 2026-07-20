@@ -156,6 +156,7 @@ export const he: Record<string, string> = {
 	"settings.headingSpacingGroup": "ריווח הכותרת",
 	"settings.headingPadVertical": "ריווח אנכי",
 	"settings.headingIconIndent": "הזחת האייקון",
+	"settings.headingGap": "מרווח בין כותרות",
 	"settings.refGroup": "מתאר וקישורים",
 	"settings.styleDemoName": "דוגמה",
 	"settings.previewTitle": "תצוגה מקדימה",

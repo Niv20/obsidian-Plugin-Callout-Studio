@@ -121,6 +121,7 @@ export const uk: Record<string, string> = {
 	"settings.headingSpacingGroup": "Інтервал заголовка",
 	"settings.headingPadVertical": "Вертикальний інтервал",
 	"settings.headingIconIndent": "Відступ іконки",
+	"settings.headingGap": "Відстань між заголовками",
 	"settings.refGroup": "План та посилання",
 	"settings.styleDemoName": "Приклад",
 	"settings.previewTitle": "Попередній перегляд",

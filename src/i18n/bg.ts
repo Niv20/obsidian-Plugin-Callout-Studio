@@ -112,6 +112,7 @@ export const bg: Record<string, string> = {
 	"settings.headingSpacingGroup": "Разстояние на заглавието",
 	"settings.headingPadVertical": "Вертикално разстояние",
 	"settings.headingIconIndent": "Отстъп на иконата",
+	"settings.headingGap": "Разстояние между заглавията",
 	"settings.refGroup": "План и връзки",
 	"settings.styleDemoName": "Пример",
 	"settings.previewTitle": "Преглед",

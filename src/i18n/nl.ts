@@ -121,6 +121,7 @@ export const nl: Record<string, string> = {
 	"settings.headingSpacingGroup": "Titelafstand",
 	"settings.headingPadVertical": "Verticale afstand",
 	"settings.headingIconIndent": "Pictograminspringing",
+	"settings.headingGap": "Ruimte tussen koppen",
 	"settings.refGroup": "Overzicht en links",
 	"settings.styleDemoName": "Voorbeeld",
 	"settings.previewTitle": "Voorbeeld",

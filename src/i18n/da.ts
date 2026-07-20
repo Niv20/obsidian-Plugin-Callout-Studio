@@ -112,6 +112,7 @@ export const da: Record<string, string> = {
 	"settings.headingSpacingGroup": "Titelafstand",
 	"settings.headingPadVertical": "Lodret afstand",
 	"settings.headingIconIndent": "Ikonindrykning",
+	"settings.headingGap": "Afstand mellem overskrifter",
 	"settings.refGroup": "Disposition og links",
 	"settings.styleDemoName": "Eksempel",
 	"settings.previewTitle": "Forhåndsvisning",

@@ -121,6 +121,7 @@ export const fa: Record<string, string> = {
 	"settings.headingSpacingGroup": "فاصله‌گذاری عنوان",
 	"settings.headingPadVertical": "فاصله عمودی",
 	"settings.headingIconIndent": "تورفتگی آیکون",
+	"settings.headingGap": "فاصله بین سرفصل‌ها",
 	"settings.refGroup": "طرح‌کلی و پیوندها",
 	"settings.styleDemoName": "نمونه",
 	"settings.previewTitle": "پیش‌نمایش",

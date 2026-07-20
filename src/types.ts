@@ -280,6 +280,15 @@ export interface HeadingFrameStyleSettings extends RoleFrameStyleSettings {
 	 * px. Keeps the icon off the very edge; independent of heading font size.
 	 */
 	paddingStart: number;
+	/**
+	 * Vertical gap *above* each heading bar, in em (the *outer* margin, distinct
+	 * from paddingTop which is the inner text spacing). This is the knob that
+	 * separates heading callouts from whatever precedes them — most importantly
+	 * from each other: several collapsed heading callouts stacked back-to-back
+	 * otherwise render touching, since the plugin emits no margin and the theme's
+	 * default heading spacing is tiny. Default 0 → theme spacing is left intact.
+	 */
+	marginTop: number;
 }
 
 /**

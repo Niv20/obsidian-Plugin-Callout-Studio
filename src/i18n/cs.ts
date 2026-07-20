@@ -121,6 +121,7 @@ export const cs: Record<string, string> = {
 	"settings.headingSpacingGroup": "Rozestupy nadpisu",
 	"settings.headingPadVertical": "Svislé rozestupy",
 	"settings.headingIconIndent": "Odsazení ikony",
+	"settings.headingGap": "Mezera mezi nadpisy",
 	"settings.refGroup": "Osnova a odkazy",
 	"settings.styleDemoName": "Ukázka",
 	"settings.previewTitle": "Náhled",

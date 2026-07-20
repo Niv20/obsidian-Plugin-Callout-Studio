@@ -121,6 +121,7 @@ export const es: Record<string, string> = {
 	"settings.headingSpacingGroup": "Espaciado del título",
 	"settings.headingPadVertical": "Espaciado vertical",
 	"settings.headingIconIndent": "Sangría del icono",
+	"settings.headingGap": "Espacio entre encabezados",
 	"settings.refGroup": "Esquema y enlaces",
 	"settings.styleDemoName": "Ejemplo",
 	"settings.previewTitle": "Vista previa",

@@ -158,6 +158,7 @@ export const en: Record<string, string> = {
 	"settings.headingSpacingGroup": "Title spacing",
 	"settings.headingPadVertical": "Vertical spacing",
 	"settings.headingIconIndent": "Icon indent",
+	"settings.headingGap": "Spacing between headers",
 	"settings.refGroup": "Outline and links",
 	"settings.styleDemoName": "Example",
 	"settings.previewTitle": "Preview",

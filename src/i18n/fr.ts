@@ -121,6 +121,7 @@ export const fr: Record<string, string> = {
 	"settings.headingSpacingGroup": "Espacement du titre",
 	"settings.headingPadVertical": "Espacement vertical",
 	"settings.headingIconIndent": "Retrait de l'icône",
+	"settings.headingGap": "Espacement entre les titres",
 	"settings.refGroup": "Plan et liens",
 	"settings.styleDemoName": "Exemple",
 	"settings.previewTitle": "Aperçu",

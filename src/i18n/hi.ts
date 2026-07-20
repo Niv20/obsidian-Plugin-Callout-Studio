@@ -121,6 +121,7 @@ export const hi: Record<string, string> = {
 	"settings.headingSpacingGroup": "शीर्षक दूरी",
 	"settings.headingPadVertical": "ऊर्ध्वाधर दूरी",
 	"settings.headingIconIndent": "आइकन इंडेंट",
+	"settings.headingGap": "शीर्षकों के बीच स्थान",
 	"settings.refGroup": "आउटलाइन और लिंक",
 	"settings.styleDemoName": "उदाहरण",
 	"settings.previewTitle": "पूर्वावलोकन",

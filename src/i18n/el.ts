@@ -112,6 +112,7 @@ export const el: Record<string, string> = {
 	"settings.headingSpacingGroup": "Απόσταση τίτλου",
 	"settings.headingPadVertical": "Κατακόρυφη απόσταση",
 	"settings.headingIconIndent": "Εσοχή εικονιδίου",
+	"settings.headingGap": "Απόσταση μεταξύ επικεφαλίδων",
 	"settings.refGroup": "Περίγραμμα και σύνδεσμοι",
 	"settings.styleDemoName": "Παράδειγμα",
 	"settings.previewTitle": "Προεπισκόπηση",

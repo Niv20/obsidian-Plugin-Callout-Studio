@@ -121,6 +121,7 @@ export const ro: Record<string, string> = {
 	"settings.headingSpacingGroup": "Spațierea titlului",
 	"settings.headingPadVertical": "Spațiere verticală",
 	"settings.headingIconIndent": "Indentare pictogramă",
+	"settings.headingGap": "Spațiere între titluri",
 	"settings.refGroup": "Schiță și linkuri",
 	"settings.styleDemoName": "Exemplu",
 	"settings.previewTitle": "Previzualizare",

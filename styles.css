@@ -493,6 +493,47 @@
 	margin-bottom: 0;
 }
 
+/* ─── "Spacing between headers" drag demo ─────────────────────────
+   The gap margin (heading.marginTop) only applies to reading-view headings
+   (.cs-heading-callout:not(.cm-line)), which the live editor preview never
+   shows. While the gap slider is dragged, only the editor *body* is swapped
+   for this stacked reading-view demo — the Preview card's frame and "Preview"
+   header stay put, so it reads as the same Preview box: bodyless heading bars
+   stacked exactly as collapsed callouts do in a note, with only the gap margin
+   between them — no animation, no special rendering. The gap itself is driven
+   by an inline --cs-heading-gap-top (set from the slider value in
+   GlobalStyleModal), so it tracks the thumb 1:1 all the way down to a hard 0. */
+.cs-gap-demo {
+	display: none;
+	min-height: 120px;
+	max-height: 340px;
+	overflow: auto;
+	padding: 12px 16px;
+	background: var(--background-primary);
+}
+
+.callout-studio-preview-col.cs-showing-gap-demo .cs-live-preview-body {
+	display: none;
+}
+
+.callout-studio-preview-col.cs-showing-gap-demo .cs-gap-demo {
+	display: block;
+}
+
+/* Nothing but the gap margin separates the stacked bars: strip every child's
+   bottom margin (theme heading margins would otherwise add invisible slack the
+   slider can't remove), leaving the top gap var as the sole spacer. */
+.cs-gap-demo-render > * {
+	margin-bottom: 0 !important;
+}
+
+/* First bar sits flush at the demo's top — the gap only ever separates one
+   bar from the previous one, never the top edge (!important to beat the gap
+   var's own !important margin-top). */
+.cs-gap-demo-render > :first-child {
+	margin-top: 0 !important;
+}
+
 /* ─── Icon Preview in Editor ──────────────────────────────────── */
 
 .callout-studio-icon-preview {
@@ -2543,6 +2584,27 @@ input.cs-input-invalid:focus {
 	color: rgb(var(--cs-color-rgb, 68, 138, 255)) !important;
 }
 
+/* Gap above the bar (Callout types → Heading → Global callout style). Static
+   default of 0 so "no gap" is an explicit, enforced value — not "whatever the
+   active theme's own hN margin-top happens to be" — matching every sibling
+   heading slider's var+fallback pattern above. Kept as its own :not(.cm-line)
+   rule rather than folded into .cs-heading-callout: a top margin on a
+   CodeMirror .cm-line can desync the editor's line-height/cursor accounting
+   (margin sits outside the box CM6 measures), so no margin-top rule — not
+   even an inert zero — should ever target .cm-line. Live Preview gets the
+   same visual gap from HeadingGapWidget (editor/livepreview/headingGapWidget.ts),
+   a real block-level DOM node CM6 measures correctly instead. */
+.cs-heading-callout:not(.cm-line) {
+	margin-top: var(--cs-heading-gap-top, 0em) !important;
+	/* Zero the theme's heading margin-bottom so the gap slider (margin-top) is
+	   the *sole* thing between two stacked heading bars — otherwise a collapsed
+	   heading callout keeps invisible slack the slider can't remove, and at
+	   gap 0 the bars still don't touch. This also makes reading view match
+	   Live Preview, where the HeadingGapWidget already gives gap-only spacing,
+	   and makes the "Spacing between headers" demo read 1:1 with reality. */
+	margin-bottom: 0 !important;
+}
+
 /* The [!id] token inside a heading bar (icon + optional name). */
 .cs-heading-token {
 	display: inline-flex;
@@ -2550,6 +2612,18 @@ input.cs-input-invalid:focus {
 	gap: 0.35em;
 	vertical-align: baseline;
 	unicode-bidi: isolate;
+}
+
+/* Gap between the icon-only token and a custom title (reading view only:
+   `[!id] Title` headings, where the token drops its name span — see
+   CalloutTokenWidget's !hasTitle flag). Live Preview never needs this: its
+   token widget replaces only the raw `[!id]` text, leaving the real space
+   character before the title in the DOM as natural inline spacing. Reading
+   view's RENDERED_HEADING_TOKEN_RE match consumes that trailing whitespace
+   when stripping the token prefix (calloutPostProcessor.ts), so without this
+   the title text sits glued directly against the icon. */
+.cs-heading-callout:not(.cm-line) .cs-heading-token + .cs-heading-title {
+	margin-inline-start: 0.35em;
 }
 
 /* Icon boxes scale with the surrounding font (pill text or heading). */

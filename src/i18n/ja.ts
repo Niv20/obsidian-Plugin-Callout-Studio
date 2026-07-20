@@ -121,6 +121,7 @@ export const ja: Record<string, string> = {
 	"settings.headingSpacingGroup": "タイトル間隔",
 	"settings.headingPadVertical": "垂直方向の間隔",
 	"settings.headingIconIndent": "アイコンインデント",
+	"settings.headingGap": "見出し間の間隔",
 	"settings.refGroup": "アウトラインとリンク",
 	"settings.styleDemoName": "サンプル",
 	"settings.previewTitle": "プレビュー",

@@ -1285,6 +1285,18 @@ export class CSSInjector {
 				`  --cs-heading-pad-start: ${gs.heading.paddingStart}px;`,
 			);
 		}
+		// Gap above the bar (the outer margin, reading view only — see the
+		// static .cs-heading-callout:not(.cm-line) rule in styles.css; Live
+		// Preview gets the same visual effect from HeadingGapWidget, a real
+		// block-level DOM node, since a margin can't safely reach .cm-line).
+		// Rides this same variable-then-static-fallback rule as its siblings
+		// above so the default (0) is an explicit, enforced value rather than
+		// "whatever the theme's own heading margin happens to be".
+		if (gs.heading.marginTop !== 0) {
+			headingProps.push(
+				`  --cs-heading-gap-top: ${gs.heading.marginTop}em;`,
+			);
+		}
 		if (headingProps.length > 0) {
 			parts.push(
 				`.${CSS_HEADING_LINE} {\n${headingProps.join("\n")}\n}`,

@@ -112,6 +112,7 @@ export const nb: Record<string, string> = {
 	"settings.headingSpacingGroup": "Tittelavstand",
 	"settings.headingPadVertical": "Vertikal avstand",
 	"settings.headingIconIndent": "Ikoninnrykk",
+	"settings.headingGap": "Avstand mellom overskrifter",
 	"settings.refGroup": "Disposisjon og lenker",
 	"settings.styleDemoName": "Eksempel",
 	"settings.previewTitle": "Forhåndsvisning",

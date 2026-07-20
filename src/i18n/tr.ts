@@ -121,6 +121,7 @@ export const tr: Record<string, string> = {
 	"settings.headingSpacingGroup": "Başlık aralığı",
 	"settings.headingPadVertical": "Dikey aralık",
 	"settings.headingIconIndent": "Simge girintisi",
+	"settings.headingGap": "Başlıklar arası boşluk",
 	"settings.refGroup": "Anahat ve bağlantılar",
 	"settings.styleDemoName": "Örnek",
 	"settings.previewTitle": "Önizleme",

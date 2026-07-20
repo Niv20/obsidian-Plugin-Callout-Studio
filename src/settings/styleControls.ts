@@ -46,6 +46,15 @@ export interface StyleSliderSpec {
 	numberOptions: Omit<AnimatedNumberLabelOptions, "initialValue">;
 	get(): number;
 	set(value: number): void;
+	/**
+	 * Fired once when the user begins dragging the thumb (pointer down, or the
+	 * first keyboard nudge). Lets a caller swap in a bespoke preview for the
+	 * duration of the drag. Optional — sliders that omit it behave as before.
+	 */
+	onDragStart?(): void;
+	/** Fired once when the drag ends (pointer up / cancel, or the slider's
+	 * `change` on release). Pairs with {@link onDragStart} to restore. */
+	onDragEnd?(): void;
 }
 
 /**
@@ -82,15 +91,40 @@ export function addStyleSlider(
 		});
 	};
 
+	// Drag-lifecycle notifications for callers that swap in a bespoke preview
+	// while the thumb is held. `dragging` dedupes the several DOM events that
+	// can each signal a start/end (pointer vs. keyboard) into one start + one
+	// end per drag.
+	let dragging = false;
+	const beginDrag = (): void => {
+		if (dragging) return;
+		dragging = true;
+		spec.onDragStart?.();
+	};
+	const endDrag = (): void => {
+		if (!dragging) return;
+		dragging = false;
+		spec.onDragEnd?.();
+	};
+
 	new Setting(row).addSlider((slider) => {
 		slider.setLimits(spec.min, spec.max, spec.step).setValue(spec.get());
 		slider.sliderEl.addEventListener("input", () => {
+			// Covers keyboard nudges, which fire `input` without a pointerdown.
+			beginDrag();
 			const v = round(parseFloat(slider.sliderEl.value));
 			spec.set(v);
 			valueLabel.update(v);
 			scheduleLiveInject();
 		});
+		if (spec.onDragStart || spec.onDragEnd) {
+			slider.sliderEl.addEventListener("pointerdown", beginDrag);
+			slider.sliderEl.addEventListener("pointerup", endDrag);
+			slider.sliderEl.addEventListener("pointercancel", endDrag);
+		}
 		slider.onChange(async (v) => {
+			// `change` marks the end of a drag (release) as well as commit.
+			endDrag();
 			spec.set(round(v));
 			await plugin.saveSettings();
 			plugin.cssInjector.inject();

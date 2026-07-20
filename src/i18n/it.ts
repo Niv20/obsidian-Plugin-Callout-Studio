@@ -121,6 +121,7 @@ export const it: Record<string, string> = {
 	"settings.headingSpacingGroup": "Spaziatura titolo",
 	"settings.headingPadVertical": "Spaziatura verticale",
 	"settings.headingIconIndent": "Rientro icona",
+	"settings.headingGap": "Spaziatura tra le intestazioni",
 	"settings.refGroup": "Schema e link",
 	"settings.styleDemoName": "Esempio",
 	"settings.previewTitle": "Anteprima",

@@ -121,6 +121,7 @@ export const de: Record<string, string> = {
 	"settings.headingSpacingGroup": "Überschriftenabstand",
 	"settings.headingPadVertical": "Vertikaler Abstand",
 	"settings.headingIconIndent": "Symboleinzug",
+	"settings.headingGap": "Abstand zwischen Überschriften",
 	"settings.refGroup": "Gliederung und Links",
 	"settings.styleDemoName": "Beispiel",
 	"settings.previewTitle": "Vorschau",

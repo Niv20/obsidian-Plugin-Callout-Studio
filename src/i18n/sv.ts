@@ -121,6 +121,7 @@ export const sv: Record<string, string> = {
 	"settings.headingSpacingGroup": "Rubrikavstånd",
 	"settings.headingPadVertical": "Vertikalt avstånd",
 	"settings.headingIconIndent": "Ikonindrag",
+	"settings.headingGap": "Avstånd mellan rubriker",
 	"settings.refGroup": "Disposition och länkar",
 	"settings.styleDemoName": "Exempel",
 	"settings.previewTitle": "Förhandsvisning",

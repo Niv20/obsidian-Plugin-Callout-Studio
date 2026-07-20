@@ -121,6 +121,7 @@ export const ru: Record<string, string> = {
 	"settings.headingSpacingGroup": "Отступы заголовка",
 	"settings.headingPadVertical": "Вертикальный отступ",
 	"settings.headingIconIndent": "Отступ иконки",
+	"settings.headingGap": "Расстояние между заголовками",
 	"settings.refGroup": "План и ссылки",
 	"settings.styleDemoName": "Пример",
 	"settings.previewTitle": "Предпросмотр",

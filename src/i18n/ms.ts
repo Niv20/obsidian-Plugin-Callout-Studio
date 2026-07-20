@@ -112,6 +112,7 @@ export const ms: Record<string, string> = {
 	"settings.headingSpacingGroup": "Jarak tajuk",
 	"settings.headingPadVertical": "Jarak menegak",
 	"settings.headingIconIndent": "Inden ikon",
+	"settings.headingGap": "Jarak antara tajuk",
 	"settings.refGroup": "Outline dan pautan",
 	"settings.styleDemoName": "Contoh",
 	"settings.previewTitle": "Pratonton",

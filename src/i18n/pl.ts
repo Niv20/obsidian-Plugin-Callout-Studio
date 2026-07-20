@@ -121,6 +121,7 @@ export const pl: Record<string, string> = {
 	"settings.headingSpacingGroup": "Odstęp tytułu",
 	"settings.headingPadVertical": "Odstęp pionowy",
 	"settings.headingIconIndent": "Wcięcie ikony",
+	"settings.headingGap": "Odstęp między nagłówkami",
 	"settings.refGroup": "Konspekt i linki",
 	"settings.styleDemoName": "Przykład",
 	"settings.previewTitle": "Podgląd",

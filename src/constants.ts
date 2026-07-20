@@ -258,6 +258,12 @@ export const DEFAULT_SETTINGS: PluginSettings = {
 			// against the corner. Fixed in px → consistent regardless of
 			// heading level.
 			paddingStart: 10,
+			// Extra gap above each heading bar (em). 0 → keep the theme's own
+			// heading spacing untouched; raising it separates stacked/collapsed
+			// heading callouts that otherwise render glued together. Defaults to
+			// a gentle half-em so stacked heading callouts read as distinct out
+			// of the box; users can zero it to fall back to theme spacing.
+			marginTop: 0.5,
 		},
 		inline: {
 			borderSides: {

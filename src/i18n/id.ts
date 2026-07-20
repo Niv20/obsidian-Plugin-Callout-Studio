@@ -121,6 +121,7 @@ export const id: Record<string, string> = {
 	"settings.headingSpacingGroup": "Jarak judul",
 	"settings.headingPadVertical": "Jarak vertikal",
 	"settings.headingIconIndent": "Indentasi ikon",
+	"settings.headingGap": "Jarak antar judul",
 	"settings.refGroup": "Outline dan tautan",
 	"settings.styleDemoName": "Contoh",
 	"settings.previewTitle": "Pratinjau",

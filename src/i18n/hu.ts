@@ -121,6 +121,7 @@ export const hu: Record<string, string> = {
 	"settings.headingSpacingGroup": "Címtérköz",
 	"settings.headingPadVertical": "Függőleges térköz",
 	"settings.headingIconIndent": "Ikon behúzása",
+	"settings.headingGap": "Térköz a címsorok között",
 	"settings.refGroup": "Vázlat és linkek",
 	"settings.styleDemoName": "Minta",
 	"settings.previewTitle": "Előnézet",

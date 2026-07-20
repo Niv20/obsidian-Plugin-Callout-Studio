@@ -121,6 +121,7 @@ export const ko: Record<string, string> = {
 	"settings.headingSpacingGroup": "제목 간격",
 	"settings.headingPadVertical": "수직 간격",
 	"settings.headingIconIndent": "아이콘 들여쓰기",
+	"settings.headingGap": "제목 사이 간격",
 	"settings.refGroup": "개요와 링크",
 	"settings.styleDemoName": "예시",
 	"settings.previewTitle": "미리 보기",

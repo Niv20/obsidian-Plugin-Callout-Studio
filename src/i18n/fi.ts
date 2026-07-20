@@ -112,6 +112,7 @@ export const fi: Record<string, string> = {
 	"settings.headingSpacingGroup": "Otsikon väli",
 	"settings.headingPadVertical": "Pystysuuntainen väli",
 	"settings.headingIconIndent": "Kuvakkeen sisennys",
+	"settings.headingGap": "Otsikoiden välinen tila",
 	"settings.refGroup": "Jäsennys ja linkit",
 	"settings.styleDemoName": "Esimerkki",
 	"settings.previewTitle": "Esikatselu",

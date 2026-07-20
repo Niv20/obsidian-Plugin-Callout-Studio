@@ -121,6 +121,7 @@ export const vi: Record<string, string> = {
 	"settings.headingSpacingGroup": "Khoảng cách tiêu đề",
 	"settings.headingPadVertical": "Khoảng cách dọc",
 	"settings.headingIconIndent": "Thụt lề biểu tượng",
+	"settings.headingGap": "Khoảng cách giữa các tiêu đề",
 	"settings.refGroup": "Dàn ý và liên kết",
 	"settings.styleDemoName": "Mẫu",
 	"settings.previewTitle": "Xem trước",

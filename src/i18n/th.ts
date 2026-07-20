@@ -121,6 +121,7 @@ export const th: Record<string, string> = {
 	"settings.headingSpacingGroup": "ระยะห่างหัวเรื่อง",
 	"settings.headingPadVertical": "ระยะห่างแนวตั้ง",
 	"settings.headingIconIndent": "ระยะเยื้องไอคอน",
+	"settings.headingGap": "ระยะห่างระหว่างหัวข้อ",
 	"settings.refGroup": "โครงร่างและลิงก์",
 	"settings.styleDemoName": "ตัวอย่าง",
 	"settings.previewTitle": "ตัวอย่าง",

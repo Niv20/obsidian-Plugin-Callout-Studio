@@ -121,6 +121,7 @@ export const zh: Record<string, string> = {
 	"settings.headingSpacingGroup": "标题间距",
 	"settings.headingPadVertical": "垂直间距",
 	"settings.headingIconIndent": "图标缩进",
+	"settings.headingGap": "标题间距",
 	"settings.refGroup": "大纲和链接",
 	"settings.styleDemoName": "示例",
 	"settings.previewTitle": "预览",

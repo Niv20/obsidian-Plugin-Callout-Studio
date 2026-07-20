@@ -13,7 +13,7 @@
  * slot (never persisted) so it renders through the real pipeline: injected
  * CSS, heading/inline decorations, icon painting.
  */
-import { Modal, Setting } from "obsidian";
+import { Component, MarkdownRenderer, Modal, Setting, setIcon } from "obsidian";
 import { t } from "../i18n";
 import type { CalloutDefinition, CalloutRenderRole } from "../types";
 import { LiveCalloutPreview } from "./LiveCalloutPreview";
@@ -23,6 +23,7 @@ import {
 	renderBordersGroup,
 } from "./styleControls";
 import type { SettingsTabPlugin } from "./sections/types";
+import { refreshAllMarkdownEditors } from "../editor/livepreview/refresh";
 
 /**
  * Reserved id for the neutral demo callout rendered in the popups. Registered
@@ -34,8 +35,18 @@ const STYLE_DEMO_ID = "global-style-demo";
 /** Neutral gray accent used by the demo callout in both theme modes. */
 const STYLE_DEMO_GRAY = "#808080";
 
+/** Number of stacked demo headers in the "Spacing between headers" demo. */
+const GAP_DEMO_COUNT = 4;
+
 export class GlobalStyleModal extends Modal {
 	private preview: LiveCalloutPreview | null = null;
+
+	/** Preview column, toggled with `cs-showing-gap-demo` during a gap drag. */
+	private previewCol: HTMLElement | null = null;
+	/** Reading-view render host for the gap demo (heading role only). */
+	private gapDemoRender: HTMLElement | null = null;
+	/** Component owning the gap demo's MarkdownRenderer output. */
+	private gapDemoComponent: Component | null = null;
 
 	constructor(
 		private readonly plugin: SettingsTabPlugin,
@@ -57,6 +68,7 @@ export class GlobalStyleModal extends Modal {
 		const previewCol = panel.createDiv({
 			cls: "callout-studio-preview-col",
 		});
+		this.previewCol = previewCol;
 		this.preview = new LiveCalloutPreview(this.app, previewCol, {
 			title: t("settings.previewTitle"),
 			initialText: this.buildSampleText(),
@@ -80,6 +92,10 @@ export class GlobalStyleModal extends Modal {
 				this.renderRegularControls(controlsCol);
 				break;
 			case "heading":
+				// A reading-view demo (real hN, where the gap margin applies —
+				// the Live Preview editor's .cm-line is excluded on purpose) that
+				// takes over the preview while the gap slider is dragged.
+				this.buildGapDemo(previewCol);
 				this.renderHeadingControls(controlsCol);
 				break;
 			case "inline":
@@ -91,6 +107,10 @@ export class GlobalStyleModal extends Modal {
 	onClose(): void {
 		this.preview?.destroy();
 		this.preview = null;
+		this.gapDemoComponent?.unload();
+		this.gapDemoComponent = null;
+		this.gapDemoRender = null;
+		this.previewCol = null;
 		this.contentEl.empty();
 	}
 
@@ -217,6 +237,52 @@ export class GlobalStyleModal extends Modal {
 				heading.paddingStart = v;
 			},
 		});
+
+		// Outer gap above each heading bar (em). Separates a heading callout
+		// from what precedes it — chiefly from other heading callouts, which
+		// otherwise stack glued together when collapsed. Distinct from the
+		// vertical-spacing slider above, which is the padding *inside* the bar.
+		addStyleSlider(this.plugin, spacingGroup, {
+			label: t("settings.headingGap"),
+			min: 0,
+			max: 2,
+			step: 0.05,
+			decimals: 2,
+			numberOptions: {
+				suffix: "em",
+				format: {
+					minimumFractionDigits: 2,
+					maximumFractionDigits: 2,
+				},
+			},
+			get: () => heading.marginTop,
+			set: (v) => {
+				heading.marginTop = v;
+				// Drive the demo straight off the slider value so it tracks
+				// exactly — including a hard 0. Relying on the injected
+				// `--cs-heading-gap-top` instead would leave the demo showing a
+				// stale gap at 0, since the injector omits the variable at 0 and
+				// the drag-time inject is RAF-coalesced (the reported "bars still
+				// far apart at 0" bug).
+				this.setGapDemoValue(v);
+			},
+			// The gap comes from a static CSS margin (reading view) and a CM6
+			// block widget (Live Preview) — neither of which the modal's own
+			// live editor preview shows moving in real time (the widget only
+			// rebuilds on an explicit refresh, not on cssInjector's cheap
+			// drag-time inject) — so swap in the stacked reading-view demo for
+			// the duration of the drag (see buildGapDemo).
+			onDragStart: () => this.showGapDemo(),
+			onDragEnd: () => {
+				this.hideGapDemo();
+				// Rebuild this modal's own embedded editor's decorations (not
+				// reached by refreshAllMarkdownEditors — it isn't a workspace
+				// leaf) plus every open note's Live Preview, so the new gap
+				// widget appears without needing to reopen the note.
+				this.preview?.refresh();
+				refreshAllMarkdownEditors(this.app);
+			},
+		});
 	}
 
 	private renderInlineControls(col: HTMLElement): void {
@@ -275,6 +341,110 @@ export class GlobalStyleModal extends Modal {
 			get,
 			set,
 		});
+	}
+
+	// ── Gap demo (heading role) ─────────────────────────────────────
+
+	/**
+	 * Build the "Spacing between headers" demo: several stacked heading
+	 * callouts rendered in reading view (real `<hN>`), where the gap margin
+	 * actually applies. Hidden until the gap slider is grabbed.
+	 *
+	 * The bars carry no body — consecutive collapsed heading callouts, exactly
+	 * as they'd stack in a note. Nothing between two bars but the gap margin
+	 * itself, so the slider reads 1:1 (no body wrappers, fold animation, or
+	 * theme heading margins to add invisible slack). A static chevron gives
+	 * each the look of a collapsed callout.
+	 */
+	private buildGapDemo(previewCol: HTMLElement): void {
+		// Live *inside* the preview card (its frame + "Preview" header stay put),
+		// swapping only the editor body — so the demo reads as the same Preview
+		// box, not a bare panel. Fall back to the column if the card isn't there.
+		const host =
+			previewCol.querySelector<HTMLElement>(
+				".cs-live-preview-container",
+			) ?? previewCol;
+		// `.markdown-preview-view` + `.markdown-rendered` make Obsidian's own
+		// reading-view CSS and the injected per-callout rules resolve as in a
+		// note — same combo LiveCalloutPreview's fallback uses.
+		const demo = host.createDiv({
+			cls: "cs-gap-demo markdown-preview-view",
+		});
+		const rendered = demo.createDiv({
+			cls: "markdown-rendered cs-gap-demo-render",
+		});
+		this.gapDemoRender = rendered;
+
+		const component = new Component();
+		component.load();
+		this.gapDemoComponent = component;
+
+		// The demo callout (STYLE_DEMO_ID) is already registered for the modal's
+		// lifetime by the LiveCalloutPreview built just above, so these headers
+		// resolve to the neutral gray demo style.
+		const name = t("settings.styleDemoName");
+		const block = `## [!${STYLE_DEMO_ID}] ${name}`;
+		const md = Array(GAP_DEMO_COUNT).fill(block).join("\n\n");
+
+		void MarkdownRenderer.render(this.app, md, rendered, "", component).then(
+			() => {
+				if (this.gapDemoRender !== rendered) return; // modal closed
+				this.addDemoChevrons(rendered);
+				// Seed each bar's inline gap so the demo is already correct the
+				// instant it's revealed, before the first slider move.
+				this.setGapDemoValue(
+					this.plugin.settings.globalStyle.heading.marginTop,
+				);
+			},
+		);
+	}
+
+	/**
+	 * Append a static (collapsed-look) chevron after each demo header's title,
+	 * mirroring the real trailing `.cs-fold-arrow` used in Live Preview
+	 * (widgets.ts's HeadingFoldArrowWidget) rather than reading view's native
+	 * `.heading-collapse-indicator`, which sits before the title but only
+	 * renders inside a real workspace leaf (MarkdownRenderer.render() here
+	 * never gets one) and is hover-only besides — unusable in this demo,
+	 * since the slider drag that reveals it is exactly what steals hover
+	 * away from the heading.
+	 */
+	private addDemoChevrons(container: HTMLElement): void {
+		container.querySelectorAll<HTMLElement>(".cs-heading-callout").forEach(
+			(h) => {
+				const arrow = createSpan({ cls: "cs-fold-arrow" });
+				setIcon(arrow, "chevron-right");
+				h.append(arrow);
+			},
+		);
+	}
+
+	/**
+	 * Point the demo's gap at an exact em value. The shared
+	 * `.cs-heading-callout:not(.cm-line)` rule reads `--cs-heading-gap-top`, so
+	 * the value is set inline on each demo bar — inline wins over the injected
+	 * sheet's own element-level declaration, so the demo tracks the slider 1:1
+	 * (including a hard 0, where the injector omits the variable entirely).
+	 */
+	private setGapDemoValue(em: number): void {
+		this.gapDemoRender
+			?.querySelectorAll<HTMLElement>(".cs-heading-callout")
+			.forEach((bar) => {
+				bar.style.setProperty("--cs-heading-gap-top", `${em}em`);
+			});
+	}
+
+	/** Instantly swap the live editor out for the stacked gap demo. */
+	private showGapDemo(): void {
+		// Sync the demo to the current value before it's revealed, so a fresh
+		// grab shows the right gap even before the first move fires `set`.
+		this.setGapDemoValue(this.plugin.settings.globalStyle.heading.marginTop);
+		this.previewCol?.addClass("cs-showing-gap-demo");
+	}
+
+	/** Restore the live editor. */
+	private hideGapDemo(): void {
+		this.previewCol?.removeClass("cs-showing-gap-demo");
 	}
 
 	// ── Demo callout + samples ──────────────────────────────────────

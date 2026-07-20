@@ -26,6 +26,7 @@ import { CalloutAutoComplete } from "./editor/AutoComplete";
 import { LinkSuggestDecorator } from "./editor/LinkSuggestDecorator";
 import { registerContextMenu } from "./editor/contextmenu";
 import { createCalloutViewPlugin } from "./editor/livepreview/calloutViewPlugin";
+import { createHeadingGapField } from "./editor/livepreview/headingGapField";
 import { beginStartupEntranceWindow } from "./editor/renderShared";
 import { refreshAllMarkdownEditors } from "./editor/livepreview/refresh";
 import { OutlineDecorator } from "./outline/OutlineDecorator";
@@ -119,6 +120,10 @@ export default class CalloutStudioPlugin extends Plugin {
 
 		// Live Preview rendering for heading callouts and inline pills.
 		this.registerEditorExtension(createCalloutViewPlugin(this));
+
+		// The heading "gap above the bar" spacer. A separate StateField because
+		// block decorations can't come from a view plugin (see headingGapField).
+		this.registerEditorExtension(createHeadingGapField(this));
 
 		// Open the startup entrance window if the UI was already visible, so the
 		// heading bars, pills, icons and fold chevrons that these render surfaces

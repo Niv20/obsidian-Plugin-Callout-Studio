@@ -112,6 +112,7 @@ export const zhTW: Record<string, string> = {
 	"settings.headingSpacingGroup": "標題間距",
 	"settings.headingPadVertical": "垂直間距",
 	"settings.headingIconIndent": "圖示縮排",
+	"settings.headingGap": "標題間距",
 	"settings.refGroup": "大綱和連結",
 	"settings.styleDemoName": "範例",
 	"settings.previewTitle": "預覽",
