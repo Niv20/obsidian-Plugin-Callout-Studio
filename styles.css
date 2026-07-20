@@ -1953,6 +1953,17 @@ input.cs-input-invalid:focus {
 		.callout-studio-preview-panel {
 		grid-template-columns: 1fr;
 	}
+	/* Same fix for the per-role "Global callout style" popups (opened from the
+	   3 "Customize" buttons in Global settings): their own unscoped override
+	   below (`.cs-role-style-modal .callout-studio-preview-panel`, 2 classes,
+	   no media guard) beats the 1-class rule above at every width, at equal
+	   specificity, by source order alone. Add the `.modal` class to reach 3
+	   classes so this stacking rule wins on specificity regardless of source
+	   order, and the live preview drops below the options — matching the
+	   callout editor on phone. */
+	.modal.cs-role-style-modal .callout-studio-preview-panel {
+		grid-template-columns: 1fr;
+	}
 	.callout-studio-preview-col {
 		position: static;
 	}
