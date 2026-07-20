@@ -242,7 +242,7 @@ export class HeadingRefLinkWidget extends WidgetType {
 	override toDOM(view: EditorView): HTMLElement {
 		const doc = view.dom.ownerDocument;
 		const { def, unknown } = resolveCalloutDef(this.registry, this.rawId);
-		const el = doc.createElement("span");
+		const el = doc.createEl("span");
 		el.className = CSS_REF_LINK;
 		el.appendChild(doc.createTextNode(this.prefix));
 		if (this.showIcon && def) {
@@ -346,7 +346,7 @@ export class HeadingFoldArrowWidget extends WidgetType {
 	}
 
 	override toDOM(view: EditorView): HTMLElement {
-		const arrow = view.dom.ownerDocument.createElement("span");
+		const arrow = view.dom.ownerDocument.createEl("span");
 		arrow.className = CSS_FOLD_ARROW;
 		if (this.folded) arrow.classList.add("cs-collapsed");
 		// Fade the chevron in during the startup entrance window (trails the

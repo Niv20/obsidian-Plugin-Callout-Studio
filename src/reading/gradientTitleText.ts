@@ -94,9 +94,9 @@ function wrapChars(root: HTMLElement): void {
 	}
 	// Mutate after the walk — replacing nodes mid-walk derails TreeWalker.
 	for (const textNode of pending) {
-		const frag = doc.createDocumentFragment();
+		const frag = createFragment();
 		for (const grapheme of graphemes(textNode.nodeValue ?? "")) {
-			const span = doc.createElement("span");
+			const span = doc.createEl("span");
 			span.className = CSS_GRAD_CHAR;
 			span.textContent = grapheme;
 			frag.appendChild(span);

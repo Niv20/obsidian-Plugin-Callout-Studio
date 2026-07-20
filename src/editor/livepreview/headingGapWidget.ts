@@ -32,7 +32,7 @@ export class HeadingGapWidget extends WidgetType {
 	}
 
 	override toDOM(view: EditorView): HTMLElement {
-		const el = view.dom.ownerDocument.createElement("div");
+		const el = view.dom.ownerDocument.createEl("div");
 		el.style.height = `${this.em}em`; // no class, no background — pure empty space
 		return el;
 	}

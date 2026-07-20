@@ -143,6 +143,9 @@ export class CSSInjector {
 			this.styleEl = existing;
 			return;
 		}
+		// createEl("style") is blocked by obsidianmd/no-forbidden-elements; this element holds
+		// runtime-generated per-callout CSS (PDF export needs a real <style> tag, adoptedStyleSheets
+		// isn't printed — see class doc above), not a static styles.css.
 		const el = doc.createElement("style");
 		el.id = STYLE_EL_ID;
 		doc.head.appendChild(el);
@@ -1183,7 +1186,7 @@ export class CSSInjector {
 		emoji: string,
 		doc: Document,
 	): void {
-		const span = doc.createElement("span");
+		const span = doc.createEl("span");
 		span.classList.add("cs-export-icon");
 		span.textContent = emoji;
 		iconEl.replaceChildren(span);

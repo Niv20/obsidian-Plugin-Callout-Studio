@@ -218,7 +218,7 @@ export function buildCalloutTokenDom(
 	const { rawId, registry, variant, showName } = options;
 	const { def, unknown } = resolveCalloutDef(registry, rawId);
 
-	const root = doc.createElement("span");
+	const root = doc.createEl("span");
 	root.classList.add(VARIANT_CLASS[variant]);
 	if (unknown) root.classList.add(CSS_UNKNOWN);
 	// Animate the pill / heading token in during the startup entrance window.
@@ -228,13 +228,13 @@ export function buildCalloutTokenDom(
 	}
 	root.setAttribute("data-callout", normalizeCalloutId(rawId));
 
-	const iconEl = doc.createElement("span");
+	const iconEl = doc.createEl("span");
 	iconEl.classList.add(CSS_TOKEN_ICON);
 	root.appendChild(iconEl);
 	if (def) paintRoleIcon(iconEl, def, registry);
 
 	if (showName) {
-		const nameEl = doc.createElement("span");
+		const nameEl = doc.createEl("span");
 		nameEl.classList.add(CSS_TOKEN_NAME);
 		// Unknown ids show what the user wrote; known ids show the display name.
 		nameEl.textContent = unknown || !def ? rawId.trim() : def.displayName;

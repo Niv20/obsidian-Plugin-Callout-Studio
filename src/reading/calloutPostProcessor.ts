@@ -201,7 +201,7 @@ function transformHeading(
 	// the title — inline markup included. Obsidian's native collapse indicator
 	// is prepended to the hN, so it stays ahead of the token either way.
 	if (hasTitle) {
-		const titleEl = h.ownerDocument.createElement("span");
+		const titleEl = h.ownerDocument.createEl("span");
 		titleEl.classList.add(CSS_HEADING_TITLE);
 		h.insertBefore(titleEl, tokenEl.nextSibling);
 		while (titleEl.nextSibling) titleEl.appendChild(titleEl.nextSibling);

@@ -170,6 +170,8 @@ export function ensureMaterialFontLoaded(
 			return;
 		}
 
+		// createEl("link") is blocked by obsidianmd/no-forbidden-elements; this loads an external
+		// Google Fonts stylesheet (Material Symbols), not a bundled styles.css.
 		const link = doc.createElement("link");
 		link.rel = "stylesheet";
 		link.href = href;
