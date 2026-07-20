@@ -17,7 +17,6 @@
  * empty space rather than more bar.
  */
 import { WidgetType } from "@codemirror/view";
-import type { EditorView } from "@codemirror/view";
 
 /** Rough estimate only — CM6 remeasures the real height once painted. */
 const ESTIMATED_PX_PER_EM = 16;
@@ -31,8 +30,8 @@ export class HeadingGapWidget extends WidgetType {
 		return other.em === this.em;
 	}
 
-	override toDOM(view: EditorView): HTMLElement {
-		const el = view.dom.ownerDocument.createEl("div");
+	override toDOM(): HTMLElement {
+		const el = createDiv();
 		el.style.height = `${this.em}em`; // no class, no background — pure empty space
 		return el;
 	}

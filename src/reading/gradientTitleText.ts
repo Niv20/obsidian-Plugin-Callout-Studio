@@ -96,7 +96,7 @@ function wrapChars(root: HTMLElement): void {
 	for (const textNode of pending) {
 		const frag = createFragment();
 		for (const grapheme of graphemes(textNode.nodeValue ?? "")) {
-			const span = doc.createEl("span");
+			const span = createSpan();
 			span.className = CSS_GRAD_CHAR;
 			span.textContent = grapheme;
 			frag.appendChild(span);

@@ -186,7 +186,7 @@ export class OutlineDecorator {
 		this.clearDecoration(el);
 		textNode.nodeValue = title;
 		if (showIcon && def) {
-			const iconEl = buildCalloutTokenDom(el.ownerDocument, {
+			const iconEl = buildCalloutTokenDom({
 				rawId: token.rawId,
 				registry: this.host.registry,
 				variant: "ref",

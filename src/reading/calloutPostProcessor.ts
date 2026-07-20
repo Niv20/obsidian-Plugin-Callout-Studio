@@ -187,7 +187,7 @@ function transformHeading(
 	textNode.textContent = (textNode.textContent ?? "").slice(
 		renderedMatch[0].length,
 	);
-	const tokenEl = buildCalloutTokenDom(h.ownerDocument, {
+	const tokenEl = buildCalloutTokenDom({
 		rawId,
 		registry: host.registry,
 		variant: "heading",
@@ -201,7 +201,7 @@ function transformHeading(
 	// the title — inline markup included. Obsidian's native collapse indicator
 	// is prepended to the hN, so it stays ahead of the token either way.
 	if (hasTitle) {
-		const titleEl = h.ownerDocument.createEl("span");
+		const titleEl = createSpan();
 		titleEl.classList.add(CSS_HEADING_TITLE);
 		h.insertBefore(titleEl, tokenEl.nextSibling);
 		while (titleEl.nextSibling) titleEl.appendChild(titleEl.nextSibling);
@@ -297,7 +297,7 @@ function transformHeadingRefLinks(
 		textNode.nodeValue = token.prefix === "#" ? "" : token.prefix;
 		const after = textNode.nextSibling;
 		if (host.settings.headingCallouts.refShowIcon && def) {
-			const iconEl = buildCalloutTokenDom(doc, {
+			const iconEl = buildCalloutTokenDom({
 				rawId: token.rawId,
 				registry: host.registry,
 				variant: "ref",
@@ -413,7 +413,7 @@ function transformInlinePills(
 		// the token text itself, which the pill then replaces.
 		c.node.splitText(c.to);
 		const tokenPart = c.node.splitText(c.from);
-		const pill = buildCalloutTokenDom(doc, {
+		const pill = buildCalloutTokenDom({
 			rawId: c.rawId,
 			registry: host.registry,
 			variant: "inline",

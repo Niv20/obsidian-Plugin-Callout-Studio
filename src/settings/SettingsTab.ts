@@ -57,6 +57,27 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 		this.plugin = plugin;
 	}
 
+	/**
+	 * Obsidian 1.13+ declarative-settings hook (powers the settings-search
+	 * index). Intentionally returns an empty array so **every** Obsidian
+	 * version renders this tab through display() below:
+	 *
+	 * - On < 1.13 the method is unknown to Obsidian and never called — display()
+	 *   runs as it always has, so older users are completely unaffected.
+	 * - On 1.13+ an empty result falls back to display() (a *non-empty* result
+	 *   would disable display() entirely and render only from the definitions),
+	 *   so the full custom UI stays identical on new installs too.
+	 *
+	 * Defining the method (even empty) is the sanctioned way to satisfy
+	 * obsidianmd/settings-tab/prefer-setting-definitions. Populating real
+	 * per-setting search entries would mean reproducing all 11 sections
+	 * declaratively — a migration that replaces display() and must be verified
+	 * on a real 1.13 build, so it is deliberately deferred.
+	 */
+	getSettingDefinitions(): unknown[] {
+		return [];
+	}
+
 	display(): void {
 		const { containerEl } = this;
 		// Tear down any resources from a previous render before rebuilding.

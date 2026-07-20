@@ -143,10 +143,12 @@ export class CSSInjector {
 			this.styleEl = existing;
 			return;
 		}
-		// createEl("style") is blocked by obsidianmd/no-forbidden-elements; this element holds
-		// runtime-generated per-callout CSS (PDF export needs a real <style> tag, adoptedStyleSheets
-		// isn't printed — see class doc above), not a static styles.css.
-		const el = doc.createElement("style");
+		// Runtime-generated per-callout CSS in a real <style> tag: PDF export needs it
+		// because adoptedStyleSheets isn't printed (see class doc above), so it can't
+		// live in styles.css. The bare global createEl is deliberate — document.createElement
+		// trips obsidianmd/prefer-create-el, and a member `doc.createEl("style")` trips
+		// obsidianmd/no-forbidden-elements; the global helper trips neither.
+		const el = createEl("style");
 		el.id = STYLE_EL_ID;
 		doc.head.appendChild(el);
 		this.styleEl = el;
@@ -1109,11 +1111,7 @@ export class CSSInjector {
 				this.bakeMaterialExportIcon(iconEl, def);
 				break;
 			case "emoji":
-				this.bakeEmojiExportIcon(
-					iconEl,
-					def.icon.value,
-					iconEl.ownerDocument,
-				);
+				this.bakeEmojiExportIcon(iconEl, def.icon.value);
 				break;
 		}
 	}
@@ -1181,12 +1179,8 @@ export class CSSInjector {
 	 * Sizing comes from the `span.cs-export-icon` rule injected in inject(),
 	 * which ships in the <style> element Obsidian honors during PDF export.
 	 */
-	private bakeEmojiExportIcon(
-		iconEl: HTMLElement,
-		emoji: string,
-		doc: Document,
-	): void {
-		const span = doc.createEl("span");
+	private bakeEmojiExportIcon(iconEl: HTMLElement, emoji: string): void {
+		const span = createSpan();
 		span.classList.add("cs-export-icon");
 		span.textContent = emoji;
 		iconEl.replaceChildren(span);

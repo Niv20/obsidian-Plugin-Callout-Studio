@@ -84,7 +84,7 @@ export class CalloutTokenWidget extends WidgetType {
 	}
 
 	override toDOM(view: EditorView): HTMLElement {
-		const el = buildCalloutTokenDom(view.dom.ownerDocument, {
+		const el = buildCalloutTokenDom({
 			rawId: this.rawId,
 			registry: this.registry,
 			variant: this.variant,
@@ -242,11 +242,11 @@ export class HeadingRefLinkWidget extends WidgetType {
 	override toDOM(view: EditorView): HTMLElement {
 		const doc = view.dom.ownerDocument;
 		const { def, unknown } = resolveCalloutDef(this.registry, this.rawId);
-		const el = doc.createEl("span");
+		const el = createSpan();
 		el.className = CSS_REF_LINK;
 		el.appendChild(doc.createTextNode(this.prefix));
 		if (this.showIcon && def) {
-			const iconEl = buildCalloutTokenDom(doc, {
+			const iconEl = buildCalloutTokenDom({
 				rawId: this.rawId,
 				registry: this.registry,
 				variant: "ref",
@@ -346,7 +346,7 @@ export class HeadingFoldArrowWidget extends WidgetType {
 	}
 
 	override toDOM(view: EditorView): HTMLElement {
-		const arrow = view.dom.ownerDocument.createEl("span");
+		const arrow = createSpan();
 		arrow.className = CSS_FOLD_ARROW;
 		if (this.folded) arrow.classList.add("cs-collapsed");
 		// Fade the chevron in during the startup entrance window (trails the

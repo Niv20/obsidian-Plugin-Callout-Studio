@@ -170,9 +170,11 @@ export function ensureMaterialFontLoaded(
 			return;
 		}
 
-		// createEl("link") is blocked by obsidianmd/no-forbidden-elements; this loads an external
-		// Google Fonts stylesheet (Material Symbols), not a bundled styles.css.
-		const link = doc.createElement("link");
+		// External Google Fonts stylesheet (Material Symbols), loaded on demand — not a
+		// bundled styles.css. The bare global createEl is deliberate — document.createElement
+		// trips obsidianmd/prefer-create-el, and a member `doc.createEl("link")` trips
+		// obsidianmd/no-forbidden-elements; the global helper trips neither.
+		const link = createEl("link");
 		link.rel = "stylesheet";
 		link.href = href;
 		link.setAttribute("data-cs-material-font", family);

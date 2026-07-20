@@ -149,7 +149,7 @@ function decorateHeadingSuggestion(
 		textNode.nodeValue = unknown || !def ? token.rawId.trim() : def.displayName;
 	}
 	if (headingCallouts.refShowIcon && def) {
-		const iconEl = buildCalloutTokenDom(titleEl.ownerDocument, {
+		const iconEl = buildCalloutTokenDom({
 			rawId: token.rawId,
 			registry: host.registry,
 			variant: "ref",
