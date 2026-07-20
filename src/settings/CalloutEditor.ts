@@ -388,8 +388,13 @@ export class CalloutEditor extends Modal {
 			// Push the in-progress edit into the registry under the reserved
 			// preview ID and re-inject CSS so colours/icons render live.
 			beforeRender: () => {
+				// A brand-new callout has no real row yet, so its preview is a
+				// demo (kept out of the settings lists — otherwise its
+				// placeholder id, the built-in `example`, would leak a phantom
+				// row). Editing an existing callout previews the real row live.
 				this.plugin.registry.setPreviewDefinition(
 					this.buildPreviewDefinition(),
+					this.existingId === null,
 				);
 				this.plugin.cssInjector.inject(false);
 			},

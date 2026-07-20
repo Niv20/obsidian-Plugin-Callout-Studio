@@ -197,6 +197,15 @@ export class CalloutRegistry {
 	 * preview clears so the real callout is never lost.
 	 */
 	private previewShadowedDef: CalloutDefinition | null = null;
+	/**
+	 * True when the active preview is a *demo* placeholder — the palette editor,
+	 * the per-role global-style popups, or a brand-new unnamed callout draft —
+	 * rather than the in-progress edit of a real, existing callout. A demo must
+	 * never affect the settings lists: it neither adds a phantom row nor hides
+	 * the real callout it happens to overlay (e.g. the built-in `example`, whose
+	 * id doubles as the preview placeholder `example`). See {@link definitionsForLists}.
+	 */
+	private previewIsDemo = false;
 
 	constructor() {
 		this.settings = structuredClone(DEFAULT_SETTINGS);
@@ -527,9 +536,37 @@ export class CalloutRegistry {
 	}
 
 	getUserDefined(): CalloutDefinition[] {
-		return this.getAll().filter(
+		return this.definitionsForLists().filter(
 			(d) => !d.builtIn && !this.isUnshadowedPreview(d.id),
 		);
+	}
+
+	/**
+	 * {@link getAll} as the settings lists should see it. The transient
+	 * live-preview stand-in is an implementation detail of the preview pane; for
+	 * a *demo* preview ({@link previewIsDemo}) it must not surface as a row nor
+	 * displace the real callout it overlays. So for a demo we present the reality
+	 * it shadows — the shadowed built-in/user callout, or nothing when it shadows
+	 * a fresh id — leaving `getAll()` (used by the CSS/render pipeline) untouched
+	 * so the demo still renders live in the preview pane. Non-demo previews (an
+	 * in-progress edit of an existing callout) pass through unchanged: that row
+	 * *should* reflect the live edit.
+	 */
+	private definitionsForLists(): CalloutDefinition[] {
+		if (this.previewActiveId === null || !this.previewIsDemo) {
+			return this.getAll();
+		}
+		const out: CalloutDefinition[] = [];
+		for (const def of this.callouts.values()) {
+			if (def.id !== this.previewActiveId) {
+				out.push(def);
+			} else if (this.previewShadowedDef) {
+				// Show the real callout the demo overlays (e.g. built-in example).
+				out.push(this.previewShadowedDef);
+			}
+			// else: demo occupies a fresh id → omit it entirely.
+		}
+		return out;
 	}
 
 	/**
@@ -544,7 +581,7 @@ export class CalloutRegistry {
 	}
 
 	getBuiltIn(): CalloutDefinition[] {
-		return this.getAll().filter((d) => d.builtIn);
+		return this.definitionsForLists().filter((d) => d.builtIn);
 	}
 
 	has(id: string): boolean {
@@ -577,11 +614,18 @@ export class CalloutRegistry {
 	 * - {@link toSaveData} skips (or substitutes the shadowed original for) the
 	 *   active preview ID, so the in-progress edit can never reach disk.
 	 *
+	 * `isDemo` marks a placeholder preview (palette editor, global-style popups,
+	 * or an unnamed new-callout draft) whose id is not a real callout the user is
+	 * editing. Such previews are hidden from the settings lists entirely, so a
+	 * demo whose id collides with an existing callout — notably the built-in
+	 * `example`, reused as the preview placeholder id — can't leak a phantom
+	 * "My callout types" row while the modal is open. See {@link definitionsForLists}.
+	 *
 	 * Deliberately does NOT call `notifyChange()`: that would trigger the
 	 * `onChange` → `saveSettings` write and force every open note to re-render.
 	 * The caller instead requests a targeted `cssInjector.inject(false)`.
 	 */
-	setPreviewDefinition(def: CalloutDefinition | null): void {
+	setPreviewDefinition(def: CalloutDefinition | null, isDemo = false): void {
 		// Undo the previous transient registration first, restoring any real
 		// callout it shadowed.
 		if (this.previewActiveId !== null) {
@@ -592,12 +636,14 @@ export class CalloutRegistry {
 			}
 			this.previewActiveId = null;
 			this.previewShadowedDef = null;
+			this.previewIsDemo = false;
 		}
 
 		if (def) {
 			const existing = this.callouts.get(def.id);
 			this.previewShadowedDef = existing ?? null;
 			this.previewActiveId = def.id;
+			this.previewIsDemo = isDemo;
 			this.callouts.set(def.id, def);
 		}
 	}
@@ -612,6 +658,16 @@ export class CalloutRegistry {
 		return this.previewActiveId !== null
 			? (this.callouts.get(this.previewActiveId) ?? null)
 			: null;
+	}
+
+	/**
+	 * Whether the currently registered preview is a demo placeholder. Lets a
+	 * nested modal capture the outer preview's demo state alongside its
+	 * definition (see {@link getPreviewDefinition}) so restoring it on close
+	 * keeps it hidden from the settings lists.
+	 */
+	isPreviewDemo(): boolean {
+		return this.previewIsDemo;
 	}
 
 	/**

@@ -113,6 +113,7 @@ export class PaletteEditorModal extends Modal {
 	private preview: LiveCalloutPreview | null = null;
 	/** Preview the caller had registered before this modal took the slot. */
 	private outerPreview: CalloutDefinition | null = null;
+	private outerPreviewIsDemo = false;
 	private nameInputEl: HTMLInputElement | null = null;
 	private nameErrorEl: HTMLElement | null = null;
 	private saveBtnEl: HTMLButtonElement | null = null;
@@ -254,19 +255,26 @@ export class PaletteEditorModal extends Modal {
 		// editor's, when this modal is opened over it) so it can be restored on
 		// close instead of clearing the registry's single preview slot to null.
 		this.outerPreview = this.plugin.registry.getPreviewDefinition();
+		this.outerPreviewIsDemo = this.plugin.registry.isPreviewDemo();
 		this.preview = new LiveCalloutPreview(this.plugin.app, this.previewEl, {
 			title: t("editor.livePreview"),
 			initialText: this.buildSampleText(),
 			// Push the derived palette into the registry under the reserved
 			// preview ID and re-inject CSS so the callout renders live.
 			beforeRender: () => {
+				// A demo placeholder: the palette editor previews a derived
+				// palette on a stand-in callout, it never edits a real one.
 				this.plugin.registry.setPreviewDefinition(
 					this.buildPreviewDefinition(),
+					true,
 				);
 				this.plugin.cssInjector.inject(false);
 			},
 			onDestroy: () => {
-				this.plugin.registry.setPreviewDefinition(this.outerPreview);
+				this.plugin.registry.setPreviewDefinition(
+					this.outerPreview,
+					this.outerPreviewIsDemo,
+				);
 				this.plugin.cssInjector.inject(false);
 			},
 		});

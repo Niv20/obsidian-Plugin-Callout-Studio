@@ -73,8 +73,11 @@ export class GlobalStyleModal extends Modal {
 			title: t("settings.previewTitle"),
 			initialText: this.buildSampleText(),
 			beforeRender: () => {
+				// A neutral demo callout for previewing the vault-wide geometry,
+				// never a real row — keep it out of the settings lists.
 				this.plugin.registry.setPreviewDefinition(
 					this.buildDemoDefinition(),
+					true,
 				);
 				this.plugin.cssInjector.inject(false);
 			},
