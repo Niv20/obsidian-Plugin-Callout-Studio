@@ -18,7 +18,7 @@ The same callout definition can be used in **three** different forms, each with 
 
 All three forms render in Live Preview, Reading view, and PDF export.
 
-<img width="813" height="466" alt="SCR-20260722-nukp" src="https://github.com/user-attachments/assets/3cf88262-184d-42e6-b810-d43889629afb" />
+<img alt="Three ways to use a callout" src="https://github.com/user-attachments/assets/3cf88262-184d-42e6-b810-d43889629afb" />
 
 
 ### Icons
@@ -36,7 +36,7 @@ You can also fine-tune each callout's icon size and horizontal/vertical offset.
 - Separate **Light** and **Dark** colors for every callout. Callout Studio honors Obsidian's current theme automatically.
 - Color presets: Obsidian's original callout palette plus extra curated presets.
 
-<img width="1512" height="982" alt="SCR-20260722-tnky" src="https://github.com/user-attachments/assets/8a37477c-2323-4464-9494-f3ed35e56f18" />
+<img alt="Per-mode colors" src="https://github.com/user-attachments/assets/8a37477c-2323-4464-9494-f3ed35e56f18" />
 
 ### Custom color palettes
 
@@ -53,7 +53,7 @@ When you type `[!` inside a blockquote, Callout Studio shows a suggestion list o
 - Picking a suggestion inserts a complete callout header.
 - You can confirm a brand-new callout name on the spot — it will be added as a fallback row to the registry.
 
-<img width="1512" height="982" alt="SCR-20260722-tkqg" src="https://github.com/user-attachments/assets/f3fd6c6c-e5de-4847-b46f-c7b42856d2fc" />
+<img alt="autocomplete" src="https://github.com/user-attachments/assets/f3fd6c6c-e5de-4847-b46f-c7b42856d2fc" />
 
 ### Global callout style
 
@@ -63,7 +63,7 @@ Regular, heading, and inline callouts each get their own style popup, opened fro
 - **Heading callouts** — border sides and thickness, corner rounding, vertical padding around the heading text, and a horizontal icon inset.
 - **Inline callouts** — border sides and thickness, corner rounding, and a dedicated font scale for the pill text.
 
-<img width="1512" height="982" alt="SCR-20260722-tkyp" src="https://github.com/user-attachments/assets/7558c077-1396-43de-9715-6538b4ca8297" />
+<img alt="Global callout style" src="https://github.com/user-attachments/assets/7558c077-1396-43de-9715-6538b4ca8297" />
 
 ### Default fallback callout
 
@@ -90,7 +90,7 @@ Right-click on any callout - regular, heading, or inline - to get extra actions 
 
 You can choose which of these actions appear for each of the three forms, and reorder them, from **Settings → Customize menu items**.
 
-<img width="1512" height="982" alt="SCR-20260722-tmfd" src="https://github.com/user-attachments/assets/4100cbe6-ba6f-45ce-986f-f3d7d17fdbac" />
+<img alt="Right-click context menu" src="https://github.com/user-attachments/assets/4100cbe6-ba6f-45ce-986f-f3d7d17fdbac" />
 
 ### Editor commands
 
