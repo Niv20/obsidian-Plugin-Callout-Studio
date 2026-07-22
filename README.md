@@ -36,7 +36,7 @@ You can also fine-tune each callout's icon size and horizontal/vertical offset.
 - Separate **Light** and **Dark** colors for every callout. Callout Studio honors Obsidian's current theme automatically.
 - Color presets: Obsidian's original callout palette plus extra curated presets.
 
-<img width="1512" height="982" alt="SCR-20260722-thns" src="https://github.com/user-attachments/assets/ff32c880-3cbc-46d7-a3ad-3421d2780556" />
+<img width="1512" height="982" alt="SCR-20260722-tnky" src="https://github.com/user-attachments/assets/8a37477c-2323-4464-9494-f3ed35e56f18" />
 
 ### Custom color palettes
 
