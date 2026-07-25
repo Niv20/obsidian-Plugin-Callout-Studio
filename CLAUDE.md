@@ -21,7 +21,7 @@ Callout Studio is an Obsidian plugin that lets users create and manage custom ca
 ### Core managers (`src/manager/`)
 
 - **CalloutRegistry** — single source of truth for all callout definitions. Owns the `Map<id, CalloutDefinition>`, serializes to/from `data.json`, runs CRUD and data migrations, fires `onChange` callbacks on every mutation.
-- **CSSInjector** — reads the registry and generates dynamic CSS custom properties per callout (colors, icons, light/dark overrides). Uses `adoptedStyleSheets` (one global per window). Debounced 300ms. Calls `app.workspace.trigger("css-change")` after inject to force Obsidian re-render.
+- **CSSInjector** — reads the registry and generates dynamic CSS custom properties per callout (colors, icons, light/dark overrides). Uses `adoptedStyleSheets` (one global per window). Injects synchronously, guarded by a re-entrancy latch. Calls `app.workspace.trigger("css-change")` after inject to force Obsidian re-render.
 - **CalloutDiscovery** — watches file-open/modify events and scans markdown for unknown `[!id]` patterns. Auto-creates "fallback" rows for new IDs. Prunes unused auto-created rows in a background debounced pass.
 - **MaterialSvgManager** — downloads and caches Material Symbols SVGs from fonts.gstatic.com. Persisted in `data.json`. Notifies listeners when a download finishes so CSS can re-inject.
 

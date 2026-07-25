@@ -46,9 +46,10 @@ const scanUnknownCalloutsInBuffer = (
 export class CalloutStudioSettingsTab extends PluginSettingTab {
 	plugin: SettingsTabPlugin;
 	private registrySubscription: (() => void) | null = null;
+	private previewSubscription: (() => void) | null = null;
 	private materialSvgUnsubscribe: (() => void) | null = null;
 	private cssChangeRef: EventRef | null = null;
-	private refreshTimer: number | null = null;
+	private refreshFrame: number | null = null;
 	private calloutLists: CalloutListsController | null = null;
 	private sectionDisposers: (() => void)[] = [];
 
@@ -92,6 +93,17 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 			const sub = () => this.scheduleListRefresh();
 			this.plugin.registry.onChange(sub);
 			this.registrySubscription = sub;
+		}
+
+		// The callout editor's live preview registers its in-progress definition
+		// transiently, without a registry mutation (no save, no note re-render
+		// — see setPreviewDefinition). This is the only signal that reaches us,
+		// and it is what keeps the row swatches in step with the modal's colour
+		// picker instead of trailing it by a beat.
+		if (!this.previewSubscription) {
+			const sub = () => this.scheduleListRefresh();
+			this.plugin.registry.onPreviewChange(sub);
+			this.previewSubscription = sub;
 		}
 
 		if (!this.materialSvgUnsubscribe) {
@@ -183,6 +195,10 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 			this.plugin.registry.offChange(this.registrySubscription);
 			this.registrySubscription = null;
 		}
+		if (this.previewSubscription) {
+			this.plugin.registry.offPreviewChange(this.previewSubscription);
+			this.previewSubscription = null;
+		}
 		if (this.materialSvgUnsubscribe) {
 			this.materialSvgUnsubscribe();
 			this.materialSvgUnsubscribe = null;
@@ -191,9 +207,9 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 			this.app.workspace.offref(this.cssChangeRef);
 			this.cssChangeRef = null;
 		}
-		if (this.refreshTimer !== null) {
-			window.clearTimeout(this.refreshTimer);
-			this.refreshTimer = null;
+		if (this.refreshFrame !== null) {
+			window.cancelAnimationFrame(this.refreshFrame);
+			this.refreshFrame = null;
 		}
 		this.calloutLists = null;
 		super.hide();
@@ -235,16 +251,21 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 		this.calloutLists?.refresh();
 	}
 
-	/** Debounced list refresh shared by all change subscriptions. */
+	/**
+	 * Coalesced list refresh shared by all change subscriptions.
+	 *
+	 * Coalescing on the next animation frame rather than a timer means a burst
+	 * (a registry mutation that also emits css-change, or a colour dragged
+	 * across the editor's palette menu) still costs exactly one re-render — but
+	 * that render lands in the very next paint instead of a beat afterwards.
+	 */
 	private scheduleListRefresh(): void {
 		if (!this.containerEl.isConnected) return;
-		if (this.refreshTimer !== null) {
-			window.clearTimeout(this.refreshTimer);
-		}
-		this.refreshTimer = window.setTimeout(() => {
-			this.refreshTimer = null;
+		if (this.refreshFrame !== null) return;
+		this.refreshFrame = window.requestAnimationFrame(() => {
+			this.refreshFrame = null;
 			if (this.containerEl.isConnected) this.refreshLists();
-		}, 60);
+		});
 	}
 
 	private scanOpenEditorsForUnknownCallouts(): void {

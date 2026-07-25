@@ -3,9 +3,9 @@
  *
  * Reads every CalloutDefinition from the registry and writes a single
  * `<style>` element into the document head with per-callout CSS custom
- * properties (colors, icon offsets, sizes). Debounces rapid successive calls
- * so the DOM is only updated once after a batch of registry changes.
- * Also manages the Material Symbols font link element when needed.
+ * properties (colors, icon offsets, sizes). A re-entrancy latch keeps the
+ * `css-change` this emits from starting a second pass through the plugin's own
+ * listener. Also manages the Material Symbols font link element when needed.
  */
 import { setIcon } from "obsidian";
 import type { App } from "obsidian";
@@ -36,8 +36,6 @@ import {
 import type { CalloutRegistry } from "./CalloutRegistry";
 import { StartupStyleCache } from "./StartupStyleCache";
 
-const DEBOUNCE_MS = 300;
-
 const STYLE_SHEET_REGISTRY_KEY = "__calloutStudioStyleSheet";
 type RegistryWindow = Window & {
 	[STYLE_SHEET_REGISTRY_KEY]?: CSSStyleSheet;
@@ -54,7 +52,6 @@ export class CSSInjector {
 	private styleSheet: CSSStyleSheet | null = null;
 	private styleDoc: Document | null = null;
 	private styleEl: HTMLStyleElement | null = null;
-	private debounceTimer: number | null = null;
 	private injecting = false;
 	private registry: CalloutRegistry;
 	private app: App;
@@ -154,9 +151,27 @@ export class CSSInjector {
 		this.styleEl = el;
 	}
 
+	/**
+	 * Regenerate and apply all callout CSS.
+	 *
+	 * The `injecting` latch makes this re-entrancy-safe: emitting `css-change`
+	 * below lands back here through the plugin's own listener, and that nested
+	 * call must be a no-op rather than a second full pass. `finally` is
+	 * load-bearing — a throw anywhere in the pass (a malformed colour, an
+	 * export realm without `setIcon`) would otherwise leave the latch stuck on
+	 * and silently drop every later inject for the rest of the session.
+	 */
 	inject(emitCssChange = true): void {
 		if (this.injecting) return;
 		this.injecting = true;
+		try {
+			this.injectNow(emitCssChange);
+		} finally {
+			this.injecting = false;
+		}
+	}
+
+	private injectNow(emitCssChange: boolean): void {
 		this.ensureStyleSheet();
 
 		const callouts = this.registry.getAll();
@@ -204,9 +219,26 @@ export class CSSInjector {
 		this.ensureStyleEl();
 		if (this.styleEl) this.styleEl.textContent = cssText;
 
+		// Our copy of these rules is now live, so retire the startup snippet's
+		// copy: it only catches up on a debounced disk write, and a stale rule
+		// can outrank a fresh one (see suppressSnippet). Guarded on actually
+		// having written somewhere, so a failed inject never leaves the
+		// document with no callout styling at all.
+		if (this.styleSheet || this.styleEl) {
+			this.startupCache.suppressSnippet();
+		}
+
 		// Snapshot the same text for next launch's startup fast path
-		// (localStorage + CSS snippet — see StartupStyleCache).
-		this.startupCache.persist(cssText);
+		// (localStorage + CSS snippet — see StartupStyleCache). Skipped while a
+		// transient live-preview definition is registered: that CSS describes an
+		// unsaved draft, which toSaveData() already goes out of its way to keep
+		// off disk, and hovering a colour in the editor's palette menu would
+		// otherwise cost a synchronous localStorage write plus a queued snippet
+		// write each time. Clearing the preview re-injects, which persists the
+		// real CSS again.
+		if (!this.registry.hasPreviewDefinition()) {
+			this.startupCache.persist(cssText);
+		}
 
 		// Re-paint DOM icons: keeps Lucide icons in sync after edits, and bakes
 		// the hidden material/emoji export fallback nodes (see paintIcon).
@@ -220,7 +252,6 @@ export class CSSInjector {
 		if (emitCssChange) {
 			this.app.workspace.trigger("css-change");
 		}
-		this.injecting = false;
 	}
 
 	/**
@@ -1186,16 +1217,6 @@ export class CSSInjector {
 		iconEl.replaceChildren(span);
 	}
 
-	scheduleInject(): void {
-		if (this.debounceTimer !== null) {
-			window.clearTimeout(this.debounceTimer);
-		}
-		this.debounceTimer = window.setTimeout(() => {
-			this.inject();
-			this.debounceTimer = null;
-		}, DEBOUNCE_MS);
-	}
-
 	private generateGlobalStyleCSS(): string {
 		const gs = this.registry.settings.globalStyle;
 		const parts: string[] = ["/* Global callout style */"];
@@ -1534,11 +1555,10 @@ export class CSSInjector {
 	}
 
 	destroy(): void {
+		// Hand callout styling back to the snippet before our own sheet goes
+		// away, so unloading the plugin doesn't strip colours from open notes.
+		this.startupCache.restoreSnippet();
 		this.startupCache.destroy();
-		if (this.debounceTimer !== null) {
-			window.clearTimeout(this.debounceTimer);
-			this.debounceTimer = null;
-		}
 		const doc = this.styleDoc ?? activeDocument;
 		if (this.styleSheet && "adoptedStyleSheets" in doc) {
 			doc.adoptedStyleSheets = doc.adoptedStyleSheets.filter(

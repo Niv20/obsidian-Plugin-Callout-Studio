@@ -164,10 +164,14 @@ export default class CalloutStudioPlugin extends Plugin {
 		);
 		this.register(() => this.outlineDecorator.destroy());
 
-		// Re-inject CSS when registry changes
+		// Re-inject CSS when registry changes. One call does both jobs:
+		// inject() emits "css-change" itself, and only once the new CSS is
+		// actually in place. (Scheduling a debounced inject *and* triggering
+		// css-change separately ran the whole pass twice per mutation — the
+		// trigger landed in our own css-change listener, which injects
+		// immediately, and the debounced timer then repeated it 300ms later.)
 		this.registry.onChange(() => {
-			this.cssInjector.scheduleInject();
-			this.app.workspace.trigger("css-change");
+			this.cssInjector.inject();
 			// Icon/color/display-name edits must repaint outline items too.
 			this.outlineDecorator.refreshAll();
 			void this.saveSettings();
@@ -295,8 +299,10 @@ export default class CalloutStudioPlugin extends Plugin {
 	 * re-render. Use after any mutation that should be immediately visible.
 	 */
 	refreshCallouts(): void {
+		// inject() emits "css-change" itself once the CSS is in place — a
+		// second explicit trigger here would only re-enter our own listener
+		// and run the whole pass again.
 		this.cssInjector.inject();
-		this.app.workspace.trigger("css-change");
 		// Rebuild Live Preview heading/inline decorations: registry changes
 		// don't touch the document, so CodeMirror won't rebuild them itself.
 		refreshAllMarkdownEditors(this.app);

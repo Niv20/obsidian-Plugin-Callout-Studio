@@ -25,6 +25,12 @@
  * handoff to the live-generated CSS is invisible. A stale snapshot (edit made
  * less than the debounce before quitting) self-heals: the next launch's
  * inject() persists the fresh CSS again.
+ *
+ * The handoff is a real handoff, not an overlap: once the plugin's own sheet is
+ * live, {@link StartupStyleCache.suppressSnippet} takes the snippet's `<style>`
+ * out of the cascade. Two copies of the same rules that update on different
+ * clocks do not merely waste bytes — the older one can outrank the newer one.
+ * See suppressSnippet for the failure it fixes.
  */
 import { normalizePath } from "obsidian";
 import type { App } from "obsidian";
@@ -44,6 +50,13 @@ const SNIPPET_HEADER =
 	" * community plugins load (removes the brief unstyled flash on mobile).\n" +
 	" * Deleting or disabling it only brings that flash back until the next\n" +
 	" * launch, when the plugin recreates and re-enables it automatically. */\n\n";
+
+/**
+ * First line of {@link SNIPPET_HEADER}. Identifies the snippet's `<style>`
+ * element in `<head>` by its own content — Obsidian does not tag snippet
+ * elements with the snippet name, and this needs no undocumented API.
+ */
+const SNIPPET_MARKER = SNIPPET_HEADER.split("\n")[0] ?? "";
 
 /**
  * The undocumented subset of Obsidian's `app.customCss` this module relies
@@ -78,6 +91,65 @@ export class StartupStyleCache {
 	private scopedKey(key: string): string {
 		const appId = (this.app as App & { appId?: string }).appId;
 		return `${appId ?? this.app.vault.getName()}-${key}`;
+	}
+
+	/**
+	 * Take the snippet's copy of the CSS out of the live cascade, now that the
+	 * plugin's own stylesheet carries the same rules. Called at the end of every
+	 * inject, so a snippet element Obsidian recreates on reload is caught again.
+	 *
+	 * The snippet exists purely for the window BEFORE this plugin loads. Once
+	 * our sheet is up, a second copy in `<head>` is not merely redundant — it is
+	 * actively wrong. The snippet only catches up on a debounced disk write, so
+	 * for ~2s after every edit it holds the PREVIOUS generation of these rules,
+	 * and a stale, *more specific* rule beats the fresh one: the generator skips
+	 * a `.theme-dark` override whenever it would duplicate the unscoped rule
+	 * (see CSSInjector's "explicit-undefined cascade"), which is only sound
+	 * inside ONE self-consistent stylesheet. Across two generations the old
+	 * `.theme-dark …[data-callout=x]` outranked the new unscoped rule, so a
+	 * heading bar or inline pill kept its old colour for two seconds after a
+	 * colour change — while the regular callout, whose dark block happened to
+	 * still be emitted, updated instantly.
+	 *
+	 * Both the DOM node and the file are left untouched, so the next launch
+	 * still gets its flash-free start; {@link restoreSnippet} hands styling back
+	 * if the plugin unloads mid-session.
+	 */
+	suppressSnippet(): void {
+		this.forEachSnippetStyleEl((el) => {
+			if (!el.disabled) el.disabled = true;
+		});
+	}
+
+	/** Undo {@link suppressSnippet}, so unloading the plugin hands callout
+	 * styling back to the snippet instead of dropping it. */
+	restoreSnippet(): void {
+		this.forEachSnippetStyleEl((el) => {
+			if (el.disabled) el.disabled = false;
+		});
+	}
+
+	/**
+	 * Visit the `<style>` element(s) Obsidian created for our snippet.
+	 *
+	 * Identified by the header we author ourselves: Obsidian does not tag
+	 * snippet elements with their snippet name, and matching on our own content
+	 * needs no undocumented API and cannot mistake a theme or another plugin's
+	 * styles for ours. Elements carrying an id are skipped — that is the
+	 * plugin's own dynamic `<style>`, which must keep applying.
+	 */
+	private forEachSnippetStyleEl(fn: (el: HTMLStyleElement) => void): void {
+		const docs = new Set<Document>([
+			this.app.workspace.containerEl.ownerDocument,
+			activeDocument,
+		]);
+		for (const doc of docs) {
+			for (const el of Array.from(doc.head.querySelectorAll("style"))) {
+				if (el.id) continue;
+				if (!el.textContent?.startsWith(SNIPPET_MARKER)) continue;
+				fn(el);
+			}
+		}
 	}
 
 	/** Synchronous read of the previous session's CSS (localStorage layer). */

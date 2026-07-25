@@ -181,6 +181,13 @@ export class CalloutRegistry {
 	private callouts: Map<string, CalloutDefinition> = new Map();
 	private builtInDefaults: Map<string, CalloutDefinition> = new Map();
 	private changeCallbacks: RegistryChangeCallback[] = [];
+	/**
+	 * Listeners for transient live-preview changes — a separate list from
+	 * {@link changeCallbacks} precisely because a preview is NOT a mutation:
+	 * it must never reach `saveSettings()` or force open notes to re-render.
+	 * See {@link onPreviewChange}.
+	 */
+	private previewChangeCallbacks: RegistryChangeCallback[] = [];
 	settings: PluginSettings;
 	materialSvgCache: MaterialSvgCacheEntry[] = [];
 
@@ -624,8 +631,21 @@ export class CalloutRegistry {
 	 * Deliberately does NOT call `notifyChange()`: that would trigger the
 	 * `onChange` → `saveSettings` write and force every open note to re-render.
 	 * The caller instead requests a targeted `cssInjector.inject(false)`.
+	 *
+	 * It DOES fire {@link onPreviewChange} whenever the settings lists could
+	 * look different afterwards, so the open settings tab repaints its rows in
+	 * the next frame. Without that signal the tab has no way to learn about a
+	 * preview at all, and only caught up ~2s later when the debounced startup
+	 * snippet write made Obsidian emit its own `css-change` — a disk write
+	 * standing in for an event.
 	 */
 	setPreviewDefinition(def: CalloutDefinition | null, isDemo = false): void {
+		// A demo preview is hidden from the settings lists entirely (see
+		// definitionsForLists), so only a NON-demo preview — the in-progress
+		// edit of a real callout — can change what those lists render. Capture
+		// the outgoing state before the bookkeeping below clears it.
+		const wasListVisible = this.previewActiveId !== null && !this.previewIsDemo;
+
 		// Undo the previous transient registration first, restoring any real
 		// callout it shadowed.
 		if (this.previewActiveId !== null) {
@@ -646,6 +666,22 @@ export class CalloutRegistry {
 			this.previewIsDemo = isDemo;
 			this.callouts.set(def.id, def);
 		}
+
+		// Notify when either end of the transition was list-visible: taking a
+		// non-demo preview down restores the real row just as surely as putting
+		// one up replaces it. A demo → demo swap changes nothing on screen.
+		if (wasListVisible || (def !== null && !isDemo)) {
+			this.notifyPreviewChange();
+		}
+	}
+
+	/**
+	 * True while a transient live-preview definition stands in for (or adds to)
+	 * the real callouts. Callers use it to skip work that must only ever see
+	 * committed state — persisting the startup CSS snapshot, above all.
+	 */
+	hasPreviewDefinition(): boolean {
+		return this.previewActiveId !== null;
 	}
 
 	/**
@@ -844,6 +880,30 @@ export class CalloutRegistry {
 
 	private notifyChange(): void {
 		for (const cb of this.changeCallbacks) {
+			cb();
+		}
+	}
+
+	/**
+	 * Subscribe to transient live-preview changes (see
+	 * {@link setPreviewDefinition}). Deliberately separate from
+	 * {@link onChange}: a preview is not a mutation, so these listeners must
+	 * stay off the `saveSettings` / re-render-every-note path. The settings tab
+	 * uses it to keep its row swatches in step with the editor modal's preview.
+	 */
+	onPreviewChange(callback: RegistryChangeCallback): void {
+		this.previewChangeCallbacks.push(callback);
+	}
+
+	offPreviewChange(callback: RegistryChangeCallback): void {
+		const idx = this.previewChangeCallbacks.indexOf(callback);
+		if (idx >= 0) {
+			this.previewChangeCallbacks.splice(idx, 1);
+		}
+	}
+
+	private notifyPreviewChange(): void {
+		for (const cb of this.previewChangeCallbacks) {
 			cb();
 		}
 	}
