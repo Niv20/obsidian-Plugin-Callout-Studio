@@ -177,6 +177,39 @@ export function mergeSavedSettings(
 
 export type RegistryChangeCallback = () => void;
 
+/**
+ * Re-stamps a transient preview definition with the identity of the real
+ * callout it shadows: *which* callout this entry is, as opposed to how it
+ * currently looks.
+ *
+ * The settings editor builds its preview from form state alone
+ * (`CalloutEditor.buildPreviewDefinition`), so it fabricates the ownership
+ * fields — always `builtIn: false`, `source: "user"`, no aliases. Those values
+ * are right for a brand-new draft (which shadows nothing) but wrong the moment
+ * the preview stands in for an existing callout in the map: the settings lists
+ * partition on `builtIn`, so a built-in row would re-home itself into "My
+ * callout types" for as long as its editor is open, the row would drop its
+ * alias badges and its fallback tag, and the CSS pipeline would stop emitting
+ * rules for the aliases — un-styling open notes mid-edit.
+ *
+ * Everything the user is actively editing — display name, icon, colors,
+ * gradient, fold and offset settings — still comes from the preview, so the
+ * row and the rendered callout keep tracking the edit live.
+ */
+function withIdentityOf(
+	real: CalloutDefinition,
+	preview: CalloutDefinition,
+): CalloutDefinition {
+	return {
+		...preview,
+		builtIn: real.builtIn,
+		source: real.source,
+		customized: real.customized,
+		aliases: real.aliases,
+		metadata: real.metadata,
+	};
+}
+
 export class CalloutRegistry {
 	private callouts: Map<string, CalloutDefinition> = new Map();
 	private builtInDefaults: Map<string, CalloutDefinition> = new Map();
@@ -556,8 +589,10 @@ export class CalloutRegistry {
 	 * it shadows — the shadowed built-in/user callout, or nothing when it shadows
 	 * a fresh id — leaving `getAll()` (used by the CSS/render pipeline) untouched
 	 * so the demo still renders live in the preview pane. Non-demo previews (an
-	 * in-progress edit of an existing callout) pass through unchanged: that row
-	 * *should* reflect the live edit.
+	 * in-progress edit of an existing callout) pass through as-is: that row
+	 * *should* reflect the live edit. Such a row can still never change sections,
+	 * because a preview shadowing a real callout inherits that callout's identity
+	 * on the way into the map — see {@link withIdentityOf}.
 	 */
 	private definitionsForLists(): CalloutDefinition[] {
 		if (this.previewActiveId === null || !this.previewIsDemo) {
@@ -618,6 +653,10 @@ export class CalloutRegistry {
 	 *   orphan rows.
 	 * - If the new ID collides with a real callout, the original is remembered in
 	 *   {@link previewShadowedDef} and restored on clear.
+	 * - A preview that collides that way also inherits the shadowed callout's
+	 *   identity ({@link withIdentityOf}), so an in-progress edit can restyle a
+	 *   row but never re-home it between the settings lists, strip its aliases,
+	 *   or make a built-in look deletable.
 	 * - {@link toSaveData} skips (or substitutes the shadowed original for) the
 	 *   active preview ID, so the in-progress edit can never reach disk.
 	 *
@@ -676,7 +715,15 @@ export class CalloutRegistry {
 			this.previewShadowedDef = existing ?? null;
 			this.previewActiveId = def.id;
 			this.previewIsDemo = isDemo;
-			this.callouts.set(def.id, def);
+			// A preview never owns the identity of the callout it shadows —
+			// see withIdentityOf. Applied to demos too: they are already hidden
+			// from the lists, but it keeps the map entry a faithful stand-in for
+			// the CSS pipeline (notably the built-in `example`, whose id doubles
+			// as the demo placeholder, keeping its aliases styled).
+			this.callouts.set(
+				def.id,
+				existing ? withIdentityOf(existing, def) : def,
+			);
 		}
 
 		// Notify when either end of the transition was list-visible: taking a

@@ -1376,7 +1376,16 @@ export class CalloutEditor extends Modal {
 		].join("\n");
 	}
 
-	/** Snapshot the current form state as a transient preview definition. */
+	/**
+	 * Snapshot the current form state as a transient preview definition.
+	 *
+	 * The ownership fields below (`builtIn`, `source`, and the empty `aliases`)
+	 * describe a brand-new draft, which is the only case where this snapshot
+	 * shadows nothing. When it stands in for an existing callout, the registry
+	 * re-stamps it with that callout's real identity on the way into the map
+	 * (`withIdentityOf` in CalloutRegistry) — so don't try to derive them here:
+	 * mid-edit the form's id may not match any real row at all.
+	 */
 	private buildPreviewDefinition(): CalloutDefinition {
 		return {
 			id: this.currentPreviewId(),
