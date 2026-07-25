@@ -68,6 +68,21 @@ function deriveDisplayNameFromId(id: string): string {
 	return id.replace(/^\p{L}/u, (c) => c.toUpperCase());
 }
 
+/**
+ * The colour half of the form state — exactly the fields a palette writes.
+ * Used both for the committed values and for the transient hover preview
+ * (see {@link CalloutEditor.previewColorOverride}).
+ */
+type EditorColorState = {
+	colorLight: string;
+	colorDark: string;
+	bgColorLight: string;
+	bgColorDark: string;
+	bgGradient: BgGradient | undefined;
+	textColorLight: string;
+	textColorDark: string;
+};
+
 export class CalloutEditor extends Modal {
 	private plugin: CalloutEditorPlugin;
 	private existingId: string | null;
@@ -96,6 +111,15 @@ export class CalloutEditor extends Modal {
 	/** Id of the palette (custom or preset) currently applied, if any. */
 	private paletteId: string | undefined;
 	private preview: LiveCalloutPreview | null = null;
+	/**
+	 * Colours the live preview shows *instead of* the committed ones while the
+	 * user hovers a palette that was never clicked. Deliberately kept out of
+	 * the form fields above: those feed `stateSnapshot()` and `save()`, so a
+	 * mere hover must not light up "Save changes", must not repaint the
+	 * settings-list swatches, and above all must not be what gets saved.
+	 * Cleared on commit, on menu close and before saving.
+	 */
+	private previewColorOverride: EditorColorState | null = null;
 	private previewFoldCollapsed = false;
 	private idsTagInput: TagInput | null = null;
 	private nameTextInput: TextComponent | null = null;
@@ -395,6 +419,12 @@ export class CalloutEditor extends Modal {
 				this.plugin.registry.setPreviewDefinition(
 					this.buildPreviewDefinition(),
 					this.existingId === null,
+					// A hover preview stays out of the settings lists' refresh:
+					// the row swatches must keep showing the colour the user
+					// actually picked until a new one is clicked. Every other
+					// edit (icon, name, sliders, a committed palette) still
+					// repaints them in the next frame.
+					this.previewColorOverride === null,
 				);
 				this.plugin.cssInjector.inject(false);
 			},
@@ -568,7 +598,7 @@ export class CalloutEditor extends Modal {
 		let selectedId = "";
 		let menuOpen = false;
 		const itemEls: HTMLElement[] = [];
-		const readColorState = () => ({
+		const readColorState = (): EditorColorState => ({
 			colorLight: this.colorLight,
 			colorDark: this.colorDark,
 			bgColorLight: this.bgColorLight,
@@ -577,11 +607,11 @@ export class CalloutEditor extends Modal {
 			textColorLight: this.textColorLight,
 			textColorDark: this.textColorDark,
 		});
-		let colorStateBeforeMenu: ReturnType<typeof readColorState> | null =
-			null;
-		const applyColorState = (
-			state: ReturnType<typeof readColorState>,
-		): void => {
+		/**
+		 * Commit colours to the form state — the only path that may mark the
+		 * form dirty. Hovering goes through `previewColorsTransient()` instead.
+		 */
+		const applyColorState = (state: EditorColorState): void => {
 			this.colorLight = state.colorLight;
 			this.colorDark = state.colorDark;
 			this.bgColorLight = state.bgColorLight;
@@ -591,6 +621,8 @@ export class CalloutEditor extends Modal {
 				: undefined;
 			this.textColorLight = state.textColorLight;
 			this.textColorDark = state.textColorDark;
+			// A real selection supersedes whatever was being hovered.
+			this.previewColorOverride = null;
 			this.updatePreview();
 		};
 
@@ -633,31 +665,41 @@ export class CalloutEditor extends Modal {
 			renderTriggerCirclesFromState();
 		}
 
-		const applyPaletteColors = (
+		/**
+		 * The colours a palette would produce, resolved against the current
+		 * state. Backgrounds are taken over only where the palette defines
+		 * them (an explicit-undefined leaves the current tint alone), while the
+		 * gradient is replaced unconditionally — switching to another
+		 * background style must clear a previously applied gradient, not leave
+		 * it behind. Custom palettes carry their own text colors; presets fall
+		 * back to the defaults.
+		 */
+		const paletteToColorState = (
 			palette: ColorPalette,
-			persist: boolean,
-		): void => {
-			this.colorLight = palette.colorLight;
-			this.colorDark = palette.colorDark;
-			if (palette.bgColorLight !== undefined) {
-				this.bgColorLight = palette.bgColorLight;
-			}
-			if (palette.bgColorDark !== undefined) {
-				this.bgColorDark = palette.bgColorDark;
-			}
-			// Unconditional: switching to another background style must clear
-			// a previously applied gradient, not leave it behind.
-			this.bgGradient = palette.bgGradient
+		): EditorColorState => ({
+			...readColorState(),
+			colorLight: palette.colorLight,
+			colorDark: palette.colorDark,
+			...(palette.bgColorLight !== undefined
+				? { bgColorLight: palette.bgColorLight }
+				: {}),
+			...(palette.bgColorDark !== undefined
+				? { bgColorDark: palette.bgColorDark }
+				: {}),
+			bgGradient: palette.bgGradient
 				? { ...palette.bgGradient }
-				: undefined;
-			// Custom palettes carry their own text colors; presets fall back
-			// to the defaults, as before.
-			this.textColorLight =
-				palette.textColorLight ?? DEFAULT_TEXT_COLOR_LIGHT;
-			this.textColorDark =
-				palette.textColorDark ?? DEFAULT_TEXT_COLOR_DARK;
-			this.updatePreview();
-			if (persist) colorStateBeforeMenu = null;
+				: undefined,
+			textColorLight: palette.textColorLight ?? DEFAULT_TEXT_COLOR_LIGHT,
+			textColorDark: palette.textColorDark ?? DEFAULT_TEXT_COLOR_DARK,
+		});
+
+		/**
+		 * Apply a palette for real. Only ever reached from an explicit
+		 * selection — hovering previews the very same state transiently, so an
+		 * uncommitted colour can never reach the snapshot or the save.
+		 */
+		const applyPaletteColors = (palette: ColorPalette): void => {
+			applyColorState(paletteToColorState(palette));
 		};
 
 		const closeMenu = (): void => {
@@ -665,12 +707,9 @@ export class CalloutEditor extends Modal {
 			menuOpen = false;
 			menu.addClass("cs-palette-menu-hidden");
 			trigger.removeClass("is-open");
-			if (colorStateBeforeMenu) {
-				applyColorState(colorStateBeforeMenu);
-				colorStateBeforeMenu = null;
-			} else {
-				this.updatePreview();
-			}
+			// Drop any hover preview: nothing was committed, so the preview
+			// simply returns to the form's own colours.
+			this.previewColorsTransient(null);
 		};
 
 		const clearActive = (): void => {
@@ -681,7 +720,10 @@ export class CalloutEditor extends Modal {
 			activeIndex = -1;
 		};
 
-		const setActive = (index: number): void => {
+		const setActive = (
+			index: number,
+			opts?: { preview?: boolean },
+		): void => {
 			if (index < 0 || index >= itemEls.length) return;
 			clearActive();
 			activeIndex = index;
@@ -689,9 +731,14 @@ export class CalloutEditor extends Modal {
 			if (!el) return;
 			el.addClass("is-active");
 			el.scrollIntoView({ block: "nearest" });
-			// Live preview the hovered preset (do not commit)
+			// Live preview the hovered preset without committing it: the form
+			// state, the save button, the trigger label and the settings-list
+			// swatches all stay on the current colour until it is clicked.
+			if (opts?.preview === false) return;
 			const entry = paletteEntries[index];
-			if (entry) applyPaletteColors(entry.palette, false);
+			if (entry) {
+				this.previewColorsTransient(paletteToColorState(entry.palette));
+			}
 		};
 
 		const commitSelection = (index: number): void => {
@@ -700,7 +747,7 @@ export class CalloutEditor extends Modal {
 			if (!entry) return;
 			selectedId = entry.id;
 			this.paletteId = entry.id;
-			applyPaletteColors(entry.palette, true);
+			applyPaletteColors(entry.palette);
 			triggerLabel.setText(entry.name);
 			renderTriggerCircles(resolveCurrentModeColors(entry.palette));
 			this.updateSaveState();
@@ -765,7 +812,11 @@ export class CalloutEditor extends Modal {
 				cls: "cs-palette-menu-item-label",
 				text: t("editor.paletteNewColor"),
 			});
-			newColorItem.addEventListener("mouseenter", clearActive);
+			newColorItem.addEventListener("mouseenter", () => {
+				// Leaving the palette rows also ends their hover preview.
+				clearActive();
+				this.previewColorsTransient(null);
+			});
 			newColorItem.addEventListener(
 				"click",
 				() => void pickNewPaletteColor(),
@@ -777,10 +828,7 @@ export class CalloutEditor extends Modal {
 		// new palette immediately selects and applies it to this callout.
 		const pickNewPaletteColor = async (): Promise<void> => {
 			// Drop any uncommitted hover-preview colors before the modal opens.
-			if (colorStateBeforeMenu) {
-				applyColorState(colorStateBeforeMenu);
-				colorStateBeforeMenu = null;
-			}
+			this.previewColorsTransient(null);
 			closeMenu();
 			const result = await new PaletteEditorModal(this.plugin, {
 				takenNames: this.plugin.settings.customPalettes.map(
@@ -797,7 +845,7 @@ export class CalloutEditor extends Modal {
 			rebuildPaletteEntries();
 			selectedId = palette.id;
 			this.paletteId = palette.id;
-			applyPaletteColors(customPaletteToColorPalette(palette), true);
+			applyPaletteColors(customPaletteToColorPalette(palette));
 			triggerLabel.setText(palette.name);
 			renderTriggerCircles(resolveCurrentModeColors(palette));
 			this.updateSaveState();
@@ -807,17 +855,18 @@ export class CalloutEditor extends Modal {
 			if (menuOpen) return;
 			closeFoldMenu();
 			menuOpen = true;
-			colorStateBeforeMenu = readColorState();
 			rebuildPaletteEntries();
 			buildMenu();
 			menu.removeClass("cs-palette-menu-hidden");
 			trigger.addClass("is-open");
-			// Focus selected, else first
+			// Focus selected, else first — highlight only. Opening the menu is
+			// not a choice, so it must not repaint the preview (with no palette
+			// matched it would otherwise jump to the first entry's colours).
 			const startIdx = paletteEntries.findIndex(
 				(e) => e.id === selectedId,
 			);
 			activeIndex = -1;
-			setActive(startIdx >= 0 ? startIdx : 0);
+			setActive(startIdx >= 0 ? startIdx : 0, { preview: false });
 			menu.focus();
 		};
 
@@ -1281,6 +1330,21 @@ export class CalloutEditor extends Modal {
 	}
 
 	/**
+	 * Re-render the live preview with colours the user has not committed —
+	 * a palette being hovered — or with `null` to drop such a preview and fall
+	 * back to the form's own colours.
+	 *
+	 * Deliberately narrower than {@link updatePreview}: no sample-text rebuild
+	 * (colours do not change the text) and, crucially, no `updateSaveState()`.
+	 * Hovering is not an edit, so it must leave "Save changes" alone.
+	 */
+	private previewColorsTransient(state: EditorColorState | null): void {
+		if (state === null && this.previewColorOverride === null) return;
+		this.previewColorOverride = state;
+		this.preview?.refresh();
+	}
+
+	/**
 	 * The callout ID the live preview should render under: the real primary ID
 	 * being edited, or a readable placeholder while it is still empty (a brand-new
 	 * callout before the user types a name).
@@ -1333,10 +1397,18 @@ export class CalloutEditor extends Modal {
 			aliases: [],
 			builtIn: false,
 			source: "user",
+			// Layered last: a hovered-but-uncommitted palette reaches the
+			// CSS/preview pipeline without ever touching the form state above.
+			...(this.previewColorOverride ?? {}),
 		};
 	}
 
 	private async save(): Promise<void> {
+		// A palette may still be hovered (the outside-click handler that ends a
+		// hover preview only runs after this button's own handler). It was
+		// never chosen, so it must not survive into the save — nor into the
+		// re-registered preview if the save is rejected below.
+		this.previewColorOverride = null;
 		// Clear the transient preview registration first, restoring any real
 		// callout it was shadowing, so the save flow mutates the real definition
 		// (not the in-progress preview) and onClose can't later revert the save.

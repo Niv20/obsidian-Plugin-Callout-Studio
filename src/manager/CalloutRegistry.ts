@@ -638,8 +638,20 @@ export class CalloutRegistry {
 	 * preview at all, and only caught up ~2s later when the debounced startup
 	 * snippet write made Obsidian emit its own `css-change` — a disk write
 	 * standing in for an event.
+	 *
+	 * `notifyLists: false` suppresses exactly that signal for a preview the
+	 * user has not chosen — the callout editor's palette menu previewing a
+	 * merely hovered colour. The rows then keep rendering the last committed
+	 * state, which is what the modal's own swatches and labels still show. The
+	 * map does hold the hovered colours meanwhile, so a list refresh from an
+	 * unrelated source would surface them; that resolves itself on the next
+	 * committed change or when the menu closes and re-notifies.
 	 */
-	setPreviewDefinition(def: CalloutDefinition | null, isDemo = false): void {
+	setPreviewDefinition(
+		def: CalloutDefinition | null,
+		isDemo = false,
+		notifyLists = true,
+	): void {
 		// A demo preview is hidden from the settings lists entirely (see
 		// definitionsForLists), so only a NON-demo preview — the in-progress
 		// edit of a real callout — can change what those lists render. Capture
@@ -670,7 +682,7 @@ export class CalloutRegistry {
 		// Notify when either end of the transition was list-visible: taking a
 		// non-demo preview down restores the real row just as surely as putting
 		// one up replaces it. A demo → demo swap changes nothing on screen.
-		if (wasListVisible || (def !== null && !isDemo)) {
+		if (notifyLists && (wasListVisible || (def !== null && !isDemo))) {
 			this.notifyPreviewChange();
 		}
 	}
