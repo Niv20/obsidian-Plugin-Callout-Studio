@@ -56,6 +56,11 @@ export const RENDERED_HEADING_TOKEN_RE = /^\[!([^\]\n\r]+)\]([+-])?[ \t]*/;
  * both `[!id]± Title` and `!id± Title` must parse. In the bracketless form an
  * id containing spaces cannot be delimited by syntax alone — see the resolver
  * extension in parseOutlineHeadingText.
+ *
+ * The bracketless alternative is inherently ambiguous: `!bug Title` is what
+ * the outline shows for `# [!bug] Title`, but it is *also* what a heading
+ * literally written `# !bug Title` shows. The parse alone cannot tell them
+ * apart, so callers must consult the raw source (see `bracketed` below).
  * Captures: 1=bracketed id, 2=bracketless id, 3=fold mark.
  */
 const OUTLINE_HEADING_TOKEN_RE =
@@ -71,6 +76,13 @@ export interface OutlineHeadingToken {
 	foldMark: "" | "+" | "-";
 	/** Displayed title text after the token ("" when the heading has none). */
 	title: string;
+	/**
+	 * True when the token was written `[!id]`. False means it was matched in
+	 * the bracketless outline form, which only `[!id]` headings *and* headings
+	 * literally starting with `!id` can produce — callers must verify such a
+	 * token against the file's raw heading text before decorating it.
+	 */
+	bracketed: boolean;
 }
 
 /**
@@ -83,6 +95,10 @@ export interface OutlineHeadingToken {
  * the first word alone is not a known id, the id is greedily extended one
  * word at a time (up to a small cap) until a known id is found; otherwise the
  * single-word parse stands, matching how unknown ids render elsewhere.
+ *
+ * A returned token is *not* proof that the user wrote a callout: check
+ * `token.bracketed` and, when it is false, confirm the id against the file's
+ * raw heading text before rendering anything.
  */
 export function parseOutlineHeadingText(
 	text: string,
@@ -121,7 +137,7 @@ export function parseOutlineHeadingText(
 		}
 	}
 
-	return { rawId, foldMark, title };
+	return { rawId, foldMark, title, bracketed };
 }
 
 /** One `[!name]` token found on a line, with its role and exact position. */

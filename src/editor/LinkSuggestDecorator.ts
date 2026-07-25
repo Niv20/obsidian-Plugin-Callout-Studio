@@ -115,14 +115,15 @@ function decorateHeadingSuggestion(
 		return;
 	}
 
-	// The outline parser fits here too: heading cache text carries the token
-	// bracketed at the very start, and the bracketless fallback is inert for
-	// ids that don't resolve.
+	// The outline parser fits here too, but only its bracketed branch: unlike
+	// the outline pane, HeadingCache.heading is the raw source text, so a real
+	// callout heading always arrives as `[!id]`. A bracketless match could then
+	// only come from a heading literally written `# !id Title` — not a callout.
 	const token = parseOutlineHeadingText(v.heading, (raw) => {
 		const id = normalizeCalloutId(raw);
 		return !!(host.registry.get(id) ?? host.registry.findByAlias(id));
 	});
-	if (!token) return;
+	if (!token?.bracketed) return;
 
 	const titleEl =
 		root.querySelector<HTMLElement>(".suggestion-title") ??

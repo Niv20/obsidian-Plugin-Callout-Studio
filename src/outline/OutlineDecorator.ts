@@ -18,6 +18,7 @@
 import type { App, WorkspaceLeaf } from "obsidian";
 import type { PluginSettings } from "../types";
 import type { CalloutRegistry } from "../manager/CalloutRegistry";
+import type { OutlineHeadingToken } from "../editor/calloutTokens";
 import { parseOutlineHeadingText } from "../editor/calloutTokens";
 import {
 	CSS_REF_TOKEN,
@@ -34,6 +35,8 @@ export interface OutlineDecoratorHost {
 }
 
 interface OutlineAttachment {
+	/** The pane itself — the route to the file whose headings it lists. */
+	leaf: WorkspaceLeaf;
 	container: HTMLElement;
 	observer: MutationObserver;
 	/** Pending requestAnimationFrame handle (0 = none). */
@@ -42,7 +45,28 @@ interface OutlineAttachment {
 	muted: boolean;
 }
 
+/** How the callout headings of one file are written in its raw source. */
+interface SourceHeadings {
+	/** Normalized ids of headings written `[!id]` — real callout headings. */
+	bracketedIds: Set<string>;
+	/** Normalized ids of headings written plainly as `!id` — not callouts. */
+	literalIds: Set<string>;
+	/** Outline text each `[!id]` heading is expected to render as. */
+	bracketedTexts: Set<string>;
+}
+
 const ITEM_SELECTOR = ".tree-item-inner";
+
+/** Collapse whitespace so reconstructed and rendered text compare equal. */
+const collapse = (text: string): string => text.replace(/\s+/g, " ").trim();
+
+/**
+ * Rebuild what the outline will display for a `[!id]` heading: the same text
+ * minus the two brackets. Used to tell two same-id headings apart when a file
+ * happens to contain both `# [!bug] A` and `# !bug B`.
+ */
+const outlineTextOf = (token: OutlineHeadingToken): string =>
+	collapse(`!${token.rawId}${token.foldMark} ${token.title}`);
 
 export class OutlineDecorator {
 	private readonly attachments = new Map<WorkspaceLeaf, OutlineAttachment>();
@@ -64,6 +88,7 @@ export class OutlineDecorator {
 			if (this.attachments.has(leaf)) continue;
 			const container = leaf.view.containerEl;
 			const att: OutlineAttachment = {
+				leaf,
 				container,
 				observer: new MutationObserver(() => {
 					if (att.muted) return;
@@ -121,12 +146,15 @@ export class OutlineDecorator {
 			headingCallouts.enabled &&
 			headingCallouts.refCleanTitles;
 
+		// One metadata lookup per pass, not per item.
+		const source = active ? this.readSourceHeadings(att) : null;
+
 		att.muted = true;
 		try {
 			for (const el of Array.from(
 				att.container.querySelectorAll<HTMLElement>(ITEM_SELECTOR),
 			)) {
-				if (active) this.processItem(el);
+				if (source) this.processItem(el, source);
 				else this.restoreItem(el);
 			}
 		} finally {
@@ -137,7 +165,71 @@ export class OutlineDecorator {
 		}
 	}
 
-	private processItem(el: HTMLElement): void {
+	/**
+	 * Read the raw heading text of the file this pane lists and sort every
+	 * callout-looking heading into the two forms it can be written in.
+	 *
+	 * The outline drops the brackets when it renders a heading, so `!bug Title`
+	 * on screen is equally consistent with `# [!bug] Title` (a real callout)
+	 * and with `# !bug Title` (plain text that merely starts with `!`). Only
+	 * the raw heading text in the metadata cache tells the two apart.
+	 */
+	private readSourceHeadings(att: OutlineAttachment): SourceHeadings {
+		const src: SourceHeadings = {
+			bracketedIds: new Set(),
+			literalIds: new Set(),
+			bracketedTexts: new Set(),
+		};
+		// The Outline view is not part of the typed API — duck-type its file
+		// and go through getCache(path) so no TFile identity check is needed.
+		const file = (att.leaf.view as { file?: { path?: unknown } }).file;
+		if (typeof file?.path !== "string") return src;
+		const headings =
+			this.host.app.metadataCache.getCache(file.path)?.headings ?? [];
+
+		// Pass 1: the unambiguous `[!id]` headings, which also define the set of
+		// ids the bracketless parse is allowed to extend to in pass 2.
+		for (const h of headings) {
+			const token = parseOutlineHeadingText(h.heading);
+			if (!token?.bracketed) continue;
+			src.bracketedIds.add(normalizeCalloutId(token.rawId));
+			src.bracketedTexts.add(outlineTextOf(token));
+		}
+		// Pass 2: headings the user wrote as plain `!id ...`. Parsed exactly the
+		// way the outline pane will parse them, so the ids line up.
+		for (const h of headings) {
+			const token = parseOutlineHeadingText(h.heading, (raw) =>
+				src.bracketedIds.has(normalizeCalloutId(raw)),
+			);
+			if (!token || token.bracketed) continue;
+			src.literalIds.add(normalizeCalloutId(token.rawId));
+		}
+		return src;
+	}
+
+	/**
+	 * Decide whether an outline item really came from a `[!id]` heading. Only
+	 * `[!id]` is callout syntax — a heading the user wrote as `# !bug Title`
+	 * must stay plain text, even though the outline displays the two alike.
+	 */
+	private isRealCallout(
+		token: OutlineHeadingToken,
+		original: string,
+		source: SourceHeadings,
+	): boolean {
+		if (token.bracketed) return true;
+		const id = normalizeCalloutId(token.rawId);
+		if (!source.bracketedIds.has(id)) return false;
+		// No plain `!id` heading in this file, so the brackets can only have
+		// come off a real callout — accept whatever title the outline shows,
+		// including one whose markdown formatting it stripped.
+		if (!source.literalIds.has(id)) return true;
+		// Both forms share this id in this file; only an exact text match can
+		// say which heading this item is.
+		return source.bracketedTexts.has(collapse(original));
+	}
+
+	private processItem(el: HTMLElement, source: SourceHeadings): void {
 		const textNode = this.findLeadingTextNode(el);
 		if (!textNode) {
 			// Nothing we can safely rewrite; drop stale state if any.
@@ -157,14 +249,13 @@ export class OutlineDecorator {
 			this.clearDecoration(el);
 		}
 
-		const token = parseOutlineHeadingText(original, (raw) => {
-			const id = normalizeCalloutId(raw);
-			return !!(
-				this.host.registry.get(id) ??
-				this.host.registry.findByAlias(id)
-			);
-		});
-		if (!token) {
+		// Resolving multi-word ids against the file's own headings rather than
+		// against the registry keeps the greedy extension honest — and gives
+		// the bracketless form the source check it needs to be trusted at all.
+		const token = parseOutlineHeadingText(original, (raw) =>
+			source.bracketedIds.has(normalizeCalloutId(raw)),
+		);
+		if (!token || !this.isRealCallout(token, original, source)) {
 			this.restoreItem(el);
 			return;
 		}
