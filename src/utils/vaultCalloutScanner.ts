@@ -256,26 +256,32 @@ export async function countCalloutUsagesMap(
 }
 
 /**
- * Convert every `> [!id]` block (for any id in `ids`) in the vault into plain
- * text. The header `[!id]` (and any `+`/`-` fold marker) is stripped while any
- * trailing title text on that line is preserved as a normal paragraph line.
- * Subsequent blockquote-continuation lines that belong to the same callout
- * block lose their leading `> ` so the body becomes plain text.
+ * Convert every usage of `ids` in the vault into plain text, per render role:
  *
- * Only outermost callout blocks whose id matches are unwrapped; nested
- * callouts inside non-matching blocks are left untouched.
+ * - regular  `> [!id] Title` → the block is unwrapped: the header keeps only its
+ *   title text and the body lines lose their leading `> `. Only outermost blocks
+ *   (single `>`) are unwrapped; callouts nested inside non-matching blocks stay.
+ * - heading   `### [!id] Title` → `### Title`, or `### [!id]` → `### <name>`
+ *   when the heading has no title of its own to fall back on.
+ * - inline    `[!id]` → `<name>`.
  *
- * Returns `{ files, blocks }` describing how many files were modified and how
- * many callout blocks were converted in total.
+ * `displayName` is that fallback name — a heading or a pill carries no text
+ * besides the token, so dropping the token outright would delete the line's
+ * only content.
+ *
+ * Returns `{ files, blocks }`: how many files were modified and how many
+ * usages were converted in total.
  */
 export async function convertCalloutsToPlainTextInVault(
 	app: App,
 	ids: string[],
+	displayName: string,
 ): Promise<{ files: number; blocks: number }> {
 	if (ids.length === 0) return { files: 0, blocks: 0 };
 
 	const idSet = new Set(ids.map((id) => normalizeCalloutId(id)));
 	const headerRegex = /^(>+)\s*\[!([^\]\n\r]+)\][+-]?\s*(.*)$/i;
+	const name = displayName.trim();
 
 	const files = app.vault.getMarkdownFiles();
 	let modifiedFiles = 0;
@@ -284,11 +290,16 @@ export async function convertCalloutsToPlainTextInVault(
 	for (const file of files) {
 		const content = await app.vault.read(file);
 		const lines = content.split("\n");
+		const isContentLine = createDocumentLineFilter();
 		let blocksInFile = 0;
 		let i = 0;
 
 		while (i < lines.length) {
 			const line = lines[i] ?? "";
+			if (!isContentLine(line, i)) {
+				i++;
+				continue;
+			}
 			const headerMatch = line.match(headerRegex);
 			if (headerMatch) {
 				const markers = headerMatch[1] ?? ">";
@@ -303,11 +314,45 @@ export async function convertCalloutsToPlainTextInVault(
 					while (i < lines.length) {
 						const cont = lines[i] ?? "";
 						if (!/^>/.test(cont)) break;
+						// Still feed the filter every line we consume, or its
+						// fence state desyncs on a fenced callout body.
+						isContentLine(cont, i);
 						lines[i] = cont.replace(/^>\s?/, "");
 						i++;
 					}
 					blocksInFile++;
 					continue;
+				}
+			}
+
+			// Not a blockquote header we own → heading and inline tokens.
+			if (line.indexOf("[!") !== -1) {
+				const result = rewriteTokensOnLine(
+					line,
+					scanLineForCalloutTokens(line),
+					(token) => {
+						if (token.role === "regular") return null;
+						if (!idSet.has(normalizeCalloutId(token.rawId))) {
+							return null;
+						}
+						if (token.role === "inline") {
+							return { text: name, end: token.to };
+						}
+						// Heading: `token.to` already covers any fold mark, so
+						// swallow the whitespace after it too and let the
+						// heading's own title stand — falling back to the name
+						// when the token was all the heading had.
+						const after = line.slice(token.to);
+						const gap = after.length - after.replace(/^[ \t]+/, "").length;
+						return {
+							text: token.hasTitle ? "" : name,
+							end: token.to + gap,
+						};
+					},
+				);
+				if (result.count > 0) {
+					lines[i] = result.line;
+					blocksInFile += result.count;
 				}
 			}
 			i++;

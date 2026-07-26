@@ -23,9 +23,12 @@ import type { SettingsSectionContext } from "./types";
 
 const convertVaultCalloutsToPlainText = (
 	app: App,
+	def: CalloutDefinition,
 	ids: string[],
 ): Promise<{ files: number; blocks: number }> =>
-	convertCalloutsToPlainTextInVault(app, ids);
+	// The display name is what a heading or inline usage falls back to: those
+	// carry no text besides the token, so it is all they have left.
+	convertCalloutsToPlainTextInVault(app, ids, def.displayName);
 
 const convertRegistryCalloutToFallback = (
 	ctx: SettingsSectionContext,
@@ -177,7 +180,11 @@ async function handleCalloutDelete(
 	}
 
 	if (usage.fileCount > 0) {
-		const result = await convertVaultCalloutsToPlainText(ctx.app, allIds);
+		const result = await convertVaultCalloutsToPlainText(
+			ctx.app,
+			def,
+			allIds,
+		);
 		new Notice(
 			t("vault.convertedToPlainText", {
 				blocks: String(result.blocks),
@@ -211,7 +218,7 @@ async function handleBuiltInCalloutDelete(
 		return;
 	}
 
-	const result = await convertVaultCalloutsToPlainText(ctx.app, allIds);
+	const result = await convertVaultCalloutsToPlainText(ctx.app, def, allIds);
 	new Notice(
 		t("vault.convertedToPlainText", {
 			blocks: String(result.blocks),
