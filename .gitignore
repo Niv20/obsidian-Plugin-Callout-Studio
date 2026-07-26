@@ -24,7 +24,13 @@ data.json
 # local agent state
 .serena/
 graphify-out/
-.claude/
+
+# .claude is local-only, except the release skill, which is part of the
+# project's release process and belongs in version control.
+.claude/*
+!.claude/skills/
+.claude/skills/*
+!.claude/skills/release/
 
 # Exclude macOS Finder (System Explorer) View States
 .DS_Store

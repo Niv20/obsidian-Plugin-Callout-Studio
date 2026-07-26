@@ -17,6 +17,32 @@ jobs:
         steps:
             - uses: actions/checkout@v4
 
+            # Refuse to publish a tag that doesn't match the version files.
+            # Obsidian requires the release tag to equal manifest.json's version
+            # exactly, so a mismatch here would ship a broken update.
+            - name: Verify version files match the tag
+              run: |
+                  tag="${GITHUB_REF#refs/tags/}"
+                  manifest=$(jq -r .version manifest.json)
+                  package=$(jq -r .version package.json)
+
+                  if [ "$manifest" != "$tag" ]; then
+                      echo "::error::manifest.json version is '$manifest' but the tag is '$tag'."
+                      exit 1
+                  fi
+
+                  if [ "$package" != "$tag" ]; then
+                      echo "::error::package.json version is '$package' but the tag is '$tag'."
+                      exit 1
+                  fi
+
+                  if [ "$(jq -r --arg v "$tag" 'has($v)' versions.json)" != "true" ]; then
+                      echo "::error::versions.json has no entry for '$tag'."
+                      exit 1
+                  fi
+
+                  echo "Version files agree on $tag."
+
             - uses: actions/setup-node@v4
               with:
                   node-version: 22.x
@@ -35,10 +61,16 @@ jobs:
               with:
                   subject-path: styles.css
 
+            # Published as a draft on purpose: the /release skill writes the
+            # user-facing notes and flips it public. A failure mid-way leaves a
+            # draft rather than a half-finished release.
             - name: Create release
               uses: softprops/action-gh-release@v2
               with:
+                  name: ${{ github.ref_name }}
+                  draft: true
                   generate_release_notes: true
+                  fail_on_unmatched_files: true
                   files: |
                       main.js
                       styles.css

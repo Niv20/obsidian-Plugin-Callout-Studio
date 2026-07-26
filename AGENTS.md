@@ -95,8 +95,9 @@ npm run build
 
 ## Versioning & releases
 
-- Bump `version` in `manifest.json` (SemVer) and update `versions.json` to map plugin version → minimum app version.
-- Create a GitHub release whose tag exactly matches `manifest.json`'s `version`. Do not use a leading `v`.
+- Use the `/release` skill (`.claude/skills/release/SKILL.md`) to cut a release. It handles everything below; don't bump or tag by hand.
+- Bump `version` in `manifest.json` (SemVer) and update `versions.json` to map plugin version → minimum app version. `npm version <bump>` does both, plus `package.json` and `package-lock.json`, in one commit.
+- Create a GitHub release whose tag exactly matches `manifest.json`'s `version`. Do not use a leading `v`. Pushing the tag is enough — `.github/workflows/release.yml` builds and publishes, and refuses to run if the tag and the version files disagree.
 - Attach `manifest.json`, `main.js`, and `styles.css` (if present) to the release as individual assets.
 - After the initial release, follow the process to add/update your plugin in the community catalog as required.
 

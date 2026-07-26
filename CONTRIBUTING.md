@@ -57,7 +57,7 @@ Most of the history loosely follows `feat:` / `fix:` / `chore:` prefixes. Match 
 
 ## Versioning
 
-Don't bump `manifest.json`, `package.json`, or `versions.json` in a feature or fix PR — releases are cut separately (`npm version <bump>` syncs all three, and tags are bare semver like `1.5.0`, no `v` prefix). If your PR is specifically about a release, say so in the description.
+Don't bump `manifest.json`, `package.json`, or `versions.json` in a feature or fix PR — releases are cut separately by the maintainer (`npm version <bump>` syncs all three, and tags are bare semver like `1.5.0`, no `v` prefix). Pushing such a tag is all it takes: GitHub Actions builds the plugin and publishes the release. If your PR is specifically about a release, say so in the description.
 
 ## License
 
