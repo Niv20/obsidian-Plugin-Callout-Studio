@@ -287,39 +287,47 @@ export function scanLineForCalloutTokens(rawLine: string): LineCalloutToken[] {
 	return tokens;
 }
 
+/** Fence opener/closer: marker run, optionally inside a blockquote. */
+const FENCE_OPEN_RE = /^(?:\s*>\s*)*\s*(`{3,}|~{3,})/;
+
 /**
- * Iterates every callout token in a full markdown document, skipping YAML
- * frontmatter and fenced code blocks (``` / ~~~, including fences nested in
- * blockquotes). Used by the vault scanners so discovery, statistics, and
- * prune-counting all see heading and inline usages, not just blockquotes.
+ * Creates a stateful, single-use line filter for whole-document scans: feed it
+ * every line of one document **in order** and it answers whether that line's
+ * `[!name]` tokens count. It hides YAML frontmatter and fenced code blocks
+ * (``` / ~~~, including fences nested in blockquotes), so a note that merely
+ * *documents* callout syntax is never mistaken for one that uses it.
+ *
+ * Every whole-document consumer shares this one filter — the read-only
+ * scanners below and the vault rewriters in utils/vaultCalloutScanner. That is
+ * what keeps "3 uses in 2 files" and "3 references updated" in agreement.
+ *
+ * Lines must be passed with their real index and none may be skipped, or the
+ * fence/frontmatter state desyncs. Callers that consume extra lines of their
+ * own (e.g. a blockquote body) must still feed them through and discard the
+ * answer.
  */
-export function forEachCalloutToken(
-	content: string,
-	cb: (rawId: string, role: CalloutRenderRole, lineIndex: number) => void,
-): void {
-	if (content.indexOf("[!") === -1) return;
-
-	const lines = content.split("\n");
-	let i = 0;
-
-	// Skip YAML frontmatter (opening --- must be the very first line).
-	if (lines[0]?.trimEnd() === "---") {
-		i = 1;
-		while (i < lines.length) {
-			const t = lines[i]?.trimEnd();
-			i++;
-			if (t === "---" || t === "...") break;
-		}
-	}
-
-	// Fence state: marker char + minimum length required to close.
-	const fenceOpenRe = /^(?:\s*>\s*)*\s*(`{3,}|~{3,})/;
+export function createDocumentLineFilter(): (
+	line: string,
+	index: number,
+) => boolean {
+	// null once the frontmatter block (if any) has been passed.
+	let inFrontmatter: boolean | null = null;
+	// Marker char + minimum length required to close the open fence.
 	let fenceMarker: string | null = null;
 
-	for (; i < lines.length; i++) {
-		const line = lines[i] ?? "";
+	return (line: string, index: number): boolean => {
+		// Frontmatter only counts when the opening --- is the very first line.
+		if (inFrontmatter === null) {
+			inFrontmatter = index === 0 && line.trimEnd() === "---";
+		}
+		if (inFrontmatter) {
+			const t = line.trimEnd();
+			// The delimiter line itself is not content either.
+			if (index > 0 && (t === "---" || t === "...")) inFrontmatter = false;
+			return false;
+		}
 
-		const fence = line.match(fenceOpenRe);
+		const fence = line.match(FENCE_OPEN_RE);
 		if (fenceMarker) {
 			// Inside a fence: only a matching closer gets us out.
 			if (
@@ -330,13 +338,35 @@ export function forEachCalloutToken(
 			) {
 				fenceMarker = null;
 			}
-			continue;
+			return false;
 		}
 		if (fence && fence[1]) {
 			fenceMarker = fence[1];
-			continue;
+			return false;
 		}
 
+		return true;
+	};
+}
+
+/**
+ * Iterates every callout token in a full markdown document, skipping YAML
+ * frontmatter and fenced code blocks. Used by the vault scanners so discovery,
+ * statistics, and prune-counting all see heading and inline usages, not just
+ * blockquotes.
+ */
+export function forEachCalloutToken(
+	content: string,
+	cb: (rawId: string, role: CalloutRenderRole, lineIndex: number) => void,
+): void {
+	if (content.indexOf("[!") === -1) return;
+
+	const lines = content.split("\n");
+	const isContentLine = createDocumentLineFilter();
+
+	for (let i = 0; i < lines.length; i++) {
+		const line = lines[i] ?? "";
+		if (!isContentLine(line, i)) continue;
 		if (line.indexOf("[!") === -1) continue;
 		for (const token of scanLineForCalloutTokens(line)) {
 			cb(token.rawId, token.role, i);

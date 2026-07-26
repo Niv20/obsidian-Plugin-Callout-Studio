@@ -7,19 +7,97 @@
  * and normalizing fold markers. Used by CalloutDiscovery (auto-discovery),
  * DataManagementSection (re-scan), and CalloutRowActions (pre-delete counts).
  *
- * The read-only scanners (statistics, unknown discovery, usage counting) go
- * through forEachCalloutToken and therefore see all three render roles —
- * regular (`> [!id]`), heading (`## [!id]`), and inline (`[!id]` mid-line).
- * The WRITE operations (bulk id/title replacement, plain-text conversion,
- * fold-marker normalization) intentionally remain blockquote-only: rewriting
- * heading/inline usages is a separate, riskier feature.
+ * Both the read-only scanners (statistics, unknown discovery, usage counting)
+ * and the write operations (bulk id/title replacement, plain-text conversion)
+ * go through the shared tokenizer in editor/calloutTokens, so they all see the
+ * same three render roles — regular (`> [!id]`), heading (`## [!id]`), and
+ * inline (`[!id]` mid-line) — and all agree on which occurrences are real:
+ * escapes, markdown links, wikilink contents, inline code, fenced code blocks
+ * and YAML frontmatter are excluded once, in one place. Keeping the writers on
+ * the same grammar as the counters is what stops the menu from promising "3
+ * uses in 2 files" and the rewrite from reporting 0.
+ *
+ * The one exception is fold-marker normalization; see the note on it below.
  */
 import type { App, TFile } from "obsidian";
 import { normalizeCalloutId } from "./calloutId";
-import { forEachCalloutToken } from "../editor/calloutTokens";
+import type { LineCalloutToken } from "../editor/calloutTokens";
+import {
+	createDocumentLineFilter,
+	forEachCalloutToken,
+	scanLineForCalloutTokens,
+} from "../editor/calloutTokens";
 
 function escapeRegex(str: string): string {
 	return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+/**
+ * End offset of a token's `[!id]` bracket span. Deliberately *not*
+ * `token.to`, which for heading tokens also covers the trailing fold mark —
+ * an id swap has to leave that mark in place.
+ */
+function tokenBracketEnd(token: LineCalloutToken): number {
+	return token.from + 2 + token.rawId.length + 1;
+}
+
+/**
+ * Applies per-token edits to one line. Tokens are spliced right-to-left so
+ * offsets computed against the original line stay valid throughout — a heading
+ * line can carry inline tokens inside its title text.
+ *
+ * `replace` returns the text to put in place of `[token.from, end)`, or null to
+ * leave that token alone. It may widen the replaced span via `end` (used to
+ * swallow the whitespace after a heading token).
+ */
+function rewriteTokensOnLine(
+	line: string,
+	tokens: LineCalloutToken[],
+	replace: (token: LineCalloutToken) => { text: string; end: number } | null,
+): { line: string; count: number } {
+	let out = line;
+	let count = 0;
+	for (const token of [...tokens].sort((a, b) => b.from - a.from)) {
+		const edit = replace(token);
+		if (!edit) continue;
+		out = out.slice(0, token.from) + edit.text + out.slice(edit.end);
+		count++;
+	}
+	return { line: out, count };
+}
+
+/**
+ * Walks a document's content lines (frontmatter and fenced code skipped) and
+ * hands each line's callout tokens to `rewriteLine`, which returns the new line
+ * and how many tokens it changed. Returns null when nothing changed, so callers
+ * can skip the vault write.
+ */
+function rewriteCalloutLines(
+	content: string,
+	rewriteLine: (
+		line: string,
+		tokens: LineCalloutToken[],
+	) => { line: string; count: number },
+): { content: string; count: number } | null {
+	if (content.indexOf("[!") === -1) return null;
+
+	const lines = content.split("\n");
+	const isContentLine = createDocumentLineFilter();
+	let total = 0;
+
+	for (let i = 0; i < lines.length; i++) {
+		const line = lines[i] ?? "";
+		if (!isContentLine(line, i)) continue;
+		if (line.indexOf("[!") === -1) continue;
+		const tokens = scanLineForCalloutTokens(line);
+		if (tokens.length === 0) continue;
+		const result = rewriteLine(line, tokens);
+		if (result.count === 0) continue;
+		lines[i] = result.line;
+		total += result.count;
+	}
+
+	return total > 0 ? { content: lines.join("\n"), count: total } : null;
 }
 
 export interface VaultCalloutTypeStatistics {
@@ -246,9 +324,15 @@ export async function convertCalloutsToPlainTextInVault(
 }
 
 /**
- * Replace callout IDs in all markdown files.
- * Any occurrence of `> [!oldId]` (for any oldId in `oldIds`) is replaced
- * with `> [!newId]`.
+ * Replace callout IDs in all markdown files. Every occurrence of `[!oldId]`
+ * (for any oldId in `oldIds`) becomes `[!newId]`, in all three render roles —
+ * a heading callout and an inline pill carry the id just as a blockquote header
+ * does, and a rename that skipped them would leave a dead id behind that
+ * renders as "unknown".
+ *
+ * Any heading fold mark is preserved: only the bracket span is swapped.
+ *
+ * Returns the number of references replaced.
  */
 export async function replaceCalloutIdsInVault(
 	app: App,
@@ -257,25 +341,22 @@ export async function replaceCalloutIdsInVault(
 ): Promise<number> {
 	if (oldIds.length === 0) return 0;
 
-	const pattern = oldIds.map(escapeRegex).join("|");
-	const regex = new RegExp(`(^>\\s*\\[!)(${pattern})(\\])`, "gim");
-
+	const idSet = new Set(oldIds.map((id) => normalizeCalloutId(id)));
 	const files = app.vault.getMarkdownFiles();
 	let totalReplacements = 0;
 
 	for (const file of files) {
 		const content = await app.vault.read(file);
-		let count = 0;
-		const newContent = content.replace(
-			regex,
-			(_match, prefix: string, _id: string, suffix: string) => {
-				count++;
-				return `${prefix}${newId}${suffix}`;
-			},
+		const result = rewriteCalloutLines(content, (line, tokens) =>
+			rewriteTokensOnLine(line, tokens, (token) =>
+				idSet.has(normalizeCalloutId(token.rawId))
+					? { text: `[!${newId}]`, end: tokenBracketEnd(token) }
+					: null,
+			),
 		);
-		if (count > 0) {
-			totalReplacements += count;
-			await app.vault.modify(file, newContent);
+		if (result) {
+			totalReplacements += result.count;
+			await app.vault.modify(file, result.content);
 		}
 	}
 
@@ -286,6 +367,11 @@ export async function replaceCalloutIdsInVault(
  * Rewrite `+/-` fold markers on every `> [!id]` (or alias) line in the vault
  * to match `desiredMarker` ("" = no marker, "+" = open, "-" = closed).
  * Only writes a file if at least one line changed.
+ *
+ * Blockquote-only by design, unlike the other writers in this file: heading
+ * callouts accept a fold mark today (`## [!id]-`), but that support is slated
+ * for removal, so teaching this function the heading role would only have to be
+ * undone. Revisit once heading folding is gone.
  */
 export async function normalizeFoldMarkersInVault(
 	app: App,
@@ -342,9 +428,12 @@ export async function scanVaultForUnknownCallouts(
 
 /**
  * Replace the display-name / title text of callouts that match the given IDs.
- * Matches lines like `> [!id] Old Title` or `> [!id]+ Old Title` and replaces
- * the title portion with `newTitle`. Only replaces when the existing title
- * matches `oldTitle` (case-insensitive) to avoid clobbering user-customized titles.
+ * Matches `> [!id] Old Title`, `> [!id]+ Old Title` and the heading equivalent
+ * `## [!id] Old Title`, replacing the title portion with `newTitle`. Inline
+ * tokens are skipped — a pill has no title text of its own.
+ *
+ * Only replaces when the whole existing title matches `oldTitle`
+ * (case-insensitive), so a title the user wrote themselves is never clobbered.
  */
 export async function replaceCalloutTitlesInVault(
 	app: App,
@@ -354,27 +443,37 @@ export async function replaceCalloutTitlesInVault(
 ): Promise<number> {
 	if (ids.length === 0) return 0;
 
-	const idPattern = ids.map(escapeRegex).join("|");
-	const escapedOld = escapeRegex(oldTitle);
-	// Match: > [!id][+-]? OldTitle (with optional fold indicator)
-	const regex = new RegExp(
-		`(^>\\s*\\[!(?:${idPattern})\\][+-]?)\\s+${escapedOld}\\s*$`,
-		"gim",
-	);
-
+	const idSet = new Set(ids.map((id) => normalizeCalloutId(id)));
+	const wanted = oldTitle.trim().toLowerCase();
+	// An empty old title would match every title-less header and *add* a title
+	// to it, which is never what a rename means.
+	if (!wanted) return 0;
 	const files = app.vault.getMarkdownFiles();
 	let totalReplacements = 0;
 
 	for (const file of files) {
 		const content = await app.vault.read(file);
-		let count = 0;
-		const newContent = content.replace(regex, (_match, prefix: string) => {
-			count++;
-			return `${prefix} ${newTitle}`;
-		});
-		if (count > 0) {
-			totalReplacements += count;
-			await app.vault.modify(file, newContent);
+		const result = rewriteCalloutLines(content, (line, tokens) =>
+			rewriteTokensOnLine(line, tokens, (token) => {
+				if (token.role === "inline") return null;
+				if (!idSet.has(normalizeCalloutId(token.rawId))) return null;
+				// A blockquote token's `to` stops at `]`, so a fold marker is
+				// still ahead of us and must be carried over; a heading token's
+				// already includes it.
+				const rest = line.slice(token.to);
+				const m = rest.match(/^([+-]?)[ \t]*(.*)$/);
+				if (!m) return null;
+				const foldMark = m[1] ?? "";
+				if ((m[2] ?? "").trim().toLowerCase() !== wanted) return null;
+				return {
+					text: `${line.slice(token.from, token.to)}${foldMark} ${newTitle}`,
+					end: line.length,
+				};
+			}),
+		);
+		if (result) {
+			totalReplacements += result.count;
+			await app.vault.modify(file, result.content);
 		}
 	}
 
