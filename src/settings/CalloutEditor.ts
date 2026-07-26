@@ -1363,10 +1363,11 @@ export class CalloutEditor extends Modal {
 	private buildSampleText(): string {
 		const id = this.currentPreviewId();
 		const name = this.displayName.trim() || t("editor.untitledCallout");
-		// Reflect the fold setting so a folded default previews collapsed.
+		// Reflect the fold setting so a folded default previews collapsed. Only
+		// the blockquote takes a marker — on a heading it would be title text.
 		const mark = this.foldable ? (this.defaultFolded ? "-" : "+") : "";
 		return [
-			`## [!${id}]${mark} ${name}`,
+			`## [!${id}] ${name}`,
 			"",
 			t("editor.sampleInlineText").replace("{id}", id),
 			"",

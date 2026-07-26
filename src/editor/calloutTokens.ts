@@ -22,12 +22,16 @@ import type { CalloutRenderRole } from "../types";
 
 /**
  * Heading callout header: 1–6 hashes, at least one space/tab, then the token
- * as the first content. Captures: 1=hashes, 2=raw id, 3=fold mark, 4=title.
+ * as the first content. Captures: 1=hashes, 2=raw id, 3=title.
  * Lines with 7+ hashes or no space after the hashes are not headings in
  * markdown, so they fall through to the inline scan.
+ *
+ * Exactly ONE space/tab after `]` is the separator; everything from there on is
+ * title, further whitespace included. That mirrors an Obsidian heading, which
+ * shows the spaces you write instead of swallowing them.
  */
 export const HEADING_CALLOUT_RE =
-	/^(#{1,6})[ \t]+\[!([^\]\n\r]+)\]([+-])?[ \t]*(.*)$/;
+	/^(#{1,6})[ \t]+\[!([^\]\n\r]+)\][ \t]?(.*)$/;
 
 /**
  * Native blockquote callout header prefix (any nesting depth). Lines matching
@@ -45,36 +49,35 @@ export const BLOCKQUOTE_CALLOUT_HEADER_RE =
 
 /**
  * Matches the token at the start of a reading-view heading's rendered text
- * (`# [!id]± title` renders as an hN whose text starts with `[!id]± `).
- * Captures: 1=raw id, 2=fold mark.
+ * (`# [!id] title` renders as an hN whose text starts with `[!id] `). Consumes
+ * the one separating space/tab, per HEADING_CALLOUT_RE. Captures: 1=raw id.
  */
-export const RENDERED_HEADING_TOKEN_RE = /^\[!([^\]\n\r]+)\]([+-])?[ \t]*/;
+export const RENDERED_HEADING_TOKEN_RE = /^\[!([^\]\n\r]+)\][ \t]?/;
 
 /**
- * Matches the callout token at the start of an Outline-pane item's displayed
- * text. The outline renders HeadingCache.heading with brackets stripped, so
- * both `[!id]± Title` and `!id± Title` must parse. In the bracketless form an
- * id containing spaces cannot be delimited by syntax alone — see the resolver
- * extension in parseOutlineHeadingText.
- *
- * The bracketless alternative is inherently ambiguous: `!bug Title` is what
- * the outline shows for `# [!bug] Title`, but it is *also* what a heading
- * literally written `# !bug Title` shows. The parse alone cannot tell them
- * apart, so callers must consult the raw source (see `bracketed` below).
- * Captures: 1=bracketed id, 2=bracketless id, 3=fold mark.
+ * Bracketed callout token opening an Outline-pane item's displayed text.
+ * Only the raw heading text still carries the brackets (the pane itself strips
+ * them — see the bracketless form below). Captures: 1=raw id.
  */
-const OUTLINE_HEADING_TOKEN_RE =
-	/^(?:\[!([^\]\n\r]+)\]|!(\S+?))([+-])?(?:[ \t]+|$)/;
+const OUTLINE_BRACKETED_TOKEN_RE = /^\[!([^\]\n\r]+)\]/;
 
-/** Longest space-separated id the bracketless extension will try to resolve. */
-const OUTLINE_ID_MAX_EXTRA_WORDS = 5;
+/**
+ * Bracketless fallback: `!id` delimited by whitespace or end-of-text. Used only
+ * when the id could not be resolved against the file's own ids, so an unknown
+ * id still parses the way it renders elsewhere. Captures: 1=raw id.
+ */
+const OUTLINE_BARE_TOKEN_RE = /^!(\S+)(?:[ \t]|$)/;
+
+/** Longest bracketless id the outline resolver will consider, in words. */
+const OUTLINE_ID_MAX_WORDS = 6;
 
 /** Parsed callout token from an Outline pane item's displayed text. */
 export interface OutlineHeadingToken {
 	/** Raw id exactly as written (pass through normalizeCalloutId to match). */
 	rawId: string;
-	foldMark: "" | "+" | "-";
-	/** Displayed title text after the token ("" when the heading has none). */
+	/** Text following the token, verbatim — the separating space included. */
+	rest: string;
+	/** Displayed title: `rest` minus its one separating space/tab. */
 	title: string;
 	/**
 	 * True when the token was written `[!id]`. False means it was matched in
@@ -85,59 +88,82 @@ export interface OutlineHeadingToken {
 	bracketed: boolean;
 }
 
+function makeOutlineToken(
+	rawId: string,
+	rest: string,
+	bracketed: boolean,
+): OutlineHeadingToken {
+	return { rawId, rest, title: rest.replace(/^[ \t]/, ""), bracketed };
+}
+
+/**
+ * Resolve where the id ends in the bracketless form `!id…`, whose only
+ * delimiter is the set of ids the file itself uses. Candidate prefixes are
+ * tried longest first, so `multi word id` wins over a shorter id that merely
+ * prefixes it, and `note- Title` yields `note` with `- Title` left as title.
+ *
+ * Candidates ending in whitespace or `-` are skipped: normalizeCalloutId trims
+ * exactly those, so such a candidate would match a *shorter* id and swallow
+ * characters that really belong to the title.
+ */
+function resolveBareOutlineId(
+	body: string,
+	isKnownId: (rawId: string) => boolean,
+): string | null {
+	let limit = body.length;
+	let words = 1;
+	for (let i = 0; i < body.length; i++) {
+		const ch = body[i];
+		if (ch !== " " && ch !== "\t") continue;
+		if (++words > OUTLINE_ID_MAX_WORDS) {
+			limit = i;
+			break;
+		}
+	}
+	for (let end = limit; end > 0; end--) {
+		const last = body[end - 1];
+		if (last === " " || last === "\t" || last === "-") continue;
+		const candidate = body.slice(0, end);
+		if (isKnownId(candidate)) return candidate;
+	}
+	return null;
+}
+
 /**
  * Parses the displayed text of an Outline pane item. Returns null when the
  * text does not start with a callout token — callers must then leave the
  * item untouched.
  *
- * Ids may legally contain spaces ("multi word callout"), which the
- * bracketless outline form cannot delimit. When `isKnownId` is provided and
- * the first word alone is not a known id, the id is greedily extended one
- * word at a time (up to a small cap) until a known id is found; otherwise the
- * single-word parse stands, matching how unknown ids render elsewhere.
- *
- * A returned token is *not* proof that the user wrote a callout: check
- * `token.bracketed` and, when it is false, confirm the id against the file's
- * raw heading text before rendering anything.
+ * The outline renders HeadingCache.heading with the brackets stripped, so both
+ * `[!id] Title` (raw heading text) and `!id Title` (what the pane shows) must
+ * parse. The bracketless form is inherently ambiguous: `!bug Title` is what the
+ * outline shows for `# [!bug] Title`, but it is *also* what a heading literally
+ * written `# !bug Title` shows. A returned token is therefore not proof that
+ * the user wrote a callout: check `token.bracketed` and, when it is false,
+ * confirm the id against the file's raw heading text before rendering anything.
  */
 export function parseOutlineHeadingText(
 	text: string,
 	isKnownId?: (rawId: string) => boolean,
 ): OutlineHeadingToken | null {
-	const m = text.match(OUTLINE_HEADING_TOKEN_RE);
-	if (!m) return null;
-	const bracketed = m[1] !== undefined;
-	let rawId = m[1] ?? m[2] ?? "";
-	if (!rawId.trim()) return null;
-	let foldMark = (m[3] ?? "") as "" | "+" | "-";
-	let title = text.slice(m[0].length);
-
-	if (!bracketed && foldMark === "" && isKnownId && !isKnownId(rawId)) {
-		const wordRe = /\S+/g;
-		let word: RegExpExecArray | null;
-		let extraWords = 0;
-		while (
-			(word = wordRe.exec(title)) !== null &&
-			extraWords < OUTLINE_ID_MAX_EXTRA_WORDS
-		) {
-			extraWords++;
-			let candidate = `${rawId} ${title.slice(0, word.index + word[0].length)}`;
-			let mark: "" | "+" | "-" = "";
-			const last = candidate.charAt(candidate.length - 1);
-			if (last === "+" || last === "-") {
-				mark = last;
-				candidate = candidate.slice(0, -1);
-			}
-			if (isKnownId(candidate)) {
-				rawId = candidate;
-				foldMark = mark;
-				title = title.slice(wordRe.lastIndex).replace(/^[ \t]+/, "");
-				break;
-			}
-		}
+	const bracketed = OUTLINE_BRACKETED_TOKEN_RE.exec(text);
+	if (bracketed) {
+		const rawId = bracketed[1] ?? "";
+		if (!rawId.trim()) return null;
+		return makeOutlineToken(rawId, text.slice(bracketed[0].length), true);
 	}
 
-	return { rawId, foldMark, title, bracketed };
+	if (!text.startsWith("!")) return null;
+	const body = text.slice(1);
+	const resolved = isKnownId ? resolveBareOutlineId(body, isKnownId) : null;
+	if (resolved !== null) {
+		return makeOutlineToken(resolved, body.slice(resolved.length), false);
+	}
+
+	const bare = OUTLINE_BARE_TOKEN_RE.exec(text);
+	const rawId = bare?.[1] ?? "";
+	if (!rawId) return null;
+	return makeOutlineToken(rawId, body.slice(rawId.length), false);
 }
 
 /** One `[!name]` token found on a line, with its role and exact position. */
@@ -147,10 +173,8 @@ export interface LineCalloutToken {
 	rawId: string;
 	/** Offset of `[` within the line. */
 	from: number;
-	/** Offset just past `]` — and past the fold mark for heading tokens. */
+	/** Offset just past `]`. */
 	to: number;
-	/** Fold mark ("" for none; only heading tokens ever carry one). */
-	foldMark: "" | "+" | "-";
 	/** Heading tokens only: true when custom title text follows the token. */
 	hasTitle: boolean;
 	/** Heading level 1–6 for heading tokens, 0 otherwise. */
@@ -216,7 +240,6 @@ export function scanLineForCalloutTokens(rawLine: string): LineCalloutToken[] {
 				rawId,
 				from: prefix.length,
 				to: prefix.length + 2 + rawId.length + 1,
-				foldMark: "",
 				hasTitle: false,
 				headingLevel: 0,
 			},
@@ -231,9 +254,8 @@ export function scanLineForCalloutTokens(rawLine: string): LineCalloutToken[] {
 	const heading = line.match(HEADING_CALLOUT_RE);
 	if (heading) {
 		const rawId = heading[2] ?? "";
-		const foldMark = (heading[3] ?? "") as "" | "+" | "-";
 		const from = line.indexOf("[!");
-		const to = from + 2 + rawId.length + 1 + foldMark.length;
+		const to = from + 2 + rawId.length + 1;
 		// `# [!text](url)` is a markdown link at heading start, not a callout.
 		const isLink = line[to] === "(";
 		if (rawId.trim() && !isLink) {
@@ -242,8 +264,7 @@ export function scanLineForCalloutTokens(rawLine: string): LineCalloutToken[] {
 				rawId,
 				from,
 				to,
-				foldMark,
-				hasTitle: (heading[4] ?? "").trim().length > 0,
+				hasTitle: (heading[3] ?? "").trim().length > 0,
 				headingLevel: (heading[1] ?? "").length,
 			});
 			inlineScanFrom = to;
@@ -277,7 +298,6 @@ export function scanLineForCalloutTokens(rawLine: string): LineCalloutToken[] {
 			rawId,
 			from: idx,
 			to: close + 1,
-			foldMark: "",
 			hasTitle: false,
 			headingLevel: 0,
 		});
@@ -384,10 +404,9 @@ export function forEachCalloutToken(
 export interface WikilinkCalloutRef {
 	/** Raw id exactly as written (pass through normalizeCalloutId to match). */
 	rawId: string;
-	foldMark: "" | "+" | "-";
 	/** Offset of `[` of the token within the line. */
 	from: number;
-	/** Offset past `]`, fold mark, and the whitespace separating the title. */
+	/** Offset past `]` and the one space/tab separating the title. */
 	to: number;
 	/** Offset of the opening `[[` within the line. */
 	linkFrom: number;
@@ -436,21 +455,12 @@ export function findWikilinkCalloutRefs(rawLine: string): WikilinkCalloutRef[] {
 			const rawId = target.slice(tokenStart + 2, close);
 			if (!rawId.trim() || rawId.includes("[")) continue;
 			let to = close + 1;
-			let foldMark: "" | "+" | "-" = "";
-			const markCh = target[to];
-			if (markCh === "+" || markCh === "-") {
-				foldMark = markCh;
-				to++;
-			}
-			while (to < target.length && (target[to] === " " || target[to] === "\t")) {
-				to++;
-			}
+			if (target[to] === " " || target[to] === "\t") to++;
 			// Title runs to the next subpath separator (nested heading paths).
 			const nextHash = target.indexOf("#", to);
 			const segEnd = nextHash === -1 ? target.length : nextHash;
 			refs.push({
 				rawId,
-				foldMark,
 				from: innerStart + tokenStart,
 				to: innerStart + to,
 				linkFrom: link.index,
@@ -473,22 +483,10 @@ export function findWikilinkCalloutRefs(rawLine: string): WikilinkCalloutRef[] {
 		const aliasId = alias.slice(2, aliasClose);
 		if (!aliasId.trim() || aliasId.includes("[")) continue;
 		let aliasTo = aliasClose + 1;
-		let aliasMark: "" | "+" | "-" = "";
-		const aliasMarkCh = alias[aliasTo];
-		if (aliasMarkCh === "+" || aliasMarkCh === "-") {
-			aliasMark = aliasMarkCh;
-			aliasTo++;
-		}
-		while (
-			aliasTo < alias.length &&
-			(alias[aliasTo] === " " || alias[aliasTo] === "\t")
-		) {
-			aliasTo++;
-		}
+		if (alias[aliasTo] === " " || alias[aliasTo] === "\t") aliasTo++;
 		const aliasStart = innerStart + pipeIdx + 1;
 		refs.push({
 			rawId: aliasId,
-			foldMark: aliasMark,
 			from: aliasStart,
 			to: aliasStart + aliasTo,
 			linkFrom: link.index,
@@ -508,7 +506,6 @@ export interface HeadingRefDisplayToken {
 	prefix: string;
 	/** Raw id exactly as written (pass through normalizeCalloutId to match). */
 	rawId: string;
-	foldMark: "" | "+" | "-";
 	/** Display text after the token ("" when the heading has no title). */
 	title: string;
 	/**
@@ -523,7 +520,7 @@ export interface HeadingRefDisplayToken {
 /**
  * Token cut off by end-of-text before its `]`. Only a title-less reference
  * can produce this (the token's `]` must directly precede the link's `]]`),
- * so no fold mark or title can follow.
+ * so no title can follow.
  */
 const TRUNCATED_HEADING_TOKEN_RE = /^\[!([^\]\n\r]+)$/;
 
@@ -567,7 +564,6 @@ export function parseHeadingRefDisplayText(
 		return {
 			prefix: text.slice(0, idx),
 			rawId,
-			foldMark: (m[2] ?? "") as "" | "+" | "-",
 			title: text.slice(idx + m[0].length),
 			truncated: false,
 		};
@@ -581,7 +577,6 @@ export function parseHeadingRefDisplayText(
 	return {
 		prefix: text.slice(0, idx),
 		rawId,
-		foldMark: "",
 		title: "",
 		truncated: true,
 	};

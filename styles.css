@@ -2686,10 +2686,11 @@ input.cs-input-invalid:focus {
    CalloutTokenWidget's !hasTitle flag). Live Preview never needs this: its
    token widget replaces only the raw `[!id]` text, leaving the real space
    character before the title in the DOM as natural inline spacing. Reading
-   view's RENDERED_HEADING_TOKEN_RE match consumes that trailing whitespace
-   when stripping the token prefix (calloutPostProcessor.ts), so without this
-   the title text sits glued directly against the icon. */
-.cs-heading-callout:not(.cm-line) .cs-heading-token + .cs-heading-title {
+   view's RENDERED_HEADING_TOKEN_RE match consumes that separating space when
+   stripping the token prefix (calloutPostProcessor.ts), so without this the
+   title text would sit glued directly against the icon. Only set when the
+   source really had that space — `[!id]-Title` is glued in both views. */
+.cs-heading-callout:not(.cm-line) .cs-heading-token + .cs-heading-title-gap {
 	margin-inline-start: 0.35em;
 }
 

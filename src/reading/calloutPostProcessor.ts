@@ -8,7 +8,7 @@
  *   1. both roles disabled → return
  *   2. block text contains no `[!` → return
  *
- * Heading blocks (`# [!id]± title`) are restyled IN PLACE — the hN element is
+ * Heading blocks (`# [!id] title`) are restyled IN PLACE — the hN element is
  * kept (outline, TOC and anchor links keep working) and gains the bar class,
  * while the `[!id]±` prefix text is swapped for the shared token DOM.
  *
@@ -35,6 +35,7 @@ import {
 	CSS_ANIM_IN,
 	CSS_HEADING_LINE,
 	CSS_HEADING_TITLE,
+	CSS_HEADING_TITLE_GAP,
 	CSS_HEADING_TOKEN,
 	CSS_INLINE_TOKEN,
 	CSS_REF_TOKEN_LINK,
@@ -137,7 +138,7 @@ function findLeadingTextNode(h: HTMLElement): Text | null {
 }
 
 /**
- * Restyle `# [!id]± title` headings in place. The block's first source line
+ * Restyle `# [!id] title` headings in place. The block's first source line
  * is authoritative when available: it rejects escaped tokens (`# \[!id]`),
  * heading-like lines inside callouts (`> # [!id]` — those are inline pills),
  * and link syntax (`# [!id](url)`).
@@ -182,7 +183,7 @@ function transformHeading(
 	if (isStartupEntranceActive()) h.classList.add(CSS_ANIM_IN);
 	h.setAttribute("data-callout", normalizeCalloutId(rawId));
 
-	// Strip the `[!id]± ` prefix from the rendered text and put the token
+	// Strip the `[!id] ` prefix from the rendered text and put the token
 	// DOM (icon + optional name) in its place.
 	textNode.textContent = (textNode.textContent ?? "").slice(
 		renderedMatch[0].length,
@@ -203,6 +204,11 @@ function transformHeading(
 	if (hasTitle) {
 		const titleEl = createSpan();
 		titleEl.classList.add(CSS_HEADING_TITLE);
+		// The stripped prefix ends in the separating space only when the source
+		// had one; a title starting right at `]` gets no gap (CSS_HEADING_TITLE_GAP).
+		if (/[ \t]$/.test(renderedMatch[0])) {
+			titleEl.classList.add(CSS_HEADING_TITLE_GAP);
+		}
 		h.insertBefore(titleEl, tokenEl.nextSibling);
 		while (titleEl.nextSibling) titleEl.appendChild(titleEl.nextSibling);
 	}

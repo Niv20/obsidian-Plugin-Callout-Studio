@@ -117,11 +117,10 @@ export class CalloutTokenWidget extends WidgetType {
 		}
 
 		// Heading tokens: clicking the icon/name drops the caret at the start
-		// of the callout id. The token span may include a trailing fold mark
-		// (`[!id]-`), so the inline offset math above would be off by one —
-		// instead locate the `[!` on the line, which is exact because the
-		// heading token is always the first `[!` (HEADING_CALLOUT_RE anchors
-		// it right after the hashes). The event is NOT stopped from bubbling:
+		// of the callout id. Rather than offset math against the replaced
+		// range, locate the `[!` on the line — exact, because the heading token
+		// is always the first `[!` (HEADING_CALLOUT_RE anchors it right after
+		// the hashes). The event is NOT stopped from bubbling:
 		// Obsidian's livePreviewState must see the mousedown so the raw-syntax
 		// reveal stays deferred to mouseup, in the same paint as the `#` marks.
 		if (this.variant === "heading") {

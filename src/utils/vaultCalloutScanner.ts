@@ -338,10 +338,9 @@ export async function convertCalloutsToPlainTextInVault(
 						if (token.role === "inline") {
 							return { text: name, end: token.to };
 						}
-						// Heading: `token.to` already covers any fold mark, so
-						// swallow the whitespace after it too and let the
-						// heading's own title stand — falling back to the name
-						// when the token was all the heading had.
+						// Heading: swallow the whitespace after the token and
+						// let the heading's own title stand — falling back to
+						// the name when the token was all the heading had.
 						const after = line.slice(token.to);
 						const gap = after.length - after.replace(/^[ \t]+/, "").length;
 						return {
@@ -413,10 +412,10 @@ export async function replaceCalloutIdsInVault(
  * to match `desiredMarker` ("" = no marker, "+" = open, "-" = closed).
  * Only writes a file if at least one line changed.
  *
- * Blockquote-only by design, unlike the other writers in this file: heading
- * callouts accept a fold mark today (`## [!id]-`), but that support is slated
- * for removal, so teaching this function the heading role would only have to be
- * undone. Revisit once heading folding is gone.
+ * Blockquote-only, unlike the other writers in this file: `+/-` is fold syntax
+ * for a blockquote callout alone. A heading callout has no fold syntax — its
+ * folding is driven by the two chevrons — so anything after `## [!id]` there is
+ * plain title text and must not be touched.
  */
 export async function normalizeFoldMarkersInVault(
 	app: App,
@@ -502,14 +501,22 @@ export async function replaceCalloutTitlesInVault(
 			rewriteTokensOnLine(line, tokens, (token) => {
 				if (token.role === "inline") return null;
 				if (!idSet.has(normalizeCalloutId(token.rawId))) return null;
-				// A blockquote token's `to` stops at `]`, so a fold marker is
-				// still ahead of us and must be carried over; a heading token's
-				// already includes it.
 				const rest = line.slice(token.to);
-				const m = rest.match(/^([+-]?)[ \t]*(.*)$/);
-				if (!m) return null;
-				const foldMark = m[1] ?? "";
-				if ((m[2] ?? "").trim().toLowerCase() !== wanted) return null;
+				// A blockquote header may carry a fold marker right after `]`;
+				// that is syntax, not title, and has to survive the rename. A
+				// heading has no such syntax — everything after `]` is its
+				// title, so `## [!id]- Old Title` is titled `- Old Title` and
+				// correctly does not match a rename of `Old Title`.
+				let foldMark = "";
+				let title = rest;
+				if (token.role === "regular") {
+					const mark = rest.charAt(0);
+					if (mark === "+" || mark === "-") {
+						foldMark = mark;
+						title = rest.slice(1);
+					}
+				}
+				if (title.trim().toLowerCase() !== wanted) return null;
 				return {
 					text: `${line.slice(token.from, token.to)}${foldMark} ${newTitle}`,
 					end: line.length,

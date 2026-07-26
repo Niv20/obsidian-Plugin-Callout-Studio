@@ -29,6 +29,14 @@ export const CSS_HEADING_TOKEN = "cs-heading-token";
  * marks the title range.
  */
 export const CSS_HEADING_TITLE = "cs-heading-title";
+/**
+ * Reading view only, and only when the source really had a separating space
+ * after `]`: reading view consumes that space while stripping the token prefix,
+ * so the gap has to come back as a margin. `## [!id]-title` has no space to
+ * consume — its title starts at the bracket — and must stay glued to the icon,
+ * exactly as Live Preview renders it.
+ */
+export const CSS_HEADING_TITLE_GAP = "cs-heading-title-gap";
 export const CSS_TOKEN_ICON = "cs-callout-icon";
 export const CSS_TOKEN_NAME = "cs-callout-name";
 export const CSS_UNKNOWN = "cs-unknown";

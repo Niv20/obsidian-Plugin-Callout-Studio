@@ -420,15 +420,11 @@ export class CalloutAutoComplete extends EditorSuggest<CalloutSuggestion> {
 
 		// Parse what already exists after the `[!...]` on the line, starting from
 		// the header (not the cursor) so a mid-token cursor doesn't truncate the
-		// title detection. Pattern after `]`: optional fold mark (+/-), optional title.
+		// title detection.
 		const afterTrigger = line.slice(start.ch + 2);
 		const closeIdx = afterTrigger.indexOf("]");
 		const afterHeader =
 			closeIdx === -1 ? "" : afterTrigger.slice(closeIdx + 1);
-		const restMatch = /^([+-]?)\s*(.*)$/.exec(afterHeader);
-		const existingTitle = restMatch?.[2]?.trim() ?? "";
-
-		const foldMark = def.foldable ? (def.defaultFolded ? "-" : "+") : "";
 
 		// Replace from trigger start to end of line
 		const lineEnd: EditorPosition = {
@@ -438,12 +434,13 @@ export class CalloutAutoComplete extends EditorSuggest<CalloutSuggestion> {
 
 		// Heading callout: the rendered token already shows the display name,
 		// so no title text is inserted; a custom title the user already wrote
-		// is preserved. Enter then moves to the start of the next line (no
+		// is preserved — everything after `]` is title, this role has no fold
+		// syntax of its own. Enter then moves to the start of the next line (no
 		// `>` prefix — heading callouts have no body), via close().
 		if (this.triggerRole === "heading") {
+			const headingTitle = afterHeader.trim();
 			const replacement =
-				`[!${matchedId}]${foldMark}` +
-				(existingTitle ? ` ${existingTitle}` : "");
+				`[!${matchedId}]` + (headingTitle ? ` ${headingTitle}` : "");
 			editor.replaceRange(replacement, start, lineEnd);
 			this.pendingEditor = editor;
 			this.pendingLine = start.line;
@@ -451,7 +448,12 @@ export class CalloutAutoComplete extends EditorSuggest<CalloutSuggestion> {
 			return;
 		}
 
-		// Regular callout header.
+		// Regular callout header. Pattern after `]`: optional fold mark (+/-),
+		// optional title.
+		const restMatch = /^([+-]?)\s*(.*)$/.exec(afterHeader);
+		const existingTitle = restMatch?.[2]?.trim() ?? "";
+		const foldMark = def.foldable ? (def.defaultFolded ? "-" : "+") : "";
+
 		// Detect if this is a brand-new callout (no title text after the header)
 		const isNewCallout = existingTitle === "";
 
@@ -544,15 +546,9 @@ export class CalloutAutoComplete extends EditorSuggest<CalloutSuggestion> {
 			return;
 		}
 
-		const foldMark = result.foldable
-			? result.defaultFolded
-				? "-"
-				: "+"
-			: "";
-
 		if (role === "heading") {
 			// No title text — the rendered token shows the display name.
-			editor.replaceRange(`[!${result.id}]${foldMark}`, start, lineEnd);
+			editor.replaceRange(`[!${result.id}]`, start, lineEnd);
 			// close() already ran (before the modal), so place the cursor
 			// directly rather than via the pending mechanism.
 			editor.focus();
@@ -560,6 +556,11 @@ export class CalloutAutoComplete extends EditorSuggest<CalloutSuggestion> {
 			return;
 		}
 
+		const foldMark = result.foldable
+			? result.defaultFolded
+				? "-"
+				: "+"
+			: "";
 		const replacement = `[!${result.id}]${foldMark} ${result.displayName}`;
 		editor.replaceRange(replacement, start, lineEnd);
 		this.pendingEditor = editor;

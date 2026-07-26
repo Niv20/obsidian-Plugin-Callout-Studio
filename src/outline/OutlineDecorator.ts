@@ -62,11 +62,13 @@ const collapse = (text: string): string => text.replace(/\s+/g, " ").trim();
 
 /**
  * Rebuild what the outline will display for a `[!id]` heading: the same text
- * minus the two brackets. Used to tell two same-id headings apart when a file
- * happens to contain both `# [!bug] A` and `# !bug B`.
+ * minus the two brackets. `rest` is the text after `]` verbatim, so a title
+ * that starts right at the bracket stays glued to the id exactly as the pane
+ * shows it. Used to tell two same-id headings apart when a file happens to
+ * contain both `# [!bug] A` and `# !bug B`.
  */
 const outlineTextOf = (token: OutlineHeadingToken): string =>
-	collapse(`!${token.rawId}${token.foldMark} ${token.title}`);
+	collapse(`!${token.rawId}${token.rest}`);
 
 export class OutlineDecorator {
 	private readonly attachments = new Map<WorkspaceLeaf, OutlineAttachment>();
