@@ -276,6 +276,8 @@ export const he: Record<string, string> = {
 	"editor.idEmpty": "נדרש לפחות מזהה אחד",
 	"editor.idExists": "תיבת־הבלטה עם מזהה זה כבר קיימת",
 	"editor.idConflict": "מזהה זה מתנגש עם תיבת־הבלטה קיימת",
+	"editor.idDashConflict":
+		'אובסידיאן ממיר רווחים למקפים, ולכן מזהה זה מתנגש עם "{{other}}"',
 	"editor.untitledCallout": "תיבת־הבלטה ללא שם",
 	"editor.loremIpsum":
 		"לורם איפסום דולור סיט אמט, קונסקטורר אדיפיסינג אלית. סד דו איוסמוד טמפור אינסידידונט אוט לבורה את דולורה מגנה אליקווה.",

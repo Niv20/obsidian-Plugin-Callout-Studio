@@ -221,6 +221,7 @@ export const id: Record<string, string> = {
 	"editor.idEmpty": "Diperlukan setidaknya satu ID",
 	"editor.idExists": "Callout dengan ID ini sudah ada",
 	"editor.idConflict": "ID ini bertentangan dengan callout yang ada",
+	"editor.idDashConflict": 'Obsidian menulis spasi sebagai tanda hubung, sehingga ID ini bertentangan dengan "{{other}}"',
 	"editor.untitledCallout": "Callout Tanpa Judul",
 	"editor.loremIpsum": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
 	"editor.loremIpsumShort": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",

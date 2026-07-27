@@ -221,6 +221,7 @@ export const uk: Record<string, string> = {
 	"editor.idEmpty": "Потрібен принаймні один ID",
 	"editor.idExists": "Callout з таким ID вже існує",
 	"editor.idConflict": "Цей ID конфліктує з існуючим callout",
+	"editor.idDashConflict": 'Obsidian записує пробіли як дефіси, тому цей ID конфліктує з «{{other}}»',
 	"editor.untitledCallout": "Callout без назви",
 	"editor.loremIpsum": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
 	"editor.loremIpsumShort": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",

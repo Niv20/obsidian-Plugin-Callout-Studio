@@ -221,6 +221,7 @@ export const ro: Record<string, string> = {
 	"editor.idEmpty": "Este necesar cel puțin un ID",
 	"editor.idExists": "Există deja un callout cu acest ID",
 	"editor.idConflict": "Acest ID intră în conflict cu un callout existent",
+	"editor.idDashConflict": 'Obsidian scrie spațiile ca liniuțe, așa că acest ID intră în conflict cu „{{other}}”',
 	"editor.untitledCallout": "Callout fără titlu",
 	"editor.loremIpsum": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
 	"editor.loremIpsumShort": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",

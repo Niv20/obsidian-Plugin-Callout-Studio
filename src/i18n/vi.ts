@@ -221,6 +221,7 @@ export const vi: Record<string, string> = {
 	"editor.idEmpty": "Cần ít nhất một ID",
 	"editor.idExists": "Đã tồn tại callout với ID này",
 	"editor.idConflict": "ID này xung đột với callout hiện có",
+	"editor.idDashConflict": 'Obsidian ghi khoảng trắng thành dấu gạch ngang, vì vậy ID này xung đột với "{{other}}"',
 	"editor.untitledCallout": "Callout chưa đặt tên",
 	"editor.loremIpsum": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
 	"editor.loremIpsumShort": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",

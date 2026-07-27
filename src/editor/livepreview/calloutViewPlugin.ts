@@ -40,10 +40,10 @@ import {
 	CSS_HEADING_LINE,
 	CSS_HEADING_TITLE,
 	CSS_UNKNOWN,
+	calloutDomId,
 	resolveCalloutDef,
 } from "../renderShared";
 import { isHeadingFoldEnabled } from "../headingFold";
-import { normalizeCalloutId } from "../../utils/calloutId";
 import {
 	CalloutTokenWidget,
 	HeadingFoldArrowWidget,
@@ -259,8 +259,8 @@ function decorateLine(
 
 		if (token.role === "heading") {
 			if (!headingEnabled) continue;
-			const { unknown } = resolveCalloutDef(host.registry, token.rawId);
-			const cls = unknown
+			const resolved = resolveCalloutDef(host.registry, token.rawId);
+			const cls = resolved.unknown
 				? `${CSS_HEADING_LINE} ${CSS_UNKNOWN}`
 				: CSS_HEADING_LINE;
 			// The bar stays on the line even while editing it…
@@ -270,7 +270,7 @@ function decorateLine(
 				Decoration.line({
 					attributes: {
 						class: cls,
-						"data-callout": normalizeCalloutId(token.rawId),
+						"data-callout": calloutDomId(token.rawId, resolved),
 					},
 				}),
 			);

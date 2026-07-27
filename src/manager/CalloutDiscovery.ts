@@ -12,7 +12,11 @@ import type { App, EventRef } from "obsidian";
 import type { CalloutRegistry } from "./CalloutRegistry";
 import type { PluginSettings } from "../types";
 import { DEFAULT_CALLOUTS } from "../constants";
-import { normalizeCalloutId } from "../utils/calloutId";
+import {
+	normalizeCalloutId,
+	obsidianCalloutAttrId,
+	obsidianDefaultTitle,
+} from "../utils/calloutId";
 import { scanLineForCalloutTokens } from "../editor/calloutTokens";
 import {
 	scanFileForUnknownCallouts,
@@ -76,13 +80,25 @@ export class CalloutDiscovery {
 		return this.zeroUsageFallbackIds.has(normalizeCalloutId(id));
 	}
 
-	/** Build a Set of all callout IDs and aliases currently known to the registry. */
+	/**
+	 * Build a Set of all callout IDs and aliases currently known to the
+	 * registry.
+	 *
+	 * Each one is registered under both its own spelling and its `data-callout`
+	 * attribute form, so a note that writes `[!a-b]` by hand does not count as
+	 * unknown while `a b` is defined — Obsidian renders the two identically, so
+	 * discovering a second row for the dash spelling would only produce a row
+	 * that fights the first one over a single CSS rule.
+	 */
 	buildKnownIds(): Set<string> {
 		const known = new Set<string>();
+		const addBothForms = (id: string): void => {
+			known.add(normalizeCalloutId(id));
+			known.add(obsidianCalloutAttrId(id));
+		};
 		for (const def of this.host.registry.getAll()) {
-			known.add(normalizeCalloutId(def.id));
-			for (const a of def.aliases ?? [])
-				known.add(normalizeCalloutId(a));
+			addBothForms(def.id);
+			for (const a of def.aliases ?? []) addBothForms(a);
 		}
 		return known;
 	}
@@ -109,11 +125,18 @@ export class CalloutDiscovery {
 		let added = 0;
 		for (const id of unknownIds) {
 			if (this.host.registry.get(id)) continue;
+			// Also skip a spelling an existing callout already owns through its
+			// `data-callout` form. buildKnownIds keeps the discovery paths from
+			// reaching here at all; this covers the first-run scan modal, which
+			// hands a user-approved list straight in.
+			if (this.host.registry.findAttrIdConflict(id, null)) continue;
 			const def = {
 				...fallback,
 				icon: fallback.icon,
 				id,
-				displayName: id.charAt(0).toUpperCase() + id.slice(1),
+				// Dash-to-space before capitalizing, matching Obsidian's own
+				// default-title algorithm — see obsidianDefaultTitle.
+				displayName: obsidianDefaultTitle(id),
 				aliases: [],
 				builtIn: false,
 				source: "fallback" as const,
@@ -152,23 +175,34 @@ export class CalloutDiscovery {
 		if (this.pruneSuspended) return 0;
 		const candidates = this.host.registry
 			.getUserDefined()
-			.filter((d) => d.source === "fallback" && d.customized !== true)
-			.map((d) => d.id);
+			.filter((d) => d.source === "fallback" && d.customized !== true);
 		if (candidates.length === 0) return 0;
+
+		// A row owns every spelling that renders as it does, so one written in
+		// the vault only as `[!a-b]` must not read as zero-usage and be pruned
+		// out from under itself. See CalloutRegistry.vaultIdFormsFor.
+		const formsById = new Map(
+			candidates.map((d) => [d.id, this.host.registry.vaultIdFormsFor(d)]),
+		);
 
 		let usage: Map<string, { fileCount: number; totalCount: number }>;
 		try {
-			usage = await countCalloutUsagesMap(this.host.app, candidates);
+			usage = await countCalloutUsagesMap(
+				this.host.app,
+				Array.from(formsById.values()).flat(),
+			);
 		} catch (e) {
 			console.debug("[CalloutStudio] prune usage scan failed", e);
 			return 0;
 		}
 
 		let removed = 0;
-		for (const id of candidates) {
+		for (const { id } of candidates) {
 			const normalized = normalizeCalloutId(id);
-			const stat = usage.get(normalized);
-			const hasUsage = stat !== undefined && stat.fileCount > 0;
+			const hasUsage = (formsById.get(id) ?? [id]).some((form) => {
+				const stat = usage.get(normalizeCalloutId(form));
+				return stat !== undefined && stat.fileCount > 0;
+			});
 			if (hasUsage) {
 				this.zeroUsageFallbackIds.delete(normalized);
 				continue;

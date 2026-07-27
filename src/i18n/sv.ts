@@ -221,6 +221,7 @@ export const sv: Record<string, string> = {
 	"editor.idEmpty": "Minst ett ID krävs",
 	"editor.idExists": "En callout med detta ID finns redan",
 	"editor.idConflict": "Detta ID krockar med en befintlig callout",
+	"editor.idDashConflict": 'Obsidian skriver mellanslag som bindestreck, så detta ID krockar med "{{other}}"',
 	"editor.untitledCallout": "Namnlös Callout",
 	"editor.loremIpsum": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
 	"editor.loremIpsumShort": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",

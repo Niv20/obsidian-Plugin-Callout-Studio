@@ -206,6 +206,7 @@ export const bg: Record<string, string> = {
 	"editor.idEmpty": "Необходимо е поне едно ID",
 	"editor.idExists": "Вече съществува callout с това ID",
 	"editor.idConflict": "Това ID е в конфликт с вече съществуващ callout",
+	"editor.idDashConflict": 'Obsidian записва интервалите като тирета, затова това ID се сблъсква с „{{other}}“',
 	"editor.untitledCallout": "Callout без заглавие",
 	"editor.loremIpsum": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
 	"editor.loremIpsumShort": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",

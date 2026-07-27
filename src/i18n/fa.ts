@@ -223,6 +223,7 @@ export const fa: Record<string, string> = {
 	"editor.idEmpty": "حداقل یک شناسه لازم است",
 	"editor.idExists": "یک callout با این شناسه از قبل وجود دارد",
 	"editor.idConflict": "این شناسه با یک callout موجود تعارض دارد",
+	"editor.idDashConflict": 'Obsidian فاصله‌ها را به‌صورت خط تیره می‌نویسد، بنابراین این شناسه با «{{other}}» تداخل دارد',
 	"editor.untitledCallout": "Callout بدون عنوان",
 	"editor.loremIpsum": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
 	"editor.loremIpsumShort":

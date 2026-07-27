@@ -12,6 +12,7 @@ import type CalloutStudioPlugin from "../../main";
 import type { CalloutRenderRole, ContextMenuItemId } from "../../types";
 import { t } from "../../i18n";
 import { CalloutEditor } from "../../settings/CalloutEditor";
+import { resolveCalloutDef } from "../renderShared";
 import {
 	CALLOUT_FOLD_MARK_REGEX,
 	type CalloutInfo,
@@ -35,10 +36,13 @@ type ItemBuilder = (
 // ─── Shared item builders ────────────────────────────────────────────────────
 
 const buildEdit: ItemBuilder = (plugin, menu, context) => {
-	const def =
-		plugin.registry.get(context.id) ??
-		plugin.registry.findByAlias(context.id);
-	if (!def) return;
+	// The same resolution the renderer uses, so the menu offers "edit" for
+	// exactly the tokens that render as a known callout — including `[!a-b]`
+	// written for the callout `a b`, which an exact id/alias lookup misses.
+	// `unknown` keeps genuinely unrecognized ids from offering to edit the
+	// fallback definition they merely borrow their looks from.
+	const { def, unknown } = resolveCalloutDef(plugin.registry, context.id);
+	if (!def || unknown) return;
 	menu.addItem((item) => {
 		item.setTitle(t("contextMenu.editCallout"))
 			.setIcon("pencil")

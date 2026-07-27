@@ -221,6 +221,7 @@ export const hi: Record<string, string> = {
 	"editor.idEmpty": "कम से कम एक ID आवश्यक है",
 	"editor.idExists": "इस ID वाला callout पहले से मौजूद है",
 	"editor.idConflict": "यह ID किसी मौजूदा callout से टकराती है",
+	"editor.idDashConflict": 'Obsidian स्पेस को डैश के रूप में लिखता है, इसलिए यह ID "{{other}}" से टकराती है',
 	"editor.untitledCallout": "बिना शीर्षक Callout",
 	"editor.loremIpsum": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
 	"editor.loremIpsumShort": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",

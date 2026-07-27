@@ -15,7 +15,10 @@ import {
 	MarkdownView,
 } from "obsidian";
 import type CalloutStudioPlugin from "../../main";
-import { normalizeCalloutId } from "../../utils/calloutId";
+import {
+	normalizeCalloutId,
+	obsidianCalloutAttrId,
+} from "../../utils/calloutId";
 import { scanLineForCalloutTokens } from "../calloutTokens";
 import {
 	CSS_HEADING_LINE,
@@ -268,14 +271,17 @@ function resolveReadingContext(
 	const sectionInfo = getSectionInfo(view, calloutEl);
 	if (!sectionInfo) return null;
 
-	const calloutId = normalizeCalloutId(
+	// Obsidian writes the DASH form here (`> [!multi word callout]` becomes
+	// `data-callout="multi-word-callout"`), so match the source lines in that
+	// same space rather than against the space-form normalized id.
+	const calloutAttrId = obsidianCalloutAttrId(
 		calloutEl.getAttribute("data-callout") ?? "",
 	);
-	if (!calloutId) return null;
+	if (!calloutAttrId) return null;
 
 	const callout = findCalloutInSection(
 		sectionInfo,
-		calloutId,
+		calloutAttrId,
 		getCalloutDomDepth(calloutEl),
 	);
 	if (!callout) return null;
@@ -316,9 +322,15 @@ function findCalloutAtLine(
 
 // Scan a rendered section's source text for a callout header matching the
 // given id and quote depth. Falls back: same id → same depth → first callout.
+//
+// The id match runs in Obsidian's *attribute* space (see obsidianCalloutAttrId)
+// because that projection is all the rendered DOM preserves: `> [!multi word
+// callout]` renders as `data-callout="multi-word-callout"`, so comparing the
+// caller's attribute against the space-form source ids would never match. For
+// ids that legitimately contain dashes the projection is the identity.
 function findCalloutInSection(
 	sectionInfo: MarkdownSectionInformation,
-	calloutId: string,
+	calloutAttrId: string,
 	quoteDepth: number,
 ): CalloutInfo | null {
 	let sameIdMatch: CalloutInfo | null = null;
@@ -340,11 +352,15 @@ function findCalloutInSection(
 
 		if (!firstCallout) firstCallout = callout;
 
-		if (callout.id === calloutId && callout.quoteDepth === quoteDepth) {
+		// `callout.id` stays space-form for the caller; only the comparison
+		// moves into attribute space.
+		const attrId = obsidianCalloutAttrId(callout.id);
+
+		if (attrId === calloutAttrId && callout.quoteDepth === quoteDepth) {
 			return callout;
 		}
 
-		if (!sameIdMatch && callout.id === calloutId) sameIdMatch = callout;
+		if (!sameIdMatch && attrId === calloutAttrId) sameIdMatch = callout;
 		if (!sameDepthMatch && callout.quoteDepth === quoteDepth)
 			sameDepthMatch = callout;
 	}

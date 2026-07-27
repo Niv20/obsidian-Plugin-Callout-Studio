@@ -208,6 +208,7 @@ export const fi: Record<string, string> = {
 	"editor.idEmpty": "Vähintään yksi tunnus vaaditaan",
 	"editor.idExists": "Callout tällä tunnuksella on jo olemassa",
 	"editor.idConflict": "Tämä tunnus on ristiriidassa olemassa olevan calloutin kanssa",
+	"editor.idDashConflict": 'Obsidian kirjoittaa välilyönnit väliviivoina, joten tämä tunnus on ristiriidassa tunnuksen "{{other}}" kanssa',
 	"editor.untitledCallout": "Nimetön Callout",
 	"editor.loremIpsum": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
 	"editor.loremIpsumShort":

@@ -207,6 +207,7 @@ export const nb: Record<string, string> = {
 	"editor.idEmpty": "Minst én ID er påkrevd",
 	"editor.idExists": "Det finnes allerede en callout med denne ID-en",
 	"editor.idConflict": "Denne ID-en er i konflikt med en eksisterende callout",
+	"editor.idDashConflict": 'Obsidian skriver mellomrom som bindestreker, så denne ID-en er i konflikt med "{{other}}"',
 	"editor.untitledCallout": "Navnløs Callout",
 	"editor.loremIpsum": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
 	"editor.loremIpsumShort": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",

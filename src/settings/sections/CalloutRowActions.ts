@@ -40,7 +40,7 @@ export async function openBuiltInRowMenu(
 	event: MouseEvent,
 	def: CalloutDefinition,
 ): Promise<void> {
-	const allIds = [def.id, ...(def.aliases ?? [])];
+	const allIds = ctx.plugin.registry.vaultIdFormsFor(def);
 	const usage = await countCalloutUsages(ctx.app, allIds);
 	const menu = new Menu();
 	const modified = ctx.plugin.registry.isBuiltInModified(def.id);
@@ -87,7 +87,7 @@ export async function openRowMenu(
 	event: MouseEvent,
 	def: CalloutDefinition,
 ): Promise<void> {
-	const allIds = [def.id, ...(def.aliases ?? [])];
+	const allIds = ctx.plugin.registry.vaultIdFormsFor(def);
 	const usage = await countCalloutUsages(ctx.app, allIds);
 	const menu = new Menu();
 
@@ -164,7 +164,7 @@ async function handleCalloutDelete(
 	def: CalloutDefinition,
 	knownUsage?: { fileCount: number; totalCount: number },
 ): Promise<void> {
-	const allIds = [def.id, ...(def.aliases ?? [])];
+	const allIds = ctx.plugin.registry.vaultIdFormsFor(def);
 	const usage = knownUsage ?? (await countCalloutUsages(ctx.app, allIds));
 
 	const action = await new DeleteCalloutModal(ctx.app, {
@@ -202,7 +202,7 @@ async function handleBuiltInCalloutDelete(
 	def: CalloutDefinition,
 	knownUsage?: { fileCount: number; totalCount: number },
 ): Promise<void> {
-	const allIds = [def.id, ...(def.aliases ?? [])];
+	const allIds = ctx.plugin.registry.vaultIdFormsFor(def);
 	const usage = knownUsage ?? (await countCalloutUsages(ctx.app, allIds));
 	if (usage.fileCount === 0) return;
 
@@ -232,7 +232,7 @@ async function handleCalloutReplace(
 	ctx: SettingsSectionContext,
 	def: CalloutDefinition,
 ): Promise<void> {
-	const allIds = [def.id, ...(def.aliases ?? [])];
+	const allIds = ctx.plugin.registry.vaultIdFormsFor(def);
 	const { fileCount, totalCount } = await countCalloutUsages(ctx.app, allIds);
 	const otherCallouts = ctx.plugin.registry
 		.getAll()
@@ -291,7 +291,7 @@ async function handleBuiltInReset(
 		if (customAliases.length > 0) {
 			const { fileCount, totalCount } = await countCalloutUsages(
 				ctx.app,
-				customAliases,
+				ctx.plugin.registry.vaultIdFormsFor(def, customAliases),
 			);
 			if (fileCount > 0) {
 				const confirmed = await new ConfirmModal(

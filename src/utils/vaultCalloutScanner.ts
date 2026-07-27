@@ -20,7 +20,7 @@
  * The one exception is fold-marker normalization; see the note on it below.
  */
 import type { App, TFile } from "obsidian";
-import { normalizeCalloutId } from "./calloutId";
+import { mergeDashSpaceVariants, normalizeCalloutId } from "./calloutId";
 import type { LineCalloutToken } from "../editor/calloutTokens";
 import {
 	createDocumentLineFilter,
@@ -177,6 +177,9 @@ export async function scanFileForUnknownCallouts(
 /**
  * Synchronously scan an in-memory string (e.g. an open editor's current
  * buffer that may be unsaved) and return unknown callout IDs from any role.
+ *
+ * Dash/space spellings of the same ID are merged into one — see
+ * {@link mergeDashSpaceVariants}.
  */
 export function scanStringForUnknownCallouts(
 	content: string,
@@ -188,7 +191,7 @@ export function scanStringForUnknownCallouts(
 		if (!id) return;
 		if (!knownIds.has(id)) found.add(id);
 	});
-	return Array.from(found);
+	return mergeDashSpaceVariants(Array.from(found));
 }
 
 /**
@@ -454,6 +457,10 @@ export async function normalizeFoldMarkersInVault(
  * Scan every Markdown file once and return the set of callout IDs that are
  * referenced in any role (regular / heading / inline) but are NOT in the
  * supplied known set.
+ *
+ * Merges dash/space spellings again after aggregating: each file was merged on
+ * its own, but `[!a b]` in one note and `[!a-b]` in another still arrive here
+ * as two entries.
  */
 export async function scanVaultForUnknownCallouts(
 	app: App,
@@ -467,7 +474,7 @@ export async function scanVaultForUnknownCallouts(
 			found.add(id);
 		}
 	}
-	return Array.from(found);
+	return mergeDashSpaceVariants(Array.from(found));
 }
 
 /**

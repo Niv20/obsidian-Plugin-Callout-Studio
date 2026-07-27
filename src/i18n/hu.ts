@@ -221,6 +221,7 @@ export const hu: Record<string, string> = {
 	"editor.idEmpty": "Legalább egy azonosító szükséges",
 	"editor.idExists": "Már létezik callout ezzel az azonosítóval",
 	"editor.idConflict": "Ez az azonosító ütközik egy meglévő callout-tal",
+	"editor.idDashConflict": 'Az Obsidian a szóközöket kötőjelként írja, ezért ez az azonosító ütközik ezzel: „{{other}}”',
 	"editor.untitledCallout": "Névtelen callout",
 	"editor.loremIpsum": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
 	"editor.loremIpsumShort": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",

@@ -221,6 +221,7 @@ export const cs: Record<string, string> = {
 	"editor.idEmpty": "Je vyžadováno alespoň jedno ID",
 	"editor.idExists": "Callout s tímto ID již existuje",
 	"editor.idConflict": "Toto ID je v konfliktu s existujícím callout",
+	"editor.idDashConflict": 'Obsidian zapisuje mezery jako pomlčky, takže toto ID koliduje s „{{other}}“',
 	"editor.untitledCallout": "Callout bez názvu",
 	"editor.loremIpsum": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
 	"editor.loremIpsumShort": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",

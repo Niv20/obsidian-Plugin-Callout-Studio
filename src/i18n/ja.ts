@@ -221,6 +221,7 @@ export const ja: Record<string, string> = {
 	"editor.idEmpty": "少なくとも1つのIDが必要です",
 	"editor.idExists": "このIDのcalloutがすでに存在します",
 	"editor.idConflict": "このIDは既存のcalloutと競合します",
+	"editor.idDashConflict": 'Obsidianはスペースをハイフンとして書き込むため、このIDは「{{other}}」と衝突します',
 	"editor.untitledCallout": "タイトルなしCallout",
 	"editor.loremIpsum": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
 	"editor.loremIpsumShort": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",

@@ -43,10 +43,10 @@ import {
 	CSS_UNKNOWN,
 	buildCalloutTokenDom,
 	isStartupEntranceActive,
+	calloutDomId,
 	resolveCalloutDef,
 } from "../editor/renderShared";
 import { applyTitleGradient } from "./gradientTitleText";
-import { normalizeCalloutId } from "../utils/calloutId";
 
 /** Narrow structural host type (avoids importing the concrete plugin class). */
 export interface ReadingRenderHost {
@@ -174,14 +174,15 @@ function transformHeading(
 		if (!rawId.trim()) return;
 	}
 
-	const { def, unknown } = resolveCalloutDef(host.registry, rawId);
+	const resolved = resolveCalloutDef(host.registry, rawId);
+	const { def, unknown } = resolved;
 	h.classList.add(CSS_HEADING_LINE);
 	if (unknown) h.classList.add(CSS_UNKNOWN);
 	// This hN is created fresh with the bar class, so the Live Preview
 	// background-color transition can't fire on it — animate via keyframe
 	// instead, but only during the startup entrance window.
 	if (isStartupEntranceActive()) h.classList.add(CSS_ANIM_IN);
-	h.setAttribute("data-callout", normalizeCalloutId(rawId));
+	h.setAttribute("data-callout", calloutDomId(rawId, resolved));
 
 	// Strip the `[!id] ` prefix from the rendered text and put the token
 	// DOM (icon + optional name) in its place.

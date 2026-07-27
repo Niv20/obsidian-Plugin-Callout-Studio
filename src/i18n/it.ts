@@ -221,6 +221,7 @@ export const it: Record<string, string> = {
 	"editor.idEmpty": "È richiesto almeno un ID",
 	"editor.idExists": "Esiste già un callout con questo ID",
 	"editor.idConflict": "Questo ID è in conflitto con un callout esistente",
+	"editor.idDashConflict": 'Obsidian scrive gli spazi come trattini, quindi questo ID è in conflitto con "{{other}}"',
 	"editor.untitledCallout": "Callout senza titolo",
 	"editor.loremIpsum": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
 	"editor.loremIpsumShort": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",

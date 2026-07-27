@@ -221,6 +221,7 @@ export const tr: Record<string, string> = {
 	"editor.idEmpty": "En az bir ID gereklidir",
 	"editor.idExists": "Bu ID ile bir callout zaten mevcut",
 	"editor.idConflict": "Bu ID mevcut bir callout ile çakışıyor",
+	"editor.idDashConflict": 'Obsidian boşlukları tire olarak yazar, bu yüzden bu ID "{{other}}" ile çakışıyor',
 	"editor.untitledCallout": "Başlıksız Callout",
 	"editor.loremIpsum": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
 	"editor.loremIpsumShort": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",

@@ -221,6 +221,7 @@ export const th: Record<string, string> = {
 	"editor.idEmpty": "ต้องมี ID อย่างน้อยหนึ่งรายการ",
 	"editor.idExists": "มี callout ที่มี ID นี้อยู่แล้ว",
 	"editor.idConflict": "ID นี้ขัดแย้งกับ callout ที่มีอยู่",
+	"editor.idDashConflict": 'Obsidian เขียนช่องว่างเป็นขีดกลาง ดังนั้น ID นี้จึงขัดแย้งกับ "{{other}}"',
 	"editor.untitledCallout": "Callout ไม่มีชื่อ",
 	"editor.loremIpsum": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
 	"editor.loremIpsumShort": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",

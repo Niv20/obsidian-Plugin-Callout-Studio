@@ -33,6 +33,7 @@ import {
 	paintRoleIcon,
 	resolveCalloutDef,
 } from "../editor/renderShared";
+import { obsidianCalloutAttrId } from "../utils/calloutId";
 import type { CalloutRegistry } from "./CalloutRegistry";
 import { StartupStyleCache } from "./StartupStyleCache";
 
@@ -42,6 +43,22 @@ type RegistryWindow = Window & {
 };
 
 const STYLE_EL_ID = "callout-studio-dynamic-css";
+
+/**
+ * The `.callout[data-callout=…]` selector base for one callout ID, with an
+ * optional theme prefix. THE single place this plugin writes that selector.
+ *
+ * Obsidian dasherizes the ID it writes into that attribute (see
+ * obsidianCalloutAttrId), so `> [!multi word callout]` renders as
+ * `data-callout="multi-word-callout"` and a space-form selector matches
+ * nothing. Callers append their own `> .callout-title …` tail.
+ *
+ * Deliberately does NOT cover the heading-bar / inline-pill / ref-token
+ * selectors: that DOM is ours and carries the space-preserving normalized ID
+ * (see renderShared.buildCalloutTokenDom).
+ */
+const calloutSel = (id: string, themePrefix = ""): string =>
+	`${themePrefix}.callout[data-callout="${obsidianCalloutAttrId(id)}"]`;
 
 /** One `background-image` layer: a gradient sweep. */
 interface BgLayer {
@@ -433,7 +450,7 @@ export class CSSInjector {
 		if (iconCSS) lightProps.push(`  --callout-icon: ${iconCSS};`);
 		lightProps.push(...this.bgProps(def, "light"));
 		parts.push(
-			`.callout[data-callout="${def.id}"] {\n${lightProps.join("\n")}\n}`,
+			`${calloutSel(def.id)} {\n${lightProps.join("\n")}\n}`,
 		);
 
 		// Dark mode override
@@ -444,21 +461,21 @@ export class CSSInjector {
 			];
 			darkProps.push(...this.bgProps(def, "dark"));
 			parts.push(
-				`.theme-dark .callout[data-callout="${def.id}"] {\n${darkProps.join("\n")}\n}`,
+				`${calloutSel(def.id, ".theme-dark ")} {\n${darkProps.join("\n")}\n}`,
 			);
 		}
 
 		// Content text color overrides
 		if (def.textColorLight) {
 			parts.push(
-				`.callout[data-callout="${def.id}"] > .callout-content {\n` +
+				`${calloutSel(def.id)} > .callout-content {\n` +
 					`  color: ${def.textColorLight};\n` +
 					`}`,
 			);
 		}
 		if (def.textColorDark && def.textColorDark !== def.textColorLight) {
 			parts.push(
-				`.theme-dark .callout[data-callout="${def.id}"] > .callout-content {\n` +
+				`${calloutSel(def.id, ".theme-dark ")} > .callout-content {\n` +
 					`  color: ${def.textColorDark};\n` +
 					`}`,
 			);
@@ -504,7 +521,7 @@ export class CSSInjector {
 					[def.id, ...(def.aliases ?? [])]
 						.map(
 							(id) =>
-								`${themePrefix}.callout[data-callout="${id}"] > ` +
+								`${calloutSel(id, themePrefix)} > ` +
 								`.callout-title > .callout-title-inner`,
 						)
 						.join(",\n"),
@@ -526,10 +543,7 @@ export class CSSInjector {
 			def,
 			(themePrefix, suffix) =>
 				[def.id, ...(def.aliases ?? [])]
-					.map(
-						(id) =>
-							`${themePrefix}.callout[data-callout="${id}"]${suffix}`,
-					)
+					.map((id) => `${calloutSel(id, themePrefix)}${suffix}`)
 					.join(",\n"),
 			false,
 		);
@@ -540,7 +554,7 @@ export class CSSInjector {
 			for (const alias of def.aliases) {
 				parts.push(
 					`/* alias: ${alias} → ${def.id} */\n` +
-						`.callout[data-callout="${alias}"] {\n${lightProps.join("\n")}\n}`,
+						`${calloutSel(alias)} {\n${lightProps.join("\n")}\n}`,
 				);
 				if (this.needsDarkBlock(def)) {
 					const aliasDarkProps: string[] = [
@@ -549,12 +563,12 @@ export class CSSInjector {
 					];
 					aliasDarkProps.push(...this.bgProps(def, "dark"));
 					parts.push(
-						`.theme-dark .callout[data-callout="${alias}"] {\n${aliasDarkProps.join("\n")}\n}`,
+						`${calloutSel(alias, ".theme-dark ")} {\n${aliasDarkProps.join("\n")}\n}`,
 					);
 				}
 				if (def.textColorLight) {
 					parts.push(
-						`.callout[data-callout="${alias}"] > .callout-content {\n  color: ${def.textColorLight};\n}`,
+						`${calloutSel(alias)} > .callout-content {\n  color: ${def.textColorLight};\n}`,
 					);
 				}
 				if (
@@ -562,7 +576,7 @@ export class CSSInjector {
 					def.textColorDark !== def.textColorLight
 				) {
 					parts.push(
-						`.theme-dark .callout[data-callout="${alias}"] > .callout-content {\n  color: ${def.textColorDark};\n}`,
+						`${calloutSel(alias, ".theme-dark ")} > .callout-content {\n  color: ${def.textColorDark};\n}`,
 					);
 				}
 				if (def.icon.type === "material") {
@@ -633,7 +647,10 @@ export class CSSInjector {
 			ids
 				.map(
 					(id) =>
-						`${themePrefix}.callout[data-callout="${id}"] > ` +
+						// Obsidian's own DOM → dasherized attr (calloutSel).
+						// Our heading-bar DOM → space-form attr (the two below).
+						// The two conventions are deliberate — do not unify them.
+						`${calloutSel(id, themePrefix)} > ` +
 						`.callout-title > .callout-fold, ` +
 						`${themePrefix}.${CSS_HEADING_LINE}[data-callout="${id}"] ` +
 						`.${CSS_FOLD_ARROW}, ` +
@@ -875,7 +892,8 @@ export class CSSInjector {
 		// that default and would otherwise silently cancel it out the moment
 		// the user touches any offset/scale slider.
 		const baseSelectors = [
-			`.callout[data-callout="${def.id}"] > .callout-title > .callout-icon`,
+			// Obsidian's own DOM → dasherized attr; the pill below is ours.
+			`${calloutSel(def.id)} > .callout-title > .callout-icon`,
 			`.${CSS_INLINE_TOKEN}[data-callout="${def.id}"] > .${CSS_TOKEN_ICON}`,
 		];
 		const headingSelector = `.${CSS_HEADING_TOKEN}[data-callout="${def.id}"] > .${CSS_TOKEN_ICON}`;
@@ -927,12 +945,13 @@ export class CSSInjector {
 		svg: string,
 	): string {
 		const dataUri = svgToDataUri(svg);
+		const sel = calloutSel(calloutId);
 		return (
 			`@media screen {\n` +
-			`.callout[data-callout="${calloutId}"] > .callout-title > .callout-icon > svg {\n` +
+			`${sel} > .callout-title > .callout-icon > svg {\n` +
 			`  display: none;\n` +
 			`}\n` +
-			`.callout[data-callout="${calloutId}"] > .callout-title > .callout-icon::after {\n` +
+			`${sel} > .callout-title > .callout-icon::after {\n` +
 			`  content: "";\n` +
 			`  display: inline-block;\n` +
 			`  width: var(--icon-size, 1.2em);\n` +
@@ -959,12 +978,13 @@ export class CSSInjector {
 		// Defensive escaping for the CSS string literal (emojis contain neither
 		// backslashes nor quotes, but keep it safe against future data changes).
 		const safe = emoji.replace(/\\/g, "\\\\").replace(/"/g, '\\"');
+		const sel = calloutSel(calloutId);
 		return (
 			`@media screen {\n` +
-			`.callout[data-callout="${calloutId}"] > .callout-title > .callout-icon > svg {\n` +
+			`${sel} > .callout-title > .callout-icon > svg {\n` +
 			`  display: none;\n` +
 			`}\n` +
-			`.callout[data-callout="${calloutId}"] > .callout-title > .callout-icon::after {\n` +
+			`${sel} > .callout-title > .callout-icon::after {\n` +
 			`  content: "${safe}";\n` +
 			`  display: inline-block;\n` +
 			`  font-size: var(--icon-size, 1.2em);\n` +
@@ -1101,14 +1121,20 @@ export class CSSInjector {
 	}
 
 	/**
-	 * Resolve a callout id to its definition: direct id, then alias, then the
-	 * configured fallback callout (so unknown ids paint the fallback icon, the
+	 * Resolve an ID read off Obsidian's OWN `data-callout` attribute — the dash
+	 * form (see obsidianCalloutAttrId) — to its definition, falling back to the
+	 * configured fallback callout so unknown IDs paint the fallback icon (the
 	 * DOM equivalent of generateFallbackCSS).
+	 *
+	 * Only for `.callout[data-callout]` elements. Heading-bar and inline-pill
+	 * DOM is ours and carries the space-form ID; those go through
+	 * renderShared.resolveCalloutDef instead, which tries the exact ID and alias
+	 * first and only then the attribute form, so unknown IDs still earn their
+	 * `.cs-unknown` class.
 	 */
-	private resolveDef(id: string): CalloutDefinition | undefined {
+	private resolveDef(attrId: string): CalloutDefinition | undefined {
 		return (
-			this.registry.get(id) ??
-			this.registry.findByAlias(id) ??
+			this.registry.findByAttrId(attrId) ??
 			this.registry.get(this.registry.settings.fallbackCalloutId)
 		);
 	}
@@ -1380,16 +1406,24 @@ export class CSSInjector {
 		const fallbackDef = callouts.find((c) => c.id === fallbackId);
 		if (!fallbackDef) return "";
 
-		// Collect all known callout IDs and aliases. The transient settings-
-		// preview definition is registered under its real ID, so it is already
-		// included here and thus excluded from the fallback tint.
-		const knownIds: string[] = [];
+		// Collect the *attr-form* of every known callout ID and alias — the form
+		// Obsidian actually writes into `data-callout` on a blockquote callout.
+		// A space-form `:not([data-callout="multi word callout"])` never excludes
+		// the element Obsidian tagged `multi-word-callout`, so the fallback rules
+		// below (which carry `!important`) would forcibly override that callout's
+		// real color and icon. A Set because two IDs can share one attr-form.
+		//
+		// The transient settings-preview definition is registered under its real
+		// ID, so it is already included here and thus excluded from the tint.
+		const knownAttrIds = new Set<string>();
 		for (const def of callouts) {
-			knownIds.push(def.id);
-			if (def.aliases) knownIds.push(...def.aliases);
+			knownAttrIds.add(obsidianCalloutAttrId(def.id));
+			for (const alias of def.aliases ?? []) {
+				knownAttrIds.add(obsidianCalloutAttrId(alias));
+			}
 		}
 
-		const notSelectors = knownIds
+		const notSelectors = Array.from(knownAttrIds)
 			.map((id) => `:not([data-callout="${id}"])`)
 			.join("");
 

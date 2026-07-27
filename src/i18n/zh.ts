@@ -221,6 +221,7 @@ export const zh: Record<string, string> = {
 	"editor.idEmpty": "至少需要一个 ID",
 	"editor.idExists": "已存在具有此 ID 的 callout",
 	"editor.idConflict": "此 ID 与现有 callout 冲突",
+	"editor.idDashConflict": 'Obsidian 会将空格写为连字符，因此此 ID 与 "{{other}}" 冲突',
 	"editor.untitledCallout": "未命名 Callout",
 	"editor.loremIpsum": "Lorem ipsum dolor sit amet，consectetur adipiscing elit。",
 	"editor.loremIpsumShort": "Lorem ipsum dolor sit amet，consectetur adipiscing elit。",

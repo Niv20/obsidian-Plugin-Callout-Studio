@@ -208,6 +208,7 @@ export const el: Record<string, string> = {
 	"editor.idEmpty": "Απαιτείται τουλάχιστον ένα ID",
 	"editor.idExists": "Υπάρχει ήδη callout με αυτό το ID",
 	"editor.idConflict": "Αυτό το ID έρχεται σε σύγκρουση με υπάρχον callout",
+	"editor.idDashConflict": 'Το Obsidian γράφει τα κενά ως παύλες, επομένως αυτό το ID συγκρούεται με το «{{other}}»',
 	"editor.untitledCallout": "Callout χωρίς τίτλο",
 	"editor.loremIpsum": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
 	"editor.loremIpsumShort":

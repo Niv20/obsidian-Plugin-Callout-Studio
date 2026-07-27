@@ -23,6 +23,7 @@ import {
 	DEFAULT_CONTEXT_MENU_ITEMS,
 	DEFAULT_SETTINGS,
 } from "../constants";
+import { obsidianCalloutAttrId } from "../utils/calloutId";
 import { parseCssColorToHex } from "../utils/colorUtils";
 import { sanitizeCustomPalettes } from "../utils/colorPalettes";
 import { sortCalloutsByDisplayName } from "../utils/sorting";
@@ -321,6 +322,68 @@ export class CalloutRegistry {
 							(def.textColorDark ?? "").toLowerCase(),
 				);
 				if (match) def.paletteId = match.id;
+			}
+		}
+		this.reconcileAttrIdCollisions();
+	}
+
+	/**
+	 * Migration: merge any pre-existing definitions that only differ by a
+	 * dash/space spelling of the same `data-callout` attribute form. Obsidian
+	 * renders both spellings identically (see obsidianCalloutAttrId's doc), so
+	 * two surviving rows would forever fight over one CSS selector. This can
+	 * happen on a vault saved before findByAttrId/findAttrIdConflict existed,
+	 * when discovery could auto-create a dash-form fallback row alongside an
+	 * already-defined space-form callout.
+	 *
+	 * A built-in always survives (its id can't realistically collide, but never
+	 * risk dropping one). Otherwise an uncustomized `fallback` row always
+	 * loses — it's disposable auto-junk — and between two real rows the
+	 * dash-free spelling wins, per the user's stated preference. A losing real
+	 * row's id is folded in as an alias of the survivor so no customization or
+	 * usage-matching is lost.
+	 */
+	private reconcileAttrIdCollisions(): void {
+		const groups = new Map<string, Set<string>>();
+		const addForm = (form: string, defId: string): void => {
+			const attrForm = obsidianCalloutAttrId(form);
+			if (!attrForm) return;
+			let set = groups.get(attrForm);
+			if (!set) groups.set(attrForm, (set = new Set()));
+			set.add(defId);
+		};
+		for (const def of this.callouts.values()) {
+			addForm(def.id, def.id);
+			for (const alias of def.aliases ?? []) addForm(alias, def.id);
+		}
+
+		const isDisposable = (d: CalloutDefinition): boolean =>
+			d.source === "fallback" && d.customized !== true;
+
+		for (const defIds of groups.values()) {
+			if (defIds.size < 2) continue;
+			const defs = Array.from(defIds)
+				.map((id) => this.callouts.get(id))
+				.filter((d): d is CalloutDefinition => d !== undefined);
+			// An earlier group in this same pass may already have resolved
+			// (deleted) one side of this collision.
+			if (defs.length < 2) continue;
+
+			const survivor =
+				defs.find((d) => d.builtIn) ??
+				defs.find((d) => !isDisposable(d) && !d.id.includes("-")) ??
+				defs.find((d) => !isDisposable(d)) ??
+				defs[0]!;
+
+			for (const loser of defs) {
+				if (loser.id === survivor.id || loser.builtIn) continue;
+				this.callouts.delete(loser.id);
+				if (isDisposable(loser)) continue;
+				const aliases = new Set(survivor.aliases ?? []);
+				aliases.add(loser.id);
+				for (const a of loser.aliases ?? []) aliases.add(a);
+				aliases.delete(survivor.id);
+				survivor.aliases = Array.from(aliases);
 			}
 		}
 	}
@@ -639,6 +702,128 @@ export class CalloutRegistry {
 			if (def.aliases && def.aliases.includes(alias)) return def;
 		}
 		return undefined;
+	}
+
+	/**
+	 * Resolve the ID Obsidian wrote into a blockquote callout's `data-callout`
+	 * back to a definition. That attribute is the DASH form of whatever the user
+	 * typed (see obsidianCalloutAttrId), so a definition stored as
+	 * `multi word callout` must be findable from `multi-word-callout`.
+	 *
+	 * Precedence runs most-literal-first, so an ID that IS literally
+	 * `multi-word-callout` always beats a `multi word callout` that merely
+	 * dasherizes to it:
+	 *   1. exact ID   2. exact alias   3. attr-form ID   4. attr-form alias
+	 * Steps 3 and 4 are separate passes so an attr-form ID beats an attr-form
+	 * alias regardless of Map insertion order.
+	 *
+	 * This is the RENDERING lookup, so it deliberately sees the callout editor's
+	 * live-preview draft. Validation wants the opposite and asks a different
+	 * question — see {@link findAttrIdConflict}.
+	 *
+	 * Returns undefined when nothing matches — callers decide whether to fall
+	 * back. A linear scan rather than a maintained index: `findByAlias` above
+	 * already scans on every rendered token, and the Map is mutated from a dozen
+	 * places (including setPreviewDefinition, which deliberately skips
+	 * notifyChange), so an index would have no safe invalidation point.
+	 */
+	findByAttrId(rawAttr: string): CalloutDefinition | undefined {
+		const key = obsidianCalloutAttrId(rawAttr);
+		const exact = this.callouts.get(key) ?? this.findByAlias(key);
+		if (exact) return exact;
+		for (const def of this.callouts.values()) {
+			if (obsidianCalloutAttrId(def.id) === key) return def;
+		}
+		for (const def of this.callouts.values()) {
+			if (def.aliases?.some((a) => obsidianCalloutAttrId(a) === key)) {
+				return def;
+			}
+		}
+		return undefined;
+	}
+
+	/**
+	 * The OTHER definition that already owns `rawId`'s `data-callout` attribute
+	 * form, or undefined when the form is free. Validation-only counterpart to
+	 * {@link findByAttrId}, and deliberately different from it in two ways:
+	 *
+	 * - It asks "does anyone else own this form?" rather than "who wins the
+	 *   lookup race", so there is no precedence ladder — the first other owner
+	 *   is reported. That keeps the answer symmetric: `a b` sees `a-b` and
+	 *   `a-b` sees `a b`, where a precedence-ordered search would let the
+	 *   literal ID win and hide the conflict in one of the two directions.
+	 * - It sees through the live-preview shadow exactly as {@link getReal}
+	 *   does. The callout editor registers its in-progress draft in this very
+	 *   map under the ID being typed (see setPreviewDefinition), so a raw scan
+	 *   finds the draft and reports it as its own conflict.
+	 *
+	 * `excludeId` is the definition being edited — it can never conflict with
+	 * itself, and skipping it wholesale also stops one of its own aliases from
+	 * conflicting with its ID.
+	 */
+	findAttrIdConflict(
+		rawId: string,
+		excludeId: string | null,
+	): CalloutDefinition | undefined {
+		const key = obsidianCalloutAttrId(rawId);
+		if (!key) return undefined;
+		for (const def of this.realDefinitions()) {
+			if (def.id === excludeId) continue;
+			if (obsidianCalloutAttrId(def.id) === key) return def;
+			if (def.aliases?.some((a) => obsidianCalloutAttrId(a) === key)) {
+				return def;
+			}
+		}
+		return undefined;
+	}
+
+	/**
+	 * Every raw ID form that may appear in the vault for `def` and belongs to
+	 * `def` alone: its ID and aliases, plus each one's `data-callout` attribute
+	 * form when that differs and no OTHER definition owns it.
+	 *
+	 * Callers that rewrite or count usages across the vault (rename, delete,
+	 * usage counts, the discovery prune pass) must use this rather than
+	 * `[def.id, ...aliases]`, or `> [!a-b]` written by hand is orphaned when the
+	 * `a b` row is renamed away — the same class of bug as leaving heading and
+	 * inline usages behind.
+	 *
+	 * The "no other owner" condition is what keeps a legacy vault safe: where
+	 * `a b` and `a-b` both exist as separate rows, neither claims the other's
+	 * usages.
+	 *
+	 * `forms` narrows the question to a subset of what `def` owns — the
+	 * built-in reset flow asks only about the aliases it is about to drop.
+	 */
+	vaultIdFormsFor(
+		def: CalloutDefinition,
+		forms: string[] = [def.id, ...(def.aliases ?? [])],
+	): string[] {
+		const out = [...forms];
+		for (const form of forms) {
+			const attrForm = obsidianCalloutAttrId(form);
+			if (!attrForm || attrForm === form) continue;
+			if (out.includes(attrForm)) continue;
+			if (this.findAttrIdConflict(attrForm, def.id)) continue;
+			out.push(attrForm);
+		}
+		return out;
+	}
+
+	/**
+	 * The committed definitions, with the transient live-preview entry replaced
+	 * by the real callout it shadows (and dropped entirely when it shadows
+	 * nothing). The iteration equivalent of {@link getReal} — for the callers
+	 * that must only ever see reality, never the callout editor's draft.
+	 */
+	private *realDefinitions(): Generator<CalloutDefinition> {
+		for (const [id, def] of this.callouts) {
+			if (id === this.previewActiveId) {
+				if (this.previewShadowedDef) yield this.previewShadowedDef;
+				continue;
+			}
+			yield def;
+		}
 	}
 
 	/**

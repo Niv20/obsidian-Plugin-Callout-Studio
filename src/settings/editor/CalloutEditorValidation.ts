@@ -18,12 +18,13 @@ type ValidationBaseInput = ValidationLookup & {
 	existingId: string | null;
 };
 
-export type ValidationStateInput = ValidationBaseInput & {
-	isBuiltIn: boolean;
-	displayName: string;
-	calloutId: string;
-	aliases: string[];
-};
+export type ValidationStateInput = ValidationBaseInput &
+	AttrIdLookup & {
+		isBuiltIn: boolean;
+		displayName: string;
+		calloutId: string;
+		aliases: string[];
+	};
 
 export type SnapshotInput = {
 	displayName: string;
@@ -92,6 +93,47 @@ export function canUseCalloutId(
 	return true;
 }
 
+/** Kept separate from ValidationLookup, which three other checks share and
+ * none of them needs this lookup. */
+type AttrIdLookup = {
+	/**
+	 * CalloutRegistry.findAttrIdConflict with the edited callout already
+	 * excluded — the OTHER definition owning this ID's dasherized form.
+	 */
+	findAttrIdConflict: (id: string) => CalloutDefinition | undefined;
+};
+
+export type AttrIdCollisionInput = AttrIdLookup & {
+	existingId: string | null;
+	id: string;
+};
+
+/**
+ * The ID of a DIFFERENT callout that would collide with `input.id` once
+ * Obsidian dasherizes it into `data-callout`, or null when there is none.
+ *
+ * `my note` and `my-note` both render as `data-callout="my-note"`, so the two
+ * would fight over a single CSS rule — the regular callout could only ever show
+ * one of them. That makes the pair unusable in practice, so this counts as a
+ * duplicate ID and blocks saving (see isStateValid), exactly like an exact
+ * clash. Heading bars and inline pills keep their own space-form attribute and
+ * would stay distinct, but that is not worth shipping a half-broken type over.
+ *
+ * Exact ID/alias clashes are NOT reported here — canUseCalloutId owns those,
+ * and reporting both would show two different messages for one problem.
+ */
+export function findAttrIdCollision(input: AttrIdCollisionInput): string | null {
+	if (!input.id) return null;
+	const owner = input.findAttrIdConflict(input.id);
+	if (!owner) return null;
+	// The registry already excludes the edited definition; belt and braces so a
+	// caller that wires the lookup without it can't make a callout fight itself.
+	if (owner.id === input.existingId) return null;
+	if (owner.id === input.id) return null; // exact → canUseCalloutId
+	if (owner.aliases?.includes(input.id)) return null; // exact alias → same
+	return owner.id;
+}
+
 export function isStateValid(input: ValidationStateInput): boolean {
 	if (!input.calloutId) return false;
 	const requireDisplayName =
@@ -102,10 +144,12 @@ export function isStateValid(input: ValidationStateInput): boolean {
 	if (!canUseCalloutId({ ...input, id: input.calloutId, role: "primary" })) {
 		return false;
 	}
+	if (findAttrIdCollision({ ...input, id: input.calloutId })) return false;
 	for (const alias of input.aliases) {
 		if (!canUseCalloutId({ ...input, id: alias, role: "alias" })) {
 			return false;
 		}
+		if (findAttrIdCollision({ ...input, id: alias })) return false;
 	}
 	return true;
 }

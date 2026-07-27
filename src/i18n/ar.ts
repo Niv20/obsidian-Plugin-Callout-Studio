@@ -221,6 +221,7 @@ export const ar: Record<string, string> = {
 	"editor.idEmpty": "مطلوب معرّف واحد على الأقل",
 	"editor.idExists": "يوجد callout بهذا المعرّف بالفعل",
 	"editor.idConflict": "هذا المعرّف يتعارض مع callout موجود",
+	"editor.idDashConflict": 'أوبسيديان يكتب المسافات كشرطات، لذلك يتعارض هذا المعرّف مع "{{other}}"',
 	"editor.untitledCallout": "Callout بدون عنوان",
 	"editor.loremIpsum": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
 	"editor.loremIpsumShort": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",

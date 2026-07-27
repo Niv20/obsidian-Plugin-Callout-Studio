@@ -222,6 +222,7 @@ export const nl: Record<string, string> = {
 	"editor.idEmpty": "Ten minste één ID is vereist",
 	"editor.idExists": "Er bestaat al een callout met deze ID",
 	"editor.idConflict": "Deze ID is in conflict met een bestaande callout",
+	"editor.idDashConflict": 'Obsidian schrijft spaties als streepjes, dus deze ID komt in conflict met "{{other}}"',
 	"editor.untitledCallout": "Naamloze callout",
 	"editor.loremIpsum": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
 	"editor.loremIpsumShort": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",

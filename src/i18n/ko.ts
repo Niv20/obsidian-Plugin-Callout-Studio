@@ -223,6 +223,7 @@ export const ko: Record<string, string> = {
 	"editor.idEmpty": "최소 하나의 ID가 필요합니다",
 	"editor.idExists": "이 ID를 가진 callout이 이미 존재합니다",
 	"editor.idConflict": "이 ID는 기존 callout과 충돌합니다",
+	"editor.idDashConflict": 'Obsidian은 공백을 대시로 저장하므로 이 ID는 "{{other}}"와(과) 충돌합니다',
 	"editor.untitledCallout": "제목 없는 Callout",
 	"editor.loremIpsum": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
 	"editor.loremIpsumShort":

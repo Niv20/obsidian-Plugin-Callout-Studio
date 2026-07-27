@@ -113,21 +113,57 @@ export interface ResolvedCalloutDef {
 }
 
 /**
- * Resolve a raw `[!id]` token id to a definition: direct id → alias → the
- * configured fallback callout. Mirrors CSSInjector.resolveDef so DOM icons
- * and CSS colors always agree.
+ * Resolve a raw `[!id]` token id to a definition: direct id → alias →
+ * `data-callout` attribute form → the configured fallback callout. Mirrors
+ * CSSInjector.resolveDef so DOM icons and CSS colors always agree.
+ *
+ * The attribute-form step is what keeps the three roles consistent: a
+ * blockquote `> [!a-b]` already picks up `a b`'s styling, because Obsidian
+ * renders both spellings as `data-callout="a-b"` and the generated CSS
+ * selectors are built from that form. Heading bars and inline pills carry our
+ * own space-preserving id, so without this step the same spelling would render
+ * here as an unknown callout.
  */
 export function resolveCalloutDef(
 	registry: CalloutRegistry,
 	rawId: string,
 ): ResolvedCalloutDef {
 	const id = normalizeCalloutId(rawId);
-	const direct = registry.get(id) ?? registry.findByAlias(id);
+	const direct =
+		registry.get(id) ?? registry.findByAlias(id) ?? registry.findByAttrId(id);
 	if (direct) return { def: direct, unknown: false };
 	return {
 		def: registry.get(registry.settings.fallbackCalloutId),
 		unknown: true,
 	};
+}
+
+/**
+ * The id our OWN DOM stamps into `data-callout` (heading bars, inline pills,
+ * ref tokens) for a raw token id.
+ *
+ * Per-callout CSS is emitted for a definition's own id and for each of its
+ * aliases, in those exact spellings, so the attribute has to carry one of them.
+ * A token that resolved only through its attribute form — `[!a-b]` written for
+ * the callout `a b`, which Obsidian renders identically — matches none of those
+ * selectors, so it is stamped with the definition's id instead. Without this it
+ * renders with its icon painted but no colour: the icon comes from JS, which
+ * resolves the definition, while the colour comes from CSS, which does not.
+ * The regular callout has never had the problem — its selector is built from
+ * the attribute form to begin with.
+ *
+ * Unknown tokens keep the raw spelling, which is what `.cs-unknown` styling and
+ * the raw-id label expect.
+ */
+export function calloutDomId(
+	rawId: string,
+	resolved: ResolvedCalloutDef,
+): string {
+	const id = normalizeCalloutId(rawId);
+	const { def, unknown } = resolved;
+	if (!def || unknown) return id;
+	if (id === def.id || def.aliases?.includes(id)) return id;
+	return def.id;
 }
 
 /**
@@ -223,7 +259,8 @@ export function buildCalloutTokenDom(
 	options: CalloutTokenDomOptions,
 ): HTMLElement {
 	const { rawId, registry, variant, showName } = options;
-	const { def, unknown } = resolveCalloutDef(registry, rawId);
+	const resolved = resolveCalloutDef(registry, rawId);
+	const { def, unknown } = resolved;
 
 	const root = createSpan();
 	root.classList.add(VARIANT_CLASS[variant]);
@@ -233,7 +270,7 @@ export function buildCalloutTokenDom(
 	if (variant !== "ref" && startupEntranceActive) {
 		root.classList.add(CSS_ANIM_IN);
 	}
-	root.setAttribute("data-callout", normalizeCalloutId(rawId));
+	root.setAttribute("data-callout", calloutDomId(rawId, resolved));
 
 	const iconEl = createSpan();
 	iconEl.classList.add(CSS_TOKEN_ICON);

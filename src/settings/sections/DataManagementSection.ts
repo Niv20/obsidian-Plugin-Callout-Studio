@@ -98,10 +98,9 @@ export function renderResetSection(
 				.setWarning()
 				.onClick(async () => {
 					const userCallouts = ctx.plugin.registry.getUserDefined();
-					const userIds = userCallouts.flatMap((c) => [
-						c.id,
-						...(c.aliases ?? []),
-					]);
+					const userIds = userCallouts.flatMap((c) =>
+						ctx.plugin.registry.vaultIdFormsFor(c),
+					);
 
 					const messageFrag = createFragment();
 					if (userIds.length > 0) {

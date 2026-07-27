@@ -94,7 +94,10 @@ export async function performCalloutEditorSave(
 		const existingDef = plugin.registry.get(existingId);
 		if (existingDef) {
 			oldDisplayName = existingDef.displayName;
-			oldAllIds = [existingDef.id, ...(existingDef.aliases ?? [])];
+			// Both spellings of an ID belong to this one callout, so renaming it
+			// rewrites `[!a-b]` usages alongside `[!a b]` ones rather than
+			// orphaning them. See CalloutRegistry.vaultIdFormsFor.
+			oldAllIds = plugin.registry.vaultIdFormsFor(existingDef);
 			oldFoldable = existingDef.foldable;
 			oldDefaultFolded = existingDef.defaultFolded;
 			const newIdSet = new Set(
@@ -231,7 +234,10 @@ export async function performCalloutEditorSave(
 		oldDisplayName !== newDisplayName &&
 		oldAllIds.length > 0
 	) {
-		const allCurrentIds = [state.calloutId, ...state.aliases];
+		const allCurrentIds = plugin.registry.vaultIdFormsFor(def, [
+			state.calloutId,
+			...state.aliases,
+		]);
 		const replaced = await replaceCalloutTitlesInVault(
 			app,
 			allCurrentIds,
@@ -259,7 +265,10 @@ export async function performCalloutEditorSave(
 			: state.defaultFolded
 				? "-"
 				: "+";
-		const allCurrentIds = [state.calloutId, ...state.aliases];
+		const allCurrentIds = plugin.registry.vaultIdFormsFor(def, [
+			state.calloutId,
+			...state.aliases,
+		]);
 		await normalizeFoldMarkersInVault(app, allCurrentIds, desiredMarker);
 	}
 

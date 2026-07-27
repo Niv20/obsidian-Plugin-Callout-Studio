@@ -45,6 +45,7 @@ import type { CalloutEditorPlugin } from "./editor/types";
 import {
 	buildStateSnapshot,
 	canUseCalloutId,
+	findAttrIdCollision,
 	hasStateChanges,
 	isOverwritingAutoFallbackRow,
 	isStateValid,
@@ -356,6 +357,10 @@ export class CalloutEditor extends Modal {
 				const role = willBePinned ? "primary" : "alias";
 				if (!this.canUseCalloutId(tag, role)) {
 					return t("editor.idConflict");
+				}
+				const clash = this.findAttrIdCollision(tag);
+				if (clash) {
+					return t("editor.idDashConflict", { other: clash });
 				}
 				return null;
 			},
@@ -1175,6 +1180,24 @@ export class CalloutEditor extends Modal {
 		});
 	}
 
+	/**
+	 * The ID of another callout this one would collide with once Obsidian
+	 * dasherizes it into `data-callout`, or null. Treated as a duplicate ID:
+	 * it shows the inline warning AND blocks saving (via isStateValid), so the
+	 * button state always agrees with the message under the ID field.
+	 */
+	private findAttrIdCollision(id: string): string | null {
+		return findAttrIdCollision({
+			existingId: this.existingId,
+			id,
+			findAttrIdConflict: (targetId) =>
+				this.plugin.registry.findAttrIdConflict(
+					targetId,
+					this.existingId,
+				),
+		});
+	}
+
 	private isStateValid(): boolean {
 		return isStateValid({
 			createFromAutocomplete: this.createFromAutocomplete,
@@ -1186,6 +1209,11 @@ export class CalloutEditor extends Modal {
 			getById: (targetId) => this.plugin.registry.getReal(targetId),
 			findByAlias: (targetId) =>
 				this.plugin.registry.findByAlias(targetId),
+			findAttrIdConflict: (targetId) =>
+				this.plugin.registry.findAttrIdConflict(
+					targetId,
+					this.existingId,
+				),
 		});
 	}
 
@@ -1230,9 +1258,19 @@ export class CalloutEditor extends Modal {
 			new Notice(t("editor.idConflict"));
 			return;
 		}
+		const primaryClash = this.findAttrIdCollision(this.calloutId);
+		if (primaryClash) {
+			new Notice(t("editor.idDashConflict", { other: primaryClash }));
+			return;
+		}
 		for (const alias of this.aliases) {
 			if (!this.canUseCalloutId(alias, "alias")) {
 				new Notice(t("editor.idConflict"));
+				return;
+			}
+			const aliasClash = this.findAttrIdCollision(alias);
+			if (aliasClash) {
+				new Notice(t("editor.idDashConflict", { other: aliasClash }));
 				return;
 			}
 		}
@@ -1304,6 +1342,21 @@ export class CalloutEditor extends Modal {
 		if (!this.canUseCalloutId(this.calloutId, "primary")) {
 			this.idsTagInput.showExternalError(t("editor.idExists"));
 			return;
+		}
+
+		// Catches the paths that bypass the tag `validate` callback:
+		// normalizeNameIdLink derives the primary ID straight from the display
+		// name (typing "My note" pins the ID `my note` without an add event),
+		// and aliases loaded from data.json were never validated at all. Both
+		// disable saving, so the reason has to be visible.
+		for (const id of [this.calloutId, ...this.aliases]) {
+			const clash = this.findAttrIdCollision(id);
+			if (clash) {
+				this.idsTagInput.showExternalError(
+					t("editor.idDashConflict", { other: clash }),
+				);
+				return;
+			}
 		}
 
 		this.idsTagInput.clearExternalError();
