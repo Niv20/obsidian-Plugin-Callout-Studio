@@ -1652,11 +1652,6 @@ button.callout-studio-icon-picker-loading {
 	flex-wrap: wrap;
 }
 
-.icon-picker-image-name {
-	flex: 1 1 140px;
-	min-width: 0;
-}
-
 .icon-picker-image-recolor {
 	display: inline-flex;
 	align-items: center;

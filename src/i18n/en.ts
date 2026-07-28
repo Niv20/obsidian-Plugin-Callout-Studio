@@ -383,7 +383,6 @@ export const en: Record<string, string> = {
 	"iconPicker.imageEmpty":
 		"No pictures yet. Add an SVG, PNG, JPEG or WebP file from your computer, " +
 		"or drop one here.",
-	"iconPicker.imageRename": "Picture name",
 	"iconPicker.imageDelete": "Delete",
 	"iconPicker.imageDeleteConfirm": "Delete “{{name}}”?",
 	"iconPicker.imageDeleteInUse":

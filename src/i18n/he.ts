@@ -374,7 +374,6 @@ export const he: Record<string, string> = {
 	"iconPicker.imageEmpty":
 		"עדיין אין תמונות. אפשר להוסיף קובץ SVG, PNG, JPEG או WebP מהמחשב, " +
 		"או פשוט לגרור אותו לכאן.",
-	"iconPicker.imageRename": "שם התמונה",
 	"iconPicker.imageDelete": "מחיקה",
 	"iconPicker.imageDeleteConfirm": "למחוק את „{{name}}”?",
 	"iconPicker.imageDeleteInUse":

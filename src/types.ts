@@ -221,7 +221,10 @@ export interface CustomPalette {
 export interface UserImageIcon {
 	/** Stable unique id (`img-` prefix). Stored as `CalloutIcon.value`. */
 	id: string;
-	/** User-visible name, seeded from the filename and renameable. */
+	/**
+	 * Taken from the filename. Never shown as a field of its own — it is what
+	 * the grid's tooltip reads and what both searches match on.
+	 */
 	name: string;
 	/** What was uploaded. Only `"svg"` keeps its own colors optional. */
 	format: "svg" | "png" | "jpeg" | "webp";

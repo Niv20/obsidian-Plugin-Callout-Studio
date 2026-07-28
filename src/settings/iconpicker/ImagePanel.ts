@@ -4,10 +4,10 @@
  * Every other source is a fixed library, so one PackPanel driven by the IconPack
  * covers them all. This one is a library the user writes to, and that needs
  * affordances the pack contract deliberately has no room for: adding files,
- * renaming, deleting, and choosing whether a picture follows the callout's
- * colour. Bending PackPanel to carry those for a single source would put a
- * branch in the file whose whole point is not having any, so this is a separate
- * panel that reuses IconGrid — the part that genuinely is shared.
+ * deleting them, and choosing whether a picture follows the callout's colour.
+ * Bending PackPanel to carry those for a single source would put a branch in the
+ * file whose whole point is not having any, so this is a separate panel that
+ * reuses IconGrid — the part that genuinely is shared.
  */
 import { Notice, setIcon } from "obsidian";
 import type { App } from "obsidian";
@@ -253,8 +253,8 @@ export class ImagePanel {
 	// ── Action row ──────────────────────────────────────────────────────
 
 	/**
-	 * The rename / recolour / delete controls for the selected picture, plus how
-	 * much of `data.json` the collection is taking up.
+	 * The recolour / delete controls for the selected picture, plus how much of
+	 * `data.json` the collection is taking up.
 	 *
 	 * Acting on the selection rather than hanging buttons off every cell keeps
 	 * the grid a grid — and IconGrid has no per-cell affordance to hang them on.
@@ -265,16 +265,6 @@ export class ImagePanel {
 
 		if (active) {
 			const actions = this.footerEl.createDiv("icon-picker-image-actions");
-
-			const nameInput = actions.createEl("input", {
-				type: "text",
-				cls: "icon-picker-image-name",
-				value: active.name,
-				attr: { "aria-label": t("iconPicker.imageRename") },
-			});
-			nameInput.addEventListener("change", () => {
-				this.rename(active.id, nameInput.value);
-			});
 
 			const recolorLabel = actions.createEl("label", {
 				cls: "icon-picker-image-recolor",
@@ -321,16 +311,6 @@ export class ImagePanel {
 	}
 
 	// ── Mutations ───────────────────────────────────────────────────────
-
-	private rename(id: string, name: string): void {
-		const trimmed = name.trim();
-		if (trimmed.length === 0) {
-			// An unnamed picture is unfindable in search; put the old name back.
-			this.renderFooter();
-			return;
-		}
-		this.update(id, (image) => ({ ...image, name: trimmed }));
-	}
 
 	private setRecolor(id: string, recolor: boolean): void {
 		// `rev` moves because the artwork now draws differently, and that is what
