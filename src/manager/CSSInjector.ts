@@ -8,8 +8,9 @@
  * listener. Also manages the Material Symbols font link element when needed.
  */
 import type { App } from "obsidian";
-import type { CalloutDefinition } from "../types";
+import type { CalloutDefinition, CalloutIcon, UserImageIcon } from "../types";
 import { renderIconInto } from "../icons/renderIcon";
+import { findUserImage } from "../icons/packs/userImages";
 import { createIconResolver } from "../icons/resolver";
 import { packFor } from "../icons/registry";
 import type { IconResolver } from "../icons/types";
@@ -63,6 +64,40 @@ const STYLE_EL_ID = "callout-studio-dynamic-css";
  */
 const calloutSel = (id: string, themePrefix = ""): string =>
 	`${themePrefix}.callout[data-callout="${obsidianCalloutAttrId(id)}"]`;
+
+/**
+ * The picture behind an icon, when the icon is one of the user's own.
+ *
+ * Undefined for every library icon, and also for a picture that has since been
+ * deleted — in both cases the caller wants the ordinary monochrome treatment.
+ */
+function userImageFor(icon: CalloutIcon): UserImageIcon | undefined {
+	return icon.type === "image" ? findUserImage(icon.value) : undefined;
+}
+
+/**
+ * How far off square a picture may be drawn before it is squeezed back.
+ *
+ * Icon boxes are square, and `contain` inside one shrinks a wide logo until its
+ * *width* fits — a 3:1 banner would render a third of the height of every other
+ * callout's icon. Widening the box instead keeps the height constant, which is
+ * what makes a row of callouts line up. The clamp stops a pathological ratio
+ * from pushing the title clean off the line.
+ */
+const MAX_ICON_ASPECT = 4;
+
+/** The `::after` box's width for a picture, or the plain square for a glyph. */
+function iconBoxWidth(picture: UserImageIcon | undefined): string {
+	const size = "var(--icon-size, 1.2em)";
+	if (!picture || picture.height <= 0) return size;
+	const aspect = Math.min(
+		Math.max(picture.width / picture.height, 1 / MAX_ICON_ASPECT),
+		MAX_ICON_ASPECT,
+	);
+	// Within a hair of square, the multiplication is noise in the output CSS.
+	if (Math.abs(aspect - 1) < 0.01) return size;
+	return `calc(${size} * ${aspect.toFixed(3)})`;
+}
 
 /** One `background-image` layer: a gradient sweep. */
 interface BgLayer {
@@ -495,7 +530,7 @@ export class CSSInjector {
 		// selector is Obsidian's blockquote DOM, which no other role produces.
 		const iconSvg = this.icons.resolveSvg(def.icon, "regular");
 		if (iconSvg) {
-			parts.push(this.generateIconMaskOverride(def.id, iconSvg));
+			parts.push(this.generateIconOverride(def.id, def.icon, iconSvg));
 		}
 
 		// Emoji icon override (renders the glyph via ::after) for live view.
@@ -581,7 +616,7 @@ export class CSSInjector {
 				}
 				if (iconSvg) {
 					parts.push(
-						this.generateIconMaskOverride(alias, iconSvg),
+						this.generateIconOverride(alias, def.icon, iconSvg),
 					);
 				}
 				if (def.icon.type === "emoji") {
@@ -906,6 +941,27 @@ export class CSSInjector {
 		return parts.join("\n\n");
 	}
 
+	/**
+	 * Emit the live-view icon rule for a callout.
+	 *
+	 * Every library icon is a monochrome glyph, so it is drawn as a mask tinted
+	 * with the callout's colour. A picture the user supplied may be neither: a
+	 * mask is a stencil, and running a logo or a photograph through one throws
+	 * its colours away and leaves a silhouette. Those get a background image
+	 * instead — the same reasoning that already keeps emoji out of the mask path.
+	 */
+	private generateIconOverride(
+		calloutId: string,
+		icon: CalloutIcon,
+		svg: string,
+	): string {
+		const picture = userImageFor(icon);
+		if (picture && !picture.recolor) {
+			return this.generateImageOverride(calloutId, svg, picture);
+		}
+		return this.generateIconMaskOverride(calloutId, svg, picture);
+	}
+
 	private getIconCSS(def: CalloutDefinition): string {
 		const pack = packFor(def.icon);
 		if (!pack) return "";
@@ -932,7 +988,11 @@ export class CSSInjector {
 	 * StartupStyleCache), and an inlined SVG is by far the largest thing in it,
 	 * so halving each occurrence is worth the indirection.
 	 */
-	private generateIconMaskOverride(calloutId: string, svg: string): string {
+	private generateIconMaskOverride(
+		calloutId: string,
+		svg: string,
+		picture?: UserImageIcon,
+	): string {
 		const dataUri = svgToDataUri(svg);
 		const sel = calloutSel(calloutId);
 		return (
@@ -944,7 +1004,7 @@ export class CSSInjector {
 			`  --cs-icon-mask: ${dataUri};\n` +
 			`  content: "";\n` +
 			`  display: inline-block;\n` +
-			`  width: var(--icon-size, 1.2em);\n` +
+			`  width: ${iconBoxWidth(picture)};\n` +
 			`  height: var(--icon-size, 1.2em);\n` +
 			`  -webkit-mask-image: var(--cs-icon-mask);\n` +
 			`  mask-image: var(--cs-icon-mask);\n` +
@@ -953,6 +1013,40 @@ export class CSSInjector {
 			`  -webkit-mask-repeat: no-repeat;\n` +
 			`  mask-repeat: no-repeat;\n` +
 			`  background-color: rgb(var(--cs-color-rgb));\n` +
+			`}\n` +
+			`}`
+		);
+	}
+
+	/**
+	 * Generates CSS that renders a user's picture via the icon element's
+	 * ::after, for live view — a background rather than a mask, so the picture
+	 * arrives with its own colours instead of as a one-colour stencil.
+	 *
+	 * Wrapped in `@media screen` like the mask and emoji rules, so PDF export
+	 * falls through to the DOM copy baked by paintIcons instead.
+	 */
+	private generateImageOverride(
+		calloutId: string,
+		svg: string,
+		picture: UserImageIcon,
+	): string {
+		const dataUri = svgToDataUri(svg);
+		const sel = calloutSel(calloutId);
+		return (
+			`@media screen {\n` +
+			`${sel} > .callout-title > .callout-icon > svg {\n` +
+			`  display: none;\n` +
+			`}\n` +
+			`${sel} > .callout-title > .callout-icon::after {\n` +
+			`  content: "";\n` +
+			`  display: inline-block;\n` +
+			`  width: ${iconBoxWidth(picture)};\n` +
+			`  height: var(--icon-size, 1.2em);\n` +
+			`  background-image: ${dataUri};\n` +
+			`  background-size: contain;\n` +
+			`  background-repeat: no-repeat;\n` +
+			`  background-position: center;\n` +
 			`}\n` +
 			`}`
 		);
@@ -1161,9 +1255,16 @@ export class CSSInjector {
 	private paintIcon(iconEl: HTMLElement, def: CalloutDefinition): void {
 		const doc = iconEl.ownerDocument;
 		const isDark = doc.body?.classList.contains("theme-dark") ?? false;
+		// A picture that keeps its own colours must not have one baked over it.
+		// Its shapes carry their own paint (and an embedded raster ignores fill
+		// entirely), so inheriting is both harmless and correct here.
+		const picture = userImageFor(def.icon);
+		const keepsOwnColors = picture !== undefined && !picture.recolor;
 		renderIconInto(iconEl, def.icon, createIconResolver(this.registry), {
 			role: "regular",
-			fill: { literal: isDark ? def.colorDark : def.colorLight },
+			fill: keepsOwnColors
+				? "currentColor"
+				: { literal: isDark ? def.colorDark : def.colorLight },
 			missing: { kind: "leave" },
 			className: "cs-export-icon",
 			rootStyle:
@@ -1406,25 +1507,33 @@ export class CSSInjector {
 		const fallbackSvg = this.icons.resolveSvg(fallbackDef.icon, "regular");
 		if (fallbackSvg) {
 			const dataUri = svgToDataUri(fallbackSvg);
-			parts.push(
-				`@media screen {\n` +
-					`body .callout${notSelectors} > .callout-title > .callout-icon > svg {\n  display: none !important;\n}\n` +
-					`body .callout${notSelectors} > .callout-title > .callout-icon::after {\n` +
-					`  --cs-icon-mask: ${dataUri};\n` +
-					`  content: "";\n` +
-					`  display: inline-block;\n` +
-					`  width: var(--icon-size, 1.2em);\n` +
-					`  height: var(--icon-size, 1.2em);\n` +
-					`  -webkit-mask-image: var(--cs-icon-mask) !important;\n` +
-					`  mask-image: var(--cs-icon-mask) !important;\n` +
-					`  -webkit-mask-size: contain;\n` +
-					`  mask-size: contain;\n` +
-					`  -webkit-mask-repeat: no-repeat;\n` +
-					`  mask-repeat: no-repeat;\n` +
-					`  background-color: rgb(var(--cs-color-rgb)) !important;\n` +
-					`}\n` +
-					`}`,
-			);
+			const picture = userImageFor(fallbackDef.icon);
+			const hide =
+				`body .callout${notSelectors} > .callout-title > .callout-icon > svg {\n  display: none !important;\n}\n`;
+			const box =
+				`body .callout${notSelectors} > .callout-title > .callout-icon::after {\n` +
+				`  content: "";\n` +
+				`  display: inline-block;\n` +
+				`  width: ${iconBoxWidth(picture)};\n` +
+				`  height: var(--icon-size, 1.2em);\n`;
+			// A picture that keeps its own colours is painted, not stencilled —
+			// same split as generateIconOverride, which this mirrors for the
+			// unknown-id fallback.
+			const paint =
+				picture && !picture.recolor
+					? `  background-image: ${dataUri} !important;\n` +
+						`  background-size: contain;\n` +
+						`  background-repeat: no-repeat;\n` +
+						`  background-position: center;\n`
+					: `  --cs-icon-mask: ${dataUri};\n` +
+						`  -webkit-mask-image: var(--cs-icon-mask) !important;\n` +
+						`  mask-image: var(--cs-icon-mask) !important;\n` +
+						`  -webkit-mask-size: contain;\n` +
+						`  mask-size: contain;\n` +
+						`  -webkit-mask-repeat: no-repeat;\n` +
+						`  mask-repeat: no-repeat;\n` +
+						`  background-color: rgb(var(--cs-color-rgb)) !important;\n`;
+			parts.push(`@media screen {\n${hide}${box}${paint}}\n}`);
 		}
 
 		// Emoji icon override for fallback (live view).
