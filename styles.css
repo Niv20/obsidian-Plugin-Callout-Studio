@@ -1231,14 +1231,20 @@ button.callout-studio-icon-picker-loading {
 	text-overflow: ellipsis;
 }
 
-/* One row of the source menu. Wraps rather than truncates: on a phone the
-   description drops to its own line instead of squeezing out the name. */
+/* One row of the source menu. align-items: center so the emblem icon (a
+   sibling drawn by Obsidian, not by us) and the checkmark land on the
+   vertical middle of the two-line text stack, not pinned to the name line. */
 .cs-source-item {
 	display: flex;
-	flex-wrap: wrap;
-	align-items: baseline;
+	align-items: center;
 	column-gap: 0.4em;
-	row-gap: 0.1em;
+}
+
+/* Name, then description always on its own line below it. */
+.cs-source-text {
+	display: flex;
+	flex-direction: column;
+	row-gap: 0.25em;
 }
 
 .cs-source-desc {

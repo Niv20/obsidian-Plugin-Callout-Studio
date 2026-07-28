@@ -191,6 +191,10 @@ export class IconPicker extends Modal {
 
 	private openSourceMenu(evt: MouseEvent): void {
 		const menu = new Menu();
+		// Desktop defaults to a native OS menu, which can only draw plain text —
+		// our emblem icons and the hand-drawn checkmark below would silently
+		// disappear. Mobile has no native menu, so this only matters here.
+		menu.setUseNativeMenu(false);
 		// Searching everything at once comes first, and is the default: with six
 		// libraries, knowing which one holds "swords" is its own puzzle.
 		const ids: PickerSourceId[] = [ALL_SOURCES, ...ICON_SOURCE_IDS];
@@ -213,18 +217,21 @@ export class IconPicker extends Modal {
 	}
 
 	/**
-	 * Name, then what the library holds and how many icons that is. Built as a
-	 * fragment so the description can be styled down and wrap onto its own line
-	 * on a narrow screen instead of truncating the name with it.
+	 * Name, then what the library holds and how many icons that is, always on
+	 * its own line below the name — a fragment so the description can be styled
+	 * down and given room to breathe instead of squeezing onto the name's line.
+	 * The check sits outside the two-line text stack so it centers on the
+	 * emblem icon's row rather than pinning to either line.
 	 */
 	private sourceMenuTitle(id: PickerSourceId, meta: SourceMeta): DocumentFragment {
 		const frag = createFragment();
 		const wrap = frag.createDiv("cs-source-item");
-		wrap.createSpan({ cls: "cs-source-name", text: t(meta.labelKey) });
+		const text = wrap.createDiv("cs-source-text");
+		text.createSpan({ cls: "cs-source-name", text: t(meta.labelKey) });
 
 		const count = this.countFor(id);
 		const description = t(meta.descriptionKey);
-		wrap.createSpan({
+		text.createSpan({
 			cls: "cs-source-desc",
 			text:
 				count === undefined
