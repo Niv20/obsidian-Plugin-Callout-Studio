@@ -177,7 +177,12 @@ https://cdn.jsdelivr.net/gh/Niv20/obsidian-Plugin-Callout-Studio@packs-v1/packs/
 https://raw.githubusercontent.com/Niv20/obsidian-Plugin-Callout-Studio/packs-v1/packs/<source>.json   (fallback)
 ```
 
-Each download is checked against a SHA-256 checksum built into the plugin, and rejected unless it matches exactly — so a compromised CDN, a captive portal or a truncated response cannot substitute anything. The file is then stored at `.obsidian/plugins/callout-studio/icon-packs/<source>.json`.
+Each download is checked against a SHA-256 checksum built into the plugin, and rejected unless it matches exactly — so a compromised CDN, a captive portal or a truncated response cannot substitute anything. The file is then stored at `.obsidian/plugins/callout-studio/icon-packs/<source>.json`, and re-checked against the same checksum every time it is read, so a file that is later edited or damaged is never trusted.
+
+**Two things download a source without you pressing the button**, because in both you have already asked for the icons in question:
+
+- **Importing callouts.** An import file names icons but carries no artwork, so whatever the imported callouts need and this vault does not have is fetched, and a notice says which sources arrived.
+- **Repairing a damaged or deleted pack file.** On startup, a source a callout uses that has gone missing or no longer matches its checksum is downloaded again. This only happens if a callout would otherwise be undrawable — if the icons you use are already cached in `data.json` (which is the normal case), nothing is fetched.
 
 **Installing a source without a network:** download the file from the plugin's [GitHub release](https://github.com/Niv20/obsidian-Plugin-Callout-Studio/releases) and drop it into that folder, named after the source (`fa-solid.json`, `octicons.json`, and so on). It is verified against the same checksum on the next launch.
 
@@ -194,7 +199,7 @@ If you never open the Material source, none of this happens.
 ### What is stored locally
 
 - **The artwork of icons you actually use** is copied into the plugin's `data.json`, so your callouts still render on a device that synced your settings but never downloaded the source, and after a cached pack file is deleted. Unused entries are cleaned up automatically when you edit or delete a callout; **Reset all** clears them outright.
-- **Downloaded icon sources** live in `.obsidian/plugins/callout-studio/icon-packs/`. Deleting them is safe — the picker simply offers the download again, and callouts keep rendering from the copy in `data.json`.
+- **Downloaded icon sources** live in `.obsidian/plugins/callout-studio/icon-packs/`. Deleting them is safe: your callouts keep rendering from the copy in `data.json`, and the picker offers the download again. If a callout does turn out to need artwork that only the deleted file had, it is fetched again on the next launch.
 - **Two snapshots of the plugin's generated CSS**, to remove the brief flash of unstyled callouts on slow startups (mainly mobile): an auto-generated snippet at `.obsidian/snippets/callout-studio-do-not-delete.css`, which Obsidian applies before community plugins load, and a small per-device localStorage cache. Both contain only generated styling, never vault content, and never leave your device. The snippet is self-healing: if it is deleted or turned off, the plugin recreates and re-enables it the next time it loads, so the startup flash never silently comes back.
 
 ## Icon licences and attribution

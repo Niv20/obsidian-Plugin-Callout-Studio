@@ -21,6 +21,9 @@ main.js
 # obsidian
 data.json
 
+# Icon packs downloaded at runtime — served from the packs-v1 tag, never committed
+icon-packs/
+
 # local agent state
 .serena/
 graphify-out/
