@@ -363,6 +363,8 @@ export const he: Record<string, string> = {
 	"iconPicker.faStyleBrands": "מותגים (Brands)",
 	"iconPicker.rpgAwesome": "RPG Awesome",
 	"iconPicker.searchRpgAwesome": "חיפוש ב־RPG Awesome",
+	"iconPicker.image": "התמונות שלי",
+	"iconPicker.searchImage": "חיפוש בתמונות שלי",
 	"iconPicker.allSources": "כל המקורות",
 	"iconPicker.searchAllSources": "חיפוש בכל מקורות האייקונים",
 	"iconPicker.sourcesNotDownloaded":
@@ -378,6 +380,7 @@ export const he: Record<string, string> = {
 	"iconPicker.descOcticons": "אייקוני הממשק של GitHub",
 	"iconPicker.descFa": "אייקונים מלאים, מתאר וסמלי מותגים",
 	"iconPicker.descRpgAwesome": "אייקוני פנטזיה ומשחקי תפקידים",
+	"iconPicker.descImage": "תמונות שהוספת מהמחשב שלך",
 
 	// Downloadable icon packs
 	"iconPack.downloadTitle": "{{name}} עדיין לא הורדה",

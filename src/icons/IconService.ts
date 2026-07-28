@@ -239,8 +239,16 @@ export class IconService implements IconResolver {
 	private isFullyCached(icon: CalloutIcon): boolean {
 		const pack = packFor(icon);
 		if (!pack) return true;
-		// Lucide and emoji carry no artwork of their own to be missing.
-		if (pack.kind === "builtin" || pack.kind === "glyph") return true;
+		// Lucide and emoji carry no artwork of their own to be missing, and a
+		// user's own picture is already sitting in settings — none of the three
+		// has anything a download could add.
+		if (
+			pack.kind === "builtin" ||
+			pack.kind === "glyph" ||
+			pack.kind === "local"
+		) {
+			return true;
+		}
 		return CALLOUT_RENDER_ROLES.every((role) =>
 			this.host.registry.findIconSvg(
 				icon.type,

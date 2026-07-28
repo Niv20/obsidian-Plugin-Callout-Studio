@@ -371,6 +371,8 @@ export const en: Record<string, string> = {
 	"iconPicker.faStyleBrands": "Brands",
 	"iconPicker.rpgAwesome": "RPG Awesome",
 	"iconPicker.searchRpgAwesome": "Search RPG Awesome",
+	"iconPicker.image": "Your images",
+	"iconPicker.searchImage": "Search your images",
 	"iconPicker.allSources": "All sources",
 	"iconPicker.searchAllSources": "Search all icon sources",
 	"iconPicker.sourcesNotDownloaded":
@@ -386,6 +388,7 @@ export const en: Record<string, string> = {
 	"iconPicker.descOcticons": "GitHub's interface icons",
 	"iconPicker.descFa": "solid, regular and brand marks",
 	"iconPicker.descRpgAwesome": "fantasy and tabletop icons",
+	"iconPicker.descImage": "pictures you add from your computer",
 
 	// Downloadable icon packs
 	"iconPack.downloadTitle": "{{name}} is not downloaded yet",

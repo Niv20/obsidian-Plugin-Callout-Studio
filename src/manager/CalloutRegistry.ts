@@ -18,6 +18,7 @@ import type {
 	LegacyPopupSettings,
 	PluginData,
 	PluginSettings,
+	UserImageIcon,
 } from "../types";
 import { CALLOUT_RENDER_ROLES } from "../types";
 import {
@@ -30,6 +31,8 @@ import { materialPack } from "../icons/packs/material";
 import { obsidianCalloutAttrId } from "../utils/calloutId";
 import { parseCssColorToHex } from "../utils/colorUtils";
 import { sanitizeCustomPalettes } from "../utils/colorPalettes";
+import { sanitizeUserImages } from "../utils/userImages";
+import { setUserImages } from "../icons/packs/userImages";
 import { sortCalloutsByDisplayName } from "../utils/sorting";
 
 /**
@@ -205,6 +208,7 @@ export function mergeSavedSettings(
 			DEFAULT_SETTINGS.fallbackCalloutId,
 		language: savedSettings.language ?? DEFAULT_SETTINGS.language,
 		customPalettes: sanitizeCustomPalettes(savedSettings.customPalettes),
+		userImages: sanitizeUserImages(savedSettings.userImages),
 	};
 }
 
@@ -282,6 +286,7 @@ export class CalloutRegistry {
 
 	constructor() {
 		this.settings = structuredClone(DEFAULT_SETTINGS);
+		this.syncUserImages();
 		for (const def of SORTED_DEFAULT_CALLOUTS) {
 			this.builtInDefaults.set(def.id, structuredClone(def));
 		}
@@ -318,6 +323,7 @@ export class CalloutRegistry {
 		// Merge settings (field-by-field against defaults; see mergeSavedSettings)
 		if (data.settings) {
 			this.settings = mergeSavedSettings(data.settings);
+			this.syncUserImages();
 		}
 
 		// Restore cached artwork for the icons the vault actually uses.
@@ -1196,6 +1202,33 @@ export class CalloutRegistry {
 		if (idx >= 0) {
 			this.changeCallbacks.splice(idx, 1);
 		}
+	}
+
+	/** The user's own pictures, newest first. */
+	getUserImages(): readonly UserImageIcon[] {
+		return this.settings.userImages;
+	}
+
+	/**
+	 * Replace the picture list and tell everything that draws to catch up.
+	 *
+	 * The single writer, so the pack's snapshot can never drift from settings.
+	 * Callers still own persistence — `notifyChange` reaches the CSS injector,
+	 * but `saveSettings()` is the plugin's to call, exactly as for callouts.
+	 */
+	setUserImages(images: readonly UserImageIcon[]): void {
+		this.settings.userImages = [...images];
+		this.syncUserImages();
+		this.notifyChange();
+	}
+
+	/**
+	 * Hand the pack the current pictures. It reads a module-level snapshot
+	 * rather than settings, because `buildSvg` is synchronous and is called from
+	 * render paths with no route back to the plugin.
+	 */
+	private syncUserImages(): void {
+		setUserImages(this.settings.userImages);
 	}
 
 	private notifyChange(): void {

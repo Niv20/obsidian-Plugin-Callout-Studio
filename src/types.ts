@@ -27,7 +27,8 @@ export type IconPackId =
 	| "fa-solid"
 	| "fa-regular"
 	| "fa-brands"
-	| "rpg-awesome";
+	| "rpg-awesome"
+	| "image";
 
 /**
  * One library as the user meets it: a row in the picker's source menu, a
@@ -43,10 +44,16 @@ export type IconSourceId =
 	| "emoji"
 	| "octicons"
 	| "fa"
-	| "rpg-awesome";
+	| "rpg-awesome"
+	| "image";
 
 export interface CalloutIcon {
 	type: IconPackId;
+	/**
+	 * Which drawing within the pack. An icon name for every bundled library; for
+	 * `"image"` it is a `UserImageIcon.id`, because the picture itself is far too
+	 * big to live here (the importer rejects a value over 200 characters).
+	 */
 	value: string;
 	/** Material Symbols style. Only meaningful when `type` is "material". */
 	style?: "outlined" | "filled" | "rounded" | "sharp";
@@ -195,6 +202,48 @@ export interface CustomPalette {
 	 * it (Gradient has no advanced per-color view).
 	 */
 	colorMode?: "simple" | "advanced";
+}
+
+/**
+ * A picture the user added from their own computer, usable as a callout icon
+ * exactly like any library icon (`CalloutIcon.type === "image"`, `value === id`).
+ *
+ * The artwork is always SVG markup, whatever was uploaded: an SVG is kept as
+ * vector, and a PNG/JPEG/WebP is re-encoded through a canvas and wrapped in
+ * `<svg><image href="data:…"></svg>`. That one representation is why every
+ * render surface, the SVG cache and the PDF-export path need no special case —
+ * a user image is just an icon whose artwork happens to live in settings.
+ *
+ * Settings is also deliberately where it lives rather than a file on disk: it
+ * syncs with the rest of `data.json`, and `exportToJSONv2` already serializes
+ * settings, so an export carries the pictures without becoming an archive.
+ */
+export interface UserImageIcon {
+	/** Stable unique id (`img-` prefix). Stored as `CalloutIcon.value`. */
+	id: string;
+	/** User-visible name, seeded from the filename and renameable. */
+	name: string;
+	/** What was uploaded. Only `"svg"` keeps its own colors optional. */
+	format: "svg" | "png" | "jpeg" | "webp";
+	/** Sanitized SVG markup, or the `<image>` wrapper around a raster. */
+	svg: string;
+	/** Intrinsic size of the stored artwork, for the icon box's aspect ratio. */
+	width: number;
+	height: number;
+	/**
+	 * Draw the picture in the callout's color instead of its own, the way every
+	 * library icon is drawn. Only ever true for a one-color SVG: a mask is a
+	 * stencil, so recoloring a photo would flatten it to a silhouette.
+	 */
+	recolor: boolean;
+	/**
+	 * Bumped on every edit. Feeds the pack's `cacheVariant`, which is what makes
+	 * an open note repaint when a picture is replaced or recolored — the render
+	 * key would otherwise be identical before and after.
+	 */
+	rev: number;
+	/** Upload time, so the picker can offer the newest first. */
+	addedAt: number;
 }
 
 export type MaterialIconStyle = "outlined" | "filled" | "rounded" | "sharp";
@@ -420,6 +469,8 @@ export interface PluginSettings {
 	language: string;
 	/** User-saved color palettes, selectable in the callout editor. */
 	customPalettes: CustomPalette[];
+	/** Pictures the user added from their computer, usable as callout icons. */
+	userImages: UserImageIcon[];
 }
 
 export interface PluginData {

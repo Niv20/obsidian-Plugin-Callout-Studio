@@ -25,6 +25,7 @@ import { emojiPack } from "./packs/emoji";
 import { octiconsPack } from "./packs/octicons";
 import { faPack } from "./packs/fontAwesome";
 import { rpgAwesomePack } from "./packs/rpgAwesome";
+import { userImagesPack } from "./packs/userImages";
 
 export const ICON_SOURCES: Readonly<Record<IconSourceId, IconPack>> =
 	Object.freeze({
@@ -34,6 +35,9 @@ export const ICON_SOURCES: Readonly<Record<IconSourceId, IconPack>> =
 		octicons: octiconsPack,
 		fa: faPack,
 		"rpg-awesome": rpgAwesomePack,
+		// Last, and deliberately so: the libraries are what most people want, and
+		// the user's own pictures read as the escape hatch at the end of the list.
+		image: userImagesPack,
 	});
 
 /** Every source, in the order the picker offers them. */
@@ -52,6 +56,7 @@ const SOURCE_OF_TYPE: Readonly<Record<IconPackId, IconSourceId>> = Object.freeze
 		"fa-regular": "fa",
 		"fa-brands": "fa",
 		"rpg-awesome": "rpg-awesome",
+		image: "image",
 	},
 );
 

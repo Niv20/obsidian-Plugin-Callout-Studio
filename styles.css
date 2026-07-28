@@ -1591,6 +1591,14 @@ button.callout-studio-icon-picker-loading {
 	line-height: 1;
 }
 
+/* A user's own picture: keeps its colours and its proportions, unlike the
+   monochrome glyphs the generic cell rule stretches to fill its box. */
+.icon-picker-image-cell svg {
+	width: 100%;
+	height: 100%;
+	object-fit: contain;
+}
+
 /* Skin-tone selector — swatches previewing a sample glyph per tone */
 .icon-picker-skin-row {
 	display: flex;

@@ -203,11 +203,15 @@ export function iconRenderKey(
 	const needsArtwork =
 		pack !== undefined && pack.kind !== "builtin" && pack.kind !== "glyph";
 	const ready = !needsArtwork || resolver.resolveSvg(icon, role) !== null;
+	// The pack's own cache variant rather than `style`/`weight`: those two cover
+	// Material and nothing else, so a source that varies its drawing any other
+	// way would keep a stale widget. `cacheVariant` is by contract everything
+	// besides the name that changes the artwork — Octicons' per-role sizes and a
+	// re-uploaded picture's revision both land here.
 	return [
 		icon.type,
 		icon.value,
-		icon.style ?? "",
-		icon.weight ?? "",
+		pack?.cacheVariant(icon, role) ?? "",
 		ready ? "r" : "",
 	].join(":");
 }
