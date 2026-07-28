@@ -173,22 +173,3 @@ function withExtension(name: string, format: UserImageIcon["format"]): string {
 	}
 	return `${name}${EXTENSION_OF[format]}`;
 }
-
-/**
- * How much of `data.json` the pictures occupy, in bytes of stored markup.
- *
- * Approximate by design: it counts the artwork and ignores the JSON framing,
- * which is what the size readout in the picker is trying to convey.
- */
-export function userImagesByteSize(images: readonly UserImageIcon[]): number {
-	let total = 0;
-	for (const image of images) total += image.svg.length;
-	return total;
-}
-
-/** A byte count as a short human-readable string ("12 KB", "1.4 MB"). */
-export function formatByteSize(bytes: number): string {
-	if (bytes < 1024) return `${bytes} B`;
-	if (bytes < 1024 * 1024) return `${Math.round(bytes / 1024)} KB`;
-	return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
-}

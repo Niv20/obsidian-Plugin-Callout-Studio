@@ -393,7 +393,6 @@ export const en: Record<string, string> = {
 		"{{count}} callouts use this picture. They will fall back to a " +
 		"placeholder icon until you give them a new one.",
 	"iconPicker.imageRecolor": "Follow callout color",
-	"iconPicker.imageStorage": "{{count}} pictures · {{size}}",
 	"iconPicker.allSources": "All sources",
 	"iconPicker.searchAllSources": "Search all icon sources",
 	"iconPicker.sourcesNotDownloaded":

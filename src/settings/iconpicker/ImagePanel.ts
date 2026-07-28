@@ -19,11 +19,9 @@ import {
 	importImageFile,
 } from "../../icons/userImageImport";
 import {
-	formatByteSize,
 	normalizeUserImageName,
 	takenUserImageNames,
 	userImageNameFromFilename,
-	userImagesByteSize,
 } from "../../utils/userImages";
 import { ConfirmModal } from "../../utils/ConfirmModal";
 import { IconGrid } from "./IconGrid";
@@ -54,11 +52,11 @@ export interface ImagePanelHost {
 export class ImagePanel {
 	private readonly toolbarEl: HTMLElement;
 	private readonly bodyEl: HTMLElement;
-	private readonly footerEl: HTMLElement;
 	private grid: IconGrid | null = null;
 	private query = "";
 	private fileInput: HTMLInputElement | null = null;
-	/** Which picture the action row acts on; null when nothing is selected. */
+	private deleteBtn: HTMLButtonElement | null = null;
+	/** Which picture Delete acts on; null when nothing is selected. */
 	private activeId: string | null = null;
 	private disposed = false;
 
@@ -73,7 +71,6 @@ export class ImagePanel {
 		container.addClass("icon-picker-image-panel");
 		this.toolbarEl = container.createDiv("icon-picker-toolbar");
 		this.bodyEl = container.createDiv("icon-picker-body");
-		this.footerEl = container.createDiv("icon-picker-image-footer");
 	}
 
 	dispose(): void {
@@ -116,11 +113,30 @@ export class ImagePanel {
 			this.refresh();
 		});
 
+		// Delete sits between search and Add, acting on whatever is selected —
+		// hanging a button off every cell would stop the grid being a grid, and
+		// IconGrid has no per-cell affordance to hang one on anyway. Whether a
+		// picture follows the callout's colour is deliberately not here: that is
+		// the callout's choice, and lives in the callout editor beside the
+		// icon's size and offsets.
+		const deleteBtn = this.toolbarEl.createEl("button", {
+			cls: "icon-picker-image-delete mod-warning",
+			attr: { type: "button" },
+		});
+		setIcon(deleteBtn.createSpan("icon-picker-image-btn-icon"), "trash-2");
+		deleteBtn.createSpan({ text: t("iconPicker.imageDelete") });
+		deleteBtn.addEventListener("click", () => {
+			const active = this.activeImage();
+			if (active) void this.confirmDelete(active);
+		});
+		this.deleteBtn = deleteBtn;
+		this.syncDeleteButton();
+
 		const addBtn = this.toolbarEl.createEl("button", {
 			cls: "icon-picker-image-add mod-cta",
 			attr: { type: "button" },
 		});
-		setIcon(addBtn.createSpan("icon-picker-image-add-icon"), "image-plus");
+		setIcon(addBtn.createSpan("icon-picker-image-btn-icon"), "image-plus");
 		addBtn.createSpan({ text: t("iconPicker.imageAdd") });
 		addBtn.addEventListener("click", () => this.fileInput?.click());
 
@@ -140,6 +156,10 @@ export class ImagePanel {
 
 	/**
 	 * Accept pictures dropped anywhere on the panel.
+	 *
+	 * The grid area is stretched to the bottom of the picker in CSS precisely so
+	 * that "anywhere" means the whole window and not just the rows that happen to
+	 * hold a picture — a target you have to aim at is one you can miss.
 	 *
 	 * Listeners sit on the panel's own element, which `dispose` destroys, so they
 	 * need no separate teardown — the same arrangement PackPanel uses.
@@ -217,7 +237,7 @@ export class ImagePanel {
 
 	// ── Grid ────────────────────────────────────────────────────────────
 
-	/** Rebuild the grid and the action row from the current picture list. */
+	/** Rebuild the grid and the Delete button from the current picture list. */
 	private refresh(): void {
 		const images = this.matching();
 		// "No pictures yet" and "nothing matches that search" are different
@@ -229,7 +249,7 @@ export class ImagePanel {
 		} else {
 			this.grid?.setEntries(images.map((image) => this.entryFor(image)));
 		}
-		this.renderFooter();
+		this.syncDeleteButton();
 	}
 
 	private matching(): UserImageIcon[] {
@@ -274,45 +294,16 @@ export class ImagePanel {
 		// Through the pack, so the pick arrives carrying the same "follow the
 		// callout's colour" default a flat drawing gets everywhere else.
 		this.host.onSelect(userImagesPack.makeIcon(entry, {}), entry);
-		this.renderFooter();
+		this.syncDeleteButton();
 	}
 
-	// ── Action row ──────────────────────────────────────────────────────
-
 	/**
-	 * The delete button for the selected picture, plus how much of `data.json`
-	 * the collection is taking up.
-	 *
-	 * Acting on the selection rather than hanging a button off every cell keeps
-	 * the grid a grid — and IconGrid has no per-cell affordance to hang one on.
-	 * Whether a picture follows the callout's colour is not here because it is
-	 * not the picture's to decide: it belongs to whichever callout is using it,
-	 * and lives in the callout editor beside the icon's size and offsets.
+	 * Delete is live only while it has something to act on — with no pictures at
+	 * all, or none picked, it is disabled rather than hidden, so the toolbar
+	 * keeps the same shape and the button stays where the eye last left it.
 	 */
-	private renderFooter(): void {
-		this.footerEl.empty();
-		const active = this.activeImage();
-
-		if (active) {
-			const actions = this.footerEl.createDiv("icon-picker-image-actions");
-
-			const deleteBtn = actions.createEl("button", {
-				cls: "icon-picker-image-delete mod-warning",
-				text: t("iconPicker.imageDelete"),
-				attr: { type: "button" },
-			});
-			deleteBtn.addEventListener("click", () => {
-				void this.confirmDelete(active);
-			});
-		}
-
-		const images = this.host.images();
-		this.footerEl.createDiv("icon-picker-image-storage").setText(
-			t("iconPicker.imageStorage", {
-				count: String(images.length),
-				size: formatByteSize(userImagesByteSize(images)),
-			}),
-		);
+	private syncDeleteButton(): void {
+		if (this.deleteBtn) this.deleteBtn.disabled = !this.activeImage();
 	}
 
 	private activeImage(): UserImageIcon | undefined {

@@ -384,7 +384,6 @@ export const he: Record<string, string> = {
 		"{{count}} callouts משתמשים בתמונה הזו. הם יחזרו לאייקון ברירת מחדל " +
 		"עד שייבחר להם אייקון חדש.",
 	"iconPicker.imageRecolor": "לצבוע בצבע ה־callout",
-	"iconPicker.imageStorage": "{{count}} תמונות · {{size}}",
 	"iconPicker.allSources": "כל המקורות",
 	"iconPicker.searchAllSources": "חיפוש בכל מקורות האייקונים",
 	"iconPicker.sourcesNotDownloaded":

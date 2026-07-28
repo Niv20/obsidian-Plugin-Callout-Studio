@@ -1629,55 +1629,53 @@ button.callout-studio-icon-picker-loading {
 	display: none;
 }
 
-.icon-picker-image-add {
+.icon-picker-image-add,
+.icon-picker-image-delete {
 	display: inline-flex;
 	align-items: center;
 	gap: 6px;
 	flex-shrink: 0;
 }
 
-.icon-picker-image-add-icon {
+/* Delete stays in place with nothing selected rather than coming and going, so
+   it needs to read as unavailable on its own — mod-warning keeps its colour
+   otherwise, and a red button that ignores clicks looks broken. */
+.icon-picker-image-delete:disabled {
+	opacity: 0.5;
+	cursor: not-allowed;
+}
+
+.icon-picker-image-btn-icon {
 	display: inline-flex;
 }
 
-.icon-picker-image-add-icon svg {
+.icon-picker-image-btn-icon svg {
 	width: 1em;
 	height: 1em;
 }
 
 /* Dropping a file anywhere on the panel adds it, so no separate drop zone takes
-   up room — but the frame marks the grid alone. Around the whole panel it also
-   enclosed the toolbar and the storage line, and on a long list its bottom edge
-   sat below the fold. */
+   up room — but the frame marks the grid alone, since around the whole panel it
+   would enclose the toolbar too. */
 .icon-picker-image-panel.is-drop-target .icon-picker-body {
 	outline: 2px dashed var(--interactive-accent);
 	outline-offset: -2px;
 	border-radius: var(--radius-m);
 }
 
-/* Keeps that frame a target rather than a sliver when only one picture is in. */
-.icon-picker-image-panel .icon-picker-body {
-	min-height: 120px;
-}
-
-.icon-picker-image-footer {
+/* The grid area is the drop target, so it reaches the bottom of the picker
+   however few pictures are in: with the body only as tall as its rows, the
+   empty space below it belonged to the scroll container, and a file let go
+   there was silently ignored. */
+.icon-picker-image-panel {
 	display: flex;
 	flex-direction: column;
-	gap: 6px;
-	padding-top: 8px;
-	border-top: 1px solid var(--background-modifier-border);
+	min-height: 100%;
 }
 
-.icon-picker-image-actions {
-	display: flex;
-	align-items: center;
-	gap: 10px;
-	flex-wrap: wrap;
-}
-
-.icon-picker-image-storage {
-	font-size: var(--font-ui-smaller);
-	color: var(--text-muted);
+.icon-picker-image-panel .icon-picker-body {
+	flex: 1;
+	min-height: 120px;
 }
 
 /* Skin-tone selector — swatches previewing a sample glyph per tone */
