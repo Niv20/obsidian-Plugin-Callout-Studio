@@ -10,7 +10,7 @@
 import type { App } from "obsidian";
 import type { CalloutDefinition, CalloutIcon, UserImageIcon } from "../types";
 import { renderIconInto } from "../icons/renderIcon";
-import { findUserImage } from "../icons/packs/userImages";
+import { findUserImage, followsCalloutColor } from "../icons/packs/userImages";
 import { createIconResolver } from "../icons/resolver";
 import { packFor } from "../icons/registry";
 import type { IconResolver } from "../icons/types";
@@ -956,7 +956,7 @@ export class CSSInjector {
 		svg: string,
 	): string {
 		const picture = userImageFor(icon);
-		if (picture && !picture.recolor) {
+		if (picture && !followsCalloutColor(icon, picture)) {
 			return this.generateImageOverride(calloutId, svg, picture);
 		}
 		return this.generateIconMaskOverride(calloutId, svg, picture);
@@ -1259,7 +1259,8 @@ export class CSSInjector {
 		// Its shapes carry their own paint (and an embedded raster ignores fill
 		// entirely), so inheriting is both harmless and correct here.
 		const picture = userImageFor(def.icon);
-		const keepsOwnColors = picture !== undefined && !picture.recolor;
+		const keepsOwnColors =
+			picture !== undefined && !followsCalloutColor(def.icon, picture);
 		renderIconInto(iconEl, def.icon, createIconResolver(this.registry), {
 			role: "regular",
 			fill: keepsOwnColors
@@ -1520,7 +1521,7 @@ export class CSSInjector {
 			// same split as generateIconOverride, which this mirrors for the
 			// unknown-id fallback.
 			const paint =
-				picture && !picture.recolor
+				picture && !followsCalloutColor(fallbackDef.icon, picture)
 					? `  background-image: ${dataUri} !important;\n` +
 						`  background-size: contain;\n` +
 						`  background-repeat: no-repeat;\n` +

@@ -3,11 +3,10 @@
  *
  * Every other source is a fixed library, so one PackPanel driven by the IconPack
  * covers them all. This one is a library the user writes to, and that needs
- * affordances the pack contract deliberately has no room for: adding files,
- * deleting them, and choosing whether a picture follows the callout's colour.
- * Bending PackPanel to carry those for a single source would put a branch in the
- * file whose whole point is not having any, so this is a separate panel that
- * reuses IconGrid — the part that genuinely is shared.
+ * affordances the pack contract deliberately has no room for: adding files and
+ * deleting them. Bending PackPanel to carry those for a single source would put
+ * a branch in the file whose whole point is not having any, so this is a
+ * separate panel that reuses IconGrid — the part that genuinely is shared.
  */
 import { Notice, setIcon } from "obsidian";
 import type { App } from "obsidian";
@@ -183,10 +182,8 @@ export class ImagePanel {
 		if (first) this.activeId = first.id;
 		this.refresh();
 		if (first) {
-			this.host.onSelect(
-				{ type: "image", value: first.id },
-				this.entryFor(first),
-			);
+			const entry = this.entryFor(first);
+			this.host.onSelect(userImagesPack.makeIcon(entry, {}), entry);
 			this.grid?.revealSelected();
 		}
 	}
@@ -246,18 +243,23 @@ export class ImagePanel {
 
 	private select(entry: IconEntry): void {
 		this.activeId = entry.name;
-		this.host.onSelect({ type: "image", value: entry.name }, entry);
+		// Through the pack, so the pick arrives carrying the same "follow the
+		// callout's colour" default a flat drawing gets everywhere else.
+		this.host.onSelect(userImagesPack.makeIcon(entry, {}), entry);
 		this.renderFooter();
 	}
 
 	// ── Action row ──────────────────────────────────────────────────────
 
 	/**
-	 * The recolour / delete controls for the selected picture, plus how much of
-	 * `data.json` the collection is taking up.
+	 * The delete button for the selected picture, plus how much of `data.json`
+	 * the collection is taking up.
 	 *
-	 * Acting on the selection rather than hanging buttons off every cell keeps
-	 * the grid a grid — and IconGrid has no per-cell affordance to hang them on.
+	 * Acting on the selection rather than hanging a button off every cell keeps
+	 * the grid a grid — and IconGrid has no per-cell affordance to hang one on.
+	 * Whether a picture follows the callout's colour is not here because it is
+	 * not the picture's to decide: it belongs to whichever callout is using it,
+	 * and lives in the callout editor beside the icon's size and offsets.
 	 */
 	private renderFooter(): void {
 		this.footerEl.empty();
@@ -265,26 +267,6 @@ export class ImagePanel {
 
 		if (active) {
 			const actions = this.footerEl.createDiv("icon-picker-image-actions");
-
-			const recolorLabel = actions.createEl("label", {
-				cls: "icon-picker-image-recolor",
-			});
-			const recolor = recolorLabel.createEl("input", { type: "checkbox" });
-			recolor.checked = active.recolor;
-			// A mask discards colour, so only a flat drawing can follow the
-			// callout — recolouring a photo would leave a silhouette.
-			recolor.disabled = active.format !== "svg";
-			recolorLabel.createSpan({ text: t("iconPicker.imageRecolor") });
-			if (recolor.disabled) {
-				recolorLabel.setAttribute(
-					"aria-label",
-					t("iconPicker.imageRecolorRasterHint"),
-				);
-				recolorLabel.addClass("is-disabled");
-			}
-			recolor.addEventListener("change", () => {
-				this.setRecolor(active.id, recolor.checked);
-			});
 
 			const deleteBtn = actions.createEl("button", {
 				cls: "icon-picker-image-delete mod-warning",
@@ -311,28 +293,6 @@ export class ImagePanel {
 	}
 
 	// ── Mutations ───────────────────────────────────────────────────────
-
-	private setRecolor(id: string, recolor: boolean): void {
-		// `rev` moves because the artwork now draws differently, and that is what
-		// the render key watches — without it an open note keeps the old paint.
-		this.update(id, (image) => ({
-			...image,
-			recolor,
-			rev: image.rev + 1,
-		}));
-	}
-
-	private update(
-		id: string,
-		change: (image: UserImageIcon) => UserImageIcon,
-	): void {
-		this.host.saveImages(
-			this.host.images().map((image) =>
-				image.id === id ? change(image) : image,
-			),
-		);
-		this.refresh();
-	}
 
 	/**
 	 * Delete, saying first how many callouts are about to lose their icon.

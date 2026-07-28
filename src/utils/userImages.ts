@@ -71,8 +71,13 @@ export function sanitizeUserImages(raw: unknown): UserImageIcon[] {
 			width: artwork.width,
 			height: artwork.height,
 			// Only an SVG can be recoloured — a mask is a stencil, so tinting a
-			// photo would flatten it to a silhouette.
-			recolor: image.recolor === true && image.format === "svg",
+			// photo would flatten it to a silhouette. `recolor` is the field's
+			// name in a vault written before the flag moved onto the callout;
+			// droppable once this branch has shipped.
+			monochrome:
+				(image.monochrome ??
+					(image as { recolor?: unknown }).recolor) === true &&
+				image.format === "svg",
 			rev: Number.isFinite(image.rev) ? Number(image.rev) : 1,
 			addedAt: Number.isFinite(image.addedAt) ? Number(image.addedAt) : 0,
 		});

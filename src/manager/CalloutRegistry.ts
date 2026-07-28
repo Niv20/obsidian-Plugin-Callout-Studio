@@ -363,6 +363,18 @@ export class CalloutRegistry {
 				def.icon = { type: "lucide", value: "pencil" };
 			}
 		}
+		// Migration: `recolor` used to live on the picture, shared by every
+		// callout pointing at it. Give each callout its own copy, taken from the
+		// picture, so nothing changes appearance on the way over.
+		for (const def of this.callouts.values()) {
+			if (def.icon.type !== "image" || def.icon.recolor !== undefined) {
+				continue;
+			}
+			const picture = this.settings.userImages.find(
+				(image) => image.id === def.icon.value,
+			);
+			def.icon = { ...def.icon, recolor: picture?.monochrome === true };
+		}
 		// Migration: link any callout saved before `paletteId` existed but whose
 		// baked colors still exactly match a saved custom palette, so an edit to
 		// that palette (applyPaletteColors) cascades onto it too.

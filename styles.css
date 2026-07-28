@@ -1652,17 +1652,6 @@ button.callout-studio-icon-picker-loading {
 	flex-wrap: wrap;
 }
 
-.icon-picker-image-recolor {
-	display: inline-flex;
-	align-items: center;
-	gap: 6px;
-	white-space: nowrap;
-}
-
-.icon-picker-image-recolor.is-disabled {
-	opacity: 0.5;
-}
-
 .icon-picker-image-storage {
 	font-size: var(--font-ui-smaller);
 	color: var(--text-muted);

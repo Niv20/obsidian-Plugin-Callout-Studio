@@ -43,6 +43,20 @@ export function listUserImages(): UserImageIcon[] {
 	return [...images.values()].sort((a, b) => b.addedAt - a.addedAt);
 }
 
+/**
+ * Whether this callout wants its picture stencilled in the callout's colour.
+ *
+ * The choice is the callout's (`CalloutIcon.recolor`) but the capability is the
+ * artwork's, and only an SVG has it. Both halves live here so the three places
+ * that split on mask-versus-background cannot drift apart.
+ */
+export function followsCalloutColor(
+	icon: CalloutIcon,
+	image: UserImageIcon | undefined,
+): boolean {
+	return image !== undefined && image.format === "svg" && icon.recolor === true;
+}
+
 export const userImagesPack: IconPack = {
 	id: "image",
 	kind: "local",
@@ -81,19 +95,28 @@ export const userImagesPack: IconPack = {
 	},
 
 	makeIcon(entry: IconEntry): CalloutIcon {
-		return { type: "image", value: entry.name };
+		// A flat one-colour drawing is offered following the callout's colour,
+		// which is almost always what is wanted and is the only way a black logo
+		// stays visible in a dark theme. From here it is the callout's to change.
+		return {
+			type: "image",
+			value: entry.name,
+			recolor: images.get(entry.name)?.monochrome === true,
+		};
 	},
 
 	/**
-	 * The artwork identity. `rev` and `recolor` both belong here even though
-	 * neither is part of the icon: replacing or recoloring a picture keeps the
-	 * same id, so without them an open note would keep its stale drawing (see
-	 * `iconRenderKey`). Same for every render role — one picture, one drawing.
+	 * The artwork identity. `rev` belongs here even though it is not part of the
+	 * icon: replacing a picture keeps the same id, so without it an open note
+	 * would keep its stale drawing (see `iconRenderKey`). `recolor` is the
+	 * callout's own, and two callouts sharing a picture must not share a key —
+	 * one would keep the other's paint. Same for every render role, though:
+	 * one picture, one drawing.
 	 */
 	cacheVariant(icon: CalloutIcon): string {
 		const image = images.get(icon.value);
 		if (!image) return "0";
-		return `${image.rev}${image.recolor ? "c" : ""}`;
+		return `${image.rev}${icon.recolor ? "c" : ""}`;
 	},
 
 	/**

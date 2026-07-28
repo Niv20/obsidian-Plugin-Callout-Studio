@@ -243,6 +243,7 @@ export const he: Record<string, string> = {
 	"editor.dark": "כהה",
 	"editor.livePreview": "תצוגה מקדימה בזמן אמת",
 	"editor.iconAdjustment": "התאמת אייקון",
+	"editor.picture": "תמונה",
 	"editor.size": "גודל",
 	"editor.horizontalOffset": "היסט אופקי",
 	"editor.verticalOffset": "היסט אנכי",
@@ -589,6 +590,10 @@ export const he: Record<string, string> = {
 		'סגנון אייקון Material "{{value}}" אינו חוקי (חייב להיות אחד מ־outlined, filled, rounded או sharp).',
 	"import.err.materialWeight":
 		'משקל אייקון Material "{{value}}" חייב להיות מספר שלם בין 100 ל־700 (בקפיצות של 100).',
+	"import.warn.iconRecolorIgnored":
+		'השדה "recolor" רלוונטי רק לתמונות שלך, ולכן מתעלמים ממנו עבור סוג אייקון {{type}}.',
+	"import.err.iconRecolorInvalid":
+		'השדה "recolor" חייב להיות true או false (התקבל "{{value}}").',
 	"import.err.colorInvalid":
 		'"{{field}}" חייב להיות בצבע hex בפורמט "#448aff" (התקבל "{{value}}").',
 	"import.err.numberRange":

@@ -89,7 +89,13 @@ const KNOWN_FIELDS = new Set<string>([
 	"metadata",
 ]);
 
-const KNOWN_ICON_FIELDS = new Set<string>(["type", "value", "style", "weight"]);
+const KNOWN_ICON_FIELDS = new Set<string>([
+	"type",
+	"value",
+	"style",
+	"weight",
+	"recolor",
+]);
 
 function isPlainObject(value: unknown): value is Record<string, unknown> {
 	if (typeof value !== "object" || value === null || Array.isArray(value)) {
@@ -253,6 +259,26 @@ function validateIcon(
 				level: "error",
 				messageKey: "import.err.materialWeight",
 				params: { value: fmt(w) },
+			});
+			ok = false;
+		}
+	}
+	// `recolor` is the same shape of leftover for every pack but "image": inert
+	// where it does not belong, so worth saying, not worth failing over.
+	if (icon.recolor !== undefined) {
+		if (type !== "image") {
+			push({
+				field: "icon.recolor",
+				level: "warning",
+				messageKey: "import.warn.iconRecolorIgnored",
+				params: { type: fmt(type) },
+			});
+		} else if (typeof icon.recolor !== "boolean") {
+			push({
+				field: "icon.recolor",
+				level: "error",
+				messageKey: "import.err.iconRecolorInvalid",
+				params: { value: fmt(icon.recolor) },
 			});
 			ok = false;
 		}

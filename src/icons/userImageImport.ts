@@ -86,10 +86,10 @@ export async function importImageFile(
 				svg: artwork.svg,
 				width: artwork.width,
 				height: artwork.height,
-				// Only a flat one-colour drawing is worth recolouring; see
-				// isMonochrome. A raster never is — a mask is a stencil, so it
+				// Only a flat one-colour drawing is worth offering as
+				// recolourable. A raster never is — a mask is a stencil, so it
 				// would come out a silhouette.
-				recolor: format === "svg" && isMonochrome(artwork.svg),
+				monochrome: format === "svg" && isMonochrome(artwork.svg),
 				rev: 1,
 				addedAt: Date.now(),
 			},

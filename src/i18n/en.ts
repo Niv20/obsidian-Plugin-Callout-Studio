@@ -246,6 +246,7 @@ export const en: Record<string, string> = {
 	"editor.dark": "Dark",
 	"editor.livePreview": "Live preview",
 	"editor.iconAdjustment": "Icon adjustment",
+	"editor.picture": "Picture",
 	"editor.size": "Size",
 	"editor.horizontalOffset": "Horizontal offset",
 	"editor.verticalOffset": "Vertical offset",
@@ -603,6 +604,10 @@ export const en: Record<string, string> = {
 		'Material icon style "{{value}}" is not one of: outlined, filled, rounded, sharp.',
 	"import.err.materialWeight":
 		'Material icon weight "{{value}}" must be an integer between 100 and 700, in steps of 100.',
+	"import.warn.iconRecolorIgnored":
+		'"recolor" only applies to your own pictures and is ignored for icon type {{type}}.',
+	"import.err.iconRecolorInvalid":
+		'"recolor" must be true or false (got "{{value}}").',
 	"import.err.colorInvalid":
 		'"{{field}}" must be a hex color like "#448aff" (got "{{value}}").',
 	"import.err.numberRange":

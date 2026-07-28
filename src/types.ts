@@ -59,6 +59,14 @@ export interface CalloutIcon {
 	style?: "outlined" | "filled" | "rounded" | "sharp";
 	/** Material Symbols weight (100–700, default 400). Material-only. */
 	weight?: number;
+	/**
+	 * Draw the picture in this callout's color instead of its own. Lives on the
+	 * callout rather than on the picture, so one logo can be tinted in `[!bug]`
+	 * and left alone in `[!note]`. Only meaningful when `type` is "image", and
+	 * only honored for an SVG: a mask is a stencil, so recoloring a photo would
+	 * flatten it to a silhouette.
+	 */
+	recolor?: boolean;
 }
 
 declare module "obsidian" {
@@ -234,15 +242,16 @@ export interface UserImageIcon {
 	width: number;
 	height: number;
 	/**
-	 * Draw the picture in the callout's color instead of its own, the way every
-	 * library icon is drawn. Only ever true for a one-color SVG: a mask is a
-	 * stencil, so recoloring a photo would flatten it to a silhouette.
+	 * A one-color drawing, detected on import. Says nothing about how any
+	 * callout draws it — that is `CalloutIcon.recolor` — but it is the only kind
+	 * worth *offering* as following the callout's color, so it seeds that flag
+	 * when the picture is first picked.
 	 */
-	recolor: boolean;
+	monochrome: boolean;
 	/**
 	 * Bumped on every edit. Feeds the pack's `cacheVariant`, which is what makes
-	 * an open note repaint when a picture is replaced or recolored — the render
-	 * key would otherwise be identical before and after.
+	 * an open note repaint when a picture is replaced — the render key would
+	 * otherwise be identical before and after.
 	 */
 	rev: number;
 	/** Upload time, so the picker can offer the newest first. */
