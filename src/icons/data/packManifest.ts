@@ -73,4 +73,10 @@ export const PACK_MANIFEST: Partial<Record<IconPackId, PackManifestEntry>> = {
 		bytes: 572059,
 		sha256: "591d8baeba5b82513ce2393b9dc788e337576b7e272006e31a8625345cbe3df6",
 	},
+	"rpg-awesome": {
+		version: "0.2.0",
+		iconCount: 495,
+		bytes: 639853,
+		sha256: "3f6bdf26563410a99d3d20638707ef9f4a530d7b6b87d93883a841e6eb1b9194",
+	},
 };

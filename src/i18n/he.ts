@@ -359,6 +359,8 @@ export const he: Record<string, string> = {
 	"iconPicker.searchFaSolid": "חיפוש ב־Font Awesome Solid",
 	"iconPicker.searchFaRegular": "חיפוש ב־Font Awesome Regular",
 	"iconPicker.searchFaBrands": "חיפוש ב־Font Awesome Brands",
+	"iconPicker.rpgAwesome": "RPG Awesome",
+	"iconPicker.searchRpgAwesome": "חיפוש ב־RPG Awesome",
 	"iconPicker.source": "מקור",
 
 	// Downloadable icon packs

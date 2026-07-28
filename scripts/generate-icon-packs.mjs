@@ -249,6 +249,217 @@ function faYaml() {
 	return yamlModule;
 }
 
+// ── RPG Awesome ─────────────────────────────────────────────────────────
+
+const RA_DIR = join(ROOT, "node_modules/rpg-awesome");
+
+/**
+ * RPG Awesome publishes a webfont and nothing else — no per-icon SVGs, no
+ * metadata — so the artwork comes out of the SVG font's `<glyph>` elements.
+ *
+ * Font space is not SVG space: the y axis points *up*, and the origin sits on
+ * the baseline rather than at the top-left. The em square is 1024 units with an
+ * ascent of 960, so the mapping is y' = 960 - y, giving a 1024×1024 viewBox.
+ *
+ * The flip is baked into the coordinates here rather than emitted as a
+ * `<g transform>` wrapper, so the pack file keeps its "path data only"
+ * property and the runtime needs no special case for this one source. It is
+ * done with svgpath rather than a regex because relative commands (`v`, `c`,
+ * `s` — all of which this font uses) need their deltas negated too, and
+ * svgpath also handles arc sweep inversion should a future version add arcs.
+ */
+const RA_UNITS_PER_EM = 1024;
+const RA_ASCENT = 960;
+const RA_SIZE = String(RA_UNITS_PER_EM);
+
+/**
+ * Bounding box of the drawn outline.
+ *
+ * Curves are flattened rather than bounded by their control points: control
+ * points routinely sit well outside the curve they shape, and here that
+ * difference decides whether a glyph looks misplaced or not. Commands are read
+ * with their real arity too — `H` and `V` carry a single coordinate, so
+ * treating a path's numbers as x,y pairs gives nonsense.
+ */
+function pathBounds(d, svgpath) {
+	let minX = Infinity;
+	let maxX = -Infinity;
+	let minY = Infinity;
+	let maxY = -Infinity;
+	const point = (x, y) => {
+		if (x < minX) minX = x;
+		if (x > maxX) maxX = x;
+		if (y < minY) minY = y;
+		if (y > maxY) maxY = y;
+	};
+	const cubic = (x0, y0, x1, y1, x2, y2, x3, y3) => {
+		const steps = 24;
+		for (let i = 0; i <= steps; i++) {
+			const t = i / steps;
+			const u = 1 - t;
+			point(
+				u * u * u * x0 + 3 * u * u * t * x1 + 3 * u * t * t * x2 + t * t * t * x3,
+				u * u * u * y0 + 3 * u * u * t * y1 + 3 * u * t * t * y2 + t * t * t * y3,
+			);
+		}
+	};
+
+	svgpath(d)
+		.abs()
+		.unshort()
+		.unarc()
+		.iterate((seg, _index, x, y) => {
+			switch (seg[0]) {
+				case "M":
+				case "L":
+					point(seg[1], seg[2]);
+					break;
+				case "H":
+					point(seg[1], y);
+					break;
+				case "V":
+					point(x, seg[1]);
+					break;
+				case "C":
+					cubic(x, y, seg[1], seg[2], seg[3], seg[4], seg[5], seg[6]);
+					break;
+				case "Q":
+					cubic(
+						x,
+						y,
+						x + (2 / 3) * (seg[1] - x),
+						y + (2 / 3) * (seg[2] - y),
+						seg[3] + (2 / 3) * (seg[1] - seg[3]),
+						seg[4] + (2 / 3) * (seg[2] - seg[4]),
+						seg[3],
+						seg[4],
+					);
+					break;
+				default:
+					break;
+			}
+		});
+
+	return { minX, maxX, minY, maxY };
+}
+
+function buildRpgAwesome() {
+	const svgpath = createRequire(import.meta.url)("svgpath");
+	const version = JSON.parse(
+		readFileSync(join(RA_DIR, "package.json"), "utf8"),
+	).version;
+
+	const font = readFileSync(
+		join(RA_DIR, "fonts/rpgawesome-webfont.svg"),
+		"utf8",
+	);
+	const scss = readFileSync(join(RA_DIR, "scss/_variables.scss"), "utf8");
+
+	// The documented ids, keyed by codepoint. Used only to check that
+	// `glyph-name` still agrees with what the stylesheet calls each icon.
+	const namesByCode = new Map(
+		[...scss.matchAll(/\$ra-var-icon-([a-z0-9-]+):\s*'\\([0-9a-fA-F]+)'/g)].map(
+			(m) => [parseInt(m[2], 16), m[1]],
+		),
+	);
+	if (namesByCode.size === 0) {
+		throw new Error("rpg-awesome: no icon names found in _variables.scss");
+	}
+
+	const icons = {};
+	const entries = [];
+
+	for (const attrs of [...font.matchAll(/<glyph ([^>]*?)\/>/g)].map((m) => m[1])) {
+		const d = /\sd="([^"]*)"/.exec(attrs)?.[1];
+		// The font carries a space glyph with no outline; it is not an icon.
+		if (!d) continue;
+
+		const glyphName = /glyph-name="([^"]*)"/.exec(attrs)?.[1];
+		const code = parseInt(
+			/unicode="&#x([0-9a-fA-F]+);"/.exec(attrs)?.[1] ?? "",
+			16,
+		);
+		// The stylesheet's name wins where the two disagree: it is the one
+		// upstream documents and ships as a CSS class, so it is what anyone
+		// looking an icon up will have seen. Two glyphs differ in 0.2.0 —
+		// `montains` is a typo for `mountains`, and `perspective-dice-six-two`
+		// is shortened to `perspective-dice-two`.
+		const name = namesByCode.get(code) ?? glyphName;
+		if (!name) {
+			throw new Error(`rpg-awesome: unnamed glyph at codepoint ${code}`);
+		}
+
+		// This font declares one advance width for every glyph; a per-glyph
+		// override would mean the em square below is the wrong frame.
+		if (/horiz-adv-x=/.test(attrs)) {
+			throw new Error(`rpg-awesome: "${name}" overrides horiz-adv-x`);
+		}
+
+		const flipped = svgpath(d)
+			.scale(1, -1)
+			.translate(0, RA_ASCENT)
+			.abs()
+			.round(2)
+			.toString();
+		assertPathData(flipped, `rpg-awesome/${name}`);
+
+		// The flip is the one thing here that could fail silently — a wrong sign
+		// or a missed offset produces a valid path that simply draws upside
+		// down or off-frame. Every glyph in this font sits inside the em square
+		// once flipped, so checking that is a real test of the transform: get
+		// it wrong and the coordinates land outside immediately.
+		const box = pathBounds(flipped, svgpath);
+		const slack = 1;
+		if (
+			box.minX < -slack ||
+			box.minY < -slack ||
+			box.maxX > RA_UNITS_PER_EM + slack ||
+			box.maxY > RA_UNITS_PER_EM + slack
+		) {
+			throw new Error(
+				`rpg-awesome: "${name}" falls outside the em square after the ` +
+					`Y-flip — x ${box.minX.toFixed(1)}…${box.maxX.toFixed(1)}, ` +
+					`y ${box.minY.toFixed(1)}…${box.maxY.toFixed(1)}, ` +
+					`expected 0…${RA_UNITS_PER_EM} on both axes`,
+			);
+		}
+
+		icons[name] = {
+			[RA_SIZE]: { w: RA_UNITS_PER_EM, p: [{ d: flipped }] },
+		};
+		// No keywords upstream, but the names are compound and descriptive, so
+		// their parts make usable search terms: "crossed-swords" becomes
+		// findable by "swords". Where the font spells a name differently from
+		// the stylesheet, keep its spelling searchable too.
+		const keywords = name.split("-").filter((part) => part.length > 1);
+		if (glyphName && glyphName !== name) {
+			for (const part of glyphName.split("-")) {
+				if (part.length > 1 && !keywords.includes(part)) {
+					keywords.push(part);
+				}
+			}
+		}
+
+		entries.push({
+			name,
+			categories: [], // RPG Awesome has no taxonomy upstream.
+			keywords,
+		});
+	}
+
+	entries.sort((a, b) => (a.name < b.name ? -1 : 1));
+	const sorted = {};
+	for (const entry of entries) sorted[entry.name] = icons[entry.name];
+
+	return {
+		id: "rpg-awesome",
+		version,
+		file: { icons: sorted },
+		entries,
+		note: `${entries.length} icons`,
+	};
+}
+
 // ── Emit ────────────────────────────────────────────────────────────────
 
 function writePackFile(pack) {
@@ -319,6 +530,7 @@ const BUILDERS = {
 	"fa-solid": () => buildFontAwesome("solid"),
 	"fa-regular": () => buildFontAwesome("regular"),
 	"fa-brands": () => buildFontAwesome("brands"),
+	"rpg-awesome": buildRpgAwesome,
 };
 
 async function main() {
