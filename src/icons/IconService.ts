@@ -91,16 +91,34 @@ export class IconService implements IconResolver {
 	// ── Lifecycle ───────────────────────────────────────────────────────
 
 	/**
-	 * Startup: read from disk the packs this vault actually uses, then fill in
-	 * any missing per-icon artwork in the background. No pack a vault does not
-	 * reference is ever read, so an unused 400 KB file costs nothing.
+	 * Startup: read from disk the packs this vault actually uses, replace any
+	 * that have gone missing or bad, then fill in missing per-icon artwork. No
+	 * pack a vault does not reference is ever read, so an unused 400 KB file
+	 * costs nothing.
 	 */
 	async initialize(): Promise<void> {
-		const used = this.host.registry.getAll().map((def) => def.icon.type);
-		await this.packs.loadUsed(used);
+		const icons = this.host.registry.getAll().map((def) => def.icon);
+		const results = await this.packs.loadUsed(icons.map((icon) => icon.type));
 		// Repaint: pack artwork read from disk arrives after the first inject.
 		this.host.cssInjector.inject();
+
+		for (const [id, result] of results) {
+			if (result === "corrupt") {
+				console.warn(
+					`[CalloutStudio] pack "${id}" on disk is damaged; replacing it`,
+				);
+			}
+		}
+
+		// Material first, because its sweep is the one built for startup: a
+		// single attempt per icon. Going the other way round would send every
+		// missing Material icon through cacheOne's three attempts and its waits
+		// between them, on a vault that may simply be offline.
 		await this.fetch.ensureAll();
+		// Then repair whatever the packs would have drawn. Icons whose artwork
+		// is already in `data.json` are skipped, so a deleted pack file whose
+		// icons are all cached downloads nothing at all.
+		await this.ensureArtworkFor(icons);
 	}
 
 	// ── Making an icon usable ───────────────────────────────────────────
@@ -110,26 +128,44 @@ export class IconService implements IconResolver {
 	 * Called when the user confirms a choice in the picker and again on save.
 	 */
 	async ensureArtwork(icon: CalloutIcon): Promise<void> {
+		if (await this.fetchArtwork(icon)) await this.publish();
+	}
+
+	/**
+	 * Fetch one icon's artwork into the cache, without announcing it. Returns
+	 * whether anything new was stored.
+	 *
+	 * Split from `ensureArtwork` so a batch can repaint and write `data.json`
+	 * once at the end rather than once per icon.
+	 */
+	private async fetchArtwork(icon: CalloutIcon): Promise<boolean> {
 		const pack = packFor(icon);
-		if (!pack) return;
+		if (!pack) return false;
 
 		if (pack.kind === "perIconRemote") {
+			// cacheOne does its own repaint and save, one icon at a time.
 			await this.fetch.cacheOne(icon);
-			return;
+			return false;
 		}
-		if (pack.kind !== "bundledRemote") return;
+		if (pack.kind !== "bundledRemote") return false;
 
 		// Only the file this icon's own style lives in — picking one Font Awesome
 		// Brands icon must not pull down Solid and Regular as well.
 		if (this.packs.state(icon.type) !== "ready") {
-			const onDisk = await this.packs.loadFromDisk(icon.type);
-			if (!onDisk) await this.packs.download(icon.type);
+			// A file that is there but damaged is no more usable than none at
+			// all, so both outcomes fall through to the download.
+			if ((await this.packs.loadFromDisk(icon.type)) !== "ready") {
+				await this.packs.download(icon.type);
+			}
 		}
-		if (this.copyPackArtwork(icon)) {
-			this.host.cssInjector.inject();
-			await this.host.saveSettings();
-			this.notify();
-		}
+		return this.copyPackArtwork(icon);
+	}
+
+	/** Repaint and persist newly cached artwork. */
+	private async publish(): Promise<void> {
+		this.host.cssInjector.inject();
+		await this.host.saveSettings();
+		this.notify();
 	}
 
 	/**
@@ -145,7 +181,13 @@ export class IconService implements IconResolver {
 	 * device that synced `data.json` from re-downloading packs it never needed.
 	 */
 	async ensureArtworkFor(icons: readonly CalloutIcon[]): Promise<void> {
-		const pending = icons.filter((icon) => !this.isFullyCached(icon));
+		const pending = icons.filter(
+			(icon) =>
+				!this.isFullyCached(icon) &&
+				// Already tried and given up on this session — retrying here
+				// would just repeat the wait. Cleared on the next launch.
+				!this.hasFailed(icon, "regular"),
+		);
 		if (pending.length === 0) return;
 
 		// One entry per icon type, so Font Awesome Brands and Solid are two
@@ -158,12 +200,13 @@ export class IconService implements IconResolver {
 		}
 
 		const restored = new Set<string>();
+		let stored = false;
 		for (const group of byType.values()) {
 			// Sequential: parallel requests to one CDN gain nothing and make a
 			// failure harder to attribute. The first icon pulls the pack down,
 			// the rest then only copy artwork out of it.
 			for (const icon of group) {
-				await this.ensureArtwork(icon);
+				if (await this.fetchArtwork(icon)) stored = true;
 			}
 			const first = group[0];
 			if (!first || !group.every((icon) => this.isFullyCached(icon))) {
@@ -172,6 +215,7 @@ export class IconService implements IconResolver {
 			const title = packFor(first)?.attribution.title;
 			if (title) restored.add(title);
 		}
+		if (stored) await this.publish();
 
 		// Say what was fetched, once for the batch. Anything that failed has
 		// already announced itself — a per-icon Notice from the fetch manager,

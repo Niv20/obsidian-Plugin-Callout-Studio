@@ -59,10 +59,6 @@ export function setPackData(id: IconPackId, file: PackFile): void {
 	loaded.set(id, file);
 }
 
-export function clearPackData(id: IconPackId): void {
-	loaded.delete(id);
-}
-
 /**
  * Validate parsed JSON as a pack file for `id`, or explain why it is not.
  *

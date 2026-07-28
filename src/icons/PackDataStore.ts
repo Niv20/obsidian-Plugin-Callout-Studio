@@ -9,9 +9,10 @@
  * - **A pack is fetched at most once.** It lands in the plugin's own folder and
  *   is read from there on every later launch, so the pack works offline
  *   afterwards and survives a restart.
- * - **Only the exact expected bytes are accepted.** The build knows each pack's
- *   SHA-256 (see packManifest.ts); anything else is discarded, whether it came
- *   from a compromised CDN, a captive portal, or a truncated write.
+ * - **Only the exact expected bytes are accepted**, on download and on every
+ *   later read. The build knows each pack's SHA-256 (see packManifest.ts);
+ *   anything else is discarded, whether it came from a compromised CDN, a
+ *   captive portal, a truncated write or an edit made to the file afterwards.
  * - **Disk is a cache, never a dependency.** Every write failure is survivable:
  *   the pack stays in memory for the session, and the artwork of the icons
  *   actually in use is separately copied into `data.json`, which syncs.
@@ -39,6 +40,13 @@ export type PackLoadState =
 	| "loading"
 	| "ready"
 	| "failed";
+
+/**
+ * How a read from disk went. `"corrupt"` covers every way a file can be there
+ * but unusable — wrong checksum, not JSON, or the wrong shape — because the
+ * response to all of them is the same.
+ */
+export type PackDiskResult = "ready" | "missing" | "corrupt";
 
 export class PackDataStore {
 	private readonly states = new Map<IconPackId, PackLoadState>();
@@ -109,18 +117,31 @@ export class PackDataStore {
 	/**
 	 * Load a pack from disk if it is there. Never fetches — a missing or
 	 * unreadable file simply means the pack is not available yet.
+	 *
+	 * The checksum is re-checked here, not just at download time. A file on disk
+	 * can be edited, truncated by a failed sync, or replaced; without this, the
+	 * damaged version would be accepted silently on every later launch. It also
+	 * makes the documented hand-drop path a real check rather than a claim, and
+	 * costs well under a millisecond per pack — far less than the parse below it.
+	 *
+	 * `"corrupt"` is distinguished from `"missing"` so the caller can say which
+	 * happened; both mean the same thing to the picker.
 	 */
-	async loadFromDisk(id: IconPackId): Promise<boolean> {
-		if (isPackLoaded(id)) return true;
+	async loadFromDisk(id: IconPackId): Promise<PackDiskResult> {
+		if (isPackLoaded(id)) return "ready";
 		const path = this.packPath(id);
+		const expected = PACK_MANIFEST[id];
 		try {
 			const adapter = this.app.vault.adapter;
-			if (!(await adapter.exists(path))) return false;
+			if (!(await adapter.exists(path))) return "missing";
 			const text = await adapter.read(path);
-			return this.accept(id, text, `disk (${path})`);
+			if (expected && !(await this.verify(text, expected, path))) {
+				return "corrupt";
+			}
+			return this.accept(id, text, `disk (${path})`) ? "ready" : "corrupt";
 		} catch (e) {
 			console.warn(`[CalloutStudio] could not read pack "${id}"`, e);
-			return false;
+			return "corrupt";
 		}
 	}
 
@@ -129,11 +150,15 @@ export class PackDataStore {
 	 * packs nothing references stay unread, so an unused 400 KB file is never
 	 * parsed.
 	 */
-	async loadUsed(usedPacks: Iterable<IconPackId>): Promise<void> {
+	async loadUsed(
+		usedPacks: Iterable<IconPackId>,
+	): Promise<Map<IconPackId, PackDiskResult>> {
+		const results = new Map<IconPackId, PackDiskResult>();
 		for (const id of new Set(usedPacks)) {
-			if (PACK_MANIFEST[id]) await this.loadFromDisk(id);
+			if (PACK_MANIFEST[id]) results.set(id, await this.loadFromDisk(id));
 		}
 		this.notify();
+		return results;
 	}
 
 	/**
@@ -217,16 +242,19 @@ export class PackDataStore {
 		}
 	}
 
-	/** Reject anything that is not byte-for-byte the file this build expects. */
+	/**
+	 * Reject anything that is not byte-for-byte the file this build expects.
+	 * `source` is a URL when downloading and a path when reading from disk.
+	 */
 	private async verify(
 		text: string,
 		expected: PackManifestEntry,
-		url: string,
+		source: string,
 	): Promise<boolean> {
 		const bytes = new TextEncoder().encode(text);
 		if (bytes.byteLength !== expected.bytes) {
 			console.warn(
-				`[CalloutStudio] pack size mismatch from ${url}: ` +
+				`[CalloutStudio] pack size mismatch from ${source}: ` +
 					`${bytes.byteLength} != ${expected.bytes}`,
 			);
 			return false;
@@ -236,7 +264,7 @@ export class PackDataStore {
 			.map((b) => b.toString(16).padStart(2, "0"))
 			.join("");
 		if (hex !== expected.sha256) {
-			console.warn(`[CalloutStudio] pack checksum mismatch from ${url}`);
+			console.warn(`[CalloutStudio] pack checksum mismatch from ${source}`);
 			return false;
 		}
 		return true;
