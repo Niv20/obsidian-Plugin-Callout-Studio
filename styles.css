@@ -1592,11 +1592,34 @@ button.callout-studio-icon-picker-loading {
 }
 
 /* A user's own picture: keeps its colours and its proportions, unlike the
-   monochrome glyphs the generic cell rule stretches to fill its box. */
+   monochrome glyphs the generic cell rule stretches to fill its box. The
+   padding is on every cell, not just the selected one, so nothing jumps on
+   click — and it is what leaves the selected cell's accent background visible
+   as a frame, since a picture that fills its square would otherwise hide it
+   completely. */
+.icon-picker-image-cell {
+	padding: 3px;
+	/* Stated rather than inherited: the cell's 42px is a fixed grid track, and
+	   content-box would push it to 48 and overflow the column. */
+	box-sizing: border-box;
+}
+
 .icon-picker-image-cell svg {
 	width: 100%;
 	height: 100%;
 	object-fit: contain;
+}
+
+/* Ringed as well as framed: a glyph leaves an accent halo inside its cell to
+   read the selection by, a full-bleed picture leaves none. */
+.icon-picker-image-cell.is-selected {
+	box-shadow: 0 0 0 2px var(--interactive-accent);
+}
+
+/* Room for that ring, and pictures need more air between them than the
+   monochrome glyphs the 4px default was measured for. */
+.icon-picker-image-panel .icon-picker-grid {
+	gap: 8px;
 }
 
 /* ── "Your images" panel ───────────────────────────────────────────── */
