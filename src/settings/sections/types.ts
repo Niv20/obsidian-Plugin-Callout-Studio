@@ -10,9 +10,10 @@ import type { App, Plugin, PluginManifest } from "obsidian";
 import type { CalloutRegistry } from "../../manager/CalloutRegistry";
 import type { CSSInjector } from "../../manager/CSSInjector";
 import type { OutlineDecorator } from "../../outline/OutlineDecorator";
+import type { PackDataStore } from "../../icons/PackDataStore";
 import type {
 	CalloutIcon,
-	MaterialIconStyle,
+	CalloutRenderRole,
 	PluginSettings,
 } from "../../types";
 
@@ -23,19 +24,17 @@ export type SettingsTabPlugin = Plugin & {
 	manifest: PluginManifest;
 	settings: PluginSettings;
 	pruneSuspended: boolean;
-	onMaterialSvgChange(cb: () => void): () => void;
+	onIconCacheChange(cb: () => void): () => void;
 	schedulePruneUnusedFallbacks(delayMs?: number): void;
 	addUnknownCalloutsAsFallback(unknownIds: string[]): number;
 	saveSettings(): Promise<void>;
 	refreshCallouts(): void;
 	refreshRenderModes(): void;
-	hasMaterialSvgFailed(
-		name: string,
-		style: MaterialIconStyle,
-		weight: number,
-	): boolean;
+	hasIconFetchFailed(icon: CalloutIcon, role: CalloutRenderRole): boolean;
+	/** Icon sources and their downloadable artwork, for the picker. */
+	icons: { packs: PackDataStore };
 	restyleUncustomizedFallbackRows(): number;
-	cacheMaterialSvg(icon: CalloutIcon): Promise<void>;
+	ensureIconArtwork(icon: CalloutIcon): Promise<void>;
 	runVaultScan(markFirstRun?: boolean): Promise<number>;
 };
 

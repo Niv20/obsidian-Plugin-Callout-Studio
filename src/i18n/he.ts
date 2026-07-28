@@ -351,6 +351,22 @@ export const he: Record<string, string> = {
 	"iconPicker.noIconSelected": "לא נבחר אייקון",
 	"iconPicker.noResults": "לא נמצאו אייקונים התואמים לחיפוש.",
 	"iconPicker.delete": "מחיקה",
+	"iconPicker.source": "מקור",
+
+	// Downloadable icon packs
+	"iconPack.downloadTitle": "{{name}} עדיין לא הורדה",
+	"iconPack.downloadDetail": "{{count}} אייקונים · {{size}} · הורדה חד־פעמית",
+	"iconPack.download": "הורדה",
+	"iconPack.downloading": "מוריד את {{name}}…",
+	"iconPack.downloadFailed":
+		"לא ניתן היה להוריד את {{name}}. בדקו את החיבור לאינטרנט ונסו שוב.",
+	"iconPack.retry": "נסו שוב",
+	"iconPack.manualHint":
+		"אפשר גם להתקין ללא אינטרנט: הורידו את הקובץ משחרור הגרסה ב־GitHub ומקמו אותו בנתיב",
+	"iconPack.copyPath": "העתקת הנתיב",
+	"iconPack.pathCopied": "הנתיב הועתק",
+	"iconPack.diskWriteFailed":
+		"Callout Studio לא הצליח לשמור את חבילת האייקונים לדיסק, ולכן היא תידרש להורדה מחדש בפעם הבאה. האייקונים שבחרתם עדיין נשמרים יחד עם ההגדרות.",
 
 	// Context Menu
 	"contextMenu.editCallout": "עריכת הגדרות תיבת־הבלטה",
@@ -508,7 +524,9 @@ export const he: Record<string, string> = {
 	"import.err.boolField": '"{{field}}" חייב להיות ערך בוליאני (true או false).',
 	"import.err.iconNotObject": "icon חייב להיות אובייקט (Object).",
 	"import.err.iconTypeInvalid":
-		'סוג האייקון "{{value}}" אינו חוקי (חייב להיות אחד מ־lucide, material או emoji).',
+		'סוג האייקון "{{value}}" אינו חוקי (חייב להיות אחד מ־{{types}}).',
+	"import.warn.iconFieldIgnored":
+		'השדה "{{field}}" רלוונטי רק לאייקוני Material, ולכן מתעלמים ממנו עבור סוג אייקון {{type}}.',
 	"import.err.iconValueEmpty": "ערך האייקון חייב להיות מחרוזת (String) שאינה ריקה.",
 	"import.err.iconValueTooLong":
 		"ערך האייקון חורג מהאורך המקסימלי ({{length}} תווים).",

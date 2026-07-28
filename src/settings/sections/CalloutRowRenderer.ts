@@ -14,6 +14,8 @@ import {
 	resolveCurrentModeColors,
 } from "../../ui/ColorCircles";
 import type { CalloutDefinition } from "../../types";
+import { renderIconInto } from "../../icons/renderIcon";
+import { createStatusIconResolver } from "../../icons/resolver";
 import type { SettingsSectionContext } from "./types";
 
 type RowRendererHandlers = {
@@ -110,54 +112,13 @@ function renderRowIcon(
 	container: HTMLElement,
 	def: CalloutDefinition,
 ): void {
-	container.removeClass("is-loading");
-	container.removeClass("is-error");
-	switch (def.icon.type) {
-		case "lucide":
-			try {
-				setIcon(container, def.icon.value);
-			} catch {
-				container.textContent = "?";
-			}
-			break;
-		case "material": {
-			const cached = ctx.plugin.registry.findMaterialSvg(
-				def.icon.value,
-				def.icon.style ?? "outlined",
-				def.icon.weight ?? 400,
-			);
-			if (cached) {
-				const parser = new DOMParser();
-				const doc = parser.parseFromString(cached.svg, "image/svg+xml");
-				const svgEl = doc.documentElement;
-				svgEl.setAttribute("fill", "currentColor");
-				container.appendChild(container.doc.importNode(svgEl, true));
-			} else {
-				const failed = ctx.plugin.hasMaterialSvgFailed(
-					def.icon.value,
-					def.icon.style ?? "outlined",
-					def.icon.weight ?? 400,
-				);
-				if (failed) {
-					setIcon(container, "circle-help");
-					container.addClass("is-error");
-					container.setAttribute(
-						"aria-label",
-						t("notice.iconDownloadFailed", {
-							name: def.icon.value,
-						}),
-					);
-				} else {
-					setIcon(container, "loader-2");
-					container.addClass("is-loading");
-				}
-			}
-			break;
-		}
-		case "emoji":
-			container.textContent = def.icon.value;
-			break;
-		default:
-			container.textContent = "?";
-	}
+	renderIconInto(container, def.icon, createStatusIconResolver(ctx.plugin), {
+		role: "regular",
+		fill: "currentColor",
+		// The settings list is where a stalled download has to be visible, so
+		// it shows real progress state rather than a stand-in glyph.
+		missing: { kind: "status" },
+		errorText: "?",
+		errorAriaLabel: t("notice.iconDownloadFailed", { name: def.icon.value }),
+	});
 }

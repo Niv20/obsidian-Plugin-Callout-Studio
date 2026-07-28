@@ -269,7 +269,7 @@ function importFromJSON(ctx: SettingsSectionContext): void {
 			ctx.display();
 			for (const def of defs) {
 				if (def.icon.type === "material") {
-					void ctx.plugin.cacheMaterialSvg(def.icon);
+					void ctx.plugin.ensureIconArtwork(def.icon);
 				}
 			}
 		} else if (settingsImported) {

@@ -1,0 +1,306 @@
+/**
+ * settings/iconpicker/IconPickerModal.ts — The icon selection modal.
+ *
+ * A source dropdown rather than a tab row: there are more sources than a tab
+ * strip fits, on mobile or in RTL, and the list keeps growing. The modal owns
+ * only the source choice, the preview and Confirm; everything about a given
+ * source lives in PackPanel.
+ *
+ * Nothing here reaches the network. Choosing a source shows either its grid or
+ * a download prompt; only pressing Download, or confirming an icon whose
+ * artwork is not local yet, causes a request.
+ */
+import { Modal, setIcon } from "obsidian";
+import type { App } from "obsidian";
+import type { CalloutIcon, IconPackId, PluginSettings } from "../../types";
+import type { IconVariantState } from "../../icons/types";
+import { ICON_PACK_IDS, getPack, packFor } from "../../icons/registry";
+import type { PackDataStore } from "../../icons/PackDataStore";
+import {
+	MATERIAL_DEFAULT_STYLE,
+	MATERIAL_DEFAULT_WEIGHT,
+} from "../../icons/packs/material";
+import { PackPanel } from "./PackPanel";
+import { t } from "../../i18n";
+
+/**
+ * Unicode skin-tone modifiers, light → dark (U+1F3FB…U+1F3FF). Reading the tone
+ * off the glyph is exact and needs no dataset lookup, so re-opening the picker
+ * highlights the toned glyph the callout actually uses.
+ */
+const SKIN_TONE_MODIFIERS = [
+	"\u{1F3FB}",
+	"\u{1F3FC}",
+	"\u{1F3FD}",
+	"\u{1F3FE}",
+	"\u{1F3FF}",
+];
+
+function emojiToneOf(glyph: string): number {
+	const index = SKIN_TONE_MODIFIERS.findIndex((m) => glyph.includes(m));
+	return index >= 0 ? index + 1 : 0;
+}
+
+export interface IconPickerPlugin {
+	app: App;
+	settings: PluginSettings;
+	saveSettings(): Promise<void>;
+	ensureIconArtwork(icon: CalloutIcon): Promise<void>;
+	icons: { packs: PackDataStore };
+}
+
+export class IconPicker extends Modal {
+	private resolve: ((icon: CalloutIcon | null) => void) | null = null;
+	private readonly currentIcon: CalloutIcon | null;
+	private selectedIcon: CalloutIcon | null;
+	private activePackId: IconPackId;
+	private panel: PackPanel | null = null;
+
+	private panelHostEl!: HTMLElement;
+	private previewEl!: HTMLElement;
+	private confirmBtn!: HTMLButtonElement;
+
+	constructor(
+		private readonly plugin: IconPickerPlugin,
+		currentIcon?: CalloutIcon,
+	) {
+		super(plugin.app);
+		this.currentIcon = currentIcon ?? null;
+		this.selectedIcon = currentIcon ? { ...currentIcon } : null;
+		// Re-opening lands on the source the current icon came from, with that
+		// icon selected and later scrolled into view. An icon from a source this
+		// build does not know falls back to the default.
+		this.activePackId =
+			currentIcon && packFor(currentIcon) ? currentIcon.type : "lucide";
+	}
+
+	openAndWait(): Promise<CalloutIcon | null> {
+		return new Promise<CalloutIcon | null>((resolve) => {
+			this.resolve = resolve;
+			super.open();
+		});
+	}
+
+	onOpen(): void {
+		this.modalEl.addClass("callout-studio-icon-picker");
+		this.titleEl.setText(t("iconPicker.pickIcon"));
+
+		const container = this.contentEl.createDiv("icon-picker-container");
+		this.buildSourceSelect(container);
+		this.panelHostEl = container.createDiv("icon-picker-content");
+
+		const footer = container.createDiv("icon-picker-footer");
+		this.previewEl = footer.createDiv("icon-picker-preview");
+		this.updatePreview();
+
+		const cancelBtn = footer.createEl("button", {
+			text: t("iconPicker.cancel"),
+		});
+		cancelBtn.addEventListener("click", () => this.cancel());
+
+		this.confirmBtn = footer.createEl("button", {
+			text: t("iconPicker.confirm"),
+			cls: "mod-cta",
+		});
+		this.confirmBtn.addEventListener("click", () => void this.confirm());
+
+		void this.showPanel();
+	}
+
+	onClose(): void {
+		this.panel?.dispose();
+		this.panel = null;
+		if (this.resolve) {
+			this.resolve(null);
+			this.resolve = null;
+		}
+	}
+
+	// ── Source selection ────────────────────────────────────────────────
+
+	private buildSourceSelect(container: HTMLElement): void {
+		const row = container.createDiv("icon-picker-source-row");
+		row.createEl("label", {
+			text: t("iconPicker.source"),
+			cls: "icon-picker-source-label",
+			attr: { for: "cs-icon-source" },
+		});
+		const select = row.createEl("select", {
+			cls: "icon-picker-source-select",
+			attr: { id: "cs-icon-source" },
+		});
+		for (const id of ICON_PACK_IDS) {
+			const opt = select.createEl("option", {
+				text: t(getPack(id).labelKey),
+				value: id,
+			});
+			if (id === this.activePackId) opt.selected = true;
+		}
+		select.addEventListener("change", () => {
+			this.activePackId = select.value as IconPackId;
+			// Switching source clears the selection: an icon id only means
+			// anything within the source it came from.
+			this.selectedIcon = null;
+			this.updatePreview();
+			void this.showPanel();
+		});
+	}
+
+	private async showPanel(): Promise<void> {
+		this.panel?.dispose();
+		this.panelHostEl.empty();
+		this.panel = new PackPanel(
+			this.panelHostEl.createDiv("icon-picker-panel"),
+			getPack(this.activePackId),
+			{
+				packs: this.plugin.icons.packs,
+				variantsFor: (id) => this.variantsFor(id),
+				saveVariants: (id, v) => this.saveVariants(id, v),
+				lastCategoryFor: (id) => this.lastCategoryFor(id),
+				saveCategory: (id, c) => this.saveCategory(id, c),
+				selectedIcon: () => this.selectedIcon,
+				onSelect: (icon) => {
+					this.selectedIcon = icon;
+					this.updatePreview();
+				},
+			},
+		);
+		await this.panel.render();
+	}
+
+	// ── Persisted picker state ──────────────────────────────────────────
+
+	/**
+	 * The toolbar values a source opens with. When re-opening on an existing
+	 * icon they come from that icon, not from the saved defaults — otherwise
+	 * its cell would be drawn in a different style and the highlight would be
+	 * lost on the very icon the user is editing.
+	 */
+	private variantsFor(id: IconPackId): IconVariantState {
+		const sources = this.plugin.settings.iconSources;
+		if (id === "material") {
+			const current =
+				this.currentIcon?.type === "material" ? this.currentIcon : null;
+			return {
+				style:
+					current?.style ??
+					sources.materialStyleDefault ??
+					MATERIAL_DEFAULT_STYLE,
+				weight:
+					current?.weight ??
+					sources.materialWeightDefault ??
+					MATERIAL_DEFAULT_WEIGHT,
+			};
+		}
+		if (id === "emoji") {
+			return {
+				emojiSkinTone:
+					this.currentIcon?.type === "emoji"
+						? emojiToneOf(this.currentIcon.value)
+						: (sources.lastEmojiSkinTone ?? 0),
+			};
+		}
+		return {};
+	}
+
+	private saveVariants(id: IconPackId, variants: IconVariantState): void {
+		const sources = this.plugin.settings.iconSources;
+		if (id === "material") {
+			if (variants.style) sources.materialStyleDefault = variants.style;
+			if (variants.weight) sources.materialWeightDefault = variants.weight;
+		} else if (id === "emoji" && variants.emojiSkinTone !== undefined) {
+			sources.lastEmojiSkinTone = variants.emojiSkinTone;
+		}
+		void this.plugin.saveSettings();
+	}
+
+	private lastCategoryFor(id: IconPackId): string {
+		// Re-opening on an existing icon shows all categories, so the icon can
+		// never be filtered out of its own grid. In-memory only — the saved
+		// category is left alone.
+		if (this.currentIcon?.type === id) return "";
+		return this.plugin.settings.iconSources.lastCategory?.[id] ?? "";
+	}
+
+	private saveCategory(id: IconPackId, category: string): void {
+		const sources = this.plugin.settings.iconSources;
+		sources.lastCategory = { ...sources.lastCategory, [id]: category };
+		void this.plugin.saveSettings();
+	}
+
+	// ── Preview & confirm ───────────────────────────────────────────────
+
+	private updatePreview(): void {
+		this.previewEl.empty();
+		if (!this.selectedIcon) {
+			this.previewEl.setText(t("iconPicker.noIconSelected"));
+			this.confirmBtn?.toggleClass("is-disabled", true);
+			return;
+		}
+		this.confirmBtn?.toggleClass("is-disabled", false);
+		this.previewEl
+			.createDiv("icon-picker-preview-label")
+			.setText(describeIcon(this.selectedIcon));
+	}
+
+	/**
+	 * Fetch the artwork before handing the icon back, so any wait happens here —
+	 * where the icon is on screen — rather than in the editor behind the modal.
+	 * Sources whose artwork is already local return immediately.
+	 */
+	private async confirm(): Promise<void> {
+		if (!this.selectedIcon || !this.resolve) {
+			this.close();
+			return;
+		}
+
+		const originalText = this.confirmBtn.textContent ?? "";
+		this.confirmBtn.disabled = true;
+		this.confirmBtn.toggleClass("is-disabled", true);
+		this.confirmBtn.empty();
+		this.confirmBtn.addClass("callout-studio-icon-picker-loading");
+		const spinner = this.confirmBtn.createSpan({
+			cls: "callout-studio-spinner",
+		});
+		setIcon(spinner, "loader-2");
+		this.confirmBtn.createSpan({ text: t("editor.downloadingIcon") });
+		try {
+			await this.plugin.ensureIconArtwork(this.selectedIcon);
+		} catch {
+			// Failures surface through the icon's own error state; never trap
+			// the user in the picker over one.
+		} finally {
+			this.confirmBtn.disabled = false;
+			this.confirmBtn.removeClass("callout-studio-icon-picker-loading");
+			this.confirmBtn.empty();
+			this.confirmBtn.textContent = originalText;
+		}
+		// The user may have closed the modal while the fetch was in flight.
+		if (!this.resolve) return;
+
+		this.resolve(this.selectedIcon);
+		this.resolve = null;
+		this.close();
+	}
+
+	private cancel(): void {
+		if (this.resolve) {
+			this.resolve(null);
+			this.resolve = null;
+		}
+		this.close();
+	}
+}
+
+/** Human-readable summary of a selection, for the footer. */
+function describeIcon(icon: CalloutIcon): string {
+	const pack = packFor(icon);
+	const source = pack ? t(pack.labelKey) : icon.type;
+	if (icon.type === "material") {
+		return (
+			`${source}: ${icon.value} ` +
+			`(${icon.style ?? MATERIAL_DEFAULT_STYLE}, ${icon.weight ?? MATERIAL_DEFAULT_WEIGHT})`
+		);
+	}
+	return `${source}: ${icon.value}`;
+}

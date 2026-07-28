@@ -7,15 +7,19 @@
  * `css-change` this emits from starting a second pass through the plugin's own
  * listener. Also manages the Material Symbols font link element when needed.
  */
-import { setIcon } from "obsidian";
 import type { App } from "obsidian";
 import type { CalloutDefinition } from "../types";
+import { renderIconInto } from "../icons/renderIcon";
+import { createIconResolver } from "../icons/resolver";
+import { packFor } from "../icons/registry";
+import type { IconResolver } from "../icons/types";
 import {
 	bgGradientCss,
 	calloutColorValue,
 	hexToRgbString,
 } from "../utils/colorUtils";
-import { ensureMaterialFontLoaded, svgToDataUri } from "../utils/iconLoader";
+import { svgToDataUri } from "../icons/svg";
+import { ensureMaterialFontLoaded } from "../icons/packs/material";
 import {
 	applyTitleGradient,
 	clearGradientChars,
@@ -73,10 +77,13 @@ export class CSSInjector {
 	private registry: CalloutRegistry;
 	private app: App;
 	private startupCache: StartupStyleCache;
+	/** Artwork lookup for both the CSS masks and the DOM export copies. */
+	private icons: IconResolver;
 
 	constructor(app: App, registry: CalloutRegistry) {
 		this.app = app;
 		this.registry = registry;
+		this.icons = createIconResolver(registry);
 		this.startupCache = new StartupStyleCache(app);
 	}
 
@@ -481,21 +488,14 @@ export class CSSInjector {
 			);
 		}
 
-		// Material icon SVG override (uses mask-image with cached SVG data URI).
-		// This drives the *live* (Reading view / Live Preview) rendering. A
-		// hidden DOM copy is also baked in by paintIcons for PDF export, where
-		// this adopted stylesheet is dropped.
-		if (def.icon.type === "material") {
-			const cached = this.registry.findMaterialSvg(
-				def.icon.value,
-				def.icon.style ?? "outlined",
-				def.icon.weight ?? 400,
-			);
-			if (cached) {
-				parts.push(
-					this.generateMaterialSvgOverride(def.id, cached.svg),
-				);
-			}
+		// Pack icon override (mask-image over the artwork's data URI). This
+		// drives the *live* (Reading view / Live Preview) rendering. A hidden
+		// DOM copy is also baked in by paintIcons for PDF export, where this
+		// adopted stylesheet is dropped. Always the "regular" role: the
+		// selector is Obsidian's blockquote DOM, which no other role produces.
+		const iconSvg = this.icons.resolveSvg(def.icon, "regular");
+		if (iconSvg) {
+			parts.push(this.generateIconMaskOverride(def.id, iconSvg));
 		}
 
 		// Emoji icon override (renders the glyph via ::after) for live view.
@@ -579,20 +579,10 @@ export class CSSInjector {
 						`${calloutSel(alias, ".theme-dark ")} > .callout-content {\n  color: ${def.textColorDark};\n}`,
 					);
 				}
-				if (def.icon.type === "material") {
-					const cachedAlias = this.registry.findMaterialSvg(
-						def.icon.value,
-						def.icon.style ?? "outlined",
-						def.icon.weight ?? 400,
+				if (iconSvg) {
+					parts.push(
+						this.generateIconMaskOverride(alias, iconSvg),
 					);
-					if (cachedAlias) {
-						parts.push(
-							this.generateMaterialSvgOverride(
-								alias,
-								cachedAlias.svg,
-							),
-						);
-					}
 				}
 				if (def.icon.type === "emoji") {
 					parts.push(
@@ -917,33 +907,32 @@ export class CSSInjector {
 	}
 
 	private getIconCSS(def: CalloutDefinition): string {
-		switch (def.icon.type) {
-			case "lucide":
-				// getIconIds() already returns IDs with the "lucide-" prefix
-				return def.icon.value;
-			case "material":
-			case "emoji":
-				// Use a valid Lucide id as the placeholder --callout-icon so
-				// Obsidian always renders *something* at first paint. The real
-				// glyph is then painted into the DOM by paintIcons (which also
-				// makes it survive PDF export).
-				return `lucide-pencil`;
-			default:
-				return "";
-		}
+		const pack = packFor(def.icon);
+		if (!pack) return "";
+		// Lucide is Obsidian's own set, so its id is the value core CSS wants.
+		// getIconIds() already returns ids with the "lucide-" prefix.
+		if (pack.kind === "builtin") return def.icon.value;
+		// Everything else needs a valid Lucide id as a placeholder
+		// --callout-icon so Obsidian renders *something* at first paint. The
+		// real glyph is then painted into the DOM by paintIcons (which also
+		// makes it survive PDF export).
+		return "lucide-pencil";
 	}
 
 	/**
-	 * Generates CSS that renders a Material icon via a mask-image ::after, for
-	 * the live (Reading view / Live Preview) rendering. Wrapped in `@media screen`
+	 * Generates CSS that renders a pack icon via a mask-image ::after, for the
+	 * live (Reading view / Live Preview) rendering. Wrapped in `@media screen`
 	 * so it does NOT apply to PDF export (print media): there, the inline-SVG copy
 	 * baked into the DOM by paintIcons is shown instead, which is far more
 	 * reliable in Chromium's print pipeline than a CSS mask.
+	 *
+	 * The data URI is declared once into a custom property rather than repeated
+	 * for the prefixed and unprefixed mask properties. The whole stylesheet is
+	 * also written to localStorage and to a snippet file on every inject (see
+	 * StartupStyleCache), and an inlined SVG is by far the largest thing in it,
+	 * so halving each occurrence is worth the indirection.
 	 */
-	private generateMaterialSvgOverride(
-		calloutId: string,
-		svg: string,
-	): string {
+	private generateIconMaskOverride(calloutId: string, svg: string): string {
 		const dataUri = svgToDataUri(svg);
 		const sel = calloutSel(calloutId);
 		return (
@@ -952,12 +941,13 @@ export class CSSInjector {
 			`  display: none;\n` +
 			`}\n` +
 			`${sel} > .callout-title > .callout-icon::after {\n` +
+			`  --cs-icon-mask: ${dataUri};\n` +
 			`  content: "";\n` +
 			`  display: inline-block;\n` +
 			`  width: var(--icon-size, 1.2em);\n` +
 			`  height: var(--icon-size, 1.2em);\n` +
-			`  -webkit-mask-image: ${dataUri};\n` +
-			`  mask-image: ${dataUri};\n` +
+			`  -webkit-mask-image: var(--cs-icon-mask);\n` +
+			`  mask-image: var(--cs-icon-mask);\n` +
 			`  -webkit-mask-size: contain;\n` +
 			`  mask-size: contain;\n` +
 			`  -webkit-mask-repeat: no-repeat;\n` +
@@ -1092,7 +1082,14 @@ export class CSSInjector {
 		const iconEl = tokenEl.querySelector<HTMLElement>(
 			`.${CSS_TOKEN_ICON}`,
 		);
-		if (iconEl) paintRoleIcon(iconEl, def, this.registry);
+		if (iconEl) {
+			// Heading tokens draw at heading size, inline pills at pill size;
+			// packs with per-size artwork pick their drawing from that.
+			const role = tokenEl.classList.contains(CSS_HEADING_TOKEN)
+				? "heading"
+				: "inline";
+			paintRoleIcon(iconEl, def, this.registry, role);
+		}
 		const nameEl = tokenEl.querySelector<HTMLElement>(`.${CSS_TOKEN_NAME}`);
 		if (!nameEl) return;
 		// Unknown tokens keep showing the raw id the user typed. (The
@@ -1142,105 +1139,36 @@ export class CSSInjector {
 	/**
 	 * Prepare a `.callout-icon` for PDF export.
 	 *
-	 * Live view (Reading view / Live Preview = screen media) renders material/emoji
-	 * via CSS `::after` (see generateMaterialSvgOverride/generateEmojiOverride),
-	 * which we wrap in `@media screen`. Here we bake a self-contained, concretely
-	 * coloured copy of the icon into the DOM. The hide rules are screen-only, so in
-	 * PDF export (print media) those CSS icons disappear and this DOM copy becomes
-	 * the visible icon — an inline SVG / text node renders far more reliably in
-	 * Chromium's print pipeline than a CSS mask, and carries its own colour.
+	 * Live view (Reading view / Live Preview = screen media) renders pack icons
+	 * and emoji via CSS `::after` (see generateIconMaskOverride /
+	 * generateEmojiOverride), which we wrap in `@media screen`. Here we bake a
+	 * self-contained, concretely coloured copy of the icon into the DOM. The hide
+	 * rules are screen-only, so in PDF export (print media) those CSS icons
+	 * disappear and this DOM copy becomes the visible icon — an inline SVG / text
+	 * node renders far more reliably in Chromium's print pipeline than a CSS
+	 * mask, and carries its own colour.
 	 *
-	 * Lucide icons are visible DOM SVGs and already survive export, so they are
-	 * painted normally.
+	 * The colour is baked as an **inline style with `!important`** on the root and
+	 * every shape: a presentation `fill` attribute would lose to core/theme CSS
+	 * (which colours the icon via `currentColor` → `--callout-color`, defaulting
+	 * to blue in an export that lacks our stylesheet), whereas an inline
+	 * `!important` declaration outranks any selector rule.
+	 *
+	 * Lucide icons are visible DOM SVGs that already survive export, so they are
+	 * painted normally. Artwork that is not cached yet leaves Obsidian's pencil
+	 * placeholder alone; the download later triggers a re-inject which repaints.
 	 */
 	private paintIcon(iconEl: HTMLElement, def: CalloutDefinition): void {
-		switch (def.icon.type) {
-			case "lucide":
-				// Visible icon; works in PDF natively. setIcon is an Obsidian
-				// helper — guard against an export realm where it is unavailable.
-				try {
-					setIcon(iconEl, def.icon.value);
-				} catch {
-					/* leave Obsidian's own rendering in place */
-				}
-				break;
-			case "material":
-				this.bakeMaterialExportIcon(iconEl, def);
-				break;
-			case "emoji":
-				this.bakeEmojiExportIcon(iconEl, def.icon.value);
-				break;
-		}
-	}
-
-	/**
-	 * Bake a hidden, self-contained Material SVG copy as a DOM-level fallback for
-	 * export paths that carry the rendered DOM but not our CSS. The callout color
-	 * is baked as an **inline style with `!important`** on the root and every
-	 * shape — a presentation `fill` attribute would lose to core/theme CSS (which
-	 * colors the icon via `currentColor` → `--callout-color`, defaulting to blue
-	 * in an export that lacks our stylesheet), whereas an inline `!important`
-	 * declaration outranks any selector rule. Native DOM only, for realm safety.
-	 *
-	 * If the SVG is not cached yet, leaves Obsidian's pencil placeholder; the
-	 * download later triggers a re-inject which repaints.
-	 */
-	private bakeMaterialExportIcon(
-		iconEl: HTMLElement,
-		def: CalloutDefinition,
-	): void {
-		if (def.icon.type !== "material") return;
-		const cached = this.registry.findMaterialSvg(
-			def.icon.value,
-			def.icon.style ?? "outlined",
-			def.icon.weight ?? 400,
-		);
-		if (!cached) return; // leave pencil placeholder; repaint on download
 		const doc = iconEl.ownerDocument;
-		const parsed = new DOMParser().parseFromString(
-			cached.svg,
-			"image/svg+xml",
-		);
-		const svgEl = parsed.documentElement;
-		if (
-			parsed.querySelector("parsererror") ||
-			svgEl.nodeName.toLowerCase() !== "svg"
-		) {
-			return;
-		}
-		const imported = doc.importNode(svgEl, true);
-		imported.classList.add("cs-export-icon");
 		const isDark = doc.body?.classList.contains("theme-dark") ?? false;
-		const color = isDark ? def.colorDark : def.colorLight;
-		// Root: size + color (inline !important beats core/theme CSS).
-		imported.setAttribute(
-			"style",
-			`width:var(--icon-size, 1.2em);height:var(--icon-size, 1.2em);fill:${color} !important`,
-		);
-		// Every shape: inline !important fill so a core rule targeting paths
-		// directly can't override it.
-		for (const shape of Array.from(
-			imported.querySelectorAll(
-				"path, circle, rect, polygon, ellipse, line, polyline, g",
-			),
-		)) {
-			shape.setAttribute("style", `fill:${color} !important`);
-		}
-		// Replaces Obsidian's pencil <svg> (and any prior copy) with our hidden one.
-		iconEl.replaceChildren(imported);
-	}
-
-	/**
-	 * Bake a hidden emoji copy (self-colored) for PDF export. Uses textContent,
-	 * never innerHTML, since the emoji is untrusted data; native DOM only.
-	 * Sizing comes from the `span.cs-export-icon` rule injected in inject(),
-	 * which ships in the <style> element Obsidian honors during PDF export.
-	 */
-	private bakeEmojiExportIcon(iconEl: HTMLElement, emoji: string): void {
-		const span = createSpan();
-		span.classList.add("cs-export-icon");
-		span.textContent = emoji;
-		iconEl.replaceChildren(span);
+		renderIconInto(iconEl, def.icon, createIconResolver(this.registry), {
+			role: "regular",
+			fill: { literal: isDark ? def.colorDark : def.colorLight },
+			missing: { kind: "leave" },
+			className: "cs-export-icon",
+			rootStyle:
+				"width:var(--icon-size, 1.2em);height:var(--icon-size, 1.2em)",
+		});
 	}
 
 	private generateGlobalStyleCSS(): string {
@@ -1473,35 +1401,30 @@ export class CSSInjector {
 			);
 		}
 
-		// Material SVG icon override for fallback (live view; PDF uses the hidden
-		// DOM copy baked by paintIcons via resolveDef).
-		if (fallbackDef.icon.type === "material") {
-			const cached = this.registry.findMaterialSvg(
-				fallbackDef.icon.value,
-				fallbackDef.icon.style ?? "outlined",
-				fallbackDef.icon.weight ?? 400,
+		// Pack icon override for fallback (live view; PDF uses the hidden DOM
+		// copy baked by paintIcons via resolveDef).
+		const fallbackSvg = this.icons.resolveSvg(fallbackDef.icon, "regular");
+		if (fallbackSvg) {
+			const dataUri = svgToDataUri(fallbackSvg);
+			parts.push(
+				`@media screen {\n` +
+					`body .callout${notSelectors} > .callout-title > .callout-icon > svg {\n  display: none !important;\n}\n` +
+					`body .callout${notSelectors} > .callout-title > .callout-icon::after {\n` +
+					`  --cs-icon-mask: ${dataUri};\n` +
+					`  content: "";\n` +
+					`  display: inline-block;\n` +
+					`  width: var(--icon-size, 1.2em);\n` +
+					`  height: var(--icon-size, 1.2em);\n` +
+					`  -webkit-mask-image: var(--cs-icon-mask) !important;\n` +
+					`  mask-image: var(--cs-icon-mask) !important;\n` +
+					`  -webkit-mask-size: contain;\n` +
+					`  mask-size: contain;\n` +
+					`  -webkit-mask-repeat: no-repeat;\n` +
+					`  mask-repeat: no-repeat;\n` +
+					`  background-color: rgb(var(--cs-color-rgb)) !important;\n` +
+					`}\n` +
+					`}`,
 			);
-			if (cached) {
-				const dataUri = svgToDataUri(cached.svg);
-				parts.push(
-					`@media screen {\n` +
-						`body .callout${notSelectors} > .callout-title > .callout-icon > svg {\n  display: none !important;\n}\n` +
-						`body .callout${notSelectors} > .callout-title > .callout-icon::after {\n` +
-						`  content: "";\n` +
-						`  display: inline-block;\n` +
-						`  width: var(--icon-size, 1.2em);\n` +
-						`  height: var(--icon-size, 1.2em);\n` +
-						`  -webkit-mask-image: ${dataUri} !important;\n` +
-						`  mask-image: ${dataUri} !important;\n` +
-						`  -webkit-mask-size: contain;\n` +
-						`  mask-size: contain;\n` +
-						`  -webkit-mask-repeat: no-repeat;\n` +
-						`  mask-repeat: no-repeat;\n` +
-						`  background-color: rgb(var(--cs-color-rgb)) !important;\n` +
-						`}\n` +
-						`}`,
-				);
-			}
 		}
 
 		// Emoji icon override for fallback (live view).

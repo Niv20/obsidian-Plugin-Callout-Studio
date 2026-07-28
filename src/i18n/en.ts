@@ -359,6 +359,22 @@ export const en: Record<string, string> = {
 	"iconPicker.noIconSelected": "No icon selected",
 	"iconPicker.noResults": "No icons match your search.",
 	"iconPicker.delete": "Delete",
+	"iconPicker.source": "Source",
+
+	// Downloadable icon packs
+	"iconPack.downloadTitle": "{{name}} is not downloaded yet",
+	"iconPack.downloadDetail": "{{count}} icons · {{size}} · one-time download",
+	"iconPack.download": "Download",
+	"iconPack.downloading": "Downloading {{name}}…",
+	"iconPack.downloadFailed":
+		"Could not download {{name}}. Check your connection and try again.",
+	"iconPack.retry": "Retry",
+	"iconPack.manualHint":
+		"You can also install it offline: download the file from the plugin's GitHub release and place it at",
+	"iconPack.copyPath": "Copy path",
+	"iconPack.pathCopied": "Path copied",
+	"iconPack.diskWriteFailed":
+		"Callout Studio could not save the icon pack to disk, so it will need downloading again next time. The icons you pick are still saved with your settings.",
 
 	// Context Menu
 	"contextMenu.editCallout": "Edit callout settings",
@@ -521,7 +537,9 @@ export const en: Record<string, string> = {
 	"import.err.boolField": '"{{field}}" must be a boolean (true or false).',
 	"import.err.iconNotObject": "Icon must be an object.",
 	"import.err.iconTypeInvalid":
-		'Icon type "{{value}}" is not one of: lucide, material, emoji.',
+		'Icon type "{{value}}" is not one of: {{types}}.',
+	"import.warn.iconFieldIgnored":
+		'"{{field}}" only applies to Material icons and is ignored for icon type {{type}}.',
 	"import.err.iconValueEmpty": "Icon value must be a non-empty string.",
 	"import.err.iconValueTooLong":
 		"Icon value is unusually long ({{length}} characters).",

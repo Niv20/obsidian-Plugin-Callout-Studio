@@ -16,6 +16,8 @@ import { EditorSelection } from "@codemirror/state";
 import { Keymap, setIcon } from "obsidian";
 import type { App } from "obsidian";
 import type { CalloutRegistry } from "../../manager/CalloutRegistry";
+import { iconRenderKey } from "../../icons/renderIcon";
+import { createIconResolver } from "../../icons/resolver";
 import { findWikilinkCalloutRefs } from "../calloutTokens";
 import { t } from "../../i18n";
 import {
@@ -25,6 +27,7 @@ import {
 	CSS_REF_TOKEN_LINK,
 	buildCalloutTokenDom,
 	isStartupEntranceActive,
+	VARIANT_ROLE,
 	resolveCalloutDef,
 	type CalloutTokenVariant,
 } from "../renderShared";
@@ -54,19 +57,13 @@ export class CalloutTokenWidget extends WidgetType {
 
 	private computeRenderKey(): string {
 		const { def, unknown } = resolveCalloutDef(this.registry, this.rawId);
-		let iconKey = "";
-		let materialReady = true;
-		if (def) {
-			const { icon } = def;
-			iconKey = `${icon.type}:${icon.value}:${icon.style ?? ""}:${icon.weight ?? ""}`;
-			if (icon.type === "material") {
-				materialReady = !!this.registry.findMaterialSvg(
-					icon.value,
-					icon.style ?? "outlined",
-					icon.weight ?? 400,
-				);
-			}
-		}
+		const iconKey = def
+			? iconRenderKey(
+					def.icon,
+					createIconResolver(this.registry),
+					VARIANT_ROLE[this.variant],
+				)
+			: "";
 		return [
 			this.variant,
 			this.showName ? "n" : "",
@@ -75,7 +72,6 @@ export class CalloutTokenWidget extends WidgetType {
 			def?.id ?? "",
 			def?.displayName ?? "",
 			iconKey,
-			materialReady ? "m" : "",
 		].join("|");
 	}
 
@@ -208,19 +204,11 @@ export class HeadingRefLinkWidget extends WidgetType {
 	) {
 		super();
 		const { def, unknown } = resolveCalloutDef(registry, rawId);
-		let iconKey = "";
-		let materialReady = true;
-		if (def) {
-			const { icon } = def;
-			iconKey = `${icon.type}:${icon.value}:${icon.style ?? ""}:${icon.weight ?? ""}`;
-			if (icon.type === "material") {
-				materialReady = !!registry.findMaterialSvg(
-					icon.value,
-					icon.style ?? "outlined",
-					icon.weight ?? 400,
-				);
-			}
-		}
+		// A reference token is a compact copy of the inline pill, so it draws
+		// from the same artwork.
+		const iconKey = def
+			? iconRenderKey(def.icon, createIconResolver(registry), "inline")
+			: "";
 		this.renderKey = [
 			this.prefix,
 			this.target,
@@ -230,7 +218,6 @@ export class HeadingRefLinkWidget extends WidgetType {
 			def?.id ?? "",
 			def?.displayName ?? "",
 			iconKey,
-			materialReady ? "m" : "",
 		].join("|");
 	}
 

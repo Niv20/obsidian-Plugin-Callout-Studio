@@ -1,0 +1,179 @@
+/**
+ * icons/IconFetchManager.ts — Fetches artwork for packs served one icon at a time.
+ *
+ * Only `perIconRemote` packs need this. Material Symbols is the sole member and
+ * is likely to stay that way: it is a variable font whose 3,870 icons across 4
+ * styles and 7 weights make over 100,000 drawings, so there is no bulk file to
+ * download the way the other packs have. Google serves each drawing on its own,
+ * and only the ones a vault actually uses are ever fetched.
+ *
+ * Fetched SVGs land in the registry's `iconSvgCache` (persisted to data.json),
+ * and listeners are notified so the UI can repaint what was a placeholder.
+ */
+import { Notice } from "obsidian";
+import type { CalloutIcon, CalloutRenderRole } from "../types";
+import type { CalloutRegistry } from "../manager/CalloutRegistry";
+import type { CSSInjector } from "../manager/CSSInjector";
+import { downloadMaterialSvg, materialVariantOf } from "./packs/material";
+import { iconCacheKey, packFor } from "./registry";
+import { t } from "../i18n";
+
+interface IconFetchHost {
+	registry: CalloutRegistry;
+	cssInjector: CSSInjector;
+	saveSettings(): Promise<void>;
+}
+
+/** Attempts per icon before giving up, and the pause between them. */
+const MAX_ATTEMPTS = 3;
+const RETRY_DELAY_MS = 2000;
+
+export class IconFetchManager {
+	/**
+	 * Icons whose fetch has been given up on, keyed by pack/name/variant.
+	 * In-memory only, so every launch is a fresh chance — which is what makes
+	 * it safe for the startup sweep to record failures for a vault that simply
+	 * happened to be offline.
+	 */
+	private readonly failed: Set<string> = new Set();
+	/** Notified when a fetch finishes, either way. */
+	private readonly listeners: Set<() => void> = new Set();
+
+	constructor(private readonly host: IconFetchHost) {}
+
+	/** Subscribe to icon cache updates. Returns an unsubscribe function. */
+	onChange(cb: () => void): () => void {
+		this.listeners.add(cb);
+		return () => {
+			this.listeners.delete(cb);
+		};
+	}
+
+	private notify(): void {
+		for (const cb of this.listeners) {
+			try {
+				cb();
+			} catch (e) {
+				console.warn("[CalloutStudio] icon cache listener error", e);
+			}
+		}
+	}
+
+	/** Key identifying one drawing, shared by the cache and the failure set. */
+	private keyFor(icon: CalloutIcon, role: CalloutRenderRole): string | null {
+		const pack = packFor(icon);
+		if (!pack) return null;
+		return iconCacheKey(pack.id, icon.value, pack.cacheVariant(icon, role));
+	}
+
+	/** True once fetching this icon has been attempted and permanently failed. */
+	hasFailed(icon: CalloutIcon, role: CalloutRenderRole = "regular"): boolean {
+		const key = this.keyFor(icon, role);
+		return key !== null && this.failed.has(key);
+	}
+
+	/** True when this icon's artwork has to be fetched before it can render. */
+	private needsFetch(icon: CalloutIcon): boolean {
+		const pack = packFor(icon);
+		if (!pack || pack.kind !== "perIconRemote") return false;
+		return !this.host.registry.findIconSvg(
+			pack.id,
+			icon.value,
+			pack.cacheVariant(icon, "regular"),
+		);
+	}
+
+	/** Store a freshly fetched drawing. */
+	private store(icon: CalloutIcon, svg: string): void {
+		const pack = packFor(icon);
+		if (!pack) return;
+		this.host.registry.addIconSvg({
+			pack: pack.id,
+			name: icon.value,
+			variant: pack.cacheVariant(icon, "regular"),
+			svg,
+		});
+	}
+
+	/**
+	 * Fetch and cache one icon's artwork, retrying a few times before giving up
+	 * and telling the user.
+	 */
+	async cacheOne(icon: CalloutIcon): Promise<void> {
+		if (!this.needsFetch(icon)) return;
+		const key = this.keyFor(icon, "regular");
+		if (key === null) return;
+
+		const { style, weight } = materialVariantOf(icon);
+		let lastErr: unknown;
+		for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
+			try {
+				const svg = await downloadMaterialSvg(icon.value, style, weight);
+				this.store(icon, svg);
+				this.failed.delete(key);
+				// Deliberately no cleanupUnusedIconSvgs() here: the icon may
+				// have just been chosen in the picker and not yet attached to a
+				// callout, so a sweep would delete exactly what was fetched.
+				// Cleanup runs at save points instead (CalloutEditor save,
+				// row actions).
+				this.host.cssInjector.inject();
+				await this.host.saveSettings();
+				this.notify();
+				return;
+			} catch (err) {
+				lastErr = err;
+				if (attempt < MAX_ATTEMPTS) {
+					await new Promise((r) =>
+						window.setTimeout(r, RETRY_DELAY_MS),
+					);
+				}
+			}
+		}
+		this.failed.add(key);
+		new Notice(t("notice.iconDownloadFailed", { name: icon.value }));
+		this.notify();
+		console.warn(
+			"[CalloutStudio] failed to fetch icon after retries",
+			lastErr,
+		);
+	}
+
+	/**
+	 * Background sweep on load: fetch artwork for every callout that is missing
+	 * it. One attempt each — a vault that is simply offline retries on the next
+	 * launch, since the failure set does not survive a reload.
+	 */
+	async ensureAll(): Promise<void> {
+		const missing = this.host.registry
+			.getAll()
+			.filter((def) => this.needsFetch(def.icon));
+		if (missing.length === 0) return;
+
+		let fetched = 0;
+		for (const def of missing) {
+			const key = this.keyFor(def.icon, "regular");
+			const { style, weight } = materialVariantOf(def.icon);
+			try {
+				const svg = await downloadMaterialSvg(
+					def.icon.value,
+					style,
+					weight,
+				);
+				this.store(def.icon, svg);
+				if (key !== null) this.failed.delete(key);
+				fetched++;
+			} catch {
+				// Record the failure so the settings list shows an error rather
+				// than a spinner that never resolves. Cleared on next launch.
+				if (key !== null) this.failed.add(key);
+			}
+		}
+
+		if (fetched > 0) {
+			this.host.cssInjector.inject();
+			await this.host.saveSettings();
+		}
+		// Notify either way: failures changed the UI state too.
+		this.notify();
+	}
+}

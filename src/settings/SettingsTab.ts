@@ -47,7 +47,7 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 	plugin: SettingsTabPlugin;
 	private registrySubscription: (() => void) | null = null;
 	private previewSubscription: (() => void) | null = null;
-	private materialSvgUnsubscribe: (() => void) | null = null;
+	private iconCacheUnsubscribe: (() => void) | null = null;
 	private cssChangeRef: EventRef | null = null;
 	private refreshFrame: number | null = null;
 	private calloutLists: CalloutListsController | null = null;
@@ -106,8 +106,8 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 			this.previewSubscription = sub;
 		}
 
-		if (!this.materialSvgUnsubscribe) {
-			this.materialSvgUnsubscribe = this.plugin.onMaterialSvgChange(() =>
+		if (!this.iconCacheUnsubscribe) {
+			this.iconCacheUnsubscribe = this.plugin.onIconCacheChange(() =>
 				this.scheduleListRefresh(),
 			);
 		}
@@ -199,9 +199,9 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 			this.plugin.registry.offPreviewChange(this.previewSubscription);
 			this.previewSubscription = null;
 		}
-		if (this.materialSvgUnsubscribe) {
-			this.materialSvgUnsubscribe();
-			this.materialSvgUnsubscribe = null;
+		if (this.iconCacheUnsubscribe) {
+			this.iconCacheUnsubscribe();
+			this.iconCacheUnsubscribe = null;
 		}
 		if (this.cssChangeRef) {
 			this.app.workspace.offref(this.cssChangeRef);

@@ -10,6 +10,7 @@ import { Notice } from "obsidian";
 import { t } from "../../i18n";
 import type { App } from "obsidian";
 import type { CalloutDefinition } from "../../types";
+import { packFor } from "../../icons/registry";
 import type { CalloutEditorPlugin } from "./types";
 import {
 	countCalloutUsages,
@@ -187,27 +188,19 @@ export async function performCalloutEditorSave(
 		return null;
 	}
 
-	if (def.icon.type === "material") {
+	// Packs served one icon at a time fetch on save, so the artwork is in the
+	// cache before the definition is rendered anywhere. Packs that ship or
+	// download their data whole already have it and return immediately.
+	if (packFor(def.icon)?.kind === "perIconRemote") {
 		onMaterialDownloadStart?.();
 		try {
-			await plugin.cacheMaterialSvg(def.icon);
-			const cached = plugin.registry.findMaterialSvg(
-				def.icon.value,
-				def.icon.style ?? "outlined",
-				def.icon.weight ?? 400,
-			);
-			console.debug(
-				"[CalloutStudio] save: SVG cached?",
-				!!cached,
-				"cache size:",
-				plugin.registry.materialSvgCache.length,
-			);
+			await plugin.ensureIconArtwork(def.icon);
 		} catch (err) {
-			console.warn("[CalloutStudio] save: SVG download failed", err);
+			console.warn("[CalloutStudio] save: icon fetch failed", err);
 		}
 	}
 
-	plugin.registry.cleanupUnusedMaterialSvgs();
+	plugin.registry.cleanupUnusedIconSvgs();
 
 	if (removedIds.length > 0) {
 		const { fileCount } = await countCalloutUsages(app, removedIds);

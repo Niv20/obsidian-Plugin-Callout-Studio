@@ -2,7 +2,7 @@
  * main.ts — Plugin entry point.
  *
  * Bootstraps the entire plugin during Obsidian's `onload` lifecycle:
- * creates the CalloutRegistry, wires up CSSInjector, MaterialSvgManager,
+ * creates the CalloutRegistry, wires up CSSInjector, IconService,
  * and CalloutDiscovery, registers all commands, the settings tab, the
  * autocomplete provider, and the context menu.
  * Keep this file focused on lifecycle only — all feature logic lives in
@@ -11,13 +11,13 @@
 import { MarkdownView, Notice, Platform, Plugin } from "obsidian";
 import type {
 	CalloutIcon,
-	MaterialIconStyle,
+	CalloutRenderRole,
 	PluginData,
 	PluginSettings,
 } from "./types";
 import { CalloutRegistry } from "./manager/CalloutRegistry";
 import { CSSInjector } from "./manager/CSSInjector";
-import { MaterialSvgManager } from "./manager/MaterialSvgManager";
+import { IconService } from "./icons/IconService";
 import { CalloutDiscovery } from "./manager/CalloutDiscovery";
 import { CalloutStudioSettingsTab } from "./settings/SettingsTab";
 import { WelcomeModal } from "./settings/WelcomeModal";
@@ -50,7 +50,7 @@ export default class CalloutStudioPlugin extends Plugin {
 	api!: CalloutStudioAPI;
 	autoComplete!: CalloutAutoComplete;
 	outlineDecorator!: OutlineDecorator;
-	private materialSvg!: MaterialSvgManager;
+	icons!: IconService;
 	private discovery!: CalloutDiscovery;
 	private linkSuggestDecorator!: LinkSuggestDecorator;
 
@@ -140,7 +140,9 @@ export default class CalloutStudioPlugin extends Plugin {
 		}
 
 		// Sub-managers (composition keeps main.ts focused on lifecycle).
-		this.materialSvg = new MaterialSvgManager({
+		this.icons = new IconService({
+			app: this.app,
+			manifest: this.manifest,
 			registry: this.registry,
 			cssInjector: this.cssInjector,
 			saveSettings: () => this.saveSettings(),
@@ -219,8 +221,10 @@ export default class CalloutStudioPlugin extends Plugin {
 		// Public API for other plugins
 		this.api = new CalloutStudioAPI(this);
 
-		// Download missing Material SVGs in background
-		void this.materialSvg.ensureAll();
+		// Load the icon packs this vault uses from disk, then fill in any
+		// missing per-icon artwork. Background: neither blocks first paint,
+		// and neither reaches the network unless artwork is genuinely absent.
+		void this.icons.initialize();
 
 		// First-run vault discovery.
 		//
@@ -348,20 +352,16 @@ export default class CalloutStudioPlugin extends Plugin {
 		return this.discovery.runVaultScan(markFirstRun);
 	}
 
-	onMaterialSvgChange(cb: () => void): () => void {
-		return this.materialSvg.onChange(cb);
+	onIconCacheChange(cb: () => void): () => void {
+		return this.icons.onChange(cb);
 	}
 
-	async cacheMaterialSvg(icon: CalloutIcon): Promise<void> {
-		return this.materialSvg.cacheOne(icon);
+	async ensureIconArtwork(icon: CalloutIcon): Promise<void> {
+		return this.icons.ensureArtwork(icon);
 	}
 
-	hasMaterialSvgFailed(
-		name: string,
-		style: MaterialIconStyle,
-		weight: number,
-	): boolean {
-		return this.materialSvg.hasFailed(name, style, weight);
+	hasIconFetchFailed(icon: CalloutIcon, role: CalloutRenderRole): boolean {
+		return this.icons.hasFailed(icon, role);
 	}
 
 	/**
