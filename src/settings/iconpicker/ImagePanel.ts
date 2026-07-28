@@ -97,6 +97,19 @@ export class ImagePanel {
 	// ── Toolbar ─────────────────────────────────────────────────────────
 
 	private buildToolbar(): void {
+		// Search first, as on every other source (see PackPanel) — otherwise the
+		// search box changes sides on the way in and out of this panel.
+		const search = this.toolbarEl.createEl("input", {
+			type: "text",
+			cls: "icon-picker-search-input",
+			placeholder: t("iconPicker.searchImage"),
+			value: this.query,
+		});
+		search.addEventListener("input", () => {
+			this.query = search.value;
+			this.refresh();
+		});
+
 		const addBtn = this.toolbarEl.createEl("button", {
 			cls: "icon-picker-image-add mod-cta",
 			attr: { type: "button" },
@@ -116,17 +129,6 @@ export class ImagePanel {
 			// Clear first, so picking the same file twice in a row still fires.
 			if (this.fileInput) this.fileInput.value = "";
 			void this.addFiles(files);
-		});
-
-		const search = this.toolbarEl.createEl("input", {
-			type: "text",
-			cls: "icon-picker-search-input",
-			placeholder: t("iconPicker.searchImage"),
-			value: this.query,
-		});
-		search.addEventListener("input", () => {
-			this.query = search.value;
-			this.refresh();
 		});
 	}
 
