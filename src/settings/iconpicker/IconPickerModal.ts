@@ -264,8 +264,8 @@ export class IconPicker extends Modal {
 		setIcon(chevron, "chevron-down");
 	}
 
-	/** Rebuilt on every open, so counts loaded in the background (and a source
-	 * picked elsewhere) are never stale by the time the menu is seen. */
+	/** Rebuilt on every open, so counts (and a source picked elsewhere) are never
+	 * stale by the time the menu is seen — see `sourceCount`. */
 	private buildSourceMenuItems(): void {
 		this.sourceMenuEl.empty();
 		this.sourceMenuItems = [];
@@ -411,13 +411,24 @@ export class IconPicker extends Modal {
 	 * toolbar can restyle them.
 	 */
 	private countFor(id: PickerSourceId): number | undefined {
-		if (id !== ALL_SOURCES) return this.sourceCounts.get(id);
+		if (id !== ALL_SOURCES) return this.sourceCount(id);
 		if (this.sourceCounts.size === 0) return undefined;
 		// Only what the pool actually contains, which grows as sources download.
 		return availableSources(this.plugin.icons.packs).reduce(
-			(total, pack) => total + (this.sourceCounts.get(pack.id) ?? 0),
+			(total, pack) => total + (this.sourceCount(pack.id) ?? 0),
 			0,
 		);
+	}
+
+	/**
+	 * One source's count. Every library is fixed, so the number loaded once on
+	 * open holds for the life of the modal — but "Your images" is the one source
+	 * the user writes to, and a count cached on open would still claim four
+	 * pictures after a fifth was added. That one is read live instead.
+	 */
+	private sourceCount(id: IconSourceId): number | undefined {
+		if (id === "image") return this.plugin.registry.getUserImages().length;
+		return this.sourceCounts.get(id);
 	}
 
 	private async loadSourceCounts(): Promise<void> {
