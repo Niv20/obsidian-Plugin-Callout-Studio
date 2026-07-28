@@ -29,6 +29,15 @@ import { followsCalloutColor, userImageFor } from "./packs/userImages";
  */
 const SHAPE_SELECTOR = "path, circle, rect, polygon, ellipse, line, polyline, g";
 
+/**
+ * SVG's initial `color`, which is what a `currentColor` written *inside* the
+ * artwork resolves against when the picture is painted as a background image
+ * (see CSSInjector.generateImageOverride): an image renders in a context of its
+ * own, so the surrounding text colour never reaches it. A DOM copy has no such
+ * boundary, so it has to state the same starting point to show the same picture.
+ */
+const SVG_INITIAL_COLOR = "#000";
+
 /** What to draw when the artwork is not available locally. */
 export type IconMissingBehavior =
 	/** Draw a Lucide icon instead, so the surface is never blank. */
@@ -154,18 +163,33 @@ function paintSvgIcon(
 	const color =
 		options.fill === "currentColor" ? "currentColor" : options.fill.literal;
 	// A picture the user supplied is the one artwork that carries colours of its
-	// own, so it is also the only one whose colours have to be taken away when
-	// the callout claims them.
+	// own, so it is also the only one there is anything to decide: the callout
+	// either claims those colours whole (stencil) or leaves every one of them
+	// alone. Every library glyph is monochrome and simply takes the colour.
+	const picture = userImageFor(icon);
 	const stencil =
-		options.followCalloutColor !== false &&
-		followsCalloutColor(icon, userImageFor(icon));
+		options.followCalloutColor !== false && followsCalloutColor(icon, picture);
+	const keepsOwnColors = picture !== undefined && !stencil;
 
 	const rootDecls: string[] = [];
 	if (options.rootStyle) rootDecls.push(options.rootStyle);
-	// A stencilled picture gets its paint from stencilSvg alone, root included:
-	// blanketing the root here would overwrite a `fill="none"` an outline
-	// drawing depends on, and flood it into a solid shape.
-	if (!stencil) {
+	if (keepsOwnColors) {
+		// Nothing is painted on it — not even `fill: currentColor`. A blanket fill
+		// on the root reaches exactly the shapes that declared no colour of their
+		// own, and those are the black ones (SVG fills black by default), so it
+		// left the heading and inline copies with their black lines wearing the
+		// callout's colour while the regular callout — a background image, which
+		// nothing outside it can paint — showed them black.
+		if (!svgEl.hasAttribute("color")) {
+			// A presentation attribute, so anything the artwork declares for itself
+			// still wins; it is only here to stop a `currentColor` inside the
+			// drawing from resolving against the surrounding callout colour.
+			svgEl.setAttribute("color", SVG_INITIAL_COLOR);
+		}
+	} else if (!stencil) {
+		// A stencilled picture gets its paint from stencilSvg alone, root included:
+		// blanketing the root here would overwrite a `fill="none"` an outline
+		// drawing depends on, and flood it into a solid shape.
 		if (options.fill === "currentColor") {
 			svgEl.setAttribute("fill", "currentColor");
 		} else {
@@ -176,7 +200,10 @@ function paintSvgIcon(
 			}
 		}
 	}
-	if (rootDecls.length > 0) svgEl.setAttribute("style", rootDecls.join(";"));
+	// Appended rather than assigned: a picture can declare its paint in a `style`
+	// on its own root, and replacing that attribute with the caller's sizing would
+	// throw away the colours this whole branch just decided to keep.
+	if (rootDecls.length > 0) appendStyle(svgEl, rootDecls.join(";"));
 	if (stencil) stencilSvg(svgEl, color);
 
 	target.replaceChildren(svgEl);

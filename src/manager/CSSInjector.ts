@@ -1241,21 +1241,18 @@ export class CSSInjector {
 	 * Lucide icons are visible DOM SVGs that already survive export, so they are
 	 * painted normally. Artwork that is not cached yet leaves Obsidian's pencil
 	 * placeholder alone; the download later triggers a re-inject which repaints.
+	 *
+	 * A picture that keeps its own colours has none of this applied to it, but
+	 * that is renderIcon's call to make and not this one's — the colour is handed
+	 * over the same way for every icon, and the painter drops it for the one
+	 * artwork the callout does not own.
 	 */
 	private paintIcon(iconEl: HTMLElement, def: CalloutDefinition): void {
 		const doc = iconEl.ownerDocument;
 		const isDark = doc.body?.classList.contains("theme-dark") ?? false;
-		// A picture that keeps its own colours must not have one baked over it.
-		// Its shapes carry their own paint (and an embedded raster ignores fill
-		// entirely), so inheriting is both harmless and correct here.
-		const picture = userImageFor(def.icon);
-		const keepsOwnColors =
-			picture !== undefined && !followsCalloutColor(def.icon, picture);
 		renderIconInto(iconEl, def.icon, createIconResolver(this.registry), {
 			role: "regular",
-			fill: keepsOwnColors
-				? "currentColor"
-				: { literal: isDark ? def.colorDark : def.colorLight },
+			fill: { literal: isDark ? def.colorDark : def.colorLight },
 			missing: { kind: "leave" },
 			className: "cs-export-icon",
 			rootStyle:
