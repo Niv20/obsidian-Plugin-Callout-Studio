@@ -25,7 +25,7 @@ Callout Studio is an Obsidian plugin that lets users create and manage custom ca
 - **CalloutRegistry** — single source of truth for all callout definitions. Owns the `Map<id, CalloutDefinition>`, serializes to/from `data.json`, runs CRUD and data migrations, fires `onChange` callbacks on every mutation.
 - **CSSInjector** — reads the registry and generates dynamic CSS custom properties per callout (colors, icons, light/dark overrides). Uses `adoptedStyleSheets` (one global per window). Injects synchronously, guarded by a re-entrancy latch. Calls `app.workspace.trigger("css-change")` after inject to force Obsidian re-render.
 - **CalloutDiscovery** — watches file-open/modify events and scans markdown for unknown `[!id]` patterns. Auto-creates "fallback" rows for new IDs. Prunes unused auto-created rows in a background debounced pass.
-- **MaterialSvgManager** — downloads and caches Material Symbols SVGs from fonts.gstatic.com. Persisted in `data.json`. Notifies listeners when a download finishes so CSS can re-inject.
+- **IconService** (`src/icons/`) — the one entry point to icon artwork. Owns `IconFetchManager` (Material's per-icon fetches from fonts.gstatic.com) and `PackDataStore` (whole-pack downloads, SHA-256 verified, cached under `<plugin-dir>/icon-packs/`). Notifies listeners when artwork lands so CSS can re-inject.
 
 ### Data flow
 
@@ -33,17 +33,25 @@ Callout Studio is an Obsidian plugin that lets users create and manage custom ca
 2. `onChange` → `cssInjector.scheduleInject()` + Obsidian CSS-change trigger  
 3. `CSSInjector.inject()` → new CSS in `adoptedStyleSheets` + DOM icon refresh  
 4. User opens a note → `CalloutDiscovery` scans → auto-creates fallback rows if needed  
-5. Material icon selected → `MaterialSvgManager.cacheOne()` → download → persist → re-inject  
+5. Icon selected → `IconService.ensureArtwork()` → fetch if needed → copy into `iconSvgCache` → re-inject  
 
 ### Settings UI (`src/settings/`)
 
-`SettingsTab.ts` composes 11 section modules under `settings/sections/`. `CalloutEditor.ts` is the edit/create modal with a real, editable Live Preview via `LiveCalloutPreview.ts`, which hosts an embedded Obsidian markdown editor (`EmbeddableMarkdownEditor.ts`) so callouts render 1:1 with a note in the active theme; it falls back to a static `MarkdownRenderer` render if the (undocumented) embed API is unavailable. `IconPicker.ts` handles Lucide, Material Symbols, and emoji selection.
+`SettingsTab.ts` composes 11 section modules under `settings/sections/`. `CalloutEditor.ts` is the edit/create modal with a real, editable Live Preview via `LiveCalloutPreview.ts`, which hosts an embedded Obsidian markdown editor (`EmbeddableMarkdownEditor.ts`) so callouts render 1:1 with a note in the active theme; it falls back to a static `MarkdownRenderer` render if the (undocumented) embed API is unavailable. `settings/iconpicker/` is the icon picker: `IconPickerModal` (source dropdown + preview + confirm), `PackPanel` (one source's toolbar and grid, driven entirely by its `IconPack`), `IconGrid` (paging and key nav), `allSources` (the pooled cross-source search).
 
 ### Editor integrations (`src/editor/`)
 
 - **AutoComplete** — `EditorSuggest` triggered by `> [!`; shows callout list + "Create new" option.
 - **ContextMenu** — right-click menu on callout blocks (edit, copy, settings).
 - **Commands** — 4 commands: open settings, create new type, wrap selection, unwrap block.
+
+### Icon sources (`src/icons/`)
+
+Eight sources behind one `IconPack` interface (`icons/types.ts`), registered in `icons/registry.ts` as a total `Record<IconPackId, IconPack>` — so adding an id without its pack is a compile error. `IconPackKind` decides how artwork reaches the screen: `builtin` (Lucide, via `setIcon`), `glyph` (emoji), `perIconRemote` (Material — 100,000+ style/weight variants, so fetched one at a time), `bundledRemote` (Font Awesome, Octicons, RPG Awesome — one file downloaded on request).
+
+`renderIcon.ts` is the **only** code that turns an icon into DOM; every surface calls `renderIconInto`. Never reach into the SVG cache from a renderer — go through `IconResolver`.
+
+Search indexes are bundled (packed by `icons/data/codec.ts`); artwork is not. Regenerate with `npm run icons:generate` — never part of `npm run build`, and its output is committed. Pack files are served from the `packs-v1` tag; refreshing them means a **new tag** plus updated checksums in `icons/data/packManifest.ts`, because jsDelivr caches tags permanently.
 
 ### Key types (`src/types.ts`)
 
@@ -76,7 +84,7 @@ Exposes registry and discovery methods to other Obsidian plugins. Treat this sur
 - Files over ~300 lines should be split by responsibility.
 - All listeners and intervals must use `this.registerEvent` / `this.registerInterval` / `this.registerDomEvent` so they are cleaned up on unload.
 - Command IDs are stable API — never rename after release.
-- Network calls (Material SVG downloads) must remain opt-graceful: always have offline fallback. No new network calls without disclosure.
+- Network calls must remain opt-graceful: always have an offline fallback, and never fetch without an explicit user action. No new network calls without disclosure in the README's *Network usage and privacy* section.
 - TypeScript strict mode is enforced. No `any` without explicit ESLint disable comment.
 - UI copy: sentence case for headings/buttons; **bold** for UI labels; arrow notation (`Settings → Hotkeys`) for navigation.
 
