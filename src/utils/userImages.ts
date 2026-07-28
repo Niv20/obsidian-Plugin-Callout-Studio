@@ -5,7 +5,14 @@
  * both of which are untrusted, so everything that reaches the pack goes through
  * `sanitizeUserImages` first — the same defensive posture as
  * `sanitizeCustomPalettes` for palettes.
+ *
+ * The artwork is re-filtered through `sanitizeUserSvg` on every read, not just
+ * when it was first added. `data.json` is an ordinary file that syncs between
+ * devices and can be hand-edited or arrive in an import, so trusting a check
+ * that happened on some other machine would be trusting nothing at all — the
+ * same reasoning that makes PackDataStore re-verify its checksums on each load.
  */
+import { sanitizeUserSvg } from "../icons/svg";
 import type { UserImageIcon } from "../types";
 
 /** Prefix for a picture's stable id, stored as `CalloutIcon.value`. */
@@ -48,18 +55,21 @@ export function sanitizeUserImages(raw: unknown): UserImageIcon[] {
 		if (typeof image.svg !== "string" || image.svg.length === 0) continue;
 		if (!FORMATS.has(image.format as UserImageIcon["format"])) continue;
 
-		const width = positiveSize(image.width);
-		const height = positiveSize(image.height);
-		if (width === undefined || height === undefined) continue;
+		// Re-filter rather than trust: this markup may have been written by an
+		// older build, edited by hand, or handed over in an import file.
+		const artwork = sanitizeUserSvg(image.svg);
+		if (!artwork) continue;
 
 		seenIds.add(image.id);
 		result.push({
 			id: image.id,
 			name: image.name,
 			format: image.format as UserImageIcon["format"],
-			svg: image.svg,
-			width,
-			height,
+			svg: artwork.svg,
+			// From the artwork itself rather than the saved numbers, which are a
+			// claim about it that nothing keeps honest.
+			width: artwork.width,
+			height: artwork.height,
 			// Only an SVG can be recoloured — a mask is a stencil, so tinting a
 			// photo would flatten it to a silhouette.
 			recolor: image.recolor === true && image.format === "svg",
@@ -68,12 +78,6 @@ export function sanitizeUserImages(raw: unknown): UserImageIcon[] {
 		});
 	}
 	return result;
-}
-
-function positiveSize(value: unknown): number | undefined {
-	if (typeof value !== "number" || !Number.isFinite(value)) return undefined;
-	if (value <= 0) return undefined;
-	return value;
 }
 
 /**
