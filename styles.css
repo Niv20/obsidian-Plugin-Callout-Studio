@@ -3145,3 +3145,11 @@ body.cs-anim-window .cs-heading-callout {
 		grid-template-columns: 1fr;
 	}
 }
+
+/* Sources the pooled "All sources" list cannot include yet. */
+.icon-picker-missing-sources {
+	padding: 8px 0 4px;
+	color: var(--text-faint);
+	font-size: var(--font-ui-smaller);
+	text-align: center;
+}

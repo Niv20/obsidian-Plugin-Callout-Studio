@@ -1,7 +1,7 @@
 /**
  * icons/types.ts — Contracts shared by every icon source.
  *
- * The plugin draws the same icon onto seven different surfaces (reading-view
+ * The plugin draws the same icon onto eight different surfaces (reading-view
  * callouts, heading bars, inline pills, the settings list, the callout editor
  * preview, the `[!` autocomplete popup, the replace-callout modal and the vault
  * statistics modal). Each of those used to re-implement "look the SVG up in the
@@ -44,6 +44,12 @@ export type IconPackKind =
 export interface IconEntry {
 	/** Stored verbatim as `CalloutIcon.value`. */
 	name: string;
+	/**
+	 * Which source this entry came from. Set only when entries from several
+	 * sources are pooled into one list ("All sources" in the picker), where the
+	 * list itself can no longer say where a given icon belongs.
+	 */
+	pack?: IconPackId;
 	/** Grid tooltip. Defaults to a prettified `name`. */
 	label?: string;
 	categories: readonly string[];

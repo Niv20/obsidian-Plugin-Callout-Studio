@@ -371,6 +371,10 @@ export const en: Record<string, string> = {
 	"iconPicker.searchFaBrands": "Search Font Awesome Brands",
 	"iconPicker.rpgAwesome": "RPG Awesome",
 	"iconPicker.searchRpgAwesome": "Search RPG Awesome",
+	"iconPicker.allSources": "All sources",
+	"iconPicker.searchAllSources": "Search all icon sources",
+	"iconPicker.sourcesNotDownloaded":
+		"Not included yet: {{names}}. Pick a source above to download it.",
 	"iconPicker.source": "Source",
 
 	// Downloadable icon packs

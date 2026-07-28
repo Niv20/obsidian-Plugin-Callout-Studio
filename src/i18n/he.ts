@@ -363,6 +363,10 @@ export const he: Record<string, string> = {
 	"iconPicker.searchFaBrands": "חיפוש ב־Font Awesome Brands",
 	"iconPicker.rpgAwesome": "RPG Awesome",
 	"iconPicker.searchRpgAwesome": "חיפוש ב־RPG Awesome",
+	"iconPicker.allSources": "כל המקורות",
+	"iconPicker.searchAllSources": "חיפוש בכל מקורות האייקונים",
+	"iconPicker.sourcesNotDownloaded":
+		"עדיין לא נכללים: {{names}}. בחרו מקור מהרשימה למעלה כדי להוריד אותו.",
 	"iconPicker.source": "מקור",
 
 	// Downloadable icon packs

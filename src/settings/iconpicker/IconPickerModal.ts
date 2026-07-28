@@ -20,6 +20,13 @@ import {
 	MATERIAL_DEFAULT_STYLE,
 	MATERIAL_DEFAULT_WEIGHT,
 } from "../../icons/packs/material";
+import {
+	ALL_SOURCES,
+	availableSources,
+	createAllSourcesPack,
+	missingSources,
+	type PickerSourceId,
+} from "./allSources";
 import { PackPanel } from "./PackPanel";
 import { t } from "../../i18n";
 
@@ -53,7 +60,7 @@ export class IconPicker extends Modal {
 	private resolve: ((icon: CalloutIcon | null) => void) | null = null;
 	private readonly currentIcon: CalloutIcon | null;
 	private selectedIcon: CalloutIcon | null;
-	private activePackId: IconPackId;
+	private activeSource: PickerSourceId;
 	private panel: PackPanel | null = null;
 
 	private panelHostEl!: HTMLElement;
@@ -70,8 +77,8 @@ export class IconPicker extends Modal {
 		// Re-opening lands on the source the current icon came from, with that
 		// icon selected and later scrolled into view. An icon from a source this
 		// build does not know falls back to the default.
-		this.activePackId =
-			currentIcon && packFor(currentIcon) ? currentIcon.type : "lucide";
+		this.activeSource =
+			currentIcon && packFor(currentIcon) ? currentIcon.type : ALL_SOURCES;
 	}
 
 	openAndWait(): Promise<CalloutIcon | null> {
@@ -129,15 +136,24 @@ export class IconPicker extends Modal {
 			cls: "icon-picker-source-select",
 			attr: { id: "cs-icon-source" },
 		});
+
+		// Searching everything at once is the default: with eight libraries,
+		// knowing which one holds "swords" is its own puzzle.
+		const all = select.createEl("option", {
+			text: t("iconPicker.allSources"),
+			value: ALL_SOURCES,
+		});
+		if (this.activeSource === ALL_SOURCES) all.selected = true;
+
 		for (const id of ICON_PACK_IDS) {
 			const opt = select.createEl("option", {
 				text: t(getPack(id).labelKey),
 				value: id,
 			});
-			if (id === this.activePackId) opt.selected = true;
+			if (id === this.activeSource) opt.selected = true;
 		}
 		select.addEventListener("change", () => {
-			this.activePackId = select.value as IconPackId;
+			this.activeSource = select.value as PickerSourceId;
 			// Switching source clears the selection: an icon id only means
 			// anything within the source it came from.
 			this.selectedIcon = null;
@@ -151,7 +167,7 @@ export class IconPicker extends Modal {
 		this.panelHostEl.empty();
 		this.panel = new PackPanel(
 			this.panelHostEl.createDiv("icon-picker-panel"),
-			getPack(this.activePackId),
+			this.activePack(),
 			{
 				packs: this.plugin.icons.packs,
 				variantsFor: (id) => this.variantsFor(id),
@@ -166,6 +182,29 @@ export class IconPicker extends Modal {
 			},
 		);
 		await this.panel.render();
+		if (this.activeSource === ALL_SOURCES) this.renderMissingSourcesHint();
+	}
+
+	private activePack() {
+		if (this.activeSource !== ALL_SOURCES) return getPack(this.activeSource);
+		// Rebuilt each time, because downloading a source mid-session should
+		// fold it into the pooled list without reopening the picker.
+		return createAllSourcesPack(availableSources(this.plugin.icons.packs));
+	}
+
+	/**
+	 * Say which sources the pooled list is missing, rather than letting them
+	 * silently not be in the results.
+	 */
+	private renderMissingSourcesHint(): void {
+		const missing = missingSources(this.plugin.icons.packs);
+		if (missing.length === 0) return;
+		const hint = this.panelHostEl.createDiv("icon-picker-missing-sources");
+		hint.setText(
+			t("iconPicker.sourcesNotDownloaded", {
+				names: missing.map((p) => t(p.labelKey)).join(", "),
+			}),
+		);
 	}
 
 	// ── Persisted picker state ──────────────────────────────────────────

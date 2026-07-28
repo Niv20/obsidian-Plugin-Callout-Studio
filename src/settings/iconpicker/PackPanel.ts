@@ -19,13 +19,14 @@ import type {
 } from "../../icons/types";
 import { filterIcons } from "../../icons/search";
 import { renderIconInto } from "../../icons/renderIcon";
-import { packFor } from "../../icons/registry";
+import { getPack, packFor } from "../../icons/registry";
 import {
 	MATERIAL_DEFAULT_STYLE,
 	ensureMaterialFontLoaded,
 	materialFontFamily,
 } from "../../icons/packs/material";
 import type { PackDataStore } from "../../icons/PackDataStore";
+import { isAllSources } from "./allSources";
 import { IconGrid } from "./IconGrid";
 import { t } from "../../i18n";
 
@@ -95,7 +96,7 @@ export class PackPanel {
 			renderCell: (cell, entry) => this.renderCell(cell, entry),
 			isSelected: (entry) => this.isSelected(entry),
 			onSelect: (entry) => this.select(entry),
-			labelFor: (entry) => entry.label ?? entry.name,
+			labelFor: (entry) => this.labelFor(entry),
 			cellClass: this.cellClass(),
 			emptyText: t("iconPicker.noResults"),
 			loadMoreText: t("iconPicker.loadMore"),
@@ -236,8 +237,9 @@ export class PackPanel {
 
 	private async loadAndShow(): Promise<void> {
 		// Material previews its grid with the webfont rather than SVGs, since
-		// its artwork is fetched one icon at a time and none of it is local yet.
-		if (this.pack.kind === "perIconRemote") {
+		// its artwork is fetched one icon at a time and none of it is local
+		// yet. The pooled list contains Material cells too, so it waits as well.
+		if (this.pack.kind === "perIconRemote" || isAllSources(this.pack)) {
 			await ensureMaterialFontLoaded(
 				this.variants.style ?? MATERIAL_DEFAULT_STYLE,
 			).catch(() => undefined);
@@ -356,6 +358,13 @@ export class PackPanel {
 
 	// ── Cells ───────────────────────────────────────────────────────────
 
+	/** Grid tooltip; the pooled list names the source too. */
+	private labelFor(entry: IconEntry): string {
+		const base = entry.label ?? entry.name;
+		if (!entry.pack) return base;
+		return `${base} — ${t(this.packOf(entry).labelKey)}`;
+	}
+
 	private cellClass(): string | undefined {
 		if (this.pack.kind === "glyph") return "icon-picker-emoji-cell";
 		if (this.pack.kind === "perIconRemote") {
@@ -364,22 +373,43 @@ export class PackPanel {
 		return undefined;
 	}
 
+	/**
+	 * The source an entry belongs to. Normally this panel's own, but the pooled
+	 * "All sources" list carries entries from several, each of which knows how
+	 * to draw and store its own icons.
+	 */
+	private packOf(entry: IconEntry): IconPack {
+		if (!entry.pack) return this.pack;
+		return getPack(entry.pack) ?? this.pack;
+	}
+
+	/** The toolbar values that apply to an entry's own source. */
+	private variantsOf(entry: IconEntry): IconVariantState {
+		const owner = this.packOf(entry);
+		return owner.id === this.pack.id
+			? this.variants
+			: this.host.variantsFor(owner.id);
+	}
+
 	private renderCell(cell: HTMLElement, entry: IconEntry): void {
+		const owner = this.packOf(entry);
+		const variants = this.variantsOf(entry);
+
 		// Material's artwork is fetched per icon, so nothing is local to draw
-		// from. Its webfont renders the whole grid instead, by ligature name.
-		if (this.pack.kind === "perIconRemote") {
+		// from. Its webfont renders those cells instead, by ligature name.
+		if (owner.kind === "perIconRemote") {
 			const span = cell.createSpan({ cls: "icon-picker-material-icon" });
 			span.setText(entry.name);
-			const style = this.variants.style ?? MATERIAL_DEFAULT_STYLE;
+			const style = variants.style ?? MATERIAL_DEFAULT_STYLE;
 			span.setCssProps({
 				"--cs-material-font": `"${materialFontFamily(style)}"`,
-				"--cs-material-weight": String(this.variants.weight ?? 400),
+				"--cs-material-weight": String(variants.weight ?? 400),
 			});
 			if (style === "filled") span.setCssProps({ "--cs-material-fill": "1" });
 			return;
 		}
 
-		renderIconInto(cell, this.pack.makeIcon(entry, this.variants), previewResolver, {
+		renderIconInto(cell, owner.makeIcon(entry, variants), previewResolver, {
 			role: "regular",
 			fill: "currentColor",
 			missing: { kind: "placeholder", lucideId: "circle-dashed" },
@@ -389,8 +419,9 @@ export class PackPanel {
 
 	private isSelected(entry: IconEntry): boolean {
 		const selected = this.host.selectedIcon();
-		if (!selected || selected.type !== this.pack.id) return false;
-		const candidate = this.pack.makeIcon(entry, this.variants);
+		const owner = this.packOf(entry);
+		if (!selected || selected.type !== owner.id) return false;
+		const candidate = owner.makeIcon(entry, this.variantsOf(entry));
 		return (
 			candidate.value === selected.value &&
 			candidate.style === selected.style
@@ -398,7 +429,8 @@ export class PackPanel {
 	}
 
 	private select(entry: IconEntry): void {
-		this.host.onSelect(this.pack.makeIcon(entry, this.variants), entry);
+		const owner = this.packOf(entry);
+		this.host.onSelect(owner.makeIcon(entry, this.variantsOf(entry)), entry);
 	}
 
 	// ── Attribution ─────────────────────────────────────────────────────
@@ -411,6 +443,9 @@ export class PackPanel {
 	 */
 	private renderAttribution(): void {
 		const { attribution } = this.pack;
+		// The pooled source credits nothing itself; each icon's own source is
+		// credited on its own panel and in the settings credits section.
+		if (attribution.licenses.length === 0) return;
 		if (attribution.noticeKey) {
 			this.bodyEl
 				.createDiv("icon-picker-pack-notice")

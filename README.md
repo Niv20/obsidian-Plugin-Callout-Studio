@@ -23,7 +23,7 @@ All three forms render in Live Preview, Reading view, and PDF export.
 
 ### Icons
 
-Seven icon sources, all from one picker — pick a source from the dropdown and search across it:
+Eight icon sources, all from one picker — pick a source from the dropdown and search across it:
 
 | Source | Icons | Notes |
 | --- | --- | --- |
