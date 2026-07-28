@@ -1189,11 +1189,19 @@ button.callout-studio-icon-picker-loading {
 	font-weight: var(--font-medium);
 }
 
+/* Wraps the button + menu so the menu can anchor to it (position: relative)
+   and always open at the button's own width, regardless of the mouse. */
+.icon-picker-source-dropdown {
+	flex: 1;
+	position: relative;
+	min-width: 0;
+}
+
 /* A button rather than a <select>, because the list it opens carries an icon
    and a description per row, and an <option> can hold neither. */
 .icon-picker-source-button {
 	display: flex;
-	flex: 1;
+	width: 100%;
 	align-items: center;
 	gap: 8px;
 	min-width: 0;
@@ -1231,11 +1239,70 @@ button.callout-studio-icon-picker-loading {
 	text-overflow: ellipsis;
 }
 
-/* One row of the source menu. align-items: center so the emblem icon (a
-   sibling drawn by Obsidian, not by us) and the checkmark land on the
-   vertical middle of the two-line text stack, not pinned to the name line. */
+/* Opens directly under the button, at the button's own width — an absolutely
+   positioned div anchored to .icon-picker-source-dropdown, not a menu that
+   follows the mouse. */
+.icon-picker-source-menu {
+	position: absolute;
+	top: calc(100% + 4px);
+	inset-inline-start: 0;
+	inset-inline-end: 0;
+	max-height: 320px;
+	overflow-y: auto;
+	z-index: 1000;
+	padding: 6px 0;
+	border-radius: var(--radius-s);
+	border: 1px solid var(--background-modifier-border);
+	background-color: var(--background-primary);
+	box-shadow:
+		0 8px 18px rgba(0, 0, 0, 0.22),
+		0 2px 6px rgba(0, 0, 0, 0.18);
+	outline: none;
+}
+
+.icon-picker-source-menu-hidden {
+	display: none;
+}
+
+.icon-picker-source-menu-item {
+	display: flex;
+	align-items: center;
+	column-gap: 0.4em;
+	padding: 6px 12px;
+	cursor: pointer;
+}
+
+/* Hover/keyboard-focus gets the same subtle tint as everywhere else; the
+   current source stays visibly marked underneath it via a stronger fill —
+   same pairing as the color palette dropdown's .is-active/.is-selected. */
+.icon-picker-source-menu-item.is-active,
+.icon-picker-source-menu-item:hover {
+	background-color: var(--background-modifier-hover);
+}
+
+.icon-picker-source-menu-item.is-selected {
+	background-color: var(--background-secondary-alt);
+}
+
+.icon-picker-source-menu-item-emblem {
+	display: flex;
+	flex-shrink: 0;
+	align-items: center;
+	color: var(--text-muted);
+}
+
+.icon-picker-source-menu-item-emblem .svg-icon {
+	width: var(--icon-s);
+	height: var(--icon-s);
+}
+
+/* Content of one row, appended next to the emblem above. align-items: center
+   so the emblem and the checkmark land on the vertical middle of the
+   two-line text stack, not pinned to the name line. */
 .cs-source-item {
 	display: flex;
+	flex: 1;
+	min-width: 0;
 	align-items: center;
 	column-gap: 0.4em;
 }

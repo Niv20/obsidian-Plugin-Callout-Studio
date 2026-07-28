@@ -10,7 +10,7 @@
  * a download prompt; only pressing Download, or confirming an icon whose
  * artwork is not local yet, causes a request.
  */
-import { Menu, Modal, setIcon } from "obsidian";
+import { Modal, setIcon } from "obsidian";
 import type { App } from "obsidian";
 import type { CalloutIcon, IconSourceId, PluginSettings } from "../../types";
 import type { IconVariantState } from "../../icons/types";
@@ -77,6 +77,14 @@ export class IconPicker extends Modal {
 	private previewEl!: HTMLElement;
 	private confirmBtn!: HTMLButtonElement;
 	private sourceButtonEl!: HTMLButtonElement;
+	private sourceDropdownEl!: HTMLElement;
+	private sourceMenuEl!: HTMLElement;
+	private sourceMenuOpen = false;
+	private sourceMenuItems: { id: PickerSourceId; el: HTMLElement }[] = [];
+	private activeSourceMenuIndex = -1;
+	/** Modal does not extend Component, so this listener has no auto-cleanup —
+	 * removed by hand in onClose(). */
+	private sourceMenuOutsideClick: ((ev: MouseEvent) => void) | null = null;
 	/** How many icons each source offers; filled in the background on open. */
 	private sourceCounts = new Map<IconSourceId, number>();
 
@@ -142,6 +150,13 @@ export class IconPicker extends Modal {
 	onClose(): void {
 		this.panel?.dispose();
 		this.panel = null;
+		if (this.sourceMenuOutsideClick) {
+			activeDocument.removeEventListener(
+				"click",
+				this.sourceMenuOutsideClick,
+			);
+			this.sourceMenuOutsideClick = null;
+		}
 		if (this.resolve) {
 			this.resolve(null);
 			this.resolve = null;
@@ -154,6 +169,11 @@ export class IconPicker extends Modal {
 	 * A button opening a menu, not a `<select>`: an `<option>` can hold text and
 	 * nothing else, and a list of bare library names asks the reader to already
 	 * know which one holds "swords".
+	 *
+	 * The menu is a plain positioned div (like the callout editor's palette
+	 * dropdown), not an Obsidian `Menu` — a native menu anchors to the mouse
+	 * and gives us no hook to paint a "this is the current source" background,
+	 * only a checkmark.
 	 */
 	private buildSourcePicker(container: HTMLElement): void {
 		const row = container.createDiv("icon-picker-source-row");
@@ -162,19 +182,37 @@ export class IconPicker extends Modal {
 			cls: "icon-picker-source-label",
 			attr: { for: "cs-icon-source" },
 		});
-		this.sourceButtonEl = row.createEl("button", {
+		this.sourceDropdownEl = row.createDiv("icon-picker-source-dropdown");
+		this.sourceButtonEl = this.sourceDropdownEl.createEl("button", {
 			cls: "icon-picker-source-button",
 			attr: {
 				id: "cs-icon-source",
 				type: "button",
-				"aria-haspopup": "menu",
+				"aria-haspopup": "listbox",
 				"aria-expanded": "false",
 			},
 		});
 		this.paintSourceButton();
-		this.sourceButtonEl.addEventListener("click", (evt) => {
-			this.openSourceMenu(evt);
+		this.sourceMenuEl = this.sourceDropdownEl.createDiv({
+			cls: "icon-picker-source-menu icon-picker-source-menu-hidden",
+			attr: { role: "listbox", tabindex: "-1" },
 		});
+
+		this.sourceButtonEl.addEventListener("click", () => {
+			if (this.sourceMenuOpen) this.closeSourceMenu();
+			else this.openSourceMenu();
+		});
+		this.sourceMenuEl.addEventListener("keydown", (ev) =>
+			this.onSourceMenuKeydown(ev),
+		);
+		// Nothing closes a plain div for us the way a real Menu would.
+		this.sourceMenuOutsideClick = (ev) => {
+			if (!this.sourceMenuOpen) return;
+			const target = ev.target as Node | null;
+			if (target && this.sourceDropdownEl.contains(target)) return;
+			this.closeSourceMenu();
+		};
+		activeDocument.addEventListener("click", this.sourceMenuOutsideClick);
 	}
 
 	/** Metadata for one row of the source menu; the pooled list has no pack. */
@@ -199,31 +237,114 @@ export class IconPicker extends Modal {
 		setIcon(chevron, "chevron-down");
 	}
 
-	private openSourceMenu(evt: MouseEvent): void {
-		const menu = new Menu();
-		// Desktop defaults to a native OS menu, which can only draw plain text —
-		// our emblem icons and the hand-drawn checkmark below would silently
-		// disappear. Mobile has no native menu, so this only matters here.
-		menu.setUseNativeMenu(false);
+	/** Rebuilt on every open, so counts loaded in the background (and a source
+	 * picked elsewhere) are never stale by the time the menu is seen. */
+	private buildSourceMenuItems(): void {
+		this.sourceMenuEl.empty();
+		this.sourceMenuItems = [];
 		// Searching everything at once comes first, and is the default: with six
 		// libraries, knowing which one holds "swords" is its own puzzle.
 		const ids: PickerSourceId[] = [ALL_SOURCES, ...ICON_SOURCE_IDS];
 		for (const id of ids) {
 			const meta = this.sourceMeta(id);
-			menu.addItem((item) =>
-				item
-					// Every emblem is a Lucide id, which Obsidian ships — so the
-					// row draws even for a source that has never been downloaded.
-					.setIcon(meta.emblemIcon)
-					.setTitle(this.sourceMenuTitle(id, meta))
-					.onClick(() => this.selectSource(id)),
+			const item = this.sourceMenuEl.createDiv({
+				cls: "icon-picker-source-menu-item",
+				attr: { role: "option" },
+			});
+			const emblem = item.createSpan({
+				cls: "icon-picker-source-menu-item-emblem",
+			});
+			// Every emblem is a Lucide id, which Obsidian ships — so the row
+			// draws even for a source that has never been downloaded.
+			setIcon(emblem, meta.emblemIcon);
+			item.appendChild(this.sourceMenuTitle(id, meta));
+			item.toggleClass("is-selected", id === this.activeSource);
+			item.addEventListener("mouseenter", () =>
+				this.setActiveSourceMenuItem(
+					this.sourceMenuItems.findIndex((i) => i.id === id),
+					{ scroll: false },
+				),
 			);
+			item.addEventListener("click", () => {
+				this.selectSource(id);
+				this.closeSourceMenu();
+			});
+			this.sourceMenuItems.push({ id, el: item });
 		}
+	}
+
+	/**
+	 * Opens directly under the button, at the button's own width, every time —
+	 * a plain positioned div anchored to its trigger, unlike Obsidian's native
+	 * Menu which lands wherever the mouse happened to be inside the button.
+	 */
+	private openSourceMenu(): void {
+		this.buildSourceMenuItems();
+		this.sourceMenuOpen = true;
+		this.sourceMenuEl.removeClass("icon-picker-source-menu-hidden");
+		this.sourceButtonEl.addClass("is-open");
 		this.sourceButtonEl.setAttribute("aria-expanded", "true");
-		menu.onHide(() => {
-			this.sourceButtonEl.setAttribute("aria-expanded", "false");
-		});
-		menu.showAtMouseEvent(evt);
+		const startIdx = this.sourceMenuItems.findIndex(
+			(i) => i.id === this.activeSource,
+		);
+		this.setActiveSourceMenuItem(startIdx >= 0 ? startIdx : 0);
+		this.sourceMenuEl.focus();
+	}
+
+	private closeSourceMenu(): void {
+		if (!this.sourceMenuOpen) return;
+		this.sourceMenuOpen = false;
+		this.sourceMenuEl.addClass("icon-picker-source-menu-hidden");
+		this.sourceButtonEl.removeClass("is-open");
+		this.sourceButtonEl.setAttribute("aria-expanded", "false");
+		this.activeSourceMenuIndex = -1;
+	}
+
+	private setActiveSourceMenuItem(
+		index: number,
+		opts?: { scroll?: boolean },
+	): void {
+		const prev = this.sourceMenuItems[this.activeSourceMenuIndex];
+		prev?.el.removeClass("is-active");
+		if (index < 0 || index >= this.sourceMenuItems.length) {
+			this.activeSourceMenuIndex = -1;
+			return;
+		}
+		const entry = this.sourceMenuItems[index];
+		if (!entry) {
+			this.activeSourceMenuIndex = -1;
+			return;
+		}
+		this.activeSourceMenuIndex = index;
+		entry.el.addClass("is-active");
+		if (opts?.scroll !== false) entry.el.scrollIntoView({ block: "nearest" });
+	}
+
+	private onSourceMenuKeydown(ev: KeyboardEvent): void {
+		if (ev.key === "ArrowDown") {
+			ev.preventDefault();
+			this.setActiveSourceMenuItem(
+				Math.min(
+					this.activeSourceMenuIndex + 1,
+					this.sourceMenuItems.length - 1,
+				),
+			);
+		} else if (ev.key === "ArrowUp") {
+			ev.preventDefault();
+			this.setActiveSourceMenuItem(Math.max(this.activeSourceMenuIndex - 1, 0));
+		} else if (ev.key === "Enter") {
+			ev.preventDefault();
+			const entry = this.sourceMenuItems[this.activeSourceMenuIndex];
+			if (entry) {
+				this.selectSource(entry.id);
+				this.closeSourceMenu();
+				this.sourceButtonEl.focus();
+			}
+		} else if (ev.key === "Escape") {
+			ev.preventDefault();
+			this.closeSourceMenu();
+			this.sourceButtonEl.focus();
+		}
 	}
 
 	/**
