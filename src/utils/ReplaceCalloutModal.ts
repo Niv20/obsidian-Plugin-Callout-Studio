@@ -7,10 +7,12 @@
  * swatches for easy scanning. Returns a DeleteAction to the caller so the
  * caller can execute the vault-wide replacement.
  */
-import { Modal, setIcon } from "obsidian";
+import { Modal } from "obsidian";
 import type { App } from "obsidian";
 import type { CalloutDefinition } from "../types";
 import type { CalloutRegistry } from "../manager/CalloutRegistry";
+import { renderIconInto } from "../icons/renderIcon";
+import { createIconResolver } from "../icons/resolver";
 import { t } from "../i18n";
 
 export type DeleteAction =
@@ -201,35 +203,12 @@ export class ReplaceCalloutModal extends Modal {
 	}
 
 	private renderIcon(iconEl: HTMLElement, def: CalloutDefinition): void {
-		try {
-			if (def.icon.type === "lucide") {
-				setIcon(iconEl, def.icon.value);
-			} else if (def.icon.type === "emoji") {
-				iconEl.textContent = def.icon.value;
-			} else if (def.icon.type === "material") {
-				const cached = this.registry.findMaterialSvg(
-					def.icon.value,
-					def.icon.style ?? "outlined",
-					def.icon.weight ?? 400,
-				);
-				if (cached) {
-					const parser = new DOMParser();
-					const doc = parser.parseFromString(
-						cached.svg,
-						"image/svg+xml",
-					);
-					const svgEl = doc.documentElement;
-					svgEl.setAttribute("fill", "currentColor");
-					iconEl.appendChild(iconEl.doc.importNode(svgEl, true));
-				} else {
-					setIcon(iconEl, "pencil");
-				}
-			} else {
-				setIcon(iconEl, "pencil");
-			}
-		} catch {
-			iconEl.textContent = "📝";
-		}
+		renderIconInto(iconEl, def.icon, createIconResolver(this.registry), {
+			role: "regular",
+			fill: "currentColor",
+			missing: { kind: "placeholder", lucideId: "pencil" },
+			errorText: "📝",
+		});
 	}
 
 	onClose(): void {

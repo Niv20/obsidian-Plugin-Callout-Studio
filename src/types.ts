@@ -7,11 +7,50 @@
  * Also extends the Obsidian `App` type with the internal `setting` panel API.
  * Every module that needs to read or write callout data imports from here.
  */
+/**
+ * Which body of artwork an icon's drawing comes from. Doubles as the
+ * discriminator on CalloutIcon, so the original values must keep their exact
+ * spelling — every `data.json` and every exported settings file in the wild
+ * stores them. Adding a member is backward-compatible; renaming one is not.
+ *
+ * This is *not* what the picker offers: Font Awesome's three styles are three
+ * ids here (they are three separately downloaded files) but one source in the
+ * picker. `IconSourceId` is that other id space, and `icons/registry.ts` maps
+ * this union onto it with a total `Record`, so a member added here without a
+ * source behind it is a compile error rather than a blank grid.
+ */
+export type IconPackId =
+	| "lucide"
+	| "material"
+	| "emoji"
+	| "octicons"
+	| "fa-solid"
+	| "fa-regular"
+	| "fa-brands"
+	| "rpg-awesome";
+
+/**
+ * One library as the user meets it: a row in the picker's source menu, a
+ * toolbar, a grid, one download button.
+ *
+ * Usually the same string as the IconPackId behind it. Font Awesome is the
+ * exception that makes the distinction worth having — one source, three pack
+ * files, chosen between by its style control.
+ */
+export type IconSourceId =
+	| "lucide"
+	| "material"
+	| "emoji"
+	| "octicons"
+	| "fa"
+	| "rpg-awesome";
+
 export interface CalloutIcon {
-	type: "lucide" | "material" | "emoji";
+	type: IconPackId;
 	value: string;
+	/** Material Symbols style. Only meaningful when `type` is "material". */
 	style?: "outlined" | "filled" | "rounded" | "sharp";
-	/** Material Symbols weight (100–700, default 400) */
+	/** Material Symbols weight (100–700, default 400). Material-only. */
 	weight?: number;
 }
 
@@ -161,6 +200,13 @@ export interface CustomPalette {
 export type MaterialIconStyle = "outlined" | "filled" | "rounded" | "sharp";
 
 /**
+ * Font Awesome's three styles. Upstream treats Brands as a style alongside
+ * Solid and Regular, and so does the picker's style control — but each one is
+ * its own downloaded file, hence its own IconPackId.
+ */
+export type FontAwesomeStyle = "solid" | "regular" | "brands";
+
+/**
  * A single entry in the bundled emoji dataset (see data/emojiData.ts).
  * `skins` is present only for skin-tone-capable emojis: the 5 fully-qualified
  * variant glyphs ordered light → dark.
@@ -180,6 +226,17 @@ export interface EmojiEntry {
  * One shared definition list serves all roles; only the rendering differs.
  */
 export type CalloutRenderRole = "regular" | "heading" | "inline";
+
+/**
+ * Every render role, for code that has to consider all of them at once — most
+ * importantly the icon cache sweep, which must keep the artwork each role draws
+ * from rather than only the blockquote's.
+ */
+export const CALLOUT_RENDER_ROLES: readonly CalloutRenderRole[] = [
+	"regular",
+	"heading",
+	"inline",
+];
 
 /** Enable/disable switch for an optional render role (heading / inline). */
 export interface RoleToggleSettings {
@@ -249,8 +306,19 @@ export interface IconSourceSettings {
 	materialStyleDefault: MaterialIconStyle;
 	/** Material Symbols weight default (100–700) */
 	materialWeightDefault: number;
-	/** Last Material category the user had open in the icon picker */
-	lastMaterialCategory: string;
+	/** Font Awesome style the picker opens on. */
+	faStyleDefault?: FontAwesomeStyle;
+	/**
+	 * Pre-2.4 field: the last Material category. Read once on load and folded
+	 * into `lastCategory`, which covers every source rather than just Material.
+	 */
+	lastMaterialCategory?: string;
+	/**
+	 * Last category the user had open in the picker, per icon source. Entries
+	 * left by a source that no longer exists (the three Font Awesome ids, which
+	 * became one) are simply never read again.
+	 */
+	lastCategory?: Partial<Record<IconSourceId, string>>;
 	/** Last emoji skin tone the user selected (0 = default, 1–5 = light→dark) */
 	lastEmojiSkinTone?: number;
 }
@@ -360,24 +428,40 @@ export interface PluginData {
 	settings: PluginSettings;
 	/** Legacy pre-bundled Material metadata cache; ignored on save. */
 	materialIconsCache?: unknown;
-	/** Locally cached SVGs for selected Material icons */
+	/**
+	 * Pre-2.4 Material-only SVG cache, superseded by `iconSvgCache`.
+	 *
+	 * Still read, by exactly one caller: the load-time migration in
+	 * CalloutRegistry that folds these entries into `iconSvgCache`. Never
+	 * written again — writing both would let them drift apart. Nothing else
+	 * should touch it.
+	 */
 	materialSvgCache?: MaterialSvgCacheEntry[];
+	/** Locally cached SVGs for every icon actually in use, across all packs. */
+	iconSvgCache?: IconSvgCacheEntry[];
 }
 
-export interface MaterialIconMetadataEntry {
-	name: string;
-	categories: string[];
-	tags: string[];
-}
-
-export interface MaterialIconMeta extends MaterialIconMetadataEntry {
-	/** Optional legacy/per-icon style support; bundled metadata uses a shared style set. */
-	styles?: MaterialIconStyle[];
-}
-
+/** Pre-2.4 cache shape, migrated to IconSvgCacheEntry on load. */
 export interface MaterialSvgCacheEntry {
 	name: string;
 	style: MaterialIconStyle;
 	weight: number;
+	svg: string;
+}
+
+/**
+ * One icon's artwork, cached in `data.json` so the callout keeps rendering
+ * without the icon pack present — on a device that synced the settings but
+ * never downloaded the pack, or after the pack file on disk is deleted.
+ */
+export interface IconSvgCacheEntry {
+	pack: IconPackId;
+	name: string;
+	/**
+	 * Everything besides the name that changes the artwork, from the pack's
+	 * `cacheVariant()`. Material encodes style and weight; Octicons encodes the
+	 * pixel height it drew at; packs with a single drawing per icon use "".
+	 */
+	variant: string;
 	svg: string;
 }

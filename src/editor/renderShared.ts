@@ -10,10 +10,11 @@
  * via CSS `currentColor` (no ::after masks), which makes them survive PDF
  * export with zero extra machinery.
  */
-import { setIcon } from "obsidian";
-import type { CalloutDefinition } from "../types";
+import type { CalloutDefinition, CalloutRenderRole } from "../types";
 import type { CalloutRegistry } from "../manager/CalloutRegistry";
 import { normalizeCalloutId } from "../utils/calloutId";
+import { renderIconInto } from "../icons/renderIcon";
+import { createIconResolver } from "../icons/resolver";
 
 /** Class names shared between Live Preview widgets and reading-view DOM. */
 export const CSS_INLINE_TOKEN = "cs-inline-callout";
@@ -167,57 +168,23 @@ export function calloutDomId(
 }
 
 /**
- * Paint a definition's icon into `iconEl` as visible, self-contained DOM:
- * Lucide via setIcon (stroke: currentColor), Material as an inline SVG with
- * `fill="currentColor"`, emoji as a text node. Color therefore follows the
- * surrounding element's CSS `color` in both themes. Material icons that are
- * not downloaded yet get a pencil placeholder; the finished download triggers
- * a CSS re-inject whose paintIcons sweep repaints them.
+ * Paint a definition's icon into `iconEl` as visible, self-contained DOM, so
+ * the glyph follows the surrounding element's CSS `color` in both themes.
+ * Artwork that is not downloaded yet gets a pencil placeholder; the finished
+ * download triggers a CSS re-inject whose paintIcons sweep repaints it.
  */
 export function paintRoleIcon(
 	iconEl: HTMLElement,
 	def: CalloutDefinition,
 	registry: CalloutRegistry,
+	role: CalloutRenderRole,
 ): void {
-	try {
-		if (def.icon.type === "lucide") {
-			setIcon(iconEl, def.icon.value);
-		} else if (def.icon.type === "emoji") {
-			iconEl.textContent = def.icon.value;
-		} else if (def.icon.type === "material") {
-			const cached = registry.findMaterialSvg(
-				def.icon.value,
-				def.icon.style ?? "outlined",
-				def.icon.weight ?? 400,
-			);
-			if (cached) {
-				const parsed = new DOMParser().parseFromString(
-					cached.svg,
-					"image/svg+xml",
-				);
-				const svgEl = parsed.documentElement;
-				if (
-					parsed.querySelector("parsererror") ||
-					svgEl.nodeName.toLowerCase() !== "svg"
-				) {
-					setIcon(iconEl, "pencil");
-					return;
-				}
-				svgEl.setAttribute("fill", "currentColor");
-				iconEl.replaceChildren(
-					iconEl.ownerDocument.importNode(svgEl, true),
-				);
-			} else {
-				setIcon(iconEl, "pencil");
-			}
-		} else {
-			setIcon(iconEl, "pencil");
-		}
-	} catch {
-		// setIcon may be unavailable in exotic render realms; a missing icon
-		// is preferable to a crash mid-render.
-		iconEl.textContent = "•";
-	}
+	renderIconInto(iconEl, def.icon, createIconResolver(registry), {
+		role,
+		fill: "currentColor",
+		missing: { kind: "placeholder", lucideId: "pencil" },
+		errorText: "•",
+	});
 }
 
 /** Where a callout token DOM is rendered — decides its root class. */
@@ -227,6 +194,16 @@ const VARIANT_CLASS: Record<CalloutTokenVariant, string> = {
 	inline: CSS_INLINE_TOKEN,
 	heading: CSS_HEADING_TOKEN,
 	ref: CSS_REF_TOKEN,
+};
+
+/**
+ * Render role a token variant draws at. A reference token is a compact copy of
+ * the inline pill — same size, so same artwork.
+ */
+export const VARIANT_ROLE: Record<CalloutTokenVariant, CalloutRenderRole> = {
+	inline: "inline",
+	heading: "heading",
+	ref: "inline",
 };
 
 export interface CalloutTokenDomOptions {
@@ -275,7 +252,7 @@ export function buildCalloutTokenDom(
 	const iconEl = createSpan();
 	iconEl.classList.add(CSS_TOKEN_ICON);
 	root.appendChild(iconEl);
-	if (def) paintRoleIcon(iconEl, def, registry);
+	if (def) paintRoleIcon(iconEl, def, registry, VARIANT_ROLE[variant]);
 
 	if (showName) {
 		const nameEl = createSpan();

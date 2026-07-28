@@ -15,7 +15,7 @@ import type {
 	CalloutRenderRole,
 } from "../types";
 import { CalloutEditor } from "../settings/CalloutEditor";
-import { IconPicker } from "../settings/IconPicker";
+import { IconPicker } from "../settings/iconpicker";
 
 /**
  * Public API exposed at `app.plugins.plugins['callout-studio'].api`

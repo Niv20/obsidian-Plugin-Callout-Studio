@@ -15,6 +15,7 @@ import type {
 import type { CalloutRegistry } from "../manager/CalloutRegistry";
 import { EXPORT_FORMAT_ID } from "../manager/CalloutRegistry";
 import { MAX_TAG_LENGTH, MAX_TAGS_COUNT } from "../constants";
+import { ICON_PACK_IDS } from "../icons/registry";
 import { normalizeCalloutId } from "./calloutId";
 import { sanitizeBgGradient } from "./colorUtils";
 import { sanitizeImportedSettings } from "./settingsValidator";
@@ -54,7 +55,9 @@ const HEX_COLOR_RE = /^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/;
 // IDs may contain normal spaces (multi-word labels). Still reject pipes,
 // brackets, and non-space whitespace (tabs / line breaks).
 const ID_BAD_CHAR_RE = /[|\][\t\n\r]/;
-const VALID_ICON_TYPES = new Set(["lucide", "material", "emoji"]);
+// Derived from the pack registry rather than written out, so adding a pack can
+// never leave the validator rejecting icons the plugin itself produces.
+const VALID_ICON_TYPES = new Set<string>(ICON_PACK_IDS);
 const VALID_MATERIAL_STYLES = new Set([
 	"outlined",
 	"filled",
@@ -183,7 +186,7 @@ function validateIcon(
 			field: "icon.type",
 			level: "error",
 			messageKey: "import.err.iconTypeInvalid",
-			params: { value: fmt(type) },
+			params: { value: fmt(type), types: ICON_PACK_IDS.join(", ") },
 		});
 		ok = false;
 	}
@@ -204,8 +207,19 @@ function validateIcon(
 		});
 		ok = false;
 	}
+	// `style` and `weight` describe Material Symbols and nothing else. On any
+	// other pack they are inert leftovers — worth reporting, but not worth
+	// failing an otherwise valid import over.
+	const isMaterial = type === "material";
 	if (icon.style !== undefined) {
-		if (
+		if (!isMaterial) {
+			push({
+				field: "icon.style",
+				level: "warning",
+				messageKey: "import.warn.iconFieldIgnored",
+				params: { field: "style", type: fmt(type) },
+			});
+		} else if (
 			typeof icon.style !== "string" ||
 			!VALID_MATERIAL_STYLES.has(icon.style)
 		) {
@@ -220,7 +234,14 @@ function validateIcon(
 	}
 	if (icon.weight !== undefined) {
 		const w = icon.weight;
-		if (
+		if (!isMaterial) {
+			push({
+				field: "icon.weight",
+				level: "warning",
+				messageKey: "import.warn.iconFieldIgnored",
+				params: { field: "weight", type: fmt(type) },
+			});
+		} else if (
 			!isFiniteNumber(w) ||
 			!Number.isInteger(w) ||
 			w < 100 ||

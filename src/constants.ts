@@ -288,7 +288,7 @@ export const DEFAULT_SETTINGS: PluginSettings = {
 	iconSources: {
 		materialStyleDefault: "rounded",
 		materialWeightDefault: 300,
-		lastMaterialCategory: "Actions",
+		lastCategory: { material: "" },
 		lastEmojiSkinTone: 0,
 	},
 	headingCallouts: {

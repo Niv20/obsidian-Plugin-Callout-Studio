@@ -193,7 +193,7 @@ async function handleCalloutDelete(
 		);
 	}
 	ctx.plugin.registry.remove(def.id);
-	ctx.plugin.registry.cleanupUnusedMaterialSvgs();
+	ctx.plugin.registry.cleanupUnusedIconSvgs();
 	ctx.display();
 }
 

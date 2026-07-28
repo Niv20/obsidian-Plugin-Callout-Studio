@@ -25,6 +25,8 @@ import {
 	buildCalloutTokenDom,
 	resolveCalloutDef,
 } from "../editor/renderShared";
+import { iconRenderKey } from "../icons/renderIcon";
+import { createIconResolver } from "../icons/resolver";
 import { normalizeCalloutId } from "../utils/calloutId";
 
 /** Narrow structural host type (avoids importing the concrete plugin class). */
@@ -348,19 +350,14 @@ export class OutlineDecorator {
 		showIcon: boolean,
 	): string {
 		const { def } = resolveCalloutDef(this.host.registry, rawId);
-		let iconKey = "";
-		let materialReady = true;
-		if (def) {
-			const { icon } = def;
-			iconKey = `${icon.type}:${icon.value}:${icon.style ?? ""}:${icon.weight ?? ""}`;
-			if (icon.type === "material") {
-				materialReady = !!this.host.registry.findMaterialSvg(
-					icon.value,
-					icon.style ?? "outlined",
-					icon.weight ?? 400,
-				);
-			}
-		}
+		// Outline entries are reference tokens: pill-sized, so pill artwork.
+		const iconKey = def
+			? iconRenderKey(
+					def.icon,
+					createIconResolver(this.host.registry),
+					"inline",
+				)
+			: "";
 		return [
 			rawId,
 			unknown ? "u" : "",
@@ -368,7 +365,6 @@ export class OutlineDecorator {
 			title,
 			showIcon ? "i" : "",
 			iconKey,
-			materialReady ? "m" : "",
 		].join("|");
 	}
 }

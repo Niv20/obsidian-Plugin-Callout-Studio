@@ -1171,41 +1171,226 @@ button.callout-studio-icon-picker-loading {
 	max-height: 70vh;
 }
 
-.icon-picker-tabs {
+/* The source row replaced a tab strip: a tab per source stopped fitting once
+   there were seven of them, on mobile and in RTL especially. */
+.icon-picker-source-row {
 	display: flex;
-	gap: 4px;
+	align-items: center;
+	gap: 8px;
 	border-bottom: 1px solid var(--background-modifier-border);
-	padding: 4px 12px 0;
+	padding: 10px 12px;
 	flex-shrink: 0;
 	background: var(--background-primary);
 }
 
-.icon-picker-tab {
-	padding: 6px 16px;
-	min-height: 32px;
-	background: none;
-	border: none;
-	border-bottom: 2px solid transparent;
-	border-radius: var(--radius-s) var(--radius-s) 0 0;
+.icon-picker-source-label {
 	color: var(--text-muted);
-	cursor: pointer;
 	font-size: var(--font-ui-small);
-	font-weight: var(--font-semibold);
-	transition:
-		color 0.15s,
-		border-color 0.15s,
-		background-color 0.15s;
+	font-weight: var(--font-medium);
 }
 
-.icon-picker-tab:hover {
-	color: var(--text-normal);
+/* Wraps the button + menu so the menu can anchor to it (position: relative)
+   and always open at the button's own width, regardless of the mouse. */
+.icon-picker-source-dropdown {
+	flex: 1;
+	position: relative;
+	min-width: 0;
+}
+
+/* A button rather than a <select>, because the list it opens carries an icon
+   and a description per row, and an <option> can hold neither. */
+.icon-picker-source-button {
+	display: flex;
+	width: 100%;
+	align-items: center;
+	gap: 8px;
+	min-width: 0;
+	text-align: start;
+	cursor: pointer;
+}
+
+.icon-picker-source-emblem,
+.icon-picker-source-chevron {
+	display: flex;
+	flex-shrink: 0;
+	align-items: center;
+	color: var(--text-muted);
+}
+
+.icon-picker-source-emblem .svg-icon {
+	width: var(--icon-s);
+	height: var(--icon-s);
+}
+
+/* The chevron sits at the far end in both directions — margin-inline-start,
+   not margin-left, so RTL puts it on the left. */
+.icon-picker-source-chevron {
+	margin-inline-start: auto;
+}
+
+.icon-picker-source-chevron .svg-icon {
+	width: var(--icon-xs);
+	height: var(--icon-xs);
+}
+
+.icon-picker-source-current {
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+
+/* Opens directly under the button, at the button's own width — an absolutely
+   positioned div anchored to .icon-picker-source-dropdown, not a menu that
+   follows the mouse. */
+.icon-picker-source-menu {
+	position: absolute;
+	top: calc(100% + 4px);
+	inset-inline-start: 0;
+	inset-inline-end: 0;
+	max-height: 320px;
+	overflow-y: auto;
+	z-index: 1000;
+	padding: 6px 0;
+	border-radius: var(--radius-s);
+	border: 1px solid var(--background-modifier-border);
+	background-color: var(--background-primary);
+	box-shadow:
+		0 8px 18px rgba(0, 0, 0, 0.22),
+		0 2px 6px rgba(0, 0, 0, 0.18);
+	outline: none;
+}
+
+.icon-picker-source-menu-hidden {
+	display: none;
+}
+
+.icon-picker-source-menu-item {
+	display: flex;
+	align-items: center;
+	column-gap: 0.4em;
+	padding: 6px 12px;
+	cursor: pointer;
+}
+
+/* Hover/keyboard-focus gets the same subtle tint as everywhere else; the
+   current source stays visibly marked underneath it via a stronger fill —
+   same pairing as the color palette dropdown's .is-active/.is-selected. */
+.icon-picker-source-menu-item.is-active,
+.icon-picker-source-menu-item:hover {
 	background-color: var(--background-modifier-hover);
 }
 
-.icon-picker-tab.is-active {
+.icon-picker-source-menu-item.is-selected {
+	background-color: var(--background-secondary-alt);
+}
+
+.icon-picker-source-menu-item-emblem {
+	display: flex;
+	flex-shrink: 0;
+	align-items: center;
+	color: var(--text-muted);
+}
+
+.icon-picker-source-menu-item-emblem .svg-icon {
+	width: var(--icon-s);
+	height: var(--icon-s);
+}
+
+/* Content of one row, appended next to the emblem above. align-items: center
+   so the emblem and the checkmark land on the vertical middle of the
+   two-line text stack, not pinned to the name line. */
+.cs-source-item {
+	display: flex;
+	flex: 1;
+	min-width: 0;
+	align-items: center;
+	column-gap: 0.4em;
+}
+
+/* Name, then description always on its own line below it. */
+.cs-source-text {
+	display: flex;
+	flex-direction: column;
+	row-gap: 0.25em;
+}
+
+.cs-source-desc {
+	color: var(--text-muted);
+	font-size: var(--font-ui-smaller);
+}
+
+.cs-source-check {
+	display: flex;
+	align-items: center;
+	margin-inline-start: auto;
+	padding-inline-start: 0.5em;
 	color: var(--text-accent);
-	border-bottom-color: var(--text-accent);
-	background-color: transparent;
+}
+
+.cs-source-check .svg-icon {
+	width: var(--icon-xs);
+	height: var(--icon-xs);
+}
+
+/* Download prompt / progress / failure, shown in place of the grid. */
+.icon-picker-notice {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 10px;
+	padding: 2.5rem 1rem;
+	text-align: center;
+	color: var(--text-muted);
+}
+
+.icon-picker-notice-title {
+	color: var(--text-normal);
+	font-size: var(--font-ui-medium);
+	font-weight: var(--font-semibold);
+}
+
+.icon-picker-notice-detail {
+	font-size: var(--font-ui-small);
+}
+
+.icon-picker-notice-loading {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+/* Standing notice for a source whose icons carry obligations of their own
+   (Font Awesome's Brands style and its trademarks). Not dismissible by design.
+   The element is always present and hidden when empty, so switching style can
+   raise it without rebuilding the panel around it. */
+.icon-picker-pack-notice {
+	margin: 8px 0 0;
+	padding: 8px 10px;
+	border-radius: var(--radius-s);
+	background-color: var(--background-modifier-hover);
+	color: var(--text-muted);
+	font-size: var(--font-ui-smaller);
+	line-height: 1.45;
+}
+
+.icon-picker-pack-notice.is-hidden {
+	display: none;
+}
+
+.icon-picker-pack-credit {
+	margin-top: 10px;
+	color: var(--text-faint);
+	font-size: var(--font-ui-smaller);
+}
+
+.icon-picker-pack-credit a {
+	margin-inline-start: 0.4em;
+	color: var(--text-accent);
+	text-decoration: none;
+}
+
+.icon-picker-pack-credit a:hover {
+	text-decoration: underline;
 }
 
 .icon-picker-content {
@@ -1251,6 +1436,17 @@ button.callout-studio-icon-picker-loading {
 	flex-shrink: 0;
 }
 
+/* Locked while the source still has to be downloaded — see PackPanel */
+.icon-picker-toolbar.is-disabled {
+	opacity: 0.5;
+}
+
+.icon-picker-toolbar.is-disabled input,
+.icon-picker-toolbar.is-disabled select,
+.icon-picker-toolbar.is-disabled button {
+	cursor: not-allowed;
+}
+
 /* On narrow screens, search takes full width and selects wrap below */
 @media (max-width: 600px) {
 	.icon-picker-toolbar input {
@@ -1276,6 +1472,62 @@ button.callout-studio-icon-picker-loading {
 
 .icon-picker-grid.is-loaded > .icon-picker-cell {
 	animation: cs-grid-fade-in 0.25s ease-out both;
+}
+
+/* Source heading in the pooled search. Spans the grid, so its group always
+   starts on a fresh row. Deliberately not sticky: the toolbar above already
+   sticks at top 0, and a second sticky layer would land on top of it.
+   Clickable — collapsing it hides that source's cells, so a source with
+   hundreds of hits can get out of the way without losing the rest below it. */
+.icon-picker-group-header {
+	display: flex;
+	align-items: center;
+	gap: 0.4em;
+	grid-column: 1 / -1;
+	padding: 14px 2px 4px;
+	font-size: var(--font-ui-smaller);
+	font-weight: var(--font-semibold);
+	color: var(--text-muted);
+	text-transform: uppercase;
+	letter-spacing: 0.05em;
+	cursor: pointer;
+}
+
+.icon-picker-group-header:hover {
+	color: var(--text-normal);
+}
+
+.icon-picker-group-header:first-child {
+	padding-top: 2px;
+}
+
+.icon-picker-group-chevron {
+	display: inline-flex;
+	flex-shrink: 0;
+	transition: transform 120ms ease;
+	transform: rotate(90deg);
+}
+
+.icon-picker-group-chevron svg {
+	width: 1em;
+	height: 1em;
+}
+
+.icon-picker-group-header.is-collapsed .icon-picker-group-chevron {
+	transform: rotate(0deg);
+}
+
+/* The chevron points at the content, so it flips with the writing direction. */
+[dir="rtl"] .icon-picker-group-chevron {
+	transform: scaleX(-1) rotate(90deg);
+}
+
+[dir="rtl"] .icon-picker-group-header.is-collapsed .icon-picker-group-chevron {
+	transform: scaleX(-1) rotate(0deg);
+}
+
+.icon-picker-cell.is-group-collapsed {
+	display: none;
 }
 
 .icon-picker-loading {
@@ -1318,8 +1570,7 @@ button.callout-studio-icon-picker-loading {
 	height: 20px;
 }
 
-.icon-picker-material-cell .icon-picker-material-icon,
-.callout-studio-material-icon {
+.icon-picker-material-cell .icon-picker-material-icon {
 	font-family: var(--cs-material-font, "Material Symbols Outlined");
 	font-weight: var(--cs-material-weight, normal);
 	font-style: normal;
@@ -1372,7 +1623,11 @@ button.callout-studio-icon-picker-loading {
 	box-shadow: inset 0 0 0 2px var(--interactive-accent);
 }
 
+/* One per group in the pooled list (own cursor, own button), or the whole
+   grid's single segment on a source panel — always a grid child now, so it
+   needs to span every column like the group heading and empty-state do. */
 .icon-picker-load-more {
+	grid-column: 1 / -1;
 	text-align: center;
 	padding: 12px;
 }
@@ -2570,6 +2825,84 @@ input.cs-input-invalid:focus {
 	}
 }
 
+/* ── Icon licences & credits ────────────────────────────────── */
+.callout-studio-credits {
+	margin-top: 2rem;
+	padding-top: 1rem;
+	border-top: 1px solid var(--background-modifier-border);
+	color: var(--text-muted);
+	font-size: var(--font-ui-smaller);
+}
+.callout-studio-credits-summary {
+	display: flex;
+	align-items: center;
+	gap: 0.4em;
+	cursor: pointer;
+	color: var(--text-normal);
+	font-size: var(--font-ui-small);
+	font-weight: var(--font-medium);
+	list-style: none;
+}
+.callout-studio-credits-summary::-webkit-details-marker {
+	display: none;
+}
+.callout-studio-credits-chevron {
+	display: inline-flex;
+	transition: transform 120ms ease;
+}
+.callout-studio-credits-chevron svg {
+	width: 1em;
+	height: 1em;
+}
+.callout-studio-credits[open] .callout-studio-credits-chevron {
+	transform: rotate(90deg);
+}
+/* The chevron points at the content, so it flips with the writing direction. */
+[dir="rtl"] .callout-studio-credits-chevron {
+	transform: scaleX(-1);
+}
+[dir="rtl"] .callout-studio-credits[open] .callout-studio-credits-chevron {
+	transform: scaleX(-1) rotate(90deg);
+}
+.callout-studio-credits-intro,
+.callout-studio-credits-more {
+	margin: 0.6em 0;
+	line-height: 1.5;
+}
+.callout-studio-credit {
+	margin: 0.9em 0;
+	padding-inline-start: 0.8em;
+	border-inline-start: 2px solid var(--background-modifier-border);
+	line-height: 1.5;
+}
+.callout-studio-credit-name {
+	color: var(--text-normal);
+	font-weight: var(--font-medium);
+}
+.callout-studio-credit-version,
+.callout-studio-credit-scope {
+	color: var(--text-faint);
+	font-weight: normal;
+}
+.callout-studio-credit-modifications {
+	margin-top: 0.25em;
+	color: var(--text-faint);
+}
+.callout-studio-credit-notice {
+	margin-top: 0.4em;
+	padding: 0.4em 0.6em;
+	border-radius: var(--radius-s);
+	background-color: var(--background-modifier-hover);
+	color: var(--text-muted);
+}
+.callout-studio-credits a {
+	color: var(--text-accent);
+	text-decoration: none;
+}
+.callout-studio-credits a:hover {
+	text-decoration: underline;
+}
+
 /* ── Footer ─────────────────────────────────────────────────── */
 .callout-studio-footer {
 	margin-top: 2rem;
@@ -3002,4 +3335,12 @@ body.cs-anim-window .cs-heading-callout {
 	.cs-welcome-panel {
 		grid-template-columns: 1fr;
 	}
+}
+
+/* Sources the pooled "All sources" list cannot include yet. */
+.icon-picker-missing-sources {
+	padding: 8px 0 4px;
+	color: var(--text-faint);
+	font-size: var(--font-ui-smaller);
+	text-align: center;
 }

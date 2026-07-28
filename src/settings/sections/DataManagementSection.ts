@@ -267,11 +267,10 @@ function importFromJSON(ctx: SettingsSectionContext): void {
 				new Notice(t("notice.importedJSON", { count: imported }));
 			}
 			ctx.display();
-			for (const def of defs) {
-				if (def.icon.type === "material") {
-					void ctx.plugin.cacheMaterialSvg(def.icon);
-				}
-			}
+			// An imported callout can name an icon from a source this vault has
+			// never downloaded, and the file carries no artwork. Fetch whatever
+			// is missing rather than leaving those callouts undrawable.
+			void ctx.plugin.ensureIconArtworkFor(defs.map((d) => d.icon));
 		} else if (settingsImported) {
 			new Notice(t("notice.importedSettings"));
 			ctx.display();

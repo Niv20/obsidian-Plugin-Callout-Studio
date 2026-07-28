@@ -342,6 +342,8 @@ export const he: Record<string, string> = {
 	"iconPicker.emoji": "אימוג'י",
 	"iconPicker.searchLucide": "חיפוש אייקוני Lucide",
 	"iconPicker.loadMore": "טעינת עוד אייקונים",
+	"iconPicker.materialStyle": "סגנון האייקון",
+	"iconPicker.materialWeight": "עובי האייקון",
 	"iconPicker.searchMaterial": "חיפוש אייקוני Material",
 	"iconPicker.searchEmoji": "חיפוש אימוג'י",
 	"iconPicker.skinTone": "גוון עור",
@@ -351,6 +353,53 @@ export const he: Record<string, string> = {
 	"iconPicker.noIconSelected": "לא נבחר אייקון",
 	"iconPicker.noResults": "לא נמצאו אייקונים התואמים לחיפוש.",
 	"iconPicker.delete": "מחיקה",
+	"iconPicker.octicons": "Octicons",
+	"iconPicker.searchOcticons": "חיפוש אייקוני Octicons",
+	"iconPicker.fa": "Font Awesome",
+	"iconPicker.searchFa": "חיפוש ב־Font Awesome",
+	"iconPicker.faStyle": "סגנון האייקון",
+	"iconPicker.faStyleSolid": "מלא (Solid)",
+	"iconPicker.faStyleRegular": "מתאר (Regular)",
+	"iconPicker.faStyleBrands": "מותגים (Brands)",
+	"iconPicker.rpgAwesome": "RPG Awesome",
+	"iconPicker.searchRpgAwesome": "חיפוש ב־RPG Awesome",
+	"iconPicker.allSources": "כל המקורות",
+	"iconPicker.searchAllSources": "חיפוש בכל מקורות האייקונים",
+	"iconPicker.sourcesNotDownloaded":
+		"עדיין לא נכללים: {{names}}. בחרו מקור מהרשימה למעלה כדי להוריד אותו.",
+	"iconPicker.chooseSource": "בחירת מקור",
+	"iconPicker.sourceGroup": "{{name}} · {{count}}",
+
+	// Source menu — what each library holds, in a few words
+	"iconPicker.descAllSources": "חיפוש בכל הספריות בבת אחת",
+	"iconPicker.descLucide": "הספרייה המובנית של אובסידיאן, תמיד זמינה",
+	"iconPicker.descMaterial": "הספרייה של גוגל, ארבעה סגנונות ושבעה משקלים",
+	"iconPicker.descEmoji": "סמלים צבעוניים, בכל גווני העור",
+	"iconPicker.descOcticons": "אייקוני הממשק של GitHub",
+	"iconPicker.descFa": "אייקונים מלאים, מתאר וסמלי מותגים",
+	"iconPicker.descRpgAwesome": "אייקוני פנטזיה ומשחקי תפקידים",
+
+	// Downloadable icon packs
+	"iconPack.downloadTitle": "{{name}} עדיין לא הורדה",
+	"iconPack.downloadDetail": "{{count}} אייקונים · {{size}} · הורדה חד־פעמית",
+	"iconPack.download": "הורדה",
+	"iconPack.downloading": "מוריד את {{name}}…",
+	"iconPack.downloadFailed":
+		"לא ניתן היה להוריד את {{name}}. בדקו את החיבור לאינטרנט ונסו שוב.",
+	"iconPack.retry": "נסו שוב",
+	"iconPack.faBrandsNotice":
+		"אייקוני המותגים הם סימני מסחר של בעליהם. הכללתם כאן אינה מהווה חסות או אישור מצדם. אנא השתמשו בהם רק כדי לייצג את החברה, המוצר או השירות שאליהם הם מתייחסים.",
+	"iconPack.artworkRestored": "האייקונים של {{names}} הורדו.",
+	"iconPack.diskWriteFailed":
+		"Callout Studio לא הצליח לשמור את חבילת האייקונים לדיסק, ולכן היא תידרש להורדה מחדש בפעם הבאה. האייקונים שבחרתם עדיין נשמרים יחד עם ההגדרות.",
+
+	// Icon licences & credits
+	"credits.title": "רישיונות וקרדיטים לאייקונים",
+	"credits.intro":
+		"Callout Studio נעזר בכמה ספריות אייקונים פתוחות. הרישיונות שלהן מופיעים כאן, יחד עם פירוט השינויים שנעשו כדי לשלב אותן.",
+	"credits.fullNotices": "הודעות צד־שלישי המלאות",
+	"credits.pluginLicense":
+		"הקוד של Callout Studio עצמו מופץ ברישיון 0BSD; ספריות האייקונים שומרות על הרישיונות שלהן.",
 
 	// Context Menu
 	"contextMenu.editCallout": "עריכת הגדרות תיבת־הבלטה",
@@ -508,7 +557,9 @@ export const he: Record<string, string> = {
 	"import.err.boolField": '"{{field}}" חייב להיות ערך בוליאני (true או false).',
 	"import.err.iconNotObject": "icon חייב להיות אובייקט (Object).",
 	"import.err.iconTypeInvalid":
-		'סוג האייקון "{{value}}" אינו חוקי (חייב להיות אחד מ־lucide, material או emoji).',
+		'סוג האייקון "{{value}}" אינו חוקי (חייב להיות אחד מ־{{types}}).',
+	"import.warn.iconFieldIgnored":
+		'השדה "{{field}}" רלוונטי רק לאייקוני Material, ולכן מתעלמים ממנו עבור סוג אייקון {{type}}.',
 	"import.err.iconValueEmpty": "ערך האייקון חייב להיות מחרוזת (String) שאינה ריקה.",
 	"import.err.iconValueTooLong":
 		"ערך האייקון חורג מהאורך המקסימלי ({{length}} תווים).",

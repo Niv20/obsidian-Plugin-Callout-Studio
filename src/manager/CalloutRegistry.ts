@@ -12,24 +12,59 @@ import type {
 	ContextMenuItemConfig,
 	ContextMenuItemId,
 	ContextMenuSettings,
+	IconPackId,
+	IconSourceSettings,
+	IconSvgCacheEntry,
 	LegacyPopupSettings,
-	MaterialIconStyle,
-	MaterialSvgCacheEntry,
 	PluginData,
 	PluginSettings,
 } from "../types";
+import { CALLOUT_RENDER_ROLES } from "../types";
 import {
 	DEFAULT_CALLOUTS,
 	DEFAULT_CONTEXT_MENU_ITEMS,
 	DEFAULT_SETTINGS,
 } from "../constants";
+import { iconCacheKey, packFor } from "../icons/registry";
+import { materialPack } from "../icons/packs/material";
 import { obsidianCalloutAttrId } from "../utils/calloutId";
 import { parseCssColorToHex } from "../utils/colorUtils";
 import { sanitizeCustomPalettes } from "../utils/colorPalettes";
 import { sortCalloutsByDisplayName } from "../utils/sorting";
 
-const CURRENT_DATA_VERSION = 2;
+/**
+ * Stamped into `data.json` for provenance. Migrations deliberately key on
+ * whether a field is present rather than on this number — an imported or
+ * hand-edited file can carry any version it likes, and a load that trusted the
+ * stamp would skip work the data actually needs.
+ *
+ * 3: `materialSvgCache` → `iconSvgCache` (generic across icon packs).
+ */
+const CURRENT_DATA_VERSION = 3;
 const SORTED_DEFAULT_CALLOUTS = sortCalloutsByDisplayName(DEFAULT_CALLOUTS);
+
+/**
+ * Merge saved icon-picker state over the defaults, folding the pre-2.4
+ * `lastMaterialCategory` into `lastCategory`, which is keyed by icon source
+ * now that there is more than one source with categories.
+ */
+function mergeIconSources(
+	saved: Partial<IconSourceSettings> | undefined,
+): IconSourceSettings {
+	const merged: IconSourceSettings = {
+		...DEFAULT_SETTINGS.iconSources,
+		...saved,
+	};
+	const legacyCategory = saved?.lastMaterialCategory;
+	if (legacyCategory) {
+		merged.lastCategory = {
+			...merged.lastCategory,
+			material: legacyCategory,
+		};
+	}
+	delete merged.lastMaterialCategory;
+	return merged;
+}
 
 /** Identifier stamped into v2 export files so the importer can recognize them. */
 export const EXPORT_FORMAT_ID = "callout-studio";
@@ -145,10 +180,7 @@ export function mergeSavedSettings(
 				savedSettings.autocomplete?.enabled ??
 				DEFAULT_SETTINGS.autocomplete.enabled,
 		},
-		iconSources: {
-			...DEFAULT_SETTINGS.iconSources,
-			...savedSettings.iconSources,
-		},
+		iconSources: mergeIconSources(savedSettings.iconSources),
 		headingCallouts: {
 			enabled:
 				savedSettings.headingCallouts?.enabled ??
@@ -223,7 +255,7 @@ export class CalloutRegistry {
 	 */
 	private previewChangeCallbacks: RegistryChangeCallback[] = [];
 	settings: PluginSettings;
-	materialSvgCache: MaterialSvgCacheEntry[] = [];
+	iconSvgCache: IconSvgCacheEntry[] = [];
 
 	/**
 	 * The callout ID currently occupied by the transient settings-preview
@@ -288,9 +320,34 @@ export class CalloutRegistry {
 			this.settings = mergeSavedSettings(data.settings);
 		}
 
-		// Restore downloaded SVG data for Material icons selected by the user.
+		// Restore cached artwork for the icons the vault actually uses.
+		if (data.iconSvgCache) {
+			this.iconSvgCache = data.iconSvgCache;
+		}
+		// Migration: fold the pre-2.4 Material-only cache into the generic one.
+		// Keyed on the field being present rather than on `data.version`, since
+		// an imported or hand-edited file can carry any version it likes.
+		// This is the only place that may read `materialSvgCache`; it exists
+		// precisely to retire it.
 		if (data.materialSvgCache) {
-			this.materialSvgCache = data.materialSvgCache;
+			for (const entry of data.materialSvgCache) {
+				this.addIconSvg({
+					pack: "material",
+					name: entry.name,
+					variant: materialPack.cacheVariant(
+						{
+							type: "material",
+							value: entry.name,
+							style: entry.style,
+							weight: entry.weight,
+						},
+						// Material draws the same artwork at every size, so any
+						// role yields the same variant.
+						"regular",
+					),
+					svg: entry.svg,
+				});
+			}
 		}
 		// Migration: any callout that still references the removed `svg` icon
 		// type falls back to a generic lucide pencil so renders don't crash.
@@ -416,10 +473,12 @@ export class CalloutRegistry {
 			version: CURRENT_DATA_VERSION,
 			callouts: calloutsToSave,
 			settings: this.settings,
-			materialSvgCache:
-				this.materialSvgCache.length > 0
-					? this.materialSvgCache
-					: undefined,
+			// `materialSvgCache` is deliberately not written back: the legacy
+			// entries were folded into `iconSvgCache` on load, and writing both
+			// would let them drift apart. Downgrading to a pre-2.4 build simply
+			// re-downloads the Material SVGs.
+			iconSvgCache:
+				this.iconSvgCache.length > 0 ? this.iconSvgCache : undefined,
 		};
 	}
 
@@ -440,6 +499,10 @@ export class CalloutRegistry {
 			current.icon.type !== original.icon.type ||
 			current.icon.value !== original.icon.value ||
 			current.icon.style !== original.icon.style ||
+			// Weight is a real axis of the Material artwork; without it,
+			// changing only a built-in's weight looked unmodified and so was
+			// never persisted.
+			current.icon.weight !== original.icon.weight ||
 			current.foldable !== original.foldable ||
 			current.defaultFolded !== original.defaultFolded ||
 			aliasesChanged ||
@@ -964,51 +1027,64 @@ export class CalloutRegistry {
 		return this.callouts.get(id);
 	}
 
-	// ── Material SVG cache ───────────────────────────────────
+	// ── Icon SVG cache ───────────────────────────────────────
 
-	findMaterialSvg(
+	findIconSvg(
+		pack: IconPackId,
 		name: string,
-		style: MaterialIconStyle,
-		weight: number = 400,
-	): MaterialSvgCacheEntry | undefined {
-		return this.materialSvgCache.find(
-			(e) => e.name === name && e.style === style && e.weight === weight,
+		variant: string,
+	): IconSvgCacheEntry | undefined {
+		return this.iconSvgCache.find(
+			(e) => e.pack === pack && e.name === name && e.variant === variant,
 		);
 	}
 
-	addMaterialSvg(entry: MaterialSvgCacheEntry): void {
-		this.materialSvgCache = this.materialSvgCache.filter(
+	addIconSvg(entry: IconSvgCacheEntry): void {
+		this.iconSvgCache = this.iconSvgCache.filter(
 			(e) =>
 				!(
+					e.pack === entry.pack &&
 					e.name === entry.name &&
-					e.style === entry.style &&
-					e.weight === entry.weight
+					e.variant === entry.variant
 				),
 		);
-		this.materialSvgCache.push(entry);
+		this.iconSvgCache.push(entry);
 	}
 
-	/** Removes cached Material SVGs that are no longer used by any callout. */
-	cleanupUnusedMaterialSvgs(): void {
+	/**
+	 * Drop cached artwork no callout references any more.
+	 *
+	 * A single icon can occupy several entries at once, because a pack may draw
+	 * it differently per render role — so every role's variant has to be
+	 * collected, not just the one the blockquote uses. Miss that and each save
+	 * would evict the artwork the inline pills are rendering from.
+	 */
+	cleanupUnusedIconSvgs(): void {
 		const usedKeys = new Set<string>();
 		for (const def of this.callouts.values()) {
-			if (def.icon.type === "material") {
+			const pack = packFor(def.icon);
+			if (!pack) continue;
+			for (const role of CALLOUT_RENDER_ROLES) {
 				usedKeys.add(
-					`${def.icon.style ?? "outlined"}/${def.icon.value}/${def.icon.weight ?? 400}`,
+					iconCacheKey(
+						def.icon.type,
+						def.icon.value,
+						pack.cacheVariant(def.icon, role),
+					),
 				);
 			}
 		}
-		this.materialSvgCache = this.materialSvgCache.filter((entry) =>
-			usedKeys.has(`${entry.style}/${entry.name}/${entry.weight}`),
+		this.iconSvgCache = this.iconSvgCache.filter((entry) =>
+			usedKeys.has(iconCacheKey(entry.pack, entry.name, entry.variant)),
 		);
 	}
 
-	clearMaterialSvgCache(): void {
-		this.materialSvgCache = [];
+	clearIconSvgCache(): void {
+		this.iconSvgCache = [];
 	}
 
-	getMaterialSvgCacheSize(): number {
-		return this.materialSvgCache.reduce(
+	getIconSvgCacheSize(): number {
+		return this.iconSvgCache.reduce(
 			(acc, e) => acc + new Blob([e.svg]).size,
 			0,
 		);
@@ -1037,7 +1113,7 @@ export class CalloutRegistry {
 		this.settings.fallbackCalloutId = DEFAULT_SETTINGS.fallbackCalloutId;
 		this.settings.customPalettes = [];
 		// Clear SVG caches
-		this.materialSvgCache = [];
+		this.clearIconSvgCache();
 		this.notifyChange();
 	}
 

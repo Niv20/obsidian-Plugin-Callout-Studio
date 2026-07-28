@@ -21,6 +21,8 @@ import {
 import type CalloutStudioPlugin from "../main";
 import type { CalloutDefinition, CalloutRenderRole } from "../types";
 import { CalloutEditor } from "../settings/CalloutEditor";
+import { renderIconInto } from "../icons/renderIcon";
+import { createIconResolver } from "../icons/resolver";
 import { getLocale, t } from "../i18n";
 import {
 	getSortedCalloutIds,
@@ -305,35 +307,17 @@ export class CalloutAutoComplete extends EditorSuggest<CalloutSuggestion> {
 			cls: "callout-studio-suggestion-icon",
 		});
 		iconEl.style.color = color;
-		try {
-			if (def.icon.type === "lucide") {
-				setIcon(iconEl, def.icon.value);
-			} else if (def.icon.type === "emoji") {
-				iconEl.textContent = def.icon.value;
-			} else if (def.icon.type === "material") {
-				const cached = this.plugin.registry.findMaterialSvg(
-					def.icon.value,
-					def.icon.style ?? "outlined",
-					def.icon.weight ?? 400,
-				);
-				if (cached) {
-					const parser = new DOMParser();
-					const doc = parser.parseFromString(
-						cached.svg,
-						"image/svg+xml",
-					);
-					const svgEl = doc.documentElement;
-					svgEl.setAttribute("fill", "currentColor");
-					iconEl.appendChild(iconEl.doc.importNode(svgEl, true));
-				} else {
-					setIcon(iconEl, "pencil");
-				}
-			} else {
-				setIcon(iconEl, "pencil");
-			}
-		} catch {
-			iconEl.textContent = "📝";
-		}
+		renderIconInto(
+			iconEl,
+			def.icon,
+			createIconResolver(this.plugin.registry),
+			{
+				role: "regular",
+				fill: "currentColor",
+				missing: { kind: "placeholder", lucideId: "pencil" },
+				errorText: "📝",
+			},
+		);
 
 		// Text container
 		const textEl = el.createDiv({ cls: "callout-studio-suggestion-text" });

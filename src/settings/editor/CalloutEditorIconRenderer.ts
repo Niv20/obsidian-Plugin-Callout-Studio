@@ -1,13 +1,13 @@
 /**
  * settings/editor/CalloutEditorIconRenderer.ts — Icon preview inside CalloutEditor.
  *
- * Renders the currently selected icon (Lucide, Material SVG, or emoji) into
- * a container element. Handles loading states and failure fallbacks for
- * Material icons whose SVG has not yet been downloaded.
+ * Renders the currently selected icon into a container element, including the
+ * loading and failure states for artwork that has not been downloaded yet.
  * Called by CalloutEditor whenever the selected icon changes.
  */
-import { setIcon } from "obsidian";
 import type { CalloutIcon } from "../../types";
+import { renderIconInto } from "../../icons/renderIcon";
+import { createStatusIconResolver } from "../../icons/resolver";
 import type { CalloutEditorPlugin } from "./types";
 
 export function renderCalloutEditorIconPreview(
@@ -16,46 +16,12 @@ export function renderCalloutEditorIconPreview(
 	container: HTMLElement,
 ): void {
 	container.empty();
-	container.removeClass("is-loading");
-	container.removeClass("is-error");
-	switch (icon.type) {
-		case "lucide":
-			try {
-				setIcon(container, icon.value);
-			} catch {
-				container.textContent = "?";
-			}
-			break;
-		case "material": {
-			const cached = plugin.registry.findMaterialSvg(
-				icon.value,
-				icon.style ?? "outlined",
-				icon.weight ?? 400,
-			);
-			if (cached) {
-				const parser = new DOMParser();
-				const doc = parser.parseFromString(cached.svg, "image/svg+xml");
-				const svgEl = doc.documentElement;
-				svgEl.setAttribute("fill", "currentColor");
-				container.appendChild(container.doc.importNode(svgEl, true));
-			} else {
-				const failed = plugin.hasMaterialSvgFailed(
-					icon.value,
-					icon.style ?? "outlined",
-					icon.weight ?? 400,
-				);
-				if (failed) {
-					setIcon(container, "circle-help");
-					container.addClass("is-error");
-				} else {
-					setIcon(container, "loader-2");
-					container.addClass("is-loading");
-				}
-			}
-			break;
-		}
-		case "emoji":
-			container.textContent = icon.value;
-			break;
-	}
+	renderIconInto(container, icon, createStatusIconResolver(plugin), {
+		role: "regular",
+		fill: "currentColor",
+		// The editor is where the user just picked the icon, so a pending or
+		// failed download has to be visible rather than masked by a stand-in.
+		missing: { kind: "status" },
+		errorText: "?",
+	});
 }

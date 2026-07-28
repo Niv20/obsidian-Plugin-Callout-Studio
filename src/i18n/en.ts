@@ -350,6 +350,8 @@ export const en: Record<string, string> = {
 	"iconPicker.emoji": "Emoji",
 	"iconPicker.searchLucide": "Search Lucide icons",
 	"iconPicker.loadMore": "Load more",
+	"iconPicker.materialStyle": "Icon style",
+	"iconPicker.materialWeight": "Icon weight",
 	"iconPicker.searchMaterial": "Search Material icons",
 	"iconPicker.searchEmoji": "Search emojis",
 	"iconPicker.skinTone": "Skin tone",
@@ -359,6 +361,53 @@ export const en: Record<string, string> = {
 	"iconPicker.noIconSelected": "No icon selected",
 	"iconPicker.noResults": "No icons match your search.",
 	"iconPicker.delete": "Delete",
+	"iconPicker.octicons": "Octicons",
+	"iconPicker.searchOcticons": "Search Octicons",
+	"iconPicker.fa": "Font Awesome",
+	"iconPicker.searchFa": "Search Font Awesome",
+	"iconPicker.faStyle": "Icon style",
+	"iconPicker.faStyleSolid": "Solid",
+	"iconPicker.faStyleRegular": "Regular",
+	"iconPicker.faStyleBrands": "Brands",
+	"iconPicker.rpgAwesome": "RPG Awesome",
+	"iconPicker.searchRpgAwesome": "Search RPG Awesome",
+	"iconPicker.allSources": "All sources",
+	"iconPicker.searchAllSources": "Search all icon sources",
+	"iconPicker.sourcesNotDownloaded":
+		"Not included yet: {{names}}. Pick a source above to download it.",
+	"iconPicker.chooseSource": "Choose source",
+	"iconPicker.sourceGroup": "{{name}} · {{count}}",
+
+	// Source menu — what each library holds, in a few words
+	"iconPicker.descAllSources": "search every library at once",
+	"iconPicker.descLucide": "Obsidian's own set, always offline",
+	"iconPicker.descMaterial": "Google's set, four styles and seven weights",
+	"iconPicker.descEmoji": "colour glyphs, every skin tone",
+	"iconPicker.descOcticons": "GitHub's interface icons",
+	"iconPicker.descFa": "solid, regular and brand marks",
+	"iconPicker.descRpgAwesome": "fantasy and tabletop icons",
+
+	// Downloadable icon packs
+	"iconPack.downloadTitle": "{{name}} is not downloaded yet",
+	"iconPack.downloadDetail": "{{count}} icons · {{size}} · one-time download",
+	"iconPack.download": "Download",
+	"iconPack.downloading": "Downloading {{name}}…",
+	"iconPack.downloadFailed":
+		"Could not download {{name}}. Check your connection and try again.",
+	"iconPack.retry": "Retry",
+	"iconPack.faBrandsNotice":
+		"Brand icons are trademarks of their respective owners. Their inclusion does not indicate endorsement. Please use them only to represent the company, product, or service they refer to.",
+	"iconPack.artworkRestored": "Downloaded the icon artwork for {{names}}.",
+	"iconPack.diskWriteFailed":
+		"Callout Studio could not save the icon pack to disk, so it will need downloading again next time. The icons you pick are still saved with your settings.",
+
+	// Icon licences & credits
+	"credits.title": "Icon licences and credits",
+	"credits.intro":
+		"Callout Studio draws on several open icon libraries. Their licences are reproduced below, along with what was changed to use them here.",
+	"credits.fullNotices": "Full third-party notices",
+	"credits.pluginLicense":
+		"Callout Studio's own code is 0BSD; the icon libraries keep their own licences.",
 
 	// Context Menu
 	"contextMenu.editCallout": "Edit callout settings",
@@ -521,7 +570,9 @@ export const en: Record<string, string> = {
 	"import.err.boolField": '"{{field}}" must be a boolean (true or false).',
 	"import.err.iconNotObject": "Icon must be an object.",
 	"import.err.iconTypeInvalid":
-		'Icon type "{{value}}" is not one of: lucide, material, emoji.',
+		'Icon type "{{value}}" is not one of: {{types}}.',
+	"import.warn.iconFieldIgnored":
+		'"{{field}}" only applies to Material icons and is ignored for icon type {{type}}.',
 	"import.err.iconValueEmpty": "Icon value must be a non-empty string.",
 	"import.err.iconValueTooLong":
 		"Icon value is unusually long ({{length}} characters).",

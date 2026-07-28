@@ -15,7 +15,7 @@ import type {
 	CalloutIcon,
 	CustomPalette,
 } from "../types";
-import { IconPicker } from "./IconPicker";
+import { IconPicker } from "./iconpicker";
 import { LiveCalloutPreview } from "./LiveCalloutPreview";
 import { PREVIEW_PLACEHOLDER_ID } from "../constants";
 import {

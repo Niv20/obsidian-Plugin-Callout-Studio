@@ -9,9 +9,10 @@
 import type { App } from "obsidian";
 import type { CalloutRegistry } from "../../manager/CalloutRegistry";
 import type { CSSInjector } from "../../manager/CSSInjector";
+import type { PackDataStore } from "../../icons/PackDataStore";
 import type {
 	CalloutIcon,
-	MaterialIconStyle,
+	CalloutRenderRole,
 	PluginSettings,
 } from "../../types";
 
@@ -23,10 +24,8 @@ export interface CalloutEditorPlugin {
 	pruneSuspended: boolean;
 	saveSettings(): Promise<void>;
 	schedulePruneUnusedFallbacks(delayMs?: number): void;
-	cacheMaterialSvg(icon: CalloutIcon): Promise<void>;
-	hasMaterialSvgFailed(
-		name: string,
-		style: MaterialIconStyle,
-		weight: number,
-	): boolean;
+	ensureIconArtwork(icon: CalloutIcon): Promise<void>;
+	hasIconFetchFailed(icon: CalloutIcon, role: CalloutRenderRole): boolean;
+	/** Icon sources and their downloadable artwork, for the picker. */
+	icons: { packs: PackDataStore };
 }
