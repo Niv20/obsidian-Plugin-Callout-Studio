@@ -63,6 +63,9 @@ export class ImagePanel {
 	) {
 		const selected = host.selectedIcon();
 		this.activeId = selected?.type === "image" ? selected.value : null;
+		// PackPanel builds a toolbar and a body under the same class names, so
+		// anything this panel styles on its own needs a marker to hang off.
+		container.addClass("icon-picker-image-panel");
 		this.toolbarEl = container.createDiv("icon-picker-toolbar");
 		this.bodyEl = container.createDiv("icon-picker-body");
 		this.footerEl = container.createDiv("icon-picker-image-footer");

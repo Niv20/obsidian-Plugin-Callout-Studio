@@ -1622,12 +1622,19 @@ button.callout-studio-icon-picker-loading {
 	height: 1em;
 }
 
-/* Dropping a file anywhere on the panel adds it, so the whole panel is the
-   target rather than a separate drop zone taking up room. */
-.icon-picker-panel.is-drop-target {
+/* Dropping a file anywhere on the panel adds it, so no separate drop zone takes
+   up room — but the frame marks the grid alone. Around the whole panel it also
+   enclosed the toolbar and the storage line, and on a long list its bottom edge
+   sat below the fold. */
+.icon-picker-image-panel.is-drop-target .icon-picker-body {
 	outline: 2px dashed var(--interactive-accent);
-	outline-offset: -4px;
+	outline-offset: -2px;
 	border-radius: var(--radius-m);
+}
+
+/* Keeps that frame a target rather than a sliver when only one picture is in. */
+.icon-picker-image-panel .icon-picker-body {
+	min-height: 120px;
 }
 
 .icon-picker-image-footer {
