@@ -302,4 +302,5 @@ export const DEFAULT_SETTINGS: PluginSettings = {
 	fallbackCalloutId: "note",
 	language: "auto",
 	customPalettes: [],
+	userImages: [],
 };

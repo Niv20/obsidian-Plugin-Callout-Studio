@@ -18,6 +18,7 @@ import type {
 	LegacyPopupSettings,
 	PluginData,
 	PluginSettings,
+	UserImageIcon,
 } from "../types";
 import { CALLOUT_RENDER_ROLES } from "../types";
 import {
@@ -30,6 +31,8 @@ import { materialPack } from "../icons/packs/material";
 import { obsidianCalloutAttrId } from "../utils/calloutId";
 import { parseCssColorToHex } from "../utils/colorUtils";
 import { sanitizeCustomPalettes } from "../utils/colorPalettes";
+import { sanitizeUserImages } from "../utils/userImages";
+import { setUserImages } from "../icons/packs/userImages";
 import { sortCalloutsByDisplayName } from "../utils/sorting";
 
 /**
@@ -205,6 +208,7 @@ export function mergeSavedSettings(
 			DEFAULT_SETTINGS.fallbackCalloutId,
 		language: savedSettings.language ?? DEFAULT_SETTINGS.language,
 		customPalettes: sanitizeCustomPalettes(savedSettings.customPalettes),
+		userImages: sanitizeUserImages(savedSettings.userImages),
 	};
 }
 
@@ -282,6 +286,7 @@ export class CalloutRegistry {
 
 	constructor() {
 		this.settings = structuredClone(DEFAULT_SETTINGS);
+		this.syncUserImages();
 		for (const def of SORTED_DEFAULT_CALLOUTS) {
 			this.builtInDefaults.set(def.id, structuredClone(def));
 		}
@@ -318,6 +323,7 @@ export class CalloutRegistry {
 		// Merge settings (field-by-field against defaults; see mergeSavedSettings)
 		if (data.settings) {
 			this.settings = mergeSavedSettings(data.settings);
+			this.syncUserImages();
 		}
 
 		// Restore cached artwork for the icons the vault actually uses.
@@ -356,6 +362,18 @@ export class CalloutRegistry {
 			if (t === "svg") {
 				def.icon = { type: "lucide", value: "pencil" };
 			}
+		}
+		// Migration: `recolor` used to live on the picture, shared by every
+		// callout pointing at it. Give each callout its own copy, taken from the
+		// picture, so nothing changes appearance on the way over.
+		for (const def of this.callouts.values()) {
+			if (def.icon.type !== "image" || def.icon.recolor !== undefined) {
+				continue;
+			}
+			const picture = this.settings.userImages.find(
+				(image) => image.id === def.icon.value,
+			);
+			def.icon = { ...def.icon, recolor: picture?.monochrome === true };
 		}
 		// Migration: link any callout saved before `paletteId` existed but whose
 		// baked colors still exactly match a saved custom palette, so an edit to
@@ -1112,6 +1130,11 @@ export class CalloutRegistry {
 		// longer exist after the reset, which would leave the dropdown blank.
 		this.settings.fallbackCalloutId = DEFAULT_SETTINGS.fallbackCalloutId;
 		this.settings.customPalettes = [];
+		// The user's own pictures go with everything else they made — leaving
+		// them behind would keep the largest thing in `data.json` after a reset
+		// that is meant to empty it.
+		this.settings.userImages = [];
+		this.syncUserImages();
 		// Clear SVG caches
 		this.clearIconSvgCache();
 		this.notifyChange();
@@ -1196,6 +1219,33 @@ export class CalloutRegistry {
 		if (idx >= 0) {
 			this.changeCallbacks.splice(idx, 1);
 		}
+	}
+
+	/** The user's own pictures, newest first. */
+	getUserImages(): readonly UserImageIcon[] {
+		return this.settings.userImages;
+	}
+
+	/**
+	 * Replace the picture list and tell everything that draws to catch up.
+	 *
+	 * The single writer, so the pack's snapshot can never drift from settings.
+	 * Callers still own persistence — `notifyChange` reaches the CSS injector,
+	 * but `saveSettings()` is the plugin's to call, exactly as for callouts.
+	 */
+	setUserImages(images: readonly UserImageIcon[]): void {
+		this.settings.userImages = [...images];
+		this.syncUserImages();
+		this.notifyChange();
+	}
+
+	/**
+	 * Hand the pack the current pictures. It reads a module-level snapshot
+	 * rather than settings, because `buildSvg` is synchronous and is called from
+	 * render paths with no route back to the plugin.
+	 */
+	private syncUserImages(): void {
+		setUserImages(this.settings.userImages);
 	}
 
 	private notifyChange(): void {

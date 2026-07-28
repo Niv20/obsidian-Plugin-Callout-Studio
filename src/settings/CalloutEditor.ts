@@ -8,7 +8,7 @@
  * CalloutEditorSave; validation to CalloutEditorValidation.
  */
 import { Modal, Notice, Setting, SliderComponent, setIcon } from "obsidian";
-import type { TextComponent } from "obsidian";
+import type { TextComponent, ToggleComponent } from "obsidian";
 import type {
 	BgGradient,
 	CalloutDefinition,
@@ -53,6 +53,8 @@ import {
 } from "./editor/CalloutEditorValidation";
 import { renderCalloutEditorIconPreview } from "./editor/CalloutEditorIconRenderer";
 import { performCalloutEditorSave } from "./editor/CalloutEditorSave";
+import { findUserImage } from "../icons/packs/userImages";
+import { createControlGroup } from "./styleControls";
 
 // Derive a callout ID from the display name. Spaces are preserved (the ID may
 // be a human-readable, multi-word label like "multi word callout"); the shared
@@ -112,6 +114,14 @@ export class CalloutEditor extends Modal {
 	/** Id of the palette (custom or preset) currently applied, if any. */
 	private paletteId: string | undefined;
 	private preview: LiveCalloutPreview | null = null;
+	private recolorToggle: ToggleComponent | null = null;
+	/**
+	 * Re-reads the Picture section from the current icon: whether it applies at
+	 * all, and what it should show. Assigned when the section is built, because
+	 * that is the only place its elements exist; the icon picker is the one thing
+	 * that can invalidate it afterwards.
+	 */
+	private syncPictureBox: () => void = () => undefined;
 	/**
 	 * Colours the live preview shows *instead of* the committed ones while the
 	 * user hovers a palette that was never clicked. Deliberately kept out of
@@ -391,6 +401,8 @@ export class CalloutEditor extends Modal {
 					iconSetting.setDesc(this.getIconLabel());
 					iconPreviewEl.empty();
 					this.renderIconPreview(iconPreviewEl);
+					// The only thing that can turn the Picture section on or off.
+					this.syncPictureBox();
 					this.updatePreview();
 				}
 			});
@@ -527,6 +539,45 @@ export class CalloutEditor extends Modal {
 					this.updatePreview();
 				});
 		});
+
+		// ── Picture section ──
+		// Only a picture has anything to say here, so the box hides itself for
+		// every other icon rather than showing a switch that does nothing.
+		// Same group chrome as the Align box in the global style popup, so the
+		// toggle row gets the same padding instead of Obsidian's modal default
+		// (which zeroes it and pins the label to the box edge).
+		const pictureBox = createControlGroup(
+			adjustCol,
+			t("editor.picture"),
+			"cs-layout-group",
+		);
+		new Setting(pictureBox)
+			.setName(t("iconPicker.imageRecolor"))
+			.addToggle((toggle) => {
+				this.recolorToggle = toggle;
+				toggle.onChange((value: boolean) => {
+					// Straight onto the icon, which the save flow and the dirty
+					// check already carry — so this stages like every other field
+					// here, and Cancel puts it back.
+					this.icon = { ...this.icon, recolor: value };
+					this.updatePreview();
+				});
+			});
+		this.syncPictureBox = () => {
+			const picture =
+				this.icon.type === "image"
+					? findUserImage(this.icon.value)
+					: undefined;
+			// A mask is a stencil, so only a flat drawing can follow the callout;
+			// a photo would come out a silhouette. Rather than showing the switch
+			// disabled beside a line of prose explaining why, the box just stays
+			// out of the way for a raster picture.
+			const canFollow = picture?.format === "svg";
+			pictureBox.toggleClass("cs-hidden", !canFollow);
+			if (!canFollow) return;
+			this.recolorToggle?.setValue(this.icon.recolor === true);
+		};
+		this.syncPictureBox();
 
 		// ── Palette dropdown (fills the Color row created above the preview) ──
 		// Build rich palette dropdown (custom widget with circles + names).

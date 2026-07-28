@@ -230,12 +230,16 @@ function importFromJSON(ctx: SettingsSectionContext): void {
 		// fields are impossible here).
 		const settingsImported = !!result.settings;
 		if (result.settings) {
-			// Merge saved palettes by id rather than letting Object.assign
-			// replace the array wholesale — otherwise importing a file with
-			// no palettes would silently wipe the user's existing ones. This
-			// mirrors how callouts are merged (add new / overwrite same id).
-			const { customPalettes: importedPalettes, ...restSettings } =
-				result.settings;
+			// Merge saved palettes and pictures by id rather than letting
+			// Object.assign replace the arrays wholesale — otherwise importing
+			// a file with none of either would silently wipe the user's
+			// existing ones. This mirrors how callouts are merged (add new /
+			// overwrite same id).
+			const {
+				customPalettes: importedPalettes,
+				userImages: importedImages,
+				...restSettings
+			} = result.settings;
 			Object.assign(ctx.plugin.registry.settings, restSettings);
 			if (importedPalettes) {
 				const byId = new Map(
@@ -250,6 +254,19 @@ function importFromJSON(ctx: SettingsSectionContext): void {
 				ctx.plugin.registry.settings.customPalettes = [
 					...byId.values(),
 				];
+			}
+			if (importedImages) {
+				const byId = new Map(
+					ctx.plugin.registry
+						.getUserImages()
+						.map((image) => [image.id, image]),
+				);
+				for (const image of importedImages) {
+					byId.set(image.id, image);
+				}
+				// Through the registry rather than by assignment: it is what
+				// hands the new pictures to the pack that draws them.
+				ctx.plugin.registry.setUserImages([...byId.values()]);
 			}
 			await ctx.plugin.saveSettings();
 			ctx.plugin.refreshRenderModes();

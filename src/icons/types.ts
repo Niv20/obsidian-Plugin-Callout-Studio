@@ -40,7 +40,13 @@ export type IconPackKind =
 	 */
 	| "perIconRemote"
 	/** One file of path data for the whole pack, downloaded once, then offline. */
-	| "bundledRemote";
+	| "bundledRemote"
+	/**
+	 * Artwork the user supplied, held in settings rather than fetched or
+	 * bundled. Always available and never downloadable, so every "is this
+	 * drawable yet" question answers yes without touching the network.
+	 */
+	| "local";
 
 /** One searchable icon in a pack's bundled index. */
 export interface IconEntry {

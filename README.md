@@ -196,9 +196,19 @@ Material Symbols is the exception: it has over 100,000 style and weight combinat
 
 If you never open the Material source, none of this happens.
 
+### Your own pictures
+
+**Your images** is the one source that downloads nothing, ever. You add SVG, PNG, JPEG or WebP files from your own computer, and they stay on your device.
+
+- **An SVG stays an SVG**, so it is sharp at any size — but only after being filtered through a strict allow-list. Shapes, gradients and clipping survive; scripts, event handlers, `<foreignObject>`, external references and anything that could fetch from the network do not. That filtering is repeated every time the file is read, not just when you add it, so a picture that arrives in an import or is edited by hand is checked too.
+- **A PNG, JPEG or WebP is re-encoded**: it is decoded, scaled so its longest side is at most 128 pixels, and drawn onto a canvas. What gets stored is the resulting pixels, so nothing of the original file survives to be interpreted later.
+- **Pictures live in `data.json` with the rest of your settings.** That means they sync wherever your settings sync, and an export carries them — one JSON file, the same **Import** button, no archive to unpack.
+- **SVG pictures can follow the callout's color** instead of keeping their own, which is what makes a flat one-color logo track your light and dark themes. Callout Studio guesses when you add the file — one color means follow, several means keep — and there is a toggle in the picker either way. PNG, JPEG and WebP always keep their own colors: painting a callout's color through a picture is a stencil, and a photograph would come out a silhouette.
+
 ### What is stored locally
 
 - **The artwork of icons you actually use** is copied into the plugin's `data.json`, so your callouts still render on a device that synced your settings but never downloaded the source, and after a cached pack file is deleted. Unused entries are cleaned up automatically when you edit or delete a callout; **Reset all** clears them outright.
+- **The pictures you added yourself**, also in `data.json` — typically five to twenty kilobytes each after the size cap above. The picker shows the running total, and **Reset all** clears them along with everything else you made.
 - **Downloaded icon sources** live in `.obsidian/plugins/callout-studio/icon-packs/`. Deleting them is safe: your callouts keep rendering from the copy in `data.json`, and the picker offers the download again. If a callout does turn out to need artwork that only the deleted file had, it is fetched again on the next launch.
 - **Two snapshots of the plugin's generated CSS**, to remove the brief flash of unstyled callouts on slow startups (mainly mobile): an auto-generated snippet at `.obsidian/snippets/callout-studio-do-not-delete.css`, which Obsidian applies before community plugins load, and a small per-device localStorage cache. Both contain only generated styling, never vault content, and never leave your device. The snippet is self-healing: if it is deleted or turned off, the plugin recreates and re-enables it the next time it loads, so the startup flash never silently comes back.
 

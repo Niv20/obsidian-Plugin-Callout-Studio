@@ -1591,6 +1591,93 @@ button.callout-studio-icon-picker-loading {
 	line-height: 1;
 }
 
+/* A user's own picture: keeps its colours and its proportions, unlike the
+   monochrome glyphs the generic cell rule stretches to fill its box. The
+   padding is on every cell, not just the selected one, so nothing jumps on
+   click — and it is what leaves the selected cell's accent background visible
+   as a frame, since a picture that fills its square would otherwise hide it
+   completely. */
+.icon-picker-image-cell {
+	padding: 3px;
+	/* Stated rather than inherited: the cell's 42px is a fixed grid track, and
+	   content-box would push it to 48 and overflow the column. */
+	box-sizing: border-box;
+}
+
+.icon-picker-image-cell svg {
+	width: 100%;
+	height: 100%;
+	object-fit: contain;
+}
+
+/* Ringed as well as framed: a glyph leaves an accent halo inside its cell to
+   read the selection by, a full-bleed picture leaves none. */
+.icon-picker-image-cell.is-selected {
+	box-shadow: 0 0 0 2px var(--interactive-accent);
+}
+
+/* Room for that ring, and pictures need more air between them than the
+   monochrome glyphs the 4px default was measured for. */
+.icon-picker-image-panel .icon-picker-grid {
+	gap: 8px;
+}
+
+/* ── "Your images" panel ───────────────────────────────────────────── */
+
+/* The real file input never shows; the styled button beside it drives it. */
+.icon-picker-image-input {
+	display: none;
+}
+
+.icon-picker-image-add,
+.icon-picker-image-delete {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	flex-shrink: 0;
+}
+
+/* Delete stays in place with nothing selected rather than coming and going, so
+   it needs to read as unavailable on its own — mod-warning keeps its colour
+   otherwise, and a red button that ignores clicks looks broken. */
+.icon-picker-image-delete:disabled {
+	opacity: 0.5;
+	cursor: not-allowed;
+}
+
+.icon-picker-image-btn-icon {
+	display: inline-flex;
+}
+
+.icon-picker-image-btn-icon svg {
+	width: 1em;
+	height: 1em;
+}
+
+/* Dropping a file anywhere on the panel adds it, so no separate drop zone takes
+   up room — but the frame marks the grid alone, since around the whole panel it
+   would enclose the toolbar too. */
+.icon-picker-image-panel.is-drop-target .icon-picker-body {
+	outline: 2px dashed var(--interactive-accent);
+	outline-offset: -2px;
+	border-radius: var(--radius-m);
+}
+
+/* The grid area is the drop target, so it reaches the bottom of the picker
+   however few pictures are in: with the body only as tall as its rows, the
+   empty space below it belonged to the scroll container, and a file let go
+   there was silently ignored. */
+.icon-picker-image-panel {
+	display: flex;
+	flex-direction: column;
+	min-height: 100%;
+}
+
+.icon-picker-image-panel .icon-picker-body {
+	flex: 1;
+	min-height: 120px;
+}
+
 /* Skin-tone selector — swatches previewing a sample glyph per tone */
 .icon-picker-skin-row {
 	display: flex;
@@ -1645,6 +1732,12 @@ button.callout-studio-icon-picker-loading {
 	text-align: center;
 	white-space: nowrap;
 	color: var(--text-muted);
+}
+
+.icon-picker-empty {
+	white-space: normal;
+	max-width: 320px;
+	margin: 0 auto;
 }
 
 .icon-picker-error {

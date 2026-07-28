@@ -12,7 +12,13 @@
  */
 import { Modal, setIcon } from "obsidian";
 import type { App } from "obsidian";
-import type { CalloutIcon, IconSourceId, PluginSettings } from "../../types";
+import type {
+	CalloutDefinition,
+	CalloutIcon,
+	IconSourceId,
+	PluginSettings,
+	UserImageIcon,
+} from "../../types";
 import type { IconVariantState } from "../../icons/types";
 import { ICON_SOURCE_IDS, getSource, packFor } from "../../icons/registry";
 import type { PackDataStore } from "../../icons/PackDataStore";
@@ -30,8 +36,19 @@ import {
 	type PickerSourceId,
 } from "./allSources";
 import { PackPanel } from "./PackPanel";
+import { ImagePanel } from "./ImagePanel";
 import { t } from "../../i18n";
 import type { LocaleKey } from "../../i18n";
+
+/**
+ * What the modal needs of whichever panel is on screen. Every source but one is
+ * a PackPanel; "Your images" is an ImagePanel, because it is the only library
+ * the user can write to (see ImagePanel's header).
+ */
+interface PickerPanel {
+	render(): Promise<void>;
+	dispose(): void;
+}
 
 /** What the source menu needs to draw a row, pooled list included. */
 interface SourceMeta {
@@ -64,6 +81,16 @@ export interface IconPickerPlugin {
 	saveSettings(): Promise<void>;
 	ensureIconArtwork(icon: CalloutIcon): Promise<void>;
 	icons: { packs: PackDataStore };
+	/**
+	 * The slice of the registry the "Your images" panel needs: the picture list
+	 * and its one writer, plus the callouts, so deleting a picture can say how
+	 * many callouts are about to lose their icon.
+	 */
+	registry: {
+		getUserImages(): readonly UserImageIcon[];
+		setUserImages(images: readonly UserImageIcon[]): void;
+		getAll(): CalloutDefinition[];
+	};
 }
 
 export class IconPicker extends Modal {
@@ -71,7 +98,7 @@ export class IconPicker extends Modal {
 	private readonly currentIcon: CalloutIcon | null;
 	private selectedIcon: CalloutIcon | null;
 	private activeSource: PickerSourceId;
-	private panel: PackPanel | null = null;
+	private panel: PickerPanel | null = null;
 
 	private panelHostEl!: HTMLElement;
 	private previewEl!: HTMLElement;
@@ -237,8 +264,8 @@ export class IconPicker extends Modal {
 		setIcon(chevron, "chevron-down");
 	}
 
-	/** Rebuilt on every open, so counts loaded in the background (and a source
-	 * picked elsewhere) are never stale by the time the menu is seen. */
+	/** Rebuilt on every open, so counts (and a source picked elsewhere) are never
+	 * stale by the time the menu is seen — see `sourceCount`. */
 	private buildSourceMenuItems(): void {
 		this.sourceMenuEl.empty();
 		this.sourceMenuItems = [];
@@ -384,13 +411,24 @@ export class IconPicker extends Modal {
 	 * toolbar can restyle them.
 	 */
 	private countFor(id: PickerSourceId): number | undefined {
-		if (id !== ALL_SOURCES) return this.sourceCounts.get(id);
+		if (id !== ALL_SOURCES) return this.sourceCount(id);
 		if (this.sourceCounts.size === 0) return undefined;
 		// Only what the pool actually contains, which grows as sources download.
 		return availableSources(this.plugin.icons.packs).reduce(
-			(total, pack) => total + (this.sourceCounts.get(pack.id) ?? 0),
+			(total, pack) => total + (this.sourceCount(pack.id) ?? 0),
 			0,
 		);
+	}
+
+	/**
+	 * One source's count. Every library is fixed, so the number loaded once on
+	 * open holds for the life of the modal — but "Your images" is the one source
+	 * the user writes to, and a count cached on open would still claim four
+	 * pictures after a fifth was added. That one is read live instead.
+	 */
+	private sourceCount(id: IconSourceId): number | undefined {
+		if (id === "image") return this.plugin.registry.getUserImages().length;
+		return this.sourceCounts.get(id);
 	}
 
 	private async loadSourceCounts(): Promise<void> {
@@ -419,8 +457,30 @@ export class IconPicker extends Modal {
 	private async showPanel(): Promise<void> {
 		this.panel?.dispose();
 		this.panelHostEl.empty();
+		const host = this.panelHostEl.createDiv("icon-picker-panel");
+
+		// The one source the user writes to needs its own panel; see ImagePanel.
+		if (this.activeSource === "image") {
+			this.panel = new ImagePanel(host, {
+				app: this.plugin.app,
+				allCallouts: () => this.plugin.registry.getAll(),
+				images: () => this.plugin.registry.getUserImages(),
+				saveImages: (images) => {
+					this.plugin.registry.setUserImages(images);
+					void this.plugin.saveSettings();
+				},
+				selectedIcon: () => this.selectedIcon,
+				onSelect: (icon) => {
+					this.selectedIcon = icon;
+					this.updatePreview();
+				},
+			});
+			await this.panel.render();
+			return;
+		}
+
 		this.panel = new PackPanel(
-			this.panelHostEl.createDiv("icon-picker-panel"),
+			host,
 			this.activePack(),
 			{
 				packs: this.plugin.icons.packs,

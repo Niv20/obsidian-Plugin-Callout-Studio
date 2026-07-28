@@ -246,6 +246,7 @@ export const en: Record<string, string> = {
 	"editor.dark": "Dark",
 	"editor.livePreview": "Live preview",
 	"editor.iconAdjustment": "Icon adjustment",
+	"editor.picture": "Picture",
 	"editor.size": "Size",
 	"editor.horizontalOffset": "Horizontal offset",
 	"editor.verticalOffset": "Vertical offset",
@@ -371,6 +372,27 @@ export const en: Record<string, string> = {
 	"iconPicker.faStyleBrands": "Brands",
 	"iconPicker.rpgAwesome": "RPG Awesome",
 	"iconPicker.searchRpgAwesome": "Search RPG Awesome",
+	"iconPicker.image": "Your images",
+	"iconPicker.searchImage": "Search your images",
+	"iconPicker.imageTooLarge": "{{name}} is too large. Pictures must be under 5 MB.",
+	"iconPicker.imageUnsupported":
+		"{{name}} is not a supported picture. Use SVG, PNG, JPEG or WebP.",
+	"iconPicker.imageInvalidSvg":
+		"{{name}} could not be read as a safe SVG, so it was not added.",
+	"iconPicker.imageDecodeFailed": "{{name}} could not be read as a picture.",
+	"iconPicker.imageDuplicate":
+		"{{name}} is already in your images. Rename the file, or delete the " +
+		"picture you already have.",
+	"iconPicker.imageAdd": "Add images",
+	"iconPicker.imageEmpty":
+		"No pictures yet. Add an SVG, PNG, JPEG or WebP file from your computer, " +
+		"or drop one here.",
+	"iconPicker.imageDelete": "Delete",
+	"iconPicker.imageDeleteConfirm": "Delete “{{name}}”?",
+	"iconPicker.imageDeleteInUse":
+		"{{count}} callouts use this picture. They will fall back to a " +
+		"placeholder icon until you give them a new one.",
+	"iconPicker.imageRecolor": "Follow callout color",
 	"iconPicker.allSources": "All sources",
 	"iconPicker.searchAllSources": "Search all icon sources",
 	"iconPicker.sourcesNotDownloaded":
@@ -386,6 +408,7 @@ export const en: Record<string, string> = {
 	"iconPicker.descOcticons": "GitHub's interface icons",
 	"iconPicker.descFa": "solid, regular and brand marks",
 	"iconPicker.descRpgAwesome": "fantasy and tabletop icons",
+	"iconPicker.descImage": "pictures you add from your computer",
 
 	// Downloadable icon packs
 	"iconPack.downloadTitle": "{{name}} is not downloaded yet",
@@ -580,6 +603,10 @@ export const en: Record<string, string> = {
 		'Material icon style "{{value}}" is not one of: outlined, filled, rounded, sharp.',
 	"import.err.materialWeight":
 		'Material icon weight "{{value}}" must be an integer between 100 and 700, in steps of 100.',
+	"import.warn.iconRecolorIgnored":
+		'"recolor" only applies to your own pictures and is ignored for icon type {{type}}.',
+	"import.err.iconRecolorInvalid":
+		'"recolor" must be true or false (got "{{value}}").',
 	"import.err.colorInvalid":
 		'"{{field}}" must be a hex color like "#448aff" (got "{{value}}").',
 	"import.err.numberRange":
@@ -600,6 +627,9 @@ export const en: Record<string, string> = {
 		'Alias "{{value}}" is already used by another callout ("{{other}}") in your vault.',
 	"import.warn.defaultFoldedAutofix":
 		'"defaultFolded" was true while "foldable" was false; defaultFolded was reset to false.',
+	"import.warn.imageMissing":
+		"This callout uses a picture that is not in the file and not in this " +
+		"vault, so it will show a placeholder icon until you give it a new one.",
 
 	// Footer
 	"footer.tagline":

@@ -89,7 +89,13 @@ const KNOWN_FIELDS = new Set<string>([
 	"metadata",
 ]);
 
-const KNOWN_ICON_FIELDS = new Set<string>(["type", "value", "style", "weight"]);
+const KNOWN_ICON_FIELDS = new Set<string>([
+	"type",
+	"value",
+	"style",
+	"weight",
+	"recolor",
+]);
 
 function isPlainObject(value: unknown): value is Record<string, unknown> {
 	if (typeof value !== "object" || value === null || Array.isArray(value)) {
@@ -257,6 +263,26 @@ function validateIcon(
 			ok = false;
 		}
 	}
+	// `recolor` is the same shape of leftover for every pack but "image": inert
+	// where it does not belong, so worth saying, not worth failing over.
+	if (icon.recolor !== undefined) {
+		if (type !== "image") {
+			push({
+				field: "icon.recolor",
+				level: "warning",
+				messageKey: "import.warn.iconRecolorIgnored",
+				params: { type: fmt(type) },
+			});
+		} else if (typeof icon.recolor !== "boolean") {
+			push({
+				field: "icon.recolor",
+				level: "error",
+				messageKey: "import.err.iconRecolorInvalid",
+				params: { value: fmt(icon.recolor) },
+			});
+			ok = false;
+		}
+	}
 	const unknown = Object.keys(icon).filter((k) => !KNOWN_ICON_FIELDS.has(k));
 	if (unknown.length > 0) {
 		push({
@@ -386,7 +412,15 @@ export function validateImportPayload(
 		const settingsResult = sanitizeImportedSettings(raw.settings);
 		return {
 			validDefs: base.validDefs,
-			issues: [...base.issues, ...settingsResult.issues],
+			issues: [
+				...base.issues,
+				...settingsResult.issues,
+				...missingImageIssues(
+					base.validDefs,
+					settingsResult.settings,
+					registry,
+				),
+			],
 			fatal: false,
 			settings: settingsResult.settings ?? undefined,
 		};
@@ -410,6 +444,43 @@ export function validateImportPayload(
 
 	const base = validateCalloutArray(raw, registry);
 	return { ...base, fatal: false };
+}
+
+/**
+ * Warn about callouts whose picture did not travel with them.
+ *
+ * An export carries the user's pictures inside its settings, so this normally
+ * finds nothing. It fires when someone hand-edits a file, or exports the
+ * callouts of one vault and pastes them beside another vault's settings — and
+ * without it those callouts would simply arrive blank with no explanation.
+ *
+ * A picture this vault already holds is fine: the id is all that is needed, and
+ * re-importing a callout onto the device that first made the picture is the
+ * ordinary case.
+ */
+function missingImageIssues(
+	defs: readonly CalloutDefinition[],
+	imported: PluginSettings | null | undefined,
+	registry: CalloutRegistry,
+): ValidationIssue[] {
+	const available = new Set<string>([
+		...(imported?.userImages ?? []).map((image) => image.id),
+		...registry.getUserImages().map((image) => image.id),
+	]);
+
+	const issues: ValidationIssue[] = [];
+	defs.forEach((def, index) => {
+		if (def.icon.type !== "image") return;
+		if (available.has(def.icon.value)) return;
+		issues.push({
+			index,
+			entryLabel: def.displayName || def.id,
+			field: "icon.value",
+			level: "warning",
+			messageKey: "import.warn.imageMissing",
+		});
+	});
+	return issues;
 }
 
 /**

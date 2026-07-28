@@ -243,6 +243,7 @@ export const he: Record<string, string> = {
 	"editor.dark": "כהה",
 	"editor.livePreview": "תצוגה מקדימה בזמן אמת",
 	"editor.iconAdjustment": "התאמת אייקון",
+	"editor.picture": "תמונה",
 	"editor.size": "גודל",
 	"editor.horizontalOffset": "היסט אופקי",
 	"editor.verticalOffset": "היסט אנכי",
@@ -363,6 +364,26 @@ export const he: Record<string, string> = {
 	"iconPicker.faStyleBrands": "מותגים (Brands)",
 	"iconPicker.rpgAwesome": "RPG Awesome",
 	"iconPicker.searchRpgAwesome": "חיפוש ב־RPG Awesome",
+	"iconPicker.image": "התמונות שלי",
+	"iconPicker.searchImage": "חיפוש בתמונות שלי",
+	"iconPicker.imageTooLarge": "{{name}} גדולה מדי. תמונות חייבות להיות עד 5MB.",
+	"iconPicker.imageUnsupported":
+		"{{name}} אינה סוג תמונה נתמך. יש להשתמש ב־SVG, PNG, JPEG או WebP.",
+	"iconPicker.imageInvalidSvg": "לא ניתן לקרוא את {{name}} כקובץ SVG בטוח, ולכן היא לא נוספה.",
+	"iconPicker.imageDecodeFailed": "לא ניתן לקרוא את {{name}} כתמונה.",
+	"iconPicker.imageDuplicate":
+		"{{name}} כבר נמצאת בתמונות שלך. אפשר לשנות את שם הקובץ, " +
+		"או למחוק את התמונה הקיימת.",
+	"iconPicker.imageAdd": "הוספת תמונות",
+	"iconPicker.imageEmpty":
+		"עדיין אין תמונות. אפשר להוסיף קובץ SVG, PNG, JPEG או WebP מהמחשב, " +
+		"או פשוט לגרור אותו לכאן.",
+	"iconPicker.imageDelete": "מחיקה",
+	"iconPicker.imageDeleteConfirm": "למחוק את „{{name}}”?",
+	"iconPicker.imageDeleteInUse":
+		"{{count}} callouts משתמשים בתמונה הזו. הם יחזרו לאייקון ברירת מחדל " +
+		"עד שייבחר להם אייקון חדש.",
+	"iconPicker.imageRecolor": "לצבוע בצבע ה־callout",
 	"iconPicker.allSources": "כל המקורות",
 	"iconPicker.searchAllSources": "חיפוש בכל מקורות האייקונים",
 	"iconPicker.sourcesNotDownloaded":
@@ -378,6 +399,7 @@ export const he: Record<string, string> = {
 	"iconPicker.descOcticons": "אייקוני הממשק של GitHub",
 	"iconPicker.descFa": "אייקונים מלאים, מתאר וסמלי מותגים",
 	"iconPicker.descRpgAwesome": "אייקוני פנטזיה ומשחקי תפקידים",
+	"iconPicker.descImage": "תמונות שהוספת מהמחשב שלך",
 
 	// Downloadable icon packs
 	"iconPack.downloadTitle": "{{name}} עדיין לא הורדה",
@@ -567,6 +589,10 @@ export const he: Record<string, string> = {
 		'סגנון אייקון Material "{{value}}" אינו חוקי (חייב להיות אחד מ־outlined, filled, rounded או sharp).',
 	"import.err.materialWeight":
 		'משקל אייקון Material "{{value}}" חייב להיות מספר שלם בין 100 ל־700 (בקפיצות של 100).',
+	"import.warn.iconRecolorIgnored":
+		'השדה "recolor" רלוונטי רק לתמונות שלך, ולכן מתעלמים ממנו עבור סוג אייקון {{type}}.',
+	"import.err.iconRecolorInvalid":
+		'השדה "recolor" חייב להיות true או false (התקבל "{{value}}").',
 	"import.err.colorInvalid":
 		'"{{field}}" חייב להיות בצבע hex בפורמט "#448aff" (התקבל "{{value}}").',
 	"import.err.numberRange":
@@ -591,4 +617,7 @@ export const he: Record<string, string> = {
 
 	"import.warn.defaultFoldedAutofix":
 		'"defaultFolded" הוגדר כ־true למרות ש־"foldable" הוגדר כ־false; לכן defaultFolded אופס בחזרה ל־false.',
+	"import.warn.imageMissing":
+		"ה־callout הזה משתמש בתמונה שאינה בקובץ ואינה בכספת הזו, ולכן יוצג " +
+		"אייקון ברירת מחדל עד שייבחר לו אייקון חדש.",
 };

@@ -475,6 +475,10 @@ export class PackPanel {
 				return "icon-picker-emoji-cell";
 			case "perIconRemote":
 				return "icon-picker-material-cell";
+			case "local":
+				// A picture keeps its own colours and its own proportions, so it
+				// must not be sized or tinted like a monochrome glyph.
+				return "icon-picker-image-cell";
 			default:
 				return undefined;
 		}

@@ -39,7 +39,11 @@ export function renderCreditsSection(
 	});
 
 	for (const id of ICON_SOURCE_IDS) {
-		renderPackCredit(details, getSource(id));
+		const pack = getSource(id);
+		// No licences means no third-party artwork to credit — the user's own
+		// pictures are theirs, and there is nothing to attribute.
+		if (pack.attribution.licenses.length === 0) continue;
+		renderPackCredit(details, pack);
 	}
 
 	const more = details.createEl("p", { cls: "callout-studio-credits-more" });

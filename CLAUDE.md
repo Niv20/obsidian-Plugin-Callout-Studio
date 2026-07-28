@@ -49,12 +49,23 @@ Callout Studio is an Obsidian plugin that lets users create and manage custom ca
 
 Two id spaces, kept apart in `icons/registry.ts`, both total `Record`s so declaring an id without the thing behind it is a compile error:
 
-- **`IconSourceId`** (6) — a library as the user meets it: one row in the picker's source menu, one toolbar, one Download button. `ICON_SOURCES` maps it to the `IconPack` (`icons/types.ts`).
-- **`IconPackId`** (8) — one body of artwork: one `CalloutIcon.type`, one pack manifest entry, one downloaded file, one SVG cache key. `SOURCE_OF_TYPE` maps it to its source, which is what `packFor(icon)` walks.
+- **`IconSourceId`** (7) — a library as the user meets it: one row in the picker's source menu, one toolbar, one Download button. `ICON_SOURCES` maps it to the `IconPack` (`icons/types.ts`).
+- **`IconPackId`** (9) — one body of artwork: one `CalloutIcon.type`, one pack manifest entry, one downloaded file, one SVG cache key. `SOURCE_OF_TYPE` maps it to its source, which is what `packFor(icon)` walks.
 
 They differ only for Font Awesome: one source, three files (`fa-solid`/`fa-regular`/`fa-brands`) chosen by its style control. **Cache keys and pack-store calls use `icon.type`, never `pack.id`** — using the source id would collapse the three styles onto one entry and orphan everything already cached.
 
-`IconPackKind` decides how artwork reaches the screen: `builtin` (Lucide, via `setIcon`), `glyph` (emoji), `perIconRemote` (Material — 100,000+ style/weight variants, so fetched one at a time), `bundledRemote` (Font Awesome, Octicons, RPG Awesome — files downloaded on request, listed per source in `dataPacks`).
+`IconPackKind` decides how artwork reaches the screen: `builtin` (Lucide, via `setIcon`), `glyph` (emoji), `perIconRemote` (Material — 100,000+ style/weight variants, so fetched one at a time), `bundledRemote` (Font Awesome, Octicons, RPG Awesome — files downloaded on request, listed per source in `dataPacks`), `local` (**Your images** — the user's own files, held in `settings.userImages`, never fetched).
+
+### Your images (`icon.type === "image"`)
+
+The one source the user writes to. `CalloutIcon.value` is a `UserImageIcon.id`, not artwork — the import validator caps `value` at 200 chars.
+
+- **Everything is stored as SVG markup.** An uploaded SVG stays vector; a PNG/JPEG/WebP is canvas-scaled to ≤128px and wrapped in `<svg><image href="data:…"></svg>` (`icons/userImageImport.ts`). That single representation is why `IconResolver`, `renderIconInto`, the settings list and the PDF-export path needed no changes — `resolver.ts` already falls back to `pack.buildSvg()`.
+- **`sanitizeUserSvg` (`icons/svg.ts`) is an allow-list**, separate from `sanitizeSVG` (Material's deny-list, for one trusted vendor). It re-runs on every read via `sanitizeUserImages`, because `data.json` syncs and can be hand-edited.
+- **Whether a picture follows the callout's colour is the *callout's* choice, not the picture's** — `CalloutIcon.recolor`, so one logo can be tinted in `[!bug]` and left alone in `[!note]`. The picture only carries `monochrome`, detected on import, which seeds that flag in `makeIcon`. `followsCalloutColor(icon, image)` holds both halves (the callout's choice *and* the SVG-only capability) so the three call sites can't drift.
+- **Two places branch on `followsCalloutColor`, and only two.** In CSS, a picture *not* following the callout is emitted as `background-image` (`generateImageOverride`), not `mask-image`, because a mask is a stencil and would flatten it to a silhouette. In the DOM, `renderIcon`'s `stencilSvg` does what that mask does — rewrites every paint the artwork declares (attributes, `style`, `<style>` classes) to the callout's colour — because the heading, inline and ref surfaces paint a real SVG and a `fill` on its root only ever reaches the shapes that declared no colour of their own. `cacheVariant` keys on `icon.recolor` for the same reason — two callouts sharing a picture must not share a render key.
+- **`registry.setUserImages()` is the single writer**, which re-syncs the pack's module-level snapshot (`buildSvg` is synchronous by contract, so it cannot read settings itself).
+- **The picker uses `ImagePanel`, not `PackPanel`** — add and delete are affordances the `IconPack` contract deliberately has no room for. The "Follow callout color" toggle is *not* there; it lives in `CalloutEditor`'s Picture section, beside the icon's size and offsets, because it belongs to the callout.
 
 A pack's optional `entryMatches` filters the grid by variant (Font Awesome's style picks *which* icons exist, not just how they look), and `pickerNotice` scopes a standing notice to certain variants (the Brands trademark note).
 
@@ -66,7 +77,7 @@ Search indexes are bundled (packed by `icons/data/codec.ts`); artwork is not. Re
 
 `CalloutDefinition` is the core data model: `id`, `displayName`, `icon`, `color`, `darkColor`, `aliases`, `transforms`, `source` (`"builtin" | "user" | "fallback" | "theme" | "plugin"`), `metadata`.
 
-`PluginSettings` holds global style (border, radius, scale) and feature toggles (autocomplete, context menu, icon source preferences).
+`PluginSettings` holds global style (border, radius, scale), feature toggles (autocomplete, context menu, icon source preferences), and the two lists the user builds up: `customPalettes` and `userImages`. Both live in settings rather than on `PluginData` precisely so `exportToJSONv2()` carries them — and both must therefore be **merged by id** on import, never `Object.assign`ed, or importing a file without them wipes the user's own.
 
 ### Callout sources
 
