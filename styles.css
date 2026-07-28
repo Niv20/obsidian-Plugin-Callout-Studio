@@ -1722,6 +1722,12 @@ button.callout-studio-icon-picker-loading {
 	color: var(--text-muted);
 }
 
+.icon-picker-empty {
+	white-space: normal;
+	max-width: 320px;
+	margin: 0 auto;
+}
+
 .icon-picker-error {
 	color: var(--text-error);
 }
