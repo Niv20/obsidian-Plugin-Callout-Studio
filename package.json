@@ -10,7 +10,8 @@
 		"version": "node version-bump.mjs && git add manifest.json versions.json",
 		"lint": "eslint .",
 		"welcome": "open 'obsidian://callout-studio-welcome'",
-		"prepare": "husky"
+		"prepare": "husky",
+		"icons:generate": "node scripts/generate-icon-packs.mjs"
 	},
 	"keywords": [],
 	"license": "0-BSD",
@@ -18,6 +19,7 @@
 		"@codemirror/language": "^6.12.4",
 		"@codemirror/state": "^6.5.0",
 		"@eslint/js": "9.30.1",
+		"@primer/octicons": "19.31.0",
 		"@types/node": "^16.11.6",
 		"esbuild": "0.25.5",
 		"eslint-plugin-obsidianmd": "^0.4.1",
@@ -25,9 +27,11 @@
 		"husky": "^9.1.7",
 		"jiti": "2.6.1",
 		"nano-staged": "^1.0.2",
+		"svgpath": "^2.6.0",
 		"tslib": "2.4.0",
 		"typescript": "^5.8.3",
-		"typescript-eslint": "8.35.1"
+		"typescript-eslint": "8.35.1",
+		"yaml": "^2.9.0"
 	},
 	"dependencies": {
 		"@codemirror/view": "6.38.6",
