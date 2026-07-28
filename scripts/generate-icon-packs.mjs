@@ -19,6 +19,7 @@
  * there is no element or attribute in the file that could carry a payload.
  */
 import { createHash } from "node:crypto";
+import { createRequire } from "node:module";
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -134,6 +135,120 @@ function buildOcticons() {
 	};
 }
 
+// ── Font Awesome Free ───────────────────────────────────────────────────
+
+const FA_DIR = join(ROOT, "node_modules/@fortawesome/fontawesome-free");
+
+/**
+ * Font Awesome's icons are all 512 units tall but vary in width, so the height
+ * is the size key and the width rides along — the same shape every other pack
+ * uses, where the viewBox is `0 0 {w} {key}`.
+ */
+const FA_HEIGHT = "512";
+
+/**
+ * Read one Font Awesome SVG.
+ *
+ * These are single-path files with the colour already set to `currentColor`,
+ * which is dropped: the plugin applies its own fill so the icon tracks the
+ * callout's colour on screen and carries a baked one into PDF export.
+ *
+ * Note this discards the `<!--! Font Awesome Free ... -->` attribution comment
+ * embedded in every file. That is what moves us off Font Awesome's "the files
+ * already carry sufficient attribution" footing and onto plain CC BY 4.0, which
+ * the credits surfaces and THIRD-PARTY-NOTICES.md satisfy explicitly.
+ */
+function readFontAwesomeSvg(style, name) {
+	const where = `fa-${style}/${name}`;
+	const raw = readFileSync(join(FA_DIR, "svgs", style, `${name}.svg`), "utf8");
+	const body = raw.replace(/<!--[\s\S]*?-->/g, "");
+
+	const viewBox = /viewBox="0 0 (\d+) 512"/.exec(body);
+	if (!viewBox) throw new Error(`unexpected viewBox at ${where}: ${raw.slice(0, 120)}`);
+
+	const paths = [...body.matchAll(/<path\b([^>]*)\/?>/g)];
+	if (paths.length !== 1) {
+		throw new Error(`expected exactly one <path> at ${where}, got ${paths.length}`);
+	}
+	const attrs = paths[0][1];
+	const d = /\bd="([^"]*)"/.exec(attrs)?.[1];
+	assertPathData(d, where);
+
+	const glyph = { d };
+	if (/\bfill-rule="evenodd"/.test(attrs)) glyph.r = 1;
+	if (/\bclip-rule="evenodd"/.test(attrs)) glyph.c = 1;
+
+	return { w: Number(viewBox[1]), p: [glyph] };
+}
+
+/**
+ * A label is only worth its bytes when it says something the name does not.
+ * "heart" → "Heart" adds nothing, since search already treats separators as
+ * spaces and ignores case.
+ */
+function labelAddsMeaning(name, label) {
+	if (!label) return false;
+	const normalize = (s) => s.toLowerCase().replace(/[\s_-]+/g, "");
+	return normalize(name) !== normalize(label);
+}
+
+function buildFontAwesome(style) {
+	const YAML = faYaml();
+	const version = JSON.parse(
+		readFileSync(join(FA_DIR, "package.json"), "utf8"),
+	).version;
+
+	const icons = YAML.parse(
+		readFileSync(join(FA_DIR, "metadata/icons.yml"), "utf8"),
+	);
+	// categories.yml maps a category to its icons; the index needs the reverse.
+	const categoriesByIcon = new Map();
+	const categoryData = YAML.parse(
+		readFileSync(join(FA_DIR, "metadata/categories.yml"), "utf8"),
+	);
+	for (const key of Object.keys(categoryData)) {
+		const { label, icons: members } = categoryData[key];
+		for (const member of members ?? []) {
+			if (!categoriesByIcon.has(member)) categoriesByIcon.set(member, []);
+			categoriesByIcon.get(member).push(label);
+		}
+	}
+
+	const names = Object.keys(icons)
+		.filter((name) => (icons[name].styles ?? []).includes(style))
+		.sort();
+
+	const packIcons = {};
+	const entries = [];
+	for (const name of names) {
+		packIcons[name] = { [FA_HEIGHT]: readFontAwesomeSvg(style, name) };
+		const label = icons[name].label;
+		entries.push({
+			name,
+			...(labelAddsMeaning(name, label) ? { label } : {}),
+			categories: (categoriesByIcon.get(name) ?? []).sort(),
+			keywords: (icons[name].search?.terms ?? []).map(String),
+		});
+	}
+
+	return {
+		id: `fa-${style}`,
+		version,
+		file: { icons: packIcons },
+		entries,
+		note: `${entries.length} icons`,
+	};
+}
+
+/** Lazily required so packs that do not need YAML can build without it. */
+let yamlModule = null;
+function faYaml() {
+	if (!yamlModule) {
+		yamlModule = createRequire(import.meta.url)("yaml");
+	}
+	return yamlModule;
+}
+
 // ── Emit ────────────────────────────────────────────────────────────────
 
 function writePackFile(pack) {
@@ -199,7 +314,12 @@ async function assertRoundTrip(entries, encoded) {
 	return decoded;
 }
 
-const BUILDERS = { octicons: buildOcticons };
+const BUILDERS = {
+	octicons: buildOcticons,
+	"fa-solid": () => buildFontAwesome("solid"),
+	"fa-regular": () => buildFontAwesome("regular"),
+	"fa-brands": () => buildFontAwesome("brands"),
+};
 
 async function main() {
 	const requested = process.argv

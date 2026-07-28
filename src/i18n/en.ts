@@ -361,6 +361,12 @@ export const en: Record<string, string> = {
 	"iconPicker.delete": "Delete",
 	"iconPicker.octicons": "Octicons",
 	"iconPicker.searchOcticons": "Search Octicons",
+	"iconPicker.faSolid": "Font Awesome — Solid",
+	"iconPicker.faRegular": "Font Awesome — Regular",
+	"iconPicker.faBrands": "Font Awesome — Brands",
+	"iconPicker.searchFaSolid": "Search Font Awesome Solid",
+	"iconPicker.searchFaRegular": "Search Font Awesome Regular",
+	"iconPicker.searchFaBrands": "Search Font Awesome Brands",
 	"iconPicker.source": "Source",
 
 	// Downloadable icon packs
@@ -375,6 +381,8 @@ export const en: Record<string, string> = {
 		"You can also install it offline: download the file from the plugin's GitHub release and place it at",
 	"iconPack.copyPath": "Copy path",
 	"iconPack.pathCopied": "Path copied",
+	"iconPack.faBrandsNotice":
+		"Brand icons are trademarks of their respective owners. Their inclusion does not indicate endorsement. Please use them only to represent the company, product, or service they refer to.",
 	"iconPack.diskWriteFailed":
 		"Callout Studio could not save the icon pack to disk, so it will need downloading again next time. The icons you pick are still saved with your settings.",
 

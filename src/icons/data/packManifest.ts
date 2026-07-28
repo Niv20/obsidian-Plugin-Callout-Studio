@@ -55,4 +55,22 @@ export const PACK_MANIFEST: Partial<Record<IconPackId, PackManifestEntry>> = {
 		bytes: 384490,
 		sha256: "8d34725983eee3d840da65e802fd29e583fc2845058923b88e8151fa418b852f",
 	},
+	"fa-solid": {
+		version: "7.3.1",
+		iconCount: 1422,
+		bytes: 813460,
+		sha256: "2c2f11e29443c4904baf60eb299dadb1804f5e52ae9b54ae24d4eaf881681f92",
+	},
+	"fa-regular": {
+		version: "7.3.1",
+		iconCount: 169,
+		bytes: 107068,
+		sha256: "e066aa24f5c41926a7da616ec0da8c6e76c087543f1bfe2c747d1b76f5edd2ba",
+	},
+	"fa-brands": {
+		version: "7.3.1",
+		iconCount: 572,
+		bytes: 572059,
+		sha256: "591d8baeba5b82513ce2393b9dc788e337576b7e272006e31a8625345cbe3df6",
+	},
 };

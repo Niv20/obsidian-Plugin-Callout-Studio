@@ -353,6 +353,12 @@ export const he: Record<string, string> = {
 	"iconPicker.delete": "מחיקה",
 	"iconPicker.octicons": "Octicons",
 	"iconPicker.searchOcticons": "חיפוש אייקוני Octicons",
+	"iconPicker.faSolid": "Font Awesome — Solid",
+	"iconPicker.faRegular": "Font Awesome — Regular",
+	"iconPicker.faBrands": "Font Awesome — Brands",
+	"iconPicker.searchFaSolid": "חיפוש ב־Font Awesome Solid",
+	"iconPicker.searchFaRegular": "חיפוש ב־Font Awesome Regular",
+	"iconPicker.searchFaBrands": "חיפוש ב־Font Awesome Brands",
 	"iconPicker.source": "מקור",
 
 	// Downloadable icon packs
@@ -367,6 +373,8 @@ export const he: Record<string, string> = {
 		"אפשר גם להתקין ללא אינטרנט: הורידו את הקובץ משחרור הגרסה ב־GitHub ומקמו אותו בנתיב",
 	"iconPack.copyPath": "העתקת הנתיב",
 	"iconPack.pathCopied": "הנתיב הועתק",
+	"iconPack.faBrandsNotice":
+		"אייקוני המותגים הם סימני מסחר של בעליהם. הכללתם כאן אינה מהווה חסות או אישור מצדם. אנא השתמשו בהם רק כדי לייצג את החברה, המוצר או השירות שאליהם הם מתייחסים.",
 	"iconPack.diskWriteFailed":
 		"Callout Studio לא הצליח לשמור את חבילת האייקונים לדיסק, ולכן היא תידרש להורדה מחדש בפעם הבאה. האייקונים שבחרתם עדיין נשמרים יחד עם ההגדרות.",
 
