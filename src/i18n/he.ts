@@ -365,6 +365,11 @@ export const he: Record<string, string> = {
 	"iconPicker.searchRpgAwesome": "חיפוש ב־RPG Awesome",
 	"iconPicker.image": "התמונות שלי",
 	"iconPicker.searchImage": "חיפוש בתמונות שלי",
+	"iconPicker.imageTooLarge": "{{name}} גדולה מדי. תמונות חייבות להיות עד 5MB.",
+	"iconPicker.imageUnsupported":
+		"{{name}} אינה סוג תמונה נתמך. יש להשתמש ב־SVG, PNG, JPEG או WebP.",
+	"iconPicker.imageInvalidSvg": "לא ניתן לקרוא את {{name}} כקובץ SVG בטוח, ולכן היא לא נוספה.",
+	"iconPicker.imageDecodeFailed": "לא ניתן לקרוא את {{name}} כתמונה.",
 	"iconPicker.allSources": "כל המקורות",
 	"iconPicker.searchAllSources": "חיפוש בכל מקורות האייקונים",
 	"iconPicker.sourcesNotDownloaded":

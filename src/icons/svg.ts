@@ -211,9 +211,17 @@ const DATA_IMAGE_HREF_RE = /^data:image\/(png|jpe?g|gif|webp);base64,[\w+/=\s]+$
 const UNSAFE_VALUE_RE = /javascript:|expression\s*\(|behaviou?r\s*:/i;
 const EXTERNAL_URL_RE = /url\(\s*['"]?(?!#|data:)/i;
 
-/** Ceilings that keep a pathological file from stalling a render or a save. */
+/**
+ * Ceilings that keep a pathological file from stalling a render or bloating
+ * `data.json`, which is read and rewritten on every save.
+ *
+ * The byte ceiling has to clear a legitimate raster: an uploaded picture is
+ * wrapped in `<svg><image href="data:…">`, and a 128px PNG that keeps its
+ * transparency can base64 to well over a hundred kilobytes. A hand-authored
+ * icon is a thousandth of that, so this only ever bites the pathological case.
+ */
 const MAX_USER_SVG_ELEMENTS = 5000;
-const MAX_USER_SVG_BYTES = 64 * 1024;
+const MAX_USER_SVG_BYTES = 256 * 1024;
 
 export interface SanitizedUserSvg {
 	svg: string;

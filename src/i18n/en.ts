@@ -373,6 +373,12 @@ export const en: Record<string, string> = {
 	"iconPicker.searchRpgAwesome": "Search RPG Awesome",
 	"iconPicker.image": "Your images",
 	"iconPicker.searchImage": "Search your images",
+	"iconPicker.imageTooLarge": "{{name}} is too large. Pictures must be under 5 MB.",
+	"iconPicker.imageUnsupported":
+		"{{name}} is not a supported picture. Use SVG, PNG, JPEG or WebP.",
+	"iconPicker.imageInvalidSvg":
+		"{{name}} could not be read as a safe SVG, so it was not added.",
+	"iconPicker.imageDecodeFailed": "{{name}} could not be read as a picture.",
 	"iconPicker.allSources": "All sources",
 	"iconPicker.searchAllSources": "Search all icon sources",
 	"iconPicker.sourcesNotDownloaded":
