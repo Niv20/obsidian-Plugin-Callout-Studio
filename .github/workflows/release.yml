@@ -51,6 +51,22 @@ jobs:
             - run: npm ci
             - run: npm run build
 
+            # main.js is the only file Obsidian downloads to install or update
+            # the plugin, and icon metadata makes it easy to grow it by a
+            # megabyte without noticing. The ceiling is deliberately close to
+            # the current size so a careless import trips it here rather than
+            # in users' vaults; raise it consciously when a feature earns it.
+            - name: Check bundle size
+              run: |
+                  limit=3145728  # 3 MiB
+                  size=$(wc -c < main.js)
+                  printf 'main.js is %s bytes (%.2f MiB), limit %s bytes.\n' \
+                      "$size" "$(echo "scale=2; $size/1048576" | bc)" "$limit"
+                  if [ "$size" -gt "$limit" ]; then
+                      echo "::error::main.js exceeds the $limit byte budget."
+                      exit 1
+                  fi
+
             - name: Attest main.js
               uses: actions/attest-build-provenance@v2
               with:

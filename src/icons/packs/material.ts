@@ -14,10 +14,11 @@
 import { requestUrl } from "obsidian";
 import type { CalloutIcon, MaterialIconStyle } from "../../types";
 import type { IconEntry, IconIndex, IconPack, IconVariantState } from "../types";
-import { MATERIAL_ICON_METADATA } from "../../data/materialIconsMetadata";
+import { decodeIndex, memoizeIndex } from "../data/codec";
+import { MATERIAL_INDEX } from "../data/material.index";
 import { sanitizeSVG } from "../svg";
 
-let index: IconIndex | null = null;
+const loadIndex = memoizeIndex(() => decodeIndex(MATERIAL_INDEX));
 const fontLoads = new Map<string, Promise<void>>();
 
 /** Defaults applied when an icon omits the fields (pre-2.0 data, or imports). */
@@ -83,19 +84,7 @@ export const materialPack: IconPack = {
 	},
 
 	loadIndex(): Promise<IconIndex> {
-		if (!index) {
-			const categories = new Set<string>();
-			const entries: IconEntry[] = MATERIAL_ICON_METADATA.map((m) => {
-				for (const c of m.categories) categories.add(c);
-				return {
-					name: m.name,
-					categories: m.categories,
-					keywords: m.tags,
-				};
-			});
-			index = { entries, categories: [...categories].sort() };
-		}
-		return Promise.resolve(index);
+		return loadIndex();
 	},
 
 	makeIcon(entry: IconEntry, variants: IconVariantState): CalloutIcon {

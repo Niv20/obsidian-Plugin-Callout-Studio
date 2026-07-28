@@ -410,17 +410,6 @@ export interface PluginData {
 	iconSvgCache?: IconSvgCacheEntry[];
 }
 
-export interface MaterialIconMetadataEntry {
-	name: string;
-	categories: string[];
-	tags: string[];
-}
-
-export interface MaterialIconMeta extends MaterialIconMetadataEntry {
-	/** Optional legacy/per-icon style support; bundled metadata uses a shared style set. */
-	styles?: MaterialIconStyle[];
-}
-
 /** Pre-2.4 cache shape, migrated to IconSvgCacheEntry on load. */
 export interface MaterialSvgCacheEntry {
 	name: string;

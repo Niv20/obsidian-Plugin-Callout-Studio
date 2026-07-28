@@ -460,6 +460,53 @@ function buildRpgAwesome() {
 	};
 }
 
+// ── Material Symbols ────────────────────────────────────────────────────
+
+/**
+ * Material Symbols has no pack file: its artwork is fetched one drawing at a
+ * time from Google, because 3,870 icons across 4 styles and 7 weights is over
+ * 100,000 variants and no bulk file exists to ship. Only the index is built.
+ *
+ * The source is the metadata table Google publishes, previously committed as a
+ * 2.24 MB TypeScript array. Packing it costs nothing in fidelity — every name,
+ * tag and category survives, as the round-trip check asserts — and takes the
+ * bundled form to well under a third of that.
+ */
+async function buildMaterial() {
+	const { createJiti } = await import("jiti");
+	const jiti = createJiti(import.meta.url);
+	const { MATERIAL_ICON_METADATA } = await jiti.import(
+		join(ROOT, "src/data/materialIconsMetadata.ts"),
+	);
+
+	// Google's table carries a little editorial debris — one tag on `moving`
+	// reads "potential tags could relate to:\n\nmoving". Collapsing whitespace
+	// keeps it searchable without letting a newline break the line-per-icon
+	// framing the index format relies on. Duplicates are dropped because a
+	// repeated tag costs a reference and matches nothing extra.
+	const clean = (values) => [
+		...new Set(
+			values
+				.map((value) => String(value).replace(/\s+/g, " ").trim())
+				.filter((value) => value.length > 0),
+		),
+	];
+
+	const entries = MATERIAL_ICON_METADATA.map((icon) => ({
+		name: icon.name,
+		categories: clean(icon.categories).sort(),
+		keywords: clean(icon.tags),
+	}));
+
+	return {
+		id: "material",
+		version: "Material Symbols",
+		file: null, // per-icon fetch; nothing to publish
+		entries,
+		note: `${entries.length} icons`,
+	};
+}
+
 // ── Emit ────────────────────────────────────────────────────────────────
 
 function writePackFile(pack) {
@@ -526,6 +573,7 @@ async function assertRoundTrip(entries, encoded) {
 }
 
 const BUILDERS = {
+	material: buildMaterial,
 	octicons: buildOcticons,
 	"fa-solid": () => buildFontAwesome("solid"),
 	"fa-regular": () => buildFontAwesome("regular"),
@@ -544,31 +592,37 @@ async function main() {
 		const build = BUILDERS[id];
 		if (!build) throw new Error(`unknown pack "${id}"`);
 
-		const pack = build();
+		const pack = await build();
 		const encoded = encodeIndex(pack.entries);
 		await assertRoundTrip(pack.entries, encoded);
 
-		const packFile = writePackFile(pack);
+		const packFile = pack.file ? writePackFile(pack) : null;
 		const indexFile = writeIndexFile(pack, encoded);
 
-		manifest[id] = {
-			version: pack.version,
-			iconCount: pack.entries.length,
-			bytes: packFile.bytes,
-			sha256: packFile.sha256,
-		};
+		if (packFile) {
+			manifest[id] = {
+				version: pack.version,
+				iconCount: pack.entries.length,
+				bytes: packFile.bytes,
+				sha256: packFile.sha256,
+			};
+		}
 
 		const kb = (n) => `${(n / 1024).toFixed(1)} KB`;
 		console.log(
 			`${id}: ${pack.entries.length} icons\n` +
-				`  pack  ${kb(packFile.bytes)}  ${packFile.path}\n` +
-				`  index ${kb(indexFile.bytes)}  ${indexFile.path}\n` +
-				`  sha256 ${packFile.sha256}`,
+				(packFile
+					? `  pack  ${kb(packFile.bytes)}  ${packFile.path}\n`
+					: `  pack  (none — artwork is fetched per icon)\n`) +
+				`  index ${kb(indexFile.bytes)}  ${indexFile.path}` +
+				(packFile ? `\n  sha256 ${packFile.sha256}` : ""),
 		);
 	}
 
-	console.log(`\nAdd/refresh these in src/icons/data/packManifest.ts:`);
-	console.log(JSON.stringify(manifest, null, 2));
+	if (Object.keys(manifest).length > 0) {
+		console.log(`\nAdd/refresh these in src/icons/data/packManifest.ts:`);
+		console.log(JSON.stringify(manifest, null, 2));
+	}
 }
 
 await main();
