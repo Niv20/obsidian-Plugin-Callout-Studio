@@ -1441,8 +1441,7 @@ button.callout-studio-icon-picker-loading {
 	height: 20px;
 }
 
-.icon-picker-material-cell .icon-picker-material-icon,
-.callout-studio-material-icon {
+.icon-picker-material-cell .icon-picker-material-icon {
 	font-family: var(--cs-material-font, "Material Symbols Outlined");
 	font-weight: var(--cs-material-weight, normal);
 	font-style: normal;

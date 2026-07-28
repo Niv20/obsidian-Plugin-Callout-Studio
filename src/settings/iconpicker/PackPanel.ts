@@ -10,7 +10,12 @@
  * opening the icon picker never touches the network.
  */
 import { setIcon } from "obsidian";
-import type { CalloutIcon, IconPackId, IconSourceId } from "../../types";
+import type {
+	CalloutIcon,
+	IconPackId,
+	IconSourceId,
+	MaterialIconStyle,
+} from "../../types";
 import type {
 	IconEntry,
 	IconIndex,
@@ -24,6 +29,7 @@ import {
 	MATERIAL_DEFAULT_STYLE,
 	ensureMaterialFontLoaded,
 	materialFontFamily,
+	materialPack,
 } from "../../icons/packs/material";
 import type { PackDataStore } from "../../icons/PackDataStore";
 import { isAllSources } from "./allSources";
@@ -110,7 +116,7 @@ export class PackPanel {
 			isSelected: (entry) => this.isSelected(entry),
 			onSelect: (entry) => this.select(entry),
 			labelFor: (entry) => this.labelFor(entry),
-			cellClass: this.cellClass(),
+			cellClass: (entry) => this.cellClass(entry),
 			emptyText: t("iconPicker.noResults"),
 			loadMoreText: t("iconPicker.loadMore"),
 		});
@@ -249,9 +255,7 @@ export class PackPanel {
 	 */
 	private async onVariantChanged(): Promise<void> {
 		if (this.pack.kind === "perIconRemote") {
-			await ensureMaterialFontLoaded(
-				this.variants.style ?? MATERIAL_DEFAULT_STYLE,
-			).catch(() => {
+			await ensureMaterialFontLoaded(this.materialStyle()).catch(() => {
 				// An unreachable font must not block browsing; ligature names
 				// simply show as text until it arrives.
 			});
@@ -286,9 +290,9 @@ export class PackPanel {
 		// its artwork is fetched one icon at a time and none of it is local
 		// yet. The pooled list contains Material cells too, so it waits as well.
 		if (this.pack.kind === "perIconRemote" || isAllSources(this.pack)) {
-			await ensureMaterialFontLoaded(
-				this.variants.style ?? MATERIAL_DEFAULT_STYLE,
-			).catch(() => undefined);
+			await ensureMaterialFontLoaded(this.materialStyle()).catch(
+				() => undefined,
+			);
 			if (this.disposed) return;
 		}
 
@@ -422,12 +426,21 @@ export class PackPanel {
 		return `${base} — ${t(this.packOf(entry).labelKey)}`;
 	}
 
-	private cellClass(): string | undefined {
-		if (this.pack.kind === "glyph") return "icon-picker-emoji-cell";
-		if (this.pack.kind === "perIconRemote") {
-			return "icon-picker-material-cell";
+	/**
+	 * Keyed on the entry's own source, not this panel's: in the pooled list a
+	 * Material cell still needs the class that applies its webfont, and an emoji
+	 * cell the one that sizes it. Without that, Material cells render their
+	 * ligature name as plain text.
+	 */
+	private cellClass(entry: IconEntry): string | undefined {
+		switch (this.packOf(entry).kind) {
+			case "glyph":
+				return "icon-picker-emoji-cell";
+			case "perIconRemote":
+				return "icon-picker-material-cell";
+			default:
+				return undefined;
 		}
-		return undefined;
 	}
 
 	/**
@@ -438,6 +451,20 @@ export class PackPanel {
 	private packOf(entry: IconEntry): IconPack {
 		if (!entry.pack) return this.pack;
 		return getSource(entry.pack) ?? this.pack;
+	}
+
+	/**
+	 * The Material style whose webfont this panel has to load.
+	 *
+	 * The pooled list has no style control of its own, so its own variant state
+	 * is empty — its Material cells are drawn in Material's saved style, and it
+	 * is that font, not the default one, that has to be fetched.
+	 */
+	private materialStyle(): MaterialIconStyle {
+		const variants = isAllSources(this.pack)
+			? this.host.variantsFor(materialPack.id)
+			: this.variants;
+		return variants.style ?? MATERIAL_DEFAULT_STYLE;
 	}
 
 	/** The toolbar values that apply to an entry's own source. */

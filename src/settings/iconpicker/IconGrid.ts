@@ -23,8 +23,13 @@ export interface IconGridOptions {
 	onSelect(entry: IconEntry, cell: HTMLElement): void;
 	/** Tooltip / accessible name. */
 	labelFor(entry: IconEntry): string;
-	/** Extra class for the cells of this source (emoji sizing, font preview). */
-	cellClass?: string;
+	/**
+	 * Extra class for this entry's cell (emoji sizing, Material font preview).
+	 *
+	 * Per entry rather than per grid, because the pooled "All sources" list mixes
+	 * sources that need different cell treatments in one grid.
+	 */
+	cellClass?(entry: IconEntry): string | undefined;
 	emptyText: string;
 	loadMoreText: string;
 }
@@ -137,8 +142,9 @@ export class IconGrid {
 		for (let i = this.displayed; i < end; i++) {
 			const entry = this.entries[i];
 			if (!entry) continue;
+			const cellClass = this.options.cellClass?.(entry);
 			const cell = this.gridEl.createDiv({
-				cls: `icon-picker-cell${this.options.cellClass ? ` ${this.options.cellClass}` : ""}`,
+				cls: `icon-picker-cell${cellClass ? ` ${cellClass}` : ""}`,
 				attr: {
 					"aria-label": this.options.labelFor(entry),
 					tabindex: "0",
