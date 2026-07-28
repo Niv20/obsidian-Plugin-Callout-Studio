@@ -233,6 +233,7 @@ export class ImagePanel {
 				// A picture keeps its own colours in the grid whatever its
 				// recolour setting: the cell has no callout colour to follow.
 				fill: "currentColor",
+				followCalloutColor: false,
 				missing: { kind: "placeholder", lucideId: "image-off" },
 				errorText: "?",
 			},

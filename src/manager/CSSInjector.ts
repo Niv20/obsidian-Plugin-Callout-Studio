@@ -10,7 +10,7 @@
 import type { App } from "obsidian";
 import type { CalloutDefinition, CalloutIcon, UserImageIcon } from "../types";
 import { renderIconInto } from "../icons/renderIcon";
-import { findUserImage, followsCalloutColor } from "../icons/packs/userImages";
+import { followsCalloutColor, userImageFor } from "../icons/packs/userImages";
 import { createIconResolver } from "../icons/resolver";
 import { packFor } from "../icons/registry";
 import type { IconResolver } from "../icons/types";
@@ -64,16 +64,6 @@ const STYLE_EL_ID = "callout-studio-dynamic-css";
  */
 const calloutSel = (id: string, themePrefix = ""): string =>
 	`${themePrefix}.callout[data-callout="${obsidianCalloutAttrId(id)}"]`;
-
-/**
- * The picture behind an icon, when the icon is one of the user's own.
- *
- * Undefined for every library icon, and also for a picture that has since been
- * deleted — in both cases the caller wants the ordinary monochrome treatment.
- */
-function userImageFor(icon: CalloutIcon): UserImageIcon | undefined {
-	return icon.type === "image" ? findUserImage(icon.value) : undefined;
-}
 
 /**
  * How far off square a picture may be drawn before it is squeezed back.

@@ -38,6 +38,16 @@ export function findUserImage(id: string): UserImageIcon | undefined {
 	return images.get(id);
 }
 
+/**
+ * The picture behind an icon, when the icon is one of the user's own.
+ *
+ * Undefined for every library icon, and also for a picture that has since been
+ * deleted — in both cases the caller wants the ordinary monochrome treatment.
+ */
+export function userImageFor(icon: CalloutIcon): UserImageIcon | undefined {
+	return icon.type === "image" ? findUserImage(icon.value) : undefined;
+}
+
 /** Every picture, newest first — the order the picker's grid shows them in. */
 export function listUserImages(): UserImageIcon[] {
 	return [...images.values()].sort((a, b) => b.addedAt - a.addedAt);
@@ -47,8 +57,9 @@ export function listUserImages(): UserImageIcon[] {
  * Whether this callout wants its picture stencilled in the callout's colour.
  *
  * The choice is the callout's (`CalloutIcon.recolor`) but the capability is the
- * artwork's, and only an SVG has it. Both halves live here so the three places
- * that split on mask-versus-background cannot drift apart.
+ * artwork's, and only an SVG has it. Both halves live here so that the places
+ * that split on it — CSS deciding between a mask and a background image, and
+ * renderIcon deciding whether to stencil the DOM copy — cannot drift apart.
  */
 export function followsCalloutColor(
 	icon: CalloutIcon,

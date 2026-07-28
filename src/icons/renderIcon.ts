@@ -2,12 +2,14 @@
  * icons/renderIcon.ts — The single "icon → DOM" painter.
  *
  * Every surface that shows a callout icon calls renderIconInto. The surfaces
- * differ only in three ways, which is exactly what the options express:
+ * differ only in four ways, which is exactly what the options express:
  *
  * - what to draw when the artwork is not local yet (`missing`)
  * - whether the glyph should follow the surrounding CSS `color` or carry a
  *   baked-in one (`fill`) — the latter is how icons survive PDF export, where
  *   Obsidian's print clone ships the DOM but not our stylesheet
+ * - whether a picture that follows its callout's colour is stencilled in that
+ *   colour here (`followCalloutColor`)
  * - whether the result is wrapped/marked for a caller-specific rule
  *   (`className`, `rootStyle`)
  *
@@ -18,6 +20,7 @@ import { setIcon } from "obsidian";
 import type { CalloutIcon, CalloutRenderRole } from "../types";
 import type { IconResolver } from "./types";
 import { packFor } from "./registry";
+import { followsCalloutColor, userImageFor } from "./packs/userImages";
 
 /**
  * Shapes that carry their own paint inside a vendor SVG. A baked export colour
@@ -45,6 +48,15 @@ export interface RenderIconOptions {
 	 * be rendered without our stylesheet.
 	 */
 	fill: "currentColor" | { literal: string };
+	/**
+	 * Whether a picture that follows its callout's colour is drawn here as a
+	 * stencil in `fill` (see stencilSvg), rather than in the colours it was
+	 * uploaded with. True everywhere by default: every surface that draws an
+	 * icon draws it *for a callout*, so it must agree with the mask the regular
+	 * callout paints. The picker's own grid is the exception — it is a library
+	 * of pictures with no callout behind them.
+	 */
+	followCalloutColor?: boolean;
 	missing: IconMissingBehavior;
 	/** Class stamped on the produced node (e.g. `cs-export-icon`). */
 	className?: string;
@@ -139,21 +151,206 @@ function paintSvgIcon(
 
 	if (options.className) svgEl.classList.add(options.className);
 
+	const color =
+		options.fill === "currentColor" ? "currentColor" : options.fill.literal;
+	// A picture the user supplied is the one artwork that carries colours of its
+	// own, so it is also the only one whose colours have to be taken away when
+	// the callout claims them.
+	const stencil =
+		options.followCalloutColor !== false &&
+		followsCalloutColor(icon, userImageFor(icon));
+
 	const rootDecls: string[] = [];
 	if (options.rootStyle) rootDecls.push(options.rootStyle);
-	if (options.fill === "currentColor") {
-		svgEl.setAttribute("fill", "currentColor");
-	} else {
-		const decl = `fill:${options.fill.literal} !important`;
-		rootDecls.push(decl);
-		for (const shape of Array.from(svgEl.querySelectorAll(SHAPE_SELECTOR))) {
-			shape.setAttribute("style", decl);
+	// A stencilled picture gets its paint from stencilSvg alone, root included:
+	// blanketing the root here would overwrite a `fill="none"` an outline
+	// drawing depends on, and flood it into a solid shape.
+	if (!stencil) {
+		if (options.fill === "currentColor") {
+			svgEl.setAttribute("fill", "currentColor");
+		} else {
+			const decl = `fill:${color} !important`;
+			rootDecls.push(decl);
+			for (const shape of Array.from(svgEl.querySelectorAll(SHAPE_SELECTOR))) {
+				shape.setAttribute("style", decl);
+			}
 		}
 	}
 	if (rootDecls.length > 0) svgEl.setAttribute("style", rootDecls.join(";"));
+	if (stencil) stencilSvg(svgEl, color);
 
 	target.replaceChildren(svgEl);
 	return "painted";
+}
+
+/* ------------------------------------------------------------------ *
+ * Stencilling a picture in the callout's colour
+ * ------------------------------------------------------------------ */
+
+/**
+ * Paint properties whose declared value decides what colour the artwork shows:
+ * the two that ink a shape, the gradient stop that feeds them, and `color`,
+ * which is what a `currentColor` written inside the artwork resolves against.
+ */
+const PAINT_PROPS = ["fill", "stroke", "stop-color", "color"] as const;
+
+/** The two properties inheritance has to be tracked for (see stencilElement). */
+const INHERITED_PROPS = ["fill", "stroke"] as const;
+
+/** Declared values that draw nothing — recolouring one would ADD ink. */
+const UNPAINTED = new Set(["none", "transparent"]);
+
+/**
+ * Elements whose own paint never reaches the screen: metadata, and the defs a
+ * shape refers to. Their colours are still rewritten (they may feed a shape),
+ * but they collect no `style` of their own — a `<style>` element carrying a
+ * `fill` is noise in the DOM inspector and nothing else.
+ */
+const NON_DRAWABLE = new Set([
+	"style",
+	"title",
+	"desc",
+	"defs",
+	"lineargradient",
+	"radialgradient",
+	"stop",
+]);
+
+/**
+ * Subtrees left exactly as they were drawn.
+ *
+ * A `<mask>` is read as luminance, not as ink: its white areas are what shows
+ * through. Recolouring those to the callout's colour would dim or erase whatever
+ * the mask reveals. A `<clipPath>` is pure geometry, so painting it is merely
+ * pointless — both are skipped whole, children included.
+ */
+const OPAQUE_SUBTREES = new Set(["mask", "clippath"]);
+
+/**
+ * SVG's own initial paint: shapes are filled black and stroked with nothing,
+ * which is why the black parts of a picture were the ones that already followed
+ * the callout — they declared no colour, so the root's `fill` reached them.
+ */
+const INITIAL_PAINT: PaintState = { fill: "black", stroke: "none" };
+
+/**
+ * A paint declaration inside a `<style>` block or a `style` attribute, split so
+ * only the value is rewritten.
+ *
+ * The value alternatives are spelled out rather than "everything up to the next
+ * delimiter" for the same reason the import-time detector spells them out (see
+ * userImageImport): run two rules together as `.a{fill:#f00}.b{fill:#0f0}` and a
+ * permissive pattern swallows both as one value. `fill-opacity` and
+ * `stroke-width` do not match, because the property has to be followed by `:`.
+ */
+const CSS_PAINT_RE =
+	/(fill|stroke|stop-color|color)(\s*:\s*)(#[0-9a-f]{3,8}|[a-z-]+\([^)]*\)|[a-z]+)/gi;
+
+/** The paint an element passes down to its children. */
+interface PaintState {
+	fill: string;
+	stroke: string;
+}
+
+/**
+ * Draw a picture as a one-colour stencil — the DOM equivalent of the CSS mask
+ * the regular callout paints a followed picture through (see CSSInjector).
+ *
+ * A `fill` on the `<svg>` root only reaches shapes that declare no paint of
+ * their own, so a multi-coloured drawing came out half recoloured on the
+ * heading and inline surfaces: the parts that were default black followed the
+ * callout and everything else kept the colours it was uploaded with. Every
+ * declared paint is therefore rewritten instead — in presentation attributes, in
+ * `style` attributes, and in the `<style>` blocks Illustrator and Figma colour
+ * whole drawings through.
+ *
+ * What is never rewritten is `none` / `transparent`: those declare the *absence*
+ * of ink, and colouring them would fill a stroked outline into a solid blob. The
+ * walk carries the inherited paint down for the same reason, so a shape inside
+ * `<g fill="none">` is left unfilled rather than flooded.
+ */
+function stencilSvg(root: Element, color: string): void {
+	for (const styleEl of Array.from(root.querySelectorAll("style"))) {
+		styleEl.textContent = rewriteCssPaint(styleEl.textContent ?? "", color);
+	}
+	stencilElement(root, color, INITIAL_PAINT);
+}
+
+function stencilElement(el: Element, color: string, inherited: PaintState): void {
+	const name = el.localName.toLowerCase();
+	if (OPAQUE_SUBTREES.has(name)) return;
+
+	const effective: PaintState = { ...inherited };
+	const decls: string[] = [];
+
+	for (const prop of INHERITED_PROPS) {
+		const declared = declaredPaint(el, prop);
+		const value = declared ?? inherited[prop];
+		effective[prop] = value;
+		if (UNPAINTED.has(value.toLowerCase())) continue;
+		// A class in a `<style>` block can declare `fill: none` where nothing
+		// readable here says so. Those rules were rewritten above, so an element
+		// that leans on one is left to them rather than forced to take ink it
+		// may have been drawn without.
+		if (declared === undefined && el.hasAttribute("class")) continue;
+		if (NON_DRAWABLE.has(name)) continue;
+		// `!important`, and on the element rather than only on the root, for the
+		// same reason the export copy bakes it that way: a core or theme rule
+		// targeting `svg path` directly outranks anything weaker.
+		decls.push(`${prop}:${color} !important`);
+	}
+
+	rewriteDeclaredPaint(el, color);
+	if (decls.length > 0) appendStyle(el, decls.join(";"));
+
+	for (const child of Array.from(el.children)) {
+		stencilElement(child, color, effective);
+	}
+}
+
+/**
+ * The paint this element declares for `prop`, or undefined when it inherits.
+ * A `style` attribute wins over the presentation attribute, as in CSS.
+ */
+function declaredPaint(el: Element, prop: "fill" | "stroke"): string | undefined {
+	const inline = el.getAttribute("style");
+	if (inline) {
+		const match = INLINE_PAINT_RE[prop].exec(inline);
+		if (match?.[1]) return match[1].trim();
+	}
+	return el.getAttribute(prop)?.trim();
+}
+
+const INLINE_PAINT_RE: Record<"fill" | "stroke", RegExp> = {
+	fill: /(?:^|;)\s*fill\s*:\s*([^;!]+)/i,
+	stroke: /(?:^|;)\s*stroke\s*:\s*([^;!]+)/i,
+};
+
+/** Replace the colours this element names with `color`, adding none. */
+function rewriteDeclaredPaint(el: Element, color: string): void {
+	for (const prop of PAINT_PROPS) {
+		const value = el.getAttribute(prop);
+		if (value !== null && !UNPAINTED.has(value.trim().toLowerCase())) {
+			el.setAttribute(prop, color);
+		}
+	}
+	const inline = el.getAttribute("style");
+	if (inline) el.setAttribute("style", rewriteCssPaint(inline, color));
+}
+
+function rewriteCssPaint(css: string, color: string): string {
+	return css.replace(
+		CSS_PAINT_RE,
+		(whole: string, prop: string, separator: string, value: string) =>
+			UNPAINTED.has(value.toLowerCase())
+				? whole
+				: `${prop}${separator}${color}`,
+	);
+}
+
+function appendStyle(el: Element, decls: string): void {
+	const existing = el.getAttribute("style");
+	el.setAttribute("style", existing ? `${existing};${decls}` : decls);
 }
 
 function paintMissing(

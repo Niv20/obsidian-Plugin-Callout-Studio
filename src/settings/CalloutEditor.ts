@@ -54,6 +54,7 @@ import {
 import { renderCalloutEditorIconPreview } from "./editor/CalloutEditorIconRenderer";
 import { performCalloutEditorSave } from "./editor/CalloutEditorSave";
 import { findUserImage } from "../icons/packs/userImages";
+import { createControlGroup } from "./styleControls";
 
 // Derive a callout ID from the display name. Spaces are preserved (the ID may
 // be a human-readable, multi-word label like "multi word callout"); the shared
@@ -542,14 +543,15 @@ export class CalloutEditor extends Modal {
 		// ── Picture section ──
 		// Only a picture has anything to say here, so the box hides itself for
 		// every other icon rather than showing a switch that does nothing.
-		const pictureBox = adjustCol.createDiv({
-			cls: "callout-studio-adjust-section",
-		});
-		pictureBox.createDiv({
-			cls: "callout-studio-adjust-header",
-			text: t("editor.picture"),
-		});
-		const recolorSetting = new Setting(pictureBox)
+		// Same group chrome as the Align box in the global style popup, so the
+		// toggle row gets the same padding instead of Obsidian's modal default
+		// (which zeroes it and pins the label to the box edge).
+		const pictureBox = createControlGroup(
+			adjustCol,
+			t("editor.picture"),
+			"cs-layout-group",
+		);
+		new Setting(pictureBox)
 			.setName(t("iconPicker.imageRecolor"))
 			.addToggle((toggle) => {
 				this.recolorToggle = toggle;
@@ -566,17 +568,14 @@ export class CalloutEditor extends Modal {
 				this.icon.type === "image"
 					? findUserImage(this.icon.value)
 					: undefined;
-			pictureBox.toggleClass("cs-hidden", picture === undefined);
-			if (!picture) return;
-			this.recolorToggle?.setValue(this.icon.recolor === true);
 			// A mask is a stencil, so only a flat drawing can follow the callout;
-			// a photo would come out a silhouette.
-			this.recolorToggle?.setDisabled(picture.format !== "svg");
-			recolorSetting.setDesc(
-				picture.format === "svg"
-					? ""
-					: t("iconPicker.imageRecolorRasterHint"),
-			);
+			// a photo would come out a silhouette. Rather than showing the switch
+			// disabled beside a line of prose explaining why, the box just stays
+			// out of the way for a raster picture.
+			const canFollow = picture?.format === "svg";
+			pictureBox.toggleClass("cs-hidden", !canFollow);
+			if (!canFollow) return;
+			this.recolorToggle?.setValue(this.icon.recolor === true);
 		};
 		this.syncPictureBox();
 

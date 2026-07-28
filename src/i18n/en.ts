@@ -390,9 +390,6 @@ export const en: Record<string, string> = {
 		"{{count}} callouts use this picture. They will fall back to a " +
 		"placeholder icon until you give them a new one.",
 	"iconPicker.imageRecolor": "Follow callout color",
-	"iconPicker.imageRecolorRasterHint":
-		"Only SVG pictures can follow the callout color. PNG, JPEG and WebP " +
-		"always keep their own.",
 	"iconPicker.imageStorage": "{{count}} pictures · {{size}}",
 	"iconPicker.allSources": "All sources",
 	"iconPicker.searchAllSources": "Search all icon sources",
