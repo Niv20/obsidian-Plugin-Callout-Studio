@@ -397,6 +397,7 @@ export const en: Record<string, string> = {
 	"iconPack.retry": "Retry",
 	"iconPack.faBrandsNotice":
 		"Brand icons are trademarks of their respective owners. Their inclusion does not indicate endorsement. Please use them only to represent the company, product, or service they refer to.",
+	"iconPack.artworkRestored": "Downloaded the icon artwork for {{names}}.",
 	"iconPack.diskWriteFailed":
 		"Callout Studio could not save the icon pack to disk, so it will need downloading again next time. The icons you pick are still saved with your settings.",
 

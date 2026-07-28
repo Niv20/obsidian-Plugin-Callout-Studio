@@ -14,9 +14,11 @@
  * second device that synced the settings but never downloaded the pack, and
  * what makes it survive someone deleting the pack file.
  */
+import { Notice } from "obsidian";
 import type { App, PluginManifest } from "obsidian";
-import type { CalloutIcon, CalloutRenderRole } from "../types";
+import type { CalloutIcon, CalloutRenderRole, IconPackId } from "../types";
 import { CALLOUT_RENDER_ROLES } from "../types";
+import { t } from "../i18n";
 import type { CalloutRegistry } from "../manager/CalloutRegistry";
 import type { CSSInjector } from "../manager/CSSInjector";
 import { IconFetchManager } from "./IconFetchManager";
@@ -62,7 +64,11 @@ export class IconService implements IconResolver {
 	}
 
 	hasFailed(icon: CalloutIcon, role: CalloutRenderRole): boolean {
-		return this.resolver.hasFailed(icon, role);
+		if (this.resolver.hasFailed(icon, role)) return true;
+		// A pack whose download gave up is just as permanently unavailable as a
+		// per-icon fetch that did. Without this the settings list would spin
+		// forever on an imported icon from a source that could not be fetched.
+		return this.packs.state(icon.type) === "failed";
 	}
 
 	onChange(cb: () => void): () => void {
@@ -124,6 +130,80 @@ export class IconService implements IconResolver {
 			await this.host.saveSettings();
 			this.notify();
 		}
+	}
+
+	/**
+	 * Make a whole batch of icons renderable, downloading whatever is missing.
+	 *
+	 * Two situations need this, and they are the same situation: a callout has
+	 * arrived from somewhere other than the picker — an import, or the vault
+	 * itself on startup — carrying an icon whose artwork this device may not
+	 * have. `ensureArtwork` handles one icon; this handles a set without
+	 * downloading the same pack once per icon.
+	 *
+	 * Icons already drawable are skipped entirely, which is what keeps a second
+	 * device that synced `data.json` from re-downloading packs it never needed.
+	 */
+	async ensureArtworkFor(icons: readonly CalloutIcon[]): Promise<void> {
+		const pending = icons.filter((icon) => !this.isFullyCached(icon));
+		if (pending.length === 0) return;
+
+		// One entry per icon type, so Font Awesome Brands and Solid are two
+		// downloads while twenty Brands icons are one.
+		const byType = new Map<IconPackId, CalloutIcon[]>();
+		for (const icon of pending) {
+			const group = byType.get(icon.type);
+			if (group) group.push(icon);
+			else byType.set(icon.type, [icon]);
+		}
+
+		const restored = new Set<string>();
+		for (const group of byType.values()) {
+			// Sequential: parallel requests to one CDN gain nothing and make a
+			// failure harder to attribute. The first icon pulls the pack down,
+			// the rest then only copy artwork out of it.
+			for (const icon of group) {
+				await this.ensureArtwork(icon);
+			}
+			const first = group[0];
+			if (!first || !group.every((icon) => this.isFullyCached(icon))) {
+				continue;
+			}
+			const title = packFor(first)?.attribution.title;
+			if (title) restored.add(title);
+		}
+
+		// Say what was fetched, once for the batch. Anything that failed has
+		// already announced itself — a per-icon Notice from the fetch manager,
+		// or an error icon on the row via `hasFailed`.
+		if (restored.size > 0) {
+			new Notice(
+				t("iconPack.artworkRestored", {
+					names: [...restored].join(", "),
+				}),
+			);
+		}
+	}
+
+	/**
+	 * Whether every drawing this icon could need is already in `data.json`.
+	 *
+	 * All roles, not just the one on screen: `copyPackArtwork` stores them all,
+	 * so anything short of that means the pack is still needed — to fill in the
+	 * heading bar or inline pill the user may enable later.
+	 */
+	private isFullyCached(icon: CalloutIcon): boolean {
+		const pack = packFor(icon);
+		if (!pack) return true;
+		// Lucide and emoji carry no artwork of their own to be missing.
+		if (pack.kind === "builtin" || pack.kind === "glyph") return true;
+		return CALLOUT_RENDER_ROLES.every((role) =>
+			this.host.registry.findIconSvg(
+				icon.type,
+				icon.value,
+				pack.cacheVariant(icon, role),
+			),
+		);
 	}
 
 	/**

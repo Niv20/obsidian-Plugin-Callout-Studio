@@ -360,6 +360,10 @@ export default class CalloutStudioPlugin extends Plugin {
 		return this.icons.ensureArtwork(icon);
 	}
 
+	async ensureIconArtworkFor(icons: readonly CalloutIcon[]): Promise<void> {
+		return this.icons.ensureArtworkFor(icons);
+	}
+
 	hasIconFetchFailed(icon: CalloutIcon, role: CalloutRenderRole): boolean {
 		return this.icons.hasFailed(icon, role);
 	}

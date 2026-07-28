@@ -35,6 +35,7 @@ export type SettingsTabPlugin = Plugin & {
 	icons: { packs: PackDataStore };
 	restyleUncustomizedFallbackRows(): number;
 	ensureIconArtwork(icon: CalloutIcon): Promise<void>;
+	ensureIconArtworkFor(icons: readonly CalloutIcon[]): Promise<void>;
 	runVaultScan(markFirstRun?: boolean): Promise<number>;
 };
 
