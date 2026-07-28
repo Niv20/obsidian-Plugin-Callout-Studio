@@ -37,7 +37,7 @@ Callout Studio is an Obsidian plugin that lets users create and manage custom ca
 
 ### Settings UI (`src/settings/`)
 
-`SettingsTab.ts` composes 11 section modules under `settings/sections/`. `CalloutEditor.ts` is the edit/create modal with a real, editable Live Preview via `LiveCalloutPreview.ts`, which hosts an embedded Obsidian markdown editor (`EmbeddableMarkdownEditor.ts`) so callouts render 1:1 with a note in the active theme; it falls back to a static `MarkdownRenderer` render if the (undocumented) embed API is unavailable. `settings/iconpicker/` is the icon picker: `IconPickerModal` (source dropdown + preview + confirm), `PackPanel` (one source's toolbar and grid, driven entirely by its `IconPack`), `IconGrid` (paging and key nav), `allSources` (the pooled cross-source search).
+`SettingsTab.ts` composes 11 section modules under `settings/sections/`. `CalloutEditor.ts` is the edit/create modal with a real, editable Live Preview via `LiveCalloutPreview.ts`, which hosts an embedded Obsidian markdown editor (`EmbeddableMarkdownEditor.ts`) so callouts render 1:1 with a note in the active theme; it falls back to a static `MarkdownRenderer` render if the (undocumented) embed API is unavailable. `settings/iconpicker/` is the icon picker: `IconPickerModal` (source menu + preview + confirm), `PackPanel` (one source's toolbar and grid, driven entirely by its `IconPack`), `IconGrid` (paging and key nav), `allSources` (the pooled cross-source search).
 
 ### Editor integrations (`src/editor/`)
 
@@ -47,7 +47,16 @@ Callout Studio is an Obsidian plugin that lets users create and manage custom ca
 
 ### Icon sources (`src/icons/`)
 
-Eight sources behind one `IconPack` interface (`icons/types.ts`), registered in `icons/registry.ts` as a total `Record<IconPackId, IconPack>` — so adding an id without its pack is a compile error. `IconPackKind` decides how artwork reaches the screen: `builtin` (Lucide, via `setIcon`), `glyph` (emoji), `perIconRemote` (Material — 100,000+ style/weight variants, so fetched one at a time), `bundledRemote` (Font Awesome, Octicons, RPG Awesome — one file downloaded on request).
+Two id spaces, kept apart in `icons/registry.ts`, both total `Record`s so declaring an id without the thing behind it is a compile error:
+
+- **`IconSourceId`** (6) — a library as the user meets it: one row in the picker's source menu, one toolbar, one Download button. `ICON_SOURCES` maps it to the `IconPack` (`icons/types.ts`).
+- **`IconPackId`** (8) — one body of artwork: one `CalloutIcon.type`, one pack manifest entry, one downloaded file, one SVG cache key. `SOURCE_OF_TYPE` maps it to its source, which is what `packFor(icon)` walks.
+
+They differ only for Font Awesome: one source, three files (`fa-solid`/`fa-regular`/`fa-brands`) chosen by its style control. **Cache keys and pack-store calls use `icon.type`, never `pack.id`** — using the source id would collapse the three styles onto one entry and orphan everything already cached.
+
+`IconPackKind` decides how artwork reaches the screen: `builtin` (Lucide, via `setIcon`), `glyph` (emoji), `perIconRemote` (Material — 100,000+ style/weight variants, so fetched one at a time), `bundledRemote` (Font Awesome, Octicons, RPG Awesome — files downloaded on request, listed per source in `dataPacks`).
+
+A pack's optional `entryMatches` filters the grid by variant (Font Awesome's style picks *which* icons exist, not just how they look), and `pickerNotice` scopes a standing notice to certain variants (the Brands trademark note).
 
 `renderIcon.ts` is the **only** code that turns an icon into DOM; every surface calls `renderIconInto`. Never reach into the SVG cache from a renderer — go through `IconResolver`.
 

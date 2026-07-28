@@ -25,7 +25,7 @@ Artwork arrives one of two ways:
 | Lucide | Shipped inside Obsidian; the plugin draws it via Obsidian's own API |
 | Emoji | Rendered by your system's emoji font; nothing is downloaded |
 | Material Symbols | Fetched from Google, one icon at a time, only for icons you choose |
-| Octicons, Font Awesome, RPG Awesome | One file per source, downloaded once when you press **Download** in the icon picker |
+| Octicons, Font Awesome, RPG Awesome | Downloaded once when you press **Download** on that source in the icon picker — one file each, three for Font Awesome (one per style) |
 
 Downloaded packs are verified against a SHA-256 checksum built into the plugin
 and cached in the plugin's own folder. See the README's *Network usage and

@@ -93,6 +93,15 @@ export class PackDataStore {
 		return normalizePath(`${base}/icon-packs`);
 	}
 
+	/**
+	 * Where a pack file lives once downloaded.
+	 *
+	 * Dropping a file here by hand also works — it is read on the next launch
+	 * and verified like any other, so a locked-down machine can install a pack
+	 * from the GitHub release without a network. The picker deliberately does
+	 * not advertise that: it is a path for someone who already knows to look,
+	 * not an option worth putting in front of everyone downloading an icon set.
+	 */
 	packPath(id: IconPackId): string {
 		return normalizePath(`${this.packDir()}/${id}.json`);
 	}

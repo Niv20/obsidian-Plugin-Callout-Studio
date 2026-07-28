@@ -23,20 +23,20 @@ All three forms render in Live Preview, Reading view, and PDF export.
 
 ### Icons
 
-Eight icon sources, all from one picker — pick a source from the dropdown and search across it:
+Six icon libraries, all from one picker — choose a source from the menu and search across it:
 
 | Source | Icons | Notes |
 | --- | --- | --- |
 | **Lucide** | ~1,600 | Obsidian's built-in set. Always available, always offline. |
 | **Material Symbols** | 3,870 | Selectable style (Outlined / Filled / Rounded / Sharp) and weight (100–700). |
 | **Emoji** | ~1,900 | Any Unicode emoji, with a skin-tone selector. |
-| **Font Awesome — Solid** | 1,422 | 68 categories to filter by. |
-| **Font Awesome — Regular** | 169 | Outline versions of common Solid icons. |
-| **Font Awesome — Brands** | 572 | Company and product marks. |
+| **Font Awesome** | 1,992 | Selectable style — Solid (1,422), Regular (169) or Brands (572). 68 categories to filter by. |
 | **Octicons** | 383 | GitHub's set. Drawn at two sizes and picked automatically to suit the callout. |
 | **RPG Awesome** | 495 | Fantasy and tabletop icons. |
 
-Searching works offline for every source from the moment you install — the names, keywords and categories all ship with the plugin. The last four sources download their artwork once, when you first press **Download** in the picker, and work offline afterwards. See [Network usage and privacy](#network-usage-and-privacy).
+Or leave it on **All sources** and search every library at once.
+
+Searching works offline for every source from the moment you install — the names, keywords and categories all ship with the plugin. The last three sources download their artwork once, when you first press **Download** in the picker, and work offline afterwards. See [Network usage and privacy](#network-usage-and-privacy).
 
 You can also fine-tune each callout's icon size and horizontal/vertical offset.
 
@@ -162,13 +162,11 @@ Callout Studio never sends vault content anywhere, and collects no telemetry or 
 
 ### Downloadable icon sources
 
-Font Awesome, Octicons and RPG Awesome each ship their artwork as a single file, downloaded the first time you press **Download** on that source in the picker. After that the source works entirely offline.
+Font Awesome, Octicons and RPG Awesome ship their artwork as files downloaded the first time you press **Download** on that source in the picker. After that the source works entirely offline. Font Awesome is three files, one per style, fetched together by that one button — and only the ones you do not already have.
 
 | Source | Download size |
 | --- | --- |
-| Font Awesome — Solid | 794 KB |
-| Font Awesome — Regular | 105 KB |
-| Font Awesome — Brands | 559 KB |
+| Font Awesome | 1.4 MB (Solid 794 KB, Regular 105 KB, Brands 559 KB) |
 | Octicons | 375 KB |
 | RPG Awesome | 625 KB |
 
@@ -181,7 +179,7 @@ https://raw.githubusercontent.com/Niv20/obsidian-Plugin-Callout-Studio/packs-v1/
 
 Each download is checked against a SHA-256 checksum built into the plugin, and rejected unless it matches exactly — so a compromised CDN, a captive portal or a truncated response cannot substitute anything. The file is then stored at `.obsidian/plugins/callout-studio/icon-packs/<source>.json`.
 
-**Installing a source without a network:** download the file from the plugin's [GitHub release](https://github.com/Niv20/obsidian-Plugin-Callout-Studio/releases) and drop it into that folder. The picker shows the exact path, with a copy button, under "install it offline".
+**Installing a source without a network:** download the file from the plugin's [GitHub release](https://github.com/Niv20/obsidian-Plugin-Callout-Studio/releases) and drop it into that folder, named after the source (`fa-solid.json`, `octicons.json`, and so on). It is verified against the same checksum on the next launch.
 
 ### Material Symbols
 
@@ -206,7 +204,7 @@ Callout Studio's own code is [0BSD](LICENSE), but the icon libraries it draws on
 Two points worth knowing before you publish something made with these icons:
 
 - **Font Awesome Free** icons are [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/), © Fonticons, Inc. Attribution travels with them, so a theme or template you share that uses them carries the same requirement.
-- **Brand icons** — Font Awesome Brands, and GitHub's own marks within Octicons — are trademarks, which no icon licence grants rights to. Font Awesome asks that they be used only to represent the company, product or service they refer to; the picker repeats that notice whenever the Brands source is selected.
+- **Brand icons** — Font Awesome's Brands style, and GitHub's own marks within Octicons — are trademarks, which no icon licence grants rights to. Font Awesome asks that they be used only to represent the company, product or service they refer to; the picker repeats that notice whenever the Brands style is selected.
 
 ## 💖 Special Thanks
 
