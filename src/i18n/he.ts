@@ -371,6 +371,9 @@ export const he: Record<string, string> = {
 		"{{name}} אינה סוג תמונה נתמך. יש להשתמש ב־SVG, PNG, JPEG או WebP.",
 	"iconPicker.imageInvalidSvg": "לא ניתן לקרוא את {{name}} כקובץ SVG בטוח, ולכן היא לא נוספה.",
 	"iconPicker.imageDecodeFailed": "לא ניתן לקרוא את {{name}} כתמונה.",
+	"iconPicker.imageDuplicate":
+		"{{name}} כבר נמצאת בתמונות שלך. אפשר לשנות את שם הקובץ, " +
+		"או למחוק את התמונה הקיימת.",
 	"iconPicker.imageAdd": "הוספת תמונות",
 	"iconPicker.imageEmpty":
 		"עדיין אין תמונות. אפשר להוסיף קובץ SVG, PNG, JPEG או WebP מהמחשב, " +

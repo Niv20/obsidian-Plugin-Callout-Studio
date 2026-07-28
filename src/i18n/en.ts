@@ -380,6 +380,9 @@ export const en: Record<string, string> = {
 	"iconPicker.imageInvalidSvg":
 		"{{name}} could not be read as a safe SVG, so it was not added.",
 	"iconPicker.imageDecodeFailed": "{{name}} could not be read as a picture.",
+	"iconPicker.imageDuplicate":
+		"{{name}} is already in your images. Rename the file, or delete the " +
+		"picture you already have.",
 	"iconPicker.imageAdd": "Add images",
 	"iconPicker.imageEmpty":
 		"No pictures yet. Add an SVG, PNG, JPEG or WebP file from your computer, " +

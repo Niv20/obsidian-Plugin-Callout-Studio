@@ -14,7 +14,10 @@
  * structure survives to be interpreted by anything later.
  */
 import { sanitizeUserSvg } from "./svg";
-import { newUserImageId } from "../utils/userImages";
+import {
+	newUserImageId,
+	userImageNameFromFilename,
+} from "../utils/userImages";
 import type { LocaleKey } from "../i18n";
 import type { UserImageIcon } from "../types";
 
@@ -81,7 +84,10 @@ export async function importImageFile(
 			ok: true,
 			image: {
 				id: newUserImageId(),
-				name: nameFromFilename(file.name),
+				// The filename as it stands on disk. The name is also the
+				// collection's uniqueness key, so it is derived in one place —
+				// see utils/userImages.
+				name: userImageNameFromFilename(file.name),
 				format,
 				svg: artwork.svg,
 				width: artwork.width,
@@ -285,19 +291,4 @@ function fitWithin(
 		width: Math.max(1, Math.round(width * scale)),
 		height: Math.max(1, Math.round(height * scale)),
 	};
-}
-
-/* ------------------------------------------------------------------ *
- * Naming
- * ------------------------------------------------------------------ */
-
-const MAX_NAME_LENGTH = 60;
-
-/** A readable starting name from the filename, which the user can rename. */
-function nameFromFilename(filename: string): string {
-	const base = filename.replace(/\.[^.]+$/, "").replace(/[_-]+/g, " ").trim();
-	if (base.length === 0) return "Image";
-	return base.length > MAX_NAME_LENGTH
-		? base.slice(0, MAX_NAME_LENGTH).trimEnd()
-		: base;
 }

@@ -230,8 +230,13 @@ export interface UserImageIcon {
 	/** Stable unique id (`img-` prefix). Stored as `CalloutIcon.value`. */
 	id: string;
 	/**
-	 * Taken from the filename. Never shown as a field of its own — it is what
-	 * the grid's tooltip reads and what both searches match on.
+	 * The filename as the operating system shows it, extension included. Never
+	 * shown as a field of its own — it is what the grid's tooltip reads and what
+	 * both searches match on.
+	 *
+	 * Also the collection's uniqueness key: adding a file whose name is already
+	 * here is refused (`utils/userImages`), which is why the extension is kept —
+	 * `logo.svg` and `logo.png` are two pictures, two `logo.png` are one.
 	 */
 	name: string;
 	/** What was uploaded. Only `"svg"` keeps its own colors optional. */

@@ -18,7 +18,13 @@ import {
 	USER_IMAGE_ACCEPT,
 	importImageFile,
 } from "../../icons/userImageImport";
-import { formatByteSize, userImagesByteSize } from "../../utils/userImages";
+import {
+	formatByteSize,
+	normalizeUserImageName,
+	takenUserImageNames,
+	userImageNameFromFilename,
+	userImagesByteSize,
+} from "../../utils/userImages";
 import { ConfirmModal } from "../../utils/ConfirmModal";
 import { IconGrid } from "./IconGrid";
 import { t } from "../../i18n";
@@ -166,14 +172,33 @@ export class ImagePanel {
 	 *
 	 * One bad file in a drop of ten must not cost the other nine, so each is
 	 * reported on its own and the rest carry on.
+	 *
+	 * A filename already in the collection is turned away before the file is
+	 * read: two cells with the same name are indistinguishable in the grid, and
+	 * the second one is almost always a re-drop of the first rather than a
+	 * different picture. The set grows as the batch goes, so dropping the same
+	 * file twice in one go collides just as it would a week apart — nothing has
+	 * been saved in between for the next check to see.
 	 */
 	private async addFiles(files: readonly File[]): Promise<void> {
 		if (files.length === 0) return;
 		const added: UserImageIcon[] = [];
+		const taken = takenUserImageNames(this.host.images());
 		for (const file of files) {
+			const name = userImageNameFromFilename(file.name);
+			if (taken.has(normalizeUserImageName(name))) {
+				new Notice(t("iconPicker.imageDuplicate", { name }));
+				continue;
+			}
+
 			const result = await importImageFile(file);
-			if (result.ok) added.push(result.image);
-			else new Notice(t(result.reason, { name: file.name }));
+			if (!result.ok) {
+				new Notice(t(result.reason, { name: file.name }));
+				continue;
+			}
+
+			taken.add(normalizeUserImageName(result.image.name));
+			added.push(result.image);
 		}
 		if (this.disposed || added.length === 0) return;
 
