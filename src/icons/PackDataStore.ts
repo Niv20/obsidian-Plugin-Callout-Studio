@@ -162,6 +162,22 @@ export class PackDataStore {
 	}
 
 	/**
+	 * Load every downloadable pack that is on disk but not yet in memory.
+	 *
+	 * `loadUsed` only warms packs a callout already references, so a pack
+	 * downloaded in an earlier session but never assigned to one still reads
+	 * as `"unavailable"` until something reads it back. The picker calls this
+	 * once when it opens, so its download prompts reflect what is actually on
+	 * disk rather than only what this session has touched.
+	 */
+	async loadAllFromDisk(): Promise<void> {
+		for (const id of Object.keys(PACK_MANIFEST) as IconPackId[]) {
+			if (this.state(id) === "unavailable") await this.loadFromDisk(id);
+		}
+		this.notify();
+	}
+
+	/**
 	 * Persist a pack so later launches skip the network. Best-effort by design:
 	 * a read-only vault or a suspended mobile app must not cost the user the
 	 * download they just did, so failure only downgrades this to session-only.

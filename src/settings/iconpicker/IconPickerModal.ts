@@ -126,7 +126,17 @@ export class IconPicker extends Modal {
 		});
 		this.confirmBtn.addEventListener("click", () => void this.confirm());
 
-		void this.showPanel();
+		void this.openInitialPanel();
+	}
+
+	/**
+	 * Warms pack state from disk before the first render, so a source
+	 * downloaded in an earlier session but not yet assigned to a callout
+	 * still shows as downloaded instead of prompting again.
+	 */
+	private async openInitialPanel(): Promise<void> {
+		await this.plugin.icons.packs.loadAllFromDisk();
+		await this.showPanel();
 	}
 
 	onClose(): void {
