@@ -1171,41 +1171,105 @@ button.callout-studio-icon-picker-loading {
 	max-height: 70vh;
 }
 
-.icon-picker-tabs {
+/* The source row replaced a tab strip: a tab per source stopped fitting once
+   there were seven of them, on mobile and in RTL especially. */
+.icon-picker-source-row {
 	display: flex;
-	gap: 4px;
+	align-items: center;
+	gap: 8px;
 	border-bottom: 1px solid var(--background-modifier-border);
-	padding: 4px 12px 0;
+	padding: 10px 12px;
 	flex-shrink: 0;
 	background: var(--background-primary);
 }
 
-.icon-picker-tab {
-	padding: 6px 16px;
-	min-height: 32px;
-	background: none;
-	border: none;
-	border-bottom: 2px solid transparent;
-	border-radius: var(--radius-s) var(--radius-s) 0 0;
+.icon-picker-source-label {
 	color: var(--text-muted);
-	cursor: pointer;
 	font-size: var(--font-ui-small);
-	font-weight: var(--font-semibold);
-	transition:
-		color 0.15s,
-		border-color 0.15s,
-		background-color 0.15s;
+	font-weight: var(--font-medium);
 }
 
-.icon-picker-tab:hover {
+.icon-picker-source-select {
+	flex: 1;
+	min-width: 0;
+}
+
+/* Download prompt / progress / failure, shown in place of the grid. */
+.icon-picker-notice {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 10px;
+	padding: 2.5rem 1rem;
+	text-align: center;
+	color: var(--text-muted);
+}
+
+.icon-picker-notice-title {
 	color: var(--text-normal);
-	background-color: var(--background-modifier-hover);
+	font-size: var(--font-ui-medium);
+	font-weight: var(--font-semibold);
 }
 
-.icon-picker-tab.is-active {
+.icon-picker-notice-detail {
+	font-size: var(--font-ui-small);
+}
+
+.icon-picker-notice-loading {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.icon-picker-manual-hint {
+	margin-top: 0.5rem;
+	max-width: 34rem;
+	font-size: var(--font-ui-smaller);
+	text-align: start;
+}
+
+.icon-picker-manual-hint summary {
+	cursor: pointer;
+}
+
+.icon-picker-manual-hint code {
+	display: block;
+	margin: 0.5em 0;
+	padding: 0.4em 0.6em;
+	border-radius: var(--radius-s);
+	background-color: var(--background-modifier-hover);
+	word-break: break-all;
+	/* A filesystem path is always read left-to-right, even in a Hebrew UI. */
+	direction: ltr;
+	text-align: left;
+}
+
+/* Standing notice for a source whose icons carry obligations of their own
+   (Font Awesome Brands and its trademarks). Not dismissible by design. */
+.icon-picker-pack-notice {
+	margin: 8px 0 0;
+	padding: 8px 10px;
+	border-radius: var(--radius-s);
+	background-color: var(--background-modifier-hover);
+	color: var(--text-muted);
+	font-size: var(--font-ui-smaller);
+	line-height: 1.45;
+}
+
+.icon-picker-pack-credit {
+	margin-top: 10px;
+	color: var(--text-faint);
+	font-size: var(--font-ui-smaller);
+}
+
+.icon-picker-pack-credit a {
+	margin-inline-start: 0.4em;
 	color: var(--text-accent);
-	border-bottom-color: var(--text-accent);
-	background-color: transparent;
+	text-decoration: none;
+}
+
+.icon-picker-pack-credit a:hover {
+	text-decoration: underline;
 }
 
 .icon-picker-content {
@@ -2568,6 +2632,84 @@ input.cs-input-invalid:focus {
 		color: var(--text-muted);
 		font-size: var(--font-ui-smaller);
 	}
+}
+
+/* ── Icon licences & credits ────────────────────────────────── */
+.callout-studio-credits {
+	margin-top: 2rem;
+	padding-top: 1rem;
+	border-top: 1px solid var(--background-modifier-border);
+	color: var(--text-muted);
+	font-size: var(--font-ui-smaller);
+}
+.callout-studio-credits-summary {
+	display: flex;
+	align-items: center;
+	gap: 0.4em;
+	cursor: pointer;
+	color: var(--text-normal);
+	font-size: var(--font-ui-small);
+	font-weight: var(--font-medium);
+	list-style: none;
+}
+.callout-studio-credits-summary::-webkit-details-marker {
+	display: none;
+}
+.callout-studio-credits-chevron {
+	display: inline-flex;
+	transition: transform 120ms ease;
+}
+.callout-studio-credits-chevron svg {
+	width: 1em;
+	height: 1em;
+}
+.callout-studio-credits[open] .callout-studio-credits-chevron {
+	transform: rotate(90deg);
+}
+/* The chevron points at the content, so it flips with the writing direction. */
+[dir="rtl"] .callout-studio-credits-chevron {
+	transform: scaleX(-1);
+}
+[dir="rtl"] .callout-studio-credits[open] .callout-studio-credits-chevron {
+	transform: scaleX(-1) rotate(90deg);
+}
+.callout-studio-credits-intro,
+.callout-studio-credits-more {
+	margin: 0.6em 0;
+	line-height: 1.5;
+}
+.callout-studio-credit {
+	margin: 0.9em 0;
+	padding-inline-start: 0.8em;
+	border-inline-start: 2px solid var(--background-modifier-border);
+	line-height: 1.5;
+}
+.callout-studio-credit-name {
+	color: var(--text-normal);
+	font-weight: var(--font-medium);
+}
+.callout-studio-credit-version,
+.callout-studio-credit-scope {
+	color: var(--text-faint);
+	font-weight: normal;
+}
+.callout-studio-credit-modifications {
+	margin-top: 0.25em;
+	color: var(--text-faint);
+}
+.callout-studio-credit-notice {
+	margin-top: 0.4em;
+	padding: 0.4em 0.6em;
+	border-radius: var(--radius-s);
+	background-color: var(--background-modifier-hover);
+	color: var(--text-muted);
+}
+.callout-studio-credits a {
+	color: var(--text-accent);
+	text-decoration: none;
+}
+.callout-studio-credits a:hover {
+	text-decoration: underline;
 }
 
 /* ── Footer ─────────────────────────────────────────────────── */

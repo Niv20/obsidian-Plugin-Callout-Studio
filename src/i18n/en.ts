@@ -388,6 +388,14 @@ export const en: Record<string, string> = {
 	"iconPack.diskWriteFailed":
 		"Callout Studio could not save the icon pack to disk, so it will need downloading again next time. The icons you pick are still saved with your settings.",
 
+	// Icon licences & credits
+	"credits.title": "Icon licences and credits",
+	"credits.intro":
+		"Callout Studio draws on several open icon libraries. Their licences are reproduced below, along with what was changed to use them here.",
+	"credits.fullNotices": "Full third-party notices",
+	"credits.pluginLicense":
+		"Callout Studio's own code is 0BSD; the icon libraries keep their own licences.",
+
 	// Context Menu
 	"contextMenu.editCallout": "Edit callout settings",
 	"contextMenu.copyMarkdown": "Copy callout Markdown",

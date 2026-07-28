@@ -14,6 +14,7 @@ import type { App, EventRef } from "obsidian";
 import { CalloutEditor } from "./CalloutEditor";
 import { scanStringForUnknownCallouts } from "../utils/vaultCalloutScanner";
 import { renderHotkeySection } from "./sections/HotkeySection";
+import { renderCreditsSection } from "./sections/CreditsSection";
 import { renderFooterSection } from "./sections/FooterSection";
 import {
 	renderImportExportSection,
@@ -166,6 +167,7 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 		renderImportExportSection(sectionCtx, containerEl);
 		renderLanguageSection(sectionCtx, containerEl);
 		renderResetSection(sectionCtx, containerEl);
+		renderCreditsSection(sectionCtx, containerEl);
 		renderFooterSection(sectionCtx, containerEl);
 	}
 

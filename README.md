@@ -23,11 +23,20 @@ All three forms render in Live Preview, Reading view, and PDF export.
 
 ### Icons
 
-Three icon sources, all selectable from one icon picker:
+Seven icon sources, all from one picker — pick a source from the dropdown and search across it:
 
-- **Lucide icons** — Obsidian's built-in set (~1,300 icons). Always available offline.
-- **Google Material Symbols** — ~3,800 icons, with selectable style (Outlined / Filled / Rounded / Sharp) and weight (100 – 700).
-- **Emoji** — Any Unicode emoji, with skin-tone selector.
+| Source | Icons | Notes |
+| --- | --- | --- |
+| **Lucide** | ~1,600 | Obsidian's built-in set. Always available, always offline. |
+| **Material Symbols** | 3,870 | Selectable style (Outlined / Filled / Rounded / Sharp) and weight (100–700). |
+| **Emoji** | ~1,900 | Any Unicode emoji, with a skin-tone selector. |
+| **Font Awesome — Solid** | 1,422 | 68 categories to filter by. |
+| **Font Awesome — Regular** | 169 | Outline versions of common Solid icons. |
+| **Font Awesome — Brands** | 572 | Company and product marks. |
+| **Octicons** | 383 | GitHub's set. Drawn at two sizes and picked automatically to suit the callout. |
+| **RPG Awesome** | 495 | Fantasy and tabletop icons. |
+
+Searching works offline for every source from the moment you install — the names, keywords and categories all ship with the plugin. The last four sources download their artwork once, when you first press **Download** in the picker, and work offline afterwards. See [Network usage and privacy](#network-usage-and-privacy).
 
 You can also fine-tune each callout's icon size and horizontal/vertical offset.
 
@@ -115,7 +124,7 @@ Callout Studio adds the following commands. **No keyboard shortcuts are assigned
 
 ### Reset
 
-A single **Reset everything** action returns the plugin to defaults: removes user callouts, restores built-in callouts, resets global styles, and clears the downloaded Material SVG cache.
+A single **Reset everything** action returns the plugin to defaults: removes user callouts, restores built-in callouts, resets global styles, and clears cached icon artwork.
 
 ### Localization
 
@@ -147,15 +156,57 @@ No vault content, clipboard data, or usage information is ever transmitted off y
 
 ## Network usage and privacy
 
-Callout Studio works offline by default and never sends any vault content anywhere. The **Google Material Symbols** icon list and search tags are bundled with the plugin, so opening and searching the Material tab does not fetch icon metadata from Google. The **Emoji** list and search tags are likewise bundled with the plugin (generated from [emojibase-data](https://github.com/milesj/emojibase)), so the Emoji tab works fully offline with no network access at all, no matter which emoji you pick. The only network activity for Material icons happens on demand:
+Callout Studio never sends vault content anywhere, and collects no telemetry or analytics. Every network request it makes is listed here.
 
-- When the picker is open, the relevant Google Fonts stylesheet is loaded from `https://fonts.googleapis.com/css2?...` so the icon previews can render with the chosen style and weight.
-- When you actually pick a Material icon for a callout, the plugin downloads that single icon's SVG from `https://fonts.gstatic.com/s/i/short-term/...` and caches the SVG locally so the icon works offline and in PDF export.
-- On startup, if any callout already uses a Material icon whose SVG is missing from the local cache (e.g. after an import), the plugin downloads only those missing SVGs in the background.
+**Nothing is fetched by opening a note, or by opening the icon picker.** Browsing and searching every icon source works offline from the moment you install the plugin, because the names, keywords and categories are all bundled. Only artwork is ever downloaded, and only for icons you actually choose.
 
-If you never use Material icons, no network calls are made. Selected Material SVGs are cached inside the plugin's `data.json` and you can clear them at any time from settings. No telemetry or analytics is collected.
+### Downloadable icon sources
 
-**What is stored locally:** to remove the brief flash of unstyled callouts on slow startups (mainly mobile), the plugin keeps two snapshots of its generated CSS on your device — an auto-generated snippet at `.obsidian/snippets/callout-studio-do-not-delete.css`, which Obsidian applies before community plugins load, and a small per-device localStorage cache. Both contain only generated styling, never vault content, and never leave your device. The snippet is self-healing: if it is deleted or turned off (accidentally or by a vault cleanup), the plugin recreates and re-enables it automatically the next time it loads, so the startup flash never silently comes back.
+Font Awesome, Octicons and RPG Awesome each ship their artwork as a single file, downloaded the first time you press **Download** on that source in the picker. After that the source works entirely offline.
+
+| Source | Download size |
+| --- | --- |
+| Font Awesome — Solid | 794 KB |
+| Font Awesome — Regular | 105 KB |
+| Font Awesome — Brands | 559 KB |
+| Octicons | 375 KB |
+| RPG Awesome | 625 KB |
+
+These come from this plugin's own repository, pinned to an immutable tag:
+
+```
+https://cdn.jsdelivr.net/gh/Niv20/obsidian-Plugin-Callout-Studio@packs-v1/packs/<source>.json
+https://raw.githubusercontent.com/Niv20/obsidian-Plugin-Callout-Studio/packs-v1/packs/<source>.json   (fallback)
+```
+
+Each download is checked against a SHA-256 checksum built into the plugin, and rejected unless it matches exactly — so a compromised CDN, a captive portal or a truncated response cannot substitute anything. The file is then stored at `.obsidian/plugins/callout-studio/icon-packs/<source>.json`.
+
+**Installing a source without a network:** download the file from the plugin's [GitHub release](https://github.com/Niv20/obsidian-Plugin-Callout-Studio/releases) and drop it into that folder. The picker shows the exact path, with a copy button, under "install it offline".
+
+### Material Symbols
+
+Material Symbols is the exception: it has over 100,000 style and weight combinations, so there is no single file to ship. It fetches one drawing at a time instead:
+
+- While its tab is open, the Google Fonts stylesheet is loaded from `https://fonts.googleapis.com/css2?...` so the grid can preview icons in the chosen style and weight.
+- When you pick an icon, that one SVG is downloaded from `https://fonts.gstatic.com/s/i/short-term/...`.
+- On startup, if a callout uses a Material icon whose artwork is missing locally (after an import, say), only those are fetched.
+
+If you never open the Material source, none of this happens.
+
+### What is stored locally
+
+- **The artwork of icons you actually use** is copied into the plugin's `data.json`, so your callouts still render on a device that synced your settings but never downloaded the source, and after a cached pack file is deleted. Unused entries are cleaned up automatically when you edit or delete a callout; **Reset all** clears them outright.
+- **Downloaded icon sources** live in `.obsidian/plugins/callout-studio/icon-packs/`. Deleting them is safe — the picker simply offers the download again, and callouts keep rendering from the copy in `data.json`.
+- **Two snapshots of the plugin's generated CSS**, to remove the brief flash of unstyled callouts on slow startups (mainly mobile): an auto-generated snippet at `.obsidian/snippets/callout-studio-do-not-delete.css`, which Obsidian applies before community plugins load, and a small per-device localStorage cache. Both contain only generated styling, never vault content, and never leave your device. The snippet is self-healing: if it is deleted or turned off, the plugin recreates and re-enables it the next time it loads, so the startup flash never silently comes back.
+
+## Icon licences and attribution
+
+Callout Studio's own code is [0BSD](LICENSE), but the icon libraries it draws on keep their own licences — see **[THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md)** for the full text of each, also reachable from *Settings → Icon licences and credits*.
+
+Two points worth knowing before you publish something made with these icons:
+
+- **Font Awesome Free** icons are [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/), © Fonticons, Inc. Attribution travels with them, so a theme or template you share that uses them carries the same requirement.
+- **Brand icons** — Font Awesome Brands, and GitHub's own marks within Octicons — are trademarks, which no icon licence grants rights to. Font Awesome asks that they be used only to represent the company, product or service they refer to; the picker repeats that notice whenever the Brands source is selected.
 
 ## 💖 Special Thanks
 
@@ -199,4 +250,6 @@ Source lives under `src/` and is bundled by esbuild into `main.js`. The release 
 
 ## License
 
-[0BSD](LICENSE)
+Callout Studio's own code is [0BSD](LICENSE) — use it however you like, no attribution required.
+
+The icon libraries it offers are separate works under their own licences, which 0BSD does not cover. See [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md).
