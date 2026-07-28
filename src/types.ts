@@ -17,7 +17,7 @@
  * maps this union onto those modules with a total `Record`, so a member added
  * here without a pack behind it is a compile error rather than a blank grid.
  */
-export type IconPackId = "lucide" | "material" | "emoji";
+export type IconPackId = "lucide" | "material" | "emoji" | "octicons";
 
 export interface CalloutIcon {
 	type: IconPackId;

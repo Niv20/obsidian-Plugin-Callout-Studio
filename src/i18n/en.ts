@@ -359,6 +359,8 @@ export const en: Record<string, string> = {
 	"iconPicker.noIconSelected": "No icon selected",
 	"iconPicker.noResults": "No icons match your search.",
 	"iconPicker.delete": "Delete",
+	"iconPicker.octicons": "Octicons",
+	"iconPicker.searchOcticons": "Search Octicons",
 	"iconPicker.source": "Source",
 
 	// Downloadable icon packs

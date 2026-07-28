@@ -351,6 +351,8 @@ export const he: Record<string, string> = {
 	"iconPicker.noIconSelected": "לא נבחר אייקון",
 	"iconPicker.noResults": "לא נמצאו אייקונים התואמים לחיפוש.",
 	"iconPicker.delete": "מחיקה",
+	"iconPicker.octicons": "Octicons",
+	"iconPicker.searchOcticons": "חיפוש אייקוני Octicons",
 	"iconPicker.source": "מקור",
 
 	// Downloadable icon packs

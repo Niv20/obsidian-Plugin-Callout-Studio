@@ -48,4 +48,11 @@ export interface PackManifestEntry {
 	sha256: string;
 }
 
-export const PACK_MANIFEST: Partial<Record<IconPackId, PackManifestEntry>> = {};
+export const PACK_MANIFEST: Partial<Record<IconPackId, PackManifestEntry>> = {
+	octicons: {
+		version: "19.31.0",
+		iconCount: 383,
+		bytes: 384490,
+		sha256: "8d34725983eee3d840da65e802fd29e583fc2845058923b88e8151fa418b852f",
+	},
+};
