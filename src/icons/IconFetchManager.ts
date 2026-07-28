@@ -63,7 +63,7 @@ export class IconFetchManager {
 	private keyFor(icon: CalloutIcon, role: CalloutRenderRole): string | null {
 		const pack = packFor(icon);
 		if (!pack) return null;
-		return iconCacheKey(pack.id, icon.value, pack.cacheVariant(icon, role));
+		return iconCacheKey(icon.type, icon.value, pack.cacheVariant(icon, role));
 	}
 
 	/** True once fetching this icon has been attempted and permanently failed. */
@@ -77,7 +77,7 @@ export class IconFetchManager {
 		const pack = packFor(icon);
 		if (!pack || pack.kind !== "perIconRemote") return false;
 		return !this.host.registry.findIconSvg(
-			pack.id,
+			icon.type,
 			icon.value,
 			pack.cacheVariant(icon, "regular"),
 		);
@@ -88,7 +88,7 @@ export class IconFetchManager {
 		const pack = packFor(icon);
 		if (!pack) return;
 		this.host.registry.addIconSvg({
-			pack: pack.id,
+			pack: icon.type,
 			name: icon.value,
 			variant: pack.cacheVariant(icon, "regular"),
 			svg,

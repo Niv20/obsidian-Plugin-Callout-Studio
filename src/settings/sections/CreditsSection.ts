@@ -11,7 +11,7 @@
  * whatever a pack declares is what appears here.
  */
 import { setIcon } from "obsidian";
-import { ICON_PACK_IDS, getPack } from "../../icons/registry";
+import { ICON_SOURCE_IDS, getSource } from "../../icons/registry";
 import type { IconPack } from "../../icons/types";
 import { t } from "../../i18n";
 import type { SettingsSectionContext } from "./types";
@@ -38,14 +38,8 @@ export function renderCreditsSection(
 		cls: "callout-studio-credits-intro",
 	});
 
-	// Deduplicated by title: Font Awesome's three sources are one library with
-	// one set of licences, and listing it three times would only add noise.
-	const seen = new Set<string>();
-	for (const id of ICON_PACK_IDS) {
-		const pack = getPack(id);
-		if (seen.has(pack.attribution.title)) continue;
-		seen.add(pack.attribution.title);
-		renderPackCredit(details, pack);
+	for (const id of ICON_SOURCE_IDS) {
+		renderPackCredit(details, getSource(id));
 	}
 
 	const more = details.createEl("p", { cls: "callout-studio-credits-more" });

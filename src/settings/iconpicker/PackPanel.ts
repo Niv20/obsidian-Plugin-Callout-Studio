@@ -9,8 +9,8 @@
  * made until the user presses Download. That is a deliberate, visible property:
  * opening the icon picker never touches the network.
  */
-import { Notice, setIcon } from "obsidian";
-import type { CalloutIcon, IconPackId } from "../../types";
+import { setIcon } from "obsidian";
+import type { CalloutIcon, IconPackId, IconSourceId } from "../../types";
 import type {
 	IconEntry,
 	IconIndex,
@@ -19,7 +19,7 @@ import type {
 } from "../../icons/types";
 import { filterIcons } from "../../icons/search";
 import { renderIconInto } from "../../icons/renderIcon";
-import { getPack, packFor } from "../../icons/registry";
+import { getSource, packFor } from "../../icons/registry";
 import {
 	MATERIAL_DEFAULT_STYLE,
 	ensureMaterialFontLoaded,
@@ -51,10 +51,10 @@ const previewResolver = {
 export interface PackPanelHost {
 	packs: PackDataStore;
 	/** Persisted picker state (last category per source, last skin tone). */
-	variantsFor(packId: IconPackId): IconVariantState;
-	saveVariants(packId: IconPackId, variants: IconVariantState): void;
-	lastCategoryFor(packId: IconPackId): string;
-	saveCategory(packId: IconPackId, category: string): void;
+	variantsFor(sourceId: IconSourceId): IconVariantState;
+	saveVariants(sourceId: IconSourceId, variants: IconVariantState): void;
+	lastCategoryFor(sourceId: IconSourceId): string;
+	saveCategory(sourceId: IconSourceId, category: string): void;
 	onSelect(icon: CalloutIcon, entry: IconEntry): void;
 	/** The icon the picker opened on, so its cell starts highlighted. */
 	selectedIcon(): CalloutIcon | null;
@@ -70,6 +70,8 @@ export class PackPanel {
 	private variants: IconVariantState;
 	private searchInput: HTMLInputElement | null = null;
 	private categorySelect: HTMLSelectElement | null = null;
+	/** Rebuilt on every variant change — Font Awesome's applies to Brands only. */
+	private noticeEl: HTMLElement | null = null;
 	/** Guards against a slow load painting into a panel the user has left. */
 	private disposed = false;
 
@@ -102,6 +104,11 @@ export class PackPanel {
 			loadMoreText: t("iconPicker.loadMore"),
 		});
 		this.renderAttribution();
+
+		// Indexes are bundled, so this touches no network — and having it before
+		// the download check is what lets the prompt quote a real icon count.
+		this.index = await this.pack.loadIndex();
+		if (this.disposed) return;
 
 		if (this.needsDownload()) {
 			this.showDownloadPrompt();
@@ -158,13 +165,14 @@ export class PackPanel {
 			attr: { "aria-label": t(spec.labelKey) },
 		});
 		const current = this.variants[spec.key];
-		for (const option of spec.options) {
+		spec.options.forEach((option, i) => {
+			const labelKey = spec.optionLabelKeys?.[i];
 			const opt = select.createEl("option", {
-				text: String(option),
+				text: labelKey ? t(labelKey) : String(option),
 				value: String(option),
 			});
 			if (String(option) === String(current)) opt.selected = true;
-		}
+		});
 		select.addEventListener("change", () => {
 			const raw = select.value;
 			this.variants = {
@@ -208,9 +216,10 @@ export class PackPanel {
 	}
 
 	/**
-	 * A variant change can alter the artwork itself, so the grid is rebuilt.
-	 * Material additionally has to wait for the webfont of the newly chosen
-	 * style before its ligatures resolve into glyphs.
+	 * A variant change can alter the artwork itself — and for Font Awesome which
+	 * icons exist at all — so the grid is rebuilt. Material additionally has to
+	 * wait for the webfont of the newly chosen style before its ligatures
+	 * resolve into glyphs.
 	 */
 	private async onVariantChanged(): Promise<void> {
 		if (this.pack.kind === "perIconRemote") {
@@ -222,17 +231,27 @@ export class PackPanel {
 			});
 			if (this.disposed) return;
 		}
+		this.updateNotice();
 		this.applyFilter();
 		this.grid?.revealSelected();
 	}
 
 	// ── Loading ─────────────────────────────────────────────────────────
 
-	private needsDownload(): boolean {
-		return (
-			this.pack.kind === "bundledRemote" &&
-			this.host.packs.state(this.pack.id) !== "ready"
+	/** The pack files this source draws from; empty for sources with none. */
+	private dataPacks(): readonly IconPackId[] {
+		if (this.pack.kind !== "bundledRemote") return [];
+		return this.pack.dataPacks ?? [];
+	}
+
+	private missingPacks(): IconPackId[] {
+		return this.dataPacks().filter(
+			(id) => this.host.packs.state(id) !== "ready",
 		);
+	}
+
+	private needsDownload(): boolean {
+		return this.missingPacks().length > 0;
 	}
 
 	private async loadAndShow(): Promise<void> {
@@ -279,16 +298,36 @@ export class PackPanel {
 
 	private applyFilter(): void {
 		if (!this.index) return;
+		const entries = filterIcons(this.index, this.query, this.category);
+		// A pack may also rule entries out by variant — Font Awesome's style
+		// picks which icons exist, not just how they are drawn.
+		const matches = this.pack.entryMatches?.bind(this.pack);
 		this.grid?.setEntries(
-			filterIcons(this.index, this.query, this.category),
+			matches
+				? entries.filter((entry) => matches(entry, this.variants))
+				: entries,
 		);
 	}
 
 	// ── Download states ─────────────────────────────────────────────────
 
+	/**
+	 * One prompt for the source, however many files it is made of. The size is
+	 * of what is actually missing, so someone who already has Font Awesome Solid
+	 * is quoted the two remaining files rather than all three.
+	 */
 	private showDownloadPrompt(): void {
-		const info = this.host.packs.info(this.pack.id);
-		const failed = this.host.packs.state(this.pack.id) === "failed";
+		const missing = this.missingPacks();
+		const failed = missing.some(
+			(id) => this.host.packs.state(id) === "failed",
+		);
+		const bytes = missing.reduce(
+			(total, id) => total + (this.host.packs.info(id)?.bytes ?? 0),
+			0,
+		);
+		// The index's own length, not the manifest's: one Font Awesome name
+		// drawn in two styles is one icon to choose from, not two.
+		const count = this.index?.entries.length ?? 0;
 
 		this.grid?.showMessage((host) => {
 			host.createDiv("icon-picker-notice-title").setText(
@@ -300,11 +339,11 @@ export class PackPanel {
 							name: this.pack.attribution.title,
 						}),
 			);
-			if (info) {
+			if (count > 0 && bytes > 0) {
 				host.createDiv("icon-picker-notice-detail").setText(
 					t("iconPack.downloadDetail", {
-						count: String(info.iconCount),
-						size: formatBytes(info.bytes),
+						count: String(count),
+						size: formatBytes(bytes),
 					}),
 				);
 			}
@@ -314,24 +353,6 @@ export class PackPanel {
 				cls: "mod-cta",
 			});
 			btn.addEventListener("click", () => void this.startDownload());
-
-			this.renderManualHint(host);
-		});
-	}
-
-	/** How to install the pack without a network, for locked-down setups. */
-	private renderManualHint(host: HTMLElement): void {
-		const details = host.createEl("details", {
-			cls: "icon-picker-manual-hint",
-		});
-		details.createEl("summary", { text: t("iconPack.manualHint") });
-		const path = this.host.packs.packPath(this.pack.id);
-		details.createEl("code", { text: path });
-		const copy = details.createEl("button", { text: t("iconPack.copyPath") });
-		copy.addEventListener("click", () => {
-			void navigator.clipboard.writeText(path).then(() => {
-				new Notice(t("iconPack.pathCopied"));
-			});
 		});
 	}
 
@@ -347,11 +368,15 @@ export class PackPanel {
 			});
 		});
 
-		const ok = await this.host.packs.download(this.pack.id);
-		if (this.disposed) return;
-		if (!ok) {
-			this.showDownloadPrompt();
-			return;
+		// One at a time: three parallel requests to the same CDN gain nothing
+		// and make a failure harder to attribute.
+		for (const id of this.missingPacks()) {
+			const ok = await this.host.packs.download(id);
+			if (this.disposed) return;
+			if (!ok) {
+				this.showDownloadPrompt();
+				return;
+			}
 		}
 		await this.loadAndShow();
 	}
@@ -380,7 +405,7 @@ export class PackPanel {
 	 */
 	private packOf(entry: IconEntry): IconPack {
 		if (!entry.pack) return this.pack;
-		return getPack(entry.pack) ?? this.pack;
+		return getSource(entry.pack) ?? this.pack;
 	}
 
 	/** The toolbar values that apply to an entry's own source. */
@@ -417,12 +442,19 @@ export class PackPanel {
 		});
 	}
 
+	/**
+	 * Compared against the icon this entry would produce, rather than against
+	 * the source it belongs to: one source can own several icon types (Font
+	 * Awesome's three styles), and only the produced icon says which one this
+	 * cell is currently offering.
+	 */
 	private isSelected(entry: IconEntry): boolean {
 		const selected = this.host.selectedIcon();
+		if (!selected) return false;
 		const owner = this.packOf(entry);
-		if (!selected || selected.type !== owner.id) return false;
 		const candidate = owner.makeIcon(entry, this.variantsOf(entry));
 		return (
+			candidate.type === selected.type &&
 			candidate.value === selected.value &&
 			candidate.style === selected.style
 		);
@@ -446,11 +478,8 @@ export class PackPanel {
 		// The pooled source credits nothing itself; each icon's own source is
 		// credited on its own panel and in the settings credits section.
 		if (attribution.licenses.length === 0) return;
-		if (attribution.noticeKey) {
-			this.bodyEl
-				.createDiv("icon-picker-pack-notice")
-				.setText(t(attribution.noticeKey));
-		}
+		this.noticeEl = this.bodyEl.createDiv("icon-picker-pack-notice");
+		this.updateNotice();
 		const line = this.bodyEl.createDiv("icon-picker-pack-credit");
 		const licenses = attribution.licenses.map((l) => l.spdx).join(", ");
 		line.setText(`${attribution.title} — ${licenses}`);
@@ -459,6 +488,20 @@ export class PackPanel {
 			href: attribution.homepage,
 			attr: { target: "_blank", rel: "noopener" },
 		});
+	}
+
+	/**
+	 * A pack that scopes its notice to certain toolbar states decides here;
+	 * everything else shows its standing notice, or none.
+	 */
+	private updateNotice(): void {
+		const el = this.noticeEl;
+		if (!el) return;
+		const key = this.pack.pickerNotice
+			? this.pack.pickerNotice(this.variants)
+			: this.pack.attribution.noticeKey;
+		el.setText(key ? t(key) : "");
+		el.toggleClass("is-hidden", !key);
 	}
 }
 

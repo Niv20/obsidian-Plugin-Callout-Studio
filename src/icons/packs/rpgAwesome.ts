@@ -30,9 +30,12 @@ export const rpgAwesomePack: IconPack = {
 	id: "rpg-awesome",
 	kind: "bundledRemote",
 	labelKey: "iconPicker.rpgAwesome",
+	descriptionKey: "iconPicker.descRpgAwesome",
+	emblemIcon: "swords",
 	searchPlaceholderKey: "iconPicker.searchRpgAwesome",
 	// No taxonomy upstream; the names carry the meaning instead.
 	hasCategories: false,
+	dataPacks: ["rpg-awesome"],
 
 	attribution: {
 		title: "RPG Awesome",

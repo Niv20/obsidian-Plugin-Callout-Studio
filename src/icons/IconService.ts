@@ -113,9 +113,11 @@ export class IconService implements IconResolver {
 		}
 		if (pack.kind !== "bundledRemote") return;
 
-		if (this.packs.state(pack.id) !== "ready") {
-			const onDisk = await this.packs.loadFromDisk(pack.id);
-			if (!onDisk) await this.packs.download(pack.id);
+		// Only the file this icon's own style lives in — picking one Font Awesome
+		// Brands icon must not pull down Solid and Regular as well.
+		if (this.packs.state(icon.type) !== "ready") {
+			const onDisk = await this.packs.loadFromDisk(icon.type);
+			if (!onDisk) await this.packs.download(icon.type);
 		}
 		if (this.copyPackArtwork(icon)) {
 			this.host.cssInjector.inject();
@@ -139,13 +141,13 @@ export class IconService implements IconResolver {
 		let stored = false;
 		for (const role of CALLOUT_RENDER_ROLES) {
 			const variant = pack.cacheVariant(icon, role);
-			if (this.host.registry.findIconSvg(pack.id, icon.value, variant)) {
+			if (this.host.registry.findIconSvg(icon.type, icon.value, variant)) {
 				continue;
 			}
 			const svg = pack.buildSvg(icon, role);
 			if (!svg) continue;
 			this.host.registry.addIconSvg({
-				pack: pack.id,
+				pack: icon.type,
 				name: icon.value,
 				variant,
 				svg,

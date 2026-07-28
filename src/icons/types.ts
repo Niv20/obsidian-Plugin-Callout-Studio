@@ -17,7 +17,9 @@
 import type {
 	CalloutIcon,
 	CalloutRenderRole,
+	FontAwesomeStyle,
 	IconPackId,
+	IconSourceId,
 	MaterialIconStyle,
 } from "../types";
 import type { LocaleKey } from "../i18n";
@@ -49,7 +51,7 @@ export interface IconEntry {
 	 * sources are pooled into one list ("All sources" in the picker), where the
 	 * list itself can no longer say where a given icon belongs.
 	 */
-	pack?: IconPackId;
+	pack?: IconSourceId;
 	/** Grid tooltip. Defaults to a prettified `name`. */
 	label?: string;
 	categories: readonly string[];
@@ -75,6 +77,8 @@ export interface IconVariantState {
 	weight?: number;
 	/** Emoji skin tone: 0 = default, 1–5 = light → dark. */
 	emojiSkinTone?: number;
+	/** Font Awesome style. Unlike Material's, it also filters the grid. */
+	faStyle?: FontAwesomeStyle;
 }
 
 /**
@@ -87,9 +91,15 @@ export interface IconVariantState {
 export type IconVariantSpec =
 	| {
 			kind: "select";
-			key: "style" | "weight";
+			key: "style" | "weight" | "faStyle";
 			labelKey: LocaleKey;
 			options: readonly (string | number)[];
+			/**
+			 * Display names for `options`, in the same order. Omitted when the
+			 * raw value already reads as a label — Material's `outlined` and
+			 * `400` do; Font Awesome's `solid` wants a capital S.
+			 */
+			optionLabelKeys?: readonly LocaleKey[];
 	  }
 	| { kind: "skin-tone" };
 
@@ -131,15 +141,31 @@ export interface IconAttribution {
  * stays trivially testable and cannot stall a render.
  */
 export interface IconPack {
-	readonly id: IconPackId;
+	readonly id: IconSourceId;
 	readonly kind: IconPackKind;
-	/** Tab/dropdown label. */
+	/** Source menu label. */
 	readonly labelKey: LocaleKey;
+	/** One line in the source menu saying what this library holds. */
+	readonly descriptionKey: LocaleKey;
+	/**
+	 * The Lucide id standing in for this library in the source menu.
+	 *
+	 * Deliberately Lucide rather than one of the library's own icons: Lucide
+	 * ships inside Obsidian, so the row draws before anything is downloaded —
+	 * which is the state most sources are in when the menu is first opened.
+	 */
+	readonly emblemIcon: string;
 	readonly searchPlaceholderKey: LocaleKey;
 	/** False hides the picker's category dropdown (Octicons and RPG have none). */
 	readonly hasCategories: boolean;
 	/** Extra toolbar controls this pack needs. */
 	readonly variants?: readonly IconVariantSpec[];
+	/**
+	 * The pack files this source draws from, for `bundledRemote` sources only.
+	 * Almost always a single file named after the source; Font Awesome is three,
+	 * one per style, which is why this is a list rather than an id.
+	 */
+	readonly dataPacks?: readonly IconPackId[];
 	readonly attribution: IconAttribution;
 
 	/** Decode the bundled search index. Memoized by the pack; safe to re-call. */
@@ -147,6 +173,23 @@ export interface IconPack {
 
 	/** Build the stored icon for a grid selection plus the picker's variant state. */
 	makeIcon(entry: IconEntry, variants: IconVariantState): CalloutIcon;
+
+	/**
+	 * Whether an entry belongs in the grid under the current toolbar state.
+	 *
+	 * Only for variants that change *which icons exist* rather than how they are
+	 * drawn: Font Awesome's Regular holds 169 of Solid's 1,422, so without this
+	 * the other 1,253 cells would be empty. Absent means every entry always shows.
+	 */
+	entryMatches?(entry: IconEntry, variants: IconVariantState): boolean;
+
+	/**
+	 * A notice the picker must keep on screen for *some* toolbar states — Font
+	 * Awesome's trademark note, which applies to Brands and to nothing else.
+	 * When present it replaces `attribution.noticeKey` in the picker; the
+	 * settings credits always show the attribution one.
+	 */
+	pickerNotice?(variants: IconVariantState): LocaleKey | undefined;
 
 	/**
 	 * Everything besides the name that changes this icon's artwork, as a cache

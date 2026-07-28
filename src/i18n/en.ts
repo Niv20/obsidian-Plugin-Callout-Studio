@@ -363,19 +363,28 @@ export const en: Record<string, string> = {
 	"iconPicker.delete": "Delete",
 	"iconPicker.octicons": "Octicons",
 	"iconPicker.searchOcticons": "Search Octicons",
-	"iconPicker.faSolid": "Font Awesome — Solid",
-	"iconPicker.faRegular": "Font Awesome — Regular",
-	"iconPicker.faBrands": "Font Awesome — Brands",
-	"iconPicker.searchFaSolid": "Search Font Awesome Solid",
-	"iconPicker.searchFaRegular": "Search Font Awesome Regular",
-	"iconPicker.searchFaBrands": "Search Font Awesome Brands",
+	"iconPicker.fa": "Font Awesome",
+	"iconPicker.searchFa": "Search Font Awesome",
+	"iconPicker.faStyle": "Icon style",
+	"iconPicker.faStyleSolid": "Solid",
+	"iconPicker.faStyleRegular": "Regular",
+	"iconPicker.faStyleBrands": "Brands",
 	"iconPicker.rpgAwesome": "RPG Awesome",
 	"iconPicker.searchRpgAwesome": "Search RPG Awesome",
 	"iconPicker.allSources": "All sources",
 	"iconPicker.searchAllSources": "Search all icon sources",
 	"iconPicker.sourcesNotDownloaded":
 		"Not included yet: {{names}}. Pick a source above to download it.",
-	"iconPicker.source": "Source",
+	"iconPicker.chooseSource": "Choose source",
+
+	// Source menu — what each library holds, in a few words
+	"iconPicker.descAllSources": "search every library at once",
+	"iconPicker.descLucide": "Obsidian's own set, always offline",
+	"iconPicker.descMaterial": "Google's set, four styles and seven weights",
+	"iconPicker.descEmoji": "colour glyphs, every skin tone",
+	"iconPicker.descOcticons": "GitHub's interface icons",
+	"iconPicker.descFa": "solid, regular and brand marks",
+	"iconPicker.descRpgAwesome": "fantasy and tabletop icons",
 
 	// Downloadable icon packs
 	"iconPack.downloadTitle": "{{name}} is not downloaded yet",
@@ -385,10 +394,6 @@ export const en: Record<string, string> = {
 	"iconPack.downloadFailed":
 		"Could not download {{name}}. Check your connection and try again.",
 	"iconPack.retry": "Retry",
-	"iconPack.manualHint":
-		"You can also install it offline: download the file from the plugin's GitHub release and place it at",
-	"iconPack.copyPath": "Copy path",
-	"iconPack.pathCopied": "Path copied",
 	"iconPack.faBrandsNotice":
 		"Brand icons are trademarks of their respective owners. Their inclusion does not indicate endorsement. Please use them only to represent the company, product, or service they refer to.",
 	"iconPack.diskWriteFailed":

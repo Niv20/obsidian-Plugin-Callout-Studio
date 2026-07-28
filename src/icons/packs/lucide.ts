@@ -14,6 +14,9 @@ export const lucidePack: IconPack = {
 	id: "lucide",
 	kind: "builtin",
 	labelKey: "iconPicker.lucide",
+	descriptionKey: "iconPicker.descLucide",
+	// Lucide began as a fork of Feather, whose logo is the feather.
+	emblemIcon: "feather",
 	searchPlaceholderKey: "iconPicker.searchLucide",
 	hasCategories: false,
 

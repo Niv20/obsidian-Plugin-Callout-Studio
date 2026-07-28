@@ -1067,7 +1067,7 @@ export class CalloutRegistry {
 			for (const role of CALLOUT_RENDER_ROLES) {
 				usedKeys.add(
 					iconCacheKey(
-						pack.id,
+						def.icon.type,
 						def.icon.value,
 						pack.cacheVariant(def.icon, role),
 					),

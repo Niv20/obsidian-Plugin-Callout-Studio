@@ -52,6 +52,8 @@ export const materialPack: IconPack = {
 	id: "material",
 	kind: "perIconRemote",
 	labelKey: "iconPicker.material",
+	descriptionKey: "iconPicker.descMaterial",
+	emblemIcon: "shapes",
 	searchPlaceholderKey: "iconPicker.searchMaterial",
 	hasCategories: true,
 	variants: [

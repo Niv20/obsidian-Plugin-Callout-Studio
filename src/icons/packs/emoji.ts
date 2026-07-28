@@ -14,6 +14,8 @@ export const emojiPack: IconPack = {
 	id: "emoji",
 	kind: "glyph",
 	labelKey: "iconPicker.emoji",
+	descriptionKey: "iconPicker.descEmoji",
+	emblemIcon: "smile",
 	searchPlaceholderKey: "iconPicker.searchEmoji",
 	hasCategories: false,
 	variants: [{ kind: "skin-tone" }],

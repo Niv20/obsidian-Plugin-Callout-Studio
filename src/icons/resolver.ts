@@ -55,7 +55,10 @@ export function createIconResolver(
 			const pack = packFor(icon);
 			if (!pack) return null;
 			const variant = pack.cacheVariant(icon, role);
-			const cached = lookup.findIconSvg(pack.id, icon.value, variant);
+			// Keyed by the icon's own type, not its source: one source can own
+			// several bodies of artwork (Font Awesome's three styles), and each
+			// keeps its own cache entry.
+			const cached = lookup.findIconSvg(icon.type, icon.value, variant);
 			if (cached) return cached.svg;
 			return pack.buildSvg?.(icon, role) ?? null;
 		},

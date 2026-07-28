@@ -355,19 +355,28 @@ export const he: Record<string, string> = {
 	"iconPicker.delete": "מחיקה",
 	"iconPicker.octicons": "Octicons",
 	"iconPicker.searchOcticons": "חיפוש אייקוני Octicons",
-	"iconPicker.faSolid": "Font Awesome — Solid",
-	"iconPicker.faRegular": "Font Awesome — Regular",
-	"iconPicker.faBrands": "Font Awesome — Brands",
-	"iconPicker.searchFaSolid": "חיפוש ב־Font Awesome Solid",
-	"iconPicker.searchFaRegular": "חיפוש ב־Font Awesome Regular",
-	"iconPicker.searchFaBrands": "חיפוש ב־Font Awesome Brands",
+	"iconPicker.fa": "Font Awesome",
+	"iconPicker.searchFa": "חיפוש ב־Font Awesome",
+	"iconPicker.faStyle": "סגנון האייקון",
+	"iconPicker.faStyleSolid": "מלא (Solid)",
+	"iconPicker.faStyleRegular": "מתאר (Regular)",
+	"iconPicker.faStyleBrands": "מותגים (Brands)",
 	"iconPicker.rpgAwesome": "RPG Awesome",
 	"iconPicker.searchRpgAwesome": "חיפוש ב־RPG Awesome",
 	"iconPicker.allSources": "כל המקורות",
 	"iconPicker.searchAllSources": "חיפוש בכל מקורות האייקונים",
 	"iconPicker.sourcesNotDownloaded":
 		"עדיין לא נכללים: {{names}}. בחרו מקור מהרשימה למעלה כדי להוריד אותו.",
-	"iconPicker.source": "מקור",
+	"iconPicker.chooseSource": "בחירת מקור",
+
+	// Source menu — what each library holds, in a few words
+	"iconPicker.descAllSources": "חיפוש בכל הספריות בבת אחת",
+	"iconPicker.descLucide": "הספרייה המובנית של אובסידיאן, תמיד זמינה",
+	"iconPicker.descMaterial": "הספרייה של גוגל, ארבעה סגנונות ושבעה משקלים",
+	"iconPicker.descEmoji": "סמלים צבעוניים, בכל גווני העור",
+	"iconPicker.descOcticons": "אייקוני הממשק של GitHub",
+	"iconPicker.descFa": "אייקונים מלאים, מתאר וסמלי מותגים",
+	"iconPicker.descRpgAwesome": "אייקוני פנטזיה ומשחקי תפקידים",
 
 	// Downloadable icon packs
 	"iconPack.downloadTitle": "{{name}} עדיין לא הורדה",
@@ -377,10 +386,6 @@ export const he: Record<string, string> = {
 	"iconPack.downloadFailed":
 		"לא ניתן היה להוריד את {{name}}. בדקו את החיבור לאינטרנט ונסו שוב.",
 	"iconPack.retry": "נסו שוב",
-	"iconPack.manualHint":
-		"אפשר גם להתקין ללא אינטרנט: הורידו את הקובץ משחרור הגרסה ב־GitHub ומקמו אותו בנתיב",
-	"iconPack.copyPath": "העתקת הנתיב",
-	"iconPack.pathCopied": "הנתיב הועתק",
 	"iconPack.faBrandsNotice":
 		"אייקוני המותגים הם סימני מסחר של בעליהם. הכללתם כאן אינה מהווה חסות או אישור מצדם. אנא השתמשו בהם רק כדי לייצג את החברה, המוצר או השירות שאליהם הם מתייחסים.",
 	"iconPack.diskWriteFailed":

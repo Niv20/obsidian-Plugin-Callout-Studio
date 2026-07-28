@@ -45,9 +45,12 @@ export const octiconsPack: IconPack = {
 	id: "octicons",
 	kind: "bundledRemote",
 	labelKey: "iconPicker.octicons",
+	descriptionKey: "iconPicker.descOcticons",
+	emblemIcon: "github",
 	searchPlaceholderKey: "iconPicker.searchOcticons",
 	// Octicons has no category taxonomy upstream, so the picker hides the filter.
 	hasCategories: false,
+	dataPacks: ["octicons"],
 
 	attribution: {
 		title: "Octicons",

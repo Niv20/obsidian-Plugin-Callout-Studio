@@ -1189,9 +1189,74 @@ button.callout-studio-icon-picker-loading {
 	font-weight: var(--font-medium);
 }
 
-.icon-picker-source-select {
+/* A button rather than a <select>, because the list it opens carries an icon
+   and a description per row, and an <option> can hold neither. */
+.icon-picker-source-button {
+	display: flex;
 	flex: 1;
+	align-items: center;
+	gap: 8px;
 	min-width: 0;
+	text-align: start;
+	cursor: pointer;
+}
+
+.icon-picker-source-emblem,
+.icon-picker-source-chevron {
+	display: flex;
+	flex-shrink: 0;
+	align-items: center;
+	color: var(--text-muted);
+}
+
+.icon-picker-source-emblem .svg-icon {
+	width: var(--icon-s);
+	height: var(--icon-s);
+}
+
+/* The chevron sits at the far end in both directions — margin-inline-start,
+   not margin-left, so RTL puts it on the left. */
+.icon-picker-source-chevron {
+	margin-inline-start: auto;
+}
+
+.icon-picker-source-chevron .svg-icon {
+	width: var(--icon-xs);
+	height: var(--icon-xs);
+}
+
+.icon-picker-source-current {
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+
+/* One row of the source menu. Wraps rather than truncates: on a phone the
+   description drops to its own line instead of squeezing out the name. */
+.cs-source-item {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: baseline;
+	column-gap: 0.4em;
+	row-gap: 0.1em;
+}
+
+.cs-source-desc {
+	color: var(--text-muted);
+	font-size: var(--font-ui-smaller);
+}
+
+.cs-source-check {
+	display: flex;
+	align-items: center;
+	margin-inline-start: auto;
+	padding-inline-start: 0.5em;
+	color: var(--text-accent);
+}
+
+.cs-source-check .svg-icon {
+	width: var(--icon-xs);
+	height: var(--icon-xs);
 }
 
 /* Download prompt / progress / failure, shown in place of the grid. */
@@ -1221,31 +1286,10 @@ button.callout-studio-icon-picker-loading {
 	gap: 8px;
 }
 
-.icon-picker-manual-hint {
-	margin-top: 0.5rem;
-	max-width: 34rem;
-	font-size: var(--font-ui-smaller);
-	text-align: start;
-}
-
-.icon-picker-manual-hint summary {
-	cursor: pointer;
-}
-
-.icon-picker-manual-hint code {
-	display: block;
-	margin: 0.5em 0;
-	padding: 0.4em 0.6em;
-	border-radius: var(--radius-s);
-	background-color: var(--background-modifier-hover);
-	word-break: break-all;
-	/* A filesystem path is always read left-to-right, even in a Hebrew UI. */
-	direction: ltr;
-	text-align: left;
-}
-
 /* Standing notice for a source whose icons carry obligations of their own
-   (Font Awesome Brands and its trademarks). Not dismissible by design. */
+   (Font Awesome's Brands style and its trademarks). Not dismissible by design.
+   The element is always present and hidden when empty, so switching style can
+   raise it without rebuilding the panel around it. */
 .icon-picker-pack-notice {
 	margin: 8px 0 0;
 	padding: 8px 10px;
@@ -1254,6 +1298,10 @@ button.callout-studio-icon-picker-loading {
 	color: var(--text-muted);
 	font-size: var(--font-ui-smaller);
 	line-height: 1.45;
+}
+
+.icon-picker-pack-notice.is-hidden {
+	display: none;
 }
 
 .icon-picker-pack-credit {

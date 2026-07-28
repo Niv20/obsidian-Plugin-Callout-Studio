@@ -1,27 +1,29 @@
 /**
  * settings/iconpicker/IconPickerModal.ts — The icon selection modal.
  *
- * A source dropdown rather than a tab row: there are more sources than a tab
- * strip fits, on mobile or in RTL, and the list keeps growing. The modal owns
- * only the source choice, the preview and Confirm; everything about a given
- * source lives in PackPanel.
+ * A source menu rather than a tab row: there are more sources than a tab strip
+ * fits, on mobile or in RTL, and the list keeps growing. The modal owns only
+ * the source choice, the preview and Confirm; everything about a given source
+ * lives in PackPanel.
  *
  * Nothing here reaches the network. Choosing a source shows either its grid or
  * a download prompt; only pressing Download, or confirming an icon whose
  * artwork is not local yet, causes a request.
  */
-import { Modal, setIcon } from "obsidian";
+import { Menu, Modal, setIcon } from "obsidian";
 import type { App } from "obsidian";
-import type { CalloutIcon, IconPackId, PluginSettings } from "../../types";
+import type { CalloutIcon, IconSourceId, PluginSettings } from "../../types";
 import type { IconVariantState } from "../../icons/types";
-import { ICON_PACK_IDS, getPack, packFor } from "../../icons/registry";
+import { ICON_SOURCE_IDS, getSource, packFor } from "../../icons/registry";
 import type { PackDataStore } from "../../icons/PackDataStore";
 import {
 	MATERIAL_DEFAULT_STYLE,
 	MATERIAL_DEFAULT_WEIGHT,
 } from "../../icons/packs/material";
+import { FA_DEFAULT_STYLE, faStyleOf } from "../../icons/packs/fontAwesome";
 import {
 	ALL_SOURCES,
+	ALL_SOURCES_META,
 	availableSources,
 	createAllSourcesPack,
 	missingSources,
@@ -29,6 +31,14 @@ import {
 } from "./allSources";
 import { PackPanel } from "./PackPanel";
 import { t } from "../../i18n";
+import type { LocaleKey } from "../../i18n";
+
+/** What the source menu needs to draw a row, pooled list included. */
+interface SourceMeta {
+	labelKey: LocaleKey;
+	descriptionKey: LocaleKey;
+	emblemIcon: string;
+}
 
 /**
  * Unicode skin-tone modifiers, light → dark (U+1F3FB…U+1F3FF). Reading the tone
@@ -66,6 +76,9 @@ export class IconPicker extends Modal {
 	private panelHostEl!: HTMLElement;
 	private previewEl!: HTMLElement;
 	private confirmBtn!: HTMLButtonElement;
+	private sourceButtonEl!: HTMLButtonElement;
+	/** How many icons each source offers; filled in the background on open. */
+	private sourceCounts = new Map<IconSourceId, number>();
 
 	constructor(
 		private readonly plugin: IconPickerPlugin,
@@ -77,8 +90,7 @@ export class IconPicker extends Modal {
 		// Re-opening lands on the source the current icon came from, with that
 		// icon selected and later scrolled into view. An icon from a source this
 		// build does not know falls back to the default.
-		this.activeSource =
-			currentIcon && packFor(currentIcon) ? currentIcon.type : ALL_SOURCES;
+		this.activeSource = (currentIcon && packFor(currentIcon)?.id) ?? ALL_SOURCES;
 	}
 
 	openAndWait(): Promise<CalloutIcon | null> {
@@ -93,8 +105,11 @@ export class IconPicker extends Modal {
 		this.titleEl.setText(t("iconPicker.pickIcon"));
 
 		const container = this.contentEl.createDiv("icon-picker-container");
-		this.buildSourceSelect(container);
+		this.buildSourcePicker(container);
 		this.panelHostEl = container.createDiv("icon-picker-content");
+		// Counts come from the bundled indexes, so this reaches no network and
+		// is normally done long before the source menu is first opened.
+		void this.loadSourceCounts();
 
 		const footer = container.createDiv("icon-picker-footer");
 		this.previewEl = footer.createDiv("icon-picker-preview");
@@ -125,41 +140,142 @@ export class IconPicker extends Modal {
 
 	// ── Source selection ────────────────────────────────────────────────
 
-	private buildSourceSelect(container: HTMLElement): void {
+	/**
+	 * A button opening a menu, not a `<select>`: an `<option>` can hold text and
+	 * nothing else, and a list of bare library names asks the reader to already
+	 * know which one holds "swords".
+	 */
+	private buildSourcePicker(container: HTMLElement): void {
 		const row = container.createDiv("icon-picker-source-row");
 		row.createEl("label", {
-			text: t("iconPicker.source"),
+			text: t("iconPicker.chooseSource"),
 			cls: "icon-picker-source-label",
 			attr: { for: "cs-icon-source" },
 		});
-		const select = row.createEl("select", {
-			cls: "icon-picker-source-select",
-			attr: { id: "cs-icon-source" },
+		this.sourceButtonEl = row.createEl("button", {
+			cls: "icon-picker-source-button",
+			attr: {
+				id: "cs-icon-source",
+				type: "button",
+				"aria-haspopup": "menu",
+				"aria-expanded": "false",
+			},
 		});
-
-		// Searching everything at once is the default: with eight libraries,
-		// knowing which one holds "swords" is its own puzzle.
-		const all = select.createEl("option", {
-			text: t("iconPicker.allSources"),
-			value: ALL_SOURCES,
+		this.paintSourceButton();
+		this.sourceButtonEl.addEventListener("click", (evt) => {
+			this.openSourceMenu(evt);
 		});
-		if (this.activeSource === ALL_SOURCES) all.selected = true;
+	}
 
-		for (const id of ICON_PACK_IDS) {
-			const opt = select.createEl("option", {
-				text: t(getPack(id).labelKey),
-				value: id,
-			});
-			if (id === this.activeSource) opt.selected = true;
+	/** Metadata for one row of the source menu; the pooled list has no pack. */
+	private sourceMeta(id: PickerSourceId): SourceMeta {
+		return id === ALL_SOURCES ? ALL_SOURCES_META : getSource(id);
+	}
+
+	private paintSourceButton(): void {
+		const meta = this.sourceMeta(this.activeSource);
+		this.sourceButtonEl.empty();
+		const emblem = this.sourceButtonEl.createSpan({
+			cls: "icon-picker-source-emblem",
+		});
+		setIcon(emblem, meta.emblemIcon);
+		this.sourceButtonEl.createSpan({
+			cls: "icon-picker-source-current",
+			text: t(meta.labelKey),
+		});
+		const chevron = this.sourceButtonEl.createSpan({
+			cls: "icon-picker-source-chevron",
+		});
+		setIcon(chevron, "chevron-down");
+	}
+
+	private openSourceMenu(evt: MouseEvent): void {
+		const menu = new Menu();
+		// Searching everything at once comes first, and is the default: with six
+		// libraries, knowing which one holds "swords" is its own puzzle.
+		const ids: PickerSourceId[] = [ALL_SOURCES, ...ICON_SOURCE_IDS];
+		for (const id of ids) {
+			const meta = this.sourceMeta(id);
+			menu.addItem((item) =>
+				item
+					// Every emblem is a Lucide id, which Obsidian ships — so the
+					// row draws even for a source that has never been downloaded.
+					.setIcon(meta.emblemIcon)
+					.setTitle(this.sourceMenuTitle(id, meta))
+					.onClick(() => this.selectSource(id)),
+			);
 		}
-		select.addEventListener("change", () => {
-			this.activeSource = select.value as PickerSourceId;
-			// Switching source clears the selection: an icon id only means
-			// anything within the source it came from.
-			this.selectedIcon = null;
-			this.updatePreview();
-			void this.showPanel();
+		this.sourceButtonEl.setAttribute("aria-expanded", "true");
+		menu.onHide(() => {
+			this.sourceButtonEl.setAttribute("aria-expanded", "false");
 		});
+		menu.showAtMouseEvent(evt);
+	}
+
+	/**
+	 * Name, then what the library holds and how many icons that is. Built as a
+	 * fragment so the description can be styled down and wrap onto its own line
+	 * on a narrow screen instead of truncating the name with it.
+	 */
+	private sourceMenuTitle(id: PickerSourceId, meta: SourceMeta): DocumentFragment {
+		const frag = createFragment();
+		const wrap = frag.createDiv("cs-source-item");
+		wrap.createSpan({ cls: "cs-source-name", text: t(meta.labelKey) });
+
+		const count = this.countFor(id);
+		const description = t(meta.descriptionKey);
+		wrap.createSpan({
+			cls: "cs-source-desc",
+			text:
+				count === undefined
+					? `(${description})`
+					: `(${description} · ${count.toLocaleString()})`,
+		});
+
+		if (id === this.activeSource) {
+			const check = wrap.createSpan({ cls: "cs-source-check" });
+			setIcon(check, "check");
+		}
+		return frag;
+	}
+
+	/**
+	 * Icons a source offers — distinct names, never style or weight
+	 * combinations: one Font Awesome name drawn in three styles is one icon to
+	 * choose from, and Material's 3,870 do not become 100,000 because the
+	 * toolbar can restyle them.
+	 */
+	private countFor(id: PickerSourceId): number | undefined {
+		if (id !== ALL_SOURCES) return this.sourceCounts.get(id);
+		if (this.sourceCounts.size === 0) return undefined;
+		// Only what the pool actually contains, which grows as sources download.
+		return availableSources(this.plugin.icons.packs).reduce(
+			(total, pack) => total + (this.sourceCounts.get(pack.id) ?? 0),
+			0,
+		);
+	}
+
+	private async loadSourceCounts(): Promise<void> {
+		for (const id of ICON_SOURCE_IDS) {
+			try {
+				const index = await getSource(id).loadIndex();
+				this.sourceCounts.set(id, index.entries.length);
+			} catch (e) {
+				// A source that cannot describe itself simply shows no count.
+				console.warn(`[CalloutStudio] could not count icons in "${id}"`, e);
+			}
+		}
+	}
+
+	private selectSource(id: PickerSourceId): void {
+		if (id === this.activeSource) return;
+		this.activeSource = id;
+		// Switching source clears the selection: an icon id only means anything
+		// within the source it came from.
+		this.selectedIcon = null;
+		this.paintSourceButton();
+		this.updatePreview();
+		void this.showPanel();
 	}
 
 	private async showPanel(): Promise<void> {
@@ -186,7 +302,7 @@ export class IconPicker extends Modal {
 	}
 
 	private activePack() {
-		if (this.activeSource !== ALL_SOURCES) return getPack(this.activeSource);
+		if (this.activeSource !== ALL_SOURCES) return getSource(this.activeSource);
 		// Rebuilt each time, because downloading a source mid-session should
 		// fold it into the pooled list without reopening the picker.
 		return createAllSourcesPack(availableSources(this.plugin.icons.packs));
@@ -215,8 +331,18 @@ export class IconPicker extends Modal {
 	 * its cell would be drawn in a different style and the highlight would be
 	 * lost on the very icon the user is editing.
 	 */
-	private variantsFor(id: IconPackId): IconVariantState {
+	private variantsFor(id: IconSourceId): IconVariantState {
 		const sources = this.plugin.settings.iconSources;
+		if (id === "fa") {
+			// The style is the icon's own type, so an icon being re-edited opens
+			// the grid it actually lives in.
+			return {
+				faStyle:
+					(this.currentIcon ? faStyleOf(this.currentIcon) : undefined) ??
+					sources.faStyleDefault ??
+					FA_DEFAULT_STYLE,
+			};
+		}
 		if (id === "material") {
 			const current =
 				this.currentIcon?.type === "material" ? this.currentIcon : null;
@@ -242,26 +368,29 @@ export class IconPicker extends Modal {
 		return {};
 	}
 
-	private saveVariants(id: IconPackId, variants: IconVariantState): void {
+	private saveVariants(id: IconSourceId, variants: IconVariantState): void {
 		const sources = this.plugin.settings.iconSources;
 		if (id === "material") {
 			if (variants.style) sources.materialStyleDefault = variants.style;
 			if (variants.weight) sources.materialWeightDefault = variants.weight;
+		} else if (id === "fa") {
+			if (variants.faStyle) sources.faStyleDefault = variants.faStyle;
 		} else if (id === "emoji" && variants.emojiSkinTone !== undefined) {
 			sources.lastEmojiSkinTone = variants.emojiSkinTone;
 		}
 		void this.plugin.saveSettings();
 	}
 
-	private lastCategoryFor(id: IconPackId): string {
+	private lastCategoryFor(id: IconSourceId): string {
 		// Re-opening on an existing icon shows all categories, so the icon can
 		// never be filtered out of its own grid. In-memory only — the saved
 		// category is left alone.
-		if (this.currentIcon?.type === id) return "";
+		const current = this.currentIcon ? packFor(this.currentIcon) : undefined;
+		if (current?.id === id) return "";
 		return this.plugin.settings.iconSources.lastCategory?.[id] ?? "";
 	}
 
-	private saveCategory(id: IconPackId, category: string): void {
+	private saveCategory(id: IconSourceId, category: string): void {
 		const sources = this.plugin.settings.iconSources;
 		sources.lastCategory = { ...sources.lastCategory, [id]: category };
 		void this.plugin.saveSettings();
@@ -341,5 +470,9 @@ function describeIcon(icon: CalloutIcon): string {
 			`(${icon.style ?? MATERIAL_DEFAULT_STYLE}, ${icon.weight ?? MATERIAL_DEFAULT_WEIGHT})`
 		);
 	}
+	// Font Awesome's three styles share one source, so the name alone would not
+	// say which drawing is about to be saved.
+	const faStyle = faStyleOf(icon);
+	if (faStyle) return `${source}: ${icon.value} (${faStyle})`;
 	return `${source}: ${icon.value}`;
 }
