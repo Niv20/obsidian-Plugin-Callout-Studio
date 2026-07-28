@@ -70,6 +70,17 @@ export class PackPanel {
 	private variants: IconVariantState;
 	private searchInput: HTMLInputElement | null = null;
 	private categorySelect: HTMLSelectElement | null = null;
+	/**
+	 * Every control in the toolbar, so they can be locked as a group while the
+	 * source still needs downloading. Using one control before then would filter
+	 * the grid — which is where the download prompt lives — and replace the
+	 * Download button with cells no artwork exists for yet.
+	 */
+	private readonly toolbarControls: (
+		| HTMLInputElement
+		| HTMLSelectElement
+		| HTMLButtonElement
+	)[] = [];
 	/** Rebuilt on every variant change — Font Awesome's applies to Brands only. */
 	private noticeEl: HTMLElement | null = null;
 	/** Guards against a slow load painting into a panel the user has left. */
@@ -126,6 +137,7 @@ export class PackPanel {
 			placeholder: t(this.pack.searchPlaceholderKey),
 			value: this.query,
 		});
+		this.toolbarControls.push(this.searchInput);
 		this.searchInput.addEventListener("input", () => {
 			this.query = this.searchInput?.value ?? "";
 			this.applyFilter();
@@ -146,6 +158,7 @@ export class PackPanel {
 				text: t("iconPicker.allCategories"),
 				value: "",
 			});
+			this.toolbarControls.push(this.categorySelect);
 			this.categorySelect.addEventListener("change", () => {
 				this.category = this.categorySelect?.value ?? "";
 				this.host.saveCategory(this.pack.id, this.category);
@@ -173,6 +186,7 @@ export class PackPanel {
 			});
 			if (String(option) === String(current)) opt.selected = true;
 		});
+		this.toolbarControls.push(select);
 		select.addEventListener("change", () => {
 			const raw = select.value;
 			this.variants = {
@@ -201,6 +215,7 @@ export class PackPanel {
 				},
 			});
 			buttons.push(btn);
+			this.toolbarControls.push(btn);
 			btn.addEventListener("click", () => {
 				this.variants = { ...this.variants, emojiSkinTone: tone };
 				this.host.saveVariants(this.pack.id, this.variants);
@@ -213,6 +228,17 @@ export class PackPanel {
 				this.grid?.repaintVisible();
 			});
 		});
+	}
+
+	/**
+	 * Searching, filtering or restyling all mean nothing while a source still
+	 * has to be downloaded, and acting on one would paint over the prompt that
+	 * offers the download. The controls are locked rather than hidden so the
+	 * toolbar keeps its height and the source still looks like itself.
+	 */
+	private setToolbarEnabled(enabled: boolean): void {
+		for (const control of this.toolbarControls) control.disabled = !enabled;
+		this.toolbarEl.toggleClass("is-disabled", !enabled);
 	}
 
 	/**
@@ -255,6 +281,7 @@ export class PackPanel {
 	}
 
 	private async loadAndShow(): Promise<void> {
+		this.setToolbarEnabled(true);
 		// Material previews its grid with the webfont rather than SVGs, since
 		// its artwork is fetched one icon at a time and none of it is local
 		// yet. The pooled list contains Material cells too, so it waits as well.
@@ -298,6 +325,9 @@ export class PackPanel {
 
 	private applyFilter(): void {
 		if (!this.index) return;
+		// The grid is holding the download prompt, not icons. Filtering would
+		// replace it with cells there is no artwork for.
+		if (this.needsDownload()) return;
 		const entries = filterIcons(this.index, this.query, this.category);
 		// A pack may also rule entries out by variant — Font Awesome's style
 		// picks which icons exist, not just how they are drawn.
@@ -317,6 +347,7 @@ export class PackPanel {
 	 * is quoted the two remaining files rather than all three.
 	 */
 	private showDownloadPrompt(): void {
+		this.setToolbarEnabled(false);
 		const missing = this.missingPacks();
 		const failed = missing.some(
 			(id) => this.host.packs.state(id) === "failed",
@@ -357,6 +388,7 @@ export class PackPanel {
 	}
 
 	private async startDownload(): Promise<void> {
+		this.setToolbarEnabled(false);
 		this.grid?.showMessage((host) => {
 			const row = host.createDiv("icon-picker-notice-loading");
 			const spinner = row.createSpan({ cls: "callout-studio-spinner" });

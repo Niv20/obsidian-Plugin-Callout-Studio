@@ -1363,6 +1363,17 @@ button.callout-studio-icon-picker-loading {
 	flex-shrink: 0;
 }
 
+/* Locked while the source still has to be downloaded — see PackPanel */
+.icon-picker-toolbar.is-disabled {
+	opacity: 0.5;
+}
+
+.icon-picker-toolbar.is-disabled input,
+.icon-picker-toolbar.is-disabled select,
+.icon-picker-toolbar.is-disabled button {
+	cursor: not-allowed;
+}
+
 /* On narrow screens, search takes full width and selects wrap below */
 @media (max-width: 600px) {
 	.icon-picker-toolbar input {
