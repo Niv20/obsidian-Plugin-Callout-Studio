@@ -1409,8 +1409,13 @@ button.callout-studio-icon-picker-loading {
 
 /* Source heading in the pooled search. Spans the grid, so its group always
    starts on a fresh row. Deliberately not sticky: the toolbar above already
-   sticks at top 0, and a second sticky layer would land on top of it. */
+   sticks at top 0, and a second sticky layer would land on top of it.
+   Clickable — collapsing it hides that source's cells, so a source with
+   hundreds of hits can get out of the way without losing the rest below it. */
 .icon-picker-group-header {
+	display: flex;
+	align-items: center;
+	gap: 0.4em;
 	grid-column: 1 / -1;
 	padding: 14px 2px 4px;
 	font-size: var(--font-ui-smaller);
@@ -1418,10 +1423,44 @@ button.callout-studio-icon-picker-loading {
 	color: var(--text-muted);
 	text-transform: uppercase;
 	letter-spacing: 0.05em;
+	cursor: pointer;
+}
+
+.icon-picker-group-header:hover {
+	color: var(--text-normal);
 }
 
 .icon-picker-group-header:first-child {
 	padding-top: 2px;
+}
+
+.icon-picker-group-chevron {
+	display: inline-flex;
+	flex-shrink: 0;
+	transition: transform 120ms ease;
+	transform: rotate(90deg);
+}
+
+.icon-picker-group-chevron svg {
+	width: 1em;
+	height: 1em;
+}
+
+.icon-picker-group-header.is-collapsed .icon-picker-group-chevron {
+	transform: rotate(0deg);
+}
+
+/* The chevron points at the content, so it flips with the writing direction. */
+[dir="rtl"] .icon-picker-group-chevron {
+	transform: scaleX(-1) rotate(90deg);
+}
+
+[dir="rtl"] .icon-picker-group-header.is-collapsed .icon-picker-group-chevron {
+	transform: scaleX(-1) rotate(0deg);
+}
+
+.icon-picker-cell.is-group-collapsed {
+	display: none;
 }
 
 .icon-picker-loading {
@@ -1517,7 +1556,11 @@ button.callout-studio-icon-picker-loading {
 	box-shadow: inset 0 0 0 2px var(--interactive-accent);
 }
 
+/* One per group in the pooled list (own cursor, own button), or the whole
+   grid's single segment on a source panel — always a grid child now, so it
+   needs to span every column like the group heading and empty-state do. */
 .icon-picker-load-more {
+	grid-column: 1 / -1;
 	text-align: center;
 	padding: 12px;
 }

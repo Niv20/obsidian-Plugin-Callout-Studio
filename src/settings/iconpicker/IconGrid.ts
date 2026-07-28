@@ -5,9 +5,17 @@
  * and scrolling a pre-selected icon into view, and delegates the one thing that
  * differs between sources — how a single cell is drawn — to a callback.
  *
- * Paging exists because a source can hold thousands of icons (Material has
- * 3,870) and rendering them all would stall the modal on open.
+ * Paging is per group, not global. In the pooled "All sources" list a source
+ * with hundreds of hits would otherwise have to be paged through in full
+ * before the next source's heading ever appeared — collapsing it wouldn't
+ * help, since "Load more" still walked the flat list underneath. Splitting
+ * every group into its own segment, each with its own cursor and its own
+ * "Load more", means every heading shows up immediately and collapsing one
+ * source's cells collapses its "Load more" with them. A source panel with no
+ * groups is simply one segment covering everything, which is exactly today's
+ * behaviour: one cursor, one button.
  */
+import { setIcon } from "obsidian";
 import type { IconEntry } from "../../icons/types";
 
 const GRID_PAGE_SIZE = 120;
@@ -35,18 +43,29 @@ export interface IconGridOptions {
 	 *
 	 * Called with the entry that precedes it, so the grid stays ignorant of what
 	 * a group even is — the pooled list heads each run of entries from one
-	 * source, and every other source returns nothing and gets a flat grid.
+	 * source, and every other source returns nothing and gets a flat grid (one
+	 * segment, no heading).
 	 */
 	groupLabelFor?(entry: IconEntry, previous: IconEntry | undefined): string | undefined;
 	emptyText: string;
 	loadMoreText: string;
 }
 
+/** One run of entries from a single group — or, for an ungrouped grid, all of them. */
+interface GridSegment {
+	readonly heading: string | undefined;
+	readonly entries: IconEntry[];
+	displayed: number;
+	collapsed: boolean;
+	headerEl: HTMLElement | null;
+	loadMoreEl: HTMLElement | null;
+	/** Parallel to `entries`, up to `displayed` — what collapsing has to hide. */
+	cellEls: HTMLElement[];
+}
+
 export class IconGrid {
 	private readonly gridEl: HTMLElement;
-	private readonly loadMoreEl: HTMLElement;
-	private entries: readonly IconEntry[] = [];
-	private displayed = 0;
+	private segments: GridSegment[] = [];
 
 	constructor(
 		parent: HTMLElement,
@@ -55,42 +74,28 @@ export class IconGrid {
 		this.gridEl = parent.createDiv("icon-picker-grid");
 		this.gridEl.setAttribute("role", "grid");
 		this.enableKeyNav();
-
-		this.loadMoreEl = parent.createDiv("icon-picker-load-more");
-		const btn = this.loadMoreEl.createEl("button", {
-			text: options.loadMoreText,
-		});
-		btn.addEventListener("click", () => {
-			this.appendPage();
-			this.syncLoadMore();
-		});
-		this.loadMoreEl.hide();
 	}
 
 	/** Replace the contents, resetting paging and scroll. */
 	setEntries(entries: readonly IconEntry[]): void {
-		this.entries = entries;
-		this.displayed = 0;
+		this.segments = this.partition(entries);
 		this.gridEl.empty();
 		this.gridEl.removeClass("is-loaded");
-		this.appendPage();
+		for (const segment of this.segments) this.renderSegment(segment);
 		this.gridEl.addClass("is-loaded");
 		if (entries.length === 0) {
 			this.gridEl.createDiv("icon-picker-empty").setText(
 				this.options.emptyText,
 			);
 		}
-		this.syncLoadMore();
 	}
 
 	/** Replace the grid with a message (download prompt, error, spinner). */
 	showMessage(build: (host: HTMLElement) => void): void {
-		this.entries = [];
-		this.displayed = 0;
+		this.segments = [];
 		this.gridEl.empty();
 		this.gridEl.addClass("is-loaded");
 		build(this.gridEl.createDiv("icon-picker-notice"));
-		this.loadMoreEl.hide();
 	}
 
 	/**
@@ -102,8 +107,12 @@ export class IconGrid {
 		const cells = Array.from(
 			this.gridEl.querySelectorAll<HTMLElement>(".icon-picker-cell"),
 		);
+		// Cells are created in exactly this order — segment by segment, up to
+		// each one's own `displayed` — so the same walk lines entries back up
+		// with the cells that currently hold them, collapsed or not.
+		const entries = this.segments.flatMap((s) => s.entries.slice(0, s.displayed));
 		cells.forEach((cell, i) => {
-			const entry = this.entries[i];
+			const entry = entries[i];
 			if (!entry) return;
 			cell.empty();
 			this.options.renderCell(cell, entry);
@@ -121,55 +130,129 @@ export class IconGrid {
 	/**
 	 * Page in icons until the pre-selected one exists, then centre it. Centring
 	 * (rather than nearest) keeps the cell clear of the sticky toolbar above.
+	 *
+	 * Only the segment that holds the selection has to page — the others are
+	 * untouched, so revealing an icon far down the pooled list no longer means
+	 * paging through everything ahead of it.
 	 */
 	revealSelected(): void {
-		const target = this.entries.findIndex((e) => this.options.isSelected(e));
-		if (target < 0) return;
+		const segment = this.segments.find((s) =>
+			s.entries.some((e) => this.options.isSelected(e)),
+		);
+		if (!segment) return;
+		if (segment.collapsed) this.toggleSegment(segment);
+
+		const target = segment.entries.findIndex((e) => this.options.isSelected(e));
 		let guard = 0;
-		while (this.cellCount() <= target && guard++ < MAX_REVEAL_PAGES) {
-			if (this.displayed >= this.entries.length) break;
-			this.appendPage();
+		while (segment.displayed <= target && guard++ < MAX_REVEAL_PAGES) {
+			if (segment.displayed >= segment.entries.length) break;
+			this.appendSegmentPage(segment);
 		}
-		this.syncLoadMore();
+		this.syncLoadMore(segment);
 		this.gridEl
 			.querySelector<HTMLElement>(".icon-picker-cell.is-selected")
 			?.scrollIntoView({ block: "center" });
 	}
 
-	private cellCount(): number {
-		return this.gridEl.querySelectorAll(".icon-picker-cell").length;
-	}
-
-	private syncLoadMore(): void {
-		if (this.displayed >= this.entries.length) this.loadMoreEl.hide();
-		else this.loadMoreEl.show();
-	}
-
-	private appendPage(): void {
-		const end = Math.min(this.displayed + GRID_PAGE_SIZE, this.entries.length);
-		for (let i = this.displayed; i < end; i++) {
-			const entry = this.entries[i];
+	/**
+	 * Split the flat, already-sorted list into runs. Pooling preserves order —
+	 * the pooled index concatenates its members and the search filters in
+	 * place — so a source change is exactly a group boundary, and no sorting is
+	 * needed to find one. A grid with no `groupLabelFor` produces one segment
+	 * covering everything.
+	 */
+	private partition(entries: readonly IconEntry[]): GridSegment[] {
+		const segments: GridSegment[] = [];
+		let current: GridSegment | null = null;
+		for (let i = 0; i < entries.length; i++) {
+			const entry = entries[i];
 			if (!entry) continue;
-
-			// Headings live in the same grid as the cells and span its full
-			// width, so a group always starts on a fresh row and paging can add
-			// one mid-flight without disturbing what is already laid out.
-			const heading = this.options.groupLabelFor?.(entry, this.entries[i - 1]);
-			if (heading !== undefined) {
-				this.gridEl
-					.createDiv("icon-picker-group-header")
-					.setText(heading);
+			const heading = this.options.groupLabelFor?.(entry, entries[i - 1]);
+			if (!current || heading !== undefined) {
+				current = {
+					heading,
+					entries: [],
+					displayed: 0,
+					collapsed: false,
+					headerEl: null,
+					loadMoreEl: null,
+					cellEls: [],
+				};
+				segments.push(current);
 			}
+			current.entries.push(entry);
+		}
+		return segments;
+	}
+
+	private renderSegment(segment: GridSegment): void {
+		if (segment.heading !== undefined) {
+			segment.headerEl = this.buildHeader(segment, segment.heading);
+		}
+		// Built before the first page so later cells have a stable anchor to
+		// insert before — this segment's own end, not the whole grid's.
+		segment.loadMoreEl = this.buildLoadMoreRow(segment);
+		this.appendSegmentPage(segment);
+		this.syncLoadMore(segment);
+	}
+
+	/**
+	 * One group's heading in the pooled list, clickable to hide its own cells
+	 * (and its own "Load more" with them). A source that floods the pool with
+	 * hundreds of hits would otherwise push every other source below the fold.
+	 */
+	private buildHeader(segment: GridSegment, heading: string): HTMLElement {
+		const header = this.gridEl.createDiv({
+			cls: "icon-picker-group-header",
+			attr: { role: "button", tabindex: "0", "aria-expanded": "true" },
+		});
+		const chevron = header.createSpan({ cls: "icon-picker-group-chevron" });
+		setIcon(chevron, "chevron-right");
+		header.createSpan({ cls: "icon-picker-group-text", text: heading });
+
+		const toggle = () => this.toggleSegment(segment);
+		header.addEventListener("click", toggle);
+		header.addEventListener("keydown", (e) => {
+			if (e.key === "Enter" || e.key === " ") {
+				e.preventDefault();
+				toggle();
+			}
+		});
+		return header;
+	}
+
+	private buildLoadMoreRow(segment: GridSegment): HTMLElement {
+		const row = this.gridEl.createDiv("icon-picker-load-more");
+		const btn = row.createEl("button", { text: this.options.loadMoreText });
+		btn.addEventListener("click", () => {
+			this.appendSegmentPage(segment);
+			this.syncLoadMore(segment);
+		});
+		return row;
+	}
+
+	private appendSegmentPage(segment: GridSegment): void {
+		const end = Math.min(segment.displayed + GRID_PAGE_SIZE, segment.entries.length);
+		for (let i = segment.displayed; i < end; i++) {
+			const entry = segment.entries[i];
+			if (!entry) continue;
 
 			const cellClass = this.options.cellClass?.(entry);
 			const cell = this.gridEl.createDiv({
-				cls: `icon-picker-cell${cellClass ? ` ${cellClass}` : ""}`,
+				cls:
+					`icon-picker-cell${cellClass ? ` ${cellClass}` : ""}` +
+					(segment.collapsed ? " is-group-collapsed" : ""),
 				attr: {
 					"aria-label": this.options.labelFor(entry),
 					tabindex: "0",
 					role: "button",
 				},
 			});
+			// createDiv appends at the grid's end; move it back in front of this
+			// segment's own "Load more" so later groups stay after it.
+			if (segment.loadMoreEl) this.gridEl.insertBefore(cell, segment.loadMoreEl);
+			segment.cellEls.push(cell);
+
 			this.options.renderCell(cell, entry);
 			if (this.options.isSelected(entry)) cell.addClass("is-selected");
 
@@ -185,7 +268,25 @@ export class IconGrid {
 				}
 			});
 		}
-		this.displayed = end;
+		segment.displayed = end;
+	}
+
+	private syncLoadMore(segment: GridSegment): void {
+		const row = segment.loadMoreEl;
+		if (!row) return;
+		const hasMore = segment.displayed < segment.entries.length;
+		if (hasMore && !segment.collapsed) row.show();
+		else row.hide();
+	}
+
+	private toggleSegment(segment: GridSegment): void {
+		segment.collapsed = !segment.collapsed;
+		segment.headerEl?.toggleClass("is-collapsed", segment.collapsed);
+		segment.headerEl?.setAttribute("aria-expanded", String(!segment.collapsed));
+		for (const cell of segment.cellEls) {
+			cell.toggleClass("is-group-collapsed", segment.collapsed);
+		}
+		this.syncLoadMore(segment);
 	}
 
 	/**
@@ -196,7 +297,9 @@ export class IconGrid {
 	private enableKeyNav(): void {
 		this.gridEl.addEventListener("keydown", (e) => {
 			const cells = Array.from(
-				this.gridEl.querySelectorAll<HTMLElement>(".icon-picker-cell"),
+				this.gridEl.querySelectorAll<HTMLElement>(
+					".icon-picker-cell:not(.is-group-collapsed)",
+				),
 			);
 			const current = activeDocument.activeElement as HTMLElement | null;
 			const idx = current ? cells.indexOf(current) : -1;
