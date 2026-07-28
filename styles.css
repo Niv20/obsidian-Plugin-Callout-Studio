@@ -1401,6 +1401,23 @@ button.callout-studio-icon-picker-loading {
 	animation: cs-grid-fade-in 0.25s ease-out both;
 }
 
+/* Source heading in the pooled search. Spans the grid, so its group always
+   starts on a fresh row. Deliberately not sticky: the toolbar above already
+   sticks at top 0, and a second sticky layer would land on top of it. */
+.icon-picker-group-header {
+	grid-column: 1 / -1;
+	padding: 14px 2px 4px;
+	font-size: var(--font-ui-smaller);
+	font-weight: var(--font-semibold);
+	color: var(--text-muted);
+	text-transform: uppercase;
+	letter-spacing: 0.05em;
+}
+
+.icon-picker-group-header:first-child {
+	padding-top: 2px;
+}
+
 .icon-picker-loading {
 	opacity: 0;
 	transition: opacity 0.2s ease;

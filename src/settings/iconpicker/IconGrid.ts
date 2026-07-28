@@ -30,6 +30,14 @@ export interface IconGridOptions {
 	 * sources that need different cell treatments in one grid.
 	 */
 	cellClass?(entry: IconEntry): string | undefined;
+	/**
+	 * A heading to place before this entry, or undefined for no break.
+	 *
+	 * Called with the entry that precedes it, so the grid stays ignorant of what
+	 * a group even is — the pooled list heads each run of entries from one
+	 * source, and every other source returns nothing and gets a flat grid.
+	 */
+	groupLabelFor?(entry: IconEntry, previous: IconEntry | undefined): string | undefined;
 	emptyText: string;
 	loadMoreText: string;
 }
@@ -142,6 +150,17 @@ export class IconGrid {
 		for (let i = this.displayed; i < end; i++) {
 			const entry = this.entries[i];
 			if (!entry) continue;
+
+			// Headings live in the same grid as the cells and span its full
+			// width, so a group always starts on a fresh row and paging can add
+			// one mid-flight without disturbing what is already laid out.
+			const heading = this.options.groupLabelFor?.(entry, this.entries[i - 1]);
+			if (heading !== undefined) {
+				this.gridEl
+					.createDiv("icon-picker-group-header")
+					.setText(heading);
+			}
+
 			const cellClass = this.options.cellClass?.(entry);
 			const cell = this.gridEl.createDiv({
 				cls: `icon-picker-cell${cellClass ? ` ${cellClass}` : ""}`,

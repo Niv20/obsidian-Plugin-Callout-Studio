@@ -89,6 +89,8 @@ export class PackPanel {
 	)[] = [];
 	/** Rebuilt on every variant change — Font Awesome's applies to Brands only. */
 	private noticeEl: HTMLElement | null = null;
+	/** How many of the current results each source contributed; pooled list only. */
+	private groupCounts = new Map<IconSourceId, number>();
 	/** Guards against a slow load painting into a panel the user has left. */
 	private disposed = false;
 
@@ -117,6 +119,8 @@ export class PackPanel {
 			onSelect: (entry) => this.select(entry),
 			labelFor: (entry) => this.labelFor(entry),
 			cellClass: (entry) => this.cellClass(entry),
+			groupLabelFor: (entry, previous) =>
+				this.groupLabelFor(entry, previous),
 			emptyText: t("iconPicker.noResults"),
 			loadMoreText: t("iconPicker.loadMore"),
 		});
@@ -336,11 +340,44 @@ export class PackPanel {
 		// A pack may also rule entries out by variant — Font Awesome's style
 		// picks which icons exist, not just how they are drawn.
 		const matches = this.pack.entryMatches?.bind(this.pack);
-		this.grid?.setEntries(
-			matches
-				? entries.filter((entry) => matches(entry, this.variants))
-				: entries,
-		);
+		const shown = matches
+			? entries.filter((entry) => matches(entry, this.variants))
+			: entries;
+		this.countGroups(shown);
+		this.grid?.setEntries(shown);
+	}
+
+	/**
+	 * Tally the results per source, so each heading can say how many it stands
+	 * for. Done once here rather than per heading, which would otherwise walk the
+	 * whole result list again every time a page is added.
+	 */
+	private countGroups(entries: readonly IconEntry[]): void {
+		this.groupCounts = new Map();
+		if (!isAllSources(this.pack)) return;
+		for (const entry of entries) {
+			if (!entry.pack) continue;
+			this.groupCounts.set(entry.pack, (this.groupCounts.get(entry.pack) ?? 0) + 1);
+		}
+	}
+
+	/**
+	 * The heading that opens each source's run of results in the pooled list.
+	 *
+	 * Pooling preserves order — the pooled index concatenates its members and the
+	 * search filters in place — so a source change is exactly a group boundary,
+	 * and no sorting is needed to find one.
+	 */
+	private groupLabelFor(
+		entry: IconEntry,
+		previous: IconEntry | undefined,
+	): string | undefined {
+		if (!isAllSources(this.pack) || !entry.pack) return undefined;
+		if (previous && previous.pack === entry.pack) return undefined;
+		return t("iconPicker.sourceGroup", {
+			name: t(this.packOf(entry).labelKey),
+			count: String(this.groupCounts.get(entry.pack) ?? 0),
+		});
 	}
 
 	// ── Download states ─────────────────────────────────────────────────

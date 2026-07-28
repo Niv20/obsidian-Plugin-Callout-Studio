@@ -376,6 +376,7 @@ export const en: Record<string, string> = {
 	"iconPicker.sourcesNotDownloaded":
 		"Not included yet: {{names}}. Pick a source above to download it.",
 	"iconPicker.chooseSource": "Choose source",
+	"iconPicker.sourceGroup": "{{name}} · {{count}}",
 
 	// Source menu — what each library holds, in a few words
 	"iconPicker.descAllSources": "search every library at once",
