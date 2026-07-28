@@ -1599,6 +1599,73 @@ button.callout-studio-icon-picker-loading {
 	object-fit: contain;
 }
 
+/* ── "Your images" panel ───────────────────────────────────────────── */
+
+/* The real file input never shows; the styled button beside it drives it. */
+.icon-picker-image-input {
+	display: none;
+}
+
+.icon-picker-image-add {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	flex-shrink: 0;
+}
+
+.icon-picker-image-add-icon {
+	display: inline-flex;
+}
+
+.icon-picker-image-add-icon svg {
+	width: 1em;
+	height: 1em;
+}
+
+/* Dropping a file anywhere on the panel adds it, so the whole panel is the
+   target rather than a separate drop zone taking up room. */
+.icon-picker-panel.is-drop-target {
+	outline: 2px dashed var(--interactive-accent);
+	outline-offset: -4px;
+	border-radius: var(--radius-m);
+}
+
+.icon-picker-image-footer {
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+	padding-top: 8px;
+	border-top: 1px solid var(--background-modifier-border);
+}
+
+.icon-picker-image-actions {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	flex-wrap: wrap;
+}
+
+.icon-picker-image-name {
+	flex: 1 1 140px;
+	min-width: 0;
+}
+
+.icon-picker-image-recolor {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	white-space: nowrap;
+}
+
+.icon-picker-image-recolor.is-disabled {
+	opacity: 0.5;
+}
+
+.icon-picker-image-storage {
+	font-size: var(--font-ui-smaller);
+	color: var(--text-muted);
+}
+
 /* Skin-tone selector — swatches previewing a sample glyph per tone */
 .icon-picker-skin-row {
 	display: flex;

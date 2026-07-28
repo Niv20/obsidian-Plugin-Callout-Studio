@@ -379,6 +379,21 @@ export const en: Record<string, string> = {
 	"iconPicker.imageInvalidSvg":
 		"{{name}} could not be read as a safe SVG, so it was not added.",
 	"iconPicker.imageDecodeFailed": "{{name}} could not be read as a picture.",
+	"iconPicker.imageAdd": "Add images",
+	"iconPicker.imageEmpty":
+		"No pictures yet. Add an SVG, PNG, JPEG or WebP file from your computer, " +
+		"or drop one here.",
+	"iconPicker.imageRename": "Picture name",
+	"iconPicker.imageDelete": "Delete",
+	"iconPicker.imageDeleteConfirm": "Delete “{{name}}”?",
+	"iconPicker.imageDeleteInUse":
+		"{{count}} callouts use this picture. They will fall back to a " +
+		"placeholder icon until you give them a new one.",
+	"iconPicker.imageRecolor": "Follow callout colour",
+	"iconPicker.imageRecolorRasterHint":
+		"Only SVG pictures can follow the callout colour. PNG, JPEG and WebP " +
+		"always keep their own.",
+	"iconPicker.imageStorage": "{{count}} pictures · {{size}}",
 	"iconPicker.allSources": "All sources",
 	"iconPicker.searchAllSources": "Search all icon sources",
 	"iconPicker.sourcesNotDownloaded":

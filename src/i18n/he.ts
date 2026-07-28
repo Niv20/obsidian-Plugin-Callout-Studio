@@ -370,6 +370,21 @@ export const he: Record<string, string> = {
 		"{{name}} אינה סוג תמונה נתמך. יש להשתמש ב־SVG, PNG, JPEG או WebP.",
 	"iconPicker.imageInvalidSvg": "לא ניתן לקרוא את {{name}} כקובץ SVG בטוח, ולכן היא לא נוספה.",
 	"iconPicker.imageDecodeFailed": "לא ניתן לקרוא את {{name}} כתמונה.",
+	"iconPicker.imageAdd": "הוספת תמונות",
+	"iconPicker.imageEmpty":
+		"עדיין אין תמונות. אפשר להוסיף קובץ SVG, PNG, JPEG או WebP מהמחשב, " +
+		"או פשוט לגרור אותו לכאן.",
+	"iconPicker.imageRename": "שם התמונה",
+	"iconPicker.imageDelete": "מחיקה",
+	"iconPicker.imageDeleteConfirm": "למחוק את „{{name}}”?",
+	"iconPicker.imageDeleteInUse":
+		"{{count}} callouts משתמשים בתמונה הזו. הם יחזרו לאייקון ברירת מחדל " +
+		"עד שייבחר להם אייקון חדש.",
+	"iconPicker.imageRecolor": "לצבוע בצבע ה־callout",
+	"iconPicker.imageRecolorRasterHint":
+		"רק תמונות SVG יכולות לקבל את צבע ה־callout. PNG, JPEG ו־WebP תמיד " +
+		"שומרות על הצבעים שלהן.",
+	"iconPicker.imageStorage": "{{count}} תמונות · {{size}}",
 	"iconPicker.allSources": "כל המקורות",
 	"iconPicker.searchAllSources": "חיפוש בכל מקורות האייקונים",
 	"iconPicker.sourcesNotDownloaded":
