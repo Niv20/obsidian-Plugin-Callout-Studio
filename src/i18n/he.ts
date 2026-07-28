@@ -614,4 +614,7 @@ export const he: Record<string, string> = {
 
 	"import.warn.defaultFoldedAutofix":
 		'"defaultFolded" הוגדר כ־true למרות ש־"foldable" הוגדר כ־false; לכן defaultFolded אופס בחזרה ל־false.',
+	"import.warn.imageMissing":
+		"ה־callout הזה משתמש בתמונה שאינה בקובץ ואינה בכספת הזו, ולכן יוצג " +
+		"אייקון ברירת מחדל עד שייבחר לו אייקון חדש.",
 };

@@ -386,7 +386,15 @@ export function validateImportPayload(
 		const settingsResult = sanitizeImportedSettings(raw.settings);
 		return {
 			validDefs: base.validDefs,
-			issues: [...base.issues, ...settingsResult.issues],
+			issues: [
+				...base.issues,
+				...settingsResult.issues,
+				...missingImageIssues(
+					base.validDefs,
+					settingsResult.settings,
+					registry,
+				),
+			],
 			fatal: false,
 			settings: settingsResult.settings ?? undefined,
 		};
@@ -410,6 +418,43 @@ export function validateImportPayload(
 
 	const base = validateCalloutArray(raw, registry);
 	return { ...base, fatal: false };
+}
+
+/**
+ * Warn about callouts whose picture did not travel with them.
+ *
+ * An export carries the user's pictures inside its settings, so this normally
+ * finds nothing. It fires when someone hand-edits a file, or exports the
+ * callouts of one vault and pastes them beside another vault's settings — and
+ * without it those callouts would simply arrive blank with no explanation.
+ *
+ * A picture this vault already holds is fine: the id is all that is needed, and
+ * re-importing a callout onto the device that first made the picture is the
+ * ordinary case.
+ */
+function missingImageIssues(
+	defs: readonly CalloutDefinition[],
+	imported: PluginSettings | null | undefined,
+	registry: CalloutRegistry,
+): ValidationIssue[] {
+	const available = new Set<string>([
+		...(imported?.userImages ?? []).map((image) => image.id),
+		...registry.getUserImages().map((image) => image.id),
+	]);
+
+	const issues: ValidationIssue[] = [];
+	defs.forEach((def, index) => {
+		if (def.icon.type !== "image") return;
+		if (available.has(def.icon.value)) return;
+		issues.push({
+			index,
+			entryLabel: def.displayName || def.id,
+			field: "icon.value",
+			level: "warning",
+			messageKey: "import.warn.imageMissing",
+		});
+	});
+	return issues;
 }
 
 /**

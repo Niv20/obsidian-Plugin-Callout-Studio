@@ -1118,6 +1118,11 @@ export class CalloutRegistry {
 		// longer exist after the reset, which would leave the dropdown blank.
 		this.settings.fallbackCalloutId = DEFAULT_SETTINGS.fallbackCalloutId;
 		this.settings.customPalettes = [];
+		// The user's own pictures go with everything else they made — leaving
+		// them behind would keep the largest thing in `data.json` after a reset
+		// that is meant to empty it.
+		this.settings.userImages = [];
+		this.syncUserImages();
 		// Clear SVG caches
 		this.clearIconSvgCache();
 		this.notifyChange();

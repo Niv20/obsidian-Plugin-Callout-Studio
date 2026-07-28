@@ -389,9 +389,9 @@ export const en: Record<string, string> = {
 	"iconPicker.imageDeleteInUse":
 		"{{count}} callouts use this picture. They will fall back to a " +
 		"placeholder icon until you give them a new one.",
-	"iconPicker.imageRecolor": "Follow callout colour",
+	"iconPicker.imageRecolor": "Follow callout color",
 	"iconPicker.imageRecolorRasterHint":
-		"Only SVG pictures can follow the callout colour. PNG, JPEG and WebP " +
+		"Only SVG pictures can follow the callout color. PNG, JPEG and WebP " +
 		"always keep their own.",
 	"iconPicker.imageStorage": "{{count}} pictures · {{size}}",
 	"iconPicker.allSources": "All sources",
@@ -624,6 +624,9 @@ export const en: Record<string, string> = {
 		'Alias "{{value}}" is already used by another callout ("{{other}}") in your vault.',
 	"import.warn.defaultFoldedAutofix":
 		'"defaultFolded" was true while "foldable" was false; defaultFolded was reset to false.',
+	"import.warn.imageMissing":
+		"This callout uses a picture that is not in the file and not in this " +
+		"vault, so it will show a placeholder icon until you give it a new one.",
 
 	// Footer
 	"footer.tagline":
