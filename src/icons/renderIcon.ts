@@ -169,6 +169,16 @@ function paintMissing(
 			setIcon(target, options.missing.lucideId);
 			return "placeholder";
 		case "status":
+			// A local pack has nothing to download, so artwork it cannot produce
+			// is a picture the user deleted, not a fetch still in flight. Draw
+			// the same pencil the stylesheet falls back to for it (see
+			// CSSInjector.getIconCSS) rather than spinning for artwork that can
+			// never arrive.
+			if (packFor(icon)?.kind === "local") {
+				setIcon(target, "pencil");
+				target.removeAttribute("aria-label");
+				return "placeholder";
+			}
 			if (resolver.hasFailed(icon, options.role)) {
 				setIcon(target, "circle-help");
 				target.addClass("is-error");
