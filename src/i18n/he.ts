@@ -342,6 +342,8 @@ export const he: Record<string, string> = {
 	"iconPicker.emoji": "אימוג'י",
 	"iconPicker.searchLucide": "חיפוש אייקוני Lucide",
 	"iconPicker.loadMore": "טעינת עוד אייקונים",
+	"iconPicker.materialStyle": "סגנון האייקון",
+	"iconPicker.materialWeight": "עובי האייקון",
 	"iconPicker.searchMaterial": "חיפוש אייקוני Material",
 	"iconPicker.searchEmoji": "חיפוש אימוג'י",
 	"iconPicker.skinTone": "גוון עור",

@@ -350,6 +350,8 @@ export const en: Record<string, string> = {
 	"iconPicker.emoji": "Emoji",
 	"iconPicker.searchLucide": "Search Lucide icons",
 	"iconPicker.loadMore": "Load more",
+	"iconPicker.materialStyle": "Icon style",
+	"iconPicker.materialWeight": "Icon weight",
 	"iconPicker.searchMaterial": "Search Material icons",
 	"iconPicker.searchEmoji": "Search emojis",
 	"iconPicker.skinTone": "Skin tone",
