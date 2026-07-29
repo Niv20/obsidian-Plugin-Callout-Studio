@@ -1267,7 +1267,7 @@ button.callout-studio-icon-picker-loading {
 .icon-picker-source-menu-item {
 	display: flex;
 	align-items: center;
-	column-gap: 0.4em;
+	column-gap: 0.75em;
 	padding: 6px 12px;
 	cursor: pointer;
 }
