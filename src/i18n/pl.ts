@@ -10,23 +10,30 @@ export const pl: Record<string, string> = {
 	"settings.fallbackTag": "Domyślny",
 	"settings.fallbackTagAuto": "Aut. domyślny",
 	"settings.rescanVault": "Ponownie skanuj vault",
-	"settings.rescanVaultDesc": "Wyszukuje nierozpoznane ID callout w notatkach i dodaje je jako wiersze zapasowe.",
+	"settings.rescanVaultDesc":
+		"Wyszukuje nierozpoznane ID callout w notatkach i dodaje je jako wiersze zapasowe.",
 	"settings.rescanVaultHintAction": "Skanuj teraz",
-	"settings.rescanComplete": "Ponowne skanowanie zakończone: dodano {{count}} nowych callout(ów).",
+	"settings.rescanComplete":
+		"Ponowne skanowanie zakończone: dodano {{count}} nowych callout(ów).",
 	"replaceModal.deleteWithoutReplaceSuffix": "(wraca do domyślnego)",
 
 	"firstRun.title": "Znaleźć istniejące callouts w vault?",
-	"firstRun.body": "Callout Studio może przeskanować vault, aby odkryć callouts, których już używasz, tak aby pojawiły się na liście ustawień i przyjęły styl zapasowy.",
-	"firstRun.heavyVaultNote": "Twój vault ma {{count}} plików Markdown — skanowanie może potrwać kilka sekund.",
-	"firstRun.laterHint": "Zawsze możesz to uruchomić później z Ustawienia → Wgląd w vault i konserwacja → Ponownie skanuj vault.",
+	"firstRun.body":
+		"Callout Studio może przeskanować vault, aby odkryć callouts, których już używasz, tak aby pojawiły się na liście ustawień i przyjęły styl zapasowy.",
+	"firstRun.heavyVaultNote":
+		"Twój vault ma {{count}} plików Markdown — skanowanie może potrwać kilka sekund.",
+	"firstRun.laterHint":
+		"Zawsze możesz to uruchomić później z Ustawienia → Wgląd w vault i konserwacja → Ponownie skanuj vault.",
 	"firstRun.scanNow": "Skanuj teraz",
 	"firstRun.noThanks": "Nie, dziękuję",
-	"firstRun.autoScanComplete": "Callout Studio przeskanował vault i dodał {{count}} callout(ów).",
+	"firstRun.autoScanComplete":
+		"Callout Studio przeskanował vault i dodał {{count}} callout(ów).",
 	"firstRun.scanning": "Skanowanie",
 
 	"welcome.tooltip": "O Callout Studio",
 	"welcome.title": "Witamy w Callout Studio",
-	"welcome.tagline": "Twoje kompletne rozwiązanie do zarządzania calloutami w Obsidianie.",
+	"welcome.tagline":
+		"Twoje kompletne rozwiązanie do zarządzania calloutami w Obsidianie.",
 	"welcome.previewTitle": "Zobacz w akcji",
 	"welcome.sample":
 		"Callout Studio pozwala tworzyć callouty z własną ikoną, kolorami i nazwą.\n\n" +
@@ -39,10 +46,14 @@ export const pl: Record<string, string> = {
 		"Callout Studio ma o wiele więcej do zaoferowania! [Dowiedz się więcej]({{repoUrl}}).\n",
 
 	"deleteModal.title": 'Usuń callout "{{name}}"?',
-	"deleteModal.bodyInUse": "Ten callout pojawia się {{count}} raz(y) w {{files}} pliku(ach).",
-	"deleteModal.bodyInUseExplain": "Usunięcie spowoduje przekształcenie tych bloków w zwykły tekst — stracą styl i nagłówek callout.",
-	"deleteModal.replaceHint": "Możesz zamiast tego zastąpić go innym callout, co zachowa zawartość vault jako stylizowany callout.",
-	"deleteModal.bodyUnused": '"{{name}}" nie jest używany w żadnej notatce, ale jest niestandardowym callout, który stworzyłeś. Usunięcie wyeliminuje go z tej listy.',
+	"deleteModal.bodyInUse":
+		"Ten callout pojawia się {{count}} raz(y) w {{files}} pliku(ach).",
+	"deleteModal.bodyInUseExplain":
+		"Usunięcie spowoduje przekształcenie tych bloków w zwykły tekst — stracą styl i nagłówek callout.",
+	"deleteModal.replaceHint":
+		"Możesz zamiast tego zastąpić go innym callout, co zachowa zawartość vault jako stylizowany callout.",
+	"deleteModal.bodyUnused":
+		'"{{name}}" nie jest używany w żadnej notatce, ale jest niestandardowym callout, który stworzyłeś. Usunięcie wyeliminuje go z tej listy.',
 	"deleteModal.replaceInstead": "Zamiast tego zastąp",
 	"deleteModal.deleteInUse": "Usuń (przekształć w zwykły tekst)",
 	"deleteModal.deleteUnused": "Usuń callout",
@@ -60,9 +71,12 @@ export const pl: Record<string, string> = {
 	"settings.importExport": "Importuj / eksportuj",
 	"settings.import": "Importuj",
 	"settings.export": "Eksportuj",
-	"settings.importDesc": "Importuj swoje dane Callout Studio z innego vault za pomocą pliku JSON.",
-	"settings.exportDesc": "Zapisz wszystkie niestandardowe typy callout w formacie JSON.",
-	"settings.importConflictNotice": "Zaimportowano {{count}} typ(ów) callout; nadpisano {{overwritten}} istniejący(ch) wpis(y).",
+	"settings.importDesc":
+		"Importuj swoje dane Callout Studio z innego vault za pomocą pliku JSON.",
+	"settings.exportDesc":
+		"Zapisz wszystkie niestandardowe typy callout w formacie JSON.",
+	"settings.importConflictNotice":
+		"Zaimportowano {{count}} typ(ów) callout; nadpisano {{overwritten}} istniejący(ch) wpis(y).",
 
 	"settings.addNewCallout": "+ dodaj callout",
 
@@ -78,7 +92,8 @@ export const pl: Record<string, string> = {
 
 	"settings.colorSwatchAria": "Akcent: {{accent}} · Tło: {{bg}}",
 	"settings.fallbackCallout": "Domyślny zapasowy callout",
-	"settings.fallbackCalloutDesc": "Nierozpoznane typy callout w vault odziedziczą styl tego callout.",
+	"settings.fallbackCalloutDesc":
+		"Nierozpoznane typy callout w vault odziedziczą styl tego callout.",
 
 	"settings.globalStyle": "Globalny styl callout",
 	"settings.border": "Obramowania",
@@ -112,42 +127,53 @@ export const pl: Record<string, string> = {
 	"settings.deletePaletteConfirm":
 		'Usunąć paletę "{{name}}"?\nCallouty korzystające z jej kolorów nie zostaną zmienione.',
 	"settings.enableAutocomplete": "Włącz autouzupełnianie [!",
-	"settings.enableAutocompleteDesc": 'Wyświetla sugestie przy wpisywaniu "[!" w bloku cytatu w edytorze. Wybierz typ callout z listy, aby wstawić pełny nagłówek callout.',
+	"settings.enableAutocompleteDesc":
+		'Wyświetla sugestie przy wpisywaniu "[!" w bloku cytatu w edytorze. Wybierz typ callout z listy, aby wstawić pełny nagłówek callout.',
 
 	"settings.openHotkeys": "Skróty klawiszowe Callout Studio",
-	"settings.openHotkeysDesc": "Otwiera ustawienia skrótów klawiszowych Obsidian dla poleceń Callout Studio, gdzie możesz wybrać własne skróty dla Utwórz nowy typ, Otwórz ustawienia, Usuń callout i Owiń w callout. Domyślnie nie są przypisane żadne skróty.",
+	"settings.openHotkeysDesc":
+		"Otwiera ustawienia skrótów klawiszowych Obsidian dla poleceń Callout Studio, gdzie możesz wybrać własne skróty dla Utwórz nowy typ, Otwórz ustawienia, Usuń callout i Owiń w callout. Domyślnie nie są przypisane żadne skróty.",
 	"settings.openHotkeysButton": "Otwórz ustawienia skrótów",
-
 
 	"settings.vaultMaintenance": "Wgląd w vault i konserwacja",
 	"settings.vaultStats": "Statystyki callout",
-	"settings.vaultStatsDesc": "Zlicza wszystkie bloki callout w notatkach Markdown i grupuje je według typu.",
+	"settings.vaultStatsDesc":
+		"Zlicza wszystkie bloki callout w notatkach Markdown i grupuje je według typu.",
 	"settings.vaultStatsButton": "Wyświetl statystyki",
 	"settings.vaultStatsScanning": "Skanowanie",
 	"settings.resetAll": "Resetuj",
-	"settings.resetAllDesc": "Usuwa wszystkie callouts użytkownika, resetuje wbudowane callouts, globalne style (obramowania, skala czcionki, kształt), zapisane palety kolorów, dostosowanie menu kontekstowego i pobrane SVG Material.",
+	"settings.resetAllDesc":
+		"Usuwa wszystkie callouts użytkownika, resetuje wbudowane callouts, globalne style (obramowania, skala czcionki, kształt), zapisane palety kolorów, dostosowanie menu kontekstowego i pobrane SVG Material.",
 	"settings.resetAllButton": "Resetuj wszystko",
-	"settings.resetAllConfirm": "Spowoduje to usunięcie wszystkich niestandardowych callouts, zresetowanie wbudowanych callouts, globalnych stylów, zapisanych palet kolorów, dostosowania menu kontekstowego i wszystkich buforowanych SVG Material. Tej akcji nie można cofnąć. Czy jesteś pewien?",
-	"notice.resetAllDone": "Wszystko zostało zresetowane do wartości domyślnych.",
+	"settings.resetAllConfirm":
+		"Spowoduje to usunięcie wszystkich niestandardowych callouts, zresetowanie wbudowanych callouts, globalnych stylów, zapisanych palet kolorów, dostosowania menu kontekstowego i wszystkich buforowanych SVG Material. Tej akcji nie można cofnąć. Czy jesteś pewien?",
+	"notice.resetAllDone":
+		"Wszystko zostało zresetowane do wartości domyślnych.",
 
 	"notice.exported": "Callouts wyeksportowane do callout-studio-export.json",
 	"notice.importedJSON": "Zaimportowano {{count}} typ(ów) callout z JSON.",
 	"notice.importedSettings": "Zaimportowano ustawienia wtyczki.",
-	"notice.noNewJSON": "Nie zaimportowano nowych typów callout (ID mogą już istnieć).",
-	"notice.iconDownloadFailed": 'Nie można pobrać ikony Material "{{name}}". Może być niedostępna dla tego stylu/grubości lub połączenie jest offline.',
+	"notice.noNewJSON":
+		"Nie zaimportowano nowych typów callout (ID mogą już istnieć).",
+	"notice.iconDownloadFailed":
+		'Nie można pobrać ikony Material "{{name}}". Może być niedostępna dla tego stylu/grubości lub połączenie jest offline.',
 	"notice.nothingToWrap": "Nic do owinięcia.",
 	"notice.cursorNotInsideCallout": "Kursor nie jest wewnątrz callout.",
-	"notice.openHotkeysFailed": "Nie można otworzyć ustawień skrótów klawiszowych Obsidian.",
-	"notice.filterHotkeysFailed": "Skróty klawiszowe Obsidian otwarte, ale nie można zastosować filtra Callout Studio.",
+	"notice.openHotkeysFailed":
+		"Nie można otworzyć ustawień skrótów klawiszowych Obsidian.",
+	"notice.filterHotkeysFailed":
+		"Skróty klawiszowe Obsidian otwarte, ale nie można zastosować filtra Callout Studio.",
 
 	"editor.editCallout": "Edytuj callout",
 	"editor.newCallout": "Nowy callout",
 	"editor.displayName": "Nazwa wyświetlana",
 	"editor.displayNameDesc": "Czytelna etykieta wyświetlana w interfejsie",
-	"editor.displayNameBuiltIn": "Nazwy wyświetlanej wbudowanych callouts nie można zmienić",
+	"editor.displayNameBuiltIn":
+		"Nazwy wyświetlanej wbudowanych callouts nie można zmienić",
 	"editor.displayNamePlaceholder": "Mój callout",
 	"editor.calloutIds": "ID callout",
-	"editor.calloutIdsDesc": "Wszystkie identyfikatory tego callout. Spacje są dozwolone.\nNaciśnij Enter lub przycisk +, aby dodać.",
+	"editor.calloutIdsDesc":
+		"Wszystkie identyfikatory tego callout. Spacje są dozwolone.\nNaciśnij Enter lub przycisk +, aby dodać.",
 	"editor.calloutIdsPlaceholder": "Dodaj ID",
 	"editor.addId": "Dodaj ID",
 	"editor.idLinkedToName": "Powiązane z nazwą wyświetlaną",
@@ -166,26 +192,33 @@ export const pl: Record<string, string> = {
 	"editor.paletteGroupPresets": "Presety kolorów",
 	"editor.paletteGroupCustom": "Niestandardowe",
 	"editor.paletteNewColor": "Nowy kolor…",
-	"editor.contrastWarning": "Niski kontrast z tłem — może być trudny do odczytania",
+	"editor.contrastWarning":
+		"Niski kontrast z tłem — może być trudny do odczytania",
 	"editor.foldable": "Zwijany",
-	"editor.foldableDesc": "Wybierz, czy callout można zwinąć i jaki domyślny stan zastosować w całym vault.",
+	"editor.foldableDesc":
+		"Wybierz, czy callout można zwinąć i jaki domyślny stan zastosować w całym vault.",
 	"editor.foldOff": "Wyłączony",
 	"editor.foldOpen": "Domyślnie otwarty",
 	"editor.foldClosed": "Domyślnie zamknięty",
 	"editor.cancel": "Anuluj",
 	"editor.saveChanges": "Zapisz zmiany",
 	"editor.createCallout": "Utwórz callout",
-	"editor.nameRequired": "Przed utworzeniem callout wymagana jest nazwa wyświetlana.",
+	"editor.nameRequired":
+		"Przed utworzeniem callout wymagana jest nazwa wyświetlana.",
 	"editor.noChangesToSave": "Nie wprowadzono żadnych zmian.",
 	"editor.downloadingIcon": "Pobieranie ikony",
 	"editor.idEmpty": "Wymagane jest co najmniej jedno ID",
 	"editor.idExists": "Callout z tym ID już istnieje",
 	"editor.idConflict": "To ID koliduje z istniejącym callout",
-	"editor.idDashConflict": 'Obsidian zapisuje spacje jako myślniki, więc to ID koliduje z „{{other}}”',
+	"editor.idDashConflict":
+		"Obsidian zapisuje spacje jako myślniki, więc to ID koliduje z „{{other}}”",
 	"editor.untitledCallout": "Callout bez tytułu",
-	"editor.loremIpsum": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-	"editor.loremIpsumShort": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-	"editor.sampleInlineText": "Oto wbudowana pigułka [!{id}] wewnątrz akapitu.",
+	"editor.loremIpsum":
+		"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+	"editor.loremIpsumShort":
+		"Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+	"editor.sampleInlineText":
+		"Oto wbudowana pigułka [!{id}] wewnątrz akapitu.",
 	"editor.previewReadOnly": "Podglądu na żywo nie można edytować",
 
 	// Palette editor modal
@@ -195,10 +228,12 @@ export const pl: Record<string, string> = {
 	"palette.namePlaceholder": "Moja paleta",
 	"palette.nameExists": "Paleta o tej nazwie już istnieje",
 	"palette.baseColor": "Kolor bazowy",
-	"palette.baseColorHint": "Automatycznie dopasujemy do niego kolor tła. Jeśli chcesz, możesz kontrolować go osobno, {{link}}.",
+	"palette.baseColorHint":
+		"Automatycznie dopasujemy do niego kolor tła. Jeśli chcesz, możesz kontrolować go osobno, {{link}}.",
 	"palette.baseColorHintLink": "klikając tutaj",
 	"palette.advancedColors": "Kolory",
-	"palette.advancedColorsHint": "Edytowanie kolorów dla trybu {{mode}} - drugi tryb aktualizuje się automatycznie. Przełącz motyw Obsidiana, aby to sprawdzić.",
+	"palette.advancedColorsHint":
+		"Edytowanie kolorów dla trybu {{mode}} - drugi tryb aktualizuje się automatycznie. Przełącz motyw Obsidiana, aby to sprawdzić.",
 	"palette.revertHint": "Wolisz zamiast tego jeden kolor bazowy? {{link}}.",
 	"palette.revertHintLink": "Cofnij",
 	"palette.lightMode": "Jasny",
@@ -246,11 +281,22 @@ export const pl: Record<string, string> = {
 	"iconPicker.searchLucide": "szukaj ikon Lucide",
 	"iconPicker.searchTabler": "szukaj ikon Tabler",
 	"iconPicker.tablerStyle": "Styl ikony",
-	"iconPicker.tablerStyleOutline": "Obrys",
-	"iconPicker.tablerStyleFilled": "Wypełniona",
+	"iconPicker.tablerStyleOutline": "Obrys (Outline)",
+	"iconPicker.tablerStyleFilled": "Wypełniona (Filled)",
 	"iconPicker.loadMore": "Załaduj więcej",
 	"iconPicker.materialStyle": "Styl ikony",
+	"iconPicker.materialStyleOutlined": "Konturowy (Outlined)",
+	"iconPicker.materialStyleFilled": "Wypełniony (Filled)",
+	"iconPicker.materialStyleRounded": "Zaokrąglony (Rounded)",
+	"iconPicker.materialStyleSharp": "Ostry (Sharp)",
 	"iconPicker.materialWeight": "Grubość ikony",
+	"iconPicker.materialWeight100": "Cienki (Thin)",
+	"iconPicker.materialWeight200": "Bardzo lekki (Extra Light)",
+	"iconPicker.materialWeight300": "Lekki (Light)",
+	"iconPicker.materialWeight400": "Normalny (Regular)",
+	"iconPicker.materialWeight500": "Średni (Medium)",
+	"iconPicker.materialWeight600": "Półgruby (Semi Bold)",
+	"iconPicker.materialWeight700": "Gruby (Bold)",
 	"iconPicker.searchMaterial": "szukaj ikon Material",
 	"iconPicker.searchEmoji": "Szukaj emoji",
 	"iconPicker.skinTone": "Odcień skóry",
@@ -262,34 +308,43 @@ export const pl: Record<string, string> = {
 	"iconPicker.fa": "Font Awesome",
 	"iconPicker.searchFa": "Szukaj w Font Awesome",
 	"iconPicker.faStyle": "Styl ikony",
-	"iconPicker.faStyleSolid": "Wypełniona",
-	"iconPicker.faStyleRegular": "Regularna",
-	"iconPicker.faStyleBrands": "Marki",
+	"iconPicker.faStyleSolid": "Wypełniona (Solid)",
+	"iconPicker.faStyleRegular": "Regularna (Regular)",
+	"iconPicker.faStyleBrands": "Marki (Brands)",
 	"iconPicker.rpgAwesome": "RPG Awesome",
 	"iconPicker.searchRpgAwesome": "Szukaj w RPG Awesome",
 	"iconPicker.image": "Twoje obrazy",
 	"iconPicker.searchImage": "Szukaj w swoich obrazach",
-	"iconPicker.imageTooLarge": "{{name}} jest za duży. Obrazy muszą być poniżej 5 MB.",
-	"iconPicker.imageUnsupported": "{{name}} nie jest obsługiwanym formatem obrazu. Użyj SVG, PNG, JPEG lub WebP.",
-	"iconPicker.imageInvalidSvg": "{{name}} nie można odczytać jako bezpiecznego SVG i nie został dodany.",
+	"iconPicker.imageTooLarge":
+		"{{name}} jest za duży. Obrazy muszą być poniżej 5 MB.",
+	"iconPicker.imageUnsupported":
+		"{{name}} nie jest obsługiwanym formatem obrazu. Użyj SVG, PNG, JPEG lub WebP.",
+	"iconPicker.imageInvalidSvg":
+		"{{name}} nie można odczytać jako bezpiecznego SVG i nie został dodany.",
 	"iconPicker.imageDecodeFailed": "{{name}} nie można odczytać jako obrazu.",
-	"iconPicker.imageDuplicate": "{{name}} jest już w twoich obrazach. Zmień nazwę pliku lub usuń istniejący obraz.",
+	"iconPicker.imageDuplicate":
+		"{{name}} jest już w twoich obrazach. Zmień nazwę pliku lub usuń istniejący obraz.",
 	"iconPicker.imageAdd": "Dodaj obrazy",
-	"iconPicker.imageEmpty": "Brak obrazów. Dodaj plik SVG, PNG, JPEG lub WebP ze swojego komputera lub upuść go tutaj.",
+	"iconPicker.imageEmpty":
+		"Brak obrazów. Dodaj plik SVG, PNG, JPEG lub WebP ze swojego komputera lub upuść go tutaj.",
 	"iconPicker.imageDelete": "Usuń",
 	"iconPicker.imageDeleteConfirm": "Usunąć „{{name}}”?",
-	"iconPicker.imageDeleteInUse": "{{count}} calloutów używa tego obrazu. Będą wyświetlać ikonę zastępczą, dopóki nie podasz nowego obrazu.",
+	"iconPicker.imageDeleteInUse":
+		"{{count}} calloutów używa tego obrazu. Będą wyświetlać ikonę zastępczą, dopóki nie podasz nowego obrazu.",
 	"iconPicker.imageRecolor": "Podążaj za kolorem Callout",
 	"iconPicker.allSources": "Wszystkie źródła",
 	"iconPicker.searchAllSources": "Szukaj we wszystkich źródłach ikon",
-	"iconPicker.sourcesNotDownloaded": "Jeszcze nie pobrano: {{names}}. Wybierz powyżej źródło, aby je pobrać.",
+	"iconPicker.sourcesNotDownloaded":
+		"Jeszcze nie pobrano: {{names}}. Wybierz powyżej źródło, aby je pobrać.",
 	"iconPicker.chooseSource": "Wybierz źródło",
 	"iconPicker.sourceGroup": "{{name}} · {{count}}",
 
 	// Source menu — what each library holds, in a few words
-	"iconPicker.descAllSources": "szukaj we wszystkich bibliotekach jednocześnie",
+	"iconPicker.descAllSources":
+		"szukaj we wszystkich bibliotekach jednocześnie",
 	"iconPicker.descLucide": "własny zestaw Obsidian, zawsze offline",
-	"iconPicker.descTabler": "czyste i spójne ikony interfejsu, obrys i wypełnione",
+	"iconPicker.descTabler":
+		"czyste i spójne ikony interfejsu, obrys i wypełnione",
 	"iconPicker.descMaterial": "zestaw Google, cztery style i siedem grubości",
 	"iconPicker.descEmoji": "kolorowe glify, każdy odcień skóry",
 	"iconPicker.descOcticons": "ikony interfejsu GitHub",
@@ -297,22 +352,142 @@ export const pl: Record<string, string> = {
 	"iconPicker.descRpgAwesome": "ikony fantasy i gier planszowych",
 	"iconPicker.descImage": "obrazy dodane z komputera",
 
+	// Icon picker — category filter dropdown labels
+	"iconPicker.cat.Accessibility": "Dostępność",
+	"iconPicker.cat.Actions": "Akcje",
+	"iconPicker.cat.Activities": "Aktywności",
+	"iconPicker.cat.Alert": "Alert",
+	"iconPicker.cat.Alphabet": "Alfabet",
+	"iconPicker.cat.Android": "Android",
+	"iconPicker.cat.Animals": "Zwierzęta",
+	"iconPicker.cat.Arrows": "Strzałki",
+	"iconPicker.cat.Astronomy": "Astronomia",
+	"iconPicker.cat.Audio&Video": "Audio i wideo",
+	"iconPicker.cat.Automotive": "Motoryzacja",
+	"iconPicker.cat.Badges": "Odznaki",
+	"iconPicker.cat.Brand": "Marki",
+	"iconPicker.cat.Buildings": "Budynki",
+	"iconPicker.cat.Business": "Biznes",
+	"iconPicker.cat.Camping": "Kemping",
+	"iconPicker.cat.Charity": "Charytatywność",
+	"iconPicker.cat.Charts": "Wykresy",
+	"iconPicker.cat.Charts + Diagrams": "Wykresy i diagramy",
+	"iconPicker.cat.Childhood": "Dzieciństwo",
+	"iconPicker.cat.Clothing + Fashion": "Ubrania i moda",
+	"iconPicker.cat.Coding": "Programowanie",
+	"iconPicker.cat.Communicate": "Komunikowanie",
+	"iconPicker.cat.Communication": "Komunikacja",
+	"iconPicker.cat.Computers": "Komputery",
+	"iconPicker.cat.Connectivity": "Łączność",
+	"iconPicker.cat.Construction": "Budownictwo",
+	"iconPicker.cat.Currencies": "Waluty",
+	"iconPicker.cat.Database": "Baza danych",
+	"iconPicker.cat.Design": "Projektowanie",
+	"iconPicker.cat.Development": "Rozwój",
+	"iconPicker.cat.Devices": "Urządzenia",
+	"iconPicker.cat.Devices + Hardware": "Urządzenia i sprzęt",
+	"iconPicker.cat.Disaster + Crisis": "Katastrofy i kryzysy",
+	"iconPicker.cat.Document": "Dokument",
+	"iconPicker.cat.E-commerce": "E-commerce",
+	"iconPicker.cat.Editing": "Edytowanie",
+	"iconPicker.cat.Education": "Edukacja",
+	"iconPicker.cat.Electrical": "Elektryczny",
+	"iconPicker.cat.Emoji": "Emoji",
+	"iconPicker.cat.Energy": "Energia",
+	"iconPicker.cat.Extensions": "Rozszerzenia",
+	"iconPicker.cat.Files": "Pliki",
+	"iconPicker.cat.Film + Video": "Film i wideo",
+	"iconPicker.cat.Food": "Jedzenie",
+	"iconPicker.cat.Food + Beverage": "Jedzenie i napoje",
+	"iconPicker.cat.Fruits + Vegetables": "Owoce i warzywa",
+	"iconPicker.cat.Games": "Gry",
+	"iconPicker.cat.Gaming": "Gaming",
+	"iconPicker.cat.Gender": "Płeć",
+	"iconPicker.cat.Genders": "Płcie",
+	"iconPicker.cat.Gestures": "Gesty",
+	"iconPicker.cat.Halloween": "Halloween",
+	"iconPicker.cat.Hands": "Dłonie",
+	"iconPicker.cat.Hardware": "Sprzęt",
+	"iconPicker.cat.Health": "Zdrowie",
+	"iconPicker.cat.Holidays": "Święta",
+	"iconPicker.cat.Home": "Dom",
+	"iconPicker.cat.Household": "Gospodarstwo domowe",
+	"iconPicker.cat.Humanitarian": "Humanitarny",
+	"iconPicker.cat.Images": "Obrazy",
+	"iconPicker.cat.Laundry": "Pranie",
+	"iconPicker.cat.Letters": "Litery",
+	"iconPicker.cat.Logic": "Logika",
+	"iconPicker.cat.Logistics": "Logistyka",
+	"iconPicker.cat.Map": "Mapa",
+	"iconPicker.cat.Maps": "Mapy",
+	"iconPicker.cat.Maritime": "Morski",
+	"iconPicker.cat.Marketing": "Marketing",
+	"iconPicker.cat.Math": "Matematyka",
+	"iconPicker.cat.Mathematics": "Matematyka",
+	"iconPicker.cat.Media": "Media",
+	"iconPicker.cat.Media Playback": "Odtwarzanie mediów",
+	"iconPicker.cat.Medical + Health": "Medycyna i zdrowie",
+	"iconPicker.cat.Money": "Pieniądze",
+	"iconPicker.cat.Mood": "Nastrój",
+	"iconPicker.cat.Moving": "Przeprowadzka",
+	"iconPicker.cat.Music + Audio": "Muzyka i audio",
+	"iconPicker.cat.Nature": "Przyroda",
+	"iconPicker.cat.Numbers": "Liczby",
+	"iconPicker.cat.Photography": "Fotografia",
+	"iconPicker.cat.Photos + Images": "Zdjęcia i obrazy",
+	"iconPicker.cat.Political": "Polityczny",
+	"iconPicker.cat.Privacy": "Prywatność",
+	"iconPicker.cat.Punctuation + Symbols": "Interpunkcja i symbole",
+	"iconPicker.cat.Religion": "Religia",
+	"iconPicker.cat.Science": "Nauka",
+	"iconPicker.cat.Science Fiction": "Science fiction",
+	"iconPicker.cat.Security": "Bezpieczeństwo",
+	"iconPicker.cat.Shapes": "Kształty",
+	"iconPicker.cat.Shopping": "Zakupy",
+	"iconPicker.cat.Social": "Media społecznościowe",
+	"iconPicker.cat.Spinners": "Spinners",
+	"iconPicker.cat.Sport": "Sport",
+	"iconPicker.cat.Sports + Fitness": "Sport i fitness",
+	"iconPicker.cat.Symbols": "Symbole",
+	"iconPicker.cat.System": "System",
+	"iconPicker.cat.Text": "Tekst",
+	"iconPicker.cat.Text Formatting": "Formatowanie tekstu",
+	"iconPicker.cat.Time": "Czas",
+	"iconPicker.cat.Toggle": "Przełącznik",
+	"iconPicker.cat.Transit": "Komunikacja",
+	"iconPicker.cat.Transportation": "Transport",
+	"iconPicker.cat.Travel": "Podróże",
+	"iconPicker.cat.Travel + Hotel": "Podróże i hotele",
+	"iconPicker.cat.UI actions": "Akcje interfejsu",
+	"iconPicker.cat.Users + People": "Użytkownicy i ludzie",
+	"iconPicker.cat.Vehicles": "Pojazdy",
+	"iconPicker.cat.Version control": "Kontrola wersji",
+	"iconPicker.cat.Weather": "Pogoda",
+	"iconPicker.cat.Writing": "Pisanie",
+	"iconPicker.cat.Zodiac": "Zodiak",
+
 	// Downloadable icon packs
 	"iconPack.downloadTitle": "{{name}} nie zostało jeszcze pobrane",
-	"iconPack.downloadDetail": "{{count}} ikon · {{size}} · jednorazowe pobieranie",
+	"iconPack.downloadDetail":
+		"{{count}} ikon · {{size}} · jednorazowe pobieranie",
 	"iconPack.download": "Pobierz",
 	"iconPack.downloading": "Pobieranie {{name}}…",
-	"iconPack.downloadFailed": "Nie można pobrać {{name}}. Sprawdź połączenie i spróbuj ponownie.",
+	"iconPack.downloadFailed":
+		"Nie można pobrać {{name}}. Sprawdź połączenie i spróbuj ponownie.",
 	"iconPack.retry": "Spróbuj ponownie",
-	"iconPack.faBrandsNotice": "Ikony marek są znakami towarowymi ich właścicieli. Ich obecność nie oznacza poparcia. Używaj ich tylko do reprezentowania firmy, produktu lub usługi, do której się odnoszą.",
+	"iconPack.faBrandsNotice":
+		"Ikony marek są znakami towarowymi ich właścicieli. Ich obecność nie oznacza poparcia. Używaj ich tylko do reprezentowania firmy, produktu lub usługi, do której się odnoszą.",
 	"iconPack.artworkRestored": "Pobrano grafikę ikon dla {{names}}.",
-	"iconPack.diskWriteFailed": "Callout Studio nie mogło zapisać pakietu ikon na dysku, więc następnym razem będzie trzeba go pobrać ponownie. Wybrane ikony są nadal zapisane w ustawieniach.",
+	"iconPack.diskWriteFailed":
+		"Callout Studio nie mogło zapisać pakietu ikon na dysku, więc następnym razem będzie trzeba go pobrać ponownie. Wybrane ikony są nadal zapisane w ustawieniach.",
 
 	// Icon licences & credits
 	"credits.title": "Licencje ikon i podziękowania",
-	"credits.intro": "Callout Studio korzysta z kilku otwartych bibliotek ikon. Ich licencje są odtworzone poniżej wraz z informacją, co zostało zmienione na potrzeby użycia tutaj.",
+	"credits.intro":
+		"Callout Studio korzysta z kilku otwartych bibliotek ikon. Ich licencje są odtworzone poniżej wraz z informacją, co zostało zmienione na potrzeby użycia tutaj.",
 	"credits.fullNotices": "Pełne informacje o stronach trzecich",
-	"credits.pluginLicense": "Własny kod Callout Studio jest na licencji 0BSD; biblioteki ikon zachowują swoje własne licencje.",
+	"credits.pluginLicense":
+		"Własny kod Callout Studio jest na licencji 0BSD; biblioteki ikon zachowują swoje własne licencje.",
 
 	"contextMenu.editCallout": "Edytuj ustawienia callout",
 	"contextMenu.copyMarkdown": "Kopiuj Markdown callout",
@@ -325,19 +500,25 @@ export const pl: Record<string, string> = {
 	"contextMenu.deleteSection": "Usuń sekcję nagłówka",
 	"heading.toggleFold": "Przełącz zwijanie",
 	"settings.globalSettings": "Ustawienia globalne",
-	"settings.globalSettingsDesc": "Dostrój wygląd każdego typu callout w całym vault.",
-	"settings.globalSettingsRegularDesc": "Dodaj token callout do cytatu blokowego (np. `> [!type]`), aby wyświetlić wbudowane pole callout Obsidian. Możesz dostosować jego obramowanie, zaokrąglenie, skalę czcionki i wyrównanie.",
-	"settings.globalSettingsHeadingDesc": "Dodaj token callout bezpośrednio po krzyżykach nagłówka (np. `## [!type]`), aby wyświetlić go jako stylizowany nagłówek callout. Możesz dostosować jego obramowanie, kształt i odstęp pionowy.",
-	"settings.globalSettingsInlineDesc": "Dodaj token callout w dowolnym miejscu wiersza tekstu (np. `[!type]`), aby wyświetlić go jako małą pigułkę śródtekstową. Możesz dostosować jego obramowanie i kształt.",
+	"settings.globalSettingsDesc":
+		"Dostrój wygląd każdego typu callout w całym vault.",
+	"settings.globalSettingsRegularDesc":
+		"Dodaj token callout do cytatu blokowego (np. `> [!type]`), aby wyświetlić wbudowane pole callout Obsidian. Możesz dostosować jego obramowanie, zaokrąglenie, skalę czcionki i wyrównanie.",
+	"settings.globalSettingsHeadingDesc":
+		"Dodaj token callout bezpośrednio po krzyżykach nagłówka (np. `## [!type]`), aby wyświetlić go jako stylizowany nagłówek callout. Możesz dostosować jego obramowanie, kształt i odstęp pionowy.",
+	"settings.globalSettingsInlineDesc":
+		"Dodaj token callout w dowolnym miejscu wiersza tekstu (np. `[!type]`), aby wyświetlić go jako małą pigułkę śródtekstową. Możesz dostosować jego obramowanie i kształt.",
 	"settings.globalSettingsCustomize": "Dostosuj",
 	"settings.calloutTypeRegular": "Zwykły callout",
 	"settings.calloutTypeHeading": "Callout-nagłówek",
 	"settings.calloutTypeInline": "Callout śródtekstowy",
 	"settings.customizeMenu": "Dostosuj elementy menu",
-	"settings.customizeMenuDesc": "Wybierz, które akcje menu kontekstowego pojawiają się dla każdego typu callout, i zmień ich kolejność. Działa w trybie źródłowym i podglądzie na żywo.",
+	"settings.customizeMenuDesc":
+		"Wybierz, które akcje menu kontekstowego pojawiają się dla każdego typu callout, i zmień ich kolejność. Działa w trybie źródłowym i podglądzie na żywo.",
 	"settings.customizeMenuButton": "Dostosuj elementy menu",
 	"menuCustomize.title": "Dostosuj menu kontekstowe",
-	"menuCustomize.desc": "Włączaj lub wyłączaj akcje i przeciągaj uchwyt, aby zmienić ich kolejność. Zmiany są zapisywane automatycznie.",
+	"menuCustomize.desc":
+		"Włączaj lub wyłączaj akcje i przeciągaj uchwyt, aby zmienić ich kolejność. Zmiany są zapisywane automatycznie.",
 	"menuCustomize.regular": "Zwykły callout",
 	"menuCustomize.heading": "Callout-nagłówek",
 	"menuCustomize.inline": "Callout śródtekstowy",
@@ -353,20 +534,28 @@ export const pl: Record<string, string> = {
 	"confirm.ok": "Usuń",
 	"confirm.cancel": "Anuluj",
 
-	"vault.filesUpdated": "Zaktualizowano {{count}} odwołanie(ń) callout w plikach vault.",
-	"vault.idsUpdated": "Zaktualizowano {{count}} ID callout w plikach vault: {{oldIds}} → {{newId}}",
-	"vault.titlesUpdated": "Zaktualizowano {{count}} tytuł(ów) callout w plikach vault: {{oldTitle}} → {{newTitle}}",
+	"vault.filesUpdated":
+		"Zaktualizowano {{count}} odwołanie(ń) callout w plikach vault.",
+	"vault.idsUpdated":
+		"Zaktualizowano {{count}} ID callout w plikach vault: {{oldIds}} → {{newId}}",
+	"vault.titlesUpdated":
+		"Zaktualizowano {{count}} tytuł(ów) callout w plikach vault: {{oldTitle}} → {{newTitle}}",
 	"vault.replaceWith": "Zastąp przez:",
 	"vault.deleteWithout": "Usuń bez zastępowania",
 	"vault.confirmDelete": "Potwierdź",
 	"vault.confirmReplace": "Zastąp",
-	"vault.replacePromptInUse": '"{{name}}" jest używany {{count}} raz(y) w {{files}} pliku(ach). Wybierz callout, którym go zastąpić:',
+	"vault.replacePromptInUse":
+		'"{{name}}" jest używany {{count}} raz(y) w {{files}} pliku(ach). Wybierz callout, którym go zastąpić:',
 	"vault.replacePromptUnused": 'Wybierz callout, którym zastąpić "{{name}}":',
-	"vault.noReplacementAvailable": "Brak innych callouts dostępnych jako zastępstwo.",
-	"vault.convertedToPlainText": "Przekształcono {{blocks}} blok(ów) callout w {{files}} pliku(ach) w zwykły tekst.",
-	"vault.resetAliasWarning": "{{count}} odwołanie(ń) w {{files}} pliku(ach) używa niestandardowych aliasów: {{aliases}}. Po zresetowaniu przestaną działać. Kontynuować?",
+	"vault.noReplacementAvailable":
+		"Brak innych callouts dostępnych jako zastępstwo.",
+	"vault.convertedToPlainText":
+		"Przekształcono {{blocks}} blok(ów) callout w {{files}} pliku(ach) w zwykły tekst.",
+	"vault.resetAliasWarning":
+		"{{count}} odwołanie(ń) w {{files}} pliku(ach) używa niestandardowych aliasów: {{aliases}}. Po zresetowaniu przestaną działać. Kontynuować?",
 	"vault.resetConfirm": "Resetuj",
-	"vault.resetAllInUse": "⚠ {{count}} odwołanie(ń) callout w {{files}} pliku(ach) używa niestandardowych typów callout, które zostaną usunięte.",
+	"vault.resetAllInUse":
+		"⚠ {{count}} odwołanie(ń) callout w {{files}} pliku(ach) używa niestandardowych typów callout, które zostaną usunięte.",
 
 	"vaultStats.title": "Statystyki callout",
 	"vaultStats.totalCallouts": "Łączna liczba callouts",
@@ -389,46 +578,75 @@ export const pl: Record<string, string> = {
 	"vaultStats.close": "Zamknij",
 
 	"import.title": "Problemy z importem",
-	"import.reportLeadIn": "Wygląda na to, że zaimportowany plik został zmodyfikowany. Oto lista problemów:",
-	"import.reportLeadInFatal": "Ten plik nie wygląda jak eksport Callout Studio. Nie można go zaimportować:",
+	"import.reportLeadIn":
+		"Wygląda na to, że zaimportowany plik został zmodyfikowany. Oto lista problemów:",
+	"import.reportLeadInFatal":
+		"Ten plik nie wygląda jak eksport Callout Studio. Nie można go zaimportować:",
 	"import.entryHeading": "Wpis {{index}} — {{label}}",
-	"import.summary": "{{valid}} z {{total}} wpisów jest prawidłowych · znaleziono {{issues}} problem(ów).",
+	"import.summary":
+		"{{valid}} z {{total}} wpisów jest prawidłowych · znaleziono {{issues}} problem(ów).",
 	"import.btnCancel": "Anuluj",
 	"import.btnImportValid": "Importuj tylko prawidłowe ({{count}})",
-	"import.err.notRecognized": "Nierozpoznany plik: oczekiwano tablicy definicji callout lub eksportu z Callout Studio.",
-	"import.warn.settingsIgnored": "Blok ustawień nie był prawidłowym obiektem i został zignorowany.",
-	"import.warn.invalidGradient": "Gradient tła był nieprawidłowy i został zignorowany.",
-	"import.err.parseFailed": "Plik nie jest prawidłowym JSON i nie mógł zostać przeanalizowany.",
+	"import.err.notRecognized":
+		"Nierozpoznany plik: oczekiwano tablicy definicji callout lub eksportu z Callout Studio.",
+	"import.warn.settingsIgnored":
+		"Blok ustawień nie był prawidłowym obiektem i został zignorowany.",
+	"import.warn.invalidGradient":
+		"Gradient tła był nieprawidłowy i został zignorowany.",
+	"import.err.parseFailed":
+		"Plik nie jest prawidłowym JSON i nie mógł zostać przeanalizowany.",
 	"import.err.entryNotObject": "Wpis musi być obiektem.",
-	"import.err.requiredMissing": 'Wymagane pole "{{field}}" brakuje lub ma zły typ.',
+	"import.err.requiredMissing":
+		'Wymagane pole "{{field}}" brakuje lub ma zły typ.',
 	"import.err.idEmpty": "ID nie może być puste.",
-	"import.err.idTooLong": 'ID "{{value}}" ma {{length}} znaków; maksimum to {{max}}.',
-	"import.err.idBadChar": 'ID "{{value}}" zawiera nieprawidłowe znaki ("|", "[", "]", tabulatory i znaki nowej linii są niedozwolone).',
+	"import.err.idTooLong":
+		'ID "{{value}}" ma {{length}} znaków; maksimum to {{max}}.',
+	"import.err.idBadChar":
+		'ID "{{value}}" zawiera nieprawidłowe znaki ("|", "[", "]", tabulatory i znaki nowej linii są niedozwolone).',
 	"import.err.displayNameEmpty": "Nazwa wyświetlana nie może być pusta.",
-	"import.err.displayNameTooLong": "Nazwa wyświetlana ma {{length}} znaków; maksimum to {{max}}.",
-	"import.err.boolField": '"{{field}}" musi być wartością logiczną (true lub false).',
+	"import.err.displayNameTooLong":
+		"Nazwa wyświetlana ma {{length}} znaków; maksimum to {{max}}.",
+	"import.err.boolField":
+		'"{{field}}" musi być wartością logiczną (true lub false).',
 	"import.err.iconNotObject": "Ikona musi być obiektem.",
-	"import.err.iconTypeInvalid": "Typ ikony \"{{value}}\" nie jest jednym z: {{types}}.",
-	"import.warn.iconFieldIgnored": "\"{{field}}\" dotyczy tylko ikon Material i jest ignorowane dla typu ikony {{type}}.",
-	"import.err.iconValueEmpty": "Wartość ikony musi być niepustym ciągiem znaków.",
-	"import.err.iconValueTooLong": "Wartość ikony jest niezwykle długa ({{length}} znaków).",
-	"import.err.materialStyle": 'Styl ikony Material "{{value}}" nie jest jednym z: outlined, filled, rounded, sharp.',
-	"import.err.materialWeight": 'Grubość ikony Material "{{value}}" musi być liczbą całkowitą od 100 do 700, w krokach po 100.',
-	"import.warn.iconRecolorIgnored": "\"recolor\" dotyczy tylko własnych obrazów i jest ignorowane dla typu ikony {{type}}.",
-	"import.err.iconRecolorInvalid": "\"recolor\" musi być true lub false (otrzymano: \"{{value}}\").",
-	"import.err.colorInvalid": '"{{field}}" musi być kolorem szesnastkowym jak "#448aff" (otrzymano "{{value}}").',
-	"import.err.numberRange": '"{{field}}" musi być liczbą od {{min}} do {{max}} (otrzymano "{{value}}").',
-	"import.err.iconSizeRange": '"{{field}}" musi być liczbą od {{min}} do {{max}} (otrzymano "{{value}}").',
+	"import.err.iconTypeInvalid":
+		'Typ ikony "{{value}}" nie jest jednym z: {{types}}.',
+	"import.warn.iconFieldIgnored":
+		'"{{field}}" dotyczy tylko ikon Material i jest ignorowane dla typu ikony {{type}}.',
+	"import.err.iconValueEmpty":
+		"Wartość ikony musi być niepustym ciągiem znaków.",
+	"import.err.iconValueTooLong":
+		"Wartość ikony jest niezwykle długa ({{length}} znaków).",
+	"import.err.materialStyle":
+		'Styl ikony Material "{{value}}" nie jest jednym z: outlined, filled, rounded, sharp.',
+	"import.err.materialWeight":
+		'Grubość ikony Material "{{value}}" musi być liczbą całkowitą od 100 do 700, w krokach po 100.',
+	"import.warn.iconRecolorIgnored":
+		'"recolor" dotyczy tylko własnych obrazów i jest ignorowane dla typu ikony {{type}}.',
+	"import.err.iconRecolorInvalid":
+		'"recolor" musi być true lub false (otrzymano: "{{value}}").',
+	"import.err.colorInvalid":
+		'"{{field}}" musi być kolorem szesnastkowym jak "#448aff" (otrzymano "{{value}}").',
+	"import.err.numberRange":
+		'"{{field}}" musi być liczbą od {{min}} do {{max}} (otrzymano "{{value}}").',
+	"import.err.iconSizeRange":
+		'"{{field}}" musi być liczbą od {{min}} do {{max}} (otrzymano "{{value}}").',
 	"import.err.aliasesNotArray": '"aliases" musi być tablicą ciągów znaków.',
 	"import.err.aliasNotString": "Alias musi być ciągiem znaków.",
 	"import.err.aliasDup": 'Alias "{{value}}" jest zduplikowany w tym wpisie.',
-	"import.err.tooManyIds": "Za dużo ID ({{count}}); każdy callout może mieć maksymalnie {{max}} ID (podstawowe + aliasy).",
-	"import.err.metadataShape": '"metadata" musi być obiektem, którego wszystkie wartości są ciągami znaków.',
+	"import.err.tooManyIds":
+		"Za dużo ID ({{count}}); każdy callout może mieć maksymalnie {{max}} ID (podstawowe + aliasy).",
+	"import.err.metadataShape":
+		'"metadata" musi być obiektem, którego wszystkie wartości są ciągami znaków.',
 	"import.err.unknownFields": "Nieznane pola zignorowane: {{fields}}.",
-	"import.err.duplicateInFile": 'ID/alias "{{value}}" jest już używany przez wpis #{{first}} w tym pliku.',
-	"import.err.aliasConflict": 'Alias "{{value}}" jest już używany przez inny callout ("{{other}}") w twoim vault.',
-	"import.warn.defaultFoldedAutofix": '"defaultFolded" było true, gdy "foldable" było false; defaultFolded zostało zresetowane do false.',
-	"import.warn.imageMissing": "Ten Callout używa obrazu, którego nie ma w pliku ani w tym vault, więc wyświetli ikonę zastępczą, dopóki nie podasz nowego.",
+	"import.err.duplicateInFile":
+		'ID/alias "{{value}}" jest już używany przez wpis #{{first}} w tym pliku.',
+	"import.err.aliasConflict":
+		'Alias "{{value}}" jest już używany przez inny callout ("{{other}}") w twoim vault.',
+	"import.warn.defaultFoldedAutofix":
+		'"defaultFolded" było true, gdy "foldable" było false; defaultFolded zostało zresetowane do false.',
+	"import.warn.imageMissing":
+		"Ten Callout używa obrazu, którego nie ma w pliku ani w tym vault, więc wyświetli ikonę zastępczą, dopóki nie podasz nowego.",
 
 	"footer.tagline": "Masz uwagi, komentarze lub sugestie? Chętnie wysłucham!",
 	"footer.madeBy": "Stworzone przez Niv  •  ",

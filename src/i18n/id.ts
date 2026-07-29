@@ -10,18 +10,24 @@ export const id: Record<string, string> = {
 	"settings.fallbackTag": "Default",
 	"settings.fallbackTagAuto": "Default otomatis",
 	"settings.rescanVault": "Pindai ulang vault",
-	"settings.rescanVaultDesc": "Menemukan ID callout yang tidak dikenal dalam catatan dan menambahkannya sebagai baris fallback.",
+	"settings.rescanVaultDesc":
+		"Menemukan ID callout yang tidak dikenal dalam catatan dan menambahkannya sebagai baris fallback.",
 	"settings.rescanVaultHintAction": "Pindai sekarang",
-	"settings.rescanComplete": "Pemindaian ulang selesai: {{count}} callout baru ditambahkan.",
+	"settings.rescanComplete":
+		"Pemindaian ulang selesai: {{count}} callout baru ditambahkan.",
 	"replaceModal.deleteWithoutReplaceSuffix": "(kembali ke default)",
 
 	"firstRun.title": "Temukan callout yang ada di vault Anda?",
-	"firstRun.body": "Callout Studio dapat memindai vault Anda untuk menemukan callout yang sudah Anda gunakan, sehingga muncul di daftar pengaturan dan mengadopsi gaya fallback Anda.",
-	"firstRun.heavyVaultNote": "Vault Anda memiliki {{count}} file Markdown — pemindaian mungkin membutuhkan beberapa detik.",
-	"firstRun.laterHint": "Anda selalu dapat menjalankan ini nanti dari Pengaturan → Wawasan & pemeliharaan vault → Pindai ulang vault.",
+	"firstRun.body":
+		"Callout Studio dapat memindai vault Anda untuk menemukan callout yang sudah Anda gunakan, sehingga muncul di daftar pengaturan dan mengadopsi gaya fallback Anda.",
+	"firstRun.heavyVaultNote":
+		"Vault Anda memiliki {{count}} file Markdown — pemindaian mungkin membutuhkan beberapa detik.",
+	"firstRun.laterHint":
+		"Anda selalu dapat menjalankan ini nanti dari Pengaturan → Wawasan & pemeliharaan vault → Pindai ulang vault.",
 	"firstRun.scanNow": "Pindai sekarang",
 	"firstRun.noThanks": "Tidak, terima kasih",
-	"firstRun.autoScanComplete": "Callout Studio memindai vault Anda dan menambahkan {{count}} callout.",
+	"firstRun.autoScanComplete":
+		"Callout Studio memindai vault Anda dan menambahkan {{count}} callout.",
 	"firstRun.scanning": "Memindai",
 
 	"welcome.tooltip": "Tentang Callout Studio",
@@ -39,10 +45,14 @@ export const id: Record<string, string> = {
 		"Callout Studio masih punya banyak hal lain untuk ditawarkan! [Pelajari lebih lanjut]({{repoUrl}}).\n",
 
 	"deleteModal.title": 'Hapus callout "{{name}}"?',
-	"deleteModal.bodyInUse": "Callout ini muncul {{count}} kali di {{files}} file.",
-	"deleteModal.bodyInUseExplain": "Menghapus akan mengubah blok tersebut menjadi teks biasa — mereka akan kehilangan gaya dan header callout.",
-	"deleteModal.replaceHint": "Anda dapat menggantinya dengan callout lain, yang menjaga konten vault sebagai callout bergaya.",
-	"deleteModal.bodyUnused": '"{{name}}" tidak digunakan di catatan mana pun, tetapi merupakan callout kustom yang Anda buat. Menghapus akan menghapusnya dari daftar ini.',
+	"deleteModal.bodyInUse":
+		"Callout ini muncul {{count}} kali di {{files}} file.",
+	"deleteModal.bodyInUseExplain":
+		"Menghapus akan mengubah blok tersebut menjadi teks biasa — mereka akan kehilangan gaya dan header callout.",
+	"deleteModal.replaceHint":
+		"Anda dapat menggantinya dengan callout lain, yang menjaga konten vault sebagai callout bergaya.",
+	"deleteModal.bodyUnused":
+		'"{{name}}" tidak digunakan di catatan mana pun, tetapi merupakan callout kustom yang Anda buat. Menghapus akan menghapusnya dari daftar ini.',
 	"deleteModal.replaceInstead": "Ganti sebagai gantinya",
 	"deleteModal.deleteInUse": "Hapus (ubah ke teks biasa)",
 	"deleteModal.deleteUnused": "Hapus callout",
@@ -60,9 +70,12 @@ export const id: Record<string, string> = {
 	"settings.importExport": "Impor / ekspor",
 	"settings.import": "Impor",
 	"settings.export": "Ekspor",
-	"settings.importDesc": "Impor kemajuan Callout Studio Anda dari vault lain menggunakan file JSON.",
-	"settings.exportDesc": "Simpan semua tipe callout kustom Anda dalam format JSON.",
-	"settings.importConflictNotice": "{{count}} tipe callout diimpor; {{overwritten}} entri yang ada ditimpa.",
+	"settings.importDesc":
+		"Impor kemajuan Callout Studio Anda dari vault lain menggunakan file JSON.",
+	"settings.exportDesc":
+		"Simpan semua tipe callout kustom Anda dalam format JSON.",
+	"settings.importConflictNotice":
+		"{{count}} tipe callout diimpor; {{overwritten}} entri yang ada ditimpa.",
 
 	"settings.addNewCallout": "+ tambah callout",
 
@@ -78,7 +91,8 @@ export const id: Record<string, string> = {
 
 	"settings.colorSwatchAria": "Aksen: {{accent}} · Latar belakang: {{bg}}",
 	"settings.fallbackCallout": "Callout fallback default",
-	"settings.fallbackCalloutDesc": "Tipe callout yang tidak dikenal di vault Anda akan mewarisi gaya callout ini.",
+	"settings.fallbackCalloutDesc":
+		"Tipe callout yang tidak dikenal di vault Anda akan mewarisi gaya callout ini.",
 
 	"settings.globalStyle": "Gaya callout global",
 	"settings.border": "Batas",
@@ -112,46 +126,57 @@ export const id: Record<string, string> = {
 	"settings.deletePaletteConfirm":
 		'Hapus palet "{{name}}"?\nCallout yang menggunakan warna ini tidak terpengaruh.',
 	"settings.enableAutocomplete": "Aktifkan pelengkapan otomatis [!",
-	"settings.enableAutocompleteDesc": 'Menampilkan saran saat Anda mengetik "[!" di dalam blockquote di editor. Pilih tipe callout dari daftar untuk menyisipkan header callout lengkap.',
+	"settings.enableAutocompleteDesc":
+		'Menampilkan saran saat Anda mengetik "[!" di dalam blockquote di editor. Pilih tipe callout dari daftar untuk menyisipkan header callout lengkap.',
 
 	"settings.openHotkeys": "Pintasan Callout Studio",
-	"settings.openHotkeysDesc": "Membuka pengaturan pintasan Obsidian untuk perintah Callout Studio, di mana Anda dapat memilih pintasan sendiri untuk Buat tipe baru, Buka pengaturan, Hapus callout, dan Bungkus dalam callout. Tidak ada pintasan yang ditetapkan secara default.",
+	"settings.openHotkeysDesc":
+		"Membuka pengaturan pintasan Obsidian untuk perintah Callout Studio, di mana Anda dapat memilih pintasan sendiri untuk Buat tipe baru, Buka pengaturan, Hapus callout, dan Bungkus dalam callout. Tidak ada pintasan yang ditetapkan secara default.",
 	"settings.openHotkeysButton": "Buka pengaturan pintasan",
-
 
 	"settings.vaultMaintenance": "Wawasan & pemeliharaan vault",
 	"settings.vaultStats": "Statistik callout",
-	"settings.vaultStatsDesc": "Menghitung semua blok callout di catatan Markdown Anda dan mengelompokkannya berdasarkan tipe.",
+	"settings.vaultStatsDesc":
+		"Menghitung semua blok callout di catatan Markdown Anda dan mengelompokkannya berdasarkan tipe.",
 	"settings.vaultStatsButton": "Lihat statistik",
 	"settings.vaultStatsScanning": "Memindai",
 	"settings.resetAll": "Reset",
-	"settings.resetAllDesc": "Menghapus semua callout pengguna, mereset callout bawaan, gaya global (batas, skala font, bentuk), palet warna tersimpan, penyesuaian menu klik kanan, dan SVG Material yang diunduh.",
+	"settings.resetAllDesc":
+		"Menghapus semua callout pengguna, mereset callout bawaan, gaya global (batas, skala font, bentuk), palet warna tersimpan, penyesuaian menu klik kanan, dan SVG Material yang diunduh.",
 	"settings.resetAllButton": "Reset semua",
-	"settings.resetAllConfirm": "Ini akan menghapus semua callout kustom, mereset callout bawaan, gaya global, palet warna tersimpan, penyesuaian menu klik kanan, dan semua SVG Material yang di-cache. Tindakan ini tidak dapat dibatalkan. Apakah Anda yakin?",
+	"settings.resetAllConfirm":
+		"Ini akan menghapus semua callout kustom, mereset callout bawaan, gaya global, palet warna tersimpan, penyesuaian menu klik kanan, dan semua SVG Material yang di-cache. Tindakan ini tidak dapat dibatalkan. Apakah Anda yakin?",
 	"notice.resetAllDone": "Semua telah direset ke default.",
 
 	"notice.exported": "Callout diekspor ke callout-studio-export.json",
 	"notice.importedJSON": "{{count}} tipe callout diimpor dari JSON.",
 	"notice.importedSettings": "Pengaturan plugin diimpor.",
-	"notice.noNewJSON": "Tidak ada tipe callout baru yang diimpor (ID mungkin sudah ada).",
-	"notice.iconDownloadFailed": 'Gagal mengunduh ikon Material "{{name}}". Ikon ini mungkin tidak tersedia untuk gaya/ketebalan ini, atau koneksi Anda sedang offline.',
+	"notice.noNewJSON":
+		"Tidak ada tipe callout baru yang diimpor (ID mungkin sudah ada).",
+	"notice.iconDownloadFailed":
+		'Gagal mengunduh ikon Material "{{name}}". Ikon ini mungkin tidak tersedia untuk gaya/ketebalan ini, atau koneksi Anda sedang offline.',
 	"notice.nothingToWrap": "Tidak ada yang perlu dibungkus.",
 	"notice.cursorNotInsideCallout": "Kursor tidak berada di dalam callout.",
-	"notice.openHotkeysFailed": "Tidak dapat membuka pengaturan pintasan Obsidian.",
-	"notice.filterHotkeysFailed": "Pintasan Obsidian dibuka, tetapi filter Callout Studio tidak dapat diterapkan.",
+	"notice.openHotkeysFailed":
+		"Tidak dapat membuka pengaturan pintasan Obsidian.",
+	"notice.filterHotkeysFailed":
+		"Pintasan Obsidian dibuka, tetapi filter Callout Studio tidak dapat diterapkan.",
 
 	"editor.editCallout": "Edit callout",
 	"editor.newCallout": "Callout baru",
 	"editor.displayName": "Nama tampilan",
 	"editor.displayNameDesc": "Label yang dapat dibaca yang ditampilkan di UI",
-	"editor.displayNameBuiltIn": "Nama tampilan tidak dapat diubah untuk callout bawaan",
+	"editor.displayNameBuiltIn":
+		"Nama tampilan tidak dapat diubah untuk callout bawaan",
 	"editor.displayNamePlaceholder": "Callout saya",
 	"editor.calloutIds": "ID callout",
-	"editor.calloutIdsDesc": "Semua pengidentifikasi untuk callout ini. Spasi diperbolehkan.\nTekan Enter atau tombol + untuk menambahkan.",
+	"editor.calloutIdsDesc":
+		"Semua pengidentifikasi untuk callout ini. Spasi diperbolehkan.\nTekan Enter atau tombol + untuk menambahkan.",
 	"editor.calloutIdsPlaceholder": "Tambah ID",
 	"editor.addId": "Tambah ID",
 	"editor.idLinkedToName": "Terhubung ke nama tampilan",
-	"editor.idCannotDelete": "ID ini terhubung ke nama tampilan dan tidak dapat dihapus — edit nama untuk mengubahnya",
+	"editor.idCannotDelete":
+		"ID ini terhubung ke nama tampilan dan tidak dapat dihapus — edit nama untuk mengubahnya",
 	"editor.icon": "Ikon",
 	"editor.livePreview": "Pratinjau langsung",
 	"editor.iconAdjustment": "Penyesuaian ikon",
@@ -165,9 +190,11 @@ export const id: Record<string, string> = {
 	"editor.paletteGroupPresets": "Preset warna",
 	"editor.paletteGroupCustom": "Kustom",
 	"editor.paletteNewColor": "Warna baru…",
-	"editor.contrastWarning": "Kontras rendah terhadap latar belakang — mungkin sulit dibaca",
+	"editor.contrastWarning":
+		"Kontras rendah terhadap latar belakang — mungkin sulit dibaca",
 	"editor.foldable": "Dapat dilipat",
-	"editor.foldableDesc": "Pilih apakah callout dapat dilipat dan status default mana yang diterapkan di seluruh vault.",
+	"editor.foldableDesc":
+		"Pilih apakah callout dapat dilipat dan status default mana yang diterapkan di seluruh vault.",
 	"editor.foldOff": "Mati",
 	"editor.foldOpen": "Terbuka secara default",
 	"editor.foldClosed": "Tertutup secara default",
@@ -180,11 +207,15 @@ export const id: Record<string, string> = {
 	"editor.idEmpty": "Diperlukan setidaknya satu ID",
 	"editor.idExists": "Callout dengan ID ini sudah ada",
 	"editor.idConflict": "ID ini bertentangan dengan callout yang ada",
-	"editor.idDashConflict": 'Obsidian menulis spasi sebagai tanda hubung, sehingga ID ini bertentangan dengan "{{other}}"',
+	"editor.idDashConflict":
+		'Obsidian menulis spasi sebagai tanda hubung, sehingga ID ini bertentangan dengan "{{other}}"',
 	"editor.untitledCallout": "Callout Tanpa Judul",
-	"editor.loremIpsum": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-	"editor.loremIpsumShort": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-	"editor.sampleInlineText": "Berikut adalah pil [!{id}] sebaris di dalam sebuah paragraf.",
+	"editor.loremIpsum":
+		"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+	"editor.loremIpsumShort":
+		"Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+	"editor.sampleInlineText":
+		"Berikut adalah pil [!{id}] sebaris di dalam sebuah paragraf.",
 	"editor.previewReadOnly": "Pratinjau langsung tidak dapat diedit",
 
 	// Palette editor modal
@@ -194,10 +225,12 @@ export const id: Record<string, string> = {
 	"palette.namePlaceholder": "Palet saya",
 	"palette.nameExists": "Palet dengan nama ini sudah ada",
 	"palette.baseColor": "Warna dasar",
-	"palette.baseColorHint": "Kami akan otomatis menyesuaikan warna latar belakang dengannya. Jika mau, Anda dapat mengaturnya secara terpisah dengan {{link}}.",
+	"palette.baseColorHint":
+		"Kami akan otomatis menyesuaikan warna latar belakang dengannya. Jika mau, Anda dapat mengaturnya secara terpisah dengan {{link}}.",
 	"palette.baseColorHintLink": "klik di sini",
 	"palette.advancedColors": "Warna",
-	"palette.advancedColorsHint": "Mengedit warna untuk mode {{mode}} - mode lainnya diperbarui secara otomatis. Ganti tema Obsidian untuk memeriksanya.",
+	"palette.advancedColorsHint":
+		"Mengedit warna untuk mode {{mode}} - mode lainnya diperbarui secara otomatis. Ganti tema Obsidian untuk memeriksanya.",
 	"palette.revertHint": "Lebih suka satu warna dasar saja? {{link}}.",
 	"palette.revertHintLink": "Kembalikan",
 	"palette.lightMode": "Terang",
@@ -245,11 +278,22 @@ export const id: Record<string, string> = {
 	"iconPicker.searchLucide": "cari ikon Lucide",
 	"iconPicker.searchTabler": "cari ikon Tabler",
 	"iconPicker.tablerStyle": "Gaya ikon",
-	"iconPicker.tablerStyleOutline": "Garis luar",
-	"iconPicker.tablerStyleFilled": "Penuh",
+	"iconPicker.tablerStyleOutline": "Garis luar (Outline)",
+	"iconPicker.tablerStyleFilled": "Penuh (Filled)",
 	"iconPicker.loadMore": "Muat lebih banyak",
 	"iconPicker.materialStyle": "Gaya ikon",
+	"iconPicker.materialStyleOutlined": "Garis luar (Outlined)",
+	"iconPicker.materialStyleFilled": "Terisi (Filled)",
+	"iconPicker.materialStyleRounded": "Membulat (Rounded)",
+	"iconPicker.materialStyleSharp": "Tajam (Sharp)",
 	"iconPicker.materialWeight": "Ketebalan ikon",
+	"iconPicker.materialWeight100": "Tipis (Thin)",
+	"iconPicker.materialWeight200": "Sangat ringan (Extra Light)",
+	"iconPicker.materialWeight300": "Ringan (Light)",
+	"iconPicker.materialWeight400": "Normal (Regular)",
+	"iconPicker.materialWeight500": "Sedang (Medium)",
+	"iconPicker.materialWeight600": "Semi tebal (Semi Bold)",
+	"iconPicker.materialWeight700": "Tebal (Bold)",
 	"iconPicker.searchMaterial": "cari ikon Material",
 	"iconPicker.searchEmoji": "Cari emoji",
 	"iconPicker.skinTone": "Warna kulit",
@@ -261,34 +305,43 @@ export const id: Record<string, string> = {
 	"iconPicker.fa": "Font Awesome",
 	"iconPicker.searchFa": "Cari Font Awesome",
 	"iconPicker.faStyle": "Gaya ikon",
-	"iconPicker.faStyleSolid": "Solid",
-	"iconPicker.faStyleRegular": "Regular",
-	"iconPicker.faStyleBrands": "Merek",
+	"iconPicker.faStyleSolid": "Terisi (Solid)",
+	"iconPicker.faStyleRegular": "Biasa (Regular)",
+	"iconPicker.faStyleBrands": "Merek (Brands)",
 	"iconPicker.rpgAwesome": "RPG Awesome",
 	"iconPicker.searchRpgAwesome": "Cari RPG Awesome",
 	"iconPicker.image": "Gambar Anda",
 	"iconPicker.searchImage": "Cari gambar Anda",
-	"iconPicker.imageTooLarge": "{{name}} terlalu besar. Gambar harus di bawah 5 MB.",
-	"iconPicker.imageUnsupported": "{{name}} bukan format gambar yang didukung. Gunakan SVG, PNG, JPEG, atau WebP.",
-	"iconPicker.imageInvalidSvg": "{{name}} tidak dapat dibaca sebagai SVG aman, sehingga tidak ditambahkan.",
-	"iconPicker.imageDecodeFailed": "{{name}} tidak dapat dibaca sebagai gambar.",
-	"iconPicker.imageDuplicate": "{{name}} sudah ada di gambar Anda. Ganti nama file atau hapus gambar yang sudah ada.",
+	"iconPicker.imageTooLarge":
+		"{{name}} terlalu besar. Gambar harus di bawah 5 MB.",
+	"iconPicker.imageUnsupported":
+		"{{name}} bukan format gambar yang didukung. Gunakan SVG, PNG, JPEG, atau WebP.",
+	"iconPicker.imageInvalidSvg":
+		"{{name}} tidak dapat dibaca sebagai SVG aman, sehingga tidak ditambahkan.",
+	"iconPicker.imageDecodeFailed":
+		"{{name}} tidak dapat dibaca sebagai gambar.",
+	"iconPicker.imageDuplicate":
+		"{{name}} sudah ada di gambar Anda. Ganti nama file atau hapus gambar yang sudah ada.",
 	"iconPicker.imageAdd": "Tambah gambar",
-	"iconPicker.imageEmpty": "Belum ada gambar. Tambahkan file SVG, PNG, JPEG, atau WebP dari komputer Anda, atau seret ke sini.",
+	"iconPicker.imageEmpty":
+		"Belum ada gambar. Tambahkan file SVG, PNG, JPEG, atau WebP dari komputer Anda, atau seret ke sini.",
 	"iconPicker.imageDelete": "Hapus",
 	"iconPicker.imageDeleteConfirm": "Hapus “{{name}}”?",
-	"iconPicker.imageDeleteInUse": "{{count}} callout menggunakan gambar ini. Mereka akan menampilkan ikon placeholder hingga Anda memberikan yang baru.",
+	"iconPicker.imageDeleteInUse":
+		"{{count}} callout menggunakan gambar ini. Mereka akan menampilkan ikon placeholder hingga Anda memberikan yang baru.",
 	"iconPicker.imageRecolor": "Ikuti warna Callout",
 	"iconPicker.allSources": "Semua sumber",
 	"iconPicker.searchAllSources": "Cari semua sumber ikon",
-	"iconPicker.sourcesNotDownloaded": "Belum disertakan: {{names}}. Pilih sumber di atas untuk mengunduhnya.",
+	"iconPicker.sourcesNotDownloaded":
+		"Belum disertakan: {{names}}. Pilih sumber di atas untuk mengunduhnya.",
 	"iconPicker.chooseSource": "Pilih sumber",
 	"iconPicker.sourceGroup": "{{name}} · {{count}}",
 
 	// Source menu — what each library holds, in a few words
 	"iconPicker.descAllSources": "cari semua pustaka sekaligus",
 	"iconPicker.descLucide": "set milik Obsidian, selalu offline",
-	"iconPicker.descTabler": "ikon UI yang bersih dan konsisten, garis luar dan penuh",
+	"iconPicker.descTabler":
+		"ikon UI yang bersih dan konsisten, garis luar dan penuh",
 	"iconPicker.descMaterial": "set Google, empat gaya dan tujuh ketebalan",
 	"iconPicker.descEmoji": "glyph berwarna, setiap warna kulit",
 	"iconPicker.descOcticons": "ikon antarmuka GitHub",
@@ -296,22 +349,142 @@ export const id: Record<string, string> = {
 	"iconPicker.descRpgAwesome": "ikon fantasi dan permainan meja",
 	"iconPicker.descImage": "gambar yang Anda tambahkan dari komputer",
 
+	// Icon picker — category filter dropdown labels
+	"iconPicker.cat.Accessibility": "Aksesibilitas",
+	"iconPicker.cat.Actions": "Tindakan",
+	"iconPicker.cat.Activities": "Aktivitas",
+	"iconPicker.cat.Alert": "Peringatan",
+	"iconPicker.cat.Alphabet": "Alfabet",
+	"iconPicker.cat.Android": "Android",
+	"iconPicker.cat.Animals": "Hewan",
+	"iconPicker.cat.Arrows": "Panah",
+	"iconPicker.cat.Astronomy": "Astronomi",
+	"iconPicker.cat.Audio&Video": "Audio & Video",
+	"iconPicker.cat.Automotive": "Otomotif",
+	"iconPicker.cat.Badges": "Lencana",
+	"iconPicker.cat.Brand": "Merek",
+	"iconPicker.cat.Buildings": "Gedung",
+	"iconPicker.cat.Business": "Bisnis",
+	"iconPicker.cat.Camping": "Berkemah",
+	"iconPicker.cat.Charity": "Amal",
+	"iconPicker.cat.Charts": "Grafik",
+	"iconPicker.cat.Charts + Diagrams": "Grafik & Diagram",
+	"iconPicker.cat.Childhood": "Masa Kecil",
+	"iconPicker.cat.Clothing + Fashion": "Pakaian & Mode",
+	"iconPicker.cat.Coding": "Pemrograman",
+	"iconPicker.cat.Communicate": "Berkomunikasi",
+	"iconPicker.cat.Communication": "Komunikasi",
+	"iconPicker.cat.Computers": "Komputer",
+	"iconPicker.cat.Connectivity": "Konektivitas",
+	"iconPicker.cat.Construction": "Konstruksi",
+	"iconPicker.cat.Currencies": "Mata Uang",
+	"iconPicker.cat.Database": "Basis Data",
+	"iconPicker.cat.Design": "Desain",
+	"iconPicker.cat.Development": "Pengembangan",
+	"iconPicker.cat.Devices": "Perangkat",
+	"iconPicker.cat.Devices + Hardware": "Perangkat & Hardware",
+	"iconPicker.cat.Disaster + Crisis": "Bencana & Krisis",
+	"iconPicker.cat.Document": "Dokumen",
+	"iconPicker.cat.E-commerce": "E-commerce",
+	"iconPicker.cat.Editing": "Penyuntingan",
+	"iconPicker.cat.Education": "Pendidikan",
+	"iconPicker.cat.Electrical": "Listrik",
+	"iconPicker.cat.Emoji": "Emoji",
+	"iconPicker.cat.Energy": "Energi",
+	"iconPicker.cat.Extensions": "Ekstensi",
+	"iconPicker.cat.Files": "Berkas",
+	"iconPicker.cat.Film + Video": "Film & Video",
+	"iconPicker.cat.Food": "Makanan",
+	"iconPicker.cat.Food + Beverage": "Makanan & Minuman",
+	"iconPicker.cat.Fruits + Vegetables": "Buah & Sayuran",
+	"iconPicker.cat.Games": "Permainan",
+	"iconPicker.cat.Gaming": "Gaming",
+	"iconPicker.cat.Gender": "Jenis Kelamin",
+	"iconPicker.cat.Genders": "Jenis Kelamin",
+	"iconPicker.cat.Gestures": "Gerakan",
+	"iconPicker.cat.Halloween": "Halloween",
+	"iconPicker.cat.Hands": "Tangan",
+	"iconPicker.cat.Hardware": "Hardware",
+	"iconPicker.cat.Health": "Kesehatan",
+	"iconPicker.cat.Holidays": "Hari Libur",
+	"iconPicker.cat.Home": "Rumah",
+	"iconPicker.cat.Household": "Rumah Tangga",
+	"iconPicker.cat.Humanitarian": "Kemanusiaan",
+	"iconPicker.cat.Images": "Gambar",
+	"iconPicker.cat.Laundry": "Cucian",
+	"iconPicker.cat.Letters": "Huruf",
+	"iconPicker.cat.Logic": "Logika",
+	"iconPicker.cat.Logistics": "Logistik",
+	"iconPicker.cat.Map": "Peta",
+	"iconPicker.cat.Maps": "Peta",
+	"iconPicker.cat.Maritime": "Maritim",
+	"iconPicker.cat.Marketing": "Pemasaran",
+	"iconPicker.cat.Math": "Matematika",
+	"iconPicker.cat.Mathematics": "Matematika",
+	"iconPicker.cat.Media": "Media",
+	"iconPicker.cat.Media Playback": "Pemutaran Media",
+	"iconPicker.cat.Medical + Health": "Medis & Kesehatan",
+	"iconPicker.cat.Money": "Uang",
+	"iconPicker.cat.Mood": "Suasana Hati",
+	"iconPicker.cat.Moving": "Pindahan",
+	"iconPicker.cat.Music + Audio": "Musik & Audio",
+	"iconPicker.cat.Nature": "Alam",
+	"iconPicker.cat.Numbers": "Angka",
+	"iconPicker.cat.Photography": "Fotografi",
+	"iconPicker.cat.Photos + Images": "Foto & Gambar",
+	"iconPicker.cat.Political": "Politik",
+	"iconPicker.cat.Privacy": "Privasi",
+	"iconPicker.cat.Punctuation + Symbols": "Tanda Baca & Simbol",
+	"iconPicker.cat.Religion": "Agama",
+	"iconPicker.cat.Science": "Ilmu Pengetahuan",
+	"iconPicker.cat.Science Fiction": "Fiksi Ilmiah",
+	"iconPicker.cat.Security": "Keamanan",
+	"iconPicker.cat.Shapes": "Bentuk",
+	"iconPicker.cat.Shopping": "Belanja",
+	"iconPicker.cat.Social": "Media Sosial",
+	"iconPicker.cat.Spinners": "Spinner",
+	"iconPicker.cat.Sport": "Olahraga",
+	"iconPicker.cat.Sports + Fitness": "Olahraga & Kebugaran",
+	"iconPicker.cat.Symbols": "Simbol",
+	"iconPicker.cat.System": "Sistem",
+	"iconPicker.cat.Text": "Teks",
+	"iconPicker.cat.Text Formatting": "Pemformatan Teks",
+	"iconPicker.cat.Time": "Waktu",
+	"iconPicker.cat.Toggle": "Sakelar",
+	"iconPicker.cat.Transit": "Transit",
+	"iconPicker.cat.Transportation": "Transportasi",
+	"iconPicker.cat.Travel": "Perjalanan",
+	"iconPicker.cat.Travel + Hotel": "Perjalanan & Hotel",
+	"iconPicker.cat.UI actions": "Tindakan UI",
+	"iconPicker.cat.Users + People": "Pengguna & Orang",
+	"iconPicker.cat.Vehicles": "Kendaraan",
+	"iconPicker.cat.Version control": "Kontrol Versi",
+	"iconPicker.cat.Weather": "Cuaca",
+	"iconPicker.cat.Writing": "Penulisan",
+	"iconPicker.cat.Zodiac": "Zodiak",
+
 	// Downloadable icon packs
 	"iconPack.downloadTitle": "{{name}} belum diunduh",
 	"iconPack.downloadDetail": "{{count}} ikon · {{size}} · unduhan sekali",
 	"iconPack.download": "Unduh",
 	"iconPack.downloading": "Mengunduh {{name}}…",
-	"iconPack.downloadFailed": "Tidak dapat mengunduh {{name}}. Periksa koneksi Anda dan coba lagi.",
+	"iconPack.downloadFailed":
+		"Tidak dapat mengunduh {{name}}. Periksa koneksi Anda dan coba lagi.",
 	"iconPack.retry": "Coba lagi",
-	"iconPack.faBrandsNotice": "Ikon merek adalah merek dagang dari pemiliknya masing-masing. Penyertaannya tidak menunjukkan dukungan. Gunakan hanya untuk mewakili perusahaan, produk, atau layanan yang dimaksud.",
-	"iconPack.artworkRestored": "Karya seni ikon untuk {{names}} telah diunduh.",
-	"iconPack.diskWriteFailed": "Callout Studio tidak dapat menyimpan paket ikon ke disk, sehingga perlu diunduh ulang lain kali. Ikon yang Anda pilih tetap tersimpan dengan pengaturan Anda.",
+	"iconPack.faBrandsNotice":
+		"Ikon merek adalah merek dagang dari pemiliknya masing-masing. Penyertaannya tidak menunjukkan dukungan. Gunakan hanya untuk mewakili perusahaan, produk, atau layanan yang dimaksud.",
+	"iconPack.artworkRestored":
+		"Karya seni ikon untuk {{names}} telah diunduh.",
+	"iconPack.diskWriteFailed":
+		"Callout Studio tidak dapat menyimpan paket ikon ke disk, sehingga perlu diunduh ulang lain kali. Ikon yang Anda pilih tetap tersimpan dengan pengaturan Anda.",
 
 	// Icon licences & credits
 	"credits.title": "Lisensi ikon dan kredit",
-	"credits.intro": "Callout Studio menggunakan beberapa pustaka ikon terbuka. Lisensinya direproduksi di bawah, bersama dengan apa yang diubah untuk menggunakannya di sini.",
+	"credits.intro":
+		"Callout Studio menggunakan beberapa pustaka ikon terbuka. Lisensinya direproduksi di bawah, bersama dengan apa yang diubah untuk menggunakannya di sini.",
 	"credits.fullNotices": "Pemberitahuan pihak ketiga lengkap",
-	"credits.pluginLicense": "Kode milik Callout Studio sendiri berlisensi 0BSD; pustaka ikon mempertahankan lisensinya sendiri.",
+	"credits.pluginLicense":
+		"Kode milik Callout Studio sendiri berlisensi 0BSD; pustaka ikon mempertahankan lisensinya sendiri.",
 
 	"contextMenu.editCallout": "Edit pengaturan callout",
 	"contextMenu.copyMarkdown": "Salin Markdown callout",
@@ -326,10 +499,14 @@ export const id: Record<string, string> = {
 	"heading.toggleFold": "Alihkan lipatan",
 
 	"settings.globalSettings": "Pengaturan global",
-	"settings.globalSettingsDesc": "Sesuaikan tampilan setiap tipe callout di seluruh vault Anda.",
-	"settings.globalSettingsRegularDesc": "Tambahkan token callout ke blockquote (mis., `> [!type]`) untuk menampilkan kotak callout native Obsidian. Anda dapat menyesuaikan batas, radius, skala font, dan perataannya.",
-	"settings.globalSettingsHeadingDesc": "Tambahkan token callout tepat setelah tanda pagar heading (mis., `## [!type]`) untuk menampilkannya sebagai heading callout bergaya. Anda dapat menyesuaikan batas, bentuk, dan jarak vertikalnya.",
-	"settings.globalSettingsInlineDesc": "Tambahkan token callout di mana saja di dalam baris teks (mis., `[!type]`) untuk menampilkannya sebagai pil sebaris kecil. Anda dapat menyesuaikan batas dan bentuknya.",
+	"settings.globalSettingsDesc":
+		"Sesuaikan tampilan setiap tipe callout di seluruh vault Anda.",
+	"settings.globalSettingsRegularDesc":
+		"Tambahkan token callout ke blockquote (mis., `> [!type]`) untuk menampilkan kotak callout native Obsidian. Anda dapat menyesuaikan batas, radius, skala font, dan perataannya.",
+	"settings.globalSettingsHeadingDesc":
+		"Tambahkan token callout tepat setelah tanda pagar heading (mis., `## [!type]`) untuk menampilkannya sebagai heading callout bergaya. Anda dapat menyesuaikan batas, bentuk, dan jarak vertikalnya.",
+	"settings.globalSettingsInlineDesc":
+		"Tambahkan token callout di mana saja di dalam baris teks (mis., `[!type]`) untuk menampilkannya sebagai pil sebaris kecil. Anda dapat menyesuaikan batas dan bentuknya.",
 	"settings.globalSettingsCustomize": "Sesuaikan",
 
 	"settings.calloutTypeRegular": "Callout reguler",
@@ -337,10 +514,12 @@ export const id: Record<string, string> = {
 	"settings.calloutTypeInline": "Callout sebaris",
 
 	"settings.customizeMenu": "Sesuaikan item menu",
-	"settings.customizeMenuDesc": "Pilih tindakan klik kanan mana yang muncul untuk setiap tipe callout dan atur ulang urutannya. Berfungsi di mode sumber dan Pratinjau Langsung.",
+	"settings.customizeMenuDesc":
+		"Pilih tindakan klik kanan mana yang muncul untuk setiap tipe callout dan atur ulang urutannya. Berfungsi di mode sumber dan Pratinjau Langsung.",
 	"settings.customizeMenuButton": "Sesuaikan item menu",
 	"menuCustomize.title": "Sesuaikan menu klik kanan",
-	"menuCustomize.desc": "Aktifkan atau nonaktifkan tindakan dan seret gagang untuk mengatur ulang urutannya. Perubahan disimpan secara otomatis.",
+	"menuCustomize.desc":
+		"Aktifkan atau nonaktifkan tindakan dan seret gagang untuk mengatur ulang urutannya. Perubahan disimpan secara otomatis.",
 	"menuCustomize.regular": "Callout reguler",
 	"menuCustomize.heading": "Callout heading",
 	"menuCustomize.inline": "Callout sebaris",
@@ -356,20 +535,28 @@ export const id: Record<string, string> = {
 	"confirm.ok": "Hapus",
 	"confirm.cancel": "Batal",
 
-	"vault.filesUpdated": "{{count}} referensi callout diperbarui di file vault.",
-	"vault.idsUpdated": "{{count}} ID callout diperbarui di file vault: {{oldIds}} → {{newId}}",
-	"vault.titlesUpdated": "{{count}} judul callout diperbarui di file vault: {{oldTitle}} → {{newTitle}}",
+	"vault.filesUpdated":
+		"{{count}} referensi callout diperbarui di file vault.",
+	"vault.idsUpdated":
+		"{{count}} ID callout diperbarui di file vault: {{oldIds}} → {{newId}}",
+	"vault.titlesUpdated":
+		"{{count}} judul callout diperbarui di file vault: {{oldTitle}} → {{newTitle}}",
 	"vault.replaceWith": "Ganti dengan:",
 	"vault.deleteWithout": "Hapus tanpa mengganti",
 	"vault.confirmDelete": "Konfirmasi",
 	"vault.confirmReplace": "Ganti",
-	"vault.replacePromptInUse": '"{{name}}" digunakan {{count}} kali di {{files}} file. Pilih callout untuk menggantikannya:',
+	"vault.replacePromptInUse":
+		'"{{name}}" digunakan {{count}} kali di {{files}} file. Pilih callout untuk menggantikannya:',
 	"vault.replacePromptUnused": 'Pilih callout untuk mengganti "{{name}}":',
-	"vault.noReplacementAvailable": "Tidak ada callout lain yang tersedia untuk menggantikan ini.",
-	"vault.convertedToPlainText": "{{blocks}} blok callout di {{files}} file diubah ke teks biasa.",
-	"vault.resetAliasWarning": "{{count}} referensi di {{files}} file menggunakan alias kustom: {{aliases}}. Ini akan berhenti berfungsi setelah reset. Lanjutkan?",
+	"vault.noReplacementAvailable":
+		"Tidak ada callout lain yang tersedia untuk menggantikan ini.",
+	"vault.convertedToPlainText":
+		"{{blocks}} blok callout di {{files}} file diubah ke teks biasa.",
+	"vault.resetAliasWarning":
+		"{{count}} referensi di {{files}} file menggunakan alias kustom: {{aliases}}. Ini akan berhenti berfungsi setelah reset. Lanjutkan?",
 	"vault.resetConfirm": "Reset",
-	"vault.resetAllInUse": "⚠ {{count}} referensi callout di {{files}} file menggunakan tipe callout kustom yang akan dihapus.",
+	"vault.resetAllInUse":
+		"⚠ {{count}} referensi callout di {{files}} file menggunakan tipe callout kustom yang akan dihapus.",
 
 	"vaultStats.title": "Statistik callout",
 	"vaultStats.totalCallouts": "Total callout",
@@ -392,47 +579,77 @@ export const id: Record<string, string> = {
 	"vaultStats.close": "Tutup",
 
 	"import.title": "Masalah impor",
-	"import.reportLeadIn": "Sepertinya file yang Anda impor telah dimodifikasi. Berikut daftar masalahnya:",
-	"import.reportLeadInFatal": "File ini tidak terlihat seperti ekspor Callout Studio. Tidak dapat diimpor:",
+	"import.reportLeadIn":
+		"Sepertinya file yang Anda impor telah dimodifikasi. Berikut daftar masalahnya:",
+	"import.reportLeadInFatal":
+		"File ini tidak terlihat seperti ekspor Callout Studio. Tidak dapat diimpor:",
 	"import.entryHeading": "Entri {{index}} — {{label}}",
-	"import.summary": "{{valid}} dari {{total}} entri valid · {{issues}} masalah ditemukan.",
+	"import.summary":
+		"{{valid}} dari {{total}} entri valid · {{issues}} masalah ditemukan.",
 	"import.btnCancel": "Batal",
 	"import.btnImportValid": "Impor yang valid saja ({{count}})",
-	"import.err.notRecognized": "File tidak dikenali: harus berupa array definisi callout atau ekspor Callout Studio.",
-	"import.warn.settingsIgnored": "Blok pengaturan bukan objek yang valid dan diabaikan.",
-	"import.warn.invalidGradient": "Gradien latar belakang tidak valid dan diabaikan.",
-	"import.err.parseFailed": "File bukan JSON yang valid dan tidak dapat diurai.",
+	"import.err.notRecognized":
+		"File tidak dikenali: harus berupa array definisi callout atau ekspor Callout Studio.",
+	"import.warn.settingsIgnored":
+		"Blok pengaturan bukan objek yang valid dan diabaikan.",
+	"import.warn.invalidGradient":
+		"Gradien latar belakang tidak valid dan diabaikan.",
+	"import.err.parseFailed":
+		"File bukan JSON yang valid dan tidak dapat diurai.",
 	"import.err.entryNotObject": "Entri harus berupa objek.",
-	"import.err.requiredMissing": 'Bidang yang diperlukan "{{field}}" hilang atau memiliki tipe yang salah.',
+	"import.err.requiredMissing":
+		'Bidang yang diperlukan "{{field}}" hilang atau memiliki tipe yang salah.',
 	"import.err.idEmpty": "ID tidak boleh kosong.",
-	"import.err.idTooLong": 'ID "{{value}}" memiliki {{length}} karakter; maksimum adalah {{max}}.',
-	"import.err.idBadChar": 'ID "{{value}}" mengandung karakter tidak valid ("|", "[", "]", tab, dan baris baru tidak diizinkan).',
+	"import.err.idTooLong":
+		'ID "{{value}}" memiliki {{length}} karakter; maksimum adalah {{max}}.',
+	"import.err.idBadChar":
+		'ID "{{value}}" mengandung karakter tidak valid ("|", "[", "]", tab, dan baris baru tidak diizinkan).',
 	"import.err.displayNameEmpty": "Nama tampilan tidak boleh kosong.",
-	"import.err.displayNameTooLong": "Nama tampilan memiliki {{length}} karakter; maksimum adalah {{max}}.",
-	"import.err.boolField": '"{{field}}" harus berupa boolean (true atau false).',
+	"import.err.displayNameTooLong":
+		"Nama tampilan memiliki {{length}} karakter; maksimum adalah {{max}}.",
+	"import.err.boolField":
+		'"{{field}}" harus berupa boolean (true atau false).',
 	"import.err.iconNotObject": "Ikon harus berupa objek.",
-	"import.err.iconTypeInvalid": "Tipe ikon \"{{value}}\" bukan salah satu dari: {{types}}.",
-	"import.warn.iconFieldIgnored": "\"{{field}}\" hanya berlaku untuk ikon Material dan diabaikan untuk tipe ikon {{type}}.",
-	"import.err.iconValueEmpty": "Nilai ikon harus berupa string yang tidak kosong.",
-	"import.err.iconValueTooLong": "Nilai ikon sangat panjang ({{length}} karakter).",
-	"import.err.materialStyle": 'Gaya ikon Material "{{value}}" bukan salah satu dari: outlined, filled, rounded, sharp.',
-	"import.err.materialWeight": 'Ketebalan ikon Material "{{value}}" harus berupa bilangan bulat antara 100 dan 700, dengan langkah 100.',
-	"import.warn.iconRecolorIgnored": "\"recolor\" hanya berlaku untuk gambar Anda sendiri dan diabaikan untuk tipe ikon {{type}}.",
-	"import.err.iconRecolorInvalid": "\"recolor\" harus true atau false (mendapat \"{{value}}\").",
-	"import.err.colorInvalid": '"{{field}}" harus berupa warna heksadesimal seperti "#448aff" (diterima "{{value}}").',
-	"import.err.numberRange": '"{{field}}" harus berupa angka antara {{min}} dan {{max}} (diterima "{{value}}").',
-	"import.err.iconSizeRange": '"{{field}}" harus berupa angka antara {{min}} dan {{max}} (diterima "{{value}}").',
+	"import.err.iconTypeInvalid":
+		'Tipe ikon "{{value}}" bukan salah satu dari: {{types}}.',
+	"import.warn.iconFieldIgnored":
+		'"{{field}}" hanya berlaku untuk ikon Material dan diabaikan untuk tipe ikon {{type}}.',
+	"import.err.iconValueEmpty":
+		"Nilai ikon harus berupa string yang tidak kosong.",
+	"import.err.iconValueTooLong":
+		"Nilai ikon sangat panjang ({{length}} karakter).",
+	"import.err.materialStyle":
+		'Gaya ikon Material "{{value}}" bukan salah satu dari: outlined, filled, rounded, sharp.',
+	"import.err.materialWeight":
+		'Ketebalan ikon Material "{{value}}" harus berupa bilangan bulat antara 100 dan 700, dengan langkah 100.',
+	"import.warn.iconRecolorIgnored":
+		'"recolor" hanya berlaku untuk gambar Anda sendiri dan diabaikan untuk tipe ikon {{type}}.',
+	"import.err.iconRecolorInvalid":
+		'"recolor" harus true atau false (mendapat "{{value}}").',
+	"import.err.colorInvalid":
+		'"{{field}}" harus berupa warna heksadesimal seperti "#448aff" (diterima "{{value}}").',
+	"import.err.numberRange":
+		'"{{field}}" harus berupa angka antara {{min}} dan {{max}} (diterima "{{value}}").',
+	"import.err.iconSizeRange":
+		'"{{field}}" harus berupa angka antara {{min}} dan {{max}} (diterima "{{value}}").',
 	"import.err.aliasesNotArray": '"aliases" harus berupa array string.',
 	"import.err.aliasNotString": "Alias harus berupa string.",
 	"import.err.aliasDup": 'Alias "{{value}}" duplikat dalam entri ini.',
-	"import.err.tooManyIds": "Terlalu banyak ID ({{count}}); setiap callout dapat memiliki maksimal {{max}} ID (utama + alias).",
-	"import.err.metadataShape": '"metadata" harus berupa objek yang semua nilainya adalah string.',
+	"import.err.tooManyIds":
+		"Terlalu banyak ID ({{count}}); setiap callout dapat memiliki maksimal {{max}} ID (utama + alias).",
+	"import.err.metadataShape":
+		'"metadata" harus berupa objek yang semua nilainya adalah string.',
 	"import.err.unknownFields": "Bidang tidak dikenal diabaikan: {{fields}}.",
-	"import.err.duplicateInFile": 'ID/alias "{{value}}" sudah digunakan oleh entri #{{first}} dalam file ini.',
-	"import.err.aliasConflict": 'Alias "{{value}}" sudah digunakan oleh callout lain ("{{other}}") di vault Anda.',
-	"import.warn.defaultFoldedAutofix": '"defaultFolded" adalah true sementara "foldable" adalah false; defaultFolded direset ke false.',
-	"import.warn.imageMissing": "Callout ini menggunakan gambar yang tidak ada dalam file dan tidak ada dalam vault ini, sehingga akan menampilkan ikon placeholder hingga Anda memberikan yang baru.",
+	"import.err.duplicateInFile":
+		'ID/alias "{{value}}" sudah digunakan oleh entri #{{first}} dalam file ini.',
+	"import.err.aliasConflict":
+		'Alias "{{value}}" sudah digunakan oleh callout lain ("{{other}}") di vault Anda.',
+	"import.warn.defaultFoldedAutofix":
+		'"defaultFolded" adalah true sementara "foldable" adalah false; defaultFolded direset ke false.',
+	"import.warn.imageMissing":
+		"Callout ini menggunakan gambar yang tidak ada dalam file dan tidak ada dalam vault ini, sehingga akan menampilkan ikon placeholder hingga Anda memberikan yang baru.",
 
-	"footer.tagline": "Ada umpan balik, komentar, atau saran? Saya ingin mendengarnya!",
+	"footer.tagline":
+		"Ada umpan balik, komentar, atau saran? Saya ingin mendengarnya!",
 	"footer.madeBy": "Dibuat oleh Niv  •  ",
 };

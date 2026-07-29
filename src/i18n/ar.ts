@@ -10,18 +10,24 @@ export const ar: Record<string, string> = {
 	"settings.fallbackTag": "افتراضي",
 	"settings.fallbackTagAuto": "افتراضي تلقائي",
 	"settings.rescanVault": "إعادة مسح المخزن",
-	"settings.rescanVaultDesc": "يبحث عن معرّفات callout غير المعروفة في الملاحظات ويضيفها كصفوف احتياطية.",
+	"settings.rescanVaultDesc":
+		"يبحث عن معرّفات callout غير المعروفة في الملاحظات ويضيفها كصفوف احتياطية.",
 	"settings.rescanVaultHintAction": "مسح الآن",
-	"settings.rescanComplete": "اكتمل إعادة المسح: تمت إضافة {{count}} callout جديد.",
+	"settings.rescanComplete":
+		"اكتمل إعادة المسح: تمت إضافة {{count}} callout جديد.",
 	"replaceModal.deleteWithoutReplaceSuffix": "(يعود إلى الافتراضي)",
 
 	"firstRun.title": "البحث عن callouts الموجودة في مخزنك؟",
-	"firstRun.body": "يمكن لـ Callout Studio مسح مخزنك للعثور على callouts التي تستخدمها بالفعل، حتى تظهر في قائمة الإعدادات وتتبنى نمط الاحتياطي الخاص بك.",
-	"firstRun.heavyVaultNote": "يحتوي مخزنك على {{count}} ملف Markdown — قد يستغرق المسح بضع ثوانٍ.",
-	"firstRun.laterHint": "يمكنك دائماً تشغيل هذا لاحقاً من الإعدادات ← رؤى المخزن والصيانة ← إعادة مسح المخزن.",
+	"firstRun.body":
+		"يمكن لـ Callout Studio مسح مخزنك للعثور على callouts التي تستخدمها بالفعل، حتى تظهر في قائمة الإعدادات وتتبنى نمط الاحتياطي الخاص بك.",
+	"firstRun.heavyVaultNote":
+		"يحتوي مخزنك على {{count}} ملف Markdown — قد يستغرق المسح بضع ثوانٍ.",
+	"firstRun.laterHint":
+		"يمكنك دائماً تشغيل هذا لاحقاً من الإعدادات ← رؤى المخزن والصيانة ← إعادة مسح المخزن.",
 	"firstRun.scanNow": "مسح الآن",
 	"firstRun.noThanks": "لا، شكراً",
-	"firstRun.autoScanComplete": "قام Callout Studio بمسح مخزنك وأضاف {{count}} callout.",
+	"firstRun.autoScanComplete":
+		"قام Callout Studio بمسح مخزنك وأضاف {{count}} callout.",
 	"firstRun.scanning": "جارٍ المسح",
 
 	"welcome.tooltip": "حول Callout Studio",
@@ -39,10 +45,14 @@ export const ar: Record<string, string> = {
 		"هناك الكثير مما يقدمه Callout Studio! [معرفة المزيد]({{repoUrl}}).\n",
 
 	"deleteModal.title": 'حذف callout "{{name}}"؟',
-	"deleteModal.bodyInUse": "يظهر هذا الـ callout {{count}} مرة في {{files}} ملف.",
-	"deleteModal.bodyInUseExplain": "سيؤدي الحذف إلى تحويل تلك الكتل إلى نص عادي — ستفقد تنسيقها وعنوان الـ callout.",
-	"deleteModal.replaceHint": "يمكنك استبداله بـ callout آخر، مما يحافظ على محتوى المخزن كـ callout منسّق.",
-	"deleteModal.bodyUnused": '"{{name}}" غير مستخدم في أي ملاحظة، لكنه callout مخصص أنشأته. سيؤدي الحذف إلى إزالته من هذه القائمة.',
+	"deleteModal.bodyInUse":
+		"يظهر هذا الـ callout {{count}} مرة في {{files}} ملف.",
+	"deleteModal.bodyInUseExplain":
+		"سيؤدي الحذف إلى تحويل تلك الكتل إلى نص عادي — ستفقد تنسيقها وعنوان الـ callout.",
+	"deleteModal.replaceHint":
+		"يمكنك استبداله بـ callout آخر، مما يحافظ على محتوى المخزن كـ callout منسّق.",
+	"deleteModal.bodyUnused":
+		'"{{name}}" غير مستخدم في أي ملاحظة، لكنه callout مخصص أنشأته. سيؤدي الحذف إلى إزالته من هذه القائمة.',
 	"deleteModal.replaceInstead": "الاستبدال بدلاً من ذلك",
 	"deleteModal.deleteInUse": "حذف (تحويل إلى نص عادي)",
 	"deleteModal.deleteUnused": "حذف الـ callout",
@@ -60,9 +70,11 @@ export const ar: Record<string, string> = {
 	"settings.importExport": "استيراد / تصدير",
 	"settings.import": "استيراد",
 	"settings.export": "تصدير",
-	"settings.importDesc": "استيراد بيانات Callout Studio من مخزن آخر باستخدام ملف JSON.",
+	"settings.importDesc":
+		"استيراد بيانات Callout Studio من مخزن آخر باستخدام ملف JSON.",
 	"settings.exportDesc": "حفظ جميع أنواع الـ callout المخصصة بصيغة JSON.",
-	"settings.importConflictNotice": "تم استيراد {{count}} نوع callout؛ تم الكتابة فوق {{overwritten}} إدخال موجود.",
+	"settings.importConflictNotice":
+		"تم استيراد {{count}} نوع callout؛ تم الكتابة فوق {{overwritten}} إدخال موجود.",
 
 	"settings.addNewCallout": "+ إضافة callout جديد",
 
@@ -78,7 +90,8 @@ export const ar: Record<string, string> = {
 
 	"settings.colorSwatchAria": "التمييز: {{accent}} · الخلفية: {{bg}}",
 	"settings.fallbackCallout": "Callout الاحتياطي الافتراضي",
-	"settings.fallbackCalloutDesc": "ستَرِث أنواع الـ callout غير المعروفة في مخزنك نمط هذا الـ callout.",
+	"settings.fallbackCalloutDesc":
+		"ستَرِث أنواع الـ callout غير المعروفة في مخزنك نمط هذا الـ callout.",
 
 	"settings.globalStyle": "نمط الـ callout العام",
 	"settings.border": "الحدود",
@@ -112,46 +125,56 @@ export const ar: Record<string, string> = {
 	"settings.deletePaletteConfirm":
 		'حذف لوحة الألوان "{{name}}"؟\nلن تتأثر عناصر callout التي تستخدم هذه الألوان.',
 	"settings.enableAutocomplete": "تفعيل الإكمال التلقائي [!",
-	"settings.enableAutocompleteDesc": 'يعرض اقتراحات عند كتابة "[!" داخل اقتباس محظور في المحرر. اختر نوع callout من القائمة لإدراج عنوان callout كامل.',
+	"settings.enableAutocompleteDesc":
+		'يعرض اقتراحات عند كتابة "[!" داخل اقتباس محظور في المحرر. اختر نوع callout من القائمة لإدراج عنوان callout كامل.',
 
 	"settings.openHotkeys": "اختصارات Callout Studio",
-	"settings.openHotkeysDesc": "يفتح إعدادات الاختصارات في Obsidian لأوامر Callout Studio، حيث يمكنك اختيار اختصاراتك الخاصة لإنشاء نوع جديد وفتح الإعدادات وإزالة الـ callout والالتفاف فيه. لا يتم تعيين أي اختصارات افتراضياً.",
+	"settings.openHotkeysDesc":
+		"يفتح إعدادات الاختصارات في Obsidian لأوامر Callout Studio، حيث يمكنك اختيار اختصاراتك الخاصة لإنشاء نوع جديد وفتح الإعدادات وإزالة الـ callout والالتفاف فيه. لا يتم تعيين أي اختصارات افتراضياً.",
 	"settings.openHotkeysButton": "فتح إعدادات الاختصارات",
-
 
 	"settings.vaultMaintenance": "رؤى المخزن والصيانة",
 	"settings.vaultStats": "إحصائيات الـ callout",
-	"settings.vaultStatsDesc": "يحصي جميع كتل الـ callout في ملاحظات Markdown ويجمّعها حسب النوع.",
+	"settings.vaultStatsDesc":
+		"يحصي جميع كتل الـ callout في ملاحظات Markdown ويجمّعها حسب النوع.",
 	"settings.vaultStatsButton": "عرض الإحصائيات",
 	"settings.vaultStatsScanning": "جارٍ المسح",
 	"settings.resetAll": "إعادة التعيين",
-	"settings.resetAllDesc": "يحذف جميع callouts المستخدم، ويعيد تعيين الـ callouts المدمجة والأنماط العامة (الحدود ومقياس الخط والشكل)، ولوحات الألوان المحفوظة، وتخصيص قائمة النقر بزر الماوس الأيمن، وSVGs Material المحملة.",
+	"settings.resetAllDesc":
+		"يحذف جميع callouts المستخدم، ويعيد تعيين الـ callouts المدمجة والأنماط العامة (الحدود ومقياس الخط والشكل)، ولوحات الألوان المحفوظة، وتخصيص قائمة النقر بزر الماوس الأيمن، وSVGs Material المحملة.",
 	"settings.resetAllButton": "إعادة تعيين الكل",
-	"settings.resetAllConfirm": "سيؤدي هذا إلى حذف جميع الـ callouts المخصصة، وإعادة تعيين الـ callouts المدمجة والأنماط العامة، ولوحات الألوان المحفوظة، وتخصيص قائمة النقر بزر الماوس الأيمن، وجميع SVGs Material المخزنة مؤقتاً. لا يمكن التراجع عن هذا الإجراء. هل أنت متأكد؟",
+	"settings.resetAllConfirm":
+		"سيؤدي هذا إلى حذف جميع الـ callouts المخصصة، وإعادة تعيين الـ callouts المدمجة والأنماط العامة، ولوحات الألوان المحفوظة، وتخصيص قائمة النقر بزر الماوس الأيمن، وجميع SVGs Material المخزنة مؤقتاً. لا يمكن التراجع عن هذا الإجراء. هل أنت متأكد؟",
 	"notice.resetAllDone": "تمت إعادة تعيين كل شيء إلى الإعدادات الافتراضية.",
 
 	"notice.exported": "تم تصدير الـ callouts إلى callout-studio-export.json",
 	"notice.importedJSON": "تم استيراد {{count}} نوع callout من JSON.",
 	"notice.importedSettings": "تم استيراد إعدادات الإضافة.",
-	"notice.noNewJSON": "لم يتم استيراد أنواع callout جديدة (قد تكون المعرّفات موجودة بالفعل).",
-	"notice.iconDownloadFailed": 'تعذّر تنزيل أيقونة Material "{{name}}". قد تكون غير متاحة لهذا الأسلوب/الوزن، أو قد يكون اتصالك بالإنترنت منقطعًا.',
+	"notice.noNewJSON":
+		"لم يتم استيراد أنواع callout جديدة (قد تكون المعرّفات موجودة بالفعل).",
+	"notice.iconDownloadFailed":
+		'تعذّر تنزيل أيقونة Material "{{name}}". قد تكون غير متاحة لهذا الأسلوب/الوزن، أو قد يكون اتصالك بالإنترنت منقطعًا.',
 	"notice.nothingToWrap": "لا يوجد شيء للالتفاف.",
 	"notice.cursorNotInsideCallout": "المؤشر ليس داخل callout.",
 	"notice.openHotkeysFailed": "تعذّر فتح إعدادات الاختصارات في Obsidian.",
-	"notice.filterHotkeysFailed": "تم فتح اختصارات Obsidian، لكن تعذّر تطبيق مرشح Callout Studio.",
+	"notice.filterHotkeysFailed":
+		"تم فتح اختصارات Obsidian، لكن تعذّر تطبيق مرشح Callout Studio.",
 
 	"editor.editCallout": "تعديل الـ callout",
 	"editor.newCallout": "callout جديد",
 	"editor.displayName": "الاسم المعروض",
 	"editor.displayNameDesc": "التسمية المقروءة المعروضة في واجهة المستخدم",
-	"editor.displayNameBuiltIn": "لا يمكن تغيير الاسم المعروض للـ callouts المدمجة",
+	"editor.displayNameBuiltIn":
+		"لا يمكن تغيير الاسم المعروض للـ callouts المدمجة",
 	"editor.displayNamePlaceholder": "calloutي",
 	"editor.calloutIds": "معرّفات الـ callout",
-	"editor.calloutIdsDesc": "جميع معرّفات هذا الـ callout. يُسمح باستخدام المسافات.\nاضغط Enter أو زر + للإضافة.",
+	"editor.calloutIdsDesc":
+		"جميع معرّفات هذا الـ callout. يُسمح باستخدام المسافات.\nاضغط Enter أو زر + للإضافة.",
 	"editor.calloutIdsPlaceholder": "إضافة معرّف",
 	"editor.addId": "إضافة معرّف",
 	"editor.idLinkedToName": "مرتبط بالاسم المعروض",
-	"editor.idCannotDelete": "هذا المعرّف مرتبط بالاسم المعروض ولا يمكن حذفه — عدّل الاسم لتغييره",
+	"editor.idCannotDelete":
+		"هذا المعرّف مرتبط بالاسم المعروض ولا يمكن حذفه — عدّل الاسم لتغييره",
 	"editor.icon": "أيقونة",
 	"editor.livePreview": "معاينة مباشرة",
 	"editor.iconAdjustment": "ضبط الأيقونة",
@@ -167,7 +190,8 @@ export const ar: Record<string, string> = {
 	"editor.paletteNewColor": "لون جديد…",
 	"editor.contrastWarning": "تباين منخفض مع الخلفية — قد يصعب قراءته",
 	"editor.foldable": "قابل للطي",
-	"editor.foldableDesc": "اختر ما إذا كان يمكن طي الـ callout وأي حالة افتراضية تُطبَّق عبر المخزن.",
+	"editor.foldableDesc":
+		"اختر ما إذا كان يمكن طي الـ callout وأي حالة افتراضية تُطبَّق عبر المخزن.",
 	"editor.foldOff": "معطّل",
 	"editor.foldOpen": "مفتوح افتراضياً",
 	"editor.foldClosed": "مغلق افتراضياً",
@@ -180,10 +204,13 @@ export const ar: Record<string, string> = {
 	"editor.idEmpty": "مطلوب معرّف واحد على الأقل",
 	"editor.idExists": "يوجد callout بهذا المعرّف بالفعل",
 	"editor.idConflict": "هذا المعرّف يتعارض مع callout موجود",
-	"editor.idDashConflict": 'أوبسيديان يكتب المسافات كشرطات، لذلك يتعارض هذا المعرّف مع "{{other}}"',
+	"editor.idDashConflict":
+		'أوبسيديان يكتب المسافات كشرطات، لذلك يتعارض هذا المعرّف مع "{{other}}"',
 	"editor.untitledCallout": "Callout بدون عنوان",
-	"editor.loremIpsum": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-	"editor.loremIpsumShort": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+	"editor.loremIpsum":
+		"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+	"editor.loremIpsumShort":
+		"Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
 	"editor.sampleInlineText": "إليك شارة [!{id}] مضمّنة داخل فقرة.",
 	"editor.previewReadOnly": "لا يمكن تعديل المعاينة المباشرة",
 
@@ -194,10 +221,12 @@ export const ar: Record<string, string> = {
 	"palette.namePlaceholder": "لوحتي",
 	"palette.nameExists": "توجد بالفعل لوحة ألوان بهذا الاسم",
 	"palette.baseColor": "اللون الأساسي",
-	"palette.baseColorHint": "سنقوم بمطابقة لون الخلفية معه تلقائيًا. إذا أردت، يمكنك التحكم فيه بشكل منفصل عن طريق {{link}}.",
+	"palette.baseColorHint":
+		"سنقوم بمطابقة لون الخلفية معه تلقائيًا. إذا أردت، يمكنك التحكم فيه بشكل منفصل عن طريق {{link}}.",
 	"palette.baseColorHintLink": "النقر هنا",
 	"palette.advancedColors": "الألوان",
-	"palette.advancedColorsHint": "تحرير الألوان لوضع {{mode}} - يتم تحديث الوضع الآخر تلقائيًا. بدّل سمة Obsidian للتحقق من ذلك.",
+	"palette.advancedColorsHint":
+		"تحرير الألوان لوضع {{mode}} - يتم تحديث الوضع الآخر تلقائيًا. بدّل سمة Obsidian للتحقق من ذلك.",
 	"palette.revertHint": "تفضل لونًا أساسيًا واحدًا بدلاً من ذلك؟ {{link}}.",
 	"palette.revertHintLink": "استعادة",
 	"palette.lightMode": "فاتح",
@@ -245,11 +274,22 @@ export const ar: Record<string, string> = {
 	"iconPicker.searchLucide": "بحث في أيقونات Lucide",
 	"iconPicker.searchTabler": "بحث في أيقونات Tabler",
 	"iconPicker.tablerStyle": "نمط الأيقونة",
-	"iconPicker.tablerStyleOutline": "محيط",
-	"iconPicker.tablerStyleFilled": "مملوءة",
+	"iconPicker.tablerStyleOutline": "محيط (Outline)",
+	"iconPicker.tablerStyleFilled": "مملوءة (Filled)",
 	"iconPicker.loadMore": "تحميل المزيد",
 	"iconPicker.materialStyle": "نمط الأيقونة",
+	"iconPicker.materialStyleOutlined": "محيطي (Outlined)",
+	"iconPicker.materialStyleFilled": "مملوء (Filled)",
+	"iconPicker.materialStyleRounded": "مستدير (Rounded)",
+	"iconPicker.materialStyleSharp": "حاد (Sharp)",
 	"iconPicker.materialWeight": "وزن الأيقونة",
+	"iconPicker.materialWeight100": "رفيع جداً (Thin)",
+	"iconPicker.materialWeight200": "خفيف جداً (Extra Light)",
+	"iconPicker.materialWeight300": "خفيف (Light)",
+	"iconPicker.materialWeight400": "عادي (Regular)",
+	"iconPicker.materialWeight500": "متوسط (Medium)",
+	"iconPicker.materialWeight600": "شبه سميك (Semi Bold)",
+	"iconPicker.materialWeight700": "سميك (Bold)",
 	"iconPicker.searchMaterial": "بحث في أيقونات Material",
 	"iconPicker.searchEmoji": "بحث في الرموز التعبيرية",
 	"iconPicker.skinTone": "لون البشرة",
@@ -261,27 +301,34 @@ export const ar: Record<string, string> = {
 	"iconPicker.fa": "Font Awesome",
 	"iconPicker.searchFa": "البحث في Font Awesome",
 	"iconPicker.faStyle": "نمط الأيقونة",
-	"iconPicker.faStyleSolid": "صلبة",
-	"iconPicker.faStyleRegular": "عادية",
-	"iconPicker.faStyleBrands": "العلامات التجارية",
+	"iconPicker.faStyleSolid": "صلبة (Solid)",
+	"iconPicker.faStyleRegular": "عادية (Regular)",
+	"iconPicker.faStyleBrands": "العلامات التجارية (Brands)",
 	"iconPicker.rpgAwesome": "RPG Awesome",
 	"iconPicker.searchRpgAwesome": "البحث في RPG Awesome",
 	"iconPicker.image": "صورك",
 	"iconPicker.searchImage": "البحث في صورك",
-	"iconPicker.imageTooLarge": "{{name}} كبير جدًا. يجب أن تكون الصور أقل من 5 ميغابايت.",
-	"iconPicker.imageUnsupported": "{{name}} ليس صيغة صورة مدعومة. استخدم SVG أو PNG أو JPEG أو WebP.",
-	"iconPicker.imageInvalidSvg": "{{name}} لا يمكن قراءته كـ SVG آمن، لذا لم تتم إضافته.",
+	"iconPicker.imageTooLarge":
+		"{{name}} كبير جدًا. يجب أن تكون الصور أقل من 5 ميغابايت.",
+	"iconPicker.imageUnsupported":
+		"{{name}} ليس صيغة صورة مدعومة. استخدم SVG أو PNG أو JPEG أو WebP.",
+	"iconPicker.imageInvalidSvg":
+		"{{name}} لا يمكن قراءته كـ SVG آمن، لذا لم تتم إضافته.",
 	"iconPicker.imageDecodeFailed": "{{name}} لا يمكن قراءته كصورة.",
-	"iconPicker.imageDuplicate": "{{name}} موجود بالفعل في صورك. أعد تسمية الملف أو احذف الصورة الموجودة.",
+	"iconPicker.imageDuplicate":
+		"{{name}} موجود بالفعل في صورك. أعد تسمية الملف أو احذف الصورة الموجودة.",
 	"iconPicker.imageAdd": "إضافة صور",
-	"iconPicker.imageEmpty": "لا توجد صور بعد. أضف ملف SVG أو PNG أو JPEG أو WebP من جهازك أو اسحبه هنا.",
+	"iconPicker.imageEmpty":
+		"لا توجد صور بعد. أضف ملف SVG أو PNG أو JPEG أو WebP من جهازك أو اسحبه هنا.",
 	"iconPicker.imageDelete": "حذف",
 	"iconPicker.imageDeleteConfirm": "حذف “{{name}}”؟",
-	"iconPicker.imageDeleteInUse": "تستخدم {{count}} من Callouts هذه الصورة. ستعرض أيقونة بديلة حتى تحدد صورة جديدة.",
+	"iconPicker.imageDeleteInUse":
+		"تستخدم {{count}} من Callouts هذه الصورة. ستعرض أيقونة بديلة حتى تحدد صورة جديدة.",
 	"iconPicker.imageRecolor": "اتباع لون Callout",
 	"iconPicker.allSources": "جميع المصادر",
 	"iconPicker.searchAllSources": "البحث في جميع مصادر الأيقونات",
-	"iconPicker.sourcesNotDownloaded": "لم يتم تضمينها بعد: {{names}}. اختر مصدرًا أعلاه لتنزيله.",
+	"iconPicker.sourcesNotDownloaded":
+		"لم يتم تضمينها بعد: {{names}}. اختر مصدرًا أعلاه لتنزيله.",
 	"iconPicker.chooseSource": "اختر مصدرًا",
 	"iconPicker.sourceGroup": "{{name}} · {{count}}",
 
@@ -296,22 +343,141 @@ export const ar: Record<string, string> = {
 	"iconPicker.descRpgAwesome": "أيقونات الخيال والألعاب المصغرة",
 	"iconPicker.descImage": "الصور التي تضيفها من جهازك",
 
+	// Icon picker — category filter dropdown labels
+	"iconPicker.cat.Accessibility": "إمكانية الوصول",
+	"iconPicker.cat.Actions": "إجراءات",
+	"iconPicker.cat.Activities": "أنشطة",
+	"iconPicker.cat.Alert": "تنبيه",
+	"iconPicker.cat.Alphabet": "أبجدية",
+	"iconPicker.cat.Android": "Android",
+	"iconPicker.cat.Animals": "حيوانات",
+	"iconPicker.cat.Arrows": "أسهم",
+	"iconPicker.cat.Astronomy": "علم الفلك",
+	"iconPicker.cat.Audio&Video": "الصوت والفيديو",
+	"iconPicker.cat.Automotive": "سيارات",
+	"iconPicker.cat.Badges": "شارات",
+	"iconPicker.cat.Brand": "علامات تجارية",
+	"iconPicker.cat.Buildings": "مباني",
+	"iconPicker.cat.Business": "أعمال",
+	"iconPicker.cat.Camping": "تخييم",
+	"iconPicker.cat.Charity": "خيرية",
+	"iconPicker.cat.Charts": "مخططات",
+	"iconPicker.cat.Charts + Diagrams": "مخططات ورسوم بيانية",
+	"iconPicker.cat.Childhood": "طفولة",
+	"iconPicker.cat.Clothing + Fashion": "ملابس وأزياء",
+	"iconPicker.cat.Coding": "برمجة",
+	"iconPicker.cat.Communicate": "تواصل",
+	"iconPicker.cat.Communication": "اتصالات",
+	"iconPicker.cat.Computers": "أجهزة كمبيوتر",
+	"iconPicker.cat.Connectivity": "اتصال",
+	"iconPicker.cat.Construction": "بناء",
+	"iconPicker.cat.Currencies": "عملات",
+	"iconPicker.cat.Database": "قاعدة بيانات",
+	"iconPicker.cat.Design": "تصميم",
+	"iconPicker.cat.Development": "تطوير",
+	"iconPicker.cat.Devices": "أجهزة",
+	"iconPicker.cat.Devices + Hardware": "أجهزة ومعدات",
+	"iconPicker.cat.Disaster + Crisis": "كوارث وأزمات",
+	"iconPicker.cat.Document": "مستند",
+	"iconPicker.cat.E-commerce": "تجارة إلكترونية",
+	"iconPicker.cat.Editing": "تحرير",
+	"iconPicker.cat.Education": "تعليم",
+	"iconPicker.cat.Electrical": "كهربائي",
+	"iconPicker.cat.Emoji": "رموز تعبيرية",
+	"iconPicker.cat.Energy": "طاقة",
+	"iconPicker.cat.Extensions": "إضافات",
+	"iconPicker.cat.Files": "ملفات",
+	"iconPicker.cat.Film + Video": "أفلام وفيديو",
+	"iconPicker.cat.Food": "طعام",
+	"iconPicker.cat.Food + Beverage": "طعام ومشروبات",
+	"iconPicker.cat.Fruits + Vegetables": "فواكه وخضروات",
+	"iconPicker.cat.Games": "ألعاب",
+	"iconPicker.cat.Gaming": "ألعاب فيديو",
+	"iconPicker.cat.Gender": "جنس",
+	"iconPicker.cat.Genders": "أجناس",
+	"iconPicker.cat.Gestures": "إيماءات",
+	"iconPicker.cat.Halloween": "هالوين",
+	"iconPicker.cat.Hands": "أيدٍ",
+	"iconPicker.cat.Hardware": "معدات",
+	"iconPicker.cat.Health": "صحة",
+	"iconPicker.cat.Holidays": "أعياد",
+	"iconPicker.cat.Home": "منزل",
+	"iconPicker.cat.Household": "المنزل",
+	"iconPicker.cat.Humanitarian": "إنساني",
+	"iconPicker.cat.Images": "صور",
+	"iconPicker.cat.Laundry": "غسيل الملابس",
+	"iconPicker.cat.Letters": "حروف",
+	"iconPicker.cat.Logic": "منطق",
+	"iconPicker.cat.Logistics": "لوجستيات",
+	"iconPicker.cat.Map": "خريطة",
+	"iconPicker.cat.Maps": "خرائط",
+	"iconPicker.cat.Maritime": "بحري",
+	"iconPicker.cat.Marketing": "تسويق",
+	"iconPicker.cat.Math": "رياضيات",
+	"iconPicker.cat.Mathematics": "رياضيات",
+	"iconPicker.cat.Media": "وسائط",
+	"iconPicker.cat.Media Playback": "تشغيل الوسائط",
+	"iconPicker.cat.Medical + Health": "طب وصحة",
+	"iconPicker.cat.Money": "أموال",
+	"iconPicker.cat.Mood": "مزاج",
+	"iconPicker.cat.Moving": "انتقال",
+	"iconPicker.cat.Music + Audio": "موسيقى وصوت",
+	"iconPicker.cat.Nature": "طبيعة",
+	"iconPicker.cat.Numbers": "أرقام",
+	"iconPicker.cat.Photography": "تصوير",
+	"iconPicker.cat.Photos + Images": "صور",
+	"iconPicker.cat.Political": "سياسية",
+	"iconPicker.cat.Privacy": "خصوصية",
+	"iconPicker.cat.Punctuation + Symbols": "علامات ترقيم ورموز",
+	"iconPicker.cat.Religion": "دين",
+	"iconPicker.cat.Science": "علوم",
+	"iconPicker.cat.Science Fiction": "خيال علمي",
+	"iconPicker.cat.Security": "أمان",
+	"iconPicker.cat.Shapes": "أشكال",
+	"iconPicker.cat.Shopping": "تسوق",
+	"iconPicker.cat.Social": "اجتماعي",
+	"iconPicker.cat.Spinners": "دوارات",
+	"iconPicker.cat.Sport": "رياضة",
+	"iconPicker.cat.Sports + Fitness": "رياضة ولياقة",
+	"iconPicker.cat.Symbols": "رموز",
+	"iconPicker.cat.System": "نظام",
+	"iconPicker.cat.Text": "نص",
+	"iconPicker.cat.Text Formatting": "تنسيق النص",
+	"iconPicker.cat.Time": "وقت",
+	"iconPicker.cat.Toggle": "تبديل",
+	"iconPicker.cat.Transit": "عبور",
+	"iconPicker.cat.Transportation": "مواصلات",
+	"iconPicker.cat.Travel": "سفر",
+	"iconPicker.cat.Travel + Hotel": "سفر وفنادق",
+	"iconPicker.cat.UI actions": "إجراءات الواجهة",
+	"iconPicker.cat.Users + People": "مستخدمون وأشخاص",
+	"iconPicker.cat.Vehicles": "مركبات",
+	"iconPicker.cat.Version control": "التحكم في الإصدار",
+	"iconPicker.cat.Weather": "طقس",
+	"iconPicker.cat.Writing": "كتابة",
+	"iconPicker.cat.Zodiac": "الأبراج",
+
 	// Downloadable icon packs
 	"iconPack.downloadTitle": "{{name}} لم يتم تنزيله بعد",
 	"iconPack.downloadDetail": "{{count}} أيقونة · {{size}} · تنزيل لمرة واحدة",
 	"iconPack.download": "تنزيل",
 	"iconPack.downloading": "جاري تنزيل {{name}}…",
-	"iconPack.downloadFailed": "تعذر تنزيل {{name}}. تحقق من الاتصال وحاول مرة أخرى.",
+	"iconPack.downloadFailed":
+		"تعذر تنزيل {{name}}. تحقق من الاتصال وحاول مرة أخرى.",
 	"iconPack.retry": "إعادة المحاولة",
-	"iconPack.faBrandsNotice": "أيقونات العلامات التجارية هي علامات تجارية مسجلة لأصحابها. لا يعني تضمينها أي تأييد. يرجى استخدامها فقط لتمثيل الشركة أو المنتج أو الخدمة التي تشير إليها.",
+	"iconPack.faBrandsNotice":
+		"أيقونات العلامات التجارية هي علامات تجارية مسجلة لأصحابها. لا يعني تضمينها أي تأييد. يرجى استخدامها فقط لتمثيل الشركة أو المنتج أو الخدمة التي تشير إليها.",
 	"iconPack.artworkRestored": "تم تنزيل رسومات الأيقونات لـ {{names}}.",
-	"iconPack.diskWriteFailed": "تعذر على Callout Studio حفظ حزمة الأيقونات على القرص، لذا ستحتاج إلى تنزيلها مرة أخرى في المرة القادمة. الأيقونات التي تختارها لا تزال محفوظة في إعداداتك.",
+	"iconPack.diskWriteFailed":
+		"تعذر على Callout Studio حفظ حزمة الأيقونات على القرص، لذا ستحتاج إلى تنزيلها مرة أخرى في المرة القادمة. الأيقونات التي تختارها لا تزال محفوظة في إعداداتك.",
 
 	// Icon licences & credits
 	"credits.title": "تراخيص الأيقونات والإسهامات",
-	"credits.intro": "يستخدم Callout Studio عدة مكتبات أيقونات مفتوحة. تراخيصها مستنسخة أدناه، مع ما تم تغييره لاستخدامها هنا.",
+	"credits.intro":
+		"يستخدم Callout Studio عدة مكتبات أيقونات مفتوحة. تراخيصها مستنسخة أدناه، مع ما تم تغييره لاستخدامها هنا.",
 	"credits.fullNotices": "إشعارات الأطراف الثالثة الكاملة",
-	"credits.pluginLicense": "الكود الخاص بـ Callout Studio يخضع لرخصة 0BSD؛ تحتفظ مكتبات الأيقونات بتراخيصها الخاصة.",
+	"credits.pluginLicense":
+		"الكود الخاص بـ Callout Studio يخضع لرخصة 0BSD؛ تحتفظ مكتبات الأيقونات بتراخيصها الخاصة.",
 
 	"contextMenu.editCallout": "تعديل إعدادات الـ callout",
 	"contextMenu.copyMarkdown": "نسخ Markdown الـ callout",
@@ -324,19 +490,25 @@ export const ar: Record<string, string> = {
 	"contextMenu.deleteSection": "حذف قسم العنوان",
 	"heading.toggleFold": "تبديل الطي",
 	"settings.globalSettings": "الإعدادات العامة",
-	"settings.globalSettingsDesc": "اضبط بدقة الشكل الذي يظهر به كل نوع callout في جميع أنحاء مخزنك.",
-	"settings.globalSettingsRegularDesc": "أضف رمز callout إلى اقتباس محظور (مثل `> [!type]`) لعرض صندوق الـ callout الأصلي في Obsidian. يمكنك ضبط حدوده ونصف قطره ومقياس الخط ومحاذاته.",
-	"settings.globalSettingsHeadingDesc": "أضف رمز callout مباشرة بعد علامات الشباك الخاصة بالعنوان (مثل `## [!type]`) لعرضه كعنوان callout منسّق. يمكنك ضبط حدوده وشكله والمسافة الرأسية.",
-	"settings.globalSettingsInlineDesc": "أضف رمز callout في أي مكان داخل سطر من النص (مثل `[!type]`) لعرضه كشارة صغيرة مضمّنة. يمكنك ضبط حدوده وشكله.",
+	"settings.globalSettingsDesc":
+		"اضبط بدقة الشكل الذي يظهر به كل نوع callout في جميع أنحاء مخزنك.",
+	"settings.globalSettingsRegularDesc":
+		"أضف رمز callout إلى اقتباس محظور (مثل `> [!type]`) لعرض صندوق الـ callout الأصلي في Obsidian. يمكنك ضبط حدوده ونصف قطره ومقياس الخط ومحاذاته.",
+	"settings.globalSettingsHeadingDesc":
+		"أضف رمز callout مباشرة بعد علامات الشباك الخاصة بالعنوان (مثل `## [!type]`) لعرضه كعنوان callout منسّق. يمكنك ضبط حدوده وشكله والمسافة الرأسية.",
+	"settings.globalSettingsInlineDesc":
+		"أضف رمز callout في أي مكان داخل سطر من النص (مثل `[!type]`) لعرضه كشارة صغيرة مضمّنة. يمكنك ضبط حدوده وشكله.",
 	"settings.globalSettingsCustomize": "تخصيص",
 	"settings.calloutTypeRegular": "callout عادي",
 	"settings.calloutTypeHeading": "callout العنوان",
 	"settings.calloutTypeInline": "callout مضمّن",
 	"settings.customizeMenu": "تخصيص عناصر القائمة",
-	"settings.customizeMenuDesc": "اختر الإجراءات التي تظهر عند النقر بزر الماوس الأيمن لكل نوع callout، وأعد ترتيبها. يعمل في وضع المصدر والمعاينة المباشرة.",
+	"settings.customizeMenuDesc":
+		"اختر الإجراءات التي تظهر عند النقر بزر الماوس الأيمن لكل نوع callout، وأعد ترتيبها. يعمل في وضع المصدر والمعاينة المباشرة.",
 	"settings.customizeMenuButton": "تخصيص عناصر القائمة",
 	"menuCustomize.title": "تخصيص قائمة النقر بزر الماوس الأيمن",
-	"menuCustomize.desc": "قم بتفعيل الإجراءات أو تعطيلها واسحب المقبض لإعادة ترتيبها. تُحفظ التغييرات تلقائياً.",
+	"menuCustomize.desc":
+		"قم بتفعيل الإجراءات أو تعطيلها واسحب المقبض لإعادة ترتيبها. تُحفظ التغييرات تلقائياً.",
 	"menuCustomize.regular": "callout عادي",
 	"menuCustomize.heading": "callout العنوان",
 	"menuCustomize.inline": "callout مضمّن",
@@ -353,19 +525,25 @@ export const ar: Record<string, string> = {
 	"confirm.cancel": "إلغاء",
 
 	"vault.filesUpdated": "تم تحديث {{count}} مرجع callout في ملفات المخزن.",
-	"vault.idsUpdated": "تم تحديث {{count}} معرّف callout في ملفات المخزن: {{oldIds}} ← {{newId}}",
-	"vault.titlesUpdated": "تم تحديث {{count}} عنوان callout في ملفات المخزن: {{oldTitle}} ← {{newTitle}}",
+	"vault.idsUpdated":
+		"تم تحديث {{count}} معرّف callout في ملفات المخزن: {{oldIds}} ← {{newId}}",
+	"vault.titlesUpdated":
+		"تم تحديث {{count}} عنوان callout في ملفات المخزن: {{oldTitle}} ← {{newTitle}}",
 	"vault.replaceWith": "الاستبدال بـ:",
 	"vault.deleteWithout": "حذف بدون استبدال",
 	"vault.confirmDelete": "تأكيد",
 	"vault.confirmReplace": "استبدال",
-	"vault.replacePromptInUse": 'يُستخدم "{{name}}" {{count}} مرة في {{files}} ملف. اختر callout لاستبداله:',
+	"vault.replacePromptInUse":
+		'يُستخدم "{{name}}" {{count}} مرة في {{files}} ملف. اختر callout لاستبداله:',
 	"vault.replacePromptUnused": 'اختر callout لاستبدال "{{name}}":',
 	"vault.noReplacementAvailable": "لا توجد callouts أخرى متاحة لاستبدال هذا.",
-	"vault.convertedToPlainText": "تم تحويل {{blocks}} كتلة callout في {{files}} ملف إلى نص عادي.",
-	"vault.resetAliasWarning": "يستخدم {{count}} مرجع(اً) في {{files}} ملف أسماءً مستعارة مخصصة: {{aliases}}. ستتوقف عن العمل بعد إعادة التعيين. المتابعة؟",
+	"vault.convertedToPlainText":
+		"تم تحويل {{blocks}} كتلة callout في {{files}} ملف إلى نص عادي.",
+	"vault.resetAliasWarning":
+		"يستخدم {{count}} مرجع(اً) في {{files}} ملف أسماءً مستعارة مخصصة: {{aliases}}. ستتوقف عن العمل بعد إعادة التعيين. المتابعة؟",
 	"vault.resetConfirm": "إعادة التعيين",
-	"vault.resetAllInUse": "⚠ يستخدم {{count}} مرجع callout في {{files}} ملف أنواع callout مخصصة ستُحذف.",
+	"vault.resetAllInUse":
+		"⚠ يستخدم {{count}} مرجع callout في {{files}} ملف أنواع callout مخصصة ستُحذف.",
 
 	"vaultStats.title": "إحصائيات الـ callout",
 	"vaultStats.totalCallouts": "إجمالي الـ callouts",
@@ -388,46 +566,75 @@ export const ar: Record<string, string> = {
 	"vaultStats.close": "إغلاق",
 
 	"import.title": "مشاكل الاستيراد",
-	"import.reportLeadIn": "يبدو أن الملف الذي استوردته قد تم تعديله. فيما يلي قائمة المشاكل:",
-	"import.reportLeadInFatal": "لا يبدو هذا الملف كتصدير Callout Studio. لا يمكن استيراده:",
+	"import.reportLeadIn":
+		"يبدو أن الملف الذي استوردته قد تم تعديله. فيما يلي قائمة المشاكل:",
+	"import.reportLeadInFatal":
+		"لا يبدو هذا الملف كتصدير Callout Studio. لا يمكن استيراده:",
 	"import.entryHeading": "الإدخال {{index}} — {{label}}",
-	"import.summary": "{{valid}} من {{total}} إدخالات صالحة · تم العثور على {{issues}} مشكلة.",
+	"import.summary":
+		"{{valid}} من {{total}} إدخالات صالحة · تم العثور على {{issues}} مشكلة.",
 	"import.btnCancel": "إلغاء",
 	"import.btnImportValid": "استيراد الصالحة فقط ({{count}})",
-	"import.err.notRecognized": "ملف غير معروف: كان متوقعاً مصفوفة من تعريفات الـ callout أو تصدير من Callout Studio.",
-	"import.warn.settingsIgnored": "كتلة الإعدادات لم تكن كائناً صالحاً، وتم تجاهلها.",
-	"import.warn.invalidGradient": "كان التدرج اللوني للخلفية غير صالح وتم تجاهله.",
+	"import.err.notRecognized":
+		"ملف غير معروف: كان متوقعاً مصفوفة من تعريفات الـ callout أو تصدير من Callout Studio.",
+	"import.warn.settingsIgnored":
+		"كتلة الإعدادات لم تكن كائناً صالحاً، وتم تجاهلها.",
+	"import.warn.invalidGradient":
+		"كان التدرج اللوني للخلفية غير صالح وتم تجاهله.",
 	"import.err.parseFailed": "الملف ليس JSON صالحاً ولا يمكن تحليله.",
 	"import.err.entryNotObject": "يجب أن يكون الإدخال كائناً.",
-	"import.err.requiredMissing": 'الحقل المطلوب "{{field}}" مفقود أو من نوع خاطئ.',
+	"import.err.requiredMissing":
+		'الحقل المطلوب "{{field}}" مفقود أو من نوع خاطئ.',
 	"import.err.idEmpty": "لا يجب أن يكون المعرّف فارغاً.",
-	"import.err.idTooLong": 'المعرّف "{{value}}" يتكون من {{length}} حرفاً؛ الحد الأقصى هو {{max}}.',
-	"import.err.idBadChar": 'يحتوي المعرّف "{{value}}" على أحرف غير صالحة ("|" و"[" و"]" وعلامات الجدولة وفواصل الأسطر غير مسموح بها).',
+	"import.err.idTooLong":
+		'المعرّف "{{value}}" يتكون من {{length}} حرفاً؛ الحد الأقصى هو {{max}}.',
+	"import.err.idBadChar":
+		'يحتوي المعرّف "{{value}}" على أحرف غير صالحة ("|" و"[" و"]" وعلامات الجدولة وفواصل الأسطر غير مسموح بها).',
 	"import.err.displayNameEmpty": "يجب ألا يكون الاسم المعروض فارغاً.",
-	"import.err.displayNameTooLong": "الاسم المعروض يتكون من {{length}} حرفاً؛ الحد الأقصى هو {{max}}.",
-	"import.err.boolField": '"{{field}}" يجب أن يكون قيمة منطقية (true أو false).',
+	"import.err.displayNameTooLong":
+		"الاسم المعروض يتكون من {{length}} حرفاً؛ الحد الأقصى هو {{max}}.",
+	"import.err.boolField":
+		'"{{field}}" يجب أن يكون قيمة منطقية (true أو false).',
 	"import.err.iconNotObject": "يجب أن تكون الأيقونة كائناً.",
-	"import.err.iconTypeInvalid": "نوع الأيقونة \"{{value}}\" ليس أحد: {{types}}.",
-	"import.warn.iconFieldIgnored": "\"{{field}}\" ينطبق فقط على أيقونات Material ويتم تجاهله لنوع الأيقونة {{type}}.",
-	"import.err.iconValueEmpty": "يجب أن تكون قيمة الأيقونة سلسلة نصية غير فارغة.",
-	"import.err.iconValueTooLong": "قيمة الأيقونة طويلة بشكل غير عادي ({{length}} حرفاً).",
-	"import.err.materialStyle": 'نمط أيقونة Material "{{value}}" ليس أحد: outlined أو filled أو rounded أو sharp.',
-	"import.err.materialWeight": 'ثقل أيقونة Material "{{value}}" يجب أن يكون عدداً صحيحاً بين 100 و700 بخطوات 100.',
-	"import.warn.iconRecolorIgnored": "\"recolor\" ينطبق فقط على صورك الخاصة ويتم تجاهله لنوع الأيقونة {{type}}.",
-	"import.err.iconRecolorInvalid": "\"recolor\" يجب أن يكون true أو false (القيمة: \"{{value}}\").",
-	"import.err.colorInvalid": '"{{field}}" يجب أن يكون لوناً بالتنسيق السداسي عشري مثل "#448aff" (تم استلام "{{value}}").',
-	"import.err.numberRange": '"{{field}}" يجب أن يكون رقماً بين {{min}} و{{max}} (تم استلام "{{value}}").',
-	"import.err.iconSizeRange": '"{{field}}" يجب أن يكون رقماً بين {{min}} و{{max}} (تم استلام "{{value}}").',
-	"import.err.aliasesNotArray": '"aliases" يجب أن يكون مصفوفة من السلاسل النصية.',
+	"import.err.iconTypeInvalid":
+		'نوع الأيقونة "{{value}}" ليس أحد: {{types}}.',
+	"import.warn.iconFieldIgnored":
+		'"{{field}}" ينطبق فقط على أيقونات Material ويتم تجاهله لنوع الأيقونة {{type}}.',
+	"import.err.iconValueEmpty":
+		"يجب أن تكون قيمة الأيقونة سلسلة نصية غير فارغة.",
+	"import.err.iconValueTooLong":
+		"قيمة الأيقونة طويلة بشكل غير عادي ({{length}} حرفاً).",
+	"import.err.materialStyle":
+		'نمط أيقونة Material "{{value}}" ليس أحد: outlined أو filled أو rounded أو sharp.',
+	"import.err.materialWeight":
+		'ثقل أيقونة Material "{{value}}" يجب أن يكون عدداً صحيحاً بين 100 و700 بخطوات 100.',
+	"import.warn.iconRecolorIgnored":
+		'"recolor" ينطبق فقط على صورك الخاصة ويتم تجاهله لنوع الأيقونة {{type}}.',
+	"import.err.iconRecolorInvalid":
+		'"recolor" يجب أن يكون true أو false (القيمة: "{{value}}").',
+	"import.err.colorInvalid":
+		'"{{field}}" يجب أن يكون لوناً بالتنسيق السداسي عشري مثل "#448aff" (تم استلام "{{value}}").',
+	"import.err.numberRange":
+		'"{{field}}" يجب أن يكون رقماً بين {{min}} و{{max}} (تم استلام "{{value}}").',
+	"import.err.iconSizeRange":
+		'"{{field}}" يجب أن يكون رقماً بين {{min}} و{{max}} (تم استلام "{{value}}").',
+	"import.err.aliasesNotArray":
+		'"aliases" يجب أن يكون مصفوفة من السلاسل النصية.',
 	"import.err.aliasNotString": "يجب أن يكون الاسم المستعار سلسلة نصية.",
 	"import.err.aliasDup": 'الاسم المستعار "{{value}}" مكرر في هذا الإدخال.',
-	"import.err.tooManyIds": "معرّفات كثيرة جداً ({{count}})؛ يمكن لكل callout أن يمتلك {{max}} معرّفات كحد أقصى (أساسي + أسماء مستعارة).",
-	"import.err.metadataShape": '"metadata" يجب أن يكون كائناً تكون جميع قيمه سلاسل نصية.',
+	"import.err.tooManyIds":
+		"معرّفات كثيرة جداً ({{count}})؛ يمكن لكل callout أن يمتلك {{max}} معرّفات كحد أقصى (أساسي + أسماء مستعارة).",
+	"import.err.metadataShape":
+		'"metadata" يجب أن يكون كائناً تكون جميع قيمه سلاسل نصية.',
 	"import.err.unknownFields": "تم تجاهل الحقول غير المعروفة: {{fields}}.",
-	"import.err.duplicateInFile": 'المعرّف/الاسم المستعار "{{value}}" مستخدم بالفعل من قِبَل الإدخال #{{first}} في هذا الملف.',
-	"import.err.aliasConflict": 'الاسم المستعار "{{value}}" مستخدم بالفعل من قِبَل callout آخر ("{{other}}") في مخزنك.',
-	"import.warn.defaultFoldedAutofix": 'كانت "defaultFolded" true بينما كانت "foldable" false؛ تمت إعادة تعيين defaultFolded إلى false.',
-	"import.warn.imageMissing": "يستخدم هذا Callout صورة غير موجودة في الملف أو في هذا vault، لذا سيعرض أيقونة بديلة حتى تحدد صورة جديدة.",
+	"import.err.duplicateInFile":
+		'المعرّف/الاسم المستعار "{{value}}" مستخدم بالفعل من قِبَل الإدخال #{{first}} في هذا الملف.',
+	"import.err.aliasConflict":
+		'الاسم المستعار "{{value}}" مستخدم بالفعل من قِبَل callout آخر ("{{other}}") في مخزنك.',
+	"import.warn.defaultFoldedAutofix":
+		'كانت "defaultFolded" true بينما كانت "foldable" false؛ تمت إعادة تعيين defaultFolded إلى false.',
+	"import.warn.imageMissing":
+		"يستخدم هذا Callout صورة غير موجودة في الملف أو في هذا vault، لذا سيعرض أيقونة بديلة حتى تحدد صورة جديدة.",
 
 	"footer.tagline": "هل لديك ملاحظات أو تعليقات أو اقتراحات؟ يسعدني سماعها!",
 	"footer.madeBy": "صنعه Niv  •  ",

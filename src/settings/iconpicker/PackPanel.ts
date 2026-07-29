@@ -319,7 +319,10 @@ export class PackPanel {
 			value: "",
 		});
 		for (const category of categories) {
-			select.createEl("option", { text: category, value: category });
+			select.createEl("option", {
+				text: t(`iconPicker.cat.${category}`),
+				value: category,
+			});
 		}
 		// A remembered category that no longer exists falls back to "all"
 		// rather than silently filtering everything out.
@@ -357,7 +360,10 @@ export class PackPanel {
 		if (!isAllSources(this.pack)) return;
 		for (const entry of entries) {
 			if (!entry.pack) continue;
-			this.groupCounts.set(entry.pack, (this.groupCounts.get(entry.pack) ?? 0) + 1);
+			this.groupCounts.set(
+				entry.pack,
+				(this.groupCounts.get(entry.pack) ?? 0) + 1,
+			);
 		}
 	}
 
@@ -530,7 +536,8 @@ export class PackPanel {
 				"--cs-material-font": `"${materialFontFamily(style)}"`,
 				"--cs-material-weight": String(variants.weight ?? 400),
 			});
-			if (style === "filled") span.setCssProps({ "--cs-material-fill": "1" });
+			if (style === "filled")
+				span.setCssProps({ "--cs-material-fill": "1" });
 			return;
 		}
 
@@ -562,7 +569,10 @@ export class PackPanel {
 
 	private select(entry: IconEntry): void {
 		const owner = this.packOf(entry);
-		this.host.onSelect(owner.makeIcon(entry, this.variantsOf(entry)), entry);
+		this.host.onSelect(
+			owner.makeIcon(entry, this.variantsOf(entry)),
+			entry,
+		);
 	}
 
 	// ── Attribution ─────────────────────────────────────────────────────

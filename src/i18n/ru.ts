@@ -10,18 +10,24 @@ export const ru: Record<string, string> = {
 	"settings.fallbackTag": "По умолчанию",
 	"settings.fallbackTagAuto": "Авт. по умолчанию",
 	"settings.rescanVault": "Пересканировать хранилище",
-	"settings.rescanVaultDesc": "Ищет нераспознанные ID callout в заметках и добавляет их как резервные строки.",
+	"settings.rescanVaultDesc":
+		"Ищет нераспознанные ID callout в заметках и добавляет их как резервные строки.",
 	"settings.rescanVaultHintAction": "Сканировать сейчас",
-	"settings.rescanComplete": "Сканирование завершено: добавлено {{count}} новых callout.",
+	"settings.rescanComplete":
+		"Сканирование завершено: добавлено {{count}} новых callout.",
 	"replaceModal.deleteWithoutReplaceSuffix": "(возврат к умолчанию)",
 
 	"firstRun.title": "Найти существующие callout в хранилище?",
-	"firstRun.body": "Callout Studio может просканировать хранилище, чтобы обнаружить уже используемые callout — они появятся в списке настроек и унаследуют ваш резервный стиль.",
-	"firstRun.heavyVaultNote": "В вашем хранилище {{count}} файлов Markdown — сканирование может занять несколько секунд.",
-	"firstRun.laterHint": "Вы всегда можете сделать это позже: Настройки → Аналитика и обслуживание хранилища → Пересканировать хранилище.",
+	"firstRun.body":
+		"Callout Studio может просканировать хранилище, чтобы обнаружить уже используемые callout — они появятся в списке настроек и унаследуют ваш резервный стиль.",
+	"firstRun.heavyVaultNote":
+		"В вашем хранилище {{count}} файлов Markdown — сканирование может занять несколько секунд.",
+	"firstRun.laterHint":
+		"Вы всегда можете сделать это позже: Настройки → Аналитика и обслуживание хранилища → Пересканировать хранилище.",
 	"firstRun.scanNow": "Сканировать сейчас",
 	"firstRun.noThanks": "Нет, спасибо",
-	"firstRun.autoScanComplete": "Callout Studio просканировал хранилище и добавил {{count}} callout.",
+	"firstRun.autoScanComplete":
+		"Callout Studio просканировал хранилище и добавил {{count}} callout.",
 	"firstRun.scanning": "Сканирование",
 
 	"welcome.tooltip": "О Callout Studio",
@@ -39,10 +45,14 @@ export const ru: Record<string, string> = {
 		"Callout Studio может предложить намного больше! [Узнать больше]({{repoUrl}}).\n",
 
 	"deleteModal.title": 'Удалить callout "{{name}}"?',
-	"deleteModal.bodyInUse": "Этот callout встречается {{count}} раз(а) в {{files}} файле(ах).",
-	"deleteModal.bodyInUseExplain": "При удалении эти блоки будут преобразованы в обычный текст — они потеряют оформление и заголовок callout.",
-	"deleteModal.replaceHint": "Вы можете заменить его другим callout, чтобы сохранить содержимое хранилища в виде оформленного callout.",
-	"deleteModal.bodyUnused": '"{{name}}" не используется ни в одной заметке, но это созданный вами пользовательский callout. Удаление уберёт его из списка.',
+	"deleteModal.bodyInUse":
+		"Этот callout встречается {{count}} раз(а) в {{files}} файле(ах).",
+	"deleteModal.bodyInUseExplain":
+		"При удалении эти блоки будут преобразованы в обычный текст — они потеряют оформление и заголовок callout.",
+	"deleteModal.replaceHint":
+		"Вы можете заменить его другим callout, чтобы сохранить содержимое хранилища в виде оформленного callout.",
+	"deleteModal.bodyUnused":
+		'"{{name}}" не используется ни в одной заметке, но это созданный вами пользовательский callout. Удаление уберёт его из списка.',
 	"deleteModal.replaceInstead": "Заменить вместо этого",
 	"deleteModal.deleteInUse": "Удалить (преобразовать в обычный текст)",
 	"deleteModal.deleteUnused": "Удалить callout",
@@ -60,9 +70,12 @@ export const ru: Record<string, string> = {
 	"settings.importExport": "Импорт / экспорт",
 	"settings.import": "Импорт",
 	"settings.export": "Экспорт",
-	"settings.importDesc": "Импортируйте данные Callout Studio из другого хранилища с помощью JSON-файла.",
-	"settings.exportDesc": "Сохранить все пользовательские типы callout в формате JSON.",
-	"settings.importConflictNotice": "Импортировано {{count}} типов callout; {{overwritten}} существующих записей перезаписано.",
+	"settings.importDesc":
+		"Импортируйте данные Callout Studio из другого хранилища с помощью JSON-файла.",
+	"settings.exportDesc":
+		"Сохранить все пользовательские типы callout в формате JSON.",
+	"settings.importConflictNotice":
+		"Импортировано {{count}} типов callout; {{overwritten}} существующих записей перезаписано.",
 
 	"settings.addNewCallout": "+ добавить callout",
 
@@ -78,7 +91,8 @@ export const ru: Record<string, string> = {
 
 	"settings.colorSwatchAria": "Акцент: {{accent}} · Фон: {{bg}}",
 	"settings.fallbackCallout": "Резервный callout по умолчанию",
-	"settings.fallbackCalloutDesc": "Нераспознанные типы callout в хранилище унаследуют стиль этого callout.",
+	"settings.fallbackCalloutDesc":
+		"Нераспознанные типы callout в хранилище унаследуют стиль этого callout.",
 
 	"settings.globalStyle": "Глобальный стиль callout",
 	"settings.border": "Рамки",
@@ -112,46 +126,57 @@ export const ru: Record<string, string> = {
 	"settings.deletePaletteConfirm":
 		'Удалить палитру "{{name}}"?\nБлоки callout, которые используют её цвета, не изменятся.',
 	"settings.enableAutocomplete": "Включить автодополнение [!",
-	"settings.enableAutocompleteDesc": 'Показывает предложения при вводе "[!" в блочной цитате в редакторе. Выберите тип callout из списка, чтобы вставить полный заголовок callout.',
+	"settings.enableAutocompleteDesc":
+		'Показывает предложения при вводе "[!" в блочной цитате в редакторе. Выберите тип callout из списка, чтобы вставить полный заголовок callout.',
 
 	"settings.openHotkeys": "Сочетания клавиш Callout Studio",
-	"settings.openHotkeysDesc": "Открывает настройки сочетаний клавиш Obsidian для команд Callout Studio, где можно задать собственные сочетания для создания нового типа, открытия настроек, удаления и добавления callout. По умолчанию сочетания не назначены.",
+	"settings.openHotkeysDesc":
+		"Открывает настройки сочетаний клавиш Obsidian для команд Callout Studio, где можно задать собственные сочетания для создания нового типа, открытия настроек, удаления и добавления callout. По умолчанию сочетания не назначены.",
 	"settings.openHotkeysButton": "Открыть настройки сочетаний клавиш",
-
 
 	"settings.vaultMaintenance": "Аналитика и обслуживание хранилища",
 	"settings.vaultStats": "Статистика callout",
-	"settings.vaultStatsDesc": "Подсчитывает все блоки callout в Markdown-заметках и группирует по типу.",
+	"settings.vaultStatsDesc":
+		"Подсчитывает все блоки callout в Markdown-заметках и группирует по типу.",
 	"settings.vaultStatsButton": "Посмотреть статистику",
 	"settings.vaultStatsScanning": "Сканирование",
 	"settings.resetAll": "Сбросить",
-	"settings.resetAllDesc": "Удаляет все пользовательские callout, сбрасывает встроенные callout, глобальные стили (рамки, масштаб шрифта, форма), сохранённые цветовые палитры, настройку контекстного меню и загруженные SVG Material.",
+	"settings.resetAllDesc":
+		"Удаляет все пользовательские callout, сбрасывает встроенные callout, глобальные стили (рамки, масштаб шрифта, форма), сохранённые цветовые палитры, настройку контекстного меню и загруженные SVG Material.",
 	"settings.resetAllButton": "Сбросить всё",
-	"settings.resetAllConfirm": "Это удалит все пользовательские callout, сбросит встроенные callout, глобальные стили, сохранённые цветовые палитры, настройку контекстного меню и все кешированные SVG Material. Действие нельзя отменить. Вы уверены?",
+	"settings.resetAllConfirm":
+		"Это удалит все пользовательские callout, сбросит встроенные callout, глобальные стили, сохранённые цветовые палитры, настройку контекстного меню и все кешированные SVG Material. Действие нельзя отменить. Вы уверены?",
 	"notice.resetAllDone": "Всё сброшено до значений по умолчанию.",
 
 	"notice.exported": "Callout экспортированы в callout-studio-export.json",
 	"notice.importedJSON": "Импортировано {{count}} типов callout из JSON.",
 	"notice.importedSettings": "Настройки плагина импортированы.",
-	"notice.noNewJSON": "Новые типы callout не импортированы (ID могут уже существовать).",
-	"notice.iconDownloadFailed": 'Не удалось загрузить иконку Material "{{name}}". Она может быть недоступна для данного стиля/насыщенности или отсутствует подключение к сети.',
+	"notice.noNewJSON":
+		"Новые типы callout не импортированы (ID могут уже существовать).",
+	"notice.iconDownloadFailed":
+		'Не удалось загрузить иконку Material "{{name}}". Она может быть недоступна для данного стиля/насыщенности или отсутствует подключение к сети.',
 	"notice.nothingToWrap": "Нечего оборачивать.",
 	"notice.cursorNotInsideCallout": "Курсор не находится внутри callout.",
-	"notice.openHotkeysFailed": "Не удалось открыть настройки сочетаний клавиш Obsidian.",
-	"notice.filterHotkeysFailed": "Настройки сочетаний клавиш открыты, но фильтр Callout Studio применить не удалось.",
+	"notice.openHotkeysFailed":
+		"Не удалось открыть настройки сочетаний клавиш Obsidian.",
+	"notice.filterHotkeysFailed":
+		"Настройки сочетаний клавиш открыты, но фильтр Callout Studio применить не удалось.",
 
 	"editor.editCallout": "Редактировать callout",
 	"editor.newCallout": "Новый callout",
 	"editor.displayName": "Отображаемое имя",
 	"editor.displayNameDesc": "Читаемая метка, отображаемая в интерфейсе",
-	"editor.displayNameBuiltIn": "Отображаемое имя встроенных callout изменить нельзя",
+	"editor.displayNameBuiltIn":
+		"Отображаемое имя встроенных callout изменить нельзя",
 	"editor.displayNamePlaceholder": "Мой callout",
 	"editor.calloutIds": "ID callout",
-	"editor.calloutIdsDesc": "Все идентификаторы этого callout. Пробелы разрешены.\nНажмите Enter или кнопку + для добавления.",
+	"editor.calloutIdsDesc":
+		"Все идентификаторы этого callout. Пробелы разрешены.\nНажмите Enter или кнопку + для добавления.",
 	"editor.calloutIdsPlaceholder": "Добавить ID",
 	"editor.addId": "Добавить ID",
 	"editor.idLinkedToName": "Связано с отображаемым именем",
-	"editor.idCannotDelete": "Этот ID связан с отображаемым именем и не может быть удалён — измените имя, чтобы изменить его",
+	"editor.idCannotDelete":
+		"Этот ID связан с отображаемым именем и не может быть удалён — измените имя, чтобы изменить его",
 	"editor.icon": "Иконка",
 	"editor.livePreview": "Живой предпросмотр",
 	"editor.iconAdjustment": "Настройка иконки",
@@ -165,25 +190,31 @@ export const ru: Record<string, string> = {
 	"editor.paletteGroupPresets": "Цветовые пресеты",
 	"editor.paletteGroupCustom": "Пользовательские",
 	"editor.paletteNewColor": "Новый цвет…",
-	"editor.contrastWarning": "Низкий контраст с фоном — может быть трудно читать",
+	"editor.contrastWarning":
+		"Низкий контраст с фоном — может быть трудно читать",
 	"editor.foldable": "Складываемый",
-	"editor.foldableDesc": "Выберите, можно ли складывать callout, и состояние по умолчанию для всего хранилища.",
+	"editor.foldableDesc":
+		"Выберите, можно ли складывать callout, и состояние по умолчанию для всего хранилища.",
 	"editor.foldOff": "Выкл.",
 	"editor.foldOpen": "Открыт по умолчанию",
 	"editor.foldClosed": "Закрыт по умолчанию",
 	"editor.cancel": "Отмена",
 	"editor.saveChanges": "Сохранить изменения",
 	"editor.createCallout": "Создать callout",
-	"editor.nameRequired": "Перед созданием callout необходимо указать отображаемое имя.",
+	"editor.nameRequired":
+		"Перед созданием callout необходимо указать отображаемое имя.",
 	"editor.noChangesToSave": "Изменений не было.",
 	"editor.downloadingIcon": "Загрузка иконки",
 	"editor.idEmpty": "Требуется хотя бы один ID",
 	"editor.idExists": "Callout с таким ID уже существует",
 	"editor.idConflict": "Этот ID конфликтует с существующим callout",
-	"editor.idDashConflict": 'Obsidian записывает пробелы как дефисы, поэтому этот ID конфликтует с «{{other}}»',
+	"editor.idDashConflict":
+		"Obsidian записывает пробелы как дефисы, поэтому этот ID конфликтует с «{{other}}»",
 	"editor.untitledCallout": "Callout без названия",
-	"editor.loremIpsum": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-	"editor.loremIpsumShort": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+	"editor.loremIpsum":
+		"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+	"editor.loremIpsumShort":
+		"Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
 	"editor.sampleInlineText": "Вот встроенная капсула [!{id}] внутри абзаца.",
 	"editor.previewReadOnly": "Живой предпросмотр нельзя редактировать",
 
@@ -194,10 +225,12 @@ export const ru: Record<string, string> = {
 	"palette.namePlaceholder": "Моя палитра",
 	"palette.nameExists": "Палитра с таким названием уже существует",
 	"palette.baseColor": "Базовый цвет",
-	"palette.baseColorHint": "Мы автоматически подберём цвет фона под него. При желании вы можете настроить его отдельно, {{link}}.",
+	"palette.baseColorHint":
+		"Мы автоматически подберём цвет фона под него. При желании вы можете настроить его отдельно, {{link}}.",
 	"palette.baseColorHintLink": "нажав здесь",
 	"palette.advancedColors": "Цвета",
-	"palette.advancedColorsHint": "Редактирование цветов для режима {{mode}} — другой режим обновляется автоматически. Переключите тему Obsidian, чтобы проверить.",
+	"palette.advancedColorsHint":
+		"Редактирование цветов для режима {{mode}} — другой режим обновляется автоматически. Переключите тему Obsidian, чтобы проверить.",
 	"palette.revertHint": "Предпочитаете один основной цвет? {{link}}.",
 	"palette.revertHintLink": "Отменить",
 	"palette.lightMode": "Светлый",
@@ -245,11 +278,22 @@ export const ru: Record<string, string> = {
 	"iconPicker.searchLucide": "поиск иконок Lucide",
 	"iconPicker.searchTabler": "поиск иконок Tabler",
 	"iconPicker.tablerStyle": "Стиль иконки",
-	"iconPicker.tablerStyleOutline": "Контурный",
-	"iconPicker.tablerStyleFilled": "Заполненный",
+	"iconPicker.tablerStyleOutline": "Контурный (Outline)",
+	"iconPicker.tablerStyleFilled": "Заполненный (Filled)",
 	"iconPicker.loadMore": "Загрузить ещё",
 	"iconPicker.materialStyle": "Стиль иконки",
+	"iconPicker.materialStyleOutlined": "Контурный (Outlined)",
+	"iconPicker.materialStyleFilled": "Заполненный (Filled)",
+	"iconPicker.materialStyleRounded": "Скруглённый (Rounded)",
+	"iconPicker.materialStyleSharp": "Острый (Sharp)",
 	"iconPicker.materialWeight": "Толщина иконки",
+	"iconPicker.materialWeight100": "Тонкий (Thin)",
+	"iconPicker.materialWeight200": "Очень лёгкий (Extra Light)",
+	"iconPicker.materialWeight300": "Лёгкий (Light)",
+	"iconPicker.materialWeight400": "Обычный (Regular)",
+	"iconPicker.materialWeight500": "Средний (Medium)",
+	"iconPicker.materialWeight600": "Полужирный (Semi Bold)",
+	"iconPicker.materialWeight700": "Жирный (Bold)",
 	"iconPicker.searchMaterial": "поиск иконок Material",
 	"iconPicker.searchEmoji": "Поиск эмодзи",
 	"iconPicker.skinTone": "Тон кожи",
@@ -261,34 +305,43 @@ export const ru: Record<string, string> = {
 	"iconPicker.fa": "Font Awesome",
 	"iconPicker.searchFa": "Поиск в Font Awesome",
 	"iconPicker.faStyle": "Стиль иконки",
-	"iconPicker.faStyleSolid": "Заполненный",
-	"iconPicker.faStyleRegular": "Обычный",
-	"iconPicker.faStyleBrands": "Бренды",
+	"iconPicker.faStyleSolid": "Заполненный (Solid)",
+	"iconPicker.faStyleRegular": "Обычный (Regular)",
+	"iconPicker.faStyleBrands": "Бренды (Brands)",
 	"iconPicker.rpgAwesome": "RPG Awesome",
 	"iconPicker.searchRpgAwesome": "Поиск в RPG Awesome",
 	"iconPicker.image": "Ваши изображения",
 	"iconPicker.searchImage": "Поиск в изображениях",
-	"iconPicker.imageTooLarge": "{{name}} слишком большой. Изображения должны быть меньше 5 МБ.",
-	"iconPicker.imageUnsupported": "{{name}} — неподдерживаемый формат изображения. Используйте SVG, PNG, JPEG или WebP.",
-	"iconPicker.imageInvalidSvg": "{{name}} не удалось прочитать как безопасный SVG, поэтому он не был добавлен.",
-	"iconPicker.imageDecodeFailed": "{{name}} не удалось прочитать как изображение.",
-	"iconPicker.imageDuplicate": "{{name}} уже есть в ваших изображениях. Переименуйте файл или удалите существующее изображение.",
+	"iconPicker.imageTooLarge":
+		"{{name}} слишком большой. Изображения должны быть меньше 5 МБ.",
+	"iconPicker.imageUnsupported":
+		"{{name}} — неподдерживаемый формат изображения. Используйте SVG, PNG, JPEG или WebP.",
+	"iconPicker.imageInvalidSvg":
+		"{{name}} не удалось прочитать как безопасный SVG, поэтому он не был добавлен.",
+	"iconPicker.imageDecodeFailed":
+		"{{name}} не удалось прочитать как изображение.",
+	"iconPicker.imageDuplicate":
+		"{{name}} уже есть в ваших изображениях. Переименуйте файл или удалите существующее изображение.",
 	"iconPicker.imageAdd": "Добавить изображения",
-	"iconPicker.imageEmpty": "Изображений пока нет. Добавьте файл SVG, PNG, JPEG или WebP с компьютера или перетащите его сюда.",
+	"iconPicker.imageEmpty":
+		"Изображений пока нет. Добавьте файл SVG, PNG, JPEG или WebP с компьютера или перетащите его сюда.",
 	"iconPicker.imageDelete": "Удалить",
 	"iconPicker.imageDeleteConfirm": "Удалить «{{name}}»?",
-	"iconPicker.imageDeleteInUse": "{{count}} callout(ов) используют это изображение. Они будут показывать замещающую иконку, пока вы не укажете новое.",
+	"iconPicker.imageDeleteInUse":
+		"{{count}} callout(ов) используют это изображение. Они будут показывать замещающую иконку, пока вы не укажете новое.",
 	"iconPicker.imageRecolor": "Следовать цвету Callout",
 	"iconPicker.allSources": "Все источники",
 	"iconPicker.searchAllSources": "Поиск во всех источниках иконок",
-	"iconPicker.sourcesNotDownloaded": "Ещё не включено: {{names}}. Выберите источник выше, чтобы загрузить.",
+	"iconPicker.sourcesNotDownloaded":
+		"Ещё не включено: {{names}}. Выберите источник выше, чтобы загрузить.",
 	"iconPicker.chooseSource": "Выбрать источник",
 	"iconPicker.sourceGroup": "{{name}} · {{count}}",
 
 	// Source menu — what each library holds, in a few words
 	"iconPicker.descAllSources": "поиск во всех библиотеках сразу",
 	"iconPicker.descLucide": "собственный набор Obsidian, всегда офлайн",
-	"iconPicker.descTabler": "чистые и последовательные иконки интерфейса, контурные и заполненные",
+	"iconPicker.descTabler":
+		"чистые и последовательные иконки интерфейса, контурные и заполненные",
 	"iconPicker.descMaterial": "набор Google, четыре стиля и семь толщин",
 	"iconPicker.descEmoji": "цветные глифы, все оттенки кожи",
 	"iconPicker.descOcticons": "иконки интерфейса GitHub",
@@ -296,22 +349,142 @@ export const ru: Record<string, string> = {
 	"iconPicker.descRpgAwesome": "иконки фэнтези и настольных игр",
 	"iconPicker.descImage": "изображения, добавленные с вашего компьютера",
 
+	// Icon picker — category filter dropdown labels
+	"iconPicker.cat.Accessibility": "Доступность",
+	"iconPicker.cat.Actions": "Действия",
+	"iconPicker.cat.Activities": "Занятия",
+	"iconPicker.cat.Alert": "Предупреждение",
+	"iconPicker.cat.Alphabet": "Алфавит",
+	"iconPicker.cat.Android": "Android",
+	"iconPicker.cat.Animals": "Животные",
+	"iconPicker.cat.Arrows": "Стрелки",
+	"iconPicker.cat.Astronomy": "Астрономия",
+	"iconPicker.cat.Audio&Video": "Аудио и видео",
+	"iconPicker.cat.Automotive": "Автомобили",
+	"iconPicker.cat.Badges": "Значки",
+	"iconPicker.cat.Brand": "Бренды",
+	"iconPicker.cat.Buildings": "Здания",
+	"iconPicker.cat.Business": "Бизнес",
+	"iconPicker.cat.Camping": "Туризм",
+	"iconPicker.cat.Charity": "Благотворительность",
+	"iconPicker.cat.Charts": "Диаграммы",
+	"iconPicker.cat.Charts + Diagrams": "Диаграммы и схемы",
+	"iconPicker.cat.Childhood": "Детство",
+	"iconPicker.cat.Clothing + Fashion": "Одежда и мода",
+	"iconPicker.cat.Coding": "Программирование",
+	"iconPicker.cat.Communicate": "Общение",
+	"iconPicker.cat.Communication": "Коммуникации",
+	"iconPicker.cat.Computers": "Компьютеры",
+	"iconPicker.cat.Connectivity": "Подключение",
+	"iconPicker.cat.Construction": "Строительство",
+	"iconPicker.cat.Currencies": "Валюты",
+	"iconPicker.cat.Database": "База данных",
+	"iconPicker.cat.Design": "Дизайн",
+	"iconPicker.cat.Development": "Разработка",
+	"iconPicker.cat.Devices": "Устройства",
+	"iconPicker.cat.Devices + Hardware": "Устройства и оборудование",
+	"iconPicker.cat.Disaster + Crisis": "Катастрофы и кризисы",
+	"iconPicker.cat.Document": "Документ",
+	"iconPicker.cat.E-commerce": "Электронная торговля",
+	"iconPicker.cat.Editing": "Редактирование",
+	"iconPicker.cat.Education": "Образование",
+	"iconPicker.cat.Electrical": "Электрический",
+	"iconPicker.cat.Emoji": "Эмодзи",
+	"iconPicker.cat.Energy": "Энергия",
+	"iconPicker.cat.Extensions": "Расширения",
+	"iconPicker.cat.Files": "Файлы",
+	"iconPicker.cat.Film + Video": "Кино и видео",
+	"iconPicker.cat.Food": "Еда",
+	"iconPicker.cat.Food + Beverage": "Еда и напитки",
+	"iconPicker.cat.Fruits + Vegetables": "Фрукты и овощи",
+	"iconPicker.cat.Games": "Игры",
+	"iconPicker.cat.Gaming": "Гейминг",
+	"iconPicker.cat.Gender": "Пол",
+	"iconPicker.cat.Genders": "Гендеры",
+	"iconPicker.cat.Gestures": "Жесты",
+	"iconPicker.cat.Halloween": "Хэллоуин",
+	"iconPicker.cat.Hands": "Руки",
+	"iconPicker.cat.Hardware": "Оборудование",
+	"iconPicker.cat.Health": "Здоровье",
+	"iconPicker.cat.Holidays": "Праздники",
+	"iconPicker.cat.Home": "Дом",
+	"iconPicker.cat.Household": "Быт",
+	"iconPicker.cat.Humanitarian": "Гуманитарный",
+	"iconPicker.cat.Images": "Изображения",
+	"iconPicker.cat.Laundry": "Стирка",
+	"iconPicker.cat.Letters": "Буквы",
+	"iconPicker.cat.Logic": "Логика",
+	"iconPicker.cat.Logistics": "Логистика",
+	"iconPicker.cat.Map": "Карта",
+	"iconPicker.cat.Maps": "Карты",
+	"iconPicker.cat.Maritime": "Морской",
+	"iconPicker.cat.Marketing": "Маркетинг",
+	"iconPicker.cat.Math": "Математика",
+	"iconPicker.cat.Mathematics": "Математика",
+	"iconPicker.cat.Media": "Медиа",
+	"iconPicker.cat.Media Playback": "Воспроизведение медиа",
+	"iconPicker.cat.Medical + Health": "Медицина и здоровье",
+	"iconPicker.cat.Money": "Деньги",
+	"iconPicker.cat.Mood": "Настроение",
+	"iconPicker.cat.Moving": "Переезд",
+	"iconPicker.cat.Music + Audio": "Музыка и звук",
+	"iconPicker.cat.Nature": "Природа",
+	"iconPicker.cat.Numbers": "Числа",
+	"iconPicker.cat.Photography": "Фотография",
+	"iconPicker.cat.Photos + Images": "Фотографии и изображения",
+	"iconPicker.cat.Political": "Политика",
+	"iconPicker.cat.Privacy": "Конфиденциальность",
+	"iconPicker.cat.Punctuation + Symbols": "Пунктуация и символы",
+	"iconPicker.cat.Religion": "Религия",
+	"iconPicker.cat.Science": "Наука",
+	"iconPicker.cat.Science Fiction": "Научная фантастика",
+	"iconPicker.cat.Security": "Безопасность",
+	"iconPicker.cat.Shapes": "Фигуры",
+	"iconPicker.cat.Shopping": "Покупки",
+	"iconPicker.cat.Social": "Социальные сети",
+	"iconPicker.cat.Spinners": "Спиннеры",
+	"iconPicker.cat.Sport": "Спорт",
+	"iconPicker.cat.Sports + Fitness": "Спорт и фитнес",
+	"iconPicker.cat.Symbols": "Символы",
+	"iconPicker.cat.System": "Система",
+	"iconPicker.cat.Text": "Текст",
+	"iconPicker.cat.Text Formatting": "Форматирование текста",
+	"iconPicker.cat.Time": "Время",
+	"iconPicker.cat.Toggle": "Переключатель",
+	"iconPicker.cat.Transit": "Транзит",
+	"iconPicker.cat.Transportation": "Транспорт",
+	"iconPicker.cat.Travel": "Путешествия",
+	"iconPicker.cat.Travel + Hotel": "Путешествия и гостиницы",
+	"iconPicker.cat.UI actions": "Действия интерфейса",
+	"iconPicker.cat.Users + People": "Пользователи и люди",
+	"iconPicker.cat.Vehicles": "Транспортные средства",
+	"iconPicker.cat.Version control": "Контроль версий",
+	"iconPicker.cat.Weather": "Погода",
+	"iconPicker.cat.Writing": "Письмо",
+	"iconPicker.cat.Zodiac": "Зодиак",
+
 	// Downloadable icon packs
 	"iconPack.downloadTitle": "{{name}} ещё не загружено",
-	"iconPack.downloadDetail": "{{count}} иконок · {{size}} · однократная загрузка",
+	"iconPack.downloadDetail":
+		"{{count}} иконок · {{size}} · однократная загрузка",
 	"iconPack.download": "Скачать",
 	"iconPack.downloading": "Загрузка {{name}}…",
-	"iconPack.downloadFailed": "Не удалось загрузить {{name}}. Проверьте соединение и повторите попытку.",
+	"iconPack.downloadFailed":
+		"Не удалось загрузить {{name}}. Проверьте соединение и повторите попытку.",
 	"iconPack.retry": "Повторить",
-	"iconPack.faBrandsNotice": "Иконки брендов являются торговыми марками соответствующих владельцев. Их включение не означает одобрения. Используйте их только для представления компании, продукта или услуги, на которые они ссылаются.",
+	"iconPack.faBrandsNotice":
+		"Иконки брендов являются торговыми марками соответствующих владельцев. Их включение не означает одобрения. Используйте их только для представления компании, продукта или услуги, на которые они ссылаются.",
 	"iconPack.artworkRestored": "Графика иконок для {{names}} была загружена.",
-	"iconPack.diskWriteFailed": "Callout Studio не смог сохранить пакет иконок на диск, поэтому его придётся загрузить снова в следующий раз. Выбранные вами иконки по-прежнему сохранены в настройках.",
+	"iconPack.diskWriteFailed":
+		"Callout Studio не смог сохранить пакет иконок на диск, поэтому его придётся загрузить снова в следующий раз. Выбранные вами иконки по-прежнему сохранены в настройках.",
 
 	// Icon licences & credits
 	"credits.title": "Лицензии иконок и авторство",
-	"credits.intro": "Callout Studio использует несколько открытых библиотек иконок. Их лицензии воспроизведены ниже вместе с описанием изменений для использования здесь.",
+	"credits.intro":
+		"Callout Studio использует несколько открытых библиотек иконок. Их лицензии воспроизведены ниже вместе с описанием изменений для использования здесь.",
 	"credits.fullNotices": "Полные уведомления третьих сторон",
-	"credits.pluginLicense": "Собственный код Callout Studio находится под лицензией 0BSD; библиотеки иконок сохраняют свои лицензии.",
+	"credits.pluginLicense":
+		"Собственный код Callout Studio находится под лицензией 0BSD; библиотеки иконок сохраняют свои лицензии.",
 
 	"contextMenu.editCallout": "Редактировать настройки callout",
 	"contextMenu.copyMarkdown": "Копировать Markdown callout",
@@ -324,19 +497,25 @@ export const ru: Record<string, string> = {
 	"contextMenu.deleteSection": "Удалить раздел заголовка",
 	"heading.toggleFold": "Переключить складывание",
 	"settings.globalSettings": "Глобальные настройки",
-	"settings.globalSettingsDesc": "Точно настройте внешний вид каждого типа callout по всему хранилищу.",
-	"settings.globalSettingsRegularDesc": "Добавьте токен callout в цитату (например, `> [!type]`), чтобы отобразить встроенный блок callout Obsidian. Вы можете настроить его рамку, скругление, масштаб шрифта и выравнивание.",
-	"settings.globalSettingsHeadingDesc": "Добавьте токен callout сразу после решёток заголовка (например, `## [!type]`), чтобы отобразить его как стилизованный callout-заголовок. Вы можете настроить его рамку, форму и вертикальные отступы.",
-	"settings.globalSettingsInlineDesc": "Добавьте токен callout в любом месте строки текста (например, `[!type]`), чтобы отобразить его в виде маленькой встроенной капсулы. Вы можете настроить его рамку и форму.",
+	"settings.globalSettingsDesc":
+		"Точно настройте внешний вид каждого типа callout по всему хранилищу.",
+	"settings.globalSettingsRegularDesc":
+		"Добавьте токен callout в цитату (например, `> [!type]`), чтобы отобразить встроенный блок callout Obsidian. Вы можете настроить его рамку, скругление, масштаб шрифта и выравнивание.",
+	"settings.globalSettingsHeadingDesc":
+		"Добавьте токен callout сразу после решёток заголовка (например, `## [!type]`), чтобы отобразить его как стилизованный callout-заголовок. Вы можете настроить его рамку, форму и вертикальные отступы.",
+	"settings.globalSettingsInlineDesc":
+		"Добавьте токен callout в любом месте строки текста (например, `[!type]`), чтобы отобразить его в виде маленькой встроенной капсулы. Вы можете настроить его рамку и форму.",
 	"settings.globalSettingsCustomize": "Настроить",
 	"settings.calloutTypeRegular": "Обычный callout",
 	"settings.calloutTypeHeading": "Callout-заголовок",
 	"settings.calloutTypeInline": "Встроенный callout",
 	"settings.customizeMenu": "Настройка пунктов меню",
-	"settings.customizeMenuDesc": "Выберите, какие действия контекстного меню отображаются для каждого типа callout, и измените их порядок. Работает в режиме источника и в живом предпросмотре.",
+	"settings.customizeMenuDesc":
+		"Выберите, какие действия контекстного меню отображаются для каждого типа callout, и измените их порядок. Работает в режиме источника и в живом предпросмотре.",
 	"settings.customizeMenuButton": "Настройка пунктов меню",
 	"menuCustomize.title": "Настройка контекстного меню",
-	"menuCustomize.desc": "Включайте и отключайте действия и перетаскивайте маркер, чтобы изменить их порядок. Изменения сохраняются автоматически.",
+	"menuCustomize.desc":
+		"Включайте и отключайте действия и перетаскивайте маркер, чтобы изменить их порядок. Изменения сохраняются автоматически.",
 	"menuCustomize.regular": "Обычный callout",
 	"menuCustomize.heading": "Callout-заголовок",
 	"menuCustomize.inline": "Встроенный callout",
@@ -344,7 +523,8 @@ export const ru: Record<string, string> = {
 	"menuItem.edit": "Редактировать callout",
 	"menuItem.openSettings": "Открыть настройки",
 	"menuItem.copyMarkdown": "Копировать Markdown",
-	"menuItem.foldDefaults": "Состояние складывания по умолчанию (открыт / закрыт / нет)",
+	"menuItem.foldDefaults":
+		"Состояние складывания по умолчанию (открыт / закрыт / нет)",
 	"menuItem.cutSection": "Вырезать раздел",
 	"menuItem.copySection": "Копировать раздел",
 	"menuItem.deleteSection": "Удалить раздел",
@@ -352,20 +532,27 @@ export const ru: Record<string, string> = {
 	"confirm.ok": "Удалить",
 	"confirm.cancel": "Отмена",
 
-	"vault.filesUpdated": "Обновлено {{count}} ссылок на callout в файлах хранилища.",
-	"vault.idsUpdated": "Обновлено {{count}} ID callout в файлах хранилища: {{oldIds}} → {{newId}}",
-	"vault.titlesUpdated": "Обновлено {{count}} заголовков callout в файлах хранилища: {{oldTitle}} → {{newTitle}}",
+	"vault.filesUpdated":
+		"Обновлено {{count}} ссылок на callout в файлах хранилища.",
+	"vault.idsUpdated":
+		"Обновлено {{count}} ID callout в файлах хранилища: {{oldIds}} → {{newId}}",
+	"vault.titlesUpdated":
+		"Обновлено {{count}} заголовков callout в файлах хранилища: {{oldTitle}} → {{newTitle}}",
 	"vault.replaceWith": "Заменить на:",
 	"vault.deleteWithout": "Удалить без замены",
 	"vault.confirmDelete": "Подтвердить",
 	"vault.confirmReplace": "Заменить",
-	"vault.replacePromptInUse": '"{{name}}" используется {{count}} раз(а) в {{files}} файле(ах). Выберите callout для замены:',
+	"vault.replacePromptInUse":
+		'"{{name}}" используется {{count}} раз(а) в {{files}} файле(ах). Выберите callout для замены:',
 	"vault.replacePromptUnused": 'Выберите callout для замены "{{name}}":',
 	"vault.noReplacementAvailable": "Нет других доступных callout для замены.",
-	"vault.convertedToPlainText": "{{blocks}} блоков callout в {{files}} файле(ах) преобразовано в обычный текст.",
-	"vault.resetAliasWarning": "{{count}} ссылок в {{files}} файле(ах) используют пользовательские псевдонимы: {{aliases}}. После сброса они перестанут работать. Продолжить?",
+	"vault.convertedToPlainText":
+		"{{blocks}} блоков callout в {{files}} файле(ах) преобразовано в обычный текст.",
+	"vault.resetAliasWarning":
+		"{{count}} ссылок в {{files}} файле(ах) используют пользовательские псевдонимы: {{aliases}}. После сброса они перестанут работать. Продолжить?",
 	"vault.resetConfirm": "Сбросить",
-	"vault.resetAllInUse": "⚠ {{count}} ссылок на callout в {{files}} файле(ах) используют пользовательские типы callout, которые будут удалены.",
+	"vault.resetAllInUse":
+		"⚠ {{count}} ссылок на callout в {{files}} файле(ах) используют пользовательские типы callout, которые будут удалены.",
 
 	"vaultStats.title": "Статистика callout",
 	"vaultStats.totalCallouts": "Всего callout",
@@ -388,47 +575,77 @@ export const ru: Record<string, string> = {
 	"vaultStats.close": "Закрыть",
 
 	"import.title": "Проблемы импорта",
-	"import.reportLeadIn": "Похоже, импортированный файл был изменён. Вот список проблем:",
-	"import.reportLeadInFatal": "Этот файл не похож на экспорт Callout Studio и не может быть импортирован:",
+	"import.reportLeadIn":
+		"Похоже, импортированный файл был изменён. Вот список проблем:",
+	"import.reportLeadInFatal":
+		"Этот файл не похож на экспорт Callout Studio и не может быть импортирован:",
 	"import.entryHeading": "Запись {{index}} — {{label}}",
-	"import.summary": "{{valid}} из {{total}} записей действительны · найдено {{issues}} проблем.",
+	"import.summary":
+		"{{valid}} из {{total}} записей действительны · найдено {{issues}} проблем.",
 	"import.btnCancel": "Отмена",
 	"import.btnImportValid": "Импортировать только действительные ({{count}})",
-	"import.err.notRecognized": "Нераспознанный файл: ожидался массив определений callout или экспорт Callout Studio.",
-	"import.warn.settingsIgnored": "Блок настроек не был допустимым объектом и был проигнорирован.",
-	"import.warn.invalidGradient": "Градиент фона был недопустимым и был проигнорирован.",
-	"import.err.parseFailed": "Файл не является допустимым JSON и не может быть разобран.",
+	"import.err.notRecognized":
+		"Нераспознанный файл: ожидался массив определений callout или экспорт Callout Studio.",
+	"import.warn.settingsIgnored":
+		"Блок настроек не был допустимым объектом и был проигнорирован.",
+	"import.warn.invalidGradient":
+		"Градиент фона был недопустимым и был проигнорирован.",
+	"import.err.parseFailed":
+		"Файл не является допустимым JSON и не может быть разобран.",
 	"import.err.entryNotObject": "Запись должна быть объектом.",
-	"import.err.requiredMissing": 'Обязательное поле "{{field}}" отсутствует или имеет неверный тип.',
+	"import.err.requiredMissing":
+		'Обязательное поле "{{field}}" отсутствует или имеет неверный тип.',
 	"import.err.idEmpty": "ID не должен быть пустым.",
-	"import.err.idTooLong": 'ID "{{value}}" имеет {{length}} символов; максимум — {{max}}.',
-	"import.err.idBadChar": 'ID "{{value}}" содержит недопустимые символы ("|", "[", "]", табуляции и переносы строк не разрешены).',
+	"import.err.idTooLong":
+		'ID "{{value}}" имеет {{length}} символов; максимум — {{max}}.',
+	"import.err.idBadChar":
+		'ID "{{value}}" содержит недопустимые символы ("|", "[", "]", табуляции и переносы строк не разрешены).',
 	"import.err.displayNameEmpty": "Отображаемое имя не должно быть пустым.",
-	"import.err.displayNameTooLong": "Отображаемое имя имеет {{length}} символов; максимум — {{max}}.",
-	"import.err.boolField": '"{{field}}" должен быть булевым значением (true или false).',
+	"import.err.displayNameTooLong":
+		"Отображаемое имя имеет {{length}} символов; максимум — {{max}}.",
+	"import.err.boolField":
+		'"{{field}}" должен быть булевым значением (true или false).',
 	"import.err.iconNotObject": "Иконка должна быть объектом.",
-	"import.err.iconTypeInvalid": "Тип иконки \"{{value}}\" не является одним из: {{types}}.",
-	"import.warn.iconFieldIgnored": "\"{{field}}\" применяется только к иконкам Material и игнорируется для типа иконки {{type}}.",
-	"import.err.iconValueEmpty": "Значение иконки должно быть непустой строкой.",
-	"import.err.iconValueTooLong": "Значение иконки необычно длинное ({{length}} символов).",
-	"import.err.materialStyle": 'Стиль иконки Material "{{value}}" не является одним из: outlined, filled, rounded, sharp.',
-	"import.err.materialWeight": 'Толщина иконки Material "{{value}}" должна быть целым числом от 100 до 700 с шагом 100.',
-	"import.warn.iconRecolorIgnored": "\"recolor\" применяется только к вашим собственным изображениям и игнорируется для типа иконки {{type}}.",
-	"import.err.iconRecolorInvalid": "\"recolor\" должно быть true или false (получено: \"{{value}}\").",
-	"import.err.colorInvalid": '"{{field}}" должен быть цветом в формате hex, например "#448aff" (получено "{{value}}").',
-	"import.err.numberRange": '"{{field}}" должен быть числом от {{min}} до {{max}} (получено "{{value}}").',
-	"import.err.iconSizeRange": '"{{field}}" должен быть числом от {{min}} до {{max}} (получено "{{value}}").',
+	"import.err.iconTypeInvalid":
+		'Тип иконки "{{value}}" не является одним из: {{types}}.',
+	"import.warn.iconFieldIgnored":
+		'"{{field}}" применяется только к иконкам Material и игнорируется для типа иконки {{type}}.',
+	"import.err.iconValueEmpty":
+		"Значение иконки должно быть непустой строкой.",
+	"import.err.iconValueTooLong":
+		"Значение иконки необычно длинное ({{length}} символов).",
+	"import.err.materialStyle":
+		'Стиль иконки Material "{{value}}" не является одним из: outlined, filled, rounded, sharp.',
+	"import.err.materialWeight":
+		'Толщина иконки Material "{{value}}" должна быть целым числом от 100 до 700 с шагом 100.',
+	"import.warn.iconRecolorIgnored":
+		'"recolor" применяется только к вашим собственным изображениям и игнорируется для типа иконки {{type}}.',
+	"import.err.iconRecolorInvalid":
+		'"recolor" должно быть true или false (получено: "{{value}}").',
+	"import.err.colorInvalid":
+		'"{{field}}" должен быть цветом в формате hex, например "#448aff" (получено "{{value}}").',
+	"import.err.numberRange":
+		'"{{field}}" должен быть числом от {{min}} до {{max}} (получено "{{value}}").',
+	"import.err.iconSizeRange":
+		'"{{field}}" должен быть числом от {{min}} до {{max}} (получено "{{value}}").',
 	"import.err.aliasesNotArray": '"aliases" должен быть массивом строк.',
 	"import.err.aliasNotString": "Псевдоним должен быть строкой.",
 	"import.err.aliasDup": 'Псевдоним "{{value}}" дублируется в этой записи.',
-	"import.err.tooManyIds": "Слишком много ID ({{count}}); каждый callout может иметь не более {{max}} ID (основной + псевдонимы).",
-	"import.err.metadataShape": '"metadata" должен быть объектом, все значения которого являются строками.',
+	"import.err.tooManyIds":
+		"Слишком много ID ({{count}}); каждый callout может иметь не более {{max}} ID (основной + псевдонимы).",
+	"import.err.metadataShape":
+		'"metadata" должен быть объектом, все значения которого являются строками.',
 	"import.err.unknownFields": "Неизвестные поля проигнорированы: {{fields}}.",
-	"import.err.duplicateInFile": 'ID/псевдоним "{{value}}" уже используется записью #{{first}} в этом файле.',
-	"import.err.aliasConflict": 'Псевдоним "{{value}}" уже используется другим callout ("{{other}}") в вашем хранилище.',
-	"import.warn.defaultFoldedAutofix": '"defaultFolded" было true, а "foldable" было false; defaultFolded сброшен до false.',
-	"import.warn.imageMissing": "Этот Callout использует изображение, которого нет ни в файле, ни в этом vault, поэтому будет показываться замещающая иконка, пока вы не укажете новое.",
+	"import.err.duplicateInFile":
+		'ID/псевдоним "{{value}}" уже используется записью #{{first}} в этом файле.',
+	"import.err.aliasConflict":
+		'Псевдоним "{{value}}" уже используется другим callout ("{{other}}") в вашем хранилище.',
+	"import.warn.defaultFoldedAutofix":
+		'"defaultFolded" было true, а "foldable" было false; defaultFolded сброшен до false.',
+	"import.warn.imageMissing":
+		"Этот Callout использует изображение, которого нет ни в файле, ни в этом vault, поэтому будет показываться замещающая иконка, пока вы не укажете новое.",
 
-	"footer.tagline": "Есть отзывы, комментарии или предложения? Буду рад услышать!",
+	"footer.tagline":
+		"Есть отзывы, комментарии или предложения? Буду рад услышать!",
 	"footer.madeBy": "Создано Нивом  •  ",
 };

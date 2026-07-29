@@ -10,23 +10,30 @@ export const ro: Record<string, string> = {
 	"settings.fallbackTag": "Implicit",
 	"settings.fallbackTagAuto": "Implicit automat",
 	"settings.rescanVault": "Rescaneaza vault",
-	"settings.rescanVaultDesc": "Caută ID-uri de callout nerecunoscute în note și le adaugă ca rânduri de rezervă.",
+	"settings.rescanVaultDesc":
+		"Caută ID-uri de callout nerecunoscute în note și le adaugă ca rânduri de rezervă.",
 	"settings.rescanVaultHintAction": "Scanează acum",
-	"settings.rescanComplete": "Rescanare completă: {{count}} callout(uri) noi adăugate.",
+	"settings.rescanComplete":
+		"Rescanare completă: {{count}} callout(uri) noi adăugate.",
 	"replaceModal.deleteWithoutReplaceSuffix": "(revine la implicit)",
 
 	"firstRun.title": "Găsiți callouts existente în vault?",
-	"firstRun.body": "Callout Studio poate scana vault-ul pentru a descoperi callouts pe care le utilizați deja, astfel încât să apară în lista de setări și să adopte stilul de rezervă.",
-	"firstRun.heavyVaultNote": "Vault-ul dvs. are {{count}} fișiere Markdown — scanarea poate dura câteva secunde.",
-	"firstRun.laterHint": "Puteți rula oricând mai târziu din Setări → Informații și întreținere vault → Rescaneaza vault.",
+	"firstRun.body":
+		"Callout Studio poate scana vault-ul pentru a descoperi callouts pe care le utilizați deja, astfel încât să apară în lista de setări și să adopte stilul de rezervă.",
+	"firstRun.heavyVaultNote":
+		"Vault-ul dvs. are {{count}} fișiere Markdown — scanarea poate dura câteva secunde.",
+	"firstRun.laterHint":
+		"Puteți rula oricând mai târziu din Setări → Informații și întreținere vault → Rescaneaza vault.",
 	"firstRun.scanNow": "Scanează acum",
 	"firstRun.noThanks": "Nu, mulțumesc",
-	"firstRun.autoScanComplete": "Callout Studio a scanat vault-ul și a adăugat {{count}} callout(uri).",
+	"firstRun.autoScanComplete":
+		"Callout Studio a scanat vault-ul și a adăugat {{count}} callout(uri).",
 	"firstRun.scanning": "Scanare",
 
 	"welcome.tooltip": "Despre Callout Studio",
 	"welcome.title": "Bine ați venit în Callout Studio",
-	"welcome.tagline": "Soluția dvs. completă pentru gestionarea callouts din Obsidian.",
+	"welcome.tagline":
+		"Soluția dvs. completă pentru gestionarea callouts din Obsidian.",
 	"welcome.previewTitle": "Vedeți-l în acțiune",
 	"welcome.sample":
 		"Callout Studio vă permite să creați callouts cu o pictogramă, culori și un nume personalizate.\n\n" +
@@ -39,10 +46,14 @@ export const ro: Record<string, string> = {
 		"Callout Studio are mult mai multe de oferit! [Aflați mai multe]({{repoUrl}}).\n",
 
 	"deleteModal.title": 'Ștergeți callout "{{name}}"?',
-	"deleteModal.bodyInUse": "Acest callout apare de {{count}} ori în {{files}} fișier(e).",
-	"deleteModal.bodyInUseExplain": "Ștergerea va converti acele blocuri în text simplu — vor pierde stilul și antetul callout.",
-	"deleteModal.replaceHint": "Îl puteți înlocui cu alt callout, păstrând conținutul vault-ului ca un callout stilizat.",
-	"deleteModal.bodyUnused": '"{{name}}" nu este folosit în nicio notă, dar este un callout personalizat pe care l-ați creat. Ștergerea îl va elimina din această listă.',
+	"deleteModal.bodyInUse":
+		"Acest callout apare de {{count}} ori în {{files}} fișier(e).",
+	"deleteModal.bodyInUseExplain":
+		"Ștergerea va converti acele blocuri în text simplu — vor pierde stilul și antetul callout.",
+	"deleteModal.replaceHint":
+		"Îl puteți înlocui cu alt callout, păstrând conținutul vault-ului ca un callout stilizat.",
+	"deleteModal.bodyUnused":
+		'"{{name}}" nu este folosit în nicio notă, dar este un callout personalizat pe care l-ați creat. Ștergerea îl va elimina din această listă.',
 	"deleteModal.replaceInstead": "Înlocuiți în schimb",
 	"deleteModal.deleteInUse": "Șterge (convertește în text simplu)",
 	"deleteModal.deleteUnused": "Șterge callout",
@@ -60,9 +71,12 @@ export const ro: Record<string, string> = {
 	"settings.importExport": "Import / export",
 	"settings.import": "Importați",
 	"settings.export": "Exportați",
-	"settings.importDesc": "Importați progresul Callout Studio dintr-un alt vault folosind un fișier JSON.",
-	"settings.exportDesc": "Salvați toate tipurile de callout personalizate în format JSON.",
-	"settings.importConflictNotice": "Au fost importate {{count}} tip(uri) de callout; {{overwritten}} înregistrare(i) existentă(e) au fost suprascrisă(e).",
+	"settings.importDesc":
+		"Importați progresul Callout Studio dintr-un alt vault folosind un fișier JSON.",
+	"settings.exportDesc":
+		"Salvați toate tipurile de callout personalizate în format JSON.",
+	"settings.importConflictNotice":
+		"Au fost importate {{count}} tip(uri) de callout; {{overwritten}} înregistrare(i) existentă(e) au fost suprascrisă(e).",
 
 	"settings.addNewCallout": "+ adaugă callout",
 
@@ -78,7 +92,8 @@ export const ro: Record<string, string> = {
 
 	"settings.colorSwatchAria": "Accent: {{accent}} · Fundal: {{bg}}",
 	"settings.fallbackCallout": "Callout de rezervă implicit",
-	"settings.fallbackCalloutDesc": "Tipurile de callout nerecunoscute din vault vor moșteni stilul acestui callout.",
+	"settings.fallbackCalloutDesc":
+		"Tipurile de callout nerecunoscute din vault vor moșteni stilul acestui callout.",
 
 	"settings.globalStyle": "Stil global callout",
 	"settings.border": "Borduri",
@@ -112,46 +127,59 @@ export const ro: Record<string, string> = {
 	"settings.deletePaletteConfirm":
 		'Ștergeți paleta "{{name}}"?\nCallout-urile care îi folosesc culorile nu sunt afectate.',
 	"settings.enableAutocomplete": "Activați completarea automată [!",
-	"settings.enableAutocompleteDesc": 'Afișează sugestii când tastați "[!" într-un citat bloc în editor. Alegeți un tip de callout din listă pentru a insera un antet callout complet.',
+	"settings.enableAutocompleteDesc":
+		'Afișează sugestii când tastați "[!" într-un citat bloc în editor. Alegeți un tip de callout din listă pentru a insera un antet callout complet.',
 
 	"settings.openHotkeys": "Scurtături Callout Studio",
-	"settings.openHotkeysDesc": "Deschide setările de scurtături Obsidian pentru comenzile Callout Studio, unde puteți alege propriile scurtături pentru Creare tip nou, Deschide setări, Elimină callout și Înfășoară în callout. Implicit nu sunt atribuite scurtături.",
+	"settings.openHotkeysDesc":
+		"Deschide setările de scurtături Obsidian pentru comenzile Callout Studio, unde puteți alege propriile scurtături pentru Creare tip nou, Deschide setări, Elimină callout și Înfășoară în callout. Implicit nu sunt atribuite scurtături.",
 	"settings.openHotkeysButton": "Deschide setările de scurtături",
-
 
 	"settings.vaultMaintenance": "Informații și întreținere vault",
 	"settings.vaultStats": "Statistici callout",
-	"settings.vaultStatsDesc": "Numără toate blocurile callout din notele Markdown și le grupează după tip.",
+	"settings.vaultStatsDesc":
+		"Numără toate blocurile callout din notele Markdown și le grupează după tip.",
 	"settings.vaultStatsButton": "Vizualizare statistici",
 	"settings.vaultStatsScanning": "Scanare",
 	"settings.resetAll": "Resetați",
-	"settings.resetAllDesc": "Șterge toate callouts utilizator, resetează callouts integrate, stilurile globale (borduri, scara fontului, formă), paletele de culori salvate, personalizarea meniului clic dreapta și SVG-urile Material descărcate.",
+	"settings.resetAllDesc":
+		"Șterge toate callouts utilizator, resetează callouts integrate, stilurile globale (borduri, scara fontului, formă), paletele de culori salvate, personalizarea meniului clic dreapta și SVG-urile Material descărcate.",
 	"settings.resetAllButton": "Resetați tot",
-	"settings.resetAllConfirm": "Aceasta va șterge toate callouts personalizate, va reseta callouts integrate, stilurile globale, paletele de culori salvate, personalizarea meniului clic dreapta și toate SVG-urile Material din cache. Această acțiune nu poate fi anulată. Ești sigur?",
+	"settings.resetAllConfirm":
+		"Aceasta va șterge toate callouts personalizate, va reseta callouts integrate, stilurile globale, paletele de culori salvate, personalizarea meniului clic dreapta și toate SVG-urile Material din cache. Această acțiune nu poate fi anulată. Ești sigur?",
 	"notice.resetAllDone": "Totul a fost resetat la valorile implicite.",
 
 	"notice.exported": "Callouts exportate în callout-studio-export.json",
-	"notice.importedJSON": "Au fost importate {{count}} tip(uri) de callout din JSON.",
+	"notice.importedJSON":
+		"Au fost importate {{count}} tip(uri) de callout din JSON.",
 	"notice.importedSettings": "Au fost importate setările pluginului.",
-	"notice.noNewJSON": "Nu au fost importate tipuri noi de callout (ID-urile pot exista deja).",
-	"notice.iconDownloadFailed": 'Nu s-a putut descărca pictograma Material "{{name}}". Poate fi indisponibilă pentru acest stil/grosime sau conexiunea este offline.',
+	"notice.noNewJSON":
+		"Nu au fost importate tipuri noi de callout (ID-urile pot exista deja).",
+	"notice.iconDownloadFailed":
+		'Nu s-a putut descărca pictograma Material "{{name}}". Poate fi indisponibilă pentru acest stil/grosime sau conexiunea este offline.',
 	"notice.nothingToWrap": "Nimic de înfășurat.",
-	"notice.cursorNotInsideCallout": "Cursorul nu este în interiorul unui callout.",
-	"notice.openHotkeysFailed": "Nu s-au putut deschide setările de scurtături Obsidian.",
-	"notice.filterHotkeysFailed": "Scurtăturile Obsidian au fost deschise, dar filtrul Callout Studio nu a putut fi aplicat.",
+	"notice.cursorNotInsideCallout":
+		"Cursorul nu este în interiorul unui callout.",
+	"notice.openHotkeysFailed":
+		"Nu s-au putut deschide setările de scurtături Obsidian.",
+	"notice.filterHotkeysFailed":
+		"Scurtăturile Obsidian au fost deschise, dar filtrul Callout Studio nu a putut fi aplicat.",
 
 	"editor.editCallout": "Editați callout",
 	"editor.newCallout": "Callout nou",
 	"editor.displayName": "Nume afișat",
 	"editor.displayNameDesc": "Eticheta lizibilă afișată în interfață",
-	"editor.displayNameBuiltIn": "Numele afișat nu poate fi modificat pentru callouts integrate",
+	"editor.displayNameBuiltIn":
+		"Numele afișat nu poate fi modificat pentru callouts integrate",
 	"editor.displayNamePlaceholder": "Callout-ul meu",
 	"editor.calloutIds": "ID-uri callout",
-	"editor.calloutIdsDesc": "Toți identificatorii pentru acest callout. Spațiile sunt permise.\nApăsați Enter sau butonul + pentru a adăuga.",
+	"editor.calloutIdsDesc":
+		"Toți identificatorii pentru acest callout. Spațiile sunt permise.\nApăsați Enter sau butonul + pentru a adăuga.",
 	"editor.calloutIdsPlaceholder": "Adaugă ID",
 	"editor.addId": "Adaugă ID",
 	"editor.idLinkedToName": "Legat de numele afișat",
-	"editor.idCannotDelete": "Acest ID este legat de numele afișat și nu poate fi șters — editați numele pentru a-l schimba",
+	"editor.idCannotDelete":
+		"Acest ID este legat de numele afișat și nu poate fi șters — editați numele pentru a-l schimba",
 	"editor.icon": "Pictogramă",
 	"editor.livePreview": "Previzualizare live",
 	"editor.iconAdjustment": "Ajustare pictogramă",
@@ -165,26 +193,33 @@ export const ro: Record<string, string> = {
 	"editor.paletteGroupPresets": "Presetări culori",
 	"editor.paletteGroupCustom": "Personalizat",
 	"editor.paletteNewColor": "Culoare nouă…",
-	"editor.contrastWarning": "Contrast scăzut cu fundalul — poate fi greu de citit",
+	"editor.contrastWarning":
+		"Contrast scăzut cu fundalul — poate fi greu de citit",
 	"editor.foldable": "Pliabil",
-	"editor.foldableDesc": "Alegeți dacă callout-ul poate fi pliat și ce stare implicită să aplice în tot vault-ul.",
+	"editor.foldableDesc":
+		"Alegeți dacă callout-ul poate fi pliat și ce stare implicită să aplice în tot vault-ul.",
 	"editor.foldOff": "Dezactivat",
 	"editor.foldOpen": "Deschis implicit",
 	"editor.foldClosed": "Închis implicit",
 	"editor.cancel": "Anulare",
 	"editor.saveChanges": "Salvați modificările",
 	"editor.createCallout": "Creați callout",
-	"editor.nameRequired": "Este necesar un nume afișat înainte de a crea un callout.",
+	"editor.nameRequired":
+		"Este necesar un nume afișat înainte de a crea un callout.",
 	"editor.noChangesToSave": "Nu s-au efectuat modificări.",
 	"editor.downloadingIcon": "Se descarcă pictograma",
 	"editor.idEmpty": "Este necesar cel puțin un ID",
 	"editor.idExists": "Există deja un callout cu acest ID",
 	"editor.idConflict": "Acest ID intră în conflict cu un callout existent",
-	"editor.idDashConflict": 'Obsidian scrie spațiile ca liniuțe, așa că acest ID intră în conflict cu „{{other}}”',
+	"editor.idDashConflict":
+		"Obsidian scrie spațiile ca liniuțe, așa că acest ID intră în conflict cu „{{other}}”",
 	"editor.untitledCallout": "Callout fără titlu",
-	"editor.loremIpsum": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-	"editor.loremIpsumShort": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-	"editor.sampleInlineText": "Iată o pastilă [!{id}] inline în interiorul unui paragraf.",
+	"editor.loremIpsum":
+		"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+	"editor.loremIpsumShort":
+		"Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+	"editor.sampleInlineText":
+		"Iată o pastilă [!{id}] inline în interiorul unui paragraf.",
 	"editor.previewReadOnly": "Previzualizarea live nu poate fi editată",
 
 	// Palette editor modal
@@ -194,10 +229,12 @@ export const ro: Record<string, string> = {
 	"palette.namePlaceholder": "Paleta mea",
 	"palette.nameExists": "Există deja o paletă cu acest nume",
 	"palette.baseColor": "Culoare de bază",
-	"palette.baseColorHint": "Vom potrivi automat culoarea de fundal cu aceasta. Dacă dorești, o poți controla separat {{link}}.",
+	"palette.baseColorHint":
+		"Vom potrivi automat culoarea de fundal cu aceasta. Dacă dorești, o poți controla separat {{link}}.",
 	"palette.baseColorHintLink": "făcând clic aici",
 	"palette.advancedColors": "Culori",
-	"palette.advancedColorsHint": "Editare culori pentru modul {{mode}} - celălalt mod se actualizează automat. Comută tema Obsidian pentru a verifica.",
+	"palette.advancedColorsHint":
+		"Editare culori pentru modul {{mode}} - celălalt mod se actualizează automat. Comută tema Obsidian pentru a verifica.",
 	"palette.revertHint": "Preferi o singură culoare de bază? {{link}}.",
 	"palette.revertHintLink": "Revenire",
 	"palette.lightMode": "Luminos",
@@ -245,11 +282,22 @@ export const ro: Record<string, string> = {
 	"iconPicker.searchLucide": "caută pictograme Lucide",
 	"iconPicker.searchTabler": "caută pictograme Tabler",
 	"iconPicker.tablerStyle": "Stilul pictogramei",
-	"iconPicker.tablerStyleOutline": "Contur",
-	"iconPicker.tablerStyleFilled": "Umplut",
+	"iconPicker.tablerStyleOutline": "Contur (Outline)",
+	"iconPicker.tablerStyleFilled": "Umplut (Filled)",
 	"iconPicker.loadMore": "Încarcă mai mult",
 	"iconPicker.materialStyle": "Stilul pictogramei",
+	"iconPicker.materialStyleOutlined": "Contur (Outlined)",
+	"iconPicker.materialStyleFilled": "Umplut (Filled)",
+	"iconPicker.materialStyleRounded": "Rotunjit (Rounded)",
+	"iconPicker.materialStyleSharp": "Ascuțit (Sharp)",
 	"iconPicker.materialWeight": "Grosimea pictogramei",
+	"iconPicker.materialWeight100": "Subțire (Thin)",
+	"iconPicker.materialWeight200": "Extra ușor (Extra Light)",
+	"iconPicker.materialWeight300": "Ușor (Light)",
+	"iconPicker.materialWeight400": "Normal (Regular)",
+	"iconPicker.materialWeight500": "Mediu (Medium)",
+	"iconPicker.materialWeight600": "Semi-îngroșat (Semi Bold)",
+	"iconPicker.materialWeight700": "Îngroșat (Bold)",
 	"iconPicker.searchMaterial": "caută pictograme Material",
 	"iconPicker.searchEmoji": "Caută emoji",
 	"iconPicker.skinTone": "Ton de piele",
@@ -261,34 +309,42 @@ export const ro: Record<string, string> = {
 	"iconPicker.fa": "Font Awesome",
 	"iconPicker.searchFa": "Caută în Font Awesome",
 	"iconPicker.faStyle": "Stilul pictogramei",
-	"iconPicker.faStyleSolid": "Solid",
-	"iconPicker.faStyleRegular": "Normal",
-	"iconPicker.faStyleBrands": "Mărci",
+	"iconPicker.faStyleSolid": "Plin (Solid)",
+	"iconPicker.faStyleRegular": "Normal (Regular)",
+	"iconPicker.faStyleBrands": "Mărci (Brands)",
 	"iconPicker.rpgAwesome": "RPG Awesome",
 	"iconPicker.searchRpgAwesome": "Caută în RPG Awesome",
 	"iconPicker.image": "Imaginile tale",
 	"iconPicker.searchImage": "Caută în imaginile tale",
-	"iconPicker.imageTooLarge": "{{name}} este prea mare. Imaginile trebuie să fie sub 5 MB.",
-	"iconPicker.imageUnsupported": "{{name}} nu este un format de imagine acceptat. Folosiți SVG, PNG, JPEG sau WebP.",
-	"iconPicker.imageInvalidSvg": "{{name}} nu a putut fi citit ca SVG sigur și nu a fost adăugat.",
+	"iconPicker.imageTooLarge":
+		"{{name}} este prea mare. Imaginile trebuie să fie sub 5 MB.",
+	"iconPicker.imageUnsupported":
+		"{{name}} nu este un format de imagine acceptat. Folosiți SVG, PNG, JPEG sau WebP.",
+	"iconPicker.imageInvalidSvg":
+		"{{name}} nu a putut fi citit ca SVG sigur și nu a fost adăugat.",
 	"iconPicker.imageDecodeFailed": "{{name}} nu a putut fi citit ca imagine.",
-	"iconPicker.imageDuplicate": "{{name}} există deja în imaginile tale. Redenumiți fișierul sau ștergeți imaginea existentă.",
+	"iconPicker.imageDuplicate":
+		"{{name}} există deja în imaginile tale. Redenumiți fișierul sau ștergeți imaginea existentă.",
 	"iconPicker.imageAdd": "Adaugă imagini",
-	"iconPicker.imageEmpty": "Nicio imagine încă. Adaugă un fișier SVG, PNG, JPEG sau WebP de pe calculatorul tău sau trage-l aici.",
+	"iconPicker.imageEmpty":
+		"Nicio imagine încă. Adaugă un fișier SVG, PNG, JPEG sau WebP de pe calculatorul tău sau trage-l aici.",
 	"iconPicker.imageDelete": "Șterge",
 	"iconPicker.imageDeleteConfirm": "Ștergeți „{{name}}”?",
-	"iconPicker.imageDeleteInUse": "{{count}} callouts folosesc această imagine. Vor afișa o pictogramă substituent până când furnizați una nouă.",
+	"iconPicker.imageDeleteInUse":
+		"{{count}} callouts folosesc această imagine. Vor afișa o pictogramă substituent până când furnizați una nouă.",
 	"iconPicker.imageRecolor": "Urmează culoarea Callout",
 	"iconPicker.allSources": "Toate sursele",
 	"iconPicker.searchAllSources": "Caută în toate sursele de pictograme",
-	"iconPicker.sourcesNotDownloaded": "Neincluși încă: {{names}}. Alege o sursă de mai sus pentru a o descărca.",
+	"iconPicker.sourcesNotDownloaded":
+		"Neincluși încă: {{names}}. Alege o sursă de mai sus pentru a o descărca.",
 	"iconPicker.chooseSource": "Alege sursa",
 	"iconPicker.sourceGroup": "{{name}} · {{count}}",
 
 	// Source menu — what each library holds, in a few words
 	"iconPicker.descAllSources": "caută în toate bibliotecile deodată",
 	"iconPicker.descLucide": "setul propriu al Obsidian, mereu offline",
-	"iconPicker.descTabler": "pictograme UI curate și consistente, contur și umplut",
+	"iconPicker.descTabler":
+		"pictograme UI curate și consistente, contur și umplut",
 	"iconPicker.descMaterial": "setul Google, patru stiluri și șapte grosimi",
 	"iconPicker.descEmoji": "glife colorate, fiecare ton de piele",
 	"iconPicker.descOcticons": "pictogramele de interfață GitHub",
@@ -296,22 +352,143 @@ export const ro: Record<string, string> = {
 	"iconPicker.descRpgAwesome": "pictograme fantasy și jocuri de masă",
 	"iconPicker.descImage": "imagini adăugate de pe calculatorul tău",
 
+	// Icon picker — category filter dropdown labels
+	"iconPicker.cat.Accessibility": "Accesibilitate",
+	"iconPicker.cat.Actions": "Acțiuni",
+	"iconPicker.cat.Activities": "Activități",
+	"iconPicker.cat.Alert": "Alertă",
+	"iconPicker.cat.Alphabet": "Alfabet",
+	"iconPicker.cat.Android": "Android",
+	"iconPicker.cat.Animals": "Animale",
+	"iconPicker.cat.Arrows": "Săgeți",
+	"iconPicker.cat.Astronomy": "Astronomie",
+	"iconPicker.cat.Audio&Video": "Audio și video",
+	"iconPicker.cat.Automotive": "Auto",
+	"iconPicker.cat.Badges": "Insigne",
+	"iconPicker.cat.Brand": "Mărci",
+	"iconPicker.cat.Buildings": "Clădiri",
+	"iconPicker.cat.Business": "Afaceri",
+	"iconPicker.cat.Camping": "Camping",
+	"iconPicker.cat.Charity": "Caritate",
+	"iconPicker.cat.Charts": "Diagrame",
+	"iconPicker.cat.Charts + Diagrams": "Diagrame și grafice",
+	"iconPicker.cat.Childhood": "Copilărie",
+	"iconPicker.cat.Clothing + Fashion": "Îmbrăcăminte și modă",
+	"iconPicker.cat.Coding": "Programare",
+	"iconPicker.cat.Communicate": "Comunicare",
+	"iconPicker.cat.Communication": "Comunicații",
+	"iconPicker.cat.Computers": "Calculatoare",
+	"iconPicker.cat.Connectivity": "Conectivitate",
+	"iconPicker.cat.Construction": "Construcție",
+	"iconPicker.cat.Currencies": "Valute",
+	"iconPicker.cat.Database": "Bază de date",
+	"iconPicker.cat.Design": "Design",
+	"iconPicker.cat.Development": "Dezvoltare",
+	"iconPicker.cat.Devices": "Dispozitive",
+	"iconPicker.cat.Devices + Hardware": "Dispozitive și hardware",
+	"iconPicker.cat.Disaster + Crisis": "Dezastre și crize",
+	"iconPicker.cat.Document": "Document",
+	"iconPicker.cat.E-commerce": "Comerț electronic",
+	"iconPicker.cat.Editing": "Editare",
+	"iconPicker.cat.Education": "Educație",
+	"iconPicker.cat.Electrical": "Electric",
+	"iconPicker.cat.Emoji": "Emoji",
+	"iconPicker.cat.Energy": "Energie",
+	"iconPicker.cat.Extensions": "Extensii",
+	"iconPicker.cat.Files": "Fișiere",
+	"iconPicker.cat.Film + Video": "Film și video",
+	"iconPicker.cat.Food": "Mâncare",
+	"iconPicker.cat.Food + Beverage": "Mâncare și băuturi",
+	"iconPicker.cat.Fruits + Vegetables": "Fructe și legume",
+	"iconPicker.cat.Games": "Jocuri",
+	"iconPicker.cat.Gaming": "Gaming",
+	"iconPicker.cat.Gender": "Gen",
+	"iconPicker.cat.Genders": "Genuri",
+	"iconPicker.cat.Gestures": "Gesturi",
+	"iconPicker.cat.Halloween": "Halloween",
+	"iconPicker.cat.Hands": "Mâini",
+	"iconPicker.cat.Hardware": "Hardware",
+	"iconPicker.cat.Health": "Sănătate",
+	"iconPicker.cat.Holidays": "Sărbători",
+	"iconPicker.cat.Home": "Acasă",
+	"iconPicker.cat.Household": "Menaj",
+	"iconPicker.cat.Humanitarian": "Umanitar",
+	"iconPicker.cat.Images": "Imagini",
+	"iconPicker.cat.Laundry": "Spălătorie",
+	"iconPicker.cat.Letters": "Litere",
+	"iconPicker.cat.Logic": "Logică",
+	"iconPicker.cat.Logistics": "Logistică",
+	"iconPicker.cat.Map": "Hartă",
+	"iconPicker.cat.Maps": "Hărți",
+	"iconPicker.cat.Maritime": "Maritim",
+	"iconPicker.cat.Marketing": "Marketing",
+	"iconPicker.cat.Math": "Matematică",
+	"iconPicker.cat.Mathematics": "Matematică",
+	"iconPicker.cat.Media": "Media",
+	"iconPicker.cat.Media Playback": "Redare media",
+	"iconPicker.cat.Medical + Health": "Medical și sănătate",
+	"iconPicker.cat.Money": "Bani",
+	"iconPicker.cat.Mood": "Dispoziție",
+	"iconPicker.cat.Moving": "Mutare",
+	"iconPicker.cat.Music + Audio": "Muzică și audio",
+	"iconPicker.cat.Nature": "Natură",
+	"iconPicker.cat.Numbers": "Numere",
+	"iconPicker.cat.Photography": "Fotografie",
+	"iconPicker.cat.Photos + Images": "Fotografii și imagini",
+	"iconPicker.cat.Political": "Politic",
+	"iconPicker.cat.Privacy": "Confidențialitate",
+	"iconPicker.cat.Punctuation + Symbols": "Punctuație și simboluri",
+	"iconPicker.cat.Religion": "Religie",
+	"iconPicker.cat.Science": "Știință",
+	"iconPicker.cat.Science Fiction": "Știință ficțiune",
+	"iconPicker.cat.Security": "Securitate",
+	"iconPicker.cat.Shapes": "Forme",
+	"iconPicker.cat.Shopping": "Cumpărături",
+	"iconPicker.cat.Social": "Rețele sociale",
+	"iconPicker.cat.Spinners": "Rotițe",
+	"iconPicker.cat.Sport": "Sport",
+	"iconPicker.cat.Sports + Fitness": "Sport și fitness",
+	"iconPicker.cat.Symbols": "Simboluri",
+	"iconPicker.cat.System": "Sistem",
+	"iconPicker.cat.Text": "Text",
+	"iconPicker.cat.Text Formatting": "Formatare text",
+	"iconPicker.cat.Time": "Timp",
+	"iconPicker.cat.Toggle": "Comutator",
+	"iconPicker.cat.Transit": "Transit",
+	"iconPicker.cat.Transportation": "Transport",
+	"iconPicker.cat.Travel": "Călătorii",
+	"iconPicker.cat.Travel + Hotel": "Călătorii și hotel",
+	"iconPicker.cat.UI actions": "Acțiuni interfață",
+	"iconPicker.cat.Users + People": "Utilizatori și persoane",
+	"iconPicker.cat.Vehicles": "Vehicule",
+	"iconPicker.cat.Version control": "Control versiuni",
+	"iconPicker.cat.Weather": "Vreme",
+	"iconPicker.cat.Writing": "Scriere",
+	"iconPicker.cat.Zodiac": "Zodiac",
+
 	// Downloadable icon packs
 	"iconPack.downloadTitle": "{{name}} nu a fost încă descărcat",
-	"iconPack.downloadDetail": "{{count}} pictograme · {{size}} · descărcare unică",
+	"iconPack.downloadDetail":
+		"{{count}} pictograme · {{size}} · descărcare unică",
 	"iconPack.download": "Descarcă",
 	"iconPack.downloading": "Se descarcă {{name}}…",
-	"iconPack.downloadFailed": "Nu s-a putut descărca {{name}}. Verificați conexiunea și încercați din nou.",
+	"iconPack.downloadFailed":
+		"Nu s-a putut descărca {{name}}. Verificați conexiunea și încercați din nou.",
 	"iconPack.retry": "Încearcă din nou",
-	"iconPack.faBrandsNotice": "Pictogramele de mărci sunt mărci înregistrate ale proprietarilor respectivi. Includerea lor nu indică o aprobare. Vă rugăm să le folosiți doar pentru a reprezenta compania, produsul sau serviciul la care se referă.",
-	"iconPack.artworkRestored": "Arta pictogramelor pentru {{names}} a fost descărcată.",
-	"iconPack.diskWriteFailed": "Callout Studio nu a putut salva pachetul de pictograme pe disc, deci va trebui descărcat din nou data viitoare. Pictogramele alese sunt încă salvate în setările dvs.",
+	"iconPack.faBrandsNotice":
+		"Pictogramele de mărci sunt mărci înregistrate ale proprietarilor respectivi. Includerea lor nu indică o aprobare. Vă rugăm să le folosiți doar pentru a reprezenta compania, produsul sau serviciul la care se referă.",
+	"iconPack.artworkRestored":
+		"Arta pictogramelor pentru {{names}} a fost descărcată.",
+	"iconPack.diskWriteFailed":
+		"Callout Studio nu a putut salva pachetul de pictograme pe disc, deci va trebui descărcat din nou data viitoare. Pictogramele alese sunt încă salvate în setările dvs.",
 
 	// Icon licences & credits
 	"credits.title": "Licențe pictograme și credite",
-	"credits.intro": "Callout Studio folosește mai multe biblioteci deschise de pictograme. Licențele lor sunt reproduse mai jos, împreună cu ce a fost schimbat pentru utilizarea lor aici.",
+	"credits.intro":
+		"Callout Studio folosește mai multe biblioteci deschise de pictograme. Licențele lor sunt reproduse mai jos, împreună cu ce a fost schimbat pentru utilizarea lor aici.",
 	"credits.fullNotices": "Notificări complete ale terților",
-	"credits.pluginLicense": "Codul propriu al Callout Studio este sub licența 0BSD; bibliotecile de pictograme păstrează propriile licențe.",
+	"credits.pluginLicense":
+		"Codul propriu al Callout Studio este sub licența 0BSD; bibliotecile de pictograme păstrează propriile licențe.",
 
 	"contextMenu.editCallout": "Editați setările callout",
 	"contextMenu.copyMarkdown": "Copiați Markdown callout",
@@ -324,19 +501,25 @@ export const ro: Record<string, string> = {
 	"contextMenu.deleteSection": "Ștergeți secțiunea de titlu",
 	"heading.toggleFold": "Comutare pliere",
 	"settings.globalSettings": "Setări globale",
-	"settings.globalSettingsDesc": "Ajustați cu precizie modul în care arată fiecare tip de callout în tot vault-ul.",
-	"settings.globalSettingsRegularDesc": "Adăugați un token callout într-un citat (de ex. `> [!type]`) pentru a afișa caseta de callout integrată a Obsidian. Puteți ajusta bordura, rotunjirea, scara fontului și alinierea.",
-	"settings.globalSettingsHeadingDesc": "Adăugați un token callout imediat după simbolurile # ale titlului (de ex. `## [!type]`) pentru a-l afișa ca un titlu de callout stilizat. Puteți ajusta bordura, forma și spațierea verticală.",
-	"settings.globalSettingsInlineDesc": "Adăugați un token callout oriunde într-o linie de text (de ex. `[!type]`) pentru a-l afișa ca o pastilă mică inline. Puteți ajusta bordura și forma.",
+	"settings.globalSettingsDesc":
+		"Ajustați cu precizie modul în care arată fiecare tip de callout în tot vault-ul.",
+	"settings.globalSettingsRegularDesc":
+		"Adăugați un token callout într-un citat (de ex. `> [!type]`) pentru a afișa caseta de callout integrată a Obsidian. Puteți ajusta bordura, rotunjirea, scara fontului și alinierea.",
+	"settings.globalSettingsHeadingDesc":
+		"Adăugați un token callout imediat după simbolurile # ale titlului (de ex. `## [!type]`) pentru a-l afișa ca un titlu de callout stilizat. Puteți ajusta bordura, forma și spațierea verticală.",
+	"settings.globalSettingsInlineDesc":
+		"Adăugați un token callout oriunde într-o linie de text (de ex. `[!type]`) pentru a-l afișa ca o pastilă mică inline. Puteți ajusta bordura și forma.",
 	"settings.globalSettingsCustomize": "Personalizați",
 	"settings.calloutTypeRegular": "Callout obișnuit",
 	"settings.calloutTypeHeading": "Callout tip titlu",
 	"settings.calloutTypeInline": "Callout inline",
 	"settings.customizeMenu": "Personalizați elementele meniului",
-	"settings.customizeMenuDesc": "Alegeți ce acțiuni de clic dreapta apar pentru fiecare tip de callout și reordonați-le. Funcționează în modul sursă și Live Preview.",
+	"settings.customizeMenuDesc":
+		"Alegeți ce acțiuni de clic dreapta apar pentru fiecare tip de callout și reordonați-le. Funcționează în modul sursă și Live Preview.",
 	"settings.customizeMenuButton": "Personalizați elementele meniului",
 	"menuCustomize.title": "Personalizare meniu clic dreapta",
-	"menuCustomize.desc": "Activați sau dezactivați acțiuni și trageți mânerul pentru a le reordona. Modificările sunt salvate automat.",
+	"menuCustomize.desc":
+		"Activați sau dezactivați acțiuni și trageți mânerul pentru a le reordona. Modificările sunt salvate automat.",
 	"menuCustomize.regular": "Callout obișnuit",
 	"menuCustomize.heading": "Callout tip titlu",
 	"menuCustomize.inline": "Callout inline",
@@ -344,7 +527,8 @@ export const ro: Record<string, string> = {
 	"menuItem.edit": "Editați callout",
 	"menuItem.openSettings": "Deschideți setările",
 	"menuItem.copyMarkdown": "Copiați Markdown",
-	"menuItem.foldDefaults": "Stare implicită de pliere (deschis / închis / niciuna)",
+	"menuItem.foldDefaults":
+		"Stare implicită de pliere (deschis / închis / niciuna)",
 	"menuItem.cutSection": "Decupați secțiunea",
 	"menuItem.copySection": "Copiați secțiunea",
 	"menuItem.deleteSection": "Ștergeți secțiunea",
@@ -352,20 +536,29 @@ export const ro: Record<string, string> = {
 	"confirm.ok": "Șterge",
 	"confirm.cancel": "Anulare",
 
-	"vault.filesUpdated": "Au fost actualizate {{count}} referință(e) callout în fișierele vault.",
-	"vault.idsUpdated": "Au fost actualizate {{count}} ID(uri) callout în fișierele vault: {{oldIds}} → {{newId}}",
-	"vault.titlesUpdated": "Au fost actualizate {{count}} titlu(uri) callout în fișierele vault: {{oldTitle}} → {{newTitle}}",
+	"vault.filesUpdated":
+		"Au fost actualizate {{count}} referință(e) callout în fișierele vault.",
+	"vault.idsUpdated":
+		"Au fost actualizate {{count}} ID(uri) callout în fișierele vault: {{oldIds}} → {{newId}}",
+	"vault.titlesUpdated":
+		"Au fost actualizate {{count}} titlu(uri) callout în fișierele vault: {{oldTitle}} → {{newTitle}}",
 	"vault.replaceWith": "Înlocuiți cu:",
 	"vault.deleteWithout": "Ștergeți fără înlocuire",
 	"vault.confirmDelete": "Confirmare",
 	"vault.confirmReplace": "Înlocuiți",
-	"vault.replacePromptInUse": '"{{name}}" este utilizat de {{count}} ori în {{files}} fișier(e). Alegeți un callout cu care să îl înlocuiți:',
-	"vault.replacePromptUnused": 'Alegeți un callout cu care să înlocuiți "{{name}}":',
-	"vault.noReplacementAvailable": "Nu există alte callouts disponibile pentru a înlocui acesta.",
-	"vault.convertedToPlainText": "{{blocks}} bloc(uri) callout din {{files}} fișier(e) convertit(e) în text simplu.",
-	"vault.resetAliasWarning": "{{count}} referință(e) din {{files}} fișier(e) folosesc aliasuri personalizate: {{aliases}}. Acestea vor înceta să funcționeze după resetare. Continuați?",
+	"vault.replacePromptInUse":
+		'"{{name}}" este utilizat de {{count}} ori în {{files}} fișier(e). Alegeți un callout cu care să îl înlocuiți:',
+	"vault.replacePromptUnused":
+		'Alegeți un callout cu care să înlocuiți "{{name}}":',
+	"vault.noReplacementAvailable":
+		"Nu există alte callouts disponibile pentru a înlocui acesta.",
+	"vault.convertedToPlainText":
+		"{{blocks}} bloc(uri) callout din {{files}} fișier(e) convertit(e) în text simplu.",
+	"vault.resetAliasWarning":
+		"{{count}} referință(e) din {{files}} fișier(e) folosesc aliasuri personalizate: {{aliases}}. Acestea vor înceta să funcționeze după resetare. Continuați?",
 	"vault.resetConfirm": "Resetați",
-	"vault.resetAllInUse": "⚠ {{count}} referință(e) callout din {{files}} fișier(e) folosesc tipuri de callout personalizate care vor fi șterse.",
+	"vault.resetAllInUse":
+		"⚠ {{count}} referință(e) callout din {{files}} fișier(e) folosesc tipuri de callout personalizate care vor fi șterse.",
 
 	"vaultStats.title": "Statistici callout",
 	"vaultStats.totalCallouts": "Total callouts",
@@ -388,47 +581,79 @@ export const ro: Record<string, string> = {
 	"vaultStats.close": "Închide",
 
 	"import.title": "Probleme de import",
-	"import.reportLeadIn": "Se pare că fișierul importat a fost modificat. Iată lista problemelor:",
-	"import.reportLeadInFatal": "Acest fișier nu pare a fi un export Callout Studio. Nu poate fi importat:",
+	"import.reportLeadIn":
+		"Se pare că fișierul importat a fost modificat. Iată lista problemelor:",
+	"import.reportLeadInFatal":
+		"Acest fișier nu pare a fi un export Callout Studio. Nu poate fi importat:",
 	"import.entryHeading": "Intrare {{index}} — {{label}}",
-	"import.summary": "{{valid}} din {{total}} intrări sunt valide · {{issues}} problemă(e) găsită(e).",
+	"import.summary":
+		"{{valid}} din {{total}} intrări sunt valide · {{issues}} problemă(e) găsită(e).",
 	"import.btnCancel": "Anulare",
 	"import.btnImportValid": "Importați doar cele valide ({{count}})",
-	"import.err.notRecognized": "Fișier nerecunoscut: se aștepta un array de definiții callout sau un export Callout Studio.",
-	"import.warn.settingsIgnored": "Blocul de setări nu a fost un obiect valid și a fost ignorat.",
-	"import.warn.invalidGradient": "Gradientul de fundal a fost invalid și a fost ignorat.",
-	"import.err.parseFailed": "Fișierul nu este JSON valid și nu a putut fi analizat.",
+	"import.err.notRecognized":
+		"Fișier nerecunoscut: se aștepta un array de definiții callout sau un export Callout Studio.",
+	"import.warn.settingsIgnored":
+		"Blocul de setări nu a fost un obiect valid și a fost ignorat.",
+	"import.warn.invalidGradient":
+		"Gradientul de fundal a fost invalid și a fost ignorat.",
+	"import.err.parseFailed":
+		"Fișierul nu este JSON valid și nu a putut fi analizat.",
 	"import.err.entryNotObject": "Intrarea trebuie să fie un obiect.",
-	"import.err.requiredMissing": 'Câmpul obligatoriu "{{field}}" lipsește sau are tipul greșit.',
+	"import.err.requiredMissing":
+		'Câmpul obligatoriu "{{field}}" lipsește sau are tipul greșit.',
 	"import.err.idEmpty": "ID-ul nu trebuie să fie gol.",
-	"import.err.idTooLong": 'ID-ul "{{value}}" are {{length}} caractere; maximul este {{max}}.',
-	"import.err.idBadChar": 'ID-ul "{{value}}" conține caractere invalide ("|", "[", "]", tabulatorii și sfârșiturile de linie nu sunt permise).',
+	"import.err.idTooLong":
+		'ID-ul "{{value}}" are {{length}} caractere; maximul este {{max}}.',
+	"import.err.idBadChar":
+		'ID-ul "{{value}}" conține caractere invalide ("|", "[", "]", tabulatorii și sfârșiturile de linie nu sunt permise).',
 	"import.err.displayNameEmpty": "Numele afișat nu trebuie să fie gol.",
-	"import.err.displayNameTooLong": "Numele afișat are {{length}} caractere; maximul este {{max}}.",
-	"import.err.boolField": '"{{field}}" trebuie să fie o valoare booleană (true sau false).',
+	"import.err.displayNameTooLong":
+		"Numele afișat are {{length}} caractere; maximul este {{max}}.",
+	"import.err.boolField":
+		'"{{field}}" trebuie să fie o valoare booleană (true sau false).',
 	"import.err.iconNotObject": "Pictograma trebuie să fie un obiect.",
-	"import.err.iconTypeInvalid": "Tipul pictogramei \"{{value}}\" nu este unul dintre: {{types}}.",
-	"import.warn.iconFieldIgnored": "\"{{field}}\" se aplică doar pictogramelor Material și este ignorat pentru tipul de pictogramă {{type}}.",
-	"import.err.iconValueEmpty": "Valoarea pictogramei trebuie să fie un șir nevid.",
-	"import.err.iconValueTooLong": "Valoarea pictogramei este neobișnuit de lungă ({{length}} caractere).",
-	"import.err.materialStyle": 'Stilul pictogramei Material "{{value}}" nu este unul dintre: outlined, filled, rounded, sharp.',
-	"import.err.materialWeight": 'Grosimea pictogramei Material "{{value}}" trebuie să fie un număr întreg între 100 și 700, în pași de 100.',
-	"import.warn.iconRecolorIgnored": "\"recolor\" se aplică doar imaginilor proprii și este ignorat pentru tipul de pictogramă {{type}}.",
-	"import.err.iconRecolorInvalid": "\"recolor\" trebuie să fie true sau false (primit: \"{{value}}\").",
-	"import.err.colorInvalid": '"{{field}}" trebuie să fie o culoare hexadecimală ca "#448aff" (primit "{{value}}").',
-	"import.err.numberRange": '"{{field}}" trebuie să fie un număr între {{min}} și {{max}} (primit "{{value}}").',
-	"import.err.iconSizeRange": '"{{field}}" trebuie să fie un număr între {{min}} și {{max}} (primit "{{value}}").',
-	"import.err.aliasesNotArray": '"aliases" trebuie să fie un array de șiruri.',
+	"import.err.iconTypeInvalid":
+		'Tipul pictogramei "{{value}}" nu este unul dintre: {{types}}.',
+	"import.warn.iconFieldIgnored":
+		'"{{field}}" se aplică doar pictogramelor Material și este ignorat pentru tipul de pictogramă {{type}}.',
+	"import.err.iconValueEmpty":
+		"Valoarea pictogramei trebuie să fie un șir nevid.",
+	"import.err.iconValueTooLong":
+		"Valoarea pictogramei este neobișnuit de lungă ({{length}} caractere).",
+	"import.err.materialStyle":
+		'Stilul pictogramei Material "{{value}}" nu este unul dintre: outlined, filled, rounded, sharp.',
+	"import.err.materialWeight":
+		'Grosimea pictogramei Material "{{value}}" trebuie să fie un număr întreg între 100 și 700, în pași de 100.',
+	"import.warn.iconRecolorIgnored":
+		'"recolor" se aplică doar imaginilor proprii și este ignorat pentru tipul de pictogramă {{type}}.',
+	"import.err.iconRecolorInvalid":
+		'"recolor" trebuie să fie true sau false (primit: "{{value}}").',
+	"import.err.colorInvalid":
+		'"{{field}}" trebuie să fie o culoare hexadecimală ca "#448aff" (primit "{{value}}").',
+	"import.err.numberRange":
+		'"{{field}}" trebuie să fie un număr între {{min}} și {{max}} (primit "{{value}}").',
+	"import.err.iconSizeRange":
+		'"{{field}}" trebuie să fie un număr între {{min}} și {{max}} (primit "{{value}}").',
+	"import.err.aliasesNotArray":
+		'"aliases" trebuie să fie un array de șiruri.',
 	"import.err.aliasNotString": "Aliasul trebuie să fie un șir.",
-	"import.err.aliasDup": 'Aliasul "{{value}}" este duplicat în această intrare.',
-	"import.err.tooManyIds": "Prea multe ID-uri ({{count}}); fiecare callout poate avea cel mult {{max}} ID-uri (primar + aliasuri).",
-	"import.err.metadataShape": '"metadata" trebuie să fie un obiect ale cărui valori sunt toate șiruri.',
+	"import.err.aliasDup":
+		'Aliasul "{{value}}" este duplicat în această intrare.',
+	"import.err.tooManyIds":
+		"Prea multe ID-uri ({{count}}); fiecare callout poate avea cel mult {{max}} ID-uri (primar + aliasuri).",
+	"import.err.metadataShape":
+		'"metadata" trebuie să fie un obiect ale cărui valori sunt toate șiruri.',
 	"import.err.unknownFields": "Câmpuri necunoscute ignorate: {{fields}}.",
-	"import.err.duplicateInFile": 'ID/aliasul "{{value}}" este deja folosit de intrarea #{{first}} din acest fișier.',
-	"import.err.aliasConflict": 'Aliasul "{{value}}" este deja folosit de alt callout ("{{other}}") din vault-ul dvs.',
-	"import.warn.defaultFoldedAutofix": '"defaultFolded" era true în timp ce "foldable" era false; defaultFolded a fost resetat la false.',
-	"import.warn.imageMissing": "Acest Callout folosește o imagine care nu se află în fișier și nu se află în acest vault, deci va afișa o pictogramă substituent până când furnizați una nouă.",
+	"import.err.duplicateInFile":
+		'ID/aliasul "{{value}}" este deja folosit de intrarea #{{first}} din acest fișier.',
+	"import.err.aliasConflict":
+		'Aliasul "{{value}}" este deja folosit de alt callout ("{{other}}") din vault-ul dvs.',
+	"import.warn.defaultFoldedAutofix":
+		'"defaultFolded" era true în timp ce "foldable" era false; defaultFolded a fost resetat la false.',
+	"import.warn.imageMissing":
+		"Acest Callout folosește o imagine care nu se află în fișier și nu se află în acest vault, deci va afișa o pictogramă substituent până când furnizați una nouă.",
 
-	"footer.tagline": "Aveți feedback, comentarii sau sugestii? Mi-ar plăcea să aud!",
+	"footer.tagline":
+		"Aveți feedback, comentarii sau sugestii? Mi-ar plăcea să aud!",
 	"footer.madeBy": "Creat de Niv  •  ",
 };

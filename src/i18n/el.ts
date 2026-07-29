@@ -8,22 +8,29 @@ export const el: Record<string, string> = {
 	"settings.fallbackTag": "Προεπιλογή",
 	"settings.fallbackTagAuto": "Αυτόματη προεπιλογή",
 	"settings.rescanVault": "Επανασάρωση vault",
-	"settings.rescanVaultDesc": "Βρίσκει άγνωστα IDs callout σε σημειώσεις και τα προσθέτει ως εφεδρικές γραμμές.",
+	"settings.rescanVaultDesc":
+		"Βρίσκει άγνωστα IDs callout σε σημειώσεις και τα προσθέτει ως εφεδρικές γραμμές.",
 	"settings.rescanVaultHintAction": "Σάρωση τώρα",
-	"settings.rescanComplete": "Η επανασάρωση ολοκληρώθηκε: προστέθηκαν {{count}} νέα callout(s).",
+	"settings.rescanComplete":
+		"Η επανασάρωση ολοκληρώθηκε: προστέθηκαν {{count}} νέα callout(s).",
 	"replaceModal.deleteWithoutReplaceSuffix": "(επιστρέφει στην προεπιλογή)",
 	"firstRun.title": "Εύρεση υπαρχόντων callouts στο vault;",
-	"firstRun.body": "Το Callout Studio μπορεί να σαρώσει το vault σας για να ανακαλύψει callouts που ήδη χρησιμοποιείτε, ώστε να εμφανίζονται στη λίστα ρυθμίσεων και να υιοθετούν το εφεδρικό σας στυλ.",
-	"firstRun.heavyVaultNote": "Το vault σας έχει {{count}} αρχεία Markdown — η σάρωση μπορεί να διαρκέσει μερικά δευτερόλεπτα.",
-	"firstRun.laterHint": "Μπορείτε πάντα να το εκτελέσετε αργότερα από Ρυθμίσεις → Πληροφορίες vault και συντήρηση → Επανασάρωση vault.",
+	"firstRun.body":
+		"Το Callout Studio μπορεί να σαρώσει το vault σας για να ανακαλύψει callouts που ήδη χρησιμοποιείτε, ώστε να εμφανίζονται στη λίστα ρυθμίσεων και να υιοθετούν το εφεδρικό σας στυλ.",
+	"firstRun.heavyVaultNote":
+		"Το vault σας έχει {{count}} αρχεία Markdown — η σάρωση μπορεί να διαρκέσει μερικά δευτερόλεπτα.",
+	"firstRun.laterHint":
+		"Μπορείτε πάντα να το εκτελέσετε αργότερα από Ρυθμίσεις → Πληροφορίες vault και συντήρηση → Επανασάρωση vault.",
 	"firstRun.scanNow": "Σάρωση τώρα",
 	"firstRun.noThanks": "Όχι, ευχαριστώ",
-	"firstRun.autoScanComplete": "Το Callout Studio σάρωσε το vault σας και πρόσθεσε {{count}} callout(s).",
+	"firstRun.autoScanComplete":
+		"Το Callout Studio σάρωσε το vault σας και πρόσθεσε {{count}} callout(s).",
 	"firstRun.scanning": "Σάρωση",
 
 	"welcome.tooltip": "Σχετικά με το Callout Studio",
 	"welcome.title": "Καλώς ήρθατε στο Callout Studio",
-	"welcome.tagline": "Η ολοκληρωμένη λύση σας για τη διαχείριση callouts στο Obsidian.",
+	"welcome.tagline":
+		"Η ολοκληρωμένη λύση σας για τη διαχείριση callouts στο Obsidian.",
 	"welcome.previewTitle": "Δείτε το σε δράση",
 	"welcome.sample":
 		"Το Callout Studio σάς επιτρέπει να δημιουργείτε callouts με προσαρμοσμένο εικονίδιο, χρώματα και όνομα.\n\n" +
@@ -36,10 +43,14 @@ export const el: Record<string, string> = {
 		"Το Callout Studio έχει πολλά περισσότερα να προσφέρει! [Μάθετε περισσότερα]({{repoUrl}}).\n",
 
 	"deleteModal.title": 'Διαγραφή callout "{{name}}";',
-	"deleteModal.bodyInUse": "Αυτό το callout εμφανίζεται {{count}} φορά/φορές σε {{files}} αρχείο/α.",
-	"deleteModal.bodyInUseExplain": "Η διαγραφή θα μετατρέψει αυτά τα μπλοκ σε απλό κείμενο — θα χάσουν το στυλ και την επικεφαλίδα callout.",
-	"deleteModal.replaceHint": "Μπορείτε να το αντικαταστήσετε με άλλο callout, διατηρώντας το περιεχόμενο του vault ως στυλιζαρισμένο callout.",
-	"deleteModal.bodyUnused": '"{{name}}" δεν χρησιμοποιείται σε καμία σημείωση, αλλά είναι ένα προσαρμοσμένο callout που δημιουργήσατε. Η διαγραφή θα το αφαιρέσει από αυτήν τη λίστα.',
+	"deleteModal.bodyInUse":
+		"Αυτό το callout εμφανίζεται {{count}} φορά/φορές σε {{files}} αρχείο/α.",
+	"deleteModal.bodyInUseExplain":
+		"Η διαγραφή θα μετατρέψει αυτά τα μπλοκ σε απλό κείμενο — θα χάσουν το στυλ και την επικεφαλίδα callout.",
+	"deleteModal.replaceHint":
+		"Μπορείτε να το αντικαταστήσετε με άλλο callout, διατηρώντας το περιεχόμενο του vault ως στυλιζαρισμένο callout.",
+	"deleteModal.bodyUnused":
+		'"{{name}}" δεν χρησιμοποιείται σε καμία σημείωση, αλλά είναι ένα προσαρμοσμένο callout που δημιουργήσατε. Η διαγραφή θα το αφαιρέσει από αυτήν τη λίστα.',
 	"deleteModal.replaceInstead": "Αντικατάσταση αντ’ αυτού",
 	"deleteModal.deleteInUse": "Διαγραφή (μετατροπή σε απλό κείμενο)",
 	"deleteModal.deleteUnused": "Διαγραφή callout",
@@ -56,11 +67,15 @@ export const el: Record<string, string> = {
 	"settings.importExport": "Εισαγωγή / εξαγωγή",
 	"settings.import": "Εισαγωγή",
 	"settings.export": "Εξαγωγή",
-	"settings.importDesc": "Εισάγετε τα δεδομένα Callout Studio από άλλο vault χρησιμοποιώντας αρχείο JSON.",
-	"settings.exportDesc": "Αποθηκεύστε όλους τους προσαρμοσμένους τύπους callout σε μορφή JSON.",
-	"settings.importConflictNotice": "Εισήχθησαν {{count}} τύπος/τύποι callout· {{overwritten}} υπάρχουσα/-ες καταχώρηση/-εις αντικαταστάθηκε/-αν.",
+	"settings.importDesc":
+		"Εισάγετε τα δεδομένα Callout Studio από άλλο vault χρησιμοποιώντας αρχείο JSON.",
+	"settings.exportDesc":
+		"Αποθηκεύστε όλους τους προσαρμοσμένους τύπους callout σε μορφή JSON.",
+	"settings.importConflictNotice":
+		"Εισήχθησαν {{count}} τύπος/τύποι callout· {{overwritten}} υπάρχουσα/-ες καταχώρηση/-εις αντικαταστάθηκε/-αν.",
 	"settings.addNewCallout": "+ προσθήκη callout",
-	"settings.noCalloutsNow": "Δεν υπάρχουν προσαρμοσμένα callouts προς το παρόν.",
+	"settings.noCalloutsNow":
+		"Δεν υπάρχουν προσαρμοσμένα callouts προς το παρόν.",
 	"settings.editAria": "Επεξεργασία {{name}}",
 	"settings.moreRowActionsAria": "Περισσότερες ενέργειες για {{name}}",
 	"settings.usageInfo": "{{count}} χρήση/χρήσεις σε {{files}} αρχείο/α",
@@ -70,7 +85,8 @@ export const el: Record<string, string> = {
 	"settings.makeFallbackAction": "Χρήση προεπιλεγμένου εφεδρικού στυλ",
 	"settings.colorSwatchAria": "Έμφαση: {{accent}} · Φόντο: {{bg}}",
 	"settings.fallbackCallout": "Προεπιλεγμένο εφεδρικό callout",
-	"settings.fallbackCalloutDesc": "Οι άγνωστοι τύποι callout στο vault σας θα κληρονομήσουν το στυλ αυτού του callout.",
+	"settings.fallbackCalloutDesc":
+		"Οι άγνωστοι τύποι callout στο vault σας θα κληρονομήσουν το στυλ αυτού του callout.",
 	"settings.globalStyle": "Καθολικό στυλ callout",
 	"settings.border": "Περιγράμματα",
 	"settings.borderAll": "Όλες",
@@ -96,43 +112,57 @@ export const el: Record<string, string> = {
 	// Settings — Saved color palettes
 	"settings.customPalettes": "Αποθηκευμένες παλέτες χρωμάτων",
 	"settings.newPalette": "Νέα παλέτα",
-	"settings.customPalettesEmpty": "Δεν υπάρχουν αποθηκευμένες παλέτες προς το παρόν.",
+	"settings.customPalettesEmpty":
+		"Δεν υπάρχουν αποθηκευμένες παλέτες προς το παρόν.",
 	"settings.editPaletteAria": "Επεξεργασία παλέτας {{name}}",
 	"settings.deletePaletteAria": "Διαγραφή παλέτας {{name}}",
 	"settings.deletePaletteConfirm":
 		'Διαγραφή παλέτας "{{name}}";\nΤα callout που χρησιμοποιούν τα χρώματά της δεν επηρεάζονται.',
 	"settings.enableAutocomplete": "Ενεργοποίηση αυτόματης συμπλήρωσης [!",
-	"settings.enableAutocompleteDesc": 'Εμφανίζει προτάσεις όταν πληκτρολογείτε "[!" μέσα σε αποσπασματική παράθεση στον επεξεργαστή. Επιλέξτε τύπο callout από τη λίστα για εισαγωγή πλήρους επικεφαλίδας callout.',
+	"settings.enableAutocompleteDesc":
+		'Εμφανίζει προτάσεις όταν πληκτρολογείτε "[!" μέσα σε αποσπασματική παράθεση στον επεξεργαστή. Επιλέξτε τύπο callout από τη λίστα για εισαγωγή πλήρους επικεφαλίδας callout.',
 	"settings.openHotkeys": "Συντομεύσεις Callout Studio",
-	"settings.openHotkeysDesc": "Ανοίγει τις ρυθμίσεις συντομεύσεων του Obsidian για εντολές Callout Studio. Καμία συντόμευση δεν έχει ανατεθεί από προεπιλογή.",
+	"settings.openHotkeysDesc":
+		"Ανοίγει τις ρυθμίσεις συντομεύσεων του Obsidian για εντολές Callout Studio. Καμία συντόμευση δεν έχει ανατεθεί από προεπιλογή.",
 	"settings.openHotkeysButton": "Άνοιγμα ρυθμίσεων συντομεύσεων",
 	"settings.vaultMaintenance": "Πληροφορίες vault και συντήρηση",
 	"settings.vaultStats": "Στατιστικά callout",
-	"settings.vaultStatsDesc": "Μετράει όλα τα μπλοκ callout στις σημειώσεις Markdown και τα ομαδοποιεί ανά τύπο.",
+	"settings.vaultStatsDesc":
+		"Μετράει όλα τα μπλοκ callout στις σημειώσεις Markdown και τα ομαδοποιεί ανά τύπο.",
 	"settings.vaultStatsButton": "Προβολή στατιστικών",
 	"settings.vaultStatsScanning": "Σάρωση",
 	"settings.resetAll": "Επαναφορά",
-	"settings.resetAllDesc": "Διαγράφει όλα τα callout χρήστη, επαναφέρει τα ενσωματωμένα callouts, τα καθολικά στυλ, τις αποθηκευμένες παλέτες χρωμάτων, την προσαρμογή του μενού δεξιού κλικ και τα ληφθέντα SVG Material.",
+	"settings.resetAllDesc":
+		"Διαγράφει όλα τα callout χρήστη, επαναφέρει τα ενσωματωμένα callouts, τα καθολικά στυλ, τις αποθηκευμένες παλέτες χρωμάτων, την προσαρμογή του μενού δεξιού κλικ και τα ληφθέντα SVG Material.",
 	"settings.resetAllButton": "Επαναφορά όλων",
-	"settings.resetAllConfirm": "Αυτό θα διαγράψει όλα τα προσαρμοσμένα callouts, θα επαναφέρει τα ενσωματωμένα callouts, τα καθολικά στυλ, τις αποθηκευμένες παλέτες χρωμάτων, την προσαρμογή του μενού δεξιού κλικ και όλα τα αποθηκευμένα SVG Material. Η ενέργεια δεν μπορεί να αναιρεθεί. Είστε σίγουροι;",
+	"settings.resetAllConfirm":
+		"Αυτό θα διαγράψει όλα τα προσαρμοσμένα callouts, θα επαναφέρει τα ενσωματωμένα callouts, τα καθολικά στυλ, τις αποθηκευμένες παλέτες χρωμάτων, την προσαρμογή του μενού δεξιού κλικ και όλα τα αποθηκευμένα SVG Material. Η ενέργεια δεν μπορεί να αναιρεθεί. Είστε σίγουροι;",
 	"notice.resetAllDone": "Όλα επαναφέρθηκαν στις προεπιλογές.",
 	"notice.exported": "Τα callouts εξήχθησαν στο callout-studio-export.json",
 	"notice.importedJSON": "Εισήχθησαν {{count}} τύπος/τύποι callout από JSON.",
 	"notice.importedSettings": "Οι ρυθμίσεις του προσθέτου εισήχθησαν.",
-	"notice.noNewJSON": "Δεν εισήχθησαν νέοι τύποι callout (τα IDs μπορεί να υπάρχουν ήδη).",
-	"notice.iconDownloadFailed": 'Αποτυχία λήψης εικονιδίου Material "{{name}}". Ενδέχεται να μην είναι διαθέσιμο για αυτό το στυλ/βάρος ή η σύνδεσή σας να είναι εκτός σύνδεσης.',
+	"notice.noNewJSON":
+		"Δεν εισήχθησαν νέοι τύποι callout (τα IDs μπορεί να υπάρχουν ήδη).",
+	"notice.iconDownloadFailed":
+		'Αποτυχία λήψης εικονιδίου Material "{{name}}". Ενδέχεται να μην είναι διαθέσιμο για αυτό το στυλ/βάρος ή η σύνδεσή σας να είναι εκτός σύνδεσης.',
 	"notice.nothingToWrap": "Δεν υπάρχει τίποτα για αναδίπλωση.",
-	"notice.cursorNotInsideCallout": "Ο κέρσορας δεν βρίσκεται μέσα σε callout.",
-	"notice.openHotkeysFailed": "Αδυναμία ανοίγματος ρυθμίσεων συντομεύσεων Obsidian.",
-	"notice.filterHotkeysFailed": "Οι συντομεύσεις Obsidian ανοίχτηκαν, αλλά δεν ήταν δυνατή η εφαρμογή του φίλτρου Callout Studio.",
+	"notice.cursorNotInsideCallout":
+		"Ο κέρσορας δεν βρίσκεται μέσα σε callout.",
+	"notice.openHotkeysFailed":
+		"Αδυναμία ανοίγματος ρυθμίσεων συντομεύσεων Obsidian.",
+	"notice.filterHotkeysFailed":
+		"Οι συντομεύσεις Obsidian ανοίχτηκαν, αλλά δεν ήταν δυνατή η εφαρμογή του φίλτρου Callout Studio.",
 	"editor.editCallout": "Επεξεργασία callout",
 	"editor.newCallout": "Νέο callout",
 	"editor.displayName": "Εμφανιζόμενο όνομα",
-	"editor.displayNameDesc": "Η αναγνώσιμη ετικέτα που εμφανίζεται στη διεπαφή",
-	"editor.displayNameBuiltIn": "Το εμφανιζόμενο όνομα δεν μπορεί να αλλαχθεί για τα ενσωματωμένα callouts",
+	"editor.displayNameDesc":
+		"Η αναγνώσιμη ετικέτα που εμφανίζεται στη διεπαφή",
+	"editor.displayNameBuiltIn":
+		"Το εμφανιζόμενο όνομα δεν μπορεί να αλλαχθεί για τα ενσωματωμένα callouts",
 	"editor.displayNamePlaceholder": "Το callout μου",
 	"editor.calloutIds": "IDs callout",
-	"editor.calloutIdsDesc": "Όλα τα αναγνωριστικά για αυτό το callout. Επιτρέπονται κενά.\nΠατήστε Enter ή το κουμπί + για προσθήκη.",
+	"editor.calloutIdsDesc":
+		"Όλα τα αναγνωριστικά για αυτό το callout. Επιτρέπονται κενά.\nΠατήστε Enter ή το κουμπί + για προσθήκη.",
 	"editor.calloutIdsPlaceholder": "Προσθήκη ID",
 	"editor.addId": "Προσθήκη ID",
 	"editor.idLinkedToName": "Συνδεδεμένο με το εμφανιζόμενο όνομα",
@@ -154,26 +184,32 @@ export const el: Record<string, string> = {
 	"editor.contrastWarning":
 		"Χαμηλή αντίθεση με το φόντο — ενδέχεται να είναι δύσκολο να διαβαστεί",
 	"editor.foldable": "Αναδιπλούμενο",
-	"editor.foldableDesc": "Επιλέξτε αν το callout μπορεί να αναδιπλωθεί και ποια προεπιλεγμένη κατάσταση εφαρμόζεται στο vault.",
+	"editor.foldableDesc":
+		"Επιλέξτε αν το callout μπορεί να αναδιπλωθεί και ποια προεπιλεγμένη κατάσταση εφαρμόζεται στο vault.",
 	"editor.foldOff": "Ανενεργό",
 	"editor.foldOpen": "Ανοιχτό από προεπιλογή",
 	"editor.foldClosed": "Κλειστό από προεπιλογή",
 	"editor.cancel": "Ακύρωση",
 	"editor.saveChanges": "Αποθήκευση αλλαγών",
 	"editor.createCallout": "Δημιουργία callout",
-	"editor.nameRequired": "Απαιτείται εμφανιζόμενο όνομα πριν τη δημιουργία callout.",
+	"editor.nameRequired":
+		"Απαιτείται εμφανιζόμενο όνομα πριν τη δημιουργία callout.",
 	"editor.noChangesToSave": "Δεν έγιναν αλλαγές.",
 	"editor.downloadingIcon": "Λήψη εικονιδίου",
 	"editor.idEmpty": "Απαιτείται τουλάχιστον ένα ID",
 	"editor.idExists": "Υπάρχει ήδη callout με αυτό το ID",
 	"editor.idConflict": "Αυτό το ID έρχεται σε σύγκρουση με υπάρχον callout",
-	"editor.idDashConflict": 'Το Obsidian γράφει τα κενά ως παύλες, επομένως αυτό το ID συγκρούεται με το «{{other}}»',
+	"editor.idDashConflict":
+		"Το Obsidian γράφει τα κενά ως παύλες, επομένως αυτό το ID συγκρούεται με το «{{other}}»",
 	"editor.untitledCallout": "Callout χωρίς τίτλο",
-	"editor.loremIpsum": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+	"editor.loremIpsum":
+		"Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
 	"editor.loremIpsumShort":
 		"Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-	"editor.sampleInlineText": "Εδώ υπάρχει ένα ενσωματωμένο [!{id}] χάπι μέσα σε μια παράγραφο.",
-	"editor.previewReadOnly": "Η ζωντανή προεπισκόπηση δεν μπορεί να επεξεργαστεί",
+	"editor.sampleInlineText":
+		"Εδώ υπάρχει ένα ενσωματωμένο [!{id}] χάπι μέσα σε μια παράγραφο.",
+	"editor.previewReadOnly":
+		"Η ζωντανή προεπισκόπηση δεν μπορεί να επεξεργαστεί",
 	// Palette editor modal
 	"palette.newTitle": "Νέα παλέτα χρωμάτων",
 	"palette.editTitle": "Επεξεργασία παλέτας χρωμάτων",
@@ -181,11 +217,14 @@ export const el: Record<string, string> = {
 	"palette.namePlaceholder": "Η παλέτα μου",
 	"palette.nameExists": "Υπάρχει ήδη παλέτα με αυτό το όνομα",
 	"palette.baseColor": "Βασικό χρώμα",
-	"palette.baseColorHint": "Θα ταιριάξουμε αυτόματα το χρώμα φόντου με αυτό. Αν θέλετε, μπορείτε να το ελέγξετε ξεχωριστά κάνοντας {{link}}.",
+	"palette.baseColorHint":
+		"Θα ταιριάξουμε αυτόματα το χρώμα φόντου με αυτό. Αν θέλετε, μπορείτε να το ελέγξετε ξεχωριστά κάνοντας {{link}}.",
 	"palette.baseColorHintLink": "κλικ εδώ",
 	"palette.advancedColors": "Χρώματα",
-	"palette.advancedColorsHint": "Επεξεργασία χρωμάτων για τη λειτουργία {{mode}} - η άλλη λειτουργία ενημερώνεται αυτόματα. Αλλάξτε το θέμα του Obsidian για να το ελέγξετε.",
-	"palette.revertHint": "Προτιμάτε ένα ενιαίο βασικό χρώμα αντ' αυτού; {{link}}.",
+	"palette.advancedColorsHint":
+		"Επεξεργασία χρωμάτων για τη λειτουργία {{mode}} - η άλλη λειτουργία ενημερώνεται αυτόματα. Αλλάξτε το θέμα του Obsidian για να το ελέγξετε.",
+	"palette.revertHint":
+		"Προτιμάτε ένα ενιαίο βασικό χρώμα αντ' αυτού; {{link}}.",
 	"palette.revertHintLink": "Επαναφορά",
 	"palette.lightMode": "Φωτεινό",
 	"palette.darkMode": "Σκοτεινό",
@@ -232,73 +271,216 @@ export const el: Record<string, string> = {
 	"iconPicker.searchLucide": "αναζήτηση εικονιδίων Lucide",
 	"iconPicker.searchTabler": "αναζήτηση εικονιδίων Tabler",
 	"iconPicker.tablerStyle": "Στυλ εικονιδίου",
-	"iconPicker.tablerStyleOutline": "Περίγραμμα",
-	"iconPicker.tablerStyleFilled": "Γεμιστό",
+	"iconPicker.tablerStyleOutline": "Περίγραμμα (Outline)",
+	"iconPicker.tablerStyleFilled": "Γεμιστό (Filled)",
 	"iconPicker.loadMore": "Φόρτωση περισσότερων",
 	"iconPicker.materialStyle": "Στυλ εικονιδίου",
+	"iconPicker.materialStyleOutlined": "Περίγραμμα (Outlined)",
+	"iconPicker.materialStyleFilled": "Γεμάτο (Filled)",
+	"iconPicker.materialStyleRounded": "Στρογγυλο (Rounded)",
+	"iconPicker.materialStyleSharp": "Αιχμηρό (Sharp)",
 	"iconPicker.materialWeight": "Βάρος εικονιδίου",
+	"iconPicker.materialWeight100": "Λεπτό (Thin)",
+	"iconPicker.materialWeight200": "Εξαιρετικά ελαφρύ (Extra Light)",
+	"iconPicker.materialWeight300": "Ελαφρύ (Light)",
+	"iconPicker.materialWeight400": "Κανονικό (Regular)",
+	"iconPicker.materialWeight500": "Μεσαίο (Medium)",
+	"iconPicker.materialWeight600": "Ημιέξτρα (Semi Bold)",
+	"iconPicker.materialWeight700": "Έξτρα (Bold)",
 	"iconPicker.searchMaterial": "αναζήτηση εικονιδίων Material",
 	"iconPicker.searchEmoji": "Αναζήτηση emoji",
 	"iconPicker.skinTone": "Χρώμα δέρματος",
 	"iconPicker.allCategories": "Όλες οι κατηγορίες",
 	"iconPicker.noIconSelected": "Δεν επιλέχθηκε εικονίδιο",
-	"iconPicker.noResults": "Κανένα εικονίδιο δεν ταιριάζει στην αναζήτησή σας.",
+	"iconPicker.noResults":
+		"Κανένα εικονίδιο δεν ταιριάζει στην αναζήτησή σας.",
 	"iconPicker.octicons": "Octicons",
 	"iconPicker.searchOcticons": "Αναζήτηση στα Octicons",
 	"iconPicker.fa": "Font Awesome",
 	"iconPicker.searchFa": "Αναζήτηση στο Font Awesome",
 	"iconPicker.faStyle": "Στυλ εικονιδίου",
-	"iconPicker.faStyleSolid": "Συμπαγές",
-	"iconPicker.faStyleRegular": "Κανονικό",
-	"iconPicker.faStyleBrands": "Εμπορικά σήματα",
+	"iconPicker.faStyleSolid": "Συμπαγές (Solid)",
+	"iconPicker.faStyleRegular": "Κανονικό (Regular)",
+	"iconPicker.faStyleBrands": "Εμπορικά σήματα (Brands)",
 	"iconPicker.rpgAwesome": "RPG Awesome",
 	"iconPicker.searchRpgAwesome": "Αναζήτηση στο RPG Awesome",
 	"iconPicker.image": "Οι εικόνες σας",
 	"iconPicker.searchImage": "Αναζήτηση στις εικόνες σας",
-	"iconPicker.imageTooLarge": "{{name}} είναι πολύ μεγάλο. Οι εικόνες πρέπει να είναι κάτω από 5 MB.",
-	"iconPicker.imageUnsupported": "{{name}} δεν είναι υποστηριζόμενη μορφή εικόνας. Χρησιμοποιήστε SVG, PNG, JPEG ή WebP.",
-	"iconPicker.imageInvalidSvg": "{{name}} δεν ήταν δυνατή η ανάγνωσή του ως ασφαλές SVG, γι' αυτό δεν προστέθηκε.",
-	"iconPicker.imageDecodeFailed": "{{name}} δεν ήταν δυνατή η ανάγνωσή του ως εικόνα.",
-	"iconPicker.imageDuplicate": "{{name}} υπάρχει ήδη στις εικόνες σας. Μετονομάστε το αρχείο ή διαγράψτε την υπάρχουσα εικόνα.",
+	"iconPicker.imageTooLarge":
+		"{{name}} είναι πολύ μεγάλο. Οι εικόνες πρέπει να είναι κάτω από 5 MB.",
+	"iconPicker.imageUnsupported":
+		"{{name}} δεν είναι υποστηριζόμενη μορφή εικόνας. Χρησιμοποιήστε SVG, PNG, JPEG ή WebP.",
+	"iconPicker.imageInvalidSvg":
+		"{{name}} δεν ήταν δυνατή η ανάγνωσή του ως ασφαλές SVG, γι' αυτό δεν προστέθηκε.",
+	"iconPicker.imageDecodeFailed":
+		"{{name}} δεν ήταν δυνατή η ανάγνωσή του ως εικόνα.",
+	"iconPicker.imageDuplicate":
+		"{{name}} υπάρχει ήδη στις εικόνες σας. Μετονομάστε το αρχείο ή διαγράψτε την υπάρχουσα εικόνα.",
 	"iconPicker.imageAdd": "Προσθήκη εικόνων",
-	"iconPicker.imageEmpty": "Δεν υπάρχουν εικόνες ακόμα. Προσθέστε ένα αρχείο SVG, PNG, JPEG ή WebP από τον υπολογιστή σας ή σύρτε το εδώ.",
+	"iconPicker.imageEmpty":
+		"Δεν υπάρχουν εικόνες ακόμα. Προσθέστε ένα αρχείο SVG, PNG, JPEG ή WebP από τον υπολογιστή σας ή σύρτε το εδώ.",
 	"iconPicker.imageDelete": "Διαγραφή",
 	"iconPicker.imageDeleteConfirm": "Διαγραφή “{{name}}”;",
-	"iconPicker.imageDeleteInUse": "{{count}} callouts χρησιμοποιούν αυτή την εικόνα. Θα εμφανίσουν ένα εικονίδιο κράτησης θέσης έως ότου δώσετε νέο.",
+	"iconPicker.imageDeleteInUse":
+		"{{count}} callouts χρησιμοποιούν αυτή την εικόνα. Θα εμφανίσουν ένα εικονίδιο κράτησης θέσης έως ότου δώσετε νέο.",
 	"iconPicker.imageRecolor": "Παρακολούθηση χρώματος Callout",
 	"iconPicker.allSources": "Όλες οι πηγές",
 	"iconPicker.searchAllSources": "Αναζήτηση σε όλες τις πηγές εικονιδίων",
-	"iconPicker.sourcesNotDownloaded": "Δεν έχει ληφθεί ακόμα: {{names}}. Επιλέξτε μια πηγή παραπάνω για να τη λάβετε.",
+	"iconPicker.sourcesNotDownloaded":
+		"Δεν έχει ληφθεί ακόμα: {{names}}. Επιλέξτε μια πηγή παραπάνω για να τη λάβετε.",
 	"iconPicker.chooseSource": "Επιλογή πηγής",
 	"iconPicker.sourceGroup": "{{name}} · {{count}}",
 
 	// Source menu — what each library holds, in a few words
 	"iconPicker.descAllSources": "αναζήτηση σε όλες τις βιβλιοθήκες ταυτόχρονα",
-	"iconPicker.descLucide": "η δική σύνθεση του Obsidian, πάντα εκτός σύνδεσης",
-	"iconPicker.descTabler": "καθαρά και συνεπή εικονίδια UI, περίγραμμα και γεμιστά",
-	"iconPicker.descMaterial": "η σύνθεση της Google, τέσσερα στυλ και επτά βάρη",
+	"iconPicker.descLucide":
+		"η δική σύνθεση του Obsidian, πάντα εκτός σύνδεσης",
+	"iconPicker.descTabler":
+		"καθαρά και συνεπή εικονίδια UI, περίγραμμα και γεμιστά",
+	"iconPicker.descMaterial":
+		"η σύνθεση της Google, τέσσερα στυλ και επτά βάρη",
 	"iconPicker.descEmoji": "έγχρωμα σχήματα, κάθε τόνος δέρματος",
 	"iconPicker.descOcticons": "εικονίδια διεπαφής του GitHub",
 	"iconPicker.descFa": "συμπαγές, κανονικό και εμπορικά σήματα",
-	"iconPicker.descRpgAwesome": "εικονίδια φαντασίας και επιτραπέζιων παιχνιδιών",
+	"iconPicker.descRpgAwesome":
+		"εικονίδια φαντασίας και επιτραπέζιων παιχνιδιών",
 	"iconPicker.descImage": "εικόνες που προσθέτετε από τον υπολογιστή σας",
+
+	// Icon picker — category filter dropdown labels
+	"iconPicker.cat.Accessibility": "Προσβασιμότητα",
+	"iconPicker.cat.Actions": "Ενέργειες",
+	"iconPicker.cat.Activities": "Δραστηριότητες",
+	"iconPicker.cat.Alert": "Προειδοποίηση",
+	"iconPicker.cat.Alphabet": "Αλφάβητο",
+	"iconPicker.cat.Android": "Android",
+	"iconPicker.cat.Animals": "Ζώα",
+	"iconPicker.cat.Arrows": "Βέλη",
+	"iconPicker.cat.Astronomy": "Αστρονομία",
+	"iconPicker.cat.Audio&Video": "Ήχος και βίντεο",
+	"iconPicker.cat.Automotive": "Αυτοκίνητα",
+	"iconPicker.cat.Badges": "Διακριτικά",
+	"iconPicker.cat.Brand": "Εμπορικές μάρκες",
+	"iconPicker.cat.Buildings": "Κτίρια",
+	"iconPicker.cat.Business": "Επιχειρήσεις",
+	"iconPicker.cat.Camping": "Κατασκήνωση",
+	"iconPicker.cat.Charity": "Φιλανθρωπία",
+	"iconPicker.cat.Charts": "Γραφήματα",
+	"iconPicker.cat.Charts + Diagrams": "Γραφήματα και διαγράμματα",
+	"iconPicker.cat.Childhood": "Παιδική ηλικία",
+	"iconPicker.cat.Clothing + Fashion": "Ρούχα και μόδα",
+	"iconPicker.cat.Coding": "Προγραμματισμός",
+	"iconPicker.cat.Communicate": "Επικοινωνία",
+	"iconPicker.cat.Communication": "Επικοινωνία",
+	"iconPicker.cat.Computers": "Υπολογιστές",
+	"iconPicker.cat.Connectivity": "Συνδεσιμότητα",
+	"iconPicker.cat.Construction": "Κατασκευή",
+	"iconPicker.cat.Currencies": "Νομίσματα",
+	"iconPicker.cat.Database": "Βάση δεδομένων",
+	"iconPicker.cat.Design": "Σχεδιασμός",
+	"iconPicker.cat.Development": "Ανάπτυξη",
+	"iconPicker.cat.Devices": "Συσκευές",
+	"iconPicker.cat.Devices + Hardware": "Συσκευές και υλικό",
+	"iconPicker.cat.Disaster + Crisis": "Καταστροφές και κρίσεις",
+	"iconPicker.cat.Document": "Έγγραφο",
+	"iconPicker.cat.E-commerce": "Ηλεκτρονικό εμπόριο",
+	"iconPicker.cat.Editing": "Επεξεργασία",
+	"iconPicker.cat.Education": "Εκπαίδευση",
+	"iconPicker.cat.Electrical": "Ηλεκτρικό",
+	"iconPicker.cat.Emoji": "Emoji",
+	"iconPicker.cat.Energy": "Ενέργεια",
+	"iconPicker.cat.Extensions": "Επεκτάσεις",
+	"iconPicker.cat.Files": "Αρχεία",
+	"iconPicker.cat.Film + Video": "Ταινίες και βίντεο",
+	"iconPicker.cat.Food": "Φαγητό",
+	"iconPicker.cat.Food + Beverage": "Φαγητό και ποτά",
+	"iconPicker.cat.Fruits + Vegetables": "Φρούτα και λαχανικά",
+	"iconPicker.cat.Games": "Παιχνίδια",
+	"iconPicker.cat.Gaming": "Γκέιμινγ",
+	"iconPicker.cat.Gender": "Φύλο",
+	"iconPicker.cat.Genders": "Φύλα",
+	"iconPicker.cat.Gestures": "Θυμικές κινήσεις",
+	"iconPicker.cat.Halloween": "Halloween",
+	"iconPicker.cat.Hands": "Χέρια",
+	"iconPicker.cat.Hardware": "Υλικό",
+	"iconPicker.cat.Health": "Υγεία",
+	"iconPicker.cat.Holidays": "Αργίες",
+	"iconPicker.cat.Home": "Σπίτι",
+	"iconPicker.cat.Household": "Νοικοκυριά",
+	"iconPicker.cat.Humanitarian": "Ανθρωπιστικό",
+	"iconPicker.cat.Images": "Εικόνες",
+	"iconPicker.cat.Laundry": "Πλύσιμο",
+	"iconPicker.cat.Letters": "Γράμματα",
+	"iconPicker.cat.Logic": "Λογική",
+	"iconPicker.cat.Logistics": "Λογιστική",
+	"iconPicker.cat.Map": "Χάρτης",
+	"iconPicker.cat.Maps": "Χάρτες",
+	"iconPicker.cat.Maritime": "Ναυτιλία",
+	"iconPicker.cat.Marketing": "Μάρκετινγ",
+	"iconPicker.cat.Math": "Μαθηματικά",
+	"iconPicker.cat.Mathematics": "Μαθηματικά",
+	"iconPicker.cat.Media": "Μέσα",
+	"iconPicker.cat.Media Playback": "Αναπαραγωγή μέσων",
+	"iconPicker.cat.Medical + Health": "Ιατρική και υγεία",
+	"iconPicker.cat.Money": "Χρήματα",
+	"iconPicker.cat.Mood": "Διάθεση",
+	"iconPicker.cat.Moving": "Μετακόμιση",
+	"iconPicker.cat.Music + Audio": "Μουσική και ήχος",
+	"iconPicker.cat.Nature": "Φύση",
+	"iconPicker.cat.Numbers": "Αριθμοί",
+	"iconPicker.cat.Photography": "Φωτογραφία",
+	"iconPicker.cat.Photos + Images": "Φωτογραφίες και εικόνες",
+	"iconPicker.cat.Political": "Πολιτικά",
+	"iconPicker.cat.Privacy": "Προστασία δεδομένων",
+	"iconPicker.cat.Punctuation + Symbols": "Στίξη και σύμβολα",
+	"iconPicker.cat.Religion": "Θρησκεία",
+	"iconPicker.cat.Science": "Επιστήμη",
+	"iconPicker.cat.Science Fiction": "Επιστημονική φαντασία",
+	"iconPicker.cat.Security": "Ασφάλεια",
+	"iconPicker.cat.Shapes": "Σχήματα",
+	"iconPicker.cat.Shopping": "Ψώνια",
+	"iconPicker.cat.Social": "Κοινωνικά μέσα",
+	"iconPicker.cat.Spinners": "Σπινάρες",
+	"iconPicker.cat.Sport": "Αθλητισμός",
+	"iconPicker.cat.Sports + Fitness": "Αθλητισμός και γυμναστική",
+	"iconPicker.cat.Symbols": "Σύμβολα",
+	"iconPicker.cat.System": "Σύστημα",
+	"iconPicker.cat.Text": "Κείμενο",
+	"iconPicker.cat.Text Formatting": "Μορφοποίηση κειμένου",
+	"iconPicker.cat.Time": "Χρόνος",
+	"iconPicker.cat.Toggle": "Διακόπτης",
+	"iconPicker.cat.Transit": "Τρανζίτ",
+	"iconPicker.cat.Transportation": "Μεταφορές",
+	"iconPicker.cat.Travel": "Ταξίδι",
+	"iconPicker.cat.Travel + Hotel": "Ταξίδι και ξενοδοχεία",
+	"iconPicker.cat.UI actions": "Ενέργειες διεπαφής",
+	"iconPicker.cat.Users + People": "Χρήστες και άνθρωποι",
+	"iconPicker.cat.Vehicles": "Οχήματα",
+	"iconPicker.cat.Version control": "Ελεγχος εκδόσεων",
+	"iconPicker.cat.Weather": "Καιρός",
+	"iconPicker.cat.Writing": "Γραφή",
+	"iconPicker.cat.Zodiac": "Ζωδιακός κύκλος",
 
 	// Downloadable icon packs
 	"iconPack.downloadTitle": "{{name}} δεν έχει ληφθεί ακόμα",
 	"iconPack.downloadDetail": "{{count}} εικονίδια · {{size}} · εφάπαξ λήψη",
 	"iconPack.download": "Λήψη",
 	"iconPack.downloading": "Λήψη {{name}}…",
-	"iconPack.downloadFailed": "Δεν ήταν δυνατή η λήψη του {{name}}. Ελέγξτε τη σύνδεσή σας και δοκιμάστε ξανά.",
+	"iconPack.downloadFailed":
+		"Δεν ήταν δυνατή η λήψη του {{name}}. Ελέγξτε τη σύνδεσή σας και δοκιμάστε ξανά.",
 	"iconPack.retry": "Επανάληψη",
-	"iconPack.faBrandsNotice": "Τα εικονίδια μαρκών αποτελούν εμπορικά σήματα των αντίστοιχων ιδιοκτητών τους. Η συμπερίληψή τους δεν υποδηλώνει έγκριση. Παρακαλώ χρησιμοποιήστε τα μόνο για την αντιπροσώπευση της εταιρείας, του προϊόντος ή της υπηρεσίας που αναφέρουν.",
+	"iconPack.faBrandsNotice":
+		"Τα εικονίδια μαρκών αποτελούν εμπορικά σήματα των αντίστοιχων ιδιοκτητών τους. Η συμπερίληψή τους δεν υποδηλώνει έγκριση. Παρακαλώ χρησιμοποιήστε τα μόνο για την αντιπροσώπευση της εταιρείας, του προϊόντος ή της υπηρεσίας που αναφέρουν.",
 	"iconPack.artworkRestored": "Λήψη γραφικών εικονιδίων για {{names}}.",
-	"iconPack.diskWriteFailed": "Το Callout Studio δεν μπόρεσε να αποθηκεύσει το πακέτο εικονιδίων στο δίσκο, οπότε θα χρειαστεί να γίνει λήψη ξανά την επόμενη φορά. Τα εικονίδια που επιλέγετε αποθηκεύονται στις ρυθμίσεις σας.",
+	"iconPack.diskWriteFailed":
+		"Το Callout Studio δεν μπόρεσε να αποθηκεύσει το πακέτο εικονιδίων στο δίσκο, οπότε θα χρειαστεί να γίνει λήψη ξανά την επόμενη φορά. Τα εικονίδια που επιλέγετε αποθηκεύονται στις ρυθμίσεις σας.",
 
 	// Icon licences & credits
 	"credits.title": "Άδειες εικονιδίων και αναφορές",
-	"credits.intro": "Το Callout Studio αντλεί από αρκετές ανοιχτές βιβλιοθήκες εικονιδίων. Οι άδειές τους αναπαράγονται παρακάτω, μαζί με ό,τι άλλαξε για τη χρήση τους εδώ.",
+	"credits.intro":
+		"Το Callout Studio αντλεί από αρκετές ανοιχτές βιβλιοθήκες εικονιδίων. Οι άδειές τους αναπαράγονται παρακάτω, μαζί με ό,τι άλλαξε για τη χρήση τους εδώ.",
 	"credits.fullNotices": "Πλήρεις ανακοινώσεις τρίτων μερών",
-	"credits.pluginLicense": "Ο κώδικας του Callout Studio είναι υπό άδεια 0BSD· οι βιβλιοθήκες εικονιδίων διατηρούν τις δικές τους άδειες.",
+	"credits.pluginLicense":
+		"Ο κώδικας του Callout Studio είναι υπό άδεια 0BSD· οι βιβλιοθήκες εικονιδίων διατηρούν τις δικές τους άδειες.",
 	"contextMenu.editCallout": "Επεξεργασία ρυθμίσεων callout",
 	"contextMenu.copyMarkdown": "Αντιγραφή Markdown callout",
 	"contextMenu.openSettings": "Άνοιγμα ρυθμίσεων Callout Studio",
@@ -310,19 +492,25 @@ export const el: Record<string, string> = {
 	"contextMenu.deleteSection": "Διαγραφή ενότητας επικεφαλίδας",
 	"heading.toggleFold": "Εναλλαγή αναδίπλωσης",
 	"settings.globalSettings": "Καθολικές ρυθμίσεις",
-	"settings.globalSettingsDesc": "Ρυθμίστε με ακρίβεια την εμφάνιση κάθε τύπου callout σε ολόκληρο το vault σας.",
-	"settings.globalSettingsRegularDesc": "Προσθέστε ένα token callout σε μια παράθεση (π.χ. `> [!type]`) για να εμφανιστεί το εγγενές πλαίσιο callout του Obsidian. Μπορείτε να προσαρμόσετε το περίγραμμα, την ακτίνα, την κλίμακα γραμματοσειράς και τη στοίχισή του.",
-	"settings.globalSettingsHeadingDesc": "Προσθέστε ένα token callout αμέσως μετά τα σύμβολα δίεσης της επικεφαλίδας (π.χ. `## [!type]`) για να εμφανιστεί ως στυλιζαρισμένη επικεφαλίδα callout. Μπορείτε να προσαρμόσετε το περίγραμμα, το σχήμα και την κατακόρυφη απόσταση.",
-	"settings.globalSettingsInlineDesc": "Προσθέστε ένα token callout οπουδήποτε μέσα σε μια γραμμή κειμένου (π.χ. `[!type]`) για να εμφανιστεί ως μικρό ενσωματωμένο χάπι. Μπορείτε να προσαρμόσετε το περίγραμμά του και το σχήμα του.",
+	"settings.globalSettingsDesc":
+		"Ρυθμίστε με ακρίβεια την εμφάνιση κάθε τύπου callout σε ολόκληρο το vault σας.",
+	"settings.globalSettingsRegularDesc":
+		"Προσθέστε ένα token callout σε μια παράθεση (π.χ. `> [!type]`) για να εμφανιστεί το εγγενές πλαίσιο callout του Obsidian. Μπορείτε να προσαρμόσετε το περίγραμμα, την ακτίνα, την κλίμακα γραμματοσειράς και τη στοίχισή του.",
+	"settings.globalSettingsHeadingDesc":
+		"Προσθέστε ένα token callout αμέσως μετά τα σύμβολα δίεσης της επικεφαλίδας (π.χ. `## [!type]`) για να εμφανιστεί ως στυλιζαρισμένη επικεφαλίδα callout. Μπορείτε να προσαρμόσετε το περίγραμμα, το σχήμα και την κατακόρυφη απόσταση.",
+	"settings.globalSettingsInlineDesc":
+		"Προσθέστε ένα token callout οπουδήποτε μέσα σε μια γραμμή κειμένου (π.χ. `[!type]`) για να εμφανιστεί ως μικρό ενσωματωμένο χάπι. Μπορείτε να προσαρμόσετε το περίγραμμά του και το σχήμα του.",
 	"settings.globalSettingsCustomize": "Προσαρμογή",
 	"settings.calloutTypeRegular": "Κανονικό callout",
 	"settings.calloutTypeHeading": "Callout επικεφαλίδας",
 	"settings.calloutTypeInline": "Ενσωματωμένο callout",
 	"settings.customizeMenu": "Προσαρμογή στοιχείων μενού",
-	"settings.customizeMenuDesc": "Επιλέξτε ποιες ενέργειες δεξιού κλικ εμφανίζονται για κάθε τύπο callout και αλλάξτε τη σειρά τους. Λειτουργεί στη λειτουργία πηγής και στην Ζωντανή Προεπισκόπηση.",
+	"settings.customizeMenuDesc":
+		"Επιλέξτε ποιες ενέργειες δεξιού κλικ εμφανίζονται για κάθε τύπο callout και αλλάξτε τη σειρά τους. Λειτουργεί στη λειτουργία πηγής και στην Ζωντανή Προεπισκόπηση.",
 	"settings.customizeMenuButton": "Προσαρμογή στοιχείων μενού",
 	"menuCustomize.title": "Προσαρμογή μενού δεξιού κλικ",
-	"menuCustomize.desc": "Ενεργοποιήστε ή απενεργοποιήστε ενέργειες και σύρετε τη λαβή για να τις αναδιατάξετε. Οι αλλαγές αποθηκεύονται αυτόματα.",
+	"menuCustomize.desc":
+		"Ενεργοποιήστε ή απενεργοποιήστε ενέργειες και σύρετε τη λαβή για να τις αναδιατάξετε. Οι αλλαγές αποθηκεύονται αυτόματα.",
 	"menuCustomize.regular": "Κανονικό callout",
 	"menuCustomize.heading": "Callout επικεφαλίδας",
 	"menuCustomize.inline": "Ενσωματωμένο callout",
@@ -330,26 +518,36 @@ export const el: Record<string, string> = {
 	"menuItem.edit": "Επεξεργασία callout",
 	"menuItem.openSettings": "Άνοιγμα ρυθμίσεων",
 	"menuItem.copyMarkdown": "Αντιγραφή Markdown",
-	"menuItem.foldDefaults": "Προεπιλεγμένη αναδίπλωση (ανοιχτό / κλειστό / καμία)",
+	"menuItem.foldDefaults":
+		"Προεπιλεγμένη αναδίπλωση (ανοιχτό / κλειστό / καμία)",
 	"menuItem.cutSection": "Αποκοπή ενότητας",
 	"menuItem.copySection": "Αντιγραφή ενότητας",
 	"menuItem.deleteSection": "Διαγραφή ενότητας",
 	"confirm.ok": "Διαγραφή",
 	"confirm.cancel": "Ακύρωση",
-	"vault.filesUpdated": "Ενημερώθηκαν {{count}} αναφορές callout σε αρχεία vault.",
-	"vault.idsUpdated": "Ενημερώθηκαν {{count}} IDs callout σε αρχεία vault: {{oldIds}} → {{newId}}",
-	"vault.titlesUpdated": "Ενημερώθηκαν {{count}} τίτλος/τίτλοι callout σε αρχεία vault: {{oldTitle}} → {{newTitle}}",
+	"vault.filesUpdated":
+		"Ενημερώθηκαν {{count}} αναφορές callout σε αρχεία vault.",
+	"vault.idsUpdated":
+		"Ενημερώθηκαν {{count}} IDs callout σε αρχεία vault: {{oldIds}} → {{newId}}",
+	"vault.titlesUpdated":
+		"Ενημερώθηκαν {{count}} τίτλος/τίτλοι callout σε αρχεία vault: {{oldTitle}} → {{newTitle}}",
 	"vault.replaceWith": "Αντικατάσταση με:",
 	"vault.deleteWithout": "Διαγραφή χωρίς αντικατάσταση",
 	"vault.confirmDelete": "Επιβεβαίωση",
 	"vault.confirmReplace": "Αντικατάσταση",
-	"vault.replacePromptInUse": '"{{name}}" χρησιμοποιείται {{count}} φορά/φορές σε {{files}} αρχείο/α. Επιλέξτε callout για αντικατάσταση:',
-	"vault.replacePromptUnused": 'Επιλέξτε callout για αντικατάσταση του "{{name}}":',
-	"vault.noReplacementAvailable": "Δεν υπάρχουν διαθέσιμα callouts για αντικατάσταση.",
-	"vault.convertedToPlainText": "{{blocks}} μπλοκ callout σε {{files}} αρχείο/α μετατράπηκαν σε απλό κείμενο.",
-	"vault.resetAliasWarning": "{{count}} αναφορές σε {{files}} αρχείο/α χρησιμοποιούν προσαρμοσμένα ψευδώνυμα: {{aliases}}. Αυτά θα σταματήσουν να λειτουργούν μετά την επαναφορά. Συνέχεια;",
+	"vault.replacePromptInUse":
+		'"{{name}}" χρησιμοποιείται {{count}} φορά/φορές σε {{files}} αρχείο/α. Επιλέξτε callout για αντικατάσταση:',
+	"vault.replacePromptUnused":
+		'Επιλέξτε callout για αντικατάσταση του "{{name}}":',
+	"vault.noReplacementAvailable":
+		"Δεν υπάρχουν διαθέσιμα callouts για αντικατάσταση.",
+	"vault.convertedToPlainText":
+		"{{blocks}} μπλοκ callout σε {{files}} αρχείο/α μετατράπηκαν σε απλό κείμενο.",
+	"vault.resetAliasWarning":
+		"{{count}} αναφορές σε {{files}} αρχείο/α χρησιμοποιούν προσαρμοσμένα ψευδώνυμα: {{aliases}}. Αυτά θα σταματήσουν να λειτουργούν μετά την επαναφορά. Συνέχεια;",
 	"vault.resetConfirm": "Επαναφορά",
-	"vault.resetAllInUse": "⚠ {{count}} αναφορές callout σε {{files}} αρχείο/α χρησιμοποιούν προσαρμοσμένους τύπους callout που θα διαγραφούν.",
+	"vault.resetAllInUse":
+		"⚠ {{count}} αναφορές callout σε {{files}} αρχείο/α χρησιμοποιούν προσαρμοσμένους τύπους callout που θα διαγραφούν.",
 	"vaultStats.title": "Στατιστικά callout",
 	"vaultStats.totalCallouts": "Σύνολο callouts",
 	"vaultStats.typesFound": "Τύποι που βρέθηκαν",
@@ -370,47 +568,79 @@ export const el: Record<string, string> = {
 	"vaultStats.sourceUnknown": "Άγνωστο",
 	"vaultStats.close": "Κλείσιμο",
 	"import.title": "Προβλήματα εισαγωγής",
-	"import.reportLeadIn": "Φαίνεται ότι το εισαγόμενο αρχείο έχει τροποποιηθεί. Ακολουθεί η λίστα προβλημάτων:",
-	"import.reportLeadInFatal": "Αυτό το αρχείο δεν μοιάζει με εξαγωγή Callout Studio. Δεν μπορεί να εισαχθεί:",
+	"import.reportLeadIn":
+		"Φαίνεται ότι το εισαγόμενο αρχείο έχει τροποποιηθεί. Ακολουθεί η λίστα προβλημάτων:",
+	"import.reportLeadInFatal":
+		"Αυτό το αρχείο δεν μοιάζει με εξαγωγή Callout Studio. Δεν μπορεί να εισαχθεί:",
 	"import.entryHeading": "Καταχώρηση {{index}} — {{label}}",
-	"import.summary": "{{valid}} από {{total}} καταχωρήσεις είναι έγκυρες · βρέθηκαν {{issues}} πρόβλημα/τα.",
+	"import.summary":
+		"{{valid}} από {{total}} καταχωρήσεις είναι έγκυρες · βρέθηκαν {{issues}} πρόβλημα/τα.",
 	"import.btnCancel": "Ακύρωση",
 	"import.btnImportValid": "Εισαγωγή μόνο έγκυρων ({{count}})",
-	"import.err.notRecognized": "Μη αναγνωρίσιμο αρχείο: αναμενόταν πίνακας ορισμών callout ή εξαγωγή από το Callout Studio.",
-	"import.warn.settingsIgnored": "Το μπλοκ ρυθμίσεων δεν ήταν έγκυρο αντικείμενο και αγνοήθηκε.",
+	"import.err.notRecognized":
+		"Μη αναγνωρίσιμο αρχείο: αναμενόταν πίνακας ορισμών callout ή εξαγωγή από το Callout Studio.",
+	"import.warn.settingsIgnored":
+		"Το μπλοκ ρυθμίσεων δεν ήταν έγκυρο αντικείμενο και αγνοήθηκε.",
 	"import.warn.invalidGradient":
 		"Η διαβάθμιση φόντου δεν ήταν έγκυρη και αγνοήθηκε.",
-	"import.err.parseFailed": "Το αρχείο δεν είναι έγκυρο JSON και δεν ήταν δυνατή η ανάλυσή του.",
+	"import.err.parseFailed":
+		"Το αρχείο δεν είναι έγκυρο JSON και δεν ήταν δυνατή η ανάλυσή του.",
 	"import.err.entryNotObject": "Η καταχώρηση πρέπει να είναι αντικείμενο.",
-	"import.err.requiredMissing": 'Το υποχρεωτικό πεδίο "{{field}}" λείπει ή έχει λανθασμένο τύπο.',
+	"import.err.requiredMissing":
+		'Το υποχρεωτικό πεδίο "{{field}}" λείπει ή έχει λανθασμένο τύπο.',
 	"import.err.idEmpty": "Το ID δεν πρέπει να είναι κενό.",
-	"import.err.idTooLong": 'Το ID "{{value}}" έχει {{length}} χαρακτήρες· το μέγιστο είναι {{max}}.',
-	"import.err.idBadChar": 'Το ID "{{value}}" περιέχει μη έγκυρους χαρακτήρες ("|", "[", "]", στηλοθέτες και αλλαγές γραμμής δεν επιτρέπονται).',
-	"import.err.displayNameEmpty": "Το εμφανιζόμενο όνομα δεν πρέπει να είναι κενό.",
-	"import.err.displayNameTooLong": "Το εμφανιζόμενο όνομα έχει {{length}} χαρακτήρες· το μέγιστο είναι {{max}}.",
-	"import.err.boolField": '"{{field}}" πρέπει να είναι boolean (true ή false).',
+	"import.err.idTooLong":
+		'Το ID "{{value}}" έχει {{length}} χαρακτήρες· το μέγιστο είναι {{max}}.',
+	"import.err.idBadChar":
+		'Το ID "{{value}}" περιέχει μη έγκυρους χαρακτήρες ("|", "[", "]", στηλοθέτες και αλλαγές γραμμής δεν επιτρέπονται).',
+	"import.err.displayNameEmpty":
+		"Το εμφανιζόμενο όνομα δεν πρέπει να είναι κενό.",
+	"import.err.displayNameTooLong":
+		"Το εμφανιζόμενο όνομα έχει {{length}} χαρακτήρες· το μέγιστο είναι {{max}}.",
+	"import.err.boolField":
+		'"{{field}}" πρέπει να είναι boolean (true ή false).',
 	"import.err.iconNotObject": "Το εικονίδιο πρέπει να είναι αντικείμενο.",
-	"import.err.iconTypeInvalid": "Ο τύπος εικονιδίου \"{{value}}\" δεν είναι ένα από: {{types}}.",
-	"import.warn.iconFieldIgnored": "\"{{field}}\" ισχύει μόνο για εικονίδια Material και αγνοείται για τον τύπο εικονιδίου {{type}}.",
-	"import.err.iconValueEmpty": "Η τιμή εικονιδίου πρέπει να είναι μη κενή συμβολοσειρά.",
-	"import.err.iconValueTooLong": "Η τιμή εικονιδίου είναι ασυνήθιστα μεγάλη ({{length}} χαρακτήρες).",
-	"import.err.materialStyle": 'Το στυλ εικονιδίου Material "{{value}}" δεν είναι ένα από: outlined, filled, rounded, sharp.',
-	"import.err.materialWeight": 'Το βάρος εικονιδίου Material "{{value}}" πρέπει να είναι ακέραιος μεταξύ 100 και 700, με βήμα 100.',
-	"import.warn.iconRecolorIgnored": "\"recolor\" ισχύει μόνο για δικές σας εικόνες και αγνοείται για τον τύπο εικονιδίου {{type}}.",
-	"import.err.iconRecolorInvalid": "\"recolor\" πρέπει να είναι true ή false (ελήφθη \"{{value}}\").",
-	"import.err.colorInvalid": '"{{field}}" πρέπει να είναι χρώμα hex όπως "#448aff" (ελήφθη "{{value}}").',
-	"import.err.numberRange": '"{{field}}" πρέπει να είναι αριθμός μεταξύ {{min}} και {{max}} (ελήφθη "{{value}}").',
-	"import.err.iconSizeRange": '"{{field}}" πρέπει να είναι αριθμός μεταξύ {{min}} και {{max}} (ελήφθη "{{value}}").',
-	"import.err.aliasesNotArray": '"aliases" πρέπει να είναι πίνακας συμβολοσειρών.',
+	"import.err.iconTypeInvalid":
+		'Ο τύπος εικονιδίου "{{value}}" δεν είναι ένα από: {{types}}.',
+	"import.warn.iconFieldIgnored":
+		'"{{field}}" ισχύει μόνο για εικονίδια Material και αγνοείται για τον τύπο εικονιδίου {{type}}.',
+	"import.err.iconValueEmpty":
+		"Η τιμή εικονιδίου πρέπει να είναι μη κενή συμβολοσειρά.",
+	"import.err.iconValueTooLong":
+		"Η τιμή εικονιδίου είναι ασυνήθιστα μεγάλη ({{length}} χαρακτήρες).",
+	"import.err.materialStyle":
+		'Το στυλ εικονιδίου Material "{{value}}" δεν είναι ένα από: outlined, filled, rounded, sharp.',
+	"import.err.materialWeight":
+		'Το βάρος εικονιδίου Material "{{value}}" πρέπει να είναι ακέραιος μεταξύ 100 και 700, με βήμα 100.',
+	"import.warn.iconRecolorIgnored":
+		'"recolor" ισχύει μόνο για δικές σας εικόνες και αγνοείται για τον τύπο εικονιδίου {{type}}.',
+	"import.err.iconRecolorInvalid":
+		'"recolor" πρέπει να είναι true ή false (ελήφθη "{{value}}").',
+	"import.err.colorInvalid":
+		'"{{field}}" πρέπει να είναι χρώμα hex όπως "#448aff" (ελήφθη "{{value}}").',
+	"import.err.numberRange":
+		'"{{field}}" πρέπει να είναι αριθμός μεταξύ {{min}} και {{max}} (ελήφθη "{{value}}").',
+	"import.err.iconSizeRange":
+		'"{{field}}" πρέπει να είναι αριθμός μεταξύ {{min}} και {{max}} (ελήφθη "{{value}}").',
+	"import.err.aliasesNotArray":
+		'"aliases" πρέπει να είναι πίνακας συμβολοσειρών.',
 	"import.err.aliasNotString": "Το ψευδώνυμο πρέπει να είναι συμβολοσειρά.",
-	"import.err.aliasDup": 'Το ψευδώνυμο "{{value}}" είναι διπλότυπο σε αυτήν την καταχώρηση.',
-	"import.err.tooManyIds": "Πάρα πολλά IDs ({{count}})· κάθε callout μπορεί να έχει το πολύ {{max}} IDs (κύριο + ψευδώνυμα).",
-	"import.err.metadataShape": '"metadata" πρέπει να είναι αντικείμενο του οποίου όλες οι τιμές είναι συμβολοσειρές.',
+	"import.err.aliasDup":
+		'Το ψευδώνυμο "{{value}}" είναι διπλότυπο σε αυτήν την καταχώρηση.',
+	"import.err.tooManyIds":
+		"Πάρα πολλά IDs ({{count}})· κάθε callout μπορεί να έχει το πολύ {{max}} IDs (κύριο + ψευδώνυμα).",
+	"import.err.metadataShape":
+		'"metadata" πρέπει να είναι αντικείμενο του οποίου όλες οι τιμές είναι συμβολοσειρές.',
 	"import.err.unknownFields": "Αγνώστα πεδία αγνοήθηκαν: {{fields}}.",
-	"import.err.duplicateInFile": 'Το ID/ψευδώνυμο "{{value}}" χρησιμοποιείται ήδη από την καταχώρηση #{{first}} σε αυτό το αρχείο.',
-	"import.err.aliasConflict": 'Το ψευδώνυμο "{{value}}" χρησιμοποιείται ήδη από άλλο callout ("{{other}}") στο vault σας.',
-	"import.warn.defaultFoldedAutofix": '"defaultFolded" ήταν true ενώ "foldable" ήταν false· το defaultFolded επαναφέρθηκε στο false.',
-	"import.warn.imageMissing": "Αυτό το Callout χρησιμοποιεί μια εικόνα που δεν βρίσκεται στο αρχείο ούτε σε αυτό το vault, γι' αυτό θα εμφανίσει ένα εικονίδιο κράτησης θέσης έως ότου δώσετε νέο.",
-	"footer.tagline": "Έχετε σχόλια, απόψεις ή προτάσεις; Θα χαρώ να τα ακούσω!",
+	"import.err.duplicateInFile":
+		'Το ID/ψευδώνυμο "{{value}}" χρησιμοποιείται ήδη από την καταχώρηση #{{first}} σε αυτό το αρχείο.',
+	"import.err.aliasConflict":
+		'Το ψευδώνυμο "{{value}}" χρησιμοποιείται ήδη από άλλο callout ("{{other}}") στο vault σας.',
+	"import.warn.defaultFoldedAutofix":
+		'"defaultFolded" ήταν true ενώ "foldable" ήταν false· το defaultFolded επαναφέρθηκε στο false.',
+	"import.warn.imageMissing":
+		"Αυτό το Callout χρησιμοποιεί μια εικόνα που δεν βρίσκεται στο αρχείο ούτε σε αυτό το vault, γι' αυτό θα εμφανίσει ένα εικονίδιο κράτησης θέσης έως ότου δώσετε νέο.",
+	"footer.tagline":
+		"Έχετε σχόλια, απόψεις ή προτάσεις; Θα χαρώ να τα ακούσω!",
 	"footer.madeBy": "Δημιουργήθηκε από τον Niv  •  ",
 };

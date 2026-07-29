@@ -10,18 +10,24 @@ export const fa: Record<string, string> = {
 	"settings.fallbackTag": "پیش‌فرض",
 	"settings.fallbackTagAuto": "پیش‌فرض خودکار",
 	"settings.rescanVault": "اسکان مجدد vault",
-	"settings.rescanVaultDesc": "شناسه‌های callout ناشناخته را در یادداشت‌ها جستجو می‌کند و آن‌ها را به عنوان ردیف‌های پشتیبان اضافه می‌کند.",
+	"settings.rescanVaultDesc":
+		"شناسه‌های callout ناشناخته را در یادداشت‌ها جستجو می‌کند و آن‌ها را به عنوان ردیف‌های پشتیبان اضافه می‌کند.",
 	"settings.rescanVaultHintAction": "همین الان اسکان کن",
-	"settings.rescanComplete": "اسکان مجدد کامل شد: {{count}} callout جدید اضافه شد.",
+	"settings.rescanComplete":
+		"اسکان مجدد کامل شد: {{count}} callout جدید اضافه شد.",
 	"replaceModal.deleteWithoutReplaceSuffix": "(به پیش‌فرض برمی‌گردد)",
 
 	"firstRun.title": "callout‌های موجود در vault را پیدا کنیم؟",
-	"firstRun.body": "Callout Studio می‌تواند vault شما را اسکان کند تا callout‌هایی را که از قبل استفاده می‌کنید کشف کند، تا در لیست تنظیمات نمایش داده شوند و سبک پشتیبان شما را بپذیرند.",
-	"firstRun.heavyVaultNote": "vault شما {{count}} فایل Markdown دارد — اسکان ممکن است چند ثانیه طول بکشد.",
-	"firstRun.laterHint": "می‌توانید این کار را بعداً از طریق تنظیمات ← بینش‌ها و نگهداری vault ← اسکان مجدد vault انجام دهید.",
+	"firstRun.body":
+		"Callout Studio می‌تواند vault شما را اسکان کند تا callout‌هایی را که از قبل استفاده می‌کنید کشف کند، تا در لیست تنظیمات نمایش داده شوند و سبک پشتیبان شما را بپذیرند.",
+	"firstRun.heavyVaultNote":
+		"vault شما {{count}} فایل Markdown دارد — اسکان ممکن است چند ثانیه طول بکشد.",
+	"firstRun.laterHint":
+		"می‌توانید این کار را بعداً از طریق تنظیمات ← بینش‌ها و نگهداری vault ← اسکان مجدد vault انجام دهید.",
 	"firstRun.scanNow": "همین الان اسکان کن",
 	"firstRun.noThanks": "نه، ممنون",
-	"firstRun.autoScanComplete": "Callout Studio vault شما را اسکان کرد و {{count}} callout اضافه کرد.",
+	"firstRun.autoScanComplete":
+		"Callout Studio vault شما را اسکان کرد و {{count}} callout اضافه کرد.",
 	"firstRun.scanning": "در حال اسکان",
 
 	"welcome.tooltip": "درباره‌ی Callout Studio",
@@ -39,10 +45,14 @@ export const fa: Record<string, string> = {
 		"Callout Studio قابلیت‌های بیشتری هم دارد! [بیشتر بدانید]({{repoUrl}}).\n",
 
 	"deleteModal.title": 'callout "{{name}}" حذف شود؟',
-	"deleteModal.bodyInUse": "این callout {{count}} بار در {{files}} فایل ظاهر می‌شود.",
-	"deleteModal.bodyInUseExplain": "حذف کردن آن بلوک‌ها را به متن ساده تبدیل می‌کند — سبک و سرتیتر callout را از دست می‌دهند.",
-	"deleteModal.replaceHint": "می‌توانید آن را با callout دیگری جایگزین کنید تا محتوای vault به صورت callout با سبک باقی بماند.",
-	"deleteModal.bodyUnused": '"{{name}}" در هیچ یادداشتی استفاده نشده، اما یک callout سفارشی است که ایجاد کرده‌اید. حذف آن را از این لیست برمی‌دارد.',
+	"deleteModal.bodyInUse":
+		"این callout {{count}} بار در {{files}} فایل ظاهر می‌شود.",
+	"deleteModal.bodyInUseExplain":
+		"حذف کردن آن بلوک‌ها را به متن ساده تبدیل می‌کند — سبک و سرتیتر callout را از دست می‌دهند.",
+	"deleteModal.replaceHint":
+		"می‌توانید آن را با callout دیگری جایگزین کنید تا محتوای vault به صورت callout با سبک باقی بماند.",
+	"deleteModal.bodyUnused":
+		'"{{name}}" در هیچ یادداشتی استفاده نشده، اما یک callout سفارشی است که ایجاد کرده‌اید. حذف آن را از این لیست برمی‌دارد.',
 	"deleteModal.replaceInstead": "به جای آن جایگزین کن",
 	"deleteModal.deleteInUse": "حذف (تبدیل به متن ساده)",
 	"deleteModal.deleteUnused": "حذف callout",
@@ -60,9 +70,12 @@ export const fa: Record<string, string> = {
 	"settings.importExport": "وارد کردن / صادر کردن",
 	"settings.import": "وارد کردن",
 	"settings.export": "صادر کردن",
-	"settings.importDesc": "داده‌های Callout Studio را از vault دیگری با استفاده از فایل JSON وارد کنید.",
-	"settings.exportDesc": "همه انواع callout سفارشی را در قالب JSON ذخیره کنید.",
-	"settings.importConflictNotice": "{{count}} نوع callout وارد شد؛ {{overwritten}} ورودی موجود بازنویسی شد.",
+	"settings.importDesc":
+		"داده‌های Callout Studio را از vault دیگری با استفاده از فایل JSON وارد کنید.",
+	"settings.exportDesc":
+		"همه انواع callout سفارشی را در قالب JSON ذخیره کنید.",
+	"settings.importConflictNotice":
+		"{{count}} نوع callout وارد شد؛ {{overwritten}} ورودی موجود بازنویسی شد.",
 
 	"settings.addNewCallout": "+ افزودن callout",
 
@@ -78,7 +91,8 @@ export const fa: Record<string, string> = {
 
 	"settings.colorSwatchAria": "برجسته: {{accent}} · پس‌زمینه: {{bg}}",
 	"settings.fallbackCallout": "callout پشتیبان پیش‌فرض",
-	"settings.fallbackCalloutDesc": "انواع callout ناشناخته در vault سبک این callout را به ارث می‌برند.",
+	"settings.fallbackCalloutDesc":
+		"انواع callout ناشناخته در vault سبک این callout را به ارث می‌برند.",
 
 	"settings.globalStyle": "سبک کلی callout",
 	"settings.border": "حاشیه",
@@ -112,42 +126,52 @@ export const fa: Record<string, string> = {
 	"settings.deletePaletteConfirm":
 		'پالت "{{name}}" حذف شود؟\nبلوک‌های callout که از رنگ‌های آن استفاده می‌کنند تغییر نمی‌کنند.',
 	"settings.enableAutocomplete": "فعال‌سازی تکمیل خودکار [!",
-	"settings.enableAutocompleteDesc": 'هنگام تایپ "[!" در یک بلوک نقل‌قول در ویرایشگر، پیشنهادات نمایش می‌دهد. یک نوع callout از لیست انتخاب کنید تا سرتیتر کامل callout درج شود.',
+	"settings.enableAutocompleteDesc":
+		'هنگام تایپ "[!" در یک بلوک نقل‌قول در ویرایشگر، پیشنهادات نمایش می‌دهد. یک نوع callout از لیست انتخاب کنید تا سرتیتر کامل callout درج شود.',
 
 	"settings.openHotkeys": "میانبرهای Callout Studio",
-	"settings.openHotkeysDesc": "تنظیمات میانبرهای Obsidian را برای دستورات Callout Studio باز می‌کند، جایی که می‌توانید میانبرهای خود را برای ایجاد نوع جدید، باز کردن تنظیمات، حذف callout و پیچیدن در callout انتخاب کنید. به صورت پیش‌فرض هیچ میانبری اختصاص داده نشده است.",
+	"settings.openHotkeysDesc":
+		"تنظیمات میانبرهای Obsidian را برای دستورات Callout Studio باز می‌کند، جایی که می‌توانید میانبرهای خود را برای ایجاد نوع جدید، باز کردن تنظیمات، حذف callout و پیچیدن در callout انتخاب کنید. به صورت پیش‌فرض هیچ میانبری اختصاص داده نشده است.",
 	"settings.openHotkeysButton": "باز کردن تنظیمات میانبر",
-
 
 	"settings.vaultMaintenance": "بینش‌ها و نگهداری vault",
 	"settings.vaultStats": "آمار callout",
-	"settings.vaultStatsDesc": "همه بلوک‌های callout را در یادداشت‌های Markdown شمارش می‌کند و بر اساس نوع گروه‌بندی می‌کند.",
+	"settings.vaultStatsDesc":
+		"همه بلوک‌های callout را در یادداشت‌های Markdown شمارش می‌کند و بر اساس نوع گروه‌بندی می‌کند.",
 	"settings.vaultStatsButton": "مشاهده آمار",
 	"settings.vaultStatsScanning": "در حال اسکان",
 	"settings.resetAll": "بازنشانی",
-	"settings.resetAllDesc": "همه callout‌های کاربر را حذف می‌کند، callout‌های داخلی، سبک‌های کلی (حاشیه، مقیاس فونت، شکل)، پالت‌های رنگ ذخیره‌شده، سفارشی‌سازی منوی کلیک راست و SVG‌های Material دانلود شده را بازنشانی می‌کند.",
+	"settings.resetAllDesc":
+		"همه callout‌های کاربر را حذف می‌کند، callout‌های داخلی، سبک‌های کلی (حاشیه، مقیاس فونت، شکل)، پالت‌های رنگ ذخیره‌شده، سفارشی‌سازی منوی کلیک راست و SVG‌های Material دانلود شده را بازنشانی می‌کند.",
 	"settings.resetAllButton": "بازنشانی همه چیز",
-	"settings.resetAllConfirm": "این عمل همه callout‌های سفارشی را حذف می‌کند، callout‌های داخلی، سبک‌های کلی، پالت‌های رنگ ذخیره‌شده، سفارشی‌سازی منوی کلیک راست و همه SVG‌های Material در حافظه نهان را بازنشانی می‌کند. این عمل قابل برگشت نیست. مطمئن هستید؟",
+	"settings.resetAllConfirm":
+		"این عمل همه callout‌های سفارشی را حذف می‌کند، callout‌های داخلی، سبک‌های کلی، پالت‌های رنگ ذخیره‌شده، سفارشی‌سازی منوی کلیک راست و همه SVG‌های Material در حافظه نهان را بازنشانی می‌کند. این عمل قابل برگشت نیست. مطمئن هستید؟",
 	"notice.resetAllDone": "همه چیز به پیش‌فرض بازنشانی شد.",
 
 	"notice.exported": "callout‌ها در callout-studio-export.json صادر شدند",
 	"notice.importedJSON": "{{count}} نوع callout از JSON وارد شد.",
 	"notice.importedSettings": "تنظیمات افزونه وارد شد.",
-	"notice.noNewJSON": "هیچ نوع callout جدیدی وارد نشد (شناسه‌ها ممکن است از قبل وجود داشته باشند).",
-	"notice.iconDownloadFailed": 'دانلود آیکون Material "{{name}}" ناموفق بود. ممکن است برای این سبک/وزن در دسترس نباشد، یا اتصال شما قطع باشد.',
+	"notice.noNewJSON":
+		"هیچ نوع callout جدیدی وارد نشد (شناسه‌ها ممکن است از قبل وجود داشته باشند).",
+	"notice.iconDownloadFailed":
+		'دانلود آیکون Material "{{name}}" ناموفق بود. ممکن است برای این سبک/وزن در دسترس نباشد، یا اتصال شما قطع باشد.',
 	"notice.nothingToWrap": "چیزی برای پیچیدن وجود ندارد.",
 	"notice.cursorNotInsideCallout": "مکان‌نما داخل callout نیست.",
-	"notice.openHotkeysFailed": "باز کردن تنظیمات میانبرهای Obsidian امکان‌پذیر نبود.",
-	"notice.filterHotkeysFailed": "میانبرهای Obsidian باز شدند، اما اعمال فیلتر Callout Studio امکان‌پذیر نبود.",
+	"notice.openHotkeysFailed":
+		"باز کردن تنظیمات میانبرهای Obsidian امکان‌پذیر نبود.",
+	"notice.filterHotkeysFailed":
+		"میانبرهای Obsidian باز شدند، اما اعمال فیلتر Callout Studio امکان‌پذیر نبود.",
 
 	"editor.editCallout": "ویرایش callout",
 	"editor.newCallout": "callout جدید",
 	"editor.displayName": "نام نمایشی",
 	"editor.displayNameDesc": "برچسب خوانا نمایش داده شده در رابط کاربری",
-	"editor.displayNameBuiltIn": "نام نمایشی برای callout‌های داخلی قابل تغییر نیست",
+	"editor.displayNameBuiltIn":
+		"نام نمایشی برای callout‌های داخلی قابل تغییر نیست",
 	"editor.displayNamePlaceholder": "callout من",
 	"editor.calloutIds": "شناسه‌های callout",
-	"editor.calloutIdsDesc": "همه شناسه‌ها برای این callout. استفاده از فاصله مجاز است.\nEnter یا دکمه + را فشار دهید تا اضافه شود.",
+	"editor.calloutIdsDesc":
+		"همه شناسه‌ها برای این callout. استفاده از فاصله مجاز است.\nEnter یا دکمه + را فشار دهید تا اضافه شود.",
 	"editor.calloutIdsPlaceholder": "افزودن شناسه",
 	"editor.addId": "افزودن شناسه",
 	"editor.idLinkedToName": "متصل به نام نمایشی",
@@ -169,7 +193,8 @@ export const fa: Record<string, string> = {
 	"editor.contrastWarning":
 		"کنتراست کم با پس‌زمینه — ممکن است خواندن آن دشوار باشد",
 	"editor.foldable": "قابل جمع",
-	"editor.foldableDesc": "انتخاب کنید آیا callout قابل جمع است و چه حالت پیش‌فرضی در کل vault اعمال شود.",
+	"editor.foldableDesc":
+		"انتخاب کنید آیا callout قابل جمع است و چه حالت پیش‌فرضی در کل vault اعمال شود.",
 	"editor.foldOff": "خاموش",
 	"editor.foldOpen": "به صورت پیش‌فرض باز",
 	"editor.foldClosed": "به صورت پیش‌فرض بسته",
@@ -182,12 +207,15 @@ export const fa: Record<string, string> = {
 	"editor.idEmpty": "حداقل یک شناسه لازم است",
 	"editor.idExists": "یک callout با این شناسه از قبل وجود دارد",
 	"editor.idConflict": "این شناسه با یک callout موجود تعارض دارد",
-	"editor.idDashConflict": 'Obsidian فاصله‌ها را به‌صورت خط تیره می‌نویسد، بنابراین این شناسه با «{{other}}» تداخل دارد',
+	"editor.idDashConflict":
+		"Obsidian فاصله‌ها را به‌صورت خط تیره می‌نویسد، بنابراین این شناسه با «{{other}}» تداخل دارد",
 	"editor.untitledCallout": "Callout بدون عنوان",
-	"editor.loremIpsum": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+	"editor.loremIpsum":
+		"Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
 	"editor.loremIpsumShort":
 		"Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-	"editor.sampleInlineText": "در اینجا یک قرص [!{id}] درون‌خطی در داخل یک پاراگراف وجود دارد.",
+	"editor.sampleInlineText":
+		"در اینجا یک قرص [!{id}] درون‌خطی در داخل یک پاراگراف وجود دارد.",
 	"editor.previewReadOnly": "پیش‌نمایش زنده قابل ویرایش نیست",
 
 	// Palette editor modal
@@ -197,11 +225,14 @@ export const fa: Record<string, string> = {
 	"palette.namePlaceholder": "پالت من",
 	"palette.nameExists": "پالتی با این نام از قبل وجود دارد",
 	"palette.baseColor": "رنگ پایه",
-	"palette.baseColorHint": "رنگ پس‌زمینه را به‌طور خودکار با آن هماهنگ می‌کنیم. در صورت تمایل، می‌توانید با {{link}} آن را جداگانه کنترل کنید.",
+	"palette.baseColorHint":
+		"رنگ پس‌زمینه را به‌طور خودکار با آن هماهنگ می‌کنیم. در صورت تمایل، می‌توانید با {{link}} آن را جداگانه کنترل کنید.",
 	"palette.baseColorHintLink": "کلیک کنید",
 	"palette.advancedColors": "رنگ‌ها",
-	"palette.advancedColorsHint": "در حال ویرایش رنگ‌ها برای حالت {{mode}} - حالت دیگر به‌طور خودکار به‌روزرسانی می‌شود. برای بررسی آن، پوسته Obsidian را تغییر دهید.",
-	"palette.revertHint": "ترجیح می‌دهید در عوض از یک رنگ پایه واحد استفاده کنید؟ {{link}}.",
+	"palette.advancedColorsHint":
+		"در حال ویرایش رنگ‌ها برای حالت {{mode}} - حالت دیگر به‌طور خودکار به‌روزرسانی می‌شود. برای بررسی آن، پوسته Obsidian را تغییر دهید.",
+	"palette.revertHint":
+		"ترجیح می‌دهید در عوض از یک رنگ پایه واحد استفاده کنید؟ {{link}}.",
 	"palette.revertHintLink": "بازگردانی",
 	"palette.lightMode": "روشن",
 	"palette.darkMode": "تیره",
@@ -248,11 +279,22 @@ export const fa: Record<string, string> = {
 	"iconPicker.searchLucide": "جستجوی آیکون‌های Lucide",
 	"iconPicker.searchTabler": "جستجوی آیکون‌های Tabler",
 	"iconPicker.tablerStyle": "سبک آیکون",
-	"iconPicker.tablerStyleOutline": "خطی",
-	"iconPicker.tablerStyleFilled": "توپر",
+	"iconPicker.tablerStyleOutline": "خطی (Outline)",
+	"iconPicker.tablerStyleFilled": "توپر (Filled)",
 	"iconPicker.loadMore": "بارگذاری بیشتر",
 	"iconPicker.materialStyle": "سبک آیکون",
+	"iconPicker.materialStyleOutlined": "خطی (Outlined)",
+	"iconPicker.materialStyleFilled": "پر (Filled)",
+	"iconPicker.materialStyleRounded": "گرد (Rounded)",
+	"iconPicker.materialStyleSharp": "تیز (Sharp)",
 	"iconPicker.materialWeight": "وزن آیکون",
+	"iconPicker.materialWeight100": "نازک (Thin)",
+	"iconPicker.materialWeight200": "خیلی سبک (Extra Light)",
+	"iconPicker.materialWeight300": "سبک (Light)",
+	"iconPicker.materialWeight400": "عادی (Regular)",
+	"iconPicker.materialWeight500": "متوسط (Medium)",
+	"iconPicker.materialWeight600": "نیمه‌پررنگ (Semi Bold)",
+	"iconPicker.materialWeight700": "پررنگ (Bold)",
 	"iconPicker.searchMaterial": "جستجوی آیکون‌های Material",
 	"iconPicker.searchEmoji": "جستجوی ایموجی",
 	"iconPicker.skinTone": "رنگ پوست",
@@ -264,27 +306,34 @@ export const fa: Record<string, string> = {
 	"iconPicker.fa": "Font Awesome",
 	"iconPicker.searchFa": "جستجو در Font Awesome",
 	"iconPicker.faStyle": "سبک آیکون",
-	"iconPicker.faStyleSolid": "توپر",
-	"iconPicker.faStyleRegular": "معمولی",
-	"iconPicker.faStyleBrands": "برندها",
+	"iconPicker.faStyleSolid": "توپر (Solid)",
+	"iconPicker.faStyleRegular": "معمولی (Regular)",
+	"iconPicker.faStyleBrands": "برندها (Brands)",
 	"iconPicker.rpgAwesome": "RPG Awesome",
 	"iconPicker.searchRpgAwesome": "جستجو در RPG Awesome",
 	"iconPicker.image": "تصاویر شما",
 	"iconPicker.searchImage": "جستجو در تصاویر شما",
-	"iconPicker.imageTooLarge": "{{name}} خیلی بزرگ است. تصاویر باید کمتر از ۵ مگابایت باشند.",
-	"iconPicker.imageUnsupported": "{{name}} فرمت تصویر پشتیبانی‌شده‌ای نیست. از SVG، PNG، JPEG یا WebP استفاده کنید.",
-	"iconPicker.imageInvalidSvg": "{{name}} به عنوان SVG امن قابل خواندن نبود و اضافه نشد.",
+	"iconPicker.imageTooLarge":
+		"{{name}} خیلی بزرگ است. تصاویر باید کمتر از ۵ مگابایت باشند.",
+	"iconPicker.imageUnsupported":
+		"{{name}} فرمت تصویر پشتیبانی‌شده‌ای نیست. از SVG، PNG، JPEG یا WebP استفاده کنید.",
+	"iconPicker.imageInvalidSvg":
+		"{{name}} به عنوان SVG امن قابل خواندن نبود و اضافه نشد.",
 	"iconPicker.imageDecodeFailed": "{{name}} به عنوان تصویر قابل خواندن نبود.",
-	"iconPicker.imageDuplicate": "{{name}} قبلاً در تصاویر شما وجود دارد. نام فایل را تغییر دهید یا تصویر موجود را حذف کنید.",
+	"iconPicker.imageDuplicate":
+		"{{name}} قبلاً در تصاویر شما وجود دارد. نام فایل را تغییر دهید یا تصویر موجود را حذف کنید.",
 	"iconPicker.imageAdd": "افزودن تصاویر",
-	"iconPicker.imageEmpty": "هنوز تصویری وجود ندارد. یک فایل SVG، PNG، JPEG یا WebP از رایانه خود اضافه کنید یا اینجا رها کنید.",
+	"iconPicker.imageEmpty":
+		"هنوز تصویری وجود ندارد. یک فایل SVG، PNG، JPEG یا WebP از رایانه خود اضافه کنید یا اینجا رها کنید.",
 	"iconPicker.imageDelete": "حذف",
 	"iconPicker.imageDeleteConfirm": "حذف «{{name}}»؟",
-	"iconPicker.imageDeleteInUse": "{{count}} callout از این تصویر استفاده می‌کنند. تا زمانی که تصویر جدیدی تعیین کنید، آیکون جایگزین نمایش داده می‌شود.",
+	"iconPicker.imageDeleteInUse":
+		"{{count}} callout از این تصویر استفاده می‌کنند. تا زمانی که تصویر جدیدی تعیین کنید، آیکون جایگزین نمایش داده می‌شود.",
 	"iconPicker.imageRecolor": "پیروی از رنگ Callout",
 	"iconPicker.allSources": "همه منابع",
 	"iconPicker.searchAllSources": "جستجو در همه منابع آیکون",
-	"iconPicker.sourcesNotDownloaded": "هنوز دانلود نشده: {{names}}. یک منبع را در بالا انتخاب کنید تا دانلود شود.",
+	"iconPicker.sourcesNotDownloaded":
+		"هنوز دانلود نشده: {{names}}. یک منبع را در بالا انتخاب کنید تا دانلود شود.",
 	"iconPicker.chooseSource": "انتخاب منبع",
 	"iconPicker.sourceGroup": "{{name}} · {{count}}",
 
@@ -299,22 +348,141 @@ export const fa: Record<string, string> = {
 	"iconPicker.descRpgAwesome": "آیکون‌های فانتزی و بازی‌های رومیزی",
 	"iconPicker.descImage": "تصاویری که از رایانه خود اضافه می‌کنید",
 
+	// Icon picker — category filter dropdown labels
+	"iconPicker.cat.Accessibility": "دسترسی‌پذیری",
+	"iconPicker.cat.Actions": "اقدامات",
+	"iconPicker.cat.Activities": "فعالیت‌ها",
+	"iconPicker.cat.Alert": "هشدار",
+	"iconPicker.cat.Alphabet": "الفبا",
+	"iconPicker.cat.Android": "Android",
+	"iconPicker.cat.Animals": "حیوانات",
+	"iconPicker.cat.Arrows": "فلش‌ها",
+	"iconPicker.cat.Astronomy": "نجوم",
+	"iconPicker.cat.Audio&Video": "صوت و تصویر",
+	"iconPicker.cat.Automotive": "خودرو",
+	"iconPicker.cat.Badges": "نشان‌ها",
+	"iconPicker.cat.Brand": "برندها",
+	"iconPicker.cat.Buildings": "ساختمان‌ها",
+	"iconPicker.cat.Business": "کسب‌وکار",
+	"iconPicker.cat.Camping": "اردوگاه",
+	"iconPicker.cat.Charity": "خیریه",
+	"iconPicker.cat.Charts": "نمودارها",
+	"iconPicker.cat.Charts + Diagrams": "نمودارها و دیاگرام‌ها",
+	"iconPicker.cat.Childhood": "کودکی",
+	"iconPicker.cat.Clothing + Fashion": "لباس و مد",
+	"iconPicker.cat.Coding": "برنامه‌نویسی",
+	"iconPicker.cat.Communicate": "ارتباط",
+	"iconPicker.cat.Communication": "ارتباطات",
+	"iconPicker.cat.Computers": "رایانه‌ها",
+	"iconPicker.cat.Connectivity": "اتصال",
+	"iconPicker.cat.Construction": "ساختمان",
+	"iconPicker.cat.Currencies": "ارزها",
+	"iconPicker.cat.Database": "پایگاه داده",
+	"iconPicker.cat.Design": "طراحی",
+	"iconPicker.cat.Development": "توسعه",
+	"iconPicker.cat.Devices": "دستگاه‌ها",
+	"iconPicker.cat.Devices + Hardware": "دستگاه‌ها و سخت‌افزار",
+	"iconPicker.cat.Disaster + Crisis": "فاجعه و بحران",
+	"iconPicker.cat.Document": "سند",
+	"iconPicker.cat.E-commerce": "تجارت الکترونیک",
+	"iconPicker.cat.Editing": "ویرایش",
+	"iconPicker.cat.Education": "آموزش",
+	"iconPicker.cat.Electrical": "برقی",
+	"iconPicker.cat.Emoji": "ایموجی",
+	"iconPicker.cat.Energy": "انرژی",
+	"iconPicker.cat.Extensions": "افزونه‌ها",
+	"iconPicker.cat.Files": "پرونده‌ها",
+	"iconPicker.cat.Film + Video": "فیلم و ویدیو",
+	"iconPicker.cat.Food": "غذا",
+	"iconPicker.cat.Food + Beverage": "غذا و نوشیدنی",
+	"iconPicker.cat.Fruits + Vegetables": "میوه و سبزیجات",
+	"iconPicker.cat.Games": "بازی‌ها",
+	"iconPicker.cat.Gaming": "گیمینگ",
+	"iconPicker.cat.Gender": "جنسیت",
+	"iconPicker.cat.Genders": "جنسیت‌ها",
+	"iconPicker.cat.Gestures": "ایما‌ها",
+	"iconPicker.cat.Halloween": "Halloween",
+	"iconPicker.cat.Hands": "دست‌ها",
+	"iconPicker.cat.Hardware": "سخت‌افزار",
+	"iconPicker.cat.Health": "سلامت",
+	"iconPicker.cat.Holidays": "تعطیلات",
+	"iconPicker.cat.Home": "خانه",
+	"iconPicker.cat.Household": "خانه‌داری",
+	"iconPicker.cat.Humanitarian": "بشردوستانه",
+	"iconPicker.cat.Images": "تصاویر",
+	"iconPicker.cat.Laundry": "لباسشویی",
+	"iconPicker.cat.Letters": "حروف",
+	"iconPicker.cat.Logic": "منطق",
+	"iconPicker.cat.Logistics": "لجستیک",
+	"iconPicker.cat.Map": "نقشه",
+	"iconPicker.cat.Maps": "نقشه‌ها",
+	"iconPicker.cat.Maritime": "دریایی",
+	"iconPicker.cat.Marketing": "بازاریابی",
+	"iconPicker.cat.Math": "ریاضیات",
+	"iconPicker.cat.Mathematics": "ریاضیات",
+	"iconPicker.cat.Media": "رسانه",
+	"iconPicker.cat.Media Playback": "پخش رسانه",
+	"iconPicker.cat.Medical + Health": "پزشکی و سلامت",
+	"iconPicker.cat.Money": "پول",
+	"iconPicker.cat.Mood": "حال و هوا",
+	"iconPicker.cat.Moving": "اسباب‌کشی",
+	"iconPicker.cat.Music + Audio": "موسیقی و صوت",
+	"iconPicker.cat.Nature": "طبیعت",
+	"iconPicker.cat.Numbers": "اعداد",
+	"iconPicker.cat.Photography": "عکاسی",
+	"iconPicker.cat.Photos + Images": "عکس‌ها و تصاویر",
+	"iconPicker.cat.Political": "سیاسی",
+	"iconPicker.cat.Privacy": "حریم خصوصی",
+	"iconPicker.cat.Punctuation + Symbols": "علائم نگارشی و نمادها",
+	"iconPicker.cat.Religion": "دین",
+	"iconPicker.cat.Science": "علم",
+	"iconPicker.cat.Science Fiction": "داستان‌های علمی‌تخیلی",
+	"iconPicker.cat.Security": "امنیت",
+	"iconPicker.cat.Shapes": "شکل‌ها",
+	"iconPicker.cat.Shopping": "خرید",
+	"iconPicker.cat.Social": "شبکه‌های اجتماعی",
+	"iconPicker.cat.Spinners": "چرخنده‌ها",
+	"iconPicker.cat.Sport": "ورزش",
+	"iconPicker.cat.Sports + Fitness": "ورزش و تناسبی",
+	"iconPicker.cat.Symbols": "نمادها",
+	"iconPicker.cat.System": "سیستم",
+	"iconPicker.cat.Text": "متن",
+	"iconPicker.cat.Text Formatting": "قالب‌بندی متن",
+	"iconPicker.cat.Time": "زمان",
+	"iconPicker.cat.Toggle": "تغییر حالت",
+	"iconPicker.cat.Transit": "ترانزیت",
+	"iconPicker.cat.Transportation": "حمل‌ونقل",
+	"iconPicker.cat.Travel": "سفر",
+	"iconPicker.cat.Travel + Hotel": "سفر و هتل",
+	"iconPicker.cat.UI actions": "عملیات رابط",
+	"iconPicker.cat.Users + People": "کاربران و افراد",
+	"iconPicker.cat.Vehicles": "وسایل نقلیه",
+	"iconPicker.cat.Version control": "کنترل نسخه",
+	"iconPicker.cat.Weather": "آب‌وهوا",
+	"iconPicker.cat.Writing": "نوشتن",
+	"iconPicker.cat.Zodiac": "برج‌ها",
+
 	// Downloadable icon packs
 	"iconPack.downloadTitle": "{{name}} هنوز دانلود نشده است",
 	"iconPack.downloadDetail": "{{count}} آیکون · {{size}} · دانلود یک‌باره",
 	"iconPack.download": "دانلود",
 	"iconPack.downloading": "در حال دانلود {{name}}…",
-	"iconPack.downloadFailed": "دانلود {{name}} ناموفق بود. اتصال خود را بررسی کنید و دوباره تلاش کنید.",
+	"iconPack.downloadFailed":
+		"دانلود {{name}} ناموفق بود. اتصال خود را بررسی کنید و دوباره تلاش کنید.",
 	"iconPack.retry": "تلاش مجدد",
-	"iconPack.faBrandsNotice": "آیکون‌های برندها علائم تجاری صاحبان مربوطه هستند. گنجاندن آن‌ها به معنای تأیید نیست. لطفاً آن‌ها را فقط برای نمایندگی شرکت، محصول یا خدماتی که به آن اشاره دارند استفاده کنید.",
+	"iconPack.faBrandsNotice":
+		"آیکون‌های برندها علائم تجاری صاحبان مربوطه هستند. گنجاندن آن‌ها به معنای تأیید نیست. لطفاً آن‌ها را فقط برای نمایندگی شرکت، محصول یا خدماتی که به آن اشاره دارند استفاده کنید.",
 	"iconPack.artworkRestored": "آثار هنری آیکون‌ها برای {{names}} دانلود شد.",
-	"iconPack.diskWriteFailed": "Callout Studio نتوانست بسته آیکون را روی دیسک ذخیره کند، بنابراین دفعه بعد باید دوباره دانلود شود. آیکون‌هایی که انتخاب می‌کنید همچنان در تنظیمات شما ذخیره هستند.",
+	"iconPack.diskWriteFailed":
+		"Callout Studio نتوانست بسته آیکون را روی دیسک ذخیره کند، بنابراین دفعه بعد باید دوباره دانلود شود. آیکون‌هایی که انتخاب می‌کنید همچنان در تنظیمات شما ذخیره هستند.",
 
 	// Icon licences & credits
 	"credits.title": "مجوزها و اعتبارات آیکون",
-	"credits.intro": "Callout Studio از چندین کتابخانه آیکون آزاد بهره می‌برد. مجوزهای آن‌ها در زیر بازتولید شده‌اند، همراه با تغییراتی که برای استفاده از آن‌ها اینجا انجام شده است.",
+	"credits.intro":
+		"Callout Studio از چندین کتابخانه آیکون آزاد بهره می‌برد. مجوزهای آن‌ها در زیر بازتولید شده‌اند، همراه با تغییراتی که برای استفاده از آن‌ها اینجا انجام شده است.",
 	"credits.fullNotices": "اطلاعیه‌های کامل شخص ثالث",
-	"credits.pluginLicense": "کد خاص Callout Studio تحت مجوز 0BSD است؛ کتابخانه‌های آیکون مجوزهای خود را حفظ می‌کنند.",
+	"credits.pluginLicense":
+		"کد خاص Callout Studio تحت مجوز 0BSD است؛ کتابخانه‌های آیکون مجوزهای خود را حفظ می‌کنند.",
 
 	"contextMenu.editCallout": "ویرایش تنظیمات callout",
 	"contextMenu.copyMarkdown": "کپی Markdown callout",
@@ -327,19 +495,25 @@ export const fa: Record<string, string> = {
 	"contextMenu.deleteSection": "حذف بخش عنوان",
 	"heading.toggleFold": "تغییر وضعیت جمع‌شدن",
 	"settings.globalSettings": "تنظیمات کلی",
-	"settings.globalSettingsDesc": "ظاهر هر نوع callout را در سراسر vault خود به‌طور دقیق تنظیم کنید.",
-	"settings.globalSettingsRegularDesc": "یک توکن callout به یک نقل‌قول اضافه کنید (مثلاً `> [!type]`) تا جعبه callout بومی Obsidian نمایش داده شود. می‌توانید حاشیه، شعاع، مقیاس فونت و تراز آن را تنظیم کنید.",
-	"settings.globalSettingsHeadingDesc": "یک توکن callout را درست بعد از علامت‌های # عنوان اضافه کنید (مثلاً `## [!type]`) تا به‌صورت یک عنوان callout با سبک خاص نمایش داده شود. می‌توانید حاشیه، شکل و فاصله عمودی آن را تنظیم کنید.",
-	"settings.globalSettingsInlineDesc": "یک توکن callout را در هر جای یک خط متن اضافه کنید (مثلاً `[!type]`) تا به‌صورت یک قرص کوچک درون‌خطی نمایش داده شود. می‌توانید حاشیه و شکل آن را تنظیم کنید.",
+	"settings.globalSettingsDesc":
+		"ظاهر هر نوع callout را در سراسر vault خود به‌طور دقیق تنظیم کنید.",
+	"settings.globalSettingsRegularDesc":
+		"یک توکن callout به یک نقل‌قول اضافه کنید (مثلاً `> [!type]`) تا جعبه callout بومی Obsidian نمایش داده شود. می‌توانید حاشیه، شعاع، مقیاس فونت و تراز آن را تنظیم کنید.",
+	"settings.globalSettingsHeadingDesc":
+		"یک توکن callout را درست بعد از علامت‌های # عنوان اضافه کنید (مثلاً `## [!type]`) تا به‌صورت یک عنوان callout با سبک خاص نمایش داده شود. می‌توانید حاشیه، شکل و فاصله عمودی آن را تنظیم کنید.",
+	"settings.globalSettingsInlineDesc":
+		"یک توکن callout را در هر جای یک خط متن اضافه کنید (مثلاً `[!type]`) تا به‌صورت یک قرص کوچک درون‌خطی نمایش داده شود. می‌توانید حاشیه و شکل آن را تنظیم کنید.",
 	"settings.globalSettingsCustomize": "سفارشی‌سازی",
 	"settings.calloutTypeRegular": "callout معمولی",
 	"settings.calloutTypeHeading": "callout عنوان",
 	"settings.calloutTypeInline": "callout درون‌خطی",
 	"settings.customizeMenu": "سفارشی‌سازی موارد منو",
-	"settings.customizeMenuDesc": "انتخاب کنید کدام اقدامات کلیک راست برای هر نوع callout نمایش داده شود و ترتیب آن‌ها را تغییر دهید. در حالت منبع و Live Preview کار می‌کند.",
+	"settings.customizeMenuDesc":
+		"انتخاب کنید کدام اقدامات کلیک راست برای هر نوع callout نمایش داده شود و ترتیب آن‌ها را تغییر دهید. در حالت منبع و Live Preview کار می‌کند.",
 	"settings.customizeMenuButton": "سفارشی‌سازی موارد منو",
 	"menuCustomize.title": "سفارشی‌سازی منوی کلیک راست",
-	"menuCustomize.desc": "اقدامات را روشن یا خاموش کنید و با کشیدن دستگیره ترتیب آن‌ها را تغییر دهید. تغییرات به‌طور خودکار ذخیره می‌شوند.",
+	"menuCustomize.desc":
+		"اقدامات را روشن یا خاموش کنید و با کشیدن دستگیره ترتیب آن‌ها را تغییر دهید. تغییرات به‌طور خودکار ذخیره می‌شوند.",
 	"menuCustomize.regular": "callout معمولی",
 	"menuCustomize.heading": "callout عنوان",
 	"menuCustomize.inline": "callout درون‌خطی",
@@ -355,20 +529,29 @@ export const fa: Record<string, string> = {
 	"confirm.ok": "حذف",
 	"confirm.cancel": "لغو",
 
-	"vault.filesUpdated": "{{count}} مرجع callout در فایل‌های vault به‌روزرسانی شد.",
-	"vault.idsUpdated": "{{count}} شناسه callout در فایل‌های vault به‌روزرسانی شد: {{oldIds}} ← {{newId}}",
-	"vault.titlesUpdated": "{{count}} عنوان callout در فایل‌های vault به‌روزرسانی شد: {{oldTitle}} ← {{newTitle}}",
+	"vault.filesUpdated":
+		"{{count}} مرجع callout در فایل‌های vault به‌روزرسانی شد.",
+	"vault.idsUpdated":
+		"{{count}} شناسه callout در فایل‌های vault به‌روزرسانی شد: {{oldIds}} ← {{newId}}",
+	"vault.titlesUpdated":
+		"{{count}} عنوان callout در فایل‌های vault به‌روزرسانی شد: {{oldTitle}} ← {{newTitle}}",
 	"vault.replaceWith": "جایگزینی با:",
 	"vault.deleteWithout": "حذف بدون جایگزینی",
 	"vault.confirmDelete": "تأیید",
 	"vault.confirmReplace": "جایگزینی",
-	"vault.replacePromptInUse": '"{{name}}" {{count}} بار در {{files}} فایل استفاده می‌شود. یک callout برای جایگزینی انتخاب کنید:',
-	"vault.replacePromptUnused": 'یک callout برای جایگزینی "{{name}}" انتخاب کنید:',
-	"vault.noReplacementAvailable": "هیچ callout دیگری برای جایگزینی موجود نیست.",
-	"vault.convertedToPlainText": "{{blocks}} بلوک callout در {{files}} فایل به متن ساده تبدیل شد.",
-	"vault.resetAliasWarning": "{{count}} مرجع در {{files}} فایل از نام‌های مستعار سفارشی استفاده می‌کنند: {{aliases}}. پس از بازنشانی کار نخواهند کرد. ادامه داده شود؟",
+	"vault.replacePromptInUse":
+		'"{{name}}" {{count}} بار در {{files}} فایل استفاده می‌شود. یک callout برای جایگزینی انتخاب کنید:',
+	"vault.replacePromptUnused":
+		'یک callout برای جایگزینی "{{name}}" انتخاب کنید:',
+	"vault.noReplacementAvailable":
+		"هیچ callout دیگری برای جایگزینی موجود نیست.",
+	"vault.convertedToPlainText":
+		"{{blocks}} بلوک callout در {{files}} فایل به متن ساده تبدیل شد.",
+	"vault.resetAliasWarning":
+		"{{count}} مرجع در {{files}} فایل از نام‌های مستعار سفارشی استفاده می‌کنند: {{aliases}}. پس از بازنشانی کار نخواهند کرد. ادامه داده شود؟",
 	"vault.resetConfirm": "بازنشانی",
-	"vault.resetAllInUse": "⚠ {{count}} مرجع callout در {{files}} فایل از انواع callout سفارشی استفاده می‌کنند که حذف خواهند شد.",
+	"vault.resetAllInUse":
+		"⚠ {{count}} مرجع callout در {{files}} فایل از انواع callout سفارشی استفاده می‌کنند که حذف خواهند شد.",
 
 	"vaultStats.title": "آمار callout",
 	"vaultStats.totalCallouts": "مجموع callout‌ها",
@@ -391,47 +574,75 @@ export const fa: Record<string, string> = {
 	"vaultStats.close": "بستن",
 
 	"import.title": "مشکلات وارد کردن",
-	"import.reportLeadIn": "به نظر می‌رسد فایل وارد شده تغییر کرده است. این لیست مشکلات است:",
-	"import.reportLeadInFatal": "این فایل شبیه صادرات Callout Studio نیست. قابل وارد کردن نیست:",
+	"import.reportLeadIn":
+		"به نظر می‌رسد فایل وارد شده تغییر کرده است. این لیست مشکلات است:",
+	"import.reportLeadInFatal":
+		"این فایل شبیه صادرات Callout Studio نیست. قابل وارد کردن نیست:",
 	"import.entryHeading": "ورودی {{index}} — {{label}}",
-	"import.summary": "{{valid}} از {{total}} ورودی معتبر است · {{issues}} مشکل یافت شد.",
+	"import.summary":
+		"{{valid}} از {{total}} ورودی معتبر است · {{issues}} مشکل یافت شد.",
 	"import.btnCancel": "لغو",
 	"import.btnImportValid": "فقط معتبرها را وارد کن ({{count}})",
-	"import.err.notRecognized": "فایل ناشناخته: انتظار می‌رفت آرایه‌ای از تعاریف callout یا خروجی Callout Studio باشد.",
-	"import.warn.settingsIgnored": "بلوک تنظیمات یک شیء معتبر نبود و نادیده گرفته شد.",
+	"import.err.notRecognized":
+		"فایل ناشناخته: انتظار می‌رفت آرایه‌ای از تعاریف callout یا خروجی Callout Studio باشد.",
+	"import.warn.settingsIgnored":
+		"بلوک تنظیمات یک شیء معتبر نبود و نادیده گرفته شد.",
 	"import.warn.invalidGradient":
 		"گرادیان پس‌زمینه معتبر نبود و نادیده گرفته شد.",
-	"import.err.parseFailed": "فایل JSON معتبر نیست و نمی‌توان آن را تجزیه کرد.",
+	"import.err.parseFailed":
+		"فایل JSON معتبر نیست و نمی‌توان آن را تجزیه کرد.",
 	"import.err.entryNotObject": "ورودی باید یک شی باشد.",
-	"import.err.requiredMissing": 'فیلد اجباری "{{field}}" وجود ندارد یا نوع اشتباهی دارد.',
+	"import.err.requiredMissing":
+		'فیلد اجباری "{{field}}" وجود ندارد یا نوع اشتباهی دارد.',
 	"import.err.idEmpty": "شناسه نباید خالی باشد.",
-	"import.err.idTooLong": 'شناسه "{{value}}" دارای {{length}} کاراکتر است؛ حداکثر {{max}} است.',
-	"import.err.idBadChar": 'شناسه "{{value}}" دارای کاراکترهای نامعتبر است ("|"، "["، "]"، تب و خط جدید مجاز نیستند).',
+	"import.err.idTooLong":
+		'شناسه "{{value}}" دارای {{length}} کاراکتر است؛ حداکثر {{max}} است.',
+	"import.err.idBadChar":
+		'شناسه "{{value}}" دارای کاراکترهای نامعتبر است ("|"، "["، "]"، تب و خط جدید مجاز نیستند).',
 	"import.err.displayNameEmpty": "نام نمایشی نباید خالی باشد.",
-	"import.err.displayNameTooLong": "نام نمایشی دارای {{length}} کاراکتر است؛ حداکثر {{max}} است.",
-	"import.err.boolField": '"{{field}}" باید یک مقدار بولی (true یا false) باشد.',
+	"import.err.displayNameTooLong":
+		"نام نمایشی دارای {{length}} کاراکتر است؛ حداکثر {{max}} است.",
+	"import.err.boolField":
+		'"{{field}}" باید یک مقدار بولی (true یا false) باشد.',
 	"import.err.iconNotObject": "آیکون باید یک شی باشد.",
-	"import.err.iconTypeInvalid": "نوع آیکون \"{{value}}\" باید یکی از: {{types}} باشد.",
-	"import.warn.iconFieldIgnored": "\"{{field}}\" فقط برای آیکون‌های Material اعمال می‌شود و برای نوع آیکون {{type}} نادیده گرفته می‌شود.",
+	"import.err.iconTypeInvalid":
+		'نوع آیکون "{{value}}" باید یکی از: {{types}} باشد.',
+	"import.warn.iconFieldIgnored":
+		'"{{field}}" فقط برای آیکون‌های Material اعمال می‌شود و برای نوع آیکون {{type}} نادیده گرفته می‌شود.',
 	"import.err.iconValueEmpty": "مقدار آیکون باید یک رشته غیرخالی باشد.",
-	"import.err.iconValueTooLong": "مقدار آیکون به طرز غیرمعمولی طولانی است ({{length}} کاراکتر).",
-	"import.err.materialStyle": 'سبک آیکون Material "{{value}}" باید یکی از: outlined، filled، rounded، sharp باشد.',
-	"import.err.materialWeight": 'وزن آیکون Material "{{value}}" باید عدد صحیحی بین ۱۰۰ و ۷۰۰ با گام ۱۰۰ باشد.',
-	"import.warn.iconRecolorIgnored": "\"recolor\" فقط برای تصاویر خودتان اعمال می‌شود و برای نوع آیکون {{type}} نادیده گرفته می‌شود.",
-	"import.err.iconRecolorInvalid": "\"recolor\" باید true یا false باشد (دریافت شد: \"{{value}}\").",
-	"import.err.colorInvalid": '"{{field}}" باید رنگ hex مانند "#448aff" باشد (دریافت شده "{{value}}").',
-	"import.err.numberRange": '"{{field}}" باید عددی بین {{min}} و {{max}} باشد (دریافت شده "{{value}}").',
-	"import.err.iconSizeRange": '"{{field}}" باید عددی بین {{min}} و {{max}} باشد (دریافت شده "{{value}}").',
+	"import.err.iconValueTooLong":
+		"مقدار آیکون به طرز غیرمعمولی طولانی است ({{length}} کاراکتر).",
+	"import.err.materialStyle":
+		'سبک آیکون Material "{{value}}" باید یکی از: outlined، filled، rounded، sharp باشد.',
+	"import.err.materialWeight":
+		'وزن آیکون Material "{{value}}" باید عدد صحیحی بین ۱۰۰ و ۷۰۰ با گام ۱۰۰ باشد.',
+	"import.warn.iconRecolorIgnored":
+		'"recolor" فقط برای تصاویر خودتان اعمال می‌شود و برای نوع آیکون {{type}} نادیده گرفته می‌شود.',
+	"import.err.iconRecolorInvalid":
+		'"recolor" باید true یا false باشد (دریافت شد: "{{value}}").',
+	"import.err.colorInvalid":
+		'"{{field}}" باید رنگ hex مانند "#448aff" باشد (دریافت شده "{{value}}").',
+	"import.err.numberRange":
+		'"{{field}}" باید عددی بین {{min}} و {{max}} باشد (دریافت شده "{{value}}").',
+	"import.err.iconSizeRange":
+		'"{{field}}" باید عددی بین {{min}} و {{max}} باشد (دریافت شده "{{value}}").',
 	"import.err.aliasesNotArray": '"aliases" باید آرایه‌ای از رشته‌ها باشد.',
 	"import.err.aliasNotString": "نام مستعار باید یک رشته باشد.",
 	"import.err.aliasDup": 'نام مستعار "{{value}}" در این ورودی تکراری است.',
-	"import.err.tooManyIds": "شناسه‌های بیش از حد ({{count}})؛ هر callout می‌تواند حداکثر {{max}} شناسه داشته باشد (اصلی + نام‌های مستعار).",
-	"import.err.metadataShape": '"metadata" باید شیئی باشد که همه مقادیرش رشته باشند.',
-	"import.err.unknownFields": "فیلدهای ناشناخته نادیده گرفته شدند: {{fields}}.",
-	"import.err.duplicateInFile": 'شناسه/نام مستعار "{{value}}" قبلاً توسط ورودی #{{first}} در این فایل استفاده شده است.',
-	"import.err.aliasConflict": 'نام مستعار "{{value}}" قبلاً توسط callout دیگری ("{{other}}") در vault شما استفاده شده است.',
-	"import.warn.defaultFoldedAutofix": '"defaultFolded" در حالی که "foldable" false بود، true بود؛ defaultFolded به false بازنشانی شد.',
-	"import.warn.imageMissing": "این Callout از تصویری استفاده می‌کند که نه در فایل و نه در این vault وجود دارد، بنابراین آیکون جایگزین نمایش داده می‌شود تا زمانی که تصویر جدیدی تعیین کنید.",
+	"import.err.tooManyIds":
+		"شناسه‌های بیش از حد ({{count}})؛ هر callout می‌تواند حداکثر {{max}} شناسه داشته باشد (اصلی + نام‌های مستعار).",
+	"import.err.metadataShape":
+		'"metadata" باید شیئی باشد که همه مقادیرش رشته باشند.',
+	"import.err.unknownFields":
+		"فیلدهای ناشناخته نادیده گرفته شدند: {{fields}}.",
+	"import.err.duplicateInFile":
+		'شناسه/نام مستعار "{{value}}" قبلاً توسط ورودی #{{first}} در این فایل استفاده شده است.',
+	"import.err.aliasConflict":
+		'نام مستعار "{{value}}" قبلاً توسط callout دیگری ("{{other}}") در vault شما استفاده شده است.',
+	"import.warn.defaultFoldedAutofix":
+		'"defaultFolded" در حالی که "foldable" false بود، true بود؛ defaultFolded به false بازنشانی شد.',
+	"import.warn.imageMissing":
+		"این Callout از تصویری استفاده می‌کند که نه در فایل و نه در این vault وجود دارد، بنابراین آیکون جایگزین نمایش داده می‌شود تا زمانی که تصویر جدیدی تعیین کنید.",
 
 	"footer.tagline": "بازخورد، نظر یا پیشنهادی دارید؟ خوشحال می‌شوم بشنوم!",
 	"footer.madeBy": "ساخته شده توسط Niv  •  ",

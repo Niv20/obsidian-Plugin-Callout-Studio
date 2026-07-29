@@ -10,23 +10,30 @@ export const nl: Record<string, string> = {
 	"settings.fallbackTag": "Standaard",
 	"settings.fallbackTagAuto": "Automatisch standaard",
 	"settings.rescanVault": "Vault opnieuw scannen",
-	"settings.rescanVaultDesc": "Zoekt niet-herkende callout-ID's in notities en voegt ze toe als fallback-rijen.",
+	"settings.rescanVaultDesc":
+		"Zoekt niet-herkende callout-ID's in notities en voegt ze toe als fallback-rijen.",
 	"settings.rescanVaultHintAction": "Nu scannen",
-	"settings.rescanComplete": "Herscan voltooid: {{count}} nieuwe callout(s) toegevoegd.",
+	"settings.rescanComplete":
+		"Herscan voltooid: {{count}} nieuwe callout(s) toegevoegd.",
 	"replaceModal.deleteWithoutReplaceSuffix": "(valt terug op standaard)",
 
 	"firstRun.title": "Bestaande callouts in uw vault zoeken?",
-	"firstRun.body": "Callout Studio kan uw vault scannen om callouts te ontdekken die u al gebruikt, zodat ze in uw instellingenlijst verschijnen en uw fallback-stijl overnemen.",
-	"firstRun.heavyVaultNote": "Uw vault heeft {{count}} Markdown-bestanden — het scannen kan enkele seconden duren.",
-	"firstRun.laterHint": "U kunt dit altijd later uitvoeren via Instellingen → Vault-inzichten & onderhoud → Vault opnieuw scannen.",
+	"firstRun.body":
+		"Callout Studio kan uw vault scannen om callouts te ontdekken die u al gebruikt, zodat ze in uw instellingenlijst verschijnen en uw fallback-stijl overnemen.",
+	"firstRun.heavyVaultNote":
+		"Uw vault heeft {{count}} Markdown-bestanden — het scannen kan enkele seconden duren.",
+	"firstRun.laterHint":
+		"U kunt dit altijd later uitvoeren via Instellingen → Vault-inzichten & onderhoud → Vault opnieuw scannen.",
 	"firstRun.scanNow": "Nu scannen",
 	"firstRun.noThanks": "Nee, bedankt",
-	"firstRun.autoScanComplete": "Callout Studio heeft uw vault gescand en {{count}} callout(s) toegevoegd.",
+	"firstRun.autoScanComplete":
+		"Callout Studio heeft uw vault gescand en {{count}} callout(s) toegevoegd.",
 	"firstRun.scanning": "Scannen",
 
 	"welcome.tooltip": "Over Callout Studio",
 	"welcome.title": "Welkom bij Callout Studio",
-	"welcome.tagline": "Uw complete oplossing voor het beheren van Obsidian-callouts.",
+	"welcome.tagline":
+		"Uw complete oplossing voor het beheren van Obsidian-callouts.",
 	"welcome.previewTitle": "Bekijk het in actie",
 	"welcome.sample":
 		"Met Callout Studio kunt u callouts maken met een eigen icoon, kleuren en naam.\n\n" +
@@ -39,10 +46,14 @@ export const nl: Record<string, string> = {
 		"Callout Studio heeft nog veel meer te bieden! [Meer informatie]({{repoUrl}}).\n",
 
 	"deleteModal.title": 'Callout "{{name}}" verwijderen?',
-	"deleteModal.bodyInUse": "Deze callout verschijnt {{count}} keer in {{files}} bestand(en).",
-	"deleteModal.bodyInUseExplain": "Verwijderen converteert deze blokken naar platte tekst — ze verliezen hun stijl en callout-koptekst.",
-	"deleteModal.replaceHint": "U kunt het vervangen door een andere callout, waardoor de vault-inhoud als een gestileerde callout bewaard blijft.",
-	"deleteModal.bodyUnused": '"{{name}}" wordt niet gebruikt in een notitie, maar is een aangepaste callout die u hebt gemaakt. Verwijderen haalt het uit deze lijst.',
+	"deleteModal.bodyInUse":
+		"Deze callout verschijnt {{count}} keer in {{files}} bestand(en).",
+	"deleteModal.bodyInUseExplain":
+		"Verwijderen converteert deze blokken naar platte tekst — ze verliezen hun stijl en callout-koptekst.",
+	"deleteModal.replaceHint":
+		"U kunt het vervangen door een andere callout, waardoor de vault-inhoud als een gestileerde callout bewaard blijft.",
+	"deleteModal.bodyUnused":
+		'"{{name}}" wordt niet gebruikt in een notitie, maar is een aangepaste callout die u hebt gemaakt. Verwijderen haalt het uit deze lijst.',
 	"deleteModal.replaceInstead": "In plaats daarvan vervangen",
 	"deleteModal.deleteInUse": "Verwijderen (naar platte tekst converteren)",
 	"deleteModal.deleteUnused": "Callout verwijderen",
@@ -60,9 +71,12 @@ export const nl: Record<string, string> = {
 	"settings.importExport": "Importeren / exporteren",
 	"settings.import": "Importeren",
 	"settings.export": "Exporteren",
-	"settings.importDesc": "Importeer uw Callout Studio-voortgang uit een andere vault via een JSON-bestand.",
-	"settings.exportDesc": "Sla al uw aangepaste callout-types op in JSON-formaat.",
-	"settings.importConflictNotice": "{{count}} callout-type(s) geïmporteerd; {{overwritten}} bestaande vermelding(en) overschreven.",
+	"settings.importDesc":
+		"Importeer uw Callout Studio-voortgang uit een andere vault via een JSON-bestand.",
+	"settings.exportDesc":
+		"Sla al uw aangepaste callout-types op in JSON-formaat.",
+	"settings.importConflictNotice":
+		"{{count}} callout-type(s) geïmporteerd; {{overwritten}} bestaande vermelding(en) overschreven.",
 
 	"settings.addNewCallout": "+ callout toevoegen",
 
@@ -78,7 +92,8 @@ export const nl: Record<string, string> = {
 	"settings.colorSwatchAria": "Accent: {{accent}} · Achtergrond: {{bg}}",
 
 	"settings.fallbackCallout": "Standaard fallback-callout",
-	"settings.fallbackCalloutDesc": "Niet-herkende callout-types in uw vault nemen de stijl van deze callout over.",
+	"settings.fallbackCalloutDesc":
+		"Niet-herkende callout-types in uw vault nemen de stijl van deze callout over.",
 
 	"settings.globalStyle": "Globale callout-stijl",
 	"settings.border": "Randen",
@@ -112,42 +127,54 @@ export const nl: Record<string, string> = {
 	"settings.deletePaletteConfirm":
 		'Palet "{{name}}" verwijderen?\nCallouts die de kleuren ervan gebruiken, worden niet beïnvloed.',
 	"settings.enableAutocomplete": "[! Automatisch aanvullen inschakelen",
-	"settings.enableAutocompleteDesc": 'Toont suggesties wanneer u "[!" typt in een blokcitaat in de editor. Kies een callout-type uit de lijst om een volledig callout-koptekst in te voegen.',
+	"settings.enableAutocompleteDesc":
+		'Toont suggesties wanneer u "[!" typt in een blokcitaat in de editor. Kies een callout-type uit de lijst om een volledig callout-koptekst in te voegen.',
 
 	"settings.openHotkeys": "Callout Studio-sneltoetsen",
-	"settings.openHotkeysDesc": "Opent de sneltoetseninstellingen van Obsidian voor Callout Studio-opdrachten, waar u uw eigen sneltoetsen kunt kiezen voor Nieuw callout-type aanmaken, Instellingen openen, Callout verwijderen en In callout inpakken. Standaard zijn er geen sneltoetsen toegewezen.",
+	"settings.openHotkeysDesc":
+		"Opent de sneltoetseninstellingen van Obsidian voor Callout Studio-opdrachten, waar u uw eigen sneltoetsen kunt kiezen voor Nieuw callout-type aanmaken, Instellingen openen, Callout verwijderen en In callout inpakken. Standaard zijn er geen sneltoetsen toegewezen.",
 	"settings.openHotkeysButton": "Sneltoetseninstellingen openen",
-
 
 	"settings.vaultMaintenance": "Vault-inzichten & onderhoud",
 	"settings.vaultStats": "Callout-statistieken",
-	"settings.vaultStatsDesc": "Telt alle callout-blokken in uw Markdown-notities en groepeert ze op type.",
+	"settings.vaultStatsDesc":
+		"Telt alle callout-blokken in uw Markdown-notities en groepeert ze op type.",
 	"settings.vaultStatsButton": "Statistieken bekijken",
 	"settings.vaultStatsScanning": "Scannen",
 	"settings.resetAll": "Terugzetten",
-	"settings.resetAllDesc": "Verwijdert alle gebruikerscallouts, zet ingebouwde callouts, globale stijlen (randen, lettertypeschaal, vorm), opgeslagen kleurenpaletten, de aanpassing van het rechtsklikmenu en gedownloade Material SVG's terug.",
+	"settings.resetAllDesc":
+		"Verwijdert alle gebruikerscallouts, zet ingebouwde callouts, globale stijlen (randen, lettertypeschaal, vorm), opgeslagen kleurenpaletten, de aanpassing van het rechtsklikmenu en gedownloade Material SVG's terug.",
 	"settings.resetAllButton": "Alles terugzetten",
-	"settings.resetAllConfirm": "Dit verwijdert alle aangepaste callouts, zet ingebouwde callouts, globale stijlen, opgeslagen kleurenpaletten, de aanpassing van het rechtsklikmenu en alle gecachte Material SVG's terug. Deze actie kan niet ongedaan worden gemaakt. Weet u het zeker?",
+	"settings.resetAllConfirm":
+		"Dit verwijdert alle aangepaste callouts, zet ingebouwde callouts, globale stijlen, opgeslagen kleurenpaletten, de aanpassing van het rechtsklikmenu en alle gecachte Material SVG's terug. Deze actie kan niet ongedaan worden gemaakt. Weet u het zeker?",
 	"notice.resetAllDone": "Alles is teruggezet naar de standaardinstellingen.",
 
 	"notice.exported": "Callouts geëxporteerd naar callout-studio-export.json",
 	"notice.importedJSON": "{{count}} callout-type(s) geïmporteerd uit JSON.",
 	"notice.importedSettings": "Plugin-instellingen geïmporteerd.",
-	"notice.noNewJSON": "Geen nieuwe callout-types geïmporteerd (ID's bestaan mogelijk al).",
-	"notice.iconDownloadFailed": 'Kan Material-pictogram "{{name}}" niet downloaden. Het is mogelijk niet beschikbaar voor deze stijl/dikte, of uw verbinding is offline.',
+	"notice.noNewJSON":
+		"Geen nieuwe callout-types geïmporteerd (ID's bestaan mogelijk al).",
+	"notice.iconDownloadFailed":
+		'Kan Material-pictogram "{{name}}" niet downloaden. Het is mogelijk niet beschikbaar voor deze stijl/dikte, of uw verbinding is offline.',
 	"notice.nothingToWrap": "Niets om in te pakken.",
-	"notice.cursorNotInsideCallout": "De cursor bevindt zich niet in een callout.",
-	"notice.openHotkeysFailed": "Kan de sneltoetseninstellingen van Obsidian niet openen.",
-	"notice.filterHotkeysFailed": "Obsidian-sneltoetsen geopend, maar het Callout Studio-filter kon niet worden toegepast.",
+	"notice.cursorNotInsideCallout":
+		"De cursor bevindt zich niet in een callout.",
+	"notice.openHotkeysFailed":
+		"Kan de sneltoetseninstellingen van Obsidian niet openen.",
+	"notice.filterHotkeysFailed":
+		"Obsidian-sneltoetsen geopend, maar het Callout Studio-filter kon niet worden toegepast.",
 
 	"editor.editCallout": "Callout bewerken",
 	"editor.newCallout": "Nieuwe callout",
 	"editor.displayName": "Weergavenaam",
-	"editor.displayNameDesc": "Het leesbare label dat in de interface wordt getoond",
-	"editor.displayNameBuiltIn": "De weergavenaam kan niet worden gewijzigd voor ingebouwde callouts",
+	"editor.displayNameDesc":
+		"Het leesbare label dat in de interface wordt getoond",
+	"editor.displayNameBuiltIn":
+		"De weergavenaam kan niet worden gewijzigd voor ingebouwde callouts",
 	"editor.displayNamePlaceholder": "Mijn callout",
 	"editor.calloutIds": "Callout-ID's",
-	"editor.calloutIdsDesc": "Alle identificatoren voor deze callout. Spaties zijn toegestaan.\nDruk op Enter of de +-knop om toe te voegen.",
+	"editor.calloutIdsDesc":
+		"Alle identificatoren voor deze callout. Spaties zijn toegestaan.\nDruk op Enter of de +-knop om toe te voegen.",
 	"editor.calloutIdsPlaceholder": "ID toevoegen",
 	"editor.addId": "ID toevoegen",
 	"editor.idLinkedToName": "Gekoppeld aan de weergavenaam",
@@ -166,26 +193,33 @@ export const nl: Record<string, string> = {
 	"editor.paletteGroupPresets": "Kleurvoorinstellingen",
 	"editor.paletteGroupCustom": "Aangepast",
 	"editor.paletteNewColor": "Nieuwe kleur…",
-	"editor.contrastWarning": "Laag contrast met de achtergrond — kan moeilijk leesbaar zijn",
+	"editor.contrastWarning":
+		"Laag contrast met de achtergrond — kan moeilijk leesbaar zijn",
 	"editor.foldable": "Opvouwbaar",
-	"editor.foldableDesc": "Kies of de callout kan worden ingeklapt en welke standaardstatus in de hele vault geldt.",
+	"editor.foldableDesc":
+		"Kies of de callout kan worden ingeklapt en welke standaardstatus in de hele vault geldt.",
 	"editor.foldOff": "Uit",
 	"editor.foldOpen": "Standaard open",
 	"editor.foldClosed": "Standaard gesloten",
 	"editor.cancel": "Annuleren",
 	"editor.saveChanges": "Wijzigingen opslaan",
 	"editor.createCallout": "Callout aanmaken",
-	"editor.nameRequired": "Een weergavenaam is vereist voordat u een callout aanmaakt.",
+	"editor.nameRequired":
+		"Een weergavenaam is vereist voordat u een callout aanmaakt.",
 	"editor.noChangesToSave": "Er zijn geen wijzigingen aangebracht.",
 	"editor.downloadingIcon": "Pictogram downloaden",
 	"editor.idEmpty": "Ten minste één ID is vereist",
 	"editor.idExists": "Er bestaat al een callout met deze ID",
 	"editor.idConflict": "Deze ID is in conflict met een bestaande callout",
-	"editor.idDashConflict": 'Obsidian schrijft spaties als streepjes, dus deze ID komt in conflict met "{{other}}"',
+	"editor.idDashConflict":
+		'Obsidian schrijft spaties als streepjes, dus deze ID komt in conflict met "{{other}}"',
 	"editor.untitledCallout": "Naamloze callout",
-	"editor.loremIpsum": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-	"editor.loremIpsumShort": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-	"editor.sampleInlineText": "Hier is een inline [!{id}] pil binnen een alinea.",
+	"editor.loremIpsum":
+		"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+	"editor.loremIpsumShort":
+		"Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+	"editor.sampleInlineText":
+		"Hier is een inline [!{id}] pil binnen een alinea.",
 	"editor.previewReadOnly": "De live-voorvertoning kan niet worden bewerkt",
 
 	// Palette editor modal
@@ -195,10 +229,12 @@ export const nl: Record<string, string> = {
 	"palette.namePlaceholder": "Mijn palet",
 	"palette.nameExists": "Er bestaat al een palet met deze naam",
 	"palette.baseColor": "Basiskleur",
-	"palette.baseColorHint": "We passen de achtergrondkleur hier automatisch op aan. Als je wilt, kun je dit apart aansturen door {{link}}.",
+	"palette.baseColorHint":
+		"We passen de achtergrondkleur hier automatisch op aan. Als je wilt, kun je dit apart aansturen door {{link}}.",
 	"palette.baseColorHintLink": "hier te klikken",
 	"palette.advancedColors": "Kleuren",
-	"palette.advancedColorsHint": "Kleuren bewerken voor {{mode}}-modus - de andere modus wordt automatisch bijgewerkt. Wissel van Obsidian-thema om het te controleren.",
+	"palette.advancedColorsHint":
+		"Kleuren bewerken voor {{mode}}-modus - de andere modus wordt automatisch bijgewerkt. Wissel van Obsidian-thema om het te controleren.",
 	"palette.revertHint": "Liever één enkele basiskleur? {{link}}.",
 	"palette.revertHintLink": "Terugzetten",
 	"palette.lightMode": "Licht",
@@ -246,50 +282,71 @@ export const nl: Record<string, string> = {
 	"iconPicker.searchLucide": "Lucide-pictogrammen zoeken",
 	"iconPicker.searchTabler": "Tabler-pictogrammen zoeken",
 	"iconPicker.tablerStyle": "Iconstijl",
-	"iconPicker.tablerStyleOutline": "Omtrek",
-	"iconPicker.tablerStyleFilled": "Gevuld",
+	"iconPicker.tablerStyleOutline": "Omtrek (Outline)",
+	"iconPicker.tablerStyleFilled": "Gevuld (Filled)",
 	"iconPicker.loadMore": "Meer laden",
 	"iconPicker.materialStyle": "Iconstijl",
+	"iconPicker.materialStyleOutlined": "Omlijnd (Outlined)",
+	"iconPicker.materialStyleFilled": "Gevuld (Filled)",
+	"iconPicker.materialStyleRounded": "Afgerond (Rounded)",
+	"iconPicker.materialStyleSharp": "Scherp (Sharp)",
 	"iconPicker.materialWeight": "Icondikte",
+	"iconPicker.materialWeight100": "Dun (Thin)",
+	"iconPicker.materialWeight200": "Extra licht (Extra Light)",
+	"iconPicker.materialWeight300": "Licht (Light)",
+	"iconPicker.materialWeight400": "Normaal (Regular)",
+	"iconPicker.materialWeight500": "Gemiddeld (Medium)",
+	"iconPicker.materialWeight600": "Half vet (Semi Bold)",
+	"iconPicker.materialWeight700": "Vet (Bold)",
 	"iconPicker.searchMaterial": "Material-pictogrammen zoeken",
 	"iconPicker.searchEmoji": "Emoji zoeken",
 	"iconPicker.skinTone": "Huidskleur",
 	"iconPicker.allCategories": "Alle categorieën",
 	"iconPicker.noIconSelected": "Geen pictogram geselecteerd",
-	"iconPicker.noResults": "Geen pictogrammen komen overeen met uw zoekopdracht.",
+	"iconPicker.noResults":
+		"Geen pictogrammen komen overeen met uw zoekopdracht.",
 	"iconPicker.octicons": "Octicons",
 	"iconPicker.searchOcticons": "Zoek in Octicons",
 	"iconPicker.fa": "Font Awesome",
 	"iconPicker.searchFa": "Zoek in Font Awesome",
 	"iconPicker.faStyle": "Iconstijl",
-	"iconPicker.faStyleSolid": "Gevuld",
-	"iconPicker.faStyleRegular": "Regulier",
-	"iconPicker.faStyleBrands": "Merken",
+	"iconPicker.faStyleSolid": "Gevuld (Solid)",
+	"iconPicker.faStyleRegular": "Regulier (Regular)",
+	"iconPicker.faStyleBrands": "Merken (Brands)",
 	"iconPicker.rpgAwesome": "RPG Awesome",
 	"iconPicker.searchRpgAwesome": "Zoek in RPG Awesome",
 	"iconPicker.image": "Uw afbeeldingen",
 	"iconPicker.searchImage": "Zoek in uw afbeeldingen",
-	"iconPicker.imageTooLarge": "{{name}} is te groot. Afbeeldingen moeten kleiner zijn dan 5 MB.",
-	"iconPicker.imageUnsupported": "{{name}} is geen ondersteund afbeeldingsformaat. Gebruik SVG, PNG, JPEG of WebP.",
-	"iconPicker.imageInvalidSvg": "{{name}} kon niet worden gelezen als veilige SVG en is niet toegevoegd.",
-	"iconPicker.imageDecodeFailed": "{{name}} kon niet worden gelezen als afbeelding.",
-	"iconPicker.imageDuplicate": "{{name}} staat al in uw afbeeldingen. Hernoem het bestand of verwijder de bestaande afbeelding.",
+	"iconPicker.imageTooLarge":
+		"{{name}} is te groot. Afbeeldingen moeten kleiner zijn dan 5 MB.",
+	"iconPicker.imageUnsupported":
+		"{{name}} is geen ondersteund afbeeldingsformaat. Gebruik SVG, PNG, JPEG of WebP.",
+	"iconPicker.imageInvalidSvg":
+		"{{name}} kon niet worden gelezen als veilige SVG en is niet toegevoegd.",
+	"iconPicker.imageDecodeFailed":
+		"{{name}} kon niet worden gelezen als afbeelding.",
+	"iconPicker.imageDuplicate":
+		"{{name}} staat al in uw afbeeldingen. Hernoem het bestand of verwijder de bestaande afbeelding.",
 	"iconPicker.imageAdd": "Afbeeldingen toevoegen",
-	"iconPicker.imageEmpty": "Nog geen afbeeldingen. Voeg een SVG-, PNG-, JPEG- of WebP-bestand toe vanaf uw computer of sleep het hier naartoe.",
+	"iconPicker.imageEmpty":
+		"Nog geen afbeeldingen. Voeg een SVG-, PNG-, JPEG- of WebP-bestand toe vanaf uw computer of sleep het hier naartoe.",
 	"iconPicker.imageDelete": "Verwijderen",
 	"iconPicker.imageDeleteConfirm": "“{{name}}” verwijderen?",
-	"iconPicker.imageDeleteInUse": "{{count}} callouts gebruiken deze afbeelding. Ze tonen een plaatshouder-icoon totdat u een nieuw icon opgeeft.",
+	"iconPicker.imageDeleteInUse":
+		"{{count}} callouts gebruiken deze afbeelding. Ze tonen een plaatshouder-icoon totdat u een nieuw icon opgeeft.",
 	"iconPicker.imageRecolor": "Callout-kleur volgen",
 	"iconPicker.allSources": "Alle bronnen",
 	"iconPicker.searchAllSources": "Zoek in alle iconbronnen",
-	"iconPicker.sourcesNotDownloaded": "Nog niet opgenomen: {{names}}. Kies hierboven een bron om te downloaden.",
+	"iconPicker.sourcesNotDownloaded":
+		"Nog niet opgenomen: {{names}}. Kies hierboven een bron om te downloaden.",
 	"iconPicker.chooseSource": "Bron kiezen",
 	"iconPicker.sourceGroup": "{{name}} · {{count}}",
 
 	// Source menu — what each library holds, in a few words
 	"iconPicker.descAllSources": "zoek in alle bibliotheken tegelijk",
 	"iconPicker.descLucide": "Obsidian's eigen set, altijd offline",
-	"iconPicker.descTabler": "schone en consistente UI-pictogrammen, omtrek en gevuld",
+	"iconPicker.descTabler":
+		"schone en consistente UI-pictogrammen, omtrek en gevuld",
 	"iconPicker.descMaterial": "Google's set, vier stijlen en zeven dikten",
 	"iconPicker.descEmoji": "kleurige glyfen, elke huidtint",
 	"iconPicker.descOcticons": "GitHubs interface-iconen",
@@ -297,22 +354,142 @@ export const nl: Record<string, string> = {
 	"iconPicker.descRpgAwesome": "fantasy- en bordspeliconen",
 	"iconPicker.descImage": "afbeeldingen die u toevoegt vanaf uw computer",
 
+	// Icon picker — category filter dropdown labels
+	"iconPicker.cat.Accessibility": "Toegankelijkheid",
+	"iconPicker.cat.Actions": "Acties",
+	"iconPicker.cat.Activities": "Activiteiten",
+	"iconPicker.cat.Alert": "Waarschuwing",
+	"iconPicker.cat.Alphabet": "Alfabet",
+	"iconPicker.cat.Android": "Android",
+	"iconPicker.cat.Animals": "Dieren",
+	"iconPicker.cat.Arrows": "Pijlen",
+	"iconPicker.cat.Astronomy": "Astronomie",
+	"iconPicker.cat.Audio&Video": "Audio en video",
+	"iconPicker.cat.Automotive": "Auto's",
+	"iconPicker.cat.Badges": "Badges",
+	"iconPicker.cat.Brand": "Merken",
+	"iconPicker.cat.Buildings": "Gebouwen",
+	"iconPicker.cat.Business": "Zakelijk",
+	"iconPicker.cat.Camping": "Kamperen",
+	"iconPicker.cat.Charity": "Liefdadigheid",
+	"iconPicker.cat.Charts": "Grafieken",
+	"iconPicker.cat.Charts + Diagrams": "Grafieken en diagrammen",
+	"iconPicker.cat.Childhood": "Kindertijd",
+	"iconPicker.cat.Clothing + Fashion": "Kleding en mode",
+	"iconPicker.cat.Coding": "Programmeren",
+	"iconPicker.cat.Communicate": "Communiceren",
+	"iconPicker.cat.Communication": "Communicatie",
+	"iconPicker.cat.Computers": "Computers",
+	"iconPicker.cat.Connectivity": "Connectiviteit",
+	"iconPicker.cat.Construction": "Bouw",
+	"iconPicker.cat.Currencies": "Valuta",
+	"iconPicker.cat.Database": "Database",
+	"iconPicker.cat.Design": "Ontwerp",
+	"iconPicker.cat.Development": "Ontwikkeling",
+	"iconPicker.cat.Devices": "Apparaten",
+	"iconPicker.cat.Devices + Hardware": "Apparaten en hardware",
+	"iconPicker.cat.Disaster + Crisis": "Rampen en crises",
+	"iconPicker.cat.Document": "Document",
+	"iconPicker.cat.E-commerce": "E-commerce",
+	"iconPicker.cat.Editing": "Bewerken",
+	"iconPicker.cat.Education": "Onderwijs",
+	"iconPicker.cat.Electrical": "Elektrisch",
+	"iconPicker.cat.Emoji": "Emoji",
+	"iconPicker.cat.Energy": "Energie",
+	"iconPicker.cat.Extensions": "Extensies",
+	"iconPicker.cat.Files": "Bestanden",
+	"iconPicker.cat.Film + Video": "Film en video",
+	"iconPicker.cat.Food": "Eten",
+	"iconPicker.cat.Food + Beverage": "Eten en drinken",
+	"iconPicker.cat.Fruits + Vegetables": "Fruit en groenten",
+	"iconPicker.cat.Games": "Spelletjes",
+	"iconPicker.cat.Gaming": "Gaming",
+	"iconPicker.cat.Gender": "Geslacht",
+	"iconPicker.cat.Genders": "Geslachten",
+	"iconPicker.cat.Gestures": "Gebaren",
+	"iconPicker.cat.Halloween": "Halloween",
+	"iconPicker.cat.Hands": "Handen",
+	"iconPicker.cat.Hardware": "Hardware",
+	"iconPicker.cat.Health": "Gezondheid",
+	"iconPicker.cat.Holidays": "Feestdagen",
+	"iconPicker.cat.Home": "Thuis",
+	"iconPicker.cat.Household": "Huishouden",
+	"iconPicker.cat.Humanitarian": "Humanitair",
+	"iconPicker.cat.Images": "Afbeeldingen",
+	"iconPicker.cat.Laundry": "Was",
+	"iconPicker.cat.Letters": "Letters",
+	"iconPicker.cat.Logic": "Logica",
+	"iconPicker.cat.Logistics": "Logistiek",
+	"iconPicker.cat.Map": "Kaart",
+	"iconPicker.cat.Maps": "Kaarten",
+	"iconPicker.cat.Maritime": "Maritiem",
+	"iconPicker.cat.Marketing": "Marketing",
+	"iconPicker.cat.Math": "Wiskunde",
+	"iconPicker.cat.Mathematics": "Wiskunde",
+	"iconPicker.cat.Media": "Media",
+	"iconPicker.cat.Media Playback": "Media afspelen",
+	"iconPicker.cat.Medical + Health": "Medisch en gezondheid",
+	"iconPicker.cat.Money": "Geld",
+	"iconPicker.cat.Mood": "Stemming",
+	"iconPicker.cat.Moving": "Verhuizen",
+	"iconPicker.cat.Music + Audio": "Muziek en audio",
+	"iconPicker.cat.Nature": "Natuur",
+	"iconPicker.cat.Numbers": "Nummers",
+	"iconPicker.cat.Photography": "Fotografie",
+	"iconPicker.cat.Photos + Images": "Foto's en afbeeldingen",
+	"iconPicker.cat.Political": "Politiek",
+	"iconPicker.cat.Privacy": "Privacy",
+	"iconPicker.cat.Punctuation + Symbols": "Interpunctie en symbolen",
+	"iconPicker.cat.Religion": "Religie",
+	"iconPicker.cat.Science": "Wetenschap",
+	"iconPicker.cat.Science Fiction": "Science fiction",
+	"iconPicker.cat.Security": "Beveiliging",
+	"iconPicker.cat.Shapes": "Vormen",
+	"iconPicker.cat.Shopping": "Winkelen",
+	"iconPicker.cat.Social": "Sociale media",
+	"iconPicker.cat.Spinners": "Spinners",
+	"iconPicker.cat.Sport": "Sport",
+	"iconPicker.cat.Sports + Fitness": "Sport en fitness",
+	"iconPicker.cat.Symbols": "Symbolen",
+	"iconPicker.cat.System": "Systeem",
+	"iconPicker.cat.Text": "Tekst",
+	"iconPicker.cat.Text Formatting": "Tekstopmaak",
+	"iconPicker.cat.Time": "Tijd",
+	"iconPicker.cat.Toggle": "Schakelaar",
+	"iconPicker.cat.Transit": "Openbaar vervoer",
+	"iconPicker.cat.Transportation": "Transport",
+	"iconPicker.cat.Travel": "Reizen",
+	"iconPicker.cat.Travel + Hotel": "Reizen en hotel",
+	"iconPicker.cat.UI actions": "UI-acties",
+	"iconPicker.cat.Users + People": "Gebruikers en mensen",
+	"iconPicker.cat.Vehicles": "Voertuigen",
+	"iconPicker.cat.Version control": "Versiebeheer",
+	"iconPicker.cat.Weather": "Weer",
+	"iconPicker.cat.Writing": "Schrijven",
+	"iconPicker.cat.Zodiac": "Dierenriem",
+
 	// Downloadable icon packs
 	"iconPack.downloadTitle": "{{name}} is nog niet gedownload",
-	"iconPack.downloadDetail": "{{count}} iconen · {{size}} · eenmalig downloaden",
+	"iconPack.downloadDetail":
+		"{{count}} iconen · {{size}} · eenmalig downloaden",
 	"iconPack.download": "Downloaden",
 	"iconPack.downloading": "{{name}} downloaden…",
-	"iconPack.downloadFailed": "{{name}} kon niet worden gedownload. Controleer uw verbinding en probeer het opnieuw.",
+	"iconPack.downloadFailed":
+		"{{name}} kon niet worden gedownload. Controleer uw verbinding en probeer het opnieuw.",
 	"iconPack.retry": "Opnieuw proberen",
-	"iconPack.faBrandsNotice": "Merkiconen zijn handelsmerken van de respectievelijke eigenaren. Opname ervan impliceert geen goedkeuring. Gebruik ze alleen om het bedrijf, product of de dienst waarnaar ze verwijzen te vertegenwoordigen.",
+	"iconPack.faBrandsNotice":
+		"Merkiconen zijn handelsmerken van de respectievelijke eigenaren. Opname ervan impliceert geen goedkeuring. Gebruik ze alleen om het bedrijf, product of de dienst waarnaar ze verwijzen te vertegenwoordigen.",
 	"iconPack.artworkRestored": "De icoongrafiek voor {{names}} is gedownload.",
-	"iconPack.diskWriteFailed": "Callout Studio kon het iconpakket niet opslaan op schijf, dus moet het de volgende keer opnieuw worden gedownload. De iconen die u kiest worden nog steeds opgeslagen met uw instellingen.",
+	"iconPack.diskWriteFailed":
+		"Callout Studio kon het iconpakket niet opslaan op schijf, dus moet het de volgende keer opnieuw worden gedownload. De iconen die u kiest worden nog steeds opgeslagen met uw instellingen.",
 
 	// Icon licences & credits
 	"credits.title": "Iconlicenties en credits",
-	"credits.intro": "Callout Studio maakt gebruik van verschillende open iconbibliotheken. Hun licenties worden hieronder weergegeven, samen met wat er is aangepast voor gebruik hier.",
+	"credits.intro":
+		"Callout Studio maakt gebruik van verschillende open iconbibliotheken. Hun licenties worden hieronder weergegeven, samen met wat er is aangepast voor gebruik hier.",
 	"credits.fullNotices": "Volledige berichten van derden",
-	"credits.pluginLicense": "De eigen code van Callout Studio valt onder de 0BSD-licentie; de iconbibliotheken behouden hun eigen licenties.",
+	"credits.pluginLicense":
+		"De eigen code van Callout Studio valt onder de 0BSD-licentie; de iconbibliotheken behouden hun eigen licenties.",
 
 	"contextMenu.editCallout": "Callout-instellingen bewerken",
 	"contextMenu.copyMarkdown": "Callout Markdown kopiëren",
@@ -325,19 +502,25 @@ export const nl: Record<string, string> = {
 	"contextMenu.deleteSection": "Kopsectie verwijderen",
 	"heading.toggleFold": "Vouwen omschakelen",
 	"settings.globalSettings": "Globale instellingen",
-	"settings.globalSettingsDesc": "Verfijn hoe elk callout-type eruitziet in de hele vault.",
-	"settings.globalSettingsRegularDesc": "Voeg een callout-token toe aan een blockquote (bijvoorbeeld `> [!type]`) om het ingebouwde callout-vak van Obsidian weer te geven. U kunt de rand, hoekafronding, lettertypeschaal en uitlijning aanpassen.",
-	"settings.globalSettingsHeadingDesc": "Voeg een callout-token direct na de kop-hekjes toe (bijvoorbeeld `## [!type]`) om het als een gestileerde callout-kop weer te geven. U kunt de rand, vorm en verticale afstand aanpassen.",
-	"settings.globalSettingsInlineDesc": "Voeg een callout-token ergens in een tekstregel toe (bijvoorbeeld `[!type]`) om het als een kleine inline pil weer te geven. U kunt de rand en vorm aanpassen.",
+	"settings.globalSettingsDesc":
+		"Verfijn hoe elk callout-type eruitziet in de hele vault.",
+	"settings.globalSettingsRegularDesc":
+		"Voeg een callout-token toe aan een blockquote (bijvoorbeeld `> [!type]`) om het ingebouwde callout-vak van Obsidian weer te geven. U kunt de rand, hoekafronding, lettertypeschaal en uitlijning aanpassen.",
+	"settings.globalSettingsHeadingDesc":
+		"Voeg een callout-token direct na de kop-hekjes toe (bijvoorbeeld `## [!type]`) om het als een gestileerde callout-kop weer te geven. U kunt de rand, vorm en verticale afstand aanpassen.",
+	"settings.globalSettingsInlineDesc":
+		"Voeg een callout-token ergens in een tekstregel toe (bijvoorbeeld `[!type]`) om het als een kleine inline pil weer te geven. U kunt de rand en vorm aanpassen.",
 	"settings.globalSettingsCustomize": "Aanpassen",
 	"settings.calloutTypeRegular": "Gewone callout",
 	"settings.calloutTypeHeading": "Kop-callout",
 	"settings.calloutTypeInline": "Inline callout",
 	"settings.customizeMenu": "Menu-items aanpassen",
-	"settings.customizeMenuDesc": "Kies welke rechtsklikacties worden weergegeven voor elk callout-type en wijzig de volgorde. Werkt in bronmodus en Live Preview.",
+	"settings.customizeMenuDesc":
+		"Kies welke rechtsklikacties worden weergegeven voor elk callout-type en wijzig de volgorde. Werkt in bronmodus en Live Preview.",
 	"settings.customizeMenuButton": "Menu-items aanpassen",
 	"menuCustomize.title": "Rechtsklikmenu aanpassen",
-	"menuCustomize.desc": "Schakel acties in of uit en sleep de handgreep om de volgorde te wijzigen. Wijzigingen worden automatisch opgeslagen.",
+	"menuCustomize.desc":
+		"Schakel acties in of uit en sleep de handgreep om de volgorde te wijzigen. Wijzigingen worden automatisch opgeslagen.",
 	"menuCustomize.regular": "Gewone callout",
 	"menuCustomize.heading": "Kop-callout",
 	"menuCustomize.inline": "Inline callout",
@@ -353,20 +536,29 @@ export const nl: Record<string, string> = {
 	"confirm.ok": "Verwijderen",
 	"confirm.cancel": "Annuleren",
 
-	"vault.filesUpdated": "{{count}} callout-referentie(s) bijgewerkt in vault-bestanden.",
-	"vault.idsUpdated": "{{count}} callout-ID('s) bijgewerkt in vault-bestanden: {{oldIds}} → {{newId}}",
-	"vault.titlesUpdated": "{{count}} callout-titel(s) bijgewerkt in vault-bestanden: {{oldTitle}} → {{newTitle}}",
+	"vault.filesUpdated":
+		"{{count}} callout-referentie(s) bijgewerkt in vault-bestanden.",
+	"vault.idsUpdated":
+		"{{count}} callout-ID('s) bijgewerkt in vault-bestanden: {{oldIds}} → {{newId}}",
+	"vault.titlesUpdated":
+		"{{count}} callout-titel(s) bijgewerkt in vault-bestanden: {{oldTitle}} → {{newTitle}}",
 	"vault.replaceWith": "Vervangen door:",
 	"vault.deleteWithout": "Verwijderen zonder te vervangen",
 	"vault.confirmDelete": "Bevestigen",
 	"vault.confirmReplace": "Vervangen",
-	"vault.replacePromptInUse": '"{{name}}" wordt {{count}} keer gebruikt in {{files}} bestand(en). Kies een callout om het mee te vervangen:',
-	"vault.replacePromptUnused": 'Kies een callout om "{{name}}" mee te vervangen:',
-	"vault.noReplacementAvailable": "Geen andere callouts beschikbaar om deze te vervangen.",
-	"vault.convertedToPlainText": "{{blocks}} callout-blok(ken) in {{files}} bestand(en) geconverteerd naar platte tekst.",
-	"vault.resetAliasWarning": "{{count}} referentie(s) in {{files}} bestand(en) gebruiken aangepaste aliassen: {{aliases}}. Deze werken niet meer na het terugzetten. Doorgaan?",
+	"vault.replacePromptInUse":
+		'"{{name}}" wordt {{count}} keer gebruikt in {{files}} bestand(en). Kies een callout om het mee te vervangen:',
+	"vault.replacePromptUnused":
+		'Kies een callout om "{{name}}" mee te vervangen:',
+	"vault.noReplacementAvailable":
+		"Geen andere callouts beschikbaar om deze te vervangen.",
+	"vault.convertedToPlainText":
+		"{{blocks}} callout-blok(ken) in {{files}} bestand(en) geconverteerd naar platte tekst.",
+	"vault.resetAliasWarning":
+		"{{count}} referentie(s) in {{files}} bestand(en) gebruiken aangepaste aliassen: {{aliases}}. Deze werken niet meer na het terugzetten. Doorgaan?",
 	"vault.resetConfirm": "Terugzetten",
-	"vault.resetAllInUse": "⚠ {{count}} callout-referentie(s) in {{files}} bestand(en) gebruiken aangepaste callout-types die worden verwijderd.",
+	"vault.resetAllInUse":
+		"⚠ {{count}} callout-referentie(s) in {{files}} bestand(en) gebruiken aangepaste callout-types die worden verwijderd.",
 
 	"vaultStats.title": "Callout-statistieken",
 	"vaultStats.totalCallouts": "Totaal callouts",
@@ -389,47 +581,79 @@ export const nl: Record<string, string> = {
 	"vaultStats.close": "Sluiten",
 
 	"import.title": "Importeerproblemen",
-	"import.reportLeadIn": "Het lijkt erop dat het geïmporteerde bestand is gewijzigd. Hier is de lijst met problemen:",
-	"import.reportLeadInFatal": "Dit bestand ziet er niet uit als een Callout Studio-export. Het kan niet worden geïmporteerd:",
+	"import.reportLeadIn":
+		"Het lijkt erop dat het geïmporteerde bestand is gewijzigd. Hier is de lijst met problemen:",
+	"import.reportLeadInFatal":
+		"Dit bestand ziet er niet uit als een Callout Studio-export. Het kan niet worden geïmporteerd:",
 	"import.entryHeading": "Vermelding {{index}} — {{label}}",
-	"import.summary": "{{valid}} van {{total}} vermeldingen zijn geldig · {{issues}} probleem/problemen gevonden.",
+	"import.summary":
+		"{{valid}} van {{total}} vermeldingen zijn geldig · {{issues}} probleem/problemen gevonden.",
 	"import.btnCancel": "Annuleren",
 	"import.btnImportValid": "Alleen geldige importeren ({{count}})",
-	"import.err.notRecognized": "Onbekend bestand: er werd een array van callout-definities of een Callout Studio-export verwacht.",
-	"import.warn.settingsIgnored": "Het instellingenblok was geen geldig object en is genegeerd.",
-	"import.warn.invalidGradient": "Het achtergrondverloop was ongeldig en is genegeerd.",
-	"import.err.parseFailed": "Het bestand is geen geldig JSON en kon niet worden geparsed.",
+	"import.err.notRecognized":
+		"Onbekend bestand: er werd een array van callout-definities of een Callout Studio-export verwacht.",
+	"import.warn.settingsIgnored":
+		"Het instellingenblok was geen geldig object en is genegeerd.",
+	"import.warn.invalidGradient":
+		"Het achtergrondverloop was ongeldig en is genegeerd.",
+	"import.err.parseFailed":
+		"Het bestand is geen geldig JSON en kon niet worden geparsed.",
 	"import.err.entryNotObject": "De vermelding moet een object zijn.",
-	"import.err.requiredMissing": 'Verplicht veld "{{field}}" ontbreekt of heeft het verkeerde type.',
+	"import.err.requiredMissing":
+		'Verplicht veld "{{field}}" ontbreekt of heeft het verkeerde type.',
 	"import.err.idEmpty": "De ID mag niet leeg zijn.",
-	"import.err.idTooLong": 'De ID "{{value}}" is {{length}} tekens; het maximum is {{max}}.',
-	"import.err.idBadChar": 'De ID "{{value}}" bevat ongeldige tekens ("|", "[", "]", tabs en regeleinden zijn niet toegestaan).',
+	"import.err.idTooLong":
+		'De ID "{{value}}" is {{length}} tekens; het maximum is {{max}}.',
+	"import.err.idBadChar":
+		'De ID "{{value}}" bevat ongeldige tekens ("|", "[", "]", tabs en regeleinden zijn niet toegestaan).',
 	"import.err.displayNameEmpty": "De weergavenaam mag niet leeg zijn.",
-	"import.err.displayNameTooLong": "De weergavenaam is {{length}} tekens; het maximum is {{max}}.",
-	"import.err.boolField": '"{{field}}" moet een booleaanse waarde zijn (true of false).',
+	"import.err.displayNameTooLong":
+		"De weergavenaam is {{length}} tekens; het maximum is {{max}}.",
+	"import.err.boolField":
+		'"{{field}}" moet een booleaanse waarde zijn (true of false).',
 	"import.err.iconNotObject": "Het pictogram moet een object zijn.",
-	"import.err.iconTypeInvalid": "Het pictogramtype \"{{value}}\" is geen van: {{types}}.",
-	"import.warn.iconFieldIgnored": "\"{{field}}\" is alleen van toepassing op Material-iconen en wordt genegeerd voor icontype {{type}}.",
-	"import.err.iconValueEmpty": "De pictogramwaarde moet een niet-lege tekenreeks zijn.",
-	"import.err.iconValueTooLong": "De pictogramwaarde is ongewoon lang ({{length}} tekens).",
-	"import.err.materialStyle": 'De Material-pictogramstijl "{{value}}" is geen van: outlined, filled, rounded, sharp.',
-	"import.err.materialWeight": 'Het Material-pictogramgewicht "{{value}}" moet een geheel getal zijn tussen 100 en 700, in stappen van 100.',
-	"import.warn.iconRecolorIgnored": "\"recolor\" is alleen van toepassing op uw eigen afbeeldingen en wordt genegeerd voor icontype {{type}}.",
-	"import.err.iconRecolorInvalid": "\"recolor\" moet true of false zijn (ontvangen: \"{{value}}\").",
-	"import.err.colorInvalid": '"{{field}}" moet een hexadecimale kleur zijn zoals "#448aff" ("{{value}}" ontvangen).',
-	"import.err.numberRange": '"{{field}}" moet een getal zijn tussen {{min}} en {{max}} ("{{value}}" ontvangen).',
-	"import.err.iconSizeRange": '"{{field}}" moet een getal zijn tussen {{min}} en {{max}} ("{{value}}" ontvangen).',
-	"import.err.aliasesNotArray": '"aliases" moet een array van tekenreeksen zijn.',
+	"import.err.iconTypeInvalid":
+		'Het pictogramtype "{{value}}" is geen van: {{types}}.',
+	"import.warn.iconFieldIgnored":
+		'"{{field}}" is alleen van toepassing op Material-iconen en wordt genegeerd voor icontype {{type}}.',
+	"import.err.iconValueEmpty":
+		"De pictogramwaarde moet een niet-lege tekenreeks zijn.",
+	"import.err.iconValueTooLong":
+		"De pictogramwaarde is ongewoon lang ({{length}} tekens).",
+	"import.err.materialStyle":
+		'De Material-pictogramstijl "{{value}}" is geen van: outlined, filled, rounded, sharp.',
+	"import.err.materialWeight":
+		'Het Material-pictogramgewicht "{{value}}" moet een geheel getal zijn tussen 100 en 700, in stappen van 100.',
+	"import.warn.iconRecolorIgnored":
+		'"recolor" is alleen van toepassing op uw eigen afbeeldingen en wordt genegeerd voor icontype {{type}}.',
+	"import.err.iconRecolorInvalid":
+		'"recolor" moet true of false zijn (ontvangen: "{{value}}").',
+	"import.err.colorInvalid":
+		'"{{field}}" moet een hexadecimale kleur zijn zoals "#448aff" ("{{value}}" ontvangen).',
+	"import.err.numberRange":
+		'"{{field}}" moet een getal zijn tussen {{min}} en {{max}} ("{{value}}" ontvangen).',
+	"import.err.iconSizeRange":
+		'"{{field}}" moet een getal zijn tussen {{min}} en {{max}} ("{{value}}" ontvangen).',
+	"import.err.aliasesNotArray":
+		'"aliases" moet een array van tekenreeksen zijn.',
 	"import.err.aliasNotString": "De alias moet een tekenreeks zijn.",
-	"import.err.aliasDup": 'De alias "{{value}}" is gedupliceerd binnen deze vermelding.',
-	"import.err.tooManyIds": "Te veel ID's ({{count}}); elke callout kan maximaal {{max}} ID's hebben (primair + aliassen).",
-	"import.err.metadataShape": '"metadata" moet een object zijn waarvan alle waarden tekenreeksen zijn.',
+	"import.err.aliasDup":
+		'De alias "{{value}}" is gedupliceerd binnen deze vermelding.',
+	"import.err.tooManyIds":
+		"Te veel ID's ({{count}}); elke callout kan maximaal {{max}} ID's hebben (primair + aliassen).",
+	"import.err.metadataShape":
+		'"metadata" moet een object zijn waarvan alle waarden tekenreeksen zijn.',
 	"import.err.unknownFields": "Onbekende veld(en) genegeerd: {{fields}}.",
-	"import.err.duplicateInFile": 'De ID/alias "{{value}}" wordt al gebruikt door vermelding #{{first}} in dit bestand.',
-	"import.err.aliasConflict": 'De alias "{{value}}" wordt al gebruikt door een andere callout ("{{other}}") in uw vault.',
-	"import.warn.defaultFoldedAutofix": '"defaultFolded" was true terwijl "foldable" false was; defaultFolded is teruggezet naar false.',
-	"import.warn.imageMissing": "Deze Callout gebruikt een afbeelding die niet in het bestand en niet in deze vault staat, dus zal een plaatshouder-icoon tonen totdat u een nieuw geeft.",
+	"import.err.duplicateInFile":
+		'De ID/alias "{{value}}" wordt al gebruikt door vermelding #{{first}} in dit bestand.',
+	"import.err.aliasConflict":
+		'De alias "{{value}}" wordt al gebruikt door een andere callout ("{{other}}") in uw vault.',
+	"import.warn.defaultFoldedAutofix":
+		'"defaultFolded" was true terwijl "foldable" false was; defaultFolded is teruggezet naar false.',
+	"import.warn.imageMissing":
+		"Deze Callout gebruikt een afbeelding die niet in het bestand en niet in deze vault staat, dus zal een plaatshouder-icoon tonen totdat u een nieuw geeft.",
 
-	"footer.tagline": "Hebt u feedback, opmerkingen of suggesties? Ik hoor het graag!",
+	"footer.tagline":
+		"Hebt u feedback, opmerkingen of suggesties? Ik hoor het graag!",
 	"footer.madeBy": "Gemaakt door Niv  •  ",
 };

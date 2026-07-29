@@ -8,22 +8,29 @@ export const fi: Record<string, string> = {
 	"settings.fallbackTag": "Oletus",
 	"settings.fallbackTagAuto": "Automaattinen oletus",
 	"settings.rescanVault": "Skannaa holvi uudelleen",
-	"settings.rescanVaultDesc": "Etsii muistiinpanoista tunnistamattomia callout-tunnuksia ja lisää ne varariveinä.",
+	"settings.rescanVaultDesc":
+		"Etsii muistiinpanoista tunnistamattomia callout-tunnuksia ja lisää ne varariveinä.",
 	"settings.rescanVaultHintAction": "Skannaa nyt",
-	"settings.rescanComplete": "Uudelleenskannaus valmis: {{count}} uutta callouttia lisätty.",
+	"settings.rescanComplete":
+		"Uudelleenskannaus valmis: {{count}} uutta callouttia lisätty.",
 	"replaceModal.deleteWithoutReplaceSuffix": "(palaa oletukseen)",
 	"firstRun.title": "Etsitkö olemassa olevia callouteja holvista?",
-	"firstRun.body": "Callout Studio voi skannata holvisi löytääkseen jo käyttämäsi calloutit, jotta ne näkyvät asetusluettelossasi ja omaksuvat varatyylisi.",
-	"firstRun.heavyVaultNote": "Holvissasi on {{count}} Markdown-tiedostoa — skannaus voi kestää muutaman sekunnin.",
-	"firstRun.laterHint": "Voit aina suorittaa tämän myöhemmin kohdasta Asetukset → Holvin näkemykset ja huolto → Skannaa holvi uudelleen.",
+	"firstRun.body":
+		"Callout Studio voi skannata holvisi löytääkseen jo käyttämäsi calloutit, jotta ne näkyvät asetusluettelossasi ja omaksuvat varatyylisi.",
+	"firstRun.heavyVaultNote":
+		"Holvissasi on {{count}} Markdown-tiedostoa — skannaus voi kestää muutaman sekunnin.",
+	"firstRun.laterHint":
+		"Voit aina suorittaa tämän myöhemmin kohdasta Asetukset → Holvin näkemykset ja huolto → Skannaa holvi uudelleen.",
 	"firstRun.scanNow": "Skannaa nyt",
 	"firstRun.noThanks": "Ei kiitos",
-	"firstRun.autoScanComplete": "Callout Studio skannasi holvisi ja lisäsi {{count}} callouttia.",
+	"firstRun.autoScanComplete":
+		"Callout Studio skannasi holvisi ja lisäsi {{count}} callouttia.",
 	"firstRun.scanning": "Skannataan",
 
 	"welcome.tooltip": "Tietoja Callout Studiosta",
 	"welcome.title": "Tervetuloa Callout Studioon",
-	"welcome.tagline": "Täydellinen ratkaisusi Obsidian-callouttien hallintaan.",
+	"welcome.tagline":
+		"Täydellinen ratkaisusi Obsidian-callouttien hallintaan.",
 	"welcome.previewTitle": "Näe se toiminnassa",
 	"welcome.sample":
 		"Callout Studion avulla voit luoda callouteja mukautetulla kuvakkeella, väreillä ja nimellä.\n\n" +
@@ -36,10 +43,14 @@ export const fi: Record<string, string> = {
 		"Callout Studiolla on paljon muutakin tarjottavaa! [Lue lisää]({{repoUrl}}).\n",
 
 	"deleteModal.title": 'Poistetaanko callout "{{name}}"?',
-	"deleteModal.bodyInUse": "Tämä callout esiintyy {{count}} kertaa {{files}} tiedostossa.",
-	"deleteModal.bodyInUseExplain": "Poistaminen muuntaa nämä lohkot tavalliseksi tekstiksi — ne menettävät tyylinsä ja callout-otsikkonsa.",
-	"deleteModal.replaceHint": "Voit korvata sen toisella calloutilla, jolloin holvin sisältö säilyy tyyliteltynä calloutina.",
-	"deleteModal.bodyUnused": '"{{name}}" ei ole käytössä missään muistiinpanossa, mutta se on luomasi mukautettu callout. Poistaminen poistaa sen tästä luettelosta.',
+	"deleteModal.bodyInUse":
+		"Tämä callout esiintyy {{count}} kertaa {{files}} tiedostossa.",
+	"deleteModal.bodyInUseExplain":
+		"Poistaminen muuntaa nämä lohkot tavalliseksi tekstiksi — ne menettävät tyylinsä ja callout-otsikkonsa.",
+	"deleteModal.replaceHint":
+		"Voit korvata sen toisella calloutilla, jolloin holvin sisältö säilyy tyyliteltynä calloutina.",
+	"deleteModal.bodyUnused":
+		'"{{name}}" ei ole käytössä missään muistiinpanossa, mutta se on luomasi mukautettu callout. Poistaminen poistaa sen tästä luettelosta.',
 	"deleteModal.replaceInstead": "Korvaa sen sijaan",
 	"deleteModal.deleteInUse": "Poista (muunna tavalliseksi tekstiksi)",
 	"deleteModal.deleteUnused": "Poista callout",
@@ -56,9 +67,12 @@ export const fi: Record<string, string> = {
 	"settings.importExport": "Tuo / vie",
 	"settings.import": "Tuo",
 	"settings.export": "Vie",
-	"settings.importDesc": "Tuo Callout Studio -tietosi toisesta holvista JSON-tiedoston avulla.",
-	"settings.exportDesc": "Tallenna kaikki mukautetut callout-tyypit JSON-muodossa.",
-	"settings.importConflictNotice": "{{count}} callout-tyyppiä tuotu; {{overwritten}} olemassa olevaa merkintää ylikirjoitettu.",
+	"settings.importDesc":
+		"Tuo Callout Studio -tietosi toisesta holvista JSON-tiedoston avulla.",
+	"settings.exportDesc":
+		"Tallenna kaikki mukautetut callout-tyypit JSON-muodossa.",
+	"settings.importConflictNotice":
+		"{{count}} callout-tyyppiä tuotu; {{overwritten}} olemassa olevaa merkintää ylikirjoitettu.",
 	"settings.addNewCallout": "+ lisää callout",
 	"settings.noCalloutsNow": "Ei mukautettuja callouteja tällä hetkellä.",
 	"settings.editAria": "Muokkaa {{name}}",
@@ -70,7 +84,8 @@ export const fi: Record<string, string> = {
 	"settings.makeFallbackAction": "Käytä oletusvaratyyliä",
 	"settings.colorSwatchAria": "Aksentti: {{accent}} · Tausta: {{bg}}",
 	"settings.fallbackCallout": "Oletus-varausCallout",
-	"settings.fallbackCalloutDesc": "Holvisi tuntemattomat callout-tyypit perivät tämän calloutin tyylin.",
+	"settings.fallbackCalloutDesc":
+		"Holvisi tuntemattomat callout-tyypit perivät tämän calloutin tyylin.",
 	"settings.globalStyle": "Callout-yleistyyli",
 	"settings.border": "Reunat",
 	"settings.borderAll": "Kaikki",
@@ -96,43 +111,54 @@ export const fi: Record<string, string> = {
 	// Settings — Saved color palettes
 	"settings.customPalettes": "Tallennetut väripaletit",
 	"settings.newPalette": "Uusi paletti",
-	"settings.customPalettesEmpty": "Ei tallennettuja paletteja tällä hetkellä.",
+	"settings.customPalettesEmpty":
+		"Ei tallennettuja paletteja tällä hetkellä.",
 	"settings.editPaletteAria": "Muokkaa palettia {{name}}",
 	"settings.deletePaletteAria": "Poista paletti {{name}}",
 	"settings.deletePaletteConfirm":
 		'Poistetaanko paletti "{{name}}"?\nSen värejä käyttävät callout-tyypit eivät muutu.',
 	"settings.enableAutocomplete": "Ota [! automaattinen täydennys käyttöön",
-	"settings.enableAutocompleteDesc": 'Näyttää ehdotuksia, kun kirjoitat "[!" lainausblokissa editorissa. Valitse callout-tyyppi luettelosta lisätäksesi täydellisen callout-otsikon.',
+	"settings.enableAutocompleteDesc":
+		'Näyttää ehdotuksia, kun kirjoitat "[!" lainausblokissa editorissa. Valitse callout-tyyppi luettelosta lisätäksesi täydellisen callout-otsikon.',
 	"settings.openHotkeys": "Callout Studio -oikotiet",
-	"settings.openHotkeysDesc": "Avaa Obsidianin oikotieasetukset Callout Studio -komennoille. Oletuksena ei ole määritetty oikoteitä.",
+	"settings.openHotkeysDesc":
+		"Avaa Obsidianin oikotieasetukset Callout Studio -komennoille. Oletuksena ei ole määritetty oikoteitä.",
 	"settings.openHotkeysButton": "Avaa oikotieasetukset",
 	"settings.vaultMaintenance": "Holvin näkemykset ja huolto",
 	"settings.vaultStats": "Callout-tilastot",
-	"settings.vaultStatsDesc": "Laskee kaikki callout-lohkot Markdown-muistiinpanoissasi ja ryhmittelee ne tyypin mukaan.",
+	"settings.vaultStatsDesc":
+		"Laskee kaikki callout-lohkot Markdown-muistiinpanoissasi ja ryhmittelee ne tyypin mukaan.",
 	"settings.vaultStatsButton": "Näytä tilastot",
 	"settings.vaultStatsScanning": "Skannataan",
 	"settings.resetAll": "Palauta",
-	"settings.resetAllDesc": "Poistaa kaikki käyttäjän calloutit, palauttaa sisäänrakennetut calloutit, yleiset tyylit, tallennetut väripaletit, hiiren kakkospainikkeen valikon mukautukset ja ladatut Material-SVG:t.",
+	"settings.resetAllDesc":
+		"Poistaa kaikki käyttäjän calloutit, palauttaa sisäänrakennetut calloutit, yleiset tyylit, tallennetut väripaletit, hiiren kakkospainikkeen valikon mukautukset ja ladatut Material-SVG:t.",
 	"settings.resetAllButton": "Palauta kaikki",
-	"settings.resetAllConfirm": "Tämä poistaa kaikki mukautetut calloutit, palauttaa sisäänrakennetut calloutit, yleiset tyylit, tallennetut väripaletit, hiiren kakkospainikkeen valikon mukautukset ja kaikki välimuistissa olevat Material-SVG:t. Toimintoa ei voi kumota. Oletko varma?",
+	"settings.resetAllConfirm":
+		"Tämä poistaa kaikki mukautetut calloutit, palauttaa sisäänrakennetut calloutit, yleiset tyylit, tallennetut väripaletit, hiiren kakkospainikkeen valikon mukautukset ja kaikki välimuistissa olevat Material-SVG:t. Toimintoa ei voi kumota. Oletko varma?",
 	"notice.resetAllDone": "Kaikki on palautettu oletuksiksi.",
 	"notice.exported": "Calloutit viety tiedostoon callout-studio-export.json",
 	"notice.importedJSON": "{{count}} callout-tyyppiä tuotu JSONista.",
 	"notice.importedSettings": "Lisäosan asetukset tuotu.",
-	"notice.noNewJSON": "Uusia callout-tyyppejä ei tuotu (tunnukset voivat jo olla olemassa).",
-	"notice.iconDownloadFailed": 'Material-kuvakkeen "{{name}}" lataaminen epäonnistui. Se ei ehkä ole saatavilla tälle tyylille/painolle tai yhteys on poikki.',
+	"notice.noNewJSON":
+		"Uusia callout-tyyppejä ei tuotu (tunnukset voivat jo olla olemassa).",
+	"notice.iconDownloadFailed":
+		'Material-kuvakkeen "{{name}}" lataaminen epäonnistui. Se ei ehkä ole saatavilla tälle tyylille/painolle tai yhteys on poikki.',
 	"notice.nothingToWrap": "Ei mitään kääriä.",
 	"notice.cursorNotInsideCallout": "Kursori ei ole calloutin sisällä.",
 	"notice.openHotkeysFailed": "Obsidianin oikotieasetuksia ei voitu avata.",
-	"notice.filterHotkeysFailed": "Obsidianin oikotiet avattiin, mutta Callout Studio -suodatinta ei voitu käyttää.",
+	"notice.filterHotkeysFailed":
+		"Obsidianin oikotiet avattiin, mutta Callout Studio -suodatinta ei voitu käyttää.",
 	"editor.editCallout": "Muokkaa callouttia",
 	"editor.newCallout": "Uusi callout",
 	"editor.displayName": "Näyttönimi",
 	"editor.displayNameDesc": "Käyttöliittymässä näkyvä luettava etiketti",
-	"editor.displayNameBuiltIn": "Sisäänrakennettujen calloutien näyttönimeä ei voi muuttaa",
+	"editor.displayNameBuiltIn":
+		"Sisäänrakennettujen calloutien näyttönimeä ei voi muuttaa",
 	"editor.displayNamePlaceholder": "Oma callout",
 	"editor.calloutIds": "Callout-tunnukset",
-	"editor.calloutIdsDesc": "Kaikki tämän calloutin tunnisteet. Välilyönnit ovat sallittuja.\nLisää painamalla Enter tai +-painiketta.",
+	"editor.calloutIdsDesc":
+		"Kaikki tämän calloutin tunnisteet. Välilyönnit ovat sallittuja.\nLisää painamalla Enter tai +-painiketta.",
 	"editor.calloutIdsPlaceholder": "Lisää tunnus",
 	"editor.addId": "Lisää tunnus",
 	"editor.idLinkedToName": "Linkitetty näyttönimeen",
@@ -154,7 +180,8 @@ export const fi: Record<string, string> = {
 	"editor.contrastWarning":
 		"Heikko kontrasti taustaan — voi olla vaikea lukea",
 	"editor.foldable": "Taitettava",
-	"editor.foldableDesc": "Valitse, voiko calloutin taittaa, ja mikä oletustila koskee koko holvia.",
+	"editor.foldableDesc":
+		"Valitse, voiko calloutin taittaa, ja mikä oletustila koskee koko holvia.",
 	"editor.foldOff": "Pois",
 	"editor.foldOpen": "Auki oletuksena",
 	"editor.foldClosed": "Kiinni oletuksena",
@@ -166,13 +193,17 @@ export const fi: Record<string, string> = {
 	"editor.downloadingIcon": "Ladataan kuvaketta",
 	"editor.idEmpty": "Vähintään yksi tunnus vaaditaan",
 	"editor.idExists": "Callout tällä tunnuksella on jo olemassa",
-	"editor.idConflict": "Tämä tunnus on ristiriidassa olemassa olevan calloutin kanssa",
-	"editor.idDashConflict": 'Obsidian kirjoittaa välilyönnit väliviivoina, joten tämä tunnus on ristiriidassa tunnuksen "{{other}}" kanssa',
+	"editor.idConflict":
+		"Tämä tunnus on ristiriidassa olemassa olevan calloutin kanssa",
+	"editor.idDashConflict":
+		'Obsidian kirjoittaa välilyönnit väliviivoina, joten tämä tunnus on ristiriidassa tunnuksen "{{other}}" kanssa',
 	"editor.untitledCallout": "Nimetön Callout",
-	"editor.loremIpsum": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+	"editor.loremIpsum":
+		"Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
 	"editor.loremIpsumShort":
 		"Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-	"editor.sampleInlineText": "Tässä on upotettu [!{id}] -pilleri kappaleen sisällä.",
+	"editor.sampleInlineText":
+		"Tässä on upotettu [!{id}] -pilleri kappaleen sisällä.",
 	"editor.previewReadOnly": "Live-esikatselua ei voi muokata",
 	// Palette editor modal
 	"palette.newTitle": "Uusi väripaletti",
@@ -181,10 +212,12 @@ export const fi: Record<string, string> = {
 	"palette.namePlaceholder": "Oma paletti",
 	"palette.nameExists": "Tämän niminen paletti on jo olemassa",
 	"palette.baseColor": "Perusväri",
-	"palette.baseColorHint": "Sovitamme taustavärin automaattisesti siihen. Jos haluat, voit hallita sitä erikseen {{link}}.",
+	"palette.baseColorHint":
+		"Sovitamme taustavärin automaattisesti siihen. Jos haluat, voit hallita sitä erikseen {{link}}.",
 	"palette.baseColorHintLink": "napsauttamalla tätä",
 	"palette.advancedColors": "Värit",
-	"palette.advancedColorsHint": "Muokataan {{mode}}-tilan värejä – toinen tila päivittyy automaattisesti. Vaihda Obsidianin teemaa tarkistaaksesi sen.",
+	"palette.advancedColorsHint":
+		"Muokataan {{mode}}-tilan värejä – toinen tila päivittyy automaattisesti. Vaihda Obsidianin teemaa tarkistaaksesi sen.",
 	"palette.revertHint": "Haluatko mieluummin yhden peruvärin? {{link}}.",
 	"palette.revertHintLink": "Palauta",
 	"palette.lightMode": "Vaalea",
@@ -232,11 +265,22 @@ export const fi: Record<string, string> = {
 	"iconPicker.searchLucide": "hae Lucide-kuvakkeita",
 	"iconPicker.searchTabler": "hae Tabler-kuvakkeita",
 	"iconPicker.tablerStyle": "Kuvaketyyli",
-	"iconPicker.tablerStyleOutline": "Ääriviiva",
-	"iconPicker.tablerStyleFilled": "Täytetty",
+	"iconPicker.tablerStyleOutline": "Ääriviiva (Outline)",
+	"iconPicker.tablerStyleFilled": "Täytetty (Filled)",
 	"iconPicker.loadMore": "Lataa lisää",
 	"iconPicker.materialStyle": "Kuvaketyyli",
+	"iconPicker.materialStyleOutlined": "Ääriviiva (Outlined)",
+	"iconPicker.materialStyleFilled": "Täytetty (Filled)",
+	"iconPicker.materialStyleRounded": "Pyöristetty (Rounded)",
+	"iconPicker.materialStyleSharp": "Terävä (Sharp)",
 	"iconPicker.materialWeight": "Kuvakkeen paino",
+	"iconPicker.materialWeight100": "Ohut (Thin)",
+	"iconPicker.materialWeight200": "Erittäin kevyt (Extra Light)",
+	"iconPicker.materialWeight300": "Kevyt (Light)",
+	"iconPicker.materialWeight400": "Normaali (Regular)",
+	"iconPicker.materialWeight500": "Keskipaksu (Medium)",
+	"iconPicker.materialWeight600": "Puolilihava (Semi Bold)",
+	"iconPicker.materialWeight700": "Lihava (Bold)",
 	"iconPicker.searchMaterial": "hae Material-kuvakkeita",
 	"iconPicker.searchEmoji": "Hae emojeja",
 	"iconPicker.skinTone": "Ihonsävy",
@@ -248,57 +292,186 @@ export const fi: Record<string, string> = {
 	"iconPicker.fa": "Font Awesome",
 	"iconPicker.searchFa": "Hae Font Awesome -kuvakkeita",
 	"iconPicker.faStyle": "Kuvaketyyli",
-	"iconPicker.faStyleSolid": "Täytetty",
-	"iconPicker.faStyleRegular": "Tavallinen",
-	"iconPicker.faStyleBrands": "Brändit",
+	"iconPicker.faStyleSolid": "Täytetty (Solid)",
+	"iconPicker.faStyleRegular": "Tavallinen (Regular)",
+	"iconPicker.faStyleBrands": "Brändit (Brands)",
 	"iconPicker.rpgAwesome": "RPG Awesome",
 	"iconPicker.searchRpgAwesome": "Hae RPG Awesome -kuvakkeita",
 	"iconPicker.image": "Kuvasi",
 	"iconPicker.searchImage": "Hae kuvistasi",
-	"iconPicker.imageTooLarge": "{{name}} on liian suuri. Kuvien on oltava alle 5 Mt.",
-	"iconPicker.imageUnsupported": "{{name}} ei ole tuettu kuvamuoto. Käytä SVG-, PNG-, JPEG- tai WebP-muotoa.",
-	"iconPicker.imageInvalidSvg": "{{name}} ei voitu lukea turvallisena SVG-tiedostona, joten sitä ei lisätty.",
+	"iconPicker.imageTooLarge":
+		"{{name}} on liian suuri. Kuvien on oltava alle 5 Mt.",
+	"iconPicker.imageUnsupported":
+		"{{name}} ei ole tuettu kuvamuoto. Käytä SVG-, PNG-, JPEG- tai WebP-muotoa.",
+	"iconPicker.imageInvalidSvg":
+		"{{name}} ei voitu lukea turvallisena SVG-tiedostona, joten sitä ei lisätty.",
 	"iconPicker.imageDecodeFailed": "{{name}} ei voitu lukea kuvana.",
-	"iconPicker.imageDuplicate": "{{name}} on jo kuvissasi. Nimeä tiedosto uudelleen tai poista olemassa oleva kuva.",
+	"iconPicker.imageDuplicate":
+		"{{name}} on jo kuvissasi. Nimeä tiedosto uudelleen tai poista olemassa oleva kuva.",
 	"iconPicker.imageAdd": "Lisää kuvia",
-	"iconPicker.imageEmpty": "Ei vielä kuvia. Lisää SVG-, PNG-, JPEG- tai WebP-tiedosto tietokoneeltasi tai pudota se tähän.",
+	"iconPicker.imageEmpty":
+		"Ei vielä kuvia. Lisää SVG-, PNG-, JPEG- tai WebP-tiedosto tietokoneeltasi tai pudota se tähän.",
 	"iconPicker.imageDelete": "Poista",
 	"iconPicker.imageDeleteConfirm": "Poistetaanko „{{name}}“?",
-	"iconPicker.imageDeleteInUse": "{{count}} calloutia käyttää tätä kuvaa. Ne näyttävät paikkamerkkikuvakkeen, kunnes annat uuden.",
+	"iconPicker.imageDeleteInUse":
+		"{{count}} calloutia käyttää tätä kuvaa. Ne näyttävät paikkamerkkikuvakkeen, kunnes annat uuden.",
 	"iconPicker.imageRecolor": "Seuraa Callout-väriä",
 	"iconPicker.allSources": "Kaikki lähteet",
 	"iconPicker.searchAllSources": "Hae kaikista kuvakelähteis",
-	"iconPicker.sourcesNotDownloaded": "Ei vielä sisällytetty: {{names}}. Valitse lähde ylhäältä ladataksesi sen.",
+	"iconPicker.sourcesNotDownloaded":
+		"Ei vielä sisällytetty: {{names}}. Valitse lähde ylhäältä ladataksesi sen.",
 	"iconPicker.chooseSource": "Valitse lähde",
 	"iconPicker.sourceGroup": "{{name}} · {{count}}",
 
 	// Source menu — what each library holds, in a few words
 	"iconPicker.descAllSources": "hae kaikista kirjastoista kerralla",
 	"iconPicker.descLucide": "Obsidianin oma setti, aina offline",
-	"iconPicker.descTabler": "siistit ja yhtenäiset UI-kuvakkeet, ääriviiva ja täytetty",
-	"iconPicker.descMaterial": "Googlen setti, neljä tyyliä ja seitsemän painoa",
+	"iconPicker.descTabler":
+		"siistit ja yhtenäiset UI-kuvakkeet, ääriviiva ja täytetty",
+	"iconPicker.descMaterial":
+		"Googlen setti, neljä tyyliä ja seitsemän painoa",
 	"iconPicker.descEmoji": "värilliset glyfit, kaikki ihonsävyt",
 	"iconPicker.descOcticons": "GitHubin käyttöliittymäkuvakkeet",
 	"iconPicker.descFa": "täytetty, tavallinen ja brändit",
 	"iconPicker.descRpgAwesome": "fantasia- ja lautapelikuvakkeet",
 	"iconPicker.descImage": "kuvat, jotka lisäät tietokoneeltasi",
 
+	// Icon picker — category filter dropdown labels
+	"iconPicker.cat.Accessibility": "Saavutettavuus",
+	"iconPicker.cat.Actions": "Toiminnot",
+	"iconPicker.cat.Activities": "Aktiviteetit",
+	"iconPicker.cat.Alert": "Varoitus",
+	"iconPicker.cat.Alphabet": "Aakkoset",
+	"iconPicker.cat.Android": "Android",
+	"iconPicker.cat.Animals": "Eläimet",
+	"iconPicker.cat.Arrows": "Nuolet",
+	"iconPicker.cat.Astronomy": "Tähtitiede",
+	"iconPicker.cat.Audio&Video": "Ääni ja video",
+	"iconPicker.cat.Automotive": "Autot",
+	"iconPicker.cat.Badges": "Merkit",
+	"iconPicker.cat.Brand": "Brändit",
+	"iconPicker.cat.Buildings": "Rakennukset",
+	"iconPicker.cat.Business": "Liiketoiminta",
+	"iconPicker.cat.Camping": "Retkeily",
+	"iconPicker.cat.Charity": "Hyväntekeväisyys",
+	"iconPicker.cat.Charts": "Kaaviot",
+	"iconPicker.cat.Charts + Diagrams": "Kaaviot ja diagrammit",
+	"iconPicker.cat.Childhood": "Lapsuus",
+	"iconPicker.cat.Clothing + Fashion": "Vaatteet ja muoti",
+	"iconPicker.cat.Coding": "Ohjelmointi",
+	"iconPicker.cat.Communicate": "Kommunikointi",
+	"iconPicker.cat.Communication": "Viestintä",
+	"iconPicker.cat.Computers": "Tietokoneet",
+	"iconPicker.cat.Connectivity": "Yhteydet",
+	"iconPicker.cat.Construction": "Rakentaminen",
+	"iconPicker.cat.Currencies": "Valuutat",
+	"iconPicker.cat.Database": "Tietokanta",
+	"iconPicker.cat.Design": "Muotoilu",
+	"iconPicker.cat.Development": "Kehitys",
+	"iconPicker.cat.Devices": "Laitteet",
+	"iconPicker.cat.Devices + Hardware": "Laitteet ja laitteisto",
+	"iconPicker.cat.Disaster + Crisis": "Katastrofit ja kriisit",
+	"iconPicker.cat.Document": "Asiakirja",
+	"iconPicker.cat.E-commerce": "Verkkokauppa",
+	"iconPicker.cat.Editing": "Muokkaus",
+	"iconPicker.cat.Education": "Koulutus",
+	"iconPicker.cat.Electrical": "Sähkö",
+	"iconPicker.cat.Emoji": "Emoji",
+	"iconPicker.cat.Energy": "Energia",
+	"iconPicker.cat.Extensions": "Laajennukset",
+	"iconPicker.cat.Files": "Tiedostot",
+	"iconPicker.cat.Film + Video": "Elokuvat ja video",
+	"iconPicker.cat.Food": "Ruoka",
+	"iconPicker.cat.Food + Beverage": "Ruoka ja juoma",
+	"iconPicker.cat.Fruits + Vegetables": "Hedelmät ja vihannekset",
+	"iconPicker.cat.Games": "Pelit",
+	"iconPicker.cat.Gaming": "Pelaaminen",
+	"iconPicker.cat.Gender": "Sukupuoli",
+	"iconPicker.cat.Genders": "Sukupuolet",
+	"iconPicker.cat.Gestures": "Eleet",
+	"iconPicker.cat.Halloween": "Halloween",
+	"iconPicker.cat.Hands": "Kädet",
+	"iconPicker.cat.Hardware": "Laitteisto",
+	"iconPicker.cat.Health": "Terveys",
+	"iconPicker.cat.Holidays": "Lomat",
+	"iconPicker.cat.Home": "Koti",
+	"iconPicker.cat.Household": "Kotitalous",
+	"iconPicker.cat.Humanitarian": "Humanitaarinen",
+	"iconPicker.cat.Images": "Kuvat",
+	"iconPicker.cat.Laundry": "Pyykinpesu",
+	"iconPicker.cat.Letters": "Kirjaimet",
+	"iconPicker.cat.Logic": "Logiikka",
+	"iconPicker.cat.Logistics": "Logistiikka",
+	"iconPicker.cat.Map": "Kartta",
+	"iconPicker.cat.Maps": "Kartat",
+	"iconPicker.cat.Maritime": "Merenkulku",
+	"iconPicker.cat.Marketing": "Markkinointi",
+	"iconPicker.cat.Math": "Matematiikka",
+	"iconPicker.cat.Mathematics": "Matematiikka",
+	"iconPicker.cat.Media": "Media",
+	"iconPicker.cat.Media Playback": "Median toisto",
+	"iconPicker.cat.Medical + Health": "Lääketiede ja terveys",
+	"iconPicker.cat.Money": "Raha",
+	"iconPicker.cat.Mood": "Mieliala",
+	"iconPicker.cat.Moving": "Muutto",
+	"iconPicker.cat.Music + Audio": "Musiikki ja ääni",
+	"iconPicker.cat.Nature": "Luonto",
+	"iconPicker.cat.Numbers": "Numerot",
+	"iconPicker.cat.Photography": "Valokuvaus",
+	"iconPicker.cat.Photos + Images": "Valokuvat ja kuvat",
+	"iconPicker.cat.Political": "Poliittinen",
+	"iconPicker.cat.Privacy": "Yksityisyys",
+	"iconPicker.cat.Punctuation + Symbols": "Välimerkit ja symbolit",
+	"iconPicker.cat.Religion": "Uskonto",
+	"iconPicker.cat.Science": "Tiede",
+	"iconPicker.cat.Science Fiction": "Tieteiskirjallisuus",
+	"iconPicker.cat.Security": "Turvallisuus",
+	"iconPicker.cat.Shapes": "Muodot",
+	"iconPicker.cat.Shopping": "Ostokset",
+	"iconPicker.cat.Social": "Sosiaalinen media",
+	"iconPicker.cat.Spinners": "Pyörijät",
+	"iconPicker.cat.Sport": "Urheilu",
+	"iconPicker.cat.Sports + Fitness": "Urheilu ja kunto",
+	"iconPicker.cat.Symbols": "Symbolit",
+	"iconPicker.cat.System": "Järjestelmä",
+	"iconPicker.cat.Text": "Teksti",
+	"iconPicker.cat.Text Formatting": "Tekstin muotoilu",
+	"iconPicker.cat.Time": "Aika",
+	"iconPicker.cat.Toggle": "Vaihto",
+	"iconPicker.cat.Transit": "Liikenne",
+	"iconPicker.cat.Transportation": "Kuljetus",
+	"iconPicker.cat.Travel": "Matkailu",
+	"iconPicker.cat.Travel + Hotel": "Matkailu ja hotellit",
+	"iconPicker.cat.UI actions": "Käyttöliittymätoiminnot",
+	"iconPicker.cat.Users + People": "Käyttäjät ja ihmiset",
+	"iconPicker.cat.Vehicles": "Ajoneuvot",
+	"iconPicker.cat.Version control": "Versionhallinta",
+	"iconPicker.cat.Weather": "Sää",
+	"iconPicker.cat.Writing": "Kirjoittaminen",
+	"iconPicker.cat.Zodiac": "Horoskooppi",
+
 	// Downloadable icon packs
 	"iconPack.downloadTitle": "{{name}} ei ole vielä ladattu",
 	"iconPack.downloadDetail": "{{count}} kuvaketta · {{size}} · kertasiirto",
 	"iconPack.download": "Lataa",
 	"iconPack.downloading": "Ladataan {{name}}…",
-	"iconPack.downloadFailed": "{{name}} ei voitu ladata. Tarkista yhteys ja yritä uudelleen.",
+	"iconPack.downloadFailed":
+		"{{name}} ei voitu ladata. Tarkista yhteys ja yritä uudelleen.",
 	"iconPack.retry": "Yritä uudelleen",
-	"iconPack.faBrandsNotice": "Brändi-kuvakkeet ovat asianomaisten omistajien tavaramerkkejä. Niiden sisällyttäminen ei tarkoita hyväksyntää. Käytä niitä vain edustamaan yritystä, tuotetta tai palvelua, johon ne viittaavat.",
-	"iconPack.artworkRestored": "Kuvakkeiden grafiikka ladattiin kohteille {{names}}.",
-	"iconPack.diskWriteFailed": "Callout Studio ei voinut tallentaa kuvakepakettia levylle, joten se on ladattava uudelleen ensi kerralla. Valitsemasi kuvakkeet on silti tallennettu asetuksiisi.",
+	"iconPack.faBrandsNotice":
+		"Brändi-kuvakkeet ovat asianomaisten omistajien tavaramerkkejä. Niiden sisällyttäminen ei tarkoita hyväksyntää. Käytä niitä vain edustamaan yritystä, tuotetta tai palvelua, johon ne viittaavat.",
+	"iconPack.artworkRestored":
+		"Kuvakkeiden grafiikka ladattiin kohteille {{names}}.",
+	"iconPack.diskWriteFailed":
+		"Callout Studio ei voinut tallentaa kuvakepakettia levylle, joten se on ladattava uudelleen ensi kerralla. Valitsemasi kuvakkeet on silti tallennettu asetuksiisi.",
 
 	// Icon licences & credits
 	"credits.title": "Kuvakkeiden lisenssit ja kiitokset",
-	"credits.intro": "Callout Studio hyödyntää useita avoimia kuvakekirjastoja. Niiden lisenssit on toistettu alla, yhdessä sen kanssa, mitä muutettiin niiden käyttämiseksi täällä.",
+	"credits.intro":
+		"Callout Studio hyödyntää useita avoimia kuvakekirjastoja. Niiden lisenssit on toistettu alla, yhdessä sen kanssa, mitä muutettiin niiden käyttämiseksi täällä.",
 	"credits.fullNotices": "Täydelliset kolmannen osapuolen ilmoitukset",
-	"credits.pluginLicense": "Callout Studion oma koodi on 0BSD-lisenssillä; kuvakekirjastot säilyttävät omat lisenssinsä.",
+	"credits.pluginLicense":
+		"Callout Studion oma koodi on 0BSD-lisenssillä; kuvakekirjastot säilyttävät omat lisenssinsä.",
 	"contextMenu.editCallout": "Muokkaa callout-asetuksia",
 	"contextMenu.copyMarkdown": "Kopioi callout Markdown",
 	"contextMenu.openSettings": "Avaa Callout Studio -asetukset",
@@ -310,19 +483,25 @@ export const fi: Record<string, string> = {
 	"contextMenu.deleteSection": "Poista otsikko-osio",
 	"heading.toggleFold": "Vaihda taitto",
 	"settings.globalSettings": "Yleisasetukset",
-	"settings.globalSettingsDesc": "Hienosäädä, miltä kukin callout-tyyppi näyttää koko holvissasi.",
-	"settings.globalSettingsRegularDesc": "Lisää callout-token lainaukseen (esim. `> [!type]`), jolloin se näkyy Obsidianin natiivina callout-laatikkona. Voit säätää sen reunaa, pyöristystä, fonttiskaalaa ja tasausta.",
-	"settings.globalSettingsHeadingDesc": "Lisää callout-token suoraan otsikon risuaitojen jälkeen (esim. `## [!type]`), jolloin se näkyy tyyliteltynä callout-otsikkona. Voit säätää sen reunaa, muotoa ja pystysuuntaista väliä.",
-	"settings.globalSettingsInlineDesc": "Lisää callout-token mihin tahansa kohtaan tekstiriviä (esim. `[!type]`), jolloin se näkyy pienenä rivinsisäisenä pillerinä. Voit säätää sen reunaa ja muotoa.",
+	"settings.globalSettingsDesc":
+		"Hienosäädä, miltä kukin callout-tyyppi näyttää koko holvissasi.",
+	"settings.globalSettingsRegularDesc":
+		"Lisää callout-token lainaukseen (esim. `> [!type]`), jolloin se näkyy Obsidianin natiivina callout-laatikkona. Voit säätää sen reunaa, pyöristystä, fonttiskaalaa ja tasausta.",
+	"settings.globalSettingsHeadingDesc":
+		"Lisää callout-token suoraan otsikon risuaitojen jälkeen (esim. `## [!type]`), jolloin se näkyy tyyliteltynä callout-otsikkona. Voit säätää sen reunaa, muotoa ja pystysuuntaista väliä.",
+	"settings.globalSettingsInlineDesc":
+		"Lisää callout-token mihin tahansa kohtaan tekstiriviä (esim. `[!type]`), jolloin se näkyy pienenä rivinsisäisenä pillerinä. Voit säätää sen reunaa ja muotoa.",
 	"settings.globalSettingsCustomize": "Mukauta",
 	"settings.calloutTypeRegular": "Tavallinen callout",
 	"settings.calloutTypeHeading": "Otsikko-callout",
 	"settings.calloutTypeInline": "Rivinsisäinen callout",
 	"settings.customizeMenu": "Mukauta valikon kohteita",
-	"settings.customizeMenuDesc": "Valitse, mitkä hiiren kakkospainikkeen toiminnot näkyvät kullekin callout-tyypille, ja järjestä ne uudelleen. Toimii lähdetilassa ja Live Preview -tilassa.",
+	"settings.customizeMenuDesc":
+		"Valitse, mitkä hiiren kakkospainikkeen toiminnot näkyvät kullekin callout-tyypille, ja järjestä ne uudelleen. Toimii lähdetilassa ja Live Preview -tilassa.",
 	"settings.customizeMenuButton": "Mukauta valikon kohteita",
 	"menuCustomize.title": "Mukauta hiiren kakkospainikkeen valikkoa",
-	"menuCustomize.desc": "Ota toimintoja käyttöön tai pois käytöstä ja järjestä niitä uudelleen vetämällä kahvasta. Muutokset tallennetaan automaattisesti.",
+	"menuCustomize.desc":
+		"Ota toimintoja käyttöön tai pois käytöstä ja järjestä niitä uudelleen vetämällä kahvasta. Muutokset tallennetaan automaattisesti.",
 	"menuCustomize.regular": "Tavallinen callout",
 	"menuCustomize.heading": "Otsikko-callout",
 	"menuCustomize.inline": "Rivinsisäinen callout",
@@ -336,20 +515,28 @@ export const fi: Record<string, string> = {
 	"menuItem.deleteSection": "Poista osio",
 	"confirm.ok": "Poista",
 	"confirm.cancel": "Peruuta",
-	"vault.filesUpdated": "{{count}} callout-viite(ttä) päivitetty holvin tiedostoissa.",
-	"vault.idsUpdated": "{{count}} callout-tunnus(ta) päivitetty holvin tiedostoissa: {{oldIds}} → {{newId}}",
-	"vault.titlesUpdated": "{{count}} callout-otsikko(a) päivitetty holvin tiedostoissa: {{oldTitle}} → {{newTitle}}",
+	"vault.filesUpdated":
+		"{{count}} callout-viite(ttä) päivitetty holvin tiedostoissa.",
+	"vault.idsUpdated":
+		"{{count}} callout-tunnus(ta) päivitetty holvin tiedostoissa: {{oldIds}} → {{newId}}",
+	"vault.titlesUpdated":
+		"{{count}} callout-otsikko(a) päivitetty holvin tiedostoissa: {{oldTitle}} → {{newTitle}}",
 	"vault.replaceWith": "Korvaa:",
 	"vault.deleteWithout": "Poista korvaamatta",
 	"vault.confirmDelete": "Vahvista",
 	"vault.confirmReplace": "Korvaa",
-	"vault.replacePromptInUse": '"{{name}}" on käytössä {{count}} kertaa {{files}} tiedostossa. Valitse callout, jolla se korvataan:',
+	"vault.replacePromptInUse":
+		'"{{name}}" on käytössä {{count}} kertaa {{files}} tiedostossa. Valitse callout, jolla se korvataan:',
 	"vault.replacePromptUnused": 'Valitse callout, jolla korvataan "{{name}}":',
-	"vault.noReplacementAvailable": "Ei muita callouteja saatavilla korvaukseksi.",
-	"vault.convertedToPlainText": "{{blocks}} callout-lohkoa {{files}} tiedostossa muunnettu tavalliseksi tekstiksi.",
-	"vault.resetAliasWarning": "{{count}} viite(ttä) {{files}} tiedostossa käyttää mukautettuja aliaksia: {{aliases}}. Ne lopettavat toimintansa palautuksen jälkeen. Jatketaanko?",
+	"vault.noReplacementAvailable":
+		"Ei muita callouteja saatavilla korvaukseksi.",
+	"vault.convertedToPlainText":
+		"{{blocks}} callout-lohkoa {{files}} tiedostossa muunnettu tavalliseksi tekstiksi.",
+	"vault.resetAliasWarning":
+		"{{count}} viite(ttä) {{files}} tiedostossa käyttää mukautettuja aliaksia: {{aliases}}. Ne lopettavat toimintansa palautuksen jälkeen. Jatketaanko?",
 	"vault.resetConfirm": "Palauta",
-	"vault.resetAllInUse": "⚠ {{count}} callout-viite(ttä) {{files}} tiedostossa käyttää mukautettuja callout-tyyppejä, jotka poistetaan.",
+	"vault.resetAllInUse":
+		"⚠ {{count}} callout-viite(ttä) {{files}} tiedostossa käyttää mukautettuja callout-tyyppejä, jotka poistetaan.",
 	"vaultStats.title": "Callout-tilastot",
 	"vaultStats.totalCallouts": "Callouteja yhteensä",
 	"vaultStats.typesFound": "Löydetyt tyypit",
@@ -370,47 +557,76 @@ export const fi: Record<string, string> = {
 	"vaultStats.sourceUnknown": "Tuntematon",
 	"vaultStats.close": "Sulje",
 	"import.title": "Tuontiongelmat",
-	"import.reportLeadIn": "Näyttää siltä, että tuomasi tiedosto on muokattu. Tässä on ongelmaluettelo:",
-	"import.reportLeadInFatal": "Tämä tiedosto ei näytä Callout Studio -vienniltä. Sitä ei voi tuoda:",
+	"import.reportLeadIn":
+		"Näyttää siltä, että tuomasi tiedosto on muokattu. Tässä on ongelmaluettelo:",
+	"import.reportLeadInFatal":
+		"Tämä tiedosto ei näytä Callout Studio -vienniltä. Sitä ei voi tuoda:",
 	"import.entryHeading": "Merkintä {{index}} — {{label}}",
-	"import.summary": "{{valid}}/{{total}} merkintää on kelvollisia · löydetty {{issues}} ongelma(a).",
+	"import.summary":
+		"{{valid}}/{{total}} merkintää on kelvollisia · löydetty {{issues}} ongelma(a).",
 	"import.btnCancel": "Peruuta",
 	"import.btnImportValid": "Tuo vain kelvolliset ({{count}})",
-	"import.err.notRecognized": "Tunnistamaton tiedosto: odotettiin callout-määritelmien taulukkoa tai Callout Studio -vientiä.",
-	"import.warn.settingsIgnored": "Asetuslohko ei ollut kelvollinen objekti, ja se jätettiin huomiotta.",
+	"import.err.notRecognized":
+		"Tunnistamaton tiedosto: odotettiin callout-määritelmien taulukkoa tai Callout Studio -vientiä.",
+	"import.warn.settingsIgnored":
+		"Asetuslohko ei ollut kelvollinen objekti, ja se jätettiin huomiotta.",
 	"import.warn.invalidGradient":
 		"Taustan liukuväri ei ollut kelvollinen, ja se jätettiin huomiotta.",
-	"import.err.parseFailed": "Tiedosto ei ole kelvollinen JSON eikä sitä voitu jäsentää.",
+	"import.err.parseFailed":
+		"Tiedosto ei ole kelvollinen JSON eikä sitä voitu jäsentää.",
 	"import.err.entryNotObject": "Merkinnän on oltava objekti.",
-	"import.err.requiredMissing": 'Pakollinen kenttä "{{field}}" puuttuu tai on väärää tyyppiä.',
+	"import.err.requiredMissing":
+		'Pakollinen kenttä "{{field}}" puuttuu tai on väärää tyyppiä.',
 	"import.err.idEmpty": "Tunnus ei saa olla tyhjä.",
-	"import.err.idTooLong": 'Tunnus "{{value}}" on {{length}} merkkiä; enimmäismäärä on {{max}}.',
-	"import.err.idBadChar": 'Tunnus "{{value}}" sisältää virheellisiä merkkejä ("|", "[", "]", sarkaimet ja rivinvaihdot eivät ole sallittuja).',
+	"import.err.idTooLong":
+		'Tunnus "{{value}}" on {{length}} merkkiä; enimmäismäärä on {{max}}.',
+	"import.err.idBadChar":
+		'Tunnus "{{value}}" sisältää virheellisiä merkkejä ("|", "[", "]", sarkaimet ja rivinvaihdot eivät ole sallittuja).',
 	"import.err.displayNameEmpty": "Näyttönimi ei saa olla tyhjä.",
-	"import.err.displayNameTooLong": "Näyttönimi on {{length}} merkkiä; enimmäismäärä on {{max}}.",
-	"import.err.boolField": '"{{field}}" on oltava totuusarvo (true tai false).',
+	"import.err.displayNameTooLong":
+		"Näyttönimi on {{length}} merkkiä; enimmäismäärä on {{max}}.",
+	"import.err.boolField":
+		'"{{field}}" on oltava totuusarvo (true tai false).',
 	"import.err.iconNotObject": "Kuvakkeen on oltava objekti.",
-	"import.err.iconTypeInvalid": "Kuvaketyyppi \"{{value}}\" ei ole yksi seuraavista: {{types}}.",
-	"import.warn.iconFieldIgnored": "\"{{field}}\" koskee vain Material-kuvakkeita ja ohitetaan kuvaketyypille {{type}}.",
-	"import.err.iconValueEmpty": "Kuvakkeen arvon on oltava ei-tyhjä merkkijono.",
-	"import.err.iconValueTooLong": "Kuvakkeen arvo on epätavallisen pitkä ({{length}} merkkiä).",
-	"import.err.materialStyle": 'Material-kuvaketyyli "{{value}}" ei ole yksi seuraavista: outlined, filled, rounded, sharp.',
-	"import.err.materialWeight": 'Material-kuvakkeen paino "{{value}}" on oltava kokonaisluku välillä 100–700 portain 100.',
-	"import.warn.iconRecolorIgnored": "\"recolor\" koskee vain omia kuviasi ja ohitetaan kuvaketyypille {{type}}.",
-	"import.err.iconRecolorInvalid": "\"recolor\" on oltava true tai false (saatiin \"{{value}}\").",
-	"import.err.colorInvalid": '"{{field}}" on oltava hex-väri kuten "#448aff" (saatiin "{{value}}").',
-	"import.err.numberRange": '"{{field}}" on oltava luku välillä {{min}}–{{max}} (saatiin "{{value}}").',
-	"import.err.iconSizeRange": '"{{field}}" on oltava luku välillä {{min}}–{{max}} (saatiin "{{value}}").',
+	"import.err.iconTypeInvalid":
+		'Kuvaketyyppi "{{value}}" ei ole yksi seuraavista: {{types}}.',
+	"import.warn.iconFieldIgnored":
+		'"{{field}}" koskee vain Material-kuvakkeita ja ohitetaan kuvaketyypille {{type}}.',
+	"import.err.iconValueEmpty":
+		"Kuvakkeen arvon on oltava ei-tyhjä merkkijono.",
+	"import.err.iconValueTooLong":
+		"Kuvakkeen arvo on epätavallisen pitkä ({{length}} merkkiä).",
+	"import.err.materialStyle":
+		'Material-kuvaketyyli "{{value}}" ei ole yksi seuraavista: outlined, filled, rounded, sharp.',
+	"import.err.materialWeight":
+		'Material-kuvakkeen paino "{{value}}" on oltava kokonaisluku välillä 100–700 portain 100.',
+	"import.warn.iconRecolorIgnored":
+		'"recolor" koskee vain omia kuviasi ja ohitetaan kuvaketyypille {{type}}.',
+	"import.err.iconRecolorInvalid":
+		'"recolor" on oltava true tai false (saatiin "{{value}}").',
+	"import.err.colorInvalid":
+		'"{{field}}" on oltava hex-väri kuten "#448aff" (saatiin "{{value}}").',
+	"import.err.numberRange":
+		'"{{field}}" on oltava luku välillä {{min}}–{{max}} (saatiin "{{value}}").',
+	"import.err.iconSizeRange":
+		'"{{field}}" on oltava luku välillä {{min}}–{{max}} (saatiin "{{value}}").',
 	"import.err.aliasesNotArray": '"aliases" on oltava merkkijonotaulukko.',
 	"import.err.aliasNotString": "Aliaksen on oltava merkkijono.",
 	"import.err.aliasDup": 'Alias "{{value}}" on tässä merkinnässä kahdesti.',
-	"import.err.tooManyIds": "Liikaa tunnuksia ({{count}}); jokaisella calloutilla voi olla korkeintaan {{max}} tunnusta (ensisijainen + aliakset).",
-	"import.err.metadataShape": '"metadata" on oltava objekti, jonka kaikki arvot ovat merkkijonoja.',
+	"import.err.tooManyIds":
+		"Liikaa tunnuksia ({{count}}); jokaisella calloutilla voi olla korkeintaan {{max}} tunnusta (ensisijainen + aliakset).",
+	"import.err.metadataShape":
+		'"metadata" on oltava objekti, jonka kaikki arvot ovat merkkijonoja.',
 	"import.err.unknownFields": "Tuntemattomat kentät ohitettu: {{fields}}.",
-	"import.err.duplicateInFile": 'Tunnus/alias "{{value}}" on jo merkinnän #{{first}} käytössä tässä tiedostossa.',
-	"import.err.aliasConflict": 'Alias "{{value}}" on jo toisen calloutin ("{{other}}") käytössä holvissasi.',
-	"import.warn.defaultFoldedAutofix": '"defaultFolded" oli true, kun "foldable" oli false; defaultFolded palautettiin arvoon false.',
-	"import.warn.imageMissing": "Tämä Callout käyttää kuvaa, jota ei ole tiedostossa eikä tässä vaultissa, joten se näyttää paikkamerkkikuvakkeen, kunnes annat uuden.",
-	"footer.tagline": "Onko sinulla palautetta, kommentteja tai ehdotuksia? Kuulisin mielelläni!",
+	"import.err.duplicateInFile":
+		'Tunnus/alias "{{value}}" on jo merkinnän #{{first}} käytössä tässä tiedostossa.',
+	"import.err.aliasConflict":
+		'Alias "{{value}}" on jo toisen calloutin ("{{other}}") käytössä holvissasi.',
+	"import.warn.defaultFoldedAutofix":
+		'"defaultFolded" oli true, kun "foldable" oli false; defaultFolded palautettiin arvoon false.',
+	"import.warn.imageMissing":
+		"Tämä Callout käyttää kuvaa, jota ei ole tiedostossa eikä tässä vaultissa, joten se näyttää paikkamerkkikuvakkeen, kunnes annat uuden.",
+	"footer.tagline":
+		"Onko sinulla palautetta, kommentteja tai ehdotuksia? Kuulisin mielelläni!",
 	"footer.madeBy": "Luonut Niv  •  ",
 };

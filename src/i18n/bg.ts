@@ -8,22 +8,29 @@ export const bg: Record<string, string> = {
 	"settings.fallbackTag": "По подразбиране",
 	"settings.fallbackTagAuto": "Авт. по подразбиране",
 	"settings.rescanVault": "Повторно сканиране на хранилището",
-	"settings.rescanVaultDesc": "Търси непознати ID-та на callout в бележките и ги добавя като резервни редове.",
+	"settings.rescanVaultDesc":
+		"Търси непознати ID-та на callout в бележките и ги добавя като резервни редове.",
 	"settings.rescanVaultHintAction": "Сканирай сега",
-	"settings.rescanComplete": "Повторното сканиране завърши: добавени са {{count}} нови callout(а).",
+	"settings.rescanComplete":
+		"Повторното сканиране завърши: добавени са {{count}} нови callout(а).",
 	"replaceModal.deleteWithoutReplaceSuffix": "(връща се към стандартното)",
 	"firstRun.title": "Намиране на съществуващи callout-и в хранилището?",
-	"firstRun.body": "Callout Studio може да сканира хранилището ви, за да открие callout-и, които вече използвате, така че да се показват в списъка с настройки и да приемат вашия резервен стил.",
-	"firstRun.heavyVaultNote": "Хранилището ви има {{count}} Markdown файла — сканирането може да отнеме няколко секунди.",
-	"firstRun.laterHint": "Можете винаги да го стартирате по-късно от Настройки → Прегледи и поддръжка на хранилището → Повторно сканиране.",
+	"firstRun.body":
+		"Callout Studio може да сканира хранилището ви, за да открие callout-и, които вече използвате, така че да се показват в списъка с настройки и да приемат вашия резервен стил.",
+	"firstRun.heavyVaultNote":
+		"Хранилището ви има {{count}} Markdown файла — сканирането може да отнеме няколко секунди.",
+	"firstRun.laterHint":
+		"Можете винаги да го стартирате по-късно от Настройки → Прегледи и поддръжка на хранилището → Повторно сканиране.",
 	"firstRun.scanNow": "Сканирай сега",
 	"firstRun.noThanks": "Не, благодаря",
-	"firstRun.autoScanComplete": "Callout Studio сканира хранилището ви и добави {{count}} callout(а).",
+	"firstRun.autoScanComplete":
+		"Callout Studio сканира хранилището ви и добави {{count}} callout(а).",
 	"firstRun.scanning": "Сканиране",
 
 	"welcome.tooltip": "За Callout Studio",
 	"welcome.title": "Добре дошли в Callout Studio",
-	"welcome.tagline": "Вашето цялостно решение за управление на callout-и в Obsidian.",
+	"welcome.tagline":
+		"Вашето цялостно решение за управление на callout-и в Obsidian.",
 	"welcome.previewTitle": "Вижте го в действие",
 	"welcome.sample":
 		"Callout Studio ви позволява да създавате callout-и със собствена икона, цветове и име.\n\n" +
@@ -36,10 +43,14 @@ export const bg: Record<string, string> = {
 		"Callout Studio предлага много повече! [Научете повече]({{repoUrl}}).\n",
 
 	"deleteModal.title": 'Изтриване на callout "{{name}}"?',
-	"deleteModal.bodyInUse": "Този callout се появява {{count}} пъти в {{files}} файл(а).",
-	"deleteModal.bodyInUseExplain": "Изтриването ще преобразува тези блокове в обикновен текст — те ще загубят стила и заглавието на callout.",
-	"deleteModal.replaceHint": "Можете да го замените с друг callout, като запазите съдържанието на хранилището като стилизиран callout.",
-	"deleteModal.bodyUnused": '"{{name}}" не се използва в нито една бележка, но е персонализиран callout, който сте създали. Изтриването ще го премахне от списъка.',
+	"deleteModal.bodyInUse":
+		"Този callout се появява {{count}} пъти в {{files}} файл(а).",
+	"deleteModal.bodyInUseExplain":
+		"Изтриването ще преобразува тези блокове в обикновен текст — те ще загубят стила и заглавието на callout.",
+	"deleteModal.replaceHint":
+		"Можете да го замените с друг callout, като запазите съдържанието на хранилището като стилизиран callout.",
+	"deleteModal.bodyUnused":
+		'"{{name}}" не се използва в нито една бележка, но е персонализиран callout, който сте създали. Изтриването ще го премахне от списъка.',
 	"deleteModal.replaceInstead": "Замяна вместо това",
 	"deleteModal.deleteInUse": "Изтриване (преобразуване в обикновен текст)",
 	"deleteModal.deleteUnused": "Изтриване на callout",
@@ -56,9 +67,12 @@ export const bg: Record<string, string> = {
 	"settings.importExport": "Импорт / Eкспорт",
 	"settings.import": "Импортиране",
 	"settings.export": "Експортиране",
-	"settings.importDesc": "Импортирайте данните на Callout Studio от друго хранилище с JSON файл.",
-	"settings.exportDesc": "Запазете всички персонализирани типове callout в JSON формат.",
-	"settings.importConflictNotice": "Импортирани са {{count}} тип(а) callout; {{overwritten}} съществуващ(и) запис(а) са презаписани.",
+	"settings.importDesc":
+		"Импортирайте данните на Callout Studio от друго хранилище с JSON файл.",
+	"settings.exportDesc":
+		"Запазете всички персонализирани типове callout в JSON формат.",
+	"settings.importConflictNotice":
+		"Импортирани са {{count}} тип(а) callout; {{overwritten}} съществуващ(и) запис(а) са презаписани.",
 	"settings.addNewCallout": "+ добавяне на callout",
 	"settings.noCalloutsNow": "Засега няма персонализирани callout-и.",
 	"settings.editAria": "Редактиране на {{name}}",
@@ -70,7 +84,8 @@ export const bg: Record<string, string> = {
 	"settings.makeFallbackAction": "Използване на стандартния резервен стил",
 	"settings.colorSwatchAria": "Акцент: {{accent}} · Фон: {{bg}}",
 	"settings.fallbackCallout": "Стандартен резервен callout",
-	"settings.fallbackCalloutDesc": "Непознатите типове callout в хранилището ви ще наследят стила на този callout.",
+	"settings.fallbackCalloutDesc":
+		"Непознатите типове callout в хранилището ви ще наследят стила на този callout.",
 	"settings.globalStyle": "Глобален стил на callout",
 	"settings.border": "Граници",
 	"settings.borderAll": "Всички",
@@ -102,41 +117,55 @@ export const bg: Record<string, string> = {
 	"settings.deletePaletteConfirm":
 		'Изтриване на палитра "{{name}}"?\nCallout-ите, които използват нейните цветове, няма да бъдат засегнати.',
 	"settings.enableAutocomplete": "Активиране на автоматично довършване [!",
-	"settings.enableAutocompleteDesc": 'Показва предложения при въвеждане на "[!" в блоков цитат в редактора. Изберете тип callout от списъка, за да вмъкнете пълно заглавие на callout.',
+	"settings.enableAutocompleteDesc":
+		'Показва предложения при въвеждане на "[!" в блоков цитат в редактора. Изберете тип callout от списъка, за да вмъкнете пълно заглавие на callout.',
 	"settings.openHotkeys": "Клавишни комбинации на Callout Studio",
-	"settings.openHotkeysDesc": "Отваря настройките за клавишни комбинации на Obsidian за командите на Callout Studio. По подразбиране не са зададени комбинации.",
-	"settings.openHotkeysButton": "Отваряне на настройките за клавишни комбинации",
+	"settings.openHotkeysDesc":
+		"Отваря настройките за клавишни комбинации на Obsidian за командите на Callout Studio. По подразбиране не са зададени комбинации.",
+	"settings.openHotkeysButton":
+		"Отваряне на настройките за клавишни комбинации",
 	"settings.vaultMaintenance": "Прегледи и поддръжка на хранилището",
 	"settings.vaultStats": "Статистика за callout",
-	"settings.vaultStatsDesc": "Брои всички блокове callout в бележките Markdown и ги групира по тип.",
+	"settings.vaultStatsDesc":
+		"Брои всички блокове callout в бележките Markdown и ги групира по тип.",
 	"settings.vaultStatsButton": "Преглед на статистиката",
 	"settings.vaultStatsScanning": "Сканиране",
 	"settings.resetAll": "Нулиране",
-	"settings.resetAllDesc": "Изтрива всички callout-и на потребителя, нулира вградените callout-и, глобалните стилове, запазените цветови палитри, персонализирането на контекстното меню и изтеглените SVG файлове на Material.",
+	"settings.resetAllDesc":
+		"Изтрива всички callout-и на потребителя, нулира вградените callout-и, глобалните стилове, запазените цветови палитри, персонализирането на контекстното меню и изтеглените SVG файлове на Material.",
 	"settings.resetAllButton": "Нулиране на всичко",
-	"settings.resetAllConfirm": "Това ще изтрие всички персонализирани callout-и, ще нулира вградените callout-и, глобалните стилове, запазените цветови палитри, персонализирането на контекстното меню и всички кеширани SVG файлове на Material. Действието не може да бъде отменено. Сигурни ли сте?",
+	"settings.resetAllConfirm":
+		"Това ще изтрие всички персонализирани callout-и, ще нулира вградените callout-и, глобалните стилове, запазените цветови палитри, персонализирането на контекстното меню и всички кеширани SVG файлове на Material. Действието не може да бъде отменено. Сигурни ли сте?",
 	"notice.resetAllDone": "Всичко е нулирано до стандартните стойности.",
-	"notice.exported": "Callout-ите са експортирани в callout-studio-export.json",
+	"notice.exported":
+		"Callout-ите са експортирани в callout-studio-export.json",
 	"notice.importedJSON": "Импортирани са {{count}} тип(а) callout от JSON.",
 	"notice.importedSettings": "Импортирани са настройките на приставката.",
-	"notice.noNewJSON": "Не са импортирани нови типове callout (ID-тата може вече да съществуват).",
-	"notice.iconDownloadFailed": 'Неуспешно изтегляне на икона Material "{{name}}". Може да е недостъпна за този стил/тегло или да нямате интернет връзка.',
+	"notice.noNewJSON":
+		"Не са импортирани нови типове callout (ID-тата може вече да съществуват).",
+	"notice.iconDownloadFailed":
+		'Неуспешно изтегляне на икона Material "{{name}}". Може да е недостъпна за този стил/тегло или да нямате интернет връзка.',
 	"notice.nothingToWrap": "Няма какво да се обвие.",
 	"notice.cursorNotInsideCallout": "Курсорът не е вътре в callout.",
-	"notice.openHotkeysFailed": "Не може да се отворят настройките за клавишни комбинации на Obsidian.",
-	"notice.filterHotkeysFailed": "Клавишните комбинации на Obsidian са отворени, но не може да се приложи филтърът на Callout Studio.",
+	"notice.openHotkeysFailed":
+		"Не може да се отворят настройките за клавишни комбинации на Obsidian.",
+	"notice.filterHotkeysFailed":
+		"Клавишните комбинации на Obsidian са отворени, но не може да се приложи филтърът на Callout Studio.",
 	"editor.editCallout": "Редактиране на callout",
 	"editor.newCallout": "Нов callout",
 	"editor.displayName": "Показвано име",
 	"editor.displayNameDesc": "Четимият етикет, показван в интерфейса",
-	"editor.displayNameBuiltIn": "Показваното име не може да се промени за вградените callout-и",
+	"editor.displayNameBuiltIn":
+		"Показваното име не може да се промени за вградените callout-и",
 	"editor.displayNamePlaceholder": "Моят callout",
 	"editor.calloutIds": "ID-та на callout",
-	"editor.calloutIdsDesc": "Всички идентификатори за този callout. Разрешени са интервали.\nНатиснете Enter или бутона + за добавяне.",
+	"editor.calloutIdsDesc":
+		"Всички идентификатори за този callout. Разрешени са интервали.\nНатиснете Enter или бутона + за добавяне.",
 	"editor.calloutIdsPlaceholder": "Добавяне на ID",
 	"editor.addId": "Добавяне на ID",
 	"editor.idLinkedToName": "Свързано с показваното име",
-	"editor.idCannotDelete": "Това ID е свързано с показваното име и не може да бъде изтрито — редактирайте името, за да го промените",
+	"editor.idCannotDelete":
+		"Това ID е свързано с показваното име и не може да бъде изтрито — редактирайте името, за да го промените",
 	"editor.icon": "Икона",
 	"editor.livePreview": "Преглед на живо",
 	"editor.iconAdjustment": "Настройка на иконата",
@@ -150,25 +179,31 @@ export const bg: Record<string, string> = {
 	"editor.paletteGroupPresets": "Цветови предварителни настройки",
 	"editor.paletteGroupCustom": "Персонализирани",
 	"editor.paletteNewColor": "Нов цвят…",
-	"editor.contrastWarning": "Нисък контраст спрямо фона — може да бъде труден за четене",
+	"editor.contrastWarning":
+		"Нисък контраст спрямо фона — може да бъде труден за четене",
 	"editor.foldable": "Сгъваем",
-	"editor.foldableDesc": "Изберете дали callout може да се сгъва и коe е стандартното състояние за цялото хранилище.",
+	"editor.foldableDesc":
+		"Изберете дали callout може да се сгъва и коe е стандартното състояние за цялото хранилище.",
 	"editor.foldOff": "Изключено",
 	"editor.foldOpen": "Отворен по подразбиране",
 	"editor.foldClosed": "Затворен по подразбиране",
 	"editor.cancel": "Отказ",
 	"editor.saveChanges": "Запазване на промените",
 	"editor.createCallout": "Създаване на callout",
-	"editor.nameRequired": "Необходимо е показвано име преди създаването на callout.",
+	"editor.nameRequired":
+		"Необходимо е показвано име преди създаването на callout.",
 	"editor.noChangesToSave": "Не са направени промени.",
 	"editor.downloadingIcon": "Изтегляне на икона",
 	"editor.idEmpty": "Необходимо е поне едно ID",
 	"editor.idExists": "Вече съществува callout с това ID",
 	"editor.idConflict": "Това ID е в конфликт с вече съществуващ callout",
-	"editor.idDashConflict": 'Obsidian записва интервалите като тирета, затова това ID се сблъсква с „{{other}}“',
+	"editor.idDashConflict":
+		"Obsidian записва интервалите като тирета, затова това ID се сблъсква с „{{other}}“",
 	"editor.untitledCallout": "Callout без заглавие",
-	"editor.loremIpsum": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-	"editor.loremIpsumShort": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+	"editor.loremIpsum":
+		"Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+	"editor.loremIpsumShort":
+		"Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
 	"editor.sampleInlineText": "Ето вградена [!{id}] капсула вътре в абзац.",
 	"editor.previewReadOnly": "Прегледът на живо не може да се редактира",
 	// Palette editor modal
@@ -178,11 +213,14 @@ export const bg: Record<string, string> = {
 	"palette.namePlaceholder": "Моята палитра",
 	"palette.nameExists": "Вече съществува палитра с това име",
 	"palette.baseColor": "Основен цвят",
-	"palette.baseColorHint": "Автоматично ще съпоставим цвета на фона с него. Ако желаете, можете да го контролирате отделно чрез {{link}}.",
+	"palette.baseColorHint":
+		"Автоматично ще съпоставим цвета на фона с него. Ако желаете, можете да го контролирате отделно чрез {{link}}.",
 	"palette.baseColorHintLink": "щракнете тук",
 	"palette.advancedColors": "Цветове",
-	"palette.advancedColorsHint": "Редактиране на цветовете за режим {{mode}} — другият режим се актуализира автоматично. Превключете темата на Obsidian, за да проверите.",
-	"palette.revertHint": "Предпочитате един основен цвят вместо това? {{link}}.",
+	"palette.advancedColorsHint":
+		"Редактиране на цветовете за режим {{mode}} — другият режим се актуализира автоматично. Превключете темата на Obsidian, за да проверите.",
+	"palette.revertHint":
+		"Предпочитате един основен цвят вместо това? {{link}}.",
 	"palette.revertHintLink": "Възстанови",
 	"palette.lightMode": "Светъл",
 	"palette.darkMode": "Тъмен",
@@ -229,11 +267,22 @@ export const bg: Record<string, string> = {
 	"iconPicker.searchLucide": "търсене на икони Lucide",
 	"iconPicker.searchTabler": "търсене на икони Tabler",
 	"iconPicker.tablerStyle": "Стил на иконата",
-	"iconPicker.tablerStyleOutline": "Контур",
-	"iconPicker.tablerStyleFilled": "Запълнен",
+	"iconPicker.tablerStyleOutline": "Контур (Outline)",
+	"iconPicker.tablerStyleFilled": "Запълнен (Filled)",
 	"iconPicker.loadMore": "Зареждане на още",
 	"iconPicker.materialStyle": "Стил на иконата",
+	"iconPicker.materialStyleOutlined": "Контурен (Outlined)",
+	"iconPicker.materialStyleFilled": "Запълнен (Filled)",
+	"iconPicker.materialStyleRounded": "Заоблен (Rounded)",
+	"iconPicker.materialStyleSharp": "Остър (Sharp)",
 	"iconPicker.materialWeight": "Тегло на иконата",
+	"iconPicker.materialWeight100": "Тънък (Thin)",
+	"iconPicker.materialWeight200": "Много лек (Extra Light)",
+	"iconPicker.materialWeight300": "Лек (Light)",
+	"iconPicker.materialWeight400": "Обикновен (Regular)",
+	"iconPicker.materialWeight500": "Среден (Medium)",
+	"iconPicker.materialWeight600": "Полунаситен (Semi Bold)",
+	"iconPicker.materialWeight700": "Наситен (Bold)",
 	"iconPicker.searchMaterial": "търсене на икони Material",
 	"iconPicker.searchEmoji": "Търси емоджи",
 	"iconPicker.skinTone": "Тон на кожата",
@@ -245,57 +294,188 @@ export const bg: Record<string, string> = {
 	"iconPicker.fa": "Font Awesome",
 	"iconPicker.searchFa": "Търсене в Font Awesome",
 	"iconPicker.faStyle": "Стил на иконата",
-	"iconPicker.faStyleSolid": "Плътен",
-	"iconPicker.faStyleRegular": "Редовен",
-	"iconPicker.faStyleBrands": "Марки",
+	"iconPicker.faStyleSolid": "Плътен (Solid)",
+	"iconPicker.faStyleRegular": "Редовен (Regular)",
+	"iconPicker.faStyleBrands": "Марки (Brands)",
 	"iconPicker.rpgAwesome": "RPG Awesome",
 	"iconPicker.searchRpgAwesome": "Търсене в RPG Awesome",
 	"iconPicker.image": "Вашите изображения",
 	"iconPicker.searchImage": "Търсене в изображенията",
-	"iconPicker.imageTooLarge": "{{name}} е твърде голям. Изображенията трябва да са под 5 MB.",
-	"iconPicker.imageUnsupported": "{{name}} не е поддържан формат на изображение. Използвайте SVG, PNG, JPEG или WebP.",
-	"iconPicker.imageInvalidSvg": "{{name}} не може да бъде прочетен като сигурен SVG, затова не беше добавен.",
-	"iconPicker.imageDecodeFailed": "{{name}} не може да бъде прочетен като изображение.",
-	"iconPicker.imageDuplicate": "{{name}} вече е в изображенията ви. Преименувайте файла или изтрийте съществуващото изображение.",
+	"iconPicker.imageTooLarge":
+		"{{name}} е твърде голям. Изображенията трябва да са под 5 MB.",
+	"iconPicker.imageUnsupported":
+		"{{name}} не е поддържан формат на изображение. Използвайте SVG, PNG, JPEG или WebP.",
+	"iconPicker.imageInvalidSvg":
+		"{{name}} не може да бъде прочетен като сигурен SVG, затова не беше добавен.",
+	"iconPicker.imageDecodeFailed":
+		"{{name}} не може да бъде прочетен като изображение.",
+	"iconPicker.imageDuplicate":
+		"{{name}} вече е в изображенията ви. Преименувайте файла или изтрийте съществуващото изображение.",
 	"iconPicker.imageAdd": "Добавяне на изображения",
-	"iconPicker.imageEmpty": "Все още няма изображения. Добавете SVG, PNG, JPEG или WebP файл от компютъра си или го пуснете тук.",
+	"iconPicker.imageEmpty":
+		"Все още няма изображения. Добавете SVG, PNG, JPEG или WebP файл от компютъра си или го пуснете тук.",
 	"iconPicker.imageDelete": "Изтриване",
 	"iconPicker.imageDeleteConfirm": "Изтриване на „{{name}}“?",
-	"iconPicker.imageDeleteInUse": "{{count}} callout(s) използва(т) това изображение. Ще показват заместваща иконка, докато не добавите нова.",
+	"iconPicker.imageDeleteInUse":
+		"{{count}} callout(s) използва(т) това изображение. Ще показват заместваща иконка, докато не добавите нова.",
 	"iconPicker.imageRecolor": "Следване цвета на Callout",
 	"iconPicker.allSources": "Всички източници",
 	"iconPicker.searchAllSources": "Търсене във всички източници на икони",
-	"iconPicker.sourcesNotDownloaded": "Все още не е включен: {{names}}. Изберете източник по-горе, за да го изтеглите.",
+	"iconPicker.sourcesNotDownloaded":
+		"Все още не е включен: {{names}}. Изберете източник по-горе, за да го изтеглите.",
 	"iconPicker.chooseSource": "Изберете източник",
 	"iconPicker.sourceGroup": "{{name}} · {{count}}",
 
 	// Source menu — what each library holds, in a few words
 	"iconPicker.descAllSources": "търсене в всички библиотеки едновременно",
 	"iconPicker.descLucide": "собствената колекция на Obsidian, винаги офлайн",
-	"iconPicker.descTabler": "чисти и последователни UI икони, контур и запълнени",
-	"iconPicker.descMaterial": "колекцията на Google, четири стила и седем тегла",
+	"iconPicker.descTabler":
+		"чисти и последователни UI икони, контур и запълнени",
+	"iconPicker.descMaterial":
+		"колекцията на Google, четири стила и седем тегла",
 	"iconPicker.descEmoji": "цветни глифове, всеки нюанс кожа",
 	"iconPicker.descOcticons": "иконите на интерфейса на GitHub",
 	"iconPicker.descFa": "плътни, редовни и марки",
 	"iconPicker.descRpgAwesome": "фентъзи и настолни игри икони",
 	"iconPicker.descImage": "изображения, добавени от компютъра ви",
 
+	// Icon picker — category filter dropdown labels
+	"iconPicker.cat.Accessibility": "Достъпност",
+	"iconPicker.cat.Actions": "Действия",
+	"iconPicker.cat.Activities": "Дейности",
+	"iconPicker.cat.Alert": "Сигнал",
+	"iconPicker.cat.Alphabet": "Азбука",
+	"iconPicker.cat.Android": "Android",
+	"iconPicker.cat.Animals": "Животни",
+	"iconPicker.cat.Arrows": "Стрелки",
+	"iconPicker.cat.Astronomy": "Астрономия",
+	"iconPicker.cat.Audio&Video": "Аудио и видео",
+	"iconPicker.cat.Automotive": "Автомобили",
+	"iconPicker.cat.Badges": "Значки",
+	"iconPicker.cat.Brand": "Марки",
+	"iconPicker.cat.Buildings": "Сгради",
+	"iconPicker.cat.Business": "Бизнес",
+	"iconPicker.cat.Camping": "Къмпинг",
+	"iconPicker.cat.Charity": "Благотворителност",
+	"iconPicker.cat.Charts": "Диаграми",
+	"iconPicker.cat.Charts + Diagrams": "Диаграми и схеми",
+	"iconPicker.cat.Childhood": "Детство",
+	"iconPicker.cat.Clothing + Fashion": "Дрехи и мода",
+	"iconPicker.cat.Coding": "Програмиране",
+	"iconPicker.cat.Communicate": "Общуване",
+	"iconPicker.cat.Communication": "Комуникация",
+	"iconPicker.cat.Computers": "Компютри",
+	"iconPicker.cat.Connectivity": "Свързаност",
+	"iconPicker.cat.Construction": "Строителство",
+	"iconPicker.cat.Currencies": "Валути",
+	"iconPicker.cat.Database": "База данни",
+	"iconPicker.cat.Design": "Дизайн",
+	"iconPicker.cat.Development": "Разработка",
+	"iconPicker.cat.Devices": "Устройства",
+	"iconPicker.cat.Devices + Hardware": "Устройства и хардуер",
+	"iconPicker.cat.Disaster + Crisis": "Бедствия и кризи",
+	"iconPicker.cat.Document": "Документ",
+	"iconPicker.cat.E-commerce": "Електронна търговия",
+	"iconPicker.cat.Editing": "Редактиране",
+	"iconPicker.cat.Education": "Образование",
+	"iconPicker.cat.Electrical": "Електрически",
+	"iconPicker.cat.Emoji": "Емоджи",
+	"iconPicker.cat.Energy": "Енергия",
+	"iconPicker.cat.Extensions": "Разширения",
+	"iconPicker.cat.Files": "Файлове",
+	"iconPicker.cat.Film + Video": "Филми и видео",
+	"iconPicker.cat.Food": "Храна",
+	"iconPicker.cat.Food + Beverage": "Храна и напитки",
+	"iconPicker.cat.Fruits + Vegetables": "Плодове и зеленчуци",
+	"iconPicker.cat.Games": "Игри",
+	"iconPicker.cat.Gaming": "Гейминг",
+	"iconPicker.cat.Gender": "Пол",
+	"iconPicker.cat.Genders": "Полове",
+	"iconPicker.cat.Gestures": "Жестове",
+	"iconPicker.cat.Halloween": "Хелоуин",
+	"iconPicker.cat.Hands": "Ръце",
+	"iconPicker.cat.Hardware": "Хардуер",
+	"iconPicker.cat.Health": "Здраве",
+	"iconPicker.cat.Holidays": "Празници",
+	"iconPicker.cat.Home": "Дом",
+	"iconPicker.cat.Household": "Домакинство",
+	"iconPicker.cat.Humanitarian": "Хуманитарно",
+	"iconPicker.cat.Images": "Изображения",
+	"iconPicker.cat.Laundry": "Пране",
+	"iconPicker.cat.Letters": "Букви",
+	"iconPicker.cat.Logic": "Логика",
+	"iconPicker.cat.Logistics": "Логистика",
+	"iconPicker.cat.Map": "Карта",
+	"iconPicker.cat.Maps": "Карти",
+	"iconPicker.cat.Maritime": "Морски",
+	"iconPicker.cat.Marketing": "Маркетинг",
+	"iconPicker.cat.Math": "Математика",
+	"iconPicker.cat.Mathematics": "Математика",
+	"iconPicker.cat.Media": "Медия",
+	"iconPicker.cat.Media Playback": "Възпроизвеждане",
+	"iconPicker.cat.Medical + Health": "Медицина и здраве",
+	"iconPicker.cat.Money": "Пари",
+	"iconPicker.cat.Mood": "Настроение",
+	"iconPicker.cat.Moving": "Преместване",
+	"iconPicker.cat.Music + Audio": "Музика и звук",
+	"iconPicker.cat.Nature": "Природа",
+	"iconPicker.cat.Numbers": "Числа",
+	"iconPicker.cat.Photography": "Фотография",
+	"iconPicker.cat.Photos + Images": "Снимки и изображения",
+	"iconPicker.cat.Political": "Политически",
+	"iconPicker.cat.Privacy": "Поверителност",
+	"iconPicker.cat.Punctuation + Symbols": "Пунктуация и символи",
+	"iconPicker.cat.Religion": "Религия",
+	"iconPicker.cat.Science": "Наука",
+	"iconPicker.cat.Science Fiction": "Научна фантастика",
+	"iconPicker.cat.Security": "Сигурност",
+	"iconPicker.cat.Shapes": "Форми",
+	"iconPicker.cat.Shopping": "Пазаруване",
+	"iconPicker.cat.Social": "Социални",
+	"iconPicker.cat.Spinners": "Спинъри",
+	"iconPicker.cat.Sport": "Спорт",
+	"iconPicker.cat.Sports + Fitness": "Спорт и фитнес",
+	"iconPicker.cat.Symbols": "Символи",
+	"iconPicker.cat.System": "Система",
+	"iconPicker.cat.Text": "Текст",
+	"iconPicker.cat.Text Formatting": "Форматиране на текст",
+	"iconPicker.cat.Time": "Време",
+	"iconPicker.cat.Toggle": "Превключване",
+	"iconPicker.cat.Transit": "Транзит",
+	"iconPicker.cat.Transportation": "Транспорт",
+	"iconPicker.cat.Travel": "Пътуване",
+	"iconPicker.cat.Travel + Hotel": "Пътуване и хотели",
+	"iconPicker.cat.UI actions": "Действия в интерфейса",
+	"iconPicker.cat.Users + People": "Потребители и хора",
+	"iconPicker.cat.Vehicles": "Превозни средства",
+	"iconPicker.cat.Version control": "Контрол на версии",
+	"iconPicker.cat.Weather": "Времето",
+	"iconPicker.cat.Writing": "Писане",
+	"iconPicker.cat.Zodiac": "Зодиак",
+
 	// Downloadable icon packs
 	"iconPack.downloadTitle": "{{name}} все още не е изтеглен",
-	"iconPack.downloadDetail": "{{count}} икони · {{size}} · еднократно изтегляне",
+	"iconPack.downloadDetail":
+		"{{count}} икони · {{size}} · еднократно изтегляне",
 	"iconPack.download": "Изтегляне",
 	"iconPack.downloading": "Изтегляне на {{name}}…",
-	"iconPack.downloadFailed": "{{name}} не може да бъде изтеглен. Проверете връзката и опитайте отново.",
+	"iconPack.downloadFailed":
+		"{{name}} не може да бъде изтеглен. Проверете връзката и опитайте отново.",
 	"iconPack.retry": "Повторен опит",
-	"iconPack.faBrandsNotice": "Иконките на марките са търговски марки на съответните им собственици. Включването им не означава одобрение. Моля, използвайте ги само за представяне на компанията, продукта или услугата, за която се отнасят.",
-	"iconPack.artworkRestored": "Изтеглени са графиките на иконите за {{names}}.",
-	"iconPack.diskWriteFailed": "Callout Studio не успя да запази пакета с икони на диска, затова ще трябва да бъде изтеглен отново следващия път. Избраните от вас икони са все още запазени с настройките ви.",
+	"iconPack.faBrandsNotice":
+		"Иконките на марките са търговски марки на съответните им собственици. Включването им не означава одобрение. Моля, използвайте ги само за представяне на компанията, продукта или услугата, за която се отнасят.",
+	"iconPack.artworkRestored":
+		"Изтеглени са графиките на иконите за {{names}}.",
+	"iconPack.diskWriteFailed":
+		"Callout Studio не успя да запази пакета с икони на диска, затова ще трябва да бъде изтеглен отново следващия път. Избраните от вас икони са все още запазени с настройките ви.",
 
 	// Icon licences & credits
 	"credits.title": "Лицензи на икони и авторски права",
-	"credits.intro": "Callout Studio използва няколко отворени библиотеки с икони. Техните лицензи са възпроизведени по-долу, заедно с промените за използването им тук.",
+	"credits.intro":
+		"Callout Studio използва няколко отворени библиотеки с икони. Техните лицензи са възпроизведени по-долу, заедно с промените за използването им тук.",
 	"credits.fullNotices": "Пълни известия за трети страни",
-	"credits.pluginLicense": "Собственият код на Callout Studio е под лиценз 0BSD; библиотеките с икони запазват своите собствени лицензи.",
+	"credits.pluginLicense":
+		"Собственият код на Callout Studio е под лиценз 0BSD; библиотеките с икони запазват своите собствени лицензи.",
 	"contextMenu.editCallout": "Редактиране на настройките на callout",
 	"contextMenu.copyMarkdown": "Копиране на Markdown на callout",
 	"contextMenu.openSettings": "Отваряне на настройките на Callout Studio",
@@ -307,19 +487,25 @@ export const bg: Record<string, string> = {
 	"contextMenu.deleteSection": "Изтриване на раздел на заглавие",
 	"heading.toggleFold": "Превключване на сгъването",
 	"settings.globalSettings": "Общи настройки",
-	"settings.globalSettingsDesc": "Прецизирайте как изглежда всеки тип callout в цялото ви хранилище.",
-	"settings.globalSettingsRegularDesc": "Добавете токен на callout към цитат (напр. `> [!type]`), за да се визуализира нативната кутия за callout на Obsidian. Можете да коригирате нейната граница, радиус, мащаб на шрифта и подравняване.",
-	"settings.globalSettingsHeadingDesc": "Добавете токен на callout веднага след диезите на заглавието (напр. `## [!type]`), за да се визуализира като стилизирано заглавие на callout. Можете да коригирате границата, формата и вертикалното разстояние.",
-	"settings.globalSettingsInlineDesc": "Добавете токен на callout навсякъде вътре в ред текст (напр. `[!type]`), за да се визуализира като малка вградена капсула. Можете да коригирате границата и формата му.",
+	"settings.globalSettingsDesc":
+		"Прецизирайте как изглежда всеки тип callout в цялото ви хранилище.",
+	"settings.globalSettingsRegularDesc":
+		"Добавете токен на callout към цитат (напр. `> [!type]`), за да се визуализира нативната кутия за callout на Obsidian. Можете да коригирате нейната граница, радиус, мащаб на шрифта и подравняване.",
+	"settings.globalSettingsHeadingDesc":
+		"Добавете токен на callout веднага след диезите на заглавието (напр. `## [!type]`), за да се визуализира като стилизирано заглавие на callout. Можете да коригирате границата, формата и вертикалното разстояние.",
+	"settings.globalSettingsInlineDesc":
+		"Добавете токен на callout навсякъде вътре в ред текст (напр. `[!type]`), за да се визуализира като малка вградена капсула. Можете да коригирате границата и формата му.",
 	"settings.globalSettingsCustomize": "Персонализиране",
 	"settings.calloutTypeRegular": "Обикновен callout",
 	"settings.calloutTypeHeading": "Callout-заглавие",
 	"settings.calloutTypeInline": "Вграден callout",
 	"settings.customizeMenu": "Персонализиране на елементите на менюто",
-	"settings.customizeMenuDesc": "Изберете кои действия от контекстното меню да се показват за всеки тип callout и променете реда им. Работи в режим на изходен код и Live Preview.",
+	"settings.customizeMenuDesc":
+		"Изберете кои действия от контекстното меню да се показват за всеки тип callout и променете реда им. Работи в режим на изходен код и Live Preview.",
 	"settings.customizeMenuButton": "Персонализиране на елементите на менюто",
 	"menuCustomize.title": "Персонализиране на контекстното меню",
-	"menuCustomize.desc": "Включвайте или изключвайте действията и плъзгайте дръжката, за да ги пренаредите. Промените се запазват автоматично.",
+	"menuCustomize.desc":
+		"Включвайте или изключвайте действията и плъзгайте дръжката, за да ги пренаредите. Промените се запазват автоматично.",
 	"menuCustomize.regular": "Обикновен callout",
 	"menuCustomize.heading": "Callout-заглавие",
 	"menuCustomize.inline": "Вграден callout",
@@ -327,26 +513,34 @@ export const bg: Record<string, string> = {
 	"menuItem.edit": "Редактиране на callout",
 	"menuItem.openSettings": "Отваряне на настройките",
 	"menuItem.copyMarkdown": "Копиране на Markdown",
-	"menuItem.foldDefaults": "Стандартно състояние на сгъване (отворен / затворен / без)",
+	"menuItem.foldDefaults":
+		"Стандартно състояние на сгъване (отворен / затворен / без)",
 	"menuItem.cutSection": "Изрязване на раздел",
 	"menuItem.copySection": "Копиране на раздел",
 	"menuItem.deleteSection": "Изтриване на раздел",
 	"confirm.ok": "Изтриване",
 	"confirm.cancel": "Отказ",
-	"vault.filesUpdated": "Актуализирани са {{count}} препратка/и към callout в файловете на хранилището.",
-	"vault.idsUpdated": "Актуализирани са {{count}} ID/та на callout в файловете на хранилището: {{oldIds}} → {{newId}}",
-	"vault.titlesUpdated": "Актуализирани са {{count}} заглавие/а на callout в файловете на хранилището: {{oldTitle}} → {{newTitle}}",
+	"vault.filesUpdated":
+		"Актуализирани са {{count}} препратка/и към callout в файловете на хранилището.",
+	"vault.idsUpdated":
+		"Актуализирани са {{count}} ID/та на callout в файловете на хранилището: {{oldIds}} → {{newId}}",
+	"vault.titlesUpdated":
+		"Актуализирани са {{count}} заглавие/а на callout в файловете на хранилището: {{oldTitle}} → {{newTitle}}",
 	"vault.replaceWith": "Замяна с:",
 	"vault.deleteWithout": "Изтриване без замяна",
 	"vault.confirmDelete": "Потвърждаване",
 	"vault.confirmReplace": "Замяна",
-	"vault.replacePromptInUse": '"{{name}}" се използва {{count}} пъти в {{files}} файл(а). Изберете callout за замяна:',
+	"vault.replacePromptInUse":
+		'"{{name}}" се използва {{count}} пъти в {{files}} файл(а). Изберете callout за замяна:',
 	"vault.replacePromptUnused": 'Изберете callout за замяна на "{{name}}":',
 	"vault.noReplacementAvailable": "Няма налични callout-и за замяна.",
-	"vault.convertedToPlainText": "{{blocks}} блок(а) callout в {{files}} файл(а) са преобразувани в обикновен текст.",
-	"vault.resetAliasWarning": "{{count}} препратка/и в {{files}} файл(а) използват персонализирани псевдоними: {{aliases}}. Те ще спрат да работят след нулиране. Продължаване?",
+	"vault.convertedToPlainText":
+		"{{blocks}} блок(а) callout в {{files}} файл(а) са преобразувани в обикновен текст.",
+	"vault.resetAliasWarning":
+		"{{count}} препратка/и в {{files}} файл(а) използват персонализирани псевдоними: {{aliases}}. Те ще спрат да работят след нулиране. Продължаване?",
 	"vault.resetConfirm": "Нулиране",
-	"vault.resetAllInUse": "⚠ {{count}} препратка/и към callout в {{files}} файл(а) използват персонализирани типове callout, които ще бъдат изтрити.",
+	"vault.resetAllInUse":
+		"⚠ {{count}} препратка/и към callout в {{files}} файл(а) използват персонализирани типове callout, които ще бъдат изтрити.",
 	"vaultStats.title": "Статистика за callout",
 	"vaultStats.totalCallouts": "Общо callout-и",
 	"vaultStats.typesFound": "Намерени типове",
@@ -367,46 +561,76 @@ export const bg: Record<string, string> = {
 	"vaultStats.sourceUnknown": "Непознат",
 	"vaultStats.close": "Затваряне",
 	"import.title": "Проблеми с импортирането",
-	"import.reportLeadIn": "Изглежда, че импортираният файл е бил модифициран. Ето списъка с проблеми:",
-	"import.reportLeadInFatal": "Този файл не изглежда като експорт на Callout Studio. Не може да бъде импортиран:",
+	"import.reportLeadIn":
+		"Изглежда, че импортираният файл е бил модифициран. Ето списъка с проблеми:",
+	"import.reportLeadInFatal":
+		"Този файл не изглежда като експорт на Callout Studio. Не може да бъде импортиран:",
 	"import.entryHeading": "Запис {{index}} — {{label}}",
-	"import.summary": "{{valid}} от {{total}} записа са валидни · намерени са {{issues}} проблема/и.",
+	"import.summary":
+		"{{valid}} от {{total}} записа са валидни · намерени са {{issues}} проблема/и.",
 	"import.btnCancel": "Отказ",
 	"import.btnImportValid": "Импортиране само на валидните ({{count}})",
-	"import.err.notRecognized": "Неразпознат файл: очакваше се масив от дефиниции на callout или експорт от Callout Studio.",
-	"import.warn.settingsIgnored": "Блокът с настройки не беше валиден обект и беше игнориран.",
-	"import.warn.invalidGradient": "Градиентът на фона беше невалиден и беше игнориран.",
-	"import.err.parseFailed": "Файлът не е валиден JSON и не може да бъде анализиран.",
+	"import.err.notRecognized":
+		"Неразпознат файл: очакваше се масив от дефиниции на callout или експорт от Callout Studio.",
+	"import.warn.settingsIgnored":
+		"Блокът с настройки не беше валиден обект и беше игнориран.",
+	"import.warn.invalidGradient":
+		"Градиентът на фона беше невалиден и беше игнориран.",
+	"import.err.parseFailed":
+		"Файлът не е валиден JSON и не може да бъде анализиран.",
 	"import.err.entryNotObject": "Записът трябва да е обект.",
-	"import.err.requiredMissing": 'Задължителното поле "{{field}}" липсва или е от грешен тип.',
+	"import.err.requiredMissing":
+		'Задължителното поле "{{field}}" липсва или е от грешен тип.',
 	"import.err.idEmpty": "ID-то не трябва да е празно.",
-	"import.err.idTooLong": 'ID-то "{{value}}" е {{length}} символа; максимумът е {{max}}.',
-	"import.err.idBadChar": 'ID-то "{{value}}" съдържа невалидни символи ("|", "[", "]", табулации и нови редове не се разрешават).',
+	"import.err.idTooLong":
+		'ID-то "{{value}}" е {{length}} символа; максимумът е {{max}}.',
+	"import.err.idBadChar":
+		'ID-то "{{value}}" съдържа невалидни символи ("|", "[", "]", табулации и нови редове не се разрешават).',
 	"import.err.displayNameEmpty": "Показваното име не трябва да е празно.",
-	"import.err.displayNameTooLong": "Показваното име е {{length}} символа; максимумът е {{max}}.",
-	"import.err.boolField": '"{{field}}" трябва да е булева стойност (true или false).',
+	"import.err.displayNameTooLong":
+		"Показваното име е {{length}} символа; максимумът е {{max}}.",
+	"import.err.boolField":
+		'"{{field}}" трябва да е булева стойност (true или false).',
 	"import.err.iconNotObject": "Иконата трябва да е обект.",
-	"import.err.iconTypeInvalid": "Типът на иконата \"{{value}}\" не е едно от: {{types}}.",
-	"import.warn.iconFieldIgnored": "\"{{field}}\" се прилага само за икони на Material и се игнорира за тип икона {{type}}.",
-	"import.err.iconValueEmpty": "Стойността на иконата трябва да е непразен низ.",
-	"import.err.iconValueTooLong": "Стойността на иконата е необичайно дълга ({{length}} символа).",
-	"import.err.materialStyle": 'Стилът на иконата Material "{{value}}" не е едно от: outlined, filled, rounded, sharp.',
-	"import.err.materialWeight": 'Теглото на иконата Material "{{value}}" трябва да е цяло число между 100 и 700, на стъпки от 100.',
-	"import.warn.iconRecolorIgnored": "\"recolor\" се прилага само за ваши собствени изображения и се игнорира за тип икона {{type}}.",
-	"import.err.iconRecolorInvalid": "\"recolor\" трябва да е true или false (получено: \"{{value}}\").",
-	"import.err.colorInvalid": '"{{field}}" трябва да е hex цвят като "#448aff" (получено "{{value}}").',
-	"import.err.numberRange": '"{{field}}" трябва да е число между {{min}} и {{max}} (получено "{{value}}").',
-	"import.err.iconSizeRange": '"{{field}}" трябва да е число между {{min}} и {{max}} (получено "{{value}}").',
+	"import.err.iconTypeInvalid":
+		'Типът на иконата "{{value}}" не е едно от: {{types}}.',
+	"import.warn.iconFieldIgnored":
+		'"{{field}}" се прилага само за икони на Material и се игнорира за тип икона {{type}}.',
+	"import.err.iconValueEmpty":
+		"Стойността на иконата трябва да е непразен низ.",
+	"import.err.iconValueTooLong":
+		"Стойността на иконата е необичайно дълга ({{length}} символа).",
+	"import.err.materialStyle":
+		'Стилът на иконата Material "{{value}}" не е едно от: outlined, filled, rounded, sharp.',
+	"import.err.materialWeight":
+		'Теглото на иконата Material "{{value}}" трябва да е цяло число между 100 и 700, на стъпки от 100.',
+	"import.warn.iconRecolorIgnored":
+		'"recolor" се прилага само за ваши собствени изображения и се игнорира за тип икона {{type}}.',
+	"import.err.iconRecolorInvalid":
+		'"recolor" трябва да е true или false (получено: "{{value}}").',
+	"import.err.colorInvalid":
+		'"{{field}}" трябва да е hex цвят като "#448aff" (получено "{{value}}").',
+	"import.err.numberRange":
+		'"{{field}}" трябва да е число между {{min}} и {{max}} (получено "{{value}}").',
+	"import.err.iconSizeRange":
+		'"{{field}}" трябва да е число между {{min}} и {{max}} (получено "{{value}}").',
 	"import.err.aliasesNotArray": '"aliases" трябва да е масив от низове.',
 	"import.err.aliasNotString": "Псевдонимът трябва да е низ.",
 	"import.err.aliasDup": 'Псевдонимът "{{value}}" е дублиран в този запис.',
-	"import.err.tooManyIds": "Прекалено много ID-та ({{count}}); всеки callout може да има максимум {{max}} ID-та (основно + псевдоними).",
-	"import.err.metadataShape": '"metadata" трябва да е обект, чиито всички стойности са низове.',
+	"import.err.tooManyIds":
+		"Прекалено много ID-та ({{count}}); всеки callout може да има максимум {{max}} ID-та (основно + псевдоними).",
+	"import.err.metadataShape":
+		'"metadata" трябва да е обект, чиито всички стойности са низове.',
 	"import.err.unknownFields": "Непознати полета игнорирани: {{fields}}.",
-	"import.err.duplicateInFile": 'ID/псевдонимът "{{value}}" вече се използва от запис #{{first}} в този файл.',
-	"import.err.aliasConflict": 'Псевдонимът "{{value}}" вече се използва от друг callout ("{{other}}") в хранилището ви.',
-	"import.warn.defaultFoldedAutofix": '"defaultFolded" беше true, докато "foldable" беше false; defaultFolded е нулирано до false.',
-	"import.warn.imageMissing": "Този Callout използва изображение, което не е в файла и не е в това vault, затова ще показва заместваща иконка, докато не добавите нова.",
-	"footer.tagline": "Имате коментари, забележки или предложения? Ще се радвам да ги чуя!",
+	"import.err.duplicateInFile":
+		'ID/псевдонимът "{{value}}" вече се използва от запис #{{first}} в този файл.',
+	"import.err.aliasConflict":
+		'Псевдонимът "{{value}}" вече се използва от друг callout ("{{other}}") в хранилището ви.',
+	"import.warn.defaultFoldedAutofix":
+		'"defaultFolded" беше true, докато "foldable" беше false; defaultFolded е нулирано до false.',
+	"import.warn.imageMissing":
+		"Този Callout използва изображение, което не е в файла и не е в това vault, затова ще показва заместваща иконка, докато не добавите нова.",
+	"footer.tagline":
+		"Имате коментари, забележки или предложения? Ще се радвам да ги чуя!",
 	"footer.madeBy": "Създадено от Niv  •  ",
 };

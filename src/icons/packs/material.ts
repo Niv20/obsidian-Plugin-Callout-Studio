@@ -13,7 +13,12 @@
  */
 import { requestUrl } from "obsidian";
 import type { CalloutIcon, MaterialIconStyle } from "../../types";
-import type { IconEntry, IconIndex, IconPack, IconVariantState } from "../types";
+import type {
+	IconEntry,
+	IconIndex,
+	IconPack,
+	IconVariantState,
+} from "../types";
 import { decodeIndex, memoizeIndex } from "../data/codec";
 import { MATERIAL_INDEX } from "../data/material.index";
 import { sanitizeSVG } from "../svg";
@@ -62,12 +67,27 @@ export const materialPack: IconPack = {
 			key: "style",
 			labelKey: "iconPicker.materialStyle",
 			options: MATERIAL_STYLES,
+			optionLabelKeys: [
+				"iconPicker.materialStyleOutlined",
+				"iconPicker.materialStyleFilled",
+				"iconPicker.materialStyleRounded",
+				"iconPicker.materialStyleSharp",
+			],
 		},
 		{
 			kind: "select",
 			key: "weight",
 			labelKey: "iconPicker.materialWeight",
 			options: MATERIAL_WEIGHTS,
+			optionLabelKeys: [
+				"iconPicker.materialWeight100",
+				"iconPicker.materialWeight200",
+				"iconPicker.materialWeight300",
+				"iconPicker.materialWeight400",
+				"iconPicker.materialWeight500",
+				"iconPicker.materialWeight600",
+				"iconPicker.materialWeight700",
+			],
 		},
 	],
 
@@ -204,7 +224,9 @@ export async function downloadMaterialSvg(
 	style: MaterialIconStyle,
 	weight: number = MATERIAL_DEFAULT_WEIGHT,
 ): Promise<string> {
-	const response = await requestUrl({ url: materialSvgUrl(name, style, weight) });
+	const response = await requestUrl({
+		url: materialSvgUrl(name, style, weight),
+	});
 	const sanitized = sanitizeSVG(response.text);
 	if (!sanitized) {
 		throw new Error(`Invalid SVG received for Material icon "${name}"`);

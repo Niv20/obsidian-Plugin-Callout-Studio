@@ -10,18 +10,24 @@ export const cs: Record<string, string> = {
 	"settings.fallbackTag": "Výchozí",
 	"settings.fallbackTagAuto": "Aut. výchozí",
 	"settings.rescanVault": "Znovu prohledat vault",
-	"settings.rescanVaultDesc": "Vyhledá nerozpoznaná ID callout v poznámkách a přidá je jako záložní řádky.",
+	"settings.rescanVaultDesc":
+		"Vyhledá nerozpoznaná ID callout v poznámkách a přidá je jako záložní řádky.",
 	"settings.rescanVaultHintAction": "Prohledat nyní",
-	"settings.rescanComplete": "Opětovné prohledávání dokončeno: přidáno {{count}} nových callout(ů).",
+	"settings.rescanComplete":
+		"Opětovné prohledávání dokončeno: přidáno {{count}} nových callout(ů).",
 	"replaceModal.deleteWithoutReplaceSuffix": "(vrátí se na výchozí)",
 
 	"firstRun.title": "Najít existující callouts ve vaultu?",
-	"firstRun.body": "Callout Studio může prohledat váš vault a objevit callouts, které již používáte, takže se zobrazí v seznamu nastavení a převezmou váš záložní styl.",
-	"firstRun.heavyVaultNote": "Váš vault má {{count}} souborů Markdown — prohledání může trvat několik sekund.",
-	"firstRun.laterHint": "Tuto operaci můžete spustit kdykoli z Nastavení → Statistiky a údržba vaultu → Znovu prohledat vault.",
+	"firstRun.body":
+		"Callout Studio může prohledat váš vault a objevit callouts, které již používáte, takže se zobrazí v seznamu nastavení a převezmou váš záložní styl.",
+	"firstRun.heavyVaultNote":
+		"Váš vault má {{count}} souborů Markdown — prohledání může trvat několik sekund.",
+	"firstRun.laterHint":
+		"Tuto operaci můžete spustit kdykoli z Nastavení → Statistiky a údržba vaultu → Znovu prohledat vault.",
 	"firstRun.scanNow": "Prohledat nyní",
 	"firstRun.noThanks": "Ne, díky",
-	"firstRun.autoScanComplete": "Callout Studio prohledal váš vault a přidal {{count}} callout(ů).",
+	"firstRun.autoScanComplete":
+		"Callout Studio prohledal váš vault a přidal {{count}} callout(ů).",
 	"firstRun.scanning": "Prohledávání",
 
 	"welcome.tooltip": "O aplikaci Callout Studio",
@@ -39,10 +45,14 @@ export const cs: Record<string, string> = {
 		"Callout Studio má mnohem víc co nabídnout! [Zjistit více]({{repoUrl}}).\n",
 
 	"deleteModal.title": 'Smazat callout "{{name}}"?',
-	"deleteModal.bodyInUse": "Tento callout se vyskytuje {{count}}krát v {{files}} souboru(ech).",
-	"deleteModal.bodyInUseExplain": "Smazáním se tyto bloky převedou na prostý text — ztratí styl a nadpis callout.",
-	"deleteModal.replaceHint": "Místo toho ho můžete nahradit jiným callout, čímž zachováte obsah vaultu jako stylizovaný callout.",
-	"deleteModal.bodyUnused": '"{{name}}" se nepoužívá v žádné poznámce, ale je to vlastní callout, který jste vytvořili. Smazáním ho odstraníte z tohoto seznamu.',
+	"deleteModal.bodyInUse":
+		"Tento callout se vyskytuje {{count}}krát v {{files}} souboru(ech).",
+	"deleteModal.bodyInUseExplain":
+		"Smazáním se tyto bloky převedou na prostý text — ztratí styl a nadpis callout.",
+	"deleteModal.replaceHint":
+		"Místo toho ho můžete nahradit jiným callout, čímž zachováte obsah vaultu jako stylizovaný callout.",
+	"deleteModal.bodyUnused":
+		'"{{name}}" se nepoužívá v žádné poznámce, ale je to vlastní callout, který jste vytvořili. Smazáním ho odstraníte z tohoto seznamu.',
 	"deleteModal.replaceInstead": "Raději nahradit",
 	"deleteModal.deleteInUse": "Smazat (převést na prostý text)",
 	"deleteModal.deleteUnused": "Smazat callout",
@@ -60,9 +70,12 @@ export const cs: Record<string, string> = {
 	"settings.importExport": "Import / export",
 	"settings.import": "Importovat",
 	"settings.export": "Exportovat",
-	"settings.importDesc": "Importujte data Callout Studio z jiného vaultu pomocí souboru JSON.",
-	"settings.exportDesc": "Uložte všechny vlastní typy callout ve formátu JSON.",
-	"settings.importConflictNotice": "Importováno {{count}} typ(ů) callout; {{overwritten}} stávajících záznamů bylo přepsáno.",
+	"settings.importDesc":
+		"Importujte data Callout Studio z jiného vaultu pomocí souboru JSON.",
+	"settings.exportDesc":
+		"Uložte všechny vlastní typy callout ve formátu JSON.",
+	"settings.importConflictNotice":
+		"Importováno {{count}} typ(ů) callout; {{overwritten}} stávajících záznamů bylo přepsáno.",
 
 	"settings.addNewCallout": "+ přidat callout",
 
@@ -78,7 +91,8 @@ export const cs: Record<string, string> = {
 
 	"settings.colorSwatchAria": "Akcent: {{accent}} · Pozadí: {{bg}}",
 	"settings.fallbackCallout": "Výchozí záložní callout",
-	"settings.fallbackCalloutDesc": "Nerozpoznané typy callout ve vaultu zdědí styl tohoto callout.",
+	"settings.fallbackCalloutDesc":
+		"Nerozpoznané typy callout ve vaultu zdědí styl tohoto callout.",
 
 	"settings.globalStyle": "Globální styl callout",
 	"settings.border": "Ohraničení",
@@ -112,46 +126,57 @@ export const cs: Record<string, string> = {
 	"settings.deletePaletteConfirm":
 		'Smazat paletu "{{name}}"?\nCallouty používající její barvy nebudou ovlivněny.',
 	"settings.enableAutocomplete": "Povolit automatické doplňování [!",
-	"settings.enableAutocompleteDesc": 'Zobrazuje návrhy při psaní "[!" v bloku citace v editoru. Vyberte typ callout ze seznamu a vložte úplnou hlavičku callout.',
+	"settings.enableAutocompleteDesc":
+		'Zobrazuje návrhy při psaní "[!" v bloku citace v editoru. Vyberte typ callout ze seznamu a vložte úplnou hlavičku callout.',
 
 	"settings.openHotkeys": "Klávesové zkratky Callout Studio",
-	"settings.openHotkeysDesc": "Otevře nastavení klávesových zkratek Obsidian pro příkazy Callout Studio, kde si můžete zvolit vlastní zkratky pro Vytvořit nový typ, Otevřít nastavení, Odebrat callout a Zabalit do callout. Ve výchozím nastavení nejsou přiřazeny žádné zkratky.",
+	"settings.openHotkeysDesc":
+		"Otevře nastavení klávesových zkratek Obsidian pro příkazy Callout Studio, kde si můžete zvolit vlastní zkratky pro Vytvořit nový typ, Otevřít nastavení, Odebrat callout a Zabalit do callout. Ve výchozím nastavení nejsou přiřazeny žádné zkratky.",
 	"settings.openHotkeysButton": "Otevřít nastavení zkratek",
-
 
 	"settings.vaultMaintenance": "Statistiky a údržba vaultu",
 	"settings.vaultStats": "Statistiky callout",
-	"settings.vaultStatsDesc": "Počítá všechny bloky callout v poznámkách Markdown a seskupuje je podle typu.",
+	"settings.vaultStatsDesc":
+		"Počítá všechny bloky callout v poznámkách Markdown a seskupuje je podle typu.",
 	"settings.vaultStatsButton": "Zobrazit statistiky",
 	"settings.vaultStatsScanning": "Prohledávání",
 	"settings.resetAll": "Obnovit",
-	"settings.resetAllDesc": "Odstraní všechny callouts uživatele, obnoví vestavěné callouts, globální styly (ohraničení, měřítko písma, tvar), uložené barevné palety, přizpůsobení kontextové nabídky a stažené SVG Material.",
+	"settings.resetAllDesc":
+		"Odstraní všechny callouts uživatele, obnoví vestavěné callouts, globální styly (ohraničení, měřítko písma, tvar), uložené barevné palety, přizpůsobení kontextové nabídky a stažené SVG Material.",
 	"settings.resetAllButton": "Obnovit vše",
-	"settings.resetAllConfirm": "Tím se odstraní všechny vlastní callouts, obnoví vestavěné callouts, globální styly, uložené barevné palety, přizpůsobení kontextové nabídky a všechny SVG Material v mezipaměti. Tuto akci nelze vrátit zpět. Jste si jisti?",
+	"settings.resetAllConfirm":
+		"Tím se odstraní všechny vlastní callouts, obnoví vestavěné callouts, globální styly, uložené barevné palety, přizpůsobení kontextové nabídky a všechny SVG Material v mezipaměti. Tuto akci nelze vrátit zpět. Jste si jisti?",
 	"notice.resetAllDone": "Vše bylo obnoveno na výchozí hodnoty.",
 
 	"notice.exported": "Callouts exportovány do callout-studio-export.json",
 	"notice.importedJSON": "Importováno {{count}} typ(ů) callout z JSON.",
 	"notice.importedSettings": "Importováno nastavení doplňku.",
-	"notice.noNewJSON": "Žádné nové typy callout nebyly importovány (ID mohou již existovat).",
-	"notice.iconDownloadFailed": 'Ikonu Material "{{name}}" nelze stáhnout. Může být nedostupná pro tento styl/tloušťku nebo jste offline.',
+	"notice.noNewJSON":
+		"Žádné nové typy callout nebyly importovány (ID mohou již existovat).",
+	"notice.iconDownloadFailed":
+		'Ikonu Material "{{name}}" nelze stáhnout. Může být nedostupná pro tento styl/tloušťku nebo jste offline.',
 	"notice.nothingToWrap": "Není co zabalit.",
 	"notice.cursorNotInsideCallout": "Kurzor není uvnitř callout.",
-	"notice.openHotkeysFailed": "Nelze otevřít nastavení klávesových zkratek Obsidian.",
-	"notice.filterHotkeysFailed": "Klávesové zkratky Obsidian otevřeny, ale filtr Callout Studio nelze použít.",
+	"notice.openHotkeysFailed":
+		"Nelze otevřít nastavení klávesových zkratek Obsidian.",
+	"notice.filterHotkeysFailed":
+		"Klávesové zkratky Obsidian otevřeny, ale filtr Callout Studio nelze použít.",
 
 	"editor.editCallout": "Upravit callout",
 	"editor.newCallout": "Nový callout",
 	"editor.displayName": "Zobrazovaný název",
 	"editor.displayNameDesc": "Čitelný popis zobrazený v rozhraní",
-	"editor.displayNameBuiltIn": "Zobrazovaný název vestavěných callouts nelze změnit",
+	"editor.displayNameBuiltIn":
+		"Zobrazovaný název vestavěných callouts nelze změnit",
 	"editor.displayNamePlaceholder": "Můj callout",
 	"editor.calloutIds": "ID callout",
-	"editor.calloutIdsDesc": "Všechny identifikátory tohoto callout. Mezery jsou povoleny.\nStiskněte Enter nebo tlačítko + pro přidání.",
+	"editor.calloutIdsDesc":
+		"Všechny identifikátory tohoto callout. Mezery jsou povoleny.\nStiskněte Enter nebo tlačítko + pro přidání.",
 	"editor.calloutIdsPlaceholder": "Přidat ID",
 	"editor.addId": "Přidat ID",
 	"editor.idLinkedToName": "Propojeno se zobrazovaným názvem",
-	"editor.idCannotDelete": "Toto ID je propojeno se zobrazovaným názvem a nelze ho smazat — upravte název, abyste ho změnili",
+	"editor.idCannotDelete":
+		"Toto ID je propojeno se zobrazovaným názvem a nelze ho smazat — upravte název, abyste ho změnili",
 	"editor.icon": "Ikona",
 	"editor.livePreview": "Živý náhled",
 	"editor.iconAdjustment": "Úprava ikony",
@@ -165,26 +190,33 @@ export const cs: Record<string, string> = {
 	"editor.paletteGroupPresets": "Barevné předvolby",
 	"editor.paletteGroupCustom": "Vlastní",
 	"editor.paletteNewColor": "Nová barva…",
-	"editor.contrastWarning": "Nízký kontrast vůči pozadí — může být obtížně čitelné",
+	"editor.contrastWarning":
+		"Nízký kontrast vůči pozadí — může být obtížně čitelné",
 	"editor.foldable": "Sbalitelný",
-	"editor.foldableDesc": "Vyberte, zda lze callout sbalit, a jaký výchozí stav se použije v celém vaultu.",
+	"editor.foldableDesc":
+		"Vyberte, zda lze callout sbalit, a jaký výchozí stav se použije v celém vaultu.",
 	"editor.foldOff": "Vypnuto",
 	"editor.foldOpen": "Ve výchozím stavu otevřený",
 	"editor.foldClosed": "Ve výchozím stavu zavřený",
 	"editor.cancel": "Zrušit",
 	"editor.saveChanges": "Uložit změny",
 	"editor.createCallout": "Vytvořit callout",
-	"editor.nameRequired": "Před vytvořením callout je vyžadován zobrazovaný název.",
+	"editor.nameRequired":
+		"Před vytvořením callout je vyžadován zobrazovaný název.",
 	"editor.noChangesToSave": "Nebyly provedeny žádné změny.",
 	"editor.downloadingIcon": "Stahování ikony",
 	"editor.idEmpty": "Je vyžadováno alespoň jedno ID",
 	"editor.idExists": "Callout s tímto ID již existuje",
 	"editor.idConflict": "Toto ID je v konfliktu s existujícím callout",
-	"editor.idDashConflict": 'Obsidian zapisuje mezery jako pomlčky, takže toto ID koliduje s „{{other}}“',
+	"editor.idDashConflict":
+		"Obsidian zapisuje mezery jako pomlčky, takže toto ID koliduje s „{{other}}“",
 	"editor.untitledCallout": "Callout bez názvu",
-	"editor.loremIpsum": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-	"editor.loremIpsumShort": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-	"editor.sampleInlineText": "Zde je vložená pilulka [!{id}] uvnitř odstavce.",
+	"editor.loremIpsum":
+		"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+	"editor.loremIpsumShort":
+		"Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+	"editor.sampleInlineText":
+		"Zde je vložená pilulka [!{id}] uvnitř odstavce.",
 	"editor.previewReadOnly": "Živý náhled nelze upravovat",
 
 	// Palette editor modal
@@ -194,11 +226,14 @@ export const cs: Record<string, string> = {
 	"palette.namePlaceholder": "Moje paleta",
 	"palette.nameExists": "Paleta s tímto názvem již existuje",
 	"palette.baseColor": "Základní barva",
-	"palette.baseColorHint": "Barvu pozadí automaticky přizpůsobíme této barvě. Pokud chcete, můžete ji ovládat samostatně kliknutím na {{link}}.",
+	"palette.baseColorHint":
+		"Barvu pozadí automaticky přizpůsobíme této barvě. Pokud chcete, můžete ji ovládat samostatně kliknutím na {{link}}.",
 	"palette.baseColorHintLink": "zde",
 	"palette.advancedColors": "Barvy",
-	"palette.advancedColorsHint": "Úprava barev pro režim {{mode}} – druhý režim se aktualizuje automaticky. Přepněte motiv Obsidianu, abyste to ověřili.",
-	"palette.revertHint": "Preferujete místo toho jednu základní barvu? {{link}}.",
+	"palette.advancedColorsHint":
+		"Úprava barev pro režim {{mode}} – druhý režim se aktualizuje automaticky. Přepněte motiv Obsidianu, abyste to ověřili.",
+	"palette.revertHint":
+		"Preferujete místo toho jednu základní barvu? {{link}}.",
 	"palette.revertHintLink": "Vrátit zpět",
 	"palette.lightMode": "Světlý",
 	"palette.darkMode": "Tmavý",
@@ -245,11 +280,22 @@ export const cs: Record<string, string> = {
 	"iconPicker.searchLucide": "hledat ikony Lucide",
 	"iconPicker.searchTabler": "hledat ikony Tabler",
 	"iconPicker.tablerStyle": "Styl ikony",
-	"iconPicker.tablerStyleOutline": "Obrys",
-	"iconPicker.tablerStyleFilled": "Plný",
+	"iconPicker.tablerStyleOutline": "Obrys (Outline)",
+	"iconPicker.tablerStyleFilled": "Plný (Filled)",
 	"iconPicker.loadMore": "Načíst více",
 	"iconPicker.materialStyle": "Styl ikony",
+	"iconPicker.materialStyleOutlined": "Osnova (Outlined)",
+	"iconPicker.materialStyleFilled": "Vyplněná (Filled)",
+	"iconPicker.materialStyleRounded": "Zaoblená (Rounded)",
+	"iconPicker.materialStyleSharp": "Ostrá (Sharp)",
 	"iconPicker.materialWeight": "Tloušťka ikony",
+	"iconPicker.materialWeight100": "Tenká (Thin)",
+	"iconPicker.materialWeight200": "Extra lehká (Extra Light)",
+	"iconPicker.materialWeight300": "Lehká (Light)",
+	"iconPicker.materialWeight400": "Obyčejná (Regular)",
+	"iconPicker.materialWeight500": "Střední (Medium)",
+	"iconPicker.materialWeight600": "Poločerno (Semi Bold)",
+	"iconPicker.materialWeight700": "Černá (Bold)",
 	"iconPicker.searchMaterial": "hledat ikony Material",
 	"iconPicker.searchEmoji": "Hledat emoji",
 	"iconPicker.skinTone": "Tón pleti",
@@ -261,27 +307,34 @@ export const cs: Record<string, string> = {
 	"iconPicker.fa": "Font Awesome",
 	"iconPicker.searchFa": "Hledat v Font Awesome",
 	"iconPicker.faStyle": "Styl ikony",
-	"iconPicker.faStyleSolid": "Plný",
-	"iconPicker.faStyleRegular": "Normální",
-	"iconPicker.faStyleBrands": "Značky",
+	"iconPicker.faStyleSolid": "Plný (Solid)",
+	"iconPicker.faStyleRegular": "Normální (Regular)",
+	"iconPicker.faStyleBrands": "Značky (Brands)",
 	"iconPicker.rpgAwesome": "RPG Awesome",
 	"iconPicker.searchRpgAwesome": "Hledat v RPG Awesome",
 	"iconPicker.image": "Vaše obrázky",
 	"iconPicker.searchImage": "Hledat ve vašich obrázcích",
-	"iconPicker.imageTooLarge": "{{name}} je příliš velký. Obrázky musí být menší než 5 MB.",
-	"iconPicker.imageUnsupported": "{{name}} není podporovaný formát obrázku. Použijte SVG, PNG, JPEG nebo WebP.",
-	"iconPicker.imageInvalidSvg": "{{name}} nelze načíst jako bezpečný SVG, proto nebyl přidán.",
+	"iconPicker.imageTooLarge":
+		"{{name}} je příliš velký. Obrázky musí být menší než 5 MB.",
+	"iconPicker.imageUnsupported":
+		"{{name}} není podporovaný formát obrázku. Použijte SVG, PNG, JPEG nebo WebP.",
+	"iconPicker.imageInvalidSvg":
+		"{{name}} nelze načíst jako bezpečný SVG, proto nebyl přidán.",
 	"iconPicker.imageDecodeFailed": "{{name}} nelze načíst jako obrázek.",
-	"iconPicker.imageDuplicate": "{{name}} je již ve vašich obrázcích. Přejmenujte soubor nebo odstraňte stávající obrázek.",
+	"iconPicker.imageDuplicate":
+		"{{name}} je již ve vašich obrázcích. Přejmenujte soubor nebo odstraňte stávající obrázek.",
 	"iconPicker.imageAdd": "Přidat obrázky",
-	"iconPicker.imageEmpty": "Zatím žádné obrázky. Přidejte soubor SVG, PNG, JPEG nebo WebP z počítače nebo jej sem přetáhněte.",
+	"iconPicker.imageEmpty":
+		"Zatím žádné obrázky. Přidejte soubor SVG, PNG, JPEG nebo WebP z počítače nebo jej sem přetáhněte.",
 	"iconPicker.imageDelete": "Smazat",
 	"iconPicker.imageDeleteConfirm": "Smazat „{{name}}“?",
-	"iconPicker.imageDeleteInUse": "{{count}} callout(ů) používá tento obrázek. Zobrazí zástupnou ikonu, dokud neuvedete nový obrázek.",
+	"iconPicker.imageDeleteInUse":
+		"{{count}} callout(ů) používá tento obrázek. Zobrazí zástupnou ikonu, dokud neuvedete nový obrázek.",
 	"iconPicker.imageRecolor": "Sledovat barvu Callout",
 	"iconPicker.allSources": "Všechny zdroje",
 	"iconPicker.searchAllSources": "Hledat ve všech zdrojích ikon",
-	"iconPicker.sourcesNotDownloaded": "Zatím není součástí: {{names}}. Vyberte zdroj výše a stáhněte ho.",
+	"iconPicker.sourcesNotDownloaded":
+		"Zatím není součástí: {{names}}. Vyberte zdroj výše a stáhněte ho.",
 	"iconPicker.chooseSource": "Vybrat zdroj",
 	"iconPicker.sourceGroup": "{{name}} · {{count}}",
 
@@ -296,22 +349,142 @@ export const cs: Record<string, string> = {
 	"iconPicker.descRpgAwesome": "ikony pro fantasy a stolní hry",
 	"iconPicker.descImage": "obrázky přidané z vašeho počítače",
 
+	// Icon picker — category filter dropdown labels
+	"iconPicker.cat.Accessibility": "Přístupnost",
+	"iconPicker.cat.Actions": "Akce",
+	"iconPicker.cat.Activities": "Aktivity",
+	"iconPicker.cat.Alert": "Upozornění",
+	"iconPicker.cat.Alphabet": "Abeceda",
+	"iconPicker.cat.Android": "Android",
+	"iconPicker.cat.Animals": "Zvířata",
+	"iconPicker.cat.Arrows": "Šipky",
+	"iconPicker.cat.Astronomy": "Astronomie",
+	"iconPicker.cat.Audio&Video": "Audio a video",
+	"iconPicker.cat.Automotive": "Automobily",
+	"iconPicker.cat.Badges": "Odznaků",
+	"iconPicker.cat.Brand": "Značky",
+	"iconPicker.cat.Buildings": "Budovy",
+	"iconPicker.cat.Business": "Byznys",
+	"iconPicker.cat.Camping": "Kemping",
+	"iconPicker.cat.Charity": "Charita",
+	"iconPicker.cat.Charts": "Grafy",
+	"iconPicker.cat.Charts + Diagrams": "Grafy a diagramy",
+	"iconPicker.cat.Childhood": "Dětství",
+	"iconPicker.cat.Clothing + Fashion": "Oblečení a móda",
+	"iconPicker.cat.Coding": "Programování",
+	"iconPicker.cat.Communicate": "Komunikace",
+	"iconPicker.cat.Communication": "Komunikace",
+	"iconPicker.cat.Computers": "Počítače",
+	"iconPicker.cat.Connectivity": "Připojení",
+	"iconPicker.cat.Construction": "Stavebnictví",
+	"iconPicker.cat.Currencies": "Měny",
+	"iconPicker.cat.Database": "Databáze",
+	"iconPicker.cat.Design": "Design",
+	"iconPicker.cat.Development": "Vývoj",
+	"iconPicker.cat.Devices": "Zařízení",
+	"iconPicker.cat.Devices + Hardware": "Zařízení a hardware",
+	"iconPicker.cat.Disaster + Crisis": "Katastrófy a krize",
+	"iconPicker.cat.Document": "Dokument",
+	"iconPicker.cat.E-commerce": "E-commerce",
+	"iconPicker.cat.Editing": "Úpravy",
+	"iconPicker.cat.Education": "Vzdělání",
+	"iconPicker.cat.Electrical": "Elektro",
+	"iconPicker.cat.Emoji": "Emoji",
+	"iconPicker.cat.Energy": "Energie",
+	"iconPicker.cat.Extensions": "Rozšíření",
+	"iconPicker.cat.Files": "Soubory",
+	"iconPicker.cat.Film + Video": "Filmy a video",
+	"iconPicker.cat.Food": "Jídlo",
+	"iconPicker.cat.Food + Beverage": "Jídlo a nápoje",
+	"iconPicker.cat.Fruits + Vegetables": "Ovoce a zelenina",
+	"iconPicker.cat.Games": "Hry",
+	"iconPicker.cat.Gaming": "Gaming",
+	"iconPicker.cat.Gender": "Pohlaví",
+	"iconPicker.cat.Genders": "Pohlaví",
+	"iconPicker.cat.Gestures": "Gesta",
+	"iconPicker.cat.Halloween": "Halloween",
+	"iconPicker.cat.Hands": "Ruce",
+	"iconPicker.cat.Hardware": "Hardware",
+	"iconPicker.cat.Health": "Zdraví",
+	"iconPicker.cat.Holidays": "Svátky",
+	"iconPicker.cat.Home": "Domov",
+	"iconPicker.cat.Household": "Domácnost",
+	"iconPicker.cat.Humanitarian": "Humanitární",
+	"iconPicker.cat.Images": "Obrázky",
+	"iconPicker.cat.Laundry": "Praní",
+	"iconPicker.cat.Letters": "Písmena",
+	"iconPicker.cat.Logic": "Logika",
+	"iconPicker.cat.Logistics": "Logistika",
+	"iconPicker.cat.Map": "Mapa",
+	"iconPicker.cat.Maps": "Mapy",
+	"iconPicker.cat.Maritime": "Námořní",
+	"iconPicker.cat.Marketing": "Marketing",
+	"iconPicker.cat.Math": "Matematika",
+	"iconPicker.cat.Mathematics": "Matematika",
+	"iconPicker.cat.Media": "Média",
+	"iconPicker.cat.Media Playback": "Přehrávání médií",
+	"iconPicker.cat.Medical + Health": "Lékařství a zdraví",
+	"iconPicker.cat.Money": "Peníze",
+	"iconPicker.cat.Mood": "Nálada",
+	"iconPicker.cat.Moving": "Stěhování",
+	"iconPicker.cat.Music + Audio": "Hudba a zvuk",
+	"iconPicker.cat.Nature": "Příroda",
+	"iconPicker.cat.Numbers": "Čísla",
+	"iconPicker.cat.Photography": "Fotografie",
+	"iconPicker.cat.Photos + Images": "Fotografie a obrázky",
+	"iconPicker.cat.Political": "Politické",
+	"iconPicker.cat.Privacy": "Soukromí",
+	"iconPicker.cat.Punctuation + Symbols": "Interpunkce a symboly",
+	"iconPicker.cat.Religion": "Náboženství",
+	"iconPicker.cat.Science": "Věda",
+	"iconPicker.cat.Science Fiction": "Science fiction",
+	"iconPicker.cat.Security": "Zabezpečení",
+	"iconPicker.cat.Shapes": "Tvary",
+	"iconPicker.cat.Shopping": "Nakupování",
+	"iconPicker.cat.Social": "Sociální",
+	"iconPicker.cat.Spinners": "Spinners",
+	"iconPicker.cat.Sport": "Sport",
+	"iconPicker.cat.Sports + Fitness": "Sport a fitness",
+	"iconPicker.cat.Symbols": "Symboly",
+	"iconPicker.cat.System": "Systém",
+	"iconPicker.cat.Text": "Text",
+	"iconPicker.cat.Text Formatting": "Formátování textu",
+	"iconPicker.cat.Time": "Čas",
+	"iconPicker.cat.Toggle": "Přepínač",
+	"iconPicker.cat.Transit": "Tranzit",
+	"iconPicker.cat.Transportation": "Doprava",
+	"iconPicker.cat.Travel": "Cestování",
+	"iconPicker.cat.Travel + Hotel": "Cestování a hotely",
+	"iconPicker.cat.UI actions": "Akce rozhraní",
+	"iconPicker.cat.Users + People": "Uživatelé a lidé",
+	"iconPicker.cat.Vehicles": "Vozidla",
+	"iconPicker.cat.Version control": "Správa verzí",
+	"iconPicker.cat.Weather": "Počasí",
+	"iconPicker.cat.Writing": "Psaní",
+	"iconPicker.cat.Zodiac": "Zvěrokruh",
+
 	// Downloadable icon packs
 	"iconPack.downloadTitle": "{{name}} ještě nebylo staženo",
-	"iconPack.downloadDetail": "{{count}} ikon · {{size}} · jednorázové stažení",
+	"iconPack.downloadDetail":
+		"{{count}} ikon · {{size}} · jednorázové stažení",
 	"iconPack.download": "Stáhnout",
 	"iconPack.downloading": "Stahování {{name}}…",
-	"iconPack.downloadFailed": "{{name}} nelze stáhnout. Zkontrolujte připojení a zkuste to znovu.",
+	"iconPack.downloadFailed":
+		"{{name}} nelze stáhnout. Zkontrolujte připojení a zkuste to znovu.",
 	"iconPack.retry": "Zkusit znovu",
-	"iconPack.faBrandsNotice": "Ikony značek jsou ochranné známky příslušných vlastníků. Jejich zahrnutí neznamená schválení. Používejte je pouze k zastupování společnosti, produktu nebo služby, které představují.",
+	"iconPack.faBrandsNotice":
+		"Ikony značek jsou ochranné známky příslušných vlastníků. Jejich zahrnutí neznamená schválení. Používejte je pouze k zastupování společnosti, produktu nebo služby, které představují.",
 	"iconPack.artworkRestored": "Byla stažena kresba ikon pro {{names}}.",
-	"iconPack.diskWriteFailed": "Callout Studio nemohlo uložit balíček ikon na disk, takže ho bude nutné příště stáhnout znovu. Vybrané ikony jsou stále uloženy ve vašem nastavení.",
+	"iconPack.diskWriteFailed":
+		"Callout Studio nemohlo uložit balíček ikon na disk, takže ho bude nutné příště stáhnout znovu. Vybrané ikony jsou stále uloženy ve vašem nastavení.",
 
 	// Icon licences & credits
 	"credits.title": "Licence ikon a poděkování",
-	"credits.intro": "Callout Studio čerpá z několika otevřených knihoven ikon. Jejich licence jsou reprodukovány níže, spolu s tím, co bylo změněno pro jejich použití zde.",
+	"credits.intro":
+		"Callout Studio čerpá z několika otevřených knihoven ikon. Jejich licence jsou reprodukovány níže, spolu s tím, co bylo změněno pro jejich použití zde.",
 	"credits.fullNotices": "Úplná oznámení třetích stran",
-	"credits.pluginLicense": "Vlastní kód Callout Studio je pod licencí 0BSD; knihovny ikon si zachovávají své vlastní licence.",
+	"credits.pluginLicense":
+		"Vlastní kód Callout Studio je pod licencí 0BSD; knihovny ikon si zachovávají své vlastní licence.",
 
 	"contextMenu.editCallout": "Upravit nastavení callout",
 	"contextMenu.copyMarkdown": "Kopírovat Markdown callout",
@@ -324,19 +497,25 @@ export const cs: Record<string, string> = {
 	"contextMenu.deleteSection": "Smazat sekci nadpisu",
 	"heading.toggleFold": "Přepnout sbalení",
 	"settings.globalSettings": "Globální nastavení",
-	"settings.globalSettingsDesc": "Doladí vzhled každého typu callout v celém vaultu.",
-	"settings.globalSettingsRegularDesc": "Přidejte token callout do citace (např. `> [!type]`) a vykreslete tak nativní rámeček callout v Obsidianu. Můžete upravit jeho ohraničení, poloměr, měřítko písma a zarovnání.",
-	"settings.globalSettingsHeadingDesc": "Přidejte token callout přímo za mřížky nadpisu (např. `## [!type]`) a vykreslete ho jako stylizovaný nadpis callout. Můžete upravit jeho ohraničení, tvar a svislé rozestupy.",
-	"settings.globalSettingsInlineDesc": "Přidejte token callout kamkoli do řádku textu (např. `[!type]`) a vykreslete ho jako malou vloženou pilulku. Můžete upravit jeho ohraničení a tvar.",
+	"settings.globalSettingsDesc":
+		"Doladí vzhled každého typu callout v celém vaultu.",
+	"settings.globalSettingsRegularDesc":
+		"Přidejte token callout do citace (např. `> [!type]`) a vykreslete tak nativní rámeček callout v Obsidianu. Můžete upravit jeho ohraničení, poloměr, měřítko písma a zarovnání.",
+	"settings.globalSettingsHeadingDesc":
+		"Přidejte token callout přímo za mřížky nadpisu (např. `## [!type]`) a vykreslete ho jako stylizovaný nadpis callout. Můžete upravit jeho ohraničení, tvar a svislé rozestupy.",
+	"settings.globalSettingsInlineDesc":
+		"Přidejte token callout kamkoli do řádku textu (např. `[!type]`) a vykreslete ho jako malou vloženou pilulku. Můžete upravit jeho ohraničení a tvar.",
 	"settings.globalSettingsCustomize": "Přizpůsobit",
 	"settings.calloutTypeRegular": "Běžný callout",
 	"settings.calloutTypeHeading": "Callout nadpisu",
 	"settings.calloutTypeInline": "Vložený callout",
 	"settings.customizeMenu": "Přizpůsobit položky menu",
-	"settings.customizeMenuDesc": "Vyberte, které akce kontextové nabídky se zobrazí pro každý typ callout, a změňte jejich pořadí. Funguje ve zdrojovém režimu a živém náhledu.",
+	"settings.customizeMenuDesc":
+		"Vyberte, které akce kontextové nabídky se zobrazí pro každý typ callout, a změňte jejich pořadí. Funguje ve zdrojovém režimu a živém náhledu.",
 	"settings.customizeMenuButton": "Přizpůsobit položky menu",
 	"menuCustomize.title": "Přizpůsobit kontextovou nabídku",
-	"menuCustomize.desc": "Zapínejte nebo vypínejte akce a přetažením úchytu je přeuspořádejte. Změny se ukládají automaticky.",
+	"menuCustomize.desc":
+		"Zapínejte nebo vypínejte akce a přetažením úchytu je přeuspořádejte. Změny se ukládají automaticky.",
 	"menuCustomize.regular": "Běžný callout",
 	"menuCustomize.heading": "Callout nadpisu",
 	"menuCustomize.inline": "Vložený callout",
@@ -344,7 +523,8 @@ export const cs: Record<string, string> = {
 	"menuItem.edit": "Upravit callout",
 	"menuItem.openSettings": "Otevřít nastavení",
 	"menuItem.copyMarkdown": "Kopírovat Markdown",
-	"menuItem.foldDefaults": "Výchozí stav sbalení (otevřeno / zavřeno / žádné)",
+	"menuItem.foldDefaults":
+		"Výchozí stav sbalení (otevřeno / zavřeno / žádné)",
 	"menuItem.cutSection": "Vyjmout sekci",
 	"menuItem.copySection": "Kopírovat sekci",
 	"menuItem.deleteSection": "Smazat sekci",
@@ -352,20 +532,29 @@ export const cs: Record<string, string> = {
 	"confirm.ok": "Smazat",
 	"confirm.cancel": "Zrušit",
 
-	"vault.filesUpdated": "Aktualizováno {{count}} odkazů na callout v souborech vaultu.",
-	"vault.idsUpdated": "Aktualizováno {{count}} ID callout v souborech vaultu: {{oldIds}} → {{newId}}",
-	"vault.titlesUpdated": "Aktualizováno {{count}} nadpisů callout v souborech vaultu: {{oldTitle}} → {{newTitle}}",
+	"vault.filesUpdated":
+		"Aktualizováno {{count}} odkazů na callout v souborech vaultu.",
+	"vault.idsUpdated":
+		"Aktualizováno {{count}} ID callout v souborech vaultu: {{oldIds}} → {{newId}}",
+	"vault.titlesUpdated":
+		"Aktualizováno {{count}} nadpisů callout v souborech vaultu: {{oldTitle}} → {{newTitle}}",
 	"vault.replaceWith": "Nahradit za:",
 	"vault.deleteWithout": "Smazat bez nahrazení",
 	"vault.confirmDelete": "Potvrdit",
 	"vault.confirmReplace": "Nahradit",
-	"vault.replacePromptInUse": '"{{name}}" se používá {{count}}krát v {{files}} souboru(ech). Vyberte callout, kterým ho chcete nahradit:',
-	"vault.replacePromptUnused": 'Vyberte callout, kterým chcete nahradit "{{name}}":',
-	"vault.noReplacementAvailable": "Nejsou k dispozici žádné jiné callouts pro nahrazení.",
-	"vault.convertedToPlainText": "{{blocks}} bloků callout v {{files}} souboru(ech) převedeno na prostý text.",
-	"vault.resetAliasWarning": "{{count}} odkazů v {{files}} souboru(ech) používá vlastní aliasy: {{aliases}}. Po obnovení přestanou fungovat. Pokračovat?",
+	"vault.replacePromptInUse":
+		'"{{name}}" se používá {{count}}krát v {{files}} souboru(ech). Vyberte callout, kterým ho chcete nahradit:',
+	"vault.replacePromptUnused":
+		'Vyberte callout, kterým chcete nahradit "{{name}}":',
+	"vault.noReplacementAvailable":
+		"Nejsou k dispozici žádné jiné callouts pro nahrazení.",
+	"vault.convertedToPlainText":
+		"{{blocks}} bloků callout v {{files}} souboru(ech) převedeno na prostý text.",
+	"vault.resetAliasWarning":
+		"{{count}} odkazů v {{files}} souboru(ech) používá vlastní aliasy: {{aliases}}. Po obnovení přestanou fungovat. Pokračovat?",
 	"vault.resetConfirm": "Obnovit",
-	"vault.resetAllInUse": "⚠ {{count}} odkazů na callout v {{files}} souboru(ech) používá vlastní typy callout, které budou odstraněny.",
+	"vault.resetAllInUse":
+		"⚠ {{count}} odkazů na callout v {{files}} souboru(ech) používá vlastní typy callout, které budou odstraněny.",
 
 	"vaultStats.title": "Statistiky callout",
 	"vaultStats.totalCallouts": "Celkem callouts",
@@ -388,47 +577,75 @@ export const cs: Record<string, string> = {
 	"vaultStats.close": "Zavřít",
 
 	"import.title": "Problémy s importem",
-	"import.reportLeadIn": "Zdá se, že importovaný soubor byl pozměněn. Zde je seznam problémů:",
-	"import.reportLeadInFatal": "Tento soubor nevypadá jako export Callout Studio. Nelze ho importovat:",
+	"import.reportLeadIn":
+		"Zdá se, že importovaný soubor byl pozměněn. Zde je seznam problémů:",
+	"import.reportLeadInFatal":
+		"Tento soubor nevypadá jako export Callout Studio. Nelze ho importovat:",
 	"import.entryHeading": "Položka {{index}} — {{label}}",
-	"import.summary": "{{valid}} z {{total}} položek je platných · nalezeno {{issues}} problémů.",
+	"import.summary":
+		"{{valid}} z {{total}} položek je platných · nalezeno {{issues}} problémů.",
 	"import.btnCancel": "Zrušit",
 	"import.btnImportValid": "Importovat pouze platné ({{count}})",
-	"import.err.notRecognized": "Nerozpoznaný soubor: očekávalo se pole definic callout nebo export z Callout Studia.",
-	"import.warn.settingsIgnored": "Blok nastavení nebyl platným objektem a byl ignorován.",
-	"import.warn.invalidGradient": "Přechod pozadí byl neplatný a byl ignorován.",
+	"import.err.notRecognized":
+		"Nerozpoznaný soubor: očekávalo se pole definic callout nebo export z Callout Studia.",
+	"import.warn.settingsIgnored":
+		"Blok nastavení nebyl platným objektem a byl ignorován.",
+	"import.warn.invalidGradient":
+		"Přechod pozadí byl neplatný a byl ignorován.",
 	"import.err.parseFailed": "Soubor není platný JSON a nelze ho analyzovat.",
 	"import.err.entryNotObject": "Položka musí být objekt.",
-	"import.err.requiredMissing": 'Povinné pole "{{field}}" chybí nebo má nesprávný typ.',
+	"import.err.requiredMissing":
+		'Povinné pole "{{field}}" chybí nebo má nesprávný typ.',
 	"import.err.idEmpty": "ID nesmí být prázdné.",
-	"import.err.idTooLong": 'ID "{{value}}" má {{length}} znaků; maximum je {{max}}.',
-	"import.err.idBadChar": 'ID "{{value}}" obsahuje neplatné znaky ("|", "[", "]", tabulátory a konce řádků nejsou povoleny).',
+	"import.err.idTooLong":
+		'ID "{{value}}" má {{length}} znaků; maximum je {{max}}.',
+	"import.err.idBadChar":
+		'ID "{{value}}" obsahuje neplatné znaky ("|", "[", "]", tabulátory a konce řádků nejsou povoleny).',
 	"import.err.displayNameEmpty": "Zobrazovaný název nesmí být prázdný.",
-	"import.err.displayNameTooLong": "Zobrazovaný název má {{length}} znaků; maximum je {{max}}.",
-	"import.err.boolField": '"{{field}}" musí být booleovská hodnota (true nebo false).',
+	"import.err.displayNameTooLong":
+		"Zobrazovaný název má {{length}} znaků; maximum je {{max}}.",
+	"import.err.boolField":
+		'"{{field}}" musí být booleovská hodnota (true nebo false).',
 	"import.err.iconNotObject": "Ikona musí být objekt.",
-	"import.err.iconTypeInvalid": "Typ ikony \"{{value}}\" není jedním z: {{types}}.",
-	"import.warn.iconFieldIgnored": "\"{{field}}\" se vztahuje pouze na ikony Material a je ignorováno pro typ ikony {{type}}.",
+	"import.err.iconTypeInvalid":
+		'Typ ikony "{{value}}" není jedním z: {{types}}.',
+	"import.warn.iconFieldIgnored":
+		'"{{field}}" se vztahuje pouze na ikony Material a je ignorováno pro typ ikony {{type}}.',
 	"import.err.iconValueEmpty": "Hodnota ikony musí být neprázdný řetězec.",
-	"import.err.iconValueTooLong": "Hodnota ikony je neobvykle dlouhá ({{length}} znaků).",
-	"import.err.materialStyle": 'Styl ikony Material "{{value}}" není jedním z: outlined, filled, rounded, sharp.',
-	"import.err.materialWeight": 'Tloušťka ikony Material "{{value}}" musí být celé číslo mezi 100 a 700, po 100.',
-	"import.warn.iconRecolorIgnored": "\"recolor\" se vztahuje pouze na vaše vlastní obrázky a je ignorováno pro typ ikony {{type}}.",
-	"import.err.iconRecolorInvalid": "\"recolor\" musí být true nebo false (získáno: \"{{value}}\").",
-	"import.err.colorInvalid": '"{{field}}" musí být hexadecimální barva jako "#448aff" (obdrženo "{{value}}").',
-	"import.err.numberRange": '"{{field}}" musí být číslo mezi {{min}} a {{max}} (obdrženo "{{value}}").',
-	"import.err.iconSizeRange": '"{{field}}" musí být číslo mezi {{min}} a {{max}} (obdrženo "{{value}}").',
+	"import.err.iconValueTooLong":
+		"Hodnota ikony je neobvykle dlouhá ({{length}} znaků).",
+	"import.err.materialStyle":
+		'Styl ikony Material "{{value}}" není jedním z: outlined, filled, rounded, sharp.',
+	"import.err.materialWeight":
+		'Tloušťka ikony Material "{{value}}" musí být celé číslo mezi 100 a 700, po 100.',
+	"import.warn.iconRecolorIgnored":
+		'"recolor" se vztahuje pouze na vaše vlastní obrázky a je ignorováno pro typ ikony {{type}}.',
+	"import.err.iconRecolorInvalid":
+		'"recolor" musí být true nebo false (získáno: "{{value}}").',
+	"import.err.colorInvalid":
+		'"{{field}}" musí být hexadecimální barva jako "#448aff" (obdrženo "{{value}}").',
+	"import.err.numberRange":
+		'"{{field}}" musí být číslo mezi {{min}} a {{max}} (obdrženo "{{value}}").',
+	"import.err.iconSizeRange":
+		'"{{field}}" musí být číslo mezi {{min}} a {{max}} (obdrženo "{{value}}").',
 	"import.err.aliasesNotArray": '"aliases" musí být pole řetězců.',
 	"import.err.aliasNotString": "Alias musí být řetězec.",
 	"import.err.aliasDup": 'Alias "{{value}}" je v této položce duplikován.',
-	"import.err.tooManyIds": "Příliš mnoho ID ({{count}}); každý callout může mít nejvýše {{max}} ID (primární + aliasy).",
-	"import.err.metadataShape": '"metadata" musí být objekt, jehož všechny hodnoty jsou řetězce.',
+	"import.err.tooManyIds":
+		"Příliš mnoho ID ({{count}}); každý callout může mít nejvýše {{max}} ID (primární + aliasy).",
+	"import.err.metadataShape":
+		'"metadata" musí být objekt, jehož všechny hodnoty jsou řetězce.',
 	"import.err.unknownFields": "Neznámá pole ignorována: {{fields}}.",
-	"import.err.duplicateInFile": 'ID/alias "{{value}}" již používá položka #{{first}} v tomto souboru.',
-	"import.err.aliasConflict": 'Alias "{{value}}" již používá jiný callout ("{{other}}") ve vašem vaultu.',
-	"import.warn.defaultFoldedAutofix": '"defaultFolded" bylo true, zatímco "foldable" bylo false; defaultFolded bylo obnoveno na false.',
-	"import.warn.imageMissing": "Tento Callout používá obrázek, který není v souboru ani v tomto vault, proto zobrazí zástupnou ikonu, dokud neuvedete nový.",
+	"import.err.duplicateInFile":
+		'ID/alias "{{value}}" již používá položka #{{first}} v tomto souboru.',
+	"import.err.aliasConflict":
+		'Alias "{{value}}" již používá jiný callout ("{{other}}") ve vašem vaultu.',
+	"import.warn.defaultFoldedAutofix":
+		'"defaultFolded" bylo true, zatímco "foldable" bylo false; defaultFolded bylo obnoveno na false.',
+	"import.warn.imageMissing":
+		"Tento Callout používá obrázek, který není v souboru ani v tomto vault, proto zobrazí zástupnou ikonu, dokud neuvedete nový.",
 
-	"footer.tagline": "Máte zpětnou vazbu, komentáře nebo návrhy? Rád je uslyším!",
+	"footer.tagline":
+		"Máte zpětnou vazbu, komentáře nebo návrhy? Rád je uslyším!",
 	"footer.madeBy": "Vytvořil Niv  •  ",
 };

@@ -8,22 +8,29 @@ export const nb: Record<string, string> = {
 	"settings.fallbackTag": "Standard",
 	"settings.fallbackTagAuto": "Automatisk standard",
 	"settings.rescanVault": "Skann vault på nytt",
-	"settings.rescanVaultDesc": "Finner ukjente callout-ID-er i notater og legger dem til som reserverader.",
+	"settings.rescanVaultDesc":
+		"Finner ukjente callout-ID-er i notater og legger dem til som reserverader.",
 	"settings.rescanVaultHintAction": "Skann nå",
-	"settings.rescanComplete": "Ny skanning ferdig: {{count}} ny(e) callout(er) lagt til.",
+	"settings.rescanComplete":
+		"Ny skanning ferdig: {{count}} ny(e) callout(er) lagt til.",
 	"replaceModal.deleteWithoutReplaceSuffix": "(faller tilbake til standard)",
 	"firstRun.title": "Finn eksisterende callouts i valvet?",
-	"firstRun.body": "Callout Studio kan skanne valvet ditt for å oppdage callouts du allerede bruker, slik at de vises i innstillingslisten og tar i bruk reservestilen din.",
-	"firstRun.heavyVaultNote": "Valvet ditt har {{count}} Markdown-filer — skanningen kan ta noen sekunder.",
-	"firstRun.laterHint": "Du kan alltid kjøre dette senere fra Innstillinger → Vault-innsikt og vedlikehold → Skann vault på nytt.",
+	"firstRun.body":
+		"Callout Studio kan skanne valvet ditt for å oppdage callouts du allerede bruker, slik at de vises i innstillingslisten og tar i bruk reservestilen din.",
+	"firstRun.heavyVaultNote":
+		"Valvet ditt har {{count}} Markdown-filer — skanningen kan ta noen sekunder.",
+	"firstRun.laterHint":
+		"Du kan alltid kjøre dette senere fra Innstillinger → Vault-innsikt og vedlikehold → Skann vault på nytt.",
 	"firstRun.scanNow": "Skann nå",
 	"firstRun.noThanks": "Nei takk",
-	"firstRun.autoScanComplete": "Callout Studio skannet valvet ditt og la til {{count}} callout(er).",
+	"firstRun.autoScanComplete":
+		"Callout Studio skannet valvet ditt og la til {{count}} callout(er).",
 	"firstRun.scanning": "Skanner",
 
 	"welcome.tooltip": "Om Callout Studio",
 	"welcome.title": "Velkommen til Callout Studio",
-	"welcome.tagline": "Din komplette løsning for å administrere Obsidian-callouts.",
+	"welcome.tagline":
+		"Din komplette løsning for å administrere Obsidian-callouts.",
 	"welcome.previewTitle": "Se det i aksjon",
 	"welcome.sample":
 		"Med Callout Studio kan du lage callouts med eget ikon, farger og navn.\n\n" +
@@ -36,10 +43,14 @@ export const nb: Record<string, string> = {
 		"Callout Studio har mye mer å tilby! [Les mer]({{repoUrl}}).\n",
 
 	"deleteModal.title": 'Slett callout "{{name}}"?',
-	"deleteModal.bodyInUse": "Denne callout-en vises {{count}} gang(er) i {{files}} fil(er).",
-	"deleteModal.bodyInUseExplain": "Sletting konverterer disse blokkene til ren tekst — de mister stil og callout-overskrift.",
-	"deleteModal.replaceHint": "Du kan erstatte den med en annen callout, som beholder vault-innholdet som en stilet callout.",
-	"deleteModal.bodyUnused": '"{{name}}" brukes ikke i noen notat, men er en tilpasset callout du har opprettet. Sletting fjerner den fra denne listen.',
+	"deleteModal.bodyInUse":
+		"Denne callout-en vises {{count}} gang(er) i {{files}} fil(er).",
+	"deleteModal.bodyInUseExplain":
+		"Sletting konverterer disse blokkene til ren tekst — de mister stil og callout-overskrift.",
+	"deleteModal.replaceHint":
+		"Du kan erstatte den med en annen callout, som beholder vault-innholdet som en stilet callout.",
+	"deleteModal.bodyUnused":
+		'"{{name}}" brukes ikke i noen notat, men er en tilpasset callout du har opprettet. Sletting fjerner den fra denne listen.',
 	"deleteModal.replaceInstead": "Erstatt i stedet",
 	"deleteModal.deleteInUse": "Slett (konverter til ren tekst)",
 	"deleteModal.deleteUnused": "Slett callout",
@@ -56,9 +67,11 @@ export const nb: Record<string, string> = {
 	"settings.importExport": "Importer / eksporter",
 	"settings.import": "Importer",
 	"settings.export": "Eksporter",
-	"settings.importDesc": "Importer Callout Studio-dataene dine fra et annet vault ved hjelp av en JSON-fil.",
+	"settings.importDesc":
+		"Importer Callout Studio-dataene dine fra et annet vault ved hjelp av en JSON-fil.",
 	"settings.exportDesc": "Lagre alle tilpassede callout-typer i JSON-format.",
-	"settings.importConflictNotice": "{{count}} callout-type(r) importert; {{overwritten}} eksisterende oppføring(er) overskrevet.",
+	"settings.importConflictNotice":
+		"{{count}} callout-type(r) importert; {{overwritten}} eksisterende oppføring(er) overskrevet.",
 	"settings.addNewCallout": "+ legg til callout",
 	"settings.noCalloutsNow": "Ingen tilpassede callouts for øyeblikket.",
 	"settings.editAria": "Rediger {{name}}",
@@ -70,7 +83,8 @@ export const nb: Record<string, string> = {
 	"settings.makeFallbackAction": "Bruk standard reservestil",
 	"settings.colorSwatchAria": "Aksent: {{accent}} · Bakgrunn: {{bg}}",
 	"settings.fallbackCallout": "Standard reserve-callout",
-	"settings.fallbackCalloutDesc": "Ukjente callout-typer i valvet ditt vil arve stilen fra denne callout-en.",
+	"settings.fallbackCalloutDesc":
+		"Ukjente callout-typer i valvet ditt vil arve stilen fra denne callout-en.",
 	"settings.globalStyle": "Global callout-stil",
 	"settings.border": "Kanter",
 	"settings.borderAll": "Alle",
@@ -102,37 +116,49 @@ export const nb: Record<string, string> = {
 	"settings.deletePaletteConfirm":
 		'Slette paletten "{{name}}"?\nCallouts som bruker fargene, blir ikke påvirket.',
 	"settings.enableAutocomplete": "Aktiver [! autofullføring",
-	"settings.enableAutocompleteDesc": 'Viser forslag når du skriver "[!" inne i et blokkssitat i redigeringsprogrammet. Velg en callout-type fra listen for å sette inn en komplett callout-overskrift.',
+	"settings.enableAutocompleteDesc":
+		'Viser forslag når du skriver "[!" inne i et blokkssitat i redigeringsprogrammet. Velg en callout-type fra listen for å sette inn en komplett callout-overskrift.',
 	"settings.openHotkeys": "Callout Studio-snarveier",
-	"settings.openHotkeysDesc": "Åpner Obsidians snarveisinnstillinger for Callout Studio-kommandoer. Som standard er ingen snarveier tildelt.",
+	"settings.openHotkeysDesc":
+		"Åpner Obsidians snarveisinnstillinger for Callout Studio-kommandoer. Som standard er ingen snarveier tildelt.",
 	"settings.openHotkeysButton": "Åpne snarveisinnstillinger",
 	"settings.vaultMaintenance": "Vault-innsikt og vedlikehold",
 	"settings.vaultStats": "Callout-statistikk",
-	"settings.vaultStatsDesc": "Teller alle callout-blokker i Markdown-notatene dine og grupperer dem etter type.",
+	"settings.vaultStatsDesc":
+		"Teller alle callout-blokker i Markdown-notatene dine og grupperer dem etter type.",
 	"settings.vaultStatsButton": "Vis statistikk",
 	"settings.vaultStatsScanning": "Skanner",
 	"settings.resetAll": "Tilbakestill",
-	"settings.resetAllDesc": "Sletter alle brukercallouts, tilbakestiller innebygde callouts, globale stiler, lagrede fargepaletter, tilpasningen av høyreklikkmenyen og nedlastede Material-SVG-er.",
+	"settings.resetAllDesc":
+		"Sletter alle brukercallouts, tilbakestiller innebygde callouts, globale stiler, lagrede fargepaletter, tilpasningen av høyreklikkmenyen og nedlastede Material-SVG-er.",
 	"settings.resetAllButton": "Tilbakestill alt",
-	"settings.resetAllConfirm": "Dette sletter alle tilpassede callouts, tilbakestiller innebygde callouts, globale stiler, lagrede fargepaletter, tilpasningen av høyreklikkmenyen og alle cachede Material-SVG-er. Handlingen kan ikke angres. Er du sikker?",
+	"settings.resetAllConfirm":
+		"Dette sletter alle tilpassede callouts, tilbakestiller innebygde callouts, globale stiler, lagrede fargepaletter, tilpasningen av høyreklikkmenyen og alle cachede Material-SVG-er. Handlingen kan ikke angres. Er du sikker?",
 	"notice.resetAllDone": "Alt er tilbakestilt til standardinnstillingene.",
 	"notice.exported": "Callouts eksportert til callout-studio-export.json",
 	"notice.importedJSON": "{{count}} callout-type(r) importert fra JSON.",
 	"notice.importedSettings": "Plugin-innstillinger importert.",
-	"notice.noNewJSON": "Ingen nye callout-typer importert (ID-er kan allerede eksistere).",
-	"notice.iconDownloadFailed": 'Kunne ikke laste ned Material-ikonet "{{name}}". Det kan være utilgjengelig for denne stilen/vekten, eller tilkoblingen er frakoblet.',
+	"notice.noNewJSON":
+		"Ingen nye callout-typer importert (ID-er kan allerede eksistere).",
+	"notice.iconDownloadFailed":
+		'Kunne ikke laste ned Material-ikonet "{{name}}". Det kan være utilgjengelig for denne stilen/vekten, eller tilkoblingen er frakoblet.',
 	"notice.nothingToWrap": "Ingenting å pakke inn.",
 	"notice.cursorNotInsideCallout": "Markøren er ikke inne i en callout.",
-	"notice.openHotkeysFailed": "Kunne ikke åpne Obsidians snarveisinnstillinger.",
-	"notice.filterHotkeysFailed": "Obsidian-snarveier åpnet, men Callout Studio-filteret kunne ikke brukes.",
+	"notice.openHotkeysFailed":
+		"Kunne ikke åpne Obsidians snarveisinnstillinger.",
+	"notice.filterHotkeysFailed":
+		"Obsidian-snarveier åpnet, men Callout Studio-filteret kunne ikke brukes.",
 	"editor.editCallout": "Rediger callout",
 	"editor.newCallout": "Ny callout",
 	"editor.displayName": "Visningsnavn",
-	"editor.displayNameDesc": "Den lesbare etiketten som vises i brukergrensesnittet",
-	"editor.displayNameBuiltIn": "Visningsnavnet kan ikke endres for innebygde callouts",
+	"editor.displayNameDesc":
+		"Den lesbare etiketten som vises i brukergrensesnittet",
+	"editor.displayNameBuiltIn":
+		"Visningsnavnet kan ikke endres for innebygde callouts",
 	"editor.displayNamePlaceholder": "Min callout",
 	"editor.calloutIds": "Callout-ID-er",
-	"editor.calloutIdsDesc": "Alle identifikatorer for denne callout-en. Mellomrom er tillatt.\nTrykk Enter eller +-knappen for å legge til.",
+	"editor.calloutIdsDesc":
+		"Alle identifikatorer for denne callout-en. Mellomrom er tillatt.\nTrykk Enter eller +-knappen for å legge til.",
 	"editor.calloutIdsPlaceholder": "Legg til ID",
 	"editor.addId": "Legg til ID",
 	"editor.idLinkedToName": "Koblet til visningsnavnet",
@@ -151,26 +177,34 @@ export const nb: Record<string, string> = {
 	"editor.paletteGroupPresets": "Fargeforhåndsinnstillinger",
 	"editor.paletteGroupCustom": "Tilpasset",
 	"editor.paletteNewColor": "Ny farge…",
-	"editor.contrastWarning": "Lav kontrast mot bakgrunnen — kan være vanskelig å lese",
+	"editor.contrastWarning":
+		"Lav kontrast mot bakgrunnen — kan være vanskelig å lese",
 	"editor.foldable": "Foldbar",
-	"editor.foldableDesc": "Velg om callout-en kan foldes og hvilken standardtilstand som skal gjelde for hele vault.",
+	"editor.foldableDesc":
+		"Velg om callout-en kan foldes og hvilken standardtilstand som skal gjelde for hele vault.",
 	"editor.foldOff": "Av",
 	"editor.foldOpen": "Åpen som standard",
 	"editor.foldClosed": "Lukket som standard",
 	"editor.cancel": "Avbryt",
 	"editor.saveChanges": "Lagre endringer",
 	"editor.createCallout": "Opprett callout",
-	"editor.nameRequired": "Et visningsnavn er påkrevd før du oppretter en callout.",
+	"editor.nameRequired":
+		"Et visningsnavn er påkrevd før du oppretter en callout.",
 	"editor.noChangesToSave": "Ingen endringer ble gjort.",
 	"editor.downloadingIcon": "Laster ned ikon",
 	"editor.idEmpty": "Minst én ID er påkrevd",
 	"editor.idExists": "Det finnes allerede en callout med denne ID-en",
-	"editor.idConflict": "Denne ID-en er i konflikt med en eksisterende callout",
-	"editor.idDashConflict": 'Obsidian skriver mellomrom som bindestreker, så denne ID-en er i konflikt med "{{other}}"',
+	"editor.idConflict":
+		"Denne ID-en er i konflikt med en eksisterende callout",
+	"editor.idDashConflict":
+		'Obsidian skriver mellomrom som bindestreker, så denne ID-en er i konflikt med "{{other}}"',
 	"editor.untitledCallout": "Navnløs Callout",
-	"editor.loremIpsum": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-	"editor.loremIpsumShort": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-	"editor.sampleInlineText": "Her er en innebygd [!{id}] pille inne i et avsnitt.",
+	"editor.loremIpsum":
+		"Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+	"editor.loremIpsumShort":
+		"Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+	"editor.sampleInlineText":
+		"Her er en innebygd [!{id}] pille inne i et avsnitt.",
 	"editor.previewReadOnly": "Direktevisningen kan ikke redigeres",
 	// Palette editor modal
 	"palette.newTitle": "Ny fargepalett",
@@ -179,11 +213,14 @@ export const nb: Record<string, string> = {
 	"palette.namePlaceholder": "Min palett",
 	"palette.nameExists": "Det finnes allerede en palett med dette navnet",
 	"palette.baseColor": "Grunnfarge",
-	"palette.baseColorHint": "Vi tilpasser automatisk bakgrunnsfargen til denne. Hvis du vil, kan du styre den separat ved å {{link}}.",
+	"palette.baseColorHint":
+		"Vi tilpasser automatisk bakgrunnsfargen til denne. Hvis du vil, kan du styre den separat ved å {{link}}.",
 	"palette.baseColorHintLink": "klikke her",
 	"palette.advancedColors": "Farger",
-	"palette.advancedColorsHint": "Redigerer farger for {{mode}}-modus - den andre modusen oppdateres automatisk. Bytt Obsidian-tema for å sjekke det.",
-	"palette.revertHint": "Foretrekker du én enkelt basisfarge i stedet? {{link}}.",
+	"palette.advancedColorsHint":
+		"Redigerer farger for {{mode}}-modus - den andre modusen oppdateres automatisk. Bytt Obsidian-tema for å sjekke det.",
+	"palette.revertHint":
+		"Foretrekker du én enkelt basisfarge i stedet? {{link}}.",
 	"palette.revertHintLink": "Tilbakestill",
 	"palette.lightMode": "Lys",
 	"palette.darkMode": "Mørk",
@@ -230,11 +267,22 @@ export const nb: Record<string, string> = {
 	"iconPicker.searchLucide": "søk Lucide-ikoner",
 	"iconPicker.searchTabler": "søk Tabler-ikoner",
 	"iconPicker.tablerStyle": "Ikonstil",
-	"iconPicker.tablerStyleOutline": "Kontur",
-	"iconPicker.tablerStyleFilled": "Fylt",
+	"iconPicker.tablerStyleOutline": "Kontur (Outline)",
+	"iconPicker.tablerStyleFilled": "Fylt (Filled)",
 	"iconPicker.loadMore": "Last inn flere",
 	"iconPicker.materialStyle": "Ikonstil",
+	"iconPicker.materialStyleOutlined": "Kontur (Outlined)",
+	"iconPicker.materialStyleFilled": "Fylt (Filled)",
+	"iconPicker.materialStyleRounded": "Avrundet (Rounded)",
+	"iconPicker.materialStyleSharp": "Skarp (Sharp)",
 	"iconPicker.materialWeight": "Ikontyngde",
+	"iconPicker.materialWeight100": "Tynn (Thin)",
+	"iconPicker.materialWeight200": "Ekstra lett (Extra Light)",
+	"iconPicker.materialWeight300": "Lett (Light)",
+	"iconPicker.materialWeight400": "Normal (Regular)",
+	"iconPicker.materialWeight500": "Middels (Medium)",
+	"iconPicker.materialWeight600": "Halvfet (Semi Bold)",
+	"iconPicker.materialWeight700": "Fet (Bold)",
 	"iconPicker.searchMaterial": "søk Material-ikoner",
 	"iconPicker.searchEmoji": "Søk etter emoji",
 	"iconPicker.skinTone": "Hudtone",
@@ -246,27 +294,34 @@ export const nb: Record<string, string> = {
 	"iconPicker.fa": "Font Awesome",
 	"iconPicker.searchFa": "Søk i Font Awesome",
 	"iconPicker.faStyle": "Ikonstil",
-	"iconPicker.faStyleSolid": "Fast",
-	"iconPicker.faStyleRegular": "Vanlig",
-	"iconPicker.faStyleBrands": "Merkevarer",
+	"iconPicker.faStyleSolid": "Fast (Solid)",
+	"iconPicker.faStyleRegular": "Vanlig (Regular)",
+	"iconPicker.faStyleBrands": "Merkevarer (Brands)",
 	"iconPicker.rpgAwesome": "RPG Awesome",
 	"iconPicker.searchRpgAwesome": "Søk i RPG Awesome",
 	"iconPicker.image": "Dine bilder",
 	"iconPicker.searchImage": "Søk i dine bilder",
-	"iconPicker.imageTooLarge": "{{name}} er for stor. Bilder må være under 5 MB.",
-	"iconPicker.imageUnsupported": "{{name}} er ikke et støttet bildeformat. Bruk SVG, PNG, JPEG eller WebP.",
-	"iconPicker.imageInvalidSvg": "{{name}} kunne ikke leses som en sikker SVG og ble ikke lagt til.",
+	"iconPicker.imageTooLarge":
+		"{{name}} er for stor. Bilder må være under 5 MB.",
+	"iconPicker.imageUnsupported":
+		"{{name}} er ikke et støttet bildeformat. Bruk SVG, PNG, JPEG eller WebP.",
+	"iconPicker.imageInvalidSvg":
+		"{{name}} kunne ikke leses som en sikker SVG og ble ikke lagt til.",
 	"iconPicker.imageDecodeFailed": "{{name}} kunne ikke leses som et bilde.",
-	"iconPicker.imageDuplicate": "{{name}} finnes allerede i bildene dine. Endre filnavnet eller slett det eksisterende bildet.",
+	"iconPicker.imageDuplicate":
+		"{{name}} finnes allerede i bildene dine. Endre filnavnet eller slett det eksisterende bildet.",
 	"iconPicker.imageAdd": "Legg til bilder",
-	"iconPicker.imageEmpty": "Ingen bilder ennå. Legg til en SVG-, PNG-, JPEG- eller WebP-fil fra datamaskinen din, eller dra den hit.",
+	"iconPicker.imageEmpty":
+		"Ingen bilder ennå. Legg til en SVG-, PNG-, JPEG- eller WebP-fil fra datamaskinen din, eller dra den hit.",
 	"iconPicker.imageDelete": "Slett",
 	"iconPicker.imageDeleteConfirm": "Slett «{{name}}»?",
-	"iconPicker.imageDeleteInUse": "{{count}} callouts bruker dette bildet. De vil vise et plassholderikonikon inntil du gir dem et nytt.",
+	"iconPicker.imageDeleteInUse":
+		"{{count}} callouts bruker dette bildet. De vil vise et plassholderikonikon inntil du gir dem et nytt.",
 	"iconPicker.imageRecolor": "Følg Callout-fargen",
 	"iconPicker.allSources": "Alle kilder",
 	"iconPicker.searchAllSources": "Søk i alle ikonkilder",
-	"iconPicker.sourcesNotDownloaded": "Ikke inkludert ennå: {{names}}. Velg en kilde ovenfor for å laste den ned.",
+	"iconPicker.sourcesNotDownloaded":
+		"Ikke inkludert ennå: {{names}}. Velg en kilde ovenfor for å laste den ned.",
 	"iconPicker.chooseSource": "Velg kilde",
 	"iconPicker.sourceGroup": "{{name}} · {{count}}",
 
@@ -281,22 +336,142 @@ export const nb: Record<string, string> = {
 	"iconPicker.descRpgAwesome": "fantasy- og brettspillikoner",
 	"iconPicker.descImage": "bilder du legger til fra datamaskinen",
 
+	// Icon picker — category filter dropdown labels
+	"iconPicker.cat.Accessibility": "Tilgjengelighet",
+	"iconPicker.cat.Actions": "Handlinger",
+	"iconPicker.cat.Activities": "Aktiviteter",
+	"iconPicker.cat.Alert": "Varsel",
+	"iconPicker.cat.Alphabet": "Alfabet",
+	"iconPicker.cat.Android": "Android",
+	"iconPicker.cat.Animals": "Dyr",
+	"iconPicker.cat.Arrows": "Piler",
+	"iconPicker.cat.Astronomy": "Astronomi",
+	"iconPicker.cat.Audio&Video": "Lyd og video",
+	"iconPicker.cat.Automotive": "Biler",
+	"iconPicker.cat.Badges": "Merker",
+	"iconPicker.cat.Brand": "Merkenavn",
+	"iconPicker.cat.Buildings": "Bygninger",
+	"iconPicker.cat.Business": "Næringsliv",
+	"iconPicker.cat.Camping": "Camping",
+	"iconPicker.cat.Charity": "Veldedighet",
+	"iconPicker.cat.Charts": "Diagrammer",
+	"iconPicker.cat.Charts + Diagrams": "Diagrammer og grafer",
+	"iconPicker.cat.Childhood": "Barndom",
+	"iconPicker.cat.Clothing + Fashion": "Klær og mote",
+	"iconPicker.cat.Coding": "Programmering",
+	"iconPicker.cat.Communicate": "Kommuniser",
+	"iconPicker.cat.Communication": "Kommunikasjon",
+	"iconPicker.cat.Computers": "Datamaskiner",
+	"iconPicker.cat.Connectivity": "Tilkobling",
+	"iconPicker.cat.Construction": "Konstruksjon",
+	"iconPicker.cat.Currencies": "Valutaer",
+	"iconPicker.cat.Database": "Database",
+	"iconPicker.cat.Design": "Design",
+	"iconPicker.cat.Development": "Utvikling",
+	"iconPicker.cat.Devices": "Enheter",
+	"iconPicker.cat.Devices + Hardware": "Enheter og maskinvare",
+	"iconPicker.cat.Disaster + Crisis": "Katastrofer og kriser",
+	"iconPicker.cat.Document": "Dokument",
+	"iconPicker.cat.E-commerce": "E-handel",
+	"iconPicker.cat.Editing": "Redigering",
+	"iconPicker.cat.Education": "Utdanning",
+	"iconPicker.cat.Electrical": "Elektrisk",
+	"iconPicker.cat.Emoji": "Emoji",
+	"iconPicker.cat.Energy": "Energi",
+	"iconPicker.cat.Extensions": "Utvidelser",
+	"iconPicker.cat.Files": "Filer",
+	"iconPicker.cat.Film + Video": "Film og video",
+	"iconPicker.cat.Food": "Mat",
+	"iconPicker.cat.Food + Beverage": "Mat og drikke",
+	"iconPicker.cat.Fruits + Vegetables": "Frukt og grønnsaker",
+	"iconPicker.cat.Games": "Spill",
+	"iconPicker.cat.Gaming": "Gaming",
+	"iconPicker.cat.Gender": "Kjønn",
+	"iconPicker.cat.Genders": "Kjønn",
+	"iconPicker.cat.Gestures": "Gester",
+	"iconPicker.cat.Halloween": "Halloween",
+	"iconPicker.cat.Hands": "Hender",
+	"iconPicker.cat.Hardware": "Maskinvare",
+	"iconPicker.cat.Health": "Helse",
+	"iconPicker.cat.Holidays": "Høytider",
+	"iconPicker.cat.Home": "Hjem",
+	"iconPicker.cat.Household": "Husholdning",
+	"iconPicker.cat.Humanitarian": "Humanitær",
+	"iconPicker.cat.Images": "Bilder",
+	"iconPicker.cat.Laundry": "Vask",
+	"iconPicker.cat.Letters": "Bokstaver",
+	"iconPicker.cat.Logic": "Logikk",
+	"iconPicker.cat.Logistics": "Logistikk",
+	"iconPicker.cat.Map": "Kart",
+	"iconPicker.cat.Maps": "Kart",
+	"iconPicker.cat.Maritime": "Maritim",
+	"iconPicker.cat.Marketing": "Markedsføring",
+	"iconPicker.cat.Math": "Matematikk",
+	"iconPicker.cat.Mathematics": "Matematikk",
+	"iconPicker.cat.Media": "Medier",
+	"iconPicker.cat.Media Playback": "Medieavspilling",
+	"iconPicker.cat.Medical + Health": "Medisin og helse",
+	"iconPicker.cat.Money": "Penger",
+	"iconPicker.cat.Mood": "Humør",
+	"iconPicker.cat.Moving": "Flytting",
+	"iconPicker.cat.Music + Audio": "Musikk og lyd",
+	"iconPicker.cat.Nature": "Natur",
+	"iconPicker.cat.Numbers": "Tall",
+	"iconPicker.cat.Photography": "Fotografering",
+	"iconPicker.cat.Photos + Images": "Bilder og fotografier",
+	"iconPicker.cat.Political": "Politisk",
+	"iconPicker.cat.Privacy": "Personvern",
+	"iconPicker.cat.Punctuation + Symbols": "Tegnsetting og symboler",
+	"iconPicker.cat.Religion": "Religion",
+	"iconPicker.cat.Science": "Vitenskap",
+	"iconPicker.cat.Science Fiction": "Science fiction",
+	"iconPicker.cat.Security": "Sikkerhet",
+	"iconPicker.cat.Shapes": "Former",
+	"iconPicker.cat.Shopping": "Shopping",
+	"iconPicker.cat.Social": "Sosiale medier",
+	"iconPicker.cat.Spinners": "Spinnere",
+	"iconPicker.cat.Sport": "Sport",
+	"iconPicker.cat.Sports + Fitness": "Sport og trening",
+	"iconPicker.cat.Symbols": "Symboler",
+	"iconPicker.cat.System": "System",
+	"iconPicker.cat.Text": "Tekst",
+	"iconPicker.cat.Text Formatting": "Tekstformatering",
+	"iconPicker.cat.Time": "Tid",
+	"iconPicker.cat.Toggle": "Bryter",
+	"iconPicker.cat.Transit": "Kollektivtransport",
+	"iconPicker.cat.Transportation": "Transport",
+	"iconPicker.cat.Travel": "Reise",
+	"iconPicker.cat.Travel + Hotel": "Reise og hotell",
+	"iconPicker.cat.UI actions": "UI-handlinger",
+	"iconPicker.cat.Users + People": "Brukere og mennesker",
+	"iconPicker.cat.Vehicles": "Kjøretøy",
+	"iconPicker.cat.Version control": "Versjonskontroll",
+	"iconPicker.cat.Weather": "Vær",
+	"iconPicker.cat.Writing": "Skriving",
+	"iconPicker.cat.Zodiac": "Stjernetegn",
+
 	// Downloadable icon packs
 	"iconPack.downloadTitle": "{{name}} er ikke lastet ned ennå",
-	"iconPack.downloadDetail": "{{count}} ikoner · {{size}} · engangsinnlasting",
+	"iconPack.downloadDetail":
+		"{{count}} ikoner · {{size}} · engangsinnlasting",
 	"iconPack.download": "Last ned",
 	"iconPack.downloading": "Laster ned {{name}}…",
-	"iconPack.downloadFailed": "Kunne ikke laste ned {{name}}. Sjekk forbindelsen og prøv igjen.",
+	"iconPack.downloadFailed":
+		"Kunne ikke laste ned {{name}}. Sjekk forbindelsen og prøv igjen.",
 	"iconPack.retry": "Prøv igjen",
-	"iconPack.faBrandsNotice": "Merkevareikoner er varemerker tilhørende de respektive eierne. Deres inkludering indikerer ikke godkjenning. Bruk dem bare til å representere selskapet, produktet eller tjenesten de refererer til.",
+	"iconPack.faBrandsNotice":
+		"Merkevareikoner er varemerker tilhørende de respektive eierne. Deres inkludering indikerer ikke godkjenning. Bruk dem bare til å representere selskapet, produktet eller tjenesten de refererer til.",
 	"iconPack.artworkRestored": "Ikongrafikken for {{names}} ble lastet ned.",
-	"iconPack.diskWriteFailed": "Callout Studio kunne ikke lagre ikonpakken til disk, så den må lastes ned igjen neste gang. Ikonene du velger er fortsatt lagret med innstillingene dine.",
+	"iconPack.diskWriteFailed":
+		"Callout Studio kunne ikke lagre ikonpakken til disk, så den må lastes ned igjen neste gang. Ikonene du velger er fortsatt lagret med innstillingene dine.",
 
 	// Icon licences & credits
 	"credits.title": "Ikonlisenser og kreditering",
-	"credits.intro": "Callout Studio bruker flere åpne ikonbiblioteker. Lisensene deres er gjengitt nedenfor, sammen med hva som ble endret for å bruke dem her.",
+	"credits.intro":
+		"Callout Studio bruker flere åpne ikonbiblioteker. Lisensene deres er gjengitt nedenfor, sammen med hva som ble endret for å bruke dem her.",
 	"credits.fullNotices": "Fullstendige tredjeparts meldinger",
-	"credits.pluginLicense": "Callout Studios egen kode er under 0BSD; ikonbibliotekene beholder sine egne lisenser.",
+	"credits.pluginLicense":
+		"Callout Studios egen kode er under 0BSD; ikonbibliotekene beholder sine egne lisenser.",
 	"contextMenu.editCallout": "Rediger callout-innstillinger",
 	"contextMenu.copyMarkdown": "Kopier callout Markdown",
 	"contextMenu.openSettings": "Åpne Callout Studio-innstillinger",
@@ -308,19 +483,25 @@ export const nb: Record<string, string> = {
 	"contextMenu.deleteSection": "Slett overskriftsseksjon",
 	"heading.toggleFold": "Veksle folding",
 	"settings.globalSettings": "Globale innstillinger",
-	"settings.globalSettingsDesc": "Finjuster hvordan hver callout-type ser ut i hele vaultet ditt.",
-	"settings.globalSettingsRegularDesc": "Legg til et callout-token i en sitatblokk (f.eks. `> [!type]`) for å vise Obsidians innebygde callout-boks. Du kan justere kant, radius, skriftstørrelse og justering.",
-	"settings.globalSettingsHeadingDesc": "Legg til et callout-token rett etter overskriftens #-tegn (f.eks. `## [!type]`) for å vise det som en stilsatt overskrift-callout. Du kan justere kant, form og vertikal avstand.",
-	"settings.globalSettingsInlineDesc": "Legg til et callout-token hvor som helst inne i en tekstlinje (f.eks. `[!type]`) for å vise det som en liten innebygd pille. Du kan justere kant og form.",
+	"settings.globalSettingsDesc":
+		"Finjuster hvordan hver callout-type ser ut i hele vaultet ditt.",
+	"settings.globalSettingsRegularDesc":
+		"Legg til et callout-token i en sitatblokk (f.eks. `> [!type]`) for å vise Obsidians innebygde callout-boks. Du kan justere kant, radius, skriftstørrelse og justering.",
+	"settings.globalSettingsHeadingDesc":
+		"Legg til et callout-token rett etter overskriftens #-tegn (f.eks. `## [!type]`) for å vise det som en stilsatt overskrift-callout. Du kan justere kant, form og vertikal avstand.",
+	"settings.globalSettingsInlineDesc":
+		"Legg til et callout-token hvor som helst inne i en tekstlinje (f.eks. `[!type]`) for å vise det som en liten innebygd pille. Du kan justere kant og form.",
 	"settings.globalSettingsCustomize": "Tilpass",
 	"settings.calloutTypeRegular": "Vanlig callout",
 	"settings.calloutTypeHeading": "Overskrift-callout",
 	"settings.calloutTypeInline": "Innebygd callout",
 	"settings.customizeMenu": "Tilpass menyelementer",
-	"settings.customizeMenuDesc": "Velg hvilke høyreklikkhandlinger som vises for hver callout-type, og endre rekkefølgen på dem. Fungerer i kildemodus og Live Preview.",
+	"settings.customizeMenuDesc":
+		"Velg hvilke høyreklikkhandlinger som vises for hver callout-type, og endre rekkefølgen på dem. Fungerer i kildemodus og Live Preview.",
 	"settings.customizeMenuButton": "Tilpass menyelementer",
 	"menuCustomize.title": "Tilpass høyreklikkmenyen",
-	"menuCustomize.desc": "Slå handlinger av eller på, og dra i håndtaket for å endre rekkefølgen. Endringer lagres automatisk.",
+	"menuCustomize.desc":
+		"Slå handlinger av eller på, og dra i håndtaket for å endre rekkefølgen. Endringer lagres automatisk.",
 	"menuCustomize.regular": "Vanlig callout",
 	"menuCustomize.heading": "Overskrift-callout",
 	"menuCustomize.inline": "Innebygd callout",
@@ -334,20 +515,28 @@ export const nb: Record<string, string> = {
 	"menuItem.deleteSection": "Slett seksjon",
 	"confirm.ok": "Slett",
 	"confirm.cancel": "Avbryt",
-	"vault.filesUpdated": "{{count}} callout-referanse(r) oppdatert i vault-filer.",
-	"vault.idsUpdated": "{{count}} callout-ID(er) oppdatert i vault-filer: {{oldIds}} → {{newId}}",
-	"vault.titlesUpdated": "{{count}} callout-tittel(ler) oppdatert i vault-filer: {{oldTitle}} → {{newTitle}}",
+	"vault.filesUpdated":
+		"{{count}} callout-referanse(r) oppdatert i vault-filer.",
+	"vault.idsUpdated":
+		"{{count}} callout-ID(er) oppdatert i vault-filer: {{oldIds}} → {{newId}}",
+	"vault.titlesUpdated":
+		"{{count}} callout-tittel(ler) oppdatert i vault-filer: {{oldTitle}} → {{newTitle}}",
 	"vault.replaceWith": "Erstatt med:",
 	"vault.deleteWithout": "Slett uten å erstatte",
 	"vault.confirmDelete": "Bekreft",
 	"vault.confirmReplace": "Erstatt",
-	"vault.replacePromptInUse": '"{{name}}" brukes {{count}} gang(er) i {{files}} fil(er). Velg en callout å erstatte den med:',
+	"vault.replacePromptInUse":
+		'"{{name}}" brukes {{count}} gang(er) i {{files}} fil(er). Velg en callout å erstatte den med:',
 	"vault.replacePromptUnused": 'Velg en callout å erstatte "{{name}}" med:',
-	"vault.noReplacementAvailable": "Ingen andre callouts tilgjengelig for erstatning.",
-	"vault.convertedToPlainText": "{{blocks}} callout-blokk(er) i {{files}} fil(er) konvertert til ren tekst.",
-	"vault.resetAliasWarning": "{{count}} referanse(r) i {{files}} fil(er) bruker tilpassede aliaser: {{aliases}}. Disse vil slutte å fungere etter tilbakestilling. Fortsett?",
+	"vault.noReplacementAvailable":
+		"Ingen andre callouts tilgjengelig for erstatning.",
+	"vault.convertedToPlainText":
+		"{{blocks}} callout-blokk(er) i {{files}} fil(er) konvertert til ren tekst.",
+	"vault.resetAliasWarning":
+		"{{count}} referanse(r) i {{files}} fil(er) bruker tilpassede aliaser: {{aliases}}. Disse vil slutte å fungere etter tilbakestilling. Fortsett?",
 	"vault.resetConfirm": "Tilbakestill",
-	"vault.resetAllInUse": "⚠ {{count}} callout-referanse(r) i {{files}} fil(er) bruker tilpassede callout-typer som vil bli slettet.",
+	"vault.resetAllInUse":
+		"⚠ {{count}} callout-referanse(r) i {{files}} fil(er) bruker tilpassede callout-typer som vil bli slettet.",
 	"vaultStats.title": "Callout-statistikk",
 	"vaultStats.totalCallouts": "Totalt callouts",
 	"vaultStats.typesFound": "Funnet typer",
@@ -368,46 +557,74 @@ export const nb: Record<string, string> = {
 	"vaultStats.sourceUnknown": "Ukjent",
 	"vaultStats.close": "Lukk",
 	"import.title": "Importproblemer",
-	"import.reportLeadIn": "Det ser ut til at den importerte filen er endret. Her er problemlisten:",
-	"import.reportLeadInFatal": "Denne filen ser ikke ut som en Callout Studio-eksport. Den kan ikke importeres:",
+	"import.reportLeadIn":
+		"Det ser ut til at den importerte filen er endret. Her er problemlisten:",
+	"import.reportLeadInFatal":
+		"Denne filen ser ikke ut som en Callout Studio-eksport. Den kan ikke importeres:",
 	"import.entryHeading": "Post {{index}} — {{label}}",
-	"import.summary": "{{valid}} av {{total}} poster er gyldige · {{issues}} problem(er) funnet.",
+	"import.summary":
+		"{{valid}} av {{total}} poster er gyldige · {{issues}} problem(er) funnet.",
 	"import.btnCancel": "Avbryt",
 	"import.btnImportValid": "Importer bare gyldige ({{count}})",
-	"import.err.notRecognized": "Ukjent fil: forventet et array med callout-definisjoner eller en Callout Studio-eksport.",
-	"import.warn.settingsIgnored": "Innstillingsblokken var ikke et gyldig objekt og ble ignorert.",
-	"import.warn.invalidGradient": "Bakgrunnsgradienten var ugyldig og ble ignorert.",
+	"import.err.notRecognized":
+		"Ukjent fil: forventet et array med callout-definisjoner eller en Callout Studio-eksport.",
+	"import.warn.settingsIgnored":
+		"Innstillingsblokken var ikke et gyldig objekt og ble ignorert.",
+	"import.warn.invalidGradient":
+		"Bakgrunnsgradienten var ugyldig og ble ignorert.",
 	"import.err.parseFailed": "Filen er ikke gyldig JSON og kunne ikke parses.",
 	"import.err.entryNotObject": "Posten må være et objekt.",
-	"import.err.requiredMissing": 'Det obligatoriske feltet "{{field}}" mangler eller har feil type.',
+	"import.err.requiredMissing":
+		'Det obligatoriske feltet "{{field}}" mangler eller har feil type.',
 	"import.err.idEmpty": "ID-en må ikke være tom.",
-	"import.err.idTooLong": 'ID-en "{{value}}" er {{length}} tegn; maksimum er {{max}}.',
-	"import.err.idBadChar": 'ID-en "{{value}}" inneholder ugyldige tegn ("|", "[", "]", tabulatorer og linjeskift er ikke tillatt).',
+	"import.err.idTooLong":
+		'ID-en "{{value}}" er {{length}} tegn; maksimum er {{max}}.',
+	"import.err.idBadChar":
+		'ID-en "{{value}}" inneholder ugyldige tegn ("|", "[", "]", tabulatorer og linjeskift er ikke tillatt).',
 	"import.err.displayNameEmpty": "Visningsnavnet må ikke være tomt.",
-	"import.err.displayNameTooLong": "Visningsnavnet er {{length}} tegn; maksimum er {{max}}.",
-	"import.err.boolField": '"{{field}}" må være en boolsk verdi (true eller false).',
+	"import.err.displayNameTooLong":
+		"Visningsnavnet er {{length}} tegn; maksimum er {{max}}.",
+	"import.err.boolField":
+		'"{{field}}" må være en boolsk verdi (true eller false).',
 	"import.err.iconNotObject": "Ikonet må være et objekt.",
-	"import.err.iconTypeInvalid": "Ikontypen \"{{value}}\" er ikke én av: {{types}}.",
-	"import.warn.iconFieldIgnored": "\"{{field}}\" gjelder bare for Material-ikoner og ignoreres for ikontype {{type}}.",
+	"import.err.iconTypeInvalid":
+		'Ikontypen "{{value}}" er ikke én av: {{types}}.',
+	"import.warn.iconFieldIgnored":
+		'"{{field}}" gjelder bare for Material-ikoner og ignoreres for ikontype {{type}}.',
 	"import.err.iconValueEmpty": "Ikonverdien må være en ikke-tom streng.",
-	"import.err.iconValueTooLong": "Ikonverdien er uvanlig lang ({{length}} tegn).",
-	"import.err.materialStyle": 'Material-ikonstilen "{{value}}" er ikke én av: outlined, filled, rounded, sharp.',
-	"import.err.materialWeight": 'Material-ikonvekten "{{value}}" må være et heltall mellom 100 og 700, i trinn av 100.',
-	"import.warn.iconRecolorIgnored": "\"recolor\" gjelder bare for egne bilder og ignoreres for ikontype {{type}}.",
-	"import.err.iconRecolorInvalid": "\"recolor\" må være true eller false (fikk \"{{value}}\").",
-	"import.err.colorInvalid": '"{{field}}" må være en hex-farge som "#448aff" (mottok "{{value}}").',
-	"import.err.numberRange": '"{{field}}" må være et tall mellom {{min}} og {{max}} (mottok "{{value}}").',
-	"import.err.iconSizeRange": '"{{field}}" må være et tall mellom {{min}} og {{max}} (mottok "{{value}}").',
+	"import.err.iconValueTooLong":
+		"Ikonverdien er uvanlig lang ({{length}} tegn).",
+	"import.err.materialStyle":
+		'Material-ikonstilen "{{value}}" er ikke én av: outlined, filled, rounded, sharp.',
+	"import.err.materialWeight":
+		'Material-ikonvekten "{{value}}" må være et heltall mellom 100 og 700, i trinn av 100.',
+	"import.warn.iconRecolorIgnored":
+		'"recolor" gjelder bare for egne bilder og ignoreres for ikontype {{type}}.',
+	"import.err.iconRecolorInvalid":
+		'"recolor" må være true eller false (fikk "{{value}}").',
+	"import.err.colorInvalid":
+		'"{{field}}" må være en hex-farge som "#448aff" (mottok "{{value}}").',
+	"import.err.numberRange":
+		'"{{field}}" må være et tall mellom {{min}} og {{max}} (mottok "{{value}}").',
+	"import.err.iconSizeRange":
+		'"{{field}}" må være et tall mellom {{min}} og {{max}} (mottok "{{value}}").',
 	"import.err.aliasesNotArray": '"aliases" må være et array av strenger.',
 	"import.err.aliasNotString": "Aliaset må være en streng.",
 	"import.err.aliasDup": 'Aliaset "{{value}}" er duplisert i denne posten.',
-	"import.err.tooManyIds": "For mange ID-er ({{count}}); hver callout kan ha maks {{max}} ID-er (primær + aliaser).",
-	"import.err.metadataShape": '"metadata" må være et objekt der alle verdier er strenger.',
+	"import.err.tooManyIds":
+		"For mange ID-er ({{count}}); hver callout kan ha maks {{max}} ID-er (primær + aliaser).",
+	"import.err.metadataShape":
+		'"metadata" må være et objekt der alle verdier er strenger.',
 	"import.err.unknownFields": "Ukjente felt ignorert: {{fields}}.",
-	"import.err.duplicateInFile": 'ID/alias "{{value}}" brukes allerede av post #{{first}} i denne filen.',
-	"import.err.aliasConflict": 'Alias "{{value}}" brukes allerede av en annen callout ("{{other}}") i valvet ditt.',
-	"import.warn.defaultFoldedAutofix": '"defaultFolded" var true mens "foldable" var false; defaultFolded ble tilbakestilt til false.',
-	"import.warn.imageMissing": "Denne Callout bruker et bilde som ikke er i filen og ikke i denne vault, så den vil vise et plassholderikonikon inntil du gir det et nytt.",
-	"footer.tagline": "Har du tilbakemeldinger, kommentarer eller forslag? Jeg vil gjerne høre det!",
+	"import.err.duplicateInFile":
+		'ID/alias "{{value}}" brukes allerede av post #{{first}} i denne filen.',
+	"import.err.aliasConflict":
+		'Alias "{{value}}" brukes allerede av en annen callout ("{{other}}") i valvet ditt.',
+	"import.warn.defaultFoldedAutofix":
+		'"defaultFolded" var true mens "foldable" var false; defaultFolded ble tilbakestilt til false.',
+	"import.warn.imageMissing":
+		"Denne Callout bruker et bilde som ikke er i filen og ikke i denne vault, så den vil vise et plassholderikonikon inntil du gir det et nytt.",
+	"footer.tagline":
+		"Har du tilbakemeldinger, kommentarer eller forslag? Jeg vil gjerne høre det!",
 	"footer.madeBy": "Laget av Niv  •  ",
 };

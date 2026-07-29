@@ -10,23 +10,31 @@ export const hu: Record<string, string> = {
 	"settings.fallbackTag": "Alapértelmezett",
 	"settings.fallbackTagAuto": "Aut. alapértelmezett",
 	"settings.rescanVault": "Tár újraszkennelése",
-	"settings.rescanVaultDesc": "Megkeresi a fel nem ismert callout-azonosítókat a jegyzetekben, és hozzáadja őket tartalék sorokként.",
+	"settings.rescanVaultDesc":
+		"Megkeresi a fel nem ismert callout-azonosítókat a jegyzetekben, és hozzáadja őket tartalék sorokként.",
 	"settings.rescanVaultHintAction": "Szkennelés most",
-	"settings.rescanComplete": "Újraszkennelés kész: {{count}} új callout hozzáadva.",
-	"replaceModal.deleteWithoutReplaceSuffix": "(visszaesik az alapértelmezettre)",
+	"settings.rescanComplete":
+		"Újraszkennelés kész: {{count}} új callout hozzáadva.",
+	"replaceModal.deleteWithoutReplaceSuffix":
+		"(visszaesik az alapértelmezettre)",
 
 	"firstRun.title": "Meglévő callout-ok keresése a tárban?",
-	"firstRun.body": "A Callout Studio szkennelheti a tárat, hogy felfedezze a már használt callout-okat, így megjelennek a beállítások listájában, és átveszik a tartalék stílust.",
-	"firstRun.heavyVaultNote": "A tárban {{count}} Markdown-fájl van – a szkennelés néhány másodpercet vehet igénybe.",
-	"firstRun.laterHint": "Ezt később is futtathatja a Beállítások → Tár-elemzések és karbantartás → Tár újraszkennelése menüpontból.",
+	"firstRun.body":
+		"A Callout Studio szkennelheti a tárat, hogy felfedezze a már használt callout-okat, így megjelennek a beállítások listájában, és átveszik a tartalék stílust.",
+	"firstRun.heavyVaultNote":
+		"A tárban {{count}} Markdown-fájl van – a szkennelés néhány másodpercet vehet igénybe.",
+	"firstRun.laterHint":
+		"Ezt később is futtathatja a Beállítások → Tár-elemzések és karbantartás → Tár újraszkennelése menüpontból.",
 	"firstRun.scanNow": "Szkennelés most",
 	"firstRun.noThanks": "Nem, köszönöm",
-	"firstRun.autoScanComplete": "A Callout Studio beszkennelte a tárat, és {{count}} callout-ot hozzáadott.",
+	"firstRun.autoScanComplete":
+		"A Callout Studio beszkennelte a tárat, és {{count}} callout-ot hozzáadott.",
 	"firstRun.scanning": "Szkennelés",
 
 	"welcome.tooltip": "A Callout Studio névjegye",
 	"welcome.title": "Üdvözöljük a Callout Studióban",
-	"welcome.tagline": "Az Ön teljes körű megoldása az Obsidian callout-ok kezelésére.",
+	"welcome.tagline":
+		"Az Ön teljes körű megoldása az Obsidian callout-ok kezelésére.",
 	"welcome.previewTitle": "Nézze meg működés közben",
 	"welcome.sample":
 		"A Callout Studio segítségével egyéni ikonnal, színekkel és névvel hozhat létre callout-okat.\n\n" +
@@ -39,10 +47,14 @@ export const hu: Record<string, string> = {
 		"A Callout Studio ennél sokkal többet is kínál! [Tudjon meg többet]({{repoUrl}}).\n",
 
 	"deleteModal.title": '"{{name}}" callout törlése?',
-	"deleteModal.bodyInUse": "Ez a callout {{count}} alkalommal szerepel {{files}} fájlban.",
-	"deleteModal.bodyInUseExplain": "A törlés ezeket a blokkokat egyszerű szöveggé alakítja – elveszítik a stílusukat és a callout fejlécét.",
-	"deleteModal.replaceHint": "Helyettesítheti egy másik callout-tal, így a tár tartalma stílusos callout marad.",
-	"deleteModal.bodyUnused": '"{{name}}" nem szerepel egyetlen jegyzetben sem, de egy általad létrehozott egyéni callout. A törlés eltávolítja a listából.',
+	"deleteModal.bodyInUse":
+		"Ez a callout {{count}} alkalommal szerepel {{files}} fájlban.",
+	"deleteModal.bodyInUseExplain":
+		"A törlés ezeket a blokkokat egyszerű szöveggé alakítja – elveszítik a stílusukat és a callout fejlécét.",
+	"deleteModal.replaceHint":
+		"Helyettesítheti egy másik callout-tal, így a tár tartalma stílusos callout marad.",
+	"deleteModal.bodyUnused":
+		'"{{name}}" nem szerepel egyetlen jegyzetben sem, de egy általad létrehozott egyéni callout. A törlés eltávolítja a listából.',
 	"deleteModal.replaceInstead": "Inkább cserélje le",
 	"deleteModal.deleteInUse": "Törlés (egyszerű szöveggé alakítás)",
 	"deleteModal.deleteUnused": "Callout törlése",
@@ -60,9 +72,12 @@ export const hu: Record<string, string> = {
 	"settings.importExport": "Importálás / exportálás",
 	"settings.import": "Importálás",
 	"settings.export": "Exportálás",
-	"settings.importDesc": "Importálja a Callout Studio adatait egy másik tárból JSON-fájl segítségével.",
-	"settings.exportDesc": "Mentse el az összes egyéni callout-típust JSON formátumban.",
-	"settings.importConflictNotice": "{{count}} callout-típus importálva; {{overwritten}} meglévő bejegyzés felülírva.",
+	"settings.importDesc":
+		"Importálja a Callout Studio adatait egy másik tárból JSON-fájl segítségével.",
+	"settings.exportDesc":
+		"Mentse el az összes egyéni callout-típust JSON formátumban.",
+	"settings.importConflictNotice":
+		"{{count}} callout-típus importálva; {{overwritten}} meglévő bejegyzés felülírva.",
 
 	"settings.addNewCallout": "+ callout hozzáadása",
 
@@ -78,7 +93,8 @@ export const hu: Record<string, string> = {
 
 	"settings.colorSwatchAria": "Kiemelés: {{accent}} · Háttér: {{bg}}",
 	"settings.fallbackCallout": "Alapértelmezett tartalék callout",
-	"settings.fallbackCalloutDesc": "A tárban fel nem ismert callout-típusok öröklik ennek a callout-nak a stílusát.",
+	"settings.fallbackCalloutDesc":
+		"A tárban fel nem ismert callout-típusok öröklik ennek a callout-nak a stílusát.",
 
 	"settings.globalStyle": "Globális callout-stílus",
 	"settings.border": "Szegélyek",
@@ -112,46 +128,58 @@ export const hu: Record<string, string> = {
 	"settings.deletePaletteConfirm":
 		'"{{name}}" paletta törlése?\nAz ezt a színt használó callout-ok nem változnak.',
 	"settings.enableAutocomplete": "[! Automatikus kiegészítés engedélyezése",
-	"settings.enableAutocompleteDesc": 'Javaslatokat jelenít meg, amikor "[!" szöveget gépel egy blokkidézet-belsejébe a szerkesztőben. Válasszon callout-típust a listából egy teljes callout fejléc beillesztéséhez.',
+	"settings.enableAutocompleteDesc":
+		'Javaslatokat jelenít meg, amikor "[!" szöveget gépel egy blokkidézet-belsejébe a szerkesztőben. Válasszon callout-típust a listából egy teljes callout fejléc beillesztéséhez.',
 
 	"settings.openHotkeys": "Callout Studio billentyűparancsok",
-	"settings.openHotkeysDesc": "Megnyitja az Obsidian billentyűparancs-beállításait a Callout Studio parancsaihoz, ahol saját parancsokat rendelhet az Új típus létrehozása, Beállítások megnyitása, Callout eltávolítása és Callout-ba csomagolás funkciókhoz. Alapértelmezés szerint nincs hozzárendelt parancs.",
+	"settings.openHotkeysDesc":
+		"Megnyitja az Obsidian billentyűparancs-beállításait a Callout Studio parancsaihoz, ahol saját parancsokat rendelhet az Új típus létrehozása, Beállítások megnyitása, Callout eltávolítása és Callout-ba csomagolás funkciókhoz. Alapértelmezés szerint nincs hozzárendelt parancs.",
 	"settings.openHotkeysButton": "Billentyűparancs-beállítások megnyitása",
-
 
 	"settings.vaultMaintenance": "Tár-elemzések és karbantartás",
 	"settings.vaultStats": "Callout-statisztikák",
-	"settings.vaultStatsDesc": "Megszámolja az összes callout-blokkot a Markdown-jegyzetekben, és típusonként csoportosítja.",
+	"settings.vaultStatsDesc":
+		"Megszámolja az összes callout-blokkot a Markdown-jegyzetekben, és típusonként csoportosítja.",
 	"settings.vaultStatsButton": "Statisztikák megtekintése",
 	"settings.vaultStatsScanning": "Szkennelés",
 	"settings.resetAll": "Visszaállítás",
-	"settings.resetAllDesc": "Törli az összes felhasználói callout-ot, visszaállítja a beépített callout-okat, a globális stílusokat (szegélyek, betűméret-arány, alak), a mentett színpalettákat, a jobb gombos menü testreszabását és a letöltött Material SVG-ket.",
+	"settings.resetAllDesc":
+		"Törli az összes felhasználói callout-ot, visszaállítja a beépített callout-okat, a globális stílusokat (szegélyek, betűméret-arány, alak), a mentett színpalettákat, a jobb gombos menü testreszabását és a letöltött Material SVG-ket.",
 	"settings.resetAllButton": "Mindent visszaállít",
-	"settings.resetAllConfirm": "Ez törli az összes egyéni callout-ot, visszaállítja a beépített callout-okat, a globális stílusokat, a mentett színpalettákat, a jobb gombos menü testreszabását és az összes gyorsítótárazott Material SVG-t. Ez a művelet nem vonható vissza. Biztos benne?",
+	"settings.resetAllConfirm":
+		"Ez törli az összes egyéni callout-ot, visszaállítja a beépített callout-okat, a globális stílusokat, a mentett színpalettákat, a jobb gombos menü testreszabását és az összes gyorsítótárazott Material SVG-t. Ez a művelet nem vonható vissza. Biztos benne?",
 	"notice.resetAllDone": "Minden visszaállt az alapértelmezettekre.",
 
 	"notice.exported": "A callout-ok exportálva: callout-studio-export.json",
 	"notice.importedJSON": "{{count}} callout-típus importálva JSON-ból.",
 	"notice.importedSettings": "A bővítmény beállításai importálva.",
-	"notice.noNewJSON": "Nem importáltunk új callout-típust (az azonosítók már létezhetnek).",
-	"notice.iconDownloadFailed": 'A "{{name}}" Material ikon letöltése nem sikerült. Lehet, hogy ez a stílus/vastagság nem érhető el, vagy nincs internetkapcsolata.',
+	"notice.noNewJSON":
+		"Nem importáltunk új callout-típust (az azonosítók már létezhetnek).",
+	"notice.iconDownloadFailed":
+		'A "{{name}}" Material ikon letöltése nem sikerült. Lehet, hogy ez a stílus/vastagság nem érhető el, vagy nincs internetkapcsolata.',
 	"notice.nothingToWrap": "Nincs mit becsomagolni.",
 	"notice.cursorNotInsideCallout": "A kurzor nem callout-on belül van.",
-	"notice.openHotkeysFailed": "Az Obsidian billentyűparancs-beállításai nem nyithatók meg.",
-	"notice.filterHotkeysFailed": "Az Obsidian billentyűparancsai megnyíltak, de a Callout Studio szűrő nem alkalmazható.",
+	"notice.openHotkeysFailed":
+		"Az Obsidian billentyűparancs-beállításai nem nyithatók meg.",
+	"notice.filterHotkeysFailed":
+		"Az Obsidian billentyűparancsai megnyíltak, de a Callout Studio szűrő nem alkalmazható.",
 
 	"editor.editCallout": "Callout szerkesztése",
 	"editor.newCallout": "Új callout",
 	"editor.displayName": "Megjelenítési név",
-	"editor.displayNameDesc": "A felhasználói felületen megjelenő olvasható felirat",
-	"editor.displayNameBuiltIn": "A beépített callout-ok megjelenítési neve nem módosítható",
+	"editor.displayNameDesc":
+		"A felhasználói felületen megjelenő olvasható felirat",
+	"editor.displayNameBuiltIn":
+		"A beépített callout-ok megjelenítési neve nem módosítható",
 	"editor.displayNamePlaceholder": "Saját callout",
 	"editor.calloutIds": "Callout-azonosítók",
-	"editor.calloutIdsDesc": "Ennek a callout-nak az összes azonosítója. A szóközök engedélyezettek.\nNyomja meg az Enter billentyűt vagy a + gombot a hozzáadáshoz.",
+	"editor.calloutIdsDesc":
+		"Ennek a callout-nak az összes azonosítója. A szóközök engedélyezettek.\nNyomja meg az Enter billentyűt vagy a + gombot a hozzáadáshoz.",
 	"editor.calloutIdsPlaceholder": "Azonosító hozzáadása",
 	"editor.addId": "Azonosító hozzáadása",
 	"editor.idLinkedToName": "A megjelenítési névhez kapcsolva",
-	"editor.idCannotDelete": "Ez az azonosító a megjelenítési névhez van kapcsolva, és nem törölhető — a módosításhoz szerkessze a nevet",
+	"editor.idCannotDelete":
+		"Ez az azonosító a megjelenítési névhez van kapcsolva, és nem törölhető — a módosításhoz szerkessze a nevet",
 	"editor.icon": "Ikon",
 	"editor.livePreview": "Élő előnézet",
 	"editor.iconAdjustment": "Ikon igazítása",
@@ -165,26 +193,33 @@ export const hu: Record<string, string> = {
 	"editor.paletteGroupPresets": "Szín-előbeállítások",
 	"editor.paletteGroupCustom": "Egyéni",
 	"editor.paletteNewColor": "Új szín…",
-	"editor.contrastWarning": "Alacsony kontraszt a háttérrel szemben — nehezen olvasható lehet",
+	"editor.contrastWarning":
+		"Alacsony kontraszt a háttérrel szemben — nehezen olvasható lehet",
 	"editor.foldable": "Összecsukható",
-	"editor.foldableDesc": "Válassza meg, hogy a callout összecsukható-e, és milyen alapértelmezett állapot vonatkozzon az egész tárra.",
+	"editor.foldableDesc":
+		"Válassza meg, hogy a callout összecsukható-e, és milyen alapértelmezett állapot vonatkozzon az egész tárra.",
 	"editor.foldOff": "Ki",
 	"editor.foldOpen": "Alapértelmezetten nyitva",
 	"editor.foldClosed": "Alapértelmezetten zárva",
 	"editor.cancel": "Mégse",
 	"editor.saveChanges": "Változtatások mentése",
 	"editor.createCallout": "Callout létrehozása",
-	"editor.nameRequired": "Callout létrehozása előtt megjelenítési név szükséges.",
+	"editor.nameRequired":
+		"Callout létrehozása előtt megjelenítési név szükséges.",
 	"editor.noChangesToSave": "Nem történt változtatás.",
 	"editor.downloadingIcon": "Ikon letöltése",
 	"editor.idEmpty": "Legalább egy azonosító szükséges",
 	"editor.idExists": "Már létezik callout ezzel az azonosítóval",
 	"editor.idConflict": "Ez az azonosító ütközik egy meglévő callout-tal",
-	"editor.idDashConflict": 'Az Obsidian a szóközöket kötőjelként írja, ezért ez az azonosító ütközik ezzel: „{{other}}”',
+	"editor.idDashConflict":
+		"Az Obsidian a szóközöket kötőjelként írja, ezért ez az azonosító ütközik ezzel: „{{other}}”",
 	"editor.untitledCallout": "Névtelen callout",
-	"editor.loremIpsum": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-	"editor.loremIpsumShort": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-	"editor.sampleInlineText": "Íme egy soron belüli [!{id}] pirula egy bekezdésen belül.",
+	"editor.loremIpsum":
+		"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+	"editor.loremIpsumShort":
+		"Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+	"editor.sampleInlineText":
+		"Íme egy soron belüli [!{id}] pirula egy bekezdésen belül.",
 	"editor.previewReadOnly": "Az élő előnézet nem szerkeszthető",
 
 	// Palette editor modal
@@ -194,10 +229,12 @@ export const hu: Record<string, string> = {
 	"palette.namePlaceholder": "Saját paletta",
 	"palette.nameExists": "Már létezik paletta ezzel a névvel",
 	"palette.baseColor": "Alapszín",
-	"palette.baseColorHint": "Automatikusan hozzá igazítjuk a háttérszínt. Ha szeretné, külön is beállíthatja a(z) {{link}} lehetőséggel.",
+	"palette.baseColorHint":
+		"Automatikusan hozzá igazítjuk a háttérszínt. Ha szeretné, külön is beállíthatja a(z) {{link}} lehetőséggel.",
 	"palette.baseColorHintLink": "ide kattintva",
 	"palette.advancedColors": "Színek",
-	"palette.advancedColorsHint": "A(z) {{mode}} mód színeinek szerkesztése – a másik mód automatikusan frissül. Váltson Obsidian témát az ellenőrzéshez.",
+	"palette.advancedColorsHint":
+		"A(z) {{mode}} mód színeinek szerkesztése – a másik mód automatikusan frissül. Váltson Obsidian témát az ellenőrzéshez.",
 	"palette.revertHint": "Inkább egyetlen alapszínt szeretne? {{link}}.",
 	"palette.revertHintLink": "Visszaállítás",
 	"palette.lightMode": "Világos",
@@ -245,11 +282,22 @@ export const hu: Record<string, string> = {
 	"iconPicker.searchLucide": "Lucide ikonok keresése",
 	"iconPicker.searchTabler": "Tabler ikonok keresése",
 	"iconPicker.tablerStyle": "Ikon stílusa",
-	"iconPicker.tablerStyleOutline": "Kontúr",
-	"iconPicker.tablerStyleFilled": "Kitöltött",
+	"iconPicker.tablerStyleOutline": "Kontúr (Outline)",
+	"iconPicker.tablerStyleFilled": "Kitöltött (Filled)",
 	"iconPicker.loadMore": "Több betöltése",
 	"iconPicker.materialStyle": "Ikon stílusa",
+	"iconPicker.materialStyleOutlined": "Körvonalazott (Outlined)",
+	"iconPicker.materialStyleFilled": "Kitöltött (Filled)",
+	"iconPicker.materialStyleRounded": "Lekerekített (Rounded)",
+	"iconPicker.materialStyleSharp": "Éles (Sharp)",
 	"iconPicker.materialWeight": "Ikon vastagsága",
+	"iconPicker.materialWeight100": "Vékony (Thin)",
+	"iconPicker.materialWeight200": "Extra könnyű (Extra Light)",
+	"iconPicker.materialWeight300": "Könnyű (Light)",
+	"iconPicker.materialWeight400": "Normál (Regular)",
+	"iconPicker.materialWeight500": "Közepes (Medium)",
+	"iconPicker.materialWeight600": "Félkövér (Semi Bold)",
+	"iconPicker.materialWeight700": "Kövér (Bold)",
 	"iconPicker.searchMaterial": "Material ikonok keresése",
 	"iconPicker.searchEmoji": "Emoji keresése",
 	"iconPicker.skinTone": "Bőrtónus",
@@ -261,57 +309,186 @@ export const hu: Record<string, string> = {
 	"iconPicker.fa": "Font Awesome",
 	"iconPicker.searchFa": "Keresés a Font Awesome-ban",
 	"iconPicker.faStyle": "Ikon stílusa",
-	"iconPicker.faStyleSolid": "Tömör",
-	"iconPicker.faStyleRegular": "Normál",
-	"iconPicker.faStyleBrands": "Márkák",
+	"iconPicker.faStyleSolid": "Tömör (Solid)",
+	"iconPicker.faStyleRegular": "Normál (Regular)",
+	"iconPicker.faStyleBrands": "Márkák (Brands)",
 	"iconPicker.rpgAwesome": "RPG Awesome",
 	"iconPicker.searchRpgAwesome": "Keresés az RPG Awesome-ban",
 	"iconPicker.image": "Saját képek",
 	"iconPicker.searchImage": "Keresés a képek között",
-	"iconPicker.imageTooLarge": "{{name}} túl nagy. A képeknek 5 MB alatt kell lenniük.",
-	"iconPicker.imageUnsupported": "{{name}} nem támogatott képformátum. Használjon SVG, PNG, JPEG vagy WebP formátumot.",
-	"iconPicker.imageInvalidSvg": "{{name}} nem olvasható biztonságos SVG-ként, ezért nem lett hozzáadva.",
+	"iconPicker.imageTooLarge":
+		"{{name}} túl nagy. A képeknek 5 MB alatt kell lenniük.",
+	"iconPicker.imageUnsupported":
+		"{{name}} nem támogatott képformátum. Használjon SVG, PNG, JPEG vagy WebP formátumot.",
+	"iconPicker.imageInvalidSvg":
+		"{{name}} nem olvasható biztonságos SVG-ként, ezért nem lett hozzáadva.",
 	"iconPicker.imageDecodeFailed": "{{name}} nem olvasható képként.",
-	"iconPicker.imageDuplicate": "{{name}} már szerepel a képei között. Nevezze át a fájlt, vagy törölje a meglévő képet.",
+	"iconPicker.imageDuplicate":
+		"{{name}} már szerepel a képei között. Nevezze át a fájlt, vagy törölje a meglévő képet.",
 	"iconPicker.imageAdd": "Képek hozzáadása",
-	"iconPicker.imageEmpty": "Még nincsenek képek. Adjon hozzá SVG, PNG, JPEG vagy WebP fájlt a számítógépéről, vagy húzza ide.",
+	"iconPicker.imageEmpty":
+		"Még nincsenek képek. Adjon hozzá SVG, PNG, JPEG vagy WebP fájlt a számítógépéről, vagy húzza ide.",
 	"iconPicker.imageDelete": "Törlés",
 	"iconPicker.imageDeleteConfirm": "„{{name}}” törlése?",
-	"iconPicker.imageDeleteInUse": "{{count}} callout használja ezt a képet. Helyőrző ikont fognak megjeleníteni, amíg nem ad meg egy újat.",
+	"iconPicker.imageDeleteInUse":
+		"{{count}} callout használja ezt a képet. Helyőrző ikont fognak megjeleníteni, amíg nem ad meg egy újat.",
 	"iconPicker.imageRecolor": "Callout szín követése",
 	"iconPicker.allSources": "Minden forrás",
 	"iconPicker.searchAllSources": "Keresés az összes ikonforrásban",
-	"iconPicker.sourcesNotDownloaded": "Még nem tartalmazza: {{names}}. Válasszon fent egy forrást a letöltéshez.",
+	"iconPicker.sourcesNotDownloaded":
+		"Még nem tartalmazza: {{names}}. Válasszon fent egy forrást a letöltéshez.",
 	"iconPicker.chooseSource": "Forrás kiválasztása",
 	"iconPicker.sourceGroup": "{{name}} · {{count}}",
 
 	// Source menu — what each library holds, in a few words
 	"iconPicker.descAllSources": "egyszerre keresés az összes könyvtárban",
 	"iconPicker.descLucide": "Az Obsidian saját készlete, mindig offline",
-	"iconPicker.descTabler": "tiszta és következetes UI ikonok, kontúr és kitöltött",
-	"iconPicker.descMaterial": "A Google készlete, négy stílus és hét vastagság",
+	"iconPicker.descTabler":
+		"tiszta és következetes UI ikonok, kontúr és kitöltött",
+	"iconPicker.descMaterial":
+		"A Google készlete, négy stílus és hét vastagság",
 	"iconPicker.descEmoji": "színes glífák, minden bőrtónus",
 	"iconPicker.descOcticons": "GitHub felületi ikonjai",
 	"iconPicker.descFa": "tömör, normál és márkák",
 	"iconPicker.descRpgAwesome": "fantasy és asztali játék ikonok",
 	"iconPicker.descImage": "képek, amelyeket a számítógépéről ad hozzá",
 
+	// Icon picker — category filter dropdown labels
+	"iconPicker.cat.Accessibility": "Akadálymentesség",
+	"iconPicker.cat.Actions": "Műveletek",
+	"iconPicker.cat.Activities": "Tevékenységek",
+	"iconPicker.cat.Alert": "Figyelmeztetés",
+	"iconPicker.cat.Alphabet": "Ábécé",
+	"iconPicker.cat.Android": "Android",
+	"iconPicker.cat.Animals": "Állatok",
+	"iconPicker.cat.Arrows": "Nyilak",
+	"iconPicker.cat.Astronomy": "Csillagászat",
+	"iconPicker.cat.Audio&Video": "Hang és videó",
+	"iconPicker.cat.Automotive": "Autók",
+	"iconPicker.cat.Badges": "Jelvények",
+	"iconPicker.cat.Brand": "Márkák",
+	"iconPicker.cat.Buildings": "Épületek",
+	"iconPicker.cat.Business": "Üzlet",
+	"iconPicker.cat.Camping": "Kemping",
+	"iconPicker.cat.Charity": "Jótékonyság",
+	"iconPicker.cat.Charts": "Diagramok",
+	"iconPicker.cat.Charts + Diagrams": "Diagramok és ábrák",
+	"iconPicker.cat.Childhood": "Gyermekkor",
+	"iconPicker.cat.Clothing + Fashion": "Ruha és divat",
+	"iconPicker.cat.Coding": "Programozás",
+	"iconPicker.cat.Communicate": "Kommunikáció",
+	"iconPicker.cat.Communication": "Kommunikáció",
+	"iconPicker.cat.Computers": "Számítógépek",
+	"iconPicker.cat.Connectivity": "Kapcsolódás",
+	"iconPicker.cat.Construction": "Építkezés",
+	"iconPicker.cat.Currencies": "Valuták",
+	"iconPicker.cat.Database": "Adatbázis",
+	"iconPicker.cat.Design": "Tervezés",
+	"iconPicker.cat.Development": "Fejlesztés",
+	"iconPicker.cat.Devices": "Eszközök",
+	"iconPicker.cat.Devices + Hardware": "Eszközök és hardver",
+	"iconPicker.cat.Disaster + Crisis": "Katasztrófák és válságok",
+	"iconPicker.cat.Document": "Dokumentum",
+	"iconPicker.cat.E-commerce": "E-kereskedelem",
+	"iconPicker.cat.Editing": "Szerkesztés",
+	"iconPicker.cat.Education": "Oktatás",
+	"iconPicker.cat.Electrical": "Elektromos",
+	"iconPicker.cat.Emoji": "Emoji",
+	"iconPicker.cat.Energy": "Energia",
+	"iconPicker.cat.Extensions": "Bővítmények",
+	"iconPicker.cat.Files": "Fájlok",
+	"iconPicker.cat.Film + Video": "Film és videó",
+	"iconPicker.cat.Food": "Étel",
+	"iconPicker.cat.Food + Beverage": "Étel és ital",
+	"iconPicker.cat.Fruits + Vegetables": "Gyümölcsök és zöldségek",
+	"iconPicker.cat.Games": "Játékok",
+	"iconPicker.cat.Gaming": "Gaming",
+	"iconPicker.cat.Gender": "Nem",
+	"iconPicker.cat.Genders": "Nemek",
+	"iconPicker.cat.Gestures": "Gesztusok",
+	"iconPicker.cat.Halloween": "Halloween",
+	"iconPicker.cat.Hands": "Kezek",
+	"iconPicker.cat.Hardware": "Hardver",
+	"iconPicker.cat.Health": "Egészség",
+	"iconPicker.cat.Holidays": "Ünnepnapok",
+	"iconPicker.cat.Home": "Otthon",
+	"iconPicker.cat.Household": "Háztartás",
+	"iconPicker.cat.Humanitarian": "Humanitárius",
+	"iconPicker.cat.Images": "Képek",
+	"iconPicker.cat.Laundry": "Mosás",
+	"iconPicker.cat.Letters": "Betűk",
+	"iconPicker.cat.Logic": "Logika",
+	"iconPicker.cat.Logistics": "Logisztika",
+	"iconPicker.cat.Map": "Térkép",
+	"iconPicker.cat.Maps": "Térképek",
+	"iconPicker.cat.Maritime": "Tengeri",
+	"iconPicker.cat.Marketing": "Marketing",
+	"iconPicker.cat.Math": "Matematika",
+	"iconPicker.cat.Mathematics": "Matematika",
+	"iconPicker.cat.Media": "Média",
+	"iconPicker.cat.Media Playback": "Média lejátszás",
+	"iconPicker.cat.Medical + Health": "Orvosi és egészség",
+	"iconPicker.cat.Money": "Pénz",
+	"iconPicker.cat.Mood": "Hangulat",
+	"iconPicker.cat.Moving": "Költözés",
+	"iconPicker.cat.Music + Audio": "Zene és hang",
+	"iconPicker.cat.Nature": "Természet",
+	"iconPicker.cat.Numbers": "Számok",
+	"iconPicker.cat.Photography": "Fényképezés",
+	"iconPicker.cat.Photos + Images": "Fotók és képek",
+	"iconPicker.cat.Political": "Politikai",
+	"iconPicker.cat.Privacy": "Adatvédelem",
+	"iconPicker.cat.Punctuation + Symbols": "Írásjelek és szimbólumok",
+	"iconPicker.cat.Religion": "Vallás",
+	"iconPicker.cat.Science": "Tudomány",
+	"iconPicker.cat.Science Fiction": "Sci-fi",
+	"iconPicker.cat.Security": "Biztonság",
+	"iconPicker.cat.Shapes": "Alakzatok",
+	"iconPicker.cat.Shopping": "Vásárlás",
+	"iconPicker.cat.Social": "Közösségi média",
+	"iconPicker.cat.Spinners": "Töltők",
+	"iconPicker.cat.Sport": "Sport",
+	"iconPicker.cat.Sports + Fitness": "Sport és fitness",
+	"iconPicker.cat.Symbols": "Szimbólumok",
+	"iconPicker.cat.System": "Rendszer",
+	"iconPicker.cat.Text": "Szöveg",
+	"iconPicker.cat.Text Formatting": "Szövegformázás",
+	"iconPicker.cat.Time": "Idő",
+	"iconPicker.cat.Toggle": "Kapcsoló",
+	"iconPicker.cat.Transit": "Tranzit",
+	"iconPicker.cat.Transportation": "Közlekedés",
+	"iconPicker.cat.Travel": "Utazás",
+	"iconPicker.cat.Travel + Hotel": "Utazás és szálloda",
+	"iconPicker.cat.UI actions": "Felhasználói felület műveletek",
+	"iconPicker.cat.Users + People": "Felhasználók és emberek",
+	"iconPicker.cat.Vehicles": "Járművek",
+	"iconPicker.cat.Version control": "Verziókövetés",
+	"iconPicker.cat.Weather": "Időjárás",
+	"iconPicker.cat.Writing": "Írás",
+	"iconPicker.cat.Zodiac": "Állatöv",
+
 	// Downloadable icon packs
 	"iconPack.downloadTitle": "{{name}} még nincs letöltve",
 	"iconPack.downloadDetail": "{{count}} ikon · {{size}} · egyszeri letöltés",
 	"iconPack.download": "Letöltés",
 	"iconPack.downloading": "{{name}} letöltése…",
-	"iconPack.downloadFailed": "{{name}} nem tölthető le. Ellenőrizze a kapcsolatot, majd próbálja újra.",
+	"iconPack.downloadFailed":
+		"{{name}} nem tölthető le. Ellenőrizze a kapcsolatot, majd próbálja újra.",
 	"iconPack.retry": "Újrapróbálkozás",
-	"iconPack.faBrandsNotice": "A márka ikonok a megfelelő tulajdonosok védjegyei. Szerepeltetésük nem jelent jóváhagyást. Kérjük, csak az általuk képviselt vállalat, termék vagy szolgáltatás megjelenítésére használja őket.",
-	"iconPack.artworkRestored": "Az ikonok grafikája letöltve a(z) {{names}} számára.",
-	"iconPack.diskWriteFailed": "A Callout Studio nem tudta menteni az ikoncsomagot a lemezre, ezért legközelebb újra le kell tölteni. A választott ikonok továbbra is mentve vannak a beállításaiban.",
+	"iconPack.faBrandsNotice":
+		"A márka ikonok a megfelelő tulajdonosok védjegyei. Szerepeltetésük nem jelent jóváhagyást. Kérjük, csak az általuk képviselt vállalat, termék vagy szolgáltatás megjelenítésére használja őket.",
+	"iconPack.artworkRestored":
+		"Az ikonok grafikája letöltve a(z) {{names}} számára.",
+	"iconPack.diskWriteFailed":
+		"A Callout Studio nem tudta menteni az ikoncsomagot a lemezre, ezért legközelebb újra le kell tölteni. A választott ikonok továbbra is mentve vannak a beállításaiban.",
 
 	// Icon licences & credits
 	"credits.title": "Ikon licenszek és köszönet",
-	"credits.intro": "A Callout Studio számos nyílt ikonkönyvtárra támaszkodik. Licenszeik alább találhatók, a felhasználáshoz szükséges módosításokkal együtt.",
+	"credits.intro":
+		"A Callout Studio számos nyílt ikonkönyvtárra támaszkodik. Licenszeik alább találhatók, a felhasználáshoz szükséges módosításokkal együtt.",
 	"credits.fullNotices": "Teljes harmadik féltől származó megjegyzések",
-	"credits.pluginLicense": "A Callout Studio saját kódja 0BSD licenc alatt áll; az ikonkönyvtárak megőrzik saját licenszeiket.",
+	"credits.pluginLicense":
+		"A Callout Studio saját kódja 0BSD licenc alatt áll; az ikonkönyvtárak megőrzik saját licenszeiket.",
 
 	"contextMenu.editCallout": "Callout-beállítások szerkesztése",
 	"contextMenu.copyMarkdown": "Callout Markdown másolása",
@@ -324,19 +501,25 @@ export const hu: Record<string, string> = {
 	"contextMenu.deleteSection": "Címsor szakasz törlése",
 	"heading.toggleFold": "Összecsukás váltása",
 	"settings.globalSettings": "Globális beállítások",
-	"settings.globalSettingsDesc": "Finomhangolja, hogyan nézzen ki az egyes callout-típusok a teljes tárban.",
-	"settings.globalSettingsRegularDesc": "Adjon hozzá egy callout tokent egy idézethez (pl. `> [!type]`), hogy megjelenjen az Obsidian natív callout-doboza. Beállíthatja a szegélyét, a sugarát, a betűméret-arányát és az igazítását.",
-	"settings.globalSettingsHeadingDesc": "Adjon hozzá egy callout tokent közvetlenül a címsor kettőskeresztjei után (pl. `## [!type]`), hogy stílusos callout-címsorként jelenjen meg. Beállíthatja a szegélyét, az alakját és a függőleges térközét.",
-	"settings.globalSettingsInlineDesc": "Adjon hozzá egy callout tokent egy szövegsor bármelyik pontján (pl. `[!type]`), hogy kis beágyazott pirulaként jelenjen meg. Beállíthatja a szegélyét és az alakját.",
+	"settings.globalSettingsDesc":
+		"Finomhangolja, hogyan nézzen ki az egyes callout-típusok a teljes tárban.",
+	"settings.globalSettingsRegularDesc":
+		"Adjon hozzá egy callout tokent egy idézethez (pl. `> [!type]`), hogy megjelenjen az Obsidian natív callout-doboza. Beállíthatja a szegélyét, a sugarát, a betűméret-arányát és az igazítását.",
+	"settings.globalSettingsHeadingDesc":
+		"Adjon hozzá egy callout tokent közvetlenül a címsor kettőskeresztjei után (pl. `## [!type]`), hogy stílusos callout-címsorként jelenjen meg. Beállíthatja a szegélyét, az alakját és a függőleges térközét.",
+	"settings.globalSettingsInlineDesc":
+		"Adjon hozzá egy callout tokent egy szövegsor bármelyik pontján (pl. `[!type]`), hogy kis beágyazott pirulaként jelenjen meg. Beállíthatja a szegélyét és az alakját.",
 	"settings.globalSettingsCustomize": "Testreszabás",
 	"settings.calloutTypeRegular": "Normál callout",
 	"settings.calloutTypeHeading": "Címsor callout",
 	"settings.calloutTypeInline": "Beágyazott callout",
 	"settings.customizeMenu": "Menüelemek testreszabása",
-	"settings.customizeMenuDesc": "Válassza ki, mely jobb gombos műveletek jelenjenek meg az egyes callout-típusoknál, és rendezze át őket. Forrás módban és élő előnézetben is működik.",
+	"settings.customizeMenuDesc":
+		"Válassza ki, mely jobb gombos műveletek jelenjenek meg az egyes callout-típusoknál, és rendezze át őket. Forrás módban és élő előnézetben is működik.",
 	"settings.customizeMenuButton": "Menüelemek testreszabása",
 	"menuCustomize.title": "Jobb gombos menü testreszabása",
-	"menuCustomize.desc": "Kapcsolja be vagy ki a műveleteket, és húzza a fogantyút az átrendezéshez. A módosítások automatikusan mentésre kerülnek.",
+	"menuCustomize.desc":
+		"Kapcsolja be vagy ki a műveleteket, és húzza a fogantyút az átrendezéshez. A módosítások automatikusan mentésre kerülnek.",
 	"menuCustomize.regular": "Normál callout",
 	"menuCustomize.heading": "Címsor callout",
 	"menuCustomize.inline": "Beágyazott callout",
@@ -344,7 +527,8 @@ export const hu: Record<string, string> = {
 	"menuItem.edit": "Callout szerkesztése",
 	"menuItem.openSettings": "Beállítások megnyitása",
 	"menuItem.copyMarkdown": "Markdown másolása",
-	"menuItem.foldDefaults": "Alapértelmezett összecsukási állapot (nyitott / zárt / nincs)",
+	"menuItem.foldDefaults":
+		"Alapértelmezett összecsukási állapot (nyitott / zárt / nincs)",
 	"menuItem.cutSection": "Szakasz kivágása",
 	"menuItem.copySection": "Szakasz másolása",
 	"menuItem.deleteSection": "Szakasz törlése",
@@ -352,20 +536,29 @@ export const hu: Record<string, string> = {
 	"confirm.ok": "Törlés",
 	"confirm.cancel": "Mégse",
 
-	"vault.filesUpdated": "{{count}} callout-hivatkozás frissítve a tárfájlokban.",
-	"vault.idsUpdated": "{{count}} callout-azonosító frissítve a tárfájlokban: {{oldIds}} → {{newId}}",
-	"vault.titlesUpdated": "{{count}} callout-cím frissítve a tárfájlokban: {{oldTitle}} → {{newTitle}}",
+	"vault.filesUpdated":
+		"{{count}} callout-hivatkozás frissítve a tárfájlokban.",
+	"vault.idsUpdated":
+		"{{count}} callout-azonosító frissítve a tárfájlokban: {{oldIds}} → {{newId}}",
+	"vault.titlesUpdated":
+		"{{count}} callout-cím frissítve a tárfájlokban: {{oldTitle}} → {{newTitle}}",
 	"vault.replaceWith": "Csere erre:",
 	"vault.deleteWithout": "Törlés csere nélkül",
 	"vault.confirmDelete": "Megerősítés",
 	"vault.confirmReplace": "Csere",
-	"vault.replacePromptInUse": '"{{name}}" {{count}} alkalommal szerepel {{files}} fájlban. Válasszon callout-ot a helyettesítéshez:',
-	"vault.replacePromptUnused": 'Válasszon callout-ot a következő helyettesítéséhez: "{{name}}":',
-	"vault.noReplacementAvailable": "Nincs más elérhető callout a helyettesítéshez.",
-	"vault.convertedToPlainText": "{{blocks}} callout-blokk {{files}} fájlban egyszerű szöveggé alakítva.",
-	"vault.resetAliasWarning": "{{count}} hivatkozás {{files}} fájlban egyéni aliasokat használ: {{aliases}}. Visszaállítás után ezek nem fognak működni. Folytatja?",
+	"vault.replacePromptInUse":
+		'"{{name}}" {{count}} alkalommal szerepel {{files}} fájlban. Válasszon callout-ot a helyettesítéshez:',
+	"vault.replacePromptUnused":
+		'Válasszon callout-ot a következő helyettesítéséhez: "{{name}}":',
+	"vault.noReplacementAvailable":
+		"Nincs más elérhető callout a helyettesítéshez.",
+	"vault.convertedToPlainText":
+		"{{blocks}} callout-blokk {{files}} fájlban egyszerű szöveggé alakítva.",
+	"vault.resetAliasWarning":
+		"{{count}} hivatkozás {{files}} fájlban egyéni aliasokat használ: {{aliases}}. Visszaállítás után ezek nem fognak működni. Folytatja?",
 	"vault.resetConfirm": "Visszaállítás",
-	"vault.resetAllInUse": "⚠ {{count}} callout-hivatkozás {{files}} fájlban olyan egyéni callout-típusokat használ, amelyek törlődni fognak.",
+	"vault.resetAllInUse":
+		"⚠ {{count}} callout-hivatkozás {{files}} fájlban olyan egyéni callout-típusokat használ, amelyek törlődni fognak.",
 
 	"vaultStats.title": "Callout-statisztikák",
 	"vaultStats.totalCallouts": "Összes callout",
@@ -388,47 +581,79 @@ export const hu: Record<string, string> = {
 	"vaultStats.close": "Bezárás",
 
 	"import.title": "Importálási problémák",
-	"import.reportLeadIn": "Úgy tűnik, az importált fájlt módosították. Íme a problémák listája:",
-	"import.reportLeadInFatal": "Ez a fájl nem tűnik Callout Studio exportnak. Nem importálható:",
+	"import.reportLeadIn":
+		"Úgy tűnik, az importált fájlt módosították. Íme a problémák listája:",
+	"import.reportLeadInFatal":
+		"Ez a fájl nem tűnik Callout Studio exportnak. Nem importálható:",
 	"import.entryHeading": "Bejegyzés {{index}} — {{label}}",
-	"import.summary": "{{valid}} / {{total}} bejegyzés érvényes · {{issues}} probléma találva.",
+	"import.summary":
+		"{{valid}} / {{total}} bejegyzés érvényes · {{issues}} probléma találva.",
 	"import.btnCancel": "Mégse",
 	"import.btnImportValid": "Csak érvényesek importálása ({{count}})",
-	"import.err.notRecognized": "Ismeretlen fájl: callout-definíciók tömbje vagy Callout Studio exportálás volt várható.",
-	"import.warn.settingsIgnored": "A beállítási blokk nem volt érvényes objektum, ezért figyelmen kívül lett hagyva.",
-	"import.warn.invalidGradient": "A háttér színátmenete nem volt érvényes, ezért figyelmen kívül lett hagyva.",
+	"import.err.notRecognized":
+		"Ismeretlen fájl: callout-definíciók tömbje vagy Callout Studio exportálás volt várható.",
+	"import.warn.settingsIgnored":
+		"A beállítási blokk nem volt érvényes objektum, ezért figyelmen kívül lett hagyva.",
+	"import.warn.invalidGradient":
+		"A háttér színátmenete nem volt érvényes, ezért figyelmen kívül lett hagyva.",
 	"import.err.parseFailed": "A fájl nem érvényes JSON, és nem elemezhető.",
 	"import.err.entryNotObject": "A bejegyzésnek objektumnak kell lennie.",
-	"import.err.requiredMissing": 'A kötelező "{{field}}" mező hiányzik vagy rossz típusú.',
+	"import.err.requiredMissing":
+		'A kötelező "{{field}}" mező hiányzik vagy rossz típusú.',
 	"import.err.idEmpty": "Az azonosító nem lehet üres.",
-	"import.err.idTooLong": 'A "{{value}}" azonosító {{length}} karakter; a maximum {{max}}.',
-	"import.err.idBadChar": 'A "{{value}}" azonosító érvénytelen karaktereket tartalmaz ("|", "[", "]", tabulátorok és sortörések nem megengedettek).',
+	"import.err.idTooLong":
+		'A "{{value}}" azonosító {{length}} karakter; a maximum {{max}}.',
+	"import.err.idBadChar":
+		'A "{{value}}" azonosító érvénytelen karaktereket tartalmaz ("|", "[", "]", tabulátorok és sortörések nem megengedettek).',
 	"import.err.displayNameEmpty": "A megjelenítési név nem lehet üres.",
-	"import.err.displayNameTooLong": "A megjelenítési név {{length}} karakter; a maximum {{max}}.",
-	"import.err.boolField": '"{{field}}" boolean értéknek kell lennie (true vagy false).',
+	"import.err.displayNameTooLong":
+		"A megjelenítési név {{length}} karakter; a maximum {{max}}.",
+	"import.err.boolField":
+		'"{{field}}" boolean értéknek kell lennie (true vagy false).',
 	"import.err.iconNotObject": "Az ikonnak objektumnak kell lennie.",
-	"import.err.iconTypeInvalid": "Az \"{{value}}\" ikontípus nem egyike a következőknek: {{types}}.",
-	"import.warn.iconFieldIgnored": "\"{{field}}\" csak a Material ikonokra vonatkozik, és a rendszer figyelmen kívül hagyja a(z) {{type}} ikontípus esetén.",
-	"import.err.iconValueEmpty": "Az ikonértéknek nem üres karakterláncnak kell lennie.",
-	"import.err.iconValueTooLong": "Az ikonérték szokatlanul hosszú ({{length}} karakter).",
-	"import.err.materialStyle": 'A "{{value}}" Material ikonstílus nem egyike a következőknek: outlined, filled, rounded, sharp.',
-	"import.err.materialWeight": 'A "{{value}}" Material ikonvastagság 100–700 közötti, 100-asával növekvő egész szám kell legyen.',
-	"import.warn.iconRecolorIgnored": "\"recolor\" csak a saját képeire vonatkozik, és a rendszer figyelmen kívül hagyja a(z) {{type}} ikontípus esetén.",
-	"import.err.iconRecolorInvalid": "\"recolor\" igaz vagy hamis kell legyen (kapott: \"{{value}}\").",
-	"import.err.colorInvalid": '"{{field}}" hexadecimális szín kell legyen, pl. "#448aff" (kapott: "{{value}}").',
-	"import.err.numberRange": '"{{field}}" {{min}} és {{max}} közötti szám kell legyen (kapott: "{{value}}").',
-	"import.err.iconSizeRange": '"{{field}}" {{min}} és {{max}} közötti szám kell legyen (kapott: "{{value}}").',
-	"import.err.aliasesNotArray": '"aliases" karakterláncok tömbje kell legyen.',
+	"import.err.iconTypeInvalid":
+		'Az "{{value}}" ikontípus nem egyike a következőknek: {{types}}.',
+	"import.warn.iconFieldIgnored":
+		'"{{field}}" csak a Material ikonokra vonatkozik, és a rendszer figyelmen kívül hagyja a(z) {{type}} ikontípus esetén.',
+	"import.err.iconValueEmpty":
+		"Az ikonértéknek nem üres karakterláncnak kell lennie.",
+	"import.err.iconValueTooLong":
+		"Az ikonérték szokatlanul hosszú ({{length}} karakter).",
+	"import.err.materialStyle":
+		'A "{{value}}" Material ikonstílus nem egyike a következőknek: outlined, filled, rounded, sharp.',
+	"import.err.materialWeight":
+		'A "{{value}}" Material ikonvastagság 100–700 közötti, 100-asával növekvő egész szám kell legyen.',
+	"import.warn.iconRecolorIgnored":
+		'"recolor" csak a saját képeire vonatkozik, és a rendszer figyelmen kívül hagyja a(z) {{type}} ikontípus esetén.',
+	"import.err.iconRecolorInvalid":
+		'"recolor" igaz vagy hamis kell legyen (kapott: "{{value}}").',
+	"import.err.colorInvalid":
+		'"{{field}}" hexadecimális szín kell legyen, pl. "#448aff" (kapott: "{{value}}").',
+	"import.err.numberRange":
+		'"{{field}}" {{min}} és {{max}} közötti szám kell legyen (kapott: "{{value}}").',
+	"import.err.iconSizeRange":
+		'"{{field}}" {{min}} és {{max}} közötti szám kell legyen (kapott: "{{value}}").',
+	"import.err.aliasesNotArray":
+		'"aliases" karakterláncok tömbje kell legyen.',
 	"import.err.aliasNotString": "Az aliasnak karakterláncnak kell lennie.",
-	"import.err.aliasDup": 'A "{{value}}" alias ismétlődik ezen a bejegyzésen belül.',
-	"import.err.tooManyIds": "Túl sok azonosító ({{count}}); minden callout-nak legfeljebb {{max}} azonosítója lehet (elsődleges + aliasok).",
-	"import.err.metadataShape": '"metadata" olyan objektum kell legyen, amelynek minden értéke karakterlánc.',
-	"import.err.unknownFields": "Ismeretlen mezők figyelmen kívül hagyva: {{fields}}.",
-	"import.err.duplicateInFile": 'A "{{value}}" azonosítót/aliast a #{{first}} bejegyzés már használja ebben a fájlban.',
-	"import.err.aliasConflict": 'A "{{value}}" aliast egy másik callout ("{{other}}") már használja a tárban.',
-	"import.warn.defaultFoldedAutofix": '"defaultFolded" true volt, míg "foldable" false volt; a defaultFolded visszaállt false-ra.',
-	"import.warn.imageMissing": "Ez a Callout olyan képet használ, amely nincs sem a fájlban, sem ebben a vaultban, ezért helyőrző ikont fog megjeleníteni, amíg nem ad meg egy újat.",
+	"import.err.aliasDup":
+		'A "{{value}}" alias ismétlődik ezen a bejegyzésen belül.',
+	"import.err.tooManyIds":
+		"Túl sok azonosító ({{count}}); minden callout-nak legfeljebb {{max}} azonosítója lehet (elsődleges + aliasok).",
+	"import.err.metadataShape":
+		'"metadata" olyan objektum kell legyen, amelynek minden értéke karakterlánc.',
+	"import.err.unknownFields":
+		"Ismeretlen mezők figyelmen kívül hagyva: {{fields}}.",
+	"import.err.duplicateInFile":
+		'A "{{value}}" azonosítót/aliast a #{{first}} bejegyzés már használja ebben a fájlban.',
+	"import.err.aliasConflict":
+		'A "{{value}}" aliast egy másik callout ("{{other}}") már használja a tárban.',
+	"import.warn.defaultFoldedAutofix":
+		'"defaultFolded" true volt, míg "foldable" false volt; a defaultFolded visszaállt false-ra.',
+	"import.warn.imageMissing":
+		"Ez a Callout olyan képet használ, amely nincs sem a fájlban, sem ebben a vaultban, ezért helyőrző ikont fog megjeleníteni, amíg nem ad meg egy újat.",
 
-	"footer.tagline": "Van visszajelzése, megjegyzése vagy javaslata? Szívesen meghallgatom!",
+	"footer.tagline":
+		"Van visszajelzése, megjegyzése vagy javaslata? Szívesen meghallgatom!",
 	"footer.madeBy": "Készítette: Niv  •  ",
 };
