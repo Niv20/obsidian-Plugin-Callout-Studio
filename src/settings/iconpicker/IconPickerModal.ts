@@ -621,7 +621,7 @@ export class IconPicker extends Modal {
 		this.confirmBtn?.toggleClass("is-disabled", false);
 		this.previewEl
 			.createDiv("icon-picker-preview-label")
-			.setText(describeIcon(this.selectedIcon));
+			.setText(describeIcon(this.selectedIcon, this.plugin.registry.getUserImages()));
 	}
 
 	/**
@@ -674,7 +674,7 @@ export class IconPicker extends Modal {
 }
 
 /** Human-readable summary of a selection, for the footer. */
-function describeIcon(icon: CalloutIcon): string {
+function describeIcon(icon: CalloutIcon, userImages: readonly UserImageIcon[]): string {
 	const pack = packFor(icon);
 	const source = pack ? t(pack.labelKey) : icon.type;
 	if (icon.type === "material") {
@@ -682,6 +682,10 @@ function describeIcon(icon: CalloutIcon): string {
 			`${source}: ${icon.value} ` +
 			`(${icon.style ?? MATERIAL_DEFAULT_STYLE}, ${icon.weight ?? MATERIAL_DEFAULT_WEIGHT})`
 		);
+	}
+	if (icon.type === "image") {
+		const image = userImages.find((img) => img.id === icon.value);
+		return `${source}: ${image?.name ?? icon.value}`;
 	}
 	// Font Awesome's three styles share one source, so the name alone would not
 	// say which drawing is about to be saved.
