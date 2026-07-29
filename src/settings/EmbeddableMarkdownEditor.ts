@@ -40,6 +40,16 @@ interface InternalMarkdownEditor extends Component {
 interface EditorOwner {
 	app: App;
 	onMarkdownScroll: () => void;
+	/**
+	 * The internal edit view's native scroll listener calls this unconditionally
+	 * (real `MarkdownView`s use it for split source/reading scroll sync). A no-op
+	 * here is enough — but it must exist: Chromium fires a spurious `scroll`
+	 * event on a scroller whenever an ancestor's `dir` flips to `rtl` (which
+	 * Obsidian sets high in the DOM under RTL interface languages), even with
+	 * zero user scrolling, and a missing method throws `TypeError` from that
+	 * event handler.
+	 */
+	syncScroll: () => void;
 	getMode: () => "source" | "preview";
 	/**
 	 * The real Obsidian editor. This owner becomes `app.workspace.activeEditor`
@@ -158,6 +168,7 @@ export class EmbeddableMarkdownEditor {
 		const owner: EditorOwner = {
 			app,
 			onMarkdownScroll: () => {},
+			syncScroll: () => {},
 			getMode: () => "source",
 			// Once mounted, expose the REAL Obsidian editor (see EditorOwner.editor
 			// for why the owner must be a full editor: Word Count and the Command
