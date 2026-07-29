@@ -21,6 +21,27 @@ export interface PackGlyph {
 	r?: 1;
 	/** 1 when the path needs `clip-rule="evenodd"`. */
 	c?: 1;
+	/**
+	 * 1 when the path is filled rather than left hollow. Only meaningful in a
+	 * stroked pack, where the root fills nothing: Tabler draws the pips on
+	 * `dice-3` and the eyes on `brand-reddit` as solids inside an outline.
+	 */
+	f?: 1;
+	/** 1 when the path opts out of the pack's stroke — a solid with no outline. */
+	n?: 1;
+}
+
+/**
+ * How a pack's paths are painted, when they are outlines rather than solids.
+ *
+ * Declared by the pack module in our own source, never read from the downloaded
+ * file: the file stays path data and 1s, which is what lets it skip SVG
+ * sanitization. Every existing pack passes none of this and is unaffected.
+ */
+export interface PackStroke {
+	width: number;
+	linecap: "round" | "butt" | "square";
+	linejoin: "round" | "miter" | "bevel";
 }
 
 /** One drawing of an icon. Its viewBox is `0 0 {w} {the size key}`. */
@@ -136,15 +157,26 @@ export function pickSizeKey(
 /**
  * Assemble an icon's drawing into SVG markup.
  *
- * No `fill` is emitted, so the glyph takes its colour from whatever the caller
- * sets — `fill="currentColor"` on screen, a baked literal for PDF export.
+ * A solid pack emits no `fill` at all, so the glyph takes its colour from
+ * whatever the caller sets — `fill="currentColor"` on screen, a baked literal
+ * for PDF export.
+ *
+ * A stroked pack has to say more, because an outline is defined by the ink it
+ * *withholds*: the root declares `fill="none"` and strokes in `currentColor`,
+ * which inherits the surrounding colour on screen exactly as Obsidian's own
+ * Lucide artwork does, and resolves to black inside a CSS mask — where only
+ * alpha is read anyway. renderIcon recognises such a drawing by its `stroke`
+ * and leaves the fill alone rather than flooding the outline solid.
+ *
  * Attribute values need no escaping: `d` is restricted to the path grammar
- * above, which contains no quote, angle bracket or ampersand.
+ * above, and everything else is a literal from `stroke`, which callers build in
+ * source rather than read from the pack file.
  */
 export function buildPackSvg(
 	id: IconPackId,
 	name: string,
 	preferred: readonly string[],
+	stroke?: PackStroke,
 ): string | null {
 	const file = loaded.get(id);
 	const sizes = file?.icons[name];
@@ -161,12 +193,22 @@ export function buildPackSvg(
 				`<path d="${g.d}"` +
 				(g.r ? ` fill-rule="evenodd"` : "") +
 				(g.c ? ` clip-rule="evenodd"` : "") +
+				// Only ever read in a stroked pack: in a solid one the root fills
+				// nothing either, so a per-path override would have nothing to say.
+				(stroke && g.f ? ` fill="currentColor"` : "") +
+				(stroke && g.n ? ` stroke="none"` : "") +
 				`/>`,
 		)
 		.join("");
 
+	const rootPaint = stroke
+		? ` fill="none" stroke="currentColor" stroke-width="${stroke.width}"` +
+			` stroke-linecap="${stroke.linecap}"` +
+			` stroke-linejoin="${stroke.linejoin}"`
+		: "";
+
 	return (
 		`<svg xmlns="http://www.w3.org/2000/svg" ` +
-		`viewBox="0 0 ${size.w} ${key}">${paths}</svg>`
+		`viewBox="0 0 ${size.w} ${key}"${rootPaint}>${paths}</svg>`
 	);
 }

@@ -330,9 +330,14 @@ export const fr: Record<string, string> = {
 	"iconPicker.confirm": "Confirmer",
 	"iconPicker.cancel": "Annuler",
 	"iconPicker.lucide": "Lucide",
+	"iconPicker.tabler": "Tabler Icons",
 	"iconPicker.material": "Material",
 	"iconPicker.emoji": "Emoji",
 	"iconPicker.searchLucide": "rechercher des icônes Lucide",
+	"iconPicker.searchTabler": "rechercher des icônes Tabler",
+	"iconPicker.tablerStyle": "Style d'icône",
+	"iconPicker.tablerStyleOutline": "Contour",
+	"iconPicker.tablerStyleFilled": "Rempli",
 	"iconPicker.loadMore": "Charger plus",
 	"iconPicker.materialStyle": "Style d'icône",
 	"iconPicker.materialWeight": "Épaisseur de l'icône",
@@ -388,6 +393,7 @@ export const fr: Record<string, string> = {
 	"iconPicker.descAllSources":
 		"rechercher dans toutes les bibliothèques à la fois",
 	"iconPicker.descLucide": "le kit d'Obsidian, toujours hors ligne",
+	"iconPicker.descTabler": "icônes d'interface épurées et cohérentes, contour et rempli",
 	"iconPicker.descMaterial":
 		"le kit de Google, quatre styles et sept épaisseurs",
 	"iconPicker.descEmoji": "glyphes colorés, chaque teinte de peau",

@@ -23,11 +23,12 @@ All three forms render in Live Preview, Reading view, and PDF export.
 
 ### Icons
 
-Six icon libraries, all from one picker — choose a source from the menu and search across it:
+Seven icon libraries, all from one picker — choose a source from the menu and search across it:
 
 | Source | Icons | Notes |
 | --- | --- | --- |
 | **Lucide** | ~1,600 | Obsidian's built-in set. Always available, always offline. |
+| **Tabler Icons** | 5,130 | Selectable style — Outline (all 5,130) or Filled (1,054). 41 categories to filter by. |
 | **Material Symbols** | 3,870 | Selectable style (Outlined / Filled / Rounded / Sharp) and weight (100–700). |
 | **Emoji** | ~1,900 | Any Unicode emoji, with a skin-tone selector. |
 | **Font Awesome** | 1,992 | Selectable style — Solid (1,422), Regular (169) or Brands (572). 68 categories to filter by. |
@@ -36,7 +37,7 @@ Six icon libraries, all from one picker — choose a source from the menu and se
 
 Or leave it on **All sources** and search every library at once.
 
-Searching works offline for every source from the moment you install — the names, keywords and categories all ship with the plugin. The last three sources download their artwork once, when you first press **Download** in the picker, and work offline afterwards. See [Network usage and privacy](#network-usage-and-privacy).
+Searching works offline for every source from the moment you install — the names, keywords and categories all ship with the plugin. Tabler Icons, Font Awesome, Octicons and RPG Awesome download their artwork once, when you first press **Download** in the picker, and work offline afterwards. See [Network usage and privacy](#network-usage-and-privacy).
 
 You can also fine-tune each callout's icon size and horizontal/vertical offset.
 
@@ -162,10 +163,11 @@ Callout Studio never sends vault content anywhere, and collects no telemetry or 
 
 ### Downloadable icon sources
 
-Font Awesome, Octicons and RPG Awesome ship their artwork as files downloaded the first time you press **Download** on that source in the picker. After that the source works entirely offline. Font Awesome is three files, one per style, fetched together by that one button — and only the ones you do not already have.
+Tabler Icons, Font Awesome, Octicons and RPG Awesome ship their artwork as files downloaded the first time you press **Download** on that source in the picker. After that the source works entirely offline. A source with styles is several files, one per style, fetched together by that one button — and only the ones you do not already have.
 
 | Source | Download size |
 | --- | --- |
+| Tabler Icons | 1.7 MB (Outline 1.14 MB, Filled 503 KB) |
 | Font Awesome | 1.4 MB (Solid 794 KB, Regular 105 KB, Brands 559 KB) |
 | Octicons | 375 KB |
 | RPG Awesome | 625 KB |
@@ -173,8 +175,8 @@ Font Awesome, Octicons and RPG Awesome ship their artwork as files downloaded th
 These come from this plugin's own repository, pinned to an immutable tag:
 
 ```
-https://cdn.jsdelivr.net/gh/Niv20/obsidian-Plugin-Callout-Studio@packs-v1/packs/<source>.json
-https://raw.githubusercontent.com/Niv20/obsidian-Plugin-Callout-Studio/packs-v1/packs/<source>.json   (fallback)
+https://cdn.jsdelivr.net/gh/Niv20/obsidian-Plugin-Callout-Studio@packs-v2/packs/<source>.json
+https://raw.githubusercontent.com/Niv20/obsidian-Plugin-Callout-Studio/packs-v2/packs/<source>.json   (fallback)
 ```
 
 Each download is checked against a SHA-256 checksum built into the plugin, and rejected unless it matches exactly — so a compromised CDN, a captive portal or a truncated response cannot substitute anything. The file is then stored at `.obsidian/plugins/callout-studio/icon-packs/<source>.json`, and re-checked against the same checksum every time it is read, so a file that is later edited or damaged is never trusted.
@@ -184,7 +186,7 @@ Each download is checked against a SHA-256 checksum built into the plugin, and r
 - **Importing callouts.** An import file names icons but carries no artwork, so whatever the imported callouts need and this vault does not have is fetched, and a notice says which sources arrived.
 - **Repairing a damaged or deleted pack file.** On startup, a source a callout uses that has gone missing or no longer matches its checksum is downloaded again. This only happens if a callout would otherwise be undrawable — if the icons you use are already cached in `data.json` (which is the normal case), nothing is fetched.
 
-**Installing a source without a network:** download the file from the plugin's [GitHub release](https://github.com/Niv20/obsidian-Plugin-Callout-Studio/releases) and drop it into that folder, named after the source (`fa-solid.json`, `octicons.json`, and so on). It is verified against the same checksum on the next launch.
+**Installing a source without a network:** download the file from the plugin's [GitHub release](https://github.com/Niv20/obsidian-Plugin-Callout-Studio/releases) and drop it into that folder, named after the source (`tabler-outline.json`, `fa-solid.json`, `octicons.json`, and so on). It is verified against the same checksum on the next launch.
 
 ### Material Symbols
 
@@ -219,7 +221,7 @@ Callout Studio's own code is [0BSD](LICENSE), but the icon libraries it draws on
 Two points worth knowing before you publish something made with these icons:
 
 - **Font Awesome Free** icons are [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/), © Fonticons, Inc. Attribution travels with them, so a theme or template you share that uses them carries the same requirement.
-- **Brand icons** — Font Awesome's Brands style, and GitHub's own marks within Octicons — are trademarks, which no icon licence grants rights to. Font Awesome asks that they be used only to represent the company, product or service they refer to; the picker repeats that notice whenever the Brands style is selected.
+- **Brand icons** — Font Awesome's Brands style, Tabler's Brand category, and GitHub's own marks within Octicons — are trademarks, which no icon licence grants rights to. Font Awesome asks that they be used only to represent the company, product or service they refer to; the picker repeats that notice whenever the Brands style is selected, and the same caution applies to the other two.
 
 ## 💖 Special Thanks
 

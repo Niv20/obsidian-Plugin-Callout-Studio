@@ -170,6 +170,11 @@ function paintSvgIcon(
 	const stencil =
 		options.followCalloutColor !== false && followsCalloutColor(icon, picture);
 	const keepsOwnColors = picture !== undefined && !stencil;
+	// An outline drawing is defined by the ink it withholds: its root fills
+	// `none` and strokes `currentColor` (see buildPackSvg). It therefore needs
+	// the same treatment a stencilled picture does, and for the same reason —
+	// a blanket fill would overwrite that `none` and flood the outline solid.
+	const stroked = !stencil && !keepsOwnColors && isStroked(svgEl);
 
 	const rootDecls: string[] = [];
 	if (options.rootStyle) rootDecls.push(options.rootStyle);
@@ -186,6 +191,11 @@ function paintSvgIcon(
 			// drawing from resolving against the surrounding callout colour.
 			svgEl.setAttribute("color", SVG_INITIAL_COLOR);
 		}
+	} else if (stroked) {
+		// Nothing here either. On screen the artwork's own `currentColor` already
+		// tracks the surrounding colour, exactly as Obsidian's Lucide does; a
+		// baked export colour is left to stencilSvg below, which is already the
+		// routine that recolours a drawing without adding ink.
 	} else if (!stencil) {
 		// A stencilled picture gets its paint from stencilSvg alone, root included:
 		// blanketing the root here would overwrite a `fill="none"` an outline
@@ -204,10 +214,27 @@ function paintSvgIcon(
 	// on its own root, and replacing that attribute with the caller's sizing would
 	// throw away the colours this whole branch just decided to keep.
 	if (rootDecls.length > 0) appendStyle(svgEl, rootDecls.join(";"));
-	if (stencil) stencilSvg(svgEl, color);
+	// A stroked drawing only needs this for a baked colour; on screen its own
+	// `currentColor` is already right, and rewriting it would pin the icon to
+	// one theme's colour.
+	if (stencil || (stroked && options.fill !== "currentColor")) {
+		stencilSvg(svgEl, color);
+	}
 
 	target.replaceChildren(svgEl);
 	return "painted";
+}
+
+/**
+ * Whether this artwork paints itself with strokes rather than fills.
+ *
+ * Read off the drawing rather than asked of the pack, so a copy already sitting
+ * in `data.json` describes itself — the cache is written once and read by every
+ * later build. Only a stroked pack's root carries `stroke` (see buildPackSvg);
+ * a solid one declares no paint at all.
+ */
+function isStroked(svgEl: Element): boolean {
+	return svgEl.hasAttribute("stroke");
 }
 
 /* ------------------------------------------------------------------ *

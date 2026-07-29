@@ -9,9 +9,10 @@ Two of them are worth reading before you use them, rather than after:
 - **Font Awesome Free**'s icons are CC BY 4.0. Redistributing something built
   with them — a theme, a vault template, a screenshot set — carries the same
   attribution requirement this file satisfies for the plugin.
-- **Brand icons** (Font Awesome Brands, and GitHub's own marks in Octicons) are
-  trademarks. No icon licence grants trademark rights, so their owners' usage
-  guidelines apply regardless of what the icon licence permits.
+- **Brand icons** (Font Awesome Brands, Tabler's Brand category, and GitHub's
+  own marks in Octicons) are trademarks. No icon licence grants trademark
+  rights, so their owners' usage guidelines apply regardless of what the icon
+  licence permits.
 
 ## What the plugin ships, and what it fetches
 
@@ -25,7 +26,7 @@ Artwork arrives one of two ways:
 | Lucide | Shipped inside Obsidian; the plugin draws it via Obsidian's own API |
 | Emoji | Rendered by your system's emoji font; nothing is downloaded |
 | Material Symbols | Fetched from Google, one icon at a time, only for icons you choose |
-| Octicons, Font Awesome, RPG Awesome | Downloaded once when you press **Download** on that source in the icon picker — one file each, three for Font Awesome (one per style) |
+| Tabler Icons, Octicons, Font Awesome, RPG Awesome | Downloaded once when you press **Download** on that source in the icon picker — one file each, two for Tabler and three for Font Awesome (one per style) |
 
 Downloaded packs are verified against a SHA-256 checksum built into the plugin
 and cached in the plugin's own folder. See the README's *Network usage and
@@ -85,6 +86,48 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ```
+
+---
+
+## Tabler Icons 3.46.0
+
+- **Homepage:** https://tabler.io/icons
+- **Licence:** MIT
+- **Copyright:** Paweł Kuna
+
+**Modifications:** Path data is extracted from the published SVGs and
+re-serialized into a compressed pack file; the transparent bounding path every
+upstream file opens with is dropped, the stroke styling of the outline set is
+applied at render time rather than baked in, and the half-opacity on one path of
+`brand-parsinta` is not carried over.
+
+```
+MIT License
+
+Copyright (c) 2020-2026 Paweł Kuna
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+```
+
+Tabler's Brand category holds company marks, which are trademarks of their
+owners. No icon licence grants trademark rights, so the same caution that
+applies to Font Awesome Brands applies to those.
 
 ---
 

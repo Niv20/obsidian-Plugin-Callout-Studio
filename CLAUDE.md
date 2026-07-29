@@ -49,12 +49,18 @@ Callout Studio is an Obsidian plugin that lets users create and manage custom ca
 
 Two id spaces, kept apart in `icons/registry.ts`, both total `Record`s so declaring an id without the thing behind it is a compile error:
 
-- **`IconSourceId`** (7) — a library as the user meets it: one row in the picker's source menu, one toolbar, one Download button. `ICON_SOURCES` maps it to the `IconPack` (`icons/types.ts`).
-- **`IconPackId`** (9) — one body of artwork: one `CalloutIcon.type`, one pack manifest entry, one downloaded file, one SVG cache key. `SOURCE_OF_TYPE` maps it to its source, which is what `packFor(icon)` walks.
+- **`IconSourceId`** (8) — a library as the user meets it: one row in the picker's source menu, one toolbar, one Download button. `ICON_SOURCES` maps it to the `IconPack` (`icons/types.ts`).
+- **`IconPackId`** (11) — one body of artwork: one `CalloutIcon.type`, one pack manifest entry, one downloaded file, one SVG cache key. `SOURCE_OF_TYPE` maps it to its source, which is what `packFor(icon)` walks.
 
-They differ only for Font Awesome: one source, three files (`fa-solid`/`fa-regular`/`fa-brands`) chosen by its style control. **Cache keys and pack-store calls use `icon.type`, never `pack.id`** — using the source id would collapse the three styles onto one entry and orphan everything already cached.
+They differ only for Font Awesome (one source, three files — `fa-solid`/`fa-regular`/`fa-brands`) and Tabler (one source, two — `tabler-outline`/`tabler-filled`), each chosen by its style control. **Cache keys and pack-store calls use `icon.type`, never `pack.id`** — using the source id would collapse the styles onto one entry and orphan everything already cached.
 
-`IconPackKind` decides how artwork reaches the screen: `builtin` (Lucide, via `setIcon`), `glyph` (emoji), `perIconRemote` (Material — 100,000+ style/weight variants, so fetched one at a time), `bundledRemote` (Font Awesome, Octicons, RPG Awesome — files downloaded on request, listed per source in `dataPacks`), `local` (**Your images** — the user's own files, held in `settings.userImages`, never fetched).
+`IconPackKind` decides how artwork reaches the screen: `builtin` (Lucide, via `setIcon`), `glyph` (emoji), `perIconRemote` (Material — 100,000+ style/weight variants, so fetched one at a time), `bundledRemote` (Tabler, Font Awesome, Octicons, RPG Awesome — files downloaded on request, listed per source in `dataPacks`), `local` (**Your images** — the user's own files, held in `settings.userImages`, never fetched).
+
+### Stroked artwork (Tabler outline)
+
+Every other downloadable pack is solid artwork the renderer fills. Tabler's outline set is drawn with a stroke and `fill="none"`, which the drawing has to state for itself — so **the stroke lives in `packs/tabler.ts` as a `PackStroke` constant, never in the downloaded file**, which stays path data and 1s and therefore still skips SVG sanitization. `buildPackSvg` takes it as an optional argument and puts it on the root; `PackGlyph`'s `f`/`n` flags let the 77 solid details inside an outline (dice pips, `brand-reddit`'s eyes) opt out, and are flags rather than values for the same reason. **`PACK_FORMAT` was deliberately not bumped** — the additions are optional and appear only in a pack no older build can name.
+
+Two consumers see that paint and neither needed changing: a CSS `mask-image` reads alpha only, and `currentColor` inside a data URI resolves to black there (the behaviour `renderIcon.ts`'s `SVG_INITIAL_COLOR` already documents). In the DOM, `paintSvgIcon` recognises a stroked drawing by the `stroke` on its root (`isStroked`) and leaves it alone on screen — `currentColor` already tracks the surrounding colour, as `builtin` Lucide does — while a baked export colour goes through the existing `stencilSvg`, which rewrites declared paint without ever colouring a `none`.
 
 ### Your images (`icon.type === "image"`)
 
@@ -67,11 +73,11 @@ The one source the user writes to. `CalloutIcon.value` is a `UserImageIcon.id`, 
 - **`registry.setUserImages()` is the single writer**, which re-syncs the pack's module-level snapshot (`buildSvg` is synchronous by contract, so it cannot read settings itself).
 - **The picker uses `ImagePanel`, not `PackPanel`** — add and delete are affordances the `IconPack` contract deliberately has no room for. The "Follow callout color" toggle is *not* there; it lives in `CalloutEditor`'s Picture section, beside the icon's size and offsets, because it belongs to the callout.
 
-A pack's optional `entryMatches` filters the grid by variant (Font Awesome's style picks *which* icons exist, not just how they look), and `pickerNotice` scopes a standing notice to certain variants (the Brands trademark note).
+A pack's optional `entryMatches` filters the grid by variant (Font Awesome's style and Tabler's pick *which* icons exist, not just how they look — only 1,054 of Tabler's 5,130 have a filled drawing), and `pickerNotice` scopes a standing notice to certain variants (the Brands trademark note).
 
 `renderIcon.ts` is the **only** code that turns an icon into DOM; every surface calls `renderIconInto`. Never reach into the SVG cache from a renderer — go through `IconResolver`.
 
-Search indexes are bundled (packed by `icons/data/codec.ts`); artwork is not. Regenerate with `npm run icons:generate` — never part of `npm run build`, and its output is committed. Pack files are served from the `packs-v1` tag; refreshing them means a **new tag** plus updated checksums in `icons/data/packManifest.ts`, because jsDelivr caches tags permanently.
+Search indexes are bundled (packed by `icons/data/codec.ts`); artwork is not. Regenerate with `npm run icons:generate` — never part of `npm run build`, and its output is committed. Pack files are served from the `packs-v2` tag; refreshing them means a **new tag** plus updated checksums in `icons/data/packManifest.ts`, because jsDelivr caches tags permanently.
 
 ### Key types (`src/types.ts`)
 

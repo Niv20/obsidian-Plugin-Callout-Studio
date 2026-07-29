@@ -507,6 +507,141 @@ async function buildMaterial() {
 	};
 }
 
+// ── Tabler Icons ────────────────────────────────────────────────────────
+
+const TABLER_DIR = join(ROOT, "node_modules/@tabler/icons");
+
+/** Every Tabler drawing is on the same 24-unit square, so there is one size. */
+const TABLER_SIZE = "24";
+
+/**
+ * The transparent square every Tabler SVG opens with. It exists to pin the
+ * icon's bounds in a browser and draws nothing, but through a CSS mask — which
+ * reads alpha, not colour — it would blot out the whole box. Dropped.
+ */
+const TABLER_BOUNDS_PATH = "M0 0h24v24H0z";
+
+/**
+ * The paint a path is allowed to declare for itself, and the flag it becomes.
+ *
+ * Outline icons are stroked from the root, and 77 of their 20,706 paths opt out
+ * of that for a detail drawn solid — the pips on `dice-3`, the eyes on
+ * `brand-reddit`. Both flags are booleans, never values: what `f` and `n` mean
+ * is written in src/icons/packData.ts, so the file still holds nothing but path
+ * data and 1s.
+ */
+const TABLER_GLYPH_FLAGS = [
+	{ attr: "fill", value: "currentColor", flag: "f" },
+	{ attr: "stroke", value: "none", flag: "n" },
+];
+
+/**
+ * Read one Tabler SVG into a drawing.
+ *
+ * Strict on purpose, in the same way parseOcticonPaths is: an element or an
+ * attribute this does not expect means upstream changed shape, and a build that
+ * quietly dropped it would ship a wrong icon. As of 3.46.0 the only attribute
+ * outside `d` and the two flags above is an `opacity=".5"` on one path of
+ * `brand-parsinta`, which is allowed through and dropped — recorded in the
+ * pack's `modifications`, since it renders that one path fully opaque.
+ */
+function readTablerSvg(style, name) {
+	const where = `tabler-${style}/${name}`;
+	const raw = readFileSync(join(TABLER_DIR, "icons", style, `${name}.svg`), "utf8");
+	const body = raw.slice(raw.indexOf(">") + 1);
+
+	const elements = [...body.matchAll(/<([a-zA-Z-]+)/g)].map((m) => m[1]);
+	const unexpected = elements.filter((e) => e !== "path");
+	if (unexpected.length > 0) {
+		throw new Error(`unexpected elements at ${where}: ${unexpected.join(", ")}`);
+	}
+	if (!/\bviewBox="0 0 24 24"/.test(raw)) {
+		throw new Error(`unexpected viewBox at ${where}: ${raw.slice(0, 160)}`);
+	}
+
+	const p = [];
+	for (const match of body.matchAll(/<path\b([^>]*?)\/?>/g)) {
+		const attrs = match[1];
+		const d = /\bd="([^"]*)"/.exec(attrs)?.[1];
+		assertPathData(d, where);
+		if (d === TABLER_BOUNDS_PATH) continue;
+
+		const glyph = { d };
+		for (const { attr, value, flag } of TABLER_GLYPH_FLAGS) {
+			// Filled icons declare `fill="currentColor"` on the root already, so the
+			// 16 paths that repeat it are saying nothing and need no flag.
+			if (style === "outline" && new RegExp(`\\b${attr}="${value}"`).test(attrs)) {
+				glyph[flag] = 1;
+			}
+		}
+
+		const declared = [...attrs.matchAll(/([a-z-]+)="/g)].map((m) => m[1]);
+		const unknown = declared.filter(
+			(a) => !["d", "fill", "stroke", "opacity"].includes(a),
+		);
+		if (unknown.length > 0) {
+			throw new Error(`unexpected attributes at ${where}: ${unknown.join(", ")}`);
+		}
+		p.push(glyph);
+	}
+	if (p.length === 0) throw new Error(`no drawable <path> at ${where}`);
+
+	return { w: 24, p };
+}
+
+/**
+ * Build one Tabler style.
+ *
+ * Upstream ships one metadata record per name covering both styles, so `styles`
+ * is what says whether this style draws it: every one of the 5,130 names has an
+ * outline drawing, 1,054 also have a filled one.
+ */
+function buildTabler(style) {
+	const version = JSON.parse(
+		readFileSync(join(TABLER_DIR, "package.json"), "utf8"),
+	).version;
+	const metadata = JSON.parse(
+		readFileSync(join(TABLER_DIR, "icons.json"), "utf8"),
+	);
+
+	const names = Object.keys(metadata)
+		.filter((name) => metadata[name].styles?.[style])
+		.sort();
+	if (names.length === 0) throw new Error(`no icons for style "${style}"`);
+
+	const icons = {};
+	const entries = [];
+	for (const name of names) {
+		icons[name] = { [TABLER_SIZE]: readTablerSvg(style, name) };
+
+		// Tags are the whole reason a search for "warning" finds `alert-triangle`.
+		// A few are numbers upstream ("a-b-2" is tagged 2), hence the cast.
+		const keywords = [
+			...new Set(
+				(metadata[name].tags ?? [])
+					.map((tag) => String(tag).replace(/\s+/g, " ").trim().toLowerCase())
+					.filter((tag) => tag.length > 0),
+			),
+		];
+		const category = metadata[name].category;
+		entries.push({
+			name,
+			// No label: Tabler's names are already the display text, and omitting
+			// them lets the index skip its label block entirely.
+			categories: category ? [category] : [],
+			keywords,
+		});
+	}
+
+	return {
+		id: `tabler-${style}`,
+		version,
+		file: { icons },
+		entries,
+		note: `${entries.length} icons`,
+	};
+}
+
 // ── Emit ────────────────────────────────────────────────────────────────
 
 function writePackFile(pack) {
@@ -575,6 +710,8 @@ async function assertRoundTrip(entries, encoded) {
 const BUILDERS = {
 	material: buildMaterial,
 	octicons: buildOcticons,
+	"tabler-outline": () => buildTabler("outline"),
+	"tabler-filled": () => buildTabler("filled"),
 	"fa-solid": () => buildFontAwesome("solid"),
 	"fa-regular": () => buildFontAwesome("regular"),
 	"fa-brands": () => buildFontAwesome("brands"),

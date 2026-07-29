@@ -20,6 +20,7 @@
 import type { CalloutIcon, IconPackId, IconSourceId } from "../types";
 import type { IconPack } from "./types";
 import { lucidePack } from "./packs/lucide";
+import { tablerPack } from "./packs/tabler";
 import { materialPack } from "./packs/material";
 import { emojiPack } from "./packs/emoji";
 import { octiconsPack } from "./packs/octicons";
@@ -30,6 +31,9 @@ import { userImagesPack } from "./packs/userImages";
 export const ICON_SOURCES: Readonly<Record<IconSourceId, IconPack>> =
 	Object.freeze({
 		lucide: lucidePack,
+		// Second, next to Lucide: it is the same outline idiom drawn on the same
+		// 24-unit grid, so the two read as neighbours rather than as alternatives.
+		tabler: tablerPack,
 		material: materialPack,
 		emoji: emojiPack,
 		octicons: octiconsPack,
@@ -49,6 +53,8 @@ export const ICON_SOURCE_IDS: readonly IconSourceId[] = Object.freeze(
 const SOURCE_OF_TYPE: Readonly<Record<IconPackId, IconSourceId>> = Object.freeze(
 	{
 		lucide: "lucide",
+		"tabler-outline": "tabler",
+		"tabler-filled": "tabler",
 		material: "material",
 		emoji: "emoji",
 		octicons: "octicons",

@@ -13,14 +13,17 @@
  * spelling — every `data.json` and every exported settings file in the wild
  * stores them. Adding a member is backward-compatible; renaming one is not.
  *
- * This is *not* what the picker offers: Font Awesome's three styles are three
- * ids here (they are three separately downloaded files) but one source in the
- * picker. `IconSourceId` is that other id space, and `icons/registry.ts` maps
- * this union onto it with a total `Record`, so a member added here without a
- * source behind it is a compile error rather than a blank grid.
+ * This is *not* what the picker offers: Font Awesome's three styles and
+ * Tabler's two are separate ids here (they are separately downloaded files) but
+ * one source each in the picker. `IconSourceId` is that other id space, and
+ * `icons/registry.ts` maps this union onto it with a total `Record`, so a
+ * member added here without a source behind it is a compile error rather than a
+ * blank grid.
  */
 export type IconPackId =
 	| "lucide"
+	| "tabler-outline"
+	| "tabler-filled"
 	| "material"
 	| "emoji"
 	| "octicons"
@@ -34,12 +37,13 @@ export type IconPackId =
  * One library as the user meets it: a row in the picker's source menu, a
  * toolbar, a grid, one download button.
  *
- * Usually the same string as the IconPackId behind it. Font Awesome is the
- * exception that makes the distinction worth having — one source, three pack
- * files, chosen between by its style control.
+ * Usually the same string as the IconPackId behind it. Font Awesome and Tabler
+ * are the exceptions that make the distinction worth having — one source each,
+ * several pack files, chosen between by a style control.
  */
 export type IconSourceId =
 	| "lucide"
+	| "tabler"
 	| "material"
 	| "emoji"
 	| "octicons"
@@ -273,6 +277,14 @@ export type MaterialIconStyle = "outlined" | "filled" | "rounded" | "sharp";
 export type FontAwesomeStyle = "solid" | "regular" | "brands";
 
 /**
+ * Tabler's two styles. Every icon is drawn as an outline; 1,054 of the 5,130
+ * also have a filled drawing, so the style control filters the grid as well as
+ * restyling it. Each style is its own downloaded file, hence its own
+ * IconPackId.
+ */
+export type TablerIconStyle = "outline" | "filled";
+
+/**
  * A single entry in the bundled emoji dataset (see data/emojiData.ts).
  * `skins` is present only for skin-tone-capable emojis: the 5 fully-qualified
  * variant glyphs ordered light → dark.
@@ -374,6 +386,8 @@ export interface IconSourceSettings {
 	materialWeightDefault: number;
 	/** Font Awesome style the picker opens on. */
 	faStyleDefault?: FontAwesomeStyle;
+	/** Tabler style the picker opens on. */
+	tablerStyleDefault?: TablerIconStyle;
 	/**
 	 * Pre-2.4 field: the last Material category. Read once on load and folded
 	 * into `lastCategory`, which covers every source rather than just Material.

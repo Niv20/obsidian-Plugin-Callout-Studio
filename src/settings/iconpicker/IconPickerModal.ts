@@ -27,6 +27,7 @@ import {
 	MATERIAL_DEFAULT_WEIGHT,
 } from "../../icons/packs/material";
 import { FA_DEFAULT_STYLE, faStyleOf } from "../../icons/packs/fontAwesome";
+import { TABLER_DEFAULT_STYLE, tablerStyleOf } from "../../icons/packs/tabler";
 import {
 	ALL_SOURCES,
 	ALL_SOURCES_META,
@@ -541,6 +542,16 @@ export class IconPicker extends Modal {
 					FA_DEFAULT_STYLE,
 			};
 		}
+		if (id === "tabler") {
+			// Same reasoning as Font Awesome above: the style is the icon's own
+			// type, so re-editing an icon opens the grid it actually lives in.
+			return {
+				tablerStyle:
+					(this.currentIcon ? tablerStyleOf(this.currentIcon) : undefined) ??
+					sources.tablerStyleDefault ??
+					TABLER_DEFAULT_STYLE,
+			};
+		}
 		if (id === "material") {
 			const current =
 				this.currentIcon?.type === "material" ? this.currentIcon : null;
@@ -573,6 +584,10 @@ export class IconPicker extends Modal {
 			if (variants.weight) sources.materialWeightDefault = variants.weight;
 		} else if (id === "fa") {
 			if (variants.faStyle) sources.faStyleDefault = variants.faStyle;
+		} else if (id === "tabler") {
+			if (variants.tablerStyle) {
+				sources.tablerStyleDefault = variants.tablerStyle;
+			}
 		} else if (id === "emoji" && variants.emojiSkinTone !== undefined) {
 			sources.lastEmojiSkinTone = variants.emojiSkinTone;
 		}

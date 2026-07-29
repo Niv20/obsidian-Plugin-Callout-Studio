@@ -21,6 +21,7 @@ import type {
 	IconPackId,
 	IconSourceId,
 	MaterialIconStyle,
+	TablerIconStyle,
 } from "../types";
 import type { LocaleKey } from "../i18n";
 
@@ -85,6 +86,8 @@ export interface IconVariantState {
 	emojiSkinTone?: number;
 	/** Font Awesome style. Unlike Material's, it also filters the grid. */
 	faStyle?: FontAwesomeStyle;
+	/** Tabler style. Filters the grid too — only some icons have a filled one. */
+	tablerStyle?: TablerIconStyle;
 }
 
 /**
@@ -97,7 +100,7 @@ export interface IconVariantState {
 export type IconVariantSpec =
 	| {
 			kind: "select";
-			key: "style" | "weight" | "faStyle";
+			key: "style" | "weight" | "faStyle" | "tablerStyle";
 			labelKey: LocaleKey;
 			options: readonly (string | number)[];
 			/**
