@@ -1617,9 +1617,11 @@ button.callout-studio-icon-picker-loading {
 }
 
 /* Room for that ring, and pictures need more air between them than the
-   monochrome glyphs the 4px default was measured for. */
+   monochrome glyphs the 4px default was measured for. Top padding keeps the
+   ring on row 1 from being clipped by the scroll container's edge. */
 .icon-picker-image-panel .icon-picker-grid {
 	gap: 8px;
+	padding-top: 3px;
 }
 
 /* ── "Your images" panel ───────────────────────────────────────────── */
