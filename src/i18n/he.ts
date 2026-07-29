@@ -22,8 +22,6 @@ export const he: Record<string, string> = {
 	"settings.rescanVault": "סריקה מחדש של הכספת",
 	"settings.rescanVaultDesc":
 		"חיפוש מזהים של תיבות־הבלטה לא מוכרות ברחבי הכספת והוספתם כשורות ברירת־מחדל.",
-	"settings.rescanVaultHintPrefix":
-		"רוצים למצוא תיבות־הבלטה שכבר קיימות בכספת?",
 	"settings.rescanVaultHintAction": "סריקה עכשיו",
 	"settings.rescanComplete": "הסריקה הסתיימה: נוספו {{count}} בלוקים חדשים.",
 	"replaceModal.deleteWithoutReplaceSuffix": "(החלה של ברירת־מחדל)",
@@ -82,7 +80,6 @@ export const he: Record<string, string> = {
 	"settings.languageDesc":
 		"שפת התצוגה של Callout Studio. ברירת־המחדל היא שפת הממשק של Obsidian.",
 	"settings.languageAuto": "אוטומטי (לפי Obsidian)",
-	"settings.colorMode": "מצב צבע",
 	"settings.importExport": "ייבוא / ייצוא",
 	"settings.import": "ייבוא",
 	"settings.export": "ייצוא",
@@ -95,36 +92,18 @@ export const he: Record<string, string> = {
 
 	// Settings — Toolbar
 	"settings.addNewCallout": "+ הוספת תיבת־הבלטה חדשה",
-	"settings.refresh": "רענון",
-	"settings.moreActions": "פעולות נוספות",
-	"settings.importCSS": "ייבוא מקטע CSS (Snippet)",
-	"settings.importJSON": "ייבוא מ־JSON",
-	"settings.exportAll": "ייצוא הכול",
 
 	// Settings — Empty states
-	"settings.noCalloutsYet":
-		'אין עדיין תיבות־הבלטה מותאמות־אישית. לחצו על "+ הוספת תיבת־הבלטה חדשה" כדי ליצור אחת.',
 	"settings.noCalloutsNow": "כרגע אין תיבות־הבלטה מותאמות־אישית.",
-	"settings.noMatch": "לא נמצאו תיבות־הבלטה התואמות לחיפוש.",
 
 	// Settings — Row actions
 	"settings.editAria": "עריכת {{name}}",
-	"settings.resetAria": "איפוס {{name}} לברירת־מחדל",
-	"settings.deleteAria": "מחיקת {{name}}",
-	"settings.swapAria":
-		"החלפת {{name}} (ברירת־המחדל הנוכחית) בתיבת־הבלטה אחרת בכספת",
-	"settings.replaceAria": "החלפת {{name}} בכספת בתיבת־הבלטה אחרת",
 	"settings.moreRowActionsAria": "פעולות נוספות עבור {{name}}",
 	"settings.usageInfo": "בשימוש {{count}} פעמים ב־{{files}} קבצים",
 	"settings.replaceAction": "החלפה בכספת",
 	"settings.deleteAction": "מחיקה",
 	"settings.resetAction": "איפוס לברירת־מחדל",
 	"settings.makeFallbackAction": "החלת עיצוב ברירת־המחדל",
-	"settings.deleteConfirm": 'למחוק את תיבת־ההבלטה "{{name}}"?',
-	"settings.lightLabel": "בהיר",
-	"settings.darkLabel": "כהה",
-	"settings.lightColorAria": "בהיר: {{color}}",
-	"settings.darkColorAria": "כהה: {{color}}",
 
 	// Settings — Fallback callout
 	"settings.colorSwatchAria": "הדגשה: {{accent}} · רקע: {{bg}}",
@@ -134,35 +113,27 @@ export const he: Record<string, string> = {
 
 	// Settings — Global style
 	"settings.globalStyle": "עיצוב גלובלי לתיבות־הבלטה",
-	"settings.globalStyleDesc": "הגדרות אלו משפיעות על כל תיבות־ההבלטה.",
 	"settings.border": "מסגרות",
-	"settings.borderDesc": "בחירת הצדדים שבהם תוצג מסגרת לתיבת־ההבלטה",
 	"settings.borderAll": "הכול",
 	"settings.borderTop": "עליונה",
 	"settings.borderRight": "ימנית",
 	"settings.borderBottom": "תחתונה",
 	"settings.borderLeft": "שמאלית",
 	"settings.borderWidth": "עובי המסגרת",
-	"settings.borderWidthDesc": "עובי המסגרת בפיקסלים עבור הצדדים הפעילים",
 	"settings.fontScaleGroup": "קנה־מידה לגופנים",
 	"settings.titleScale": "כותרת",
 	"settings.contentScale": "תוכן",
 	"settings.inlineTextScale": "טקסט",
 	"settings.shapeGroup": "צורה",
 	"settings.borderRadius": "עיגול הפינות",
-	"settings.borderRadiusDesc": "רדיוס הפינות בפיקסלים של תיבת־ההבלטה",
 	"settings.alignGroup": "יישור",
 	"settings.alignContent": "יישור התוכן לכותרת",
 	"settings.headingSpacingGroup": "ריווח הכותרת",
 	"settings.headingPadVertical": "ריווח אנכי",
 	"settings.headingIconIndent": "הזחת האייקון",
 	"settings.headingGap": "מרווח בין כותרות",
-	"settings.refGroup": "מתאר וקישורים",
 	"settings.styleDemoName": "דוגמה",
 	"settings.previewTitle": "תצוגה מקדימה",
-	"settings.previewCalloutTitle": "תיבת־הבלטה לדוגמה",
-	"settings.previewCalloutContent":
-		"לורם איפסום דולור סיט אמט, קונסקטורר אדיפיסינג אלית. סד דו אייסמוד טמפור אינסידידונט אוט לבורה את דולורה מגנה אליקה. אוט אנים אד מינים ונאים, קויס נוסטרוד אקסרסיטאשן אולמקו לבוריס.",
 
 	// Settings — Saved color palettes
 	"settings.customPalettes": "פלטות צבעים שמורות",
@@ -183,7 +154,6 @@ export const he: Record<string, string> = {
 		"פתיחת מסך קיצורי המקלדת של Obsidian עבור פקודות Callout Studio, שם תוכלו לבחור קיצורים ליצירת סוג חדש, פתיחת הגדרות, עטיפה בתוך או חילוץ מתיבת־הבלטה. כברירת־מחדל, לא מוגדרים קיצורי מקלדת.",
 	"settings.openHotkeysButton": "פתיחת הגדרות",
 
-	"settings.colorFormat": "פורמט צבע",
 
 	// Settings — Reset
 	"settings.vaultMaintenance": "סקירה ותחזוקה של הכספת",
@@ -201,21 +171,14 @@ export const he: Record<string, string> = {
 	"notice.resetAllDone": "הכול אופס לברירות־המחדל.",
 
 	// Notices
-	"notice.importedCSS": "יובאו {{count}} סוגי תיבות־הבלטה ממקטעי CSS.",
-	"notice.noNewCSS": "לא נמצאו סוגי תיבות־הבלטה חדשים במקטעי ה־CSS.",
-	"notice.failedCSS": "קריאת תיקיית מקטעי ה־CSS נכשלה.",
 	"notice.exported": "תיבות־ההבלטה יוצאו לקובץ callout-studio-export.json",
-	"notice.invalidJSON": "פורמט JSON לא תקין: צפוי מערך (Array).",
 	"notice.importedJSON": "יובאו {{count}} סוגי תיבות־הבלטה מתוך JSON.",
 	"notice.importedSettings": "הגדרות התוסף יובאו.",
 	"notice.noNewJSON":
 		"לא יובאו תיבות־הבלטה חדשות (ייתכן שהמזהים כבר קיימים).",
-	"notice.failedJSON": "פענוח קובץ ה־JSON נכשל.",
-	"notice.svgCacheCleared": "מטמון ה־SVG של Material נוקה.",
 	"notice.iconDownloadFailed":
 		'לא ניתן להוריד את אייקון Material "{{name}}". ייתכן שאינו זמין בסגנון/משקל הזה, או שאין חיבור לאינטרנט.',
 	"notice.nothingToWrap": "אין תוכן לעטוף.",
-	"notice.selectionContainsNoContent": "האזור הנבחר אינו מכיל תוכן.",
 	"notice.cursorNotInsideCallout": "הסמן אינו נמצא בתוך תיבת־הבלטה.",
 	"notice.openHotkeysFailed":
 		"לא ניתן לפתוח את מסך קיצורי המקלדת של Obsidian.",
@@ -239,8 +202,6 @@ export const he: Record<string, string> = {
 	"editor.idCannotDelete":
 		"לא ניתן למחוק מזהה זה — הוא מקושר לשם התצוגה. כדי לשנותו, ערכו את השם",
 	"editor.icon": "אייקון",
-	"editor.light": "בהיר",
-	"editor.dark": "כהה",
 	"editor.livePreview": "תצוגה מקדימה בזמן אמת",
 	"editor.iconAdjustment": "התאמת אייקון",
 	"editor.picture": "תמונה",
@@ -248,12 +209,7 @@ export const he: Record<string, string> = {
 	"editor.horizontalOffset": "היסט אופקי",
 	"editor.verticalOffset": "היסט אנכי",
 	"editor.colors": "צבעים",
-	"editor.background": "רקע",
-	"editor.gradientEnd": "סוף הגרדיאנט",
-	"editor.text": "טקסט",
-	"editor.iconColor": "צבע ראשי",
 	"editor.paletteDeleted": "צבע שנמחק",
-	"editor.paletteNone": "— בחירת תבנית —",
 	"editor.paletteGroupObsidian": "תיבות־הבלטה של Obsidian",
 	"editor.paletteGroupPresets": "תבניות צבע",
 	"editor.paletteGroupCustom": "מותאם אישית",
@@ -266,8 +222,6 @@ export const he: Record<string, string> = {
 	"editor.foldOff": "ללא קיפול",
 	"editor.foldOpen": "פתוח כברירת־מחדל",
 	"editor.foldClosed": "סגור כברירת־מחדל",
-	"editor.expandPreview": "פתיחת התצוגה המקדימה",
-	"editor.collapsePreview": "סגירת התצוגה המקדימה",
 	"editor.cancel": "ביטול",
 	"editor.saveChanges": "שמירת שינויים",
 	"editor.createCallout": "יצירת תיבת־הבלטה",
@@ -353,12 +307,9 @@ export const he: Record<string, string> = {
 	"iconPicker.searchMaterial": "חיפוש אייקוני Material",
 	"iconPicker.searchEmoji": "חיפוש אימוג'י",
 	"iconPicker.skinTone": "גוון עור",
-	"iconPicker.iconsLoading": "האייקונים נטענים, אנא המתינו...",
-	"iconPicker.loadFailed": "טעינת אייקוני Material נכשלה: {{error}}",
 	"iconPicker.allCategories": "כל הקטגוריות",
 	"iconPicker.noIconSelected": "לא נבחר אייקון",
 	"iconPicker.noResults": "לא נמצאו אייקונים התואמים לחיפוש.",
-	"iconPicker.delete": "מחיקה",
 	"iconPicker.octicons": "Octicons",
 	"iconPicker.searchOcticons": "חיפוש אייקוני Octicons",
 	"iconPicker.fa": "Font Awesome",
@@ -456,25 +407,9 @@ export const he: Record<string, string> = {
 	"settings.globalSettingsCustomize": "התאמה אישית",
 
 	// Callout types section
-	"settings.calloutTypes": "סוגי תיבות־הבלטה",
 	"settings.calloutTypeRegular": "תיבת־הבלטה רגילה",
-	"settings.calloutTypeRegularDesc":
-		"תיבת־הבלטה עם תוכן בתוך ציטוט: ‎> [!name]‎. תמיד פעילה.",
-	"settings.calloutTypeRegularLocked":
-		"תיבות־הבלטה רגילות הן הרינדור המובנה של Obsidian ולא ניתן לכבות אותן.",
-	"settings.roleEnabled": "מופעל",
 	"settings.calloutTypeHeading": "תיבת־הבלטה ככותרת",
-	"settings.calloutTypeHeadingDesc":
-		"כותרת שהתוכן הראשון בה הוא הסימון, למשל ‎## [!name]‎. מוצגת כפס צבעוני בגודל הפונט של הכותרת. סימון ‎+‎ / ‎-‎ אחרי הסימון פותח/סוגר את כל המקטע בעת פתיחת הקובץ.",
 	"settings.calloutTypeInline": "תיבת־הבלטה מוטבעת",
-	"settings.calloutTypeInlineDesc":
-		"סימון ‎[!name]‎ באמצע שורה, מוצג כגלולה קטנה. ללא כותרת וללא תוכן.",
-	"settings.refCleanTitles": "ניקוי כותרות במתאר ובקישורים",
-	"settings.refCleanTitlesDesc":
-		"הסתרת הסימון ‎[!name]‎ בכל מקום שבו יש הפניה לתיבת־הבלטה מסוג כותרת: חלונית המתאר, קישורים לכותרת (כולל תוכני עניינים), וחלונית הצעות הקישורים. כותרות ללא טקסט כותרת מציגות את השם לתצוגה של תיבת־ההבלטה.",
-	"settings.refShowIcon": "הצגת סמל במתאר ובקישורים",
-	"settings.refShowIconDesc":
-		"הצגת הסמל הצבעוני של תיבת־ההבלטה לפני הכותרת המנוקה במקומות אלו.",
 
 	// Context menu customization
 	"settings.customizeMenu": "התאמת פריטי התפריט",
@@ -488,8 +423,6 @@ export const he: Record<string, string> = {
 	"menuCustomize.heading": "תיבת־הבלטה ככותרת",
 	"menuCustomize.inline": "תיבת־הבלטה מוטבעת",
 	"menuCustomize.dragHandle": "גררו כדי לשנות סדר",
-	"menuCustomize.moveUp": "העברה למעלה",
-	"menuCustomize.moveDown": "העברה למטה",
 	"menuItem.edit": "עריכת תיבת־ההבלטה",
 	"menuItem.openSettings": "פתיחת ההגדרות",
 	"menuItem.copyMarkdown": "העתקת Markdown",
@@ -503,20 +436,12 @@ export const he: Record<string, string> = {
 	"confirm.cancel": "ביטול",
 
 	// Vault edge-case modals
-	"vault.renameConfirm":
-		'{{count}} הפניות ב־{{files}} קבצים משתמשות במזהים שהוסרו: {{oldIds}}. לעדכן ל־"{{newId}}"?',
-	"vault.updateFiles": "עדכון קבצים",
-	"vault.skip": "דילוג",
 	"vault.filesUpdated": "עודכנו {{count}} הפניות בקובצי הכספת.",
 	"vault.idsUpdated":
 		"עודכנו {{count}} מזהים של תיבות־הבלטה בקובצי הכספת: {{oldIds}} → {{newId}}",
 	"vault.titlesUpdated":
 		"עודכנו {{count}} כותרות של תיבות־הבלטה בקובצי הכספת: {{oldTitle}} → {{newTitle}}",
-	"vault.deleteInUse":
-		'"{{name}}" מופיעה {{count}} פעמים ב־{{files}} קבצים. כיצד תרצו להמשיך?',
 	"vault.replaceWith": "החלפה ב:",
-	"vault.selectCallout": "— בחירת תיבת־הבלטה —",
-	"vault.replaceAndDelete": "החלפה ומחיקה",
 	"vault.deleteWithout": "מחיקה ללא החלפה",
 	"vault.confirmDelete": "אישור",
 	"vault.confirmReplace": "החלפה",
@@ -564,7 +489,6 @@ export const he: Record<string, string> = {
 		"{{valid}} מתוך {{total}} רשומות נמצאו תקינות · התגלו {{issues}} בעיות.",
 	"import.btnCancel": "ביטול",
 	"import.btnImportValid": "ייבוא הרשומות התקינות בלבד ({{count}})",
-	"import.err.notArray": "הערך הראשי חייב להיות מערך (Array) של הגדרות תיבת־הבלטה.",
 	"import.err.notRecognized":
 		"קובץ לא מזוהה: נדרש מערך של הגדרות תיבת־הבלטה או קובץ ייצוא של Callout Studio.",
 	"import.warn.settingsIgnored":

@@ -22,8 +22,6 @@ export const en: Record<string, string> = {
 	"settings.rescanVault": "Re-scan vault",
 	"settings.rescanVaultDesc":
 		"Find unrecognized callout IDs used in notes and add them as fallback rows.",
-	"settings.rescanVaultHintPrefix":
-		"Need to discover callouts from your vault?",
 	"settings.rescanVaultHintAction": "Scan now",
 	"settings.rescanComplete":
 		"Re-scan complete: {{count}} new callout(s) added.",
@@ -83,7 +81,6 @@ export const en: Record<string, string> = {
 	"settings.languageDesc":
 		"Display language for Callout Studio. Defaults to Obsidian's interface language.",
 	"settings.languageAuto": "Automatic (match Obsidian)",
-	"settings.colorMode": "Color mode",
 	"settings.importExport": "Import / export",
 	"settings.import": "Import",
 	"settings.export": "Export",
@@ -95,37 +92,18 @@ export const en: Record<string, string> = {
 
 	// Settings — Toolbar
 	"settings.addNewCallout": "Add new callout",
-	"settings.refresh": "Refresh",
-	"settings.moreActions": "More actions",
-	"settings.importCSS": "Import from CSS snippet",
-	"settings.importJSON": "Import from JSON",
-	"settings.exportAll": "Export all",
 
 	// Settings — Empty states
-	"settings.noCalloutsYet":
-		'No custom callouts yet. Click "Add new callout" to create one.',
 	"settings.noCalloutsNow": "No custom callouts for now.",
-	"settings.noMatch": "No callouts match your search.",
 
 	// Settings — Row actions
 	"settings.editAria": "Edit {{name}}",
-	"settings.resetAria": "Reset {{name}} to default",
-	"settings.deleteAria": "Delete {{name}}",
-	"settings.swapAria":
-		"Swap {{name}} (current fallback) with another callout in the vault",
-	"settings.replaceAria":
-		"Replace {{name}} in the vault with another callout",
 	"settings.moreRowActionsAria": "More actions for {{name}}",
 	"settings.usageInfo": "{{count}} use(s) in {{files}} file(s)",
 	"settings.replaceAction": "Replace in vault",
 	"settings.deleteAction": "Delete",
 	"settings.resetAction": "Reset to default",
 	"settings.makeFallbackAction": "Use default fallback style",
-	"settings.deleteConfirm": 'Delete callout "{{name}}"?',
-	"settings.lightLabel": "L",
-	"settings.darkLabel": "D",
-	"settings.lightColorAria": "Light: {{color}}",
-	"settings.darkColorAria": "Dark: {{color}}",
 	"settings.colorSwatchAria": "Accent: {{accent}} · Background: {{bg}}",
 
 	// Settings — Fallback callout
@@ -135,36 +113,27 @@ export const en: Record<string, string> = {
 
 	// Settings — Global style
 	"settings.globalStyle": "Global callout style",
-	"settings.globalStyleDesc": "These settings affect all callouts globally.",
 	"settings.border": "Borders",
-	"settings.borderDesc":
-		"Select which sides of the callout have a visible border",
 	"settings.borderAll": "All",
 	"settings.borderTop": "Top",
 	"settings.borderRight": "Right",
 	"settings.borderBottom": "Bottom",
 	"settings.borderLeft": "Left",
 	"settings.borderWidth": "Border thickness",
-	"settings.borderWidthDesc": "Thickness in pixels for active borders",
 	"settings.fontScaleGroup": "Font scale",
 	"settings.titleScale": "Title",
 	"settings.contentScale": "Content",
 	"settings.inlineTextScale": "Text",
 	"settings.shapeGroup": "Shape",
 	"settings.borderRadius": "Corner rounding",
-	"settings.borderRadiusDesc": "Border-radius in pixels for callout corners",
 	"settings.alignGroup": "Align",
 	"settings.alignContent": "Align content with title",
 	"settings.headingSpacingGroup": "Title spacing",
 	"settings.headingPadVertical": "Vertical spacing",
 	"settings.headingIconIndent": "Icon indent",
 	"settings.headingGap": "Spacing between headers",
-	"settings.refGroup": "Outline and links",
 	"settings.styleDemoName": "Example",
 	"settings.previewTitle": "Preview",
-	"settings.previewCalloutTitle": "Example callout",
-	"settings.previewCalloutContent":
-		"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.",
 
 	// Settings — Saved color palettes
 	"settings.customPalettes": "Saved color palettes",
@@ -186,7 +155,6 @@ export const en: Record<string, string> = {
 		"Open Obsidian's hotkeys settings for Callout Studio commands, where you can choose your own shortcuts for Create new callout type, Open settings, Unwrap from callout, and Wrap in callout. No shortcuts are assigned by default.",
 	"settings.openHotkeysButton": "Open hotkey settings",
 
-	"settings.colorFormat": "Color format",
 
 	// Settings — Reset
 	"settings.vaultMaintenance": "Vault insights & maintenance",
@@ -204,22 +172,14 @@ export const en: Record<string, string> = {
 	"notice.resetAllDone": "Everything has been reset to defaults.",
 
 	// Notices
-	"notice.importedCSS":
-		"Imported {{count}} callout type(s) from CSS snippets.",
-	"notice.noNewCSS": "No new callout types found in CSS snippets.",
-	"notice.failedCSS": "Failed to read CSS snippets folder.",
 	"notice.exported": "Callouts exported to callout-studio-export.json",
-	"notice.invalidJSON": "Invalid JSON format: expected an array.",
 	"notice.importedJSON": "Imported {{count}} callout type(s) from JSON.",
 	"notice.importedSettings": "Imported plugin settings.",
 	"notice.noNewJSON":
 		"No new callout types were imported (ids may already exist).",
-	"notice.failedJSON": "Failed to parse JSON file.",
-	"notice.svgCacheCleared": "Material SVG cache cleared.",
 	"notice.iconDownloadFailed":
 		'Could not download Material icon "{{name}}". It may be unavailable for this style/weight, or your connection may be offline.',
 	"notice.nothingToWrap": "Nothing to wrap.",
-	"notice.selectionContainsNoContent": "Selection contains no content.",
 	"notice.cursorNotInsideCallout": "Cursor is not inside a callout.",
 	"notice.openHotkeysFailed": "Could not open Obsidian hotkeys settings.",
 	"notice.filterHotkeysFailed":
@@ -242,8 +202,6 @@ export const en: Record<string, string> = {
 	"editor.idCannotDelete":
 		"This ID is linked to the display name and can't be deleted — edit the name to change it",
 	"editor.icon": "Icon",
-	"editor.light": "Light",
-	"editor.dark": "Dark",
 	"editor.livePreview": "Live preview",
 	"editor.iconAdjustment": "Icon adjustment",
 	"editor.picture": "Picture",
@@ -251,12 +209,7 @@ export const en: Record<string, string> = {
 	"editor.horizontalOffset": "Horizontal offset",
 	"editor.verticalOffset": "Vertical offset",
 	"editor.colors": "Color",
-	"editor.background": "Background",
-	"editor.gradientEnd": "Gradient end",
-	"editor.text": "Text",
-	"editor.iconColor": "Main color",
 	"editor.paletteDeleted": "Deleted color",
-	"editor.paletteNone": "— select a preset —",
 	"editor.paletteGroupObsidian": "Obsidian callouts",
 	"editor.paletteGroupPresets": "Color presets",
 	"editor.paletteGroupCustom": "Custom",
@@ -269,8 +222,6 @@ export const en: Record<string, string> = {
 	"editor.foldOff": "Off",
 	"editor.foldOpen": "Open by default",
 	"editor.foldClosed": "Closed by default",
-	"editor.expandPreview": "Expand preview",
-	"editor.collapsePreview": "Collapse preview",
 	"editor.cancel": "Cancel",
 	"editor.saveChanges": "Save changes",
 	"editor.createCallout": "Create callout",
@@ -361,12 +312,9 @@ export const en: Record<string, string> = {
 	"iconPicker.searchMaterial": "Search Material icons",
 	"iconPicker.searchEmoji": "Search emojis",
 	"iconPicker.skinTone": "Skin tone",
-	"iconPicker.iconsLoading": "Icons are loading, please wait",
-	"iconPicker.loadFailed": "Failed to load Material icons: {{error}}",
 	"iconPicker.allCategories": "All categories",
 	"iconPicker.noIconSelected": "No icon selected",
 	"iconPicker.noResults": "No icons match your search.",
-	"iconPicker.delete": "Delete",
 	"iconPicker.octicons": "Octicons",
 	"iconPicker.searchOcticons": "Search Octicons",
 	"iconPicker.fa": "Font Awesome",
@@ -465,25 +413,9 @@ export const en: Record<string, string> = {
 	"settings.globalSettingsCustomize": "Customize",
 
 	// Callout types section
-	"settings.calloutTypes": "Callout types",
 	"settings.calloutTypeRegular": "Regular callout",
-	"settings.calloutTypeRegularDesc":
-		"A blockquote callout with content: `> [!type]`.",
-	"settings.calloutTypeRegularLocked":
-		"Regular callouts are Obsidian's native rendering and can't be turned off.",
-	"settings.roleEnabled": "Enabled",
 	"settings.calloutTypeHeading": "Heading callout",
-	"settings.calloutTypeHeadingDesc":
-		"A heading whose first content is the token, e.g. `## [!type]`. Rendered as a colored bar at the heading's font size.",
 	"settings.calloutTypeInline": "Inline callout",
-	"settings.calloutTypeInlineDesc":
-		"A `[!type]` token in the middle of a line, rendered as a small pill. No title or content.",
-	"settings.refCleanTitles": "Clean titles in outline and links",
-	"settings.refCleanTitlesDesc":
-		"Hide the [!type] token wherever a heading callout is referenced: the outline pane, links to the heading (including tables of contents), and the link suggestion popup. Headings without a title show the callout's display name.",
-	"settings.refShowIcon": "Show icon in outline and links",
-	"settings.refShowIconDesc":
-		"Show the callout's colored icon before the cleaned title in those places.",
 
 	// Context menu customization
 	"settings.customizeMenu": "Customize menu items",
@@ -497,8 +429,6 @@ export const en: Record<string, string> = {
 	"menuCustomize.heading": "Heading callout",
 	"menuCustomize.inline": "Inline callout",
 	"menuCustomize.dragHandle": "Drag to reorder",
-	"menuCustomize.moveUp": "Move up",
-	"menuCustomize.moveDown": "Move down",
 	"menuItem.edit": "Edit callout",
 	"menuItem.openSettings": "Open settings",
 	"menuItem.copyMarkdown": "Copy Markdown",
@@ -512,21 +442,13 @@ export const en: Record<string, string> = {
 	"confirm.cancel": "Cancel",
 
 	// Vault edge-case modals
-	"vault.renameConfirm":
-		'{{count}} callout reference(s) in {{files}} file(s) use the removed ID(s): {{oldIds}}. Update them to "{{newId}}"?',
-	"vault.updateFiles": "Update files",
-	"vault.skip": "Skip",
 	"vault.filesUpdated":
 		"Updated {{count}} callout reference(s) in vault files.",
 	"vault.idsUpdated":
 		"Updated {{count}} callout ID(s) in vault files: {{oldIds}} → {{newId}}",
 	"vault.titlesUpdated":
 		"Updated {{count}} callout title(s) in vault files: {{oldTitle}} → {{newTitle}}",
-	"vault.deleteInUse":
-		'"{{name}}" is used {{count}} time(s) in {{files}} file(s). Choose how to proceed:',
 	"vault.replaceWith": "Replace with:",
-	"vault.selectCallout": "\u2014 select a callout \u2014",
-	"vault.replaceAndDelete": "Replace & delete",
 	"vault.deleteWithout": "Delete without replacing",
 	"vault.confirmDelete": "Confirm",
 	"vault.confirmReplace": "Replace",
@@ -575,8 +497,6 @@ export const en: Record<string, string> = {
 		"{{valid}} of {{total}} entries are valid · {{issues}} issue(s) found.",
 	"import.btnCancel": "Cancel",
 	"import.btnImportValid": "Import valid only ({{count}})",
-	"import.err.notArray":
-		"The top-level value must be an array of callout definitions.",
 	"import.err.notRecognized":
 		"Unrecognized file: expected a callout definitions array or a Callout Studio export.",
 	"import.warn.settingsIgnored":
