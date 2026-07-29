@@ -10,24 +10,32 @@ export const fr: Record<string, string> = {
 	"settings.fallbackTag": "Par défaut",
 	"settings.fallbackTagAuto": "Par défaut automatique",
 	"settings.rescanVault": "Rescanner le vault",
-	"settings.rescanVaultDesc": "Recherche les IDs de callout non reconnus dans les notes et les ajoute comme lignes de secours.",
-	"settings.rescanVaultHintPrefix": "Besoin de découvrir des callouts dans votre vault ?",
+	"settings.rescanVaultDesc":
+		"Recherche les IDs de callout non reconnus dans les notes et les ajoute comme lignes de secours.",
+	"settings.rescanVaultHintPrefix":
+		"Besoin de découvrir des callouts dans votre vault ?",
 	"settings.rescanVaultHintAction": "Scanner maintenant",
-	"settings.rescanComplete": "Rescan terminé : {{count}} nouveau(x) callout(s) ajouté(s).",
+	"settings.rescanComplete":
+		"Rescan terminé : {{count}} nouveau(x) callout(s) ajouté(s).",
 	"replaceModal.deleteWithoutReplaceSuffix": "(revient au défaut)",
 
 	"firstRun.title": "Trouver les callouts existants dans votre vault ?",
-	"firstRun.body": "Callout Studio peut scanner votre vault pour découvrir les callouts que vous utilisez déjà, afin qu'ils apparaissent dans votre liste de paramètres et adoptent votre style de secours.",
-	"firstRun.heavyVaultNote": "Votre vault contient {{count}} fichiers Markdown — le scan peut prendre quelques secondes.",
-	"firstRun.laterHint": "Vous pouvez toujours effectuer cette opération plus tard depuis Paramètres → Informations et maintenance du vault → Rescanner le vault.",
+	"firstRun.body":
+		"Callout Studio peut scanner votre vault pour découvrir les callouts que vous utilisez déjà, afin qu'ils apparaissent dans votre liste de paramètres et adoptent votre style de secours.",
+	"firstRun.heavyVaultNote":
+		"Votre vault contient {{count}} fichiers Markdown — le scan peut prendre quelques secondes.",
+	"firstRun.laterHint":
+		"Vous pouvez toujours effectuer cette opération plus tard depuis Paramètres → Informations et maintenance du vault → Rescanner le vault.",
 	"firstRun.scanNow": "Scanner maintenant",
 	"firstRun.noThanks": "Non merci",
-	"firstRun.autoScanComplete": "Callout Studio a scanné votre vault et ajouté {{count}} callout(s).",
+	"firstRun.autoScanComplete":
+		"Callout Studio a scanné votre vault et ajouté {{count}} callout(s).",
 	"firstRun.scanning": "Scan en cours",
 
 	"welcome.tooltip": "À propos de Callout Studio",
 	"welcome.title": "Bienvenue dans Callout Studio",
-	"welcome.tagline": "Votre solution complète pour gérer les callouts d'Obsidian.",
+	"welcome.tagline":
+		"Votre solution complète pour gérer les callouts d'Obsidian.",
 	"welcome.previewTitle": "Voir en action",
 	"welcome.sample":
 		"Callout Studio vous permet de créer des callouts avec une icône, des couleurs et un nom personnalisés.\n\n" +
@@ -40,10 +48,14 @@ export const fr: Record<string, string> = {
 		"Callout Studio a bien plus à offrir ! [En savoir plus]({{repoUrl}}).\n",
 
 	"deleteModal.title": 'Supprimer le callout "{{name}}" ?',
-	"deleteModal.bodyInUse": "Ce callout apparaît {{count}} fois dans {{files}} fichier(s).",
-	"deleteModal.bodyInUseExplain": "La suppression convertira ces blocs en texte brut — ils perdront leur style et l'en-tête du callout.",
-	"deleteModal.replaceHint": "Vous pouvez le remplacer par un autre callout, ce qui conserve le contenu du vault sous forme de callout stylisé.",
-	"deleteModal.bodyUnused": '"{{name}}" n\'est utilisé dans aucune note, mais c\'est un callout personnalisé que vous avez créé. La suppression le retirera de cette liste.',
+	"deleteModal.bodyInUse":
+		"Ce callout apparaît {{count}} fois dans {{files}} fichier(s).",
+	"deleteModal.bodyInUseExplain":
+		"La suppression convertira ces blocs en texte brut — ils perdront leur style et l'en-tête du callout.",
+	"deleteModal.replaceHint":
+		"Vous pouvez le remplacer par un autre callout, ce qui conserve le contenu du vault sous forme de callout stylisé.",
+	"deleteModal.bodyUnused":
+		"\"{{name}}\" n'est utilisé dans aucune note, mais c'est un callout personnalisé que vous avez créé. La suppression le retirera de cette liste.",
 	"deleteModal.replaceInstead": "Remplacer plutôt",
 	"deleteModal.deleteInUse": "Supprimer (convertir en texte brut)",
 	"deleteModal.deleteUnused": "Supprimer le callout",
@@ -62,9 +74,12 @@ export const fr: Record<string, string> = {
 	"settings.importExport": "Importer / exporter",
 	"settings.import": "Importer",
 	"settings.export": "Exporter",
-	"settings.importDesc": "Importez votre progression Callout Studio depuis un autre vault via un fichier JSON.",
-	"settings.exportDesc": "Enregistrez tous vos types de callout personnalisés au format JSON.",
-	"settings.importConflictNotice": "{{count}} type(s) de callout importé(s) ; {{overwritten}} entrée(s) existante(s) écrasée(s).",
+	"settings.importDesc":
+		"Importez votre progression Callout Studio depuis un autre vault via un fichier JSON.",
+	"settings.exportDesc":
+		"Enregistrez tous vos types de callout personnalisés au format JSON.",
+	"settings.importConflictNotice":
+		"{{count}} type(s) de callout importé(s) ; {{overwritten}} entrée(s) existante(s) écrasée(s).",
 
 	"settings.addNewCallout": "+ ajouter un callout",
 	"settings.refresh": "Actualiser",
@@ -73,15 +88,18 @@ export const fr: Record<string, string> = {
 	"settings.importJSON": "Importer depuis JSON",
 	"settings.exportAll": "Tout exporter",
 
-	"settings.noCalloutsYet": 'Aucun callout personnalisé pour l\'instant. Cliquez sur "+ ajouter un callout" pour en créer un.',
+	"settings.noCalloutsYet":
+		'Aucun callout personnalisé pour l\'instant. Cliquez sur "+ ajouter un callout" pour en créer un.',
 	"settings.noCalloutsNow": "Aucun callout personnalisé pour le moment.",
 	"settings.noMatch": "Aucun callout ne correspond à votre recherche.",
 
 	"settings.editAria": "Modifier {{name}}",
 	"settings.resetAria": "Réinitialiser {{name}} aux valeurs par défaut",
 	"settings.deleteAria": "Supprimer {{name}}",
-	"settings.swapAria": "Échanger {{name}} (secours actuel) avec un autre callout dans le vault",
-	"settings.replaceAria": "Remplacer {{name}} dans le vault par un autre callout",
+	"settings.swapAria":
+		"Échanger {{name}} (secours actuel) avec un autre callout dans le vault",
+	"settings.replaceAria":
+		"Remplacer {{name}} dans le vault par un autre callout",
 	"settings.moreRowActionsAria": "Plus d'actions pour {{name}}",
 	"settings.usageInfo": "{{count}} utilisation(s) dans {{files}} fichier(s)",
 	"settings.replaceAction": "Remplacer dans le vault",
@@ -96,12 +114,15 @@ export const fr: Record<string, string> = {
 	"settings.colorSwatchAria": "Accent : {{accent}} · Arrière-plan : {{bg}}",
 
 	"settings.fallbackCallout": "Callout de secours par défaut",
-	"settings.fallbackCalloutDesc": "Les types de callout non reconnus dans votre vault hériteront du style de ce callout.",
+	"settings.fallbackCalloutDesc":
+		"Les types de callout non reconnus dans votre vault hériteront du style de ce callout.",
 
 	"settings.globalStyle": "Style global des callouts",
-	"settings.globalStyleDesc": "Ces paramètres affectent tous les callouts globalement.",
+	"settings.globalStyleDesc":
+		"Ces paramètres affectent tous les callouts globalement.",
 	"settings.border": "Bordures",
-	"settings.borderDesc": "Sélectionnez les côtés du callout qui ont une bordure visible",
+	"settings.borderDesc":
+		"Sélectionnez les côtés du callout qui ont une bordure visible",
 	"settings.borderAll": "Tous",
 	"settings.borderTop": "Haut",
 	"settings.borderRight": "Droit",
@@ -115,7 +136,8 @@ export const fr: Record<string, string> = {
 	"settings.inlineTextScale": "Texte",
 	"settings.shapeGroup": "Forme",
 	"settings.borderRadius": "Arrondi des coins",
-	"settings.borderRadiusDesc": "Rayon de bordure en pixels pour les coins du callout",
+	"settings.borderRadiusDesc":
+		"Rayon de bordure en pixels pour les coins du callout",
 	"settings.alignGroup": "Alignement",
 	"settings.alignContent": "Aligner le contenu avec le titre",
 	"settings.headingSpacingGroup": "Espacement du titre",
@@ -126,61 +148,78 @@ export const fr: Record<string, string> = {
 	"settings.styleDemoName": "Exemple",
 	"settings.previewTitle": "Aperçu",
 	"settings.previewCalloutTitle": "Callout d'exemple",
-	"settings.previewCalloutContent": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+	"settings.previewCalloutContent":
+		"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
 
 	// Settings — Saved color palettes
 	"settings.customPalettes": "Palettes de couleurs enregistrées",
 	"settings.newPalette": "Nouvelle palette",
-	"settings.customPalettesEmpty": "Aucune palette enregistrée pour le moment.",
+	"settings.customPalettesEmpty":
+		"Aucune palette enregistrée pour le moment.",
 	"settings.editPaletteAria": "Modifier la palette {{name}}",
 	"settings.deletePaletteAria": "Supprimer la palette {{name}}",
 	"settings.deletePaletteConfirm":
 		'Supprimer la palette "{{name}}" ?\nLes callouts qui utilisent ses couleurs ne sont pas affectés.',
 	"settings.enableAutocomplete": "Activer la saisie automatique [!",
-	"settings.enableAutocompleteDesc": 'Affiche des suggestions lorsque vous tapez "[!" dans une citation de l\'éditeur. Choisissez un type de callout dans la liste pour insérer un en-tête de callout complet.',
+	"settings.enableAutocompleteDesc":
+		'Affiche des suggestions lorsque vous tapez "[!" dans une citation de l\'éditeur. Choisissez un type de callout dans la liste pour insérer un en-tête de callout complet.',
 
 	"settings.openHotkeys": "Raccourcis de Callout Studio",
-	"settings.openHotkeysDesc": "Ouvre les paramètres de raccourcis d'Obsidian pour les commandes de Callout Studio, où vous pouvez choisir vos propres raccourcis pour Créer un type, Ouvrir les paramètres, Retirer le callout et Envelopper dans un callout. Aucun raccourci n'est attribué par défaut.",
+	"settings.openHotkeysDesc":
+		"Ouvre les paramètres de raccourcis d'Obsidian pour les commandes de Callout Studio, où vous pouvez choisir vos propres raccourcis pour Créer un type, Ouvrir les paramètres, Retirer le callout et Envelopper dans un callout. Aucun raccourci n'est attribué par défaut.",
 	"settings.openHotkeysButton": "Ouvrir les raccourcis",
 
 	"settings.colorFormat": "Format de couleur",
 
 	"settings.vaultMaintenance": "Informations et maintenance du vault",
 	"settings.vaultStats": "Statistiques des callouts",
-	"settings.vaultStatsDesc": "Compte tous les blocs de callout dans vos notes Markdown et les regroupe par type.",
+	"settings.vaultStatsDesc":
+		"Compte tous les blocs de callout dans vos notes Markdown et les regroupe par type.",
 	"settings.vaultStatsButton": "Voir les statistiques",
 	"settings.vaultStatsScanning": "Scan en cours",
 	"settings.resetAll": "Réinitialiser",
-	"settings.resetAllDesc": "Supprime tous les callouts utilisateur, réinitialise les callouts intégrés, les styles globaux (bordures, échelle de police, forme), les palettes de couleurs enregistrées, la personnalisation du menu du clic droit et les SVG Material téléchargés.",
+	"settings.resetAllDesc":
+		"Supprime tous les callouts utilisateur, réinitialise les callouts intégrés, les styles globaux (bordures, échelle de police, forme), les palettes de couleurs enregistrées, la personnalisation du menu du clic droit et les SVG Material téléchargés.",
 	"settings.resetAllButton": "Tout réinitialiser",
-	"settings.resetAllConfirm": "Cela supprimera tous les callouts personnalisés, réinitialisera les callouts intégrés, les styles globaux, les palettes de couleurs enregistrées, la personnalisation du menu du clic droit et tous les SVG Material en cache. Cette action est irréversible. Êtes-vous sûr ?",
+	"settings.resetAllConfirm":
+		"Cela supprimera tous les callouts personnalisés, réinitialisera les callouts intégrés, les styles globaux, les palettes de couleurs enregistrées, la personnalisation du menu du clic droit et tous les SVG Material en cache. Cette action est irréversible. Êtes-vous sûr ?",
 	"notice.resetAllDone": "Tout a été réinitialisé aux valeurs par défaut.",
 
-	"notice.importedCSS": "{{count}} type(s) de callout importé(s) depuis des snippets CSS.",
-	"notice.noNewCSS": "Aucun nouveau type de callout trouvé dans les snippets CSS.",
+	"notice.importedCSS":
+		"{{count}} type(s) de callout importé(s) depuis des snippets CSS.",
+	"notice.noNewCSS":
+		"Aucun nouveau type de callout trouvé dans les snippets CSS.",
 	"notice.failedCSS": "Échec de la lecture du dossier des snippets CSS.",
 	"notice.exported": "Callouts exportés vers callout-studio-export.json",
 	"notice.invalidJSON": "Format JSON invalide : un tableau était attendu.",
-	"notice.importedJSON": "{{count}} type(s) de callout importé(s) depuis JSON.",
+	"notice.importedJSON":
+		"{{count}} type(s) de callout importé(s) depuis JSON.",
 	"notice.importedSettings": "Paramètres de l'extension importés.",
-	"notice.noNewJSON": "Aucun nouveau type de callout importé (les IDs peuvent déjà exister).",
+	"notice.noNewJSON":
+		"Aucun nouveau type de callout importé (les IDs peuvent déjà exister).",
 	"notice.failedJSON": "Échec de l'analyse du fichier JSON.",
 	"notice.svgCacheCleared": "Cache SVG Material vidé.",
-	"notice.iconDownloadFailed": 'Impossible de télécharger l\'icône Material "{{name}}". Elle n\'est peut-être pas disponible pour ce style/grammage, ou votre connexion est hors ligne.',
+	"notice.iconDownloadFailed":
+		"Impossible de télécharger l'icône Material \"{{name}}\". Elle n'est peut-être pas disponible pour ce style/grammage, ou votre connexion est hors ligne.",
 	"notice.nothingToWrap": "Rien à envelopper.",
-	"notice.selectionContainsNoContent": "La sélection ne contient aucun contenu.",
+	"notice.selectionContainsNoContent":
+		"La sélection ne contient aucun contenu.",
 	"notice.cursorNotInsideCallout": "Le curseur n'est pas dans un callout.",
-	"notice.openHotkeysFailed": "Impossible d'ouvrir les paramètres de raccourcis d'Obsidian.",
-	"notice.filterHotkeysFailed": "Les raccourcis Obsidian ont été ouverts, mais le filtre Callout Studio n'a pas pu être appliqué.",
+	"notice.openHotkeysFailed":
+		"Impossible d'ouvrir les paramètres de raccourcis d'Obsidian.",
+	"notice.filterHotkeysFailed":
+		"Les raccourcis Obsidian ont été ouverts, mais le filtre Callout Studio n'a pas pu être appliqué.",
 
 	"editor.editCallout": "Modifier le callout",
 	"editor.newCallout": "Nouveau callout",
 	"editor.displayName": "Nom d'affichage",
 	"editor.displayNameDesc": "L'étiquette lisible affichée dans l'interface",
-	"editor.displayNameBuiltIn": "Le nom d'affichage ne peut pas être modifié pour les callouts intégrés",
+	"editor.displayNameBuiltIn":
+		"Le nom d'affichage ne peut pas être modifié pour les callouts intégrés",
 	"editor.displayNamePlaceholder": "Mon callout",
 	"editor.calloutIds": "IDs de callout",
-	"editor.calloutIdsDesc": "Tous les identifiants de ce callout. Les espaces sont autorisés.\nAppuyez sur Entrée ou le bouton + pour en ajouter.",
+	"editor.calloutIdsDesc":
+		"Tous les identifiants de ce callout. Les espaces sont autorisés.\nAppuyez sur Entrée ou le bouton + pour en ajouter.",
 	"editor.calloutIdsPlaceholder": "Ajouter un ID",
 	"editor.addId": "Ajouter un ID",
 	"editor.idLinkedToName": "Lié au nom d'affichage",
@@ -191,6 +230,7 @@ export const fr: Record<string, string> = {
 	"editor.dark": "Sombre",
 	"editor.livePreview": "Aperçu en direct",
 	"editor.iconAdjustment": "Ajustement de l'icône",
+	"editor.picture": "Image",
 	"editor.size": "Taille",
 	"editor.horizontalOffset": "Décalage horizontal",
 	"editor.verticalOffset": "Décalage vertical",
@@ -208,7 +248,8 @@ export const fr: Record<string, string> = {
 	"editor.contrastWarning":
 		"Contraste faible avec l'arrière-plan — peut être difficile à lire",
 	"editor.foldable": "Repliable",
-	"editor.foldableDesc": "Choisissez si le callout peut être replié et l'état par défaut à appliquer dans tout le vault.",
+	"editor.foldableDesc":
+		"Choisissez si le callout peut être replié et l'état par défaut à appliquer dans tout le vault.",
 	"editor.foldOff": "Désactivé",
 	"editor.foldOpen": "Ouvert par défaut",
 	"editor.foldClosed": "Fermé par défaut",
@@ -217,18 +258,22 @@ export const fr: Record<string, string> = {
 	"editor.cancel": "Annuler",
 	"editor.saveChanges": "Enregistrer les modifications",
 	"editor.createCallout": "Créer le callout",
-	"editor.nameRequired": "Un nom d'affichage est requis avant de créer un callout.",
+	"editor.nameRequired":
+		"Un nom d'affichage est requis avant de créer un callout.",
 	"editor.noChangesToSave": "Aucune modification n'a été effectuée.",
 	"editor.downloadingIcon": "Téléchargement de l'icône",
 	"editor.idEmpty": "Au moins un ID est requis",
 	"editor.idExists": "Un callout avec cet ID existe déjà",
 	"editor.idConflict": "Cet ID entre en conflit avec un callout existant",
-	"editor.idDashConflict": 'Obsidian écrit les espaces sous forme de tirets, donc cet ID entre en conflit avec « {{other}} »',
+	"editor.idDashConflict":
+		"Obsidian écrit les espaces sous forme de tirets, donc cet ID entre en conflit avec « {{other}} »",
 	"editor.untitledCallout": "Callout sans titre",
-	"editor.loremIpsum": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+	"editor.loremIpsum":
+		"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
 	"editor.loremIpsumShort":
 		"Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-	"editor.sampleInlineText": "Voici une pastille [!{id}] intégrée dans un paragraphe.",
+	"editor.sampleInlineText":
+		"Voici une pastille [!{id}] intégrée dans un paragraphe.",
 	"editor.previewReadOnly": "L'aperçu en direct ne peut pas être modifié",
 
 	// Palette editor modal
@@ -238,10 +283,12 @@ export const fr: Record<string, string> = {
 	"palette.namePlaceholder": "Ma palette",
 	"palette.nameExists": "Une palette portant ce nom existe déjà",
 	"palette.baseColor": "Couleur de base",
-	"palette.baseColorHint": "Nous adapterons automatiquement la couleur d'arrière-plan à celle-ci. Si vous le souhaitez, vous pouvez la contrôler séparément en {{link}}.",
+	"palette.baseColorHint":
+		"Nous adapterons automatiquement la couleur d'arrière-plan à celle-ci. Si vous le souhaitez, vous pouvez la contrôler séparément en {{link}}.",
 	"palette.baseColorHintLink": "cliquant ici",
 	"palette.advancedColors": "Couleurs",
-	"palette.advancedColorsHint": "Modification des couleurs pour le mode {{mode}} - l'autre mode se met à jour automatiquement. Changez le thème d'Obsidian pour vérifier.",
+	"palette.advancedColorsHint":
+		"Modification des couleurs pour le mode {{mode}} - l'autre mode se met à jour automatiquement. Changez le thème d'Obsidian pour vérifier.",
 	"palette.revertHint": "Vous préférez une seule couleur de base ? {{link}}.",
 	"palette.revertHintLink": "Rétablir",
 	"palette.lightMode": "Clair",
@@ -287,15 +334,91 @@ export const fr: Record<string, string> = {
 	"iconPicker.emoji": "Emoji",
 	"iconPicker.searchLucide": "rechercher des icônes Lucide",
 	"iconPicker.loadMore": "Charger plus",
+	"iconPicker.materialStyle": "Style d'icône",
+	"iconPicker.materialWeight": "Épaisseur de l'icône",
 	"iconPicker.searchMaterial": "rechercher des icônes Material",
 	"iconPicker.searchEmoji": "Rechercher des emojis",
 	"iconPicker.skinTone": "Teinte de peau",
 	"iconPicker.iconsLoading": "Les icônes se chargent, veuillez patienter",
-	"iconPicker.loadFailed": "Échec du chargement des icônes Material : {{error}}",
+	"iconPicker.loadFailed":
+		"Échec du chargement des icônes Material : {{error}}",
 	"iconPicker.allCategories": "Toutes les catégories",
 	"iconPicker.noIconSelected": "Aucune icône sélectionnée",
 	"iconPicker.noResults": "Aucune icône ne correspond à votre recherche.",
 	"iconPicker.delete": "Supprimer",
+	"iconPicker.octicons": "Octicons",
+	"iconPicker.searchOcticons": "Rechercher dans Octicons",
+	"iconPicker.fa": "Font Awesome",
+	"iconPicker.searchFa": "Rechercher dans Font Awesome",
+	"iconPicker.faStyle": "Style d'icône",
+	"iconPicker.faStyleSolid": "Plein",
+	"iconPicker.faStyleRegular": "Régulier",
+	"iconPicker.faStyleBrands": "Marques",
+	"iconPicker.rpgAwesome": "RPG Awesome",
+	"iconPicker.searchRpgAwesome": "Rechercher dans RPG Awesome",
+	"iconPicker.image": "Vos images",
+	"iconPicker.searchImage": "Rechercher dans vos images",
+	"iconPicker.imageTooLarge":
+		"{{name}} est trop volumineux. Les images doivent faire moins de 5 Mo.",
+	"iconPicker.imageUnsupported":
+		"{{name}} n'est pas un format d'image pris en charge. Utilisez SVG, PNG, JPEG ou WebP.",
+	"iconPicker.imageInvalidSvg":
+		"{{name}} ne peut pas être lu comme un SVG sécurisé et n'a pas été ajouté.",
+	"iconPicker.imageDecodeFailed":
+		"{{name}} ne peut pas être lu comme une image.",
+	"iconPicker.imageDuplicate":
+		"{{name}} est déjà dans vos images. Renommez le fichier ou supprimez l'image existante.",
+	"iconPicker.imageAdd": "Ajouter des images",
+	"iconPicker.imageEmpty":
+		"Pas encore d'images. Ajoutez un fichier SVG, PNG, JPEG ou WebP depuis votre ordinateur, ou déposez-en un ici.",
+	"iconPicker.imageDelete": "Supprimer",
+	"iconPicker.imageDeleteConfirm": "Supprimer « {{name}} » ?",
+	"iconPicker.imageDeleteInUse":
+		"{{count}} callout(s) utilisent cette image. Ils afficheront une icône de remplacement jusqu'à ce que vous en fournissiez une nouvelle.",
+	"iconPicker.imageRecolor": "Suivre la couleur du Callout",
+	"iconPicker.allSources": "Toutes les sources",
+	"iconPicker.searchAllSources":
+		"Rechercher dans toutes les sources d'icônes",
+	"iconPicker.sourcesNotDownloaded":
+		"Pas encore inclus : {{names}}. Choisissez une source ci-dessus pour la télécharger.",
+	"iconPicker.chooseSource": "Choisir une source",
+	"iconPicker.sourceGroup": "{{name}} · {{count}}",
+
+	// Source menu — what each library holds, in a few words
+	"iconPicker.descAllSources":
+		"rechercher dans toutes les bibliothèques à la fois",
+	"iconPicker.descLucide": "le kit d'Obsidian, toujours hors ligne",
+	"iconPicker.descMaterial":
+		"le kit de Google, quatre styles et sept épaisseurs",
+	"iconPicker.descEmoji": "glyphes colorés, chaque teinte de peau",
+	"iconPicker.descOcticons": "icônes d'interface de GitHub",
+	"iconPicker.descFa": "plein, régulier et marques",
+	"iconPicker.descRpgAwesome": "icônes de fantaisie et jeux de plateau",
+	"iconPicker.descImage": "images que vous ajoutez depuis votre ordinateur",
+
+	// Downloadable icon packs
+	"iconPack.downloadTitle": "{{name}} n'est pas encore téléchargé",
+	"iconPack.downloadDetail":
+		"{{count}} icônes · {{size}} · téléchargement unique",
+	"iconPack.download": "Télécharger",
+	"iconPack.downloading": "Téléchargement de {{name}}…",
+	"iconPack.downloadFailed":
+		"Impossible de télécharger {{name}}. Vérifiez votre connexion et réessayez.",
+	"iconPack.retry": "Réessayer",
+	"iconPack.faBrandsNotice":
+		"Les icônes de marques sont des marques déposées de leurs propriétaires respectifs. Leur inclusion n'indique pas une approbation. Veuillez les utiliser uniquement pour représenter l'entreprise, le produit ou le service auquel elles font référence.",
+	"iconPack.artworkRestored":
+		"Les graphismes d'icônes pour {{names}} ont été téléchargés.",
+	"iconPack.diskWriteFailed":
+		"Callout Studio n'a pas pu enregistrer le pack d'icônes sur le disque, il devra donc être retéléchargé la prochaine fois. Les icônes que vous choisissez sont toujours enregistrées dans vos paramètres.",
+
+	// Icon licences & credits
+	"credits.title": "Licences d'icônes et crédits",
+	"credits.intro":
+		"Callout Studio s'appuie sur plusieurs bibliothèques d'icônes ouvertes. Leurs licences sont reproduites ci-dessous, ainsi que ce qui a été modifié pour les utiliser ici.",
+	"credits.fullNotices": "Mentions tierces complètes",
+	"credits.pluginLicense":
+		"Le code propre de Callout Studio est sous licence 0BSD ; les bibliothèques d'icônes conservent leurs propres licences.",
 
 	"contextMenu.editCallout": "Modifier les paramètres du callout",
 	"contextMenu.copyMarkdown": "Copier le Markdown du callout",
@@ -308,30 +431,41 @@ export const fr: Record<string, string> = {
 	"contextMenu.deleteSection": "Supprimer la section de titre",
 	"heading.toggleFold": "Basculer le repli",
 	"settings.globalSettings": "Paramètres globaux",
-	"settings.globalSettingsDesc": "Affinez l'apparence de chaque type de callout dans tout votre vault.",
-	"settings.globalSettingsRegularDesc": "Ajoutez un jeton de callout à une citation (p. ex. `> [!type]`) pour afficher le bloc de callout natif d'Obsidian. Vous pouvez ajuster sa bordure, son rayon, son échelle de police et son alignement.",
-	"settings.globalSettingsHeadingDesc": "Ajoutez un jeton de callout juste après les dièses du titre (p. ex. `## [!type]`) pour l'afficher comme un titre de callout stylisé. Vous pouvez ajuster sa bordure, sa forme et son espacement vertical.",
-	"settings.globalSettingsInlineDesc": "Ajoutez un jeton de callout n'importe où dans une ligne de texte (p. ex. `[!type]`) pour l'afficher comme une petite pastille en ligne. Vous pouvez ajuster sa bordure et sa forme.",
+	"settings.globalSettingsDesc":
+		"Affinez l'apparence de chaque type de callout dans tout votre vault.",
+	"settings.globalSettingsRegularDesc":
+		"Ajoutez un jeton de callout à une citation (p. ex. `> [!type]`) pour afficher le bloc de callout natif d'Obsidian. Vous pouvez ajuster sa bordure, son rayon, son échelle de police et son alignement.",
+	"settings.globalSettingsHeadingDesc":
+		"Ajoutez un jeton de callout juste après les dièses du titre (p. ex. `## [!type]`) pour l'afficher comme un titre de callout stylisé. Vous pouvez ajuster sa bordure, sa forme et son espacement vertical.",
+	"settings.globalSettingsInlineDesc":
+		"Ajoutez un jeton de callout n'importe où dans une ligne de texte (p. ex. `[!type]`) pour l'afficher comme une petite pastille en ligne. Vous pouvez ajuster sa bordure et sa forme.",
 	"settings.globalSettingsCustomize": "Personnaliser",
 	"settings.calloutTypes": "Types de callout",
 	"settings.calloutTypeRegular": "Callout classique",
-	"settings.calloutTypeRegularDesc": "Un callout de type citation avec contenu : > [!name]. Toujours activé.",
+	"settings.calloutTypeRegularDesc":
+		"Un callout de type citation avec contenu : > [!name]. Toujours activé.",
 	"settings.calloutTypeRegularLocked":
 		"Les callouts classiques sont le rendu natif d'Obsidian et ne peuvent pas être désactivés.",
 	"settings.roleEnabled": "Activé",
 	"settings.calloutTypeHeading": "Callout de titre",
-	"settings.calloutTypeHeadingDesc": "Un titre dont le premier contenu est le jeton, par ex. ## [!name]. Affiché comme une barre colorée à la taille de police du titre. Utilisez + / - après le jeton pour ouvrir/fermer toute la section à l'ouverture du fichier.",
+	"settings.calloutTypeHeadingDesc":
+		"Un titre dont le premier contenu est le jeton, par ex. ## [!name]. Affiché comme une barre colorée à la taille de police du titre. Utilisez + / - après le jeton pour ouvrir/fermer toute la section à l'ouverture du fichier.",
 	"settings.calloutTypeInline": "Callout en ligne",
-	"settings.calloutTypeInlineDesc": "Un jeton [!name] au milieu d'une ligne, affiché comme une petite pastille. Sans titre ni contenu.",
+	"settings.calloutTypeInlineDesc":
+		"Un jeton [!name] au milieu d'une ligne, affiché comme une petite pastille. Sans titre ni contenu.",
 	"settings.refCleanTitles": "Nettoyer les titres dans le plan et les liens",
-	"settings.refCleanTitlesDesc": "Masque le jeton [!name] partout où un callout de titre est référencé : le panneau de plan, les liens vers le titre (y compris les tables des matières) et la fenêtre de suggestions de liens. Les titres sans texte affichent le nom d'affichage du callout.",
+	"settings.refCleanTitlesDesc":
+		"Masque le jeton [!name] partout où un callout de titre est référencé : le panneau de plan, les liens vers le titre (y compris les tables des matières) et la fenêtre de suggestions de liens. Les titres sans texte affichent le nom d'affichage du callout.",
 	"settings.refShowIcon": "Afficher l'icône dans le plan et les liens",
-	"settings.refShowIconDesc": "Affiche l'icône colorée du callout avant le titre nettoyé à ces endroits.",
+	"settings.refShowIconDesc":
+		"Affiche l'icône colorée du callout avant le titre nettoyé à ces endroits.",
 	"settings.customizeMenu": "Personnaliser les éléments du menu",
-	"settings.customizeMenuDesc": "Choisissez quelles actions du clic droit apparaissent pour chaque type de callout et réorganisez-les. Fonctionne en mode source et aperçu en direct.",
+	"settings.customizeMenuDesc":
+		"Choisissez quelles actions du clic droit apparaissent pour chaque type de callout et réorganisez-les. Fonctionne en mode source et aperçu en direct.",
 	"settings.customizeMenuButton": "Personnaliser les éléments du menu",
 	"menuCustomize.title": "Personnaliser le menu du clic droit",
-	"menuCustomize.desc": "Activez ou désactivez les actions et faites glisser la poignée pour les réorganiser. Les modifications sont enregistrées automatiquement.",
+	"menuCustomize.desc":
+		"Activez ou désactivez les actions et faites glisser la poignée pour les réorganiser. Les modifications sont enregistrées automatiquement.",
 	"menuCustomize.regular": "Callout classique",
 	"menuCustomize.heading": "Callout de titre",
 	"menuCustomize.inline": "Callout en ligne",
@@ -349,26 +483,37 @@ export const fr: Record<string, string> = {
 	"confirm.ok": "Supprimer",
 	"confirm.cancel": "Annuler",
 
-	"vault.renameConfirm": '{{count}} référence(s) de callout dans {{files}} fichier(s) utilisent les ID supprimés : {{oldIds}}. Les mettre à jour vers "{{newId}}" ?',
+	"vault.renameConfirm":
+		'{{count}} référence(s) de callout dans {{files}} fichier(s) utilisent les ID supprimés : {{oldIds}}. Les mettre à jour vers "{{newId}}" ?',
 	"vault.updateFiles": "Mettre à jour les fichiers",
 	"vault.skip": "Ignorer",
-	"vault.filesUpdated": "{{count}} référence(s) de callout mises à jour dans les fichiers du vault.",
-	"vault.idsUpdated": "{{count}} ID(s) de callout mis à jour dans les fichiers du vault : {{oldIds}} → {{newId}}",
-	"vault.titlesUpdated": "{{count}} titre(s) de callout mis à jour dans les fichiers du vault : {{oldTitle}} → {{newTitle}}",
-	"vault.deleteInUse": '"{{name}}" est utilisé {{count}} fois dans {{files}} fichier(s). Choisissez comment procéder :',
+	"vault.filesUpdated":
+		"{{count}} référence(s) de callout mises à jour dans les fichiers du vault.",
+	"vault.idsUpdated":
+		"{{count}} ID(s) de callout mis à jour dans les fichiers du vault : {{oldIds}} → {{newId}}",
+	"vault.titlesUpdated":
+		"{{count}} titre(s) de callout mis à jour dans les fichiers du vault : {{oldTitle}} → {{newTitle}}",
+	"vault.deleteInUse":
+		'"{{name}}" est utilisé {{count}} fois dans {{files}} fichier(s). Choisissez comment procéder :',
 	"vault.replaceWith": "Remplacer par :",
 	"vault.selectCallout": "— sélectionner un callout —",
 	"vault.replaceAndDelete": "Remplacer et supprimer",
 	"vault.deleteWithout": "Supprimer sans remplacer",
 	"vault.confirmDelete": "Confirmer",
 	"vault.confirmReplace": "Remplacer",
-	"vault.replacePromptInUse": '"{{name}}" est utilisé {{count}} fois dans {{files}} fichier(s). Choisissez un callout pour le remplacer :',
-	"vault.replacePromptUnused": 'Choisissez un callout pour remplacer "{{name}}" :',
-	"vault.noReplacementAvailable": "Aucun autre callout disponible pour remplacer celui-ci.",
-	"vault.convertedToPlainText": "{{blocks}} bloc(s) de callout dans {{files}} fichier(s) convertis en texte brut.",
-	"vault.resetAliasWarning": "{{count}} référence(s) dans {{files}} fichier(s) utilisent des alias personnalisés : {{aliases}}. Ceux-ci ne fonctionneront plus après la réinitialisation. Continuer ?",
+	"vault.replacePromptInUse":
+		'"{{name}}" est utilisé {{count}} fois dans {{files}} fichier(s). Choisissez un callout pour le remplacer :',
+	"vault.replacePromptUnused":
+		'Choisissez un callout pour remplacer "{{name}}" :',
+	"vault.noReplacementAvailable":
+		"Aucun autre callout disponible pour remplacer celui-ci.",
+	"vault.convertedToPlainText":
+		"{{blocks}} bloc(s) de callout dans {{files}} fichier(s) convertis en texte brut.",
+	"vault.resetAliasWarning":
+		"{{count}} référence(s) dans {{files}} fichier(s) utilisent des alias personnalisés : {{aliases}}. Ceux-ci ne fonctionneront plus après la réinitialisation. Continuer ?",
 	"vault.resetConfirm": "Réinitialiser",
-	"vault.resetAllInUse": "⚠ {{count}} référence(s) de callout dans {{files}} fichier(s) utilisent des types de callout personnalisés qui seront supprimés.",
+	"vault.resetAllInUse":
+		"⚠ {{count}} référence(s) de callout dans {{files}} fichier(s) utilisent des types de callout personnalisés qui seront supprimés.",
 
 	"vaultStats.title": "Statistiques des callouts",
 	"vaultStats.totalCallouts": "Total des callouts",
@@ -391,45 +536,79 @@ export const fr: Record<string, string> = {
 	"vaultStats.close": "Fermer",
 
 	"import.title": "Problèmes d'importation",
-	"import.reportLeadIn": "Il semble que le fichier que vous avez importé ait été modifié. Voici la liste des problèmes :",
-	"import.reportLeadInFatal": "Ce fichier ne ressemble pas à un export Callout Studio. Il ne peut pas être importé :",
+	"import.reportLeadIn":
+		"Il semble que le fichier que vous avez importé ait été modifié. Voici la liste des problèmes :",
+	"import.reportLeadInFatal":
+		"Ce fichier ne ressemble pas à un export Callout Studio. Il ne peut pas être importé :",
 	"import.entryHeading": "Entrée {{index}} — {{label}}",
-	"import.summary": "{{valid}} sur {{total}} entrées sont valides · {{issues}} problème(s) trouvé(s).",
+	"import.summary":
+		"{{valid}} sur {{total}} entrées sont valides · {{issues}} problème(s) trouvé(s).",
 	"import.btnCancel": "Annuler",
 	"import.btnImportValid": "Importer seulement les valides ({{count}})",
-	"import.err.notArray": "La valeur de niveau supérieur doit être un tableau de définitions de callout.",
-	"import.err.notRecognized": "Fichier non reconnu : un tableau de définitions de callout ou une exportation de Callout Studio était attendu.",
-	"import.warn.settingsIgnored": "Le bloc de paramètres n'était pas un objet valide et a été ignoré.",
+	"import.err.notArray":
+		"La valeur de niveau supérieur doit être un tableau de définitions de callout.",
+	"import.err.notRecognized":
+		"Fichier non reconnu : un tableau de définitions de callout ou une exportation de Callout Studio était attendu.",
+	"import.warn.settingsIgnored":
+		"Le bloc de paramètres n'était pas un objet valide et a été ignoré.",
 	"import.warn.invalidGradient":
 		"Le dégradé d'arrière-plan n'était pas valide et a été ignoré.",
-	"import.err.parseFailed": "Le fichier n'est pas du JSON valide et n'a pas pu être analysé.",
+	"import.err.parseFailed":
+		"Le fichier n'est pas du JSON valide et n'a pas pu être analysé.",
 	"import.err.entryNotObject": "L'entrée doit être un objet.",
-	"import.err.requiredMissing": 'Le champ requis "{{field}}" est manquant ou a un type incorrect.',
+	"import.err.requiredMissing":
+		'Le champ requis "{{field}}" est manquant ou a un type incorrect.',
 	"import.err.idEmpty": "L'ID ne doit pas être vide.",
-	"import.err.idTooLong": 'L\'ID "{{value}}" fait {{length}} caractères ; le maximum est {{max}}.',
-	"import.err.idBadChar": 'L\'ID "{{value}}" contient des caractères invalides ("|", "[", "]", les tabulations et les sauts de ligne ne sont pas autorisés).',
+	"import.err.idTooLong":
+		'L\'ID "{{value}}" fait {{length}} caractères ; le maximum est {{max}}.',
+	"import.err.idBadChar":
+		'L\'ID "{{value}}" contient des caractères invalides ("|", "[", "]", les tabulations et les sauts de ligne ne sont pas autorisés).',
 	"import.err.displayNameEmpty": "Le nom d'affichage ne doit pas être vide.",
-	"import.err.displayNameTooLong": "Le nom d'affichage fait {{length}} caractères ; le maximum est {{max}}.",
+	"import.err.displayNameTooLong":
+		"Le nom d'affichage fait {{length}} caractères ; le maximum est {{max}}.",
 	"import.err.boolField": '"{{field}}" doit être un booléen (true ou false).',
 	"import.err.iconNotObject": "L'icône doit être un objet.",
-	"import.err.iconTypeInvalid": 'Le type d\'icône "{{value}}" n\'est pas l\'un de : lucide, material, emoji.',
-	"import.err.iconValueEmpty": "La valeur de l'icône doit être une chaîne non vide.",
-	"import.err.iconValueTooLong": "La valeur de l'icône est inhabituellement longue ({{length}} caractères).",
-	"import.err.materialStyle": 'Le style d\'icône Material "{{value}}" n\'est pas l\'un de : outlined, filled, rounded, sharp.',
-	"import.err.materialWeight": 'Le poids de l\'icône Material "{{value}}" doit être un entier entre 100 et 700, par pas de 100.',
-	"import.err.colorInvalid": '"{{field}}" doit être une couleur hexadécimale comme "#448aff" (reçu "{{value}}").',
-	"import.err.numberRange": '"{{field}}" doit être un nombre entre {{min}} et {{max}} (reçu "{{value}}").',
-	"import.err.iconSizeRange": '"{{field}}" doit être un nombre entre {{min}} et {{max}} (reçu "{{value}}").',
+	"import.err.iconTypeInvalid":
+		"Le type d'ic\u00f4ne \"{{value}}\" n'est pas l'un de\u00a0: {{types}}.",
+	"import.warn.iconFieldIgnored":
+		"\"{{field}}\" s'applique uniquement aux icônes Material et est ignoré pour le type d'icône {{type}}.",
+	"import.err.iconValueEmpty":
+		"La valeur de l'icône doit être une chaîne non vide.",
+	"import.err.iconValueTooLong":
+		"La valeur de l'icône est inhabituellement longue ({{length}} caractères).",
+	"import.err.materialStyle":
+		"Le style d'icône Material \"{{value}}\" n'est pas l'un de : outlined, filled, rounded, sharp.",
+	"import.err.materialWeight":
+		'Le poids de l\'icône Material "{{value}}" doit être un entier entre 100 et 700, par pas de 100.',
+	"import.warn.iconRecolorIgnored":
+		"\"recolor\" s'applique uniquement à vos propres images et est ignoré pour le type d'icône {{type}}.",
+	"import.err.iconRecolorInvalid":
+		'"recolor" doit être true ou false (reçu : "{{value}}").',
+	"import.err.colorInvalid":
+		'"{{field}}" doit être une couleur hexadécimale comme "#448aff" (reçu "{{value}}").',
+	"import.err.numberRange":
+		'"{{field}}" doit être un nombre entre {{min}} et {{max}} (reçu "{{value}}").',
+	"import.err.iconSizeRange":
+		'"{{field}}" doit être un nombre entre {{min}} et {{max}} (reçu "{{value}}").',
 	"import.err.aliasesNotArray": '"aliases" doit être un tableau de chaînes.',
 	"import.err.aliasNotString": "L'alias doit être une chaîne.",
-	"import.err.aliasDup": 'L\'alias "{{value}}" est dupliqué dans cette entrée.',
-	"import.err.tooManyIds": "Trop d'IDs ({{count}}) ; chaque callout peut avoir au maximum {{max}} IDs (principal + alias).",
-	"import.err.metadataShape": '"metadata" doit être un objet dont toutes les valeurs sont des chaînes.',
+	"import.err.aliasDup":
+		'L\'alias "{{value}}" est dupliqué dans cette entrée.',
+	"import.err.tooManyIds":
+		"Trop d'IDs ({{count}}) ; chaque callout peut avoir au maximum {{max}} IDs (principal + alias).",
+	"import.err.metadataShape":
+		'"metadata" doit être un objet dont toutes les valeurs sont des chaînes.',
 	"import.err.unknownFields": "Champ(s) inconnu(s) ignoré(s) : {{fields}}.",
-	"import.err.duplicateInFile": 'L\'ID/alias "{{value}}" est déjà utilisé par l\'entrée #{{first}} dans ce fichier.',
-	"import.err.aliasConflict": 'L\'alias "{{value}}" est déjà utilisé par un autre callout ("{{other}}") dans votre vault.',
-	"import.warn.defaultFoldedAutofix": '"defaultFolded" était true alors que "foldable" était false ; defaultFolded a été réinitialisé à false.',
+	"import.err.duplicateInFile":
+		"L'ID/alias \"{{value}}\" est déjà utilisé par l'entrée #{{first}} dans ce fichier.",
+	"import.err.aliasConflict":
+		'L\'alias "{{value}}" est déjà utilisé par un autre callout ("{{other}}") dans votre vault.',
+	"import.warn.defaultFoldedAutofix":
+		'"defaultFolded" était true alors que "foldable" était false ; defaultFolded a été réinitialisé à false.',
+	"import.warn.imageMissing":
+		"Ce Callout utilise une image qui n'est pas dans le fichier ni dans ce vault, il affichera donc une icône de remplacement jusqu'à ce que vous lui en donniez une nouvelle.",
 
-	"footer.tagline": "Des retours, commentaires ou suggestions ? J'adorerais vous entendre !",
+	"footer.tagline":
+		"Des retours, commentaires ou suggestions ? J'adorerais vous entendre !",
 	"footer.madeBy": "Créé par Niv  •  ",
 };
