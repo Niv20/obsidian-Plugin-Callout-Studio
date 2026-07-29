@@ -178,6 +178,7 @@ export const fa: Record<string, string> = {
 	"editor.idCannotDelete":
 		"این شناسه به نام نمایشی متصل است و قابل حذف نیست — برای تغییر آن، نام را ویرایش کنید",
 	"editor.icon": "آیکون",
+	"editor.pickIcon": "انتخاب نماد",
 	"editor.livePreview": "پیش‌نمایش زنده",
 	"editor.iconAdjustment": "تنظیم آیکون",
 	"editor.picture": "تصویر",
@@ -268,6 +269,11 @@ export const fa: Record<string, string> = {
 	"colorName.gray": "خاکستری",
 	"colorName.black": "مشکی",
 	"colorName.white": "سفید",
+	"colorName.crimson": "زرشکی",
+	"colorName.coral": "مرجانی",
+	"colorName.grape": "انگوری",
+	"colorName.plum": "آلویی",
+	"colorName.bubblegum": "آدامس",
 
 	"iconPicker.pickIcon": "انتخاب آیکون",
 	"iconPicker.confirm": "تأیید",

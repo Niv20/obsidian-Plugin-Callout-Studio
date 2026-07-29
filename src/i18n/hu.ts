@@ -181,6 +181,7 @@ export const hu: Record<string, string> = {
 	"editor.idCannotDelete":
 		"Ez az azonosító a megjelenítési névhez van kapcsolva, és nem törölhető — a módosításhoz szerkessze a nevet",
 	"editor.icon": "Ikon",
+	"editor.pickIcon": "Ikon kiválasztása",
 	"editor.livePreview": "Élő előnézet",
 	"editor.iconAdjustment": "Ikon igazítása",
 	"editor.picture": "Kép",
@@ -271,6 +272,11 @@ export const hu: Record<string, string> = {
 	"colorName.gray": "Szürke",
 	"colorName.black": "Fekete",
 	"colorName.white": "Fehér",
+	"colorName.crimson": "Karmazsinvörös",
+	"colorName.coral": "Korall",
+	"colorName.grape": "Szőlő",
+	"colorName.plum": "Szilva",
+	"colorName.bubblegum": "Rágógumi",
 
 	"iconPicker.pickIcon": "Ikon kiválasztása",
 	"iconPicker.confirm": "Megerősítés",

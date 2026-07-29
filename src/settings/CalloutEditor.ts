@@ -25,8 +25,8 @@ import {
 	DEFAULT_TEXT_COLOR_DARK,
 } from "../utils/colorUtils";
 import {
-	OBSIDIAN_PALETTES,
-	EXTRA_PALETTES,
+	getObsidianPalettes,
+	getExtraPalettes,
 	customPaletteToColorPalette,
 	generatePaletteId,
 	type ColorPalette,
@@ -391,7 +391,7 @@ export class CalloutEditor extends Modal {
 		this.renderIconPreview(iconPreviewEl);
 
 		iconSetting.addButton((btn) => {
-			btn.setButtonText("Pick icon").onClick(async () => {
+			btn.setButtonText(t("editor.pickIcon")).onClick(async () => {
 				const picker = new IconPicker(this.plugin, this.icon);
 				const result = await picker.openAndWait();
 				if (result) {
@@ -605,13 +605,13 @@ export class CalloutEditor extends Modal {
 							palette,
 						};
 					}),
-				...OBSIDIAN_PALETTES.map((p) => ({
+				...getObsidianPalettes().map((p) => ({
 					id: p.id,
 					name: p.name,
 					group: "obsidian" as const,
 					palette: p,
 				})),
-				...EXTRA_PALETTES.map((p) => ({
+				...getExtraPalettes().map((p) => ({
 					id: p.id,
 					name: p.name,
 					group: "preset" as const,
@@ -702,11 +702,17 @@ export class CalloutEditor extends Modal {
 			bgGradientsEqual(palette.bgGradient, this.bgGradient);
 
 		// Prefer the stable paletteId link (survives a palette's colors being
-		// edited); fall back to hex matching for definitions saved before that
-		// link existed. Either way, remember the resolved id going forward.
+		// edited); a paletteId saved under a preset's old (pre-rename) id still
+		// resolves via legacyIds; fall back to hex matching for definitions
+		// saved before paletteId existed at all. Either way, remember the
+		// resolved id going forward.
 		const matchedEntry =
 			(this.paletteId
-				? paletteEntries.find((e) => e.id === this.paletteId)
+				? paletteEntries.find(
+						(e) =>
+							e.id === this.paletteId ||
+							e.palette.legacyIds?.includes(this.paletteId as string),
+					)
 				: undefined) ??
 			paletteEntries.find(({ palette }) => matchesPalette(palette));
 		if (matchedEntry) {

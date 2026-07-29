@@ -35,7 +35,7 @@ import {
 import { LiveCalloutPreview } from "./LiveCalloutPreview";
 import { PREVIEW_PLACEHOLDER_ID } from "../constants";
 import { suggestColorName } from "../utils/colorNames";
-import { OBSIDIAN_PALETTES, EXTRA_PALETTES } from "../utils/colorPalettes";
+import { getObsidianPalettes, getExtraPalettes } from "../utils/colorPalettes";
 import { t } from "../i18n";
 import type { CalloutRegistry } from "../manager/CalloutRegistry";
 import type { CSSInjector } from "../manager/CSSInjector";
@@ -128,12 +128,14 @@ export class PaletteEditorModal extends Modal {
 		super(plugin.app);
 		this.existing = options.existing ?? null;
 		// Callers pass the other CUSTOM palette names; the fixed preset names
-		// are merged here so a custom palette can't shadow "Ocean" etc.
+		// are merged here so a custom palette can't shadow "Blue" etc. Read via
+		// the getters (not a cached const) so the comparison is against the
+		// names in the user's current display language.
 		this.takenNames = new Set(
 			[
 				...(options.takenNames ?? []),
-				...OBSIDIAN_PALETTES.map((p) => p.name),
-				...EXTRA_PALETTES.map((p) => p.name),
+				...getObsidianPalettes().map((p) => p.name),
+				...getExtraPalettes().map((p) => p.name),
 			].map(normalizeName),
 		);
 		this.name = this.existing?.name ?? "";

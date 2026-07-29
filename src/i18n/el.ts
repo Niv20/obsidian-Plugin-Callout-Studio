@@ -169,6 +169,7 @@ export const el: Record<string, string> = {
 	"editor.idCannotDelete":
 		"Αυτό το ID είναι συνδεδεμένο με το εμφανιζόμενο όνομα και δεν μπορεί να διαγραφεί — επεξεργαστείτε το όνομα για να το αλλάξετε",
 	"editor.icon": "Εικονίδιο",
+	"editor.pickIcon": "Επιλογή εικονιδίου",
 	"editor.livePreview": "Ζωντανή προεπισκόπηση",
 	"editor.iconAdjustment": "Ρύθμιση εικονιδίου",
 	"editor.picture": "Εικόνα",
@@ -260,6 +261,11 @@ export const el: Record<string, string> = {
 	"colorName.gray": "Γκρι",
 	"colorName.black": "Μαύρο",
 	"colorName.white": "Λευκό",
+	"colorName.crimson": "Βυσσινί",
+	"colorName.coral": "Κοραλί",
+	"colorName.grape": "Σταφύλι",
+	"colorName.plum": "Δαμάσκηνο",
+	"colorName.bubblegum": "Τσίχλα",
 
 	"iconPicker.pickIcon": "Επιλογή εικονιδίου",
 	"iconPicker.confirm": "Επιβεβαίωση",

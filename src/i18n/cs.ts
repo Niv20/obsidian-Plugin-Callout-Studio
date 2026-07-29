@@ -178,6 +178,7 @@ export const cs: Record<string, string> = {
 	"editor.idCannotDelete":
 		"Toto ID je propojeno se zobrazovaným názvem a nelze ho smazat — upravte název, abyste ho změnili",
 	"editor.icon": "Ikona",
+	"editor.pickIcon": "Vybrat ikonu",
 	"editor.livePreview": "Živý náhled",
 	"editor.iconAdjustment": "Úprava ikony",
 	"editor.picture": "Obrázek",
@@ -269,6 +270,11 @@ export const cs: Record<string, string> = {
 	"colorName.gray": "Šedá",
 	"colorName.black": "Černá",
 	"colorName.white": "Bílá",
+	"colorName.crimson": "Karmínová",
+	"colorName.coral": "Korálová",
+	"colorName.grape": "Hroznová",
+	"colorName.plum": "Švestková",
+	"colorName.bubblegum": "Žvýkačka",
 
 	"iconPicker.pickIcon": "Vybrat ikonu",
 	"iconPicker.confirm": "Potvrdit",

@@ -181,6 +181,7 @@ export const nl: Record<string, string> = {
 	"editor.idCannotDelete":
 		"Deze ID is gekoppeld aan de weergavenaam en kan niet worden verwijderd — bewerk de naam om deze te wijzigen",
 	"editor.icon": "Pictogram",
+	"editor.pickIcon": "Pictogram kiezen",
 	"editor.livePreview": "Live voorbeeld",
 	"editor.iconAdjustment": "Pictogramaanpassing",
 	"editor.picture": "Afbeelding",
@@ -271,6 +272,11 @@ export const nl: Record<string, string> = {
 	"colorName.gray": "Grijs",
 	"colorName.black": "Zwart",
 	"colorName.white": "Wit",
+	"colorName.crimson": "Karmozijn",
+	"colorName.coral": "Koraal",
+	"colorName.grape": "Druif",
+	"colorName.plum": "Pruim",
+	"colorName.bubblegum": "Kauwgom",
 
 	"iconPicker.pickIcon": "Een pictogram kiezen",
 	"iconPicker.confirm": "Bevestigen",

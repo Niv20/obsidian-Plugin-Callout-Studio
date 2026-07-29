@@ -179,6 +179,7 @@ export const hi: Record<string, string> = {
 	"editor.idCannotDelete":
 		"यह ID प्रदर्शन नाम से जुड़ी है और इसे हटाया नहीं जा सकता — बदलने के लिए नाम संपादित करें",
 	"editor.icon": "आइकन",
+	"editor.pickIcon": "आइकॉन चुनें",
 	"editor.livePreview": "लाइव पूर्वावलोकन",
 	"editor.iconAdjustment": "आइकन समायोजन",
 	"editor.picture": "चित्र",
@@ -268,6 +269,11 @@ export const hi: Record<string, string> = {
 	"colorName.gray": "धूसर",
 	"colorName.black": "काला",
 	"colorName.white": "सफेद",
+	"colorName.crimson": "किरमिजी",
+	"colorName.coral": "मूंगा",
+	"colorName.grape": "अंगूरी",
+	"colorName.plum": "आलूबुखारा",
+	"colorName.bubblegum": "बबलगम",
 
 	"iconPicker.pickIcon": "आइकन चुनें",
 	"iconPicker.confirm": "पुष्टि करें",

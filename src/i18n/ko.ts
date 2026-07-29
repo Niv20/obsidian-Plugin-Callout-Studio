@@ -178,6 +178,7 @@ export const ko: Record<string, string> = {
 	"editor.idCannotDelete":
 		"이 ID는 표시 이름에 연결되어 있어 삭제할 수 없습니다 — 이름을 편집하여 변경하세요",
 	"editor.icon": "아이콘",
+	"editor.pickIcon": "아이콘 선택",
 	"editor.livePreview": "라이브 미리 보기",
 	"editor.iconAdjustment": "아이콘 조정",
 	"editor.picture": "이미지",
@@ -266,6 +267,11 @@ export const ko: Record<string, string> = {
 	"colorName.gray": "회색",
 	"colorName.black": "검정",
 	"colorName.white": "흰색",
+	"colorName.crimson": "진홍색",
+	"colorName.coral": "산호색",
+	"colorName.grape": "포도색",
+	"colorName.plum": "자두색",
+	"colorName.bubblegum": "풍선껌",
 
 	"iconPicker.pickIcon": "아이콘 선택",
 	"iconPicker.confirm": "확인",

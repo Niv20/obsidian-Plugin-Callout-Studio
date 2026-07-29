@@ -178,6 +178,7 @@ export const ja: Record<string, string> = {
 	"editor.idCannotDelete":
 		"このIDは表示名にリンクされているため削除できません。名前を編集して変更してください",
 	"editor.icon": "アイコン",
+	"editor.pickIcon": "アイコンを選択",
 	"editor.livePreview": "ライブプレビュー",
 	"editor.iconAdjustment": "アイコン調整",
 	"editor.picture": "画像",
@@ -266,6 +267,11 @@ export const ja: Record<string, string> = {
 	"colorName.gray": "グレー",
 	"colorName.black": "黒",
 	"colorName.white": "白",
+	"colorName.crimson": "深紅",
+	"colorName.coral": "サンゴ色",
+	"colorName.grape": "グレープ",
+	"colorName.plum": "プラム",
+	"colorName.bubblegum": "バブルガム",
 
 	"iconPicker.pickIcon": "アイコンを選択",
 	"iconPicker.confirm": "確認",

@@ -166,6 +166,7 @@ export const ms: Record<string, string> = {
 	"editor.idCannotDelete":
 		"ID ini dipautkan ke nama paparan dan tidak boleh dipadam — edit nama untuk menukarnya",
 	"editor.icon": "Ikon",
+	"editor.pickIcon": "Pilih ikon",
 	"editor.livePreview": "Pratonton langsung",
 	"editor.iconAdjustment": "Pelarasan ikon",
 	"editor.picture": "Gambar",
@@ -254,6 +255,11 @@ export const ms: Record<string, string> = {
 	"colorName.gray": "Kelabu",
 	"colorName.black": "Hitam",
 	"colorName.white": "Putih",
+	"colorName.crimson": "Merah tua",
+	"colorName.coral": "Karang",
+	"colorName.grape": "Anggur",
+	"colorName.plum": "Plum",
+	"colorName.bubblegum": "Gula-gula getah",
 
 	"iconPicker.pickIcon": "Pilih ikon",
 	"iconPicker.confirm": "Sahkan",

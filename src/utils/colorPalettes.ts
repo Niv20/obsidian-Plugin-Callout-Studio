@@ -14,10 +14,19 @@ import {
 	sanitizeBgGradient,
 } from "./colorUtils";
 import type { BgGradient, CustomPalette } from "../types";
+import { t } from "../i18n";
 
 export interface ColorPalette {
 	id: string;
 	name: string;
+	/**
+	 * Ids this preset was saved under before it was renamed (e.g. the old
+	 * callout-name-based id "note" for what is now "blue"). Checked before
+	 * hex-matching so a callout saved under the old id still resolves to
+	 * this preset by name instead of falling through as an unmatched/
+	 * "deleted" color — see CalloutEditor.ts's palette-dropdown lookup.
+	 */
+	legacyIds?: string[];
 	/** Group label for the dropdown */
 	group: "obsidian" | "preset" | "custom";
 	/** Accent / icon color – light mode */
@@ -44,6 +53,7 @@ function makePalette(
 	colorDark: string,
 	bgColorLight?: string,
 	bgColorDark?: string,
+	legacyIds?: string[],
 ): ColorPalette {
 	return {
 		id,
@@ -53,49 +63,149 @@ function makePalette(
 		colorDark,
 		bgColorLight: bgColorLight ?? bgTintFor(colorLight, false),
 		bgColorDark: bgColorDark ?? bgTintFor(colorDark, true),
+		...(legacyIds ? { legacyIds } : {}),
 	};
 }
 
-/** Palettes derived from Obsidian's built-in callout types */
-export const OBSIDIAN_PALETTES: ColorPalette[] = [
-	makePalette("note", "Note / Info / Todo", "obsidian", "#448aff", "#448aff"),
-	makePalette("abstract", "Abstract", "obsidian", "#00bcd4", "#00bcd4"),
-	makePalette("tip", "Tip", "obsidian", "#00bfa5", "#00bfa5"),
-	makePalette("success", "Success", "obsidian", "#00c853", "#00c853"),
-	makePalette(
-		"question",
-		"Question / Warning",
-		"obsidian",
-		"#ff9100",
-		"#ff9100",
-	),
-	makePalette("failure", "Failure / Bug", "obsidian", "#ff5252", "#ff5252"),
-	makePalette("danger", "Danger", "obsidian", "#ff1744", "#ff1744"),
-	makePalette("example", "Example", "obsidian", "#7c4dff", "#7c4dff"),
-	makePalette("quote", "Quote", "obsidian", "#9e9e9e", "#9e9e9e"),
-];
+/**
+ * Palettes derived from Obsidian's built-in callout types, named for the hue
+ * itself rather than the callout role it happens to match (so the same
+ * dropdown entry reads sensibly for a `[!bug]` as for a `[!failure]`).
+ * `legacyIds` carries the old callout-name-based id each preset used to be
+ * saved under, so a callout picked before this rename still resolves to the
+ * right preset (see the palette-dropdown lookup in CalloutEditor.ts) instead
+ * of appearing as an unmatched/"deleted" color.
+ *
+ * Built as a function (not a top-level const) so preset names are resolved
+ * through `t()` at call time — the dropdown is rebuilt on every open, so this
+ * keeps names in sync if the user switches the plugin's display language.
+ */
+export function getObsidianPalettes(): ColorPalette[] {
+	return [
+		makePalette(
+			"blue",
+			t("colorName.blue"),
+			"obsidian",
+			"#448aff",
+			"#448aff",
+			undefined,
+			undefined,
+			["note"],
+		),
+		makePalette(
+			"cyan",
+			t("colorName.cyan"),
+			"obsidian",
+			"#00bcd4",
+			"#00bcd4",
+			undefined,
+			undefined,
+			["abstract"],
+		),
+		makePalette(
+			"teal",
+			t("colorName.teal"),
+			"obsidian",
+			"#00bfa5",
+			"#00bfa5",
+			undefined,
+			undefined,
+			["tip"],
+		),
+		makePalette(
+			"green",
+			t("colorName.green"),
+			"obsidian",
+			"#00c853",
+			"#00c853",
+			undefined,
+			undefined,
+			["success"],
+		),
+		makePalette(
+			"orange",
+			t("colorName.orange"),
+			"obsidian",
+			"#ff9100",
+			"#ff9100",
+			undefined,
+			undefined,
+			["question"],
+		),
+		makePalette(
+			"red",
+			t("colorName.red"),
+			"obsidian",
+			"#ff5252",
+			"#ff5252",
+			undefined,
+			undefined,
+			["failure"],
+		),
+		makePalette(
+			"crimson",
+			t("colorName.crimson"),
+			"obsidian",
+			"#ff1744",
+			"#ff1744",
+			undefined,
+			undefined,
+			["danger"],
+		),
+		makePalette(
+			"violet",
+			t("colorName.violet"),
+			"obsidian",
+			"#7c4dff",
+			"#7c4dff",
+			undefined,
+			undefined,
+			["example"],
+		),
+		makePalette(
+			"gray",
+			t("colorName.gray"),
+			"obsidian",
+			"#9e9e9e",
+			"#9e9e9e",
+			undefined,
+			undefined,
+			["quote"],
+		),
+	];
+}
 
 /**
  * Additional curated color presets. Deliberately kept to hues Obsidian's
  * built-in callouts don't already cover (chartreuse, brown, and the
  * warm/purple/pink family) so the presets add variety instead of duplicating
  * note-blue, tip-teal, success-green, failure-red or quote-gray.
+ *
+ * Same function-not-const shape as `getObsidianPalettes` and for the same
+ * reason: names are localized, so they must be resolved at call time.
  */
-export const EXTRA_PALETTES: ColorPalette[] = [
-	makePalette("coral", "Coral", "preset", "#ff5722", "#ff8a65"),
-	makePalette("amber", "Amber", "preset", "#ff8f00", "#ffd54f"),
-	makePalette("lime", "Lime", "preset", "#afb42b", "#dce775"),
-	makePalette("brown", "Brown", "preset", "#795548", "#a1887f"),
-	makePalette("grape", "Grape", "preset", "#9c27b0", "#ce93d8"),
-	makePalette("plum", "Plum", "preset", "#6a1b9a", "#ab47bc"),
-	makePalette("bubblegum", "Bubblegum", "preset", "#e91e63", "#f48fb1"),
-];
+export function getExtraPalettes(): ColorPalette[] {
+	return [
+		makePalette("coral", t("colorName.coral"), "preset", "#ff5722", "#ff8a65"),
+		makePalette("amber", t("colorName.amber"), "preset", "#ff8f00", "#ffd54f"),
+		makePalette("lime", t("colorName.lime"), "preset", "#afb42b", "#dce775"),
+		makePalette("brown", t("colorName.brown"), "preset", "#795548", "#a1887f"),
+		makePalette("grape", t("colorName.grape"), "preset", "#9c27b0", "#ce93d8"),
+		makePalette("plum", t("colorName.plum"), "preset", "#6a1b9a", "#ab47bc"),
+		makePalette(
+			"bubblegum",
+			t("colorName.bubblegum"),
+			"preset",
+			"#e91e63",
+			"#f48fb1",
+		),
+	];
+}
 
 /** All available palettes */
-export const COLOR_PALETTES: ColorPalette[] = [
-	...OBSIDIAN_PALETTES,
-	...EXTRA_PALETTES,
-];
+export function getAllColorPalettes(): ColorPalette[] {
+	return [...getObsidianPalettes(), ...getExtraPalettes()];
+}
 
 /** Adapts a user-saved palette to the dropdown's ColorPalette shape. */
 export function customPaletteToColorPalette(p: CustomPalette): ColorPalette {
@@ -115,7 +225,7 @@ export function customPaletteToColorPalette(p: CustomPalette): ColorPalette {
 
 /**
  * Unique id for a new custom palette. The `cp-` prefix guarantees no
- * collision with the fixed preset ids ("note", "ocean", …).
+ * collision with the fixed preset ids ("blue", "coral", …).
  */
 export function generatePaletteId(): string {
 	return `cp-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;

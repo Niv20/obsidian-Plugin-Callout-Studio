@@ -165,6 +165,7 @@ export const fi: Record<string, string> = {
 	"editor.idCannotDelete":
 		"Tämä tunnus on linkitetty näyttönimeen eikä sitä voi poistaa — muuta nimeä muuttaaksesi sitä",
 	"editor.icon": "Kuvake",
+	"editor.pickIcon": "Valitse kuvake",
 	"editor.livePreview": "Reaaliaikainen esikatselu",
 	"editor.iconAdjustment": "Kuvakkeen säätö",
 	"editor.picture": "Kuva",
@@ -254,6 +255,11 @@ export const fi: Record<string, string> = {
 	"colorName.gray": "Harmaa",
 	"colorName.black": "Musta",
 	"colorName.white": "Valkoinen",
+	"colorName.crimson": "Karmiininpunainen",
+	"colorName.coral": "Koralli",
+	"colorName.grape": "Rypäle",
+	"colorName.plum": "Luumu",
+	"colorName.bubblegum": "Purukumi",
 
 	"iconPicker.pickIcon": "Valitse kuvake",
 	"iconPicker.confirm": "Vahvista",

@@ -167,6 +167,7 @@ export const bg: Record<string, string> = {
 	"editor.idCannotDelete":
 		"Това ID е свързано с показваното име и не може да бъде изтрито — редактирайте името, за да го промените",
 	"editor.icon": "Икона",
+	"editor.pickIcon": "Изберете икона",
 	"editor.livePreview": "Преглед на живо",
 	"editor.iconAdjustment": "Настройка на иконата",
 	"editor.picture": "Изображение",
@@ -256,6 +257,11 @@ export const bg: Record<string, string> = {
 	"colorName.gray": "Сиво",
 	"colorName.black": "Черно",
 	"colorName.white": "Бяло",
+	"colorName.crimson": "Тъмночервено",
+	"colorName.coral": "Коралово",
+	"colorName.grape": "Гроздов",
+	"colorName.plum": "Сливов",
+	"colorName.bubblegum": "Дъвка",
 
 	"iconPicker.pickIcon": "Избор на икона",
 	"iconPicker.confirm": "Потвърждаване",

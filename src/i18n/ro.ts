@@ -181,6 +181,7 @@ export const ro: Record<string, string> = {
 	"editor.idCannotDelete":
 		"Acest ID este legat de numele afișat și nu poate fi șters — editați numele pentru a-l schimba",
 	"editor.icon": "Pictogramă",
+	"editor.pickIcon": "Alege pictograma",
 	"editor.livePreview": "Previzualizare live",
 	"editor.iconAdjustment": "Ajustare pictogramă",
 	"editor.picture": "Imagine",
@@ -271,6 +272,11 @@ export const ro: Record<string, string> = {
 	"colorName.gray": "Gri",
 	"colorName.black": "Negru",
 	"colorName.white": "Alb",
+	"colorName.crimson": "Carmin",
+	"colorName.coral": "Coral",
+	"colorName.grape": "Strugure",
+	"colorName.plum": "Prună",
+	"colorName.bubblegum": "Gumă de mestecat",
 
 	"iconPicker.pickIcon": "Alegeți o pictogramă",
 	"iconPicker.confirm": "Confirmare",

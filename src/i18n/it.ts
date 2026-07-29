@@ -179,6 +179,7 @@ export const it: Record<string, string> = {
 	"editor.idCannotDelete":
 		"Questo ID è collegato al nome visualizzato e non può essere eliminato — modifica il nome per cambiarlo",
 	"editor.icon": "Icona",
+	"editor.pickIcon": "Scegli icona",
 	"editor.livePreview": "Anteprima live",
 	"editor.iconAdjustment": "Regolazione icona",
 	"editor.picture": "Immagine",
@@ -269,6 +270,11 @@ export const it: Record<string, string> = {
 	"colorName.gray": "Grigio",
 	"colorName.black": "Nero",
 	"colorName.white": "Bianco",
+	"colorName.crimson": "Cremisi",
+	"colorName.coral": "Corallo",
+	"colorName.grape": "Uva",
+	"colorName.plum": "Prugna",
+	"colorName.bubblegum": "Gomma da masticare",
 
 	"iconPicker.pickIcon": "Scegli un'icona",
 	"iconPicker.confirm": "Conferma",

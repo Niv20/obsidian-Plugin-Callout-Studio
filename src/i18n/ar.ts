@@ -176,6 +176,7 @@ export const ar: Record<string, string> = {
 	"editor.idCannotDelete":
 		"هذا المعرّف مرتبط بالاسم المعروض ولا يمكن حذفه — عدّل الاسم لتغييره",
 	"editor.icon": "أيقونة",
+	"editor.pickIcon": "اختر أيقونة",
 	"editor.livePreview": "معاينة مباشرة",
 	"editor.iconAdjustment": "ضبط الأيقونة",
 	"editor.picture": "صورة",
@@ -263,6 +264,11 @@ export const ar: Record<string, string> = {
 	"colorName.gray": "رمادي",
 	"colorName.black": "أسود",
 	"colorName.white": "أبيض",
+	"colorName.crimson": "قرمزي",
+	"colorName.coral": "مرجاني",
+	"colorName.grape": "عنبي",
+	"colorName.plum": "برقوقي",
+	"colorName.bubblegum": "علكة",
 
 	"iconPicker.pickIcon": "اختيار أيقونة",
 	"iconPicker.confirm": "تأكيد",

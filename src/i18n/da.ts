@@ -165,6 +165,7 @@ export const da: Record<string, string> = {
 	"editor.idCannotDelete":
 		"Dette ID er knyttet til visningsnavnet og kan ikke slettes — rediger navnet for at ændre det",
 	"editor.icon": "Ikon",
+	"editor.pickIcon": "Vælg ikon",
 	"editor.livePreview": "Live-forhåndsvisning",
 	"editor.iconAdjustment": "Ikontilpasning",
 	"editor.picture": "Billede",
@@ -255,6 +256,11 @@ export const da: Record<string, string> = {
 	"colorName.gray": "Grå",
 	"colorName.black": "Sort",
 	"colorName.white": "Hvid",
+	"colorName.crimson": "Karmoisinrød",
+	"colorName.coral": "Koral",
+	"colorName.grape": "Drue",
+	"colorName.plum": "Blomme",
+	"colorName.bubblegum": "Tyggegummi",
 
 	"iconPicker.pickIcon": "Vælg et ikon",
 	"iconPicker.confirm": "Bekræft",

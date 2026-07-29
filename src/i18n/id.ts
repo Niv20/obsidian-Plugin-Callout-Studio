@@ -178,6 +178,7 @@ export const id: Record<string, string> = {
 	"editor.idCannotDelete":
 		"ID ini terhubung ke nama tampilan dan tidak dapat dihapus — edit nama untuk mengubahnya",
 	"editor.icon": "Ikon",
+	"editor.pickIcon": "Pilih ikon",
 	"editor.livePreview": "Pratinjau langsung",
 	"editor.iconAdjustment": "Penyesuaian ikon",
 	"editor.picture": "Gambar",
@@ -267,6 +268,11 @@ export const id: Record<string, string> = {
 	"colorName.gray": "Abu-abu",
 	"colorName.black": "Hitam",
 	"colorName.white": "Putih",
+	"colorName.crimson": "Merah krimson",
+	"colorName.coral": "Koral",
+	"colorName.grape": "Anggur",
+	"colorName.plum": "Prune",
+	"colorName.bubblegum": "Permen karet",
 
 	"iconPicker.pickIcon": "Pilih ikon",
 	"iconPicker.confirm": "Konfirmasi",
