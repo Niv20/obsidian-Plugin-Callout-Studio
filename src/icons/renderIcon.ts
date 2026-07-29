@@ -21,6 +21,7 @@ import type { CalloutIcon, CalloutRenderRole } from "../types";
 import type { IconResolver } from "./types";
 import { packFor } from "./registry";
 import { followsCalloutColor, userImageFor } from "./packs/userImages";
+import { isolateSvgCopy } from "./isolateSvg";
 
 /**
  * Shapes that carry their own paint inside a vendor SVG. A baked export colour
@@ -322,6 +323,12 @@ interface PaintState {
  * of ink, and colouring them would fill a stroked outline into a solid blob. The
  * walk carries the inherited paint down for the same reason, so a shape inside
  * `<g fill="none">` is left unfilled rather than flooded.
+ *
+ * The `<style>` blocks rewritten below belong to this copy alone by the time we
+ * get here (see isolateSvgCopy). Before they were fenced, this rewrite reached
+ * every other copy in the document too — so one callout recolouring a picture
+ * stripped the colours off a second callout using the same file with
+ * "Follow callout color" off.
  */
 function stencilSvg(root: Element, color: string): void {
 	for (const styleEl of Array.from(root.querySelectorAll("style"))) {
@@ -343,9 +350,9 @@ function stencilElement(el: Element, color: string, inherited: PaintState): void
 		effective[prop] = value;
 		if (UNPAINTED.has(value.toLowerCase())) continue;
 		// A class in a `<style>` block can declare `fill: none` where nothing
-		// readable here says so. Those rules were rewritten above, so an element
-		// that leans on one is left to them rather than forced to take ink it
-		// may have been drawn without.
+		// readable here says so. Those rules were rewritten above and belong to
+		// this copy alone, so an element that leans on one is left to them rather
+		// than forced to take ink it may have been drawn without.
 		if (declared === undefined && el.hasAttribute("class")) continue;
 		if (NON_DRAWABLE.has(name)) continue;
 		// `!important`, and on the element rather than only on the root, for the
@@ -483,6 +490,13 @@ export function iconRenderKey(
  * Returns null for anything that is not a well-formed `<svg>` root, so a
  * corrupted cache entry falls through to the caller's missing behavior instead
  * of appending a `<parsererror>` block to the page.
+ *
+ * The copy is isolated before it is handed back, so "every SVG that leaves here
+ * answers only for itself" holds at one place rather than at each of
+ * paintSvgIcon's colour branches. It has to happen before stencilSvg, which
+ * rewrites the paint *values* inside the very `<style>` blocks isolateSvgCopy
+ * has just fenced — the other order would fence rules that had already leaked
+ * into a sibling copy.
  */
 function importSvg(svg: string, doc: Document): Element | null {
 	const parsed = new DOMParser().parseFromString(svg, "image/svg+xml");
@@ -493,5 +507,7 @@ function importSvg(svg: string, doc: Document): Element | null {
 	) {
 		return null;
 	}
-	return doc.importNode(root, true);
+	const copy = doc.importNode(root, true);
+	isolateSvgCopy(copy);
+	return copy;
 }
