@@ -84,7 +84,7 @@ export const he: Record<string, string> = {
 	"settings.import": "ייבוא",
 	"settings.export": "ייצוא",
 	"settings.importDesc":
-		"אם תרצו לייבא מכספת אחרת את ההגדרות שלכם ב־Callout Studio, תוכלו לעשות זאת באמצעות קובץ JSON.",
+		"ייבאו את ההגדרות שלכם ב־Callout Studio מכספת אחרת, או העבירו את תיבות־ההבלטה שלכם מתוסף אחר.",
 	"settings.exportDesc":
 		"הייצוא שומר את כל סוגי תיבות־ההבלטה המותאמות־אישית שלכם בפורמט JSON.",
 	"settings.importConflictNotice":
@@ -173,6 +173,8 @@ export const he: Record<string, string> = {
 	"notice.exported": "תיבות־ההבלטה יוצאו לקובץ callout-studio-export.json",
 	"notice.importedJSON": "יובאו {{count}} סוגי תיבות־הבלטה מתוך JSON.",
 	"notice.importedSettings": "הגדרות התוסף יובאו.",
+	"notice.importedCalloutManager":
+		"יובא מתוך Callout Manager: {{created}} נוצרו, {{updated}} עודכנו.",
 	"notice.noNewJSON":
 		"לא יובאו תיבות־הבלטה חדשות (ייתכן שהמזהים כבר קיימים).",
 	"notice.iconDownloadFailed":
@@ -689,4 +691,29 @@ export const he: Record<string, string> = {
 	"import.warn.imageMissing":
 		"ה־callout הזה משתמש בתמונה שאינה בקובץ ואינה בכספת הזו, ולכן יוצג " +
 		"אייקון ברירת מחדל עד שייבחר לו אייקון חדש.",
+
+	// ייבוא — בחירת מקור
+	"import.chooseSource": "ייבוא מתוך",
+	"import.sourceStudio": "Callout Studio",
+	"import.sourceStudioDesc": "טעינת קובץ ‎.json שיוצא מתוך Callout Studio.",
+	"import.sourceCalloutManager": "Callout Manager",
+	"import.sourceCalloutManagerDesc":
+		"הדביקו את הסגנונות שהעתקתם מכפתור ה־Copy של Callout Manager.",
+	"import.sourceAdmonition": "Admonition",
+	"import.sourceAdmonitionDesc": "עדיין לא זמין.",
+	"import.sourceAdmonitionNotice": "ייבוא מתוך Admonition עדיין אינו נתמך.",
+
+	// ייבוא — הדבקה מתוך Callout Manager
+	"import.cmTitle": "ייבוא מתוך Callout Manager",
+	"import.cmInstructions":
+		"ב־Callout Manager, השתמשו בכפתור ה־Copy שלו כדי להעתיק את סגנונות " +
+		"תיבות־ההבלטה המותאמות־אישית שלכם, ואז הדביקו אותם למטה.",
+	"import.cmPlaceholder": "הדביקו כאן את הסגנונות שהועתקו…",
+	"import.cmBtnCancel": "ביטול",
+	"import.cmBtnImport": "ייבוא",
+	"import.err.cmNoBlocksFound": "לא נמצאו סגנונות של Callout Manager בטקסט שהודבק.",
+	"import.err.cmNoColorForNew":
+		'לא נמצא צבע תקין עבור תיבת־ההבלטה החדשה "{{value}}"; היא דולגה.',
+	"import.err.cmIdConflict":
+		'המזהה "{{value}}" כבר משמש ככינוי (alias) עבור תיבת־הבלטה אחרת ("{{other}}"), ולכן דולג.',
 };

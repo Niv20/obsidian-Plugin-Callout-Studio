@@ -2770,6 +2770,71 @@ input.cs-input-invalid:focus {
 	font-size: 0.9em;
 }
 
+/* ─── Import source chooser modal ─────────────────────────── */
+.callout-studio-import-source-modal {
+	max-width: 480px;
+}
+.cs-import-file-input {
+	display: none;
+}
+.cs-import-source-list {
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+	margin-top: 0.5rem;
+}
+.cs-import-source-item {
+	display: flex;
+	align-items: center;
+	gap: 0.75rem;
+	padding: 0.6rem 0.75rem;
+	border: 1px solid var(--background-modifier-border);
+	border-radius: 6px;
+	cursor: pointer;
+}
+.cs-import-source-item:hover {
+	background: var(--background-modifier-hover);
+}
+.cs-import-source-item.is-disabled {
+	opacity: 0.6;
+}
+.cs-import-source-item-icon {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: var(--text-accent);
+	flex-shrink: 0;
+}
+.cs-import-source-item-text {
+	display: flex;
+	flex-direction: column;
+	gap: 0.1rem;
+}
+.cs-import-source-item-title {
+	font-weight: 600;
+	color: var(--text-normal);
+}
+.cs-import-source-item-desc {
+	font-size: 0.85em;
+	color: var(--text-muted);
+}
+
+/* ─── Callout Manager paste modal ─────────────────────────── */
+.callout-studio-cm-import-modal {
+	max-width: 560px;
+}
+.cs-cm-import-instructions {
+	margin-top: 0;
+	color: var(--text-muted);
+}
+.cs-cm-import-textarea {
+	width: 100%;
+	min-height: 220px;
+	font-family: var(--font-monospace);
+	font-size: 0.85em;
+	resize: vertical;
+}
+
 /* ─── Vault statistics modal ───────────────────────────────── */
 .callout-studio-vault-stats-modal {
 	max-width: 760px;

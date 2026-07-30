@@ -9,11 +9,16 @@
  */
 import {
 	bgTintFor,
+	bgGradientsEqual,
 	clampBgIntensity,
+	DEFAULT_TEXT_COLOR_DARK,
+	DEFAULT_TEXT_COLOR_LIGHT,
+	derivePaletteFromColor,
 	isValidHexColor,
 	sanitizeBgGradient,
 } from "./colorUtils";
-import type { BgGradient, CustomPalette } from "../types";
+import { dedupeColorName, normalizeName, suggestColorName } from "./colorNames";
+import type { BgGradient, CalloutDefinition, CustomPalette } from "../types";
 import { t } from "../i18n";
 
 export interface ColorPalette {
@@ -279,4 +284,99 @@ export function sanitizeCustomPalettes(raw: unknown): CustomPalette[] {
 		});
 	}
 	return result;
+}
+
+/** The `CalloutDefinition` fields a resolved palette bakes onto a callout. */
+export type CalloutManagerBakedColors = Pick<
+	CalloutDefinition,
+	| "colorLight"
+	| "colorDark"
+	| "bgColorLight"
+	| "bgColorDark"
+	| "textColorLight"
+	| "textColorDark"
+	| "bgGradient"
+>;
+
+export interface CalloutManagerColorResolution {
+	/** The palette (existing or newly created) this color now links to. */
+	paletteId: string;
+	colors: CalloutManagerBakedColors;
+	/**
+	 * Set only when no existing palette matched the imported color — the
+	 * caller (`CalloutRegistry.applyCalloutManagerImport`) is responsible for
+	 * pushing this onto `settings.customPalettes`.
+	 */
+	createdPalette?: CustomPalette;
+}
+
+function bakeColors(palette: ColorPalette): CalloutManagerBakedColors {
+	return {
+		colorLight: palette.colorLight,
+		colorDark: palette.colorDark,
+		bgColorLight: palette.bgColorLight ?? bgTintFor(palette.colorLight, false),
+		bgColorDark: palette.bgColorDark ?? bgTintFor(palette.colorDark, true),
+		textColorLight: palette.textColorLight ?? DEFAULT_TEXT_COLOR_LIGHT,
+		textColorDark: palette.textColorDark ?? DEFAULT_TEXT_COLOR_DARK,
+		bgGradient: palette.bgGradient ? { ...palette.bgGradient } : undefined,
+	};
+}
+
+/**
+ * Resolves one imported Callout Manager color (a single hex, since that
+ * plugin has no separate light/dark accents) against everything already
+ * known: Obsidian/preset palettes and the user's saved custom palettes.
+ * `customPalettes` should be the caller's live, growing array: the caller is
+ * expected to push `createdPalette` onto it before resolving the next entry,
+ * so two imported callouts sharing a brand-new color see each other and
+ * share one saved palette instead of getting one each.
+ *
+ * A color that already matches a known palette (by the same 4-field
+ * accent+background / gradient equality `CalloutEditor`'s dropdown and
+ * `CalloutRegistry`'s paletteId migration already use) links to that palette
+ * as-is. Otherwise the color is "unknown": a new named `CustomPalette` is
+ * derived from it (same derivation as the editor's "New color…" flow) for
+ * the caller to save, instead of the callout ending up with baked colors
+ * that match nothing — which the editor would otherwise show as a
+ * "Deleted color".
+ */
+export function resolveCalloutManagerColor(
+	hex: string,
+	customPalettes: CustomPalette[],
+): CalloutManagerColorResolution {
+	const derived = derivePaletteFromColor(hex);
+	const candidates: ColorPalette[] = [
+		...getAllColorPalettes(),
+		...customPalettes.map(customPaletteToColorPalette),
+	];
+
+	const match = candidates.find(
+		(p) =>
+			p.colorLight.toLowerCase() === derived.colorLight.toLowerCase() &&
+			p.colorDark.toLowerCase() === derived.colorDark.toLowerCase() &&
+			(p.bgColorLight ?? "").toLowerCase() ===
+				derived.bgColorLight.toLowerCase() &&
+			(p.bgColorDark ?? "").toLowerCase() ===
+				derived.bgColorDark.toLowerCase() &&
+			bgGradientsEqual(p.bgGradient, undefined),
+	);
+	if (match) {
+		return { paletteId: match.id, colors: bakeColors(match) };
+	}
+
+	const takenNames = new Set(
+		[...getAllColorPalettes(), ...customPalettes].map((p) =>
+			normalizeName(p.name),
+		),
+	);
+	const createdPalette: CustomPalette = {
+		id: generatePaletteId(),
+		name: dedupeColorName(suggestColorName(hex), takenNames),
+		...derived,
+	};
+	return {
+		paletteId: createdPalette.id,
+		colors: bakeColors(customPaletteToColorPalette(createdPalette)),
+		createdPalette,
+	};
 }

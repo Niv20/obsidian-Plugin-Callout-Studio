@@ -85,7 +85,7 @@ export const en: Record<string, string> = {
 	"settings.import": "Import",
 	"settings.export": "Export",
 	"settings.importDesc":
-		"Import your Callout Studio progress from another vault using a JSON file.",
+		"Import your Callout Studio progress from another vault, or bring your callouts over from a different plugin.",
 	"settings.exportDesc": "Save all your custom callout types in JSON format.",
 	"settings.importConflictNotice":
 		"Imported {{count}} callout type(s); {{overwritten}} existing entry/entries were overwritten.",
@@ -174,6 +174,8 @@ export const en: Record<string, string> = {
 	"notice.exported": "Callouts exported to callout-studio-export.json",
 	"notice.importedJSON": "Imported {{count}} callout type(s) from JSON.",
 	"notice.importedSettings": "Imported plugin settings.",
+	"notice.importedCalloutManager":
+		"Imported from Callout Manager: {{created}} created, {{updated}} updated.",
 	"notice.noNewJSON":
 		"No new callout types were imported (ids may already exist).",
 	"notice.iconDownloadFailed":
@@ -688,6 +690,33 @@ export const en: Record<string, string> = {
 	"import.warn.imageMissing":
 		"This callout uses a picture that is not in the file and not in this " +
 		"vault, so it will show a placeholder icon until you give it a new one.",
+
+	// Import — source chooser
+	"import.chooseSource": "Import from",
+	"import.sourceStudio": "Callout Studio",
+	"import.sourceStudioDesc": "Load a .json file exported from Callout Studio.",
+	"import.sourceCalloutManager": "Callout Manager",
+	"import.sourceCalloutManagerDesc":
+		"Paste the styles you copied from Callout Manager's Copy button.",
+	"import.sourceAdmonition": "Admonition",
+	"import.sourceAdmonitionDesc": "Not available yet.",
+	"import.sourceAdmonitionNotice":
+		"Importing from Admonition isn't supported yet.",
+
+	// Import — Callout Manager paste flow
+	"import.cmTitle": "Import from Callout Manager",
+	"import.cmInstructions":
+		"In Callout Manager, use its Copy button to copy your customized " +
+		"callout styles, then paste them below.",
+	"import.cmPlaceholder": "Paste the copied styles here…",
+	"import.cmBtnCancel": "Cancel",
+	"import.cmBtnImport": "Import",
+	"import.err.cmNoBlocksFound":
+		"No Callout Manager styles were found in the pasted text.",
+	"import.err.cmNoColorForNew":
+		'No usable color was found for the new callout "{{value}}"; it was skipped.',
+	"import.err.cmIdConflict":
+		'ID "{{value}}" is already used as an alias by another callout ("{{other}}") and was skipped.',
 
 	// Footer
 	"footer.tagline":

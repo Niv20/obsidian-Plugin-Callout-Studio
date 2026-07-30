@@ -34,7 +34,11 @@ import {
 } from "../ui/ColorSwatchInput";
 import { LiveCalloutPreview } from "./LiveCalloutPreview";
 import { PREVIEW_PLACEHOLDER_ID } from "../constants";
-import { suggestColorName } from "../utils/colorNames";
+import {
+	dedupeColorName,
+	normalizeName,
+	suggestColorName,
+} from "../utils/colorNames";
 import { getObsidianPalettes, getExtraPalettes } from "../utils/colorPalettes";
 import { t } from "../i18n";
 import type { CalloutRegistry } from "../manager/CalloutRegistry";
@@ -65,9 +69,6 @@ const DEFAULT_GRADIENT_ANGLE = 135;
 const GRADIENT_HUE_SHIFT = 45;
 
 type BgStyle = "solid" | "gradient";
-
-/** Names are compared case-insensitively, ignoring surrounding whitespace. */
-const normalizeName = (name: string): string => name.trim().toLowerCase();
 
 export class PaletteEditorModal extends Modal {
 	private existing: CustomPalette | null;
@@ -798,21 +799,6 @@ export class PaletteEditorModal extends Modal {
 		};
 	}
 
-	/**
-	 * "Blue" taken → "Blue 2", "Blue 3", … Only used for the auto-suggested
-	 * name when the field was left empty; a user-typed duplicate is blocked
-	 * by updateNameValidity instead of being silently renamed.
-	 */
-	private dedupeName(name: string): string {
-		if (!this.takenNames.has(normalizeName(name))) return name;
-		for (let n = 2; ; n++) {
-			const candidate = `${name} ${n}`;
-			if (!this.takenNames.has(normalizeName(candidate))) {
-				return candidate;
-			}
-		}
-	}
-
 	private finish(save: boolean): void {
 		// Save stays disabled on a duplicate name, but guard anyway.
 		if (save && this.isNameTaken()) return;
@@ -822,7 +808,11 @@ export class PaletteEditorModal extends Modal {
 		if (save) {
 			const typed = this.name.trim();
 			const name =
-				typed || this.dedupeName(suggestColorName(this.colors.colorLight));
+				typed ||
+				dedupeColorName(
+					suggestColorName(this.colors.colorLight),
+					this.takenNames,
+				);
 			const gradient = this.currentGradient();
 			result = {
 				name,

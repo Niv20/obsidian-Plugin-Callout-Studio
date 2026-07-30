@@ -11,6 +11,7 @@ import { t } from "../../i18n";
 import { ConfirmModal } from "../../utils/ConfirmModal";
 import { ImportReportModal } from "../../utils/ImportReportModal";
 import { validateImportPayload } from "../../utils/importValidator";
+import { ImportSourceModal } from "../ImportSourceModal";
 import {
 	countCalloutUsages,
 	scanVaultCalloutStatistics,
@@ -35,7 +36,7 @@ export function renderImportExportSection(
 		.addButton((btn) => {
 			btn.setButtonText(t("settings.import"))
 				.setIcon("download")
-				.onClick(() => importFromJSON(ctx));
+				.onClick(() => new ImportSourceModal(ctx).open());
 			btn.buttonEl.addClass("cs-settings-neutral-btn");
 		});
 
@@ -165,137 +166,136 @@ function exportCallouts(ctx: SettingsSectionContext): void {
 	new Notice(t("notice.exported"));
 }
 
-function importFromJSON(ctx: SettingsSectionContext): void {
-	const input = createEl("input");
-	input.type = "file";
-	input.accept = ".json";
-	// eslint-disable-next-line @typescript-eslint/no-misused-promises -- DOM change handler is fire-and-forget; async errors are handled inside the callback.
-	input.addEventListener("change", async () => {
-		const file = input.files?.[0];
-		if (!file) return;
+/**
+ * Parses and applies a Callout Studio JSON export. Takes an already-chosen
+ * `File` rather than owning a file input itself — see ImportSourceModal,
+ * which keeps one persistent, DOM-attached input alive for its lifetime
+ * (mirroring ImagePanel's "Your images" add button) rather than creating one
+ * fresh per click, since a detached input built inside the click handler was
+ * unreliable for actually showing Chromium's file chooser.
+ */
+export async function processImportedJSON(
+	ctx: SettingsSectionContext,
+	file: File,
+): Promise<void> {
+	let parsed: unknown;
+	try {
+		const text = await file.text();
+		parsed = JSON.parse(text);
+	} catch {
+		await new ImportReportModal(
+			ctx.app,
+			[
+				{
+					index: -1,
+					entryLabel: "",
+					level: "error",
+					messageKey: "import.err.parseFailed",
+				},
+			],
+			0,
+			0,
+			true,
+		).prompt();
+		return;
+	}
 
-		let parsed: unknown;
-		try {
-			const text = await file.text();
-			parsed = JSON.parse(text);
-		} catch {
-			await new ImportReportModal(
-				ctx.app,
-				[
-					{
-						index: -1,
-						entryLabel: "",
-						level: "error",
-						messageKey: "import.err.parseFailed",
-					},
-				],
-				0,
-				0,
-				true,
-			).prompt();
-			return;
-		}
+	const result = validateImportPayload(parsed, ctx.plugin.registry);
 
-		const result = validateImportPayload(parsed, ctx.plugin.registry);
+	if (result.issues.length > 0 || result.fatal) {
+		const total = countImportedCallouts(parsed);
+		const choice = await new ImportReportModal(
+			ctx.app,
+			result.issues,
+			result.validDefs.length,
+			total,
+			result.fatal,
+		).prompt();
+		if (choice === "cancel") return;
+	}
 
-		if (result.issues.length > 0 || result.fatal) {
-			const total = countImportedCallouts(parsed);
-			const choice = await new ImportReportModal(
-				ctx.app,
-				result.issues,
-				result.validDefs.length,
-				total,
-				result.fatal,
-			).prompt();
-			if (choice === "cancel") return;
-		}
+	const defs = result.validDefs;
 
-		const defs = result.validDefs;
-
-		let imported = 0;
-		let overwritten = 0;
-		for (const def of defs) {
-			if (ctx.plugin.registry.has(def.id)) {
-				ctx.plugin.registry.update(def.id, def);
-				overwritten++;
-				imported++;
-			} else {
-				const added = ctx.plugin.registry.add(def);
-				if (added) imported++;
-			}
-		}
-
-		// v2 files also carry plugin settings; apply them field-by-field
-		// (result.settings is already merged against defaults, so unknown
-		// fields are impossible here).
-		const settingsImported = !!result.settings;
-		if (result.settings) {
-			// Merge saved palettes and pictures by id rather than letting
-			// Object.assign replace the arrays wholesale — otherwise importing
-			// a file with none of either would silently wipe the user's
-			// existing ones. This mirrors how callouts are merged (add new /
-			// overwrite same id).
-			const {
-				customPalettes: importedPalettes,
-				userImages: importedImages,
-				...restSettings
-			} = result.settings;
-			Object.assign(ctx.plugin.registry.settings, restSettings);
-			if (importedPalettes) {
-				const byId = new Map(
-					ctx.plugin.registry.settings.customPalettes.map((p) => [
-						p.id,
-						p,
-					]),
-				);
-				for (const palette of importedPalettes) {
-					byId.set(palette.id, palette);
-				}
-				ctx.plugin.registry.settings.customPalettes = [
-					...byId.values(),
-				];
-			}
-			if (importedImages) {
-				const byId = new Map(
-					ctx.plugin.registry
-						.getUserImages()
-						.map((image) => [image.id, image]),
-				);
-				for (const image of importedImages) {
-					byId.set(image.id, image);
-				}
-				// Through the registry rather than by assignment: it is what
-				// hands the new pictures to the pack that draws them.
-				ctx.plugin.registry.setUserImages([...byId.values()]);
-			}
-			await ctx.plugin.saveSettings();
-			ctx.plugin.refreshRenderModes();
-		}
-
-		if (imported > 0) {
-			if (overwritten > 0) {
-				new Notice(
-					t("settings.importConflictNotice", {
-						count: imported,
-						overwritten,
-					}),
-				);
-			} else {
-				new Notice(t("notice.importedJSON", { count: imported }));
-			}
-			ctx.display();
-			// An imported callout can name an icon from a source this vault has
-			// never downloaded, and the file carries no artwork. Fetch whatever
-			// is missing rather than leaving those callouts undrawable.
-			void ctx.plugin.ensureIconArtworkFor(defs.map((d) => d.icon));
-		} else if (settingsImported) {
-			new Notice(t("notice.importedSettings"));
-			ctx.display();
+	let imported = 0;
+	let overwritten = 0;
+	for (const def of defs) {
+		if (ctx.plugin.registry.has(def.id)) {
+			ctx.plugin.registry.update(def.id, def);
+			overwritten++;
+			imported++;
 		} else {
-			new Notice(t("notice.noNewJSON"));
+			const added = ctx.plugin.registry.add(def);
+			if (added) imported++;
 		}
-	});
-	input.click();
+	}
+
+	// v2 files also carry plugin settings; apply them field-by-field
+	// (result.settings is already merged against defaults, so unknown
+	// fields are impossible here).
+	const settingsImported = !!result.settings;
+	if (result.settings) {
+		// Merge saved palettes and pictures by id rather than letting
+		// Object.assign replace the arrays wholesale — otherwise importing
+		// a file with none of either would silently wipe the user's
+		// existing ones. This mirrors how callouts are merged (add new /
+		// overwrite same id).
+		const {
+			customPalettes: importedPalettes,
+			userImages: importedImages,
+			...restSettings
+		} = result.settings;
+		Object.assign(ctx.plugin.registry.settings, restSettings);
+		if (importedPalettes) {
+			const byId = new Map(
+				ctx.plugin.registry.settings.customPalettes.map((p) => [
+					p.id,
+					p,
+				]),
+			);
+			for (const palette of importedPalettes) {
+				byId.set(palette.id, palette);
+			}
+			ctx.plugin.registry.settings.customPalettes = [...byId.values()];
+		}
+		if (importedImages) {
+			const byId = new Map(
+				ctx.plugin.registry
+					.getUserImages()
+					.map((image) => [image.id, image]),
+			);
+			for (const image of importedImages) {
+				byId.set(image.id, image);
+			}
+			// Through the registry rather than by assignment: it is what
+			// hands the new pictures to the pack that draws them.
+			ctx.plugin.registry.setUserImages([...byId.values()]);
+		}
+		await ctx.plugin.saveSettings();
+		ctx.plugin.refreshRenderModes();
+	}
+
+	if (imported > 0) {
+		if (overwritten > 0) {
+			new Notice(
+				t("settings.importConflictNotice", {
+					count: imported,
+					overwritten,
+				}),
+			);
+		} else {
+			new Notice(t("notice.importedJSON", { count: imported }));
+		}
+		ctx.display();
+		// An imported callout can name an icon from a source this vault has
+		// never downloaded, and the file carries no artwork. Fetch whatever
+		// is missing rather than leaving those callouts undrawable.
+		void ctx.plugin.ensureIconArtworkFor(defs.map((d) => d.icon));
+	} else if (settingsImported) {
+		new Notice(t("notice.importedSettings"));
+		ctx.display();
+	} else {
+		new Notice(t("notice.noNewJSON"));
+	}
 }
 
 /** Number of callout entries in either import shape (for the report modal). */

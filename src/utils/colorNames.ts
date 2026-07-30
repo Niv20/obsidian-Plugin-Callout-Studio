@@ -59,3 +59,21 @@ export function suggestColorName(hex: string): string {
 	}
 	return t(`colorName.${bestKey}`);
 }
+
+/** Names are compared case-insensitively, ignoring surrounding whitespace. */
+export function normalizeName(name: string): string {
+	return name.trim().toLowerCase();
+}
+
+/**
+ * "Blue" taken → "Blue 2", "Blue 3", … Used for auto-suggested palette names
+ * (left empty by the user, or generated for an imported color) so a
+ * collision never silently overwrites/hides another entry.
+ */
+export function dedupeColorName(name: string, takenNames: Set<string>): string {
+	if (!takenNames.has(normalizeName(name))) return name;
+	for (let n = 2; ; n++) {
+		const candidate = `${name} ${n}`;
+		if (!takenNames.has(normalizeName(candidate))) return candidate;
+	}
+}

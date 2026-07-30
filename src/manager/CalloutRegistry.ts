@@ -28,9 +28,16 @@ import {
 } from "../constants";
 import { iconCacheKey, packFor } from "../icons/registry";
 import { materialPack } from "../icons/packs/material";
-import { obsidianCalloutAttrId } from "../utils/calloutId";
-import { parseCssColorToHex } from "../utils/colorUtils";
-import { sanitizeCustomPalettes } from "../utils/colorPalettes";
+import type { CalloutManagerPlanItem } from "../utils/calloutManagerImport";
+import {
+	normalizeCalloutId,
+	obsidianCalloutAttrId,
+	obsidianDefaultTitle,
+} from "../utils/calloutId";
+import {
+	resolveCalloutManagerColor,
+	sanitizeCustomPalettes,
+} from "../utils/colorPalettes";
 import { sanitizeUserImages } from "../utils/userImages";
 import { setUserImages } from "../icons/packs/userImages";
 import { sortCalloutsByDisplayName } from "../utils/sorting";
@@ -1140,51 +1147,80 @@ export class CalloutRegistry {
 		this.notifyChange();
 	}
 
-	importFromCSS(cssText: string): CalloutDefinition[] {
-		const imported: CalloutDefinition[] = [];
-		// Match patterns like: .callout[data-callout="name"] { --callout-color: <color> }
-		// The color is captured raw and parsed below, so both the pre-1.13 RGB
-		// triplet (255, 0, 0) and the 1.13+ formats (#ff0000, rgb(255,0,0)) work.
-		const regex =
-			/\.callout\[data-callout=["']([^"']+)["']\]\s*\{[^}]*--callout-color:\s*([^;}]+)/g;
-		let match: RegExpExecArray | null;
+	/**
+	 * Applies a plan already computed by `planCalloutManagerImport` (which
+	 * decided update-vs-create per entry against this same registry). Kept as
+	 * two steps — plan (read-only, in utils/calloutManagerImport.ts) then
+	 * apply (here) — so the paste modal can show a report before anything
+	 * changes, exactly like the JSON importer's ImportReportModal step.
+	 */
+	applyCalloutManagerImport(items: CalloutManagerPlanItem[]): {
+		created: number;
+		updated: number;
+	} {
+		let created = 0;
+		let updated = 0;
+		// Pushed onto settings.customPalettes as soon as created (not batched
+		// to the end) so a later entry sharing the same new color sees it via
+		// resolveCalloutManagerColor and reuses it instead of saving a
+		// duplicate, and so it's already present by the time add()/update()
+		// below fires the save.
+		let paletteCreated = false;
 
-		while ((match = regex.exec(cssText)) !== null) {
-			const id = match[1];
-			const rawColor = match[2];
-			if (!id || !rawColor) continue;
-			if (this.callouts.has(id)) continue;
-			// Skip if ID conflicts with an existing alias
-			if (this.findByAlias(id)) continue;
+		for (const item of items) {
+			if (item.action === "update") {
+				const partial: Partial<CalloutDefinition> = {};
+				if (item.entry.icon) partial.icon = item.entry.icon;
+				if (item.entry.color) {
+					const resolved = resolveCalloutManagerColor(
+						item.entry.color,
+						this.settings.customPalettes,
+					);
+					if (resolved.createdPalette) {
+						this.settings.customPalettes.push(resolved.createdPalette);
+						paletteCreated = true;
+					}
+					Object.assign(partial, resolved.colors);
+					partial.paletteId = resolved.paletteId;
+				}
+				if (Object.keys(partial).length > 0) {
+					this.update(item.existingId as string, partial);
+				}
+				updated++;
+				continue;
+			}
 
-			// Skip colors we can't safely convert to hex (named colors, oklch(), …)
-			// rather than importing a callout with a broken color value.
-			const hex = parseCssColorToHex(rawColor);
-			if (!hex) continue;
-
+			const id = normalizeCalloutId(item.entry.id);
+			const resolved = resolveCalloutManagerColor(
+				item.entry.color as string,
+				this.settings.customPalettes,
+			);
+			if (resolved.createdPalette) {
+				this.settings.customPalettes.push(resolved.createdPalette);
+				paletteCreated = true;
+			}
 			const def: CalloutDefinition = {
 				id,
-				displayName: id
-					.split("-")
-					.map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-					.join(" "),
-				icon: { type: "lucide", value: "pencil" },
-				colorLight: hex,
-				colorDark: hex,
+				displayName: obsidianDefaultTitle(item.entry.id),
+				icon: item.entry.icon ?? { type: "lucide", value: "pencil" },
+				...resolved.colors,
+				paletteId: resolved.paletteId,
 				foldable: true,
 				defaultFolded: false,
 				builtIn: false,
-				source: "theme",
+				source: "user",
 			};
-
-			this.callouts.set(id, def);
-			imported.push(def);
+			if (this.add(def)) created++;
 		}
 
-		if (imported.length > 0) {
+		// Safety net: add()/update() above already save on every successful
+		// mutation, but a created palette whose def failed to add (e.g. a
+		// same-id race) would otherwise sit unsaved until an unrelated change.
+		if (paletteCreated) {
 			this.notifyChange();
 		}
-		return imported;
+
+		return { created, updated };
 	}
 
 	exportToJSON(): string {
