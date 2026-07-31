@@ -55,6 +55,7 @@ import { renderCalloutEditorIconPreview } from "./editor/CalloutEditorIconRender
 import { performCalloutEditorSave } from "./editor/CalloutEditorSave";
 import { findUserImage } from "../icons/packs/userImages";
 import { createControlGroup } from "./styleControls";
+import { refreshAllMarkdownEditors } from "../editor/livepreview/refresh";
 
 // Derive a callout ID from the display name. Spaces are preserved (the ID may
 // be a human-readable, multi-word label like "multi word callout"); the shared
@@ -114,6 +115,7 @@ export class CalloutEditor extends Modal {
 	/** Id of the palette (custom or preset) currently applied, if any. */
 	private paletteId: string | undefined;
 	private preview: LiveCalloutPreview | null = null;
+	private noteRefreshFrame: number | null = null;
 	private recolorToggle: ToggleComponent | null = null;
 	/**
 	 * Re-reads the Picture section from the current icon: whether it applies at
@@ -444,10 +446,15 @@ export class CalloutEditor extends Modal {
 					this.previewColorOverride === null,
 				);
 				this.plugin.cssInjector.inject(false);
+				this.scheduleNoteDecorationRefresh();
 			},
 			onDestroy: () => {
 				this.plugin.registry.setPreviewDefinition(null);
 				this.plugin.cssInjector.inject(false);
+				// Synchronous, unlike the scheduled call above: this is the
+				// teardown that reverts open notes to their committed state, and
+				// onClose cancels any frame still pending by the time it runs.
+				refreshAllMarkdownEditors(this.app);
 			},
 		});
 
@@ -1431,6 +1438,34 @@ export class CalloutEditor extends Modal {
 		renderCalloutEditorIconPreview(this.plugin, this.icon, container);
 	}
 
+	/**
+	 * Push the in-progress definition out to the notes themselves, not just to
+	 * the modal's own live preview.
+	 *
+	 * Colours and geometry ride the injected CSS and need no help — that is why
+	 * a regular callout in the note restyles the instant the CSS does. Heading
+	 * and inline callouts are different: their icon and display name are baked
+	 * into Live Preview widget DOM, and a registry change never touches the
+	 * document, so CodeMirror has no reason to rebuild them. Without this
+	 * dispatch they keep the old icon until something unrelated rebuilds them —
+	 * a click in the note, or closing the modal.
+	 *
+	 * Coalesced on the next frame because beforeRender runs on every slider tick
+	 * and every keystroke, and one rebuild per burst is enough (the same reason
+	 * SettingsTab batches its list refresh).
+	 *
+	 * Reading view is deliberately left out: re-running its post-processors
+	 * means previewMode.rerender(), far too heavy to repeat per keystroke. It
+	 * catches up on save, when inject() emits css-change.
+	 */
+	private scheduleNoteDecorationRefresh(): void {
+		if (this.noteRefreshFrame !== null) return;
+		this.noteRefreshFrame = window.requestAnimationFrame(() => {
+			this.noteRefreshFrame = null;
+			refreshAllMarkdownEditors(this.app);
+		});
+	}
+
 	private updatePreview(): void {
 		if (!this.preview) return;
 		// Keep the sample's titles tracking the display-name field.
@@ -1587,6 +1622,14 @@ export class CalloutEditor extends Modal {
 	}
 
 	onClose(): void {
+		// Drop any coalesced refresh still queued from the last preview render.
+		// Must happen BEFORE destroy(): that reverts the preview and refreshes
+		// the notes synchronously, so a frame firing afterwards would only
+		// repeat work — and one firing after the modal is gone is pure waste.
+		if (this.noteRefreshFrame !== null) {
+			window.cancelAnimationFrame(this.noteRefreshFrame);
+			this.noteRefreshFrame = null;
+		}
 		this.preview?.destroy();
 		this.preview = null;
 		this.removePopupOutsideClickListener?.();
