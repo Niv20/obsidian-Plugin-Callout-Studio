@@ -1267,7 +1267,7 @@ button.callout-studio-icon-picker-loading {
 .icon-picker-source-menu-item {
 	display: flex;
 	align-items: center;
-	column-gap: 0.75em;
+	gap: 0.75em;
 	padding: 6px 12px;
 	cursor: pointer;
 }
@@ -1304,7 +1304,7 @@ button.callout-studio-icon-picker-loading {
 	flex: 1;
 	min-width: 0;
 	align-items: center;
-	column-gap: 0.4em;
+	gap: 0.4em;
 }
 
 /* Name, then description always on its own line below it. */
