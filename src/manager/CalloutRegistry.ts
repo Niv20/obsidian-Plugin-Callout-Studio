@@ -947,9 +947,7 @@ export class CalloutRegistry {
 	 * It DOES fire {@link onPreviewChange} whenever the settings lists could
 	 * look different afterwards, so the open settings tab repaints its rows in
 	 * the next frame. Without that signal the tab has no way to learn about a
-	 * preview at all, and only caught up ~2s later when the debounced startup
-	 * snippet write made Obsidian emit its own `css-change` — a disk write
-	 * standing in for an event.
+	 * preview at all.
 	 *
 	 * `notifyLists: false` suppresses exactly that signal for a preview the
 	 * user has not chosen — the callout editor's palette menu previewing a

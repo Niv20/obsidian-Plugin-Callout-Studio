@@ -19,6 +19,7 @@ import { CalloutRegistry } from "./manager/CalloutRegistry";
 import { CSSInjector } from "./manager/CSSInjector";
 import { IconService } from "./icons/IconService";
 import { CalloutDiscovery } from "./manager/CalloutDiscovery";
+import { removeLegacyStartupSnippet } from "./manager/legacyStartupSnippet";
 import { CalloutStudioSettingsTab } from "./settings/SettingsTab";
 import { WelcomeModal } from "./settings/WelcomeModal";
 import { CalloutEditor } from "./settings/CalloutEditor";
@@ -79,9 +80,7 @@ export default class CalloutStudioPlugin extends Plugin {
 		// Startup fast path — synchronously re-apply last session's CSS from
 		// localStorage BEFORE the first await, so on slow startups (mobile,
 		// where the note renders before plugins finish loading) custom callout
-		// styling lands as early as this plugin possibly can. Works together
-		// with the auto-generated CSS snippet, which Obsidian applies even
-		// earlier — before community plugins load at all. See
+		// styling lands as early as this plugin possibly can. See
 		// StartupStyleCache for the full picture.
 		this.cssInjector = new CSSInjector(this.app, this.registry);
 		this.cssInjector.injectFromCache();
@@ -154,6 +153,13 @@ export default class CalloutStudioPlugin extends Plugin {
 			saveSettings: () => this.saveSettings(),
 			refreshCallouts: () => this.refreshCallouts(),
 			registerEvent: (ref) => this.registerEvent(ref),
+		});
+
+		// Remove the startup CSS snippet versions up to 2.5.0 left in the vault.
+		// Deferred to layout-ready so its one `exists()` stat never sits on the
+		// startup path. Delete this together with legacyStartupSnippet.ts in 3.0.0.
+		this.app.workspace.onLayoutReady(() => {
+			void removeLegacyStartupSnippet(this.app);
 		});
 
 		// Clean heading-callout titles in the Outline pane.

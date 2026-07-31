@@ -268,23 +268,13 @@ export class CSSInjector {
 		this.ensureStyleEl();
 		if (this.styleEl) this.styleEl.textContent = cssText;
 
-		// Our copy of these rules is now live, so retire the startup snippet's
-		// copy: it only catches up on a debounced disk write, and a stale rule
-		// can outrank a fresh one (see suppressSnippet). Guarded on actually
-		// having written somewhere, so a failed inject never leaves the
-		// document with no callout styling at all.
-		if (this.styleSheet || this.styleEl) {
-			this.startupCache.suppressSnippet();
-		}
-
-		// Snapshot the same text for next launch's startup fast path
-		// (localStorage + CSS snippet — see StartupStyleCache). Skipped while a
-		// transient live-preview definition is registered: that CSS describes an
-		// unsaved draft, which toSaveData() already goes out of its way to keep
-		// off disk, and hovering a colour in the editor's palette menu would
-		// otherwise cost a synchronous localStorage write plus a queued snippet
-		// write each time. Clearing the preview re-injects, which persists the
-		// real CSS again.
+		// Snapshot the same text for next launch's startup fast path (see
+		// StartupStyleCache). Skipped while a transient live-preview definition
+		// is registered: that CSS describes an unsaved draft, which toSaveData()
+		// already goes out of its way to keep off disk, and hovering a colour in
+		// the editor's palette menu would otherwise cost a synchronous
+		// localStorage write each time. Clearing the preview re-injects, which
+		// persists the real CSS again.
 		if (!this.registry.hasPreviewDefinition()) {
 			this.startupCache.persist(cssText);
 		}
@@ -974,9 +964,9 @@ export class CSSInjector {
 	 *
 	 * The data URI is declared once into a custom property rather than repeated
 	 * for the prefixed and unprefixed mask properties. The whole stylesheet is
-	 * also written to localStorage and to a snippet file on every inject (see
-	 * StartupStyleCache), and an inlined SVG is by far the largest thing in it,
-	 * so halving each occurrence is worth the indirection.
+	 * also written to localStorage on every inject (see StartupStyleCache), and
+	 * an inlined SVG is by far the largest thing in it, so halving each
+	 * occurrence is worth the indirection.
 	 */
 	private generateIconMaskOverride(
 		calloutId: string,
@@ -1609,10 +1599,6 @@ export class CSSInjector {
 	}
 
 	destroy(): void {
-		// Hand callout styling back to the snippet before our own sheet goes
-		// away, so unloading the plugin doesn't strip colours from open notes.
-		this.startupCache.restoreSnippet();
-		this.startupCache.destroy();
 		const doc = this.styleDoc ?? activeDocument;
 		if (this.styleSheet && "adoptedStyleSheets" in doc) {
 			doc.adoptedStyleSheets = doc.adoptedStyleSheets.filter(
