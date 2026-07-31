@@ -89,6 +89,12 @@ export class PackPanel {
 	)[] = [];
 	/** Rebuilt on every variant change — Font Awesome's applies to Brands only. */
 	private noticeEl: HTMLElement | null = null;
+	/**
+	 * The entry behind the current selection, so a later variant change (weight,
+	 * style, skin tone) can redraw it from the same name instead of leaving the
+	 * host holding the icon as it looked before the toolbar changed.
+	 */
+	private selectedEntry: IconEntry | null = null;
 	/** How many of the current results each source contributed; pooled list only. */
 	private groupCounts = new Map<IconSourceId, number>();
 	/** Guards against a slow load painting into a panel the user has left. */
@@ -233,6 +239,7 @@ export class PackPanel {
 					b.toggleClass("is-active", i === tone);
 					b.setAttribute("aria-pressed", String(i === tone));
 				});
+				this.syncSelectionToVariants();
 				// Only the glyphs change, so repaint in place: rebuilding would
 				// throw away scroll position and every page loaded so far.
 				this.grid?.repaintVisible();
@@ -265,9 +272,33 @@ export class PackPanel {
 			});
 			if (this.disposed) return;
 		}
+		this.syncSelectionToVariants();
 		this.updateNotice();
 		this.applyFilter();
 		this.grid?.revealSelected();
+	}
+
+	/**
+	 * Re-derive the current selection under the toolbar's new variant state.
+	 *
+	 * A style or weight change redraws every cell in the grid, but without this
+	 * the host still holds the `CalloutIcon` built at the moment of the original
+	 * click — so Confirm would save the icon as it looked before the toolbar
+	 * changed, and the only way to pick up the new weight/style was to click the
+	 * already-selected cell again.
+	 */
+	private syncSelectionToVariants(): void {
+		const selected = this.host.selectedIcon();
+		if (!selected) return;
+		// Only this panel's own source: a variant change here has nothing to say
+		// about an icon selected from another one.
+		if (packFor(selected)?.id !== this.pack.id) return;
+		const entry =
+			this.selectedEntry ??
+			this.index?.entries.find((e) => e.name === selected.value);
+		if (!entry) return;
+		this.selectedEntry = entry;
+		this.host.onSelect(this.pack.makeIcon(entry, this.variants), entry);
 	}
 
 	// ── Loading ─────────────────────────────────────────────────────────
@@ -569,6 +600,7 @@ export class PackPanel {
 
 	private select(entry: IconEntry): void {
 		const owner = this.packOf(entry);
+		this.selectedEntry = entry;
 		this.host.onSelect(
 			owner.makeIcon(entry, this.variantsOf(entry)),
 			entry,
