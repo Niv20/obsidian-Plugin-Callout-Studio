@@ -133,7 +133,7 @@ export interface CalloutDefinition {
 	iconOffsetX?: number;
 	/** Vertical icon offset in px (−10 to 10) */
 	iconOffsetY?: number;
-	/** Icon scale factor (0.5 to 2.0, default 1) */
+	/** Icon scale factor (0.5 to 1.5, default 1) */
 	iconSize?: number;
 	/** Custom background color – light mode */
 	bgColorLight?: string;

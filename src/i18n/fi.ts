@@ -623,7 +623,7 @@ export const fi: Record<string, string> = {
 		"Liikaa tunnuksia ({{count}}); jokaisella calloutilla voi olla korkeintaan {{max}} tunnusta (ensisijainen + aliakset).",
 	"import.err.metadataShape":
 		'"metadata" on oltava objekti, jonka kaikki arvot ovat merkkijonoja.',
-	"import.err.unknownFields": "Tuntemattomat kentät ohitettu: {{fields}}.",
+	"import.warn.unknownFields": "Tuntemattomat kentät ohitettu: {{fields}}.",
 	"import.err.duplicateInFile":
 		'Tunnus/alias "{{value}}" on jo merkinnän #{{first}} käytössä tässä tiedostossa.',
 	"import.err.aliasConflict":

@@ -639,7 +639,7 @@ export const hi: Record<string, string> = {
 		"बहुत अधिक ID ({{count}}); प्रत्येक callout में अधिकतम {{max}} ID हो सकती हैं (मुख्य + उपनाम)।",
 	"import.err.metadataShape":
 		'"metadata" एक ऑब्जेक्ट होना चाहिए जिसके सभी मान स्ट्रिंग हों।',
-	"import.err.unknownFields": "अज्ञात फ़ील्ड अनदेखी की गईं: {{fields}}।",
+	"import.warn.unknownFields": "अज्ञात फ़ील्ड अनदेखी की गईं: {{fields}}।",
 	"import.err.duplicateInFile":
 		'ID/उपनाम "{{value}}" इस फ़ाइल की प्रविष्टि #{{first}} द्वारा पहले से उपयोग में है।',
 	"import.err.aliasConflict":

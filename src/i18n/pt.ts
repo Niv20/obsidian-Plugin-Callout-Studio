@@ -646,7 +646,7 @@ export const pt: Record<string, string> = {
 		"Muitos IDs ({{count}}); cada callout pode ter no máximo {{max}} IDs (principal + aliases).",
 	"import.err.metadataShape":
 		'"metadata" deve ser um objeto cujos valores sejam todos strings.',
-	"import.err.unknownFields": "Campos desconhecidos ignorados: {{fields}}.",
+	"import.warn.unknownFields": "Campos desconhecidos ignorados: {{fields}}.",
 	"import.err.duplicateInFile":
 		'O ID/alias "{{value}}" já está em uso pela entrada #{{first}} neste arquivo.',
 	"import.err.aliasConflict":

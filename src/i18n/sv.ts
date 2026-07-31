@@ -554,7 +554,7 @@ export const sv: Record<string, string> = {
 	"import.err.aliasDup": 'Aliaset "{{value}}" är duplicerat inom den här posten.',
 	"import.err.tooManyIds": "För många ID:n ({{count}}); varje callout kan ha högst {{max}} ID:n (primärt + alias).",
 	"import.err.metadataShape": '"metadata" måste vara ett objekt vars alla värden är strängar.',
-	"import.err.unknownFields": "Okända fält ignorerades: {{fields}}.",
+	"import.warn.unknownFields": "Okända fält ignorerades: {{fields}}.",
 	"import.err.duplicateInFile": 'ID/aliaset "{{value}}" används redan av post #{{first}} i den här filen.',
 	"import.err.aliasConflict": 'Aliaset "{{value}}" används redan av en annan callout ("{{other}}") i ditt vault.',
 	"import.warn.defaultFoldedAutofix": '"defaultFolded" var true medan "foldable" var false; defaultFolded återställdes till false.',

@@ -645,7 +645,7 @@ export const id: Record<string, string> = {
 		"Terlalu banyak ID ({{count}}); setiap callout dapat memiliki maksimal {{max}} ID (utama + alias).",
 	"import.err.metadataShape":
 		'"metadata" harus berupa objek yang semua nilainya adalah string.',
-	"import.err.unknownFields": "Bidang tidak dikenal diabaikan: {{fields}}.",
+	"import.warn.unknownFields": "Bidang tidak dikenal diabaikan: {{fields}}.",
 	"import.err.duplicateInFile":
 		'ID/alias "{{value}}" sudah digunakan oleh entri #{{first}} dalam file ini.',
 	"import.err.aliasConflict":

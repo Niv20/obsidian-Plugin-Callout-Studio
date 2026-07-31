@@ -680,7 +680,7 @@ export const en: Record<string, string> = {
 		"Too many IDs ({{count}}); each callout can have at most {{max}} IDs (primary + aliases).",
 	"import.err.metadataShape":
 		'"metadata" must be an object whose values are all strings.',
-	"import.err.unknownFields": "Unknown field(s) ignored: {{fields}}.",
+	"import.warn.unknownFields": "Unknown field(s) ignored: {{fields}}.",
 	"import.err.duplicateInFile":
 		'ID/alias "{{value}}" is already used by entry #{{first}} in this file.',
 	"import.err.aliasConflict":
@@ -690,6 +690,14 @@ export const en: Record<string, string> = {
 	"import.warn.imageMissing":
 		"This callout uses a picture that is not in the file and not in this " +
 		"vault, so it will show a placeholder icon until you give it a new one.",
+	"import.err.paletteIdInvalid":
+		'"paletteId" must be a non-empty text ID (got "{{value}}").',
+	"import.warn.iconNameUnknown":
+		'There is no "{{value}}" icon in {{type}}, so the default icon was used instead.',
+	"import.warn.cmIconUnknownNew":
+		'There is no "{{value}}" icon in Obsidian, so the default icon was used instead.',
+	"import.warn.cmIconUnknownExisting":
+		'There is no "{{value}}" icon in Obsidian, so "{{id}}" kept the icon it already had.',
 
 	// Import — source chooser
 	"import.chooseSource": "Import from",

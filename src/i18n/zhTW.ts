@@ -536,7 +536,7 @@ export const zhTW: Record<string, string> = {
 	"import.err.aliasDup": '「{{value}}」別名在此條目中重複。',
 	"import.err.tooManyIds": "ID 過多（{{count}} 個）；每個 callout 最多可以有 {{max}} 個 ID（主 ID + 別名）。",
 	"import.err.metadataShape": '「metadata」必須是一個值全為字串的物件。',
-	"import.err.unknownFields": "忽略了未知欄位：{{fields}}。",
+	"import.warn.unknownFields": "忽略了未知欄位：{{fields}}。",
 	"import.err.duplicateInFile": 'ID/別名「{{value}}」已被此檔案中的條目 #{{first}} 使用。',
 	"import.err.aliasConflict": '別名「{{value}}」已被 vault 中的另一個 callout（「{{other}}」）使用。',
 	"import.warn.defaultFoldedAutofix": '「defaultFolded」為 true 而「foldable」為 false；defaultFolded 已重置為 false。',

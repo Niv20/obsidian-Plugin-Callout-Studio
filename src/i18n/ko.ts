@@ -642,7 +642,7 @@ export const ko: Record<string, string> = {
 		"ID가 너무 많습니다 ({{count}}개). 각 callout은 최대 {{max}}개의 ID(기본 + 별칭)를 가질 수 있습니다.",
 	"import.err.metadataShape":
 		'"metadata"는 모든 값이 문자열인 객체여야 합니다.',
-	"import.err.unknownFields": "알 수 없는 필드가 무시되었습니다: {{fields}}.",
+	"import.warn.unknownFields": "알 수 없는 필드가 무시되었습니다: {{fields}}.",
 	"import.err.duplicateInFile":
 		'ID/별칭 "{{value}}"은(는) 이 파일의 항목 #{{first}}에서 이미 사용 중입니다.',
 	"import.err.aliasConflict":

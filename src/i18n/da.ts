@@ -619,7 +619,7 @@ export const da: Record<string, string> = {
 		"For mange ID'er ({{count}}); hver callout kan højst have {{max}} ID'er (primær + aliaser).",
 	"import.err.metadataShape":
 		'"metadata" skal være et objekt, hvis alle værdier er strenge.',
-	"import.err.unknownFields": "Ukendte felter ignoreret: {{fields}}.",
+	"import.warn.unknownFields": "Ukendte felter ignoreret: {{fields}}.",
 	"import.err.duplicateInFile":
 		'ID/alias "{{value}}" bruges allerede af post #{{first}} i denne fil.',
 	"import.err.aliasConflict":

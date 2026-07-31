@@ -647,7 +647,7 @@ export const ja: Record<string, string> = {
 		"IDが多すぎます（{{count}}件）。各calloutには最大{{max}}件のID（プライマリ＋エイリアス）を持てます。",
 	"import.err.metadataShape":
 		'"metadata"はすべての値が文字列のオブジェクトでなければなりません。',
-	"import.err.unknownFields":
+	"import.warn.unknownFields":
 		"不明なフィールドは無視されました: {{fields}}。",
 	"import.err.duplicateInFile":
 		'ID/エイリアス"{{value}}"はこのファイルのエントリ#{{first}}ですでに使用されています。',

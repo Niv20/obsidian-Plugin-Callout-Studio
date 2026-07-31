@@ -649,7 +649,7 @@ export const ro: Record<string, string> = {
 		"Prea multe ID-uri ({{count}}); fiecare callout poate avea cel mult {{max}} ID-uri (primar + aliasuri).",
 	"import.err.metadataShape":
 		'"metadata" trebuie să fie un obiect ale cărui valori sunt toate șiruri.',
-	"import.err.unknownFields": "Câmpuri necunoscute ignorate: {{fields}}.",
+	"import.warn.unknownFields": "Câmpuri necunoscute ignorate: {{fields}}.",
 	"import.err.duplicateInFile":
 		'ID/aliasul "{{value}}" este deja folosit de intrarea #{{first}} din acest fișier.',
 	"import.err.aliasConflict":

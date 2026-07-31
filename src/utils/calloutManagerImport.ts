@@ -8,7 +8,8 @@
  *   }
  *
  * Parsing (this file) is pure and never touches the registry; planning reads
- * the registry (to decide update-vs-create per id) but doesn't mutate it —
+ * the registry (to decide update-vs-create per id) and Obsidian's icon set (to
+ * reject an icon name that names nothing) but doesn't mutate either —
  * the actual mutation is `CalloutRegistry.applyCalloutManagerImport`. Split
  * this way so the paste modal can show a report (via the same
  * `ValidationIssue` shape the JSON importer uses) before anything changes.
@@ -16,6 +17,7 @@
 import type { CalloutIcon } from "../types";
 import type { CalloutRegistry } from "../manager/CalloutRegistry";
 import type { ValidationIssue } from "./importValidator";
+import { createLucideNameCheck } from "../icons/nameCheck";
 import { normalizeCalloutId } from "./calloutId";
 import { parseCssColorToHex } from "./colorUtils";
 
@@ -133,9 +135,40 @@ export function planCalloutManagerImport(
 
 	const toApply: CalloutManagerPlanItem[] = [];
 	const issues: ValidationIssue[] = [];
+	const lucideExists = createLucideNameCheck();
 
-	entries.forEach((entry, index) => {
+	entries.forEach((rawEntry, index) => {
+		// `--callout-icon` is free text in the pasted CSS, so a typo (or an icon
+		// from an Obsidian version this vault does not have) names nothing. Drop
+		// it rather than storing it: a stored non-name renders as an empty
+		// square, which reads as the plugin being broken. Copied, never mutated
+		// — the caller's parsed entries are not ours to edit.
+		let entry = rawEntry;
+		const unknownIcon = entry.icon && !lucideExists(entry.icon.value);
+		if (unknownIcon) {
+			entry = { ...rawEntry, icon: undefined };
+		}
+
 		const existing = registry.findByAttrId(entry.id);
+		if (unknownIcon) {
+			issues.push({
+				index,
+				entryLabel: entry.id,
+				field: "icon",
+				level: "warning",
+				// The two outcomes really do differ: an existing callout keeps
+				// the icon it already has, while a new one has nothing to keep
+				// and takes the default.
+				messageKey: existing
+					? "import.warn.cmIconUnknownExisting"
+					: "import.warn.cmIconUnknownNew",
+				params: {
+					value: rawEntry.icon?.value ?? "",
+					id: existing?.id ?? entry.id,
+				},
+			});
+		}
+
 		if (existing) {
 			toApply.push({ action: "update", existingId: existing.id, entry });
 			return;

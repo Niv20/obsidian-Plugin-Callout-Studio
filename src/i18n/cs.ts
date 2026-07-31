@@ -641,7 +641,7 @@ export const cs: Record<string, string> = {
 		"Příliš mnoho ID ({{count}}); každý callout může mít nejvýše {{max}} ID (primární + aliasy).",
 	"import.err.metadataShape":
 		'"metadata" musí být objekt, jehož všechny hodnoty jsou řetězce.',
-	"import.err.unknownFields": "Neznámá pole ignorována: {{fields}}.",
+	"import.warn.unknownFields": "Neznámá pole ignorována: {{fields}}.",
 	"import.err.duplicateInFile":
 		'ID/alias "{{value}}" již používá položka #{{first}} v tomto souboru.',
 	"import.err.aliasConflict":

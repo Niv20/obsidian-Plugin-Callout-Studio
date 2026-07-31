@@ -677,7 +677,7 @@ export const he: Record<string, string> = {
 		"יותר מדי ID־ים ({{count}}); לכל תיבת־הבלטה מותרים עד {{max}} ID־ים (ראשי + כינויים).",
 	"import.err.metadataShape":
 		'"metadata" חייב להיות אובייקט (Object) שכל ערכיו הם מחרוזות.',
-	"import.err.unknownFields": "שדות לא מוכרים הוסרו מהייבוא: {{fields}}.",
+	"import.warn.unknownFields": "שדות לא מוכרים הוסרו מהייבוא: {{fields}}.",
 	"import.err.duplicateInFile":
 		'ה־ID או הכינוי "{{value}}" כבר נמצא בשימוש ברשומה #{{first}} בקובץ זה.',
 	"import.err.aliasConflict":
@@ -691,6 +691,14 @@ export const he: Record<string, string> = {
 	"import.warn.imageMissing":
 		"ה־callout הזה משתמש בתמונה שאינה בקובץ ואינה בכספת הזו, ולכן יוצג " +
 		"אייקון ברירת מחדל עד שייבחר לו אייקון חדש.",
+	"import.err.paletteIdInvalid":
+		'"paletteId" חייב להיות מזהה טקסט שאינו ריק (התקבל "{{value}}").',
+	"import.warn.iconNameUnknown":
+		'אין אייקון בשם "{{value}}" ב־{{type}}, ולכן נעשה שימוש באייקון ברירת המחדל.',
+	"import.warn.cmIconUnknownNew":
+		'אין אייקון בשם "{{value}}" באובסידיאן, ולכן נעשה שימוש באייקון ברירת המחדל.',
+	"import.warn.cmIconUnknownExisting":
+		'אין אייקון בשם "{{value}}" באובסידיאן, ולכן "{{id}}" נשאר עם האייקון הקיים שלו.',
 
 	// ייבוא — בחירת מקור
 	"import.chooseSource": "ייבוא מתוך",

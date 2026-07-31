@@ -653,7 +653,7 @@ export const de: Record<string, string> = {
 		"Zu viele IDs ({{count}}); jeder Callout kann maximal {{max}} IDs haben (primär + Aliase).",
 	"import.err.metadataShape":
 		'"metadata" muss ein Objekt sein, dessen Werte alle Zeichenketten sind.',
-	"import.err.unknownFields": "Unbekannte Felder ignoriert: {{fields}}.",
+	"import.warn.unknownFields": "Unbekannte Felder ignoriert: {{fields}}.",
 	"import.err.duplicateInFile":
 		'Die ID/der Alias "{{value}}" wird bereits von Eintrag #{{first}} in dieser Datei verwendet.',
 	"import.err.aliasConflict":

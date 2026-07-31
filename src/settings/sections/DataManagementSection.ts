@@ -200,7 +200,7 @@ export async function processImportedJSON(
 		return;
 	}
 
-	const result = validateImportPayload(parsed, ctx.plugin.registry);
+	const result = await validateImportPayload(parsed, ctx.plugin.registry);
 
 	if (result.issues.length > 0 || result.fatal) {
 		const total = countImportedCallouts(parsed);
@@ -234,11 +234,15 @@ export async function processImportedJSON(
 	// fields are impossible here).
 	const settingsImported = !!result.settings;
 	if (result.settings) {
-		// Merge saved palettes and pictures by id rather than letting
-		// Object.assign replace the arrays wholesale — otherwise importing
-		// a file with none of either would silently wipe the user's
-		// existing ones. This mirrors how callouts are merged (add new /
-		// overwrite same id).
+		// Everything else IS replaced wholesale, deliberately: an import is a
+		// restore, and global style / menu config / language are single values
+		// with no id to merge on, so "keep both" has no meaning for them.
+		//
+		// Palettes and pictures are the exception because they are lists the
+		// user builds up. Merge them by id rather than letting Object.assign
+		// replace the arrays — otherwise importing a file with none of either
+		// would silently wipe the user's existing ones. This mirrors how
+		// callouts are merged (add new / overwrite same id).
 		const {
 			customPalettes: importedPalettes,
 			userImages: importedImages,

@@ -25,6 +25,7 @@ import {
 	DEFAULT_CALLOUTS,
 	DEFAULT_CONTEXT_MENU_ITEMS,
 	DEFAULT_SETTINGS,
+	FALLBACK_ICON,
 } from "../constants";
 import { iconCacheKey, packFor } from "../icons/registry";
 import { materialPack } from "../icons/packs/material";
@@ -507,32 +508,59 @@ export class CalloutRegistry {
 		};
 	}
 
+	/**
+	 * Whether a built-in still matches the default it shipped with.
+	 *
+	 * This is the gate on {@link toSaveData} persisting a built-in at all, so a
+	 * field missing here is not a cosmetic gap: a built-in the user customized
+	 * *only* through that field reads as pristine and is never written to
+	 * `data.json` — the edit survives until the next reload and then vanishes.
+	 * Hence the total `Record`, which makes adding a field to
+	 * `CalloutDefinition` without deciding its place here a compile error.
+	 *
+	 * `id` identifies the pair rather than distinguishing it; `builtIn` and
+	 * `source` are what makes this a built-in in the first place. Everything
+	 * else is a difference the user can see.
+	 */
+	private static readonly COMPARED_FIELDS: Record<
+		Exclude<keyof CalloutDefinition, "id" | "builtIn" | "source">,
+		true
+	> = {
+		displayName: true,
+		icon: true,
+		colorLight: true,
+		colorDark: true,
+		foldable: true,
+		defaultFolded: true,
+		iconOffsetX: true,
+		iconOffsetY: true,
+		iconSize: true,
+		bgColorLight: true,
+		bgColorDark: true,
+		bgGradient: true,
+		textColorLight: true,
+		textColorDark: true,
+		aliases: true,
+		paletteId: true,
+		customized: true,
+		metadata: true,
+	};
+
 	private isModified(
 		current: CalloutDefinition,
 		original: CalloutDefinition,
 	): boolean {
-		const aliasesChanged =
-			JSON.stringify(current.aliases ?? []) !==
-			JSON.stringify(original.aliases ?? []);
-		const gradientChanged =
-			JSON.stringify(current.bgGradient ?? null) !==
-			JSON.stringify(original.bgGradient ?? null);
-		return (
-			current.displayName !== original.displayName ||
-			current.colorLight !== original.colorLight ||
-			current.colorDark !== original.colorDark ||
-			current.icon.type !== original.icon.type ||
-			current.icon.value !== original.icon.value ||
-			current.icon.style !== original.icon.style ||
-			// Weight is a real axis of the Material artwork; without it,
-			// changing only a built-in's weight looked unmodified and so was
-			// never persisted.
-			current.icon.weight !== original.icon.weight ||
-			current.foldable !== original.foldable ||
-			current.defaultFolded !== original.defaultFolded ||
-			aliasesChanged ||
-			gradientChanged
-		);
+		// Structural compare, so nested values (`icon`, `bgGradient`, `aliases`,
+		// `metadata`) are covered without a per-field spelling of each one.
+		// `?? null` keeps "absent" and "explicitly undefined" equal, which is
+		// what a JSON round-trip through data.json produces anyway.
+		return Object.keys(CalloutRegistry.COMPARED_FIELDS).some((field) => {
+			const key = field as keyof CalloutDefinition;
+			return (
+				JSON.stringify(current[key] ?? null) !==
+				JSON.stringify(original[key] ?? null)
+			);
+		});
 	}
 
 	add(def: CalloutDefinition): boolean {
@@ -730,6 +758,28 @@ export class CalloutRegistry {
 		return this.definitionsForLists().filter(
 			(d) => !d.builtIn && !this.isUnshadowedPreview(d.id),
 		);
+	}
+
+	/**
+	 * Everything an export has to carry: {@link getUserDefined} plus every
+	 * built-in the user has changed from its shipped default.
+	 *
+	 * Separate from `getUserDefined` because that one also feeds the settings
+	 * lists and the legacy `exportToJSON()`, which is public API surface. A
+	 * modified built-in is real, user-authored work — recoloring `note` is no
+	 * less an edit than creating a callout — and `toSaveData` already persists
+	 * it, so leaving it out of the file made "export" quietly not mean "back up
+	 * my callouts". The importer recognizes a built-in id and updates the
+	 * built-in in place rather than adding a duplicate user row.
+	 */
+	getExportableDefinitions(): CalloutDefinition[] {
+		const modifiedBuiltIns = this.definitionsForLists().filter(
+			(d) =>
+				d.builtIn &&
+				!this.isUnshadowedPreview(d.id) &&
+				this.isBuiltInModified(d.id),
+		);
+		return [...this.getUserDefined(), ...modifiedBuiltIns];
 	}
 
 	/**
@@ -1200,7 +1250,10 @@ export class CalloutRegistry {
 			const def: CalloutDefinition = {
 				id,
 				displayName: obsidianDefaultTitle(item.entry.id),
-				icon: item.entry.icon ?? { type: "lucide", value: "pencil" },
+				// No icon in the paste, or one the planner rejected as naming
+				// nothing — either way there is nothing to keep, so take the
+				// shared import fallback.
+				icon: item.entry.icon ?? { ...FALLBACK_ICON },
 				...resolved.colors,
 				paletteId: resolved.paletteId,
 				foldable: true,
@@ -1236,7 +1289,7 @@ export class CalloutRegistry {
 			{
 				format: EXPORT_FORMAT_ID,
 				formatVersion: EXPORT_FORMAT_VERSION,
-				callouts: this.getUserDefined(),
+				callouts: this.getExportableDefinitions(),
 				settings: this.settings,
 			},
 			null,

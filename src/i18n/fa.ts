@@ -639,7 +639,7 @@ export const fa: Record<string, string> = {
 		"شناسه‌های بیش از حد ({{count}})؛ هر callout می‌تواند حداکثر {{max}} شناسه داشته باشد (اصلی + نام‌های مستعار).",
 	"import.err.metadataShape":
 		'"metadata" باید شیئی باشد که همه مقادیرش رشته باشند.',
-	"import.err.unknownFields":
+	"import.warn.unknownFields":
 		"فیلدهای ناشناخته نادیده گرفته شدند: {{fields}}.",
 	"import.err.duplicateInFile":
 		'شناسه/نام مستعار "{{value}}" قبلاً توسط ورودی #{{first}} در این فایل استفاده شده است.',

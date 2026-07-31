@@ -562,7 +562,7 @@ export const th: Record<string, string> = {
 	"import.err.aliasDup": 'นามแฝง "{{value}}" ซ้ำกันในรายการนี้',
 	"import.err.tooManyIds": "มี ID มากเกินไป ({{count}}) แต่ละ callout มีได้สูงสุด {{max}} ID (หลัก + นามแฝง)",
 	"import.err.metadataShape": '"metadata" ต้องเป็น object ที่ค่าทั้งหมดเป็น string',
-	"import.err.unknownFields": "ละเว้นฟิลด์ที่ไม่รู้จัก: {{fields}}",
+	"import.warn.unknownFields": "ละเว้นฟิลด์ที่ไม่รู้จัก: {{fields}}",
 	"import.err.duplicateInFile": 'ID/นามแฝง "{{value}}" ถูกใช้โดยรายการ #{{first}} ในไฟล์นี้แล้ว',
 	"import.err.aliasConflict": 'นามแฝง "{{value}}" ถูกใช้โดย callout อื่น ("{{other}}") ใน vault ของคุณแล้ว',
 	"import.warn.defaultFoldedAutofix": '"defaultFolded" เป็น true ในขณะที่ "foldable" เป็น false; defaultFolded ถูกรีเซ็ตเป็น false แล้ว',

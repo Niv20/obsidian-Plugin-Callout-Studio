@@ -9,6 +9,7 @@
  */
 import type {
 	CalloutDefinition,
+	CalloutIcon,
 	CalloutRenderRole,
 	ContextMenuItemConfig,
 	GlobalStyleSettings,
@@ -49,6 +50,22 @@ export const PREVIEW_PLACEHOLDER_ID = "example";
  * threshold — does not affect what the scan itself does.
  */
 export const HEAVY_VAULT_FILE_THRESHOLD: number = 500;
+
+/**
+ * The icon a callout gets when the import it came from named one that does not
+ * exist — a typo in hand-edited JSON, or a Callout Manager paste referring to an
+ * icon this Obsidian does not ship.
+ *
+ * Lucide, because it is the only pack that needs no download and so is certain
+ * to draw; `pencil` for the same reason `CSSInjector` uses it as the first-paint
+ * placeholder. Deliberately a visible, ordinary icon rather than a warning
+ * glyph: the import report already says which name was wrong, and the callout
+ * itself is fine.
+ */
+export const FALLBACK_ICON: CalloutIcon = Object.freeze({
+	type: "lucide",
+	value: "pencil",
+});
 
 export const DEFAULT_CALLOUTS: CalloutDefinition[] = [
 	{

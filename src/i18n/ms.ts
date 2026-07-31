@@ -619,7 +619,7 @@ export const ms: Record<string, string> = {
 		"Terlalu banyak ID ({{count}}); setiap callout boleh mempunyai maksimum {{max}} ID (utama + alias).",
 	"import.err.metadataShape":
 		'"metadata" mestilah objek yang semua nilainya adalah rentetan.',
-	"import.err.unknownFields": "Medan tidak diketahui diabaikan: {{fields}}.",
+	"import.warn.unknownFields": "Medan tidak diketahui diabaikan: {{fields}}.",
 	"import.err.duplicateInFile":
 		'ID/alias "{{value}}" sudah digunakan oleh entri #{{first}} dalam fail ini.',
 	"import.err.aliasConflict":

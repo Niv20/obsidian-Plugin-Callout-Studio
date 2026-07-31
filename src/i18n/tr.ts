@@ -562,7 +562,7 @@ export const tr: Record<string, string> = {
 	"import.err.aliasDup": '"{{value}}" takma adı bu giriş içinde yineleniyor.',
 	"import.err.tooManyIds": "Çok fazla ID ({{count}}); her callout en fazla {{max}} ID'ye sahip olabilir (birincil + takma adlar).",
 	"import.err.metadataShape": '"metadata" tüm değerleri dize olan bir nesne olmalıdır.',
-	"import.err.unknownFields": "Bilinmeyen alanlar yoksayıldı: {{fields}}.",
+	"import.warn.unknownFields": "Bilinmeyen alanlar yoksayıldı: {{fields}}.",
 	"import.err.duplicateInFile": '"{{value}}" ID/takma adı bu dosyadaki #{{first}} girişi tarafından zaten kullanılıyor.',
 	"import.err.aliasConflict": '"{{value}}" takma adı vault\'unuzdaki başka bir callout ("{{other}}") tarafından zaten kullanılıyor.',
 	"import.warn.defaultFoldedAutofix": '"defaultFolded" true iken "foldable" false\'tu; defaultFolded false\'a sıfırlandı.',

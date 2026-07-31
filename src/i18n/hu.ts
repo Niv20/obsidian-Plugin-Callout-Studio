@@ -648,7 +648,7 @@ export const hu: Record<string, string> = {
 		"Túl sok azonosító ({{count}}); minden callout-nak legfeljebb {{max}} azonosítója lehet (elsődleges + aliasok).",
 	"import.err.metadataShape":
 		'"metadata" olyan objektum kell legyen, amelynek minden értéke karakterlánc.',
-	"import.err.unknownFields":
+	"import.warn.unknownFields":
 		"Ismeretlen mezők figyelmen kívül hagyva: {{fields}}.",
 	"import.err.duplicateInFile":
 		'A "{{value}}" azonosítót/aliast a #{{first}} bejegyzés már használja ebben a fájlban.',

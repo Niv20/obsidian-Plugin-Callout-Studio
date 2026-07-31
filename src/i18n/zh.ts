@@ -562,7 +562,7 @@ export const zh: Record<string, string> = {
 	"import.err.aliasDup": '"{{value}}"别名在此条目中重复。',
 	"import.err.tooManyIds": "ID 过多（{{count}} 个）；每个 callout 最多可以有 {{max}} 个 ID（主 ID + 别名）。",
 	"import.err.metadataShape": '"metadata"必须是一个值全为字符串的对象。',
-	"import.err.unknownFields": "忽略了未知字段：{{fields}}。",
+	"import.warn.unknownFields": "忽略了未知字段：{{fields}}。",
 	"import.err.duplicateInFile": 'ID/别名"{{value}}"已被此文件中的条目 #{{first}} 使用。',
 	"import.err.aliasConflict": '别名"{{value}}"已被库中的另一个 callout（"{{other}}"）使用。',
 	"import.warn.defaultFoldedAutofix": '"defaultFolded"为 true 而"foldable"为 false；defaultFolded 已重置为 false。',

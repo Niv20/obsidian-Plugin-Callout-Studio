@@ -637,7 +637,7 @@ export const el: Record<string, string> = {
 		"Πάρα πολλά IDs ({{count}})· κάθε callout μπορεί να έχει το πολύ {{max}} IDs (κύριο + ψευδώνυμα).",
 	"import.err.metadataShape":
 		'"metadata" πρέπει να είναι αντικείμενο του οποίου όλες οι τιμές είναι συμβολοσειρές.',
-	"import.err.unknownFields": "Αγνώστα πεδία αγνοήθηκαν: {{fields}}.",
+	"import.warn.unknownFields": "Αγνώστα πεδία αγνοήθηκαν: {{fields}}.",
 	"import.err.duplicateInFile":
 		'Το ID/ψευδώνυμο "{{value}}" χρησιμοποιείται ήδη από την καταχώρηση #{{first}} σε αυτό το αρχείο.',
 	"import.err.aliasConflict":

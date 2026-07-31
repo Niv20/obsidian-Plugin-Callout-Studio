@@ -627,7 +627,7 @@ export const bg: Record<string, string> = {
 		"Прекалено много ID-та ({{count}}); всеки callout може да има максимум {{max}} ID-та (основно + псевдоними).",
 	"import.err.metadataShape":
 		'"metadata" трябва да е обект, чиито всички стойности са низове.',
-	"import.err.unknownFields": "Непознати полета игнорирани: {{fields}}.",
+	"import.warn.unknownFields": "Непознати полета игнорирани: {{fields}}.",
 	"import.err.duplicateInFile":
 		'ID/псевдонимът "{{value}}" вече се използва от запис #{{first}} в този файл.',
 	"import.err.aliasConflict":

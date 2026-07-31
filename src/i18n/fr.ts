@@ -650,7 +650,7 @@ export const fr: Record<string, string> = {
 		"Trop d'IDs ({{count}}) ; chaque callout peut avoir au maximum {{max}} IDs (principal + alias).",
 	"import.err.metadataShape":
 		'"metadata" doit être un objet dont toutes les valeurs sont des chaînes.',
-	"import.err.unknownFields": "Champ(s) inconnu(s) ignoré(s) : {{fields}}.",
+	"import.warn.unknownFields": "Champ(s) inconnu(s) ignoré(s) : {{fields}}.",
 	"import.err.duplicateInFile":
 		"L'ID/alias \"{{value}}\" est déjà utilisé par l'entrée #{{first}} dans ce fichier.",
 	"import.err.aliasConflict":

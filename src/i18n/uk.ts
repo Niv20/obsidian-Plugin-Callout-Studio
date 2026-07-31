@@ -562,7 +562,7 @@ export const uk: Record<string, string> = {
 	"import.err.aliasDup": 'Псевдонім «{{value}}» дублюється в цьому записі.',
 	"import.err.tooManyIds": "Забагато ID ({{count}}); кожен callout може мати не більше {{max}} ID (основний + псевдоніми).",
 	"import.err.metadataShape": "«metadata» повинен бути об'єктом, всі значення якого є рядками.",
-	"import.err.unknownFields": "Невідомі поля проігноровані: {{fields}}.",
+	"import.warn.unknownFields": "Невідомі поля проігноровані: {{fields}}.",
 	"import.err.duplicateInFile": 'ID/псевдонім «{{value}}» вже використовується записом #{{first}} у цьому файлі.',
 	"import.err.aliasConflict": 'Псевдонім «{{value}}» вже використовується іншим callout («{{other}}») у вашому сховищі.',
 	"import.warn.defaultFoldedAutofix": '«defaultFolded» було true, а «foldable» — false; defaultFolded скинуто до false.',

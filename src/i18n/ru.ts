@@ -641,7 +641,7 @@ export const ru: Record<string, string> = {
 		"Слишком много ID ({{count}}); каждый callout может иметь не более {{max}} ID (основной + псевдонимы).",
 	"import.err.metadataShape":
 		'"metadata" должен быть объектом, все значения которого являются строками.',
-	"import.err.unknownFields": "Неизвестные поля проигнорированы: {{fields}}.",
+	"import.warn.unknownFields": "Неизвестные поля проигнорированы: {{fields}}.",
 	"import.err.duplicateInFile":
 		'ID/псевдоним "{{value}}" уже используется записью #{{first}} в этом файле.',
 	"import.err.aliasConflict":

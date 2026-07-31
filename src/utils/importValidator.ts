@@ -14,7 +14,8 @@ import type {
 } from "../types";
 import type { CalloutRegistry } from "../manager/CalloutRegistry";
 import { EXPORT_FORMAT_ID } from "../manager/CalloutRegistry";
-import { MAX_TAG_LENGTH, MAX_TAGS_COUNT } from "../constants";
+import { FALLBACK_ICON, MAX_TAG_LENGTH, MAX_TAGS_COUNT } from "../constants";
+import { createIconNameCheck } from "../icons/nameCheck";
 import { ICON_PACK_IDS } from "../icons/registry";
 import { normalizeCalloutId } from "./calloutId";
 import { sanitizeBgGradient } from "./colorUtils";
@@ -66,36 +67,51 @@ const VALID_MATERIAL_STYLES = new Set([
 ]);
 const MAX_DISPLAY_NAME = 80;
 
-/** Top-level keys we recognize on a `CalloutDefinition`. Anything else is reported as a warning. */
-const KNOWN_FIELDS = new Set<string>([
-	"id",
-	"displayName",
-	"icon",
-	"colorLight",
-	"colorDark",
-	"foldable",
-	"defaultFolded",
-	"builtIn",
-	"source",
-	"iconOffsetX",
-	"iconOffsetY",
-	"iconSize",
-	"bgColorLight",
-	"bgColorDark",
-	"bgGradient",
-	"textColorLight",
-	"textColorDark",
-	"aliases",
-	"metadata",
-]);
+/**
+ * Top-level keys we recognize on a `CalloutDefinition`. Anything else is
+ * reported as a warning.
+ *
+ * A total `Record` rather than a bare list, for the same reason the icon
+ * registry uses one: the export writes whatever a definition happens to carry,
+ * so a field added to `CalloutDefinition` and forgotten here makes the plugin
+ * warn about its *own* export ("Unknown field(s) ignored: …") on every entry and
+ * silently drop the value. Declaring the field without listing it is now a
+ * compile error instead.
+ */
+const KNOWN_FIELD_MAP: Record<keyof CalloutDefinition, true> = {
+	id: true,
+	displayName: true,
+	icon: true,
+	colorLight: true,
+	colorDark: true,
+	foldable: true,
+	defaultFolded: true,
+	builtIn: true,
+	source: true,
+	iconOffsetX: true,
+	iconOffsetY: true,
+	iconSize: true,
+	bgColorLight: true,
+	bgColorDark: true,
+	bgGradient: true,
+	textColorLight: true,
+	textColorDark: true,
+	aliases: true,
+	paletteId: true,
+	customized: true,
+	metadata: true,
+};
+const KNOWN_FIELDS = new Set<string>(Object.keys(KNOWN_FIELD_MAP));
 
-const KNOWN_ICON_FIELDS = new Set<string>([
-	"type",
-	"value",
-	"style",
-	"weight",
-	"recolor",
-]);
+/** Recognized `CalloutIcon` keys. Total for the same reason as `KNOWN_FIELD_MAP`. */
+const KNOWN_ICON_FIELD_MAP: Record<keyof CalloutIcon, true> = {
+	type: true,
+	value: true,
+	style: true,
+	weight: true,
+	recolor: true,
+};
+const KNOWN_ICON_FIELDS = new Set<string>(Object.keys(KNOWN_ICON_FIELD_MAP));
 
 function isPlainObject(value: unknown): value is Record<string, unknown> {
 	if (typeof value !== "object" || value === null || Array.isArray(value)) {
@@ -288,7 +304,7 @@ function validateIcon(
 		push({
 			field: "icon",
 			level: "warning",
-			messageKey: "import.err.unknownFields",
+			messageKey: "import.warn.unknownFields",
 			params: { fields: unknown.join(", ") },
 		});
 	}
@@ -381,10 +397,10 @@ function validateMetadata(
  * - v2: an object envelope `{ format, formatVersion, callouts, settings }`
  *   carrying callouts AND full plugin settings.
  */
-export function validateImportPayload(
+export async function validateImportPayload(
 	raw: unknown,
 	registry: CalloutRegistry,
-): ValidationResult {
+): Promise<ValidationResult> {
 	// v2 object envelope.
 	if (isPlainObject(raw) && !Array.isArray(raw)) {
 		const looksLikeV2 =
@@ -420,6 +436,7 @@ export function validateImportPayload(
 					settingsResult.settings,
 					registry,
 				),
+				...(await unknownIconNameIssues(base.validDefs)),
 			],
 			fatal: false,
 			settings: settingsResult.settings ?? undefined,
@@ -443,7 +460,45 @@ export function validateImportPayload(
 	}
 
 	const base = validateCalloutArray(raw, registry);
-	return { ...base, fatal: false };
+	return {
+		...base,
+		issues: [...base.issues, ...(await unknownIconNameIssues(base.validDefs))],
+		fatal: false,
+	};
+}
+
+/**
+ * Replace icons whose name exists in no pack, and say so.
+ *
+ * A name is not checked while the entry is validated because the check is
+ * async — the packs' search indexes are decoded on demand — and it is not worth
+ * failing an entry over: every other property of the callout is fine, so the
+ * repair is to draw *something* and tell the user which name was wrong, rather
+ * than to refuse the import or to store a name that renders as an empty square.
+ *
+ * Mutates the already-sanitized defs in place; they exist only to be handed to
+ * the registry, and the modal that shows these issues can still cancel.
+ */
+async function unknownIconNameIssues(
+	defs: CalloutDefinition[],
+): Promise<ValidationIssue[]> {
+	if (defs.length === 0) return [];
+	const nameExists = await createIconNameCheck(defs.map((def) => def.icon));
+
+	const issues: ValidationIssue[] = [];
+	defs.forEach((def, index) => {
+		if (nameExists(def.icon)) return;
+		issues.push({
+			index,
+			entryLabel: def.displayName || def.id,
+			field: "icon.value",
+			level: "warning",
+			messageKey: "import.warn.iconNameUnknown",
+			params: { value: def.icon.value, type: def.icon.type },
+		});
+		def.icon = { ...FALLBACK_ICON };
+	});
+	return issues;
 }
 
 /**
@@ -735,6 +790,37 @@ function validateCalloutArray(
 			}
 		}
 
+		// ── palette link (optional) ──────────────────────────
+		// Shape only. An id naming a palette this vault does not have is NOT an
+		// issue: the colors are baked into the entry, so the link is inert until
+		// that palette exists — exactly the state `paletteId`'s doc describes for
+		// a palette the user deleted. It usually arrives in the same file's
+		// `settings.customPalettes` anyway.
+		if (entry.paletteId !== undefined) {
+			const paletteId =
+				typeof entry.paletteId === "string" ? entry.paletteId.trim() : "";
+			if (paletteId.length === 0 || paletteId.length > MAX_TAG_LENGTH) {
+				push({
+					field: "paletteId",
+					level: "error",
+					messageKey: "import.err.paletteIdInvalid",
+					params: { value: fmt(entry.paletteId) },
+				});
+				entryOk = false;
+			}
+		}
+
+		// ── customized flag (optional) ───────────────────────
+		if (entry.customized !== undefined && typeof entry.customized !== "boolean") {
+			push({
+				field: "customized",
+				level: "error",
+				messageKey: "import.err.boolField",
+				params: { field: "customized" },
+			});
+			entryOk = false;
+		}
+
 		// ── metadata ─────────────────────────────────────────
 		if (entry.metadata !== undefined) {
 			if (!validateMetadata(entry.metadata, push)) entryOk = false;
@@ -745,7 +831,7 @@ function validateCalloutArray(
 		if (unknown.length > 0) {
 			push({
 				level: "warning",
-				messageKey: "import.err.unknownFields",
+				messageKey: "import.warn.unknownFields",
 				params: { fields: unknown.join(", ") },
 			});
 		}
@@ -836,6 +922,22 @@ function validateCalloutArray(
 			if (typeof iconRaw.weight === "number") {
 				cleanIcon.weight = iconRaw.weight;
 			}
+			// Only for "image": the flag is the *callout's* choice about the
+			// user's own picture, and validateIcon already warned that it means
+			// nothing on any other pack.
+			if (
+				cleanIcon.type === "image" &&
+				typeof iconRaw.recolor === "boolean"
+			) {
+				cleanIcon.recolor = iconRaw.recolor;
+			}
+
+			// A file can carry a customized built-in (see
+			// `getExportableDefinitions`). Landing that as a new user callout
+			// would leave the real built-in untouched and put a duplicate row
+			// beside it, so keep the identity the registry already has.
+			const target = registry.get(idRaw);
+			const isBuiltIn = target?.builtIn === true;
 
 			const def: CalloutDefinition = {
 				id: idRaw,
@@ -846,8 +948,8 @@ function validateCalloutArray(
 				foldable: entry.foldable as boolean,
 				defaultFolded:
 					autoDefaultFolded ?? (entry.defaultFolded as boolean),
-				builtIn: false,
-				source: "user",
+				builtIn: isBuiltIn,
+				source: isBuiltIn ? "builtin" : "user",
 			};
 			if (typeof entry.bgColorLight === "string")
 				def.bgColorLight = entry.bgColorLight;
@@ -865,6 +967,14 @@ function validateCalloutArray(
 				def.iconOffsetY = entry.iconOffsetY;
 			if (isFiniteNumber(entry.iconSize)) def.iconSize = entry.iconSize;
 			if (aliasesClean.length > 0) def.aliases = aliasesClean;
+			if (typeof entry.paletteId === "string") {
+				def.paletteId = entry.paletteId.trim();
+			}
+			// Built-ins never carry it (they are not auto-prunable), matching
+			// what the editor writes — see CalloutEditorSave's `customized`.
+			if (!isBuiltIn && entry.customized === true) {
+				def.customized = true;
+			}
 			if (isPlainObject(entry.metadata)) {
 				const meta: Record<string, string> = {};
 				for (const [k, v] of Object.entries(entry.metadata)) {

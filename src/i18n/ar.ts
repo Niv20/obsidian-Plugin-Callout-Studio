@@ -632,7 +632,7 @@ export const ar: Record<string, string> = {
 		"معرّفات كثيرة جداً ({{count}})؛ يمكن لكل callout أن يمتلك {{max}} معرّفات كحد أقصى (أساسي + أسماء مستعارة).",
 	"import.err.metadataShape":
 		'"metadata" يجب أن يكون كائناً تكون جميع قيمه سلاسل نصية.',
-	"import.err.unknownFields": "تم تجاهل الحقول غير المعروفة: {{fields}}.",
+	"import.warn.unknownFields": "تم تجاهل الحقول غير المعروفة: {{fields}}.",
 	"import.err.duplicateInFile":
 		'المعرّف/الاسم المستعار "{{value}}" مستخدم بالفعل من قِبَل الإدخال #{{first}} في هذا الملف.',
 	"import.err.aliasConflict":

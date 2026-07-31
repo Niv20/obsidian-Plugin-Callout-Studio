@@ -649,7 +649,7 @@ export const nl: Record<string, string> = {
 		"Te veel ID's ({{count}}); elke callout kan maximaal {{max}} ID's hebben (primair + aliassen).",
 	"import.err.metadataShape":
 		'"metadata" moet een object zijn waarvan alle waarden tekenreeksen zijn.',
-	"import.err.unknownFields": "Onbekende veld(en) genegeerd: {{fields}}.",
+	"import.warn.unknownFields": "Onbekende veld(en) genegeerd: {{fields}}.",
 	"import.err.duplicateInFile":
 		'De ID/alias "{{value}}" wordt al gebruikt door vermelding #{{first}} in dit bestand.',
 	"import.err.aliasConflict":

@@ -562,7 +562,7 @@ export const vi: Record<string, string> = {
 	"import.err.aliasDup": 'Bí danh "{{value}}" bị trùng trong mục này.',
 	"import.err.tooManyIds": "Quá nhiều ID ({{count}}); mỗi callout có thể có tối đa {{max}} ID (chính + bí danh).",
 	"import.err.metadataShape": '"metadata" phải là đối tượng có tất cả giá trị là chuỗi.',
-	"import.err.unknownFields": "Các trường không rõ đã bị bỏ qua: {{fields}}.",
+	"import.warn.unknownFields": "Các trường không rõ đã bị bỏ qua: {{fields}}.",
 	"import.err.duplicateInFile": 'ID/bí danh "{{value}}" đã được sử dụng bởi mục #{{first}} trong tệp này.',
 	"import.err.aliasConflict": 'Bí danh "{{value}}" đã được sử dụng bởi callout khác ("{{other}}") trong vault của bạn.',
 	"import.warn.defaultFoldedAutofix": '"defaultFolded" là true trong khi "foldable" là false; defaultFolded đã được đặt lại về false.',
