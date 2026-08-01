@@ -153,6 +153,7 @@ export const pl: Record<string, string> = {
 	"notice.exported": "Callouts wyeksportowane do callout-studio-export.json",
 	"notice.importedJSON": "Zaimportowano {{count}} typ(ów) callout z JSON.",
 	"notice.importedSettings": "Zaimportowano ustawienia wtyczki.",
+	"notice.importedCalloutManager": "Zaimportowano z Callout Manager: {{created}} utworzono, {{updated}} zaktualizowano.",
 	"notice.noNewJSON":
 		"Nie zaimportowano nowych typów callout (ID mogą już istnieć).",
 	"notice.iconDownloadFailed":
@@ -653,6 +654,27 @@ export const pl: Record<string, string> = {
 		'"defaultFolded" było true, gdy "foldable" było false; defaultFolded zostało zresetowane do false.',
 	"import.warn.imageMissing":
 		"Ten Callout używa obrazu, którego nie ma w pliku ani w tym vault, więc wyświetli ikonę zastępczą, dopóki nie podasz nowego.",
+
+		"import.err.paletteIdInvalid": "\"paletteId\" musi być niepustym identyfikatorem tekstowym (otrzymano \"{{value}}\").",
+	"import.warn.iconNameUnknown": "Brak ikony \"{{value}}\" w {{type}}, więc użyto domyślnej ikony.",
+	"import.warn.cmIconUnknownNew": "Brak ikony \"{{value}}\" w Obsidian, więc użyto domyślnej ikony.",
+	"import.warn.cmIconUnknownExisting": "Brak ikony \"{{value}}\" w Obsidian, więc \"{{id}}\" zachowało ikonę, którą już miało.",
+	"import.chooseSource": "Importuj z",
+	"import.sourceStudio": "Callout Studio",
+	"import.sourceStudioDesc": "Załaduj plik .json wyeksportowany z Callout Studio.",
+	"import.sourceCalloutManager": "Callout Manager",
+	"import.sourceCalloutManagerDesc": "Wklej style skopiowane za pomocą przycisku Copy w Callout Manager.",
+	"import.sourceAdmonition": "Admonition",
+	"import.sourceAdmonitionDesc": "Jeszcze niedostępne.",
+	"import.sourceAdmonitionNotice": "Importowanie z Admonition nie jest jeszcze obsługiwane.",
+	"import.cmTitle": "Importuj z Callout Manager",
+	"import.cmInstructions": "W Callout Manager użyj przycisku Copy, aby skopiować niestandardowe style calloutów, a następnie wklej je poniżej.",
+	"import.cmPlaceholder": "Wklej skopiowane style tutaj…",
+	"import.cmBtnCancel": "Anuluj",
+	"import.cmBtnImport": "Importuj",
+	"import.err.cmNoBlocksFound": "W wklejonym tekście nie znaleziono żadnych stylów Callout Manager.",
+	"import.err.cmNoColorForNew": "Nie znaleziono użytecznego koloru dla nowego callouta \"{{value}}\"; został pominięty.",
+	"import.err.cmIdConflict": "ID \"{{value}}\" jest już używane jako alias przez inny callout (\"{{other}}\") i zostało pominięte.",
 
 	"footer.tagline": "Masz uwagi, komentarze lub sugestie? Chętnie wysłucham!",
 	"footer.madeBy": "Stworzone przez Niv  •  ",

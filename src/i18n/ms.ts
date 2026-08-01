@@ -139,6 +139,7 @@ export const ms: Record<string, string> = {
 	"notice.exported": "Callouts dieksport ke callout-studio-export.json",
 	"notice.importedJSON": "{{count}} jenis callout diimport dari JSON.",
 	"notice.importedSettings": "Tetapan plugin diimport.",
+	"notice.importedCalloutManager": "Diimport dari Callout Manager: {{created}} dicipta, {{updated}} dikemas kini.",
 	"notice.noNewJSON":
 		"Tiada jenis callout baharu diimport (ID mungkin sudah wujud).",
 	"notice.iconDownloadFailed":
@@ -628,6 +629,27 @@ export const ms: Record<string, string> = {
 		'"defaultFolded" adalah true manakala "foldable" adalah false; defaultFolded telah ditetapkan semula kepada false.',
 	"import.warn.imageMissing":
 		"Callout ini menggunakan gambar yang tidak ada dalam fail dan tidak dalam vault ini, jadi ia akan menunjukkan ikon pemegang tempat sehingga anda memberikan yang baru.",
+		"import.err.paletteIdInvalid": "\"paletteId\" mestilah ID teks yang tidak kosong (menerima \"{{value}}\").",
+	"import.warn.iconNameUnknown": "Tiada ikon \"{{value}}\" dalam {{type}}, jadi ikon lalai digunakan sebagai gantinya.",
+	"import.warn.cmIconUnknownNew": "Tiada ikon \"{{value}}\" dalam Obsidian, jadi ikon lalai digunakan sebagai gantinya.",
+	"import.warn.cmIconUnknownExisting": "Tiada ikon \"{{value}}\" dalam Obsidian, jadi \"{{id}}\" mengekalkan ikon yang sudah ada.",
+	"import.chooseSource": "Import dari",
+	"import.sourceStudio": "Callout Studio",
+	"import.sourceStudioDesc": "Muatkan fail .json yang dieksport dari Callout Studio.",
+	"import.sourceCalloutManager": "Callout Manager",
+	"import.sourceCalloutManagerDesc": "Tampal gaya yang anda salin daripada butang Copy Callout Manager.",
+	"import.sourceAdmonition": "Admonition",
+	"import.sourceAdmonitionDesc": "Belum tersedia.",
+	"import.sourceAdmonitionNotice": "Mengimport dari Admonition belum disokong.",
+	"import.cmTitle": "Import dari Callout Manager",
+	"import.cmInstructions": "Dalam Callout Manager, gunakan butang Copy untuk menyalin gaya callout tersuai anda, kemudian tampalnya di bawah.",
+	"import.cmPlaceholder": "Tampal gaya yang disalin di sini…",
+	"import.cmBtnCancel": "Batal",
+	"import.cmBtnImport": "Import",
+	"import.err.cmNoBlocksFound": "Tiada gaya Callout Manager ditemukan dalam teks yang ditampal.",
+	"import.err.cmNoColorForNew": "Tiada warna yang boleh digunakan ditemukan untuk callout baru \"{{value}}\"; ia dilangkau.",
+	"import.err.cmIdConflict": "ID \"{{value}}\" sudah digunakan sebagai alias oleh callout lain (\"{{other}}\") dan dilangkau.",
+
 	"footer.tagline":
 		"Ada maklum balas, komen atau cadangan? Saya ingin mendengarnya!",
 	"footer.madeBy": "Dicipta oleh Niv  •  ",

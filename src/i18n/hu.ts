@@ -153,6 +153,7 @@ export const hu: Record<string, string> = {
 	"notice.exported": "A callout-ok exportálva: callout-studio-export.json",
 	"notice.importedJSON": "{{count}} callout-típus importálva JSON-ból.",
 	"notice.importedSettings": "A bővítmény beállításai importálva.",
+	"notice.importedCalloutManager": "Importálva a Callout Managerből: {{created}} létrehozva, {{updated}} frissítve.",
 	"notice.noNewJSON":
 		"Nem importáltunk új callout-típust (az azonosítók már létezhetnek).",
 	"notice.iconDownloadFailed":
@@ -658,6 +659,27 @@ export const hu: Record<string, string> = {
 		'"defaultFolded" true volt, míg "foldable" false volt; a defaultFolded visszaállt false-ra.',
 	"import.warn.imageMissing":
 		"Ez a Callout olyan képet használ, amely nincs sem a fájlban, sem ebben a vaultban, ezért helyőrző ikont fog megjeleníteni, amíg nem ad meg egy újat.",
+
+		"import.err.paletteIdInvalid": "A \"paletteId\" egy nem üres szöveges azonosítónak kell lennie (kapott: \"{{value}}\").",
+	"import.warn.iconNameUnknown": "Nincs \"{{value}}\" ikon a következőben: {{type}}, ezért az alapértelmezett ikont használtuk.",
+	"import.warn.cmIconUnknownNew": "Nincs \"{{value}}\" ikon az Obsidianban, ezért az alapértelmezett ikont használtuk.",
+	"import.warn.cmIconUnknownExisting": "Nincs \"{{value}}\" ikon az Obsidianban, ezért a \"{{id}}\" megtartotta a korábban beállított ikont.",
+	"import.chooseSource": "Importálás innen",
+	"import.sourceStudio": "Callout Studio",
+	"import.sourceStudioDesc": "Egy Callout Studióból exportált .json fájl betöltése.",
+	"import.sourceCalloutManager": "Callout Manager",
+	"import.sourceCalloutManagerDesc": "Illeszd be a Callout Manager Copy gombjáról másolt stílusokat.",
+	"import.sourceAdmonition": "Admonition",
+	"import.sourceAdmonitionDesc": "Még nem elérhető.",
+	"import.sourceAdmonitionNotice": "Az Admonitionből való importálás még nem támogatott.",
+	"import.cmTitle": "Importálás a Callout Managerből",
+	"import.cmInstructions": "A Callout Managerben használd a Copy gombot a testreszabott callout stílusaid másolásához, majd illeszd be őket lentebb.",
+	"import.cmPlaceholder": "Illeszd be a másolt stílusokat ide…",
+	"import.cmBtnCancel": "Mégse",
+	"import.cmBtnImport": "Importálás",
+	"import.err.cmNoBlocksFound": "Nem találhatók Callout Manager stílusok a beillesztett szövegben.",
+	"import.err.cmNoColorForNew": "Nem található használható szín az új \"{{value}}\" callouthoz; kihagyva.",
+	"import.err.cmIdConflict": "A \"{{value}}\" azonosítót már egy másik callout (\"{{other}}\") alias-ként használja, ezért kihagyva.",
 
 	"footer.tagline":
 		"Van visszajelzése, megjegyzése vagy javaslata? Szívesen meghallgatom!",

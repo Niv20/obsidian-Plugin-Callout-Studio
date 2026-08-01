@@ -140,6 +140,7 @@ export const fi: Record<string, string> = {
 	"notice.exported": "Calloutit viety tiedostoon callout-studio-export.json",
 	"notice.importedJSON": "{{count}} callout-tyyppiä tuotu JSONista.",
 	"notice.importedSettings": "Lisäosan asetukset tuotu.",
+	"notice.importedCalloutManager": "Tuotu Callout Managerista: {{created}} luotu, {{updated}} päivitetty.",
 	"notice.noNewJSON":
 		"Uusia callout-tyyppejä ei tuotu (tunnukset voivat jo olla olemassa).",
 	"notice.iconDownloadFailed":
@@ -632,6 +633,27 @@ export const fi: Record<string, string> = {
 		'"defaultFolded" oli true, kun "foldable" oli false; defaultFolded palautettiin arvoon false.',
 	"import.warn.imageMissing":
 		"Tämä Callout käyttää kuvaa, jota ei ole tiedostossa eikä tässä vaultissa, joten se näyttää paikkamerkkikuvakkeen, kunnes annat uuden.",
+		"import.err.paletteIdInvalid": "\"paletteId\" on oltava ei-tyhjä tekstitunniste (saatiin \"{{value}}\").",
+	"import.warn.iconNameUnknown": "Kuvaketta \"{{value}}\" ei ole {{type}}:ssa, joten käytettiin oletuskuvaketta.",
+	"import.warn.cmIconUnknownNew": "Kuvaketta \"{{value}}\" ei ole Obsidianissa, joten käytettiin oletuskuvaketta.",
+	"import.warn.cmIconUnknownExisting": "Kuvaketta \"{{value}}\" ei ole Obsidianissa, joten \"{{id}}\" säilytti jo olemassa olevan kuvakkeensa.",
+	"import.chooseSource": "Tuo kohteesta",
+	"import.sourceStudio": "Callout Studio",
+	"import.sourceStudioDesc": "Lataa Callout Studiosta viety .json-tiedosto.",
+	"import.sourceCalloutManager": "Callout Manager",
+	"import.sourceCalloutManagerDesc": "Liitä Callout Managerin Copy-painikkeella kopioimasi tyylit.",
+	"import.sourceAdmonition": "Admonition",
+	"import.sourceAdmonitionDesc": "Ei vielä saatavilla.",
+	"import.sourceAdmonitionNotice": "Admonitionista tuomista ei vielä tueta.",
+	"import.cmTitle": "Tuo Callout Managerista",
+	"import.cmInstructions": "Kopioi Callout Managerissa mukautetut callout-tyylisi sen Copy-painikkeella ja liitä ne sitten alle.",
+	"import.cmPlaceholder": "Liitä kopioidut tyylit tähän…",
+	"import.cmBtnCancel": "Peruuta",
+	"import.cmBtnImport": "Tuo",
+	"import.err.cmNoBlocksFound": "Liitetystä tekstistä ei löydetty Callout Manager -tyylejä.",
+	"import.err.cmNoColorForNew": "Uudelle calloutille \"{{value}}\" ei löydetty käyttökelpoista väriä; se ohitettiin.",
+	"import.err.cmIdConflict": "Tunnus \"{{value}}\" on jo käytössä toisen calloutin aliaksena (\"{{other}}\") ja se ohitettiin.",
+
 	"footer.tagline":
 		"Onko sinulla palautetta, kommentteja tai ehdotuksia? Kuulisin mielelläni!",
 	"footer.madeBy": "Luonut Niv  •  ",

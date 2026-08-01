@@ -153,6 +153,7 @@ export const hi: Record<string, string> = {
 		"Callouts को callout-studio-export.json में निर्यात किया गया",
 	"notice.importedJSON": "JSON से {{count}} callout प्रकार आयात किए गए।",
 	"notice.importedSettings": "प्लगइन सेटिंग आयात की गईं।",
+	"notice.importedCalloutManager": "Callout Manager से आयात किया गया: {{created}} बनाए गए, {{updated}} अपडेट किए गए।",
 	"notice.noNewJSON":
 		"कोई नए callout प्रकार आयात नहीं हुए (ID पहले से मौजूद हो सकते हैं)।",
 	"notice.iconDownloadFailed":
@@ -648,6 +649,27 @@ export const hi: Record<string, string> = {
 		'"defaultFolded" true था जबकि "foldable" false था; defaultFolded को false पर रीसेट किया गया।',
 	"import.warn.imageMissing":
 		"यह Callout एक ऐसे चित्र का उपयोग करता है जो फ़ाइल में और इस vault में नहीं है, इसलिए नया देने तक एक प्लेसहोल्डर आइकन दिखाएगा।",
+
+		"import.err.paletteIdInvalid": "\"paletteId\" एक गैर-रिक्त टेक्स्ट ID होनी चाहिए (\"{{value}}\" प्राप्त हुई)।",
+	"import.warn.iconNameUnknown": "\"{{value}}\" आइकन {{type}} में नहीं है, इसलिए डिफ़ॉल्ट आइकन का उपयोग किया गया।",
+	"import.warn.cmIconUnknownNew": "\"{{value}}\" आइकन Obsidian में नहीं है, इसलिए डिफ़ॉल्ट आइकन का उपयोग किया गया।",
+	"import.warn.cmIconUnknownExisting": "\"{{value}}\" आइकन Obsidian में नहीं है, इसलिए \"{{id}}\" ने अपना पुराना आइकन बनाए रखा।",
+	"import.chooseSource": "इससे आयात करें",
+	"import.sourceStudio": "Callout Studio",
+	"import.sourceStudioDesc": "Callout Studio से निर्यात की गई .json फ़ाइल लोड करें।",
+	"import.sourceCalloutManager": "Callout Manager",
+	"import.sourceCalloutManagerDesc": "Callout Manager के Copy बटन से कॉपी किए गए स्टाइल यहाँ पेस्ट करें।",
+	"import.sourceAdmonition": "Admonition",
+	"import.sourceAdmonitionDesc": "अभी उपलब्ध नहीं है।",
+	"import.sourceAdmonitionNotice": "Admonition से आयात करना अभी समर्थित नहीं है।",
+	"import.cmTitle": "Callout Manager से आयात करें",
+	"import.cmInstructions": "Callout Manager में, अपने कस्टमाइज़ किए गए callout स्टाइल कॉपी करने के लिए Copy बटन का उपयोग करें, फिर उन्हें नीचे पेस्ट करें।",
+	"import.cmPlaceholder": "कॉपी किए गए स्टाइल यहाँ पेस्ट करें…",
+	"import.cmBtnCancel": "रद्द करें",
+	"import.cmBtnImport": "आयात",
+	"import.err.cmNoBlocksFound": "पेस्ट किए गए टेक्स्ट में कोई Callout Manager स्टाइल नहीं मिले।",
+	"import.err.cmNoColorForNew": "नए callout \"{{value}}\" के लिए कोई उपयोगी रंग नहीं मिला; इसे छोड़ दिया गया।",
+	"import.err.cmIdConflict": "ID \"{{value}}\" पहले से ही एक अन्य callout (\"{{other}}\") द्वारा alias के रूप में उपयोग की जा रही है और इसे छोड़ दिया गया।",
 
 	"footer.tagline": "कोई फ़ीडबैक, टिप्पणी या सुझाव है? मुझे बताएँ!",
 	"footer.madeBy": "Niv द्वारा निर्मित  •  ",

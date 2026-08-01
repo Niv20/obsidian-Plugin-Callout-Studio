@@ -151,6 +151,7 @@ export const cs: Record<string, string> = {
 	"notice.exported": "Callouts exportovány do callout-studio-export.json",
 	"notice.importedJSON": "Importováno {{count}} typ(ů) callout z JSON.",
 	"notice.importedSettings": "Importováno nastavení doplňku.",
+	"notice.importedCalloutManager": "Importováno z Callout Manager: {{created}} vytvořeno, {{updated}} aktualizováno.",
 	"notice.noNewJSON":
 		"Žádné nové typy callout nebyly importovány (ID mohou již existovat).",
 	"notice.iconDownloadFailed":
@@ -650,6 +651,27 @@ export const cs: Record<string, string> = {
 		'"defaultFolded" bylo true, zatímco "foldable" bylo false; defaultFolded bylo obnoveno na false.',
 	"import.warn.imageMissing":
 		"Tento Callout používá obrázek, který není v souboru ani v tomto vault, proto zobrazí zástupnou ikonu, dokud neuvedete nový.",
+
+		"import.err.paletteIdInvalid": "\"paletteId\" musí být neprázdný textový identifikátor (obdrženo \"{{value}}\").",
+	"import.warn.iconNameUnknown": "Ikona \"{{value}}\" v {{type}} neexistuje, proto byla použita výchozí ikona.",
+	"import.warn.cmIconUnknownNew": "Ikona \"{{value}}\" v Obsidian neexistuje, proto byla použita výchozí ikona.",
+	"import.warn.cmIconUnknownExisting": "Ikona \"{{value}}\" v Obsidian neexistuje, proto \"{{id}}\" si ponechalo ikonu, kterou již mělo.",
+	"import.chooseSource": "Importovat z",
+	"import.sourceStudio": "Callout Studio",
+	"import.sourceStudioDesc": "Načíst soubor .json exportovaný z Callout Studio.",
+	"import.sourceCalloutManager": "Callout Manager",
+	"import.sourceCalloutManagerDesc": "Vložte styly zkopírované z tlačítka Copy v Callout Manager.",
+	"import.sourceAdmonition": "Admonition",
+	"import.sourceAdmonitionDesc": "Zatím není k dispozici.",
+	"import.sourceAdmonitionNotice": "Import z Admonition zatím není podporován.",
+	"import.cmTitle": "Import z Callout Manager",
+	"import.cmInstructions": "V Callout Manager použijte tlačítko Copy ke zkopírování přizpůsobených stylů calloutů, poté je vložte níže.",
+	"import.cmPlaceholder": "Vložte zkopírované styly sem…",
+	"import.cmBtnCancel": "Zrušit",
+	"import.cmBtnImport": "Importovat",
+	"import.err.cmNoBlocksFound": "Ve vloženém textu nebyly nalezeny žádné styly Callout Manager.",
+	"import.err.cmNoColorForNew": "Pro nový callout \"{{value}}\" nebyla nalezena použitelná barva; byl přeskočen.",
+	"import.err.cmIdConflict": "ID \"{{value}}\" je již používáno jako alias jiným calloutem (\"{{other}}\") a bylo přeskočeno.",
 
 	"footer.tagline":
 		"Máte zpětnou vazbu, komentáře nebo návrhy? Rád je uslyším!",
