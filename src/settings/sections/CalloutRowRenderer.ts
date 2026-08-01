@@ -63,7 +63,7 @@ export function renderCalloutRow(
 	for (const id of allIds) {
 		syntaxLine.createEl("code", {
 			cls: "callout-studio-row-syntax",
-			text: `> [!${id}]`,
+			text: `[!${id}]`,
 		});
 	}
 
