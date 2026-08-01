@@ -155,6 +155,9 @@ export const ro: Record<string, string> = {
 	"notice.importedSettings": "Au fost importate setările pluginului.",
 	"notice.importedCalloutManager":
 		"Importat din Callout Manager: {{created}} create, {{updated}} actualizate.",
+	"notice.importedAdmonition":
+		"Importat din Admonition: {{created}} create, {{updated}} " +
+		"actualizate.",
 	"notice.noNewJSON":
 		"Nu au fost importate tipuri noi de callout (ID-urile pot exista deja).",
 	"notice.iconDownloadFailed":
@@ -679,9 +682,8 @@ export const ro: Record<string, string> = {
 	"import.sourceCalloutManagerDesc":
 		"Lipiți stilurile copiate din butonul Copy al Callout Manager.",
 	"import.sourceAdmonition": "Admonition",
-	"import.sourceAdmonitionDesc": "Nu este disponibil încă.",
-	"import.sourceAdmonitionNotice":
-		"Importul din Admonition nu este acceptat încă.",
+	"import.sourceAdmonitionDesc":
+		"Adu-ți admonition-urile personalizate din pluginul Admonition.",
 	"import.cmTitle": "Importați din Callout Manager",
 	"import.cmInstructions":
 		"În Callout Manager, utilizați butonul Copy pentru a copia stilurile de callout personalizate, apoi lipiți-le mai jos.",
@@ -694,6 +696,48 @@ export const ro: Record<string, string> = {
 		'Nu a fost găsită nicio culoare utilizabilă pentru noul callout "{{value}}"; a fost omis.',
 	"import.err.cmIdConflict":
 		'ID-ul "{{value}}" este deja utilizat ca alias de un alt callout ("{{other}}") și a fost omis.',
+
+	// Import — Admonition
+	"import.admTitle": "Importă din Admonition",
+	"import.admInstructions":
+		"Fiecare admonition devine un callout cu numele, pictograma și " +
+		"culoarea sa. Setările fără echivalent în Callout Studio " +
+		"(comandă, buton de copiere, titlu ascuns) rămân pe loc.",
+	"import.admFromVault": "Acest seif",
+	"import.admVaultChecking": "Se caută pluginul Admonition…",
+	"import.admVaultFound": "S-au găsit {{count}} admonition personalizate.",
+	"import.admVaultNotFound":
+		"Nu s-au găsit admonition personalizate în acest seif.",
+	"import.admFromFile": "Un fișier",
+	"import.admFromFileDesc": "Un fișier admonitions.json sau un pachet partajat.",
+	"import.admChooseFile": "Alege fișier…",
+	"import.admPasteLabel": "Sau lipește JSON-ul aici:",
+	"import.admPlaceholder": "Lipește aici admonition-urile tale…",
+	"import.admBtnCancel": "Anulare",
+	"import.admBtnImport": "Importați",
+	"import.err.admNotRecognized":
+		"Fișier nerecunoscut: se aștepta o listă de admonition sau un " +
+		"data.json de la Admonition.",
+	"import.err.admNoEntries": "Nu s-a găsit niciun admonition de importat.",
+	"import.err.admTypeMissing": 'Acest admonition nu are "type" și a fost omis.',
+	"import.warn.admIconUnknown":
+		'Nu s-a găsit nicio pictogramă numită "{{value}}" în nicio ' +
+		'bibliotecă, așa că s-a folosit pictograma implicită.',
+	"import.warn.admIconUnknownExisting":
+		'Nu s-a găsit nicio pictogramă numită "{{value}}" în nicio ' +
+		'bibliotecă, așa că "{{id}}" și-a păstrat pictograma existentă.',
+	"import.warn.admImageFailed":
+		"Imaginea încărcată nu a putut fi citită, așa că s-a folosit " +
+		"pictograma implicită.",
+	"import.warn.admIconWithCss":
+		"Acest admonition este stilizat de un fragment CSS în Admonition. " +
+		"Acel stil nu face parte din import, așa că au venit doar numele, " +
+		"pictograma și culoarea.",
+	"import.warn.admNoColor":
+		"Nu era setată nicio culoare, așa că s-a folosit albastrul " +
+		"implicit.",
+	"import.warn.admTitleTruncated":
+		"Titlul are {{length}} caractere; a fost scurtat la {{max}}.",
 
 	"footer.tagline":
 		"Aveți feedback, comentarii sau sugestii? Mi-ar plăcea să aud!",

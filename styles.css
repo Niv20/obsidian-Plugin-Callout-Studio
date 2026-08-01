@@ -2795,9 +2795,6 @@ input.cs-input-invalid:focus {
 .cs-import-source-item:hover {
 	background: var(--background-modifier-hover);
 }
-.cs-import-source-item.is-disabled {
-	opacity: 0.6;
-}
 .cs-import-source-item-icon {
 	display: flex;
 	align-items: center;
@@ -2830,6 +2827,64 @@ input.cs-input-invalid:focus {
 .cs-cm-import-textarea {
 	width: 100%;
 	min-height: 220px;
+	font-family: var(--font-monospace);
+	font-size: 0.85em;
+	resize: vertical;
+}
+
+/* ─── Admonition import modal ──────────────────────────────── */
+.callout-studio-adm-import-modal {
+	max-width: 560px;
+}
+.cs-adm-import-instructions {
+	margin-top: 0;
+	color: var(--text-muted);
+}
+/* One row per ready-made source (this vault, a file). The paste box below is
+   the fallback, so these read as offers rather than as a list of steps. */
+.cs-adm-import-row {
+	display: flex;
+	align-items: center;
+	gap: 0.75rem;
+	padding: 0.6rem 0.75rem;
+	margin-bottom: 0.5rem;
+	border: 1px solid var(--background-modifier-border);
+	border-radius: 6px;
+}
+.cs-adm-import-row-icon {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: var(--text-accent);
+	flex-shrink: 0;
+}
+.cs-adm-import-row-text {
+	display: flex;
+	flex-direction: column;
+	gap: 0.1rem;
+	/* Takes the slack so the button sits against the right edge, and lets a
+	   long status line wrap instead of pushing the button out of the row. */
+	flex: 1;
+	min-width: 0;
+}
+.cs-adm-import-row-title {
+	font-weight: 600;
+	color: var(--text-normal);
+}
+.cs-adm-import-row-desc {
+	font-size: 0.85em;
+	color: var(--text-muted);
+}
+.cs-adm-import-row button {
+	flex-shrink: 0;
+}
+.cs-adm-import-paste-label {
+	margin-bottom: 0.35rem;
+	color: var(--text-muted);
+}
+.cs-adm-import-textarea {
+	width: 100%;
+	min-height: 160px;
 	font-family: var(--font-monospace);
 	font-size: 0.85em;
 	resize: vertical;

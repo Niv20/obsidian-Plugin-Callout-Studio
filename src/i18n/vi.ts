@@ -154,6 +154,9 @@ export const vi: Record<string, string> = {
 	"notice.importedSettings": "Đã nhập cài đặt plugin.",
 	"notice.importedCalloutManager":
 		"Đã nhập từ Callout Manager: {{created}} đã tạo, {{updated}} đã cập nhật.",
+	"notice.importedAdmonition":
+		"Đã nhập từ Admonition: tạo mới {{created}}, cập nhật " +
+		"{{updated}}.",
 	"notice.noNewJSON":
 		"Không có loại callout mới nào được nhập (ID có thể đã tồn tại).",
 	"notice.iconDownloadFailed":
@@ -675,8 +678,8 @@ export const vi: Record<string, string> = {
 	"import.sourceCalloutManagerDesc":
 		"Dán các kiểu bạn đã sao chép từ nút Copy của Callout Manager.",
 	"import.sourceAdmonition": "Admonition",
-	"import.sourceAdmonitionDesc": "Chưa khả dụng.",
-	"import.sourceAdmonitionNotice": "Nhập từ Admonition chưa được hỗ trợ.",
+	"import.sourceAdmonitionDesc":
+		"Mang các admonition tùy chỉnh của bạn từ plugin Admonition sang.",
 	"import.cmTitle": "Nhập từ Callout Manager",
 	"import.cmInstructions":
 		"Trong Callout Manager, sử dụng nút Copy để sao chép các kiểu callout tùy chỉnh, sau đó dán bên dưới.",
@@ -689,6 +692,49 @@ export const vi: Record<string, string> = {
 		'Không tìm thấy màu sắc có thể sử dụng cho callout mới "{{value}}"; đã bỏ qua.',
 	"import.err.cmIdConflict":
 		'ID "{{value}}" đã được sử dụng làm bí danh bởi một callout khác ("{{other}}") và đã bị bỏ qua.',
+
+	// Import — Admonition
+	"import.admTitle": "Nhập từ Admonition",
+	"import.admInstructions":
+		"Mỗi admonition sẽ sang đây thành một callout với tên, biểu tượng " +
+		"và màu của nó. Những tùy chọn không có tương đương trong Callout " +
+		"Studio (lệnh, nút sao chép, ẩn tiêu đề) sẽ không được nhập.",
+	"import.admFromVault": "Kho này",
+	"import.admVaultChecking": "Đang tìm plugin Admonition…",
+	"import.admVaultFound": "Đã tìm thấy {{count}} admonition tùy chỉnh.",
+	"import.admVaultNotFound":
+		"Không tìm thấy admonition tùy chỉnh nào trong kho này.",
+	"import.admFromFile": "Một tệp",
+	"import.admFromFileDesc":
+		"Một tệp admonitions.json, hoặc một gói được chia sẻ.",
+	"import.admChooseFile": "Chọn tệp…",
+	"import.admPasteLabel": "Hoặc dán JSON vào đây:",
+	"import.admPlaceholder": "Dán admonition của bạn vào đây…",
+	"import.admBtnCancel": "Hủy",
+	"import.admBtnImport": "Nhập",
+	"import.err.admNotRecognized":
+		"Tệp không nhận dạng được: cần một danh sách admonition hoặc tệp " +
+		"data.json của Admonition.",
+	"import.err.admNoEntries": "Không tìm thấy admonition nào để nhập.",
+	"import.err.admTypeMissing":
+		'Admonition này không có "type" nên đã bị bỏ qua.',
+	"import.warn.admIconUnknown":
+		'Không tìm thấy biểu tượng nào tên "{{value}}" trong bất kỳ thư ' +
+		'viện nào, nên biểu tượng mặc định đã được dùng.',
+	"import.warn.admIconUnknownExisting":
+		'Không tìm thấy biểu tượng nào tên "{{value}}" trong bất kỳ thư ' +
+		'viện nào, nên "{{id}}" vẫn giữ biểu tượng sẵn có.',
+	"import.warn.admImageFailed":
+		"Không đọc được ảnh đã tải lên, nên biểu tượng mặc định đã được " +
+		"dùng.",
+	"import.warn.admIconWithCss":
+		"Admonition này được tạo kiểu bằng một đoạn CSS trong Admonition. " +
+		"Kiểu đó không thuộc phần nhập, nên chỉ tên, biểu tượng và màu " +
+		"được mang sang.",
+	"import.warn.admNoColor":
+		"Chưa đặt màu nào, nên màu xanh mặc định đã được dùng.",
+	"import.warn.admTitleTruncated":
+		"Tiêu đề dài {{length}} ký tự; đã được rút ngắn còn {{max}}.",
 
 	"footer.tagline": "Có phản hồi, nhận xét hoặc đề xuất? Tôi rất muốn nghe!",
 	"footer.madeBy": "Được tạo bởi Niv  •  ",

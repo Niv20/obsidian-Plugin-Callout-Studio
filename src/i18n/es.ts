@@ -156,6 +156,9 @@ export const es: Record<string, string> = {
 	"notice.importedSettings": "Se importó la configuración del complemento.",
 	"notice.importedCalloutManager":
 		"Importado desde Callout Manager: {{created}} creados, {{updated}} actualizados.",
+	"notice.importedAdmonition":
+		"Importado desde Admonition: {{created}} creados, {{updated}} " +
+		"actualizados.",
 	"notice.noNewJSON":
 		"No se importaron nuevos tipos de callout (los IDs pueden ya existir).",
 	"notice.iconDownloadFailed":
@@ -678,9 +681,8 @@ export const es: Record<string, string> = {
 	"import.sourceCalloutManagerDesc":
 		"Pega los estilos que copiaste desde el botón Copy de Callout Manager.",
 	"import.sourceAdmonition": "Admonition",
-	"import.sourceAdmonitionDesc": "Aún no disponible.",
-	"import.sourceAdmonitionNotice":
-		"La importación desde Admonition aún no está disponible.",
+	"import.sourceAdmonitionDesc":
+		"Trae tus admonitions personalizadas desde el plugin Admonition.",
 	"import.cmTitle": "Importar desde Callout Manager",
 	"import.cmInstructions":
 		"En Callout Manager, usa su botón Copy para copiar tus estilos de callout personalizados y luego pégalos a continuación.",
@@ -693,6 +695,50 @@ export const es: Record<string, string> = {
 		'No se encontró ningún color utilizable para el nuevo callout "{{value}}"; fue omitido.',
 	"import.err.cmIdConflict":
 		'El ID "{{value}}" ya está siendo usado como alias por otro callout ("{{other}}") y fue omitido.',
+
+	// Import — Admonition
+	"import.admTitle": "Importar desde Admonition",
+	"import.admInstructions":
+		"Cada admonition se convierte en un callout con su nombre, icono " +
+		"y color. Los ajustes sin equivalente en Callout Studio (comando, " +
+		"botón de copiar, título oculto) se quedan atrás.",
+	"import.admFromVault": "Esta bóveda",
+	"import.admVaultChecking": "Buscando el plugin Admonition…",
+	"import.admVaultFound":
+		"Se encontraron {{count}} admonition(s) personalizadas.",
+	"import.admVaultNotFound":
+		"No se encontraron admonitions personalizadas en esta bóveda.",
+	"import.admFromFile": "Un archivo",
+	"import.admFromFileDesc":
+		"Un archivo admonitions.json, o un paquete compartido.",
+	"import.admChooseFile": "Elegir archivo…",
+	"import.admPasteLabel": "O pega aquí el JSON:",
+	"import.admPlaceholder": "Pega aquí tus admonitions…",
+	"import.admBtnCancel": "Cancelar",
+	"import.admBtnImport": "Importar",
+	"import.err.admNotRecognized":
+		"Archivo no reconocido: se esperaba una lista de admonitions o un " +
+		"data.json de Admonition.",
+	"import.err.admNoEntries": "No se encontraron admonitions para importar.",
+	"import.err.admTypeMissing": 'Esta admonition no tiene "type" y se omitió.',
+	"import.warn.admIconUnknown":
+		'No se encontró ningún icono llamado "{{value}}" en ninguna ' +
+		'biblioteca, así que se usó el icono predeterminado.',
+	"import.warn.admIconUnknownExisting":
+		'No se encontró ningún icono llamado "{{value}}" en ninguna ' +
+		'biblioteca, así que "{{id}}" conservó el icono que ya tenía.',
+	"import.warn.admImageFailed":
+		"No se pudo leer la imagen subida, así que se usó el icono " +
+		"predeterminado.",
+	"import.warn.admIconWithCss":
+		"Esta admonition recibe su estilo de un fragmento CSS en " +
+		"Admonition. Ese estilo no forma parte de la importación, así que " +
+		"solo se trajeron su nombre, icono y color.",
+	"import.warn.admNoColor":
+		"No se definió ningún color, así que se usó el azul " +
+		"predeterminado.",
+	"import.warn.admTitleTruncated":
+		"El título tiene {{length}} caracteres; se acortó a {{max}}.",
 
 	"footer.tagline":
 		"¿Tiene comentarios, sugerencias o ideas? ¡Me encantaría escucharle!",

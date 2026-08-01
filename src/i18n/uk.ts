@@ -154,6 +154,9 @@ export const uk: Record<string, string> = {
 	"notice.importedSettings": "Імпортовано налаштування плагіна.",
 	"notice.importedCalloutManager":
 		"Імпортовано з Callout Manager: {{created}} створено, {{updated}} оновлено.",
+	"notice.importedAdmonition":
+		"Імпортовано з Admonition: створено {{created}}, оновлено " +
+		"{{updated}}.",
 	"notice.noNewJSON":
 		"Нові типи callout не імпортовано (ID можуть вже існувати).",
 	"notice.iconDownloadFailed":
@@ -679,9 +682,8 @@ export const uk: Record<string, string> = {
 	"import.sourceCalloutManagerDesc":
 		"Вставте стилі, скопійовані за допомогою кнопки Copy в Callout Manager.",
 	"import.sourceAdmonition": "Admonition",
-	"import.sourceAdmonitionDesc": "Поки недоступно.",
-	"import.sourceAdmonitionNotice":
-		"Імпорт з Admonition поки не підтримується.",
+	"import.sourceAdmonitionDesc":
+		"Перенесіть свої власні admonition із плагіна Admonition.",
 	"import.cmTitle": "Імпорт з Callout Manager",
 	"import.cmInstructions":
 		"У Callout Manager скористайтесь кнопкою Copy, щоб скопіювати налаштовані стилі callout, після чого вставте їх нижче.",
@@ -694,6 +696,47 @@ export const uk: Record<string, string> = {
 		'Не знайдено придатного кольору для нового callout "{{value}}"; його було пропущено.',
 	"import.err.cmIdConflict":
 		'ID "{{value}}" вже використовується як псевдонім іншим callout ("{{other}}") і було пропущено.',
+
+	// Import — Admonition
+	"import.admTitle": "Імпорт з Admonition",
+	"import.admInstructions":
+		"Кожен admonition переноситься як callout зі своєю назвою, " +
+		"піктограмою та кольором. Налаштування, яким немає відповідника в " +
+		"Callout Studio (команда, кнопка копіювання, прихований " +
+		"заголовок), не переносяться.",
+	"import.admFromVault": "Це сховище",
+	"import.admVaultChecking": "Пошук плагіна Admonition…",
+	"import.admVaultFound": "Знайдено власних admonition: {{count}}.",
+	"import.admVaultNotFound": "У цьому сховищі не знайдено власних admonition.",
+	"import.admFromFile": "Файл",
+	"import.admFromFileDesc": "Файл admonitions.json або спільний набір.",
+	"import.admChooseFile": "Вибрати файл…",
+	"import.admPasteLabel": "Або вставте JSON сюди:",
+	"import.admPlaceholder": "Вставте сюди свої admonition…",
+	"import.admBtnCancel": "Скасувати",
+	"import.admBtnImport": "Імпорт",
+	"import.err.admNotRecognized":
+		"Файл не розпізнано: очікувався список admonition або data.json " +
+		"плагіна Admonition.",
+	"import.err.admNoEntries": "Не знайдено жодного admonition для імпорту.",
+	"import.err.admTypeMissing":
+		'У цього admonition немає "type", його пропущено.',
+	"import.warn.admIconUnknown":
+		'Піктограму з назвою "{{value}}" не знайдено в жодній бібліотеці, ' +
+		'тому використано типову піктограму.',
+	"import.warn.admIconUnknownExisting":
+		'Піктограму з назвою "{{value}}" не знайдено в жодній бібліотеці, ' +
+		'тому "{{id}}" залишив свою попередню піктограму.',
+	"import.warn.admImageFailed":
+		"Не вдалося прочитати завантажене зображення, тому використано " +
+		"типову піктограму.",
+	"import.warn.admIconWithCss":
+		"Цей admonition оформлено CSS-фрагментом у плагіні Admonition. Це " +
+		"оформлення не входить до імпорту, тому перенесено лише назву, " +
+		"піктограму та колір.",
+	"import.warn.admNoColor": "Колір не задано, тому використано типовий синій.",
+	"import.warn.admTitleTruncated":
+		"Заголовок має {{length}} символів; скорочено до {{max}}.",
 
 	"footer.tagline": "Є відгуки, коментарі або пропозиції? Буду радий почути!",
 	"footer.madeBy": "Створено Нівом  •  ",

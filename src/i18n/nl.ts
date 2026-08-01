@@ -154,6 +154,9 @@ export const nl: Record<string, string> = {
 	"notice.importedSettings": "Plugin-instellingen geïmporteerd.",
 	"notice.importedCalloutManager":
 		"Geïmporteerd uit Callout Manager: {{created}} aangemaakt, {{updated}} bijgewerkt.",
+	"notice.importedAdmonition":
+		"Geïmporteerd uit Admonition: {{created}} aangemaakt, {{updated}} " +
+		"bijgewerkt.",
 	"notice.noNewJSON":
 		"Geen nieuwe callout-types geïmporteerd (ID's bestaan mogelijk al).",
 	"notice.iconDownloadFailed":
@@ -679,9 +682,8 @@ export const nl: Record<string, string> = {
 	"import.sourceCalloutManagerDesc":
 		"Plak de stijlen die je hebt gekopieerd via de Copy-knop van Callout Manager.",
 	"import.sourceAdmonition": "Admonition",
-	"import.sourceAdmonitionDesc": "Nog niet beschikbaar.",
-	"import.sourceAdmonitionNotice":
-		"Importeren uit Admonition wordt nog niet ondersteund.",
+	"import.sourceAdmonitionDesc":
+		"Haal je eigen admonitions op uit de Admonition-plug-in.",
 	"import.cmTitle": "Importeren uit Callout Manager",
 	"import.cmInstructions":
 		"Gebruik in Callout Manager de Copy-knop om je aangepaste callout-stijlen te kopiëren en plak ze vervolgens hieronder.",
@@ -694,6 +696,50 @@ export const nl: Record<string, string> = {
 		'Er is geen bruikbare kleur gevonden voor de nieuwe callout "{{value}}"; deze is overgeslagen.',
 	"import.err.cmIdConflict":
 		'ID "{{value}}" wordt al gebruikt als alias door een andere callout ("{{other}}") en is overgeslagen.',
+
+	// Import — Admonition
+	"import.admTitle": "Importeren uit Admonition",
+	"import.admInstructions":
+		"Elke admonition komt over als een callout met naam, pictogram en " +
+		"kleur. Instellingen zonder equivalent in Callout Studio " +
+		"(opdracht, kopieerknop, verborgen titel) blijven achter.",
+	"import.admFromVault": "Deze kluis",
+	"import.admVaultChecking": "Zoeken naar de Admonition-plug-in…",
+	"import.admVaultFound": "{{count}} eigen admonition(s) gevonden.",
+	"import.admVaultNotFound": "Geen eigen admonitions gevonden in deze kluis.",
+	"import.admFromFile": "Een bestand",
+	"import.admFromFileDesc":
+		"Een admonitions.json-bestand of een gedeeld pakket.",
+	"import.admChooseFile": "Bestand kiezen…",
+	"import.admPasteLabel": "Of plak de JSON hier:",
+	"import.admPlaceholder": "Plak je admonitions hier…",
+	"import.admBtnCancel": "Annuleren",
+	"import.admBtnImport": "Importeren",
+	"import.err.admNotRecognized":
+		"Bestand niet herkend: er werd een lijst met admonitions of een " +
+		"data.json van Admonition verwacht.",
+	"import.err.admNoEntries": "Geen admonitions gevonden om te importeren.",
+	"import.err.admTypeMissing":
+		'Deze admonition heeft geen "type" en is overgeslagen.',
+	"import.warn.admIconUnknown":
+		'Er is in geen enkele pictogrambibliotheek een pictogram met de ' +
+		'naam "{{value}}" gevonden, dus is het standaardpictogram ' +
+		'gebruikt.',
+	"import.warn.admIconUnknownExisting":
+		'Er is in geen enkele pictogrambibliotheek een pictogram met de ' +
+		'naam "{{value}}" gevonden, dus heeft "{{id}}" het bestaande ' +
+		'pictogram behouden.',
+	"import.warn.admImageFailed":
+		"De geüploade afbeelding kon niet worden gelezen, dus is het " +
+		"standaardpictogram gebruikt.",
+	"import.warn.admIconWithCss":
+		"Deze admonition wordt in Admonition opgemaakt door een " +
+		"CSS-snippet. Die opmaak hoort niet bij de import, dus alleen " +
+		"naam, pictogram en kleur zijn overgekomen.",
+	"import.warn.admNoColor":
+		"Er was geen kleur ingesteld, dus is het standaardblauw gebruikt.",
+	"import.warn.admTitleTruncated":
+		"De titel is {{length}} tekens; hij is ingekort tot {{max}}.",
 
 	"footer.tagline":
 		"Hebt u feedback, opmerkingen of suggesties? Ik hoor het graag!",

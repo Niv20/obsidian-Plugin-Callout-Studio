@@ -153,6 +153,9 @@ export const cs: Record<string, string> = {
 	"notice.importedSettings": "Importováno nastavení doplňku.",
 	"notice.importedCalloutManager":
 		"Importováno z Callout Manager: {{created}} vytvořeno, {{updated}} aktualizováno.",
+	"notice.importedAdmonition":
+		"Importováno z Admonition: {{created}} vytvořeno, {{updated}} " +
+		"aktualizováno.",
 	"notice.noNewJSON":
 		"Žádné nové typy callout nebyly importovány (ID mohou již existovat).",
 	"notice.iconDownloadFailed":
@@ -671,9 +674,8 @@ export const cs: Record<string, string> = {
 	"import.sourceCalloutManagerDesc":
 		"Vložte styly zkopírované z tlačítka Copy v Callout Manager.",
 	"import.sourceAdmonition": "Admonition",
-	"import.sourceAdmonitionDesc": "Zatím není k dispozici.",
-	"import.sourceAdmonitionNotice":
-		"Import z Admonition zatím není podporován.",
+	"import.sourceAdmonitionDesc":
+		"Přeneste své vlastní admonition z pluginu Admonition.",
 	"import.cmTitle": "Import z Callout Manager",
 	"import.cmInstructions":
 		"V Callout Manager použijte tlačítko Copy ke zkopírování přizpůsobených stylů calloutů, poté je vložte níže.",
@@ -686,6 +688,47 @@ export const cs: Record<string, string> = {
 		'Pro nový callout "{{value}}" nebyla nalezena použitelná barva; byl přeskočen.',
 	"import.err.cmIdConflict":
 		'ID "{{value}}" je již používáno jako alias jiným calloutem ("{{other}}") a bylo přeskočeno.',
+
+	// Import — Admonition
+	"import.admTitle": "Import z Admonition",
+	"import.admInstructions":
+		"Každý admonition sem přijde jako callout s názvem, ikonou a " +
+		"barvou. Nastavení, která v Callout Studiu nemají obdobu (příkaz, " +
+		"tlačítko kopírování, skrytý nadpis), zůstanou stranou.",
+	"import.admFromVault": "Tento trezor",
+	"import.admVaultChecking": "Hledám plugin Admonition…",
+	"import.admVaultFound": "Nalezeno {{count}} vlastních admonition.",
+	"import.admVaultNotFound":
+		"V tomto trezoru nebyly nalezeny žádné vlastní admonition.",
+	"import.admFromFile": "Soubor",
+	"import.admFromFileDesc": "Soubor admonitions.json nebo sdílený balíček.",
+	"import.admChooseFile": "Vybrat soubor…",
+	"import.admPasteLabel": "Nebo sem vložte JSON:",
+	"import.admPlaceholder": "Vložte sem své admonition…",
+	"import.admBtnCancel": "Zrušit",
+	"import.admBtnImport": "Importovat",
+	"import.err.admNotRecognized":
+		"Nerozpoznaný soubor: očekáván seznam admonition nebo data.json " +
+		"pluginu Admonition.",
+	"import.err.admNoEntries": "Nebyly nalezeny žádné admonition k importu.",
+	"import.err.admTypeMissing": 'Tento admonition nemá "type" a byl přeskočen.',
+	"import.warn.admIconUnknown":
+		'V žádné knihovně ikon není ikona s názvem "{{value}}", proto ' +
+		'byla použita výchozí ikona.',
+	"import.warn.admIconUnknownExisting":
+		'V žádné knihovně ikon není ikona s názvem "{{value}}", proto si ' +
+		'"{{id}}" ponechal svou dosavadní ikonu.',
+	"import.warn.admImageFailed":
+		"Nahraný obrázek se nepodařilo načíst, proto byla použita výchozí " +
+		"ikona.",
+	"import.warn.admIconWithCss":
+		"Tento admonition je v pluginu Admonition stylován úryvkem CSS. " +
+		"Ten není součástí importu, takže se přenesl jen název, ikona a " +
+		"barva.",
+	"import.warn.admNoColor":
+		"Nebyla nastavena žádná barva, proto byla použita výchozí modrá.",
+	"import.warn.admTitleTruncated":
+		"Název má {{length}} znaků; byl zkrácen na {{max}}.",
 
 	"footer.tagline":
 		"Máte zpětnou vazbu, komentáře nebo návrhy? Rád je uslyším!",

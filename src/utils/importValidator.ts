@@ -65,7 +65,8 @@ const VALID_MATERIAL_STYLES = new Set([
 	"rounded",
 	"sharp",
 ]);
-const MAX_DISPLAY_NAME = 80;
+/** Exported for the Admonition importer, which caps an imported title to it. */
+export const MAX_DISPLAY_NAME = 80;
 
 /**
  * Top-level keys we recognize on a `CalloutDefinition`. Anything else is
@@ -158,7 +159,12 @@ function deriveLabel(
 	return `#${index + 1}`;
 }
 
-function validateIdString(
+/**
+ * The id rules, shared with the Admonition importer rather than restated there:
+ * a type name from another plugin has to clear exactly the same bar as one from
+ * our own export file, and two copies of these limits would drift.
+ */
+export function validateIdString(
 	id: string,
 	push: (issue: Omit<ValidationIssue, "index" | "entryLabel">) => void,
 	field: string,

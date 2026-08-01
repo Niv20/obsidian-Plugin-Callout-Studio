@@ -101,6 +101,40 @@ export function takenUserImageNames(
 }
 
 /**
+ * A free name close to `name`, marked as taken so the next caller gets another.
+ *
+ * The picker refuses a duplicate instead of renaming it, deliberately: someone
+ * adding a file by hand knows which file they meant, and a silent `logo (2).svg`
+ * would only look like the add had failed. An import has no one to ask — it is
+ * a batch, it may run twice over the same source, and dropping an entry there
+ * would quietly cost a callout its icon. So it renames.
+ *
+ * The loop is bounded because `userImageNameFromFilename` caps the length, and
+ * a long enough stem truncates back to the very name being avoided. `unique` is
+ * the way out: it is the picture's own id, so it collides with nothing.
+ */
+export function claimUserImageName(
+	name: string,
+	taken: Set<string>,
+	unique: string,
+): string {
+	const dot = name.lastIndexOf(".");
+	const stem = dot > 0 ? name.slice(0, dot) : name;
+	const extension = dot > 0 ? name.slice(dot) : "";
+
+	let candidate = name;
+	for (let n = 2; n < 100 && taken.has(normalizeUserImageName(candidate)); n++) {
+		candidate = userImageNameFromFilename(`${stem} (${n})${extension}`);
+	}
+	if (taken.has(normalizeUserImageName(candidate))) {
+		candidate = userImageNameFromFilename(`${stem} (${unique})${extension}`);
+	}
+
+	taken.add(normalizeUserImageName(candidate));
+	return candidate;
+}
+
+/**
  * Drop anything malformed from a saved or imported picture list.
  *
  * Entries are dropped rather than repaired: a picture with no artwork is not a

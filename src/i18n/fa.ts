@@ -153,6 +153,9 @@ export const fa: Record<string, string> = {
 	"notice.importedSettings": "تنظیمات افزونه وارد شد.",
 	"notice.importedCalloutManager":
 		"از Callout Manager وارد شد: {{created}} ایجاد شد، {{updated}} به‌روز شد.",
+	"notice.importedAdmonition":
+		"از Admonition درون‌ریزی شد: {{created}} ایجاد، {{updated}} " +
+		"به‌روزرسانی.",
 	"notice.noNewJSON":
 		"هیچ نوع callout جدیدی وارد نشد (شناسه‌ها ممکن است از قبل وجود داشته باشند).",
 	"notice.iconDownloadFailed":
@@ -670,9 +673,9 @@ export const fa: Record<string, string> = {
 	"import.sourceCalloutManagerDesc":
 		"استایل‌هایی را که از دکمه Copy در Callout Manager کپی کرده‌اید بچسبانید.",
 	"import.sourceAdmonition": "Admonition",
-	"import.sourceAdmonitionDesc": "هنوز در دسترس نیست.",
-	"import.sourceAdmonitionNotice":
-		"وارد کردن از Admonition هنوز پشتیبانی نمی‌شود.",
+	"import.sourceAdmonitionDesc":
+		"admonition‌های سفارشی خود را از افزونهٔ Admonition به اینجا " +
+		"بیاورید.",
 	"import.cmTitle": "وارد کردن از Callout Manager",
 	"import.cmInstructions":
 		"در Callout Manager، از دکمه Copy برای کپی کردن استایل‌های callout سفارشی خود استفاده کنید، سپس آن‌ها را در زیر بچسبانید.",
@@ -685,6 +688,48 @@ export const fa: Record<string, string> = {
 		'هیچ رنگ قابل استفاده‌ای برای callout جدید "{{value}}" یافت نشد؛ از آن صرف‌نظر شد.',
 	"import.err.cmIdConflict":
 		'شناسه "{{value}}" قبلاً به عنوان نام مستعار توسط callout دیگری ("{{other}}") استفاده می‌شود و از آن صرف‌نظر شد.',
+
+	// Import — Admonition
+	"import.admTitle": "درون‌ریزی از Admonition",
+	"import.admInstructions":
+		"هر admonition با نام، نماد و رنگ خود به‌صورت یک callout وارد " +
+		"می‌شود. تنظیماتی که معادلی در Callout Studio ندارند (فرمان، " +
+		"دکمهٔ کپی، عنوان پنهان) منتقل نمی‌شوند.",
+	"import.admFromVault": "همین گاوصندوق",
+	"import.admVaultChecking": "در حال جست‌وجوی افزونهٔ Admonition…",
+	"import.admVaultFound": "{{count}} admonition سفارشی پیدا شد.",
+	"import.admVaultNotFound": "هیچ admonition سفارشی در این گاوصندوق پیدا نشد.",
+	"import.admFromFile": "یک پرونده",
+	"import.admFromFileDesc":
+		"یک پروندهٔ admonitions.json، یا یک بستهٔ به‌اشتراک‌گذاشته‌شده.",
+	"import.admChooseFile": "انتخاب پرونده…",
+	"import.admPasteLabel": "یا JSON را اینجا بچسبانید:",
+	"import.admPlaceholder": "admonition‌های خود را اینجا بچسبانید…",
+	"import.admBtnCancel": "لغو",
+	"import.admBtnImport": "وارد کردن",
+	"import.err.admNotRecognized":
+		"پرونده شناسایی نشد: فهرستی از admonition یا پروندهٔ data.json " +
+		"افزونهٔ Admonition انتظار می‌رفت.",
+	"import.err.admNoEntries": "هیچ admonition برای درون‌ریزی پیدا نشد.",
+	"import.err.admTypeMissing":
+		'این admonition فاقد "type" است و نادیده گرفته شد.',
+	"import.warn.admIconUnknown":
+		'نمادی با نام "{{value}}" در هیچ کتابخانه‌ای پیدا نشد، بنابراین ' +
+		'از نماد پیش‌فرض استفاده شد.',
+	"import.warn.admIconUnknownExisting":
+		'نمادی با نام "{{value}}" در هیچ کتابخانه‌ای پیدا نشد، بنابراین ' +
+		'"{{id}}" نماد قبلی خود را نگه داشت.',
+	"import.warn.admImageFailed":
+		"تصویر بارگذاری‌شده خوانده نشد، بنابراین از نماد پیش‌فرض استفاده " +
+		"شد.",
+	"import.warn.admIconWithCss":
+		"این admonition در Admonition با یک قطعه CSS ظاهرآرایی شده است. " +
+		"آن ظاهر بخشی از درون‌ریزی نیست، بنابراین تنها نام، نماد و رنگ آن " +
+		"منتقل شد.",
+	"import.warn.admNoColor":
+		"هیچ رنگی تنظیم نشده بود، بنابراین از آبی پیش‌فرض استفاده شد.",
+	"import.warn.admTitleTruncated":
+		"عنوان {{length}} نویسه است؛ به {{max}} کوتاه شد.",
 
 	"footer.tagline": "بازخورد، نظر یا پیشنهادی دارید؟ خوشحال می‌شوم بشنوم!",
 	"footer.madeBy": "ساخته شده توسط Niv  •  ",

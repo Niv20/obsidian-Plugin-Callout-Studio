@@ -152,6 +152,9 @@ export const ar: Record<string, string> = {
 	"notice.importedSettings": "تم استيراد إعدادات الإضافة.",
 	"notice.importedCalloutManager":
 		"تم الاستيراد من Callout Manager: تم إنشاء {{created}}، وتحديث {{updated}}.",
+	"notice.importedAdmonition":
+		"تم الاستيراد من Admonition: تم إنشاء {{created}}، وتحديث " +
+		"{{updated}}.",
 	"notice.noNewJSON":
 		"لم يتم استيراد أنواع callout جديدة (قد تكون المعرّفات موجودة بالفعل).",
 	"notice.iconDownloadFailed":
@@ -661,8 +664,8 @@ export const ar: Record<string, string> = {
 	"import.sourceCalloutManagerDesc":
 		"الصق الأنماط التي نسختها من زر Copy في Callout Manager.",
 	"import.sourceAdmonition": "Admonition",
-	"import.sourceAdmonitionDesc": "غير متاح بعد.",
-	"import.sourceAdmonitionNotice": "الاستيراد من Admonition غير مدعوم بعد.",
+	"import.sourceAdmonitionDesc":
+		"انقل تنبيهات admonition المخصصة لديك من إضافة Admonition.",
 	"import.cmTitle": "استيراد من Callout Manager",
 	"import.cmInstructions":
 		"في Callout Manager، استخدم زر Copy لنسخ أنماط تلميحاتك المخصصة، ثم الصقها أدناه.",
@@ -675,6 +678,48 @@ export const ar: Record<string, string> = {
 		'لم يتم العثور على لون قابل للاستخدام للتلميح الجديد "{{value}}"; تم تخطيه.',
 	"import.err.cmIdConflict":
 		'المعرّف "{{value}}" مستخدم بالفعل كاسم مستعار لتلميح آخر ("{{other}}")، وتم تخطيه.',
+
+	// Import — Admonition
+	"import.admTitle": "استيراد من Admonition",
+	"import.admInstructions":
+		"ينتقل كل admonition كـ callout مع اسمه وأيقونته ولونه. الإعدادات " +
+		"التي لا مقابل لها في Callout Studio (الأمر، زر النسخ، إخفاء " +
+		"العنوان) لا تُستورد.",
+	"import.admFromVault": "هذه الخزينة",
+	"import.admVaultChecking": "جارٍ البحث عن إضافة Admonition…",
+	"import.admVaultFound": "تم العثور على {{count}} من admonition المخصصة.",
+	"import.admVaultNotFound":
+		"لم يتم العثور على أي admonition مخصص في هذه الخزينة.",
+	"import.admFromFile": "ملف",
+	"import.admFromFileDesc": "ملف admonitions.json، أو حزمة مشتركة.",
+	"import.admChooseFile": "اختيار ملف…",
+	"import.admPasteLabel": "أو الصق JSON هنا:",
+	"import.admPlaceholder": "الصق admonition الخاصة بك هنا…",
+	"import.admBtnCancel": "إلغاء",
+	"import.admBtnImport": "استيراد",
+	"import.err.admNotRecognized":
+		"ملف غير معروف: كان المتوقع قائمة admonition أو ملف data.json " +
+		"الخاص بـ Admonition.",
+	"import.err.admNoEntries": "لم يتم العثور على أي admonition لاستيراده.",
+	"import.err.admTypeMissing":
+		'هذا الـ admonition لا يحتوي على "type"، وقد تم تخطيه.',
+	"import.warn.admIconUnknown":
+		'لا توجد أيقونة باسم "{{value}}" في أي مكتبة أيقونات، لذلك تم ' +
+		'استخدام الأيقونة الافتراضية.',
+	"import.warn.admIconUnknownExisting":
+		'لا توجد أيقونة باسم "{{value}}" في أي مكتبة أيقونات، لذلك احتفظ ' +
+		'"{{id}}" بالأيقونة الموجودة لديه.',
+	"import.warn.admImageFailed":
+		"تعذّرت قراءة الصورة المرفوعة، لذلك تم استخدام الأيقونة " +
+		"الافتراضية.",
+	"import.warn.admIconWithCss":
+		"يتم تنسيق هذا الـ admonition عبر مقتطف CSS في Admonition. هذا " +
+		"التنسيق ليس جزءًا من الاستيراد، لذلك انتقل الاسم والأيقونة " +
+		"واللون فقط.",
+	"import.warn.admNoColor":
+		"لم يُحدَّد أي لون، لذلك تم استخدام الأزرق الافتراضي.",
+	"import.warn.admTitleTruncated":
+		"طول العنوان {{length}} حرفًا؛ تم اختصاره إلى {{max}}.",
 
 	"footer.tagline": "هل لديك ملاحظات أو تعليقات أو اقتراحات؟ يسعدني سماعها!",
 	"footer.madeBy": "صنعه Niv  •  ",

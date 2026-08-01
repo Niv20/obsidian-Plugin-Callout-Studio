@@ -155,6 +155,9 @@ export const tr: Record<string, string> = {
 	"notice.importedSettings": "Eklenti ayarları içe aktarıldı.",
 	"notice.importedCalloutManager":
 		"Callout Manager'dan içe aktarıldı: {{created}} oluşturuldu, {{updated}} güncellendi.",
+	"notice.importedAdmonition":
+		"Admonition'dan içe aktarıldı: {{created}} oluşturuldu, " +
+		"{{updated}} güncellendi.",
 	"notice.noNewJSON":
 		"Yeni callout türü içe aktarılmadı (ID'ler zaten mevcut olabilir).",
 	"notice.iconDownloadFailed":
@@ -674,9 +677,8 @@ export const tr: Record<string, string> = {
 	"import.sourceCalloutManagerDesc":
 		"Callout Manager'ın Copy düğmesinden kopyaladığınız stilleri yapıştırın.",
 	"import.sourceAdmonition": "Admonition",
-	"import.sourceAdmonitionDesc": "Henüz kullanılamıyor.",
-	"import.sourceAdmonitionNotice":
-		"Admonition'dan içe aktarma henüz desteklenmiyor.",
+	"import.sourceAdmonitionDesc":
+		"Özel admonition'larınızı Admonition eklentisinden getirin.",
 	"import.cmTitle": "Callout Manager'dan İçe Aktar",
 	"import.cmInstructions":
 		"Callout Manager'da, özelleştirilmiş callout stillerinizi kopyalamak için Copy düğmesini kullanın, ardından aşağıya yapıştırın.",
@@ -689,6 +691,47 @@ export const tr: Record<string, string> = {
 		'Yeni callout "{{value}}" için kullanılabilir bir renk bulunamadı; atlandı.',
 	"import.err.cmIdConflict":
 		'"{{value}}" ID\'si zaten başka bir callout ("{{other}}") tarafından takma ad olarak kullanılıyor ve atlandı.',
+
+	// Import — Admonition
+	"import.admTitle": "Admonition'dan içe aktar",
+	"import.admInstructions":
+		"Her admonition adı, simgesi ve rengiyle birlikte bir callout " +
+		"olarak gelir. Callout Studio'da karşılığı olmayan ayarlar " +
+		"(komut, kopyala düğmesi, gizli başlık) geride kalır.",
+	"import.admFromVault": "Bu kasa",
+	"import.admVaultChecking": "Admonition eklentisi aranıyor…",
+	"import.admVaultFound": "{{count}} özel admonition bulundu.",
+	"import.admVaultNotFound": "Bu kasada özel admonition bulunamadı.",
+	"import.admFromFile": "Bir dosya",
+	"import.admFromFileDesc":
+		"Bir admonitions.json dosyası veya paylaşılan bir paket.",
+	"import.admChooseFile": "Dosya seç…",
+	"import.admPasteLabel": "Ya da JSON'u buraya yapıştırın:",
+	"import.admPlaceholder": "Admonition'larınızı buraya yapıştırın…",
+	"import.admBtnCancel": "İptal",
+	"import.admBtnImport": "İçe aktar",
+	"import.err.admNotRecognized":
+		"Tanınmayan dosya: bir admonition listesi veya Admonition'ın " +
+		"data.json dosyası bekleniyordu.",
+	"import.err.admNoEntries": "İçe aktarılacak admonition bulunamadı.",
+	"import.err.admTypeMissing": 'Bu admonition\'da "type" yok, atlandı.',
+	"import.warn.admIconUnknown":
+		'Hiçbir simge kitaplığında "{{value}}" adlı bir simge bulunamadı, ' +
+		'bu yüzden varsayılan simge kullanıldı.',
+	"import.warn.admIconUnknownExisting":
+		'Hiçbir simge kitaplığında "{{value}}" adlı bir simge bulunamadı, ' +
+		'bu yüzden "{{id}}" mevcut simgesini korudu.',
+	"import.warn.admImageFailed":
+		"Yüklenen görsel okunamadı, bu yüzden varsayılan simge " +
+		"kullanıldı.",
+	"import.warn.admIconWithCss":
+		"Bu admonition, Admonition içindeki bir CSS parçacığıyla " +
+		"biçimlendiriliyor. Bu biçimlendirme içe aktarmaya dahil " +
+		"değildir; yalnızca adı, simgesi ve rengi geldi.",
+	"import.warn.admNoColor":
+		"Renk ayarlanmamıştı, bu yüzden varsayılan mavi kullanıldı.",
+	"import.warn.admTitleTruncated":
+		"Başlık {{length}} karakter; {{max}} karaktere kısaltıldı.",
 
 	"footer.tagline":
 		"Geri bildiriminiz, yorumlarınız veya önerileriniz var mı? Duymak isterim!",

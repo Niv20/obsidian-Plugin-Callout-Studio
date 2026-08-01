@@ -155,6 +155,9 @@ export const hi: Record<string, string> = {
 	"notice.importedSettings": "प्लगइन सेटिंग आयात की गईं।",
 	"notice.importedCalloutManager":
 		"Callout Manager से आयात किया गया: {{created}} बनाए गए, {{updated}} अपडेट किए गए।",
+	"notice.importedAdmonition":
+		"Admonition से आयात किया गया: {{created}} बनाए गए, {{updated}} " +
+		"अपडेट किए गए।",
 	"notice.noNewJSON":
 		"कोई नए callout प्रकार आयात नहीं हुए (ID पहले से मौजूद हो सकते हैं)।",
 	"notice.iconDownloadFailed":
@@ -669,9 +672,8 @@ export const hi: Record<string, string> = {
 	"import.sourceCalloutManagerDesc":
 		"Callout Manager के Copy बटन से कॉपी किए गए स्टाइल यहाँ पेस्ट करें।",
 	"import.sourceAdmonition": "Admonition",
-	"import.sourceAdmonitionDesc": "अभी उपलब्ध नहीं है।",
-	"import.sourceAdmonitionNotice":
-		"Admonition से आयात करना अभी समर्थित नहीं है।",
+	"import.sourceAdmonitionDesc":
+		"Admonition प्लगइन से अपने कस्टम admonition यहाँ ले आएँ।",
 	"import.cmTitle": "Callout Manager से आयात करें",
 	"import.cmInstructions":
 		"Callout Manager में, अपने कस्टमाइज़ किए गए callout स्टाइल कॉपी करने के लिए Copy बटन का उपयोग करें, फिर उन्हें नीचे पेस्ट करें।",
@@ -684,6 +686,47 @@ export const hi: Record<string, string> = {
 		'नए callout "{{value}}" के लिए कोई उपयोगी रंग नहीं मिला; इसे छोड़ दिया गया।',
 	"import.err.cmIdConflict":
 		'ID "{{value}}" पहले से ही एक अन्य callout ("{{other}}") द्वारा alias के रूप में उपयोग की जा रही है और इसे छोड़ दिया गया।',
+
+	// Import — Admonition
+	"import.admTitle": "Admonition से आयात करें",
+	"import.admInstructions":
+		"हर admonition अपने नाम, आइकन और रंग के साथ एक callout बन जाता " +
+		"है। जिन सेटिंग्स का Callout Studio में कोई समकक्ष नहीं है " +
+		"(कमांड, कॉपी बटन, छिपा शीर्षक), वे नहीं आतीं।",
+	"import.admFromVault": "यह वॉल्ट",
+	"import.admVaultChecking": "Admonition प्लगइन खोजा जा रहा है…",
+	"import.admVaultFound": "{{count}} कस्टम admonition मिले।",
+	"import.admVaultNotFound": "इस वॉल्ट में कोई कस्टम admonition नहीं मिला।",
+	"import.admFromFile": "एक फ़ाइल",
+	"import.admFromFileDesc": "एक admonitions.json फ़ाइल, या कोई साझा पैक।",
+	"import.admChooseFile": "फ़ाइल चुनें…",
+	"import.admPasteLabel": "या JSON यहाँ पेस्ट करें:",
+	"import.admPlaceholder": "अपने admonition यहाँ पेस्ट करें…",
+	"import.admBtnCancel": "रद्द करें",
+	"import.admBtnImport": "आयात",
+	"import.err.admNotRecognized":
+		"अपरिचित फ़ाइल: admonition की सूची या Admonition की data.json " +
+		"अपेक्षित थी।",
+	"import.err.admNoEntries": "आयात करने के लिए कोई admonition नहीं मिला।",
+	"import.err.admTypeMissing":
+		'इस admonition में "type" नहीं है, इसे छोड़ दिया गया।',
+	"import.warn.admIconUnknown":
+		'"{{value}}" नाम का कोई आइकन किसी भी आइकन लाइब्रेरी में नहीं ' +
+		'मिला, इसलिए डिफ़ॉल्ट आइकन उपयोग किया गया।',
+	"import.warn.admIconUnknownExisting":
+		'"{{value}}" नाम का कोई आइकन किसी भी आइकन लाइब्रेरी में नहीं ' +
+		'मिला, इसलिए "{{id}}" ने अपना पुराना आइकन ही रखा।',
+	"import.warn.admImageFailed":
+		"अपलोड की गई तस्वीर पढ़ी नहीं जा सकी, इसलिए डिफ़ॉल्ट आइकन उपयोग " +
+		"किया गया।",
+	"import.warn.admIconWithCss":
+		"यह admonition, Admonition में एक CSS स्निपेट से स्टाइल किया गया " +
+		"है। वह स्टाइल आयात का हिस्सा नहीं है, इसलिए केवल इसका नाम, आइकन " +
+		"और रंग ही आए।",
+	"import.warn.admNoColor":
+		"कोई रंग सेट नहीं था, इसलिए डिफ़ॉल्ट नीला उपयोग किया गया।",
+	"import.warn.admTitleTruncated":
+		"शीर्षक {{length}} वर्णों का है; इसे {{max}} तक छोटा किया गया।",
 
 	"footer.tagline": "कोई फ़ीडबैक, टिप्पणी या सुझाव है? मुझे बताएँ!",
 	"footer.madeBy": "Niv द्वारा निर्मित  •  ",

@@ -153,6 +153,9 @@ export const th: Record<string, string> = {
 	"notice.importedSettings": "นำเข้าการตั้งค่าปลั๊กอินแล้ว",
 	"notice.importedCalloutManager":
 		"นำเข้าจาก Callout Manager: สร้างแล้ว {{created}} รายการ, อัปเดตแล้ว {{updated}} รายการ",
+	"notice.importedAdmonition":
+		"นำเข้าจาก Admonition แล้ว: สร้าง {{created}} รายการ อัปเดต " +
+		"{{updated}} รายการ",
 	"notice.noNewJSON": "ไม่มีประเภท callout ใหม่ที่นำเข้า (ID อาจมีอยู่แล้ว)",
 	"notice.iconDownloadFailed":
 		'ไม่สามารถดาวน์โหลดไอคอน Material "{{name}}" ได้ อาจไม่มีให้บริการสำหรับสไตล์/น้ำหนักนี้ หรือการเชื่อมต่อของคุณออฟไลน์อยู่',
@@ -665,8 +668,8 @@ export const th: Record<string, string> = {
 	"import.sourceCalloutManagerDesc":
 		"วางสไตล์ที่คุณคัดลอกจากปุ่ม Copy ของ Callout Manager",
 	"import.sourceAdmonition": "Admonition",
-	"import.sourceAdmonitionDesc": "ยังไม่พร้อมใช้งาน",
-	"import.sourceAdmonitionNotice": "ยังไม่รองรับการนำเข้าจาก Admonition",
+	"import.sourceAdmonitionDesc":
+		"นำ admonition ที่คุณกำหนดเองมาจากปลั๊กอิน Admonition",
 	"import.cmTitle": "นำเข้าจาก Callout Manager",
 	"import.cmInstructions":
 		"ใน Callout Manager ให้ใช้ปุ่ม Copy เพื่อคัดลอกสไตล์ callout ที่กำหนดเอง จากนั้นวางด้านล่าง",
@@ -678,6 +681,43 @@ export const th: Record<string, string> = {
 		'ไม่พบสีที่ใช้งานได้สำหรับ callout ใหม่ "{{value}}" จึงถูกข้ามไป',
 	"import.err.cmIdConflict":
 		'ID "{{value}}" ถูกใช้เป็น alias โดย callout อื่น ("{{other}}") แล้ว จึงถูกข้ามไป',
+
+	// Import — Admonition
+	"import.admTitle": "นำเข้าจาก Admonition",
+	"import.admInstructions":
+		"admonition แต่ละรายการจะกลายเป็น callout พร้อมชื่อ ไอคอน " +
+		"และสีของมัน ส่วนการตั้งค่าที่ Callout Studio ไม่มีเทียบเท่า " +
+		"(คำสั่ง ปุ่มคัดลอก ซ่อนหัวเรื่อง) จะไม่ถูกนำเข้า",
+	"import.admFromVault": "ห้องนิรภัยนี้",
+	"import.admVaultChecking": "กำลังค้นหาปลั๊กอิน Admonition…",
+	"import.admVaultFound": "พบ admonition ที่กำหนดเอง {{count}} รายการ",
+	"import.admVaultNotFound": "ไม่พบ admonition ที่กำหนดเองในห้องนิรภัยนี้",
+	"import.admFromFile": "ไฟล์",
+	"import.admFromFileDesc": "ไฟล์ admonitions.json หรือชุดที่แชร์กันมา",
+	"import.admChooseFile": "เลือกไฟล์…",
+	"import.admPasteLabel": "หรือวาง JSON ที่นี่:",
+	"import.admPlaceholder": "วาง admonition ของคุณที่นี่…",
+	"import.admBtnCancel": "ยกเลิก",
+	"import.admBtnImport": "นำเข้า",
+	"import.err.admNotRecognized":
+		"ไม่รู้จักไฟล์นี้: ต้องเป็นรายการ admonition หรือไฟล์ data.json " +
+		"ของ Admonition",
+	"import.err.admNoEntries": "ไม่พบ admonition ที่จะนำเข้า",
+	"import.err.admTypeMissing": 'admonition นี้ไม่มี "type" จึงถูกข้ามไป',
+	"import.warn.admIconUnknown":
+		'ไม่พบไอคอนชื่อ "{{value}}" ในคลังไอคอนใดเลย ' +
+		'จึงใช้ไอคอนเริ่มต้นแทน',
+	"import.warn.admIconUnknownExisting":
+		'ไม่พบไอคอนชื่อ "{{value}}" ในคลังไอคอนใดเลย "{{id}}" ' +
+		'จึงยังคงใช้ไอคอนเดิม',
+	"import.warn.admImageFailed":
+		"อ่านรูปภาพที่อัปโหลดไม่ได้ จึงใช้ไอคอนเริ่มต้นแทน",
+	"import.warn.admIconWithCss":
+		"admonition นี้จัดรูปแบบด้วยสไนปเป็ต CSS ใน Admonition " +
+		"สไตล์นั้นไม่ได้รวมอยู่ในการนำเข้า จึงนำมาเฉพาะชื่อ ไอคอน และสี",
+	"import.warn.admNoColor": "ไม่ได้ตั้งค่าสีไว้ จึงใช้สีน้ำเงินเริ่มต้น",
+	"import.warn.admTitleTruncated":
+		"หัวเรื่องยาว {{length}} อักขระ ถูกย่อเหลือ {{max}}",
 
 	"footer.tagline":
 		"มีคำติชม ความคิดเห็น หรือข้อเสนอแนะหรือไม่? ยินดีรับฟัง!",

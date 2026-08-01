@@ -151,6 +151,8 @@ export const zh: Record<string, string> = {
 	"notice.importedSettings": "已导入插件设置。",
 	"notice.importedCalloutManager":
 		"已从 Callout Manager 导入：创建了 {{created}} 个，更新了 {{updated}} 个。",
+	"notice.importedAdmonition":
+		"已从 Admonition 导入：新建 {{created}} 个，更新 {{updated}} 个。",
 	"notice.noNewJSON": "未导入新的 callout 类型（ID 可能已存在）。",
 	"notice.iconDownloadFailed":
 		'无法下载 Material 图标"{{name}}"。该图标可能不支持此样式/字重，或您的网络连接已断开。',
@@ -650,8 +652,7 @@ export const zh: Record<string, string> = {
 	"import.sourceCalloutManagerDesc":
 		"粘贴您从 Callout Manager 的 Copy 按钮复制的样式。",
 	"import.sourceAdmonition": "Admonition",
-	"import.sourceAdmonitionDesc": "尚未可用。",
-	"import.sourceAdmonitionNotice": "暂不支持从 Admonition 导入。",
+	"import.sourceAdmonitionDesc": "从 Admonition 插件中导入您的自定义 admonition。",
 	"import.cmTitle": "从 Callout Manager 导入",
 	"import.cmInstructions":
 		"在 Callout Manager 中，使用其 Copy 按钮复制您自定义的 callout 样式，然后将其粘贴到下方。",
@@ -663,6 +664,36 @@ export const zh: Record<string, string> = {
 		'未找到适用于新 callout "{{value}}" 的可用颜色；已跳过。',
 	"import.err.cmIdConflict":
 		'ID "{{value}}" 已被另一个 callout ("{{other}}") 用作别名，已跳过。',
+
+	// Import — Admonition
+	"import.admTitle": "从 Admonition 导入",
+	"import.admInstructions":
+		"每个 admonition 都会作为 callout 导入，保留其名称、图标和颜色。Callout Studio " +
+		"没有对应功能的设置（命令、复制按钮、隐藏标题）不会被导入。",
+	"import.admFromVault": "本仓库",
+	"import.admVaultChecking": "正在查找 Admonition 插件…",
+	"import.admVaultFound": "找到 {{count}} 个自定义 admonition。",
+	"import.admVaultNotFound": "在本仓库中未找到自定义 admonition。",
+	"import.admFromFile": "文件",
+	"import.admFromFileDesc": "admonitions.json 文件，或共享的图标包。",
+	"import.admChooseFile": "选择文件…",
+	"import.admPasteLabel": "或在此粘贴 JSON：",
+	"import.admPlaceholder": "在此粘贴您的 admonition…",
+	"import.admBtnCancel": "取消",
+	"import.admBtnImport": "导入",
+	"import.err.admNotRecognized":
+		"无法识别的文件：应为 admonition 列表或 Admonition 的 data.json。",
+	"import.err.admNoEntries": "未找到可导入的 admonition。",
+	"import.err.admTypeMissing": '此 admonition 没有 "type"，已跳过。',
+	"import.warn.admIconUnknown": '在所有图标库中都未找到名为 "{{value}}" 的图标，已改用默认图标。',
+	"import.warn.admIconUnknownExisting":
+		'在所有图标库中都未找到名为 "{{value}}" 的图标，因此 "{{id}}" 保留了原有图标。',
+	"import.warn.admImageFailed": "无法读取上传的图片，已改用默认图标。",
+	"import.warn.admIconWithCss":
+		"此 admonition 在 Admonition 中由 CSS " +
+		"片段设置样式。该样式不属于导入内容，因此仅导入了名称、图标和颜色。",
+	"import.warn.admNoColor": "未设置颜色，已使用默认的蓝色。",
+	"import.warn.admTitleTruncated": "标题长度为 {{length}} 个字符；已缩短至 {{max}}。",
 
 	"footer.tagline": "有反馈、意见或建议？欢迎告诉我！",
 	"footer.madeBy": "由 Niv 制作  •  ",

@@ -143,6 +143,9 @@ export const bg: Record<string, string> = {
 	"notice.importedSettings": "Импортирани са настройките на приставката.",
 	"notice.importedCalloutManager":
 		"Импортирано от Callout Manager: {{created}} създадени, {{updated}} обновени.",
+	"notice.importedAdmonition":
+		"Внесено от Admonition: {{created}} създадени, {{updated}} " +
+		"обновени.",
 	"notice.noNewJSON":
 		"Не са импортирани нови типове callout (ID-тата може вече да съществуват).",
 	"notice.iconDownloadFailed":
@@ -656,9 +659,9 @@ export const bg: Record<string, string> = {
 	"import.sourceCalloutManagerDesc":
 		"Поставете стиловете, копирани от бутона Copy на Callout Manager.",
 	"import.sourceAdmonition": "Admonition",
-	"import.sourceAdmonitionDesc": "Все още не е налично.",
-	"import.sourceAdmonitionNotice":
-		"Импортирането от Admonition все още не се поддържа.",
+	"import.sourceAdmonitionDesc":
+		"Пренесете своите персонализирани admonition от приставката " +
+		"Admonition.",
 	"import.cmTitle": "Импортиране от Callout Manager",
 	"import.cmInstructions":
 		"В Callout Manager използвайте бутона Copy, за да копирате персонализираните стилове на callout-ите, след което ги поставете по-долу.",
@@ -671,6 +674,48 @@ export const bg: Record<string, string> = {
 		'Не беше намерен използваем цвят за новия callout "{{value}}"; той беше пропуснат.',
 	"import.err.cmIdConflict":
 		'ID "{{value}}" вече се използва като псевдоним от друг callout ("{{other}}") и беше пропуснат.',
+
+	// Import — Admonition
+	"import.admTitle": "Внасяне от Admonition",
+	"import.admInstructions":
+		"Всеки admonition идва тук като callout с името, иконата и цвета " +
+		"си. Настройки без съответствие в Callout Studio (команда, бутон " +
+		"за копиране, скрито заглавие) не се пренасят.",
+	"import.admFromVault": "Този трезор",
+	"import.admVaultChecking": "Търсене на приставката Admonition…",
+	"import.admVaultFound": "Намерени са {{count}} персонализирани admonition.",
+	"import.admVaultNotFound":
+		"В този трезор не са намерени персонализирани admonition.",
+	"import.admFromFile": "Файл",
+	"import.admFromFileDesc": "Файл admonitions.json или споделен пакет.",
+	"import.admChooseFile": "Избор на файл…",
+	"import.admPasteLabel": "Или поставете JSON тук:",
+	"import.admPlaceholder": "Поставете своите admonition тук…",
+	"import.admBtnCancel": "Отказ",
+	"import.admBtnImport": "Импортиране",
+	"import.err.admNotRecognized":
+		"Неразпознат файл: очакваше се списък с admonition или data.json " +
+		"на Admonition.",
+	"import.err.admNoEntries": "Не са намерени admonition за внасяне.",
+	"import.err.admTypeMissing": 'Този admonition няма "type" и беше пропуснат.',
+	"import.warn.admIconUnknown":
+		'В никоя библиотека с икони няма икона с име "{{value}}", затова ' +
+		'беше използвана иконата по подразбиране.',
+	"import.warn.admIconUnknownExisting":
+		'В никоя библиотека с икони няма икона с име "{{value}}", затова ' +
+		'"{{id}}" запази досегашната си икона.',
+	"import.warn.admImageFailed":
+		"Каченото изображение не можа да бъде прочетено, затова беше " +
+		"използвана иконата по подразбиране.",
+	"import.warn.admIconWithCss":
+		"Този admonition получава вида си от CSS фрагмент в Admonition. " +
+		"Този вид не е част от внасянето, затова дойдоха само името, " +
+		"иконата и цветът.",
+	"import.warn.admNoColor":
+		"Не беше зададен цвят, затова беше използвано синьото по " +
+		"подразбиране.",
+	"import.warn.admTitleTruncated":
+		"Заглавието е {{length}} знака; беше съкратено до {{max}}.",
 
 	"footer.tagline":
 		"Имате коментари, забележки или предложения? Ще се радвам да ги чуя!",

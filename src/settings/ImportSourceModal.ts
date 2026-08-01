@@ -1,14 +1,15 @@
 /**
  * settings/ImportSourceModal.ts — Chooser shown by the settings tab's Import
  * button: Callout Studio's own file format, the competing "Callout Manager"
- * plugin's clipboard export, or (placeholder, not yet implemented) Admonition.
+ * plugin's clipboard export, or the "Admonition" plugin's admonitions.
  *
  * Owns only the choice between the three; each source's own flow (file
  * picker, paste box) lives in its own module.
  */
-import { Modal, Notice, setIcon } from "obsidian";
+import { Modal, setIcon } from "obsidian";
 import { t } from "../i18n";
 import { processImportedJSON } from "./sections/DataManagementSection";
+import { AdmonitionImportModal } from "./AdmonitionImportModal";
 import { CalloutManagerImportModal } from "./CalloutManagerImportModal";
 import type { SettingsSectionContext } from "./sections/types";
 
@@ -17,8 +18,6 @@ interface SourceRow {
 	title: string;
 	desc: string;
 	onClick: () => void;
-	/** Admonition only: visibly present but not wired up yet. */
-	disabled?: boolean;
 }
 
 export class ImportSourceModal extends Modal {
@@ -75,8 +74,10 @@ export class ImportSourceModal extends Modal {
 				icon: "puzzle",
 				title: t("import.sourceAdmonition"),
 				desc: t("import.sourceAdmonitionDesc"),
-				disabled: true,
-				onClick: () => new Notice(t("import.sourceAdmonitionNotice")),
+				onClick: () => {
+					this.close();
+					new AdmonitionImportModal(this.ctx).open();
+				},
 			},
 		];
 
@@ -85,7 +86,6 @@ export class ImportSourceModal extends Modal {
 
 	private renderRow(container: HTMLElement, row: SourceRow): void {
 		const item = container.createDiv({ cls: "cs-import-source-item" });
-		if (row.disabled) item.addClass("is-disabled");
 		item.setAttribute("role", "button");
 		item.setAttribute("tabindex", "0");
 

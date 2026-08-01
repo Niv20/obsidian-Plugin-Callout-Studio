@@ -175,6 +175,8 @@ export const he: Record<string, string> = {
 	"notice.importedSettings": "הגדרות התוסף יובאו.",
 	"notice.importedCalloutManager":
 		"יובא מתוך Callout Manager: {{created}} נוצרו, {{updated}} עודכנו.",
+	"notice.importedAdmonition":
+		"יובא מתוך Admonition: {{created}} נוצרו, {{updated}} עודכנו.",
 	"notice.noNewJSON":
 		"לא יובאו תיבות־הבלטה חדשות (ייתכן שהמזהים כבר קיימים).",
 	"notice.iconDownloadFailed":
@@ -710,8 +712,8 @@ export const he: Record<string, string> = {
 	"import.sourceCalloutManagerDesc":
 		"הדביקו את הסגנונות שהעתקתם מכפתור ה־Copy של Callout Manager.",
 	"import.sourceAdmonition": "Admonition",
-	"import.sourceAdmonitionDesc": "עדיין לא זמין.",
-	"import.sourceAdmonitionNotice": "ייבוא מתוך Admonition עדיין אינו נתמך.",
+	"import.sourceAdmonitionDesc":
+		"העבירו את ההתראות המותאמות־אישית שלכם מהתוסף Admonition.",
 
 	// ייבוא — הדבקה מתוך Callout Manager
 	"import.cmTitle": "ייבוא מתוך Callout Manager",
@@ -726,4 +728,42 @@ export const he: Record<string, string> = {
 		'לא נמצא צבע תקין עבור תיבת־ההבלטה החדשה "{{value}}"; היא דולגה.',
 	"import.err.cmIdConflict":
 		'המזהה "{{value}}" כבר משמש ככינוי (alias) עבור תיבת־הבלטה אחרת ("{{other}}"), ולכן דולג.',
+
+	// Import — Admonition
+	"import.admTitle": "ייבוא מתוך Admonition",
+	"import.admInstructions":
+		"כל התראה עוברת לתיבת־הבלטה עם השם, האייקון והצבע שלה. הגדרות " +
+		"שאין להן מקבילה ב־Callout Studio (פקודה, כפתור העתקה, הסתרת " +
+		"כותרת) נשארות מאחור.",
+	"import.admFromVault": "הכספת הזו",
+	"import.admVaultChecking": "מחפש את התוסף Admonition…",
+	"import.admVaultFound": "נמצאו {{count}} התראות מותאמות־אישית.",
+	"import.admVaultNotFound": "לא נמצאו התראות מותאמות־אישית בכספת הזו.",
+	"import.admFromFile": "קובץ",
+	"import.admFromFileDesc": "קובץ admonitions.json, או חבילה משותפת.",
+	"import.admChooseFile": "בחירת קובץ…",
+	"import.admPasteLabel": "או הדביקו כאן את ה־JSON:",
+	"import.admPlaceholder": "הדביקו כאן את ההתראות שלכם…",
+	"import.admBtnCancel": "ביטול",
+	"import.admBtnImport": "ייבוא",
+	"import.err.admNotRecognized":
+		"קובץ לא מזוהה: ציפינו לרשימת התראות, או לקובץ data.json של " +
+		"Admonition.",
+	"import.err.admNoEntries": "לא נמצאו התראות לייבוא.",
+	"import.err.admTypeMissing": 'להתראה הזו אין "type", ולכן היא דולגה.',
+	"import.warn.admIconUnknown":
+		'לא נמצא אייקון בשם "{{value}}" באף ספריית אייקונים, ולכן נעשה ' +
+		'שימוש באייקון ברירת המחדל.',
+	"import.warn.admIconUnknownExisting":
+		'לא נמצא אייקון בשם "{{value}}" באף ספריית אייקונים, ולכן ' +
+		'"{{id}}" נשאר עם האייקון הקיים שלו.',
+	"import.warn.admImageFailed":
+		"לא ניתן היה לקרוא את התמונה שהועלתה, ולכן נעשה שימוש באייקון " +
+		"ברירת המחדל.",
+	"import.warn.admIconWithCss":
+		"ההתראה הזו מעוצבת על־ידי קטע CSS ב־Admonition. העיצוב הזה אינו " +
+		"חלק מהייבוא, ולכן עברו רק השם, האייקון והצבע.",
+	"import.warn.admNoColor": "לא הוגדר צבע, ולכן נעשה שימוש בכחול ברירת המחדל.",
+	"import.warn.admTitleTruncated":
+		"הכותרת באורך {{length}} תווים; היא קוצרה ל־{{max}}.",
 };

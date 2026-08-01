@@ -263,3 +263,29 @@ export const faPack: IconPack = {
 export function faStyleOf(icon: CalloutIcon): FontAwesomeStyle | undefined {
 	return FA_STYLES.find((style) => FA_TYPE_OF[style] === icon.type);
 }
+
+/**
+ * Which of the three files actually draws this name, honouring `wanted` when it
+ * is one of them. Undefined for a name Font Awesome does not have at all.
+ *
+ * For imports, which arrive knowing a name and — at best — a style they are not
+ * required to have got right. The search index cannot answer this on its own:
+ * the three styles are merged into one list of names, so a membership test says
+ * "Font Awesome has this" and never "Solid has this". A Brands-only name like
+ * `square-github` stored as Solid points into a file with no such drawing.
+ *
+ * The correction runs even when a style was stated, and deliberately: the same
+ * `resolveStyle` fallback backs the picker, so an import lands on exactly the
+ * icon picking that name there would have given.
+ *
+ * Async because it needs the merged index built; it is memoized, so the cost is
+ * paid once per session and is already paid by any name check that ran first.
+ */
+export async function faTypeForName(
+	name: string,
+	wanted: FontAwesomeStyle = FA_DEFAULT_STYLE,
+): Promise<IconPackId | undefined> {
+	await loadIndex();
+	if (!stylesByName.has(name)) return undefined;
+	return FA_TYPE_OF[resolveStyle(name, wanted)];
+}

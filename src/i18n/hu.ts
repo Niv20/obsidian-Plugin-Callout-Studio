@@ -155,6 +155,9 @@ export const hu: Record<string, string> = {
 	"notice.importedSettings": "A bővítmény beállításai importálva.",
 	"notice.importedCalloutManager":
 		"Importálva a Callout Managerből: {{created}} létrehozva, {{updated}} frissítve.",
+	"notice.importedAdmonition":
+		"Importálva az Admonitionből: {{created}} létrehozva, {{updated}} " +
+		"frissítve.",
 	"notice.noNewJSON":
 		"Nem importáltunk új callout-típust (az azonosítók már létezhetnek).",
 	"notice.iconDownloadFailed":
@@ -679,9 +682,8 @@ export const hu: Record<string, string> = {
 	"import.sourceCalloutManagerDesc":
 		"Illeszd be a Callout Manager Copy gombjáról másolt stílusokat.",
 	"import.sourceAdmonition": "Admonition",
-	"import.sourceAdmonitionDesc": "Még nem elérhető.",
-	"import.sourceAdmonitionNotice":
-		"Az Admonitionből való importálás még nem támogatott.",
+	"import.sourceAdmonitionDesc":
+		"Hozd át a saját admonition-jeidet az Admonition bővítményből.",
 	"import.cmTitle": "Importálás a Callout Managerből",
 	"import.cmInstructions":
 		"A Callout Managerben használd a Copy gombot a testreszabott callout stílusaid másolásához, majd illeszd be őket lentebb.",
@@ -694,6 +696,50 @@ export const hu: Record<string, string> = {
 		'Nem található használható szín az új "{{value}}" callouthoz; kihagyva.',
 	"import.err.cmIdConflict":
 		'A "{{value}}" azonosítót már egy másik callout ("{{other}}") alias-ként használja, ezért kihagyva.',
+
+	// Import — Admonition
+	"import.admTitle": "Importálás az Admonitionből",
+	"import.admInstructions":
+		"Minden admonition callout lesz, a nevével, ikonjával és színével " +
+		"együtt. Azok a beállítások, amelyeknek nincs megfelelője a " +
+		"Callout Studióban (parancs, másolás gomb, rejtett cím), nem " +
+		"jönnek át.",
+	"import.admFromVault": "Ez a tároló",
+	"import.admVaultChecking": "Az Admonition bővítmény keresése…",
+	"import.admVaultFound": "{{count}} saját admonition található.",
+	"import.admVaultNotFound": "Ebben a tárolóban nem található saját admonition.",
+	"import.admFromFile": "Egy fájl",
+	"import.admFromFileDesc":
+		"Egy admonitions.json fájl vagy egy megosztott csomag.",
+	"import.admChooseFile": "Fájl kiválasztása…",
+	"import.admPasteLabel": "Vagy illeszd be ide a JSON-t:",
+	"import.admPlaceholder": "Illeszd be ide az admonition-jeidet…",
+	"import.admBtnCancel": "Mégse",
+	"import.admBtnImport": "Importálás",
+	"import.err.admNotRecognized":
+		"Ismeretlen fájl: admonition-lista vagy az Admonition data.json " +
+		"fájlja volt várható.",
+	"import.err.admNoEntries": "Nem található importálható admonition.",
+	"import.err.admTypeMissing":
+		'Ennek az admonitionnek nincs "type" mezője, ezért kimaradt.',
+	"import.warn.admIconUnknown":
+		'Egyik ikonkönyvtárban sincs "{{value}}" nevű ikon, ezért az ' +
+		'alapértelmezett ikon került a helyére.',
+	"import.warn.admIconUnknownExisting":
+		'Egyik ikonkönyvtárban sincs "{{value}}" nevű ikon, ezért a(z) ' +
+		'"{{id}}" megtartotta a korábbi ikonját.',
+	"import.warn.admImageFailed":
+		"A feltöltött kép nem volt olvasható, ezért az alapértelmezett " +
+		"ikon került a helyére.",
+	"import.warn.admIconWithCss":
+		"Ezt az admonitiont egy CSS-részlet formázza az Admonitionben. Ez " +
+		"a formázás nem része az importnak, így csak a neve, ikonja és " +
+		"színe jött át.",
+	"import.warn.admNoColor":
+		"Nem volt szín beállítva, ezért az alapértelmezett kék került a " +
+		"helyére.",
+	"import.warn.admTitleTruncated":
+		"A cím {{length}} karakter; {{max}} karakterre rövidült.",
 
 	"footer.tagline":
 		"Van visszajelzése, megjegyzése vagy javaslata? Szívesen meghallgatom!",

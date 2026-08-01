@@ -143,6 +143,9 @@ export const el: Record<string, string> = {
 	"notice.importedSettings": "Οι ρυθμίσεις του προσθέτου εισήχθησαν.",
 	"notice.importedCalloutManager":
 		"Εισήχθη από Callout Manager: {{created}} δημιουργήθηκαν, {{updated}} ενημερώθηκαν.",
+	"notice.importedAdmonition":
+		"Έγινε εισαγωγή από το Admonition: {{created}} δημιουργήθηκαν, " +
+		"{{updated}} ενημερώθηκαν.",
 	"notice.noNewJSON":
 		"Δεν εισήχθησαν νέοι τύποι callout (τα IDs μπορεί να υπάρχουν ήδη).",
 	"notice.iconDownloadFailed":
@@ -666,9 +669,9 @@ export const el: Record<string, string> = {
 	"import.sourceCalloutManagerDesc":
 		"Επικολλήστε τα στυλ που αντιγράψατε από το κουμπί Copy του Callout Manager.",
 	"import.sourceAdmonition": "Admonition",
-	"import.sourceAdmonitionDesc": "Δεν είναι διαθέσιμο ακόμα.",
-	"import.sourceAdmonitionNotice":
-		"Η εισαγωγή από Admonition δεν υποστηρίζεται ακόμα.",
+	"import.sourceAdmonitionDesc":
+		"Φέρτε τα προσαρμοσμένα admonition σας από το πρόσθετο " +
+		"Admonition.",
 	"import.cmTitle": "Εισαγωγή από Callout Manager",
 	"import.cmInstructions":
 		"Στο Callout Manager, χρησιμοποιήστε το κουμπί Copy για να αντιγράψετε τα προσαρμοσμένα στυλ callout, και στη συνέχεια επικολλήστε τα παρακάτω.",
@@ -681,6 +684,50 @@ export const el: Record<string, string> = {
 		'Δεν βρέθηκε χρησιμοποιήσιμο χρώμα για το νέο callout "{{value}}"· παραλείφθηκε.',
 	"import.err.cmIdConflict":
 		'Το ID "{{value}}" χρησιμοποιείται ήδη ως ψευδώνυμο από άλλο callout ("{{other}}") και παραλείφθηκε.',
+
+	// Import — Admonition
+	"import.admTitle": "Εισαγωγή από το Admonition",
+	"import.admInstructions":
+		"Κάθε admonition έρχεται ως callout με το όνομα, το εικονίδιο και " +
+		"το χρώμα του. Ρυθμίσεις χωρίς αντίστοιχο στο Callout Studio " +
+		"(εντολή, κουμπί αντιγραφής, κρυφός τίτλος) δεν μεταφέρονται.",
+	"import.admFromVault": "Αυτό το θησαυροφυλάκιο",
+	"import.admVaultChecking": "Αναζήτηση του πρόσθετου Admonition…",
+	"import.admVaultFound": "Βρέθηκαν {{count}} προσαρμοσμένα admonition.",
+	"import.admVaultNotFound":
+		"Δεν βρέθηκαν προσαρμοσμένα admonition σε αυτό το θησαυροφυλάκιο.",
+	"import.admFromFile": "Ένα αρχείο",
+	"import.admFromFileDesc":
+		"Ένα αρχείο admonitions.json ή ένα κοινόχρηστο πακέτο.",
+	"import.admChooseFile": "Επιλογή αρχείου…",
+	"import.admPasteLabel": "Ή επικολλήστε εδώ το JSON:",
+	"import.admPlaceholder": "Επικολλήστε εδώ τα admonition σας…",
+	"import.admBtnCancel": "Ακύρωση",
+	"import.admBtnImport": "Εισαγωγή",
+	"import.err.admNotRecognized":
+		"Μη αναγνωρίσιμο αρχείο: αναμενόταν λίστα admonition ή ένα " +
+		"data.json του Admonition.",
+	"import.err.admNoEntries": "Δεν βρέθηκαν admonition για εισαγωγή.",
+	"import.err.admTypeMissing":
+		'Αυτό το admonition δεν έχει "type" και παραλείφθηκε.',
+	"import.warn.admIconUnknown":
+		'Δεν βρέθηκε εικονίδιο με όνομα "{{value}}" σε καμία βιβλιοθήκη, ' +
+		'οπότε χρησιμοποιήθηκε το προεπιλεγμένο εικονίδιο.',
+	"import.warn.admIconUnknownExisting":
+		'Δεν βρέθηκε εικονίδιο με όνομα "{{value}}" σε καμία βιβλιοθήκη, ' +
+		'οπότε το "{{id}}" κράτησε το εικονίδιο που είχε ήδη.',
+	"import.warn.admImageFailed":
+		"Δεν ήταν δυνατή η ανάγνωση της μεταφορτωμένης εικόνας, οπότε " +
+		"χρησιμοποιήθηκε το προεπιλεγμένο εικονίδιο.",
+	"import.warn.admIconWithCss":
+		"Αυτό το admonition παίρνει την εμφάνισή του από ένα απόσπασμα " +
+		"CSS στο Admonition. Η εμφάνιση αυτή δεν περιλαμβάνεται στην " +
+		"εισαγωγή, οπότε ήρθαν μόνο το όνομα, το εικονίδιο και το χρώμα.",
+	"import.warn.admNoColor":
+		"Δεν είχε οριστεί χρώμα, οπότε χρησιμοποιήθηκε το προεπιλεγμένο " +
+		"μπλε.",
+	"import.warn.admTitleTruncated":
+		"Ο τίτλος έχει {{length}} χαρακτήρες· συντομεύτηκε στους {{max}}.",
 
 	"footer.tagline":
 		"Έχετε σχόλια, απόψεις ή προτάσεις; Θα χαρώ να τα ακούσω!",

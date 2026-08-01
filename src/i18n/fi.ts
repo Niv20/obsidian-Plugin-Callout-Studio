@@ -142,6 +142,8 @@ export const fi: Record<string, string> = {
 	"notice.importedSettings": "Lisäosan asetukset tuotu.",
 	"notice.importedCalloutManager":
 		"Tuotu Callout Managerista: {{created}} luotu, {{updated}} päivitetty.",
+	"notice.importedAdmonition":
+		"Tuotu Admonitionista: {{created}} luotu, {{updated}} päivitetty.",
 	"notice.noNewJSON":
 		"Uusia callout-tyyppejä ei tuotu (tunnukset voivat jo olla olemassa).",
 	"notice.iconDownloadFailed":
@@ -651,8 +653,8 @@ export const fi: Record<string, string> = {
 	"import.sourceCalloutManagerDesc":
 		"Liitä Callout Managerin Copy-painikkeella kopioimasi tyylit.",
 	"import.sourceAdmonition": "Admonition",
-	"import.sourceAdmonitionDesc": "Ei vielä saatavilla.",
-	"import.sourceAdmonitionNotice": "Admonitionista tuomista ei vielä tueta.",
+	"import.sourceAdmonitionDesc":
+		"Tuo omat admonitionisi Admonition-laajennuksesta.",
 	"import.cmTitle": "Tuo Callout Managerista",
 	"import.cmInstructions":
 		"Kopioi Callout Managerissa mukautetut callout-tyylisi sen Copy-painikkeella ja liitä ne sitten alle.",
@@ -665,6 +667,47 @@ export const fi: Record<string, string> = {
 		'Uudelle calloutille "{{value}}" ei löydetty käyttökelpoista väriä; se ohitettiin.',
 	"import.err.cmIdConflict":
 		'Tunnus "{{value}}" on jo käytössä toisen calloutin aliaksena ("{{other}}") ja se ohitettiin.',
+
+	// Import — Admonition
+	"import.admTitle": "Tuo Admonitionista",
+	"import.admInstructions":
+		"Jokainen admonition tulee tänne calloutina nimineen, " +
+		"kuvakkeineen ja väreineen. Asetukset, joille ei ole vastinetta " +
+		"Callout Studiossa (komento, kopiointipainike, piilotettu " +
+		"otsikko), jäävät pois.",
+	"import.admFromVault": "Tämä holvi",
+	"import.admVaultChecking": "Etsitään Admonition-laajennusta…",
+	"import.admVaultFound": "Löytyi {{count}} omaa admonitionia.",
+	"import.admVaultNotFound": "Tästä holvista ei löytynyt omia admonitioneja.",
+	"import.admFromFile": "Tiedosto",
+	"import.admFromFileDesc": "admonitions.json-tiedosto tai jaettu paketti.",
+	"import.admChooseFile": "Valitse tiedosto…",
+	"import.admPasteLabel": "Tai liitä JSON tähän:",
+	"import.admPlaceholder": "Liitä admonitionisi tähän…",
+	"import.admBtnCancel": "Peruuta",
+	"import.admBtnImport": "Tuo",
+	"import.err.admNotRecognized":
+		"Tiedostoa ei tunnistettu: odotettiin admonition-luetteloa tai " +
+		"Admonitionin data.json-tiedostoa.",
+	"import.err.admNoEntries": "Tuotavia admonitioneja ei löytynyt.",
+	"import.err.admTypeMissing":
+		'Tältä admonitionilta puuttuu "type", joten se ohitettiin.',
+	"import.warn.admIconUnknown":
+		'Missään kuvakekirjastossa ei ole kuvaketta nimeltä "{{value}}", ' +
+		'joten käytettiin oletuskuvaketta.',
+	"import.warn.admIconUnknownExisting":
+		'Missään kuvakekirjastossa ei ole kuvaketta nimeltä "{{value}}", ' +
+		'joten "{{id}}" säilytti entisen kuvakkeensa.',
+	"import.warn.admImageFailed":
+		"Ladattua kuvaa ei voitu lukea, joten käytettiin oletuskuvaketta.",
+	"import.warn.admIconWithCss":
+		"Tämän admonitionin ulkoasu tulee Admonitionin CSS-katkelmasta. " +
+		"Se ei kuulu tuontiin, joten mukaan tulivat vain nimi, kuvake ja " +
+		"väri.",
+	"import.warn.admNoColor":
+		"Väriä ei ollut asetettu, joten käytettiin oletussinistä.",
+	"import.warn.admTitleTruncated":
+		"Otsikko on {{length}} merkkiä; se lyhennettiin {{max}} merkkiin.",
 
 	"footer.tagline":
 		"Onko sinulla palautetta, kommentteja tai ehdotuksia? Kuulisin mielelläni!",

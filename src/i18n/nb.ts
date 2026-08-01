@@ -140,6 +140,9 @@ export const nb: Record<string, string> = {
 	"notice.importedSettings": "Plugin-innstillinger importert.",
 	"notice.importedCalloutManager":
 		"Importert fra Callout Manager: {{created}} opprettet, {{updated}} oppdatert.",
+	"notice.importedAdmonition":
+		"Importert fra Admonition: {{created}} opprettet, {{updated}} " +
+		"oppdatert.",
 	"notice.noNewJSON":
 		"Ingen nye callout-typer importert (ID-er kan allerede eksistere).",
 	"notice.iconDownloadFailed":
@@ -650,8 +653,8 @@ export const nb: Record<string, string> = {
 	"import.sourceCalloutManagerDesc":
 		"Lim inn stilene du kopierte fra Copy-knappen i Callout Manager.",
 	"import.sourceAdmonition": "Admonition",
-	"import.sourceAdmonitionDesc": "Ikke tilgjengelig ennå.",
-	"import.sourceAdmonitionNotice": "Import fra Admonition støttes ikke ennå.",
+	"import.sourceAdmonitionDesc":
+		"Hent dine egne admonitions fra Admonition-tillegget.",
 	"import.cmTitle": "Importer fra Callout Manager",
 	"import.cmInstructions":
 		"I Callout Manager bruker du Copy-knappen for å kopiere de tilpassede callout-stilene dine, og limer dem inn nedenfor.",
@@ -664,6 +667,47 @@ export const nb: Record<string, string> = {
 		'Ingen brukbar farge ble funnet for den nye callouten "{{value}}"; den ble hoppet over.',
 	"import.err.cmIdConflict":
 		'ID "{{value}}" brukes allerede som et alias av en annen callout ("{{other}}") og ble hoppet over.',
+
+	// Import — Admonition
+	"import.admTitle": "Importer fra Admonition",
+	"import.admInstructions":
+		"Hver admonition kommer over som en callout med navn, ikon og " +
+		"farge. Innstillinger uten en motsvarighet i Callout Studio " +
+		"(kommando, kopiknapp, skjult tittel) blir igjen.",
+	"import.admFromVault": "Dette hvelvet",
+	"import.admVaultChecking": "Leter etter Admonition-tillegget…",
+	"import.admVaultFound": "Fant {{count}} egne admonitions.",
+	"import.admVaultNotFound": "Fant ingen egne admonitions i dette hvelvet.",
+	"import.admFromFile": "En fil",
+	"import.admFromFileDesc": "En admonitions.json-fil eller en delt pakke.",
+	"import.admChooseFile": "Velg fil…",
+	"import.admPasteLabel": "Eller lim inn JSON her:",
+	"import.admPlaceholder": "Lim inn dine admonitions her…",
+	"import.admBtnCancel": "Avbryt",
+	"import.admBtnImport": "Importer",
+	"import.err.admNotRecognized":
+		"Ukjent fil: forventet en liste med admonitions eller en " +
+		"data.json fra Admonition.",
+	"import.err.admNoEntries": "Fant ingen admonitions å importere.",
+	"import.err.admTypeMissing":
+		'Denne admonitionen mangler "type" og ble hoppet over.',
+	"import.warn.admIconUnknown":
+		'Det finnes ingen ikon som heter "{{value}}" i noe ikonbibliotek, ' +
+		'så standardikonet ble brukt.',
+	"import.warn.admIconUnknownExisting":
+		'Det finnes ingen ikon som heter "{{value}}" i noe ikonbibliotek, ' +
+		'så "{{id}}" beholdt ikonet den allerede hadde.',
+	"import.warn.admImageFailed":
+		"Det opplastede bildet kunne ikke leses, så standardikonet ble " +
+		"brukt.",
+	"import.warn.admIconWithCss":
+		"Denne admonitionen får utseendet sitt fra et CSS-snutt i " +
+		"Admonition. Det utseendet er ikke en del av importen, så bare " +
+		"navn, ikon og farge ble med.",
+	"import.warn.admNoColor":
+		"Ingen farge var angitt, så standardblåfargen ble brukt.",
+	"import.warn.admTitleTruncated":
+		"Tittelen er på {{length}} tegn; den ble forkortet til {{max}}.",
 
 	"footer.tagline":
 		"Har du tilbakemeldinger, kommentarer eller forslag? Jeg vil gjerne høre det!",

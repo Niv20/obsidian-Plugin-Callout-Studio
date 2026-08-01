@@ -141,6 +141,9 @@ export const ms: Record<string, string> = {
 	"notice.importedSettings": "Tetapan plugin diimport.",
 	"notice.importedCalloutManager":
 		"Diimport dari Callout Manager: {{created}} dicipta, {{updated}} dikemas kini.",
+	"notice.importedAdmonition":
+		"Diimport daripada Admonition: {{created}} dicipta, {{updated}} " +
+		"dikemas kini.",
 	"notice.noNewJSON":
 		"Tiada jenis callout baharu diimport (ID mungkin sudah wujud).",
 	"notice.iconDownloadFailed":
@@ -648,9 +651,8 @@ export const ms: Record<string, string> = {
 	"import.sourceCalloutManagerDesc":
 		"Tampal gaya yang anda salin daripada butang Copy Callout Manager.",
 	"import.sourceAdmonition": "Admonition",
-	"import.sourceAdmonitionDesc": "Belum tersedia.",
-	"import.sourceAdmonitionNotice":
-		"Mengimport dari Admonition belum disokong.",
+	"import.sourceAdmonitionDesc":
+		"Bawa admonition tersuai anda dari pemalam Admonition.",
 	"import.cmTitle": "Import dari Callout Manager",
 	"import.cmInstructions":
 		"Dalam Callout Manager, gunakan butang Copy untuk menyalin gaya callout tersuai anda, kemudian tampalnya di bawah.",
@@ -663,6 +665,47 @@ export const ms: Record<string, string> = {
 		'Tiada warna yang boleh digunakan ditemukan untuk callout baru "{{value}}"; ia dilangkau.',
 	"import.err.cmIdConflict":
 		'ID "{{value}}" sudah digunakan sebagai alias oleh callout lain ("{{other}}") dan dilangkau.',
+
+	// Import — Admonition
+	"import.admTitle": "Import daripada Admonition",
+	"import.admInstructions":
+		"Setiap admonition datang sebagai callout dengan nama, ikon dan " +
+		"warnanya. Tetapan yang tiada padanan dalam Callout Studio " +
+		"(perintah, butang salin, tajuk tersembunyi) tidak dibawa.",
+	"import.admFromVault": "Bilik kebal ini",
+	"import.admVaultChecking": "Mencari pemalam Admonition…",
+	"import.admVaultFound": "{{count}} admonition tersuai ditemui.",
+	"import.admVaultNotFound":
+		"Tiada admonition tersuai ditemui dalam bilik kebal ini.",
+	"import.admFromFile": "Satu fail",
+	"import.admFromFileDesc": "Fail admonitions.json, atau pek yang dikongsi.",
+	"import.admChooseFile": "Pilih fail…",
+	"import.admPasteLabel": "Atau tampal JSON di sini:",
+	"import.admPlaceholder": "Tampal admonition anda di sini…",
+	"import.admBtnCancel": "Batal",
+	"import.admBtnImport": "Import",
+	"import.err.admNotRecognized":
+		"Fail tidak dikenali: senarai admonition atau data.json " +
+		"Admonition dijangka.",
+	"import.err.admNoEntries": "Tiada admonition ditemui untuk diimport.",
+	"import.err.admTypeMissing":
+		'Admonition ini tiada "type" dan telah dilangkau.',
+	"import.warn.admIconUnknown":
+		'Tiada ikon bernama "{{value}}" dalam mana-mana pustaka ikon, ' +
+		'jadi ikon lalai digunakan.',
+	"import.warn.admIconUnknownExisting":
+		'Tiada ikon bernama "{{value}}" dalam mana-mana pustaka ikon, ' +
+		'jadi "{{id}}" mengekalkan ikon sedia ada.',
+	"import.warn.admImageFailed":
+		"Gambar yang dimuat naik tidak dapat dibaca, jadi ikon lalai " +
+		"digunakan.",
+	"import.warn.admIconWithCss":
+		"Admonition ini digayakan oleh petikan CSS dalam Admonition. Gaya " +
+		"itu bukan sebahagian daripada import, jadi hanya nama, ikon dan " +
+		"warnanya yang dibawa.",
+	"import.warn.admNoColor": "Tiada warna ditetapkan, jadi biru lalai digunakan.",
+	"import.warn.admTitleTruncated":
+		"Tajuk ialah {{length}} aksara; ia dipendekkan kepada {{max}}.",
 
 	"footer.tagline":
 		"Ada maklum balas, komen atau cadangan? Saya ingin mendengarnya!",

@@ -176,6 +176,8 @@ export const en: Record<string, string> = {
 	"notice.importedSettings": "Imported plugin settings.",
 	"notice.importedCalloutManager":
 		"Imported from Callout Manager: {{created}} created, {{updated}} updated.",
+	"notice.importedAdmonition":
+		"Imported from Admonition: {{created}} created, {{updated}} updated.",
 	"notice.noNewJSON":
 		"No new callout types were imported (ids may already exist).",
 	"notice.iconDownloadFailed":
@@ -709,9 +711,8 @@ export const en: Record<string, string> = {
 	"import.sourceCalloutManagerDesc":
 		"Paste the styles you copied from Callout Manager's Copy button.",
 	"import.sourceAdmonition": "Admonition",
-	"import.sourceAdmonitionDesc": "Not available yet.",
-	"import.sourceAdmonitionNotice":
-		"Importing from Admonition isn't supported yet.",
+	"import.sourceAdmonitionDesc":
+		"Bring your custom admonitions over from the Admonition plugin.",
 
 	// Import — Callout Manager paste flow
 	"import.cmTitle": "Import from Callout Manager",
@@ -727,6 +728,44 @@ export const en: Record<string, string> = {
 		'No usable color was found for the new callout "{{value}}"; it was skipped.',
 	"import.err.cmIdConflict":
 		'ID "{{value}}" is already used as an alias by another callout ("{{other}}") and was skipped.',
+
+	// Import — Admonition
+	"import.admTitle": "Import from Admonition",
+	"import.admInstructions":
+		"Each admonition comes over as a callout with its name, icon, and " +
+		"color. Settings Callout Studio has no equivalent for (command, copy " +
+		"button, hidden title) are left behind.",
+	"import.admFromVault": "This vault",
+	"import.admVaultChecking": "Looking for the Admonition plugin…",
+	"import.admVaultFound": "{{count}} custom admonition(s) found.",
+	"import.admVaultNotFound":
+		"No custom admonitions were found in this vault.",
+	"import.admFromFile": "A file",
+	"import.admFromFileDesc": "An admonitions.json file, or a shared pack.",
+	"import.admChooseFile": "Choose file…",
+	"import.admPasteLabel": "Or paste the JSON here:",
+	"import.admPlaceholder": "Paste your admonitions here…",
+	"import.admBtnCancel": "Cancel",
+	"import.admBtnImport": "Import",
+	"import.err.admNotRecognized":
+		"Unrecognized file: expected a list of admonitions, or an Admonition " +
+		"data.json.",
+	"import.err.admNoEntries": "No admonitions were found to import.",
+	"import.err.admTypeMissing":
+		'This admonition has no "type" and was skipped.',
+	"import.warn.admIconUnknown":
+		'No icon named "{{value}}" was found in any icon library, so the default icon was used instead.',
+	"import.warn.admIconUnknownExisting":
+		'No icon named "{{value}}" was found in any icon library, so "{{id}}" kept the icon it already had.',
+	"import.warn.admImageFailed":
+		"The uploaded picture could not be read, so the default icon was used instead.",
+	"import.warn.admIconWithCss":
+		"This admonition is styled by a CSS snippet in Admonition. That styling " +
+		"is not part of the import, so only its name, icon, and color came over.",
+	"import.warn.admNoColor":
+		"No color was set, so the default blue was used.",
+	"import.warn.admTitleTruncated":
+		"The title is {{length}} characters; it was shortened to {{max}}.",
 
 	// Footer
 	"footer.tagline":

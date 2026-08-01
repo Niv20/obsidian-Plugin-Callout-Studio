@@ -30,6 +30,7 @@ import {
 import { iconCacheKey, packFor } from "../icons/registry";
 import { materialPack } from "../icons/packs/material";
 import type { CalloutManagerPlanItem } from "../utils/calloutManagerImport";
+import type { AdmonitionPlan } from "../utils/admonitionImport";
 import {
 	normalizeCalloutId,
 	obsidianCalloutAttrId,
@@ -1267,6 +1268,106 @@ export class CalloutRegistry {
 		// Safety net: add()/update() above already save on every successful
 		// mutation, but a created palette whose def failed to add (e.g. a
 		// same-id race) would otherwise sit unsaved until an unrelated change.
+		if (paletteCreated) {
+			this.notifyChange();
+		}
+
+		return { created, updated };
+	}
+
+	/**
+	 * Applies a plan already computed by `planAdmonitionImport`, the same
+	 * two-step shape as the Callout Manager import above and for the same
+	 * reason — the report is shown before anything here runs.
+	 *
+	 * Pictures go in first and by id, never by assignment: an Admonition icon
+	 * that was an uploaded image arrives as artwork, and the callouts in the
+	 * same plan point at it by id, so it has to exist before they land. Merging
+	 * (rather than replacing) is the same rule the JSON importer follows — the
+	 * user's own pictures are a list they built up, and an import is not
+	 * entitled to empty it.
+	 */
+	applyAdmonitionImport(plan: AdmonitionPlan): {
+		created: number;
+		updated: number;
+	} {
+		if (plan.newImages.length > 0) {
+			const byId = new Map(
+				this.settings.userImages.map((image) => [image.id, image]),
+			);
+			for (const image of plan.newImages) byId.set(image.id, image);
+			this.setUserImages([...byId.values()]);
+		}
+
+		let created = 0;
+		let updated = 0;
+		// Pushed onto settings.customPalettes as each is created rather than
+		// batched, so a later entry sharing the same new colour finds it and
+		// reuses it instead of saving a second copy — see
+		// applyCalloutManagerImport, which resolves colours the same way.
+		let paletteCreated = false;
+
+		const resolveColor = (
+			hex: string,
+		): ReturnType<typeof resolveCalloutManagerColor> => {
+			const resolved = resolveCalloutManagerColor(
+				hex,
+				this.settings.customPalettes,
+			);
+			if (resolved.createdPalette) {
+				this.settings.customPalettes.push(resolved.createdPalette);
+				paletteCreated = true;
+			}
+			return resolved;
+		};
+
+		for (const item of plan.toApply) {
+			if (item.action === "update") {
+				const { entry } = item;
+				const partial: Partial<CalloutDefinition> = {};
+				// Only what the admonition actually stated. An entry with no
+				// title must not rename the callout, and one whose icon named
+				// nothing must not blank the icon it already has.
+				if (entry.displayName) partial.displayName = entry.displayName;
+				if (entry.icon) partial.icon = entry.icon;
+				if (entry.color) {
+					const resolved = resolveColor(entry.color);
+					Object.assign(partial, resolved.colors);
+					partial.paletteId = resolved.paletteId;
+				}
+				// Counted only when something actually changed: an admonition
+				// that stated nothing but its type matches a callout that
+				// already exists, and reporting that as an update would claim
+				// work that never happened.
+				if (Object.keys(partial).length > 0) {
+					this.update(item.existingId, partial);
+					updated++;
+				}
+				continue;
+			}
+
+			const { entry } = item;
+			const resolved = resolveColor(entry.color);
+			const def: CalloutDefinition = {
+				id: entry.id,
+				displayName: entry.displayName ?? obsidianDefaultTitle(entry.id),
+				// No icon in the file, or one naming a drawing that exists in no
+				// library — either way there is nothing to keep, so take the
+				// shared import fallback.
+				icon: entry.icon ?? { ...FALLBACK_ICON },
+				...resolved.colors,
+				paletteId: resolved.paletteId,
+				foldable: true,
+				defaultFolded: false,
+				builtIn: false,
+				source: "user",
+			};
+			if (this.add(def)) created++;
+		}
+
+		// Safety net, as in applyCalloutManagerImport: add()/update() save on
+		// every successful mutation, but a palette created for a def that then
+		// failed to add would otherwise sit unsaved until an unrelated change.
 		if (paletteCreated) {
 			this.notifyChange();
 		}
