@@ -293,9 +293,17 @@ export class PackPanel {
 		// Only this panel's own source: a variant change here has nothing to say
 		// about an icon selected from another one.
 		if (packFor(selected)?.id !== this.pack.id) return;
+		// A toned emoji's stored value is one of `entry.variants`, not
+		// `entry.name` — matching name alone misses every entry re-opened with a
+		// skin tone already applied, which is exactly the case a tone change
+		// needs to resync.
 		const entry =
 			this.selectedEntry ??
-			this.index?.entries.find((e) => e.name === selected.value);
+			this.index?.entries.find(
+				(e) =>
+					e.name === selected.value ||
+					e.variants?.includes(selected.value),
+			);
 		if (!entry) return;
 		this.selectedEntry = entry;
 		this.host.onSelect(this.pack.makeIcon(entry, this.variants), entry);
