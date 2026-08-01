@@ -10,23 +10,30 @@ export const tr: Record<string, string> = {
 	"settings.fallbackTag": "Varsayılan",
 	"settings.fallbackTagAuto": "Otomatik varsayılan",
 	"settings.rescanVault": "Vault'u yeniden tara",
-	"settings.rescanVaultDesc": "Notlardaki tanınmayan callout ID'lerini bulur ve geri dönüş satırları olarak ekler.",
+	"settings.rescanVaultDesc":
+		"Notlardaki tanınmayan callout ID'lerini bulur ve geri dönüş satırları olarak ekler.",
 	"settings.rescanVaultHintAction": "Şimdi tara",
-	"settings.rescanComplete": "Yeniden tarama tamamlandı: {{count}} yeni callout eklendi.",
+	"settings.rescanComplete":
+		"Yeniden tarama tamamlandı: {{count}} yeni callout eklendi.",
 	"replaceModal.deleteWithoutReplaceSuffix": "(varsayılana geri döner)",
 
 	"firstRun.title": "Vault'unuzdaki mevcut callout'ları bulsun mu?",
-	"firstRun.body": "Callout Studio, zaten kullandığınız callout'ları keşfetmek için vault'unuzu tarayabilir; bunlar ayarlar listenizde görünür ve geri dönüş stilinizi benimser.",
-	"firstRun.heavyVaultNote": "Vault'unuzda {{count}} Markdown dosyası var — tarama birkaç saniye sürebilir.",
-	"firstRun.laterHint": "Bunu daha sonra Ayarlar → Vault içgörüleri ve bakımı → Vault'u yeniden tara üzerinden her zaman çalıştırabilirsiniz.",
+	"firstRun.body":
+		"Callout Studio, zaten kullandığınız callout'ları keşfetmek için vault'unuzu tarayabilir; bunlar ayarlar listenizde görünür ve geri dönüş stilinizi benimser.",
+	"firstRun.heavyVaultNote":
+		"Vault'unuzda {{count}} Markdown dosyası var — tarama birkaç saniye sürebilir.",
+	"firstRun.laterHint":
+		"Bunu daha sonra Ayarlar → Vault içgörüleri ve bakımı → Vault'u yeniden tara üzerinden her zaman çalıştırabilirsiniz.",
 	"firstRun.scanNow": "Şimdi tara",
 	"firstRun.noThanks": "Hayır, teşekkürler",
-	"firstRun.autoScanComplete": "Callout Studio vault'unuzu taradı ve {{count}} callout ekledi.",
+	"firstRun.autoScanComplete":
+		"Callout Studio vault'unuzu taradı ve {{count}} callout ekledi.",
 	"firstRun.scanning": "Taranıyor",
 
 	"welcome.tooltip": "Callout Studio hakkında",
 	"welcome.title": "Callout Studio'ya hoş geldiniz",
-	"welcome.tagline": "Obsidian callout'larını yönetmek için eksiksiz çözümünüz.",
+	"welcome.tagline":
+		"Obsidian callout'larını yönetmek için eksiksiz çözümünüz.",
 	"welcome.previewTitle": "Aksiyon halinde görün",
 	"welcome.sample":
 		"Callout Studio, özel bir simge, renkler ve ad ile callout'lar oluşturmanızı sağlar.\n\n" +
@@ -39,10 +46,14 @@ export const tr: Record<string, string> = {
 		"Callout Studio'nun sunacağı çok daha fazlası var! [Daha fazla bilgi]({{repoUrl}}).\n",
 
 	"deleteModal.title": '"{{name}}" callout\'unu sil?',
-	"deleteModal.bodyInUse": "Bu callout {{files}} dosyada {{count}} kez görünüyor.",
-	"deleteModal.bodyInUseExplain": "Silmek, bu blokları düz metne dönüştürür — stil ve callout başlığını kaybeder.",
-	"deleteModal.replaceHint": "Bunun yerine başka bir callout ile değiştirebilir, böylece vault içeriğini biçimli callout olarak koruyabilirsiniz.",
-	"deleteModal.bodyUnused": '"{{name}}" hiçbir notta kullanılmıyor, ancak oluşturduğunuz özel bir callout. Silmek onu bu listeden kaldırır.',
+	"deleteModal.bodyInUse":
+		"Bu callout {{files}} dosyada {{count}} kez görünüyor.",
+	"deleteModal.bodyInUseExplain":
+		"Silmek, bu blokları düz metne dönüştürür — stil ve callout başlığını kaybeder.",
+	"deleteModal.replaceHint":
+		"Bunun yerine başka bir callout ile değiştirebilir, böylece vault içeriğini biçimli callout olarak koruyabilirsiniz.",
+	"deleteModal.bodyUnused":
+		'"{{name}}" hiçbir notta kullanılmıyor, ancak oluşturduğunuz özel bir callout. Silmek onu bu listeden kaldırır.',
 	"deleteModal.replaceInstead": "Bunun yerine değiştir",
 	"deleteModal.deleteInUse": "Sil (düz metne dönüştür)",
 	"deleteModal.deleteUnused": "Callout'u sil",
@@ -60,9 +71,12 @@ export const tr: Record<string, string> = {
 	"settings.importExport": "İçe aktar / dışa aktar",
 	"settings.import": "İçe aktar",
 	"settings.export": "Dışa aktar",
-	"settings.importDesc": "JSON dosyası kullanarak başka bir vault'tan Callout Studio verilerinizi içe aktarın.",
-	"settings.exportDesc": "Tüm özel callout türlerinizi JSON formatında kaydedin.",
-	"settings.importConflictNotice": "{{count}} callout türü içe aktarıldı; {{overwritten}} mevcut kayıt üzerine yazıldı.",
+	"settings.importDesc":
+		"JSON dosyası kullanarak başka bir vault'tan Callout Studio verilerinizi içe aktarın.",
+	"settings.exportDesc":
+		"Tüm özel callout türlerinizi JSON formatında kaydedin.",
+	"settings.importConflictNotice":
+		"{{count}} callout türü içe aktarıldı; {{overwritten}} mevcut kayıt üzerine yazıldı.",
 
 	"settings.addNewCallout": "+ callout ekle",
 
@@ -78,7 +92,8 @@ export const tr: Record<string, string> = {
 
 	"settings.colorSwatchAria": "Vurgu: {{accent}} · Arka plan: {{bg}}",
 	"settings.fallbackCallout": "Varsayılan geri dönüş callout'u",
-	"settings.fallbackCalloutDesc": "Vault'unuzdaki tanınmayan callout türleri bu callout'un stilini devralır.",
+	"settings.fallbackCalloutDesc":
+		"Vault'unuzdaki tanınmayan callout türleri bu callout'un stilini devralır.",
 
 	"settings.globalStyle": "Genel callout stili",
 	"settings.border": "Kenarlıklar",
@@ -112,49 +127,63 @@ export const tr: Record<string, string> = {
 	"settings.deletePaletteConfirm":
 		'"{{name}}" paletini sil?\nBu renkleri kullanan callout öğeleri etkilenmez.',
 	"settings.enableAutocomplete": "[! Otomatik tamamlamayı etkinleştir",
-	"settings.enableAutocompleteDesc": 'Düzenleyicide blok alıntı içinde "[!" yazdığınızda öneriler gösterir. Tam bir callout başlığı eklemek için listeden bir callout türü seçin.',
+	"settings.enableAutocompleteDesc":
+		'Düzenleyicide blok alıntı içinde "[!" yazdığınızda öneriler gösterir. Tam bir callout başlığı eklemek için listeden bir callout türü seçin.',
 
 	"settings.openHotkeys": "Callout Studio kısayolları",
-	"settings.openHotkeysDesc": "Callout Studio komutları için Obsidian kısayol ayarlarını açar; burada Yeni callout türü oluştur, Ayarları aç, Callout'u kaldır ve Callout'a sar için kendi kısayollarınızı belirleyebilirsiniz. Varsayılan olarak kısayol atanmamıştır.",
+	"settings.openHotkeysDesc":
+		"Callout Studio komutları için Obsidian kısayol ayarlarını açar; burada Yeni callout türü oluştur, Ayarları aç, Callout'u kaldır ve Callout'a sar için kendi kısayollarınızı belirleyebilirsiniz. Varsayılan olarak kısayol atanmamıştır.",
 	"settings.openHotkeysButton": "Kısayol ayarlarını aç",
-
 
 	"settings.vaultMaintenance": "Vault içgörüleri ve bakımı",
 	"settings.vaultStats": "Callout istatistikleri",
-	"settings.vaultStatsDesc": "Markdown notlarınızdaki tüm callout bloklarını sayar ve türe göre gruplar.",
+	"settings.vaultStatsDesc":
+		"Markdown notlarınızdaki tüm callout bloklarını sayar ve türe göre gruplar.",
 	"settings.vaultStatsButton": "İstatistikleri görüntüle",
 	"settings.vaultStatsScanning": "Taranıyor",
 	"settings.resetAll": "Sıfırla",
-	"settings.resetAllDesc": "Tüm kullanıcı callout'larını siler, yerleşik callout'ları, global stilleri (kenarlıklar, yazı tipi ölçeği, şekil), kaydedilmiş renk paletlerini, sağ tık menüsü özelleştirmesini ve indirilen Material SVG'leri sıfırlar.",
+	"settings.resetAllDesc":
+		"Tüm kullanıcı callout'larını siler, yerleşik callout'ları, global stilleri (kenarlıklar, yazı tipi ölçeği, şekil), kaydedilmiş renk paletlerini, sağ tık menüsü özelleştirmesini ve indirilen Material SVG'leri sıfırlar.",
 	"settings.resetAllButton": "Her şeyi sıfırla",
-	"settings.resetAllConfirm": "Bu işlem tüm özel callout'ları siler, yerleşik callout'ları, global stilleri, kaydedilmiş renk paletlerini, sağ tık menüsü özelleştirmesini ve önbelleğe alınmış tüm Material SVG'leri sıfırlar. Bu işlem geri alınamaz. Emin misiniz?",
+	"settings.resetAllConfirm":
+		"Bu işlem tüm özel callout'ları siler, yerleşik callout'ları, global stilleri, kaydedilmiş renk paletlerini, sağ tık menüsü özelleştirmesini ve önbelleğe alınmış tüm Material SVG'leri sıfırlar. Bu işlem geri alınamaz. Emin misiniz?",
 	"notice.resetAllDone": "Her şey varsayılanlara sıfırlandı.",
 
-	"notice.exported": "Callout'lar callout-studio-export.json dosyasına dışa aktarıldı",
+	"notice.exported":
+		"Callout'lar callout-studio-export.json dosyasına dışa aktarıldı",
 	"notice.importedJSON": "JSON'dan {{count}} callout türü içe aktarıldı.",
 	"notice.importedSettings": "Eklenti ayarları içe aktarıldı.",
-	"notice.importedCalloutManager": "Callout Manager'dan içe aktarıldı: {{created}} oluşturuldu, {{updated}} güncellendi.",
-	"notice.noNewJSON": "Yeni callout türü içe aktarılmadı (ID'ler zaten mevcut olabilir).",
-	"notice.iconDownloadFailed": '"{{name}}" Material simgesi indirilemedi. Bu stil/ağırlık için mevcut olmayabilir veya bağlantınız çevrimdışı olabilir.',
+	"notice.importedCalloutManager":
+		"Callout Manager'dan içe aktarıldı: {{created}} oluşturuldu, {{updated}} güncellendi.",
+	"notice.noNewJSON":
+		"Yeni callout türü içe aktarılmadı (ID'ler zaten mevcut olabilir).",
+	"notice.iconDownloadFailed":
+		'"{{name}}" Material simgesi indirilemedi. Bu stil/ağırlık için mevcut olmayabilir veya bağlantınız çevrimdışı olabilir.',
 	"notice.nothingToWrap": "Sarılacak bir şey yok.",
 	"notice.cursorNotInsideCallout": "İmleç callout içinde değil.",
 	"notice.openHotkeysFailed": "Obsidian kısayol ayarları açılamadı.",
-	"notice.filterHotkeysFailed": "Obsidian kısayolları açıldı, ancak Callout Studio filtresi uygulanamadı.",
+	"notice.filterHotkeysFailed":
+		"Obsidian kısayolları açıldı, ancak Callout Studio filtresi uygulanamadı.",
 
 	"editor.editCallout": "Callout düzenle",
 	"editor.newCallout": "Yeni callout",
 	"editor.displayName": "Görünen ad",
-	"editor.displayNameDesc": "Kullanıcı arayüzünde gösterilen okunabilir etiket",
-	"editor.displayNameBuiltIn": "Yerleşik callout'lar için görünen ad değiştirilemez",
+	"editor.displayNameDesc":
+		"Kullanıcı arayüzünde gösterilen okunabilir etiket",
+	"editor.displayNameBuiltIn":
+		"Yerleşik callout'lar için görünen ad değiştirilemez",
 	"editor.displayNamePlaceholder": "Callout'um",
 	"editor.calloutIds": "Callout ID'leri",
-	"editor.calloutIdsDesc": "Bu callout için tüm tanımlayıcılar. Boşluklara izin verilir.\nEklemek için Enter veya + düğmesine basın.",
+	"editor.calloutIdsDesc":
+		"Bu callout için tüm tanımlayıcılar. Boşluklara izin verilir.\nEklemek için Enter veya + düğmesine basın.",
 	"editor.calloutIdsPlaceholder": "ID ekle",
 	"editor.addId": "ID ekle",
 	"editor.idLinkedToName": "Görünen ada bağlı",
-	"editor.idCannotDelete": "Bu ID, görünen ada bağlı olduğu için silinemez — değiştirmek için adı düzenleyin",
+	"editor.idCannotDelete":
+		"Bu ID, görünen ada bağlı olduğu için silinemez — değiştirmek için adı düzenleyin",
 	"editor.icon": "Simge",
 	"editor.pickIcon": "Simge seç",
+	"editor.resetIcon": "Simgeyi varsayılana sıfırla",
 	"editor.livePreview": "Canlı önizleme",
 	"editor.iconAdjustment": "Simge ayarı",
 	"editor.picture": "Resim",
@@ -162,14 +191,17 @@ export const tr: Record<string, string> = {
 	"editor.horizontalOffset": "Yatay uzaklık",
 	"editor.verticalOffset": "Dikey uzaklık",
 	"editor.colors": "Renkler",
+	"editor.resetColors": "Renkleri varsayılana sıfırla",
 	"editor.paletteDeleted": "Silinmiş renk",
 	"editor.paletteGroupObsidian": "Obsidian callout'ları",
 	"editor.paletteGroupPresets": "Renk ön ayarları",
 	"editor.paletteGroupCustom": "Özel",
 	"editor.paletteNewColor": "Yeni renk…",
-	"editor.contrastWarning": "Arka plana karşı düşük kontrast — okunması zor olabilir",
+	"editor.contrastWarning":
+		"Arka plana karşı düşük kontrast — okunması zor olabilir",
 	"editor.foldable": "Katlanabilir",
-	"editor.foldableDesc": "Callout'un katlanabilir olup olmayacağını ve vault genelinde uygulanacak varsayılan durumu seçin.",
+	"editor.foldableDesc":
+		"Callout'un katlanabilir olup olmayacağını ve vault genelinde uygulanacak varsayılan durumu seçin.",
 	"editor.foldOff": "Kapalı",
 	"editor.foldOpen": "Varsayılan olarak açık",
 	"editor.foldClosed": "Varsayılan olarak kapalı",
@@ -182,11 +214,15 @@ export const tr: Record<string, string> = {
 	"editor.idEmpty": "En az bir ID gereklidir",
 	"editor.idExists": "Bu ID ile bir callout zaten mevcut",
 	"editor.idConflict": "Bu ID mevcut bir callout ile çakışıyor",
-	"editor.idDashConflict": 'Obsidian boşlukları tire olarak yazar, bu yüzden bu ID "{{other}}" ile çakışıyor',
+	"editor.idDashConflict":
+		'Obsidian boşlukları tire olarak yazar, bu yüzden bu ID "{{other}}" ile çakışıyor',
 	"editor.untitledCallout": "Başlıksız Callout",
-	"editor.loremIpsum": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-	"editor.loremIpsumShort": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-	"editor.sampleInlineText": "İşte bir paragraf içinde satır içi bir [!{id}] hapı.",
+	"editor.loremIpsum":
+		"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+	"editor.loremIpsumShort":
+		"Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+	"editor.sampleInlineText":
+		"İşte bir paragraf içinde satır içi bir [!{id}] hapı.",
 	"editor.previewReadOnly": "Canlı önizleme düzenlenemez",
 
 	// Palette editor modal
@@ -196,11 +232,14 @@ export const tr: Record<string, string> = {
 	"palette.namePlaceholder": "Paletim",
 	"palette.nameExists": "Bu adla bir palet zaten var",
 	"palette.baseColor": "Temel renk",
-	"palette.baseColorHint": "Arka plan rengini otomatik olarak buna uyduracağız. İsterseniz {{link}} ile ayrı olarak kontrol edebilirsiniz.",
+	"palette.baseColorHint":
+		"Arka plan rengini otomatik olarak buna uyduracağız. İsterseniz {{link}} ile ayrı olarak kontrol edebilirsiniz.",
 	"palette.baseColorHintLink": "buraya tıklayarak",
 	"palette.advancedColors": "Renkler",
-	"palette.advancedColorsHint": "{{mode}} modu için renkler düzenleniyor - diğer mod otomatik olarak güncellenir. Kontrol etmek için Obsidian temasını değiştirin.",
-	"palette.revertHint": "Bunun yerine tek bir temel renk mi tercih edersiniz? {{link}}.",
+	"palette.advancedColorsHint":
+		"{{mode}} modu için renkler düzenleniyor - diğer mod otomatik olarak güncellenir. Kontrol etmek için Obsidian temasını değiştirin.",
+	"palette.revertHint":
+		"Bunun yerine tek bir temel renk mi tercih edersiniz? {{link}}.",
 	"palette.revertHintLink": "Geri al",
 	"palette.lightMode": "Açık",
 	"palette.darkMode": "Koyu",
@@ -286,20 +325,27 @@ export const tr: Record<string, string> = {
 	"iconPicker.searchRpgAwesome": "RPG Awesome ara",
 	"iconPicker.image": "Resimleriniz",
 	"iconPicker.searchImage": "Resimlerinizde ara",
-	"iconPicker.imageTooLarge": "{{name}} çok büyük. Resimler 5 MB'ın altında olmalıdır.",
-	"iconPicker.imageUnsupported": "{{name}} desteklenen bir resim biçimi değil. SVG, PNG, JPEG veya WebP kullanın.",
-	"iconPicker.imageInvalidSvg": "{{name}} güvenli SVG olarak okunamadı ve eklenmedi.",
+	"iconPicker.imageTooLarge":
+		"{{name}} çok büyük. Resimler 5 MB'ın altında olmalıdır.",
+	"iconPicker.imageUnsupported":
+		"{{name}} desteklenen bir resim biçimi değil. SVG, PNG, JPEG veya WebP kullanın.",
+	"iconPicker.imageInvalidSvg":
+		"{{name}} güvenli SVG olarak okunamadı ve eklenmedi.",
 	"iconPicker.imageDecodeFailed": "{{name}} resim olarak okunamadı.",
-	"iconPicker.imageDuplicate": "{{name}} zaten resimlerinizde var. Dosyayı yeniden adlandırın veya mevcut resmi silin.",
+	"iconPicker.imageDuplicate":
+		"{{name}} zaten resimlerinizde var. Dosyayı yeniden adlandırın veya mevcut resmi silin.",
 	"iconPicker.imageAdd": "Resim ekle",
-	"iconPicker.imageEmpty": "Henüz resim yok. Bilgisayarınızdan SVG, PNG, JPEG veya WebP dosyası ekleyin ya da buraya sürükleyin.",
+	"iconPicker.imageEmpty":
+		"Henüz resim yok. Bilgisayarınızdan SVG, PNG, JPEG veya WebP dosyası ekleyin ya da buraya sürükleyin.",
 	"iconPicker.imageDelete": "Sil",
 	"iconPicker.imageDeleteConfirm": "“{{name}}” silinsin mi?",
-	"iconPicker.imageDeleteInUse": "{{count}} callout bu resmi kullanıyor. Yeni bir resim belirtene kadar yer tutucu simge gösterilecek.",
+	"iconPicker.imageDeleteInUse":
+		"{{count}} callout bu resmi kullanıyor. Yeni bir resim belirtene kadar yer tutucu simge gösterilecek.",
 	"iconPicker.imageRecolor": "Callout rengini izle",
 	"iconPicker.allSources": "Tüm kaynaklar",
 	"iconPicker.searchAllSources": "Tüm simge kaynaklarında ara",
-	"iconPicker.sourcesNotDownloaded": "Henüz dahil edilmedi: {{names}}. İndirmek için yukarıdan bir kaynak seçin.",
+	"iconPicker.sourcesNotDownloaded":
+		"Henüz dahil edilmedi: {{names}}. İndirmek için yukarıdan bir kaynak seçin.",
 	"iconPicker.chooseSource": "Kaynak seç",
 	"iconPicker.sourceGroup": "{{name}} · {{count}}",
 
@@ -430,20 +476,26 @@ export const tr: Record<string, string> = {
 
 	// Downloadable icon packs
 	"iconPack.downloadTitle": "{{name}} henüz indirilmedi",
-	"iconPack.downloadDetail": "{{count}} simge · {{size}} · tek seferlik indirme",
+	"iconPack.downloadDetail":
+		"{{count}} simge · {{size}} · tek seferlik indirme",
 	"iconPack.download": "İndir",
 	"iconPack.downloading": "{{name}} indiriliyor…",
-	"iconPack.downloadFailed": "{{name}} indirilemedi. Bağlantınızı kontrol edin ve tekrar deneyin.",
+	"iconPack.downloadFailed":
+		"{{name}} indirilemedi. Bağlantınızı kontrol edin ve tekrar deneyin.",
 	"iconPack.retry": "Yeniden dene",
-	"iconPack.faBrandsNotice": "Marka simgeleri ilgili sahiplerinin ticari markalarıdır. Dahil edilmeleri onay anlamına gelmez. Lütfen yalnızca temsil ettikleri şirket, ürün veya hizmeti temsil etmek için kullanın.",
+	"iconPack.faBrandsNotice":
+		"Marka simgeleri ilgili sahiplerinin ticari markalarıdır. Dahil edilmeleri onay anlamına gelmez. Lütfen yalnızca temsil ettikleri şirket, ürün veya hizmeti temsil etmek için kullanın.",
 	"iconPack.artworkRestored": "{{names}} için simge çizimleri indirildi.",
-	"iconPack.diskWriteFailed": "Callout Studio simge paketini diske kaydedemedi, bu nedenle bir sonraki seferde yeniden indirilmesi gerekecek. Seçtiğiniz simgeler hâlâ ayarlarınıza kaydedildi.",
+	"iconPack.diskWriteFailed":
+		"Callout Studio simge paketini diske kaydedemedi, bu nedenle bir sonraki seferde yeniden indirilmesi gerekecek. Seçtiğiniz simgeler hâlâ ayarlarınıza kaydedildi.",
 
 	// Icon licences & credits
 	"credits.title": "Simge lisansları ve katkılar",
-	"credits.intro": "Callout Studio birçok açık simge kitaplığından yararlanır. Lisansları aşağıda yeniden üretilmiştir; burada kullanım için yapılan değişikliklerle birlikte.",
+	"credits.intro":
+		"Callout Studio birçok açık simge kitaplığından yararlanır. Lisansları aşağıda yeniden üretilmiştir; burada kullanım için yapılan değişikliklerle birlikte.",
 	"credits.fullNotices": "Tam üçüncü taraf bildirimleri",
-	"credits.pluginLicense": "Callout Studio'nun kendi kodu 0BSD lisansı altındadır; simge kitaplıkları kendi lisanslarını korur.",
+	"credits.pluginLicense":
+		"Callout Studio'nun kendi kodu 0BSD lisansı altındadır; simge kitaplıkları kendi lisanslarını korur.",
 
 	"contextMenu.editCallout": "Callout ayarlarını düzenle",
 	"contextMenu.copyMarkdown": "Callout Markdown'ı kopyala",
@@ -473,10 +525,12 @@ export const tr: Record<string, string> = {
 	"settings.calloutTypeInline": "Satır içi callout",
 
 	"settings.customizeMenu": "Menü öğelerini özelleştir",
-	"settings.customizeMenuDesc": "Her callout türü için hangi sağ tık eylemlerinin görüneceğini seçin ve sırasını değiştirin. Kaynak modunda ve Canlı Önizleme'de çalışır.",
+	"settings.customizeMenuDesc":
+		"Her callout türü için hangi sağ tık eylemlerinin görüneceğini seçin ve sırasını değiştirin. Kaynak modunda ve Canlı Önizleme'de çalışır.",
 	"settings.customizeMenuButton": "Menü öğelerini özelleştir",
 	"menuCustomize.title": "Sağ tık menüsünü özelleştir",
-	"menuCustomize.desc": "Eylemleri açıp kapatın ve yeniden sıralamak için tutamacı sürükleyin. Değişiklikler otomatik olarak kaydedilir.",
+	"menuCustomize.desc":
+		"Eylemleri açıp kapatın ve yeniden sıralamak için tutamacı sürükleyin. Değişiklikler otomatik olarak kaydedilir.",
 	"menuCustomize.regular": "Normal callout",
 	"menuCustomize.heading": "Başlık callout'u",
 	"menuCustomize.inline": "Satır içi callout",
@@ -492,20 +546,28 @@ export const tr: Record<string, string> = {
 	"confirm.ok": "Sil",
 	"confirm.cancel": "İptal",
 
-	"vault.filesUpdated": "Vault dosyalarında {{count}} callout referansı güncellendi.",
-	"vault.idsUpdated": "Vault dosyalarında {{count}} callout ID'si güncellendi: {{oldIds}} → {{newId}}",
-	"vault.titlesUpdated": "Vault dosyalarında {{count}} callout başlığı güncellendi: {{oldTitle}} → {{newTitle}}",
+	"vault.filesUpdated":
+		"Vault dosyalarında {{count}} callout referansı güncellendi.",
+	"vault.idsUpdated":
+		"Vault dosyalarında {{count}} callout ID'si güncellendi: {{oldIds}} → {{newId}}",
+	"vault.titlesUpdated":
+		"Vault dosyalarında {{count}} callout başlığı güncellendi: {{oldTitle}} → {{newTitle}}",
 	"vault.replaceWith": "Şununla değiştir:",
 	"vault.deleteWithout": "Değiştirmeden sil",
 	"vault.confirmDelete": "Onayla",
 	"vault.confirmReplace": "Değiştir",
-	"vault.replacePromptInUse": '"{{name}}" {{files}} dosyada {{count}} kez kullanılıyor. Onu değiştirmek için bir callout seçin:',
+	"vault.replacePromptInUse":
+		'"{{name}}" {{files}} dosyada {{count}} kez kullanılıyor. Onu değiştirmek için bir callout seçin:',
 	"vault.replacePromptUnused": '"{{name}}" yerine geçecek bir callout seçin:',
-	"vault.noReplacementAvailable": "Bunu değiştirmek için başka callout mevcut değil.",
-	"vault.convertedToPlainText": "{{files}} dosyadaki {{blocks}} callout bloğu düz metne dönüştürüldü.",
-	"vault.resetAliasWarning": "{{files}} dosyadaki {{count}} referans özel takma adlar kullanıyor: {{aliases}}. Sıfırlamadan sonra çalışmayacaklar. Devam edilsin mi?",
+	"vault.noReplacementAvailable":
+		"Bunu değiştirmek için başka callout mevcut değil.",
+	"vault.convertedToPlainText":
+		"{{files}} dosyadaki {{blocks}} callout bloğu düz metne dönüştürüldü.",
+	"vault.resetAliasWarning":
+		"{{files}} dosyadaki {{count}} referans özel takma adlar kullanıyor: {{aliases}}. Sıfırlamadan sonra çalışmayacaklar. Devam edilsin mi?",
 	"vault.resetConfirm": "Sıfırla",
-	"vault.resetAllInUse": "⚠ {{files}} dosyadaki {{count}} callout referansı silinecek özel callout türleri kullanıyor.",
+	"vault.resetAllInUse":
+		"⚠ {{files}} dosyadaki {{count}} callout referansı silinecek özel callout türleri kullanıyor.",
 
 	"vaultStats.title": "Callout istatistikleri",
 	"vaultStats.totalCallouts": "Toplam callout",
@@ -528,68 +590,107 @@ export const tr: Record<string, string> = {
 	"vaultStats.close": "Kapat",
 
 	"import.title": "İçe aktarma sorunları",
-	"import.reportLeadIn": "İçe aktardığınız dosya değiştirilmiş gibi görünüyor. İşte sorunların listesi:",
-	"import.reportLeadInFatal": "Bu dosya bir Callout Studio dışa aktarması gibi görünmüyor. İçe aktarılamaz:",
+	"import.reportLeadIn":
+		"İçe aktardığınız dosya değiştirilmiş gibi görünüyor. İşte sorunların listesi:",
+	"import.reportLeadInFatal":
+		"Bu dosya bir Callout Studio dışa aktarması gibi görünmüyor. İçe aktarılamaz:",
 	"import.entryHeading": "Giriş {{index}} — {{label}}",
-	"import.summary": "{{total}} girişten {{valid}} tanesi geçerli · {{issues}} sorun bulundu.",
+	"import.summary":
+		"{{total}} girişten {{valid}} tanesi geçerli · {{issues}} sorun bulundu.",
 	"import.btnCancel": "İptal",
 	"import.btnImportValid": "Yalnızca geçerli olanları içe aktar ({{count}})",
-	"import.err.notRecognized": "Tanınmayan dosya: bir callout tanımları dizisi veya bir Callout Studio dışa aktarımı bekleniyordu.",
-	"import.warn.settingsIgnored": "Ayarlar bloğu geçerli bir nesne değildi ve yoksayıldı.",
-	"import.warn.invalidGradient": "Arka plan gradyanı geçersizdi ve yoksayıldı.",
+	"import.err.notRecognized":
+		"Tanınmayan dosya: bir callout tanımları dizisi veya bir Callout Studio dışa aktarımı bekleniyordu.",
+	"import.warn.settingsIgnored":
+		"Ayarlar bloğu geçerli bir nesne değildi ve yoksayıldı.",
+	"import.warn.invalidGradient":
+		"Arka plan gradyanı geçersizdi ve yoksayıldı.",
 	"import.err.parseFailed": "Dosya geçerli JSON değil ve ayrıştırılamadı.",
 	"import.err.entryNotObject": "Giriş bir nesne olmalıdır.",
-	"import.err.requiredMissing": '"{{field}}" zorunlu alanı eksik veya yanlış türde.',
+	"import.err.requiredMissing":
+		'"{{field}}" zorunlu alanı eksik veya yanlış türde.',
 	"import.err.idEmpty": "ID boş olmamalıdır.",
-	"import.err.idTooLong": '"{{value}}" ID\'si {{length}} karakter; maksimum {{max}}.',
-	"import.err.idBadChar": '"{{value}}" ID\'si geçersiz karakterler içeriyor ("|", "[", "]", sekmeler ve satır sonları kullanılamaz).',
+	"import.err.idTooLong":
+		'"{{value}}" ID\'si {{length}} karakter; maksimum {{max}}.',
+	"import.err.idBadChar":
+		'"{{value}}" ID\'si geçersiz karakterler içeriyor ("|", "[", "]", sekmeler ve satır sonları kullanılamaz).',
 	"import.err.displayNameEmpty": "Görünen ad boş olmamalıdır.",
-	"import.err.displayNameTooLong": "Görünen ad {{length}} karakter; maksimum {{max}}.",
-	"import.err.boolField": '"{{field}}" bir boole (true veya false) olmalıdır.',
+	"import.err.displayNameTooLong":
+		"Görünen ad {{length}} karakter; maksimum {{max}}.",
+	"import.err.boolField":
+		'"{{field}}" bir boole (true veya false) olmalıdır.',
 	"import.err.iconNotObject": "Simge bir nesne olmalıdır.",
-	"import.err.iconTypeInvalid": "\"{{value}}\" simge türü şunlardan biri olmalıdır: {{types}}.",
-	"import.warn.iconFieldIgnored": "\"{{field}}\" yalnızca Material simgeleri için geçerlidir ve simge türü {{type}} için yoksayılır.",
+	"import.err.iconTypeInvalid":
+		'"{{value}}" simge türü şunlardan biri olmalıdır: {{types}}.',
+	"import.warn.iconFieldIgnored":
+		'"{{field}}" yalnızca Material simgeleri için geçerlidir ve simge türü {{type}} için yoksayılır.',
 	"import.err.iconValueEmpty": "Simge değeri boş olmayan bir dize olmalıdır.",
-	"import.err.iconValueTooLong": "Simge değeri olağandışı uzun ({{length}} karakter).",
-	"import.err.materialStyle": '"{{value}}" Material simge stili şunlardan biri olmalıdır: outlined, filled, rounded, sharp.',
-	"import.err.materialWeight": '"{{value}}" Material simge ağırlığı 100 ile 700 arasında, 100\'er adımlarla tam sayı olmalıdır.',
-	"import.warn.iconRecolorIgnored": "\"recolor\" yalnızca kendi resimleriniz için geçerlidir ve simge türü {{type}} için yoksayılır.",
-	"import.err.iconRecolorInvalid": "\"recolor\" true veya false olmalıdır (\"{{value}}\" alındı).",
-	"import.err.colorInvalid": '"{{field}}" "#448aff" gibi bir onaltılık renk olmalıdır ("{{value}}" alındı).',
-	"import.err.numberRange": '"{{field}}" {{min}} ile {{max}} arasında bir sayı olmalıdır ("{{value}}" alındı).',
-	"import.err.iconSizeRange": '"{{field}}" {{min}} ile {{max}} arasında bir sayı olmalıdır ("{{value}}" alındı).',
+	"import.err.iconValueTooLong":
+		"Simge değeri olağandışı uzun ({{length}} karakter).",
+	"import.err.materialStyle":
+		'"{{value}}" Material simge stili şunlardan biri olmalıdır: outlined, filled, rounded, sharp.',
+	"import.err.materialWeight":
+		'"{{value}}" Material simge ağırlığı 100 ile 700 arasında, 100\'er adımlarla tam sayı olmalıdır.',
+	"import.warn.iconRecolorIgnored":
+		'"recolor" yalnızca kendi resimleriniz için geçerlidir ve simge türü {{type}} için yoksayılır.',
+	"import.err.iconRecolorInvalid":
+		'"recolor" true veya false olmalıdır ("{{value}}" alındı).',
+	"import.err.colorInvalid":
+		'"{{field}}" "#448aff" gibi bir onaltılık renk olmalıdır ("{{value}}" alındı).',
+	"import.err.numberRange":
+		'"{{field}}" {{min}} ile {{max}} arasında bir sayı olmalıdır ("{{value}}" alındı).',
+	"import.err.iconSizeRange":
+		'"{{field}}" {{min}} ile {{max}} arasında bir sayı olmalıdır ("{{value}}" alındı).',
 	"import.err.aliasesNotArray": '"aliases" bir dize dizisi olmalıdır.',
 	"import.err.aliasNotString": "Takma ad bir dize olmalıdır.",
 	"import.err.aliasDup": '"{{value}}" takma adı bu giriş içinde yineleniyor.',
-	"import.err.tooManyIds": "Çok fazla ID ({{count}}); her callout en fazla {{max}} ID'ye sahip olabilir (birincil + takma adlar).",
-	"import.err.metadataShape": '"metadata" tüm değerleri dize olan bir nesne olmalıdır.',
+	"import.err.tooManyIds":
+		"Çok fazla ID ({{count}}); her callout en fazla {{max}} ID'ye sahip olabilir (birincil + takma adlar).",
+	"import.err.metadataShape":
+		'"metadata" tüm değerleri dize olan bir nesne olmalıdır.',
 	"import.warn.unknownFields": "Bilinmeyen alanlar yoksayıldı: {{fields}}.",
-	"import.err.duplicateInFile": '"{{value}}" ID/takma adı bu dosyadaki #{{first}} girişi tarafından zaten kullanılıyor.',
-	"import.err.aliasConflict": '"{{value}}" takma adı vault\'unuzdaki başka bir callout ("{{other}}") tarafından zaten kullanılıyor.',
-	"import.warn.defaultFoldedAutofix": '"defaultFolded" true iken "foldable" false\'tu; defaultFolded false\'a sıfırlandı.',
-	"import.warn.imageMissing": "Bu Callout, dosyada ve bu vault'ta bulunmayan bir resim kullanıyor, bu nedenle yeni bir resim sağlayana kadar yer tutucu simge gösterecek.",
+	"import.err.duplicateInFile":
+		'"{{value}}" ID/takma adı bu dosyadaki #{{first}} girişi tarafından zaten kullanılıyor.',
+	"import.err.aliasConflict":
+		'"{{value}}" takma adı vault\'unuzdaki başka bir callout ("{{other}}") tarafından zaten kullanılıyor.',
+	"import.warn.defaultFoldedAutofix":
+		'"defaultFolded" true iken "foldable" false\'tu; defaultFolded false\'a sıfırlandı.',
+	"import.warn.imageMissing":
+		"Bu Callout, dosyada ve bu vault'ta bulunmayan bir resim kullanıyor, bu nedenle yeni bir resim sağlayana kadar yer tutucu simge gösterecek.",
 
-		"import.err.paletteIdInvalid": "\"paletteId\" boş olmayan bir metin ID'si olmalıdır (\"{{value}}\" alındı).",
-	"import.warn.iconNameUnknown": "\"{{value}}\" simgesi {{type}} içinde bulunmuyor, bu nedenle varsayılan simge kullanıldı.",
-	"import.warn.cmIconUnknownNew": "\"{{value}}\" simgesi Obsidian içinde bulunmuyor, bu nedenle varsayılan simge kullanıldı.",
-	"import.warn.cmIconUnknownExisting": "\"{{value}}\" simgesi Obsidian içinde bulunmuyor, bu nedenle \"{{id}}\" zaten sahip olduğu simgeyi korudu.",
+	"import.err.paletteIdInvalid":
+		'"paletteId" boş olmayan bir metin ID\'si olmalıdır ("{{value}}" alındı).',
+	"import.warn.iconNameUnknown":
+		'"{{value}}" simgesi {{type}} içinde bulunmuyor, bu nedenle varsayılan simge kullanıldı.',
+	"import.warn.cmIconUnknownNew":
+		'"{{value}}" simgesi Obsidian içinde bulunmuyor, bu nedenle varsayılan simge kullanıldı.',
+	"import.warn.cmIconUnknownExisting":
+		'"{{value}}" simgesi Obsidian içinde bulunmuyor, bu nedenle "{{id}}" zaten sahip olduğu simgeyi korudu.',
 	"import.chooseSource": "Şuradan içe aktar",
 	"import.sourceStudio": "Callout Studio",
-	"import.sourceStudioDesc": "Callout Studio'dan dışa aktarılmış bir .json dosyası yükleyin.",
+	"import.sourceStudioDesc":
+		"Callout Studio'dan dışa aktarılmış bir .json dosyası yükleyin.",
 	"import.sourceCalloutManager": "Callout Manager",
-	"import.sourceCalloutManagerDesc": "Callout Manager'ın Copy düğmesinden kopyaladığınız stilleri yapıştırın.",
+	"import.sourceCalloutManagerDesc":
+		"Callout Manager'ın Copy düğmesinden kopyaladığınız stilleri yapıştırın.",
 	"import.sourceAdmonition": "Admonition",
 	"import.sourceAdmonitionDesc": "Henüz kullanılamıyor.",
-	"import.sourceAdmonitionNotice": "Admonition'dan içe aktarma henüz desteklenmiyor.",
+	"import.sourceAdmonitionNotice":
+		"Admonition'dan içe aktarma henüz desteklenmiyor.",
 	"import.cmTitle": "Callout Manager'dan İçe Aktar",
-	"import.cmInstructions": "Callout Manager'da, özelleştirilmiş callout stillerinizi kopyalamak için Copy düğmesini kullanın, ardından aşağıya yapıştırın.",
+	"import.cmInstructions":
+		"Callout Manager'da, özelleştirilmiş callout stillerinizi kopyalamak için Copy düğmesini kullanın, ardından aşağıya yapıştırın.",
 	"import.cmPlaceholder": "Kopyalanan stilleri buraya yapıştırın…",
 	"import.cmBtnCancel": "İptal",
 	"import.cmBtnImport": "İçe aktar",
-	"import.err.cmNoBlocksFound": "Yapıştırılan metinde Callout Manager stilleri bulunamadı.",
-	"import.err.cmNoColorForNew": "Yeni callout \"{{value}}\" için kullanılabilir bir renk bulunamadı; atlandı.",
-	"import.err.cmIdConflict": "\"{{value}}\" ID'si zaten başka bir callout (\"{{other}}\") tarafından takma ad olarak kullanılıyor ve atlandı.",
+	"import.err.cmNoBlocksFound":
+		"Yapıştırılan metinde Callout Manager stilleri bulunamadı.",
+	"import.err.cmNoColorForNew":
+		'Yeni callout "{{value}}" için kullanılabilir bir renk bulunamadı; atlandı.',
+	"import.err.cmIdConflict":
+		'"{{value}}" ID\'si zaten başka bir callout ("{{other}}") tarafından takma ad olarak kullanılıyor ve atlandı.',
 
-	"footer.tagline": "Geri bildiriminiz, yorumlarınız veya önerileriniz var mı? Duymak isterim!",
+	"footer.tagline":
+		"Geri bildiriminiz, yorumlarınız veya önerileriniz var mı? Duymak isterim!",
 	"footer.madeBy": "Niv tarafından yapıldı  •  ",
 };

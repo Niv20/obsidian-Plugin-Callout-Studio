@@ -152,7 +152,8 @@ export const de: Record<string, string> = {
 	"notice.exported": "Callouts nach callout-studio-export.json exportiert",
 	"notice.importedJSON": "{{count}} Callout-Typ(en) aus JSON importiert.",
 	"notice.importedSettings": "Plugin-Einstellungen importiert.",
-	"notice.importedCalloutManager": "Aus Callout Manager importiert: {{created}} erstellt, {{updated}} aktualisiert.",
+	"notice.importedCalloutManager":
+		"Aus Callout Manager importiert: {{created}} erstellt, {{updated}} aktualisiert.",
 	"notice.noNewJSON":
 		"Keine neuen Callout-Typen importiert (IDs möglicherweise bereits vorhanden).",
 	"notice.iconDownloadFailed":
@@ -183,6 +184,7 @@ export const de: Record<string, string> = {
 		"Diese ID ist mit dem Anzeigenamen verknüpft und kann nicht gelöscht werden — ändern Sie den Namen, um sie zu ändern",
 	"editor.icon": "Symbol",
 	"editor.pickIcon": "Symbol auswählen",
+	"editor.resetIcon": "Symbol auf Standard zurücksetzen",
 	"editor.livePreview": "Live-Vorschau",
 	"editor.iconAdjustment": "Symbolanpassung",
 	"editor.picture": "Bild",
@@ -190,6 +192,7 @@ export const de: Record<string, string> = {
 	"editor.horizontalOffset": "Horizontaler Versatz",
 	"editor.verticalOffset": "Vertikaler Versatz",
 	"editor.colors": "Farben",
+	"editor.resetColors": "Farben auf Standard zurücksetzen",
 	"editor.paletteDeleted": "Gelöschte Farbe",
 	"editor.paletteGroupObsidian": "Obsidian-Callouts",
 	"editor.paletteGroupPresets": "Farbvoreinstellungen",
@@ -664,26 +667,37 @@ export const de: Record<string, string> = {
 	"import.warn.imageMissing":
 		"Dieser Callout verwendet ein Bild, das weder in der Datei noch im Vault vorhanden ist; es wird ein Platzhalter-Symbol angezeigt, bis Sie ein neues festlegen.",
 
-		"import.err.paletteIdInvalid": "\"paletteId\" muss eine nicht leere Text-ID sein (erhalten: \"{{value}}\").",
-	"import.warn.iconNameUnknown": "Es gibt kein Symbol \"{{value}}\" in {{type}}, daher wurde das Standardsymbol verwendet.",
-	"import.warn.cmIconUnknownNew": "Es gibt kein Symbol \"{{value}}\" in Obsidian, daher wurde das Standardsymbol verwendet.",
-	"import.warn.cmIconUnknownExisting": "Es gibt kein Symbol \"{{value}}\" in Obsidian, daher hat \"{{id}}\" das bereits vorhandene Symbol behalten.",
+	"import.err.paletteIdInvalid":
+		'"paletteId" muss eine nicht leere Text-ID sein (erhalten: "{{value}}").',
+	"import.warn.iconNameUnknown":
+		'Es gibt kein Symbol "{{value}}" in {{type}}, daher wurde das Standardsymbol verwendet.',
+	"import.warn.cmIconUnknownNew":
+		'Es gibt kein Symbol "{{value}}" in Obsidian, daher wurde das Standardsymbol verwendet.',
+	"import.warn.cmIconUnknownExisting":
+		'Es gibt kein Symbol "{{value}}" in Obsidian, daher hat "{{id}}" das bereits vorhandene Symbol behalten.',
 	"import.chooseSource": "Importieren aus",
 	"import.sourceStudio": "Callout Studio",
-	"import.sourceStudioDesc": "Eine aus Callout Studio exportierte .json-Datei laden.",
+	"import.sourceStudioDesc":
+		"Eine aus Callout Studio exportierte .json-Datei laden.",
 	"import.sourceCalloutManager": "Callout Manager",
-	"import.sourceCalloutManagerDesc": "Füge die Stile ein, die du über den Copy-Button des Callout Managers kopiert hast.",
+	"import.sourceCalloutManagerDesc":
+		"Füge die Stile ein, die du über den Copy-Button des Callout Managers kopiert hast.",
 	"import.sourceAdmonition": "Admonition",
 	"import.sourceAdmonitionDesc": "Noch nicht verfügbar.",
-	"import.sourceAdmonitionNotice": "Das Importieren aus Admonition wird noch nicht unterstützt.",
+	"import.sourceAdmonitionNotice":
+		"Das Importieren aus Admonition wird noch nicht unterstützt.",
 	"import.cmTitle": "Aus Callout Manager importieren",
-	"import.cmInstructions": "Verwende in Callout Manager den Copy-Button, um deine angepassten Callout-Stile zu kopieren, und füge sie dann unten ein.",
+	"import.cmInstructions":
+		"Verwende in Callout Manager den Copy-Button, um deine angepassten Callout-Stile zu kopieren, und füge sie dann unten ein.",
 	"import.cmPlaceholder": "Kopierte Stile hier einfügen…",
 	"import.cmBtnCancel": "Abbrechen",
 	"import.cmBtnImport": "Importieren",
-	"import.err.cmNoBlocksFound": "Im eingefügten Text wurden keine Callout Manager-Stile gefunden.",
-	"import.err.cmNoColorForNew": "Für den neuen Callout \"{{value}}\" wurde keine verwendbare Farbe gefunden; er wurde übersprungen.",
-	"import.err.cmIdConflict": "Die ID \"{{value}}\" wird bereits als Alias von einem anderen Callout (\"{{other}}\") verwendet und wurde übersprungen.",
+	"import.err.cmNoBlocksFound":
+		"Im eingefügten Text wurden keine Callout Manager-Stile gefunden.",
+	"import.err.cmNoColorForNew":
+		'Für den neuen Callout "{{value}}" wurde keine verwendbare Farbe gefunden; er wurde übersprungen.',
+	"import.err.cmIdConflict":
+		'Die ID "{{value}}" wird bereits als Alias von einem anderen Callout ("{{other}}") verwendet und wurde übersprungen.',
 
 	"footer.tagline":
 		"Feedback, Kommentare oder Vorschläge? Ich würde mich freuen, von Ihnen zu hören!",

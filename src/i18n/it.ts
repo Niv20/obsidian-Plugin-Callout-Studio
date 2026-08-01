@@ -152,7 +152,8 @@ export const it: Record<string, string> = {
 	"notice.exported": "Callout esportati in callout-studio-export.json",
 	"notice.importedJSON": "Importato/i {{count}} tipo/i di callout da JSON.",
 	"notice.importedSettings": "Impostazioni del plugin importate.",
-	"notice.importedCalloutManager": "Importato da Callout Manager: {{created}} creati, {{updated}} aggiornati.",
+	"notice.importedCalloutManager":
+		"Importato da Callout Manager: {{created}} creati, {{updated}} aggiornati.",
 	"notice.noNewJSON":
 		"Nessun nuovo tipo di callout importato (gli ID potrebbero già esistere).",
 	"notice.iconDownloadFailed":
@@ -181,6 +182,7 @@ export const it: Record<string, string> = {
 		"Questo ID è collegato al nome visualizzato e non può essere eliminato — modifica il nome per cambiarlo",
 	"editor.icon": "Icona",
 	"editor.pickIcon": "Scegli icona",
+	"editor.resetIcon": "Ripristina icona predefinita",
 	"editor.livePreview": "Anteprima live",
 	"editor.iconAdjustment": "Regolazione icona",
 	"editor.picture": "Immagine",
@@ -188,6 +190,7 @@ export const it: Record<string, string> = {
 	"editor.horizontalOffset": "Offset orizzontale",
 	"editor.verticalOffset": "Offset verticale",
 	"editor.colors": "Colori",
+	"editor.resetColors": "Ripristina colori predefiniti",
 	"editor.paletteDeleted": "Colore eliminato",
 	"editor.paletteGroupObsidian": "Callout Obsidian",
 	"editor.paletteGroupPresets": "Preimpostazioni colore",
@@ -662,26 +665,37 @@ export const it: Record<string, string> = {
 	"import.warn.imageMissing":
 		"Questo Callout usa un'immagine che non è nel file e non è in questo vault, quindi mostrerà un'icona segnaposto finché non ne fornisci una nuova.",
 
-		"import.err.paletteIdInvalid": "\"paletteId\" deve essere un ID testo non vuoto (ricevuto \"{{value}}\").",
-	"import.warn.iconNameUnknown": "Non c'è nessuna icona \"{{value}}\" in {{type}}, quindi è stata usata l'icona predefinita.",
-	"import.warn.cmIconUnknownNew": "Non c'è nessuna icona \"{{value}}\" in Obsidian, quindi è stata usata l'icona predefinita.",
-	"import.warn.cmIconUnknownExisting": "Non c'è nessuna icona \"{{value}}\" in Obsidian, quindi \"{{id}}\" ha mantenuto l'icona che aveva già.",
+	"import.err.paletteIdInvalid":
+		'"paletteId" deve essere un ID testo non vuoto (ricevuto "{{value}}").',
+	"import.warn.iconNameUnknown":
+		"Non c'è nessuna icona \"{{value}}\" in {{type}}, quindi è stata usata l'icona predefinita.",
+	"import.warn.cmIconUnknownNew":
+		"Non c'è nessuna icona \"{{value}}\" in Obsidian, quindi è stata usata l'icona predefinita.",
+	"import.warn.cmIconUnknownExisting":
+		'Non c\'è nessuna icona "{{value}}" in Obsidian, quindi "{{id}}" ha mantenuto l\'icona che aveva già.',
 	"import.chooseSource": "Importa da",
 	"import.sourceStudio": "Callout Studio",
-	"import.sourceStudioDesc": "Carica un file .json esportato da Callout Studio.",
+	"import.sourceStudioDesc":
+		"Carica un file .json esportato da Callout Studio.",
 	"import.sourceCalloutManager": "Callout Manager",
-	"import.sourceCalloutManagerDesc": "Incolla gli stili copiati dal pulsante Copy di Callout Manager.",
+	"import.sourceCalloutManagerDesc":
+		"Incolla gli stili copiati dal pulsante Copy di Callout Manager.",
 	"import.sourceAdmonition": "Admonition",
 	"import.sourceAdmonitionDesc": "Non ancora disponibile.",
-	"import.sourceAdmonitionNotice": "L'importazione da Admonition non è ancora supportata.",
+	"import.sourceAdmonitionNotice":
+		"L'importazione da Admonition non è ancora supportata.",
 	"import.cmTitle": "Importa da Callout Manager",
-	"import.cmInstructions": "In Callout Manager, usa il pulsante Copy per copiare i tuoi stili callout personalizzati, poi incollali qui sotto.",
+	"import.cmInstructions":
+		"In Callout Manager, usa il pulsante Copy per copiare i tuoi stili callout personalizzati, poi incollali qui sotto.",
 	"import.cmPlaceholder": "Incolla qui gli stili copiati…",
 	"import.cmBtnCancel": "Annulla",
 	"import.cmBtnImport": "Importa",
-	"import.err.cmNoBlocksFound": "Non sono stati trovati stili di Callout Manager nel testo incollato.",
-	"import.err.cmNoColorForNew": "Nessun colore utilizzabile è stato trovato per il nuovo callout \"{{value}}\"; è stato ignorato.",
-	"import.err.cmIdConflict": "L'ID \"{{value}}\" è già utilizzato come alias da un altro callout (\"{{other}}\") ed è stato ignorato.",
+	"import.err.cmNoBlocksFound":
+		"Non sono stati trovati stili di Callout Manager nel testo incollato.",
+	"import.err.cmNoColorForNew":
+		'Nessun colore utilizzabile è stato trovato per il nuovo callout "{{value}}"; è stato ignorato.',
+	"import.err.cmIdConflict":
+		'L\'ID "{{value}}" è già utilizzato come alias da un altro callout ("{{other}}") ed è stato ignorato.',
 
 	"footer.tagline":
 		"Hai feedback, commenti o suggerimenti? Mi farebbe piacere sentirti!",

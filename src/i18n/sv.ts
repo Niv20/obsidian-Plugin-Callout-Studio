@@ -10,23 +10,31 @@ export const sv: Record<string, string> = {
 	"settings.fallbackTag": "Standard",
 	"settings.fallbackTagAuto": "Automatisk standard",
 	"settings.rescanVault": "Skanna vault igen",
-	"settings.rescanVaultDesc": "Hittar okända callout-ID:n i anteckningar och lägger till dem som reservrader.",
+	"settings.rescanVaultDesc":
+		"Hittar okända callout-ID:n i anteckningar och lägger till dem som reservrader.",
 	"settings.rescanVaultHintAction": "Skanna nu",
-	"settings.rescanComplete": "Omskanningen klar: {{count}} ny(a) callout(s) tillagd(a).",
-	"replaceModal.deleteWithoutReplaceSuffix": "(faller tillbaka till standard)",
+	"settings.rescanComplete":
+		"Omskanningen klar: {{count}} ny(a) callout(s) tillagd(a).",
+	"replaceModal.deleteWithoutReplaceSuffix":
+		"(faller tillbaka till standard)",
 
 	"firstRun.title": "Hitta befintliga callouts i ditt vault?",
-	"firstRun.body": "Callout Studio kan skanna ditt vault för att hitta callouts du redan använder, så att de visas i inställningslistan och antar din reservstil.",
-	"firstRun.heavyVaultNote": "Ditt vault har {{count}} Markdown-filer — skanningen kan ta några sekunder.",
-	"firstRun.laterHint": "Du kan alltid köra detta senare från Inställningar → Vault-insikter och underhåll → Skanna vault igen.",
+	"firstRun.body":
+		"Callout Studio kan skanna ditt vault för att hitta callouts du redan använder, så att de visas i inställningslistan och antar din reservstil.",
+	"firstRun.heavyVaultNote":
+		"Ditt vault har {{count}} Markdown-filer — skanningen kan ta några sekunder.",
+	"firstRun.laterHint":
+		"Du kan alltid köra detta senare från Inställningar → Vault-insikter och underhåll → Skanna vault igen.",
 	"firstRun.scanNow": "Skanna nu",
 	"firstRun.noThanks": "Nej tack",
-	"firstRun.autoScanComplete": "Callout Studio skannade ditt vault och lade till {{count}} callout(s).",
+	"firstRun.autoScanComplete":
+		"Callout Studio skannade ditt vault och lade till {{count}} callout(s).",
 	"firstRun.scanning": "Skannar",
 
 	"welcome.tooltip": "Om Callout Studio",
 	"welcome.title": "Välkommen till Callout Studio",
-	"welcome.tagline": "Din kompletta lösning för att hantera Obsidian-callouts.",
+	"welcome.tagline":
+		"Din kompletta lösning för att hantera Obsidian-callouts.",
 	"welcome.previewTitle": "Se det i action",
 	"welcome.sample":
 		"Med Callout Studio kan du skapa callouts med egen ikon, färger och namn.\n\n" +
@@ -39,10 +47,14 @@ export const sv: Record<string, string> = {
 		"Callout Studio har mycket mer att erbjuda! [Läs mer]({{repoUrl}}).\n",
 
 	"deleteModal.title": 'Ta bort callout "{{name}}"?',
-	"deleteModal.bodyInUse": "Denna callout förekommer {{count}} gång(er) i {{files}} fil(er).",
-	"deleteModal.bodyInUseExplain": "Borttagning konverterar dessa block till vanlig text — de förlorar sin stil och callout-rubrik.",
-	"deleteModal.replaceHint": "Du kan ersätta den med en annan callout, vilket bevarar vault-innehållet som en stilad callout.",
-	"deleteModal.bodyUnused": '"{{name}}" används inte i någon anteckning, men är en anpassad callout du skapat. Borttagning tar bort den från den här listan.',
+	"deleteModal.bodyInUse":
+		"Denna callout förekommer {{count}} gång(er) i {{files}} fil(er).",
+	"deleteModal.bodyInUseExplain":
+		"Borttagning konverterar dessa block till vanlig text — de förlorar sin stil och callout-rubrik.",
+	"deleteModal.replaceHint":
+		"Du kan ersätta den med en annan callout, vilket bevarar vault-innehållet som en stilad callout.",
+	"deleteModal.bodyUnused":
+		'"{{name}}" används inte i någon anteckning, men är en anpassad callout du skapat. Borttagning tar bort den från den här listan.',
 	"deleteModal.replaceInstead": "Ersätt istället",
 	"deleteModal.deleteInUse": "Ta bort (konvertera till vanlig text)",
 	"deleteModal.deleteUnused": "Ta bort callout",
@@ -60,9 +72,12 @@ export const sv: Record<string, string> = {
 	"settings.importExport": "Importera / exportera",
 	"settings.import": "Importera",
 	"settings.export": "Exportera",
-	"settings.importDesc": "Importera dina Callout Studio-data från ett annat vault med en JSON-fil.",
-	"settings.exportDesc": "Spara alla dina anpassade callout-typer i JSON-format.",
-	"settings.importConflictNotice": "{{count}} callout-typ(er) importerade; {{overwritten}} befintlig(a) post(er) skrevs över.",
+	"settings.importDesc":
+		"Importera dina Callout Studio-data från ett annat vault med en JSON-fil.",
+	"settings.exportDesc":
+		"Spara alla dina anpassade callout-typer i JSON-format.",
+	"settings.importConflictNotice":
+		"{{count}} callout-typ(er) importerade; {{overwritten}} befintlig(a) post(er) skrevs över.",
 
 	"settings.addNewCallout": "+ lägg till callout",
 
@@ -78,7 +93,8 @@ export const sv: Record<string, string> = {
 	"settings.colorSwatchAria": "Accent: {{accent}} · Bakgrund: {{bg}}",
 
 	"settings.fallbackCallout": "Standard reservcallout",
-	"settings.fallbackCalloutDesc": "Okända callout-typer i ditt vault ärver stilen från denna callout.",
+	"settings.fallbackCalloutDesc":
+		"Okända callout-typer i ditt vault ärver stilen från denna callout.",
 
 	"settings.globalStyle": "Global callout-stil",
 	"settings.border": "Kanter",
@@ -112,49 +128,62 @@ export const sv: Record<string, string> = {
 	"settings.deletePaletteConfirm":
 		'Ta bort paletten "{{name}}"?\nCallouts som använder dess färger påverkas inte.',
 	"settings.enableAutocomplete": "Aktivera [! autokomplettering",
-	"settings.enableAutocompleteDesc": 'Visar förslag när du skriver "[!" i ett blockcitat i editorn. Välj en callout-typ från listan för att infoga en komplett callout-rubrik.',
+	"settings.enableAutocompleteDesc":
+		'Visar förslag när du skriver "[!" i ett blockcitat i editorn. Välj en callout-typ från listan för att infoga en komplett callout-rubrik.',
 
 	"settings.openHotkeys": "Callout Studio-genvägar",
-	"settings.openHotkeysDesc": "Öppnar Obsidians genväginställningar för Callout Studio-kommandon, där du kan välja egna genvägar för Skapa ny typ, Öppna inställningar, Ta bort callout och Lägg i callout. Inga genvägar tilldelas som standard.",
+	"settings.openHotkeysDesc":
+		"Öppnar Obsidians genväginställningar för Callout Studio-kommandon, där du kan välja egna genvägar för Skapa ny typ, Öppna inställningar, Ta bort callout och Lägg i callout. Inga genvägar tilldelas som standard.",
 	"settings.openHotkeysButton": "Öppna genväginställningar",
-
 
 	"settings.vaultMaintenance": "Vault-insikter och underhåll",
 	"settings.vaultStats": "Callout-statistik",
-	"settings.vaultStatsDesc": "Räknar alla callout-block i dina Markdown-anteckningar och grupperar dem efter typ.",
+	"settings.vaultStatsDesc":
+		"Räknar alla callout-block i dina Markdown-anteckningar och grupperar dem efter typ.",
 	"settings.vaultStatsButton": "Visa statistik",
 	"settings.vaultStatsScanning": "Skannar",
 	"settings.resetAll": "Återställ",
-	"settings.resetAllDesc": "Tar bort alla användarcallouts, återställer inbyggda callouts, globala stilar (kanter, typsnittsskala, form), sparade färgpaletter, anpassningen av högerklicksmenyn och nedladdade Material-SVG:er.",
+	"settings.resetAllDesc":
+		"Tar bort alla användarcallouts, återställer inbyggda callouts, globala stilar (kanter, typsnittsskala, form), sparade färgpaletter, anpassningen av högerklicksmenyn och nedladdade Material-SVG:er.",
 	"settings.resetAllButton": "Återställ allt",
-	"settings.resetAllConfirm": "Detta tar bort alla anpassade callouts, återställer inbyggda callouts, globala stilar, sparade färgpaletter, anpassningen av högerklicksmenyn och alla cachade Material-SVG:er. Åtgärden kan inte ångras. Är du säker?",
+	"settings.resetAllConfirm":
+		"Detta tar bort alla anpassade callouts, återställer inbyggda callouts, globala stilar, sparade färgpaletter, anpassningen av högerklicksmenyn och alla cachade Material-SVG:er. Åtgärden kan inte ångras. Är du säker?",
 	"notice.resetAllDone": "Allt har återställts till standard.",
 
 	"notice.exported": "Callouts exporterade till callout-studio-export.json",
 	"notice.importedJSON": "{{count}} callout-typ(er) importerade från JSON.",
 	"notice.importedSettings": "Tilläggets inställningar importerade.",
-	"notice.importedCalloutManager": "Importerat från Callout Manager: {{created}} skapade, {{updated}} uppdaterade.",
-	"notice.noNewJSON": "Inga nya callout-typer importerades (ID:n kan redan finnas).",
-	"notice.iconDownloadFailed": 'Det gick inte att ladda ned Material-ikonen "{{name}}". Den kanske inte är tillgänglig för den här stilen/vikten, eller så är anslutningen offline.',
+	"notice.importedCalloutManager":
+		"Importerat från Callout Manager: {{created}} skapade, {{updated}} uppdaterade.",
+	"notice.noNewJSON":
+		"Inga nya callout-typer importerades (ID:n kan redan finnas).",
+	"notice.iconDownloadFailed":
+		'Det gick inte att ladda ned Material-ikonen "{{name}}". Den kanske inte är tillgänglig för den här stilen/vikten, eller så är anslutningen offline.',
 	"notice.nothingToWrap": "Inget att lägga i callout.",
 	"notice.cursorNotInsideCallout": "Markören är inte inne i en callout.",
-	"notice.openHotkeysFailed": "Det gick inte att öppna Obsidians genväginställningar.",
-	"notice.filterHotkeysFailed": "Obsidians genvägar öppnades, men Callout Studio-filtret kunde inte tillämpas.",
+	"notice.openHotkeysFailed":
+		"Det gick inte att öppna Obsidians genväginställningar.",
+	"notice.filterHotkeysFailed":
+		"Obsidians genvägar öppnades, men Callout Studio-filtret kunde inte tillämpas.",
 
 	"editor.editCallout": "Redigera callout",
 	"editor.newCallout": "Ny callout",
 	"editor.displayName": "Visningsnamn",
 	"editor.displayNameDesc": "Den läsbara etiketten som visas i gränssnittet",
-	"editor.displayNameBuiltIn": "Visningsnamnet kan inte ändras för inbyggda callouts",
+	"editor.displayNameBuiltIn":
+		"Visningsnamnet kan inte ändras för inbyggda callouts",
 	"editor.displayNamePlaceholder": "Min callout",
 	"editor.calloutIds": "Callout-ID:n",
-	"editor.calloutIdsDesc": "Alla identifierare för denna callout. Blanksteg är tillåtna.\nTryck Enter eller +-knappen för att lägga till.",
+	"editor.calloutIdsDesc":
+		"Alla identifierare för denna callout. Blanksteg är tillåtna.\nTryck Enter eller +-knappen för att lägga till.",
 	"editor.calloutIdsPlaceholder": "Lägg till ID",
 	"editor.addId": "Lägg till ID",
 	"editor.idLinkedToName": "Länkad till visningsnamnet",
-	"editor.idCannotDelete": "Detta ID är länkat till visningsnamnet och kan inte tas bort — redigera namnet för att ändra det",
+	"editor.idCannotDelete":
+		"Detta ID är länkat till visningsnamnet och kan inte tas bort — redigera namnet för att ändra det",
 	"editor.icon": "Ikon",
 	"editor.pickIcon": "Välj ikon",
+	"editor.resetIcon": "Återställ ikon till standard",
 	"editor.livePreview": "Live-förhandsvisning",
 	"editor.iconAdjustment": "Ikonjustering",
 	"editor.picture": "Bild",
@@ -162,14 +191,17 @@ export const sv: Record<string, string> = {
 	"editor.horizontalOffset": "Horisontell förskjutning",
 	"editor.verticalOffset": "Vertikal förskjutning",
 	"editor.colors": "Färger",
+	"editor.resetColors": "Återställ färger till standard",
 	"editor.paletteDeleted": "Borttagen färg",
 	"editor.paletteGroupObsidian": "Obsidian-callouts",
 	"editor.paletteGroupPresets": "Färgförinställningar",
 	"editor.paletteGroupCustom": "Anpassad",
 	"editor.paletteNewColor": "Ny färg…",
-	"editor.contrastWarning": "Låg kontrast mot bakgrunden — kan vara svårt att läsa",
+	"editor.contrastWarning":
+		"Låg kontrast mot bakgrunden — kan vara svårt att läsa",
 	"editor.foldable": "Vikbar",
-	"editor.foldableDesc": "Välj om callout kan vikas och vilket standardläge som ska gälla i hela vault.",
+	"editor.foldableDesc":
+		"Välj om callout kan vikas och vilket standardläge som ska gälla i hela vault.",
 	"editor.foldOff": "Av",
 	"editor.foldOpen": "Öppen som standard",
 	"editor.foldClosed": "Stängd som standard",
@@ -182,11 +214,15 @@ export const sv: Record<string, string> = {
 	"editor.idEmpty": "Minst ett ID krävs",
 	"editor.idExists": "En callout med detta ID finns redan",
 	"editor.idConflict": "Detta ID krockar med en befintlig callout",
-	"editor.idDashConflict": 'Obsidian skriver mellanslag som bindestreck, så detta ID krockar med "{{other}}"',
+	"editor.idDashConflict":
+		'Obsidian skriver mellanslag som bindestreck, så detta ID krockar med "{{other}}"',
 	"editor.untitledCallout": "Namnlös Callout",
-	"editor.loremIpsum": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-	"editor.loremIpsumShort": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-	"editor.sampleInlineText": "Här är en infogad [!{id}]-pill inuti ett stycke.",
+	"editor.loremIpsum":
+		"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+	"editor.loremIpsumShort":
+		"Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+	"editor.sampleInlineText":
+		"Här är en infogad [!{id}]-pill inuti ett stycke.",
 	"editor.previewReadOnly": "Livevyn kan inte redigeras",
 
 	// Palette editor modal
@@ -196,10 +232,12 @@ export const sv: Record<string, string> = {
 	"palette.namePlaceholder": "Min palett",
 	"palette.nameExists": "En palett med detta namn finns redan",
 	"palette.baseColor": "Basfärg",
-	"palette.baseColorHint": "Vi matchar automatiskt bakgrundsfärgen till den. Om du vill kan du styra den separat genom att {{link}}.",
+	"palette.baseColorHint":
+		"Vi matchar automatiskt bakgrundsfärgen till den. Om du vill kan du styra den separat genom att {{link}}.",
 	"palette.baseColorHintLink": "klicka här",
 	"palette.advancedColors": "Färger",
-	"palette.advancedColorsHint": "Redigerar färger för {{mode}}-läge - det andra läget uppdateras automatiskt. Byt Obsidian-tema för att kontrollera det.",
+	"palette.advancedColorsHint":
+		"Redigerar färger för {{mode}}-läge - det andra läget uppdateras automatiskt. Byt Obsidian-tema för att kontrollera det.",
 	"palette.revertHint": "Föredrar du en enda basfärg istället? {{link}}.",
 	"palette.revertHintLink": "Återställ",
 	"palette.lightMode": "Ljust",
@@ -286,20 +324,27 @@ export const sv: Record<string, string> = {
 	"iconPicker.searchRpgAwesome": "Sök i RPG Awesome",
 	"iconPicker.image": "Dina bilder",
 	"iconPicker.searchImage": "Sök i dina bilder",
-	"iconPicker.imageTooLarge": "{{name}} är för stor. Bilder måste vara under 5 MB.",
-	"iconPicker.imageUnsupported": "{{name}} är inte ett format som stöds. Använd SVG, PNG, JPEG eller WebP.",
-	"iconPicker.imageInvalidSvg": "{{name}} kunde inte läsas som en säker SVG och lades inte till.",
+	"iconPicker.imageTooLarge":
+		"{{name}} är för stor. Bilder måste vara under 5 MB.",
+	"iconPicker.imageUnsupported":
+		"{{name}} är inte ett format som stöds. Använd SVG, PNG, JPEG eller WebP.",
+	"iconPicker.imageInvalidSvg":
+		"{{name}} kunde inte läsas som en säker SVG och lades inte till.",
 	"iconPicker.imageDecodeFailed": "{{name}} kunde inte läsas som en bild.",
-	"iconPicker.imageDuplicate": "{{name}} finns redan i dina bilder. Byt namn på filen eller ta bort den befintliga bilden.",
+	"iconPicker.imageDuplicate":
+		"{{name}} finns redan i dina bilder. Byt namn på filen eller ta bort den befintliga bilden.",
 	"iconPicker.imageAdd": "Lägg till bilder",
-	"iconPicker.imageEmpty": "Inga bilder ännu. Lägg till en SVG-, PNG-, JPEG- eller WebP-fil från din dator eller dra den hit.",
+	"iconPicker.imageEmpty":
+		"Inga bilder ännu. Lägg till en SVG-, PNG-, JPEG- eller WebP-fil från din dator eller dra den hit.",
 	"iconPicker.imageDelete": "Ta bort",
 	"iconPicker.imageDeleteConfirm": "Ta bort „{{name}}“?",
-	"iconPicker.imageDeleteInUse": "{{count}} callouts använder den här bilden. De visar en platshållarikon tills du ger dem en ny.",
+	"iconPicker.imageDeleteInUse":
+		"{{count}} callouts använder den här bilden. De visar en platshållarikon tills du ger dem en ny.",
 	"iconPicker.imageRecolor": "Följ Callout-färg",
 	"iconPicker.allSources": "Alla källor",
 	"iconPicker.searchAllSources": "Sök i alla ikonfontskällor",
-	"iconPicker.sourcesNotDownloaded": "Inte inkluderat ännu: {{names}}. Välj en källa ovan för att ladda ner den.",
+	"iconPicker.sourcesNotDownloaded":
+		"Inte inkluderat ännu: {{names}}. Välj en källa ovan för att ladda ner den.",
 	"iconPicker.chooseSource": "Välj källa",
 	"iconPicker.sourceGroup": "{{name}} · {{count}}",
 
@@ -430,20 +475,26 @@ export const sv: Record<string, string> = {
 
 	// Downloadable icon packs
 	"iconPack.downloadTitle": "{{name}} har inte laddats ner än",
-	"iconPack.downloadDetail": "{{count}} ikoner · {{size}} · engångsnerladdning",
+	"iconPack.downloadDetail":
+		"{{count}} ikoner · {{size}} · engångsnerladdning",
 	"iconPack.download": "Ladda ner",
 	"iconPack.downloading": "Laddar ner {{name}}…",
-	"iconPack.downloadFailed": "Kunde inte ladda ner {{name}}. Kontrollera din anslutning och försök igen.",
+	"iconPack.downloadFailed":
+		"Kunde inte ladda ner {{name}}. Kontrollera din anslutning och försök igen.",
 	"iconPack.retry": "Försök igen",
-	"iconPack.faBrandsNotice": "Varumärkesikoner är varumärken som tillhör respektive ägare. Deras inkludering indikerar inte ett godkännande. Använd dem bara för att representera det företag, den produkt eller tjänst de hänvisar till.",
+	"iconPack.faBrandsNotice":
+		"Varumärkesikoner är varumärken som tillhör respektive ägare. Deras inkludering indikerar inte ett godkännande. Använd dem bara för att representera det företag, den produkt eller tjänst de hänvisar till.",
 	"iconPack.artworkRestored": "Ikonbilderna för {{names}} har laddats ner.",
-	"iconPack.diskWriteFailed": "Callout Studio kunde inte spara ikonpaketet på disk, så det måste laddas ner igen nästa gång. Ikonerna du väljer sparas fortfarande med dina inställningar.",
+	"iconPack.diskWriteFailed":
+		"Callout Studio kunde inte spara ikonpaketet på disk, så det måste laddas ner igen nästa gång. Ikonerna du väljer sparas fortfarande med dina inställningar.",
 
 	// Icon licences & credits
 	"credits.title": "Ikonlicenser och erkännanden",
-	"credits.intro": "Callout Studio använder flera öppna ikonbibliotek. Deras licenser återges nedan, tillsammans med vad som ändrades för att använda dem här.",
+	"credits.intro":
+		"Callout Studio använder flera öppna ikonbibliotek. Deras licenser återges nedan, tillsammans med vad som ändrades för att använda dem här.",
 	"credits.fullNotices": "Fullständiga tredjepartsmeddelanden",
-	"credits.pluginLicense": "Callout Studios egen kod är under 0BSD; ikonbiblioteken behåller sina egna licenser.",
+	"credits.pluginLicense":
+		"Callout Studios egen kod är under 0BSD; ikonbiblioteken behåller sina egna licenser.",
 
 	"contextMenu.editCallout": "Redigera callout-inställningar",
 	"contextMenu.copyMarkdown": "Kopiera callout Markdown",
@@ -456,19 +507,25 @@ export const sv: Record<string, string> = {
 	"contextMenu.deleteSection": "Ta bort rubriksektion",
 	"heading.toggleFold": "Växla vikning",
 	"settings.globalSettings": "Globala inställningar",
-	"settings.globalSettingsDesc": "Finjustera hur varje callout-typ ser ut i hela vault.",
-	"settings.globalSettingsRegularDesc": "Lägg till en callout-token i ett citat (t.ex. `> [!type]`) för att rendera Obsidians inbyggda callout-ruta. Du kan justera dess kant, hörnrundning, typsnittsskala och justering.",
-	"settings.globalSettingsHeadingDesc": "Lägg till en callout-token direkt efter rubrikens fyrkanter (t.ex. `## [!type]`) för att rendera den som en stiliserad callout-rubrik. Du kan justera dess kant, form och vertikalt mellanrum.",
-	"settings.globalSettingsInlineDesc": "Lägg till en callout-token var som helst i en textrad (t.ex. `[!type]`) för att rendera den som en liten infogad pill. Du kan justera dess kant och form.",
+	"settings.globalSettingsDesc":
+		"Finjustera hur varje callout-typ ser ut i hela vault.",
+	"settings.globalSettingsRegularDesc":
+		"Lägg till en callout-token i ett citat (t.ex. `> [!type]`) för att rendera Obsidians inbyggda callout-ruta. Du kan justera dess kant, hörnrundning, typsnittsskala och justering.",
+	"settings.globalSettingsHeadingDesc":
+		"Lägg till en callout-token direkt efter rubrikens fyrkanter (t.ex. `## [!type]`) för att rendera den som en stiliserad callout-rubrik. Du kan justera dess kant, form och vertikalt mellanrum.",
+	"settings.globalSettingsInlineDesc":
+		"Lägg till en callout-token var som helst i en textrad (t.ex. `[!type]`) för att rendera den som en liten infogad pill. Du kan justera dess kant och form.",
 	"settings.globalSettingsCustomize": "Anpassa",
 	"settings.calloutTypeRegular": "Vanlig callout",
 	"settings.calloutTypeHeading": "Rubrik-callout",
 	"settings.calloutTypeInline": "Infogad callout",
 	"settings.customizeMenu": "Anpassa menyalternativ",
-	"settings.customizeMenuDesc": "Välj vilka högerklicksåtgärder som visas för varje callout-typ och ändra deras ordning. Fungerar i källäge och Live Preview.",
+	"settings.customizeMenuDesc":
+		"Välj vilka högerklicksåtgärder som visas för varje callout-typ och ändra deras ordning. Fungerar i källäge och Live Preview.",
 	"settings.customizeMenuButton": "Anpassa menyalternativ",
 	"menuCustomize.title": "Anpassa högerklicksmenyn",
-	"menuCustomize.desc": "Aktivera eller inaktivera åtgärder och dra i handtaget för att ändra ordningen. Ändringar sparas automatiskt.",
+	"menuCustomize.desc":
+		"Aktivera eller inaktivera åtgärder och dra i handtaget för att ändra ordningen. Ändringar sparas automatiskt.",
 	"menuCustomize.regular": "Vanlig callout",
 	"menuCustomize.heading": "Rubrik-callout",
 	"menuCustomize.inline": "Infogad callout",
@@ -484,20 +541,28 @@ export const sv: Record<string, string> = {
 	"confirm.ok": "Ta bort",
 	"confirm.cancel": "Avbryt",
 
-	"vault.filesUpdated": "{{count}} callout-referens(er) uppdaterade i vault-filer.",
-	"vault.idsUpdated": "{{count}} callout-ID:n uppdaterade i vault-filer: {{oldIds}} → {{newId}}",
-	"vault.titlesUpdated": "{{count}} callout-rubrik(er) uppdaterade i vault-filer: {{oldTitle}} → {{newTitle}}",
+	"vault.filesUpdated":
+		"{{count}} callout-referens(er) uppdaterade i vault-filer.",
+	"vault.idsUpdated":
+		"{{count}} callout-ID:n uppdaterade i vault-filer: {{oldIds}} → {{newId}}",
+	"vault.titlesUpdated":
+		"{{count}} callout-rubrik(er) uppdaterade i vault-filer: {{oldTitle}} → {{newTitle}}",
 	"vault.replaceWith": "Ersätt med:",
 	"vault.deleteWithout": "Ta bort utan att ersätta",
 	"vault.confirmDelete": "Bekräfta",
 	"vault.confirmReplace": "Ersätt",
-	"vault.replacePromptInUse": '"{{name}}" används {{count}} gång(er) i {{files}} fil(er). Välj en callout att ersätta den med:',
+	"vault.replacePromptInUse":
+		'"{{name}}" används {{count}} gång(er) i {{files}} fil(er). Välj en callout att ersätta den med:',
 	"vault.replacePromptUnused": 'Välj en callout att ersätta "{{name}}" med:',
-	"vault.noReplacementAvailable": "Inga andra callouts tillgängliga för att ersätta denna.",
-	"vault.convertedToPlainText": "{{blocks}} callout-block i {{files}} fil(er) konverterade till vanlig text.",
-	"vault.resetAliasWarning": "{{count}} referens(er) i {{files}} fil(er) använder anpassade alias: {{aliases}}. Dessa slutar fungera efter återställning. Fortsätta?",
+	"vault.noReplacementAvailable":
+		"Inga andra callouts tillgängliga för att ersätta denna.",
+	"vault.convertedToPlainText":
+		"{{blocks}} callout-block i {{files}} fil(er) konverterade till vanlig text.",
+	"vault.resetAliasWarning":
+		"{{count}} referens(er) i {{files}} fil(er) använder anpassade alias: {{aliases}}. Dessa slutar fungera efter återställning. Fortsätta?",
 	"vault.resetConfirm": "Återställ",
-	"vault.resetAllInUse": "⚠ {{count}} callout-referens(er) i {{files}} fil(er) använder anpassade callout-typer som tas bort.",
+	"vault.resetAllInUse":
+		"⚠ {{count}} callout-referens(er) i {{files}} fil(er) använder anpassade callout-typer som tas bort.",
 
 	"vaultStats.title": "Callout-statistik",
 	"vaultStats.totalCallouts": "Totalt callouts",
@@ -520,68 +585,108 @@ export const sv: Record<string, string> = {
 	"vaultStats.close": "Stäng",
 
 	"import.title": "Importproblem",
-	"import.reportLeadIn": "Det verkar som att den importerade filen har ändrats. Här är problemlistan:",
-	"import.reportLeadInFatal": "Den här filen ser inte ut som en Callout Studio-export. Den kan inte importeras:",
+	"import.reportLeadIn":
+		"Det verkar som att den importerade filen har ändrats. Här är problemlistan:",
+	"import.reportLeadInFatal":
+		"Den här filen ser inte ut som en Callout Studio-export. Den kan inte importeras:",
 	"import.entryHeading": "Post {{index}} — {{label}}",
-	"import.summary": "{{valid}} av {{total}} poster är giltiga · {{issues}} problem hittades.",
+	"import.summary":
+		"{{valid}} av {{total}} poster är giltiga · {{issues}} problem hittades.",
 	"import.btnCancel": "Avbryt",
 	"import.btnImportValid": "Importera bara giltiga ({{count}})",
-	"import.err.notRecognized": "Okänd fil: en array med callout-definitioner eller en Callout Studio-export förväntades.",
-	"import.warn.settingsIgnored": "Inställningsblocket var inte ett giltigt objekt och ignorerades.",
-	"import.warn.invalidGradient": "Bakgrundsgradienten var ogiltig och ignorerades.",
-	"import.err.parseFailed": "Filen är inte giltig JSON och kunde inte tolkas.",
+	"import.err.notRecognized":
+		"Okänd fil: en array med callout-definitioner eller en Callout Studio-export förväntades.",
+	"import.warn.settingsIgnored":
+		"Inställningsblocket var inte ett giltigt objekt och ignorerades.",
+	"import.warn.invalidGradient":
+		"Bakgrundsgradienten var ogiltig och ignorerades.",
+	"import.err.parseFailed":
+		"Filen är inte giltig JSON och kunde inte tolkas.",
 	"import.err.entryNotObject": "Posten måste vara ett objekt.",
-	"import.err.requiredMissing": 'Det obligatoriska fältet "{{field}}" saknas eller har fel typ.',
+	"import.err.requiredMissing":
+		'Det obligatoriska fältet "{{field}}" saknas eller har fel typ.',
 	"import.err.idEmpty": "ID:t får inte vara tomt.",
-	"import.err.idTooLong": 'ID:t "{{value}}" är {{length}} tecken; maxvärdet är {{max}}.',
-	"import.err.idBadChar": 'ID:t "{{value}}" innehåller ogiltiga tecken ("|", "[", "]", tabbar och radbrytningar är inte tillåtna).',
+	"import.err.idTooLong":
+		'ID:t "{{value}}" är {{length}} tecken; maxvärdet är {{max}}.',
+	"import.err.idBadChar":
+		'ID:t "{{value}}" innehåller ogiltiga tecken ("|", "[", "]", tabbar och radbrytningar är inte tillåtna).',
 	"import.err.displayNameEmpty": "Visningsnamnet får inte vara tomt.",
-	"import.err.displayNameTooLong": "Visningsnamnet är {{length}} tecken; maxvärdet är {{max}}.",
-	"import.err.boolField": '"{{field}}" måste vara ett booleskt värde (true eller false).',
+	"import.err.displayNameTooLong":
+		"Visningsnamnet är {{length}} tecken; maxvärdet är {{max}}.",
+	"import.err.boolField":
+		'"{{field}}" måste vara ett booleskt värde (true eller false).',
 	"import.err.iconNotObject": "Ikonen måste vara ett objekt.",
-	"import.err.iconTypeInvalid": "Ikontypen \"{{value}}\" är inte en av: {{types}}.",
-	"import.warn.iconFieldIgnored": "\"{{field}}\" gäller bara för Material-ikoner och ignoreras för ikontyp {{type}}.",
+	"import.err.iconTypeInvalid":
+		'Ikontypen "{{value}}" är inte en av: {{types}}.',
+	"import.warn.iconFieldIgnored":
+		'"{{field}}" gäller bara för Material-ikoner och ignoreras för ikontyp {{type}}.',
 	"import.err.iconValueEmpty": "Ikonvärdet måste vara en icke-tom sträng.",
-	"import.err.iconValueTooLong": "Ikonvärdet är ovanligt långt ({{length}} tecken).",
-	"import.err.materialStyle": 'Material-ikonstilen "{{value}}" är inte en av: outlined, filled, rounded, sharp.',
-	"import.err.materialWeight": 'Material-ikontjockleken "{{value}}" måste vara ett heltal mellan 100 och 700, i steg om 100.',
-	"import.warn.iconRecolorIgnored": "\"recolor\" gäller bara för egna bilder och ignoreras för ikontyp {{type}}.",
-	"import.err.iconRecolorInvalid": "\"recolor\" måste vara true eller false (fick \"{{value}}\").",
-	"import.err.colorInvalid": '"{{field}}" måste vara en hexadecimal färg som "#448aff" (fick "{{value}}").',
-	"import.err.numberRange": '"{{field}}" måste vara ett tal mellan {{min}} och {{max}} (fick "{{value}}").',
-	"import.err.iconSizeRange": '"{{field}}" måste vara ett tal mellan {{min}} och {{max}} (fick "{{value}}").',
+	"import.err.iconValueTooLong":
+		"Ikonvärdet är ovanligt långt ({{length}} tecken).",
+	"import.err.materialStyle":
+		'Material-ikonstilen "{{value}}" är inte en av: outlined, filled, rounded, sharp.',
+	"import.err.materialWeight":
+		'Material-ikontjockleken "{{value}}" måste vara ett heltal mellan 100 och 700, i steg om 100.',
+	"import.warn.iconRecolorIgnored":
+		'"recolor" gäller bara för egna bilder och ignoreras för ikontyp {{type}}.',
+	"import.err.iconRecolorInvalid":
+		'"recolor" måste vara true eller false (fick "{{value}}").',
+	"import.err.colorInvalid":
+		'"{{field}}" måste vara en hexadecimal färg som "#448aff" (fick "{{value}}").',
+	"import.err.numberRange":
+		'"{{field}}" måste vara ett tal mellan {{min}} och {{max}} (fick "{{value}}").',
+	"import.err.iconSizeRange":
+		'"{{field}}" måste vara ett tal mellan {{min}} och {{max}} (fick "{{value}}").',
 	"import.err.aliasesNotArray": '"aliases" måste vara en array av strängar.',
 	"import.err.aliasNotString": "Aliaset måste vara en sträng.",
-	"import.err.aliasDup": 'Aliaset "{{value}}" är duplicerat inom den här posten.',
-	"import.err.tooManyIds": "För många ID:n ({{count}}); varje callout kan ha högst {{max}} ID:n (primärt + alias).",
-	"import.err.metadataShape": '"metadata" måste vara ett objekt vars alla värden är strängar.',
+	"import.err.aliasDup":
+		'Aliaset "{{value}}" är duplicerat inom den här posten.',
+	"import.err.tooManyIds":
+		"För många ID:n ({{count}}); varje callout kan ha högst {{max}} ID:n (primärt + alias).",
+	"import.err.metadataShape":
+		'"metadata" måste vara ett objekt vars alla värden är strängar.',
 	"import.warn.unknownFields": "Okända fält ignorerades: {{fields}}.",
-	"import.err.duplicateInFile": 'ID/aliaset "{{value}}" används redan av post #{{first}} i den här filen.',
-	"import.err.aliasConflict": 'Aliaset "{{value}}" används redan av en annan callout ("{{other}}") i ditt vault.',
-	"import.warn.defaultFoldedAutofix": '"defaultFolded" var true medan "foldable" var false; defaultFolded återställdes till false.',
-	"import.warn.imageMissing": "Den här Callout använder en bild som inte finns i filen och inte i det här vault, så den visar en platshållarikon tills du ger den en ny.",
+	"import.err.duplicateInFile":
+		'ID/aliaset "{{value}}" används redan av post #{{first}} i den här filen.',
+	"import.err.aliasConflict":
+		'Aliaset "{{value}}" används redan av en annan callout ("{{other}}") i ditt vault.',
+	"import.warn.defaultFoldedAutofix":
+		'"defaultFolded" var true medan "foldable" var false; defaultFolded återställdes till false.',
+	"import.warn.imageMissing":
+		"Den här Callout använder en bild som inte finns i filen och inte i det här vault, så den visar en platshållarikon tills du ger den en ny.",
 
-		"import.err.paletteIdInvalid": "\"paletteId\" måste vara ett icke-tomt text-ID (fick \"{{value}}\").",
-	"import.warn.iconNameUnknown": "Det finns ingen \"{{value}}\" ikon i {{type}}, så standardikonen användes istället.",
-	"import.warn.cmIconUnknownNew": "Det finns ingen \"{{value}}\" ikon i Obsidian, så standardikonen användes istället.",
-	"import.warn.cmIconUnknownExisting": "Det finns ingen \"{{value}}\" ikon i Obsidian, så \"{{id}}\" behöll ikonen det redan hade.",
+	"import.err.paletteIdInvalid":
+		'"paletteId" måste vara ett icke-tomt text-ID (fick "{{value}}").',
+	"import.warn.iconNameUnknown":
+		'Det finns ingen "{{value}}" ikon i {{type}}, så standardikonen användes istället.',
+	"import.warn.cmIconUnknownNew":
+		'Det finns ingen "{{value}}" ikon i Obsidian, så standardikonen användes istället.',
+	"import.warn.cmIconUnknownExisting":
+		'Det finns ingen "{{value}}" ikon i Obsidian, så "{{id}}" behöll ikonen det redan hade.',
 	"import.chooseSource": "Importera från",
 	"import.sourceStudio": "Callout Studio",
-	"import.sourceStudioDesc": "Läs in en .json-fil exporterad från Callout Studio.",
+	"import.sourceStudioDesc":
+		"Läs in en .json-fil exporterad från Callout Studio.",
 	"import.sourceCalloutManager": "Callout Manager",
-	"import.sourceCalloutManagerDesc": "Klistra in stilarna du kopierade från Copy-knappen i Callout Manager.",
+	"import.sourceCalloutManagerDesc":
+		"Klistra in stilarna du kopierade från Copy-knappen i Callout Manager.",
 	"import.sourceAdmonition": "Admonition",
 	"import.sourceAdmonitionDesc": "Inte tillgänglig ännu.",
 	"import.sourceAdmonitionNotice": "Import från Admonition stöds inte ännu.",
 	"import.cmTitle": "Importera från Callout Manager",
-	"import.cmInstructions": "I Callout Manager, använd Copy-knappen för att kopiera dina anpassade callout-stilar och klistra sedan in dem nedan.",
+	"import.cmInstructions":
+		"I Callout Manager, använd Copy-knappen för att kopiera dina anpassade callout-stilar och klistra sedan in dem nedan.",
 	"import.cmPlaceholder": "Klistra in de kopierade stilarna här…",
 	"import.cmBtnCancel": "Avbryt",
 	"import.cmBtnImport": "Importera",
-	"import.err.cmNoBlocksFound": "Inga Callout Manager-stilar hittades i den inklistrade texten.",
-	"import.err.cmNoColorForNew": "Ingen användbar färg hittades för den nya callouten \"{{value}}\"; den hoppades över.",
-	"import.err.cmIdConflict": "ID \"{{value}}\" används redan som ett alias av en annan callout (\"{{other}}\") och hoppades över.",
+	"import.err.cmNoBlocksFound":
+		"Inga Callout Manager-stilar hittades i den inklistrade texten.",
+	"import.err.cmNoColorForNew":
+		'Ingen användbar färg hittades för den nya callouten "{{value}}"; den hoppades över.',
+	"import.err.cmIdConflict":
+		'ID "{{value}}" används redan som ett alias av en annan callout ("{{other}}") och hoppades över.',
 
-	"footer.tagline": "Har du feedback, kommentarer eller förslag? Jag vill gärna höra!",
+	"footer.tagline":
+		"Har du feedback, kommentarer eller förslag? Jag vill gärna höra!",
 	"footer.madeBy": "Skapad av Niv  •  ",
 };

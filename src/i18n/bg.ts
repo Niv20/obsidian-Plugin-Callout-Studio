@@ -141,7 +141,8 @@ export const bg: Record<string, string> = {
 		"Callout-ите са експортирани в callout-studio-export.json",
 	"notice.importedJSON": "Импортирани са {{count}} тип(а) callout от JSON.",
 	"notice.importedSettings": "Импортирани са настройките на приставката.",
-	"notice.importedCalloutManager": "Импортирано от Callout Manager: {{created}} създадени, {{updated}} обновени.",
+	"notice.importedCalloutManager":
+		"Импортирано от Callout Manager: {{created}} създадени, {{updated}} обновени.",
 	"notice.noNewJSON":
 		"Не са импортирани нови типове callout (ID-тата може вече да съществуват).",
 	"notice.iconDownloadFailed":
@@ -169,6 +170,7 @@ export const bg: Record<string, string> = {
 		"Това ID е свързано с показваното име и не може да бъде изтрито — редактирайте името, за да го промените",
 	"editor.icon": "Икона",
 	"editor.pickIcon": "Изберете икона",
+	"editor.resetIcon": "Нулиране на иконата по подразбиране",
 	"editor.livePreview": "Преглед на живо",
 	"editor.iconAdjustment": "Настройка на иконата",
 	"editor.picture": "Изображение",
@@ -176,6 +178,7 @@ export const bg: Record<string, string> = {
 	"editor.horizontalOffset": "Хоризонтално отместване",
 	"editor.verticalOffset": "Вертикално отместване",
 	"editor.colors": "Цветове",
+	"editor.resetColors": "Нулиране на цветовете по подразбиране",
 	"editor.paletteDeleted": "Изтрит цвят",
 	"editor.paletteGroupObsidian": "Callout-и на Obsidian",
 	"editor.paletteGroupPresets": "Цветови предварителни настройки",
@@ -637,26 +640,37 @@ export const bg: Record<string, string> = {
 		'"defaultFolded" беше true, докато "foldable" беше false; defaultFolded е нулирано до false.',
 	"import.warn.imageMissing":
 		"Този Callout използва изображение, което не е в файла и не е в това vault, затова ще показва заместваща иконка, докато не добавите нова.",
-		"import.err.paletteIdInvalid": "\"paletteId\" трябва да е непразен текстов идентификатор (получено \"{{value}}\").",
-	"import.warn.iconNameUnknown": "Няма икона \"{{value}}\" в {{type}}, затова беше използвана иконата по подразбиране.",
-	"import.warn.cmIconUnknownNew": "Няма икона \"{{value}}\" в Obsidian, затова беше използвана иконата по подразбиране.",
-	"import.warn.cmIconUnknownExisting": "Няма икона \"{{value}}\" в Obsidian, затова \"{{id}}\" запази иконата, която вече имаше.",
+	"import.err.paletteIdInvalid":
+		'"paletteId" трябва да е непразен текстов идентификатор (получено "{{value}}").',
+	"import.warn.iconNameUnknown":
+		'Няма икона "{{value}}" в {{type}}, затова беше използвана иконата по подразбиране.',
+	"import.warn.cmIconUnknownNew":
+		'Няма икона "{{value}}" в Obsidian, затова беше използвана иконата по подразбиране.',
+	"import.warn.cmIconUnknownExisting":
+		'Няма икона "{{value}}" в Obsidian, затова "{{id}}" запази иконата, която вече имаше.',
 	"import.chooseSource": "Импортиране от",
 	"import.sourceStudio": "Callout Studio",
-	"import.sourceStudioDesc": "Зареди .json файл, експортиран от Callout Studio.",
+	"import.sourceStudioDesc":
+		"Зареди .json файл, експортиран от Callout Studio.",
 	"import.sourceCalloutManager": "Callout Manager",
-	"import.sourceCalloutManagerDesc": "Поставете стиловете, копирани от бутона Copy на Callout Manager.",
+	"import.sourceCalloutManagerDesc":
+		"Поставете стиловете, копирани от бутона Copy на Callout Manager.",
 	"import.sourceAdmonition": "Admonition",
 	"import.sourceAdmonitionDesc": "Все още не е налично.",
-	"import.sourceAdmonitionNotice": "Импортирането от Admonition все още не се поддържа.",
+	"import.sourceAdmonitionNotice":
+		"Импортирането от Admonition все още не се поддържа.",
 	"import.cmTitle": "Импортиране от Callout Manager",
-	"import.cmInstructions": "В Callout Manager използвайте бутона Copy, за да копирате персонализираните стилове на callout-ите, след което ги поставете по-долу.",
+	"import.cmInstructions":
+		"В Callout Manager използвайте бутона Copy, за да копирате персонализираните стилове на callout-ите, след което ги поставете по-долу.",
 	"import.cmPlaceholder": "Поставете копираните стилове тук…",
 	"import.cmBtnCancel": "Отказ",
 	"import.cmBtnImport": "Импортиране",
-	"import.err.cmNoBlocksFound": "Не бяха намерени стилове на Callout Manager в поставения текст.",
-	"import.err.cmNoColorForNew": "Не беше намерен използваем цвят за новия callout \"{{value}}\"; той беше пропуснат.",
-	"import.err.cmIdConflict": "ID \"{{value}}\" вече се използва като псевдоним от друг callout (\"{{other}}\") и беше пропуснат.",
+	"import.err.cmNoBlocksFound":
+		"Не бяха намерени стилове на Callout Manager в поставения текст.",
+	"import.err.cmNoColorForNew":
+		'Не беше намерен използваем цвят за новия callout "{{value}}"; той беше пропуснат.',
+	"import.err.cmIdConflict":
+		'ID "{{value}}" вече се използва като псевдоним от друг callout ("{{other}}") и беше пропуснат.',
 
 	"footer.tagline":
 		"Имате коментари, забележки или предложения? Ще се радвам да ги чуя!",

@@ -153,7 +153,8 @@ export const ro: Record<string, string> = {
 	"notice.importedJSON":
 		"Au fost importate {{count}} tip(uri) de callout din JSON.",
 	"notice.importedSettings": "Au fost importate setările pluginului.",
-	"notice.importedCalloutManager": "Importat din Callout Manager: {{created}} create, {{updated}} actualizate.",
+	"notice.importedCalloutManager":
+		"Importat din Callout Manager: {{created}} create, {{updated}} actualizate.",
 	"notice.noNewJSON":
 		"Nu au fost importate tipuri noi de callout (ID-urile pot exista deja).",
 	"notice.iconDownloadFailed":
@@ -183,6 +184,7 @@ export const ro: Record<string, string> = {
 		"Acest ID este legat de numele afișat și nu poate fi șters — editați numele pentru a-l schimba",
 	"editor.icon": "Pictogramă",
 	"editor.pickIcon": "Alege pictograma",
+	"editor.resetIcon": "Resetați pictograma la implicit",
 	"editor.livePreview": "Previzualizare live",
 	"editor.iconAdjustment": "Ajustare pictogramă",
 	"editor.picture": "Imagine",
@@ -190,6 +192,7 @@ export const ro: Record<string, string> = {
 	"editor.horizontalOffset": "Decalaj orizontal",
 	"editor.verticalOffset": "Decalaj vertical",
 	"editor.colors": "Culori",
+	"editor.resetColors": "Resetați culorile la implicit",
 	"editor.paletteDeleted": "Culoare ștearsă",
 	"editor.paletteGroupObsidian": "Callouts Obsidian",
 	"editor.paletteGroupPresets": "Presetări culori",
@@ -660,26 +663,37 @@ export const ro: Record<string, string> = {
 	"import.warn.imageMissing":
 		"Acest Callout folosește o imagine care nu se află în fișier și nu se află în acest vault, deci va afișa o pictogramă substituent până când furnizați una nouă.",
 
-		"import.err.paletteIdInvalid": "\"paletteId\" trebuie să fie un ID text nevid (primit \"{{value}}\").",
-	"import.warn.iconNameUnknown": "Nu există nicio pictogramă \"{{value}}\" în {{type}}, deci a fost utilizată pictograma implicită.",
-	"import.warn.cmIconUnknownNew": "Nu există nicio pictogramă \"{{value}}\" în Obsidian, deci a fost utilizată pictograma implicită.",
-	"import.warn.cmIconUnknownExisting": "Nu există nicio pictogramă \"{{value}}\" în Obsidian, deci \"{{id}}\" a păstrat pictograma pe care o avea deja.",
+	"import.err.paletteIdInvalid":
+		'"paletteId" trebuie să fie un ID text nevid (primit "{{value}}").',
+	"import.warn.iconNameUnknown":
+		'Nu există nicio pictogramă "{{value}}" în {{type}}, deci a fost utilizată pictograma implicită.',
+	"import.warn.cmIconUnknownNew":
+		'Nu există nicio pictogramă "{{value}}" în Obsidian, deci a fost utilizată pictograma implicită.',
+	"import.warn.cmIconUnknownExisting":
+		'Nu există nicio pictogramă "{{value}}" în Obsidian, deci "{{id}}" a păstrat pictograma pe care o avea deja.',
 	"import.chooseSource": "Importați din",
 	"import.sourceStudio": "Callout Studio",
-	"import.sourceStudioDesc": "Încărcați un fișier .json exportat din Callout Studio.",
+	"import.sourceStudioDesc":
+		"Încărcați un fișier .json exportat din Callout Studio.",
 	"import.sourceCalloutManager": "Callout Manager",
-	"import.sourceCalloutManagerDesc": "Lipiți stilurile copiate din butonul Copy al Callout Manager.",
+	"import.sourceCalloutManagerDesc":
+		"Lipiți stilurile copiate din butonul Copy al Callout Manager.",
 	"import.sourceAdmonition": "Admonition",
 	"import.sourceAdmonitionDesc": "Nu este disponibil încă.",
-	"import.sourceAdmonitionNotice": "Importul din Admonition nu este acceptat încă.",
+	"import.sourceAdmonitionNotice":
+		"Importul din Admonition nu este acceptat încă.",
 	"import.cmTitle": "Importați din Callout Manager",
-	"import.cmInstructions": "În Callout Manager, utilizați butonul Copy pentru a copia stilurile de callout personalizate, apoi lipiți-le mai jos.",
+	"import.cmInstructions":
+		"În Callout Manager, utilizați butonul Copy pentru a copia stilurile de callout personalizate, apoi lipiți-le mai jos.",
 	"import.cmPlaceholder": "Lipiți stilurile copiate aici…",
 	"import.cmBtnCancel": "Anulare",
 	"import.cmBtnImport": "Importați",
-	"import.err.cmNoBlocksFound": "Nu au fost găsite stiluri Callout Manager în textul lipit.",
-	"import.err.cmNoColorForNew": "Nu a fost găsită nicio culoare utilizabilă pentru noul callout \"{{value}}\"; a fost omis.",
-	"import.err.cmIdConflict": "ID-ul \"{{value}}\" este deja utilizat ca alias de un alt callout (\"{{other}}\") și a fost omis.",
+	"import.err.cmNoBlocksFound":
+		"Nu au fost găsite stiluri Callout Manager în textul lipit.",
+	"import.err.cmNoColorForNew":
+		'Nu a fost găsită nicio culoare utilizabilă pentru noul callout "{{value}}"; a fost omis.',
+	"import.err.cmIdConflict":
+		'ID-ul "{{value}}" este deja utilizat ca alias de un alt callout ("{{other}}") și a fost omis.',
 
 	"footer.tagline":
 		"Aveți feedback, comentarii sau sugestii? Mi-ar plăcea să aud!",

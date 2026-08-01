@@ -141,7 +141,8 @@ export const el: Record<string, string> = {
 	"notice.exported": "Τα callouts εξήχθησαν στο callout-studio-export.json",
 	"notice.importedJSON": "Εισήχθησαν {{count}} τύπος/τύποι callout από JSON.",
 	"notice.importedSettings": "Οι ρυθμίσεις του προσθέτου εισήχθησαν.",
-	"notice.importedCalloutManager": "Εισήχθη από Callout Manager: {{created}} δημιουργήθηκαν, {{updated}} ενημερώθηκαν.",
+	"notice.importedCalloutManager":
+		"Εισήχθη από Callout Manager: {{created}} δημιουργήθηκαν, {{updated}} ενημερώθηκαν.",
 	"notice.noNewJSON":
 		"Δεν εισήχθησαν νέοι τύποι callout (τα IDs μπορεί να υπάρχουν ήδη).",
 	"notice.iconDownloadFailed":
@@ -171,6 +172,7 @@ export const el: Record<string, string> = {
 		"Αυτό το ID είναι συνδεδεμένο με το εμφανιζόμενο όνομα και δεν μπορεί να διαγραφεί — επεξεργαστείτε το όνομα για να το αλλάξετε",
 	"editor.icon": "Εικονίδιο",
 	"editor.pickIcon": "Επιλογή εικονιδίου",
+	"editor.resetIcon": "Επαναφορά εικονιδίου στην προεπιλογή",
 	"editor.livePreview": "Ζωντανή προεπισκόπηση",
 	"editor.iconAdjustment": "Ρύθμιση εικονιδίου",
 	"editor.picture": "Εικόνα",
@@ -178,6 +180,7 @@ export const el: Record<string, string> = {
 	"editor.horizontalOffset": "Οριζόντια μετατόπιση",
 	"editor.verticalOffset": "Κατακόρυφη μετατόπιση",
 	"editor.colors": "Χρώματα",
+	"editor.resetColors": "Επαναφορά χρωμάτων στην προεπιλογή",
 	"editor.paletteDeleted": "Διαγραμμένο χρώμα",
 	"editor.paletteGroupObsidian": "Callouts Obsidian",
 	"editor.paletteGroupPresets": "Προεπιλογές χρωμάτων",
@@ -647,26 +650,37 @@ export const el: Record<string, string> = {
 		'"defaultFolded" ήταν true ενώ "foldable" ήταν false· το defaultFolded επαναφέρθηκε στο false.',
 	"import.warn.imageMissing":
 		"Αυτό το Callout χρησιμοποιεί μια εικόνα που δεν βρίσκεται στο αρχείο ούτε σε αυτό το vault, γι' αυτό θα εμφανίσει ένα εικονίδιο κράτησης θέσης έως ότου δώσετε νέο.",
-		"import.err.paletteIdInvalid": "Το \"paletteId\" πρέπει να είναι ένα μη κενό αναγνωριστικό κειμένου (ελήφθη \"{{value}}\").",
-	"import.warn.iconNameUnknown": "Δεν υπάρχει εικονίδιο \"{{value}}\" στο {{type}}, οπότε χρησιμοποιήθηκε το προεπιλεγμένο εικονίδιο.",
-	"import.warn.cmIconUnknownNew": "Δεν υπάρχει εικονίδιο \"{{value}}\" στο Obsidian, οπότε χρησιμοποιήθηκε το προεπιλεγμένο εικονίδιο.",
-	"import.warn.cmIconUnknownExisting": "Δεν υπάρχει εικονίδιο \"{{value}}\" στο Obsidian, οπότε το \"{{id}}\" διατήρησε το εικονίδιο που είχε ήδη.",
+	"import.err.paletteIdInvalid":
+		'Το "paletteId" πρέπει να είναι ένα μη κενό αναγνωριστικό κειμένου (ελήφθη "{{value}}").',
+	"import.warn.iconNameUnknown":
+		'Δεν υπάρχει εικονίδιο "{{value}}" στο {{type}}, οπότε χρησιμοποιήθηκε το προεπιλεγμένο εικονίδιο.',
+	"import.warn.cmIconUnknownNew":
+		'Δεν υπάρχει εικονίδιο "{{value}}" στο Obsidian, οπότε χρησιμοποιήθηκε το προεπιλεγμένο εικονίδιο.',
+	"import.warn.cmIconUnknownExisting":
+		'Δεν υπάρχει εικονίδιο "{{value}}" στο Obsidian, οπότε το "{{id}}" διατήρησε το εικονίδιο που είχε ήδη.',
 	"import.chooseSource": "Εισαγωγή από",
 	"import.sourceStudio": "Callout Studio",
-	"import.sourceStudioDesc": "Φόρτωση αρχείου .json εξαγόμενου από το Callout Studio.",
+	"import.sourceStudioDesc":
+		"Φόρτωση αρχείου .json εξαγόμενου από το Callout Studio.",
 	"import.sourceCalloutManager": "Callout Manager",
-	"import.sourceCalloutManagerDesc": "Επικολλήστε τα στυλ που αντιγράψατε από το κουμπί Copy του Callout Manager.",
+	"import.sourceCalloutManagerDesc":
+		"Επικολλήστε τα στυλ που αντιγράψατε από το κουμπί Copy του Callout Manager.",
 	"import.sourceAdmonition": "Admonition",
 	"import.sourceAdmonitionDesc": "Δεν είναι διαθέσιμο ακόμα.",
-	"import.sourceAdmonitionNotice": "Η εισαγωγή από Admonition δεν υποστηρίζεται ακόμα.",
+	"import.sourceAdmonitionNotice":
+		"Η εισαγωγή από Admonition δεν υποστηρίζεται ακόμα.",
 	"import.cmTitle": "Εισαγωγή από Callout Manager",
-	"import.cmInstructions": "Στο Callout Manager, χρησιμοποιήστε το κουμπί Copy για να αντιγράψετε τα προσαρμοσμένα στυλ callout, και στη συνέχεια επικολλήστε τα παρακάτω.",
+	"import.cmInstructions":
+		"Στο Callout Manager, χρησιμοποιήστε το κουμπί Copy για να αντιγράψετε τα προσαρμοσμένα στυλ callout, και στη συνέχεια επικολλήστε τα παρακάτω.",
 	"import.cmPlaceholder": "Επικολλήστε τα αντιγραμμένα στυλ εδώ…",
 	"import.cmBtnCancel": "Ακύρωση",
 	"import.cmBtnImport": "Εισαγωγή",
-	"import.err.cmNoBlocksFound": "Δεν βρέθηκαν στυλ Callout Manager στο επικολλημένο κείμενο.",
-	"import.err.cmNoColorForNew": "Δεν βρέθηκε χρησιμοποιήσιμο χρώμα για το νέο callout \"{{value}}\"· παραλείφθηκε.",
-	"import.err.cmIdConflict": "Το ID \"{{value}}\" χρησιμοποιείται ήδη ως ψευδώνυμο από άλλο callout (\"{{other}}\") και παραλείφθηκε.",
+	"import.err.cmNoBlocksFound":
+		"Δεν βρέθηκαν στυλ Callout Manager στο επικολλημένο κείμενο.",
+	"import.err.cmNoColorForNew":
+		'Δεν βρέθηκε χρησιμοποιήσιμο χρώμα για το νέο callout "{{value}}"· παραλείφθηκε.',
+	"import.err.cmIdConflict":
+		'Το ID "{{value}}" χρησιμοποιείται ήδη ως ψευδώνυμο από άλλο callout ("{{other}}") και παραλείφθηκε.',
 
 	"footer.tagline":
 		"Έχετε σχόλια, απόψεις ή προτάσεις; Θα χαρώ να τα ακούσω!",

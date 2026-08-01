@@ -153,7 +153,8 @@ export const ja: Record<string, string> = {
 	"notice.importedJSON":
 		"JSONから{{count}}件のcalloutタイプをインポートしました。",
 	"notice.importedSettings": "プラグインの設定をインポートしました。",
-	"notice.importedCalloutManager": "Callout Manager からインポートしました：{{created}} 件作成、{{updated}} 件更新。",
+	"notice.importedCalloutManager":
+		"Callout Manager からインポートしました：{{created}} 件作成、{{updated}} 件更新。",
 	"notice.noNewJSON":
 		"新しいcalloutタイプはインポートされませんでした（IDがすでに存在する可能性があります）。",
 	"notice.iconDownloadFailed":
@@ -180,6 +181,7 @@ export const ja: Record<string, string> = {
 		"このIDは表示名にリンクされているため削除できません。名前を編集して変更してください",
 	"editor.icon": "アイコン",
 	"editor.pickIcon": "アイコンを選択",
+	"editor.resetIcon": "アイコンをデフォルトにリセット",
 	"editor.livePreview": "ライブプレビュー",
 	"editor.iconAdjustment": "アイコン調整",
 	"editor.picture": "画像",
@@ -187,6 +189,7 @@ export const ja: Record<string, string> = {
 	"editor.horizontalOffset": "水平オフセット",
 	"editor.verticalOffset": "垂直オフセット",
 	"editor.colors": "カラー",
+	"editor.resetColors": "カラーをデフォルトにリセット",
 	"editor.paletteDeleted": "削除された色",
 	"editor.paletteGroupObsidian": "Obsidian callout",
 	"editor.paletteGroupPresets": "カラープリセット",
@@ -659,26 +662,37 @@ export const ja: Record<string, string> = {
 	"import.warn.imageMissing":
 		"このCalloutはファイルにもこのvaultにも存在しない画像を使用しています。新しい画像を指定するまでプレースホルダーアイコンが表示されます。",
 
-		"import.err.paletteIdInvalid": "\"paletteId\" は空でないテキスト ID である必要があります（\"{{value}}\" を受け取りました）。",
-	"import.warn.iconNameUnknown": "\"{{value}}\" アイコンは {{type}} に存在しないため、デフォルトのアイコンが使用されました。",
-	"import.warn.cmIconUnknownNew": "\"{{value}}\" アイコンは Obsidian に存在しないため、デフォルトのアイコンが使用されました。",
-	"import.warn.cmIconUnknownExisting": "\"{{value}}\" アイコンは Obsidian に存在しないため、\"{{id}}\" は既存のアイコンを保持しました。",
+	"import.err.paletteIdInvalid":
+		'"paletteId" は空でないテキスト ID である必要があります（"{{value}}" を受け取りました）。',
+	"import.warn.iconNameUnknown":
+		'"{{value}}" アイコンは {{type}} に存在しないため、デフォルトのアイコンが使用されました。',
+	"import.warn.cmIconUnknownNew":
+		'"{{value}}" アイコンは Obsidian に存在しないため、デフォルトのアイコンが使用されました。',
+	"import.warn.cmIconUnknownExisting":
+		'"{{value}}" アイコンは Obsidian に存在しないため、"{{id}}" は既存のアイコンを保持しました。',
 	"import.chooseSource": "インポート元",
 	"import.sourceStudio": "Callout Studio",
-	"import.sourceStudioDesc": "Callout Studio からエクスポートされた .json ファイルを読み込みます。",
+	"import.sourceStudioDesc":
+		"Callout Studio からエクスポートされた .json ファイルを読み込みます。",
 	"import.sourceCalloutManager": "Callout Manager",
-	"import.sourceCalloutManagerDesc": "Callout Manager の Copy ボタンでコピーしたスタイルを貼り付けてください。",
+	"import.sourceCalloutManagerDesc":
+		"Callout Manager の Copy ボタンでコピーしたスタイルを貼り付けてください。",
 	"import.sourceAdmonition": "Admonition",
 	"import.sourceAdmonitionDesc": "まだ利用できません。",
-	"import.sourceAdmonitionNotice": "Admonition からのインポートはまだサポートされていません。",
+	"import.sourceAdmonitionNotice":
+		"Admonition からのインポートはまだサポートされていません。",
 	"import.cmTitle": "Callout Manager からインポート",
-	"import.cmInstructions": "Callout Manager で Copy ボタンを使用してカスタマイズされた callout スタイルをコピーし、以下に貼り付けてください。",
+	"import.cmInstructions":
+		"Callout Manager で Copy ボタンを使用してカスタマイズされた callout スタイルをコピーし、以下に貼り付けてください。",
 	"import.cmPlaceholder": "コピーしたスタイルをここに貼り付け…",
 	"import.cmBtnCancel": "キャンセル",
 	"import.cmBtnImport": "インポート",
-	"import.err.cmNoBlocksFound": "貼り付けたテキストに Callout Manager のスタイルが見つかりませんでした。",
-	"import.err.cmNoColorForNew": "新しい callout \"{{value}}\" に使用できる色が見つからなかったため、スキップされました。",
-	"import.err.cmIdConflict": "ID \"{{value}}\" は別の callout (\"{{other}}\") によって既にエイリアスとして使用されているため、スキップされました。",
+	"import.err.cmNoBlocksFound":
+		"貼り付けたテキストに Callout Manager のスタイルが見つかりませんでした。",
+	"import.err.cmNoColorForNew":
+		'新しい callout "{{value}}" に使用できる色が見つからなかったため、スキップされました。',
+	"import.err.cmIdConflict":
+		'ID "{{value}}" は別の callout ("{{other}}") によって既にエイリアスとして使用されているため、スキップされました。',
 
 	"footer.tagline":
 		"フィードバック、コメント、提案はありますか？ぜひお聞かせください！",

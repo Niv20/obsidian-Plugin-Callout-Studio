@@ -150,7 +150,8 @@ export const ar: Record<string, string> = {
 	"notice.exported": "تم تصدير الـ callouts إلى callout-studio-export.json",
 	"notice.importedJSON": "تم استيراد {{count}} نوع callout من JSON.",
 	"notice.importedSettings": "تم استيراد إعدادات الإضافة.",
-	"notice.importedCalloutManager": "تم الاستيراد من Callout Manager: تم إنشاء {{created}}، وتحديث {{updated}}.",
+	"notice.importedCalloutManager":
+		"تم الاستيراد من Callout Manager: تم إنشاء {{created}}، وتحديث {{updated}}.",
 	"notice.noNewJSON":
 		"لم يتم استيراد أنواع callout جديدة (قد تكون المعرّفات موجودة بالفعل).",
 	"notice.iconDownloadFailed":
@@ -178,6 +179,7 @@ export const ar: Record<string, string> = {
 		"هذا المعرّف مرتبط بالاسم المعروض ولا يمكن حذفه — عدّل الاسم لتغييره",
 	"editor.icon": "أيقونة",
 	"editor.pickIcon": "اختر أيقونة",
+	"editor.resetIcon": "إعادة تعيين الأيقونة إلى الافتراضي",
 	"editor.livePreview": "معاينة مباشرة",
 	"editor.iconAdjustment": "ضبط الأيقونة",
 	"editor.picture": "صورة",
@@ -185,6 +187,7 @@ export const ar: Record<string, string> = {
 	"editor.horizontalOffset": "الإزاحة الأفقية",
 	"editor.verticalOffset": "الإزاحة الرأسية",
 	"editor.colors": "الألوان",
+	"editor.resetColors": "إعادة تعيين الألوان إلى الافتراضي",
 	"editor.paletteDeleted": "لون محذوف",
 	"editor.paletteGroupObsidian": "Callouts Obsidian",
 	"editor.paletteGroupPresets": "إعدادات الألوان المسبقة",
@@ -643,26 +646,35 @@ export const ar: Record<string, string> = {
 	"import.warn.imageMissing":
 		"يستخدم هذا Callout صورة غير موجودة في الملف أو في هذا vault، لذا سيعرض أيقونة بديلة حتى تحدد صورة جديدة.",
 
-		"import.err.paletteIdInvalid": "\"paletteId\" يجب أن يكون معرّف نصي غير فارغ (تم استلام \"{{value}}\").",
-	"import.warn.iconNameUnknown": "لا يوجد أيقونة باسم \"{{value}}\" في {{type}}، لذلك تم استخدام الأيقونة الافتراضية بدلاً منها.",
-	"import.warn.cmIconUnknownNew": "لا يوجد أيقونة باسم \"{{value}}\" في Obsidian، لذلك تم استخدام الأيقونة الافتراضية بدلاً منها.",
-	"import.warn.cmIconUnknownExisting": "لا يوجد أيقونة باسم \"{{value}}\" في Obsidian، لذلك احتفظ \"{{id}}\" بالأيقونة التي كانت لديه.",
+	"import.err.paletteIdInvalid":
+		'"paletteId" يجب أن يكون معرّف نصي غير فارغ (تم استلام "{{value}}").',
+	"import.warn.iconNameUnknown":
+		'لا يوجد أيقونة باسم "{{value}}" في {{type}}، لذلك تم استخدام الأيقونة الافتراضية بدلاً منها.',
+	"import.warn.cmIconUnknownNew":
+		'لا يوجد أيقونة باسم "{{value}}" في Obsidian، لذلك تم استخدام الأيقونة الافتراضية بدلاً منها.',
+	"import.warn.cmIconUnknownExisting":
+		'لا يوجد أيقونة باسم "{{value}}" في Obsidian، لذلك احتفظ "{{id}}" بالأيقونة التي كانت لديه.',
 	"import.chooseSource": "استيراد من",
 	"import.sourceStudio": "Callout Studio",
 	"import.sourceStudioDesc": "تحميل ملف ‎.json تم تصديره من Callout Studio.",
 	"import.sourceCalloutManager": "Callout Manager",
-	"import.sourceCalloutManagerDesc": "الصق الأنماط التي نسختها من زر Copy في Callout Manager.",
+	"import.sourceCalloutManagerDesc":
+		"الصق الأنماط التي نسختها من زر Copy في Callout Manager.",
 	"import.sourceAdmonition": "Admonition",
 	"import.sourceAdmonitionDesc": "غير متاح بعد.",
 	"import.sourceAdmonitionNotice": "الاستيراد من Admonition غير مدعوم بعد.",
 	"import.cmTitle": "استيراد من Callout Manager",
-	"import.cmInstructions": "في Callout Manager، استخدم زر Copy لنسخ أنماط تلميحاتك المخصصة، ثم الصقها أدناه.",
+	"import.cmInstructions":
+		"في Callout Manager، استخدم زر Copy لنسخ أنماط تلميحاتك المخصصة، ثم الصقها أدناه.",
 	"import.cmPlaceholder": "الصق الأنماط المنسوخة هنا…",
 	"import.cmBtnCancel": "إلغاء",
 	"import.cmBtnImport": "استيراد",
-	"import.err.cmNoBlocksFound": "لم يتم العثور على أي أنماط Callout Manager في النص الملصق.",
-	"import.err.cmNoColorForNew": "لم يتم العثور على لون قابل للاستخدام للتلميح الجديد \"{{value}}\"; تم تخطيه.",
-	"import.err.cmIdConflict": "المعرّف \"{{value}}\" مستخدم بالفعل كاسم مستعار لتلميح آخر (\"{{other}}\")، وتم تخطيه.",
+	"import.err.cmNoBlocksFound":
+		"لم يتم العثور على أي أنماط Callout Manager في النص الملصق.",
+	"import.err.cmNoColorForNew":
+		'لم يتم العثور على لون قابل للاستخدام للتلميح الجديد "{{value}}"; تم تخطيه.',
+	"import.err.cmIdConflict":
+		'المعرّف "{{value}}" مستخدم بالفعل كاسم مستعار لتلميح آخر ("{{other}}")، وتم تخطيه.',
 
 	"footer.tagline": "هل لديك ملاحظات أو تعليقات أو اقتراحات؟ يسعدني سماعها!",
 	"footer.madeBy": "صنعه Niv  •  ",

@@ -10,18 +10,24 @@ export const uk: Record<string, string> = {
 	"settings.fallbackTag": "За замовчуванням",
 	"settings.fallbackTagAuto": "Авт. за замовчуванням",
 	"settings.rescanVault": "Повторно сканувати сховище",
-	"settings.rescanVaultDesc": "Шукає нерозпізнані ID callout у нотатках і додає їх як резервні рядки.",
+	"settings.rescanVaultDesc":
+		"Шукає нерозпізнані ID callout у нотатках і додає їх як резервні рядки.",
 	"settings.rescanVaultHintAction": "Сканувати зараз",
-	"settings.rescanComplete": "Повторне сканування завершено: додано {{count}} нових callout(ів).",
+	"settings.rescanComplete":
+		"Повторне сканування завершено: додано {{count}} нових callout(ів).",
 	"replaceModal.deleteWithoutReplaceSuffix": "(повернення до типового)",
 
 	"firstRun.title": "Знайти наявні callout у сховищі?",
-	"firstRun.body": "Callout Studio може просканувати сховище, щоб виявити callout, які ви вже використовуєте, — вони з'являться у списку налаштувань і успадкують ваш резервний стиль.",
-	"firstRun.heavyVaultNote": "У вашому сховищі {{count}} файлів Markdown — сканування може зайняти кілька секунд.",
-	"firstRun.laterHint": "Ви завжди можете зробити це пізніше: Налаштування → Аналітика та обслуговування сховища → Повторно сканувати сховище.",
+	"firstRun.body":
+		"Callout Studio може просканувати сховище, щоб виявити callout, які ви вже використовуєте, — вони з'являться у списку налаштувань і успадкують ваш резервний стиль.",
+	"firstRun.heavyVaultNote":
+		"У вашому сховищі {{count}} файлів Markdown — сканування може зайняти кілька секунд.",
+	"firstRun.laterHint":
+		"Ви завжди можете зробити це пізніше: Налаштування → Аналітика та обслуговування сховища → Повторно сканувати сховище.",
 	"firstRun.scanNow": "Сканувати зараз",
 	"firstRun.noThanks": "Ні, дякую",
-	"firstRun.autoScanComplete": "Callout Studio просканував сховище і додав {{count}} callout(ів).",
+	"firstRun.autoScanComplete":
+		"Callout Studio просканував сховище і додав {{count}} callout(ів).",
 	"firstRun.scanning": "Сканування",
 
 	"welcome.tooltip": "Про Callout Studio",
@@ -39,10 +45,14 @@ export const uk: Record<string, string> = {
 		"Callout Studio має набагато більше можливостей! [Дізнатися більше]({{repoUrl}}).\n",
 
 	"deleteModal.title": 'Видалити callout "{{name}}"?',
-	"deleteModal.bodyInUse": "Цей callout зустрічається {{count}} раз(ів) у {{files}} файлі(ах).",
-	"deleteModal.bodyInUseExplain": "Видалення перетворить ці блоки на звичайний текст — вони втратять оформлення та заголовок callout.",
-	"deleteModal.replaceHint": "Ви можете замінити його іншим callout, щоб зберегти вміст сховища у вигляді оформленого callout.",
-	"deleteModal.bodyUnused": '"{{name}}" не використовується в жодній нотатці, але це створений вами користувацький callout. Видалення приберe його зі списку.',
+	"deleteModal.bodyInUse":
+		"Цей callout зустрічається {{count}} раз(ів) у {{files}} файлі(ах).",
+	"deleteModal.bodyInUseExplain":
+		"Видалення перетворить ці блоки на звичайний текст — вони втратять оформлення та заголовок callout.",
+	"deleteModal.replaceHint":
+		"Ви можете замінити його іншим callout, щоб зберегти вміст сховища у вигляді оформленого callout.",
+	"deleteModal.bodyUnused":
+		'"{{name}}" не використовується в жодній нотатці, але це створений вами користувацький callout. Видалення приберe його зі списку.',
 	"deleteModal.replaceInstead": "Замінити натомість",
 	"deleteModal.deleteInUse": "Видалити (перетворити на звичайний текст)",
 	"deleteModal.deleteUnused": "Видалити callout",
@@ -60,9 +70,12 @@ export const uk: Record<string, string> = {
 	"settings.importExport": "Імпорт / Експорт",
 	"settings.import": "Імпорт",
 	"settings.export": "Експорт",
-	"settings.importDesc": "Імпортуйте дані Callout Studio з іншого сховища за допомогою JSON-файлу.",
-	"settings.exportDesc": "Збережіть усі користувацькі типи callout у форматі JSON.",
-	"settings.importConflictNotice": "Імпортовано {{count}} тип(ів) callout; {{overwritten}} існуючих записів перезаписано.",
+	"settings.importDesc":
+		"Імпортуйте дані Callout Studio з іншого сховища за допомогою JSON-файлу.",
+	"settings.exportDesc":
+		"Збережіть усі користувацькі типи callout у форматі JSON.",
+	"settings.importConflictNotice":
+		"Імпортовано {{count}} тип(ів) callout; {{overwritten}} існуючих записів перезаписано.",
 
 	"settings.addNewCallout": "+ додати callout",
 
@@ -74,11 +87,13 @@ export const uk: Record<string, string> = {
 	"settings.replaceAction": "Замінити у сховищі",
 	"settings.deleteAction": "Видалити",
 	"settings.resetAction": "Скинути до типового",
-	"settings.makeFallbackAction": "Використовувати резервний стиль за замовчуванням",
+	"settings.makeFallbackAction":
+		"Використовувати резервний стиль за замовчуванням",
 
 	"settings.colorSwatchAria": "Акцент: {{accent}} · Фон: {{bg}}",
 	"settings.fallbackCallout": "Резервний callout за замовчуванням",
-	"settings.fallbackCalloutDesc": "Нерозпізнані типи callout у сховищі успадкують стиль цього callout.",
+	"settings.fallbackCalloutDesc":
+		"Нерозпізнані типи callout у сховищі успадкують стиль цього callout.",
 
 	"settings.globalStyle": "Глобальний стиль callout",
 	"settings.border": "Рамки",
@@ -112,49 +127,63 @@ export const uk: Record<string, string> = {
 	"settings.deletePaletteConfirm":
 		'Видалити палітру "{{name}}"?\nБлоки callout, які використовують її кольори, не зміняться.',
 	"settings.enableAutocomplete": "Увімкнути автодоповнення [!",
-	"settings.enableAutocompleteDesc": 'Показує підказки при введенні «[!» у блоку цитати в редакторі. Виберіть тип callout зі списку, щоб вставити повний заголовок callout.',
+	"settings.enableAutocompleteDesc":
+		"Показує підказки при введенні «[!» у блоку цитати в редакторі. Виберіть тип callout зі списку, щоб вставити повний заголовок callout.",
 
 	"settings.openHotkeys": "Гарячі клавіші Callout Studio",
-	"settings.openHotkeysDesc": "Відкриває налаштування гарячих клавіш Obsidian для команд Callout Studio, де можна встановити власні клавіші для створення нового типу, відкриття налаштувань, видалення та обгортання callout. За замовчуванням гарячі клавіші не призначені.",
+	"settings.openHotkeysDesc":
+		"Відкриває налаштування гарячих клавіш Obsidian для команд Callout Studio, де можна встановити власні клавіші для створення нового типу, відкриття налаштувань, видалення та обгортання callout. За замовчуванням гарячі клавіші не призначені.",
 	"settings.openHotkeysButton": "Відкрити налаштування гарячих клавіш",
-
 
 	"settings.vaultMaintenance": "Аналітика та обслуговування сховища",
 	"settings.vaultStats": "Статистика callout",
-	"settings.vaultStatsDesc": "Підраховує всі блоки callout у Markdown-нотатках і групує за типом.",
+	"settings.vaultStatsDesc":
+		"Підраховує всі блоки callout у Markdown-нотатках і групує за типом.",
 	"settings.vaultStatsButton": "Переглянути статистику",
 	"settings.vaultStatsScanning": "Сканування",
 	"settings.resetAll": "Скинути",
-	"settings.resetAllDesc": "Видаляє всі користувацькі callout, скидає вбудовані callout, глобальні стилі (рамки, масштаб шрифту, форма), збережені колірні палітри, налаштування контекстного меню і завантажені SVG Material.",
+	"settings.resetAllDesc":
+		"Видаляє всі користувацькі callout, скидає вбудовані callout, глобальні стилі (рамки, масштаб шрифту, форма), збережені колірні палітри, налаштування контекстного меню і завантажені SVG Material.",
 	"settings.resetAllButton": "Скинути все",
-	"settings.resetAllConfirm": "Це видалить усі користувацькі callout, скине вбудовані callout, глобальні стилі, збережені колірні палітри, налаштування контекстного меню та всі кешовані SVG Material. Дію не можна скасувати. Ви впевнені?",
+	"settings.resetAllConfirm":
+		"Це видалить усі користувацькі callout, скине вбудовані callout, глобальні стилі, збережені колірні палітри, налаштування контекстного меню та всі кешовані SVG Material. Дію не можна скасувати. Ви впевнені?",
 	"notice.resetAllDone": "Все скинуто до типових значень.",
 
 	"notice.exported": "Callout експортовано до callout-studio-export.json",
 	"notice.importedJSON": "Імпортовано {{count}} тип(ів) callout з JSON.",
 	"notice.importedSettings": "Імпортовано налаштування плагіна.",
-	"notice.importedCalloutManager": "Імпортовано з Callout Manager: {{created}} створено, {{updated}} оновлено.",
-	"notice.noNewJSON": "Нові типи callout не імпортовано (ID можуть вже існувати).",
-	"notice.iconDownloadFailed": 'Не вдалося завантажити іконку Material «{{name}}». Вона може бути недоступна для цього стилю/товщини або відсутнє підключення до мережі.',
+	"notice.importedCalloutManager":
+		"Імпортовано з Callout Manager: {{created}} створено, {{updated}} оновлено.",
+	"notice.noNewJSON":
+		"Нові типи callout не імпортовано (ID можуть вже існувати).",
+	"notice.iconDownloadFailed":
+		"Не вдалося завантажити іконку Material «{{name}}». Вона може бути недоступна для цього стилю/товщини або відсутнє підключення до мережі.",
 	"notice.nothingToWrap": "Нічого для обгортання.",
 	"notice.cursorNotInsideCallout": "Курсор не знаходиться всередині callout.",
-	"notice.openHotkeysFailed": "Не вдалося відкрити налаштування гарячих клавіш Obsidian.",
-	"notice.filterHotkeysFailed": "Налаштування гарячих клавіш відкрито, але фільтр Callout Studio застосувати не вдалося.",
+	"notice.openHotkeysFailed":
+		"Не вдалося відкрити налаштування гарячих клавіш Obsidian.",
+	"notice.filterHotkeysFailed":
+		"Налаштування гарячих клавіш відкрито, але фільтр Callout Studio застосувати не вдалося.",
 
 	"editor.editCallout": "Редагувати callout",
 	"editor.newCallout": "Новий callout",
 	"editor.displayName": "Відображувана назва",
-	"editor.displayNameDesc": "Читабельна мітка, що відображається в інтерфейсі",
-	"editor.displayNameBuiltIn": "Відображувану назву вбудованих callout змінити не можна",
+	"editor.displayNameDesc":
+		"Читабельна мітка, що відображається в інтерфейсі",
+	"editor.displayNameBuiltIn":
+		"Відображувану назву вбудованих callout змінити не можна",
 	"editor.displayNamePlaceholder": "Мій callout",
 	"editor.calloutIds": "ID callout",
-	"editor.calloutIdsDesc": "Всі ідентифікатори цього callout. Пробіли дозволені.\nНатисніть Enter або кнопку + для додавання.",
+	"editor.calloutIdsDesc":
+		"Всі ідентифікатори цього callout. Пробіли дозволені.\nНатисніть Enter або кнопку + для додавання.",
 	"editor.calloutIdsPlaceholder": "Додати ID",
 	"editor.addId": "Додати ID",
 	"editor.idLinkedToName": "Пов'язано з відображуваною назвою",
-	"editor.idCannotDelete": "Цей ID пов'язаний з відображуваною назвою і не може бути видалений — щоб змінити його, відредагуйте назву",
+	"editor.idCannotDelete":
+		"Цей ID пов'язаний з відображуваною назвою і не може бути видалений — щоб змінити його, відредагуйте назву",
 	"editor.icon": "Іконка",
 	"editor.pickIcon": "Вибрати значок",
+	"editor.resetIcon": "Скинути значок до типового",
 	"editor.livePreview": "Живий попередній перегляд",
 	"editor.iconAdjustment": "Налаштування іконки",
 	"editor.picture": "Зображення",
@@ -162,31 +191,39 @@ export const uk: Record<string, string> = {
 	"editor.horizontalOffset": "Горизонтальне зміщення",
 	"editor.verticalOffset": "Вертикальне зміщення",
 	"editor.colors": "Кольори",
+	"editor.resetColors": "Скинути кольори до типового",
 	"editor.paletteDeleted": "Видалений колір",
 	"editor.paletteGroupObsidian": "Callout Obsidian",
 	"editor.paletteGroupPresets": "Колірні пресети",
 	"editor.paletteGroupCustom": "Власні",
 	"editor.paletteNewColor": "Новий колір…",
-	"editor.contrastWarning": "Низький контраст із фоном — може бути важко читати",
+	"editor.contrastWarning":
+		"Низький контраст із фоном — може бути важко читати",
 	"editor.foldable": "Складаний",
-	"editor.foldableDesc": "Виберіть, чи можна складати callout, та стан за замовчуванням для всього сховища.",
+	"editor.foldableDesc":
+		"Виберіть, чи можна складати callout, та стан за замовчуванням для всього сховища.",
 	"editor.foldOff": "Вимк.",
 	"editor.foldOpen": "Відкритий за замовчуванням",
 	"editor.foldClosed": "Закритий за замовчуванням",
 	"editor.cancel": "Скасувати",
 	"editor.saveChanges": "Зберегти зміни",
 	"editor.createCallout": "Створити callout",
-	"editor.nameRequired": "Перед створенням callout необхідно вказати відображувану назву.",
+	"editor.nameRequired":
+		"Перед створенням callout необхідно вказати відображувану назву.",
 	"editor.noChangesToSave": "Змін не було.",
 	"editor.downloadingIcon": "Завантаження іконки",
 	"editor.idEmpty": "Потрібен принаймні один ID",
 	"editor.idExists": "Callout з таким ID вже існує",
 	"editor.idConflict": "Цей ID конфліктує з існуючим callout",
-	"editor.idDashConflict": 'Obsidian записує пробіли як дефіси, тому цей ID конфліктує з «{{other}}»',
+	"editor.idDashConflict":
+		"Obsidian записує пробіли як дефіси, тому цей ID конфліктує з «{{other}}»",
 	"editor.untitledCallout": "Callout без назви",
-	"editor.loremIpsum": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-	"editor.loremIpsumShort": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-	"editor.sampleInlineText": "Ось вбудована капсула [!{id}] всередині абзацу.",
+	"editor.loremIpsum":
+		"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+	"editor.loremIpsumShort":
+		"Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+	"editor.sampleInlineText":
+		"Ось вбудована капсула [!{id}] всередині абзацу.",
 	"editor.previewReadOnly": "Живий перегляд не можна редагувати",
 
 	// Palette editor modal
@@ -196,10 +233,12 @@ export const uk: Record<string, string> = {
 	"palette.namePlaceholder": "Моя палітра",
 	"palette.nameExists": "Палітра з такою назвою вже існує",
 	"palette.baseColor": "Базовий колір",
-	"palette.baseColorHint": "Ми автоматично підберемо колір фону під нього. За бажанням ви можете керувати ним окремо, {{link}}.",
+	"palette.baseColorHint":
+		"Ми автоматично підберемо колір фону під нього. За бажанням ви можете керувати ним окремо, {{link}}.",
 	"palette.baseColorHintLink": "натиснувши тут",
 	"palette.advancedColors": "Кольори",
-	"palette.advancedColorsHint": "Редагування кольорів для режиму {{mode}} — інший режим оновлюється автоматично. Перемкніть тему Obsidian, щоб перевірити.",
+	"palette.advancedColorsHint":
+		"Редагування кольорів для режиму {{mode}} — інший режим оновлюється автоматично. Перемкніть тему Obsidian, щоб перевірити.",
 	"palette.revertHint": "Бажаєте натомість один базовий колір? {{link}}.",
 	"palette.revertHintLink": "Скасувати",
 	"palette.lightMode": "Світлий",
@@ -286,27 +325,36 @@ export const uk: Record<string, string> = {
 	"iconPicker.searchRpgAwesome": "Пошук в RPG Awesome",
 	"iconPicker.image": "Ваші зображення",
 	"iconPicker.searchImage": "Пошук у ваших зображеннях",
-	"iconPicker.imageTooLarge": "{{name}} занадто великий. Зображення мають бути менше 5 МБ.",
-	"iconPicker.imageUnsupported": "{{name}} — непідтримуваний формат зображення. Використовуйте SVG, PNG, JPEG або WebP.",
-	"iconPicker.imageInvalidSvg": "{{name}} не вдалося прочитати як безпечний SVG, тому він не був доданий.",
-	"iconPicker.imageDecodeFailed": "{{name}} не вдалося прочитати як зображення.",
-	"iconPicker.imageDuplicate": "{{name}} вже є у ваших зображеннях. Перейменуйте файл або видаліть наявне зображення.",
+	"iconPicker.imageTooLarge":
+		"{{name}} занадто великий. Зображення мають бути менше 5 МБ.",
+	"iconPicker.imageUnsupported":
+		"{{name}} — непідтримуваний формат зображення. Використовуйте SVG, PNG, JPEG або WebP.",
+	"iconPicker.imageInvalidSvg":
+		"{{name}} не вдалося прочитати як безпечний SVG, тому він не був доданий.",
+	"iconPicker.imageDecodeFailed":
+		"{{name}} не вдалося прочитати як зображення.",
+	"iconPicker.imageDuplicate":
+		"{{name}} вже є у ваших зображеннях. Перейменуйте файл або видаліть наявне зображення.",
 	"iconPicker.imageAdd": "Додати зображення",
-	"iconPicker.imageEmpty": "Зображень поки немає. Додайте файл SVG, PNG, JPEG або WebP зі свого комп'ютера або перетягніть сюди.",
+	"iconPicker.imageEmpty":
+		"Зображень поки немає. Додайте файл SVG, PNG, JPEG або WebP зі свого комп'ютера або перетягніть сюди.",
 	"iconPicker.imageDelete": "Видалити",
 	"iconPicker.imageDeleteConfirm": "Видалити «{{name}}»?",
-	"iconPicker.imageDeleteInUse": "{{count}} callout(ів) використовують це зображення. Вони показуватимуть іконку-замінник, доки ви не вкажете нову.",
+	"iconPicker.imageDeleteInUse":
+		"{{count}} callout(ів) використовують це зображення. Вони показуватимуть іконку-замінник, доки ви не вкажете нову.",
 	"iconPicker.imageRecolor": "Слідувати кольору Callout",
 	"iconPicker.allSources": "Всі джерела",
 	"iconPicker.searchAllSources": "Пошук у всіх джерелах іконок",
-	"iconPicker.sourcesNotDownloaded": "Ще не включено: {{names}}. Виберіть джерело вище, щоб завантажити.",
+	"iconPicker.sourcesNotDownloaded":
+		"Ще не включено: {{names}}. Виберіть джерело вище, щоб завантажити.",
 	"iconPicker.chooseSource": "Вибрати джерело",
 	"iconPicker.sourceGroup": "{{name}} · {{count}}",
 
 	// Source menu — what each library holds, in a few words
 	"iconPicker.descAllSources": "пошук в усіх бібліотеках одночасно",
 	"iconPicker.descLucide": "власний набір Obsidian, завжди офлайн",
-	"iconPicker.descTabler": "чисті та послідовні іконки інтерфейсу, контур та заповнені",
+	"iconPicker.descTabler":
+		"чисті та послідовні іконки інтерфейсу, контур та заповнені",
 	"iconPicker.descMaterial": "набір Google, чотири стилі та сім товщин",
 	"iconPicker.descEmoji": "кольорові глифи, всі відтінки шкіри",
 	"iconPicker.descOcticons": "іконки інтерфейсу GitHub",
@@ -430,20 +478,26 @@ export const uk: Record<string, string> = {
 
 	// Downloadable icon packs
 	"iconPack.downloadTitle": "{{name}} ще не завантажено",
-	"iconPack.downloadDetail": "{{count}} іконок · {{size}} · одноразове завантаження",
+	"iconPack.downloadDetail":
+		"{{count}} іконок · {{size}} · одноразове завантаження",
 	"iconPack.download": "Завантажити",
 	"iconPack.downloading": "Завантаження {{name}}…",
-	"iconPack.downloadFailed": "Не вдалося завантажити {{name}}. Перевірте з'єднання і повторіть спробу.",
+	"iconPack.downloadFailed":
+		"Не вдалося завантажити {{name}}. Перевірте з'єднання і повторіть спробу.",
 	"iconPack.retry": "Повторити",
-	"iconPack.faBrandsNotice": "Іконки брендів є торговими марками відповідних власників. Їх включення не означає схвалення. Використовуйте їх лише для представлення компанії, продукту або послуги, на які вони посилаються.",
+	"iconPack.faBrandsNotice":
+		"Іконки брендів є торговими марками відповідних власників. Їх включення не означає схвалення. Використовуйте їх лише для представлення компанії, продукту або послуги, на які вони посилаються.",
 	"iconPack.artworkRestored": "Графіку іконок для {{names}} завантажено.",
-	"iconPack.diskWriteFailed": "Callout Studio не вдалося зберегти пакет іконок на диск, тому наступного разу його потрібно буде завантажити знову. Вибрані вами іконки зберігаються з налаштуваннями.",
+	"iconPack.diskWriteFailed":
+		"Callout Studio не вдалося зберегти пакет іконок на диск, тому наступного разу його потрібно буде завантажити знову. Вибрані вами іконки зберігаються з налаштуваннями.",
 
 	// Icon licences & credits
 	"credits.title": "Ліцензії іконок та авторство",
-	"credits.intro": "Callout Studio використовує кілька відкритих бібліотек іконок. Їхні ліцензії відтворено нижче разом зі змінами для використання тут.",
+	"credits.intro":
+		"Callout Studio використовує кілька відкритих бібліотек іконок. Їхні ліцензії відтворено нижче разом зі змінами для використання тут.",
 	"credits.fullNotices": "Повні сповіщення третіх сторін",
-	"credits.pluginLicense": "Власний код Callout Studio знаходиться під ліцензією 0BSD; бібліотеки іконок зберігають свої ліцензії.",
+	"credits.pluginLicense":
+		"Власний код Callout Studio знаходиться під ліцензією 0BSD; бібліотеки іконок зберігають свої ліцензії.",
 
 	"contextMenu.editCallout": "Редагувати налаштування callout",
 	"contextMenu.copyMarkdown": "Копіювати Markdown callout",
@@ -473,10 +527,12 @@ export const uk: Record<string, string> = {
 	"settings.calloutTypeInline": "Вбудований callout",
 
 	"settings.customizeMenu": "Налаштувати пункти меню",
-	"settings.customizeMenuDesc": "Виберіть, які дії контекстного меню з'являються для кожного типу callout, і змініть їх порядок. Працює у вихідному режимі та живому попередньому перегляді.",
+	"settings.customizeMenuDesc":
+		"Виберіть, які дії контекстного меню з'являються для кожного типу callout, і змініть їх порядок. Працює у вихідному режимі та живому попередньому перегляді.",
 	"settings.customizeMenuButton": "Налаштувати пункти меню",
 	"menuCustomize.title": "Налаштування контекстного меню",
-	"menuCustomize.desc": "Вмикайте або вимикайте дії та перетягуйте маркер, щоб змінити їх порядок. Зміни зберігаються автоматично.",
+	"menuCustomize.desc":
+		"Вмикайте або вимикайте дії та перетягуйте маркер, щоб змінити їх порядок. Зміни зберігаються автоматично.",
 	"menuCustomize.regular": "Звичайний callout",
 	"menuCustomize.heading": "Callout-заголовок",
 	"menuCustomize.inline": "Вбудований callout",
@@ -484,7 +540,8 @@ export const uk: Record<string, string> = {
 	"menuItem.edit": "Редагувати callout",
 	"menuItem.openSettings": "Відкрити налаштування",
 	"menuItem.copyMarkdown": "Копіювати Markdown",
-	"menuItem.foldDefaults": "Складання за замовчуванням (відкрито / закрито / немає)",
+	"menuItem.foldDefaults":
+		"Складання за замовчуванням (відкрито / закрито / немає)",
 	"menuItem.cutSection": "Вирізати розділ",
 	"menuItem.copySection": "Копіювати розділ",
 	"menuItem.deleteSection": "Видалити розділ",
@@ -492,20 +549,27 @@ export const uk: Record<string, string> = {
 	"confirm.ok": "Видалити",
 	"confirm.cancel": "Скасувати",
 
-	"vault.filesUpdated": "Оновлено {{count}} посилань на callout у файлах сховища.",
-	"vault.idsUpdated": "Оновлено {{count}} ID callout у файлах сховища: {{oldIds}} → {{newId}}",
-	"vault.titlesUpdated": "Оновлено {{count}} заголовків callout у файлах сховища: {{oldTitle}} → {{newTitle}}",
+	"vault.filesUpdated":
+		"Оновлено {{count}} посилань на callout у файлах сховища.",
+	"vault.idsUpdated":
+		"Оновлено {{count}} ID callout у файлах сховища: {{oldIds}} → {{newId}}",
+	"vault.titlesUpdated":
+		"Оновлено {{count}} заголовків callout у файлах сховища: {{oldTitle}} → {{newTitle}}",
 	"vault.replaceWith": "Замінити на:",
 	"vault.deleteWithout": "Видалити без заміни",
 	"vault.confirmDelete": "Підтвердити",
 	"vault.confirmReplace": "Замінити",
-	"vault.replacePromptInUse": '«{{name}}» використовується {{count}} раз(ів) у {{files}} файлі(ах). Виберіть callout для заміни:',
-	"vault.replacePromptUnused": 'Виберіть callout для заміни «{{name}}»:',
+	"vault.replacePromptInUse":
+		"«{{name}}» використовується {{count}} раз(ів) у {{files}} файлі(ах). Виберіть callout для заміни:",
+	"vault.replacePromptUnused": "Виберіть callout для заміни «{{name}}»:",
 	"vault.noReplacementAvailable": "Немає інших доступних callout для заміни.",
-	"vault.convertedToPlainText": "{{blocks}} блоків callout у {{files}} файлі(ах) перетворено на звичайний текст.",
-	"vault.resetAliasWarning": "{{count}} посилань у {{files}} файлі(ах) використовують користувацькі псевдоніми: {{aliases}}. Після скидання вони перестануть працювати. Продовжити?",
+	"vault.convertedToPlainText":
+		"{{blocks}} блоків callout у {{files}} файлі(ах) перетворено на звичайний текст.",
+	"vault.resetAliasWarning":
+		"{{count}} посилань у {{files}} файлі(ах) використовують користувацькі псевдоніми: {{aliases}}. Після скидання вони перестануть працювати. Продовжити?",
 	"vault.resetConfirm": "Скинути",
-	"vault.resetAllInUse": "⚠ {{count}} посилань на callout у {{files}} файлі(ах) використовують користувацькі типи callout, які будуть видалені.",
+	"vault.resetAllInUse":
+		"⚠ {{count}} посилань на callout у {{files}} файлі(ах) використовують користувацькі типи callout, які будуть видалені.",
 
 	"vaultStats.title": "Статистика callout",
 	"vaultStats.totalCallouts": "Всього callout",
@@ -528,67 +592,108 @@ export const uk: Record<string, string> = {
 	"vaultStats.close": "Закрити",
 
 	"import.title": "Проблеми імпорту",
-	"import.reportLeadIn": "Схоже, імпортований файл було змінено. Ось список проблем:",
-	"import.reportLeadInFatal": "Цей файл не схожий на експорт Callout Studio. Його не можна імпортувати:",
+	"import.reportLeadIn":
+		"Схоже, імпортований файл було змінено. Ось список проблем:",
+	"import.reportLeadInFatal":
+		"Цей файл не схожий на експорт Callout Studio. Його не можна імпортувати:",
 	"import.entryHeading": "Запис {{index}} — {{label}}",
-	"import.summary": "{{valid}} з {{total}} записів дійсні · знайдено {{issues}} проблем.",
+	"import.summary":
+		"{{valid}} з {{total}} записів дійсні · знайдено {{issues}} проблем.",
 	"import.btnCancel": "Скасувати",
 	"import.btnImportValid": "Імпортувати лише дійсні ({{count}})",
-	"import.err.notRecognized": "Нерозпізнаний файл: очікувався масив визначень callout або експорт Callout Studio.",
-	"import.warn.settingsIgnored": "Блок налаштувань не був дійсним об'єктом і був проігнорований.",
-	"import.warn.invalidGradient": "Фоновий градієнт був недійсним і був проігнорований.",
-	"import.err.parseFailed": "Файл не є дійсним JSON і не може бути розібраний.",
+	"import.err.notRecognized":
+		"Нерозпізнаний файл: очікувався масив визначень callout або експорт Callout Studio.",
+	"import.warn.settingsIgnored":
+		"Блок налаштувань не був дійсним об'єктом і був проігнорований.",
+	"import.warn.invalidGradient":
+		"Фоновий градієнт був недійсним і був проігнорований.",
+	"import.err.parseFailed":
+		"Файл не є дійсним JSON і не може бути розібраний.",
 	"import.err.entryNotObject": "Запис повинен бути об'єктом.",
-	"import.err.requiredMissing": "Обов'язкове поле «{{field}}» відсутнє або має неправильний тип.",
+	"import.err.requiredMissing":
+		"Обов'язкове поле «{{field}}» відсутнє або має неправильний тип.",
 	"import.err.idEmpty": "ID не повинен бути порожнім.",
-	"import.err.idTooLong": 'ID «{{value}}» має {{length}} символів; максимум — {{max}}.',
-	"import.err.idBadChar": 'ID «{{value}}» містить недійсні символи («|», «[», «]», табуляції та переноси рядків не дозволені).',
-	"import.err.displayNameEmpty": "Відображувана назва не повинна бути порожньою.",
-	"import.err.displayNameTooLong": "Відображувана назва має {{length}} символів; максимум — {{max}}.",
-	"import.err.boolField": '«{{field}}» повинно бути булевим значенням (true або false).',
+	"import.err.idTooLong":
+		"ID «{{value}}» має {{length}} символів; максимум — {{max}}.",
+	"import.err.idBadChar":
+		"ID «{{value}}» містить недійсні символи («|», «[», «]», табуляції та переноси рядків не дозволені).",
+	"import.err.displayNameEmpty":
+		"Відображувана назва не повинна бути порожньою.",
+	"import.err.displayNameTooLong":
+		"Відображувана назва має {{length}} символів; максимум — {{max}}.",
+	"import.err.boolField":
+		"«{{field}}» повинно бути булевим значенням (true або false).",
 	"import.err.iconNotObject": "Іконка повинна бути об'єктом.",
-	"import.err.iconTypeInvalid": "Тип іконки «{{value}}» не є одним із: {{types}}.",
-	"import.warn.iconFieldIgnored": "\"{{field}}\" застосовується лише до іконок Material і ігнорується для типу іконки {{type}}.",
-	"import.err.iconValueEmpty": "Значення іконки повинно бути непорожнім рядком.",
-	"import.err.iconValueTooLong": "Значення іконки незвично довге ({{length}} символів).",
-	"import.err.materialStyle": 'Стиль іконки Material «{{value}}» не є одним із: outlined, filled, rounded, sharp.',
-	"import.err.materialWeight": 'Товщина іконки Material «{{value}}» повинна бути цілим числом від 100 до 700 з кроком 100.',
-	"import.warn.iconRecolorIgnored": "\"recolor\" застосовується лише до ваших власних зображень і ігнорується для типу іконки {{type}}.",
-	"import.err.iconRecolorInvalid": "\"recolor\" має бути true або false (отримано: «{{value}}»).",
-	"import.err.colorInvalid": '«{{field}}» повинно бути кольором у форматі hex, наприклад «#448aff» (отримано «{{value}}»).',
-	"import.err.numberRange": '«{{field}}» повинно бути числом від {{min}} до {{max}} (отримано «{{value}}»).',
-	"import.err.iconSizeRange": '«{{field}}» повинно бути числом від {{min}} до {{max}} (отримано «{{value}}»).',
-	"import.err.aliasesNotArray": '«aliases» повинен бути масивом рядків.',
+	"import.err.iconTypeInvalid":
+		"Тип іконки «{{value}}» не є одним із: {{types}}.",
+	"import.warn.iconFieldIgnored":
+		'"{{field}}" застосовується лише до іконок Material і ігнорується для типу іконки {{type}}.',
+	"import.err.iconValueEmpty":
+		"Значення іконки повинно бути непорожнім рядком.",
+	"import.err.iconValueTooLong":
+		"Значення іконки незвично довге ({{length}} символів).",
+	"import.err.materialStyle":
+		"Стиль іконки Material «{{value}}» не є одним із: outlined, filled, rounded, sharp.",
+	"import.err.materialWeight":
+		"Товщина іконки Material «{{value}}» повинна бути цілим числом від 100 до 700 з кроком 100.",
+	"import.warn.iconRecolorIgnored":
+		'"recolor" застосовується лише до ваших власних зображень і ігнорується для типу іконки {{type}}.',
+	"import.err.iconRecolorInvalid":
+		'"recolor" має бути true або false (отримано: «{{value}}»).',
+	"import.err.colorInvalid":
+		"«{{field}}» повинно бути кольором у форматі hex, наприклад «#448aff» (отримано «{{value}}»).",
+	"import.err.numberRange":
+		"«{{field}}» повинно бути числом від {{min}} до {{max}} (отримано «{{value}}»).",
+	"import.err.iconSizeRange":
+		"«{{field}}» повинно бути числом від {{min}} до {{max}} (отримано «{{value}}»).",
+	"import.err.aliasesNotArray": "«aliases» повинен бути масивом рядків.",
 	"import.err.aliasNotString": "Псевдонім повинен бути рядком.",
-	"import.err.aliasDup": 'Псевдонім «{{value}}» дублюється в цьому записі.',
-	"import.err.tooManyIds": "Забагато ID ({{count}}); кожен callout може мати не більше {{max}} ID (основний + псевдоніми).",
-	"import.err.metadataShape": "«metadata» повинен бути об'єктом, всі значення якого є рядками.",
+	"import.err.aliasDup": "Псевдонім «{{value}}» дублюється в цьому записі.",
+	"import.err.tooManyIds":
+		"Забагато ID ({{count}}); кожен callout може мати не більше {{max}} ID (основний + псевдоніми).",
+	"import.err.metadataShape":
+		"«metadata» повинен бути об'єктом, всі значення якого є рядками.",
 	"import.warn.unknownFields": "Невідомі поля проігноровані: {{fields}}.",
-	"import.err.duplicateInFile": 'ID/псевдонім «{{value}}» вже використовується записом #{{first}} у цьому файлі.',
-	"import.err.aliasConflict": 'Псевдонім «{{value}}» вже використовується іншим callout («{{other}}») у вашому сховищі.',
-	"import.warn.defaultFoldedAutofix": '«defaultFolded» було true, а «foldable» — false; defaultFolded скинуто до false.',
-	"import.warn.imageMissing": "Цей Callout використовує зображення, якого немає ні в файлі, ні в цьому vault, тому буде показано іконку-замінник, доки ви не вкажете нову.",
+	"import.err.duplicateInFile":
+		"ID/псевдонім «{{value}}» вже використовується записом #{{first}} у цьому файлі.",
+	"import.err.aliasConflict":
+		"Псевдонім «{{value}}» вже використовується іншим callout («{{other}}») у вашому сховищі.",
+	"import.warn.defaultFoldedAutofix":
+		"«defaultFolded» було true, а «foldable» — false; defaultFolded скинуто до false.",
+	"import.warn.imageMissing":
+		"Цей Callout використовує зображення, якого немає ні в файлі, ні в цьому vault, тому буде показано іконку-замінник, доки ви не вкажете нову.",
 
-		"import.err.paletteIdInvalid": "\"paletteId\" має бути непорожнім текстовим ідентифікатором (отримано \"{{value}}\").",
-	"import.warn.iconNameUnknown": "Іконки \"{{value}}\" немає в {{type}}, тому було використано стандартну іконку.",
-	"import.warn.cmIconUnknownNew": "Іконки \"{{value}}\" немає в Obsidian, тому було використано стандартну іконку.",
-	"import.warn.cmIconUnknownExisting": "Іконки \"{{value}}\" немає в Obsidian, тому \"{{id}}\" залишив іконку, яка у нього вже була.",
+	"import.err.paletteIdInvalid":
+		'"paletteId" має бути непорожнім текстовим ідентифікатором (отримано "{{value}}").',
+	"import.warn.iconNameUnknown":
+		'Іконки "{{value}}" немає в {{type}}, тому було використано стандартну іконку.',
+	"import.warn.cmIconUnknownNew":
+		'Іконки "{{value}}" немає в Obsidian, тому було використано стандартну іконку.',
+	"import.warn.cmIconUnknownExisting":
+		'Іконки "{{value}}" немає в Obsidian, тому "{{id}}" залишив іконку, яка у нього вже була.',
 	"import.chooseSource": "Імпорт з",
 	"import.sourceStudio": "Callout Studio",
-	"import.sourceStudioDesc": "Завантажте файл .json, експортований з Callout Studio.",
+	"import.sourceStudioDesc":
+		"Завантажте файл .json, експортований з Callout Studio.",
 	"import.sourceCalloutManager": "Callout Manager",
-	"import.sourceCalloutManagerDesc": "Вставте стилі, скопійовані за допомогою кнопки Copy в Callout Manager.",
+	"import.sourceCalloutManagerDesc":
+		"Вставте стилі, скопійовані за допомогою кнопки Copy в Callout Manager.",
 	"import.sourceAdmonition": "Admonition",
 	"import.sourceAdmonitionDesc": "Поки недоступно.",
-	"import.sourceAdmonitionNotice": "Імпорт з Admonition поки не підтримується.",
+	"import.sourceAdmonitionNotice":
+		"Імпорт з Admonition поки не підтримується.",
 	"import.cmTitle": "Імпорт з Callout Manager",
-	"import.cmInstructions": "У Callout Manager скористайтесь кнопкою Copy, щоб скопіювати налаштовані стилі callout, після чого вставте їх нижче.",
+	"import.cmInstructions":
+		"У Callout Manager скористайтесь кнопкою Copy, щоб скопіювати налаштовані стилі callout, після чого вставте їх нижче.",
 	"import.cmPlaceholder": "Вставте скопійовані стилі сюди…",
 	"import.cmBtnCancel": "Скасувати",
 	"import.cmBtnImport": "Імпорт",
-	"import.err.cmNoBlocksFound": "У вставленому тексті не знайдено стилів Callout Manager.",
-	"import.err.cmNoColorForNew": "Не знайдено придатного кольору для нового callout \"{{value}}\"; його було пропущено.",
-	"import.err.cmIdConflict": "ID \"{{value}}\" вже використовується як псевдонім іншим callout (\"{{other}}\") і було пропущено.",
+	"import.err.cmNoBlocksFound":
+		"У вставленому тексті не знайдено стилів Callout Manager.",
+	"import.err.cmNoColorForNew":
+		'Не знайдено придатного кольору для нового callout "{{value}}"; його було пропущено.',
+	"import.err.cmIdConflict":
+		'ID "{{value}}" вже використовується як псевдонім іншим callout ("{{other}}") і було пропущено.',
 
 	"footer.tagline": "Є відгуки, коментарі або пропозиції? Буду радий почути!",
 	"footer.madeBy": "Створено Нівом  •  ",

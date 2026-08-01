@@ -151,7 +151,8 @@ export const fa: Record<string, string> = {
 	"notice.exported": "callout‌ها در callout-studio-export.json صادر شدند",
 	"notice.importedJSON": "{{count}} نوع callout از JSON وارد شد.",
 	"notice.importedSettings": "تنظیمات افزونه وارد شد.",
-	"notice.importedCalloutManager": "از Callout Manager وارد شد: {{created}} ایجاد شد، {{updated}} به‌روز شد.",
+	"notice.importedCalloutManager":
+		"از Callout Manager وارد شد: {{created}} ایجاد شد، {{updated}} به‌روز شد.",
 	"notice.noNewJSON":
 		"هیچ نوع callout جدیدی وارد نشد (شناسه‌ها ممکن است از قبل وجود داشته باشند).",
 	"notice.iconDownloadFailed":
@@ -180,6 +181,7 @@ export const fa: Record<string, string> = {
 		"این شناسه به نام نمایشی متصل است و قابل حذف نیست — برای تغییر آن، نام را ویرایش کنید",
 	"editor.icon": "آیکون",
 	"editor.pickIcon": "انتخاب نماد",
+	"editor.resetIcon": "بازنشانی نماد به پیش‌فرض",
 	"editor.livePreview": "پیش‌نمایش زنده",
 	"editor.iconAdjustment": "تنظیم آیکون",
 	"editor.picture": "تصویر",
@@ -187,6 +189,7 @@ export const fa: Record<string, string> = {
 	"editor.horizontalOffset": "جابجایی افقی",
 	"editor.verticalOffset": "جابجایی عمودی",
 	"editor.colors": "رنگ‌ها",
+	"editor.resetColors": "بازنشانی رنگ‌ها به پیش‌فرض",
 	"editor.paletteDeleted": "رنگ حذف‌شده",
 	"editor.paletteGroupObsidian": "Callout‌های Obsidian",
 	"editor.paletteGroupPresets": "پیش‌تنظیم‌های رنگ",
@@ -651,26 +654,37 @@ export const fa: Record<string, string> = {
 	"import.warn.imageMissing":
 		"این Callout از تصویری استفاده می‌کند که نه در فایل و نه در این vault وجود دارد، بنابراین آیکون جایگزین نمایش داده می‌شود تا زمانی که تصویر جدیدی تعیین کنید.",
 
-		"import.err.paletteIdInvalid": "\"paletteId\" باید یک شناسه متنی غیرخالی باشد (دریافت شد \"{{value}}\").",
-	"import.warn.iconNameUnknown": "هیچ نماد \"{{value}}\" در {{type}} وجود ندارد، بنابراین نماد پیش‌فرض استفاده شد.",
-	"import.warn.cmIconUnknownNew": "هیچ نماد \"{{value}}\" در Obsidian وجود ندارد، بنابراین نماد پیش‌فرض استفاده شد.",
-	"import.warn.cmIconUnknownExisting": "هیچ نماد \"{{value}}\" در Obsidian وجود ندارد، بنابراین \"{{id}}\" نماد قبلی خود را نگه داشت.",
+	"import.err.paletteIdInvalid":
+		'"paletteId" باید یک شناسه متنی غیرخالی باشد (دریافت شد "{{value}}").',
+	"import.warn.iconNameUnknown":
+		'هیچ نماد "{{value}}" در {{type}} وجود ندارد، بنابراین نماد پیش‌فرض استفاده شد.',
+	"import.warn.cmIconUnknownNew":
+		'هیچ نماد "{{value}}" در Obsidian وجود ندارد، بنابراین نماد پیش‌فرض استفاده شد.',
+	"import.warn.cmIconUnknownExisting":
+		'هیچ نماد "{{value}}" در Obsidian وجود ندارد، بنابراین "{{id}}" نماد قبلی خود را نگه داشت.',
 	"import.chooseSource": "وارد کردن از",
 	"import.sourceStudio": "Callout Studio",
-	"import.sourceStudioDesc": "بارگذاری فایل .json صادر شده از Callout Studio.",
+	"import.sourceStudioDesc":
+		"بارگذاری فایل .json صادر شده از Callout Studio.",
 	"import.sourceCalloutManager": "Callout Manager",
-	"import.sourceCalloutManagerDesc": "استایل‌هایی را که از دکمه Copy در Callout Manager کپی کرده‌اید بچسبانید.",
+	"import.sourceCalloutManagerDesc":
+		"استایل‌هایی را که از دکمه Copy در Callout Manager کپی کرده‌اید بچسبانید.",
 	"import.sourceAdmonition": "Admonition",
 	"import.sourceAdmonitionDesc": "هنوز در دسترس نیست.",
-	"import.sourceAdmonitionNotice": "وارد کردن از Admonition هنوز پشتیبانی نمی‌شود.",
+	"import.sourceAdmonitionNotice":
+		"وارد کردن از Admonition هنوز پشتیبانی نمی‌شود.",
 	"import.cmTitle": "وارد کردن از Callout Manager",
-	"import.cmInstructions": "در Callout Manager، از دکمه Copy برای کپی کردن استایل‌های callout سفارشی خود استفاده کنید، سپس آن‌ها را در زیر بچسبانید.",
+	"import.cmInstructions":
+		"در Callout Manager، از دکمه Copy برای کپی کردن استایل‌های callout سفارشی خود استفاده کنید، سپس آن‌ها را در زیر بچسبانید.",
 	"import.cmPlaceholder": "استایل‌های کپی‌شده را اینجا بچسبانید…",
 	"import.cmBtnCancel": "لغو",
 	"import.cmBtnImport": "وارد کردن",
-	"import.err.cmNoBlocksFound": "هیچ استایل Callout Manager در متن چسبانده‌شده یافت نشد.",
-	"import.err.cmNoColorForNew": "هیچ رنگ قابل استفاده‌ای برای callout جدید \"{{value}}\" یافت نشد؛ از آن صرف‌نظر شد.",
-	"import.err.cmIdConflict": "شناسه \"{{value}}\" قبلاً به عنوان نام مستعار توسط callout دیگری (\"{{other}}\") استفاده می‌شود و از آن صرف‌نظر شد.",
+	"import.err.cmNoBlocksFound":
+		"هیچ استایل Callout Manager در متن چسبانده‌شده یافت نشد.",
+	"import.err.cmNoColorForNew":
+		'هیچ رنگ قابل استفاده‌ای برای callout جدید "{{value}}" یافت نشد؛ از آن صرف‌نظر شد.',
+	"import.err.cmIdConflict":
+		'شناسه "{{value}}" قبلاً به عنوان نام مستعار توسط callout دیگری ("{{other}}") استفاده می‌شود و از آن صرف‌نظر شد.',
 
 	"footer.tagline": "بازخورد، نظر یا پیشنهادی دارید؟ خوشحال می‌شوم بشنوم!",
 	"footer.madeBy": "ساخته شده توسط Niv  •  ",

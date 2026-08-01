@@ -152,7 +152,8 @@ export const ko: Record<string, string> = {
 	"notice.importedJSON":
 		"JSON에서 {{count}}개의 callout 유형을 가져왔습니다.",
 	"notice.importedSettings": "플러그인 설정을 가져왔습니다.",
-	"notice.importedCalloutManager": "Callout Manager에서 가져왔습니다: {{created}}개 생성됨, {{updated}}개 업데이트됨.",
+	"notice.importedCalloutManager":
+		"Callout Manager에서 가져왔습니다: {{created}}개 생성됨, {{updated}}개 업데이트됨.",
 	"notice.noNewJSON":
 		"새로운 callout 유형을 가져오지 못했습니다 (ID가 이미 존재할 수 있습니다).",
 	"notice.iconDownloadFailed":
@@ -180,6 +181,7 @@ export const ko: Record<string, string> = {
 		"이 ID는 표시 이름에 연결되어 있어 삭제할 수 없습니다 — 이름을 편집하여 변경하세요",
 	"editor.icon": "아이콘",
 	"editor.pickIcon": "아이콘 선택",
+	"editor.resetIcon": "아이콘을 기본값으로 재설정",
 	"editor.livePreview": "라이브 미리 보기",
 	"editor.iconAdjustment": "아이콘 조정",
 	"editor.picture": "이미지",
@@ -187,6 +189,7 @@ export const ko: Record<string, string> = {
 	"editor.horizontalOffset": "수평 오프셋",
 	"editor.verticalOffset": "수직 오프셋",
 	"editor.colors": "색상",
+	"editor.resetColors": "색상을 기본값으로 재설정",
 	"editor.paletteDeleted": "삭제된 색상",
 	"editor.paletteGroupObsidian": "Obsidian callout",
 	"editor.paletteGroupPresets": "색상 사전 설정",
@@ -643,7 +646,8 @@ export const ko: Record<string, string> = {
 		"ID가 너무 많습니다 ({{count}}개). 각 callout은 최대 {{max}}개의 ID(기본 + 별칭)를 가질 수 있습니다.",
 	"import.err.metadataShape":
 		'"metadata"는 모든 값이 문자열인 객체여야 합니다.',
-	"import.warn.unknownFields": "알 수 없는 필드가 무시되었습니다: {{fields}}.",
+	"import.warn.unknownFields":
+		"알 수 없는 필드가 무시되었습니다: {{fields}}.",
 	"import.err.duplicateInFile":
 		'ID/별칭 "{{value}}"은(는) 이 파일의 항목 #{{first}}에서 이미 사용 중입니다.',
 	"import.err.aliasConflict":
@@ -653,26 +657,37 @@ export const ko: Record<string, string> = {
 	"import.warn.imageMissing":
 		"이 Callout은 파일에도, 이 vault에도 없는 이미지를 사용하므로 새 이미지를 지정할 때까지 자리 표시자 아이콘이 표시됩니다.",
 
-		"import.err.paletteIdInvalid": "\"paletteId\"는 비어 있지 않은 텍스트 ID여야 합니다(\"{{value}}\" 수신).",
-	"import.warn.iconNameUnknown": "\"{{value}}\" 아이콘이 {{type}}에 없어 기본 아이콘이 대신 사용되었습니다.",
-	"import.warn.cmIconUnknownNew": "\"{{value}}\" 아이콘이 Obsidian에 없어 기본 아이콘이 대신 사용되었습니다.",
-	"import.warn.cmIconUnknownExisting": "\"{{value}}\" 아이콘이 Obsidian에 없어 \"{{id}}\"는 기존 아이콘을 유지했습니다.",
+	"import.err.paletteIdInvalid":
+		'"paletteId"는 비어 있지 않은 텍스트 ID여야 합니다("{{value}}" 수신).',
+	"import.warn.iconNameUnknown":
+		'"{{value}}" 아이콘이 {{type}}에 없어 기본 아이콘이 대신 사용되었습니다.',
+	"import.warn.cmIconUnknownNew":
+		'"{{value}}" 아이콘이 Obsidian에 없어 기본 아이콘이 대신 사용되었습니다.',
+	"import.warn.cmIconUnknownExisting":
+		'"{{value}}" 아이콘이 Obsidian에 없어 "{{id}}"는 기존 아이콘을 유지했습니다.',
 	"import.chooseSource": "가져오기 위치",
 	"import.sourceStudio": "Callout Studio",
-	"import.sourceStudioDesc": "Callout Studio에서 내보낸 .json 파일을 불러옵니다.",
+	"import.sourceStudioDesc":
+		"Callout Studio에서 내보낸 .json 파일을 불러옵니다.",
 	"import.sourceCalloutManager": "Callout Manager",
-	"import.sourceCalloutManagerDesc": "Callout Manager의 Copy 버튼으로 복사한 스타일을 붙여넣으세요.",
+	"import.sourceCalloutManagerDesc":
+		"Callout Manager의 Copy 버튼으로 복사한 스타일을 붙여넣으세요.",
 	"import.sourceAdmonition": "Admonition",
 	"import.sourceAdmonitionDesc": "아직 사용할 수 없습니다.",
-	"import.sourceAdmonitionNotice": "Admonition에서 가져오기는 아직 지원되지 않습니다.",
+	"import.sourceAdmonitionNotice":
+		"Admonition에서 가져오기는 아직 지원되지 않습니다.",
 	"import.cmTitle": "Callout Manager에서 가져오기",
-	"import.cmInstructions": "Callout Manager에서 Copy 버튼을 사용하여 사용자 정의 callout 스타일을 복사한 후, 아래에 붙여넣으세요.",
+	"import.cmInstructions":
+		"Callout Manager에서 Copy 버튼을 사용하여 사용자 정의 callout 스타일을 복사한 후, 아래에 붙여넣으세요.",
 	"import.cmPlaceholder": "복사한 스타일을 여기에 붙여넣으세요…",
 	"import.cmBtnCancel": "취소",
 	"import.cmBtnImport": "가져오기",
-	"import.err.cmNoBlocksFound": "붙여넣은 텍스트에서 Callout Manager 스타일을 찾을 수 없습니다.",
-	"import.err.cmNoColorForNew": "새 callout \"{{value}}\"에 사용 가능한 색상을 찾을 수 없어 건너뛰었습니다.",
-	"import.err.cmIdConflict": "ID \"{{value}}\"는 이미 다른 callout(\"{{other}}\")의 alias로 사용 중이어서 건너뛰었습니다.",
+	"import.err.cmNoBlocksFound":
+		"붙여넣은 텍스트에서 Callout Manager 스타일을 찾을 수 없습니다.",
+	"import.err.cmNoColorForNew":
+		'새 callout "{{value}}"에 사용 가능한 색상을 찾을 수 없어 건너뛰었습니다.',
+	"import.err.cmIdConflict":
+		'ID "{{value}}"는 이미 다른 callout("{{other}}")의 alias로 사용 중이어서 건너뛰었습니다.',
 
 	"footer.tagline": "피드백, 의견 또는 제안이 있으신가요? 꼭 들려주세요!",
 	"footer.madeBy": "Niv 제작  •  ",

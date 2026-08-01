@@ -10,18 +10,23 @@ export const zh: Record<string, string> = {
 	"settings.fallbackTag": "默认",
 	"settings.fallbackTagAuto": "自动默认",
 	"settings.rescanVault": "重新扫描库",
-	"settings.rescanVaultDesc": "查找笔记中未识别的 callout ID 并将其添加为回退行。",
+	"settings.rescanVaultDesc":
+		"查找笔记中未识别的 callout ID 并将其添加为回退行。",
 	"settings.rescanVaultHintAction": "立即扫描",
 	"settings.rescanComplete": "重新扫描完成：已添加 {{count}} 个新 callout。",
 	"replaceModal.deleteWithoutReplaceSuffix": "（回退到默认值）",
 
 	"firstRun.title": "在库中查找现有的 callout？",
-	"firstRun.body": "Callout Studio 可以扫描您的库以发现您已在使用的 callout，使其出现在设置列表中并采用您的回退样式。",
-	"firstRun.heavyVaultNote": "您的库中有 {{count}} 个 Markdown 文件——扫描可能需要几秒钟。",
-	"firstRun.laterHint": "您随时可以从「设置 → 库洞察与维护 → 重新扫描库」运行此操作。",
+	"firstRun.body":
+		"Callout Studio 可以扫描您的库以发现您已在使用的 callout，使其出现在设置列表中并采用您的回退样式。",
+	"firstRun.heavyVaultNote":
+		"您的库中有 {{count}} 个 Markdown 文件——扫描可能需要几秒钟。",
+	"firstRun.laterHint":
+		"您随时可以从「设置 → 库洞察与维护 → 重新扫描库」运行此操作。",
 	"firstRun.scanNow": "立即扫描",
 	"firstRun.noThanks": "不，谢谢",
-	"firstRun.autoScanComplete": "Callout Studio 已扫描您的库并添加了 {{count}} 个 callout。",
+	"firstRun.autoScanComplete":
+		"Callout Studio 已扫描您的库并添加了 {{count}} 个 callout。",
 	"firstRun.scanning": "扫描中",
 
 	"welcome.tooltip": "关于 Callout Studio",
@@ -39,10 +44,14 @@ export const zh: Record<string, string> = {
 		"Callout Studio 还有更多功能等您发现！[了解更多]({{repoUrl}})。\n",
 
 	"deleteModal.title": '删除 callout "{{name}}"？',
-	"deleteModal.bodyInUse": "此 callout 在 {{files}} 个文件中出现了 {{count}} 次。",
-	"deleteModal.bodyInUseExplain": "删除后这些块将转换为纯文本——它们将失去样式和 callout 标题。",
-	"deleteModal.replaceHint": "您可以用另一个 callout 替换它，这样库内容仍保持为带样式的 callout。",
-	"deleteModal.bodyUnused": '"{{name}}" 未在任何笔记中使用，但它是您自定义的 callout。删除将从列表中移除它。',
+	"deleteModal.bodyInUse":
+		"此 callout 在 {{files}} 个文件中出现了 {{count}} 次。",
+	"deleteModal.bodyInUseExplain":
+		"删除后这些块将转换为纯文本——它们将失去样式和 callout 标题。",
+	"deleteModal.replaceHint":
+		"您可以用另一个 callout 替换它，这样库内容仍保持为带样式的 callout。",
+	"deleteModal.bodyUnused":
+		'"{{name}}" 未在任何笔记中使用，但它是您自定义的 callout。删除将从列表中移除它。',
 	"deleteModal.replaceInstead": "改为替换",
 	"deleteModal.deleteInUse": "删除（转为纯文本）",
 	"deleteModal.deleteUnused": "删除 callout",
@@ -60,9 +69,11 @@ export const zh: Record<string, string> = {
 	"settings.importExport": "导入 / 导出",
 	"settings.import": "导入",
 	"settings.export": "导出",
-	"settings.importDesc": "使用 JSON 文件从另一个库导入您的 Callout Studio 数据。",
+	"settings.importDesc":
+		"使用 JSON 文件从另一个库导入您的 Callout Studio 数据。",
 	"settings.exportDesc": "以 JSON 格式保存所有自定义 callout 类型。",
-	"settings.importConflictNotice": "已导入 {{count}} 个 callout 类型；{{overwritten}} 个现有条目已被覆盖。",
+	"settings.importConflictNotice":
+		"已导入 {{count}} 个 callout 类型；{{overwritten}} 个现有条目已被覆盖。",
 
 	"settings.addNewCallout": "+ 添加新 callout",
 
@@ -78,7 +89,8 @@ export const zh: Record<string, string> = {
 
 	"settings.colorSwatchAria": "强调色：{{accent}} · 背景：{{bg}}",
 	"settings.fallbackCallout": "默认回退 callout",
-	"settings.fallbackCalloutDesc": "库中无法识别的 callout 类型将继承此 callout 的样式。",
+	"settings.fallbackCalloutDesc":
+		"库中无法识别的 callout 类型将继承此 callout 的样式。",
 
 	"settings.globalStyle": "全局 callout 样式",
 	"settings.border": "边框",
@@ -112,34 +124,41 @@ export const zh: Record<string, string> = {
 	"settings.deletePaletteConfirm":
 		'删除调色板 "{{name}}"？\n使用其颜色的 callout 不受影响。',
 	"settings.enableAutocomplete": "启用 [! 自动完成",
-	"settings.enableAutocompleteDesc": '在编辑器块引用中输入"[!"时显示建议。从列表中选择 callout 类型以插入完整的 callout 标题。',
+	"settings.enableAutocompleteDesc":
+		'在编辑器块引用中输入"[!"时显示建议。从列表中选择 callout 类型以插入完整的 callout 标题。',
 
 	"settings.openHotkeys": "Callout Studio 快捷键",
-	"settings.openHotkeysDesc": "打开 Obsidian 的快捷键设置，在那里您可以为「创建新 callout 类型」、「打开设置」、「从 callout 中解包」和「用 callout 包裹」设置快捷键。默认不分配快捷键。",
+	"settings.openHotkeysDesc":
+		"打开 Obsidian 的快捷键设置，在那里您可以为「创建新 callout 类型」、「打开设置」、「从 callout 中解包」和「用 callout 包裹」设置快捷键。默认不分配快捷键。",
 	"settings.openHotkeysButton": "打开快捷键设置",
-
 
 	"settings.vaultMaintenance": "库洞察与维护",
 	"settings.vaultStats": "Callout 统计",
-	"settings.vaultStatsDesc": "统计 Markdown 笔记中每个 callout 块并按类型分组。",
+	"settings.vaultStatsDesc":
+		"统计 Markdown 笔记中每个 callout 块并按类型分组。",
 	"settings.vaultStatsButton": "查看统计",
 	"settings.vaultStatsScanning": "扫描中",
 	"settings.resetAll": "重置",
-	"settings.resetAllDesc": "删除所有用户 callout，重置内置 callout、全局样式（边框、字体缩放、形状）、已保存的调色板、右键菜单自定义设置和已下载的 Material SVG。",
+	"settings.resetAllDesc":
+		"删除所有用户 callout，重置内置 callout、全局样式（边框、字体缩放、形状）、已保存的调色板、右键菜单自定义设置和已下载的 Material SVG。",
 	"settings.resetAllButton": "重置所有内容",
-	"settings.resetAllConfirm": "此操作将删除所有自定义 callout，重置内置 callout、全局样式、已保存的调色板、右键菜单自定义设置和所有缓存的 Material SVG。此操作无法撤销。确定吗？",
+	"settings.resetAllConfirm":
+		"此操作将删除所有自定义 callout，重置内置 callout、全局样式、已保存的调色板、右键菜单自定义设置和所有缓存的 Material SVG。此操作无法撤销。确定吗？",
 	"notice.resetAllDone": "所有内容已重置为默认值。",
 
 	"notice.exported": "Callout 已导出到 callout-studio-export.json",
 	"notice.importedJSON": "已从 JSON 导入 {{count}} 个 callout 类型。",
 	"notice.importedSettings": "已导入插件设置。",
-	"notice.importedCalloutManager": "已从 Callout Manager 导入：创建了 {{created}} 个，更新了 {{updated}} 个。",
+	"notice.importedCalloutManager":
+		"已从 Callout Manager 导入：创建了 {{created}} 个，更新了 {{updated}} 个。",
 	"notice.noNewJSON": "未导入新的 callout 类型（ID 可能已存在）。",
-	"notice.iconDownloadFailed": '无法下载 Material 图标"{{name}}"。该图标可能不支持此样式/字重，或您的网络连接已断开。',
+	"notice.iconDownloadFailed":
+		'无法下载 Material 图标"{{name}}"。该图标可能不支持此样式/字重，或您的网络连接已断开。',
 	"notice.nothingToWrap": "没有可包裹的内容。",
 	"notice.cursorNotInsideCallout": "光标不在 callout 内部。",
 	"notice.openHotkeysFailed": "无法打开 Obsidian 快捷键设置。",
-	"notice.filterHotkeysFailed": "已打开 Obsidian 快捷键，但无法应用 Callout Studio 过滤器。",
+	"notice.filterHotkeysFailed":
+		"已打开 Obsidian 快捷键，但无法应用 Callout Studio 过滤器。",
 
 	"editor.editCallout": "编辑 callout",
 	"editor.newCallout": "新建 callout",
@@ -148,13 +167,16 @@ export const zh: Record<string, string> = {
 	"editor.displayNameBuiltIn": "内置 callout 的显示名称无法更改",
 	"editor.displayNamePlaceholder": "我的 callout",
 	"editor.calloutIds": "Callout ID",
-	"editor.calloutIdsDesc": "此 callout 的所有标识符。允许使用空格。\n按 Enter 或 + 按钮添加。",
+	"editor.calloutIdsDesc":
+		"此 callout 的所有标识符。允许使用空格。\n按 Enter 或 + 按钮添加。",
 	"editor.calloutIdsPlaceholder": "添加 ID",
 	"editor.addId": "添加 ID",
 	"editor.idLinkedToName": "已关联到显示名称",
-	"editor.idCannotDelete": "此 ID 已关联到显示名称，无法删除——请编辑名称以更改",
+	"editor.idCannotDelete":
+		"此 ID 已关联到显示名称，无法删除——请编辑名称以更改",
 	"editor.icon": "图标",
 	"editor.pickIcon": "选择图标",
+	"editor.resetIcon": "重置图标为默认",
 	"editor.livePreview": "实时预览",
 	"editor.iconAdjustment": "图标调整",
 	"editor.picture": "图片",
@@ -162,6 +184,7 @@ export const zh: Record<string, string> = {
 	"editor.horizontalOffset": "水平偏移",
 	"editor.verticalOffset": "垂直偏移",
 	"editor.colors": "颜色",
+	"editor.resetColors": "重置颜色为默认",
 	"editor.paletteDeleted": "已删除的颜色",
 	"editor.paletteGroupObsidian": "Obsidian callout",
 	"editor.paletteGroupPresets": "颜色预设",
@@ -169,7 +192,8 @@ export const zh: Record<string, string> = {
 	"editor.paletteNewColor": "新建颜色…",
 	"editor.contrastWarning": "与背景对比度过低——可能难以阅读",
 	"editor.foldable": "可折叠",
-	"editor.foldableDesc": "选择 callout 是否可折叠以及在整个库中应用的默认状态。",
+	"editor.foldableDesc":
+		"选择 callout 是否可折叠以及在整个库中应用的默认状态。",
 	"editor.foldOff": "关闭",
 	"editor.foldOpen": "默认展开",
 	"editor.foldClosed": "默认折叠",
@@ -182,10 +206,13 @@ export const zh: Record<string, string> = {
 	"editor.idEmpty": "至少需要一个 ID",
 	"editor.idExists": "已存在具有此 ID 的 callout",
 	"editor.idConflict": "此 ID 与现有 callout 冲突",
-	"editor.idDashConflict": 'Obsidian 会将空格写为连字符，因此此 ID 与 "{{other}}" 冲突',
+	"editor.idDashConflict":
+		'Obsidian 会将空格写为连字符，因此此 ID 与 "{{other}}" 冲突',
 	"editor.untitledCallout": "未命名 Callout",
-	"editor.loremIpsum": "Lorem ipsum dolor sit amet，consectetur adipiscing elit。",
-	"editor.loremIpsumShort": "Lorem ipsum dolor sit amet，consectetur adipiscing elit。",
+	"editor.loremIpsum":
+		"Lorem ipsum dolor sit amet，consectetur adipiscing elit。",
+	"editor.loremIpsumShort":
+		"Lorem ipsum dolor sit amet，consectetur adipiscing elit。",
 	"editor.sampleInlineText": "这是一个嵌入在段落中的行内 [!{id}] 徽标。",
 	"editor.previewReadOnly": "实时预览无法编辑",
 
@@ -196,10 +223,12 @@ export const zh: Record<string, string> = {
 	"palette.namePlaceholder": "我的调色板",
 	"palette.nameExists": "已存在同名的调色板",
 	"palette.baseColor": "基础颜色",
-	"palette.baseColorHint": "我们会自动将背景颜色与之匹配。如果需要，您可以通过{{link}}单独控制它。",
+	"palette.baseColorHint":
+		"我们会自动将背景颜色与之匹配。如果需要，您可以通过{{link}}单独控制它。",
 	"palette.baseColorHintLink": "点击此处",
 	"palette.advancedColors": "颜色",
-	"palette.advancedColorsHint": "正在编辑{{mode}}模式的颜色 - 另一模式会自动更新。切换 Obsidian 主题以进行检查。",
+	"palette.advancedColorsHint":
+		"正在编辑{{mode}}模式的颜色 - 另一模式会自动更新。切换 Obsidian 主题以进行检查。",
 	"palette.revertHint": "更喜欢使用单一基础颜色？{{link}}。",
 	"palette.revertHintLink": "还原",
 	"palette.lightMode": "浅色",
@@ -287,19 +316,25 @@ export const zh: Record<string, string> = {
 	"iconPicker.image": "您的图片",
 	"iconPicker.searchImage": "搜索您的图片",
 	"iconPicker.imageTooLarge": "{{name}} 太大。图片必须小于 5 MB。",
-	"iconPicker.imageUnsupported": "{{name}} 不是受支持的图片格式。请使用 SVG、PNG、JPEG 或 WebP。",
-	"iconPicker.imageInvalidSvg": "{{name}} 无法作为安全的 SVG 读取，因此未添加。",
+	"iconPicker.imageUnsupported":
+		"{{name}} 不是受支持的图片格式。请使用 SVG、PNG、JPEG 或 WebP。",
+	"iconPicker.imageInvalidSvg":
+		"{{name}} 无法作为安全的 SVG 读取，因此未添加。",
 	"iconPicker.imageDecodeFailed": "{{name}} 无法作为图片读取。",
-	"iconPicker.imageDuplicate": "{{name}} 已在您的图片中。请重命名文件或删除已有的图片。",
+	"iconPicker.imageDuplicate":
+		"{{name}} 已在您的图片中。请重命名文件或删除已有的图片。",
 	"iconPicker.imageAdd": "添加图片",
-	"iconPicker.imageEmpty": "还没有图片。从您的计算机添加 SVG、PNG、JPEG 或 WebP 文件，或将其拖到此处。",
+	"iconPicker.imageEmpty":
+		"还没有图片。从您的计算机添加 SVG、PNG、JPEG 或 WebP 文件，或将其拖到此处。",
 	"iconPicker.imageDelete": "删除",
 	"iconPicker.imageDeleteConfirm": "删除“{{name}}”？",
-	"iconPicker.imageDeleteInUse": "{{count}} 个 callout 使用了这张图片。在您提供新图片之前，它们将显示占位图标。",
+	"iconPicker.imageDeleteInUse":
+		"{{count}} 个 callout 使用了这张图片。在您提供新图片之前，它们将显示占位图标。",
 	"iconPicker.imageRecolor": "跟随 Callout 颜色",
 	"iconPicker.allSources": "所有来源",
 	"iconPicker.searchAllSources": "搜索所有图标来源",
-	"iconPicker.sourcesNotDownloaded": "尚未包含：{{names}}。请在上方选择来源以下载。",
+	"iconPicker.sourcesNotDownloaded":
+		"尚未包含：{{names}}。请在上方选择来源以下载。",
 	"iconPicker.chooseSource": "选择来源",
 	"iconPicker.sourceGroup": "{{name}} · {{count}}",
 
@@ -435,15 +470,19 @@ export const zh: Record<string, string> = {
 	"iconPack.downloading": "正在下载 {{name}}…",
 	"iconPack.downloadFailed": "无法下载 {{name}}。请检查网络连接后重试。",
 	"iconPack.retry": "重试",
-	"iconPack.faBrandsNotice": "品牌图标是其各自所有者的商标。包含这些图标并不表示认可。请仅将其用于代表所指的公司、产品或服务。",
+	"iconPack.faBrandsNotice":
+		"品牌图标是其各自所有者的商标。包含这些图标并不表示认可。请仅将其用于代表所指的公司、产品或服务。",
 	"iconPack.artworkRestored": "已下载 {{names}} 的图标图稿。",
-	"iconPack.diskWriteFailed": "Callout Studio 无法将图标包保存到磁盘，下次需要重新下载。您选择的图标仍已保存在您的设置中。",
+	"iconPack.diskWriteFailed":
+		"Callout Studio 无法将图标包保存到磁盘，下次需要重新下载。您选择的图标仍已保存在您的设置中。",
 
 	// Icon licences & credits
 	"credits.title": "图标许可证与致谢",
-	"credits.intro": "Callout Studio 使用了多个开源图标库。其许可证以及为在此使用所做的更改均已在下方列出。",
+	"credits.intro":
+		"Callout Studio 使用了多个开源图标库。其许可证以及为在此使用所做的更改均已在下方列出。",
 	"credits.fullNotices": "完整的第三方声明",
-	"credits.pluginLicense": "Callout Studio 自身代码采用 0BSD 许可证；图标库保留各自的许可证。",
+	"credits.pluginLicense":
+		"Callout Studio 自身代码采用 0BSD 许可证；图标库保留各自的许可证。",
 
 	"contextMenu.editCallout": "编辑 callout 设置",
 	"contextMenu.copyMarkdown": "复制 callout Markdown",
@@ -458,8 +497,7 @@ export const zh: Record<string, string> = {
 	"heading.toggleFold": "切换折叠",
 
 	"settings.globalSettings": "全局设置",
-	"settings.globalSettingsDesc":
-		"微调每种 callout 类型在整个库中的外观。",
+	"settings.globalSettingsDesc": "微调每种 callout 类型在整个库中的外观。",
 	"settings.globalSettingsRegularDesc":
 		"在引用块中添加 callout 标记（例如 `> [!type]`）以显示为 Obsidian 原生的 callout 框。您可以调整其边框、圆角、字体缩放和对齐方式。",
 	"settings.globalSettingsHeadingDesc":
@@ -473,10 +511,12 @@ export const zh: Record<string, string> = {
 	"settings.calloutTypeInline": "行内 callout",
 
 	"settings.customizeMenu": "自定义菜单项",
-	"settings.customizeMenuDesc": "选择每种 callout 类型显示哪些右键操作，并调整它们的顺序。 在源代码模式和实时预览中均有效。",
+	"settings.customizeMenuDesc":
+		"选择每种 callout 类型显示哪些右键操作，并调整它们的顺序。 在源代码模式和实时预览中均有效。",
 	"settings.customizeMenuButton": "自定义菜单项",
 	"menuCustomize.title": "自定义右键菜单",
-	"menuCustomize.desc": "启用或禁用操作，并拖动手柄调整顺序。更改会自动保存。",
+	"menuCustomize.desc":
+		"启用或禁用操作，并拖动手柄调整顺序。更改会自动保存。",
 	"menuCustomize.regular": "常规 callout",
 	"menuCustomize.heading": "标题 callout",
 	"menuCustomize.inline": "行内 callout",
@@ -493,19 +533,25 @@ export const zh: Record<string, string> = {
 	"confirm.cancel": "取消",
 
 	"vault.filesUpdated": "已更新库文件中的 {{count}} 个 callout 引用。",
-	"vault.idsUpdated": "已更新库文件中的 {{count}} 个 callout ID：{{oldIds}} → {{newId}}",
-	"vault.titlesUpdated": "已更新库文件中的 {{count}} 个 callout 标题：{{oldTitle}} → {{newTitle}}",
+	"vault.idsUpdated":
+		"已更新库文件中的 {{count}} 个 callout ID：{{oldIds}} → {{newId}}",
+	"vault.titlesUpdated":
+		"已更新库文件中的 {{count}} 个 callout 标题：{{oldTitle}} → {{newTitle}}",
 	"vault.replaceWith": "替换为：",
 	"vault.deleteWithout": "直接删除",
 	"vault.confirmDelete": "确认",
 	"vault.confirmReplace": "替换",
-	"vault.replacePromptInUse": '"{{name}}" 在 {{files}} 个文件中被使用了 {{count}} 次。选择替换它的 callout：',
+	"vault.replacePromptInUse":
+		'"{{name}}" 在 {{files}} 个文件中被使用了 {{count}} 次。选择替换它的 callout：',
 	"vault.replacePromptUnused": '选择替换"{{name}}"的 callout：',
 	"vault.noReplacementAvailable": "没有其他可用的 callout 来替换此项。",
-	"vault.convertedToPlainText": "已将 {{files}} 个文件中的 {{blocks}} 个 callout 块转换为纯文本。",
-	"vault.resetAliasWarning": "{{files}} 个文件中有 {{count}} 个引用使用了自定义别名：{{aliases}}。重置后这些别名将失效。继续？",
+	"vault.convertedToPlainText":
+		"已将 {{files}} 个文件中的 {{blocks}} 个 callout 块转换为纯文本。",
+	"vault.resetAliasWarning":
+		"{{files}} 个文件中有 {{count}} 个引用使用了自定义别名：{{aliases}}。重置后这些别名将失效。继续？",
 	"vault.resetConfirm": "重置",
-	"vault.resetAllInUse": "⚠ {{files}} 个文件中有 {{count}} 个 callout 引用使用了将被删除的自定义 callout 类型。",
+	"vault.resetAllInUse":
+		"⚠ {{files}} 个文件中有 {{count}} 个 callout 引用使用了将被删除的自定义 callout 类型。",
 
 	"vaultStats.title": "Callout 统计",
 	"vaultStats.totalCallouts": "Callout 总数",
@@ -529,66 +575,94 @@ export const zh: Record<string, string> = {
 
 	"import.title": "导入问题",
 	"import.reportLeadIn": "看起来您导入的文件已被修改。以下是问题列表：",
-	"import.reportLeadInFatal": "此文件看起来不像 Callout Studio 的导出文件，无法导入：",
+	"import.reportLeadInFatal":
+		"此文件看起来不像 Callout Studio 的导出文件，无法导入：",
 	"import.entryHeading": "条目 {{index}} — {{label}}",
-	"import.summary": "{{total}} 个条目中 {{valid}} 个有效 · 发现 {{issues}} 个问题。",
+	"import.summary":
+		"{{total}} 个条目中 {{valid}} 个有效 · 发现 {{issues}} 个问题。",
 	"import.btnCancel": "取消",
 	"import.btnImportValid": "仅导入有效项（{{count}} 个）",
-	"import.err.notRecognized": "无法识别的文件：应为 callout 定义数组或 Callout Studio 导出文件。",
+	"import.err.notRecognized":
+		"无法识别的文件：应为 callout 定义数组或 Callout Studio 导出文件。",
 	"import.warn.settingsIgnored": "设置块不是有效的对象，已被忽略。",
 	"import.warn.invalidGradient": "背景渐变无效，已被忽略。",
 	"import.err.parseFailed": "文件不是有效的 JSON，无法解析。",
 	"import.err.entryNotObject": "条目必须是对象。",
 	"import.err.requiredMissing": '必填字段"{{field}}"缺失或类型错误。',
 	"import.err.idEmpty": "ID 不能为空。",
-	"import.err.idTooLong": 'ID"{{value}}"长度为 {{length}} 个字符；最大值为 {{max}}。',
-	"import.err.idBadChar": 'ID"{{value}}"包含无效字符（不允许使用"|"、"["、"]"、制表符和换行符）。',
+	"import.err.idTooLong":
+		'ID"{{value}}"长度为 {{length}} 个字符；最大值为 {{max}}。',
+	"import.err.idBadChar":
+		'ID"{{value}}"包含无效字符（不允许使用"|"、"["、"]"、制表符和换行符）。',
 	"import.err.displayNameEmpty": "显示名称不能为空。",
-	"import.err.displayNameTooLong": "显示名称长度为 {{length}} 个字符；最大值为 {{max}}。",
+	"import.err.displayNameTooLong":
+		"显示名称长度为 {{length}} 个字符；最大值为 {{max}}。",
 	"import.err.boolField": '"{{field}}"必须是布尔值（true 或 false）。',
 	"import.err.iconNotObject": "图标必须是对象。",
-	"import.err.iconTypeInvalid": "图标类型“{{value}}”不是以下之一：{{types}}。",
-	"import.warn.iconFieldIgnored": "\"{{field}}\" 仅适用于 Material 图标，对于图标类型 {{type}} 将被忽略。",
+	"import.err.iconTypeInvalid":
+		"图标类型“{{value}}”不是以下之一：{{types}}。",
+	"import.warn.iconFieldIgnored":
+		'"{{field}}" 仅适用于 Material 图标，对于图标类型 {{type}} 将被忽略。',
 	"import.err.iconValueEmpty": "图标值必须是非空字符串。",
 	"import.err.iconValueTooLong": "图标值异常过长（{{length}} 个字符）。",
-	"import.err.materialStyle": 'Material 图标样式"{{value}}"不是以下之一：outlined、filled、rounded、sharp。',
-	"import.err.materialWeight": 'Material 图标粗细"{{value}}"必须是 100 到 700 之间的整数，步长为 100。',
-	"import.warn.iconRecolorIgnored": "\"recolor\" 仅适用于您自己的图片，对于图标类型 {{type}} 将被忽略。",
-	"import.err.iconRecolorInvalid": "\"recolor\" 必须为 true 或 false（收到：“{{value}}”)。",
-	"import.err.colorInvalid": '"{{field}}"必须是如"#448aff"的十六进制颜色（收到"{{value}}"）。',
-	"import.err.numberRange": '"{{field}}"必须是 {{min}} 到 {{max}} 之间的数字（收到"{{value}}"）。',
-	"import.err.iconSizeRange": '"{{field}}"必须是 {{min}} 到 {{max}} 之间的数字（收到"{{value}}"）。',
+	"import.err.materialStyle":
+		'Material 图标样式"{{value}}"不是以下之一：outlined、filled、rounded、sharp。',
+	"import.err.materialWeight":
+		'Material 图标粗细"{{value}}"必须是 100 到 700 之间的整数，步长为 100。',
+	"import.warn.iconRecolorIgnored":
+		'"recolor" 仅适用于您自己的图片，对于图标类型 {{type}} 将被忽略。',
+	"import.err.iconRecolorInvalid":
+		'"recolor" 必须为 true 或 false（收到：“{{value}}”)。',
+	"import.err.colorInvalid":
+		'"{{field}}"必须是如"#448aff"的十六进制颜色（收到"{{value}}"）。',
+	"import.err.numberRange":
+		'"{{field}}"必须是 {{min}} 到 {{max}} 之间的数字（收到"{{value}}"）。',
+	"import.err.iconSizeRange":
+		'"{{field}}"必须是 {{min}} 到 {{max}} 之间的数字（收到"{{value}}"）。',
 	"import.err.aliasesNotArray": '"aliases"必须是字符串数组。',
 	"import.err.aliasNotString": "别名必须是字符串。",
 	"import.err.aliasDup": '"{{value}}"别名在此条目中重复。',
-	"import.err.tooManyIds": "ID 过多（{{count}} 个）；每个 callout 最多可以有 {{max}} 个 ID（主 ID + 别名）。",
+	"import.err.tooManyIds":
+		"ID 过多（{{count}} 个）；每个 callout 最多可以有 {{max}} 个 ID（主 ID + 别名）。",
 	"import.err.metadataShape": '"metadata"必须是一个值全为字符串的对象。',
 	"import.warn.unknownFields": "忽略了未知字段：{{fields}}。",
-	"import.err.duplicateInFile": 'ID/别名"{{value}}"已被此文件中的条目 #{{first}} 使用。',
-	"import.err.aliasConflict": '别名"{{value}}"已被库中的另一个 callout（"{{other}}"）使用。',
-	"import.warn.defaultFoldedAutofix": '"defaultFolded"为 true 而"foldable"为 false；defaultFolded 已重置为 false。',
-	"import.warn.imageMissing": "此 Callout 使用的图片不在文件中也不在此 vault 中，因此将显示占位图标，直到您提供新图片。",
+	"import.err.duplicateInFile":
+		'ID/别名"{{value}}"已被此文件中的条目 #{{first}} 使用。',
+	"import.err.aliasConflict":
+		'别名"{{value}}"已被库中的另一个 callout（"{{other}}"）使用。',
+	"import.warn.defaultFoldedAutofix":
+		'"defaultFolded"为 true 而"foldable"为 false；defaultFolded 已重置为 false。',
+	"import.warn.imageMissing":
+		"此 Callout 使用的图片不在文件中也不在此 vault 中，因此将显示占位图标，直到您提供新图片。",
 
-		"import.err.paletteIdInvalid": "\"paletteId\" 必须是非空文本 ID（收到了 \"{{value}}\")。",
-	"import.warn.iconNameUnknown": "\"{{value}}\" 图标在 {{type}} 中不存在，因此使用了默认图标。",
-	"import.warn.cmIconUnknownNew": "\"{{value}}\" 图标在 Obsidian 中不存在，因此使用了默认图标。",
-	"import.warn.cmIconUnknownExisting": "\"{{value}}\" 图标在 Obsidian 中不存在，因此 \"{{id}}\" 保留了它原有的图标。",
+	"import.err.paletteIdInvalid":
+		'"paletteId" 必须是非空文本 ID（收到了 "{{value}}")。',
+	"import.warn.iconNameUnknown":
+		'"{{value}}" 图标在 {{type}} 中不存在，因此使用了默认图标。',
+	"import.warn.cmIconUnknownNew":
+		'"{{value}}" 图标在 Obsidian 中不存在，因此使用了默认图标。',
+	"import.warn.cmIconUnknownExisting":
+		'"{{value}}" 图标在 Obsidian 中不存在，因此 "{{id}}" 保留了它原有的图标。',
 	"import.chooseSource": "从以下位置导入",
 	"import.sourceStudio": "Callout Studio",
 	"import.sourceStudioDesc": "加载从 Callout Studio 导出的 .json 文件。",
 	"import.sourceCalloutManager": "Callout Manager",
-	"import.sourceCalloutManagerDesc": "粘贴您从 Callout Manager 的 Copy 按钮复制的样式。",
+	"import.sourceCalloutManagerDesc":
+		"粘贴您从 Callout Manager 的 Copy 按钮复制的样式。",
 	"import.sourceAdmonition": "Admonition",
 	"import.sourceAdmonitionDesc": "尚未可用。",
 	"import.sourceAdmonitionNotice": "暂不支持从 Admonition 导入。",
 	"import.cmTitle": "从 Callout Manager 导入",
-	"import.cmInstructions": "在 Callout Manager 中，使用其 Copy 按钮复制您自定义的 callout 样式，然后将其粘贴到下方。",
+	"import.cmInstructions":
+		"在 Callout Manager 中，使用其 Copy 按钮复制您自定义的 callout 样式，然后将其粘贴到下方。",
 	"import.cmPlaceholder": "在此粘贴复制的样式…",
 	"import.cmBtnCancel": "取消",
 	"import.cmBtnImport": "导入",
 	"import.err.cmNoBlocksFound": "在粘贴的文本中未找到 Callout Manager 样式。",
-	"import.err.cmNoColorForNew": "未找到适用于新 callout \"{{value}}\" 的可用颜色；已跳过。",
-	"import.err.cmIdConflict": "ID \"{{value}}\" 已被另一个 callout (\"{{other}}\") 用作别名，已跳过。",
+	"import.err.cmNoColorForNew":
+		'未找到适用于新 callout "{{value}}" 的可用颜色；已跳过。',
+	"import.err.cmIdConflict":
+		'ID "{{value}}" 已被另一个 callout ("{{other}}") 用作别名，已跳过。',
 
 	"footer.tagline": "有反馈、意见或建议？欢迎告诉我！",
 	"footer.madeBy": "由 Niv 制作  •  ",

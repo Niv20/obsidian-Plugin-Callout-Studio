@@ -8,7 +8,11 @@
  * CalloutEditorSave; validation to CalloutEditorValidation.
  */
 import { Modal, Notice, Setting, SliderComponent, setIcon } from "obsidian";
-import type { TextComponent, ToggleComponent } from "obsidian";
+import type {
+	ExtraButtonComponent,
+	TextComponent,
+	ToggleComponent,
+} from "obsidian";
 import type {
 	BgGradient,
 	CalloutDefinition,
@@ -86,6 +90,27 @@ type EditorColorState = {
 	textColorLight: string;
 	textColorDark: string;
 };
+
+/**
+ * The colour state a built-in's shipped definition would produce in the form —
+ * not just its raw fields. `constants.ts` only ever sets `colorLight`/`colorDark`
+ * on a built-in; the background tint and text colours are derived on the fly
+ * (same formulas the constructor uses at lines ~179-196). Comparing against the
+ * raw definition would treat every untouched built-in as "changed" the moment
+ * the modal opens, since the constructor always fills those fields with a
+ * concrete derived value.
+ */
+function defaultColorStateFor(def: CalloutDefinition): EditorColorState {
+	return {
+		colorLight: def.colorLight,
+		colorDark: def.colorDark,
+		bgColorLight: def.bgColorLight ?? bgTintFor(def.colorLight, false),
+		bgColorDark: def.bgColorDark ?? bgTintFor(def.colorDark, true),
+		bgGradient: def.bgGradient ? { ...def.bgGradient } : undefined,
+		textColorLight: def.textColorLight ?? DEFAULT_TEXT_COLOR_LIGHT,
+		textColorDark: def.textColorDark ?? DEFAULT_TEXT_COLOR_DARK,
+	};
+}
 
 export class CalloutEditor extends Modal {
 	private plugin: CalloutEditorPlugin;
@@ -381,6 +406,14 @@ export class CalloutEditor extends Modal {
 		// Sync initial warning state without showing an empty-ID warning before interaction.
 		this.updateIdWarning();
 
+		// The pristine shipped definition, only for a built-in being edited. Its
+		// mere presence is the single gate for the icon/colour revert buttons —
+		// a new callout or a user/fallback/theme/plugin row never gets one.
+		const originalDef =
+			this.isBuiltIn && this.existingId
+				? this.plugin.registry.getBuiltInDefault(this.existingId)
+				: undefined;
+
 		// Icon
 		const iconSetting = new Setting(contentEl)
 			.setName(t("editor.icon"))
@@ -391,6 +424,19 @@ export class CalloutEditor extends Modal {
 			"callout-studio-icon-preview",
 		);
 		this.renderIconPreview(iconPreviewEl);
+
+		// Reverts the icon alone to the built-in's shipped value; only shown once
+		// it has actually diverged from that default.
+		let iconRevertBtn: ExtraButtonComponent | null = null;
+		const iconMatchesDefault = (): boolean =>
+			!originalDef ||
+			JSON.stringify(this.icon) === JSON.stringify(originalDef.icon);
+		const syncIconRevert = (): void => {
+			iconRevertBtn?.extraSettingsEl.toggleClass(
+				"cs-hidden",
+				iconMatchesDefault(),
+			);
+		};
 
 		iconSetting.addButton((btn) => {
 			btn.setButtonText(t("editor.pickIcon")).onClick(async () => {
@@ -405,10 +451,28 @@ export class CalloutEditor extends Modal {
 					this.renderIconPreview(iconPreviewEl);
 					// The only thing that can turn the Picture section on or off.
 					this.syncPictureBox();
+					syncIconRevert();
 					this.updatePreview();
 				}
 			});
 		});
+
+		iconSetting.addExtraButton((btn) => {
+			iconRevertBtn = btn;
+			btn.setIcon("rotate-ccw")
+				.setTooltip(t("editor.resetIcon"))
+				.onClick(() => {
+					if (!originalDef) return;
+					this.icon = { ...originalDef.icon };
+					iconSetting.setDesc(this.getIconLabel());
+					iconPreviewEl.empty();
+					this.renderIconPreview(iconPreviewEl);
+					this.syncPictureBox();
+					syncIconRevert();
+					this.updatePreview();
+				});
+		});
+		syncIconRevert();
 
 		// ── Color row ───────────────────────────────────────────────
 		// Standard setting row (matching Display name / Callout IDs / Icon).
@@ -567,6 +631,7 @@ export class CalloutEditor extends Modal {
 					// check already carry — so this stages like every other field
 					// here, and Cancel puts it back.
 					this.icon = { ...this.icon, recolor: value };
+					syncIconRevert();
 					this.updatePreview();
 				});
 			});
@@ -670,6 +735,21 @@ export class CalloutEditor extends Modal {
 			textColorLight: this.textColorLight,
 			textColorDark: this.textColorDark,
 		});
+		// Reverts colours (and background/text) to the built-in's shipped
+		// values; only shown once they have actually diverged from that
+		// default. Mirrors `iconMatchesDefault`/`syncIconRevert` above.
+		let colorRevertBtn: ExtraButtonComponent | null = null;
+		const colorMatchesDefault = (): boolean =>
+			!originalDef ||
+			JSON.stringify(readColorState()) ===
+				JSON.stringify(defaultColorStateFor(originalDef));
+		const syncColorRevert = (): void => {
+			colorRevertBtn?.extraSettingsEl.toggleClass(
+				"cs-hidden",
+				colorMatchesDefault(),
+			);
+		};
+
 		/**
 		 * Commit colours to the form state — the only path that may mark the
 		 * form dirty. Hovering goes through `previewColorsTransient()` instead.
@@ -686,6 +766,7 @@ export class CalloutEditor extends Modal {
 			this.textColorDark = state.textColorDark;
 			// A real selection supersedes whatever was being hovered.
 			this.previewColorOverride = null;
+			syncColorRevert();
 			this.updatePreview();
 		};
 
@@ -708,31 +789,57 @@ export class CalloutEditor extends Modal {
 				this.bgColorDark.toLowerCase() &&
 			bgGradientsEqual(palette.bgGradient, this.bgGradient);
 
-		// Prefer the stable paletteId link (survives a palette's colors being
-		// edited); a paletteId saved under a preset's old (pre-rename) id still
-		// resolves via legacyIds; fall back to hex matching for definitions
-		// saved before paletteId existed at all. Either way, remember the
-		// resolved id going forward.
-		const matchedEntry =
-			(this.paletteId
-				? paletteEntries.find(
-						(e) =>
-							e.id === this.paletteId ||
-							e.palette.legacyIds?.includes(this.paletteId as string),
-					)
-				: undefined) ??
-			paletteEntries.find(({ palette }) => matchesPalette(palette));
-		if (matchedEntry) {
-			selectedId = matchedEntry.id;
-			this.paletteId = matchedEntry.id;
-			triggerLabel.setText(matchedEntry.name);
-			renderTriggerCircles(
-				resolveCurrentModeColors(matchedEntry.palette),
-			);
-		} else {
-			this.paletteId = undefined;
-			renderTriggerCirclesFromState();
-		}
+		/**
+		 * Re-resolves the trigger's label/swatch from whatever the form's
+		 * colours currently are. Prefers the stable paletteId link (survives a
+		 * palette's colors being edited); a paletteId saved under a preset's
+		 * old (pre-rename) id still resolves via legacyIds; falls back to hex
+		 * matching for definitions saved before paletteId existed at all.
+		 * Either way, remembers the resolved id going forward. Called once at
+		 * setup and again after a colour revert, so (unlike the one-shot setup
+		 * this replaced) the "no match" branch must explicitly reset the label
+		 * — it may already be showing a previously selected palette's name.
+		 */
+		const refreshTriggerFromCurrentColors = (): void => {
+			const matched =
+				(this.paletteId
+					? paletteEntries.find(
+							(e) =>
+								e.id === this.paletteId ||
+								e.palette.legacyIds?.includes(
+									this.paletteId as string,
+								),
+						)
+					: undefined) ??
+				paletteEntries.find(({ palette }) => matchesPalette(palette));
+			if (matched) {
+				selectedId = matched.id;
+				this.paletteId = matched.id;
+				triggerLabel.setText(matched.name);
+				renderTriggerCircles(resolveCurrentModeColors(matched.palette));
+			} else {
+				this.paletteId = undefined;
+				triggerLabel.setText(t("editor.paletteDeleted"));
+				renderTriggerCirclesFromState();
+			}
+		};
+		refreshTriggerFromCurrentColors();
+
+		colorSetting.addExtraButton((btn) => {
+			colorRevertBtn = btn;
+			btn.setIcon("rotate-ccw")
+				.setTooltip(t("editor.resetColors"))
+				.onClick(() => {
+					if (!originalDef) return;
+					// Otherwise refreshTriggerFromCurrentColors resolves the stale
+					// id first and keeps showing whatever palette was last picked,
+					// even though the colors underneath just reverted.
+					this.paletteId = originalDef.paletteId;
+					applyColorState(defaultColorStateFor(originalDef));
+					refreshTriggerFromCurrentColors();
+				});
+		});
+		syncColorRevert();
 
 		/**
 		 * The colours a palette would produce, resolved against the current

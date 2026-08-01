@@ -10,18 +10,24 @@ export const th: Record<string, string> = {
 	"settings.fallbackTag": "ค่าเริ่มต้น",
 	"settings.fallbackTagAuto": "ค่าเริ่มต้นอัตโนมัติ",
 	"settings.rescanVault": "สแกน vault ใหม่",
-	"settings.rescanVaultDesc": "ค้นหา ID callout ที่ไม่รู้จักในโน้ตและเพิ่มเป็นแถวสำรอง",
+	"settings.rescanVaultDesc":
+		"ค้นหา ID callout ที่ไม่รู้จักในโน้ตและเพิ่มเป็นแถวสำรอง",
 	"settings.rescanVaultHintAction": "สแกนเดี๋ยวนี้",
-	"settings.rescanComplete": "สแกนใหม่เสร็จแล้ว: เพิ่ม {{count}} callout ใหม่",
+	"settings.rescanComplete":
+		"สแกนใหม่เสร็จแล้ว: เพิ่ม {{count}} callout ใหม่",
 	"replaceModal.deleteWithoutReplaceSuffix": "(กลับไปใช้ค่าเริ่มต้น)",
 
 	"firstRun.title": "ค้นหา callout ที่มีอยู่ใน vault หรือไม่?",
-	"firstRun.body": "Callout Studio สามารถสแกน vault ของคุณเพื่อค้นพบ callout ที่คุณใช้งานอยู่แล้ว เพื่อให้แสดงในรายการการตั้งค่าและใช้สไตล์สำรองของคุณ",
-	"firstRun.heavyVaultNote": "vault ของคุณมีไฟล์ Markdown {{count}} ไฟล์ — การสแกนอาจใช้เวลาสักครู่",
-	"firstRun.laterHint": "คุณสามารถเรียกใช้งานนี้ในภายหลังได้จาก การตั้งค่า → ข้อมูลเชิงลึกและการบำรุงรักษา vault → สแกน vault ใหม่",
+	"firstRun.body":
+		"Callout Studio สามารถสแกน vault ของคุณเพื่อค้นพบ callout ที่คุณใช้งานอยู่แล้ว เพื่อให้แสดงในรายการการตั้งค่าและใช้สไตล์สำรองของคุณ",
+	"firstRun.heavyVaultNote":
+		"vault ของคุณมีไฟล์ Markdown {{count}} ไฟล์ — การสแกนอาจใช้เวลาสักครู่",
+	"firstRun.laterHint":
+		"คุณสามารถเรียกใช้งานนี้ในภายหลังได้จาก การตั้งค่า → ข้อมูลเชิงลึกและการบำรุงรักษา vault → สแกน vault ใหม่",
 	"firstRun.scanNow": "สแกนเดี๋ยวนี้",
 	"firstRun.noThanks": "ไม่ ขอบคุณ",
-	"firstRun.autoScanComplete": "Callout Studio สแกน vault ของคุณและเพิ่ม {{count}} callout แล้ว",
+	"firstRun.autoScanComplete":
+		"Callout Studio สแกน vault ของคุณและเพิ่ม {{count}} callout แล้ว",
 	"firstRun.scanning": "กำลังสแกน",
 
 	"welcome.tooltip": "เกี่ยวกับ Callout Studio",
@@ -39,10 +45,14 @@ export const th: Record<string, string> = {
 		"Callout Studio ยังมีอะไรให้มากกว่านี้อีกมาก! [เรียนรู้เพิ่มเติม]({{repoUrl}})\n",
 
 	"deleteModal.title": 'ลบ callout "{{name}}" หรือไม่?',
-	"deleteModal.bodyInUse": "callout นี้ปรากฏ {{count}} ครั้งใน {{files}} ไฟล์",
-	"deleteModal.bodyInUseExplain": "การลบจะแปลงบล็อกเหล่านั้นเป็นข้อความธรรมดา — จะสูญเสียสไตล์และหัว callout",
-	"deleteModal.replaceHint": "คุณสามารถแทนที่ด้วย callout อื่นแทน ซึ่งจะรักษาเนื้อหาใน vault เป็น callout ที่มีสไตล์",
-	"deleteModal.bodyUnused": '"{{name}}" ไม่ได้ใช้งานในโน้ตใด แต่เป็น callout แบบกำหนดเองที่คุณสร้าง การลบจะนำออกจากรายการนี้',
+	"deleteModal.bodyInUse":
+		"callout นี้ปรากฏ {{count}} ครั้งใน {{files}} ไฟล์",
+	"deleteModal.bodyInUseExplain":
+		"การลบจะแปลงบล็อกเหล่านั้นเป็นข้อความธรรมดา — จะสูญเสียสไตล์และหัว callout",
+	"deleteModal.replaceHint":
+		"คุณสามารถแทนที่ด้วย callout อื่นแทน ซึ่งจะรักษาเนื้อหาใน vault เป็น callout ที่มีสไตล์",
+	"deleteModal.bodyUnused":
+		'"{{name}}" ไม่ได้ใช้งานในโน้ตใด แต่เป็น callout แบบกำหนดเองที่คุณสร้าง การลบจะนำออกจากรายการนี้',
 	"deleteModal.replaceInstead": "แทนที่แทน",
 	"deleteModal.deleteInUse": "ลบ (แปลงเป็นข้อความธรรมดา)",
 	"deleteModal.deleteUnused": "ลบ callout",
@@ -60,9 +70,12 @@ export const th: Record<string, string> = {
 	"settings.importExport": "นำเข้า / ส่งออก",
 	"settings.import": "นำเข้า",
 	"settings.export": "ส่งออก",
-	"settings.importDesc": "นำเข้าข้อมูล Callout Studio จาก vault อื่นโดยใช้ไฟล์ JSON",
-	"settings.exportDesc": "บันทึกประเภท callout แบบกำหนดเองทั้งหมดในรูปแบบ JSON",
-	"settings.importConflictNotice": "นำเข้า {{count}} ประเภท callout แล้ว; เขียนทับ {{overwritten}} รายการที่มีอยู่",
+	"settings.importDesc":
+		"นำเข้าข้อมูล Callout Studio จาก vault อื่นโดยใช้ไฟล์ JSON",
+	"settings.exportDesc":
+		"บันทึกประเภท callout แบบกำหนดเองทั้งหมดในรูปแบบ JSON",
+	"settings.importConflictNotice":
+		"นำเข้า {{count}} ประเภท callout แล้ว; เขียนทับ {{overwritten}} รายการที่มีอยู่",
 
 	"settings.addNewCallout": "+ เพิ่ม callout",
 
@@ -78,7 +91,8 @@ export const th: Record<string, string> = {
 
 	"settings.colorSwatchAria": "จุดเน้น: {{accent}} · พื้นหลัง: {{bg}}",
 	"settings.fallbackCallout": "Callout สำรองเริ่มต้น",
-	"settings.fallbackCalloutDesc": "ประเภท callout ที่ไม่รู้จักใน vault จะสืบทอดสไตล์ของ callout นี้",
+	"settings.fallbackCalloutDesc":
+		"ประเภท callout ที่ไม่รู้จักใน vault จะสืบทอดสไตล์ของ callout นี้",
 
 	"settings.globalStyle": "สไตล์ callout ส่วนกลาง",
 	"settings.border": "ขอบ",
@@ -112,49 +126,61 @@ export const th: Record<string, string> = {
 	"settings.deletePaletteConfirm":
 		'ลบชุดสี "{{name}}" หรือไม่?\nCallout ที่ใช้สีนี้จะไม่ได้รับผลกระทบ',
 	"settings.enableAutocomplete": "เปิดใช้การเติมข้อความอัตโนมัติ [!",
-	"settings.enableAutocompleteDesc": 'แสดงคำแนะนำเมื่อพิมพ์ "[!" ในบล็อกอ้างอิงในตัวแก้ไข เลือกประเภท callout จากรายการเพื่อแทรกส่วนหัว callout ที่สมบูรณ์',
+	"settings.enableAutocompleteDesc":
+		'แสดงคำแนะนำเมื่อพิมพ์ "[!" ในบล็อกอ้างอิงในตัวแก้ไข เลือกประเภท callout จากรายการเพื่อแทรกส่วนหัว callout ที่สมบูรณ์',
 
 	"settings.openHotkeys": "แป้นพิมพ์ลัด Callout Studio",
-	"settings.openHotkeysDesc": "เปิดการตั้งค่าแป้นพิมพ์ลัดของ Obsidian สำหรับคำสั่ง Callout Studio ซึ่งคุณสามารถเลือกแป้นพิมพ์ลัดของคุณเองสำหรับการสร้างประเภทใหม่ เปิดการตั้งค่า นำ callout ออก และห่อใน callout ไม่มีการกำหนดแป้นพิมพ์ลัดโดยค่าเริ่มต้น",
+	"settings.openHotkeysDesc":
+		"เปิดการตั้งค่าแป้นพิมพ์ลัดของ Obsidian สำหรับคำสั่ง Callout Studio ซึ่งคุณสามารถเลือกแป้นพิมพ์ลัดของคุณเองสำหรับการสร้างประเภทใหม่ เปิดการตั้งค่า นำ callout ออก และห่อใน callout ไม่มีการกำหนดแป้นพิมพ์ลัดโดยค่าเริ่มต้น",
 	"settings.openHotkeysButton": "เปิดการตั้งค่าแป้นพิมพ์ลัด",
-
 
 	"settings.vaultMaintenance": "ข้อมูลเชิงลึกและการบำรุงรักษา vault",
 	"settings.vaultStats": "สถิติ callout",
-	"settings.vaultStatsDesc": "นับบล็อก callout ทั้งหมดในโน้ต Markdown และจัดกลุ่มตามประเภท",
+	"settings.vaultStatsDesc":
+		"นับบล็อก callout ทั้งหมดในโน้ต Markdown และจัดกลุ่มตามประเภท",
 	"settings.vaultStatsButton": "ดูสถิติ",
 	"settings.vaultStatsScanning": "กำลังสแกน",
 	"settings.resetAll": "รีเซ็ต",
-	"settings.resetAllDesc": "ลบ callout ผู้ใช้ทั้งหมด รีเซ็ต callout ในตัว สไตล์ส่วนกลาง (ขอบ ขนาดตัวอักษร รูปร่าง) ชุดสีที่บันทึกไว้ การปรับแต่งเมนูคลิกขวา และ SVG Material ที่ดาวน์โหลด",
+	"settings.resetAllDesc":
+		"ลบ callout ผู้ใช้ทั้งหมด รีเซ็ต callout ในตัว สไตล์ส่วนกลาง (ขอบ ขนาดตัวอักษร รูปร่าง) ชุดสีที่บันทึกไว้ การปรับแต่งเมนูคลิกขวา และ SVG Material ที่ดาวน์โหลด",
 	"settings.resetAllButton": "รีเซ็ตทั้งหมด",
-	"settings.resetAllConfirm": "การดำเนินการนี้จะลบ callout แบบกำหนดเองทั้งหมด รีเซ็ต callout ในตัว สไตล์ส่วนกลาง ชุดสีที่บันทึกไว้ การปรับแต่งเมนูคลิกขวา และ SVG Material ที่แคชทั้งหมด ไม่สามารถยกเลิกได้ คุณแน่ใจหรือไม่?",
+	"settings.resetAllConfirm":
+		"การดำเนินการนี้จะลบ callout แบบกำหนดเองทั้งหมด รีเซ็ต callout ในตัว สไตล์ส่วนกลาง ชุดสีที่บันทึกไว้ การปรับแต่งเมนูคลิกขวา และ SVG Material ที่แคชทั้งหมด ไม่สามารถยกเลิกได้ คุณแน่ใจหรือไม่?",
 	"notice.resetAllDone": "รีเซ็ตทุกอย่างเป็นค่าเริ่มต้นแล้ว",
 
 	"notice.exported": "ส่งออก callout ไปยัง callout-studio-export.json แล้ว",
 	"notice.importedJSON": "นำเข้า {{count}} ประเภท callout จาก JSON แล้ว",
 	"notice.importedSettings": "นำเข้าการตั้งค่าปลั๊กอินแล้ว",
-	"notice.importedCalloutManager": "นำเข้าจาก Callout Manager: สร้างแล้ว {{created}} รายการ, อัปเดตแล้ว {{updated}} รายการ",
+	"notice.importedCalloutManager":
+		"นำเข้าจาก Callout Manager: สร้างแล้ว {{created}} รายการ, อัปเดตแล้ว {{updated}} รายการ",
 	"notice.noNewJSON": "ไม่มีประเภท callout ใหม่ที่นำเข้า (ID อาจมีอยู่แล้ว)",
-	"notice.iconDownloadFailed": 'ไม่สามารถดาวน์โหลดไอคอน Material "{{name}}" ได้ อาจไม่มีให้บริการสำหรับสไตล์/น้ำหนักนี้ หรือการเชื่อมต่อของคุณออฟไลน์อยู่',
+	"notice.iconDownloadFailed":
+		'ไม่สามารถดาวน์โหลดไอคอน Material "{{name}}" ได้ อาจไม่มีให้บริการสำหรับสไตล์/น้ำหนักนี้ หรือการเชื่อมต่อของคุณออฟไลน์อยู่',
 	"notice.nothingToWrap": "ไม่มีอะไรให้ห่อ",
 	"notice.cursorNotInsideCallout": "เคอร์เซอร์ไม่อยู่ใน callout",
-	"notice.openHotkeysFailed": "ไม่สามารถเปิดการตั้งค่าแป้นพิมพ์ลัดของ Obsidian ได้",
-	"notice.filterHotkeysFailed": "เปิดแป้นพิมพ์ลัด Obsidian แล้ว แต่ไม่สามารถใช้ตัวกรอง Callout Studio ได้",
+	"notice.openHotkeysFailed":
+		"ไม่สามารถเปิดการตั้งค่าแป้นพิมพ์ลัดของ Obsidian ได้",
+	"notice.filterHotkeysFailed":
+		"เปิดแป้นพิมพ์ลัด Obsidian แล้ว แต่ไม่สามารถใช้ตัวกรอง Callout Studio ได้",
 
 	"editor.editCallout": "แก้ไข callout",
 	"editor.newCallout": "callout ใหม่",
 	"editor.displayName": "ชื่อที่แสดง",
 	"editor.displayNameDesc": "ป้ายกำกับที่อ่านได้ที่แสดงใน UI",
-	"editor.displayNameBuiltIn": "ไม่สามารถเปลี่ยนชื่อที่แสดงสำหรับ callout ในตัวได้",
+	"editor.displayNameBuiltIn":
+		"ไม่สามารถเปลี่ยนชื่อที่แสดงสำหรับ callout ในตัวได้",
 	"editor.displayNamePlaceholder": "callout ของฉัน",
 	"editor.calloutIds": "ID callout",
-	"editor.calloutIdsDesc": "ตัวระบุทั้งหมดสำหรับ callout นี้ อนุญาตให้ใช้ช่องว่างได้\nกด Enter หรือปุ่ม + เพื่อเพิ่ม",
+	"editor.calloutIdsDesc":
+		"ตัวระบุทั้งหมดสำหรับ callout นี้ อนุญาตให้ใช้ช่องว่างได้\nกด Enter หรือปุ่ม + เพื่อเพิ่ม",
 	"editor.calloutIdsPlaceholder": "เพิ่ม ID",
 	"editor.addId": "เพิ่ม ID",
 	"editor.idLinkedToName": "เชื่อมโยงกับชื่อที่แสดง",
-	"editor.idCannotDelete": "ID นี้เชื่อมโยงกับชื่อที่แสดงและไม่สามารถลบได้ — แก้ไขชื่อเพื่อเปลี่ยน",
+	"editor.idCannotDelete":
+		"ID นี้เชื่อมโยงกับชื่อที่แสดงและไม่สามารถลบได้ — แก้ไขชื่อเพื่อเปลี่ยน",
 	"editor.icon": "ไอคอน",
 	"editor.pickIcon": "เลือกไอคอน",
+	"editor.resetIcon": "รีเซ็ตไอคอนเป็นค่าเริ่มต้น",
 	"editor.livePreview": "ตัวอย่างสด",
 	"editor.iconAdjustment": "ปรับไอคอน",
 	"editor.picture": "รูปภาพ",
@@ -162,6 +188,7 @@ export const th: Record<string, string> = {
 	"editor.horizontalOffset": "ระยะเลื่อนแนวนอน",
 	"editor.verticalOffset": "ระยะเลื่อนแนวตั้ง",
 	"editor.colors": "สี",
+	"editor.resetColors": "รีเซ็ตสีเป็นค่าเริ่มต้น",
 	"editor.paletteDeleted": "สีที่ถูกลบ",
 	"editor.paletteGroupObsidian": "Callout Obsidian",
 	"editor.paletteGroupPresets": "ค่าสีที่ตั้งไว้ล่วงหน้า",
@@ -169,7 +196,8 @@ export const th: Record<string, string> = {
 	"editor.paletteNewColor": "สีใหม่…",
 	"editor.contrastWarning": "คอนทราสต์ต่ำเมื่อเทียบกับพื้นหลัง — อาจอ่านยาก",
 	"editor.foldable": "พับได้",
-	"editor.foldableDesc": "เลือกว่า callout พับได้หรือไม่และสถานะเริ่มต้นที่จะใช้กับ vault ทั้งหมด",
+	"editor.foldableDesc":
+		"เลือกว่า callout พับได้หรือไม่และสถานะเริ่มต้นที่จะใช้กับ vault ทั้งหมด",
 	"editor.foldOff": "ปิด",
 	"editor.foldOpen": "เปิดโดยค่าเริ่มต้น",
 	"editor.foldClosed": "ปิดโดยค่าเริ่มต้น",
@@ -182,10 +210,13 @@ export const th: Record<string, string> = {
 	"editor.idEmpty": "ต้องมี ID อย่างน้อยหนึ่งรายการ",
 	"editor.idExists": "มี callout ที่มี ID นี้อยู่แล้ว",
 	"editor.idConflict": "ID นี้ขัดแย้งกับ callout ที่มีอยู่",
-	"editor.idDashConflict": 'Obsidian เขียนช่องว่างเป็นขีดกลาง ดังนั้น ID นี้จึงขัดแย้งกับ "{{other}}"',
+	"editor.idDashConflict":
+		'Obsidian เขียนช่องว่างเป็นขีดกลาง ดังนั้น ID นี้จึงขัดแย้งกับ "{{other}}"',
 	"editor.untitledCallout": "Callout ไม่มีชื่อ",
-	"editor.loremIpsum": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-	"editor.loremIpsumShort": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+	"editor.loremIpsum":
+		"Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+	"editor.loremIpsumShort":
+		"Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
 	"editor.sampleInlineText": "นี่คือแคปซูล [!{id}] แบบอินไลน์ภายในย่อหน้า",
 	"editor.previewReadOnly": "ไม่สามารถแก้ไขตัวอย่างสดได้",
 
@@ -196,10 +227,12 @@ export const th: Record<string, string> = {
 	"palette.namePlaceholder": "ชุดสีของฉัน",
 	"palette.nameExists": "มีชุดสีชื่อนี้อยู่แล้ว",
 	"palette.baseColor": "สีพื้นฐาน",
-	"palette.baseColorHint": "เราจะจับคู่สีพื้นหลังให้เข้ากับสีนี้โดยอัตโนมัติ หากต้องการ คุณสามารถควบคุมแยกต่างหากได้โดย{{link}}",
+	"palette.baseColorHint":
+		"เราจะจับคู่สีพื้นหลังให้เข้ากับสีนี้โดยอัตโนมัติ หากต้องการ คุณสามารถควบคุมแยกต่างหากได้โดย{{link}}",
 	"palette.baseColorHintLink": "คลิกที่นี่",
 	"palette.advancedColors": "สี",
-	"palette.advancedColorsHint": "กำลังแก้ไขสีสำหรับโหมด {{mode}} - อีกโหมดจะอัปเดตโดยอัตโนมัติ สลับธีมของ Obsidian เพื่อตรวจสอบ",
+	"palette.advancedColorsHint":
+		"กำลังแก้ไขสีสำหรับโหมด {{mode}} - อีกโหมดจะอัปเดตโดยอัตโนมัติ สลับธีมของ Obsidian เพื่อตรวจสอบ",
 	"palette.revertHint": "ต้องการใช้สีพื้นฐานเดียวแทนหรือไม่? {{link}}",
 	"palette.revertHintLink": "เปลี่ยนกลับ",
 	"palette.lightMode": "สว่าง",
@@ -286,20 +319,27 @@ export const th: Record<string, string> = {
 	"iconPicker.searchRpgAwesome": "ค้นหา RPG Awesome",
 	"iconPicker.image": "รูปภาพของคุณ",
 	"iconPicker.searchImage": "ค้นหารูปภาพของคุณ",
-	"iconPicker.imageTooLarge": "{{name}} มีขนาดใหญ่เกินไป รูปภาพต้องมีขนาดน้อยกว่า 5 MB",
-	"iconPicker.imageUnsupported": "{{name}} ไม่ใช่รูปแบบรูปภาพที่รองรับ ใช้ SVG, PNG, JPEG หรือ WebP",
-	"iconPicker.imageInvalidSvg": "ไม่สามารถอ่าน {{name}} เป็น SVG ที่ปลอดภัยได้จึงไม่ได้เพิ่ม",
+	"iconPicker.imageTooLarge":
+		"{{name}} มีขนาดใหญ่เกินไป รูปภาพต้องมีขนาดน้อยกว่า 5 MB",
+	"iconPicker.imageUnsupported":
+		"{{name}} ไม่ใช่รูปแบบรูปภาพที่รองรับ ใช้ SVG, PNG, JPEG หรือ WebP",
+	"iconPicker.imageInvalidSvg":
+		"ไม่สามารถอ่าน {{name}} เป็น SVG ที่ปลอดภัยได้จึงไม่ได้เพิ่ม",
 	"iconPicker.imageDecodeFailed": "ไม่สามารถอ่าน {{name}} เป็นรูปภาพได้",
-	"iconPicker.imageDuplicate": "{{name}} มีอยู่ในรูปภาพของคุณแล้ว เปลี่ยนชื่อไฟล์หรือลบรูปภาพที่มีอยู่",
+	"iconPicker.imageDuplicate":
+		"{{name}} มีอยู่ในรูปภาพของคุณแล้ว เปลี่ยนชื่อไฟล์หรือลบรูปภาพที่มีอยู่",
 	"iconPicker.imageAdd": "เพิ่มรูปภาพ",
-	"iconPicker.imageEmpty": "ยังไม่มีรูปภาพ เพิ่มไฟล์ SVG, PNG, JPEG หรือ WebP จากคอมพิวเตอร์ของคุณ หรือลากมาที่นี่",
+	"iconPicker.imageEmpty":
+		"ยังไม่มีรูปภาพ เพิ่มไฟล์ SVG, PNG, JPEG หรือ WebP จากคอมพิวเตอร์ของคุณ หรือลากมาที่นี่",
 	"iconPicker.imageDelete": "ลบ",
 	"iconPicker.imageDeleteConfirm": "ลบ “{{name}}” หรือไม่?",
-	"iconPicker.imageDeleteInUse": "{{count}} callout ใช้รูปภาพนี้ จะแสดงไอคอนตัวแทนจนกว่าคุณจะกำหนดใหม่",
+	"iconPicker.imageDeleteInUse":
+		"{{count}} callout ใช้รูปภาพนี้ จะแสดงไอคอนตัวแทนจนกว่าคุณจะกำหนดใหม่",
 	"iconPicker.imageRecolor": "ตามสี Callout",
 	"iconPicker.allSources": "ทุกแหล่งข้อมูล",
 	"iconPicker.searchAllSources": "ค้นหาในทุกแหล่งไอคอน",
-	"iconPicker.sourcesNotDownloaded": "ยังไม่ได้รวม: {{names}} เลือกแหล่งข้อมูลด้านบนเพื่อดาวน์โหลด",
+	"iconPicker.sourcesNotDownloaded":
+		"ยังไม่ได้รวม: {{names}} เลือกแหล่งข้อมูลด้านบนเพื่อดาวน์โหลด",
 	"iconPicker.chooseSource": "เลือกแหล่งข้อมูล",
 	"iconPicker.sourceGroup": "{{name}} · {{count}}",
 
@@ -430,20 +470,26 @@ export const th: Record<string, string> = {
 
 	// Downloadable icon packs
 	"iconPack.downloadTitle": "{{name}} ยังไม่ได้ดาวน์โหลด",
-	"iconPack.downloadDetail": "{{count}} ไอคอน · {{size}} · ดาวน์โหลดครั้งเดียว",
+	"iconPack.downloadDetail":
+		"{{count}} ไอคอน · {{size}} · ดาวน์โหลดครั้งเดียว",
 	"iconPack.download": "ดาวน์โหลด",
 	"iconPack.downloading": "กำลังดาวน์โหลด {{name}}…",
-	"iconPack.downloadFailed": "ไม่สามารถดาวน์โหลด {{name}} ได้ ตรวจสอบการเชื่อมต่อแล้วลองอีกครั้ง",
+	"iconPack.downloadFailed":
+		"ไม่สามารถดาวน์โหลด {{name}} ได้ ตรวจสอบการเชื่อมต่อแล้วลองอีกครั้ง",
 	"iconPack.retry": "ลองอีกครั้ง",
-	"iconPack.faBrandsNotice": "ไอคอนแบรนด์เป็นเครื่องหมายการค้าของเจ้าของแต่ละราย การรวมไว้ไม่ได้หมายความว่าได้รับการรับรอง โปรดใช้เฉพาะเพื่อแทนบริษัท ผลิตภัณฑ์ หรือบริการที่อ้างถึง",
+	"iconPack.faBrandsNotice":
+		"ไอคอนแบรนด์เป็นเครื่องหมายการค้าของเจ้าของแต่ละราย การรวมไว้ไม่ได้หมายความว่าได้รับการรับรอง โปรดใช้เฉพาะเพื่อแทนบริษัท ผลิตภัณฑ์ หรือบริการที่อ้างถึง",
 	"iconPack.artworkRestored": "ดาวน์โหลดงานศิลป์ไอคอนสำหรับ {{names}} แล้ว",
-	"iconPack.diskWriteFailed": "Callout Studio ไม่สามารถบันทึกชุดไอคอนลงดิสก์ได้ จึงต้องดาวน์โหลดใหม่ในครั้งถัดไป ไอคอนที่คุณเลือกยังคงบันทึกไว้ในการตั้งค่า",
+	"iconPack.diskWriteFailed":
+		"Callout Studio ไม่สามารถบันทึกชุดไอคอนลงดิสก์ได้ จึงต้องดาวน์โหลดใหม่ในครั้งถัดไป ไอคอนที่คุณเลือกยังคงบันทึกไว้ในการตั้งค่า",
 
 	// Icon licences & credits
 	"credits.title": "ใบอนุญาตไอคอนและเครดิต",
-	"credits.intro": "Callout Studio ใช้ไลบรารีไอคอนแบบเปิดหลายแห่ง ใบอนุญาตของไลบรารีเหล่านั้นจะปรากฏด้านล่าง พร้อมกับสิ่งที่เปลี่ยนแปลงเพื่อใช้งานที่นี่",
+	"credits.intro":
+		"Callout Studio ใช้ไลบรารีไอคอนแบบเปิดหลายแห่ง ใบอนุญาตของไลบรารีเหล่านั้นจะปรากฏด้านล่าง พร้อมกับสิ่งที่เปลี่ยนแปลงเพื่อใช้งานที่นี่",
 	"credits.fullNotices": "ประกาศบุคคลที่สามฉบับเต็ม",
-	"credits.pluginLicense": "โค้ดของ Callout Studio เองอยู่ภายใต้ใบอนุญาต 0BSD ไลบรารีไอคอนยังคงใบอนุญาตของตนเอง",
+	"credits.pluginLicense":
+		"โค้ดของ Callout Studio เองอยู่ภายใต้ใบอนุญาต 0BSD ไลบรารีไอคอนยังคงใบอนุญาตของตนเอง",
 
 	"contextMenu.editCallout": "แก้ไขการตั้งค่า callout",
 	"contextMenu.copyMarkdown": "คัดลอก Markdown callout",
@@ -473,10 +519,12 @@ export const th: Record<string, string> = {
 	"settings.calloutTypeInline": "Callout อินไลน์",
 
 	"settings.customizeMenu": "ปรับแต่งรายการเมนู",
-	"settings.customizeMenuDesc": "เลือกว่าการดำเนินการคลิกขวาใดจะปรากฏสำหรับแต่ละประเภท callout และจัดลำดับใหม่ ใช้งานได้ในโหมดต้นฉบับ และ Live Preview",
+	"settings.customizeMenuDesc":
+		"เลือกว่าการดำเนินการคลิกขวาใดจะปรากฏสำหรับแต่ละประเภท callout และจัดลำดับใหม่ ใช้งานได้ในโหมดต้นฉบับ และ Live Preview",
 	"settings.customizeMenuButton": "ปรับแต่งรายการเมนู",
 	"menuCustomize.title": "ปรับแต่งเมนูคลิกขวา",
-	"menuCustomize.desc": "เปิดหรือปิดการดำเนินการและลากที่จับเพื่อจัดลำดับใหม่ การเปลี่ยนแปลงจะถูกบันทึกโดยอัตโนมัติ",
+	"menuCustomize.desc":
+		"เปิดหรือปิดการดำเนินการและลากที่จับเพื่อจัดลำดับใหม่ การเปลี่ยนแปลงจะถูกบันทึกโดยอัตโนมัติ",
 	"menuCustomize.regular": "Callout ปกติ",
 	"menuCustomize.heading": "Callout หัวข้อ",
 	"menuCustomize.inline": "Callout อินไลน์",
@@ -492,20 +540,28 @@ export const th: Record<string, string> = {
 	"confirm.ok": "ลบ",
 	"confirm.cancel": "ยกเลิก",
 
-	"vault.filesUpdated": "อัปเดต {{count}} การอ้างอิง callout ในไฟล์ vault แล้ว",
-	"vault.idsUpdated": "อัปเดต {{count}} ID callout ในไฟล์ vault แล้ว: {{oldIds}} → {{newId}}",
-	"vault.titlesUpdated": "อัปเดต {{count}} หัวเรื่อง callout ในไฟล์ vault แล้ว: {{oldTitle}} → {{newTitle}}",
+	"vault.filesUpdated":
+		"อัปเดต {{count}} การอ้างอิง callout ในไฟล์ vault แล้ว",
+	"vault.idsUpdated":
+		"อัปเดต {{count}} ID callout ในไฟล์ vault แล้ว: {{oldIds}} → {{newId}}",
+	"vault.titlesUpdated":
+		"อัปเดต {{count}} หัวเรื่อง callout ในไฟล์ vault แล้ว: {{oldTitle}} → {{newTitle}}",
 	"vault.replaceWith": "แทนที่ด้วย:",
 	"vault.deleteWithout": "ลบโดยไม่แทนที่",
 	"vault.confirmDelete": "ยืนยัน",
 	"vault.confirmReplace": "แทนที่",
-	"vault.replacePromptInUse": '"{{name}}" ถูกใช้งาน {{count}} ครั้งใน {{files}} ไฟล์ เลือก callout เพื่อแทนที่:',
+	"vault.replacePromptInUse":
+		'"{{name}}" ถูกใช้งาน {{count}} ครั้งใน {{files}} ไฟล์ เลือก callout เพื่อแทนที่:',
 	"vault.replacePromptUnused": 'เลือก callout เพื่อแทนที่ "{{name}}":',
-	"vault.noReplacementAvailable": "ไม่มี callout อื่นที่พร้อมใช้งานเพื่อแทนที่",
-	"vault.convertedToPlainText": "แปลง {{blocks}} บล็อก callout ใน {{files}} ไฟล์เป็นข้อความธรรมดาแล้ว",
-	"vault.resetAliasWarning": "{{count}} การอ้างอิงใน {{files}} ไฟล์ใช้นามแฝงแบบกำหนดเอง: {{aliases}} นามแฝงเหล่านี้จะหยุดทำงานหลังจากรีเซ็ต ดำเนินการต่อหรือไม่?",
+	"vault.noReplacementAvailable":
+		"ไม่มี callout อื่นที่พร้อมใช้งานเพื่อแทนที่",
+	"vault.convertedToPlainText":
+		"แปลง {{blocks}} บล็อก callout ใน {{files}} ไฟล์เป็นข้อความธรรมดาแล้ว",
+	"vault.resetAliasWarning":
+		"{{count}} การอ้างอิงใน {{files}} ไฟล์ใช้นามแฝงแบบกำหนดเอง: {{aliases}} นามแฝงเหล่านี้จะหยุดทำงานหลังจากรีเซ็ต ดำเนินการต่อหรือไม่?",
 	"vault.resetConfirm": "รีเซ็ต",
-	"vault.resetAllInUse": "⚠ {{count}} การอ้างอิง callout ใน {{files}} ไฟล์ใช้ประเภท callout แบบกำหนดเองที่จะถูกลบ",
+	"vault.resetAllInUse":
+		"⚠ {{count}} การอ้างอิง callout ใน {{files}} ไฟล์ใช้ประเภท callout แบบกำหนดเองที่จะถูกลบ",
 
 	"vaultStats.title": "สถิติ callout",
 	"vaultStats.totalCallouts": "callout ทั้งหมด",
@@ -529,67 +585,101 @@ export const th: Record<string, string> = {
 
 	"import.title": "ปัญหาการนำเข้า",
 	"import.reportLeadIn": "ดูเหมือนไฟล์ที่นำเข้าถูกแก้ไข นี่คือรายการปัญหา:",
-	"import.reportLeadInFatal": "ไฟล์นี้ดูไม่เหมือนการส่งออกของ Callout Studio ไม่สามารถนำเข้าได้:",
+	"import.reportLeadInFatal":
+		"ไฟล์นี้ดูไม่เหมือนการส่งออกของ Callout Studio ไม่สามารถนำเข้าได้:",
 	"import.entryHeading": "รายการ {{index}} — {{label}}",
-	"import.summary": "{{valid}} จาก {{total}} รายการถูกต้อง · พบ {{issues}} ปัญหา",
+	"import.summary":
+		"{{valid}} จาก {{total}} รายการถูกต้อง · พบ {{issues}} ปัญหา",
 	"import.btnCancel": "ยกเลิก",
 	"import.btnImportValid": "นำเข้าเฉพาะที่ถูกต้อง ({{count}})",
-	"import.err.notRecognized": "ไฟล์ที่ไม่รู้จัก: คาดว่าเป็น array ของนิยาม callout หรือไฟล์ส่งออกของ Callout Studio",
-	"import.warn.settingsIgnored": "บล็อกการตั้งค่าไม่ใช่ object ที่ถูกต้องและถูกละเว้น",
-	"import.warn.invalidGradient": "การไล่ระดับสีพื้นหลังไม่ถูกต้องและถูกละเว้น",
-	"import.err.parseFailed": "ไฟล์ไม่ใช่ JSON ที่ถูกต้องและไม่สามารถแยกวิเคราะห์ได้",
+	"import.err.notRecognized":
+		"ไฟล์ที่ไม่รู้จัก: คาดว่าเป็น array ของนิยาม callout หรือไฟล์ส่งออกของ Callout Studio",
+	"import.warn.settingsIgnored":
+		"บล็อกการตั้งค่าไม่ใช่ object ที่ถูกต้องและถูกละเว้น",
+	"import.warn.invalidGradient":
+		"การไล่ระดับสีพื้นหลังไม่ถูกต้องและถูกละเว้น",
+	"import.err.parseFailed":
+		"ไฟล์ไม่ใช่ JSON ที่ถูกต้องและไม่สามารถแยกวิเคราะห์ได้",
 	"import.err.entryNotObject": "รายการต้องเป็น object",
-	"import.err.requiredMissing": 'ฟิลด์ที่จำเป็น "{{field}}" หายไปหรือมีประเภทที่ไม่ถูกต้อง',
+	"import.err.requiredMissing":
+		'ฟิลด์ที่จำเป็น "{{field}}" หายไปหรือมีประเภทที่ไม่ถูกต้อง',
 	"import.err.idEmpty": "ID ต้องไม่ว่างเปล่า",
-	"import.err.idTooLong": 'ID "{{value}}" มี {{length}} อักขระ สูงสุด {{max}}',
-	"import.err.idBadChar": 'ID "{{value}}" มีอักขระที่ไม่ถูกต้อง (ไม่อนุญาตให้ใช้ "|" "[" "]" แท็บ และการขึ้นบรรทัดใหม่)',
+	"import.err.idTooLong":
+		'ID "{{value}}" มี {{length}} อักขระ สูงสุด {{max}}',
+	"import.err.idBadChar":
+		'ID "{{value}}" มีอักขระที่ไม่ถูกต้อง (ไม่อนุญาตให้ใช้ "|" "[" "]" แท็บ และการขึ้นบรรทัดใหม่)',
 	"import.err.displayNameEmpty": "ชื่อที่แสดงต้องไม่ว่างเปล่า",
-	"import.err.displayNameTooLong": "ชื่อที่แสดงมี {{length}} อักขระ สูงสุด {{max}}",
+	"import.err.displayNameTooLong":
+		"ชื่อที่แสดงมี {{length}} อักขระ สูงสุด {{max}}",
 	"import.err.boolField": '"{{field}}" ต้องเป็น boolean (true หรือ false)',
 	"import.err.iconNotObject": "ไอคอนต้องเป็น object",
-	"import.err.iconTypeInvalid": "ประเภทไอคอน \"{{value}}\" ต้องเป็นหนึ่งใน: {{types}}",
-	"import.warn.iconFieldIgnored": "\"{{field}}\" ใช้เฉพาะกับไอคอน Material เท่านั้น และถูกละเว้นสำหรับประเภทไอคอน {{type}}",
+	"import.err.iconTypeInvalid":
+		'ประเภทไอคอน "{{value}}" ต้องเป็นหนึ่งใน: {{types}}',
+	"import.warn.iconFieldIgnored":
+		'"{{field}}" ใช้เฉพาะกับไอคอน Material เท่านั้น และถูกละเว้นสำหรับประเภทไอคอน {{type}}',
 	"import.err.iconValueEmpty": "ค่าไอคอนต้องเป็น string ที่ไม่ว่างเปล่า",
 	"import.err.iconValueTooLong": "ค่าไอคอนยาวผิดปกติ ({{length}} อักขระ)",
-	"import.err.materialStyle": 'สไตล์ไอคอน Material "{{value}}" ต้องเป็นหนึ่งใน: outlined, filled, rounded, sharp',
-	"import.err.materialWeight": 'น้ำหนักไอคอน Material "{{value}}" ต้องเป็นจำนวนเต็มระหว่าง 100 ถึง 700 ด้วยขั้นตอน 100',
-	"import.warn.iconRecolorIgnored": "\"recolor\" ใช้เฉพาะกับรูปภาพของคุณเองเท่านั้น และถูกละเว้นสำหรับประเภทไอคอน {{type}}",
-	"import.err.iconRecolorInvalid": "\"recolor\" ต้องเป็น true หรือ false (ได้รับ: \"{{value}}\")",
-	"import.err.colorInvalid": '"{{field}}" ต้องเป็นสี hex เช่น "#448aff" (ได้รับ "{{value}}")',
-	"import.err.numberRange": '"{{field}}" ต้องเป็นตัวเลขระหว่าง {{min}} ถึง {{max}} (ได้รับ "{{value}}")',
-	"import.err.iconSizeRange": '"{{field}}" ต้องเป็นตัวเลขระหว่าง {{min}} ถึง {{max}} (ได้รับ "{{value}}")',
+	"import.err.materialStyle":
+		'สไตล์ไอคอน Material "{{value}}" ต้องเป็นหนึ่งใน: outlined, filled, rounded, sharp',
+	"import.err.materialWeight":
+		'น้ำหนักไอคอน Material "{{value}}" ต้องเป็นจำนวนเต็มระหว่าง 100 ถึง 700 ด้วยขั้นตอน 100',
+	"import.warn.iconRecolorIgnored":
+		'"recolor" ใช้เฉพาะกับรูปภาพของคุณเองเท่านั้น และถูกละเว้นสำหรับประเภทไอคอน {{type}}',
+	"import.err.iconRecolorInvalid":
+		'"recolor" ต้องเป็น true หรือ false (ได้รับ: "{{value}}")',
+	"import.err.colorInvalid":
+		'"{{field}}" ต้องเป็นสี hex เช่น "#448aff" (ได้รับ "{{value}}")',
+	"import.err.numberRange":
+		'"{{field}}" ต้องเป็นตัวเลขระหว่าง {{min}} ถึง {{max}} (ได้รับ "{{value}}")',
+	"import.err.iconSizeRange":
+		'"{{field}}" ต้องเป็นตัวเลขระหว่าง {{min}} ถึง {{max}} (ได้รับ "{{value}}")',
 	"import.err.aliasesNotArray": '"aliases" ต้องเป็น array ของ string',
 	"import.err.aliasNotString": "นามแฝงต้องเป็น string",
 	"import.err.aliasDup": 'นามแฝง "{{value}}" ซ้ำกันในรายการนี้',
-	"import.err.tooManyIds": "มี ID มากเกินไป ({{count}}) แต่ละ callout มีได้สูงสุด {{max}} ID (หลัก + นามแฝง)",
-	"import.err.metadataShape": '"metadata" ต้องเป็น object ที่ค่าทั้งหมดเป็น string',
+	"import.err.tooManyIds":
+		"มี ID มากเกินไป ({{count}}) แต่ละ callout มีได้สูงสุด {{max}} ID (หลัก + นามแฝง)",
+	"import.err.metadataShape":
+		'"metadata" ต้องเป็น object ที่ค่าทั้งหมดเป็น string',
 	"import.warn.unknownFields": "ละเว้นฟิลด์ที่ไม่รู้จัก: {{fields}}",
-	"import.err.duplicateInFile": 'ID/นามแฝง "{{value}}" ถูกใช้โดยรายการ #{{first}} ในไฟล์นี้แล้ว',
-	"import.err.aliasConflict": 'นามแฝง "{{value}}" ถูกใช้โดย callout อื่น ("{{other}}") ใน vault ของคุณแล้ว',
-	"import.warn.defaultFoldedAutofix": '"defaultFolded" เป็น true ในขณะที่ "foldable" เป็น false; defaultFolded ถูกรีเซ็ตเป็น false แล้ว',
-	"import.warn.imageMissing": "Callout นี้ใช้รูปภาพที่ไม่มีในไฟล์และไม่มีใน vault นี้ จึงจะแสดงไอคอนตัวแทนจนกว่าคุณจะกำหนดใหม่",
+	"import.err.duplicateInFile":
+		'ID/นามแฝง "{{value}}" ถูกใช้โดยรายการ #{{first}} ในไฟล์นี้แล้ว',
+	"import.err.aliasConflict":
+		'นามแฝง "{{value}}" ถูกใช้โดย callout อื่น ("{{other}}") ใน vault ของคุณแล้ว',
+	"import.warn.defaultFoldedAutofix":
+		'"defaultFolded" เป็น true ในขณะที่ "foldable" เป็น false; defaultFolded ถูกรีเซ็ตเป็น false แล้ว',
+	"import.warn.imageMissing":
+		"Callout นี้ใช้รูปภาพที่ไม่มีในไฟล์และไม่มีใน vault นี้ จึงจะแสดงไอคอนตัวแทนจนกว่าคุณจะกำหนดใหม่",
 
-		"import.err.paletteIdInvalid": "\"paletteId\" ต้องเป็น ID ข้อความที่ไม่ว่างเปล่า (ได้รับ \"{{value}}\")",
-	"import.warn.iconNameUnknown": "ไม่มีไอคอน \"{{value}}\" ใน {{type}} จึงใช้ไอคอนเริ่มต้นแทน",
-	"import.warn.cmIconUnknownNew": "ไม่มีไอคอน \"{{value}}\" ใน Obsidian จึงใช้ไอคอนเริ่มต้นแทน",
-	"import.warn.cmIconUnknownExisting": "ไม่มีไอคอน \"{{value}}\" ใน Obsidian ดังนั้น \"{{id}}\" จึงยังคงใช้ไอคอนเดิม",
+	"import.err.paletteIdInvalid":
+		'"paletteId" ต้องเป็น ID ข้อความที่ไม่ว่างเปล่า (ได้รับ "{{value}}")',
+	"import.warn.iconNameUnknown":
+		'ไม่มีไอคอน "{{value}}" ใน {{type}} จึงใช้ไอคอนเริ่มต้นแทน',
+	"import.warn.cmIconUnknownNew":
+		'ไม่มีไอคอน "{{value}}" ใน Obsidian จึงใช้ไอคอนเริ่มต้นแทน',
+	"import.warn.cmIconUnknownExisting":
+		'ไม่มีไอคอน "{{value}}" ใน Obsidian ดังนั้น "{{id}}" จึงยังคงใช้ไอคอนเดิม',
 	"import.chooseSource": "นำเข้าจาก",
 	"import.sourceStudio": "Callout Studio",
 	"import.sourceStudioDesc": "โหลดไฟล์ .json ที่ส่งออกจาก Callout Studio",
 	"import.sourceCalloutManager": "Callout Manager",
-	"import.sourceCalloutManagerDesc": "วางสไตล์ที่คุณคัดลอกจากปุ่ม Copy ของ Callout Manager",
+	"import.sourceCalloutManagerDesc":
+		"วางสไตล์ที่คุณคัดลอกจากปุ่ม Copy ของ Callout Manager",
 	"import.sourceAdmonition": "Admonition",
 	"import.sourceAdmonitionDesc": "ยังไม่พร้อมใช้งาน",
 	"import.sourceAdmonitionNotice": "ยังไม่รองรับการนำเข้าจาก Admonition",
 	"import.cmTitle": "นำเข้าจาก Callout Manager",
-	"import.cmInstructions": "ใน Callout Manager ให้ใช้ปุ่ม Copy เพื่อคัดลอกสไตล์ callout ที่กำหนดเอง จากนั้นวางด้านล่าง",
+	"import.cmInstructions":
+		"ใน Callout Manager ให้ใช้ปุ่ม Copy เพื่อคัดลอกสไตล์ callout ที่กำหนดเอง จากนั้นวางด้านล่าง",
 	"import.cmPlaceholder": "วางสไตล์ที่คัดลอกไว้ที่นี่…",
 	"import.cmBtnCancel": "ยกเลิก",
 	"import.cmBtnImport": "นำเข้า",
 	"import.err.cmNoBlocksFound": "ไม่พบสไตล์ Callout Manager ในข้อความที่วาง",
-	"import.err.cmNoColorForNew": "ไม่พบสีที่ใช้งานได้สำหรับ callout ใหม่ \"{{value}}\" จึงถูกข้ามไป",
-	"import.err.cmIdConflict": "ID \"{{value}}\" ถูกใช้เป็น alias โดย callout อื่น (\"{{other}}\") แล้ว จึงถูกข้ามไป",
+	"import.err.cmNoColorForNew":
+		'ไม่พบสีที่ใช้งานได้สำหรับ callout ใหม่ "{{value}}" จึงถูกข้ามไป',
+	"import.err.cmIdConflict":
+		'ID "{{value}}" ถูกใช้เป็น alias โดย callout อื่น ("{{other}}") แล้ว จึงถูกข้ามไป',
 
-	"footer.tagline": "มีคำติชม ความคิดเห็น หรือข้อเสนอแนะหรือไม่? ยินดีรับฟัง!",
+	"footer.tagline":
+		"มีคำติชม ความคิดเห็น หรือข้อเสนอแนะหรือไม่? ยินดีรับฟัง!",
 	"footer.madeBy": "สร้างโดย Niv  •  ",
 };

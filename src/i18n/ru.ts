@@ -151,7 +151,8 @@ export const ru: Record<string, string> = {
 	"notice.exported": "Callout экспортированы в callout-studio-export.json",
 	"notice.importedJSON": "Импортировано {{count}} типов callout из JSON.",
 	"notice.importedSettings": "Настройки плагина импортированы.",
-	"notice.importedCalloutManager": "Импортировано из Callout Manager: создано {{created}}, обновлено {{updated}}.",
+	"notice.importedCalloutManager":
+		"Импортировано из Callout Manager: создано {{created}}, обновлено {{updated}}.",
 	"notice.noNewJSON":
 		"Новые типы callout не импортированы (ID могут уже существовать).",
 	"notice.iconDownloadFailed":
@@ -180,6 +181,7 @@ export const ru: Record<string, string> = {
 		"Этот ID связан с отображаемым именем и не может быть удалён — измените имя, чтобы изменить его",
 	"editor.icon": "Иконка",
 	"editor.pickIcon": "Выбрать значок",
+	"editor.resetIcon": "Сбросить значок по умолчанию",
 	"editor.livePreview": "Живой предпросмотр",
 	"editor.iconAdjustment": "Настройка иконки",
 	"editor.picture": "Изображение",
@@ -187,6 +189,7 @@ export const ru: Record<string, string> = {
 	"editor.horizontalOffset": "Горизонтальное смещение",
 	"editor.verticalOffset": "Вертикальное смещение",
 	"editor.colors": "Цвета",
+	"editor.resetColors": "Сбросить цвета по умолчанию",
 	"editor.paletteDeleted": "Цвет удалён",
 	"editor.paletteGroupObsidian": "Callout Obsidian",
 	"editor.paletteGroupPresets": "Цветовые пресеты",
@@ -642,7 +645,8 @@ export const ru: Record<string, string> = {
 		"Слишком много ID ({{count}}); каждый callout может иметь не более {{max}} ID (основной + псевдонимы).",
 	"import.err.metadataShape":
 		'"metadata" должен быть объектом, все значения которого являются строками.',
-	"import.warn.unknownFields": "Неизвестные поля проигнорированы: {{fields}}.",
+	"import.warn.unknownFields":
+		"Неизвестные поля проигнорированы: {{fields}}.",
 	"import.err.duplicateInFile":
 		'ID/псевдоним "{{value}}" уже используется записью #{{first}} в этом файле.',
 	"import.err.aliasConflict":
@@ -652,26 +656,37 @@ export const ru: Record<string, string> = {
 	"import.warn.imageMissing":
 		"Этот Callout использует изображение, которого нет ни в файле, ни в этом vault, поэтому будет показываться замещающая иконка, пока вы не укажете новое.",
 
-		"import.err.paletteIdInvalid": "\"paletteId\" должен быть непустым текстовым идентификатором (получено \"{{value}}\").",
-	"import.warn.iconNameUnknown": "Иконки \"{{value}}\" нет в {{type}}, поэтому была использована иконка по умолчанию.",
-	"import.warn.cmIconUnknownNew": "Иконки \"{{value}}\" нет в Obsidian, поэтому была использована иконка по умолчанию.",
-	"import.warn.cmIconUnknownExisting": "Иконки \"{{value}}\" нет в Obsidian, поэтому \"{{id}}\" оставил иконку, которая у него уже была.",
+	"import.err.paletteIdInvalid":
+		'"paletteId" должен быть непустым текстовым идентификатором (получено "{{value}}").',
+	"import.warn.iconNameUnknown":
+		'Иконки "{{value}}" нет в {{type}}, поэтому была использована иконка по умолчанию.',
+	"import.warn.cmIconUnknownNew":
+		'Иконки "{{value}}" нет в Obsidian, поэтому была использована иконка по умолчанию.',
+	"import.warn.cmIconUnknownExisting":
+		'Иконки "{{value}}" нет в Obsidian, поэтому "{{id}}" оставил иконку, которая у него уже была.',
 	"import.chooseSource": "Импорт из",
 	"import.sourceStudio": "Callout Studio",
-	"import.sourceStudioDesc": "Загрузить файл .json, экспортированный из Callout Studio.",
+	"import.sourceStudioDesc":
+		"Загрузить файл .json, экспортированный из Callout Studio.",
 	"import.sourceCalloutManager": "Callout Manager",
-	"import.sourceCalloutManagerDesc": "Вставьте стили, скопированные через кнопку Copy в Callout Manager.",
+	"import.sourceCalloutManagerDesc":
+		"Вставьте стили, скопированные через кнопку Copy в Callout Manager.",
 	"import.sourceAdmonition": "Admonition",
 	"import.sourceAdmonitionDesc": "Пока недоступно.",
-	"import.sourceAdmonitionNotice": "Импорт из Admonition пока не поддерживается.",
+	"import.sourceAdmonitionNotice":
+		"Импорт из Admonition пока не поддерживается.",
 	"import.cmTitle": "Импорт из Callout Manager",
-	"import.cmInstructions": "В Callout Manager нажмите кнопку Copy, чтобы скопировать настроенные стили callout, затем вставьте их ниже.",
+	"import.cmInstructions":
+		"В Callout Manager нажмите кнопку Copy, чтобы скопировать настроенные стили callout, затем вставьте их ниже.",
 	"import.cmPlaceholder": "Вставьте скопированные стили сюда…",
 	"import.cmBtnCancel": "Отмена",
 	"import.cmBtnImport": "Импорт",
-	"import.err.cmNoBlocksFound": "В вставленном тексте не найдено стилей Callout Manager.",
-	"import.err.cmNoColorForNew": "Не найден подходящий цвет для нового callout \"{{value}}\"; он был пропущен.",
-	"import.err.cmIdConflict": "ID \"{{value}}\" уже используется как псевдоним другим callout (\"{{other}}\") и был пропущен.",
+	"import.err.cmNoBlocksFound":
+		"В вставленном тексте не найдено стилей Callout Manager.",
+	"import.err.cmNoColorForNew":
+		'Не найден подходящий цвет для нового callout "{{value}}"; он был пропущен.',
+	"import.err.cmIdConflict":
+		'ID "{{value}}" уже используется как псевдоним другим callout ("{{other}}") и был пропущен.',
 
 	"footer.tagline":
 		"Есть отзывы, комментарии или предложения? Буду рад услышать!",

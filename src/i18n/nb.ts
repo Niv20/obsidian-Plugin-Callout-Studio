@@ -138,7 +138,8 @@ export const nb: Record<string, string> = {
 	"notice.exported": "Callouts eksportert til callout-studio-export.json",
 	"notice.importedJSON": "{{count}} callout-type(r) importert fra JSON.",
 	"notice.importedSettings": "Plugin-innstillinger importert.",
-	"notice.importedCalloutManager": "Importert fra Callout Manager: {{created}} opprettet, {{updated}} oppdatert.",
+	"notice.importedCalloutManager":
+		"Importert fra Callout Manager: {{created}} opprettet, {{updated}} oppdatert.",
 	"notice.noNewJSON":
 		"Ingen nye callout-typer importert (ID-er kan allerede eksistere).",
 	"notice.iconDownloadFailed":
@@ -167,6 +168,7 @@ export const nb: Record<string, string> = {
 		"Denne ID-en er koblet til visningsnavnet og kan ikke slettes — rediger navnet for å endre den",
 	"editor.icon": "Ikon",
 	"editor.pickIcon": "Velg ikon",
+	"editor.resetIcon": "Tilbakestill ikon til standard",
 	"editor.livePreview": "Live-forhåndsvisning",
 	"editor.iconAdjustment": "Ikontilpasning",
 	"editor.picture": "Bilde",
@@ -174,6 +176,7 @@ export const nb: Record<string, string> = {
 	"editor.horizontalOffset": "Horisontal forskyvning",
 	"editor.verticalOffset": "Vertikal forskyvning",
 	"editor.colors": "Farger",
+	"editor.resetColors": "Tilbakestill farger til standard",
 	"editor.paletteDeleted": "Slettet farge",
 	"editor.paletteGroupObsidian": "Obsidian-callouts",
 	"editor.paletteGroupPresets": "Fargeforhåndsinnstillinger",
@@ -631,26 +634,36 @@ export const nb: Record<string, string> = {
 		'"defaultFolded" var true mens "foldable" var false; defaultFolded ble tilbakestilt til false.',
 	"import.warn.imageMissing":
 		"Denne Callout bruker et bilde som ikke er i filen og ikke i denne vault, så den vil vise et plassholderikonikon inntil du gir det et nytt.",
-		"import.err.paletteIdInvalid": "\"paletteId\" må være en ikke-tom tekst-ID (mottok \"{{value}}\").",
-	"import.warn.iconNameUnknown": "Det finnes ingen \"{{value}}\" ikon i {{type}}, så standardikonet ble brukt i stedet.",
-	"import.warn.cmIconUnknownNew": "Det finnes ingen \"{{value}}\" ikon i Obsidian, så standardikonet ble brukt i stedet.",
-	"import.warn.cmIconUnknownExisting": "Det finnes ingen \"{{value}}\" ikon i Obsidian, så \"{{id}}\" beholdt ikonet det allerede hadde.",
+	"import.err.paletteIdInvalid":
+		'"paletteId" må være en ikke-tom tekst-ID (mottok "{{value}}").',
+	"import.warn.iconNameUnknown":
+		'Det finnes ingen "{{value}}" ikon i {{type}}, så standardikonet ble brukt i stedet.',
+	"import.warn.cmIconUnknownNew":
+		'Det finnes ingen "{{value}}" ikon i Obsidian, så standardikonet ble brukt i stedet.',
+	"import.warn.cmIconUnknownExisting":
+		'Det finnes ingen "{{value}}" ikon i Obsidian, så "{{id}}" beholdt ikonet det allerede hadde.',
 	"import.chooseSource": "Importer fra",
 	"import.sourceStudio": "Callout Studio",
-	"import.sourceStudioDesc": "Last inn en .json-fil eksportert fra Callout Studio.",
+	"import.sourceStudioDesc":
+		"Last inn en .json-fil eksportert fra Callout Studio.",
 	"import.sourceCalloutManager": "Callout Manager",
-	"import.sourceCalloutManagerDesc": "Lim inn stilene du kopierte fra Copy-knappen i Callout Manager.",
+	"import.sourceCalloutManagerDesc":
+		"Lim inn stilene du kopierte fra Copy-knappen i Callout Manager.",
 	"import.sourceAdmonition": "Admonition",
 	"import.sourceAdmonitionDesc": "Ikke tilgjengelig ennå.",
 	"import.sourceAdmonitionNotice": "Import fra Admonition støttes ikke ennå.",
 	"import.cmTitle": "Importer fra Callout Manager",
-	"import.cmInstructions": "I Callout Manager bruker du Copy-knappen for å kopiere de tilpassede callout-stilene dine, og limer dem inn nedenfor.",
+	"import.cmInstructions":
+		"I Callout Manager bruker du Copy-knappen for å kopiere de tilpassede callout-stilene dine, og limer dem inn nedenfor.",
 	"import.cmPlaceholder": "Lim inn de kopierte stilene her…",
 	"import.cmBtnCancel": "Avbryt",
 	"import.cmBtnImport": "Importer",
-	"import.err.cmNoBlocksFound": "Ingen Callout Manager-stiler ble funnet i den innlimte teksten.",
-	"import.err.cmNoColorForNew": "Ingen brukbar farge ble funnet for den nye callouten \"{{value}}\"; den ble hoppet over.",
-	"import.err.cmIdConflict": "ID \"{{value}}\" brukes allerede som et alias av en annen callout (\"{{other}}\") og ble hoppet over.",
+	"import.err.cmNoBlocksFound":
+		"Ingen Callout Manager-stiler ble funnet i den innlimte teksten.",
+	"import.err.cmNoColorForNew":
+		'Ingen brukbar farge ble funnet for den nye callouten "{{value}}"; den ble hoppet over.',
+	"import.err.cmIdConflict":
+		'ID "{{value}}" brukes allerede som et alias av en annen callout ("{{other}}") og ble hoppet over.',
 
 	"footer.tagline":
 		"Har du tilbakemeldinger, kommentarer eller forslag? Jeg vil gjerne høre det!",

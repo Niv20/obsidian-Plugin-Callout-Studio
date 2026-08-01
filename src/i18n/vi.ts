@@ -10,23 +10,30 @@ export const vi: Record<string, string> = {
 	"settings.fallbackTag": "Mặc định",
 	"settings.fallbackTagAuto": "Mặc định tự động",
 	"settings.rescanVault": "Quét lại vault",
-	"settings.rescanVaultDesc": "Tìm các ID callout chưa được nhận dạng trong ghi chú và thêm chúng như các hàng dự phòng.",
+	"settings.rescanVaultDesc":
+		"Tìm các ID callout chưa được nhận dạng trong ghi chú và thêm chúng như các hàng dự phòng.",
 	"settings.rescanVaultHintAction": "Quét ngay",
-	"settings.rescanComplete": "Quét lại hoàn tất: đã thêm {{count}} callout mới.",
+	"settings.rescanComplete":
+		"Quét lại hoàn tất: đã thêm {{count}} callout mới.",
 	"replaceModal.deleteWithoutReplaceSuffix": "(quay lại mặc định)",
 
 	"firstRun.title": "Tìm callouts hiện có trong vault?",
-	"firstRun.body": "Callout Studio có thể quét vault của bạn để khám phá các callout bạn đang sử dụng, để chúng xuất hiện trong danh sách cài đặt và áp dụng kiểu dự phòng của bạn.",
-	"firstRun.heavyVaultNote": "Vault của bạn có {{count}} tệp Markdown — quá trình quét có thể mất vài giây.",
-	"firstRun.laterHint": "Bạn luôn có thể chạy điều này sau từ Cài đặt → Thông tin & bảo trì vault → Quét lại vault.",
+	"firstRun.body":
+		"Callout Studio có thể quét vault của bạn để khám phá các callout bạn đang sử dụng, để chúng xuất hiện trong danh sách cài đặt và áp dụng kiểu dự phòng của bạn.",
+	"firstRun.heavyVaultNote":
+		"Vault của bạn có {{count}} tệp Markdown — quá trình quét có thể mất vài giây.",
+	"firstRun.laterHint":
+		"Bạn luôn có thể chạy điều này sau từ Cài đặt → Thông tin & bảo trì vault → Quét lại vault.",
 	"firstRun.scanNow": "Quét ngay",
 	"firstRun.noThanks": "Không, cảm ơn",
-	"firstRun.autoScanComplete": "Callout Studio đã quét vault và thêm {{count}} callout.",
+	"firstRun.autoScanComplete":
+		"Callout Studio đã quét vault và thêm {{count}} callout.",
 	"firstRun.scanning": "Đang quét",
 
 	"welcome.tooltip": "Giới thiệu về Callout Studio",
 	"welcome.title": "Chào mừng đến với Callout Studio",
-	"welcome.tagline": "Giải pháp toàn diện của bạn để quản lý callout trong Obsidian.",
+	"welcome.tagline":
+		"Giải pháp toàn diện của bạn để quản lý callout trong Obsidian.",
 	"welcome.previewTitle": "Xem nó hoạt động",
 	"welcome.sample":
 		"Callout Studio cho phép bạn tạo callout với biểu tượng, màu sắc và tên tùy chỉnh.\n\n" +
@@ -39,10 +46,14 @@ export const vi: Record<string, string> = {
 		"Callout Studio còn có nhiều thứ hơn thế để mang lại! [Tìm hiểu thêm]({{repoUrl}}).\n",
 
 	"deleteModal.title": 'Xóa callout "{{name}}"?',
-	"deleteModal.bodyInUse": "Callout này xuất hiện {{count}} lần trong {{files}} tệp.",
-	"deleteModal.bodyInUseExplain": "Xóa sẽ chuyển đổi các khối đó thành văn bản thường — chúng sẽ mất kiểu và tiêu đề callout.",
-	"deleteModal.replaceHint": "Bạn có thể thay thế nó bằng callout khác, giữ nguyên nội dung vault dưới dạng callout có kiểu.",
-	"deleteModal.bodyUnused": '"{{name}}" không được sử dụng trong bất kỳ ghi chú nào, nhưng là callout tùy chỉnh bạn đã tạo. Xóa sẽ loại bỏ nó khỏi danh sách này.',
+	"deleteModal.bodyInUse":
+		"Callout này xuất hiện {{count}} lần trong {{files}} tệp.",
+	"deleteModal.bodyInUseExplain":
+		"Xóa sẽ chuyển đổi các khối đó thành văn bản thường — chúng sẽ mất kiểu và tiêu đề callout.",
+	"deleteModal.replaceHint":
+		"Bạn có thể thay thế nó bằng callout khác, giữ nguyên nội dung vault dưới dạng callout có kiểu.",
+	"deleteModal.bodyUnused":
+		'"{{name}}" không được sử dụng trong bất kỳ ghi chú nào, nhưng là callout tùy chỉnh bạn đã tạo. Xóa sẽ loại bỏ nó khỏi danh sách này.',
 	"deleteModal.replaceInstead": "Thay thế thay vào đó",
 	"deleteModal.deleteInUse": "Xóa (chuyển thành văn bản thường)",
 	"deleteModal.deleteUnused": "Xóa callout",
@@ -60,9 +71,12 @@ export const vi: Record<string, string> = {
 	"settings.importExport": "Nhập / xuất",
 	"settings.import": "Nhập",
 	"settings.export": "Xuất",
-	"settings.importDesc": "Nhập dữ liệu Callout Studio từ vault khác bằng tệp JSON.",
-	"settings.exportDesc": "Lưu tất cả các loại callout tùy chỉnh ở định dạng JSON.",
-	"settings.importConflictNotice": "Đã nhập {{count}} loại callout; {{overwritten}} mục hiện có đã bị ghi đè.",
+	"settings.importDesc":
+		"Nhập dữ liệu Callout Studio từ vault khác bằng tệp JSON.",
+	"settings.exportDesc":
+		"Lưu tất cả các loại callout tùy chỉnh ở định dạng JSON.",
+	"settings.importConflictNotice":
+		"Đã nhập {{count}} loại callout; {{overwritten}} mục hiện có đã bị ghi đè.",
 
 	"settings.addNewCallout": "+ thêm callout",
 
@@ -78,7 +92,8 @@ export const vi: Record<string, string> = {
 
 	"settings.colorSwatchAria": "Điểm nhấn: {{accent}} · Nền: {{bg}}",
 	"settings.fallbackCallout": "Callout dự phòng mặc định",
-	"settings.fallbackCalloutDesc": "Các loại callout không nhận dạng được trong vault sẽ kế thừa kiểu của callout này.",
+	"settings.fallbackCalloutDesc":
+		"Các loại callout không nhận dạng được trong vault sẽ kế thừa kiểu của callout này.",
 
 	"settings.globalStyle": "Kiểu callout toàn cục",
 	"settings.border": "Viền",
@@ -112,49 +127,61 @@ export const vi: Record<string, string> = {
 	"settings.deletePaletteConfirm":
 		'Xóa bảng màu "{{name}}"?\nCác callout dùng màu này sẽ không bị ảnh hưởng.',
 	"settings.enableAutocomplete": "Bật tự động hoàn thành [!",
-	"settings.enableAutocompleteDesc": 'Hiển thị gợi ý khi bạn gõ "[!" trong trích dẫn khối trong trình soạn thảo. Chọn loại callout từ danh sách để chèn tiêu đề callout đầy đủ.',
+	"settings.enableAutocompleteDesc":
+		'Hiển thị gợi ý khi bạn gõ "[!" trong trích dẫn khối trong trình soạn thảo. Chọn loại callout từ danh sách để chèn tiêu đề callout đầy đủ.',
 
 	"settings.openHotkeys": "Phím tắt Callout Studio",
-	"settings.openHotkeysDesc": "Mở cài đặt phím tắt Obsidian cho các lệnh Callout Studio, nơi bạn có thể chọn phím tắt riêng cho Tạo loại mới, Mở cài đặt, Bỏ callout và Bọc trong callout. Không có phím tắt nào được gán theo mặc định.",
+	"settings.openHotkeysDesc":
+		"Mở cài đặt phím tắt Obsidian cho các lệnh Callout Studio, nơi bạn có thể chọn phím tắt riêng cho Tạo loại mới, Mở cài đặt, Bỏ callout và Bọc trong callout. Không có phím tắt nào được gán theo mặc định.",
 	"settings.openHotkeysButton": "Mở cài đặt phím tắt",
-
 
 	"settings.vaultMaintenance": "Thông tin & bảo trì vault",
 	"settings.vaultStats": "Thống kê callout",
-	"settings.vaultStatsDesc": "Đếm tất cả các khối callout trong ghi chú Markdown và nhóm theo loại.",
+	"settings.vaultStatsDesc":
+		"Đếm tất cả các khối callout trong ghi chú Markdown và nhóm theo loại.",
 	"settings.vaultStatsButton": "Xem thống kê",
 	"settings.vaultStatsScanning": "Đang quét",
 	"settings.resetAll": "Đặt lại",
-	"settings.resetAllDesc": "Xóa tất cả callouts người dùng, đặt lại callouts tích hợp, kiểu toàn cục (viền, tỷ lệ phông, hình dạng), bảng màu đã lưu, tùy chỉnh menu chuột phải và SVG Material đã tải.",
+	"settings.resetAllDesc":
+		"Xóa tất cả callouts người dùng, đặt lại callouts tích hợp, kiểu toàn cục (viền, tỷ lệ phông, hình dạng), bảng màu đã lưu, tùy chỉnh menu chuột phải và SVG Material đã tải.",
 	"settings.resetAllButton": "Đặt lại tất cả",
-	"settings.resetAllConfirm": "Điều này sẽ xóa tất cả callouts tùy chỉnh, đặt lại callouts tích hợp, kiểu toàn cục, bảng màu đã lưu, tùy chỉnh menu chuột phải và tất cả SVG Material đã cache. Hành động này không thể hoàn tác. Bạn có chắc không?",
+	"settings.resetAllConfirm":
+		"Điều này sẽ xóa tất cả callouts tùy chỉnh, đặt lại callouts tích hợp, kiểu toàn cục, bảng màu đã lưu, tùy chỉnh menu chuột phải và tất cả SVG Material đã cache. Hành động này không thể hoàn tác. Bạn có chắc không?",
 	"notice.resetAllDone": "Đã đặt lại tất cả về mặc định.",
 
 	"notice.exported": "Đã xuất callouts vào callout-studio-export.json",
 	"notice.importedJSON": "Đã nhập {{count}} loại callout từ JSON.",
 	"notice.importedSettings": "Đã nhập cài đặt plugin.",
-	"notice.importedCalloutManager": "Đã nhập từ Callout Manager: {{created}} đã tạo, {{updated}} đã cập nhật.",
-	"notice.noNewJSON": "Không có loại callout mới nào được nhập (ID có thể đã tồn tại).",
-	"notice.iconDownloadFailed": 'Không thể tải biểu tượng Material "{{name}}". Nó có thể không có sẵn cho kiểu/độ dày này, hoặc kết nối của bạn đang ngoại tuyến.',
+	"notice.importedCalloutManager":
+		"Đã nhập từ Callout Manager: {{created}} đã tạo, {{updated}} đã cập nhật.",
+	"notice.noNewJSON":
+		"Không có loại callout mới nào được nhập (ID có thể đã tồn tại).",
+	"notice.iconDownloadFailed":
+		'Không thể tải biểu tượng Material "{{name}}". Nó có thể không có sẵn cho kiểu/độ dày này, hoặc kết nối của bạn đang ngoại tuyến.',
 	"notice.nothingToWrap": "Không có gì để bọc.",
 	"notice.cursorNotInsideCallout": "Con trỏ không nằm trong callout.",
 	"notice.openHotkeysFailed": "Không thể mở cài đặt phím tắt Obsidian.",
-	"notice.filterHotkeysFailed": "Đã mở phím tắt Obsidian, nhưng không thể áp dụng bộ lọc Callout Studio.",
+	"notice.filterHotkeysFailed":
+		"Đã mở phím tắt Obsidian, nhưng không thể áp dụng bộ lọc Callout Studio.",
 
 	"editor.editCallout": "Chỉnh sửa callout",
 	"editor.newCallout": "Callout mới",
 	"editor.displayName": "Tên hiển thị",
 	"editor.displayNameDesc": "Nhãn dễ đọc được hiển thị trong giao diện",
-	"editor.displayNameBuiltIn": "Không thể thay đổi tên hiển thị của callouts tích hợp",
+	"editor.displayNameBuiltIn":
+		"Không thể thay đổi tên hiển thị của callouts tích hợp",
 	"editor.displayNamePlaceholder": "Callout của tôi",
 	"editor.calloutIds": "ID callout",
-	"editor.calloutIdsDesc": "Tất cả các định danh cho callout này. Cho phép dấu cách.\nNhấn Enter hoặc nút + để thêm.",
+	"editor.calloutIdsDesc":
+		"Tất cả các định danh cho callout này. Cho phép dấu cách.\nNhấn Enter hoặc nút + để thêm.",
 	"editor.calloutIdsPlaceholder": "Thêm ID",
 	"editor.addId": "Thêm ID",
 	"editor.idLinkedToName": "Liên kết với tên hiển thị",
-	"editor.idCannotDelete": "ID này được liên kết với tên hiển thị và không thể xóa — chỉnh sửa tên để thay đổi nó",
+	"editor.idCannotDelete":
+		"ID này được liên kết với tên hiển thị và không thể xóa — chỉnh sửa tên để thay đổi nó",
 	"editor.icon": "Biểu tượng",
 	"editor.pickIcon": "Chọn biểu tượng",
+	"editor.resetIcon": "Đặt lại biểu tượng về mặc định",
 	"editor.livePreview": "Xem trước trực tiếp",
 	"editor.iconAdjustment": "Điều chỉnh biểu tượng",
 	"editor.picture": "Hình ảnh",
@@ -162,6 +189,7 @@ export const vi: Record<string, string> = {
 	"editor.horizontalOffset": "Độ lệch ngang",
 	"editor.verticalOffset": "Độ lệch dọc",
 	"editor.colors": "Màu sắc",
+	"editor.resetColors": "Đặt lại màu sắc về mặc định",
 	"editor.paletteDeleted": "Màu đã xóa",
 	"editor.paletteGroupObsidian": "Callouts Obsidian",
 	"editor.paletteGroupPresets": "Cài đặt màu trước",
@@ -169,7 +197,8 @@ export const vi: Record<string, string> = {
 	"editor.paletteNewColor": "Màu mới…",
 	"editor.contrastWarning": "Độ tương phản thấp so với nền — có thể khó đọc",
 	"editor.foldable": "Có thể gập",
-	"editor.foldableDesc": "Chọn liệu callout có thể gập và trạng thái mặc định nào áp dụng trên toàn vault.",
+	"editor.foldableDesc":
+		"Chọn liệu callout có thể gập và trạng thái mặc định nào áp dụng trên toàn vault.",
 	"editor.foldOff": "Tắt",
 	"editor.foldOpen": "Mặc định mở",
 	"editor.foldClosed": "Mặc định đóng",
@@ -182,11 +211,15 @@ export const vi: Record<string, string> = {
 	"editor.idEmpty": "Cần ít nhất một ID",
 	"editor.idExists": "Đã tồn tại callout với ID này",
 	"editor.idConflict": "ID này xung đột với callout hiện có",
-	"editor.idDashConflict": 'Obsidian ghi khoảng trắng thành dấu gạch ngang, vì vậy ID này xung đột với "{{other}}"',
+	"editor.idDashConflict":
+		'Obsidian ghi khoảng trắng thành dấu gạch ngang, vì vậy ID này xung đột với "{{other}}"',
 	"editor.untitledCallout": "Callout chưa đặt tên",
-	"editor.loremIpsum": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-	"editor.loremIpsumShort": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-	"editor.sampleInlineText": "Đây là một viên [!{id}] nội tuyến bên trong một đoạn văn.",
+	"editor.loremIpsum":
+		"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+	"editor.loremIpsumShort":
+		"Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+	"editor.sampleInlineText":
+		"Đây là một viên [!{id}] nội tuyến bên trong một đoạn văn.",
 	"editor.previewReadOnly": "Không thể chỉnh sửa bản xem trước trực tiếp",
 
 	// Palette editor modal
@@ -196,11 +229,14 @@ export const vi: Record<string, string> = {
 	"palette.namePlaceholder": "Bảng màu của tôi",
 	"palette.nameExists": "Đã tồn tại bảng màu với tên này",
 	"palette.baseColor": "Màu gốc",
-	"palette.baseColorHint": "Chúng tôi sẽ tự động khớp màu nền với màu này. Nếu muốn, bạn có thể điều khiển riêng bằng cách {{link}}.",
+	"palette.baseColorHint":
+		"Chúng tôi sẽ tự động khớp màu nền với màu này. Nếu muốn, bạn có thể điều khiển riêng bằng cách {{link}}.",
 	"palette.baseColorHintLink": "nhấp vào đây",
 	"palette.advancedColors": "Màu sắc",
-	"palette.advancedColorsHint": "Đang chỉnh sửa màu cho chế độ {{mode}} - chế độ còn lại sẽ tự động cập nhật. Chuyển giao diện Obsidian để kiểm tra.",
-	"palette.revertHint": "Muốn dùng một màu cơ bản duy nhất thay thế? {{link}}.",
+	"palette.advancedColorsHint":
+		"Đang chỉnh sửa màu cho chế độ {{mode}} - chế độ còn lại sẽ tự động cập nhật. Chuyển giao diện Obsidian để kiểm tra.",
+	"palette.revertHint":
+		"Muốn dùng một màu cơ bản duy nhất thay thế? {{link}}.",
 	"palette.revertHintLink": "Hoàn tác",
 	"palette.lightMode": "Sáng",
 	"palette.darkMode": "Tối",
@@ -273,7 +309,8 @@ export const vi: Record<string, string> = {
 	"iconPicker.skinTone": "Tông màu da",
 	"iconPicker.allCategories": "Tất cả danh mục",
 	"iconPicker.noIconSelected": "Chưa chọn biểu tượng",
-	"iconPicker.noResults": "Không có biểu tượng nào khớp với tìm kiếm của bạn.",
+	"iconPicker.noResults":
+		"Không có biểu tượng nào khớp với tìm kiếm của bạn.",
 	"iconPicker.octicons": "Octicons",
 	"iconPicker.searchOcticons": "Tìm kiếm Octicons",
 	"iconPicker.fa": "Font Awesome",
@@ -287,26 +324,34 @@ export const vi: Record<string, string> = {
 	"iconPicker.image": "Hình ảnh của bạn",
 	"iconPicker.searchImage": "Tìm kiếm hình ảnh của bạn",
 	"iconPicker.imageTooLarge": "{{name}} quá lớn. Hình ảnh phải nhỏ hơn 5 MB.",
-	"iconPicker.imageUnsupported": "{{name}} không phải định dạng hình ảnh được hỗ trợ. Sử dụng SVG, PNG, JPEG hoặc WebP.",
-	"iconPicker.imageInvalidSvg": "{{name}} không thể đọc được như một SVG an toàn và đã không được thêm vào.",
-	"iconPicker.imageDecodeFailed": "{{name}} không thể đọc được như một hình ảnh.",
-	"iconPicker.imageDuplicate": "{{name}} đã có trong hình ảnh của bạn. Đổi tên tệp hoặc xóa hình ảnh hiện có.",
+	"iconPicker.imageUnsupported":
+		"{{name}} không phải định dạng hình ảnh được hỗ trợ. Sử dụng SVG, PNG, JPEG hoặc WebP.",
+	"iconPicker.imageInvalidSvg":
+		"{{name}} không thể đọc được như một SVG an toàn và đã không được thêm vào.",
+	"iconPicker.imageDecodeFailed":
+		"{{name}} không thể đọc được như một hình ảnh.",
+	"iconPicker.imageDuplicate":
+		"{{name}} đã có trong hình ảnh của bạn. Đổi tên tệp hoặc xóa hình ảnh hiện có.",
 	"iconPicker.imageAdd": "Thêm hình ảnh",
-	"iconPicker.imageEmpty": "Chưa có hình ảnh nào. Thêm tệp SVG, PNG, JPEG hoặc WebP từ máy tính của bạn hoặc kéo thả vào đây.",
+	"iconPicker.imageEmpty":
+		"Chưa có hình ảnh nào. Thêm tệp SVG, PNG, JPEG hoặc WebP từ máy tính của bạn hoặc kéo thả vào đây.",
 	"iconPicker.imageDelete": "Xóa",
 	"iconPicker.imageDeleteConfirm": "Xóa “{{name}}”?",
-	"iconPicker.imageDeleteInUse": "{{count}} callout đang sử dụng hình ảnh này. Chúng sẽ hiển thị biểu tượng giữ chỗ cho đến khi bạn cung cấp hình ảnh mới.",
+	"iconPicker.imageDeleteInUse":
+		"{{count}} callout đang sử dụng hình ảnh này. Chúng sẽ hiển thị biểu tượng giữ chỗ cho đến khi bạn cung cấp hình ảnh mới.",
 	"iconPicker.imageRecolor": "Theo màu Callout",
 	"iconPicker.allSources": "Tất cả nguồn",
 	"iconPicker.searchAllSources": "Tìm kiếm trong tất cả nguồn biểu tượng",
-	"iconPicker.sourcesNotDownloaded": "Chưa có: {{names}}. Chọn nguồn ở trên để tải xuống.",
+	"iconPicker.sourcesNotDownloaded":
+		"Chưa có: {{names}}. Chọn nguồn ở trên để tải xuống.",
 	"iconPicker.chooseSource": "Chọn nguồn",
 	"iconPicker.sourceGroup": "{{name}} · {{count}}",
 
 	// Source menu — what each library holds, in a few words
 	"iconPicker.descAllSources": "tìm kiếm mọi thư viện cùng lúc",
 	"iconPicker.descLucide": "bộ riêng của Obsidian, luôn ngoại tuyến",
-	"iconPicker.descTabler": "biểu tượng UI sạch và nhất quán, đường nét và đặc",
+	"iconPicker.descTabler":
+		"biểu tượng UI sạch và nhất quán, đường nét và đặc",
 	"iconPicker.descMaterial": "bộ của Google, bốn kiểu và bảy độ đậm",
 	"iconPicker.descEmoji": "ký tự màu, mọi tông da",
 	"iconPicker.descOcticons": "biểu tượng giao diện GitHub",
@@ -430,20 +475,27 @@ export const vi: Record<string, string> = {
 
 	// Downloadable icon packs
 	"iconPack.downloadTitle": "{{name}} chưa được tải xuống",
-	"iconPack.downloadDetail": "{{count}} biểu tượng · {{size}} · tải xuống một lần",
+	"iconPack.downloadDetail":
+		"{{count}} biểu tượng · {{size}} · tải xuống một lần",
 	"iconPack.download": "Tải xuống",
 	"iconPack.downloading": "Đang tải xuống {{name}}…",
-	"iconPack.downloadFailed": "Không thể tải xuống {{name}}. Kiểm tra kết nối và thử lại.",
+	"iconPack.downloadFailed":
+		"Không thể tải xuống {{name}}. Kiểm tra kết nối và thử lại.",
 	"iconPack.retry": "Thử lại",
-	"iconPack.faBrandsNotice": "Biểu tượng thương hiệu là nhãn hiệu của chủ sở hữu tương ứng. Việc đưa vào không có nghĩa là xác nhận. Chỉ sử dụng để đại diện cho công ty, sản phẩm hoặc dịch vụ mà chúng đề cập.",
-	"iconPack.artworkRestored": "Đã tải xuống hình ảnh biểu tượng cho {{names}}.",
-	"iconPack.diskWriteFailed": "Callout Studio không thể lưu gói biểu tượng vào đĩa, vì vậy cần tải xuống lại lần sau. Các biểu tượng bạn chọn vẫn được lưu cùng cài đặt.",
+	"iconPack.faBrandsNotice":
+		"Biểu tượng thương hiệu là nhãn hiệu của chủ sở hữu tương ứng. Việc đưa vào không có nghĩa là xác nhận. Chỉ sử dụng để đại diện cho công ty, sản phẩm hoặc dịch vụ mà chúng đề cập.",
+	"iconPack.artworkRestored":
+		"Đã tải xuống hình ảnh biểu tượng cho {{names}}.",
+	"iconPack.diskWriteFailed":
+		"Callout Studio không thể lưu gói biểu tượng vào đĩa, vì vậy cần tải xuống lại lần sau. Các biểu tượng bạn chọn vẫn được lưu cùng cài đặt.",
 
 	// Icon licences & credits
 	"credits.title": "Giấy phép biểu tượng và nhận định",
-	"credits.intro": "Callout Studio sử dụng một số thư viện biểu tượng mở. Giấy phép của chúng được tái bản dưới đây, cùng với những gì đã được thay đổi để sử dụng ở đây.",
+	"credits.intro":
+		"Callout Studio sử dụng một số thư viện biểu tượng mở. Giấy phép của chúng được tái bản dưới đây, cùng với những gì đã được thay đổi để sử dụng ở đây.",
 	"credits.fullNotices": "Thông báo đầy đủ của bên thứ ba",
-	"credits.pluginLicense": "Mã nguồn của Callout Studio thuộc giấy phép 0BSD; các thư viện biểu tượng giữ nguyên giấy phép riêng.",
+	"credits.pluginLicense":
+		"Mã nguồn của Callout Studio thuộc giấy phép 0BSD; các thư viện biểu tượng giữ nguyên giấy phép riêng.",
 
 	"contextMenu.editCallout": "Chỉnh sửa cài đặt callout",
 	"contextMenu.copyMarkdown": "Sao chép Markdown callout",
@@ -473,10 +525,12 @@ export const vi: Record<string, string> = {
 	"settings.calloutTypeInline": "Callout nội tuyến",
 
 	"settings.customizeMenu": "Tùy chỉnh mục menu",
-	"settings.customizeMenuDesc": "Chọn những hành động chuột phải nào xuất hiện cho từng loại callout và sắp xếp lại thứ tự. Hoạt động trong chế độ nguồn và Xem trước trực tiếp.",
+	"settings.customizeMenuDesc":
+		"Chọn những hành động chuột phải nào xuất hiện cho từng loại callout và sắp xếp lại thứ tự. Hoạt động trong chế độ nguồn và Xem trước trực tiếp.",
 	"settings.customizeMenuButton": "Tùy chỉnh mục menu",
 	"menuCustomize.title": "Tùy chỉnh menu chuột phải",
-	"menuCustomize.desc": "Bật hoặc tắt các hành động và kéo tay cầm để sắp xếp lại. Thay đổi được lưu tự động.",
+	"menuCustomize.desc":
+		"Bật hoặc tắt các hành động và kéo tay cầm để sắp xếp lại. Thay đổi được lưu tự động.",
 	"menuCustomize.regular": "Callout thông thường",
 	"menuCustomize.heading": "Callout tiêu đề",
 	"menuCustomize.inline": "Callout nội tuyến",
@@ -492,20 +546,28 @@ export const vi: Record<string, string> = {
 	"confirm.ok": "Xóa",
 	"confirm.cancel": "Hủy",
 
-	"vault.filesUpdated": "Đã cập nhật {{count}} tham chiếu callout trong các tệp vault.",
-	"vault.idsUpdated": "Đã cập nhật {{count}} ID callout trong các tệp vault: {{oldIds}} → {{newId}}",
-	"vault.titlesUpdated": "Đã cập nhật {{count}} tiêu đề callout trong các tệp vault: {{oldTitle}} → {{newTitle}}",
+	"vault.filesUpdated":
+		"Đã cập nhật {{count}} tham chiếu callout trong các tệp vault.",
+	"vault.idsUpdated":
+		"Đã cập nhật {{count}} ID callout trong các tệp vault: {{oldIds}} → {{newId}}",
+	"vault.titlesUpdated":
+		"Đã cập nhật {{count}} tiêu đề callout trong các tệp vault: {{oldTitle}} → {{newTitle}}",
 	"vault.replaceWith": "Thay thế bằng:",
 	"vault.deleteWithout": "Xóa không thay thế",
 	"vault.confirmDelete": "Xác nhận",
 	"vault.confirmReplace": "Thay thế",
-	"vault.replacePromptInUse": '"{{name}}" được sử dụng {{count}} lần trong {{files}} tệp. Chọn callout để thay thế:',
+	"vault.replacePromptInUse":
+		'"{{name}}" được sử dụng {{count}} lần trong {{files}} tệp. Chọn callout để thay thế:',
 	"vault.replacePromptUnused": 'Chọn callout để thay thế "{{name}}":',
-	"vault.noReplacementAvailable": "Không có callout nào khác để thay thế callout này.",
-	"vault.convertedToPlainText": "Đã chuyển {{blocks}} khối callout trong {{files}} tệp thành văn bản thường.",
-	"vault.resetAliasWarning": "{{count}} tham chiếu trong {{files}} tệp đang sử dụng bí danh tùy chỉnh: {{aliases}}. Chúng sẽ ngừng hoạt động sau khi đặt lại. Tiếp tục?",
+	"vault.noReplacementAvailable":
+		"Không có callout nào khác để thay thế callout này.",
+	"vault.convertedToPlainText":
+		"Đã chuyển {{blocks}} khối callout trong {{files}} tệp thành văn bản thường.",
+	"vault.resetAliasWarning":
+		"{{count}} tham chiếu trong {{files}} tệp đang sử dụng bí danh tùy chỉnh: {{aliases}}. Chúng sẽ ngừng hoạt động sau khi đặt lại. Tiếp tục?",
 	"vault.resetConfirm": "Đặt lại",
-	"vault.resetAllInUse": "⚠ {{count}} tham chiếu callout trong {{files}} tệp đang sử dụng các loại callout tùy chỉnh sẽ bị xóa.",
+	"vault.resetAllInUse":
+		"⚠ {{count}} tham chiếu callout trong {{files}} tệp đang sử dụng các loại callout tùy chỉnh sẽ bị xóa.",
 
 	"vaultStats.title": "Thống kê callout",
 	"vaultStats.totalCallouts": "Tổng callouts",
@@ -528,67 +590,105 @@ export const vi: Record<string, string> = {
 	"vaultStats.close": "Đóng",
 
 	"import.title": "Vấn đề nhập",
-	"import.reportLeadIn": "Có vẻ như tệp bạn nhập đã bị sửa đổi. Đây là danh sách vấn đề:",
-	"import.reportLeadInFatal": "Tệp này trông không giống xuất khẩu Callout Studio. Không thể nhập:",
+	"import.reportLeadIn":
+		"Có vẻ như tệp bạn nhập đã bị sửa đổi. Đây là danh sách vấn đề:",
+	"import.reportLeadInFatal":
+		"Tệp này trông không giống xuất khẩu Callout Studio. Không thể nhập:",
 	"import.entryHeading": "Mục {{index}} — {{label}}",
-	"import.summary": "{{valid}} trong {{total}} mục hợp lệ · tìm thấy {{issues}} vấn đề.",
+	"import.summary":
+		"{{valid}} trong {{total}} mục hợp lệ · tìm thấy {{issues}} vấn đề.",
 	"import.btnCancel": "Hủy",
 	"import.btnImportValid": "Chỉ nhập hợp lệ ({{count}})",
-	"import.err.notRecognized": "Tệp không được nhận dạng: cần một mảng định nghĩa callout hoặc một tệp xuất Callout Studio.",
-	"import.warn.settingsIgnored": "Khối cài đặt không phải là một đối tượng hợp lệ và đã bị bỏ qua.",
-	"import.warn.invalidGradient": "Chuyển sắc nền không hợp lệ và đã bị bỏ qua.",
-	"import.err.parseFailed": "Tệp không phải JSON hợp lệ và không thể phân tích.",
+	"import.err.notRecognized":
+		"Tệp không được nhận dạng: cần một mảng định nghĩa callout hoặc một tệp xuất Callout Studio.",
+	"import.warn.settingsIgnored":
+		"Khối cài đặt không phải là một đối tượng hợp lệ và đã bị bỏ qua.",
+	"import.warn.invalidGradient":
+		"Chuyển sắc nền không hợp lệ và đã bị bỏ qua.",
+	"import.err.parseFailed":
+		"Tệp không phải JSON hợp lệ và không thể phân tích.",
 	"import.err.entryNotObject": "Mục phải là một đối tượng.",
-	"import.err.requiredMissing": 'Trường bắt buộc "{{field}}" thiếu hoặc có kiểu sai.',
+	"import.err.requiredMissing":
+		'Trường bắt buộc "{{field}}" thiếu hoặc có kiểu sai.',
 	"import.err.idEmpty": "ID không được để trống.",
-	"import.err.idTooLong": 'ID "{{value}}" có {{length}} ký tự; tối đa là {{max}}.',
-	"import.err.idBadChar": 'ID "{{value}}" chứa ký tự không hợp lệ ("|", "[", "]", tab và ngắt dòng không được phép).',
+	"import.err.idTooLong":
+		'ID "{{value}}" có {{length}} ký tự; tối đa là {{max}}.',
+	"import.err.idBadChar":
+		'ID "{{value}}" chứa ký tự không hợp lệ ("|", "[", "]", tab và ngắt dòng không được phép).',
 	"import.err.displayNameEmpty": "Tên hiển thị không được để trống.",
-	"import.err.displayNameTooLong": "Tên hiển thị có {{length}} ký tự; tối đa là {{max}}.",
-	"import.err.boolField": '"{{field}}" phải là giá trị boolean (true hoặc false).',
+	"import.err.displayNameTooLong":
+		"Tên hiển thị có {{length}} ký tự; tối đa là {{max}}.",
+	"import.err.boolField":
+		'"{{field}}" phải là giá trị boolean (true hoặc false).',
 	"import.err.iconNotObject": "Biểu tượng phải là một đối tượng.",
-	"import.err.iconTypeInvalid": "Loại biểu tượng \"{{value}}\" không phải một trong: {{types}}.",
-	"import.warn.iconFieldIgnored": "\"{{field}}\" chỉ áp dụng cho biểu tượng Material và bị bỏ qua cho loại biểu tượng {{type}}.",
+	"import.err.iconTypeInvalid":
+		'Loại biểu tượng "{{value}}" không phải một trong: {{types}}.',
+	"import.warn.iconFieldIgnored":
+		'"{{field}}" chỉ áp dụng cho biểu tượng Material và bị bỏ qua cho loại biểu tượng {{type}}.',
 	"import.err.iconValueEmpty": "Giá trị biểu tượng phải là chuỗi không rỗng.",
-	"import.err.iconValueTooLong": "Giá trị biểu tượng dài bất thường ({{length}} ký tự).",
-	"import.err.materialStyle": 'Kiểu biểu tượng Material "{{value}}" không phải một trong: outlined, filled, rounded, sharp.',
-	"import.err.materialWeight": 'Độ dày biểu tượng Material "{{value}}" phải là số nguyên từ 100 đến 700, bước 100.',
-	"import.warn.iconRecolorIgnored": "\"recolor\" chỉ áp dụng cho hình ảnh của riêng bạn và bị bỏ qua cho loại biểu tượng {{type}}.",
-	"import.err.iconRecolorInvalid": "\"recolor\" phải là true hoặc false (nhận: \"{{value}}\").",
-	"import.err.colorInvalid": '"{{field}}" phải là màu hex như "#448aff" (nhận được "{{value}}").',
-	"import.err.numberRange": '"{{field}}" phải là số từ {{min}} đến {{max}} (nhận được "{{value}}").',
-	"import.err.iconSizeRange": '"{{field}}" phải là số từ {{min}} đến {{max}} (nhận được "{{value}}").',
+	"import.err.iconValueTooLong":
+		"Giá trị biểu tượng dài bất thường ({{length}} ký tự).",
+	"import.err.materialStyle":
+		'Kiểu biểu tượng Material "{{value}}" không phải một trong: outlined, filled, rounded, sharp.',
+	"import.err.materialWeight":
+		'Độ dày biểu tượng Material "{{value}}" phải là số nguyên từ 100 đến 700, bước 100.',
+	"import.warn.iconRecolorIgnored":
+		'"recolor" chỉ áp dụng cho hình ảnh của riêng bạn và bị bỏ qua cho loại biểu tượng {{type}}.',
+	"import.err.iconRecolorInvalid":
+		'"recolor" phải là true hoặc false (nhận: "{{value}}").',
+	"import.err.colorInvalid":
+		'"{{field}}" phải là màu hex như "#448aff" (nhận được "{{value}}").',
+	"import.err.numberRange":
+		'"{{field}}" phải là số từ {{min}} đến {{max}} (nhận được "{{value}}").',
+	"import.err.iconSizeRange":
+		'"{{field}}" phải là số từ {{min}} đến {{max}} (nhận được "{{value}}").',
 	"import.err.aliasesNotArray": '"aliases" phải là mảng chuỗi.',
 	"import.err.aliasNotString": "Bí danh phải là chuỗi.",
 	"import.err.aliasDup": 'Bí danh "{{value}}" bị trùng trong mục này.',
-	"import.err.tooManyIds": "Quá nhiều ID ({{count}}); mỗi callout có thể có tối đa {{max}} ID (chính + bí danh).",
-	"import.err.metadataShape": '"metadata" phải là đối tượng có tất cả giá trị là chuỗi.',
-	"import.warn.unknownFields": "Các trường không rõ đã bị bỏ qua: {{fields}}.",
-	"import.err.duplicateInFile": 'ID/bí danh "{{value}}" đã được sử dụng bởi mục #{{first}} trong tệp này.',
-	"import.err.aliasConflict": 'Bí danh "{{value}}" đã được sử dụng bởi callout khác ("{{other}}") trong vault của bạn.',
-	"import.warn.defaultFoldedAutofix": '"defaultFolded" là true trong khi "foldable" là false; defaultFolded đã được đặt lại về false.',
-	"import.warn.imageMissing": "Callout này sử dụng hình ảnh không có trong tệp và không có trong vault này, vì vậy sẽ hiển thị biểu tượng giữ chỗ cho đến khi bạn cung cấp hình ảnh mới.",
+	"import.err.tooManyIds":
+		"Quá nhiều ID ({{count}}); mỗi callout có thể có tối đa {{max}} ID (chính + bí danh).",
+	"import.err.metadataShape":
+		'"metadata" phải là đối tượng có tất cả giá trị là chuỗi.',
+	"import.warn.unknownFields":
+		"Các trường không rõ đã bị bỏ qua: {{fields}}.",
+	"import.err.duplicateInFile":
+		'ID/bí danh "{{value}}" đã được sử dụng bởi mục #{{first}} trong tệp này.',
+	"import.err.aliasConflict":
+		'Bí danh "{{value}}" đã được sử dụng bởi callout khác ("{{other}}") trong vault của bạn.',
+	"import.warn.defaultFoldedAutofix":
+		'"defaultFolded" là true trong khi "foldable" là false; defaultFolded đã được đặt lại về false.',
+	"import.warn.imageMissing":
+		"Callout này sử dụng hình ảnh không có trong tệp và không có trong vault này, vì vậy sẽ hiển thị biểu tượng giữ chỗ cho đến khi bạn cung cấp hình ảnh mới.",
 
-		"import.err.paletteIdInvalid": "\"paletteId\" phải là một ID văn bản không rỗng (nhận được \"{{value}}\").",
-	"import.warn.iconNameUnknown": "Không có biểu tượng \"{{value}}\" trong {{type}}, vì vậy biểu tượng mặc định đã được sử dụng.",
-	"import.warn.cmIconUnknownNew": "Không có biểu tượng \"{{value}}\" trong Obsidian, vì vậy biểu tượng mặc định đã được sử dụng.",
-	"import.warn.cmIconUnknownExisting": "Không có biểu tượng \"{{value}}\" trong Obsidian, vì vậy \"{{id}}\" giữ nguyên biểu tượng đã có.",
+	"import.err.paletteIdInvalid":
+		'"paletteId" phải là một ID văn bản không rỗng (nhận được "{{value}}").',
+	"import.warn.iconNameUnknown":
+		'Không có biểu tượng "{{value}}" trong {{type}}, vì vậy biểu tượng mặc định đã được sử dụng.',
+	"import.warn.cmIconUnknownNew":
+		'Không có biểu tượng "{{value}}" trong Obsidian, vì vậy biểu tượng mặc định đã được sử dụng.',
+	"import.warn.cmIconUnknownExisting":
+		'Không có biểu tượng "{{value}}" trong Obsidian, vì vậy "{{id}}" giữ nguyên biểu tượng đã có.',
 	"import.chooseSource": "Nhập từ",
 	"import.sourceStudio": "Callout Studio",
 	"import.sourceStudioDesc": "Tải tệp .json được xuất từ Callout Studio.",
 	"import.sourceCalloutManager": "Callout Manager",
-	"import.sourceCalloutManagerDesc": "Dán các kiểu bạn đã sao chép từ nút Copy của Callout Manager.",
+	"import.sourceCalloutManagerDesc":
+		"Dán các kiểu bạn đã sao chép từ nút Copy của Callout Manager.",
 	"import.sourceAdmonition": "Admonition",
 	"import.sourceAdmonitionDesc": "Chưa khả dụng.",
 	"import.sourceAdmonitionNotice": "Nhập từ Admonition chưa được hỗ trợ.",
 	"import.cmTitle": "Nhập từ Callout Manager",
-	"import.cmInstructions": "Trong Callout Manager, sử dụng nút Copy để sao chép các kiểu callout tùy chỉnh, sau đó dán bên dưới.",
+	"import.cmInstructions":
+		"Trong Callout Manager, sử dụng nút Copy để sao chép các kiểu callout tùy chỉnh, sau đó dán bên dưới.",
 	"import.cmPlaceholder": "Dán các kiểu đã sao chép vào đây…",
 	"import.cmBtnCancel": "Hủy",
 	"import.cmBtnImport": "Nhập",
-	"import.err.cmNoBlocksFound": "Không tìm thấy kiểu Callout Manager nào trong văn bản đã dán.",
-	"import.err.cmNoColorForNew": "Không tìm thấy màu sắc có thể sử dụng cho callout mới \"{{value}}\"; đã bỏ qua.",
-	"import.err.cmIdConflict": "ID \"{{value}}\" đã được sử dụng làm bí danh bởi một callout khác (\"{{other}}\") và đã bị bỏ qua.",
+	"import.err.cmNoBlocksFound":
+		"Không tìm thấy kiểu Callout Manager nào trong văn bản đã dán.",
+	"import.err.cmNoColorForNew":
+		'Không tìm thấy màu sắc có thể sử dụng cho callout mới "{{value}}"; đã bỏ qua.',
+	"import.err.cmIdConflict":
+		'ID "{{value}}" đã được sử dụng làm bí danh bởi một callout khác ("{{other}}") và đã bị bỏ qua.',
 
 	"footer.tagline": "Có phản hồi, nhận xét hoặc đề xuất? Tôi rất muốn nghe!",
 	"footer.madeBy": "Được tạo bởi Niv  •  ",

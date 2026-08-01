@@ -152,7 +152,8 @@ export const nl: Record<string, string> = {
 	"notice.exported": "Callouts geëxporteerd naar callout-studio-export.json",
 	"notice.importedJSON": "{{count}} callout-type(s) geïmporteerd uit JSON.",
 	"notice.importedSettings": "Plugin-instellingen geïmporteerd.",
-	"notice.importedCalloutManager": "Geïmporteerd uit Callout Manager: {{created}} aangemaakt, {{updated}} bijgewerkt.",
+	"notice.importedCalloutManager":
+		"Geïmporteerd uit Callout Manager: {{created}} aangemaakt, {{updated}} bijgewerkt.",
 	"notice.noNewJSON":
 		"Geen nieuwe callout-types geïmporteerd (ID's bestaan mogelijk al).",
 	"notice.iconDownloadFailed":
@@ -183,6 +184,7 @@ export const nl: Record<string, string> = {
 		"Deze ID is gekoppeld aan de weergavenaam en kan niet worden verwijderd — bewerk de naam om deze te wijzigen",
 	"editor.icon": "Pictogram",
 	"editor.pickIcon": "Pictogram kiezen",
+	"editor.resetIcon": "Pictogram terugzetten naar standaard",
 	"editor.livePreview": "Live voorbeeld",
 	"editor.iconAdjustment": "Pictogramaanpassing",
 	"editor.picture": "Afbeelding",
@@ -190,6 +192,7 @@ export const nl: Record<string, string> = {
 	"editor.horizontalOffset": "Horizontale offset",
 	"editor.verticalOffset": "Verticale offset",
 	"editor.colors": "Kleuren",
+	"editor.resetColors": "Kleuren terugzetten naar standaard",
 	"editor.paletteDeleted": "Verwijderde kleur",
 	"editor.paletteGroupObsidian": "Obsidian-callouts",
 	"editor.paletteGroupPresets": "Kleurvoorinstellingen",
@@ -660,26 +663,37 @@ export const nl: Record<string, string> = {
 	"import.warn.imageMissing":
 		"Deze Callout gebruikt een afbeelding die niet in het bestand en niet in deze vault staat, dus zal een plaatshouder-icoon tonen totdat u een nieuw geeft.",
 
-		"import.err.paletteIdInvalid": "\"paletteId\" moet een niet-leeg tekst-ID zijn (ontvangen: \"{{value}}\").",
-	"import.warn.iconNameUnknown": "Er is geen \"{{value}}\" icoon in {{type}}, dus het standaardicoon is gebruikt.",
-	"import.warn.cmIconUnknownNew": "Er is geen \"{{value}}\" icoon in Obsidian, dus het standaardicoon is gebruikt.",
-	"import.warn.cmIconUnknownExisting": "Er is geen \"{{value}}\" icoon in Obsidian, dus \"{{id}}\" heeft het icoon behouden dat het al had.",
+	"import.err.paletteIdInvalid":
+		'"paletteId" moet een niet-leeg tekst-ID zijn (ontvangen: "{{value}}").',
+	"import.warn.iconNameUnknown":
+		'Er is geen "{{value}}" icoon in {{type}}, dus het standaardicoon is gebruikt.',
+	"import.warn.cmIconUnknownNew":
+		'Er is geen "{{value}}" icoon in Obsidian, dus het standaardicoon is gebruikt.',
+	"import.warn.cmIconUnknownExisting":
+		'Er is geen "{{value}}" icoon in Obsidian, dus "{{id}}" heeft het icoon behouden dat het al had.',
 	"import.chooseSource": "Importeren uit",
 	"import.sourceStudio": "Callout Studio",
-	"import.sourceStudioDesc": "Laad een .json-bestand dat is geëxporteerd uit Callout Studio.",
+	"import.sourceStudioDesc":
+		"Laad een .json-bestand dat is geëxporteerd uit Callout Studio.",
 	"import.sourceCalloutManager": "Callout Manager",
-	"import.sourceCalloutManagerDesc": "Plak de stijlen die je hebt gekopieerd via de Copy-knop van Callout Manager.",
+	"import.sourceCalloutManagerDesc":
+		"Plak de stijlen die je hebt gekopieerd via de Copy-knop van Callout Manager.",
 	"import.sourceAdmonition": "Admonition",
 	"import.sourceAdmonitionDesc": "Nog niet beschikbaar.",
-	"import.sourceAdmonitionNotice": "Importeren uit Admonition wordt nog niet ondersteund.",
+	"import.sourceAdmonitionNotice":
+		"Importeren uit Admonition wordt nog niet ondersteund.",
 	"import.cmTitle": "Importeren uit Callout Manager",
-	"import.cmInstructions": "Gebruik in Callout Manager de Copy-knop om je aangepaste callout-stijlen te kopiëren en plak ze vervolgens hieronder.",
+	"import.cmInstructions":
+		"Gebruik in Callout Manager de Copy-knop om je aangepaste callout-stijlen te kopiëren en plak ze vervolgens hieronder.",
 	"import.cmPlaceholder": "Plak de gekopieerde stijlen hier…",
 	"import.cmBtnCancel": "Annuleren",
 	"import.cmBtnImport": "Importeren",
-	"import.err.cmNoBlocksFound": "Er zijn geen Callout Manager-stijlen gevonden in de geplakte tekst.",
-	"import.err.cmNoColorForNew": "Er is geen bruikbare kleur gevonden voor de nieuwe callout \"{{value}}\"; deze is overgeslagen.",
-	"import.err.cmIdConflict": "ID \"{{value}}\" wordt al gebruikt als alias door een andere callout (\"{{other}}\") en is overgeslagen.",
+	"import.err.cmNoBlocksFound":
+		"Er zijn geen Callout Manager-stijlen gevonden in de geplakte tekst.",
+	"import.err.cmNoColorForNew":
+		'Er is geen bruikbare kleur gevonden voor de nieuwe callout "{{value}}"; deze is overgeslagen.',
+	"import.err.cmIdConflict":
+		'ID "{{value}}" wordt al gebruikt als alias door een andere callout ("{{other}}") en is overgeslagen.',
 
 	"footer.tagline":
 		"Hebt u feedback, opmerkingen of suggesties? Ik hoor het graag!",
