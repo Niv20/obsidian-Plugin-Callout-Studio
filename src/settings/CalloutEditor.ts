@@ -64,7 +64,7 @@ import {
 import { renderCalloutEditorIconPreview } from "./editor/CalloutEditorIconRenderer";
 import { performCalloutEditorSave } from "./editor/CalloutEditorSave";
 import { findUserImage } from "../icons/packs/userImages";
-import { emojiLabelFor } from "../icons/packs/emoji";
+import { describeIcon } from "../icons/describeIcon";
 import { createControlGroup, setSliderDisplay } from "./styleControls";
 import { refreshAllMarkdownEditors } from "../editor/livepreview/refresh";
 
@@ -486,11 +486,18 @@ export class CalloutEditor extends Modal {
 			.setName(t("editor.icon"))
 			.setDesc(this.getIconLabel());
 
-		// Icon preview
-		const iconPreviewEl = iconSetting.controlEl.createDiv(
-			"callout-studio-icon-preview",
-		);
+		// The tile *is* the picker. A preview square beside a "Pick icon" button
+		// is two things pointing at one action; the drawing the user is about to
+		// replace is the most direct target that action has, so it is the button.
+		// The pencil is what says so — the icon fades out under it on hover and
+		// focus, which is also why it can share the box instead of overlaying it.
+		const iconTile = iconSetting.controlEl.createEl("button", {
+			cls: "cs-icon-tile",
+			attr: { type: "button", "aria-label": t("editor.pickIcon") },
+		});
+		const iconPreviewEl = iconTile.createDiv("callout-studio-icon-preview");
 		this.renderIconPreview(iconPreviewEl);
+		setIcon(iconTile.createDiv("cs-icon-tile-edit"), "pencil");
 
 		// Reverts the icon alone to the built-in's shipped value; only shown once
 		// it has actually diverged from that default.
@@ -505,23 +512,23 @@ export class CalloutEditor extends Modal {
 			);
 		};
 
-		iconSetting.addButton((btn) => {
-			btn.setButtonText(t("editor.pickIcon")).onClick(async () => {
-				const picker = new IconPicker(this.plugin, this.icon);
-				const result = await picker.openAndWait();
-				if (result) {
-					this.icon = result;
-					// Material icons are already cached by the IconPicker
-					// before it closes, so the preview can render immediately.
-					iconSetting.setDesc(this.getIconLabel());
-					iconPreviewEl.empty();
-					this.renderIconPreview(iconPreviewEl);
-					// The only thing that can turn the Picture section on or off.
-					this.syncPictureBox();
-					syncIconRevert();
-					this.updatePreview();
-				}
-			});
+		const openIconPicker = async (): Promise<void> => {
+			const picker = new IconPicker(this.plugin, this.icon);
+			const result = await picker.openAndWait();
+			if (!result) return;
+			this.icon = result;
+			// Material icons are already cached by the IconPicker
+			// before it closes, so the preview can render immediately.
+			iconSetting.setDesc(this.getIconLabel());
+			iconPreviewEl.empty();
+			this.renderIconPreview(iconPreviewEl);
+			// The only thing that can turn the Picture section on or off.
+			this.syncPictureBox();
+			syncIconRevert();
+			this.updatePreview();
+		};
+		iconTile.addEventListener("click", () => {
+			void openIconPicker();
 		});
 
 		iconSetting.addExtraButton((btn) => {
@@ -1633,14 +1640,7 @@ export class CalloutEditor extends Modal {
 	}
 
 	private getIconLabel(): string {
-		const { type, value, style, weight } = this.icon;
-		if (type === "material") {
-			return `${type}: ${value} (${style ?? "outlined"}, ${weight ?? 400})`;
-		}
-		if (type === "emoji") {
-			return `${type}: ${emojiLabelFor(value) ?? value}`;
-		}
-		return `${type}: ${value}`;
+		return describeIcon(this.icon, this.plugin.settings.userImages ?? []);
 	}
 
 	private renderIconPreview(container: HTMLElement): void {

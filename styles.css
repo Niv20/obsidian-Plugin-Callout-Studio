@@ -614,33 +614,109 @@
 	margin-bottom: 0;
 }
 
-/* ─── Icon Preview in Editor ──────────────────────────────────── */
+/* ─── Icon tile in the editor ─────────────────────────────────── */
 
-/* `flex: 0 0 auto` because this box is the row's only fixed-size element and
-   the 32px IS the design — it holds the artwork at 20px with a hair of padding,
-   and there is nothing inside it to give up. When the revert button appears on
-   phone the row overflows, and by default every item shares the shortfall, so
-   the preview lost a few px along with the button and the icon started clipping
-   its own frame. Take it out of the shrinking entirely: on phone the Choose
-   icon button beside it is stretched to the full row by Obsidian's own
-   `…setting-item-control button:not(.clickable-icon) { width: 100% }`, so it is
-   carrying far more width than its label needs and is the one thing here with
-   slack to give. */
-.callout-studio-icon-preview {
+/* The tile is the picker — the drawing the user is about to replace is the
+   button that replaces it. `flex: 0 0 auto` because the 44px IS the design and
+   there is nothing inside to give up: when the revert button appears on phone
+   the row overflows, and by default every item shares the shortfall, which
+   clipped the artwork against its own frame. */
+.cs-icon-tile {
+	position: relative;
 	display: flex;
 	flex: 0 0 auto;
 	align-items: center;
 	justify-content: center;
-	width: 32px;
-	height: 32px;
-	border-radius: var(--radius-s);
+	width: 44px;
+	height: 44px;
+	padding: 0;
+	border: 1px solid var(--background-modifier-border);
+	border-radius: var(--radius-m);
+	background-color: var(--background-modifier-form-field);
+	box-shadow: none;
+	color: var(--text-normal);
+	cursor: pointer;
+	transition:
+		border-color 120ms ease,
+		background-color 120ms ease;
+}
+
+/* Obsidian stretches every non-`clickable-icon` button in a setting row to the
+   full width on phone. Four classes to outrank that one rule, and only for the
+   width — everything else above already wins on its own. */
+.callout-studio-editor
+	.setting-item
+	.setting-item-control
+	button.cs-icon-tile {
+	width: 44px;
+}
+
+.cs-icon-tile:hover,
+.cs-icon-tile:focus-visible {
+	border-color: var(--interactive-accent);
 	background-color: var(--background-modifier-hover);
-	margin-right: 8px;
+}
+
+.cs-icon-tile:focus-visible {
+	outline: none;
+	box-shadow: 0 0 0 2px var(--background-modifier-border-focus);
+}
+
+/* The pencil shares the box rather than covering it: fading the artwork out
+   under it needs no opaque layer, so it cannot mismatch the tile's background
+   in one theme or the other. */
+.cs-icon-tile-edit {
+	position: absolute;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: var(--text-accent);
+	opacity: 0;
+	transform: scale(0.8);
+	pointer-events: none;
+	transition:
+		opacity 120ms ease,
+		transform 120ms ease;
+}
+
+.cs-icon-tile-edit svg {
+	width: 16px;
+	height: 16px;
+}
+
+.cs-icon-tile:hover .callout-studio-icon-preview,
+.cs-icon-tile:focus-visible .callout-studio-icon-preview {
+	opacity: 0;
+}
+
+.cs-icon-tile:hover .cs-icon-tile-edit,
+.cs-icon-tile:focus-visible .cs-icon-tile-edit {
+	opacity: 1;
+	transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.cs-icon-tile,
+	.cs-icon-tile-edit,
+	.callout-studio-icon-preview {
+		transition: none;
+	}
+
+	.cs-icon-tile-edit {
+		transform: none;
+	}
+}
+
+.callout-studio-icon-preview {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	transition: opacity 120ms ease;
 }
 
 .callout-studio-icon-preview svg {
-	width: 20px;
-	height: 20px;
+	width: 22px;
+	height: 22px;
 }
 
 .callout-studio-icon-preview.is-loading svg {
