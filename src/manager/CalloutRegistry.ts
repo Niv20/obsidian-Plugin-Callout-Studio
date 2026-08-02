@@ -343,9 +343,9 @@ export class CalloutRegistry {
 	 * ("lucide-pencil") — see nameCheck.ts. Both name the same real icon, but
 	 * anything that compares `CalloutIcon.value` by strict string equality
 	 * (the picker's selection match, {@link isModified}) sees them as
-	 * different icons. Used to normalize both `builtInDefaults` (constructor)
-	 * and `callouts` (load(), below) so nothing is ever diffed or matched
-	 * across the two spellings.
+	 * different icons. Used by {@link setCallout} and the constructor's
+	 * `builtInDefaults` seeding so nothing is ever diffed or matched across
+	 * the two spellings.
 	 */
 	private static normalizeLucideIcon(icon: CalloutIcon): CalloutIcon {
 		if (icon.type === "lucide" && !icon.value.startsWith("lucide-")) {
@@ -354,12 +354,26 @@ export class CalloutRegistry {
 		return icon;
 	}
 
+	/**
+	 * The only place `this.callouts` is written. Every `CalloutIcon` that
+	 * enters the registry — a fresh default, merged/saved data, an import, or
+	 * a live edit — passes through here, so {@link normalizeLucideIcon} runs
+	 * once at the boundary instead of needing a separate migration pass after
+	 * the fact (which is exactly how the fresh-install and "Reset all" paths
+	 * previously slipped past a post-hoc loop and kept comparing a bare value
+	 * against `builtInDefaults`' normalized one).
+	 */
+	private setCallout(id: string, def: CalloutDefinition): void {
+		def.icon = CalloutRegistry.normalizeLucideIcon(def.icon);
+		this.callouts.set(id, def);
+	}
+
 	load(data: Partial<PluginData> | null): void {
 		this.callouts.clear();
 
 		// Always start with built-in defaults
 		for (const def of SORTED_DEFAULT_CALLOUTS) {
-			this.callouts.set(def.id, structuredClone(def));
+			this.setCallout(def.id, structuredClone(def));
 		}
 
 		if (!data) return;
@@ -370,14 +384,14 @@ export class CalloutRegistry {
 				if (this.callouts.has(saved.id) && saved.builtIn) {
 					// Merge overrides onto built-in
 					const existing = this.callouts.get(saved.id)!;
-					this.callouts.set(saved.id, {
+					this.setCallout(saved.id, {
 						...existing,
 						...saved,
 						builtIn: true,
 						source: "builtin",
 					});
 				} else if (!saved.builtIn) {
-					this.callouts.set(saved.id, saved);
+					this.setCallout(saved.id, saved);
 				}
 			}
 		}
@@ -419,17 +433,15 @@ export class CalloutRegistry {
 		}
 		// Migration: any callout that still references the removed `svg` icon
 		// type falls back to a generic lucide pencil so renders don't crash.
+		// Already the picker's spelling (see {@link normalizeLucideIcon}) since
+		// every other entry point normalizes through {@link setCallout} — this
+		// is the one place that reassigns `.icon` directly on an already-stored
+		// definition rather than going through it.
 		for (const def of this.callouts.values()) {
 			const t = (def.icon?.type as string | undefined) ?? "lucide";
 			if (t === "svg") {
-				def.icon = { type: "lucide", value: "pencil" };
+				def.icon = { type: "lucide", value: "lucide-pencil" };
 			}
-		}
-		// Migration: normalize bare Lucide icon values to the picker's spelling
-		// (see {@link normalizeLucideIcon}) so both the picker's selection match
-		// and {@link isModified}'s diff against `builtInDefaults` agree with it.
-		for (const def of this.callouts.values()) {
-			def.icon = CalloutRegistry.normalizeLucideIcon(def.icon);
 		}
 		// Migration: `recolor` used to live on the picture, shared by every
 		// callout pointing at it. Give each callout its own copy, taken from the
@@ -637,7 +649,7 @@ export class CalloutRegistry {
 			if (this.callouts.has(alias)) return false;
 			if (this.findByAlias(alias)) return false;
 		}
-		this.callouts.set(def.id, def);
+		this.setCallout(def.id, def);
 		this.notifyChange();
 		return true;
 	}
@@ -652,9 +664,9 @@ export class CalloutRegistry {
 		if (partial.id && partial.id !== id) {
 			if (this.callouts.has(partial.id)) return false;
 			this.callouts.delete(id);
-			this.callouts.set(partial.id, { ...existing, ...partial });
+			this.setCallout(partial.id, { ...existing, ...partial });
 		} else {
-			this.callouts.set(id, { ...existing, ...partial });
+			this.setCallout(id, { ...existing, ...partial });
 		}
 
 		// If the user just edited the active fallback callout's appearance,
@@ -706,7 +718,7 @@ export class CalloutRegistry {
 			if (def.source !== "fallback") continue;
 			if (def.customized === true) continue;
 			if (def.id === fallbackId) continue;
-			this.callouts.set(def.id, {
+			this.setCallout(def.id, {
 				...def,
 				icon: { ...fallback.icon },
 				colorLight: fallback.colorLight,
@@ -764,7 +776,7 @@ export class CalloutRegistry {
 		let touchedFallback = false;
 		for (const def of this.callouts.values()) {
 			if (def.paletteId !== paletteId) continue;
-			this.callouts.set(def.id, { ...def, ...colors });
+			this.setCallout(def.id, { ...def, ...colors });
 			updated++;
 			if (def.id === this.settings.fallbackCalloutId) touchedFallback = true;
 		}
@@ -792,7 +804,7 @@ export class CalloutRegistry {
 			source: "fallback",
 		};
 		delete next.customized;
-		this.callouts.set(id, next);
+		this.setCallout(id, next);
 		this.restyleUncustomizedFallbackRows();
 		this.notifyChange();
 		return true;
@@ -808,7 +820,7 @@ export class CalloutRegistry {
 	resetBuiltIn(id: string): boolean {
 		const original = this.builtInDefaults.get(id);
 		if (!original) return false;
-		this.callouts.set(id, structuredClone(original));
+		this.setCallout(id, structuredClone(original));
 		this.notifyChange();
 		return true;
 	}
@@ -1089,7 +1101,7 @@ export class CalloutRegistry {
 		// callout it shadowed.
 		if (this.previewActiveId !== null) {
 			if (this.previewShadowedDef) {
-				this.callouts.set(this.previewActiveId, this.previewShadowedDef);
+				this.setCallout(this.previewActiveId, this.previewShadowedDef);
 			} else {
 				this.callouts.delete(this.previewActiveId);
 			}
@@ -1108,7 +1120,7 @@ export class CalloutRegistry {
 			// from the lists, but it keeps the map entry a faithful stand-in for
 			// the CSS pipeline (notably the built-in `example`, whose id doubles
 			// as the demo placeholder, keeping its aliases styled).
-			this.callouts.set(
+			this.setCallout(
 				def.id,
 				existing ? withIdentityOf(existing, def) : def,
 			);
@@ -1233,7 +1245,7 @@ export class CalloutRegistry {
 	resetAll(): void {
 		this.callouts.clear();
 		for (const def of DEFAULT_CALLOUTS) {
-			this.callouts.set(def.id, structuredClone(def));
+			this.setCallout(def.id, structuredClone(def));
 		}
 		// Reset global style to defaults
 		this.settings.globalStyle = structuredClone(
