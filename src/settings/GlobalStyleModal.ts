@@ -428,6 +428,15 @@ export class GlobalStyleModal extends Modal {
 	 * the value is set inline on each demo bar — inline wins over the injected
 	 * sheet's own element-level declaration, so the demo tracks the slider 1:1
 	 * (including a hard 0, where the injector omits the variable entirely).
+	 *
+	 * Every bar gets the same value, the first one included — so the demo
+	 * opens with the gap above its top bar too. styles.css used to carry a
+	 * `.cs-gap-demo-render > :first-child { margin-top: 0 }` rule meaning to
+	 * suppress that, but it never took effect: it tied on specificity with the
+	 * shared `.cs-heading-callout:not(.cm-line)` margin rule and lost on source
+	 * order. It was dropped rather than repaired, to keep the demo looking
+	 * exactly as it always has. To make the top bar sit flush, pass
+	 * `i === 0 ? "0em" : ...` below — that is the whole fix.
 	 */
 	private setGapDemoValue(em: number): void {
 		this.gapDemoRender

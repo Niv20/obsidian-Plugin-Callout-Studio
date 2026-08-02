@@ -522,16 +522,20 @@
 
 /* Nothing but the gap margin separates the stacked bars: strip every child's
    bottom margin (theme heading margins would otherwise add invisible slack the
-   slider can't remove), leaving the top gap var as the sole spacer. */
-.cs-gap-demo-render > * {
-	margin-bottom: 0 !important;
-}
+   slider can't remove), leaving the top gap var as the sole spacer. The class
+   is doubled so this outweighs a theme's own `.markdown-rendered hN` margin
+   (1 class + 1 type) — `> *` contributes nothing of its own.
 
-/* First bar sits flush at the demo's top — the gap only ever separates one
-   bar from the previous one, never the top edge (!important to beat the gap
-   var's own !important margin-top). */
-.cs-gap-demo-render > :first-child {
-	margin-top: 0 !important;
+   There is deliberately no companion `> :first-child { margin-top: 0 }` rule.
+   One used to sit here, meaning to keep the top bar flush against the demo's
+   edge, but it never did anything: it tied on specificity with the shared
+   .cs-heading-callout:not(.cm-line) margin rule below and lost on source
+   order, so the first bar has always carried the gap like every other. It was
+   removed rather than given the weight to win, which would have changed how
+   the demo looks. See GlobalStyleModal.setGapDemoValue for the one-line fix
+   if that top gap is ever unwanted. */
+.cs-gap-demo-render.cs-gap-demo-render > * {
+	margin-bottom: 0;
 }
 
 /* ─── Icon Preview in Editor ──────────────────────────────────── */
@@ -2528,34 +2532,41 @@ input.cs-input-invalid:focus {
 	transform: rotate(90deg);
 }
 
-/* Rows/controls shown only while the gradient background is enabled */
-.cs-gradient-hidden {
-	display: none !important;
+/* Rows/controls shown only while the gradient background is enabled.
+   Both hide utilities below land on a Setting's own .setting-item element,
+   whose `display: flex` is exactly as specific as a single class — so the
+   class is doubled to win on specificity rather than on which stylesheet
+   happens to be loaded last. */
+.cs-gradient-hidden.cs-gradient-hidden {
+	display: none;
 }
 
 /* Generic row-hide utility (e.g. the Intensity slider while the palette
    editor's advanced per-color grid is showing) */
-.cs-row-hidden {
-	display: none !important;
+.cs-row-hidden.cs-row-hidden {
+	display: none;
 }
 
 /* Low-emphasis text-link button, e.g. the palette editor's simple/advanced
-   color view toggle */
-/* Obsidian's .setting-item button rule (higher specificity than a bare
-   class) otherwise wins and applies its normal button padding/min-height,
-   which is what made this look like a big button — every box property is
-   reset here with !important to guarantee the low-profile text-link look. */
-.setting-item .cs-link-btn {
+   color view toggle. It IS a <button>, so Obsidian's own `button` (1 type)
+   and `button:not(.clickable-icon)` (1 class + 1 type) rules dress it as a
+   full grey button unless every box property is reset. The class is repeated
+   to 3 so that reset wins outright — comfortably above those, and above a
+   theme restating them under a `.modal`/`.setting-item` scope. Obsidian's
+   heavier `.is-phone .setting-item-control button` rules never reach it: the
+   button is built inside a Setting's descEl (.setting-item-description), not
+   its control column — see PaletteEditorModal.renderInlineLinkHint. */
+.setting-item .cs-link-btn.cs-link-btn {
 	display: block;
 	appearance: none;
 	width: auto;
-	min-height: 0 !important;
+	min-height: 0;
 	margin: 4px 0 0;
-	padding: 0 !important;
-	border: none !important;
-	border-radius: 0 !important;
-	background: none !important;
-	box-shadow: none !important;
+	padding: 0;
+	border: none;
+	border-radius: 0;
+	background: none;
+	box-shadow: none;
 	color: var(--text-accent);
 	font-size: var(--font-smaller);
 	font-family: inherit;
@@ -2564,9 +2575,9 @@ input.cs-input-invalid:focus {
 	height: auto;
 	cursor: pointer;
 }
-.setting-item .cs-link-btn:hover {
+.setting-item .cs-link-btn.cs-link-btn:hover {
 	color: var(--text-accent-hover);
-	background: none !important;
+	background: none;
 	text-decoration: underline;
 }
 
@@ -2575,10 +2586,12 @@ input.cs-input-invalid:focus {
 .cs-inline-hint {
 	margin-top: 4px;
 }
-.setting-item .cs-link-btn-inline {
+/* Inline variant of the button above, so it must outweigh it — one more class
+   (4). Otherwise the base rule's `display: block` wins and the link breaks out
+   of the sentence onto its own line. */
+.setting-item .cs-link-btn.cs-link-btn.cs-link-btn-inline {
 	display: inline;
 	margin: 0;
-	padding: 0 !important;
 	font-size: inherit;
 }
 
@@ -3160,10 +3173,6 @@ input.cs-input-invalid:focus {
 	font-size: calc(0.9em * var(--cs-inline-scale, 1));
 	line-height: 1.4;
 	vertical-align: baseline;
-	/* !important for the same PDF-export reason as .cs-heading-callout: keep
-	   the pill's text (and Lucide icon, via currentColor) tinted when print
-	   CSS would otherwise force it black. */
-	color: rgb(var(--cs-color-rgb, 68, 138, 255)) !important;
 	background-color: rgba(var(--cs-color-rgb, 68, 138, 255), 0.12);
 	font-weight: var(--font-medium, 500);
 	white-space: nowrap;
@@ -3173,30 +3182,65 @@ input.cs-input-invalid:focus {
 	unicode-bidi: isolate;
 }
 
+/* Same split as .cs-heading-callout, and for the same reason: the tint is the
+   one property that has to outweigh an ancestor's, so it sits on its own
+   doubled-class rule while background-color stays above at one class where
+   CSSInjector's per-callout `[data-callout]` rules can still override it.
+   In PDF export the pill inherits `.print .markdown-preview-view { color:
+   initial }` unless it declares its own colour — this is that declaration,
+   and the Lucide icon follows it through currentColor. Kept clear of the
+   pill's gradient title sweep, which is 3 selectors and sets
+   -webkit-text-fill-color rather than color, so the two never collide. */
+.cs-inline-callout.cs-inline-callout {
+	color: rgb(var(--cs-color-rgb, 68, 138, 255));
+}
+
 /* Heading callout bar: applied to the hN element (reading view) or the
    .cm-line (Live Preview). Font size is inherited from the heading itself,
-   so H1 bars render larger than H6 bars with no extra rules. */
+   so H1 bars render larger than H6 bars with no extra rules.
+
+   The bar's declarations are deliberately SPLIT across two selectors of
+   different weight, and moving one between them is a real behaviour change:
+
+   - Here, at one class, sit the properties CSSInjector overrides per callout.
+     Its `.cs-heading-callout[data-callout="id"]` rules are 2 selectors and
+     beat this by design (see generateTokenColorCSS) — that is how a custom
+     palette's background or gradient reaches a heading bar at all. Raising
+     this rule's weight would silently strand every custom background on the
+     default tint.
+   - Below, at four classes, sit the properties Obsidian's own CSS declares on
+     the same element and would otherwise win, and which nothing per-callout
+     ever overrides. */
 .cs-heading-callout {
 	background-color: rgba(var(--cs-color-rgb, 68, 138, 255), 0.12);
 	border-radius: var(--cs-heading-radius, var(--radius-s, 4px));
-	/* Vertical text spacing is user-tunable (Callout types → Heading →
-	   Global callout style). !important so the sliders win over Obsidian's
-	   editor rule that pads heading lines from the top (which pushed the
-	   text toward the bottom of the bar); equal defaults center it. */
-	padding-top: var(--cs-heading-pad-top, 0.25em) !important;
-	padding-bottom: var(--cs-heading-pad-bottom, 0.25em) !important;
-	/* Start inset is user-tunable in px (Heading → Icon indent) so the icon
-	   sits off the corner; end keeps the classic em inset. !important for the
-	   same reason as the vertical paddings: Obsidian's higher-specificity
-	   .mod-cm6 .cm-line { padding: 0 } rule zeroes these otherwise. */
-	padding-inline-start: var(--cs-heading-pad-start, 10px) !important;
-	padding-inline-end: 0.45em !important;
-	/* !important so the callout tint survives PDF export: Obsidian's print
-	   stylesheet forces heading text to black for legibility, which otherwise
-	   overrides this and leaves the title text — and Lucide icons, which
-	   inherit it via currentColor — black on the colored bar. Baked
-	   material/emoji export icons carry their own inline !important color. */
-	color: rgb(var(--cs-color-rgb, 68, 138, 255)) !important;
+}
+
+/* The class is repeated to 4 so these win on specificity alone, one more than
+   the strongest rule each fights (same trick as .cs-tag-add-btn above, and
+   unlike !important it leaves the entrance transition free to animate them):
+
+   - padding: `.markdown-source-view.mod-cm6 .cm-line { padding: 0 }` and
+     `.cm-s-obsidian .cm-line.HyperMD-header { padding-top }` — 3 classes
+     each. Without this the Live Preview bar loses its inset entirely and its
+     text is pushed to the bottom by the editor's own heading padding.
+   - color: `.markdown-rendered h1…h6 { color: var(--hN-color) }` — 1 class +
+     1 type. That var is `inherit` by default, so on screen it merely passes
+     the surrounding text colour through; in PDF export it inherits the print
+     sheet's `.print .markdown-preview-view { color: initial }` and the title
+     text — plus Lucide icons, which follow it via currentColor — comes out
+     black on the coloured bar. Baked material/emoji export icons carry their
+     own inline colour and are unaffected either way.
+
+   Vertical spacing and the start inset are user-tunable (Callout types →
+   Heading → Global callout style, and → Icon indent); equal top/bottom
+   defaults centre the text, and the end inset keeps the classic em. */
+.cs-heading-callout.cs-heading-callout.cs-heading-callout.cs-heading-callout {
+	padding-top: var(--cs-heading-pad-top, 0.25em);
+	padding-bottom: var(--cs-heading-pad-bottom, 0.25em);
+	padding-inline-start: var(--cs-heading-pad-start, 10px);
+	padding-inline-end: 0.45em;
+	color: rgb(var(--cs-color-rgb, 68, 138, 255));
 }
 
 /* Gap above the bar (Callout types → Heading → Global callout style). Static
@@ -3208,16 +3252,20 @@ input.cs-input-invalid:focus {
    (margin sits outside the box CM6 measures), so no margin-top rule — not
    even an inert zero — should ever target .cm-line. Live Preview gets the
    same visual gap from HeadingGapWidget (editor/livepreview/headingGapWidget.ts),
-   a real block-level DOM node CM6 measures correctly instead. */
-.cs-heading-callout:not(.cm-line) {
-	margin-top: var(--cs-heading-gap-top, 0em) !important;
+   a real block-level DOM node CM6 measures correctly instead.
+
+   3 classes: above Obsidian's own heading margins (`h1…h6 { margin-block-* }`
+   and `.markdown-rendered :is(p,pre,…) + :is(h1…h6) { margin-top }`, at most
+   1 class + 2 types) with room to spare for a theme restating them. */
+.cs-heading-callout.cs-heading-callout:not(.cm-line) {
+	margin-top: var(--cs-heading-gap-top, 0em);
 	/* Zero the theme's heading margin-bottom so the gap slider (margin-top) is
 	   the *sole* thing between two stacked heading bars — otherwise a collapsed
 	   heading callout keeps invisible slack the slider can't remove, and at
 	   gap 0 the bars still don't touch. This also makes reading view match
 	   Live Preview, where the HeadingGapWidget already gives gap-only spacing,
 	   and makes the "Spacing between headers" demo read 1:1 with reality. */
-	margin-bottom: 0 !important;
+	margin-bottom: 0;
 }
 
 /* The [!id] token inside a heading bar (icon + optional name). */
@@ -3403,8 +3451,10 @@ input.cs-input-invalid:focus {
 /* Live Preview heading bar: the .cm-line already exists (it held the raw
    text), the view plugin just adds .cs-heading-callout to it — so a transition
    scoped to the open window fires on that class flip, and never on lines that
-   are built already-styled. It also sidesteps the bar's !important padding/
-   color, which a keyframe could not override. */
+   are built already-styled. A transition also animates padding and color from
+   whatever the cascade resolved, so it stays correct however heavily those two
+   are declared — where a keyframe would have to restate them and would fight
+   the bar's own high-specificity rule. */
 body.cs-anim-window .cs-heading-callout {
 	transition:
 		background-color 350ms ease-out,
