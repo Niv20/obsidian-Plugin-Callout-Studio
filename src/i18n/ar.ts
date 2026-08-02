@@ -631,6 +631,8 @@ export const ar: Record<string, string> = {
 		'"{{field}}" يجب أن يكون رقماً بين {{min}} و{{max}} (تم استلام "{{value}}").',
 	"import.err.iconSizeRange":
 		'"{{field}}" يجب أن يكون رقماً بين {{min}} و{{max}} (تم استلام "{{value}}").',
+	"import.err.iconAdjustShape":
+		'"iconAdjust" must be an object mapping a callout type ("regular", "heading", "inline") to its icon size and offsets.',
 	"import.err.aliasesNotArray":
 		'"aliases" يجب أن يكون مصفوفة من السلاسل النصية.',
 	"import.err.aliasNotString": "يجب أن يكون الاسم المستعار سلسلة نصية.",

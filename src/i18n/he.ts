@@ -672,6 +672,8 @@ export const he: Record<string, string> = {
 		'"{{field}}" חייב להיות מספר בין {{min}} ל־{{max}} (התקבל "{{value}}").',
 	"import.err.iconSizeRange":
 		'"{{field}}" חייב להיות מספר בין {{min}} ל־{{max}} (התקבל "{{value}}").',
+	"import.err.iconAdjustShape":
+		'"iconAdjust" חייב להיות אובייקט הממפה סוג תיבת־הבלטה ("regular", "heading", "inline") לגודל האייקון ולהיסטים שלו.',
 	"import.err.aliasesNotArray":
 		'"aliases" חייב להיות מערך (Array) של מחרוזות (Strings).',
 	"import.err.aliasNotString": "כינוי (Alias) חייב להיות מחרוזת (String).",

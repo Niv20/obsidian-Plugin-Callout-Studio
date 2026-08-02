@@ -646,6 +646,8 @@ export const hu: Record<string, string> = {
 		'"{{field}}" {{min}} és {{max}} közötti szám kell legyen (kapott: "{{value}}").',
 	"import.err.iconSizeRange":
 		'"{{field}}" {{min}} és {{max}} közötti szám kell legyen (kapott: "{{value}}").',
+	"import.err.iconAdjustShape":
+		'"iconAdjust" must be an object mapping a callout type ("regular", "heading", "inline") to its icon size and offsets.',
 	"import.err.aliasesNotArray":
 		'"aliases" karakterláncok tömbje kell legyen.',
 	"import.err.aliasNotString": "Az aliasnak karakterláncnak kell lennie.",

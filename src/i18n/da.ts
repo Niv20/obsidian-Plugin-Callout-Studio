@@ -619,6 +619,8 @@ export const da: Record<string, string> = {
 		'"{{field}}" skal være et tal mellem {{min}} og {{max}} (modtog "{{value}}").',
 	"import.err.iconSizeRange":
 		'"{{field}}" skal være et tal mellem {{min}} og {{max}} (modtog "{{value}}").',
+	"import.err.iconAdjustShape":
+		'"iconAdjust" must be an object mapping a callout type ("regular", "heading", "inline") to its icon size and offsets.',
 	"import.err.aliasesNotArray": '"aliases" skal være en array af strenge.',
 	"import.err.aliasNotString": "Aliaset skal være en streng.",
 	"import.err.aliasDup": 'Aliaset "{{value}}" er duplikeret i denne post.',

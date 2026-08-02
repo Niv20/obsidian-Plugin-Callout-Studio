@@ -645,6 +645,8 @@ export const id: Record<string, string> = {
 		'"{{field}}" harus berupa angka antara {{min}} dan {{max}} (diterima "{{value}}").',
 	"import.err.iconSizeRange":
 		'"{{field}}" harus berupa angka antara {{min}} dan {{max}} (diterima "{{value}}").',
+	"import.err.iconAdjustShape":
+		'"iconAdjust" must be an object mapping a callout type ("regular", "heading", "inline") to its icon size and offsets.',
 	"import.err.aliasesNotArray": '"aliases" harus berupa array string.',
 	"import.err.aliasNotString": "Alias harus berupa string.",
 	"import.err.aliasDup": 'Alias "{{value}}" duplikat dalam entri ini.',

@@ -8,7 +8,17 @@
  * listener. Also manages the Material Symbols font link element when needed.
  */
 import type { App } from "obsidian";
-import type { CalloutDefinition, CalloutIcon, UserImageIcon } from "../types";
+import type {
+	CalloutDefinition,
+	CalloutIcon,
+	CalloutRenderRole,
+	UserImageIcon,
+} from "../types";
+import { CALLOUT_RENDER_ROLES } from "../types";
+import {
+	isDefaultIconAdjust,
+	resolveIconAdjust,
+} from "../utils/iconAdjust";
 import { renderIconInto } from "../icons/renderIcon";
 import { followsCalloutColor, userImageFor } from "../icons/packs/userImages";
 import { createIconResolver } from "../icons/resolver";
@@ -872,52 +882,66 @@ export class CSSInjector {
 		return `@media print {\n${rules.join("\n\n")}\n}`;
 	}
 
+	/**
+	 * The selector carrying one role's icon adjustment.
+	 *
+	 * Ref tokens in the outline and in links are deliberately absent: they are
+	 * too small for pixel offsets to mean anything, so they keep the shared
+	 * sizing from styles.css whatever the user does here.
+	 */
+	private iconTransformSelector(id: string, role: CalloutRenderRole): string {
+		switch (role) {
+			case "regular":
+				// Obsidian's own DOM → dasherized attr; the two tokens are ours.
+				return `${calloutSel(id)} > .callout-title > .callout-icon`;
+			case "heading":
+				return `.${CSS_HEADING_TOKEN}[data-callout="${id}"] > .${CSS_TOKEN_ICON}`;
+			case "inline":
+				return `.${CSS_INLINE_TOKEN}[data-callout="${id}"] > .${CSS_TOKEN_ICON}`;
+		}
+	}
+
+	/**
+	 * Per-role icon offset/scale rules for one callout.
+	 *
+	 * Each role gets its own rule and is skipped entirely while it sits at the
+	 * defaults, so nudging the heading token cannot shift the blockquote icon —
+	 * that shared-value coupling is exactly what the per-role model replaced.
+	 *
+	 * The heading rule re-bakes the static optical nudge from styles.css
+	 * (--cs-heading-icon-offset): this selector outranks that default and would
+	 * otherwise silently cancel it the moment a heading slider is touched. Its
+	 * fallback must stay in step with the one in styles.css — they disagreed
+	 * (0.06em here, 0.1em there) until this rewrite, which made any slider move
+	 * lift the heading icon by the 0.04em difference.
+	 */
 	private getIconTransformCSS(def: CalloutDefinition): string {
-		const ox = def.iconOffsetX ?? 0;
-		const oy = def.iconOffsetY ?? 0;
-		const scale = def.iconSize ?? 1;
-		if (ox === 0 && oy === 0 && scale === 1) return "";
+		const parts: string[] = [];
 
-		const buildTransform = (extraY?: string): string => {
+		for (const role of CALLOUT_RENDER_ROLES) {
+			const adjust = resolveIconAdjust(def, role);
+			// The heading keeps its static nudge from styles.css when untouched.
+			if (isDefaultIconAdjust(adjust)) continue;
+
+			const extraY =
+				role === "heading" ? "var(--cs-heading-icon-offset, 0.1em)" : "";
 			const transforms: string[] = [];
-			if (ox !== 0 || oy !== 0 || extraY) {
-				const y = extraY ? `calc(${oy}px + ${extraY})` : `${oy}px`;
-				transforms.push(`translate(${ox}px, ${y})`);
+			if (adjust.offsetX !== 0 || adjust.offsetY !== 0 || extraY) {
+				const y = extraY
+					? `calc(${adjust.offsetY}px + ${extraY})`
+					: `${adjust.offsetY}px`;
+				transforms.push(`translate(${adjust.offsetX}px, ${y})`);
 			}
-			if (scale !== 1) transforms.push(`scale(${scale})`);
-			return transforms.join(" ");
-		};
+			if (adjust.size !== 1) transforms.push(`scale(${adjust.size})`);
 
-		// The adjustment applies to every surface the callout's icon renders
-		// on: the regular callout title, the heading-bar token, and the inline
-		// pill (ref tokens in outline/links stay untouched — they are too
-		// small for pixel offsets to make sense). The heading token also
-		// bakes in the static default optical nudge from styles.css
-		// (--cs-heading-icon-offset) — this rule has higher specificity than
-		// that default and would otherwise silently cancel it out the moment
-		// the user touches any offset/scale slider.
-		const baseSelectors = [
-			// Obsidian's own DOM → dasherized attr; the pill below is ours.
-			`${calloutSel(def.id)} > .callout-title > .callout-icon`,
-			`.${CSS_INLINE_TOKEN}[data-callout="${def.id}"] > .${CSS_TOKEN_ICON}`,
-		];
-		const headingSelector = `.${CSS_HEADING_TOKEN}[data-callout="${def.id}"] > .${CSS_TOKEN_ICON}`;
-
-		const parts: string[] = [
-			`${headingSelector} {\n` +
-				`  transform: ${buildTransform("var(--cs-heading-icon-offset, 0.06em)")};\n` +
-				`  transform-origin: center;\n` +
-				`}`,
-		];
-		const baseTransform = buildTransform();
-		if (baseTransform) {
-			parts.unshift(
-				`${baseSelectors.join(",\n")} {\n` +
-					`  transform: ${baseTransform};\n` +
+			parts.push(
+				`${this.iconTransformSelector(def.id, role)} {\n` +
+					`  transform: ${transforms.join(" ")};\n` +
 					`  transform-origin: center;\n` +
 					`}`,
 			);
 		}
+
 		return parts.join("\n\n");
 	}
 
@@ -1303,10 +1327,13 @@ export class CSSInjector {
 		// title gap) instead of under the icon. Logical property keeps it
 		// correct in RTL; written to both adoptedStyleSheets and the <style>
 		// element so it applies in Reading view, Live Preview, and PDF export.
+		// The --cs-regular-icon-gap term mirrors the icon's own trailing margin
+		// from styles.css: without it this indent would fall short by exactly
+		// that margin and the body would sit left of the title text.
 		if (gs.alignContentWithTitle) {
 			parts.push(
 				`.callout > .callout-content {\n` +
-					`  padding-inline-start: calc(var(--icon-size, 1.2em) + 0.2em);\n` +
+					`  padding-inline-start: calc(var(--icon-size, 1.2em) + 0.2em + var(--cs-regular-icon-gap, 0.15em));\n` +
 					`}`,
 			);
 		}

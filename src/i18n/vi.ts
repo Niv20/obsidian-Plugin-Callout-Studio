@@ -645,6 +645,8 @@ export const vi: Record<string, string> = {
 		'"{{field}}" phải là số từ {{min}} đến {{max}} (nhận được "{{value}}").',
 	"import.err.iconSizeRange":
 		'"{{field}}" phải là số từ {{min}} đến {{max}} (nhận được "{{value}}").',
+	"import.err.iconAdjustShape":
+		'"iconAdjust" must be an object mapping a callout type ("regular", "heading", "inline") to its icon size and offsets.',
 	"import.err.aliasesNotArray": '"aliases" phải là mảng chuỗi.',
 	"import.err.aliasNotString": "Bí danh phải là chuỗi.",
 	"import.err.aliasDup": 'Bí danh "{{value}}" bị trùng trong mục này.',

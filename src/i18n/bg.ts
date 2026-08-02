@@ -627,6 +627,8 @@ export const bg: Record<string, string> = {
 		'"{{field}}" трябва да е число между {{min}} и {{max}} (получено "{{value}}").',
 	"import.err.iconSizeRange":
 		'"{{field}}" трябва да е число между {{min}} и {{max}} (получено "{{value}}").',
+	"import.err.iconAdjustShape":
+		'"iconAdjust" must be an object mapping a callout type ("regular", "heading", "inline") to its icon size and offsets.',
 	"import.err.aliasesNotArray": '"aliases" трябва да е масив от низове.',
 	"import.err.aliasNotString": "Псевдонимът трябва да е низ.",
 	"import.err.aliasDup": 'Псевдонимът "{{value}}" е дублиран в този запис.',

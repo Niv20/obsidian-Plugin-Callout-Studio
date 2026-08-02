@@ -10,8 +10,12 @@
 import type {
 	CalloutDefinition,
 	CalloutIcon,
+	CalloutRenderRole,
+	IconAdjust,
 	PluginSettings,
 } from "../types";
+import { CALLOUT_RENDER_ROLES } from "../types";
+import { ICON_ADJUST_LIMITS } from "./iconAdjust";
 import type { CalloutRegistry } from "../manager/CalloutRegistry";
 import { EXPORT_FORMAT_ID } from "../manager/CalloutRegistry";
 import { FALLBACK_ICON, MAX_TAG_LENGTH, MAX_TAGS_COUNT } from "../constants";
@@ -89,6 +93,7 @@ const KNOWN_FIELD_MAP: Record<keyof CalloutDefinition, true> = {
 	defaultFolded: true,
 	builtIn: true,
 	source: true,
+	iconAdjust: true,
 	iconOffsetX: true,
 	iconOffsetY: true,
 	iconSize: true,
@@ -365,6 +370,112 @@ function validateNumberRange(
 		return false;
 	}
 	return true;
+}
+
+/**
+ * Validate the per-role `iconAdjust` map into a sanitized value.
+ *
+ * Ranges come from `ICON_ADJUST_LIMITS` — the same constant the editor's
+ * sliders are built from — so an imported file can never carry a value the UI
+ * has no way to represent or undo. Issues name the exact control
+ * (`iconAdjust.heading.offsetX`), and an unrecognized role is dropped with the
+ * same "unknown field ignored" warning the top-level field check uses, rather
+ * than failing the whole entry over a key a future version may well define.
+ *
+ * Absent fields are left absent: `resolveIconAdjust` falls those back to the
+ * flat legacy trio, which is what makes a partial entry meaningful.
+ */
+function validateIconAdjust(
+	value: unknown,
+	push: (issue: Omit<ValidationIssue, "index" | "entryLabel">) => void,
+): { ok: boolean; value: CalloutDefinition["iconAdjust"] } {
+	if (!isPlainObject(value)) {
+		push({
+			field: "iconAdjust",
+			level: "error",
+			messageKey: "import.err.iconAdjustShape",
+		});
+		return { ok: false, value: undefined };
+	}
+
+	const { offset, size } = ICON_ADJUST_LIMITS;
+	const numericFields: {
+		key: keyof IconAdjust;
+		min: number;
+		max: number;
+		messageKey: string;
+	}[] = [
+		{
+			key: "offsetX",
+			min: offset.min,
+			max: offset.max,
+			messageKey: "import.err.numberRange",
+		},
+		{
+			key: "offsetY",
+			min: offset.min,
+			max: offset.max,
+			messageKey: "import.err.numberRange",
+		},
+		{
+			key: "size",
+			min: size.min,
+			max: size.max,
+			messageKey: "import.err.iconSizeRange",
+		},
+	];
+
+	const out: Partial<Record<CalloutRenderRole, IconAdjust>> = {};
+	let ok = true;
+
+	for (const [role, raw] of Object.entries(value)) {
+		if (!CALLOUT_RENDER_ROLES.includes(role as CalloutRenderRole)) {
+			push({
+				field: "iconAdjust",
+				level: "warning",
+				messageKey: "import.warn.unknownFields",
+				params: { fields: `iconAdjust.${role}` },
+			});
+			continue;
+		}
+		if (!isPlainObject(raw)) {
+			push({
+				field: `iconAdjust.${role}`,
+				level: "error",
+				messageKey: "import.err.iconAdjustShape",
+			});
+			ok = false;
+			continue;
+		}
+
+		const clean: IconAdjust = {};
+		for (const { key, min, max, messageKey } of numericFields) {
+			const field = raw[key];
+			if (field === undefined) continue;
+			if (
+				!validateNumberRange(
+					field,
+					`iconAdjust.${role}.${key}`,
+					min,
+					max,
+					push,
+					messageKey,
+				)
+			) {
+				ok = false;
+				continue;
+			}
+			clean[key] = field as number;
+		}
+		if (Object.keys(clean).length > 0) {
+			out[role as CalloutRenderRole] = clean;
+		}
+	}
+
+	return {
+		ok,
+		value: Object.keys(out).length > 0 ? out : undefined,
+	};
 }
 
 function validateMetadata(
@@ -738,6 +849,14 @@ function validateCalloutArray(
 				entryOk = false;
 		}
 
+		// ── per-role icon adjustment ─────────────────────────
+		let iconAdjustClean: CalloutDefinition["iconAdjust"];
+		if (entry.iconAdjust !== undefined) {
+			const result = validateIconAdjust(entry.iconAdjust, push);
+			if (!result.ok) entryOk = false;
+			iconAdjustClean = result.value;
+		}
+
 		// ── aliases ──────────────────────────────────────────
 		const aliasesClean: string[] = [];
 		if (entry.aliases !== undefined) {
@@ -967,6 +1086,7 @@ function validateCalloutArray(
 				def.textColorLight = entry.textColorLight;
 			if (typeof entry.textColorDark === "string")
 				def.textColorDark = entry.textColorDark;
+			if (iconAdjustClean) def.iconAdjust = iconAdjustClean;
 			if (isFiniteNumber(entry.iconOffsetX))
 				def.iconOffsetX = entry.iconOffsetX;
 			if (isFiniteNumber(entry.iconOffsetY))

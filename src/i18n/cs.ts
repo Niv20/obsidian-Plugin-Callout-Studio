@@ -641,6 +641,8 @@ export const cs: Record<string, string> = {
 		'"{{field}}" musí být číslo mezi {{min}} a {{max}} (obdrženo "{{value}}").',
 	"import.err.iconSizeRange":
 		'"{{field}}" musí být číslo mezi {{min}} a {{max}} (obdrženo "{{value}}").',
+	"import.err.iconAdjustShape":
+		'"iconAdjust" must be an object mapping a callout type ("regular", "heading", "inline") to its icon size and offsets.',
 	"import.err.aliasesNotArray": '"aliases" musí být pole řetězců.',
 	"import.err.aliasNotString": "Alias musí být řetězec.",
 	"import.err.aliasDup": 'Alias "{{value}}" je v této položce duplikován.',

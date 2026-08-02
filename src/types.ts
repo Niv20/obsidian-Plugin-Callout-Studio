@@ -119,6 +119,20 @@ export interface BgGradient {
 	textToColorDark?: string;
 }
 
+/**
+ * One render role's icon adjustment. Every field is optional because an absent
+ * one falls back to the matching flat `iconOffsetX`/`iconOffsetY`/`iconSize` on
+ * the definition — see {@link CalloutDefinition.iconAdjust}.
+ */
+export interface IconAdjust {
+	/** Horizontal icon offset in px (−10 to 10) */
+	offsetX?: number;
+	/** Vertical icon offset in px (−10 to 10) */
+	offsetY?: number;
+	/** Icon scale factor (0.5 to 1.5, default 1) */
+	size?: number;
+}
+
 export interface CalloutDefinition {
 	id: string;
 	displayName: string;
@@ -129,11 +143,27 @@ export interface CalloutDefinition {
 	defaultFolded: boolean;
 	builtIn: boolean;
 	source: "user" | "theme" | "plugin" | "builtin" | "fallback";
-	/** Horizontal icon offset in px (−10 to 10) */
+	/**
+	 * Icon size and offsets per render role, so a nudge that fixes the heading
+	 * token cannot knock the blockquote icon out of place.
+	 *
+	 * A role missing here — or a single field missing inside one — falls back to
+	 * the flat trio below, which is precisely what that trio meant before this
+	 * field existed: one adjustment shared by all three roles. That fallback is
+	 * what lets pre-existing data and older exports keep rendering exactly as
+	 * they did, with no migration pass. Resolve through
+	 * `resolveIconAdjust()` (utils/iconAdjust.ts) rather than reading either
+	 * layer directly.
+	 */
+	iconAdjust?: Partial<Record<CalloutRenderRole, IconAdjust>>;
+	/**
+	 * Horizontal icon offset in px (−10 to 10). Legacy shared value and the
+	 * mirror of `iconAdjust.regular`; see `iconAdjust` above.
+	 */
 	iconOffsetX?: number;
-	/** Vertical icon offset in px (−10 to 10) */
+	/** Vertical icon offset in px (−10 to 10). See `iconOffsetX`. */
 	iconOffsetY?: number;
-	/** Icon scale factor (0.5 to 1.5, default 1) */
+	/** Icon scale factor (0.5 to 1.5, default 1). See `iconOffsetX`. */
 	iconSize?: number;
 	/** Custom background color – light mode */
 	bgColorLight?: string;

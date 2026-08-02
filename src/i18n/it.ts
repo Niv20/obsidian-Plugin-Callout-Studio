@@ -651,6 +651,8 @@ export const it: Record<string, string> = {
 		'"{{field}}" deve essere un numero tra {{min}} e {{max}} (ricevuto "{{value}}").',
 	"import.err.iconSizeRange":
 		'"{{field}}" deve essere un numero tra {{min}} e {{max}} (ricevuto "{{value}}").',
+	"import.err.iconAdjustShape":
+		'"iconAdjust" must be an object mapping a callout type ("regular", "heading", "inline") to its icon size and offsets.',
 	"import.err.aliasesNotArray": '"aliases" deve essere un array di stringhe.',
 	"import.err.aliasNotString": "L'alias deve essere una stringa.",
 	"import.err.aliasDup": 'L\'alias "{{value}}" è duplicato in questa voce.',

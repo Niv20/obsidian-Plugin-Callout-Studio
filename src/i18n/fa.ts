@@ -639,6 +639,8 @@ export const fa: Record<string, string> = {
 		'"{{field}}" باید عددی بین {{min}} و {{max}} باشد (دریافت شده "{{value}}").',
 	"import.err.iconSizeRange":
 		'"{{field}}" باید عددی بین {{min}} و {{max}} باشد (دریافت شده "{{value}}").',
+	"import.err.iconAdjustShape":
+		'"iconAdjust" must be an object mapping a callout type ("regular", "heading", "inline") to its icon size and offsets.',
 	"import.err.aliasesNotArray": '"aliases" باید آرایه‌ای از رشته‌ها باشد.',
 	"import.err.aliasNotString": "نام مستعار باید یک رشته باشد.",
 	"import.err.aliasDup": 'نام مستعار "{{value}}" در این ورودی تکراری است.',

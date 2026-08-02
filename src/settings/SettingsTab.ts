@@ -236,6 +236,7 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 					textColorDark: result.textColorDark,
 					foldable: result.foldable,
 					defaultFolded: result.defaultFolded,
+					iconAdjust: result.iconAdjust,
 					iconOffsetX: result.iconOffsetX,
 					iconOffsetY: result.iconOffsetY,
 					iconSize: result.iconSize,

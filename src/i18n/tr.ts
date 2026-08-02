@@ -644,6 +644,8 @@ export const tr: Record<string, string> = {
 		'"{{field}}" {{min}} ile {{max}} arasında bir sayı olmalıdır ("{{value}}" alındı).',
 	"import.err.iconSizeRange":
 		'"{{field}}" {{min}} ile {{max}} arasında bir sayı olmalıdır ("{{value}}" alındı).',
+	"import.err.iconAdjustShape":
+		'"iconAdjust" must be an object mapping a callout type ("regular", "heading", "inline") to its icon size and offsets.',
 	"import.err.aliasesNotArray": '"aliases" bir dize dizisi olmalıdır.',
 	"import.err.aliasNotString": "Takma ad bir dize olmalıdır.",
 	"import.err.aliasDup": '"{{value}}" takma adı bu giriş içinde yineleniyor.',

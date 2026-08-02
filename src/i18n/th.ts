@@ -636,6 +636,8 @@ export const th: Record<string, string> = {
 		'"{{field}}" ต้องเป็นตัวเลขระหว่าง {{min}} ถึง {{max}} (ได้รับ "{{value}}")',
 	"import.err.iconSizeRange":
 		'"{{field}}" ต้องเป็นตัวเลขระหว่าง {{min}} ถึง {{max}} (ได้รับ "{{value}}")',
+	"import.err.iconAdjustShape":
+		'"iconAdjust" must be an object mapping a callout type ("regular", "heading", "inline") to its icon size and offsets.',
 	"import.err.aliasesNotArray": '"aliases" ต้องเป็น array ของ string',
 	"import.err.aliasNotString": "นามแฝงต้องเป็น string",
 	"import.err.aliasDup": 'นามแฝง "{{value}}" ซ้ำกันในรายการนี้',

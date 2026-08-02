@@ -647,6 +647,8 @@ export const nl: Record<string, string> = {
 		'"{{field}}" moet een getal zijn tussen {{min}} en {{max}} ("{{value}}" ontvangen).',
 	"import.err.iconSizeRange":
 		'"{{field}}" moet een getal zijn tussen {{min}} en {{max}} ("{{value}}" ontvangen).',
+	"import.err.iconAdjustShape":
+		'"iconAdjust" must be an object mapping a callout type ("regular", "heading", "inline") to its icon size and offsets.',
 	"import.err.aliasesNotArray":
 		'"aliases" moet een array van tekenreeksen zijn.',
 	"import.err.aliasNotString": "De alias moet een tekenreeks zijn.",

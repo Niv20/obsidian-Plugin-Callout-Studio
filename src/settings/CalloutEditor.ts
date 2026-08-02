@@ -17,8 +17,15 @@ import type {
 	BgGradient,
 	CalloutDefinition,
 	CalloutIcon,
+	CalloutRenderRole,
 	CustomPalette,
 } from "../types";
+import {
+	buildIconAdjust,
+	ICON_ADJUST_LIMITS,
+	resolveIconAdjust,
+	type ResolvedIconAdjust,
+} from "../utils/iconAdjust";
 import { IconPicker } from "./iconpicker";
 import { LiveCalloutPreview } from "./LiveCalloutPreview";
 import { PREVIEW_PLACEHOLDER_ID } from "../constants";
@@ -67,6 +74,48 @@ import { refreshAllMarkdownEditors } from "../editor/livepreview/refresh";
 function generateId(displayName: string): string {
 	return sanitizeCalloutIdInput(displayName);
 }
+
+/**
+ * Header for each icon-adjustment box: what is being adjusted, then which
+ * callout's icon it belongs to — "Icon adjustment — Heading callout". The role
+ * name alone read as a section about the whole heading callout rather than
+ * about its icon, which is all these three sliders touch.
+ *
+ * Composed from the two strings that already say each half in all 32 locales
+ * (the role names are the ones the Global settings section heads its three rows
+ * with, so the two panels name the same three things identically) rather than
+ * from a new per-role phrase, which would need translating 32 times to say
+ * something both halves already say.
+ *
+ * A thunk rather than a plain string map: `t()` must run after the locale is
+ * resolved, not at module load.
+ */
+const ICON_ADJUST_ROLE_LABEL: Record<CalloutRenderRole, () => string> = {
+	regular: () => t("settings.calloutTypeRegular"),
+	heading: () => t("settings.calloutTypeHeading"),
+	inline: () => t("settings.calloutTypeInline"),
+};
+
+function iconAdjustHeader(role: CalloutRenderRole): string {
+	return `${t("editor.iconAdjustment")} — ${ICON_ADJUST_ROLE_LABEL[role]()}`;
+}
+
+/**
+ * The order the three boxes are stacked in — display order only, deliberately
+ * not `CALLOUT_RENDER_ROLES`: that constant is what the CSS, cache and import
+ * sweeps iterate, and reordering it to suit this panel would move behaviour to
+ * serve a layout.
+ *
+ * Regular closes the group rather than opening it. Its icon is the one that
+ * already sits right by default, so it is the least likely of the three to be
+ * touched, while the two token roles — which share a baseline-aligned icon and
+ * so are the ones a nudge is usually for — lead.
+ */
+const ICON_ADJUST_ORDER: readonly CalloutRenderRole[] = [
+	"heading",
+	"inline",
+	"regular",
+];
 
 // Derive a display name from a user-typed ID: sentence-case the first letter
 // and keep everything else (spaces, dashes) intact so generateId() on the
@@ -133,9 +182,13 @@ export class CalloutEditor extends Modal {
 	private textColorDark: string;
 	private foldable: boolean;
 	private defaultFolded: boolean;
-	private iconOffsetX: number;
-	private iconOffsetY: number;
-	private iconSize: number;
+	/**
+	 * Icon size and offsets, resolved into one independent triple per render
+	 * role at open. Resolving up front (rather than leaving roles implicitly
+	 * sharing the legacy value) is what keeps the three groups independent:
+	 * dragging Regular never drags Heading along behind it.
+	 */
+	private iconAdjust: Record<CalloutRenderRole, ResolvedIconAdjust>;
 	private aliases: string[];
 	/** Id of the palette (custom or preset) currently applied, if any. */
 	private paletteId: string | undefined;
@@ -222,14 +275,15 @@ export class CalloutEditor extends Modal {
 		this.foldable = existing?.foldable ?? fallbackBase?.foldable ?? false;
 		this.defaultFolded =
 			existing?.defaultFolded ?? fallbackBase?.defaultFolded ?? false;
-		this.iconOffsetX =
-			existing?.iconOffsetX ?? fallbackBase?.iconOffsetX ?? 0;
-		this.iconOffsetY =
-			existing?.iconOffsetY ?? fallbackBase?.iconOffsetY ?? 0;
-		this.iconSize = Math.max(
-			0.5,
-			Math.min(existing?.iconSize ?? fallbackBase?.iconSize ?? 1, 1.5),
-		);
+		// resolveIconAdjust already falls a role back to the legacy flat trio and
+		// clamps, so data written before per-role adjustment opens with all three
+		// groups showing that shared value — exactly what it renders as today.
+		const adjustBase = existing ?? fallbackBase;
+		this.iconAdjust = {
+			regular: resolveIconAdjust(adjustBase, "regular"),
+			heading: resolveIconAdjust(adjustBase, "heading"),
+			inline: resolveIconAdjust(adjustBase, "inline"),
+		};
 		this.aliases = [...(existing?.aliases ?? [])];
 		this.paletteId = existing?.paletteId ?? fallbackBase?.paletteId;
 		this.previewFoldCollapsed = this.foldable && this.defaultFolded;
@@ -527,89 +581,13 @@ export class CalloutEditor extends Modal {
 			cls: "callout-studio-adjust-col",
 		});
 
-		// ── Icon adjustment section ──
-		const iconAdjust = adjustCol.createDiv({
-			cls: "callout-studio-adjust-section",
-		});
-		iconAdjust.createDiv({
-			cls: "callout-studio-adjust-header",
-			text: t("editor.iconAdjustment"),
-		});
-
-		// Size slider
-		const sizeRow = iconAdjust.createDiv({
-			cls: "callout-studio-slider-row cs-size-slider-row",
-		});
-		const sizeLabel = sizeRow.createDiv({
-			cls: "callout-studio-slider-label",
-		});
-		sizeLabel.createSpan({ text: t("editor.size") });
-		const sizeValue = createAnimatedNumberLabel(sizeLabel, {
-			initialValue: Math.round(this.iconSize * 100),
-			suffix: "%",
-			format: { maximumFractionDigits: 0 },
-		});
-		new Setting(sizeRow).addSlider((slider: SliderComponent) => {
-			slider
-				.setLimits(50, 150, 5)
-				.setValue(Math.round(this.iconSize * 100))
-				.setInstant(true)
-				.onChange((value: number) => {
-					this.iconSize = value / 100;
-					sizeValue.update(value);
-					this.updatePreview();
-				});
-		});
-
-		// Horizontal offset slider
-		const hRow = iconAdjust.createDiv({
-			cls: "callout-studio-slider-row",
-		});
-		const hLabel = hRow.createDiv({
-			cls: "callout-studio-slider-label",
-		});
-		hLabel.createSpan({ text: t("editor.horizontalOffset") });
-		const hValue = createAnimatedNumberLabel(hLabel, {
-			initialValue: this.iconOffsetX,
-			suffix: "px",
-			format: { maximumFractionDigits: 0 },
-		});
-		new Setting(hRow).addSlider((slider: SliderComponent) => {
-			slider
-				.setLimits(-10, 10, 1)
-				.setValue(this.iconOffsetX)
-				.setInstant(true)
-				.onChange((value: number) => {
-					this.iconOffsetX = value;
-					hValue.update(value);
-					this.updatePreview();
-				});
-		});
-
-		// Vertical offset slider
-		const vRow = iconAdjust.createDiv({
-			cls: "callout-studio-slider-row",
-		});
-		const vLabel = vRow.createDiv({
-			cls: "callout-studio-slider-label",
-		});
-		vLabel.createSpan({ text: t("editor.verticalOffset") });
-		const vValue = createAnimatedNumberLabel(vLabel, {
-			initialValue: this.iconOffsetY,
-			suffix: "px",
-			format: { maximumFractionDigits: 0 },
-		});
-		new Setting(vRow).addSlider((slider: SliderComponent) => {
-			slider
-				.setLimits(-10, 10, 1)
-				.setValue(this.iconOffsetY)
-				.setInstant(true)
-				.onChange((value: number) => {
-					this.iconOffsetY = value;
-					vValue.update(value);
-					this.updatePreview();
-				});
-		});
+		// ── Icon adjustment: one box per render role ──
+		// Stacked rather than tabbed so all nine values stay on screen at once
+		// with no mode to remember; the preview column is sticky (styles.css),
+		// so it stays in view while this column scrolls.
+		for (const role of ICON_ADJUST_ORDER) {
+			this.renderIconAdjustGroup(adjustCol, role);
+		}
 
 		// ── Picture section ──
 		// Only a picture has anything to say here, so the box hides itself for
@@ -1253,6 +1231,123 @@ export class CalloutEditor extends Modal {
 		this.updateSaveState();
 	}
 
+	/**
+	 * One role's icon-adjustment box: size, horizontal offset, vertical offset.
+	 *
+	 * Written once and called per role. The three sliders are identical in every
+	 * respect but which field of `this.iconAdjust[role]` they write, so the box
+	 * is built from a small table rather than three near-copies — the shape the
+	 * single-triple version of this panel had, tripled.
+	 */
+	private renderIconAdjustGroup(
+		parent: HTMLElement,
+		role: CalloutRenderRole,
+	): void {
+		const box = parent.createDiv({ cls: "callout-studio-adjust-section" });
+		box.createDiv({
+			cls: "callout-studio-adjust-header",
+			text: iconAdjustHeader(role),
+		});
+
+		const adjust = this.iconAdjust[role];
+		const { offset, size } = ICON_ADJUST_LIMITS;
+
+		// Size is stored as a factor but shown as a percentage, so it converts on
+		// the way in and out; the offsets are already px and pass straight through.
+		const controls: {
+			label: string;
+			cls: string;
+			suffix: string;
+			limits: [number, number, number];
+			get: () => number;
+			set: (value: number) => void;
+		}[] = [
+			{
+				label: t("editor.size"),
+				cls: " cs-size-slider-row",
+				suffix: "%",
+				limits: [size.min * 100, size.max * 100, 5],
+				get: () => Math.round(adjust.size * 100),
+				set: (value) => {
+					adjust.size = value / 100;
+				},
+			},
+			{
+				label: t("editor.horizontalOffset"),
+				cls: "",
+				suffix: "px",
+				limits: [offset.min, offset.max, offset.step],
+				get: () => adjust.offsetX,
+				set: (value) => {
+					adjust.offsetX = value;
+				},
+			},
+			{
+				label: t("editor.verticalOffset"),
+				cls: "",
+				suffix: "px",
+				limits: [offset.min, offset.max, offset.step],
+				get: () => adjust.offsetY,
+				set: (value) => {
+					adjust.offsetY = value;
+				},
+			},
+		];
+
+		for (const control of controls) {
+			const row = box.createDiv({
+				cls: `callout-studio-slider-row${control.cls}`,
+			});
+			const label = row.createDiv({ cls: "callout-studio-slider-label" });
+			label.createSpan({ text: control.label });
+			const readout = createAnimatedNumberLabel(label, {
+				initialValue: control.get(),
+				suffix: control.suffix,
+				format: { maximumFractionDigits: 0 },
+			});
+			new Setting(row).addSlider((slider: SliderComponent) => {
+				slider
+					.setLimits(...control.limits)
+					.setValue(control.get())
+					.setInstant(true)
+					.onChange((value: number) => {
+						control.set(value);
+						readout.update(value);
+						this.updatePreview();
+					});
+			});
+		}
+	}
+
+	/**
+	 * The icon-adjustment half of the form state, in the shape a
+	 * `CalloutDefinition` stores it — the single place the two storage layers are
+	 * written, so the snapshots, the live preview and the save flow cannot drift.
+	 *
+	 * `regular` is mirrored into the flat legacy trio on the way out. That is
+	 * what an older build reads (applying it to all three roles, as it always
+	 * did), what the import validator's existing range checks see, and what
+	 * `resolveIconAdjust` falls back to for a role left at its defaults — so the
+	 * mirror is load-bearing, not just a courtesy to old versions.
+	 */
+	private iconAdjustState(): {
+		// Spelled out rather than Pick<CalloutDefinition, …>: the flat trio is
+		// optional on a stored definition but always written here, and the
+		// snapshot/save types require it.
+		iconAdjust: CalloutDefinition["iconAdjust"];
+		iconOffsetX: number;
+		iconOffsetY: number;
+		iconSize: number;
+	} {
+		const regular = this.iconAdjust.regular;
+		return {
+			iconAdjust: buildIconAdjust(this.iconAdjust),
+			iconOffsetX: regular.offsetX,
+			iconOffsetY: regular.offsetY,
+			iconSize: regular.size,
+		};
+	}
+
 	private stateSnapshot(): string {
 		return buildStateSnapshot({
 			displayName: this.displayName,
@@ -1267,9 +1362,7 @@ export class CalloutEditor extends Modal {
 			textColorDark: this.textColorDark,
 			foldable: this.foldable,
 			defaultFolded: this.defaultFolded,
-			iconOffsetX: this.iconOffsetX,
-			iconOffsetY: this.iconOffsetY,
-			iconSize: this.iconSize,
+			...this.iconAdjustState(),
 			aliases: this.aliases,
 		});
 	}
@@ -1288,9 +1381,7 @@ export class CalloutEditor extends Modal {
 			textColorDark: this.textColorDark,
 			foldable: this.foldable,
 			defaultFolded: this.defaultFolded,
-			iconOffsetX: this.iconOffsetX,
-			iconOffsetY: this.iconOffsetY,
-			iconSize: this.iconSize,
+			...this.iconAdjustState(),
 			aliases: [],
 		});
 	}
@@ -1653,9 +1744,7 @@ export class CalloutEditor extends Modal {
 			textColorDark: this.textColorDark,
 			foldable: this.foldable,
 			defaultFolded: this.defaultFolded,
-			iconOffsetX: this.iconOffsetX,
-			iconOffsetY: this.iconOffsetY,
-			iconSize: this.iconSize,
+			...this.iconAdjustState(),
 			aliases: [],
 			builtIn: false,
 			source: "user",
@@ -1693,9 +1782,7 @@ export class CalloutEditor extends Modal {
 				textColorDark: this.textColorDark,
 				foldable: this.foldable,
 				defaultFolded: this.defaultFolded,
-				iconOffsetX: this.iconOffsetX,
-				iconOffsetY: this.iconOffsetY,
-				iconSize: this.iconSize,
+				...this.iconAdjustState(),
 				aliases: this.aliases,
 				paletteId: this.paletteId,
 			},

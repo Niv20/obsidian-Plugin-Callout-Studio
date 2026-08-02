@@ -647,6 +647,8 @@ export const ro: Record<string, string> = {
 		'"{{field}}" trebuie să fie un număr între {{min}} și {{max}} (primit "{{value}}").',
 	"import.err.iconSizeRange":
 		'"{{field}}" trebuie să fie un număr între {{min}} și {{max}} (primit "{{value}}").',
+	"import.err.iconAdjustShape":
+		'"iconAdjust" must be an object mapping a callout type ("regular", "heading", "inline") to its icon size and offsets.',
 	"import.err.aliasesNotArray":
 		'"aliases" trebuie să fie un array de șiruri.',
 	"import.err.aliasNotString": "Aliasul trebuie să fie un șir.",

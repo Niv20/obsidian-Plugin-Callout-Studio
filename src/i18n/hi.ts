@@ -639,6 +639,8 @@ export const hi: Record<string, string> = {
 		'"{{field}}" {{min}} से {{max}} के बीच संख्या होनी चाहिए ("{{value}}" मिला)।',
 	"import.err.iconSizeRange":
 		'"{{field}}" {{min}} से {{max}} के बीच संख्या होनी चाहिए ("{{value}}" मिला)।',
+	"import.err.iconAdjustShape":
+		'"iconAdjust" must be an object mapping a callout type ("regular", "heading", "inline") to its icon size and offsets.',
 	"import.err.aliasesNotArray": '"aliases" स्ट्रिंग्स का array होना चाहिए।',
 	"import.err.aliasNotString": "उपनाम एक स्ट्रिंग होना चाहिए।",
 	"import.err.aliasDup": '"{{value}}" उपनाम इस प्रविष्टि में दोहराया गया है।',

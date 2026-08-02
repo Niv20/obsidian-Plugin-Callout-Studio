@@ -619,6 +619,8 @@ export const ms: Record<string, string> = {
 		'"{{field}}" mestilah nombor antara {{min}} dan {{max}} (diterima "{{value}}").',
 	"import.err.iconSizeRange":
 		'"{{field}}" mestilah nombor antara {{min}} dan {{max}} (diterima "{{value}}").',
+	"import.err.iconAdjustShape":
+		'"iconAdjust" must be an object mapping a callout type ("regular", "heading", "inline") to its icon size and offsets.',
 	"import.err.aliasesNotArray": '"aliases" mestilah array rentetan.',
 	"import.err.aliasNotString": "Alias mestilah rentetan.",
 	"import.err.aliasDup": 'Alias "{{value}}" diduplikasi dalam entri ini.',

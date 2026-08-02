@@ -644,6 +644,8 @@ export const ja: Record<string, string> = {
 		'"{{field}}"は{{min}}〜{{max}}の数値でなければなりません（"{{value}}"を受け取りました）。',
 	"import.err.iconSizeRange":
 		'"{{field}}"は{{min}}〜{{max}}の数値でなければなりません（"{{value}}"を受け取りました）。',
+	"import.err.iconAdjustShape":
+		'"iconAdjust" must be an object mapping a callout type ("regular", "heading", "inline") to its icon size and offsets.',
 	"import.err.aliasesNotArray":
 		'"aliases"は文字列の配列でなければなりません。',
 	"import.err.aliasNotString": "エイリアスは文字列でなければなりません。",

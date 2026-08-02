@@ -641,6 +641,8 @@ export const ru: Record<string, string> = {
 		'"{{field}}" должен быть числом от {{min}} до {{max}} (получено "{{value}}").',
 	"import.err.iconSizeRange":
 		'"{{field}}" должен быть числом от {{min}} до {{max}} (получено "{{value}}").',
+	"import.err.iconAdjustShape":
+		'"iconAdjust" must be an object mapping a callout type ("regular", "heading", "inline") to its icon size and offsets.',
 	"import.err.aliasesNotArray": '"aliases" должен быть массивом строк.',
 	"import.err.aliasNotString": "Псевдоним должен быть строкой.",
 	"import.err.aliasDup": 'Псевдоним "{{value}}" дублируется в этой записи.',

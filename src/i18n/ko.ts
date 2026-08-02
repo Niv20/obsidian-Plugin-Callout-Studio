@@ -641,6 +641,8 @@ export const ko: Record<string, string> = {
 		'"{{field}}"은(는) {{min}}에서 {{max}} 사이의 숫자여야 합니다 ("{{value}}"을(를) 받았습니다).',
 	"import.err.iconSizeRange":
 		'"{{field}}"은(는) {{min}}에서 {{max}} 사이의 숫자여야 합니다 ("{{value}}"을(를) 받았습니다).',
+	"import.err.iconAdjustShape":
+		'"iconAdjust" must be an object mapping a callout type ("regular", "heading", "inline") to its icon size and offsets.',
 	"import.err.aliasesNotArray": '"aliases"는 문자열 배열이어야 합니다.',
 	"import.err.aliasNotString": "별칭은 문자열이어야 합니다.",
 	"import.err.aliasDup": '"{{value}}" 별칭이 이 항목 내에서 중복됩니다.',

@@ -3155,6 +3155,24 @@ input.cs-input-invalid:focus {
 	text-decoration: underline;
 }
 
+/* ══ Regular callout title ═════════════════════════════════════ */
+
+/* Space between the icon and the title text. Obsidian core sets
+   `.callout-title { gap: var(--size-4-1) }` — a fixed 4px — while this plugin's
+   own tokens below use em-relative gaps (0.35em heading, 0.3em inline), and the
+   regular icon box is the largest of the three (--icon-size, 1.2em, against 1em).
+   The regular icon therefore reads as the most cramped of the three roles, and
+   grows tighter still as a theme's base font size rises, because px does not
+   scale. Top up the icon's own trailing side so the three match optically.
+
+   Deliberately on the icon rather than on the title's `gap`: the title row's
+   other flex gap — the one before the fold chevron — is left exactly as the
+   theme set it. Baked-in default, overridable via --cs-regular-icon-gap in a
+   CSS snippet, same as --cs-heading-icon-offset below. */
+.callout > .callout-title > .callout-icon {
+	margin-inline-end: var(--cs-regular-icon-gap, 0.15em);
+}
+
 /* ══ Heading & inline callout tokens ═══════════════════════════ */
 /* Structural rules only — per-callout colors (--cs-color-rgb) are
    injected dynamically by CSSInjector, keyed by data-callout.     */

@@ -649,6 +649,8 @@ export const uk: Record<string, string> = {
 		"«{{field}}» повинно бути числом від {{min}} до {{max}} (отримано «{{value}}»).",
 	"import.err.iconSizeRange":
 		"«{{field}}» повинно бути числом від {{min}} до {{max}} (отримано «{{value}}»).",
+	"import.err.iconAdjustShape":
+		'"iconAdjust" must be an object mapping a callout type ("regular", "heading", "inline") to its icon size and offsets.',
 	"import.err.aliasesNotArray": "«aliases» повинен бути масивом рядків.",
 	"import.err.aliasNotString": "Псевдонім повинен бути рядком.",
 	"import.err.aliasDup": "Псевдонім «{{value}}» дублюється в цьому записі.",

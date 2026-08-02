@@ -32,6 +32,8 @@ export type CalloutEditorSaveState = {
 	textColorDark: string;
 	foldable: boolean;
 	defaultFolded: boolean;
+	/** Per-role icon adjustment; see `CalloutDefinition.iconAdjust`. */
+	iconAdjust?: CalloutDefinition["iconAdjust"];
 	iconOffsetX: number;
 	iconOffsetY: number;
 	iconSize: number;
@@ -161,6 +163,10 @@ export async function performCalloutEditorSave(
 		defaultFolded: fallbackBase?.defaultFolded ?? state.defaultFolded,
 		builtIn: isBuiltIn,
 		source: nextSource,
+		// Like paletteId and bgGradient: when mirroring the fallback style its
+		// (possibly absent) per-role map wins outright rather than falling
+		// through to the form, so the two adjustment layers stay from one row.
+		iconAdjust: fallbackBase ? fallbackBase.iconAdjust : state.iconAdjust,
 		iconOffsetX: fallbackBase?.iconOffsetX ?? state.iconOffsetX,
 		iconOffsetY: fallbackBase?.iconOffsetY ?? state.iconOffsetY,
 		iconSize: fallbackBase?.iconSize ?? state.iconSize,

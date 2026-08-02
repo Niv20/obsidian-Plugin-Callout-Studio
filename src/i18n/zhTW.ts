@@ -598,6 +598,8 @@ export const zhTW: Record<string, string> = {
 		"「{{field}}」必須是 {{min}} 到 {{max}} 之間的數字（收到「{{value}}」）。",
 	"import.err.iconSizeRange":
 		"「{{field}}」必須是 {{min}} 到 {{max}} 之間的數字（收到「{{value}}」）。",
+	"import.err.iconAdjustShape":
+		'"iconAdjust" must be an object mapping a callout type ("regular", "heading", "inline") to its icon size and offsets.',
 	"import.err.aliasesNotArray": "「aliases」必須是字串陣列。",
 	"import.err.aliasNotString": "別名必須是字串。",
 	"import.err.aliasDup": "「{{value}}」別名在此條目中重複。",

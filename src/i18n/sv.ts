@@ -640,6 +640,8 @@ export const sv: Record<string, string> = {
 		'"{{field}}" måste vara ett tal mellan {{min}} och {{max}} (fick "{{value}}").',
 	"import.err.iconSizeRange":
 		'"{{field}}" måste vara ett tal mellan {{min}} och {{max}} (fick "{{value}}").',
+	"import.err.iconAdjustShape":
+		'"iconAdjust" must be an object mapping a callout type ("regular", "heading", "inline") to its icon size and offsets.',
 	"import.err.aliasesNotArray": '"aliases" måste vara en array av strängar.',
 	"import.err.aliasNotString": "Aliaset måste vara en sträng.",
 	"import.err.aliasDup":

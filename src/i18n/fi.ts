@@ -622,6 +622,8 @@ export const fi: Record<string, string> = {
 		'"{{field}}" on oltava luku välillä {{min}}–{{max}} (saatiin "{{value}}").',
 	"import.err.iconSizeRange":
 		'"{{field}}" on oltava luku välillä {{min}}–{{max}} (saatiin "{{value}}").',
+	"import.err.iconAdjustShape":
+		'"iconAdjust" must be an object mapping a callout type ("regular", "heading", "inline") to its icon size and offsets.',
 	"import.err.aliasesNotArray": '"aliases" on oltava merkkijonotaulukko.',
 	"import.err.aliasNotString": "Aliaksen on oltava merkkijono.",
 	"import.err.aliasDup": 'Alias "{{value}}" on tässä merkinnässä kahdesti.',

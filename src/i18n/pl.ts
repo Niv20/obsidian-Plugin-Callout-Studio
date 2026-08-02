@@ -644,6 +644,8 @@ export const pl: Record<string, string> = {
 		'"{{field}}" musi być liczbą od {{min}} do {{max}} (otrzymano "{{value}}").',
 	"import.err.iconSizeRange":
 		'"{{field}}" musi być liczbą od {{min}} do {{max}} (otrzymano "{{value}}").',
+	"import.err.iconAdjustShape":
+		'"iconAdjust" must be an object mapping a callout type ("regular", "heading", "inline") to its icon size and offsets.',
 	"import.err.aliasesNotArray": '"aliases" musi być tablicą ciągów znaków.',
 	"import.err.aliasNotString": "Alias musi być ciągiem znaków.",
 	"import.err.aliasDup": 'Alias "{{value}}" jest zduplikowany w tym wpisie.',

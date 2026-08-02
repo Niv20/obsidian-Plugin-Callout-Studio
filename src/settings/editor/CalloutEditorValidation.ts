@@ -39,6 +39,8 @@ export type SnapshotInput = {
 	textColorDark: string;
 	foldable: boolean;
 	defaultFolded: boolean;
+	/** Per-role icon adjustment; see `CalloutDefinition.iconAdjust`. */
+	iconAdjust?: CalloutDefinition["iconAdjust"];
 	iconOffsetX: number;
 	iconOffsetY: number;
 	iconSize: number;

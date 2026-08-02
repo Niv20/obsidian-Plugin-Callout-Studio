@@ -621,6 +621,8 @@ export const nb: Record<string, string> = {
 		'"{{field}}" må være et tall mellom {{min}} og {{max}} (mottok "{{value}}").',
 	"import.err.iconSizeRange":
 		'"{{field}}" må være et tall mellom {{min}} og {{max}} (mottok "{{value}}").',
+	"import.err.iconAdjustShape":
+		'"iconAdjust" must be an object mapping a callout type ("regular", "heading", "inline") to its icon size and offsets.',
 	"import.err.aliasesNotArray": '"aliases" må være et array av strenger.',
 	"import.err.aliasNotString": "Aliaset må være en streng.",
 	"import.err.aliasDup": 'Aliaset "{{value}}" er duplisert i denne posten.',

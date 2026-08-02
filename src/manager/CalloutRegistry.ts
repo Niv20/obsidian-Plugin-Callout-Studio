@@ -533,6 +533,7 @@ export class CalloutRegistry {
 		colorDark: true,
 		foldable: true,
 		defaultFolded: true,
+		iconAdjust: true,
 		iconOffsetX: true,
 		iconOffsetY: true,
 		iconSize: true,
@@ -658,6 +659,12 @@ export class CalloutRegistry {
 					: undefined,
 				textColorLight: fallback.textColorLight,
 				textColorDark: fallback.textColorDark,
+				// Both layers travel together: the per-role map alone would be
+				// read against *this* row's stale legacy trio wherever a role
+				// leaves a field unset (see resolveIconAdjust).
+				iconAdjust: fallback.iconAdjust
+					? structuredClone(fallback.iconAdjust)
+					: undefined,
 				iconOffsetX: fallback.iconOffsetX,
 				iconOffsetY: fallback.iconOffsetY,
 				iconSize: fallback.iconSize,

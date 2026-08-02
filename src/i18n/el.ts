@@ -635,6 +635,8 @@ export const el: Record<string, string> = {
 		'"{{field}}" πρέπει να είναι αριθμός μεταξύ {{min}} και {{max}} (ελήφθη "{{value}}").',
 	"import.err.iconSizeRange":
 		'"{{field}}" πρέπει να είναι αριθμός μεταξύ {{min}} και {{max}} (ελήφθη "{{value}}").',
+	"import.err.iconAdjustShape":
+		'"iconAdjust" must be an object mapping a callout type ("regular", "heading", "inline") to its icon size and offsets.',
 	"import.err.aliasesNotArray":
 		'"aliases" πρέπει να είναι πίνακας συμβολοσειρών.',
 	"import.err.aliasNotString": "Το ψευδώνυμο πρέπει να είναι συμβολοσειρά.",
