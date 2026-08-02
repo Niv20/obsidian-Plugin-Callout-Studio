@@ -12,6 +12,7 @@ import type {
 	ContextMenuItemConfig,
 	ContextMenuItemId,
 	ContextMenuSettings,
+	HeadingFrameStyleSettings,
 	IconPackId,
 	IconSourceSettings,
 	IconSvgCacheEntry,
@@ -87,6 +88,39 @@ type LegacySavedSettings = Partial<PluginSettings> & {
 	contextMenu?: Partial<ContextMenuSettings>;
 };
 
+/** Saved heading frame style, plus fields removed by a later version. */
+type LegacyHeadingStyle = Partial<HeadingFrameStyleSettings> & {
+	/** The "Icon indent" slider (px start inset), removed in 2.7.0. */
+	paddingStart?: number;
+};
+
+/**
+ * Merge a saved heading frame style over the defaults. Needs its own helper
+ * rather than a plain spread inside mergeSavedSettings because a spread keeps
+ * keys the current version knows nothing about — and settings are written back
+ * wholesale by both `toSaveData()` and `exportToJSONv2()`, so a stale key would
+ * otherwise be re-saved forever and copied into every new export file. Deleting
+ * it here is what makes settingsValidator's "unknown fields are dropped"
+ * promise true for nested role styles too (same pattern as mergeIconSources's
+ * `lastMaterialCategory`).
+ */
+function mergeHeadingStyle(
+	saved: LegacyHeadingStyle | undefined,
+): HeadingFrameStyleSettings {
+	const merged: LegacyHeadingStyle = {
+		...DEFAULT_SETTINGS.globalStyle.heading,
+		...saved,
+		borderSides: {
+			...DEFAULT_SETTINGS.globalStyle.heading.borderSides,
+			...(saved?.borderSides as Record<string, boolean> | undefined),
+		},
+	};
+	// The bar's start inset is a static 10px in styles.css now; nothing reads
+	// a saved value, so drop it instead of carrying it around inert.
+	delete merged.paddingStart;
+	return merged as HeadingFrameStyleSettings;
+}
+
 /**
  * Merges a saved per-role menu item list against that role's defaults:
  * keeps the user's order, drops unknown ids and duplicates, and appends
@@ -146,16 +180,7 @@ export function mergeSavedSettings(
 			// Nested role frame styles need their own deep merge — a spread of
 			// savedGlobal would replace them wholesale (dropping fields added
 			// in newer versions) or leave them undefined on legacy data.
-			heading: {
-				...DEFAULT_SETTINGS.globalStyle.heading,
-				...savedGlobal?.heading,
-				borderSides: {
-					...DEFAULT_SETTINGS.globalStyle.heading.borderSides,
-					...(savedGlobal?.heading?.borderSides as
-						| Record<string, boolean>
-						| undefined),
-				},
-			},
+			heading: mergeHeadingStyle(savedGlobal?.heading),
 			inline: {
 				...DEFAULT_SETTINGS.globalStyle.inline,
 				...savedGlobal?.inline,
@@ -201,6 +226,9 @@ export function mergeSavedSettings(
 			// user-configurable; ignore any saved-off value from old data.
 			refCleanTitles: true,
 			refShowIcon: true,
+			showFoldArrow:
+				savedSettings.headingCallouts?.showFoldArrow ??
+				DEFAULT_SETTINGS.headingCallouts.showFoldArrow,
 		},
 		inlineCallouts: {
 			enabled:

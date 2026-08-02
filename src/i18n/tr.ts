@@ -113,8 +113,9 @@ export const tr: Record<string, string> = {
 	"settings.alignContent": "İçeriği başlıkla hizala",
 	"settings.headingSpacingGroup": "Başlık aralığı",
 	"settings.headingPadVertical": "Dikey aralık",
-	"settings.headingIconIndent": "Simge girintisi",
 	"settings.headingGap": "Başlıklar arası boşluk",
+	"settings.headingFoldGroup": "Katla",
+	"settings.headingFoldArrow": "Katlama okunu göster",
 	"settings.styleDemoName": "Örnek",
 	"settings.previewTitle": "Önizleme",
 
@@ -719,7 +720,7 @@ export const tr: Record<string, string> = {
 	"import.err.admTypeMissing": 'Bu admonition\'da "type" yok, atlandı.',
 	"import.warn.admIconUnknown":
 		'Hiçbir simge kitaplığında "{{value}}" adlı bir simge bulunamadı, ' +
-		'bu yüzden varsayılan simge kullanıldı.',
+		"bu yüzden varsayılan simge kullanıldı.",
 	"import.warn.admIconUnknownExisting":
 		'Hiçbir simge kitaplığında "{{value}}" adlı bir simge bulunamadı, ' +
 		'bu yüzden "{{id}}" mevcut simgesini korudu.',

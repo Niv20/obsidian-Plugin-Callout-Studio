@@ -113,8 +113,9 @@ export const vi: Record<string, string> = {
 	"settings.alignContent": "Căn chỉnh nội dung với tiêu đề",
 	"settings.headingSpacingGroup": "Khoảng cách tiêu đề",
 	"settings.headingPadVertical": "Khoảng cách dọc",
-	"settings.headingIconIndent": "Thụt lề biểu tượng",
 	"settings.headingGap": "Khoảng cách giữa các tiêu đề",
+	"settings.headingFoldGroup": "Thu gọn",
+	"settings.headingFoldArrow": "Hiển thị mũi tên thu gọn",
 	"settings.styleDemoName": "Mẫu",
 	"settings.previewTitle": "Xem trước",
 
@@ -722,7 +723,7 @@ export const vi: Record<string, string> = {
 		'Admonition này không có "type" nên đã bị bỏ qua.',
 	"import.warn.admIconUnknown":
 		'Không tìm thấy biểu tượng nào tên "{{value}}" trong bất kỳ thư ' +
-		'viện nào, nên biểu tượng mặc định đã được dùng.',
+		"viện nào, nên biểu tượng mặc định đã được dùng.",
 	"import.warn.admIconUnknownExisting":
 		'Không tìm thấy biểu tượng nào tên "{{value}}" trong bất kỳ thư ' +
 		'viện nào, nên "{{id}}" vẫn giữ biểu tượng sẵn có.',

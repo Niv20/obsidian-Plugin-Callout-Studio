@@ -112,8 +112,9 @@ export const th: Record<string, string> = {
 	"settings.alignContent": "จัดเนื้อหาให้ตรงกับชื่อเรื่อง",
 	"settings.headingSpacingGroup": "ระยะห่างหัวเรื่อง",
 	"settings.headingPadVertical": "ระยะห่างแนวตั้ง",
-	"settings.headingIconIndent": "ระยะเยื้องไอคอน",
 	"settings.headingGap": "ระยะห่างระหว่างหัวข้อ",
+	"settings.headingFoldGroup": "การพับ",
+	"settings.headingFoldArrow": "แสดงลูกศรพับ",
 	"settings.styleDemoName": "ตัวอย่าง",
 	"settings.previewTitle": "ตัวอย่าง",
 
@@ -708,10 +709,10 @@ export const th: Record<string, string> = {
 	"import.err.admTypeMissing": 'admonition นี้ไม่มี "type" จึงถูกข้ามไป',
 	"import.warn.admIconUnknown":
 		'ไม่พบไอคอนชื่อ "{{value}}" ในคลังไอคอนใดเลย ' +
-		'จึงใช้ไอคอนเริ่มต้นแทน',
+		"จึงใช้ไอคอนเริ่มต้นแทน",
 	"import.warn.admIconUnknownExisting":
 		'ไม่พบไอคอนชื่อ "{{value}}" ในคลังไอคอนใดเลย "{{id}}" ' +
-		'จึงยังคงใช้ไอคอนเดิม',
+		"จึงยังคงใช้ไอคอนเดิม",
 	"import.warn.admImageFailed":
 		"อ่านรูปภาพที่อัปโหลดไม่ได้ จึงใช้ไอคอนเริ่มต้นแทน",
 	"import.warn.admIconWithCss":

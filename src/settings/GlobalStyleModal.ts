@@ -24,6 +24,7 @@ import {
 } from "./styleControls";
 import type { SettingsTabPlugin } from "./sections/types";
 import { refreshAllMarkdownEditors } from "../editor/livepreview/refresh";
+import { CSS_FOLD_ARROW, CSS_HEADING_LINE } from "../editor/renderShared";
 
 /**
  * Reserved id for the neutral demo callout rendered in the popups. Registered
@@ -208,21 +209,6 @@ export class GlobalStyleModal extends Modal {
 			},
 		});
 
-		// Horizontal inset pushing the icon in from the bar's start edge (px,
-		// so it stays constant across heading levels).
-		addStyleSlider(this.plugin, spacingGroup, {
-			label: t("settings.headingIconIndent"),
-			min: 0,
-			max: 40,
-			step: 1,
-			decimals: 0,
-			suffix: "px",
-			get: () => heading.paddingStart,
-			set: (v) => {
-				heading.paddingStart = v;
-			},
-		});
-
 		// Outer gap above each heading bar (em). Separates a heading callout
 		// from what precedes it — chiefly from other heading callouts, which
 		// otherwise stack glued together when collapsed. Distinct from the
@@ -262,6 +248,34 @@ export class GlobalStyleModal extends Modal {
 				refreshAllMarkdownEditors(this.app);
 			},
 		});
+
+		// Our own trailing chevron only — Obsidian's native indicator before
+		// the title (and the one reading view uses) is a separate element we
+		// never draw, so it keeps folding regardless of this switch.
+		const foldGroup = createControlGroup(
+			col,
+			t("settings.headingFoldGroup"),
+			"cs-layout-group",
+		);
+		new Setting(foldGroup)
+			.setName(t("settings.headingFoldArrow"))
+			.addToggle((toggle) => {
+				toggle
+					.setValue(this.plugin.settings.headingCallouts.showFoldArrow)
+					.onChange(async (v) => {
+						this.plugin.settings.headingCallouts.showFoldArrow = v;
+						await this.plugin.saveSettings();
+						// The gap demo draws its own static chevron, so it
+						// doesn't come along with the editor refresh below.
+						this.syncDemoChevrons();
+						// Emits no CSS — the chevron is a CM6 widget, so the
+						// editors have to rebuild their decorations. The modal's
+						// own embedded editor isn't a workspace leaf, so
+						// refreshAllMarkdownEditors doesn't reach it.
+						this.preview?.refresh();
+						refreshAllMarkdownEditors(this.app);
+					});
+			});
 	}
 
 	private renderInlineControls(col: HTMLElement): void {
@@ -359,7 +373,7 @@ export class GlobalStyleModal extends Modal {
 		void MarkdownRenderer.render(this.app, md, rendered, "", component).then(
 			() => {
 				if (this.gapDemoRender !== rendered) return; // modal closed
-				this.addDemoChevrons(rendered);
+				this.syncDemoChevrons();
 				// Seed each bar's inline gap so the demo is already correct the
 				// instant it's revealed, before the first slider move.
 				this.setGapDemoValue(
@@ -370,23 +384,39 @@ export class GlobalStyleModal extends Modal {
 	}
 
 	/**
-	 * Append a static (collapsed-look) chevron after each demo header's title,
-	 * mirroring the real trailing `.cs-fold-arrow` used in Live Preview
+	 * Bring each demo header's static (collapsed-look) chevron in line with the
+	 * **Show fold arrow** switch below the slider — added when it's on, removed
+	 * when it's off. The demo draws its own chevron rather than reusing the real
+	 * one, so it has to honor that switch itself; skipping this is what made the
+	 * arrow show up mid-drag with the switch off.
+	 *
+	 * The drawn arrow mirrors the real trailing `.cs-fold-arrow` of Live Preview
 	 * (widgets.ts's HeadingFoldArrowWidget) rather than reading view's native
 	 * `.heading-collapse-indicator`, which sits before the title but only
 	 * renders inside a real workspace leaf (MarkdownRenderer.render() here
 	 * never gets one) and is hover-only besides — unusable in this demo,
 	 * since the slider drag that reveals it is exactly what steals hover
 	 * away from the heading.
+	 *
+	 * Idempotent, so it can run on every reveal as well as on every toggle.
 	 */
-	private addDemoChevrons(container: HTMLElement): void {
-		container.querySelectorAll<HTMLElement>(".cs-heading-callout").forEach(
-			(h) => {
-				const arrow = createSpan({ cls: "cs-fold-arrow" });
+	private syncDemoChevrons(): void {
+		const show = this.plugin.settings.headingCallouts.showFoldArrow;
+		this.gapDemoRender
+			?.querySelectorAll<HTMLElement>(`.${CSS_HEADING_LINE}`)
+			.forEach((h) => {
+				const existing = h.querySelector<HTMLElement>(
+					`:scope > .${CSS_FOLD_ARROW}`,
+				);
+				if (!show) {
+					existing?.remove();
+					return;
+				}
+				if (existing) return;
+				const arrow = createSpan({ cls: CSS_FOLD_ARROW });
 				setIcon(arrow, "chevron-right");
 				h.append(arrow);
-			},
-		);
+			});
 	}
 
 	/**
@@ -418,6 +448,9 @@ export class GlobalStyleModal extends Modal {
 		// Sync the demo to the current value before it's revealed, so a fresh
 		// grab shows the right gap even before the first move fires `set`.
 		this.setGapDemoValue(this.plugin.settings.globalStyle.heading.marginTop);
+		// Same for the chevrons: the fold switch may have been flipped since the
+		// demo was built, and it's the reveal — not the build — the user sees.
+		this.syncDemoChevrons();
 		this.previewCol?.addClass("cs-showing-gap-demo");
 	}
 

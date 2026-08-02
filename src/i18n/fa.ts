@@ -112,8 +112,9 @@ export const fa: Record<string, string> = {
 	"settings.alignContent": "تراز کردن محتوا با عنوان",
 	"settings.headingSpacingGroup": "فاصله‌گذاری عنوان",
 	"settings.headingPadVertical": "فاصله عمودی",
-	"settings.headingIconIndent": "تورفتگی آیکون",
 	"settings.headingGap": "فاصله بین سرفصل‌ها",
+	"settings.headingFoldGroup": "تا کردن",
+	"settings.headingFoldArrow": "نمایش فلش تا کردن",
 	"settings.styleDemoName": "نمونه",
 	"settings.previewTitle": "پیش‌نمایش",
 
@@ -700,7 +701,8 @@ export const fa: Record<string, string> = {
 	"import.admFromVault": "همین گاوصندوق",
 	"import.admVaultChecking": "در حال جست‌وجوی افزونهٔ Admonition…",
 	"import.admVaultFound": "{{count}} admonition سفارشی پیدا شد.",
-	"import.admVaultNotFound": "هیچ admonition سفارشی در این گاوصندوق پیدا نشد.",
+	"import.admVaultNotFound":
+		"هیچ admonition سفارشی در این گاوصندوق پیدا نشد.",
 	"import.admFromFile": "یک پرونده",
 	"import.admFromFileDesc":
 		"یک پروندهٔ admonitions.json، یا یک بستهٔ به‌اشتراک‌گذاشته‌شده.",
@@ -717,7 +719,7 @@ export const fa: Record<string, string> = {
 		'این admonition فاقد "type" است و نادیده گرفته شد.',
 	"import.warn.admIconUnknown":
 		'نمادی با نام "{{value}}" در هیچ کتابخانه‌ای پیدا نشد، بنابراین ' +
-		'از نماد پیش‌فرض استفاده شد.',
+		"از نماد پیش‌فرض استفاده شد.",
 	"import.warn.admIconUnknownExisting":
 		'نمادی با نام "{{value}}" در هیچ کتابخانه‌ای پیدا نشد، بنابراین ' +
 		'"{{id}}" نماد قبلی خود را نگه داشت.',

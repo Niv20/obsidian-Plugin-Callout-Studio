@@ -111,8 +111,9 @@ export const ar: Record<string, string> = {
 	"settings.alignContent": "محاذاة المحتوى مع العنوان",
 	"settings.headingSpacingGroup": "تباعد العنوان",
 	"settings.headingPadVertical": "التباعد الرأسي",
-	"settings.headingIconIndent": "المسافة البادئة للأيقونة",
 	"settings.headingGap": "المسافة بين العناوين",
+	"settings.headingFoldGroup": "طي",
+	"settings.headingFoldArrow": "إظهار سهم الطي",
 	"settings.styleDemoName": "مثال",
 	"settings.previewTitle": "معاينة",
 
@@ -707,7 +708,7 @@ export const ar: Record<string, string> = {
 		'هذا الـ admonition لا يحتوي على "type"، وقد تم تخطيه.',
 	"import.warn.admIconUnknown":
 		'لا توجد أيقونة باسم "{{value}}" في أي مكتبة أيقونات، لذلك تم ' +
-		'استخدام الأيقونة الافتراضية.',
+		"استخدام الأيقونة الافتراضية.",
 	"import.warn.admIconUnknownExisting":
 		'لا توجد أيقونة باسم "{{value}}" في أي مكتبة أيقونات، لذلك احتفظ ' +
 		'"{{id}}" بالأيقونة الموجودة لديه.',

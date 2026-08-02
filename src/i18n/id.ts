@@ -112,8 +112,9 @@ export const id: Record<string, string> = {
 	"settings.alignContent": "Sejajarkan konten dengan judul",
 	"settings.headingSpacingGroup": "Jarak judul",
 	"settings.headingPadVertical": "Jarak vertikal",
-	"settings.headingIconIndent": "Indentasi ikon",
 	"settings.headingGap": "Jarak antar judul",
+	"settings.headingFoldGroup": "Lipat",
+	"settings.headingFoldArrow": "Tampilkan panah lipat",
 	"settings.styleDemoName": "Contoh",
 	"settings.previewTitle": "Pratinjau",
 
@@ -723,7 +724,7 @@ export const id: Record<string, string> = {
 		'Admonition ini tidak memiliki "type" dan dilewati.',
 	"import.warn.admIconUnknown":
 		'Tidak ada ikon bernama "{{value}}" di pustaka ikon mana pun, ' +
-		'jadi ikon bawaan digunakan.',
+		"jadi ikon bawaan digunakan.",
 	"import.warn.admIconUnknownExisting":
 		'Tidak ada ikon bernama "{{value}}" di pustaka ikon mana pun, ' +
 		'jadi "{{id}}" tetap memakai ikon yang sudah ada.',

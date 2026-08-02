@@ -105,8 +105,9 @@ export const el: Record<string, string> = {
 	"settings.alignContent": "Στοίχιση περιεχομένου με τον τίτλο",
 	"settings.headingSpacingGroup": "Απόσταση τίτλου",
 	"settings.headingPadVertical": "Κατακόρυφη απόσταση",
-	"settings.headingIconIndent": "Εσοχή εικονιδίου",
 	"settings.headingGap": "Απόσταση μεταξύ επικεφαλίδων",
+	"settings.headingFoldGroup": "Σύμπτυξη",
+	"settings.headingFoldArrow": "Εμφάνιση βέλους σύμπτυξης",
 	"settings.styleDemoName": "Παράδειγμα",
 	"settings.previewTitle": "Προεπισκόπηση",
 	// Settings — Saved color palettes
@@ -714,7 +715,7 @@ export const el: Record<string, string> = {
 		'Αυτό το admonition δεν έχει "type" και παραλείφθηκε.',
 	"import.warn.admIconUnknown":
 		'Δεν βρέθηκε εικονίδιο με όνομα "{{value}}" σε καμία βιβλιοθήκη, ' +
-		'οπότε χρησιμοποιήθηκε το προεπιλεγμένο εικονίδιο.',
+		"οπότε χρησιμοποιήθηκε το προεπιλεγμένο εικονίδιο.",
 	"import.warn.admIconUnknownExisting":
 		'Δεν βρέθηκε εικονίδιο με όνομα "{{value}}" σε καμία βιβλιοθήκη, ' +
 		'οπότε το "{{id}}" κράτησε το εικονίδιο που είχε ήδη.',

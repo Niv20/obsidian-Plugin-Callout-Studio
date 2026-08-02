@@ -112,8 +112,9 @@ export const ko: Record<string, string> = {
 	"settings.alignContent": "제목에 맞게 내용 정렬",
 	"settings.headingSpacingGroup": "제목 간격",
 	"settings.headingPadVertical": "수직 간격",
-	"settings.headingIconIndent": "아이콘 들여쓰기",
 	"settings.headingGap": "제목 사이 간격",
+	"settings.headingFoldGroup": "접기",
+	"settings.headingFoldArrow": "접기 화살표 표시",
 	"settings.styleDemoName": "예시",
 	"settings.previewTitle": "미리 보기",
 
@@ -677,7 +678,8 @@ export const ko: Record<string, string> = {
 	"import.sourceCalloutManagerDesc":
 		"Callout Manager의 Copy 버튼으로 복사한 스타일을 붙여넣으세요.",
 	"import.sourceAdmonition": "Admonition",
-	"import.sourceAdmonitionDesc": "Admonition 플러그인에서 사용자 지정 admonition을 가져옵니다.",
+	"import.sourceAdmonitionDesc":
+		"Admonition 플러그인에서 사용자 지정 admonition을 가져옵니다.",
 	"import.cmTitle": "Callout Manager에서 가져오기",
 	"import.cmInstructions":
 		"Callout Manager에서 Copy 버튼을 사용하여 사용자 정의 callout 스타일을 복사한 후, 아래에 붙여넣으세요.",
@@ -699,7 +701,8 @@ export const ko: Record<string, string> = {
 	"import.admFromVault": "이 보관함",
 	"import.admVaultChecking": "Admonition 플러그인을 찾는 중…",
 	"import.admVaultFound": "사용자 지정 admonition {{count}}개를 찾았습니다.",
-	"import.admVaultNotFound": "이 보관함에서 사용자 지정 admonition을 찾지 못했습니다.",
+	"import.admVaultNotFound":
+		"이 보관함에서 사용자 지정 admonition을 찾지 못했습니다.",
 	"import.admFromFile": "파일",
 	"import.admFromFileDesc": "admonitions.json 파일 또는 공유된 팩.",
 	"import.admChooseFile": "파일 선택…",
@@ -710,18 +713,22 @@ export const ko: Record<string, string> = {
 	"import.err.admNotRecognized":
 		"인식할 수 없는 파일입니다: admonition 목록 또는 Admonition의 data.json이 필요합니다.",
 	"import.err.admNoEntries": "가져올 admonition을 찾지 못했습니다.",
-	"import.err.admTypeMissing": '이 admonition에는 "type"이 없어 건너뛰었습니다.',
+	"import.err.admTypeMissing":
+		'이 admonition에는 "type"이 없어 건너뛰었습니다.',
 	"import.warn.admIconUnknown":
 		'"{{value}}" 이름의 아이콘을 어떤 아이콘 라이브러리에서도 찾지 못해 기본 아이콘을 사용했습니다.',
 	"import.warn.admIconUnknownExisting":
 		'"{{value}}" 이름의 아이콘을 어떤 아이콘 라이브러리에서도 찾지 못해 "{{id}}"은(는) 기존 아이콘을 ' +
-		'그대로 유지했습니다.',
-	"import.warn.admImageFailed": "업로드된 이미지를 읽을 수 없어 기본 아이콘을 사용했습니다.",
+		"그대로 유지했습니다.",
+	"import.warn.admImageFailed":
+		"업로드된 이미지를 읽을 수 없어 기본 아이콘을 사용했습니다.",
 	"import.warn.admIconWithCss":
 		"이 admonition은 Admonition의 CSS 스니펫으로 스타일이 지정되어 있습니다. 해당 스타일은 " +
 		"가져오기에 포함되지 않으므로 이름, 아이콘, 색상만 가져왔습니다.",
-	"import.warn.admNoColor": "색상이 설정되어 있지 않아 기본 파란색을 사용했습니다.",
-	"import.warn.admTitleTruncated": "제목이 {{length}}자입니다. {{max}}자로 줄였습니다.",
+	"import.warn.admNoColor":
+		"색상이 설정되어 있지 않아 기본 파란색을 사용했습니다.",
+	"import.warn.admTitleTruncated":
+		"제목이 {{length}}자입니다. {{max}}자로 줄였습니다.",
 
 	"footer.tagline": "피드백, 의견 또는 제안이 있으신가요? 꼭 들려주세요!",
 	"footer.madeBy": "Niv 제작  •  ",

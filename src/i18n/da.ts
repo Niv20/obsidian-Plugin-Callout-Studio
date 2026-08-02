@@ -104,8 +104,9 @@ export const da: Record<string, string> = {
 	"settings.alignContent": "Juster indhold med titel",
 	"settings.headingSpacingGroup": "Titelafstand",
 	"settings.headingPadVertical": "Lodret afstand",
-	"settings.headingIconIndent": "Ikonindrykning",
 	"settings.headingGap": "Afstand mellem overskrifter",
+	"settings.headingFoldGroup": "Fold",
+	"settings.headingFoldArrow": "Vis fold-pil",
 	"settings.styleDemoName": "Eksempel",
 	"settings.previewTitle": "Forhåndsvisning",
 	// Settings — Saved color palettes
@@ -695,7 +696,7 @@ export const da: Record<string, string> = {
 		'Denne admonition har ingen "type" og blev sprunget over.',
 	"import.warn.admIconUnknown":
 		'Der findes intet ikon ved navn "{{value}}" i nogen ikonsamling, ' +
-		'så standardikonet blev brugt.',
+		"så standardikonet blev brugt.",
 	"import.warn.admIconUnknownExisting":
 		'Der findes intet ikon ved navn "{{value}}" i nogen ikonsamling, ' +
 		'så "{{id}}" beholdt sit hidtidige ikon.',

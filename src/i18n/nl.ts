@@ -113,8 +113,9 @@ export const nl: Record<string, string> = {
 	"settings.alignContent": "Inhoud uitlijnen met titel",
 	"settings.headingSpacingGroup": "Titelafstand",
 	"settings.headingPadVertical": "Verticale afstand",
-	"settings.headingIconIndent": "Pictograminspringing",
 	"settings.headingGap": "Ruimte tussen koppen",
+	"settings.headingFoldGroup": "Inklappen",
+	"settings.headingFoldArrow": "Inklapppijl tonen",
 	"settings.styleDemoName": "Voorbeeld",
 	"settings.previewTitle": "Voorbeeld",
 
@@ -724,13 +725,13 @@ export const nl: Record<string, string> = {
 	"import.err.admTypeMissing":
 		'Deze admonition heeft geen "type" en is overgeslagen.',
 	"import.warn.admIconUnknown":
-		'Er is in geen enkele pictogrambibliotheek een pictogram met de ' +
+		"Er is in geen enkele pictogrambibliotheek een pictogram met de " +
 		'naam "{{value}}" gevonden, dus is het standaardpictogram ' +
-		'gebruikt.',
+		"gebruikt.",
 	"import.warn.admIconUnknownExisting":
-		'Er is in geen enkele pictogrambibliotheek een pictogram met de ' +
+		"Er is in geen enkele pictogrambibliotheek een pictogram met de " +
 		'naam "{{value}}" gevonden, dus heeft "{{id}}" het bestaande ' +
-		'pictogram behouden.',
+		"pictogram behouden.",
 	"import.warn.admImageFailed":
 		"De geüploade afbeelding kon niet worden gelezen, dus is het " +
 		"standaardpictogram gebruikt.",

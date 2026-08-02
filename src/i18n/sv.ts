@@ -114,8 +114,9 @@ export const sv: Record<string, string> = {
 	"settings.alignContent": "Justera innehåll med rubrik",
 	"settings.headingSpacingGroup": "Rubrikavstånd",
 	"settings.headingPadVertical": "Vertikalt avstånd",
-	"settings.headingIconIndent": "Ikonindrag",
 	"settings.headingGap": "Avstånd mellan rubriker",
+	"settings.headingFoldGroup": "Hopfällning",
+	"settings.headingFoldArrow": "Visa hopfällningspil",
 	"settings.styleDemoName": "Exempel",
 	"settings.previewTitle": "Förhandsvisning",
 
@@ -700,7 +701,8 @@ export const sv: Record<string, string> = {
 	"import.admFromVault": "Det här valvet",
 	"import.admVaultChecking": "Letar efter Admonition-tillägget…",
 	"import.admVaultFound": "{{count}} egna admonitions hittades.",
-	"import.admVaultNotFound": "Inga egna admonitions hittades i det här valvet.",
+	"import.admVaultNotFound":
+		"Inga egna admonitions hittades i det här valvet.",
 	"import.admFromFile": "En fil",
 	"import.admFromFileDesc": "En admonitions.json-fil eller ett delat paket.",
 	"import.admChooseFile": "Välj fil…",
@@ -716,7 +718,7 @@ export const sv: Record<string, string> = {
 		'Den här admonitionen saknar "type" och hoppades över.',
 	"import.warn.admIconUnknown":
 		'Ingen ikon med namnet "{{value}}" hittades i något ' +
-		'ikonbibliotek, så standardikonen användes.',
+		"ikonbibliotek, så standardikonen användes.",
 	"import.warn.admIconUnknownExisting":
 		'Ingen ikon med namnet "{{value}}" hittades i något ' +
 		'ikonbibliotek, så "{{id}}" behöll ikonen den redan hade.',
@@ -727,7 +729,8 @@ export const sv: Record<string, string> = {
 		"Den här admonitionen formges av ett CSS-snutt i Admonition. Den " +
 		"formgivningen ingår inte i importen, så bara namn, ikon och färg " +
 		"följde med.",
-	"import.warn.admNoColor": "Ingen färg var angiven, så standardblått användes.",
+	"import.warn.admNoColor":
+		"Ingen färg var angiven, så standardblått användes.",
 	"import.warn.admTitleTruncated":
 		"Titeln är {{length}} tecken; den kortades till {{max}}.",
 

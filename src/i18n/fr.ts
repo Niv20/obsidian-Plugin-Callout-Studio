@@ -113,8 +113,9 @@ export const fr: Record<string, string> = {
 	"settings.alignContent": "Aligner le contenu avec le titre",
 	"settings.headingSpacingGroup": "Espacement du titre",
 	"settings.headingPadVertical": "Espacement vertical",
-	"settings.headingIconIndent": "Retrait de l'icône",
 	"settings.headingGap": "Espacement entre les titres",
+	"settings.headingFoldGroup": "Réduire",
+	"settings.headingFoldArrow": "Afficher la flèche de réduction",
 	"settings.styleDemoName": "Exemple",
 	"settings.previewTitle": "Aperçu",
 
@@ -709,11 +710,13 @@ export const fr: Record<string, string> = {
 		"(commande, bouton de copie, titre masqué) sont laissés de côté.",
 	"import.admFromVault": "Ce coffre",
 	"import.admVaultChecking": "Recherche du plugin Admonition…",
-	"import.admVaultFound": "{{count}} admonition(s) personnalisée(s) trouvée(s).",
+	"import.admVaultFound":
+		"{{count}} admonition(s) personnalisée(s) trouvée(s).",
 	"import.admVaultNotFound":
 		"Aucune admonition personnalisée trouvée dans ce coffre.",
 	"import.admFromFile": "Un fichier",
-	"import.admFromFileDesc": "Un fichier admonitions.json, ou un pack partagé.",
+	"import.admFromFileDesc":
+		"Un fichier admonitions.json, ou un pack partagé.",
 	"import.admChooseFile": "Choisir un fichier…",
 	"import.admPasteLabel": "Ou collez le JSON ici :",
 	"import.admPlaceholder": "Collez vos admonitions ici…",
@@ -727,7 +730,7 @@ export const fr: Record<string, string> = {
 		'Cette admonition n\'a pas de "type" et a été ignorée.',
 	"import.warn.admIconUnknown":
 		'Aucune icône nommée "{{value}}" n\'a été trouvée dans les ' +
-		'bibliothèques d\'icônes ; l\'icône par défaut a été utilisée.',
+		"bibliothèques d'icônes ; l'icône par défaut a été utilisée.",
 	"import.warn.admIconUnknownExisting":
 		'Aucune icône nommée "{{value}}" n\'a été trouvée dans les ' +
 		'bibliothèques d\'icônes ; "{{id}}" a conservé son icône actuelle.',

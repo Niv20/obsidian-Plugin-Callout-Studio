@@ -112,8 +112,9 @@ export const cs: Record<string, string> = {
 	"settings.alignContent": "Zarovnat obsah s nadpisem",
 	"settings.headingSpacingGroup": "Rozestupy nadpisu",
 	"settings.headingPadVertical": "Svislé rozestupy",
-	"settings.headingIconIndent": "Odsazení ikony",
 	"settings.headingGap": "Mezera mezi nadpisy",
+	"settings.headingFoldGroup": "Sbalení",
+	"settings.headingFoldArrow": "Zobrazit šipku sbalení",
 	"settings.styleDemoName": "Ukázka",
 	"settings.previewTitle": "Náhled",
 
@@ -713,10 +714,11 @@ export const cs: Record<string, string> = {
 		"Nerozpoznaný soubor: očekáván seznam admonition nebo data.json " +
 		"pluginu Admonition.",
 	"import.err.admNoEntries": "Nebyly nalezeny žádné admonition k importu.",
-	"import.err.admTypeMissing": 'Tento admonition nemá "type" a byl přeskočen.',
+	"import.err.admTypeMissing":
+		'Tento admonition nemá "type" a byl přeskočen.',
 	"import.warn.admIconUnknown":
 		'V žádné knihovně ikon není ikona s názvem "{{value}}", proto ' +
-		'byla použita výchozí ikona.',
+		"byla použita výchozí ikona.",
 	"import.warn.admIconUnknownExisting":
 		'V žádné knihovně ikon není ikona s názvem "{{value}}", proto si ' +
 		'"{{id}}" ponechal svou dosavadní ikonu.',

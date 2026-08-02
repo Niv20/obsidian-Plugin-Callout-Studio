@@ -168,10 +168,14 @@ function buildDecorations(
 	const selection = view.state.selection;
 	const tree = syntaxTree(view.state);
 
-	// Heading fold state: only relevant when heading callouts render AND the
-	// core "Fold heading" setting is on (native folding is otherwise absent, so
-	// we draw no chevron). Resolved once per rebuild.
-	const foldEnabled = headingEnabled && isHeadingFoldEnabled(host.app);
+	// Heading fold state: only relevant when heading callouts render, the user
+	// wants our trailing chevron, AND the core "Fold heading" setting is on
+	// (native folding is otherwise absent, so we draw no chevron). Resolved
+	// once per rebuild.
+	const foldEnabled =
+		headingEnabled &&
+		host.settings.headingCallouts.showFoldArrow &&
+		isHeadingFoldEnabled(host.app);
 	const foldedLines: ReadonlySet<number> = foldEnabled
 		? getFoldedLines(view)
 		: NO_FOLDS;

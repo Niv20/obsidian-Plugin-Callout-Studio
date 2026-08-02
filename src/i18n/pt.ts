@@ -113,8 +113,9 @@ export const pt: Record<string, string> = {
 	"settings.alignContent": "Alinhar conteúdo com o título",
 	"settings.headingSpacingGroup": "Espaçamento do título",
 	"settings.headingPadVertical": "Espaçamento vertical",
-	"settings.headingIconIndent": "Recuo do ícone",
 	"settings.headingGap": "Espaçamento entre cabeçalhos",
+	"settings.headingFoldGroup": "Dobrar",
+	"settings.headingFoldArrow": "Mostrar seta de dobra",
 	"settings.styleDemoName": "Exemplo",
 	"settings.previewTitle": "Pré-visualização",
 
@@ -704,7 +705,8 @@ export const pt: Record<string, string> = {
 		"botão de copiar, título oculto) ficam para trás.",
 	"import.admFromVault": "Este cofre",
 	"import.admVaultChecking": "A procurar o plugin Admonition…",
-	"import.admVaultFound": "Encontradas {{count}} admonition(s) personalizadas.",
+	"import.admVaultFound":
+		"Encontradas {{count}} admonition(s) personalizadas.",
 	"import.admVaultNotFound":
 		"Não foram encontradas admonitions personalizadas neste cofre.",
 	"import.admFromFile": "Um ficheiro",
@@ -718,11 +720,13 @@ export const pt: Record<string, string> = {
 	"import.err.admNotRecognized":
 		"Ficheiro não reconhecido: era esperada uma lista de admonitions " +
 		"ou um data.json do Admonition.",
-	"import.err.admNoEntries": "Não foram encontradas admonitions para importar.",
-	"import.err.admTypeMissing": 'Esta admonition não tem "type" e foi ignorada.',
+	"import.err.admNoEntries":
+		"Não foram encontradas admonitions para importar.",
+	"import.err.admTypeMissing":
+		'Esta admonition não tem "type" e foi ignorada.',
 	"import.warn.admIconUnknown":
 		'Não foi encontrado nenhum ícone chamado "{{value}}" em nenhuma ' +
-		'biblioteca, por isso foi usado o ícone predefinido.',
+		"biblioteca, por isso foi usado o ícone predefinido.",
 	"import.warn.admIconUnknownExisting":
 		'Não foi encontrado nenhum ícone chamado "{{value}}" em nenhuma ' +
 		'biblioteca, por isso "{{id}}" manteve o ícone que já tinha.',

@@ -113,8 +113,9 @@ export const de: Record<string, string> = {
 	"settings.alignContent": "Inhalt am Titel ausrichten",
 	"settings.headingSpacingGroup": "Überschriftenabstand",
 	"settings.headingPadVertical": "Vertikaler Abstand",
-	"settings.headingIconIndent": "Symboleinzug",
 	"settings.headingGap": "Abstand zwischen Überschriften",
+	"settings.headingFoldGroup": "Einklappen",
+	"settings.headingFoldArrow": "Einklapp-Pfeil anzeigen",
 	"settings.styleDemoName": "Beispiel",
 	"settings.previewTitle": "Vorschau",
 
@@ -731,10 +732,10 @@ export const de: Record<string, string> = {
 	"import.err.admTypeMissing":
 		'Diese Admonition hat kein "type" und wurde übersprungen.',
 	"import.warn.admIconUnknown":
-		'In keiner Symbolbibliothek gibt es ein Symbol namens ' +
+		"In keiner Symbolbibliothek gibt es ein Symbol namens " +
 		'"{{value}}", daher wurde das Standardsymbol verwendet.',
 	"import.warn.admIconUnknownExisting":
-		'In keiner Symbolbibliothek gibt es ein Symbol namens ' +
+		"In keiner Symbolbibliothek gibt es ein Symbol namens " +
 		'"{{value}}", daher hat "{{id}}" sein bisheriges Symbol behalten.',
 	"import.warn.admImageFailed":
 		"Das hochgeladene Bild konnte nicht gelesen werden, daher wurde " +

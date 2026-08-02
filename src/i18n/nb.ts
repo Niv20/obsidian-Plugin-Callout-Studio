@@ -103,8 +103,9 @@ export const nb: Record<string, string> = {
 	"settings.alignContent": "Juster innhold med tittel",
 	"settings.headingSpacingGroup": "Tittelavstand",
 	"settings.headingPadVertical": "Vertikal avstand",
-	"settings.headingIconIndent": "Ikoninnrykk",
 	"settings.headingGap": "Avstand mellom overskrifter",
+	"settings.headingFoldGroup": "Brett inn",
+	"settings.headingFoldArrow": "Vis brettepil",
 	"settings.styleDemoName": "Eksempel",
 	"settings.previewTitle": "Forhåndsvisning",
 	// Settings — Saved color palettes
@@ -695,7 +696,7 @@ export const nb: Record<string, string> = {
 		'Denne admonitionen mangler "type" og ble hoppet over.',
 	"import.warn.admIconUnknown":
 		'Det finnes ingen ikon som heter "{{value}}" i noe ikonbibliotek, ' +
-		'så standardikonet ble brukt.',
+		"så standardikonet ble brukt.",
 	"import.warn.admIconUnknownExisting":
 		'Det finnes ingen ikon som heter "{{value}}" i noe ikonbibliotek, ' +
 		'så "{{id}}" beholdt ikonet den allerede hadde.',

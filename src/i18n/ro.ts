@@ -113,8 +113,9 @@ export const ro: Record<string, string> = {
 	"settings.alignContent": "Aliniați conținutul cu titlul",
 	"settings.headingSpacingGroup": "Spațierea titlului",
 	"settings.headingPadVertical": "Spațiere verticală",
-	"settings.headingIconIndent": "Indentare pictogramă",
 	"settings.headingGap": "Spațiere între titluri",
+	"settings.headingFoldGroup": "Pliere",
+	"settings.headingFoldArrow": "Afișează săgeata de pliere",
 	"settings.styleDemoName": "Exemplu",
 	"settings.previewTitle": "Previzualizare",
 
@@ -711,7 +712,8 @@ export const ro: Record<string, string> = {
 	"import.admVaultNotFound":
 		"Nu s-au găsit admonition personalizate în acest seif.",
 	"import.admFromFile": "Un fișier",
-	"import.admFromFileDesc": "Un fișier admonitions.json sau un pachet partajat.",
+	"import.admFromFileDesc":
+		"Un fișier admonitions.json sau un pachet partajat.",
 	"import.admChooseFile": "Alege fișier…",
 	"import.admPasteLabel": "Sau lipește JSON-ul aici:",
 	"import.admPlaceholder": "Lipește aici admonition-urile tale…",
@@ -721,10 +723,11 @@ export const ro: Record<string, string> = {
 		"Fișier nerecunoscut: se aștepta o listă de admonition sau un " +
 		"data.json de la Admonition.",
 	"import.err.admNoEntries": "Nu s-a găsit niciun admonition de importat.",
-	"import.err.admTypeMissing": 'Acest admonition nu are "type" și a fost omis.',
+	"import.err.admTypeMissing":
+		'Acest admonition nu are "type" și a fost omis.',
 	"import.warn.admIconUnknown":
 		'Nu s-a găsit nicio pictogramă numită "{{value}}" în nicio ' +
-		'bibliotecă, așa că s-a folosit pictograma implicită.',
+		"bibliotecă, așa că s-a folosit pictograma implicită.",
 	"import.warn.admIconUnknownExisting":
 		'Nu s-a găsit nicio pictogramă numită "{{value}}" în nicio ' +
 		'bibliotecă, așa că "{{id}}" și-a păstrat pictograma existentă.',

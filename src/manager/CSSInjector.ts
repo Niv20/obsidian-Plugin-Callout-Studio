@@ -1358,11 +1358,6 @@ export class CSSInjector {
 				`  --cs-heading-pad-bottom: ${gs.heading.paddingBottom}em;`,
 			);
 		}
-		if (gs.heading.paddingStart !== 10) {
-			headingProps.push(
-				`  --cs-heading-pad-start: ${gs.heading.paddingStart}px;`,
-			);
-		}
 		// Gap above the bar (the outer margin, reading view only — see the
 		// static .cs-heading-callout:not(.cm-line) rule in styles.css; Live
 		// Preview gets the same visual effect from HeadingGapWidget, a real

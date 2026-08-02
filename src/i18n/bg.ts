@@ -104,8 +104,9 @@ export const bg: Record<string, string> = {
 	"settings.alignContent": "Подравни съдържанието с заглавието",
 	"settings.headingSpacingGroup": "Разстояние на заглавието",
 	"settings.headingPadVertical": "Вертикално разстояние",
-	"settings.headingIconIndent": "Отстъп на иконата",
 	"settings.headingGap": "Разстояние между заглавията",
+	"settings.headingFoldGroup": "Сгъване",
+	"settings.headingFoldArrow": "Показване на стрелка за сгъване",
 	"settings.styleDemoName": "Пример",
 	"settings.previewTitle": "Преглед",
 	// Settings — Saved color palettes
@@ -699,10 +700,11 @@ export const bg: Record<string, string> = {
 		"Неразпознат файл: очакваше се списък с admonition или data.json " +
 		"на Admonition.",
 	"import.err.admNoEntries": "Не са намерени admonition за внасяне.",
-	"import.err.admTypeMissing": 'Този admonition няма "type" и беше пропуснат.',
+	"import.err.admTypeMissing":
+		'Този admonition няма "type" и беше пропуснат.',
 	"import.warn.admIconUnknown":
 		'В никоя библиотека с икони няма икона с име "{{value}}", затова ' +
-		'беше използвана иконата по подразбиране.',
+		"беше използвана иконата по подразбиране.",
 	"import.warn.admIconUnknownExisting":
 		'В никоя библиотека с икони няма икона с име "{{value}}", затова ' +
 		'"{{id}}" запази досегашната си икона.',

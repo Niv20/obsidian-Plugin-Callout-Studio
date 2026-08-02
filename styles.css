@@ -3466,13 +3466,17 @@ input.cs-input-invalid:focus {
      black on the coloured bar. Baked material/emoji export icons carry their
      own inline colour and are unaffected either way.
 
-   Vertical spacing and the start inset are user-tunable (Callout types →
-   Heading → Global callout style, and → Icon indent); equal top/bottom
-   defaults centre the text, and the end inset keeps the classic em. */
+   Vertical spacing is user-tunable (Callout types → Heading → Global callout
+   style); equal top/bottom defaults centre the text. The start inset is fixed
+   in px so it stays constant across heading levels — it used to be a slider
+   ("Icon indent"), removed in 2.7.0 — and the end inset keeps the classic em.
+   Keep the start declaration even if its value never changes: without it the
+   Live Preview bar loses its inset entirely to Obsidian's own
+   `.markdown-source-view.mod-cm6 .cm-line { padding: 0 }`. */
 .cs-heading-callout.cs-heading-callout.cs-heading-callout.cs-heading-callout {
 	padding-top: var(--cs-heading-pad-top, 0.25em);
 	padding-bottom: var(--cs-heading-pad-bottom, 0.25em);
-	padding-inline-start: var(--cs-heading-pad-start, 10px);
+	padding-inline-start: 10px;
 	padding-inline-end: 0.45em;
 	color: rgb(var(--cs-color-rgb, 68, 138, 255));
 }
@@ -3577,30 +3581,67 @@ input.cs-input-invalid:focus {
    end-of-line widget after the heading title, so it mirrors a regular callout's
    disclosure arrow. Sized to the heading font, tinted with the callout's own
    color (like the icon and name), subtle until hover, and rotated when its
-   section is folded. Only rendered when the core "Fold heading" setting is on. */
+   section is folded. Only rendered when the core "Fold heading" setting is on.
+
+   The chevron is centered on the bar via the strut trick below, NOT with
+   `vertical-align: middle` — which it used to use, and which is what made it
+   sit low. `middle` anchors an inline box to *the text's baseline plus half
+   the parent's x-height*, while the bar's own center is the line box center,
+   at `baseline + (descent - ascent) / 2`. Those two points differ by a
+   constant `(ascent - descent) / 2 - x-height / 2` (~0.09em of the heading
+   font, so ~2-4px on an H1), always on the low side, and being a fixed em
+   amount it never self-corrects — least of all against a bar the vertical-
+   spacing slider can make twice as tall. */
 .cs-heading-callout .cs-fold-arrow {
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
-	vertical-align: middle;
+	vertical-align: baseline;
 	margin-inline-start: 0.4em;
-	line-height: 1;
 	cursor: pointer;
 	color: rgb(var(--cs-color-rgb, 68, 138, 255));
 	opacity: 0.65;
-	transition:
-		transform 100ms ease,
-		opacity 100ms ease;
+	/* Only opacity: the rotation lives on the svg below, so a transform
+	   transition here would have nothing to animate. */
+	transition: opacity 100ms ease;
+}
+
+/* A zero-width space as the chevron's first flex item — the same technique
+   Obsidian core uses for reading view's `.collapse-icon`, so both surfaces
+   finally share one vertical anchor.
+
+   The pseudo carries a line box exactly one line-height tall (no `line-height:
+   1` on the parent, so it inherits the heading's), which makes it the tallest
+   flex item and therefore fixes the container's height to the strut's. With
+   `align-items: center` no item takes part in baseline alignment, so per CSS
+   Flexbox 8.5 the container's baseline is the *startmost* item's — this
+   pseudo's text baseline — and `vertical-align: baseline` above then lands the
+   container on exactly the parent line box. `align-items: center` centers the
+   svg inside it, so chevron center == line box center == bar center at any
+   vertical spacing (the slider writes paddingTop and paddingBottom together,
+   so the bar stays symmetric). `lh` would say this in one line but is Safari
+   16.4+, and this plugin is not desktop-only. */
+.cs-heading-callout .cs-fold-arrow::before {
+	content: "\200B";
+	width: 0;
 }
 .cs-heading-callout .cs-fold-arrow:hover {
 	opacity: 1;
 }
+/* The rotation is on the svg, never on the span: the span is no longer square
+   (0.85em wide by one line-height tall), so rotating it would swing the
+   chevron out of place. --cs-heading-fold-offset is an escape hatch for a
+   CSS snippet, mirroring --cs-heading-icon-offset above; transform functions
+   apply right-to-left, so the chevron rotates about its own center first and
+   is nudged afterwards. */
 .cs-heading-callout .cs-fold-arrow svg {
 	width: 0.85em;
 	height: 0.85em;
+	transform: translateY(var(--cs-heading-fold-offset, 0em));
+	transition: transform 100ms ease;
 }
-.cs-heading-callout .cs-fold-arrow.cs-collapsed {
-	transform: rotate(-90deg);
+.cs-heading-callout .cs-fold-arrow.cs-collapsed svg {
+	transform: translateY(var(--cs-heading-fold-offset, 0em)) rotate(-90deg);
 }
 
 /* Reading view already renders Obsidian's native heading collapse indicator

@@ -112,8 +112,9 @@ export const ru: Record<string, string> = {
 	"settings.alignContent": "Выровнять содержимое по заголовку",
 	"settings.headingSpacingGroup": "Отступы заголовка",
 	"settings.headingPadVertical": "Вертикальный отступ",
-	"settings.headingIconIndent": "Отступ иконки",
 	"settings.headingGap": "Расстояние между заголовками",
+	"settings.headingFoldGroup": "Сворачивание",
+	"settings.headingFoldArrow": "Показать стрелку сворачивания",
 	"settings.styleDemoName": "Пример",
 	"settings.previewTitle": "Предпросмотр",
 
@@ -719,7 +720,7 @@ export const ru: Record<string, string> = {
 	"import.err.admTypeMissing": 'У этого admonition нет "type", он пропущен.',
 	"import.warn.admIconUnknown":
 		'Значок с именем "{{value}}" не найден ни в одной библиотеке, ' +
-		'поэтому использован значок по умолчанию.',
+		"поэтому использован значок по умолчанию.",
 	"import.warn.admIconUnknownExisting":
 		'Значок с именем "{{value}}" не найден ни в одной библиотеке, ' +
 		'поэтому "{{id}}" сохранил прежний значок.',

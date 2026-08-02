@@ -114,8 +114,9 @@ export const hu: Record<string, string> = {
 	"settings.alignContent": "Tartalom igazítása a címhez",
 	"settings.headingSpacingGroup": "Címtérköz",
 	"settings.headingPadVertical": "Függőleges térköz",
-	"settings.headingIconIndent": "Ikon behúzása",
 	"settings.headingGap": "Térköz a címsorok között",
+	"settings.headingFoldGroup": "Összecsukás",
+	"settings.headingFoldArrow": "Összecsukási nyíl megjelenítése",
 	"settings.styleDemoName": "Minta",
 	"settings.previewTitle": "Előnézet",
 
@@ -709,7 +710,8 @@ export const hu: Record<string, string> = {
 	"import.admFromVault": "Ez a tároló",
 	"import.admVaultChecking": "Az Admonition bővítmény keresése…",
 	"import.admVaultFound": "{{count}} saját admonition található.",
-	"import.admVaultNotFound": "Ebben a tárolóban nem található saját admonition.",
+	"import.admVaultNotFound":
+		"Ebben a tárolóban nem található saját admonition.",
 	"import.admFromFile": "Egy fájl",
 	"import.admFromFileDesc":
 		"Egy admonitions.json fájl vagy egy megosztott csomag.",
@@ -726,7 +728,7 @@ export const hu: Record<string, string> = {
 		'Ennek az admonitionnek nincs "type" mezője, ezért kimaradt.',
 	"import.warn.admIconUnknown":
 		'Egyik ikonkönyvtárban sincs "{{value}}" nevű ikon, ezért az ' +
-		'alapértelmezett ikon került a helyére.',
+		"alapértelmezett ikon került a helyére.",
 	"import.warn.admIconUnknownExisting":
 		'Egyik ikonkönyvtárban sincs "{{value}}" nevű ikon, ezért a(z) ' +
 		'"{{id}}" megtartotta a korábbi ikonját.',

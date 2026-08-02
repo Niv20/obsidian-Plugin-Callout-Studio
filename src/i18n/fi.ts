@@ -104,8 +104,9 @@ export const fi: Record<string, string> = {
 	"settings.alignContent": "Tasaa sisältö otsikon kanssa",
 	"settings.headingSpacingGroup": "Otsikon väli",
 	"settings.headingPadVertical": "Pystysuuntainen väli",
-	"settings.headingIconIndent": "Kuvakkeen sisennys",
 	"settings.headingGap": "Otsikoiden välinen tila",
+	"settings.headingFoldGroup": "Kutistaminen",
+	"settings.headingFoldArrow": "Näytä kutistamisnuoli",
 	"settings.styleDemoName": "Esimerkki",
 	"settings.previewTitle": "Esikatselu",
 	// Settings — Saved color palettes
@@ -696,7 +697,7 @@ export const fi: Record<string, string> = {
 		'Tältä admonitionilta puuttuu "type", joten se ohitettiin.',
 	"import.warn.admIconUnknown":
 		'Missään kuvakekirjastossa ei ole kuvaketta nimeltä "{{value}}", ' +
-		'joten käytettiin oletuskuvaketta.',
+		"joten käytettiin oletuskuvaketta.",
 	"import.warn.admIconUnknownExisting":
 		'Missään kuvakekirjastossa ei ole kuvaketta nimeltä "{{value}}", ' +
 		'joten "{{id}}" säilytti entisen kuvakkeensa.',

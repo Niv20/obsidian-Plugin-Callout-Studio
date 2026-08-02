@@ -113,8 +113,9 @@ export const es: Record<string, string> = {
 	"settings.alignContent": "Alinear contenido con el título",
 	"settings.headingSpacingGroup": "Espaciado del título",
 	"settings.headingPadVertical": "Espaciado vertical",
-	"settings.headingIconIndent": "Sangría del icono",
 	"settings.headingGap": "Espacio entre encabezados",
+	"settings.headingFoldGroup": "Plegar",
+	"settings.headingFoldArrow": "Mostrar flecha de pliegue",
 	"settings.styleDemoName": "Ejemplo",
 	"settings.previewTitle": "Vista previa",
 
@@ -725,7 +726,7 @@ export const es: Record<string, string> = {
 	"import.err.admTypeMissing": 'Esta admonition no tiene "type" y se omitió.',
 	"import.warn.admIconUnknown":
 		'No se encontró ningún icono llamado "{{value}}" en ninguna ' +
-		'biblioteca, así que se usó el icono predeterminado.',
+		"biblioteca, así que se usó el icono predeterminado.",
 	"import.warn.admIconUnknownExisting":
 		'No se encontró ningún icono llamado "{{value}}" en ninguna ' +
 		'biblioteca, así que "{{id}}" conservó el icono que ya tenía.',

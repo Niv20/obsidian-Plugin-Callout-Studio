@@ -113,8 +113,9 @@ export const it: Record<string, string> = {
 	"settings.alignContent": "Allinea il contenuto al titolo",
 	"settings.headingSpacingGroup": "Spaziatura titolo",
 	"settings.headingPadVertical": "Spaziatura verticale",
-	"settings.headingIconIndent": "Rientro icona",
 	"settings.headingGap": "Spaziatura tra le intestazioni",
+	"settings.headingFoldGroup": "Piega",
+	"settings.headingFoldArrow": "Mostra freccia di piega",
 	"settings.styleDemoName": "Esempio",
 	"settings.previewTitle": "Anteprima",
 
@@ -730,7 +731,7 @@ export const it: Record<string, string> = {
 		'Questa admonition non ha "type" ed è stata saltata.',
 	"import.warn.admIconUnknown":
 		'Nessuna icona di nome "{{value}}" è stata trovata in alcuna ' +
-		'libreria, quindi è stata usata l\'icona predefinita.',
+		"libreria, quindi è stata usata l'icona predefinita.",
 	"import.warn.admIconUnknownExisting":
 		'Nessuna icona di nome "{{value}}" è stata trovata in alcuna ' +
 		'libreria, quindi "{{id}}" ha mantenuto l\'icona che aveva già.',

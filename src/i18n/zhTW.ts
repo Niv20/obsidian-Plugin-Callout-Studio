@@ -101,8 +101,9 @@ export const zhTW: Record<string, string> = {
 	"settings.alignContent": "將內容與標題對齊",
 	"settings.headingSpacingGroup": "標題間距",
 	"settings.headingPadVertical": "垂直間距",
-	"settings.headingIconIndent": "圖示縮排",
 	"settings.headingGap": "標題間距",
+	"settings.headingFoldGroup": "折疊",
+	"settings.headingFoldArrow": "顯示折疊箭頭",
 	"settings.styleDemoName": "範例",
 	"settings.previewTitle": "預覽",
 	// Settings — Saved color palettes
@@ -630,7 +631,8 @@ export const zhTW: Record<string, string> = {
 	"import.sourceCalloutManagerDesc":
 		"貼上您從 Callout Manager 的 Copy 按鈕複製的樣式。",
 	"import.sourceAdmonition": "Admonition",
-	"import.sourceAdmonitionDesc": "從 Admonition 外掛匯入您的自訂 admonition。",
+	"import.sourceAdmonitionDesc":
+		"從 Admonition 外掛匯入您的自訂 admonition。",
 	"import.cmTitle": "從 Callout Manager 匯入",
 	"import.cmInstructions":
 		"在 Callout Manager 中，使用其 Copy 按鈕複製您自訂的 callout 樣式，然後將其貼到下方。",
@@ -663,7 +665,8 @@ export const zhTW: Record<string, string> = {
 		"無法辨識的檔案：應為 admonition 清單或 Admonition 的 data.json。",
 	"import.err.admNoEntries": "找不到可匯入的 admonition。",
 	"import.err.admTypeMissing": '此 admonition 沒有 "type"，已略過。',
-	"import.warn.admIconUnknown": '在所有圖示庫中都找不到名為 "{{value}}" 的圖示，已改用預設圖示。',
+	"import.warn.admIconUnknown":
+		'在所有圖示庫中都找不到名為 "{{value}}" 的圖示，已改用預設圖示。',
 	"import.warn.admIconUnknownExisting":
 		'在所有圖示庫中都找不到名為 "{{value}}" 的圖示，因此 "{{id}}" 保留了原有圖示。',
 	"import.warn.admImageFailed": "無法讀取上傳的圖片，已改用預設圖示。",
@@ -671,7 +674,8 @@ export const zhTW: Record<string, string> = {
 		"此 admonition 在 Admonition 中由 CSS " +
 		"片段設定樣式。該樣式不屬於匯入內容，因此僅匯入了名稱、圖示與顏色。",
 	"import.warn.admNoColor": "未設定顏色，已使用預設的藍色。",
-	"import.warn.admTitleTruncated": "標題長度為 {{length}} 個字元；已縮短至 {{max}}。",
+	"import.warn.admTitleTruncated":
+		"標題長度為 {{length}} 個字元；已縮短至 {{max}}。",
 
 	"footer.tagline": "有反饋、意見或建議？歡迎告訴我！",
 	"footer.madeBy": "由 Niv 製作  •  ",

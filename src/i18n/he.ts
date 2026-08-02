@@ -130,8 +130,9 @@ export const he: Record<string, string> = {
 	"settings.alignContent": "יישור התוכן לכותרת",
 	"settings.headingSpacingGroup": "ריווח הכותרת",
 	"settings.headingPadVertical": "ריווח אנכי",
-	"settings.headingIconIndent": "הזחת האייקון",
 	"settings.headingGap": "מרווח בין כותרות",
+	"settings.headingFoldGroup": "קיפול",
+	"settings.headingFoldArrow": "הצגת חץ הקיפול",
 	"settings.styleDemoName": "דוגמה",
 	"settings.previewTitle": "תצוגה מקדימה",
 

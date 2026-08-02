@@ -113,8 +113,9 @@ export const hi: Record<string, string> = {
 	"settings.alignContent": "सामग्री को शीर्षक के साथ संरेखित करें",
 	"settings.headingSpacingGroup": "शीर्षक दूरी",
 	"settings.headingPadVertical": "ऊर्ध्वाधर दूरी",
-	"settings.headingIconIndent": "आइकन इंडेंट",
 	"settings.headingGap": "शीर्षकों के बीच स्थान",
+	"settings.headingFoldGroup": "फ़ोल्ड",
+	"settings.headingFoldArrow": "फ़ोल्ड तीर दिखाएं",
 	"settings.styleDemoName": "उदाहरण",
 	"settings.previewTitle": "पूर्वावलोकन",
 
@@ -714,7 +715,7 @@ export const hi: Record<string, string> = {
 		'इस admonition में "type" नहीं है, इसे छोड़ दिया गया।',
 	"import.warn.admIconUnknown":
 		'"{{value}}" नाम का कोई आइकन किसी भी आइकन लाइब्रेरी में नहीं ' +
-		'मिला, इसलिए डिफ़ॉल्ट आइकन उपयोग किया गया।',
+		"मिला, इसलिए डिफ़ॉल्ट आइकन उपयोग किया गया।",
 	"import.warn.admIconUnknownExisting":
 		'"{{value}}" नाम का कोई आइकन किसी भी आइकन लाइब्रेरी में नहीं ' +
 		'मिला, इसलिए "{{id}}" ने अपना पुराना आइकन ही रखा।',

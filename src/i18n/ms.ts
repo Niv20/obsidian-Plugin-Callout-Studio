@@ -104,8 +104,9 @@ export const ms: Record<string, string> = {
 	"settings.alignContent": "Selaraskan kandungan dengan tajuk",
 	"settings.headingSpacingGroup": "Jarak tajuk",
 	"settings.headingPadVertical": "Jarak menegak",
-	"settings.headingIconIndent": "Inden ikon",
 	"settings.headingGap": "Jarak antara tajuk",
+	"settings.headingFoldGroup": "Lipat",
+	"settings.headingFoldArrow": "Papar anak panah lipat",
 	"settings.styleDemoName": "Contoh",
 	"settings.previewTitle": "Pratonton",
 	// Settings — Saved color palettes
@@ -694,7 +695,7 @@ export const ms: Record<string, string> = {
 		'Admonition ini tiada "type" dan telah dilangkau.',
 	"import.warn.admIconUnknown":
 		'Tiada ikon bernama "{{value}}" dalam mana-mana pustaka ikon, ' +
-		'jadi ikon lalai digunakan.',
+		"jadi ikon lalai digunakan.",
 	"import.warn.admIconUnknownExisting":
 		'Tiada ikon bernama "{{value}}" dalam mana-mana pustaka ikon, ' +
 		'jadi "{{id}}" mengekalkan ikon sedia ada.',
@@ -705,7 +706,8 @@ export const ms: Record<string, string> = {
 		"Admonition ini digayakan oleh petikan CSS dalam Admonition. Gaya " +
 		"itu bukan sebahagian daripada import, jadi hanya nama, ikon dan " +
 		"warnanya yang dibawa.",
-	"import.warn.admNoColor": "Tiada warna ditetapkan, jadi biru lalai digunakan.",
+	"import.warn.admNoColor":
+		"Tiada warna ditetapkan, jadi biru lalai digunakan.",
 	"import.warn.admTitleTruncated":
 		"Tajuk ialah {{length}} aksara; ia dipendekkan kepada {{max}}.",
 

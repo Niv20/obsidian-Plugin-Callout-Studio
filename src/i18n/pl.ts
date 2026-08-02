@@ -113,8 +113,9 @@ export const pl: Record<string, string> = {
 	"settings.alignContent": "Wyrównaj treść z tytułem",
 	"settings.headingSpacingGroup": "Odstęp tytułu",
 	"settings.headingPadVertical": "Odstęp pionowy",
-	"settings.headingIconIndent": "Wcięcie ikony",
 	"settings.headingGap": "Odstęp między nagłówkami",
+	"settings.headingFoldGroup": "Zwijanie",
+	"settings.headingFoldArrow": "Pokaż strzałkę zwijania",
 	"settings.styleDemoName": "Przykład",
 	"settings.previewTitle": "Podgląd",
 
@@ -704,7 +705,8 @@ export const pl: Record<string, string> = {
 	"import.admFromVault": "Ten sejf",
 	"import.admVaultChecking": "Szukanie wtyczki Admonition…",
 	"import.admVaultFound": "Znaleziono {{count}} własnych admonition.",
-	"import.admVaultNotFound": "Nie znaleziono własnych admonition w tym sejfie.",
+	"import.admVaultNotFound":
+		"Nie znaleziono własnych admonition w tym sejfie.",
 	"import.admFromFile": "Plik",
 	"import.admFromFileDesc": "Plik admonitions.json lub udostępniony pakiet.",
 	"import.admChooseFile": "Wybierz plik…",
@@ -720,10 +722,10 @@ export const pl: Record<string, string> = {
 	"import.err.admTypeMissing":
 		'Ten admonition nie ma pola "type" i został pominięty.',
 	"import.warn.admIconUnknown":
-		'W żadnej bibliotece ikon nie znaleziono ikony o nazwie ' +
+		"W żadnej bibliotece ikon nie znaleziono ikony o nazwie " +
 		'"{{value}}", więc użyto ikony domyślnej.',
 	"import.warn.admIconUnknownExisting":
-		'W żadnej bibliotece ikon nie znaleziono ikony o nazwie ' +
+		"W żadnej bibliotece ikon nie znaleziono ikony o nazwie " +
 		'"{{value}}", więc "{{id}}" zachował dotychczasową ikonę.',
 	"import.warn.admImageFailed":
 		"Nie udało się odczytać przesłanego obrazu, więc użyto ikony " +

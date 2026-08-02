@@ -112,8 +112,9 @@ export const ja: Record<string, string> = {
 	"settings.alignContent": "コンテンツをタイトルに合わせて整列",
 	"settings.headingSpacingGroup": "タイトル間隔",
 	"settings.headingPadVertical": "垂直方向の間隔",
-	"settings.headingIconIndent": "アイコンインデント",
 	"settings.headingGap": "見出し間の間隔",
+	"settings.headingFoldGroup": "折りたたみ",
+	"settings.headingFoldArrow": "折りたたみ矢印を表示",
 	"settings.styleDemoName": "サンプル",
 	"settings.previewTitle": "プレビュー",
 
@@ -682,7 +683,8 @@ export const ja: Record<string, string> = {
 	"import.sourceCalloutManagerDesc":
 		"Callout Manager の Copy ボタンでコピーしたスタイルを貼り付けてください。",
 	"import.sourceAdmonition": "Admonition",
-	"import.sourceAdmonitionDesc": "Admonition プラグインからカスタム admonition を引き継ぎます。",
+	"import.sourceAdmonitionDesc":
+		"Admonition プラグインからカスタム admonition を引き継ぎます。",
 	"import.cmTitle": "Callout Manager からインポート",
 	"import.cmInstructions":
 		"Callout Manager で Copy ボタンを使用してカスタマイズされた callout スタイルをコピーし、以下に貼り付けてください。",
@@ -703,8 +705,10 @@ export const ja: Record<string, string> = {
 		"Studio に対応する設定がないもの（コマンド、コピーボタン、タイトル非表示）は引き継がれません。",
 	"import.admFromVault": "この保管庫",
 	"import.admVaultChecking": "Admonition プラグインを探しています…",
-	"import.admVaultFound": "カスタム admonition が {{count}} 件見つかりました。",
-	"import.admVaultNotFound": "この保管庫にカスタム admonition は見つかりませんでした。",
+	"import.admVaultFound":
+		"カスタム admonition が {{count}} 件見つかりました。",
+	"import.admVaultNotFound":
+		"この保管庫にカスタム admonition は見つかりませんでした。",
 	"import.admFromFile": "ファイル",
 	"import.admFromFileDesc": "admonitions.json ファイル、または共有パック。",
 	"import.admChooseFile": "ファイルを選択…",
@@ -714,18 +718,23 @@ export const ja: Record<string, string> = {
 	"import.admBtnImport": "インポート",
 	"import.err.admNotRecognized":
 		"認識できないファイルです：admonition のリスト、または Admonition の data.json が必要です。",
-	"import.err.admNoEntries": "インポートできる admonition が見つかりませんでした。",
-	"import.err.admTypeMissing": 'この admonition には "type" がないため、スキップしました。',
+	"import.err.admNoEntries":
+		"インポートできる admonition が見つかりませんでした。",
+	"import.err.admTypeMissing":
+		'この admonition には "type" がないため、スキップしました。',
 	"import.warn.admIconUnknown":
 		'"{{value}}" という名前のアイコンはどのアイコンライブラリにもないため、既定のアイコンを使用しました。',
 	"import.warn.admIconUnknownExisting":
 		'"{{value}}" という名前のアイコンはどのアイコンライブラリにもないため、"{{id}}" は元のアイコンのままです。',
-	"import.warn.admImageFailed": "アップロードされた画像を読み取れなかったため、既定のアイコンを使用しました。",
+	"import.warn.admImageFailed":
+		"アップロードされた画像を読み取れなかったため、既定のアイコンを使用しました。",
 	"import.warn.admIconWithCss":
 		"この admonition は Admonition 側の CSS " +
 		"スニペットでスタイル設定されています。そのスタイルはインポートに含まれないため、名前・アイコン・色のみを引き継ぎました。",
-	"import.warn.admNoColor": "色が設定されていないため、既定の青を使用しました。",
-	"import.warn.admTitleTruncated": "タイトルは {{length}} 文字です。{{max}} 文字に短縮しました。",
+	"import.warn.admNoColor":
+		"色が設定されていないため、既定の青を使用しました。",
+	"import.warn.admTitleTruncated":
+		"タイトルは {{length}} 文字です。{{max}} 文字に短縮しました。",
 
 	"footer.tagline":
 		"フィードバック、コメント、提案はありますか？ぜひお聞かせください！",

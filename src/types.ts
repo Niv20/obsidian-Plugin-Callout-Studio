@@ -362,6 +362,11 @@ export interface HeadingCalloutSettings extends RoleToggleSettings {
 	refCleanTitles: boolean;
 	/** Show the callout's colored icon before the cleaned reference title. */
 	refShowIcon: boolean;
+	/**
+	 * Draw the plugin's own fold chevron after the heading title (Live
+	 * Preview). Obsidian's native indicator *before* the title is unaffected.
+	 */
+	showFoldArrow: boolean;
 }
 
 /**
@@ -463,11 +468,6 @@ export interface HeadingFrameStyleSettings extends RoleFrameStyleSettings {
 	paddingTop: number;
 	/** Space below the heading text inside the bar, in em. */
 	paddingBottom: number;
-	/**
-	 * Horizontal inset of the icon (and title) from the bar's start edge, in
-	 * px. Keeps the icon off the very edge; independent of heading font size.
-	 */
-	paddingStart: number;
 	/**
 	 * Vertical gap *above* each heading bar, in em (the *outer* margin, distinct
 	 * from paddingTop which is the inner text spacing). This is the knob that

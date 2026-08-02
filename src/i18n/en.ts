@@ -130,8 +130,9 @@ export const en: Record<string, string> = {
 	"settings.alignContent": "Align content with title",
 	"settings.headingSpacingGroup": "Title spacing",
 	"settings.headingPadVertical": "Vertical spacing",
-	"settings.headingIconIndent": "Icon indent",
 	"settings.headingGap": "Spacing between headers",
+	"settings.headingFoldGroup": "Fold",
+	"settings.headingFoldArrow": "Show fold arrow",
 	"settings.styleDemoName": "Example",
 	"settings.previewTitle": "Preview",
 

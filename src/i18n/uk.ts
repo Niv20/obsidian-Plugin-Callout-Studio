@@ -113,8 +113,9 @@ export const uk: Record<string, string> = {
 	"settings.alignContent": "Вирівняти вміст за заголовком",
 	"settings.headingSpacingGroup": "Інтервал заголовка",
 	"settings.headingPadVertical": "Вертикальний інтервал",
-	"settings.headingIconIndent": "Відступ іконки",
 	"settings.headingGap": "Відстань між заголовками",
+	"settings.headingFoldGroup": "Згортання",
+	"settings.headingFoldArrow": "Показати стрілку згортання",
 	"settings.styleDemoName": "Приклад",
 	"settings.previewTitle": "Попередній перегляд",
 
@@ -709,7 +710,8 @@ export const uk: Record<string, string> = {
 	"import.admFromVault": "Це сховище",
 	"import.admVaultChecking": "Пошук плагіна Admonition…",
 	"import.admVaultFound": "Знайдено власних admonition: {{count}}.",
-	"import.admVaultNotFound": "У цьому сховищі не знайдено власних admonition.",
+	"import.admVaultNotFound":
+		"У цьому сховищі не знайдено власних admonition.",
 	"import.admFromFile": "Файл",
 	"import.admFromFileDesc": "Файл admonitions.json або спільний набір.",
 	"import.admChooseFile": "Вибрати файл…",
@@ -725,7 +727,7 @@ export const uk: Record<string, string> = {
 		'У цього admonition немає "type", його пропущено.',
 	"import.warn.admIconUnknown":
 		'Піктограму з назвою "{{value}}" не знайдено в жодній бібліотеці, ' +
-		'тому використано типову піктограму.',
+		"тому використано типову піктограму.",
 	"import.warn.admIconUnknownExisting":
 		'Піктограму з назвою "{{value}}" не знайдено в жодній бібліотеці, ' +
 		'тому "{{id}}" залишив свою попередню піктограму.',
@@ -736,7 +738,8 @@ export const uk: Record<string, string> = {
 		"Цей admonition оформлено CSS-фрагментом у плагіні Admonition. Це " +
 		"оформлення не входить до імпорту, тому перенесено лише назву, " +
 		"піктограму та колір.",
-	"import.warn.admNoColor": "Колір не задано, тому використано типовий синій.",
+	"import.warn.admNoColor":
+		"Колір не задано, тому використано типовий синій.",
 	"import.warn.admTitleTruncated":
 		"Заголовок має {{length}} символів; скорочено до {{max}}.",
 

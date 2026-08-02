@@ -271,10 +271,6 @@ export const DEFAULT_SETTINGS: PluginSettings = {
 			// pushes heading text toward the bottom).
 			paddingTop: 0.25,
 			paddingBottom: 0.25,
-			// Icon inset from the bar's start edge (px), so it isn't flush
-			// against the corner. Fixed in px → consistent regardless of
-			// heading level.
-			paddingStart: 10,
 			// Extra gap above each heading bar (em). 0 → keep the theme's own
 			// heading spacing untouched; raising it separates stacked/collapsed
 			// heading callouts that otherwise render glued together. Defaults to
@@ -312,6 +308,7 @@ export const DEFAULT_SETTINGS: PluginSettings = {
 		enabled: true,
 		refCleanTitles: true,
 		refShowIcon: true,
+		showFoldArrow: true,
 	},
 	inlineCallouts: { enabled: true },
 	firstRunCompleted: false,
