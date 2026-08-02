@@ -139,6 +139,15 @@
 	box-shadow: none;
 }
 
+/* Obsidian centers a setting row's control by default, but several themes
+   restyle .setting-item to align-items: flex-start for readability against
+   long descriptions — which strands a plain row's button at the top instead
+   of centered against its (often two-line) name + description. Pin it back
+   regardless of theme. */
+.callout-studio-settings .setting-item:not(.setting-item-heading) {
+	align-items: center;
+}
+
 .callout-studio-kebab-btn {
 	flex-shrink: 0;
 }
