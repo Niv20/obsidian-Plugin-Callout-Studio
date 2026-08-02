@@ -3369,9 +3369,13 @@ input.cs-input-invalid:focus {
 }
 
 /* ── Footer ─────────────────────────────────────────────────── */
+/* Always immediately follows .callout-studio-credits (see SettingsTab.ts),
+ * which already opens its own full-strength divider above it — a second
+ * 2rem/1rem divider back-to-back left a big empty gap under the collapsed
+ * "Icon licences and credits" summary, so this one is kept lighter. */
 .callout-studio-footer {
-	margin-top: 2rem;
-	padding-top: 1rem;
+	margin-top: 1rem;
+	padding-top: 0.75rem;
 	border-top: 1px solid var(--background-modifier-border);
 	text-align: center;
 	color: var(--text-muted);
