@@ -64,6 +64,7 @@ import {
 import { renderCalloutEditorIconPreview } from "./editor/CalloutEditorIconRenderer";
 import { performCalloutEditorSave } from "./editor/CalloutEditorSave";
 import { findUserImage } from "../icons/packs/userImages";
+import { emojiLabelFor } from "../icons/packs/emoji";
 import { createControlGroup, setSliderDisplay } from "./styleControls";
 import { refreshAllMarkdownEditors } from "../editor/livepreview/refresh";
 
@@ -1620,6 +1621,9 @@ export class CalloutEditor extends Modal {
 		const { type, value, style, weight } = this.icon;
 		if (type === "material") {
 			return `${type}: ${value} (${style ?? "outlined"}, ${weight ?? 400})`;
+		}
+		if (type === "emoji") {
+			return `${type}: ${emojiLabelFor(value) ?? value}`;
 		}
 		return `${type}: ${value}`;
 	}

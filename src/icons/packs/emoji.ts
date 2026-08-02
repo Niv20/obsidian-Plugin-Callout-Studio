@@ -9,6 +9,21 @@ import type { IconEntry, IconIndex, IconPack, IconVariantState } from "../types"
 import { EMOJI_DATA } from "../../data/emojiData";
 
 let index: IconIndex | null = null;
+let labelByGlyph: Map<string, string> | null = null;
+
+/** Human-readable name for a stored emoji glyph, base or skin-tone variant. */
+export function emojiLabelFor(glyph: string): string | undefined {
+	if (!labelByGlyph) {
+		labelByGlyph = new Map();
+		for (const entry of EMOJI_DATA) {
+			labelByGlyph.set(entry.emoji, entry.label);
+			for (const skin of entry.skins ?? []) {
+				labelByGlyph.set(skin, entry.label);
+			}
+		}
+	}
+	return labelByGlyph.get(glyph);
+}
 
 export const emojiPack: IconPack = {
 	id: "emoji",

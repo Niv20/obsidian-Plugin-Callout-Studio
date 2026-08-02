@@ -28,6 +28,7 @@ import {
 } from "../../icons/packs/material";
 import { FA_DEFAULT_STYLE, faStyleOf } from "../../icons/packs/fontAwesome";
 import { TABLER_DEFAULT_STYLE, tablerStyleOf } from "../../icons/packs/tabler";
+import { emojiLabelFor } from "../../icons/packs/emoji";
 import {
 	ALL_SOURCES,
 	ALL_SOURCES_META,
@@ -686,6 +687,9 @@ function describeIcon(icon: CalloutIcon, userImages: readonly UserImageIcon[]): 
 	if (icon.type === "image") {
 		const image = userImages.find((img) => img.id === icon.value);
 		return `${source}: ${image?.name ?? icon.value}`;
+	}
+	if (icon.type === "emoji") {
+		return `${source}: ${emojiLabelFor(icon.value) ?? icon.value}`;
 	}
 	// Font Awesome's three styles share one source, so the name alone would not
 	// say which drawing is about to be saved.
