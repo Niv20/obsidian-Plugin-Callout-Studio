@@ -51,7 +51,6 @@ import {
 	type SwatchColors,
 } from "../ui/ColorCircles";
 import { PaletteEditorModal } from "./PaletteEditorModal";
-import { createAnimatedNumberLabel } from "../ui/AnimatedNumberLabel";
 import type { CalloutEditorPlugin } from "./editor/types";
 import {
 	buildStateSnapshot,
@@ -65,7 +64,7 @@ import {
 import { renderCalloutEditorIconPreview } from "./editor/CalloutEditorIconRenderer";
 import { performCalloutEditorSave } from "./editor/CalloutEditorSave";
 import { findUserImage } from "../icons/packs/userImages";
-import { createControlGroup } from "./styleControls";
+import { createControlGroup, setSliderDisplay } from "./styleControls";
 import { refreshAllMarkdownEditors } from "../editor/livepreview/refresh";
 
 // Derive a callout ID from the display name. Spaces are preserved (the ID may
@@ -194,6 +193,7 @@ export class CalloutEditor extends Modal {
 	private paletteId: string | undefined;
 	private preview: LiveCalloutPreview | null = null;
 	private noteRefreshFrame: number | null = null;
+	private updatePreviewFrame: number | null = null;
 	private recolorToggle: ToggleComponent | null = null;
 	/**
 	 * Re-reads the Picture section from the current icon: whether it applies at
@@ -1256,7 +1256,6 @@ export class CalloutEditor extends Modal {
 		// the way in and out; the offsets are already px and pass straight through.
 		const controls: {
 			label: string;
-			cls: string;
 			suffix: string;
 			limits: [number, number, number];
 			get: () => number;
@@ -1264,7 +1263,6 @@ export class CalloutEditor extends Modal {
 		}[] = [
 			{
 				label: t("editor.size"),
-				cls: " cs-size-slider-row",
 				suffix: "%",
 				limits: [size.min * 100, size.max * 100, 5],
 				get: () => Math.round(adjust.size * 100),
@@ -1274,7 +1272,6 @@ export class CalloutEditor extends Modal {
 			},
 			{
 				label: t("editor.horizontalOffset"),
-				cls: "",
 				suffix: "px",
 				limits: [offset.min, offset.max, offset.step],
 				get: () => adjust.offsetX,
@@ -1284,7 +1281,6 @@ export class CalloutEditor extends Modal {
 			},
 			{
 				label: t("editor.verticalOffset"),
-				cls: "",
 				suffix: "px",
 				limits: [offset.min, offset.max, offset.step],
 				get: () => adjust.offsetY,
@@ -1295,25 +1291,21 @@ export class CalloutEditor extends Modal {
 		];
 
 		for (const control of controls) {
-			const row = box.createDiv({
-				cls: `callout-studio-slider-row${control.cls}`,
-			});
+			const row = box.createDiv({ cls: "callout-studio-slider-row" });
 			const label = row.createDiv({ cls: "callout-studio-slider-label" });
 			label.createSpan({ text: control.label });
-			const readout = createAnimatedNumberLabel(label, {
-				initialValue: control.get(),
-				suffix: control.suffix,
-				format: { maximumFractionDigits: 0 },
-			});
+			// The number beside the track is Obsidian's own — SliderComponent keeps
+			// it in sync, so this only says how to spell it. All three values are
+			// whole numbers, so there are no decimals to pad.
 			new Setting(row).addSlider((slider: SliderComponent) => {
+				setSliderDisplay(slider, (v) => `${v}${control.suffix}`);
 				slider
 					.setLimits(...control.limits)
 					.setValue(control.get())
 					.setInstant(true)
 					.onChange((value: number) => {
 						control.set(value);
-						readout.update(value);
-						this.updatePreview();
+						this.scheduleUpdatePreview();
 					});
 			});
 		}
@@ -1664,6 +1656,29 @@ export class CalloutEditor extends Modal {
 		});
 	}
 
+	/**
+	 * {@link updatePreview}, coalesced to at most one run per animation frame —
+	 * for the controls that fire continuously while a pointer is held.
+	 *
+	 * A slider tick is not cheap: `updatePreview` re-registers the draft
+	 * definition and re-injects, which regenerates the CSS for every callout and
+	 * then repaints every icon in the document. Running that several times
+	 * between two frames only makes the last one visible, so the earlier passes
+	 * buy nothing and cost the frame budget the live preview needs. One pass per
+	 * frame still tracks the thumb at ~60fps — unlike a debounce, which would
+	 * hold the preview still until the drag stopped.
+	 *
+	 * The same gate `addStyleSlider` puts around the global style sliders
+	 * (settings/styleControls.ts), which is why those already drag smoothly.
+	 */
+	private scheduleUpdatePreview(): void {
+		if (this.updatePreviewFrame !== null) return;
+		this.updatePreviewFrame = window.requestAnimationFrame(() => {
+			this.updatePreviewFrame = null;
+			this.updatePreview();
+		});
+	}
+
 	private updatePreview(): void {
 		if (!this.preview) return;
 		// Keep the sample's titles tracking the display-name field.
@@ -1823,6 +1838,12 @@ export class CalloutEditor extends Modal {
 		if (this.noteRefreshFrame !== null) {
 			window.cancelAnimationFrame(this.noteRefreshFrame);
 			this.noteRefreshFrame = null;
+		}
+		// Same reasoning for the slider's coalesced preview pass, with one more
+		// on top: it touches `this.preview`, which is about to be destroyed.
+		if (this.updatePreviewFrame !== null) {
+			window.cancelAnimationFrame(this.updatePreviewFrame);
+			this.updatePreviewFrame = null;
 		}
 		this.preview?.destroy();
 		this.preview = null;

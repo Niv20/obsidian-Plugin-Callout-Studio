@@ -13,7 +13,6 @@ import type { CalloutRegistry } from "../manager/CalloutRegistry";
 import { renderIconInto } from "../icons/renderIcon";
 import { createIconResolver } from "../icons/resolver";
 import { getLocale, t } from "../i18n";
-import { createAnimatedNumberLabel } from "../ui/AnimatedNumberLabel";
 import type {
 	VaultCalloutStatistics,
 	VaultCalloutTypeStatistics,
@@ -106,23 +105,12 @@ export class VaultCalloutStatisticsModal extends Modal {
 		const metricEl = containerEl.createDiv({
 			cls: "cs-vault-stats-metric",
 		});
-		const valueEl = metricEl.createDiv({
+		metricEl.createDiv({
 			cls: "cs-vault-stats-metric-value",
+			// Grouped per the user's locale — a five-digit vault count is much
+			// easier to read as 12,480 than as 12480.
+			text: value.toLocaleString(getLocale()),
 		});
-		const flow = createAnimatedNumberLabel(valueEl, {
-			initialValue: 0,
-			locales: getLocale(),
-		});
-		flow.el.classList.remove(
-			"callout-studio-slider-value",
-			"callout-studio-number-flow",
-		);
-		flow.el.transformTiming = { duration: 400, easing: "ease-out" };
-		flow.el.spinTiming = { duration: 400, easing: "ease-out" };
-		// Wait for the modal open animation to settle, then count up.
-		window.setTimeout(() => {
-			flow.update(value);
-		}, 50);
 		metricEl.createDiv({
 			cls: "cs-vault-stats-metric-label",
 			text: label,

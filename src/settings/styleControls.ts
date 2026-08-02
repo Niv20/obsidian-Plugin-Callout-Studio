@@ -8,14 +8,38 @@
  * previews the change via cssInjector.scheduleInject(), releasing commits it
  * via saveSettings() + cssInjector.inject().
  */
-import { Setting } from "obsidian";
+import { Setting, type SliderComponent } from "obsidian";
 import { t } from "../i18n";
-import {
-	createAnimatedNumberLabel,
-	type AnimatedNumberLabelOptions,
-} from "../ui/AnimatedNumberLabel";
 import type { BorderSidesSettings } from "../types";
 import type { SettingsTabPlugin } from "./sections/types";
+
+/**
+ * `setDisplayFormat` arrived with the value readout in Obsidian 1.13. It is in
+ * neither the 1.10.3 typings this repo builds against nor the runtime of the
+ * older builds the manifest still supports, which is why it is declared here
+ * and reached optionally rather than called outright.
+ */
+type SliderWithDisplayFormat = SliderComponent & {
+	setDisplayFormat?: (format: (value: number) => string) => unknown;
+};
+
+/**
+ * Put a unit on the number Obsidian draws beside a slider — "12px" rather than
+ * a bare "12".
+ *
+ * A no-op below 1.13, where there is no readout to format: those builds show
+ * the slider alone, exactly as they did before. Keep the formatted string's
+ * length stable (a fixed decimal count, a unit that never changes) — it shares
+ * a flex row with a track that takes the width it leaves, so a readout that
+ * grows by a character shrinks the slider under the cursor. styles.css reserves
+ * a width for the same reason.
+ */
+export function setSliderDisplay(
+	slider: SliderComponent,
+	format: (value: number) => string,
+): void {
+	(slider as SliderWithDisplayFormat).setDisplayFormat?.(format);
+}
 
 /** A titled control group box (bordered section with a muted header). */
 export function createControlGroup(
@@ -40,10 +64,16 @@ export interface StyleSliderSpec {
 	min: number;
 	max: number;
 	step: number;
-	/** Decimal places kept when rounding slider values. */
+	/**
+	 * Decimal places kept when rounding slider values, and the count the readout
+	 * is padded to — always the same number of digits, so the readout's width
+	 * cannot change mid-drag.
+	 */
 	decimals: number;
-	/** Prefix/suffix/format for the animated value readout. */
-	numberOptions: Omit<AnimatedNumberLabelOptions, "initialValue">;
+	/** Unit appended to the readout, e.g. `"px"`. */
+	suffix?: string;
+	/** Marker prepended to the readout, e.g. `"×"` for a scale factor. */
+	prefix?: string;
 	get(): number;
 	set(value: number): void;
 	/**
@@ -69,10 +99,6 @@ export function addStyleSlider(
 	const row = parentEl.createDiv({ cls: "callout-studio-slider-row" });
 	const labelEl = row.createDiv({ cls: "callout-studio-slider-label" });
 	labelEl.createSpan({ text: spec.label });
-	const valueLabel = createAnimatedNumberLabel(labelEl, {
-		...spec.numberOptions,
-		initialValue: spec.get(),
-	});
 
 	const factor = Math.pow(10, spec.decimals);
 	const round = (v: number): number => Math.round(v * factor) / factor;
@@ -108,13 +134,19 @@ export function addStyleSlider(
 	};
 
 	new Setting(row).addSlider((slider) => {
+		// The number beside the track is Obsidian's own — SliderComponent keeps it
+		// in sync, so this only says how to spell it.
+		setSliderDisplay(
+			slider,
+			(v) =>
+				`${spec.prefix ?? ""}${v.toFixed(spec.decimals)}${spec.suffix ?? ""}`,
+		);
 		slider.setLimits(spec.min, spec.max, spec.step).setValue(spec.get());
 		slider.sliderEl.addEventListener("input", () => {
 			// Covers keyboard nudges, which fire `input` without a pointerdown.
 			beginDrag();
 			const v = round(parseFloat(slider.sliderEl.value));
 			spec.set(v);
-			valueLabel.update(v);
 			scheduleLiveInject();
 		});
 		if (spec.onDragStart || spec.onDragEnd) {
@@ -199,7 +231,7 @@ export function renderBordersGroup(
 		max: 4,
 		step: 0.5,
 		decimals: 1,
-		numberOptions: { suffix: "px", format: { maximumFractionDigits: 1 } },
+		suffix: "px",
 		get: () => frame.borderWidth,
 		set: (v) => {
 			frame.borderWidth = v;

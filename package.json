@@ -39,7 +39,6 @@
 	"dependencies": {
 		"@codemirror/view": "6.38.6",
 		"monkey-around": "^3.0.0",
-		"number-flow": "^0.6.0",
 		"obsidian": "1.10.3"
 	},
 	"nano-staged": {

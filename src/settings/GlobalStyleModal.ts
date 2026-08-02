@@ -130,13 +130,7 @@ export class GlobalStyleModal extends Modal {
 			max: 1.5,
 			step: 0.05,
 			decimals: 2,
-			numberOptions: {
-				prefix: "×",
-				format: {
-					minimumFractionDigits: 2,
-					maximumFractionDigits: 2,
-				},
-			},
+			prefix: "×",
 			get: () => globalStyle.titleScale,
 			set: (v) => {
 				globalStyle.titleScale = v;
@@ -148,13 +142,7 @@ export class GlobalStyleModal extends Modal {
 			max: 1.5,
 			step: 0.05,
 			decimals: 2,
-			numberOptions: {
-				prefix: "×",
-				format: {
-					minimumFractionDigits: 2,
-					maximumFractionDigits: 2,
-				},
-			},
+			prefix: "×",
 			get: () => globalStyle.contentScale,
 			set: (v) => {
 				globalStyle.contentScale = v;
@@ -212,13 +200,7 @@ export class GlobalStyleModal extends Modal {
 			max: 1,
 			step: 0.05,
 			decimals: 2,
-			numberOptions: {
-				suffix: "em",
-				format: {
-					minimumFractionDigits: 2,
-					maximumFractionDigits: 2,
-				},
-			},
+			suffix: "em",
 			get: () => heading.paddingTop,
 			set: (v) => {
 				heading.paddingTop = v;
@@ -234,7 +216,7 @@ export class GlobalStyleModal extends Modal {
 			max: 40,
 			step: 1,
 			decimals: 0,
-			numberOptions: { suffix: "px" },
+			suffix: "px",
 			get: () => heading.paddingStart,
 			set: (v) => {
 				heading.paddingStart = v;
@@ -251,13 +233,7 @@ export class GlobalStyleModal extends Modal {
 			max: 2,
 			step: 0.05,
 			decimals: 2,
-			numberOptions: {
-				suffix: "em",
-				format: {
-					minimumFractionDigits: 2,
-					maximumFractionDigits: 2,
-				},
-			},
+			suffix: "em",
 			get: () => heading.marginTop,
 			set: (v) => {
 				heading.marginTop = v;
@@ -299,13 +275,7 @@ export class GlobalStyleModal extends Modal {
 			max: 1.5,
 			step: 0.05,
 			decimals: 2,
-			numberOptions: {
-				prefix: "×",
-				format: {
-					minimumFractionDigits: 2,
-					maximumFractionDigits: 2,
-				},
-			},
+			prefix: "×",
 			get: () => inline.fontScale,
 			set: (v) => {
 				inline.fontScale = v;
@@ -337,10 +307,7 @@ export class GlobalStyleModal extends Modal {
 			max,
 			step: 1,
 			decimals: 0,
-			numberOptions: {
-				suffix: "px",
-				format: { maximumFractionDigits: 0 },
-			},
+			suffix: "px",
 			get,
 			set,
 		});
