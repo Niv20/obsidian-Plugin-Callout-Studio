@@ -9,6 +9,7 @@
  */
 import type {
 	CalloutDefinition,
+	CalloutIcon,
 	ContextMenuItemConfig,
 	ContextMenuItemId,
 	ContextMenuSettings,
@@ -325,8 +326,32 @@ export class CalloutRegistry {
 		this.settings = structuredClone(DEFAULT_SETTINGS);
 		this.syncUserImages();
 		for (const def of SORTED_DEFAULT_CALLOUTS) {
-			this.builtInDefaults.set(def.id, structuredClone(def));
+			const cloned = structuredClone(def);
+			// Keep this snapshot's icon spelling in lockstep with the runtime
+			// normalization `load()` applies to `this.callouts` (see the Lucide
+			// migration below) — `isModified`/`isBuiltInModified` diff a live
+			// callout against this exact map, so if the two ever disagreed on
+			// spelling alone, every untouched built-in would read as customized.
+			cloned.icon = CalloutRegistry.normalizeLucideIcon(cloned.icon);
+			this.builtInDefaults.set(def.id, cloned);
 		}
+	}
+
+	/**
+	 * `constants.ts` and older imports store bare Lucide names ("pencil"),
+	 * while the icon picker's grid always produces the `getIconIds()` spelling
+	 * ("lucide-pencil") — see nameCheck.ts. Both name the same real icon, but
+	 * anything that compares `CalloutIcon.value` by strict string equality
+	 * (the picker's selection match, {@link isModified}) sees them as
+	 * different icons. Used to normalize both `builtInDefaults` (constructor)
+	 * and `callouts` (load(), below) so nothing is ever diffed or matched
+	 * across the two spellings.
+	 */
+	private static normalizeLucideIcon(icon: CalloutIcon): CalloutIcon {
+		if (icon.type === "lucide" && !icon.value.startsWith("lucide-")) {
+			return { ...icon, value: `lucide-${icon.value}` };
+		}
+		return icon;
 	}
 
 	load(data: Partial<PluginData> | null): void {
@@ -399,6 +424,12 @@ export class CalloutRegistry {
 			if (t === "svg") {
 				def.icon = { type: "lucide", value: "pencil" };
 			}
+		}
+		// Migration: normalize bare Lucide icon values to the picker's spelling
+		// (see {@link normalizeLucideIcon}) so both the picker's selection match
+		// and {@link isModified}'s diff against `builtInDefaults` agree with it.
+		for (const def of this.callouts.values()) {
+			def.icon = CalloutRegistry.normalizeLucideIcon(def.icon);
 		}
 		// Migration: `recolor` used to live on the picture, shared by every
 		// callout pointing at it. Give each callout its own copy, taken from the

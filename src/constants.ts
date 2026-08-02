@@ -64,7 +64,7 @@ export const HEAVY_VAULT_FILE_THRESHOLD: number = 500;
  */
 export const FALLBACK_ICON: CalloutIcon = Object.freeze({
 	type: "lucide",
-	value: "pencil",
+	value: "lucide-pencil",
 });
 
 export const DEFAULT_CALLOUTS: CalloutDefinition[] = [

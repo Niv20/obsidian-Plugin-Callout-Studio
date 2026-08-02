@@ -250,7 +250,7 @@ export class CalloutEditor extends Modal {
 			? { ...existing.icon }
 			: fallbackBase?.icon
 				? { ...fallbackBase.icon }
-				: { type: "lucide", value: "pencil" };
+				: { type: "lucide", value: "lucide-pencil" };
 		this.colorLight =
 			existing?.colorLight ?? fallbackBase?.colorLight ?? "#448aff";
 		this.colorDark =
