@@ -428,8 +428,67 @@
 
 /* ─── Callout Editor Modal ────────────────────────────────────── */
 
-.callout-studio-editor .modal-content {
-	padding: 16px;
+/* One width for every control in the form's top rows — the display name field,
+   the IDs field and the colour dropdown — so the three share a right edge
+   instead of ending in three different places. Each reaches for this variable
+   rather than restating a number, which is what makes the phone case a single
+   override below instead of one per control.
+
+   (A `.callout-studio-editor .modal-content { padding: 16px }` rule used to sit
+   here and never matched anything: `contentEl` IS the `.modal-content` element
+   the class is added to, so the descendant combinator had nothing to descend
+   into. The modal's real padding lives on `.modal.callout-studio-editor-modal >
+   .modal-content` further down.) */
+.callout-studio-editor {
+	--cs-editor-control-width: 220px;
+}
+
+/* On phone Obsidian stacks every setting row and forces its controls to full
+   width (`.is-phone .modal .setting-item-control input, …select, …button:not(
+   .clickable-icon) { width: 100% }`). Re-point the variable rather than fight
+   that rule once per control: uniform still means uniform there, it just
+   means 100%. */
+.is-phone .callout-studio-editor {
+	--cs-editor-control-width: 100%;
+}
+
+/* The display name field. `.cs-tag-input-field` is excluded because it is also a
+   text input inside a control column — but it is the flexible half of the IDs
+   row, and the width belongs to the wrapper around it, not to the field. Our 4
+   classes + 1 type outrank Obsidian's phone rule above (3 classes + 1 type),
+   and on phone the variable resolves to 100% anyway, so the two agree.
+
+   The rest of the box model (border, padding, height) and the focus/disabled
+   states are copied from `.cs-tag-input-field` on purpose: this field sits
+   directly above the Callout IDs field, and the two looked like different
+   controls when one used Obsidian's bare input style and the other the
+   deliberately-styled tag field. */
+.callout-studio-editor
+	.setting-item-control
+	input[type="text"]:not(.cs-tag-input-field) {
+	width: var(--cs-editor-control-width);
+	border: 1px solid var(--background-modifier-border);
+	border-radius: var(--radius-s);
+	background: var(--background-modifier-form-field);
+	padding: 6px 10px;
+	min-height: 36px;
+	box-sizing: border-box;
+}
+
+.callout-studio-editor
+	.setting-item-control
+	input[type="text"]:not(.cs-tag-input-field):focus {
+	border-color: var(--interactive-accent);
+	box-shadow: 0 0 0 2px rgba(var(--interactive-accent-rgb), 0.2);
+}
+
+.callout-studio-editor
+	.setting-item-control
+	input[type="text"]:not(.cs-tag-input-field):disabled {
+	color: var(--text-faint);
+	opacity: 0.5;
+	cursor: not-allowed;
+	background: var(--background-secondary);
 }
 
 /* ─── Live Preview ────────────────────────────────────────────── */
@@ -445,7 +504,7 @@
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
-	padding: 8px 12px;
+	padding: 6px 10px;
 	background: var(--background-secondary);
 	font-size: var(--font-ui-smaller);
 	color: var(--text-muted);
@@ -611,10 +670,16 @@ button.callout-studio-icon-picker-loading {
 	max-width: min(720px, 95vw);
 }
 
+/* The top padding is load-bearing, not decoration: this element is the modal's
+   scroll container, and an `overflow` box clips at its PADDING box. Obsidian
+   draws a focused text input's ring outside the input
+   (`box-shadow: 0 0 0 var(--input-border-width-focus)`, 2px), so with
+   `padding-top: 0` the first row's ring had exactly zero pixels to paint into
+   and came out sliced flat along the top edge. Don't take it back to 0. */
 .modal.callout-studio-editor-modal > .modal-content {
 	flex: 1;
 	overflow-y: auto;
-	padding-top: 0;
+	padding-top: 10px;
 	padding-bottom: 0;
 	padding-left: clamp(18px, 3vw, 24px);
 	padding-right: clamp(18px, 3vw, 24px);
@@ -639,9 +704,14 @@ button.callout-studio-icon-picker-loading {
 	background: var(--modal-background);
 }
 
+/* Only the margin reset survives here. This selector is (0,3,0) and Obsidian's
+   own `.modal:not(.mod-settings) .setting-item:not(.setting-item-heading)
+   :where(:not(.setting-group *)):first-child { padding-top: 0 }` is (0,5,0)
+   (`:where()` adds nothing), so the `padding-top: 8px` this used to carry never
+   applied. The space it was reaching for now sits on the scroller above, where
+   it also gives the focus ring somewhere to go. */
 .callout-studio-editor-modal > .modal-content > :first-child {
 	margin-top: 0;
-	padding-top: 8px;
 }
 
 .callout-studio-editor-buttons {
@@ -674,6 +744,16 @@ button.callout-studio-icon-picker-loading {
 	margin: 16px 0;
 	align-items: start;
 	justify-content: start;
+}
+
+/* Closes the form off from the preview below it: the Color row is the last of
+   the four setting rows, and without a line the panel reads as one more of them.
+   Scoped to the callout editor on purpose — the palette editor and the per-role
+   style popups reuse this same panel (see the responsive overrides near the end
+   of this file), and neither has a form above it for the line to separate. */
+.callout-studio-editor .callout-studio-preview-panel {
+	border-top: 1px solid var(--background-modifier-border);
+	padding-top: 16px;
 }
 
 .callout-studio-preview-col {
@@ -828,11 +908,16 @@ button.callout-studio-icon-picker-loading {
 	position: relative;
 }
 
-/* The editor's Color row hosts the dropdown in a standard setting
-   control; cap its width so it reads like the other row controls. */
+/* The editor's Color row hosts the dropdown in a standard setting control, so
+   it takes the same width as every other control in the form rather than
+   stretching to whatever the row leaves over. `min-width: 0` is what lets the
+   label inside actually ellipsise; without it the trigger's flex children floor
+   at their content width and a long palette name pushes the box wider. */
 .callout-studio-editor .setting-item-control .cs-palette-dropdown {
-	min-width: 220px;
-	max-width: 280px;
+	flex: 0 0 auto;
+	width: var(--cs-editor-control-width);
+	max-width: 100%;
+	min-width: 0;
 }
 
 .cs-palette-trigger {
@@ -855,28 +940,55 @@ button.callout-studio-icon-picker-loading {
 	background-color: var(--background-modifier-hover);
 }
 
+/* `flex-shrink: 0` because the trigger is a fixed width now and something has
+   to give when the name is long — and it must be the name, not the swatch. A
+   gradient palette draws three overlapping circles (~35px); left shrinkable,
+   they would be squeezed toward the 22px floor and the back one clipped. */
 .cs-palette-trigger-circles {
 	display: inline-flex;
+	flex-shrink: 0;
 	min-width: 22px;
 }
 
+/* `min-width: 0` is not redundant next to `flex: 1`: the flex BASIS is 0 but
+   `min-width` still defaults to `auto`, which floors the label at its content
+   width — so without this the ellipsis below never fires and a long palette
+   name overflows the trigger instead of being cut. */
 .cs-palette-trigger-label {
 	flex: 1;
+	min-width: 0;
 	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
 }
 
+/* Sits at the far end in both directions — margin-inline-start, not
+   margin-left, so RTL puts it on the left. Same treatment as the icon picker's
+   source button, which this control is deliberately a twin of. */
 .cs-palette-trigger-caret {
+	display: flex;
+	flex-shrink: 0;
+	align-items: center;
+	margin-inline-start: auto;
 	color: var(--text-muted);
-	font-size: 10px;
 }
 
+.cs-palette-trigger-caret .svg-icon {
+	width: var(--icon-xs);
+	height: var(--icon-xs);
+}
+
+/* Opens at the trigger's own width, every time. Pinning BOTH inset-inline edges
+   is the whole trick — with only the start edge the popup is shrink-to-fit and
+   free to disagree with its trigger, which is how it ended up narrower than the
+   button that opened it and read as clipped. (This is what the icon picker's
+   `.icon-picker-source-menu` does, and why that one looks right.) A `min-width`
+   would reintroduce exactly that disagreement, so there isn't one. */
 .cs-palette-menu {
 	position: absolute;
 	top: calc(100% + 4px);
 	inset-inline-start: 0;
-	min-width: 240px;
+	inset-inline-end: 0;
 	max-height: 320px;
 	overflow-y: auto;
 	z-index: 1000;
@@ -925,6 +1037,16 @@ button.callout-studio-icon-picker-loading {
 	color: var(--text-faint);
 	text-transform: uppercase;
 	letter-spacing: 0.04em;
+	text-align: start;
+}
+
+/* Separates each later group from the one above it. Skipped on the first
+   label — the menu's own top edge already delimits it, so a divider there
+   would just duplicate the border a pixel below. */
+.cs-palette-menu-group-label:not(:first-child) {
+	margin-top: 6px;
+	padding-top: 10px;
+	border-top: 1px solid var(--background-modifier-border);
 }
 
 .cs-palette-menu-item {
@@ -946,8 +1068,16 @@ button.callout-studio-icon-picker-loading {
 	background-color: var(--background-secondary-alt);
 }
 
+/* Same `min-width: 0` as the trigger's label, for the same reason: the menu is
+   the trigger's width now, so a long custom-palette name has to be cut rather
+   than allowed to widen the row. */
 .cs-palette-menu-item-label {
 	flex: 1;
+	min-width: 0;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	text-align: start;
 }
 
 /* ─── Color circles (shared) ──────────────────────────────────── */
@@ -1844,10 +1974,17 @@ button.callout-studio-icon-picker-loading {
 
 /* ─── Tag Input (Aliases) ─────────────────────────────────────── */
 
+/* The wrapper carries the row's width, not the field inside it — the field has
+   to stay flexible so the + button can sit beside it. Shares the editor's
+   control width so the IDs row ends on the same edge as the display name and
+   colour rows. The fallback matters: this is the one width rule here not scoped
+   under `.callout-studio-editor`, so it has to still mean something if TagInput
+   is ever mounted somewhere that doesn't set the variable. */
 .cs-tag-wrapper {
 	display: flex;
 	flex-direction: column;
-	max-width: 220px;
+	width: var(--cs-editor-control-width, 220px);
+	max-width: 100%;
 }
 
 /* Invalid text input (e.g. duplicate palette name) — red like an ID error */
@@ -1876,21 +2013,44 @@ input.cs-input-invalid:focus {
 	margin-top: 4px;
 }
 
+/* The + does not take a slice of this row — it is absolutely positioned over
+   the field's trailing edge (`.cs-tag-add-slot` below), so the field itself is
+   the full width of the row whether the button is showing or not. That is the
+   whole point: an empty field has no notch bitten out of it for a button that
+   has nothing to do yet.
+
+   `--cs-tag-field-bg` is shared by the field and by the overlay that has to
+   disappear into it. Reading the same variable is what guarantees the end-cap
+   is *exactly* the field's fill rather than a colour that merely usually
+   matches it. */
 .cs-tag-input-row {
+	--cs-tag-field-bg: var(--background-modifier-form-field);
+	/* Width of the end-cap the + sits in. The field's trailing padding is
+	   derived from it below, so the two can never drift apart. */
+	--cs-tag-add-size: 28px;
+	position: relative;
 	display: flex;
-	align-items: stretch;
-	gap: 4px;
+	align-items: center;
 }
 
+/* The trailing padding is what actually keeps text out from under the +: the
+   text run simply stops before the button and scrolls there instead. It is
+   reserved unconditionally, not only while the button is showing, so the first
+   keystroke doesn't shove the caret sideways — and it costs nothing visible
+   when the field is empty, since the field is still full width and only the
+   placeholder (never longer than a few words) shares the space.
+
+   `+ 5px`: the slot sits 1px inside the border, so this clears it by 4px. */
 .cs-tag-input-row > .cs-tag-input-field {
 	flex: 1 1 auto;
 	min-width: 80px;
 	border: 1px solid var(--background-modifier-border);
 	border-radius: var(--radius-s);
-	background: var(--background-primary);
+	background: var(--cs-tag-field-bg);
 	color: var(--text-normal);
 	font-size: var(--font-ui-small);
 	padding: 6px 10px;
+	padding-inline-end: calc(var(--cs-tag-add-size) + 5px);
 	min-height: 36px;
 	outline: none;
 	box-sizing: border-box;
@@ -1912,26 +2072,60 @@ input.cs-input-invalid:focus {
 	color: var(--text-faint);
 }
 
+/* The end-cap the + lives in, laid over the field's trailing edge.
+   `inset-block: 1px` / `inset-inline-end: 1px` keeps it inside the field's 1px
+   border rather than on top of it. It is a sibling of the input, not a child,
+   so nothing clips it — hence the matching corner radii, minus the 1px of
+   inset, so its hover tint cannot square off the field's rounded corner.
+
+   It still paints the field's own colour, even though the field's trailing
+   padding now stops the text before it. That is a backstop, not the mechanism:
+   Chromium has historically been inconsistent about whether an input's end
+   padding is honoured once the text scrolls horizontally, and an opaque block
+   in the field's exact colour costs one line and settles it either way. It is
+   invisible when correct — which is the point.
+
+   `pointer-events: none` so the strip still behaves like part of the text
+   field: clicking there puts the caret in the input, as it would if the overlay
+   weren't there. The button re-enables them for itself. */
+.cs-tag-add-slot {
+	position: absolute;
+	inset-block: 1px;
+	inset-inline-end: 1px;
+	width: var(--cs-tag-add-size);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: var(--cs-tag-field-bg);
+	border-start-end-radius: calc(var(--radius-s) - 1px);
+	border-end-end-radius: calc(var(--radius-s) - 1px);
+	pointer-events: none;
+	opacity: 0;
+	transition: opacity 0.12s ease;
+}
+
+/* Only shown once there is text to commit — see TagInput.syncAddButton(). */
+.cs-tag-add-slot.is-visible {
+	opacity: 1;
+}
+
+.cs-tag-add-slot.is-visible .cs-tag-add-btn {
+	pointer-events: auto;
+}
+
+/* Just the glyph. The end-cap behind it already separates it from the text, so
+   the button contributes no box of its own until hovered. */
 .cs-tag-add-btn {
-	flex: 0 0 auto;
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
-	width: 36px;
-	min-height: 36px;
-	padding: 0;
-	border: 1px solid var(--background-modifier-border);
-	border-radius: var(--radius-s);
-	background: var(--background-primary);
+	border: none;
+	border-radius: inherit;
+	background: transparent;
+	box-shadow: none;
 	color: var(--text-muted);
 	cursor: pointer;
 	box-sizing: border-box;
-}
-
-.cs-tag-add-btn:hover:not(:disabled) {
-	color: var(--text-normal);
-	border-color: var(--interactive-accent);
-	background: var(--background-modifier-hover);
 }
 
 .cs-tag-add-btn:disabled {
@@ -1939,9 +2133,51 @@ input.cs-input-invalid:focus {
 	cursor: not-allowed;
 }
 
+/* Inset, like every other focus ring in this file — an outward one on a control
+   this close to the modal's scrolling edge is the thing that gets clipped. */
+.cs-tag-add-btn:focus-visible {
+	outline: 2px solid var(--text-accent);
+	outline-offset: -2px;
+	box-shadow: none;
+}
+
 .cs-tag-add-btn .svg-icon {
 	width: 16px;
 	height: 16px;
+	flex: 0 0 auto;
+}
+
+/* Obsidian dresses a bare `button` harder than one plain class can undo, and
+   this is the one place that matters — the + must vanish into the field, not
+   sit on it as a chip. Counted against what 1.13 ships:
+
+     button:not(.clickable-icon)                          → (0,1,1)  bg + shadow
+     button:hover                                         → (0,1,1)  bg
+     .is-tablet button:not(.clickable-icon)               → (0,2,1)  padding
+     .is-phone .modal .setting-item-control button        → (0,3,1)  padding
+
+   A lone `.cs-tag-add-btn` is (0,1,0) and loses to every one of them — which is
+   why the + was still painting `--interactive-normal`. Doubling the class here
+   gives (0,4,0), clearing all four, and one rule now covers desktop, tablet and
+   phone where three used to disagree. Sizing is `100%` of the slot on purpose:
+   the remaining phone rule (`… button:not(.clickable-icon)`, (0,4,1)) forces
+   exactly that, so for once we and Obsidian want the same thing. */
+.cs-tag-input-row .cs-tag-add-slot .cs-tag-add-btn.cs-tag-add-btn {
+	width: 100%;
+	height: 100%;
+	min-height: 0;
+	padding: 0;
+	margin: 0;
+	background: transparent;
+	box-shadow: none;
+}
+
+.cs-tag-input-row
+	.cs-tag-add-slot
+	.cs-tag-add-btn.cs-tag-add-btn:hover:not(:disabled) {
+	color: var(--text-normal);
+	background: var(--background-modifier-hover);
+	box-shadow: none;
 }
 
 .cs-tag-row {
@@ -2066,10 +2302,6 @@ input.cs-input-invalid:focus {
 
 .cs-global-preview-card {
 	padding: 0;
-}
-
-.cs-global-preview-card .callout-studio-preview-header {
-	padding: 6px 10px;
 }
 
 .cs-global-preview-body {
@@ -2330,49 +2562,43 @@ input.cs-input-invalid:focus {
 	}
 }
 
-/* On phone, Obsidian's own core CSS (`.is-phone .setting-item-control input,
-   select, button:not(.clickable-icon) { width: 100% }`) forces every input
-   and button inside a setting's control column to full width — regardless of
-   viewport size, since it's keyed off the device class (.is-phone on <body>),
-   not a media query. That fight is what pushed the + button off-screen /
-   smeared it full-width. Scope the fix to .is-phone (not a width breakpoint)
-   so desktop — including a narrow desktop window — is untouched, and reassert
-   our intended sizing (input grows, + stays a 36px square) via selector
-   specificity instead of !important. Obsidian's own responsive stacking
-   (info row above, control row below) already applies here and needs no
-   duplicate handling. */
-.is-phone .cs-callout-ids-setting .cs-tag-wrapper {
-	max-width: none;
-	width: 100%;
-}
-/* Our 3 plain classes (.is-phone .cs-callout-ids-setting .cs-tag-input-field)
-   already outrank Obsidian's `input` line above on class count alone (3 > 2),
-   regardless of its extra type selector — no !important needed. */
-.is-phone .cs-callout-ids-setting .cs-tag-input-field {
+/* On phone, Obsidian's core CSS forces every input and button inside a
+   setting's control column to full width — regardless of viewport size, since
+   it's keyed off the device class (.is-phone on <body>), not a media query.
+   That is what smears the + button into a full-width bar if left alone. Scope
+   the fix to .is-phone (not a width breakpoint) so desktop — including a narrow
+   desktop window — is untouched, and win it back on selector specificity rather
+   than !important. Obsidian's own responsive stacking (info row above, control
+   row below) already applies here and needs no duplicate handling.
+
+   The specificity below is counted against what Obsidian 1.13 actually ships,
+   which is NOT what the older comment here assumed. It gained a `.modal`:
+
+     .is-phone .modal .setting-item-control input            → (0,3,1)
+     .is-phone .modal .setting-item-control
+                              button:not(.clickable-icon)    → (0,4,1)
+     .is-phone .modal .setting-item-control button           → (0,3,1)
+
+   so the 3-class override that used to sit here lost. The wrapper needs no rule
+   at all any more: it takes --cs-editor-control-width, which .is-phone already
+   re-points to 100%.
+
+   The two + button rules that used to live here — one per device class — are
+   gone with the button itself: it no longer sits in this row's flow, so its box
+   is the overlay's, and the single (0,4,0) rule up beside `.cs-tag-add-slot`
+   now settles desktop, tablet and phone at once. Only the tap target still
+   differs, and that is one variable below. */
+.is-phone .modal .cs-callout-ids-setting .cs-tag-input-field {
 	width: auto;
 	flex: 1 1 auto;
 }
-/* Obsidian's `button:not(.clickable-icon)` variant of the rule above counts
-   as 3 classes (.is-phone, .setting-item-control, the :not() argument) plus
-   the `button` type selector, tying our 3 plain classes and then winning on
-   that extra type selector. Repeat our own class once to add a 4th class
-   instead — still an unconditional win, and unlike !important it stays
-   correct if Obsidian ever tweaks that rule's padding/margin too. */
-.is-phone .cs-callout-ids-setting .cs-tag-add-btn.cs-tag-add-btn {
-	width: 36px;
-	flex: 0 0 36px;
-}
 
-/* On iPad, Obsidian's core CSS (`.is-tablet button:not(.clickable-icon) {
-   padding: var(--size-4-1) var(--size-4-5) }`, i.e. 4px 20px) is 2 classes +
-   1 type selector. Our 3-class selector below already outranks it on class
-   count alone, so plain specificity reasserts zero padding with no
-   !important needed. Without this, 40px of forced horizontal padding inside
-   a button fixed at 36px wide leaves ~0px for the centered 16px "+" icon, so
-   it gets squeezed out — intermittently, depending on how the browser
-   resolves the overconstrained box. */
-.is-tablet .cs-callout-ids-setting .cs-tag-add-btn {
-	padding: 0;
+/* A fatter tap target on touch, which the field's 36px min-height (34px inside
+   its border) has room for. The field's trailing padding is derived from this,
+   so it widens to match on its own. */
+.is-phone .cs-tag-input-row,
+.is-tablet .cs-tag-input-row {
+	--cs-tag-add-size: 34px;
 }
 
 @media (min-width: 701px) and (max-width: 760px) {

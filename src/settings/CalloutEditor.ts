@@ -677,7 +677,11 @@ export class CalloutEditor extends Modal {
 		});
 		const trigger = dropdown.createEl("button", {
 			cls: "cs-palette-trigger",
-			attr: { type: "button", "aria-haspopup": "listbox" },
+			attr: {
+				type: "button",
+				"aria-haspopup": "listbox",
+				"aria-expanded": "false",
+			},
 		});
 		const triggerCircles = trigger.createDiv({
 			cls: "cs-palette-trigger-circles",
@@ -688,11 +692,14 @@ export class CalloutEditor extends Modal {
 			cls: "cs-palette-trigger-label",
 			text: t("editor.paletteDeleted"),
 		});
+		// The same Lucide chevron the icon picker's source button uses, rather
+		// than a "▾" glyph: a text caret is sized and baselined by the UI font,
+		// so it never quite lines up with the real chevrons elsewhere in the
+		// plugin.
 		const triggerCaret = trigger.createSpan({
 			cls: "cs-palette-trigger-caret",
-			text: "▾",
 		});
-		void triggerCaret;
+		setIcon(triggerCaret, "chevron-down");
 
 		// Opens downward: the colors section now sits near the top of the
 		// modal, so an upward menu would clip against the modal edge.
@@ -862,6 +869,7 @@ export class CalloutEditor extends Modal {
 			menuOpen = false;
 			menu.addClass("cs-palette-menu-hidden");
 			trigger.removeClass("is-open");
+			trigger.setAttribute("aria-expanded", "false");
 			// Drop any hover preview: nothing was committed, so the preview
 			// simply returns to the form's own colours.
 			this.previewColorsTransient(null);
@@ -1014,6 +1022,7 @@ export class CalloutEditor extends Modal {
 			buildMenu();
 			menu.removeClass("cs-palette-menu-hidden");
 			trigger.addClass("is-open");
+			trigger.setAttribute("aria-expanded", "true");
 			// Focus selected, else first — highlight only. Opening the menu is
 			// not a choice, so it must not repaint the preview (with no palette
 			// matched it would otherwise jump to the first entry's colours).

@@ -23,6 +23,8 @@ import { t } from "../i18n";
 export class TagInput {
 	private wrapperEl: HTMLElement;
 	private inputEl: HTMLInputElement;
+	/** Overlay at the field's trailing edge; hosts the + and its text fade. */
+	private addSlotEl: HTMLElement;
 	private addBtnEl: HTMLButtonElement;
 	private errorEl: HTMLElement;
 	private tagsRowEl: HTMLElement;
@@ -100,13 +102,26 @@ export class TagInput {
 					: {},
 		});
 
-		// Add button
-		this.addBtnEl = inputRow.createEl("button", {
+		// Add button. It does not sit beside the field taking a slice of the
+		// row's width — it overlays the field's trailing edge and only appears
+		// once there is something to commit, so an empty field is the full
+		// width of the row. The slot is the piece that overlays; the field
+		// reserves matching trailing padding so text never runs under it
+		// (see styles.css).
+		this.addSlotEl = inputRow.createDiv({ cls: "cs-tag-add-slot" });
+		this.addBtnEl = this.addSlotEl.createEl("button", {
 			cls: "cs-tag-add-btn",
 			attr: { type: "button", "aria-label": t("editor.addId") },
 		});
 		this.addBtnEl.setAttribute("title", t("editor.addId"));
 		setIcon(this.addBtnEl, "plus");
+		// Keep focus in the field on click. Without this the mousedown blurs the
+		// input, `blur` commits the tag and empties the value, and syncAddButton
+		// pulls the button out from under the pointer before the click lands —
+		// so the click handler's focus-restore never runs.
+		this.addBtnEl.addEventListener("mousedown", (e) => {
+			e.preventDefault();
+		});
 		this.addBtnEl.addEventListener("click", (e) => {
 			e.preventDefault();
 			this.commitInput();
@@ -142,6 +157,7 @@ export class TagInput {
 
 		// Show error when user tries to type past maxLength (if a cap is set)
 		this.inputEl.addEventListener("input", () => {
+			this.syncAddButton();
 			this.onInput?.(this.inputEl.value);
 			const cap = this.maxLength;
 			if (cap !== undefined && this.inputEl.value.length >= cap) {
@@ -168,6 +184,17 @@ export class TagInput {
 		});
 	}
 
+	/**
+	 * Show the + only when it has something to do: text typed, and room left
+	 * for another tag. Both halves matter — a visible-but-disabled button would
+	 * still paint its opaque end-cap over the field for no reason.
+	 */
+	private syncAddButton(): void {
+		const canAdd =
+			this.inputEl.value.trim() !== "" && !this.addBtnEl.disabled;
+		this.addSlotEl.toggleClass("is-visible", canAdd);
+	}
+
 	private updateInputState(): void {
 		if (this.tags.length >= this.maxTags) {
 			this.inputEl.disabled = true;
@@ -182,6 +209,7 @@ export class TagInput {
 			this.inputEl.placeholder = this.placeholder;
 			this.clearPersistentError();
 		}
+		this.syncAddButton();
 	}
 
 	private showPersistentError(msg: string): void {
@@ -212,6 +240,7 @@ export class TagInput {
 		if (!raw) return;
 		this.addTag(raw);
 		this.inputEl.value = "";
+		this.syncAddButton();
 	}
 
 	private showError(msg: string): void {
