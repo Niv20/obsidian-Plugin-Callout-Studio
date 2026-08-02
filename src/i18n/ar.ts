@@ -506,8 +506,6 @@ export const ar: Record<string, string> = {
 	"contextMenu.deleteSection": "حذف قسم العنوان",
 	"heading.toggleFold": "تبديل الطي",
 	"settings.globalSettings": "الإعدادات العامة",
-	"settings.globalSettingsDesc":
-		"اضبط بدقة الشكل الذي يظهر به كل نوع callout في جميع أنحاء مخزنك.",
 	"settings.globalSettingsRegularDesc":
 		"أضف رمز callout إلى اقتباس محظور (مثل `> [!type]`) لعرض صندوق الـ callout الأصلي في Obsidian. يمكنك ضبط حدوده ونصف قطره ومقياس الخط ومحاذاته.",
 	"settings.globalSettingsHeadingDesc":

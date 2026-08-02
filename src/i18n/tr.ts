@@ -516,8 +516,6 @@ export const tr: Record<string, string> = {
 	"heading.toggleFold": "Katlamayı aç/kapat",
 
 	"settings.globalSettings": "Genel ayarlar",
-	"settings.globalSettingsDesc":
-		"Her callout türünün vault'unuz genelinde nasıl göründüğünü ince ayarlayın.",
 	"settings.globalSettingsRegularDesc":
 		"Obsidian'ın yerel callout kutusu olarak görüntülemek için bir blok alıntıya callout belirteci ekleyin (örn. `> [!type]`). Kenarlığını, köşe yuvarlaklığını, yazı tipi ölçeğini ve hizalamasını ayarlayabilirsiniz.",
 	"settings.globalSettingsHeadingDesc":

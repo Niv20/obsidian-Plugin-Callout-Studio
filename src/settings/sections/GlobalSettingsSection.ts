@@ -4,10 +4,9 @@
  * A single callout definition can render as a regular blockquote callout, a
  * heading callout, or an inline pill. Each role has its own vault-wide geometry
  * (borders, spacing, shape, …) edited in the per-role "Global callout style"
- * popup ({@link GlobalStyleModal}). This section is a heading, a one-line
- * intro, then one {@link Setting} row per role — each with its own
- * syntax-specific description and a "Customize" button that opens that
- * role's popup.
+ * popup ({@link GlobalStyleModal}). This section is a heading, then one
+ * {@link Setting} row per role — each with its own syntax-specific
+ * description and a "Customize" button that opens that role's popup.
  *
  * Each role also has an `enabled` setting (regular is always on; heading and
  * inline can each be disabled) that still gates rendering, but it is not
@@ -40,11 +39,6 @@ export function renderGlobalSettingsSection(
 	containerEl: HTMLElement,
 ): void {
 	new Setting(containerEl).setName(t("settings.globalSettings")).setHeading();
-
-	containerEl.createEl("p", {
-		cls: "cs-global-settings-desc",
-		text: t("settings.globalSettingsDesc"),
-	});
 
 	const roles: { role: CalloutRenderRole; label: string; desc: string }[] = [
 		{

@@ -513,8 +513,6 @@ export const cs: Record<string, string> = {
 	"contextMenu.deleteSection": "Smazat sekci nadpisu",
 	"heading.toggleFold": "Přepnout sbalení",
 	"settings.globalSettings": "Globální nastavení",
-	"settings.globalSettingsDesc":
-		"Doladí vzhled každého typu callout v celém vaultu.",
 	"settings.globalSettingsRegularDesc":
 		"Přidejte token callout do citace (např. `> [!type]`) a vykreslete tak nativní rámeček callout v Obsidianu. Můžete upravit jeho ohraničení, poloměr, měřítko písma a zarovnání.",
 	"settings.globalSettingsHeadingDesc":

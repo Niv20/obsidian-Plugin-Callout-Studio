@@ -516,8 +516,6 @@ export const vi: Record<string, string> = {
 	"heading.toggleFold": "Chuyển đổi gập",
 
 	"settings.globalSettings": "Cài đặt toàn cục",
-	"settings.globalSettingsDesc":
-		"Tinh chỉnh cách mỗi loại callout hiển thị trên toàn bộ vault của bạn.",
 	"settings.globalSettingsRegularDesc":
 		"Thêm token callout vào một trích dẫn khối (ví dụ: `> [!type]`) để hiển thị dưới dạng hộp callout gốc của Obsidian. Bạn có thể điều chỉnh viền, độ bo góc, tỷ lệ phông và căn chỉnh của nó.",
 	"settings.globalSettingsHeadingDesc":

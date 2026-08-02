@@ -539,8 +539,6 @@ export const he: Record<string, string> = {
 
 	// Global settings section (per-role style popups)
 	"settings.globalSettings": "הגדרות גלובליות",
-	"settings.globalSettingsDesc":
-		"כיוונון עדין של המראה של כל סוג תיבת־הבלטה בכל רחבי הכספת שלכם.",
 	"settings.globalSettingsRegularDesc":
 		"הוספת סימון תיבת־הבלטה לתוך ציטוט (למשל, `> [!type]`) תציג את תיבת־ההבלטה המובנית של Obsidian. ניתן להתאים את המסגרת, עיגול הפינות, קנה־המידה של הגופן והיישור.",
 	"settings.globalSettingsHeadingDesc":

@@ -521,8 +521,6 @@ export const de: Record<string, string> = {
 	"contextMenu.deleteSection": "Überschriftsabschnitt löschen",
 	"heading.toggleFold": "Faltung umschalten",
 	"settings.globalSettings": "Globale Einstellungen",
-	"settings.globalSettingsDesc":
-		"Feinabstimmung, wie jeder Callout-Typ in Ihrem gesamten Vault aussieht.",
 	"settings.globalSettingsRegularDesc":
 		"Fügen Sie einem Zitatblock ein Callout-Token hinzu (z. B. `> [!type]`), um Obsidians native Callout-Box darzustellen. Sie können Rahmen, Radius, Schriftskalierung und Ausrichtung anpassen.",
 	"settings.globalSettingsHeadingDesc":

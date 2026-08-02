@@ -511,8 +511,6 @@ export const fa: Record<string, string> = {
 	"contextMenu.deleteSection": "حذف بخش عنوان",
 	"heading.toggleFold": "تغییر وضعیت جمع‌شدن",
 	"settings.globalSettings": "تنظیمات کلی",
-	"settings.globalSettingsDesc":
-		"ظاهر هر نوع callout را در سراسر vault خود به‌طور دقیق تنظیم کنید.",
 	"settings.globalSettingsRegularDesc":
 		"یک توکن callout به یک نقل‌قول اضافه کنید (مثلاً `> [!type]`) تا جعبه callout بومی Obsidian نمایش داده شود. می‌توانید حاشیه، شعاع، مقیاس فونت و تراز آن را تنظیم کنید.",
 	"settings.globalSettingsHeadingDesc":

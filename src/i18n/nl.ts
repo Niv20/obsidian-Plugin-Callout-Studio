@@ -518,8 +518,6 @@ export const nl: Record<string, string> = {
 	"contextMenu.deleteSection": "Kopsectie verwijderen",
 	"heading.toggleFold": "Vouwen omschakelen",
 	"settings.globalSettings": "Globale instellingen",
-	"settings.globalSettingsDesc":
-		"Verfijn hoe elk callout-type eruitziet in de hele vault.",
 	"settings.globalSettingsRegularDesc":
 		"Voeg een callout-token toe aan een blockquote (bijvoorbeeld `> [!type]`) om het ingebouwde callout-vak van Obsidian weer te geven. U kunt de rand, hoekafronding, lettertypeschaal en uitlijning aanpassen.",
 	"settings.globalSettingsHeadingDesc":

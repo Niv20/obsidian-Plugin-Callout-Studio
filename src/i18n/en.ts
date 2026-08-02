@@ -542,8 +542,6 @@ export const en: Record<string, string> = {
 
 	// Global settings section (per-role style popups)
 	"settings.globalSettings": "Global settings",
-	"settings.globalSettingsDesc":
-		"Fine-tune how each callout type looks across your whole vault.",
 	"settings.globalSettingsRegularDesc":
 		"Add a callout token to a blockquote (e.g., `> [!type]`) to render Obsidian's native callout box. You can adjust its border, radius, font scale, and alignment.",
 	"settings.globalSettingsHeadingDesc":

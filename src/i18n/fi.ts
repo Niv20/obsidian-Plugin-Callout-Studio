@@ -498,8 +498,6 @@ export const fi: Record<string, string> = {
 	"contextMenu.deleteSection": "Poista otsikko-osio",
 	"heading.toggleFold": "Vaihda taitto",
 	"settings.globalSettings": "Yleisasetukset",
-	"settings.globalSettingsDesc":
-		"Hienosäädä, miltä kukin callout-tyyppi näyttää koko holvissasi.",
 	"settings.globalSettingsRegularDesc":
 		"Lisää callout-token lainaukseen (esim. `> [!type]`), jolloin se näkyy Obsidianin natiivina callout-laatikkona. Voit säätää sen reunaa, pyöristystä, fonttiskaalaa ja tasausta.",
 	"settings.globalSettingsHeadingDesc":

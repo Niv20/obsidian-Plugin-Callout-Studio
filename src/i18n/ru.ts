@@ -513,8 +513,6 @@ export const ru: Record<string, string> = {
 	"contextMenu.deleteSection": "Удалить раздел заголовка",
 	"heading.toggleFold": "Переключить складывание",
 	"settings.globalSettings": "Глобальные настройки",
-	"settings.globalSettingsDesc":
-		"Точно настройте внешний вид каждого типа callout по всему хранилищу.",
 	"settings.globalSettingsRegularDesc":
 		"Добавьте токен callout в цитату (например, `> [!type]`), чтобы отобразить встроенный блок callout Obsidian. Вы можете настроить его рамку, скругление, масштаб шрифта и выравнивание.",
 	"settings.globalSettingsHeadingDesc":

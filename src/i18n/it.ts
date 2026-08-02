@@ -518,8 +518,6 @@ export const it: Record<string, string> = {
 	"heading.toggleFold": "Attiva/disattiva la piegatura",
 
 	"settings.globalSettings": "Impostazioni globali",
-	"settings.globalSettingsDesc":
-		"Perfeziona l'aspetto di ogni tipo di callout in tutto il tuo vault.",
 	"settings.globalSettingsRegularDesc":
 		"Aggiungi un token callout a una citazione (ad es. `> [!type]`) per visualizzare il riquadro callout nativo di Obsidian. Puoi regolarne bordo, raggio, scala font e allineamento.",
 	"settings.globalSettingsHeadingDesc":

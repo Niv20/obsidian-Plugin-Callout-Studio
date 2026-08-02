@@ -503,8 +503,6 @@ export const bg: Record<string, string> = {
 	"contextMenu.deleteSection": "Изтриване на раздел на заглавие",
 	"heading.toggleFold": "Превключване на сгъването",
 	"settings.globalSettings": "Общи настройки",
-	"settings.globalSettingsDesc":
-		"Прецизирайте как изглежда всеки тип callout в цялото ви хранилище.",
 	"settings.globalSettingsRegularDesc":
 		"Добавете токен на callout към цитат (напр. `> [!type]`), за да се визуализира нативната кутия за callout на Obsidian. Можете да коригирате нейната граница, радиус, мащаб на шрифта и подравняване.",
 	"settings.globalSettingsHeadingDesc":

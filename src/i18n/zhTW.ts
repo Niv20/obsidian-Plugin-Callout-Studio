@@ -484,8 +484,6 @@ export const zhTW: Record<string, string> = {
 	"contextMenu.deleteSection": "刪除標題部分",
 	"heading.toggleFold": "切換折疊",
 	"settings.globalSettings": "全域設定",
-	"settings.globalSettingsDesc":
-		"微調每種 callout 類型在整個 vault 中的外觀。",
 	"settings.globalSettingsRegularDesc":
 		"在區塊引用中新增 callout 標記（例如 `> [!type]`）以顯示為 Obsidian 原生的 callout 框。您可以調整其邊框、圓角、字型縮放和對齊方式。",
 	"settings.globalSettingsHeadingDesc":

@@ -510,8 +510,6 @@ export const th: Record<string, string> = {
 	"heading.toggleFold": "สลับการพับ",
 
 	"settings.globalSettings": "การตั้งค่าส่วนกลาง",
-	"settings.globalSettingsDesc":
-		"ปรับแต่งรูปลักษณ์ของ callout แต่ละประเภทอย่างละเอียดทั่วทั้ง vault ของคุณ",
 	"settings.globalSettingsRegularDesc":
 		"เพิ่มโทเค็น callout ลงในบล็อกอ้างอิง (เช่น `> [!type]`) เพื่อแสดงผลเป็นกล่อง callout ดั้งเดิมของ Obsidian คุณสามารถปรับขอบ ความโค้งมุม ขนาดตัวอักษร และการจัดแนวได้",
 	"settings.globalSettingsHeadingDesc":

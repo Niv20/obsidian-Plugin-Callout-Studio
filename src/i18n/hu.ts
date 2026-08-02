@@ -517,8 +517,6 @@ export const hu: Record<string, string> = {
 	"contextMenu.deleteSection": "Címsor szakasz törlése",
 	"heading.toggleFold": "Összecsukás váltása",
 	"settings.globalSettings": "Globális beállítások",
-	"settings.globalSettingsDesc":
-		"Finomhangolja, hogyan nézzen ki az egyes callout-típusok a teljes tárban.",
 	"settings.globalSettingsRegularDesc":
 		"Adjon hozzá egy callout tokent egy idézethez (pl. `> [!type]`), hogy megjelenjen az Obsidian natív callout-doboza. Beállíthatja a szegélyét, a sugarát, a betűméret-arányát és az igazítását.",
 	"settings.globalSettingsHeadingDesc":

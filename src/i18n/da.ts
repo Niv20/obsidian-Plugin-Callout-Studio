@@ -497,8 +497,6 @@ export const da: Record<string, string> = {
 	"contextMenu.deleteSection": "Slet overskriftsektion",
 	"heading.toggleFold": "Skift foldning",
 	"settings.globalSettings": "Globale indstillinger",
-	"settings.globalSettingsDesc":
-		"Finjuster hvordan hver callout-type ser ud i hele din vault.",
 	"settings.globalSettingsRegularDesc":
 		"Tilføj et callout-token til et citat (f.eks. `> [!type]`) for at vise Obsidians indbyggede callout-boks. Du kan justere dens kant, radius, skriftstørrelse og justering.",
 	"settings.globalSettingsHeadingDesc":

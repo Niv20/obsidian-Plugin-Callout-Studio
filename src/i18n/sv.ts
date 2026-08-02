@@ -513,8 +513,6 @@ export const sv: Record<string, string> = {
 	"contextMenu.deleteSection": "Ta bort rubriksektion",
 	"heading.toggleFold": "Växla vikning",
 	"settings.globalSettings": "Globala inställningar",
-	"settings.globalSettingsDesc":
-		"Finjustera hur varje callout-typ ser ut i hela vault.",
 	"settings.globalSettingsRegularDesc":
 		"Lägg till en callout-token i ett citat (t.ex. `> [!type]`) för att rendera Obsidians inbyggda callout-ruta. Du kan justera dess kant, hörnrundning, typsnittsskala och justering.",
 	"settings.globalSettingsHeadingDesc":

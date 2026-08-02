@@ -508,8 +508,6 @@ export const el: Record<string, string> = {
 	"contextMenu.deleteSection": "Διαγραφή ενότητας επικεφαλίδας",
 	"heading.toggleFold": "Εναλλαγή αναδίπλωσης",
 	"settings.globalSettings": "Καθολικές ρυθμίσεις",
-	"settings.globalSettingsDesc":
-		"Ρυθμίστε με ακρίβεια την εμφάνιση κάθε τύπου callout σε ολόκληρο το vault σας.",
 	"settings.globalSettingsRegularDesc":
 		"Προσθέστε ένα token callout σε μια παράθεση (π.χ. `> [!type]`) για να εμφανιστεί το εγγενές πλαίσιο callout του Obsidian. Μπορείτε να προσαρμόσετε το περίγραμμα, την ακτίνα, την κλίμακα γραμματοσειράς και τη στοίχισή του.",
 	"settings.globalSettingsHeadingDesc":

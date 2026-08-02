@@ -517,8 +517,6 @@ export const ro: Record<string, string> = {
 	"contextMenu.deleteSection": "Ștergeți secțiunea de titlu",
 	"heading.toggleFold": "Comutare pliere",
 	"settings.globalSettings": "Setări globale",
-	"settings.globalSettingsDesc":
-		"Ajustați cu precizie modul în care arată fiecare tip de callout în tot vault-ul.",
 	"settings.globalSettingsRegularDesc":
 		"Adăugați un token callout într-un citat (de ex. `> [!type]`) pentru a afișa caseta de callout integrată a Obsidian. Puteți ajusta bordura, rotunjirea, scara fontului și alinierea.",
 	"settings.globalSettingsHeadingDesc":

@@ -502,7 +502,6 @@ export const zh: Record<string, string> = {
 	"heading.toggleFold": "切换折叠",
 
 	"settings.globalSettings": "全局设置",
-	"settings.globalSettingsDesc": "微调每种 callout 类型在整个库中的外观。",
 	"settings.globalSettingsRegularDesc":
 		"在引用块中添加 callout 标记（例如 `> [!type]`）以显示为 Obsidian 原生的 callout 框。您可以调整其边框、圆角、字体缩放和对齐方式。",
 	"settings.globalSettingsHeadingDesc":

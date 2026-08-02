@@ -516,8 +516,6 @@ export const pl: Record<string, string> = {
 	"contextMenu.deleteSection": "Usuń sekcję nagłówka",
 	"heading.toggleFold": "Przełącz zwijanie",
 	"settings.globalSettings": "Ustawienia globalne",
-	"settings.globalSettingsDesc":
-		"Dostrój wygląd każdego typu callout w całym vault.",
 	"settings.globalSettingsRegularDesc":
 		"Dodaj token callout do cytatu blokowego (np. `> [!type]`), aby wyświetlić wbudowane pole callout Obsidian. Możesz dostosować jego obramowanie, zaokrąglenie, skalę czcionki i wyrównanie.",
 	"settings.globalSettingsHeadingDesc":

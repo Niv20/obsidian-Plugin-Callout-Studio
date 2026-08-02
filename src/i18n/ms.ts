@@ -498,8 +498,6 @@ export const ms: Record<string, string> = {
 	"contextMenu.deleteSection": "Padam bahagian tajuk",
 	"heading.toggleFold": "Togol lipatan",
 	"settings.globalSettings": "Tetapan global",
-	"settings.globalSettingsDesc":
-		"Perhalusi cara setiap jenis callout kelihatan di seluruh vault anda.",
 	"settings.globalSettingsRegularDesc":
 		"Tambah token callout pada sebutan blok (cth. `> [!type]`) untuk memaparkan kotak callout asli Obsidian. Anda boleh melaraskan sempadan, jejari, skala fon dan penjajarannya.",
 	"settings.globalSettingsHeadingDesc":

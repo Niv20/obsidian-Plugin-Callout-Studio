@@ -518,8 +518,6 @@ export const uk: Record<string, string> = {
 	"heading.toggleFold": "Перемкнути складання",
 
 	"settings.globalSettings": "Глобальні налаштування",
-	"settings.globalSettingsDesc":
-		"Точно налаштуйте, як виглядає кожен тип callout у всьому вашому сховищі.",
 	"settings.globalSettingsRegularDesc":
 		"Додайте токен callout до цитати (напр., `> [!type]`), щоб відобразити стандартний блок callout Obsidian. Ви можете налаштувати його рамку, заокруглення кутів, масштаб шрифту та вирівнювання.",
 	"settings.globalSettingsHeadingDesc":

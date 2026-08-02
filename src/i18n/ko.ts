@@ -512,8 +512,6 @@ export const ko: Record<string, string> = {
 	"heading.toggleFold": "접기 전환",
 
 	"settings.globalSettings": "전역 설정",
-	"settings.globalSettingsDesc":
-		"볼트 전체에서 각 callout 유형이 어떻게 보이는지 세밀하게 조정합니다.",
 	"settings.globalSettingsRegularDesc":
 		"인용 블록에 callout 토큰을 추가하면(예: `> [!type]`) Obsidian 기본 callout 상자로 표시됩니다. 테두리, 반지름, 폰트 크기, 정렬을 조정할 수 있습니다.",
 	"settings.globalSettingsHeadingDesc":

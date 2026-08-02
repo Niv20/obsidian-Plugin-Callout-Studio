@@ -521,8 +521,6 @@ export const fr: Record<string, string> = {
 	"contextMenu.deleteSection": "Supprimer la section de titre",
 	"heading.toggleFold": "Basculer le repli",
 	"settings.globalSettings": "Paramètres globaux",
-	"settings.globalSettingsDesc":
-		"Affinez l'apparence de chaque type de callout dans tout votre vault.",
 	"settings.globalSettingsRegularDesc":
 		"Ajoutez un jeton de callout à une citation (p. ex. `> [!type]`) pour afficher le bloc de callout natif d'Obsidian. Vous pouvez ajuster sa bordure, son rayon, son échelle de police et son alignement.",
 	"settings.globalSettingsHeadingDesc":

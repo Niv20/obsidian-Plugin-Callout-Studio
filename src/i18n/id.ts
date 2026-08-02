@@ -515,8 +515,6 @@ export const id: Record<string, string> = {
 	"heading.toggleFold": "Alihkan lipatan",
 
 	"settings.globalSettings": "Pengaturan global",
-	"settings.globalSettingsDesc":
-		"Sesuaikan tampilan setiap tipe callout di seluruh vault Anda.",
 	"settings.globalSettingsRegularDesc":
 		"Tambahkan token callout ke blockquote (mis., `> [!type]`) untuk menampilkan kotak callout native Obsidian. Anda dapat menyesuaikan batas, radius, skala font, dan perataannya.",
 	"settings.globalSettingsHeadingDesc":

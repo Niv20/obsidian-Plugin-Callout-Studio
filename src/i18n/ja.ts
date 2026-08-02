@@ -514,8 +514,6 @@ export const ja: Record<string, string> = {
 	"heading.toggleFold": "折りたたみを切り替え",
 
 	"settings.globalSettings": "グローバル設定",
-	"settings.globalSettingsDesc":
-		"vault全体で各calloutタイプの見た目を細かく調整します。",
 	"settings.globalSettingsRegularDesc":
 		"引用ブロックにcalloutトークンを追加すると（例: `> [!type]`）、Obsidianのネイティブなcalloutボックスとして表示されます。ボーダー、半径、フォントスケール、整列を調整できます。",
 	"settings.globalSettingsHeadingDesc":

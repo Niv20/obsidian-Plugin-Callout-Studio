@@ -517,8 +517,6 @@ export const pt: Record<string, string> = {
 	"contextMenu.deleteSection": "Excluir seção do cabeçalho",
 	"heading.toggleFold": "Alternar dobra",
 	"settings.globalSettings": "Configurações globais",
-	"settings.globalSettingsDesc":
-		"Ajuste com precisão a aparência de cada tipo de callout em todo o vault.",
 	"settings.globalSettingsRegularDesc":
 		"Adicione um token de callout a uma citação em bloco (por exemplo, `> [!type]`) para renderizar a caixa de callout integrada do Obsidian. Você pode ajustar a borda, o arredondamento, a escala de fonte e o alinhamento.",
 	"settings.globalSettingsHeadingDesc":

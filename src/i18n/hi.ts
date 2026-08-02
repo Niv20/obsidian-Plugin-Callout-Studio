@@ -513,8 +513,6 @@ export const hi: Record<string, string> = {
 	"contextMenu.deleteSection": "शीर्षक अनुभाग हटाएँ",
 	"heading.toggleFold": "मोड़ना टॉगल करें",
 	"settings.globalSettings": "वैश्विक सेटिंग",
-	"settings.globalSettingsDesc":
-		"अपने पूरे vault में प्रत्येक callout प्रकार का रूप बारीकी से समायोजित करें।",
 	"settings.globalSettingsRegularDesc":
 		"Obsidian के मूल callout बॉक्स को दिखाने के लिए किसी उद्धरण में एक callout टोकन जोड़ें (जैसे, `> [!type]`)। आप इसका बॉर्डर, रेडियस, फ़ॉन्ट स्केल और संरेखण समायोजित कर सकते हैं।",
 	"settings.globalSettingsHeadingDesc":
