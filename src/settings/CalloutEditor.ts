@@ -469,6 +469,14 @@ export class CalloutEditor extends Modal {
 				? this.plugin.registry.getBuiltInDefault(this.existingId)
 				: undefined;
 
+		// ── Color row ───────────────────────────────────────────────
+		// Standard setting row (matching Display name / Callout IDs / Icon).
+		// The palette dropdown is built further down — after the live preview
+		// exists, since selecting a palette refreshes it — and lands here.
+		const colorSetting = new Setting(contentEl)
+			.setName(t("editor.colors"))
+			.setDesc(t("editor.colorsDesc"));
+
 		// Icon
 		const iconSetting = new Setting(contentEl)
 			.setName(t("editor.icon"))
@@ -528,12 +536,6 @@ export class CalloutEditor extends Modal {
 				});
 		});
 		syncIconRevert();
-
-		// ── Color row ───────────────────────────────────────────────
-		// Standard setting row (matching Display name / Callout IDs / Icon).
-		// The palette dropdown is built further down — after the live preview
-		// exists, since selecting a palette refreshes it — and lands here.
-		const colorSetting = new Setting(contentEl).setName(t("editor.colors"));
 
 		// ── Preview + Adjustments Panel (two-column) ────────────────
 		const previewPanel = contentEl.createDiv({

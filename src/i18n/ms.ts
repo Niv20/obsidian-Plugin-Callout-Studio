@@ -181,6 +181,8 @@ export const ms: Record<string, string> = {
 	"editor.horizontalOffset": "Ofset mendatar",
 	"editor.verticalOffset": "Ofset menegak",
 	"editor.colors": "Warna",
+	"editor.colorsDesc":
+		"Sets this callout's border, background, and text colors.",
 	"editor.resetColors": "Tetapkan semula warna ke lalai",
 	"editor.paletteDeleted": "Warna dipadam",
 	"editor.paletteGroupObsidian": "Callouts Obsidian",

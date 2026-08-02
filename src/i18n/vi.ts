@@ -193,6 +193,8 @@ export const vi: Record<string, string> = {
 	"editor.horizontalOffset": "Độ lệch ngang",
 	"editor.verticalOffset": "Độ lệch dọc",
 	"editor.colors": "Màu sắc",
+	"editor.colorsDesc":
+		"Sets this callout's border, background, and text colors.",
 	"editor.resetColors": "Đặt lại màu sắc về mặc định",
 	"editor.paletteDeleted": "Màu đã xóa",
 	"editor.paletteGroupObsidian": "Callouts Obsidian",

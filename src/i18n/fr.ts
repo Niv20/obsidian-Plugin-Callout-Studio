@@ -196,6 +196,8 @@ export const fr: Record<string, string> = {
 	"editor.horizontalOffset": "Décalage horizontal",
 	"editor.verticalOffset": "Décalage vertical",
 	"editor.colors": "Couleurs",
+	"editor.colorsDesc":
+		"Sets this callout's border, background, and text colors.",
 	"editor.resetColors": "Réinitialiser les couleurs par défaut",
 	"editor.paletteDeleted": "Couleur supprimée",
 	"editor.paletteGroupObsidian": "Callouts Obsidian",

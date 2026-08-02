@@ -196,6 +196,8 @@ export const de: Record<string, string> = {
 	"editor.horizontalOffset": "Horizontaler Versatz",
 	"editor.verticalOffset": "Vertikaler Versatz",
 	"editor.colors": "Farben",
+	"editor.colorsDesc":
+		"Sets this callout's border, background, and text colors.",
 	"editor.resetColors": "Farben auf Standard zurücksetzen",
 	"editor.paletteDeleted": "Gelöschte Farbe",
 	"editor.paletteGroupObsidian": "Obsidian-Callouts",

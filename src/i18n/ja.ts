@@ -192,6 +192,8 @@ export const ja: Record<string, string> = {
 	"editor.horizontalOffset": "水平オフセット",
 	"editor.verticalOffset": "垂直オフセット",
 	"editor.colors": "カラー",
+	"editor.colorsDesc":
+		"Sets this callout's border, background, and text colors.",
 	"editor.resetColors": "カラーをデフォルトにリセット",
 	"editor.paletteDeleted": "削除された色",
 	"editor.paletteGroupObsidian": "Obsidian callout",

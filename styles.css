@@ -750,13 +750,15 @@ button.callout-studio-icon-picker-loading {
 	display: grid;
 	grid-template-columns: minmax(0, 400px) 260px;
 	gap: 12px;
-	margin: 16px 0;
+	margin: 0 0 16px;
 	align-items: start;
 	justify-content: start;
 }
 
-/* Closes the form off from the preview below it: the Color row is the last of
-   the four setting rows, and without a line the panel reads as one more of them.
+/* Closes the form off from the preview below it: Icon is the last of the four
+   setting rows, and without a line the panel reads as one more of them. No top
+   margin here — the last row's own bottom padding already separates it from
+   the line, and stacking a margin on top of that read as too much dead space.
    Scoped to the callout editor on purpose — the palette editor and the per-role
    style popups reuse this same panel (see the responsive overrides near the end
    of this file), and neither has a form above it for the line to separate. */

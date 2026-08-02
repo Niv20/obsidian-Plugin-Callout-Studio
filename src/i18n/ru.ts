@@ -193,6 +193,8 @@ export const ru: Record<string, string> = {
 	"editor.horizontalOffset": "Горизонтальное смещение",
 	"editor.verticalOffset": "Вертикальное смещение",
 	"editor.colors": "Цвета",
+	"editor.colorsDesc":
+		"Sets this callout's border, background, and text colors.",
 	"editor.resetColors": "Сбросить цвета по умолчанию",
 	"editor.paletteDeleted": "Цвет удалён",
 	"editor.paletteGroupObsidian": "Callout Obsidian",

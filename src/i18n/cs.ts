@@ -193,6 +193,8 @@ export const cs: Record<string, string> = {
 	"editor.horizontalOffset": "Horizontální posun",
 	"editor.verticalOffset": "Vertikální posun",
 	"editor.colors": "Barvy",
+	"editor.colorsDesc":
+		"Sets this callout's border, background, and text colors.",
 	"editor.resetColors": "Obnovit barvy na výchozí",
 	"editor.paletteDeleted": "Smazaná barva",
 	"editor.paletteGroupObsidian": "Callouts Obsidian",

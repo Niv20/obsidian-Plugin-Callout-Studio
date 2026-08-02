@@ -187,6 +187,8 @@ export const zh: Record<string, string> = {
 	"editor.horizontalOffset": "水平偏移",
 	"editor.verticalOffset": "垂直偏移",
 	"editor.colors": "颜色",
+	"editor.colorsDesc":
+		"Sets this callout's border, background, and text colors.",
 	"editor.resetColors": "重置颜色为默认",
 	"editor.paletteDeleted": "已删除的颜色",
 	"editor.paletteGroupObsidian": "Obsidian callout",

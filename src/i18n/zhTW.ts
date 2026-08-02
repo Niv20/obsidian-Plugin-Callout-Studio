@@ -173,6 +173,8 @@ export const zhTW: Record<string, string> = {
 	"editor.horizontalOffset": "水平偏移",
 	"editor.verticalOffset": "垂直偏移",
 	"editor.colors": "顏色",
+	"editor.colorsDesc":
+		"Sets this callout's border, background, and text colors.",
 	"editor.resetColors": "重設顏色為預設",
 	"editor.paletteDeleted": "已刪除的顏色",
 	"editor.paletteGroupObsidian": "Obsidian callout",

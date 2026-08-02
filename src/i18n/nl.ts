@@ -196,6 +196,8 @@ export const nl: Record<string, string> = {
 	"editor.horizontalOffset": "Horizontale offset",
 	"editor.verticalOffset": "Verticale offset",
 	"editor.colors": "Kleuren",
+	"editor.colorsDesc":
+		"Sets this callout's border, background, and text colors.",
 	"editor.resetColors": "Kleuren terugzetten naar standaard",
 	"editor.paletteDeleted": "Verwijderde kleur",
 	"editor.paletteGroupObsidian": "Obsidian-callouts",

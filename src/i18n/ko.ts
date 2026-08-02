@@ -192,6 +192,8 @@ export const ko: Record<string, string> = {
 	"editor.horizontalOffset": "수평 오프셋",
 	"editor.verticalOffset": "수직 오프셋",
 	"editor.colors": "색상",
+	"editor.colorsDesc":
+		"Sets this callout's border, background, and text colors.",
 	"editor.resetColors": "색상을 기본값으로 재설정",
 	"editor.paletteDeleted": "삭제된 색상",
 	"editor.paletteGroupObsidian": "Obsidian callout",

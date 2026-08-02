@@ -196,6 +196,8 @@ export const ro: Record<string, string> = {
 	"editor.horizontalOffset": "Decalaj orizontal",
 	"editor.verticalOffset": "Decalaj vertical",
 	"editor.colors": "Culori",
+	"editor.colorsDesc":
+		"Sets this callout's border, background, and text colors.",
 	"editor.resetColors": "Resetați culorile la implicit",
 	"editor.paletteDeleted": "Culoare ștearsă",
 	"editor.paletteGroupObsidian": "Callouts Obsidian",

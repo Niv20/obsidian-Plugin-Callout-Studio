@@ -179,6 +179,8 @@ export const fi: Record<string, string> = {
 	"editor.horizontalOffset": "Vaakasuuntainen siirtymä",
 	"editor.verticalOffset": "Pystysuuntainen siirtymä",
 	"editor.colors": "Värit",
+	"editor.colorsDesc":
+		"Sets this callout's border, background, and text colors.",
 	"editor.resetColors": "Palauta värit oletukseksi",
 	"editor.paletteDeleted": "Poistettu väri",
 	"editor.paletteGroupObsidian": "Obsidian-calloutit",

@@ -194,6 +194,8 @@ export const hi: Record<string, string> = {
 	"editor.horizontalOffset": "क्षैतिज ऑफसेट",
 	"editor.verticalOffset": "ऊर्ध्वाधर ऑफसेट",
 	"editor.colors": "रंग",
+	"editor.colorsDesc":
+		"Sets this callout's border, background, and text colors.",
 	"editor.resetColors": "रंगों को डिफ़ॉल्ट पर रीसेट करें",
 	"editor.paletteDeleted": "हटाया गया रंग",
 	"editor.paletteGroupObsidian": "Obsidian callouts",

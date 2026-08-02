@@ -193,6 +193,8 @@ export const id: Record<string, string> = {
 	"editor.horizontalOffset": "Offset horizontal",
 	"editor.verticalOffset": "Offset vertikal",
 	"editor.colors": "Warna",
+	"editor.colorsDesc":
+		"Sets this callout's border, background, and text colors.",
 	"editor.resetColors": "Setel ulang warna ke default",
 	"editor.paletteDeleted": "Warna yang dihapus",
 	"editor.paletteGroupObsidian": "Callout Obsidian",

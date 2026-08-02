@@ -195,6 +195,8 @@ export const sv: Record<string, string> = {
 	"editor.horizontalOffset": "Horisontell förskjutning",
 	"editor.verticalOffset": "Vertikal förskjutning",
 	"editor.colors": "Färger",
+	"editor.colorsDesc":
+		"Sets this callout's border, background, and text colors.",
 	"editor.resetColors": "Återställ färger till standard",
 	"editor.paletteDeleted": "Borttagen färg",
 	"editor.paletteGroupObsidian": "Obsidian-callouts",

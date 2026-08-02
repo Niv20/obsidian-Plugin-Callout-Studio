@@ -215,6 +215,7 @@ export const en: Record<string, string> = {
 	"editor.horizontalOffset": "Horizontal offset",
 	"editor.verticalOffset": "Vertical offset",
 	"editor.colors": "Color",
+	"editor.colorsDesc": "Sets this callout's border, background, and text colors.",
 	"editor.resetColors": "Reset colors to default",
 	"editor.paletteDeleted": "Deleted color",
 	"editor.paletteGroupObsidian": "Obsidian callouts",

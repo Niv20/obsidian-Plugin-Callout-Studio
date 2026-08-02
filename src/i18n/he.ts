@@ -215,6 +215,7 @@ export const he: Record<string, string> = {
 	"editor.horizontalOffset": "היסט אופקי",
 	"editor.verticalOffset": "היסט אנכי",
 	"editor.colors": "צבעים",
+	"editor.colorsDesc": "קובע את צבעי המסגרת, הרקע והטקסט של הקאלאוט הזה.",
 	"editor.resetColors": "אפס צבעים לברירת המחדל",
 	"editor.paletteDeleted": "צבע שנמחק",
 	"editor.paletteGroupObsidian": "תיבות־הבלטה של Obsidian",

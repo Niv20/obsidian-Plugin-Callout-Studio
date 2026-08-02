@@ -182,6 +182,8 @@ export const bg: Record<string, string> = {
 	"editor.horizontalOffset": "Хоризонтално отместване",
 	"editor.verticalOffset": "Вертикално отместване",
 	"editor.colors": "Цветове",
+	"editor.colorsDesc":
+		"Sets this callout's border, background, and text colors.",
 	"editor.resetColors": "Нулиране на цветовете по подразбиране",
 	"editor.paletteDeleted": "Изтрит цвят",
 	"editor.paletteGroupObsidian": "Callout-и на Obsidian",

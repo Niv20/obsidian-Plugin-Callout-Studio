@@ -195,6 +195,8 @@ export const uk: Record<string, string> = {
 	"editor.horizontalOffset": "Горизонтальне зміщення",
 	"editor.verticalOffset": "Вертикальне зміщення",
 	"editor.colors": "Кольори",
+	"editor.colorsDesc":
+		"Sets this callout's border, background, and text colors.",
 	"editor.resetColors": "Скинути кольори до типового",
 	"editor.paletteDeleted": "Видалений колір",
 	"editor.paletteGroupObsidian": "Callout Obsidian",

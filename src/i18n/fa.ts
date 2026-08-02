@@ -193,6 +193,8 @@ export const fa: Record<string, string> = {
 	"editor.horizontalOffset": "جابجایی افقی",
 	"editor.verticalOffset": "جابجایی عمودی",
 	"editor.colors": "رنگ‌ها",
+	"editor.colorsDesc":
+		"Sets this callout's border, background, and text colors.",
 	"editor.resetColors": "بازنشانی رنگ‌ها به پیش‌فرض",
 	"editor.paletteDeleted": "رنگ حذف‌شده",
 	"editor.paletteGroupObsidian": "Callout‌های Obsidian",

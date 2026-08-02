@@ -195,6 +195,8 @@ export const tr: Record<string, string> = {
 	"editor.horizontalOffset": "Yatay uzaklık",
 	"editor.verticalOffset": "Dikey uzaklık",
 	"editor.colors": "Renkler",
+	"editor.colorsDesc":
+		"Sets this callout's border, background, and text colors.",
 	"editor.resetColors": "Renkleri varsayılana sıfırla",
 	"editor.paletteDeleted": "Silinmiş renk",
 	"editor.paletteGroupObsidian": "Obsidian callout'ları",

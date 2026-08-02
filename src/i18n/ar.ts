@@ -191,6 +191,8 @@ export const ar: Record<string, string> = {
 	"editor.horizontalOffset": "الإزاحة الأفقية",
 	"editor.verticalOffset": "الإزاحة الرأسية",
 	"editor.colors": "الألوان",
+	"editor.colorsDesc":
+		"Sets this callout's border, background, and text colors.",
 	"editor.resetColors": "إعادة تعيين الألوان إلى الافتراضي",
 	"editor.paletteDeleted": "لون محذوف",
 	"editor.paletteGroupObsidian": "Callouts Obsidian",

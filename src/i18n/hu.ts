@@ -196,6 +196,8 @@ export const hu: Record<string, string> = {
 	"editor.horizontalOffset": "Vízszintes eltolás",
 	"editor.verticalOffset": "Függőleges eltolás",
 	"editor.colors": "Színek",
+	"editor.colorsDesc":
+		"Sets this callout's border, background, and text colors.",
 	"editor.resetColors": "Színek visszaállítása alapértelmezettre",
 	"editor.paletteDeleted": "Törölt szín",
 	"editor.paletteGroupObsidian": "Obsidian callout-ok",

@@ -180,6 +180,8 @@ export const da: Record<string, string> = {
 	"editor.horizontalOffset": "Vandret forskydning",
 	"editor.verticalOffset": "Lodret forskydning",
 	"editor.colors": "Farver",
+	"editor.colorsDesc":
+		"Sets this callout's border, background, and text colors.",
 	"editor.resetColors": "Nulstil farver til standard",
 	"editor.paletteDeleted": "Slettet farve",
 	"editor.paletteGroupObsidian": "Obsidian-callouts",

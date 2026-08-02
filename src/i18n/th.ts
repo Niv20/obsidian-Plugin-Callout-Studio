@@ -192,6 +192,8 @@ export const th: Record<string, string> = {
 	"editor.horizontalOffset": "ระยะเลื่อนแนวนอน",
 	"editor.verticalOffset": "ระยะเลื่อนแนวตั้ง",
 	"editor.colors": "สี",
+	"editor.colorsDesc":
+		"Sets this callout's border, background, and text colors.",
 	"editor.resetColors": "รีเซ็ตสีเป็นค่าเริ่มต้น",
 	"editor.paletteDeleted": "สีที่ถูกลบ",
 	"editor.paletteGroupObsidian": "Callout Obsidian",

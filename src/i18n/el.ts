@@ -184,6 +184,8 @@ export const el: Record<string, string> = {
 	"editor.horizontalOffset": "Οριζόντια μετατόπιση",
 	"editor.verticalOffset": "Κατακόρυφη μετατόπιση",
 	"editor.colors": "Χρώματα",
+	"editor.colorsDesc":
+		"Sets this callout's border, background, and text colors.",
 	"editor.resetColors": "Επαναφορά χρωμάτων στην προεπιλογή",
 	"editor.paletteDeleted": "Διαγραμμένο χρώμα",
 	"editor.paletteGroupObsidian": "Callouts Obsidian",

@@ -196,6 +196,8 @@ export const es: Record<string, string> = {
 	"editor.horizontalOffset": "Desplazamiento horizontal",
 	"editor.verticalOffset": "Desplazamiento vertical",
 	"editor.colors": "Colores",
+	"editor.colorsDesc":
+		"Sets this callout's border, background, and text colors.",
 	"editor.resetColors": "Restablecer colores al predeterminado",
 	"editor.paletteDeleted": "Color eliminado",
 	"editor.paletteGroupObsidian": "Callouts de Obsidian",
