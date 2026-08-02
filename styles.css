@@ -214,6 +214,7 @@
 	min-width: 0;
 	display: flex;
 	align-items: center;
+	flex-wrap: wrap;
 	gap: 8px;
 }
 
@@ -235,6 +236,13 @@
 	background: var(--background-primary);
 	padding: 1px 6px;
 	border-radius: 4px;
+}
+
+.callout-studio-row-syntax-line {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 4px;
 }
 
 /* ─── Color Swatches ──────────────────────────────────────────── */
@@ -2017,35 +2025,12 @@ input.cs-input-invalid:focus {
 }
 
 /*
- * Progressive hiding of trailing callout IDs as the row narrows further.
- * Each breakpoint hides one more ID from the end of the list, so the row
- * degrades gracefully one item at a time instead of all at once.
+ * A row's callout IDs either all fit or all hide together — a row can have
+ * anywhere from one ID to several aliases, so hiding them one at a time from
+ * the end (as this used to) let multi-alias rows keep their primary ID
+ * visible far longer than a single-alias row at the very same width.
  */
-@container (max-width: 420px) {
-	.callout-studio-row-syntax-line
-		.callout-studio-row-syntax:nth-last-child(-n + 1) {
-		display: none;
-	}
-}
 @container (max-width: 380px) {
-	.callout-studio-row-syntax-line
-		.callout-studio-row-syntax:nth-last-child(-n + 2) {
-		display: none;
-	}
-}
-@container (max-width: 340px) {
-	.callout-studio-row-syntax-line
-		.callout-studio-row-syntax:nth-last-child(-n + 3) {
-		display: none;
-	}
-}
-@container (max-width: 300px) {
-	.callout-studio-row-syntax-line
-		.callout-studio-row-syntax:nth-last-child(-n + 4) {
-		display: none;
-	}
-}
-@container (max-width: 270px) {
 	.callout-studio-row-syntax-line {
 		display: none;
 	}
@@ -2056,15 +2041,6 @@ input.cs-input-invalid:focus {
 	.callout-studio-row-name {
 		display: none;
 	}
-}
-
-/* ─── Row IDs (Settings List) ─────────────────────────────────── */
-
-.callout-studio-row-syntax-line {
-	display: flex;
-	flex-wrap: wrap;
-	align-items: center;
-	gap: 4px;
 }
 
 /* ─── Disabled Reset Button ───────────────────────────────────── */
