@@ -616,8 +616,19 @@
 
 /* ─── Icon Preview in Editor ──────────────────────────────────── */
 
+/* `flex: 0 0 auto` because this box is the row's only fixed-size element and
+   the 32px IS the design — it holds the artwork at 20px with a hair of padding,
+   and there is nothing inside it to give up. When the revert button appears on
+   phone the row overflows, and by default every item shares the shortfall, so
+   the preview lost a few px along with the button and the icon started clipping
+   its own frame. Take it out of the shrinking entirely: on phone the Choose
+   icon button beside it is stretched to the full row by Obsidian's own
+   `…setting-item-control button:not(.clickable-icon) { width: 100% }`, so it is
+   carrying far more width than its label needs and is the one thing here with
+   slack to give. */
 .callout-studio-icon-preview {
 	display: flex;
+	flex: 0 0 auto;
 	align-items: center;
 	justify-content: center;
 	width: 32px;
@@ -929,16 +940,45 @@ button.callout-studio-icon-picker-loading {
 	position: relative;
 }
 
-/* The editor's Color row hosts the dropdown in a standard setting control, so
-   it takes the same width as every other control in the form rather than
-   stretching to whatever the row leaves over. `min-width: 0` is what lets the
-   label inside actually ellipsise; without it the trigger's flex children floor
-   at their content width and a long palette name pushes the box wider. */
-.callout-studio-editor .setting-item-control .cs-palette-dropdown {
+/* The shared control width is put on the Color row's control COLUMN, not on the
+   dropdown inside it — because that column holds two things once a built-in has
+   been customized (dropdown + revert button) and the width belongs to the pair.
+   Pinning the pair is what keeps the row's right edge on the same line as the
+   display-name and IDs fields whether or not the button is there: the button
+   takes its slice out of the shared width and the dropdown flexes into the
+   rest, instead of the button being appended past the shared edge and shoving
+   the dropdown left of it.
+
+   `flex: 0 0 auto` because Obsidian's own `.setting-item-control` is a growing
+   flex item — left alone it would ignore the width and fill the row. */
+.callout-studio-editor .cs-color-setting .setting-item-control {
 	flex: 0 0 auto;
 	width: var(--cs-editor-control-width);
 	max-width: 100%;
+}
+
+/* `width: auto` + `flex: 1` rather than a width of its own: whatever the column
+   above has left after the revert button (all of it, when the button is
+   `display: none`) is exactly the dropdown's width, so nothing here needs to
+   know the button's size. `min-width: 0` is what lets the label inside actually
+   ellipsise; without it the trigger's flex children floor at their content
+   width and a long palette name pushes the box wider than its column. */
+.callout-studio-editor .setting-item-control .cs-palette-dropdown {
+	flex: 1 1 auto;
+	width: auto;
+	max-width: 100%;
 	min-width: 0;
+}
+
+/* The "revert to default" buttons on the Colors and Icon rows — shown only once
+   a built-in has actually diverged, so they join a row that was already laid
+   out without them. They are the one thing in that row that must not absorb the
+   difference: a squeezed icon button is still a button, a squeezed 24px
+   clickable icon is a smudge. Everything else in these rows shrinks (the
+   palette dropdown above, the Choose icon button below), so this is what makes
+   "the control gets narrower" the outcome instead of "the row overflows". */
+.callout-studio-editor .setting-item-control .extra-setting-button {
+	flex: 0 0 auto;
 }
 
 .cs-palette-trigger {

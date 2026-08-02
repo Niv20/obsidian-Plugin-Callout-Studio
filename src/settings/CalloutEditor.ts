@@ -473,8 +473,12 @@ export class CalloutEditor extends Modal {
 		// Standard setting row (matching Display name / Callout IDs / Icon).
 		// The palette dropdown is built further down — after the live preview
 		// exists, since selecting a palette refreshes it — and lands here.
+		// The class is what lets styles.css pin this row's control column to the
+		// form's shared control width, so the revert button below shortens the
+		// dropdown instead of pushing it left off the shared right edge.
 		const colorSetting = new Setting(contentEl)
 			.setName(t("editor.colors"))
+			.setClass("cs-color-setting")
 			.setDesc(t("editor.colorsDesc"));
 
 		// Icon
