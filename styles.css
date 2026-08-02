@@ -2770,6 +2770,63 @@ input.cs-input-invalid:focus {
 	margin: 0;
 }
 
+/* ── Option-column row rhythm ────────────────────────────────────
+   Obsidian 1.13 gives every modal setting row its own hairline plus 16px of air
+   on each side of it, so consecutive rows are symmetric on their own:
+
+     .modal:not(.mod-settings) .setting-item:not(.setting-item-heading)
+       :where(:not(.setting-group *)) { padding: var(--size-4-4) 0;
+                                        border-top: var(--border-width) … }
+     …:first-child { border-top: none; padding-top: 0 }      (0,5,0)
+     …:last-child  { padding-bottom: 0 }                     (0,5,0)
+
+   Two things pulled this column off that grid; both are undone below.
+
+   1. The shared .callout-studio-adjust-col carries `gap: 8px`, which is right
+      where that column holds .callout-studio-adjust-section cards (the callout
+      editor, the per-role style popups) and wrong here, where it holds bare
+      setting rows: the gap lands BELOW a row's 16px bottom padding but ABOVE the
+      next row's border, so every line sat 24px under one row and 16px over the
+      next — most obvious on a short row like Direction. The rows already carry
+      their own spacing, so the gap goes rather than gets halved.
+
+   2. :first-child / :last-child are structural, not visual, so the
+      .cs-palette-color-section wrapper re-triggers both edge rules INSIDE
+      itself. In the simple view that wrapper holds exactly one row — Base color
+      — which therefore matched both and came out with no vertical padding at
+      all: visibly shorter than Second color, with its hint text flush against
+      the line below. In the advanced view the "Colors" header lost its top
+      padding and the Text color row its bottom padding. The column's own last
+      row is caught by the same rule, and that row is the Gradient title text one
+      — hidden in Solid — so the column ended flush in Gradient and 16px lower in
+      Solid.
+
+   Doubling .setting-item takes these to (0,6,0) so they beat the core rules
+   outright rather than on load order, the way the rest of this file does it. No
+   border-top is restored on the wrapper's first row: .cs-palette-divider already
+   draws that line. */
+.callout-studio-palette-editor .callout-studio-adjust-col {
+	gap: 0;
+}
+
+.callout-studio-editor-modal
+	.callout-studio-palette-editor
+	.cs-palette-color-section
+	> .setting-item.setting-item:first-child {
+	padding-top: var(--size-4-4);
+}
+
+.callout-studio-editor-modal
+	.callout-studio-palette-editor
+	.cs-palette-color-section
+	> .setting-item.setting-item:last-child,
+.callout-studio-editor-modal
+	.callout-studio-palette-editor
+	.callout-studio-adjust-col
+	> .setting-item.setting-item:last-child {
+	padding-bottom: var(--size-4-4);
+}
+
 /* "Customize all colors" collapsible card header. The button element keeps
    the shared adjust-header look; these rules strip Obsidian's default button
    chrome and add the open/closed chevron. */
@@ -2873,10 +2930,14 @@ input.cs-input-invalid:focus {
 }
 
 /* Fixed divider under the palette editor's Style row, shown regardless of
-   Solid/Gradient — modals suppress Obsidian's default setting-item
-   border-top, so this needs an explicit rule instead. */
+   Solid/Gradient. Modals do NOT suppress the setting-item border-top — each row
+   draws its own (see the rhythm block above). The line is needed here because
+   the row below is the first child of the .cs-palette-color-section wrapper and
+   so matches Obsidian's `:first-child { border-top: none }` rule, which is what
+   takes its own line away. Same hairline width as those borders, so the two read
+   as one rule down the column. */
 .cs-palette-divider {
-	border-top: 1px solid var(--background-modifier-border);
+	border-top: var(--border-width) solid var(--background-modifier-border);
 }
 
 /* Two-option segmented control (Solid|Gradient, Linear|Radial) */

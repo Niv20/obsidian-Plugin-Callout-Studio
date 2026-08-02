@@ -235,9 +235,11 @@ export class PaletteEditorModal extends Modal {
 		this.nameErrorEl = nameSetting.descEl.createDiv({ cls: "cs-tag-error" });
 
 		this.buildBgStyleRow(adjustCol);
-		// Always visible, regardless of Solid/Gradient: modals suppress
-		// Obsidian's default setting-item border-top (see buildBgStyleRow's
-		// neighbors), so this needs an explicit rule instead.
+		// Always visible, regardless of Solid/Gradient. Every other row in this
+		// column draws its own top border, but the first row of the color
+		// section below is the first child of that wrapper and so matches
+		// Obsidian's `:first-child { border-top: none }` modal rule — this div
+		// puts the missing line back.
 		adjustCol.createDiv({ cls: "cs-palette-divider" });
 
 		this.colorSectionEl = adjustCol.createDiv({
