@@ -723,6 +723,16 @@ button.callout-studio-icon-picker-loading {
 	margin-top: 0;
 }
 
+/* Same theme-defensive pin the settings tab already carries: some themes
+   restyle .setting-item to align-items: flex-start, which strands a row's
+   control near the top once its name + description block grows taller than the
+   control — a two-line description, or a name that wraps at a larger UI font
+   size. Shared by CalloutEditor and PaletteEditorModal, which both set this
+   class on modalEl. */
+.callout-studio-editor-modal .setting-item:not(.setting-item-heading) {
+	align-items: center;
+}
+
 .callout-studio-editor-buttons {
 	display: flex;
 	justify-content: flex-end;
