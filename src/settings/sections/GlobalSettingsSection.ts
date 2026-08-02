@@ -42,11 +42,6 @@ export function renderGlobalSettingsSection(
 
 	const roles: { role: CalloutRenderRole; label: string; desc: string }[] = [
 		{
-			role: "regular",
-			label: t("settings.calloutTypeRegular"),
-			desc: t("settings.globalSettingsRegularDesc"),
-		},
-		{
 			role: "heading",
 			label: t("settings.calloutTypeHeading"),
 			desc: t("settings.globalSettingsHeadingDesc"),
@@ -55,6 +50,11 @@ export function renderGlobalSettingsSection(
 			role: "inline",
 			label: t("settings.calloutTypeInline"),
 			desc: t("settings.globalSettingsInlineDesc"),
+		},
+		{
+			role: "regular",
+			label: t("settings.calloutTypeRegular"),
+			desc: t("settings.globalSettingsRegularDesc"),
 		},
 	];
 
