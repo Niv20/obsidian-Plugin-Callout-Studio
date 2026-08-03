@@ -9,6 +9,7 @@
 import { Modal } from "obsidian";
 import type { App } from "obsidian";
 import { t } from "../i18n";
+import { applyModalChrome } from "../settings/modalChrome";
 
 export class ConfirmModal extends Modal {
 	private resolved = false;
@@ -26,6 +27,7 @@ export class ConfirmModal extends Modal {
 
 	onOpen(): void {
 		const { contentEl } = this;
+		const btnContainer = applyModalChrome(this, { footer: true });
 		if (typeof this.message === "string") {
 			const paragraphs = this.message.split(/\n+/);
 			for (const p of paragraphs) {
@@ -34,10 +36,6 @@ export class ConfirmModal extends Modal {
 		} else {
 			contentEl.appendChild(this.message);
 		}
-
-		const btnContainer = contentEl.createDiv({
-			cls: "modal-button-container",
-		});
 
 		btnContainer
 			.createEl("button", {

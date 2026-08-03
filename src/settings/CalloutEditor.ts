@@ -66,6 +66,7 @@ import { performCalloutEditorSave } from "./editor/CalloutEditorSave";
 import { findUserImage } from "../icons/packs/userImages";
 import { describeIcon } from "../icons/describeIcon";
 import { createControlGroup, setSliderDisplay } from "./styleControls";
+import { applyModalChrome, removeModalChrome } from "./modalChrome";
 import { refreshAllMarkdownEditors } from "../editor/livepreview/refresh";
 
 // Derive a callout ID from the display name. Spaces are preserved (the ID may
@@ -303,7 +304,10 @@ export class CalloutEditor extends Modal {
 		const { contentEl } = this;
 		contentEl.empty();
 		contentEl.addClass("callout-studio-editor");
+		// Standard window shell; the extra class carries only this editor's
+		// width and the panel measurements taken against it.
 		this.modalEl.addClass("callout-studio-editor-modal");
+		const footerEl = applyModalChrome(this, { footer: true, wide: true });
 
 		// Suspend automatic prune passes while the user is editing so a
 		// fallback row currently being customized cannot be auto-removed
@@ -1223,10 +1227,8 @@ export class CalloutEditor extends Modal {
 		this.removePopupOutsideClickListener = () => {
 			activeDocument.removeEventListener("click", popupOutsideClick);
 		};
-		// Action buttons — sticky bottom bar
-		const buttonContainer = this.modalEl.createDiv({
-			cls: "callout-studio-editor-buttons",
-		});
+		// Action buttons — the chrome's pinned bottom bar
+		const buttonContainer = footerEl;
 
 		const cancelBtn = buttonContainer.createEl("button", {
 			text: t("editor.cancel"),
@@ -1873,7 +1875,8 @@ export class CalloutEditor extends Modal {
 			this.resolve = null;
 		}
 		this.contentEl.empty();
-		this.modalEl.querySelector(".callout-studio-editor-buttons")?.remove();
+		// The button bar is a sibling of contentEl, so emptying that misses it.
+		removeModalChrome(this);
 		this.modalEl.removeClass("callout-studio-editor-modal");
 		// Re-enable automatic pruning and run one pass to clean up any
 		// fallback rows the user touched but did not save.

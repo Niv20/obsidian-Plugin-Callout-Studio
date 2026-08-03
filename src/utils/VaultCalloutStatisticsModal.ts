@@ -13,6 +13,7 @@ import type { CalloutRegistry } from "../manager/CalloutRegistry";
 import { renderIconInto } from "../icons/renderIcon";
 import { createIconResolver } from "../icons/resolver";
 import { getLocale, t } from "../i18n";
+import { applyModalChrome } from "../settings/modalChrome";
 import type {
 	VaultCalloutStatistics,
 	VaultCalloutTypeStatistics,
@@ -59,9 +60,7 @@ export class VaultCalloutStatisticsModal extends Modal {
 			this.renderTypeList(contentEl);
 		}
 
-		const btnContainer = contentEl.createDiv({
-			cls: "modal-button-container",
-		});
+		const btnContainer = applyModalChrome(this, { footer: true });
 		btnContainer
 			.createEl("button", { text: t("vaultStats.close") })
 			.addEventListener("click", () => this.close());

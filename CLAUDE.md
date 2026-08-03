@@ -37,6 +37,8 @@ Callout Studio is an Obsidian plugin that lets users create and manage custom ca
 
 ### Settings UI (`src/settings/`)
 
+**Every modal wears the same chrome, and `modalChrome.ts` is the only way to put it on.** `applyModalChrome(modal, {footer?, wide?})` gives the window three bands — a fixed header whose rule runs edge to edge, `.modal-content` as the *one* scroll container, and (when `footer` is set) the returned pinned button bar. It works by taking Obsidian's own 16px off `.modal` and handing it to the bands as `--cs-modal-inset`, so a new window must never re-add padding to `.modal` or `.modal-content`. Buttons go in the returned footer, not in a `modal-button-container` inside the content. Two deliberate exceptions: `WelcomeModal` is a splash and opts out entirely, and `ConfirmModal`/`ReplaceCalloutModal` set no title, so they get no header rule. **Anything sticky inside the body must sit at `top: 0`** — a positive offset parks an opaque layer below the header rule and eats the text scrolling behind it (see `.callout-studio-preview-col`).
+
 `SettingsTab.ts` composes 11 section modules under `settings/sections/`. `CalloutEditor.ts` is the edit/create modal with a real, editable Live Preview via `LiveCalloutPreview.ts`, which hosts an embedded Obsidian markdown editor (`EmbeddableMarkdownEditor.ts`) so callouts render 1:1 with a note in the active theme; it falls back to a static `MarkdownRenderer` render if the (undocumented) embed API is unavailable. `settings/iconpicker/` is the icon picker: `IconPickerModal` (source menu + preview + confirm), `PackPanel` (one source's toolbar and grid, driven entirely by its `IconPack`), `IconGrid` (paging and key nav), `allSources` (the pooled cross-source search).
 
 ### Editor integrations (`src/editor/`)

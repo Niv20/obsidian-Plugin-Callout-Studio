@@ -15,6 +15,7 @@ import type { App } from "obsidian";
 import { t } from "../i18n";
 import { makeDragSortable } from "../ui/DragSortList";
 import { animateReorder } from "../ui/flip";
+import { applyModalChrome } from "./modalChrome";
 import type {
 	CalloutRenderRole,
 	ContextMenuItemConfig,
@@ -61,6 +62,8 @@ export class MenuCustomizationModal extends Modal {
 
 	onOpen(): void {
 		this.contentEl.addClass("cs-menu-customize");
+		// No footer: the toggles and the drag order save themselves.
+		applyModalChrome(this);
 		this.titleEl.setText(t("menuCustomize.title"));
 		this.contentEl.createEl("p", {
 			text: t("menuCustomize.desc"),

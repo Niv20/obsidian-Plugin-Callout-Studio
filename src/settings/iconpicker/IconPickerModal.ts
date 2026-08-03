@@ -39,6 +39,7 @@ import {
 } from "./allSources";
 import { PackPanel } from "./PackPanel";
 import { ImagePanel } from "./ImagePanel";
+import { applyModalChrome, removeModalChrome } from "../modalChrome";
 import { t } from "../../i18n";
 import type { LocaleKey } from "../../i18n";
 
@@ -139,6 +140,8 @@ export class IconPicker extends Modal {
 
 	onOpen(): void {
 		this.modalEl.addClass("callout-studio-icon-picker");
+		const footer = applyModalChrome(this, { footer: true });
+		footer.addClass("icon-picker-footer");
 		this.titleEl.setText(t("iconPicker.pickIcon"));
 
 		const container = this.contentEl.createDiv("icon-picker-container");
@@ -148,7 +151,7 @@ export class IconPicker extends Modal {
 		// is normally done long before the source menu is first opened.
 		void this.loadSourceCounts();
 
-		const footer = container.createDiv("icon-picker-footer");
+		// The chosen icon previews in the bar beside the two buttons.
 		this.previewEl = footer.createDiv("icon-picker-preview");
 		this.updatePreview();
 
@@ -179,6 +182,8 @@ export class IconPicker extends Modal {
 	onClose(): void {
 		this.panel?.dispose();
 		this.panel = null;
+		// The bar is a sibling of contentEl, so it outlives the usual teardown.
+		removeModalChrome(this);
 		if (this.sourceMenuOutsideClick) {
 			activeDocument.removeEventListener(
 				"click",

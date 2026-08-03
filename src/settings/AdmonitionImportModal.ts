@@ -25,6 +25,7 @@ import {
 } from "../utils/admonitionFormat";
 import { planAdmonitionImport } from "../utils/admonitionImport";
 import { ImportReportModal } from "../utils/ImportReportModal";
+import { applyModalChrome } from "./modalChrome";
 import type { SettingsSectionContext } from "./sections/types";
 
 /**
@@ -86,9 +87,7 @@ export class AdmonitionImportModal extends Modal {
 				this.textareaEl.value.trim().length === 0;
 		});
 
-		const btnContainer = this.contentEl.createDiv({
-			cls: "modal-button-container",
-		});
+		const btnContainer = applyModalChrome(this, { footer: true });
 		btnContainer
 			.createEl("button", { text: t("import.admBtnCancel") })
 			.addEventListener("click", () => this.close());

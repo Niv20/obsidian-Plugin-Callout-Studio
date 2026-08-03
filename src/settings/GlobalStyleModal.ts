@@ -25,6 +25,7 @@ import {
 import type { SettingsTabPlugin } from "./sections/types";
 import { refreshAllMarkdownEditors } from "../editor/livepreview/refresh";
 import { CSS_FOLD_ARROW, CSS_HEADING_LINE } from "../editor/renderShared";
+import { applyModalChrome } from "./modalChrome";
 
 /**
  * Reserved id for the neutral demo callout rendered in the popups. Registered
@@ -58,6 +59,9 @@ export class GlobalStyleModal extends Modal {
 
 	onOpen(): void {
 		this.modalEl.addClass("cs-role-style-modal");
+		// No footer: every control here applies live, so there is nothing to
+		// confirm. Same width as the two editors, hence `wide`.
+		applyModalChrome(this, { wide: true });
 		this.titleEl.setText(
 			`${t("settings.globalStyle")} — ${this.roleName()}`,
 		);

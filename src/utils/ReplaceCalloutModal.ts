@@ -14,6 +14,7 @@ import type { CalloutRegistry } from "../manager/CalloutRegistry";
 import { renderIconInto } from "../icons/renderIcon";
 import { createIconResolver } from "../icons/resolver";
 import { t } from "../i18n";
+import { applyModalChrome } from "../settings/modalChrome";
 
 export type DeleteAction =
 	| { action: "replace"; replaceWith: string }
@@ -128,9 +129,7 @@ export class ReplaceCalloutModal extends Modal {
 		}
 
 		// Single confirm button
-		const btnContainer = contentEl.createDiv({
-			cls: "modal-button-container",
-		});
+		const btnContainer = applyModalChrome(this, { footer: true });
 		const confirmText =
 			this.confirmLabel ??
 			(this.mode === "replace"

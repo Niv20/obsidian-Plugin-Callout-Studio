@@ -14,6 +14,7 @@ import {
 	planCalloutManagerImport,
 } from "../utils/calloutManagerImport";
 import { ImportReportModal } from "../utils/ImportReportModal";
+import { applyModalChrome } from "./modalChrome";
 import type { SettingsSectionContext } from "./sections/types";
 
 export class CalloutManagerImportModal extends Modal {
@@ -41,9 +42,7 @@ export class CalloutManagerImportModal extends Modal {
 			this.updateImportState(),
 		);
 
-		const btnContainer = this.contentEl.createDiv({
-			cls: "modal-button-container",
-		});
+		const btnContainer = applyModalChrome(this, { footer: true });
 		btnContainer
 			.createEl("button", { text: t("import.cmBtnCancel") })
 			.addEventListener("click", () => this.close());

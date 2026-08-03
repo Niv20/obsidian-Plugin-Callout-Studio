@@ -43,6 +43,7 @@ import { getObsidianPalettes, getExtraPalettes } from "../utils/colorPalettes";
 import { t } from "../i18n";
 import type { CalloutRegistry } from "../manager/CalloutRegistry";
 import type { CSSInjector } from "../manager/CSSInjector";
+import { applyModalChrome, removeModalChrome } from "./modalChrome";
 
 export type PaletteEditorResult = Omit<CustomPalette, "id">;
 
@@ -203,10 +204,11 @@ export class PaletteEditorModal extends Modal {
 		const { contentEl } = this;
 		contentEl.empty();
 		contentEl.addClass("callout-studio-palette-editor");
-		// Same flex shell as the callout editor: sticky title, scrolling
-		// content (the sticky preview column relies on that scroll container),
-		// and a fixed footer for the buttons.
+		// Same shell and width as the callout editor: fixed title with a rule,
+		// scrolling content (the sticky preview column relies on that scroll
+		// container), and a fixed footer for the buttons.
 		this.modalEl.addClass("callout-studio-editor-modal");
+		const footer = applyModalChrome(this, { footer: true, wide: true });
 
 		// Two-column body from the very first row: options (including the name)
 		// on the left, sticky live preview on the right — the callout editor's
@@ -284,10 +286,7 @@ export class PaletteEditorModal extends Modal {
 			},
 		});
 
-		// Footer outside the scrolling content, like the callout editor's.
-		const buttons = this.modalEl.createDiv({
-			cls: "callout-studio-editor-buttons",
-		});
+		const buttons = footer;
 		buttons
 			.createEl("button", { text: t("editor.cancel") })
 			.addEventListener("click", () => this.finish(false));
@@ -837,6 +836,8 @@ export class PaletteEditorModal extends Modal {
 		this.preview?.destroy();
 		this.preview = null;
 		this.contentEl.empty();
+		// The button bar is a sibling of contentEl, so emptying that misses it.
+		removeModalChrome(this);
 		if (this.resolve) {
 			this.resolve(null);
 			this.resolve = null;

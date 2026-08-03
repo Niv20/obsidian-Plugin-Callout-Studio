@@ -9,6 +9,7 @@
 import { Modal } from "obsidian";
 import type { App } from "obsidian";
 import { t } from "../i18n";
+import { applyModalChrome } from "../settings/modalChrome";
 
 /**
  * One-time first-install modal that asks the user whether to scan the
@@ -52,9 +53,7 @@ export class FirstRunScanModal extends Modal {
 			cls: "callout-studio-firstrun-later-hint",
 		});
 
-		const btnContainer = contentEl.createDiv({
-			cls: "modal-button-container",
-		});
+		const btnContainer = applyModalChrome(this, { footer: true });
 
 		this.skipBtn = btnContainer.createEl("button", {
 			text: t("firstRun.noThanks"),

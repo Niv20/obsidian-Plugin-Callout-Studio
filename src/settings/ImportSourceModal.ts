@@ -11,6 +11,7 @@ import { t } from "../i18n";
 import { processImportedJSON } from "./sections/DataManagementSection";
 import { AdmonitionImportModal } from "./AdmonitionImportModal";
 import { CalloutManagerImportModal } from "./CalloutManagerImportModal";
+import { applyModalChrome } from "./modalChrome";
 import type { SettingsSectionContext } from "./sections/types";
 
 interface SourceRow {
@@ -29,6 +30,8 @@ export class ImportSourceModal extends Modal {
 
 	onOpen(): void {
 		this.modalEl.addClass("callout-studio-import-source-modal");
+		// No footer: every row here IS the action.
+		applyModalChrome(this);
 		this.setTitle(t("import.chooseSource"));
 
 		// Created once, attached to the DOM, and hidden — like ImagePanel's

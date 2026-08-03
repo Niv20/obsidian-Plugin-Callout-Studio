@@ -11,6 +11,7 @@ import { Modal } from "obsidian";
 import type { App } from "obsidian";
 import type { CalloutDefinition } from "../types";
 import { t } from "../i18n";
+import { applyModalChrome } from "../settings/modalChrome";
 
 export type DeleteCalloutAction = "cancel" | "delete" | "replace";
 
@@ -74,9 +75,7 @@ export class DeleteCalloutModal extends Modal {
 			});
 		}
 
-		const btnContainer = contentEl.createDiv({
-			cls: "modal-button-container",
-		});
+		const btnContainer = applyModalChrome(this, { footer: true });
 
 		const cancelBtn = btnContainer.createEl("button", {
 			text: t("confirm.cancel"),

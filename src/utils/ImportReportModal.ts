@@ -10,6 +10,7 @@ import { Modal } from "obsidian";
 import type { App } from "obsidian";
 import { t } from "../i18n";
 import type { ValidationIssue } from "./importValidator";
+import { applyModalChrome } from "../settings/modalChrome";
 
 export type ImportReportChoice = "cancel" | "importValid";
 
@@ -107,9 +108,7 @@ export class ImportReportModal extends Modal {
 		);
 
 		// Footer buttons
-		const btnContainer = contentEl.createDiv({
-			cls: "modal-button-container",
-		});
+		const btnContainer = applyModalChrome(this, { footer: true });
 
 		btnContainer
 			.createEl("button", { text: t("import.btnCancel") })
