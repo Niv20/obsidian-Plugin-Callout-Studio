@@ -28,6 +28,12 @@ import {
 /** Minimal shape of the internal edit view we touch. */
 interface InternalMarkdownEditor extends Component {
 	editable: boolean;
+	/**
+	 * Raw source vs. Live Preview for this editor. Seeded in the base
+	 * constructor from the vault's "Default editing mode"; see
+	 * {@link forceLivePreview}, which overwrites it before it is ever read.
+	 */
+	sourceMode?: boolean;
 	editMode?: object;
 	showEditor?(): void;
 	set(content: string, focus?: boolean): void;
@@ -93,6 +99,36 @@ interface EmbedRegistryApp extends App {
 
 /** Cached constructor — resolving it spins up (then unloads) a throwaway editor. */
 let cachedCtor: MarkdownEditorCtor | null = null;
+
+/**
+ * Pin an editor instance to Live Preview, whatever the vault's "Default editing
+ * mode" (Settings → Editor) says.
+ *
+ * The base editor opens its constructor with
+ * `this.sourceMode = !app.vault.getConfig("livePreview")` — an embed has no
+ * file, leaf or view state of its own to carry a mode, so it simply adopts the
+ * vault-wide default. A preview pane must not: it is labelled "Live preview",
+ * and under a Source-mode vault it would otherwise show its sample as raw
+ * `> [!id]` text forever.
+ *
+ * Overwriting the flag is enough *because of when it is read*. `sourceMode`
+ * feeds `buildLocalExtensions()`, which decides both halves of Live Preview —
+ * it seeds `editorLivePreviewField` and installs the live-preview view plugin —
+ * and `getLocalExtensions()` memoises that into `this.localExtensions`, so it
+ * runs exactly once, lazily, on the first `set()`. Assigning between
+ * construction and that first `set()` therefore lands before anything has read
+ * it, and the editor builds identically to one in a Live-Preview vault: fully
+ * interactive, with the click-to-reveal-source behaviour intact. Flipping it
+ * after `set()` would not work — the extensions are already cached, so the
+ * live-preview plugin would be missing no matter what the field said.
+ *
+ * Undocumented internals, hence the optional property: if the flag is ever
+ * renamed the assignment is inert and the editor simply follows the vault
+ * default again, exactly as it did before this existed.
+ */
+function forceLivePreview(instance: InternalMarkdownEditor): void {
+	instance.sourceMode = false;
+}
 
 /**
  * Resolve the base `MarkdownEditor` constructor by instantiating a throwaway
@@ -184,6 +220,9 @@ export class EmbeddableMarkdownEditor {
 			},
 		};
 		this.instance = new Ctor(app, container, owner);
+		// Must sit between construction and the first `set()` — that call is
+		// what builds (and then caches) the extensions this flag decides.
+		forceLivePreview(this.instance);
 		this.instance.set(options.value, false);
 
 		// A shape change could let construction "succeed" without mounting any

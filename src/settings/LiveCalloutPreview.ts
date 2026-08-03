@@ -11,6 +11,11 @@
  * and editable in place. All three callout roles (regular `> [!id]`, heading
  * `## [!id]`, inline `[!id]`) render exactly as in a note.
  *
+ * The embedded editor is pinned to Live Preview regardless of the vault's
+ * "Default editing mode" (see `forceLivePreview`), so this pane always means
+ * what its label says — rendered callouts, with click-to-reveal-source intact —
+ * instead of quietly becoming a raw-source pane in a Source-mode vault.
+ *
  * Fidelity is preserved by NOT overriding the cascade: the preview sits inside
  * the real `body.theme-*`, applies no colours/backdrop of its own, and lets the
  * live `CSSInjector` rules resolve exactly as in a note.
@@ -18,7 +23,9 @@
  * Graceful fallback: the embedded-editor API is undocumented and may change. If
  * construction throws, the preview degrades to a static (non-editable)
  * `MarkdownRenderer.render` of the same sample — still accurate, just not
- * editable — so the plugin never breaks.
+ * editable — so the plugin never breaks. That path stays full-fidelity too: the
+ * reading-view post-processors give it the same three roles and painted icons,
+ * and `refresh()` re-renders it on every form change.
  *
  * Shared by the callout editor modal (previewing an in-progress edit via the
  * reserved preview ID), the callout type cards (one role each), and the
