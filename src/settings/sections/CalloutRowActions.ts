@@ -256,7 +256,6 @@ async function handleCalloutReplace(
 		message,
 		availableCallouts: otherCallouts,
 		registry: ctx.plugin.registry,
-		fallbackId: ctx.plugin.settings.fallbackCalloutId,
 	}).prompt();
 
 	if (result.action !== "replace") return;

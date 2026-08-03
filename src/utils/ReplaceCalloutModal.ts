@@ -33,7 +33,6 @@ export interface ReplaceCalloutModalOptions {
 	/** Selectable callouts (the source callout should already be filtered out). */
 	availableCallouts: CalloutDefinition[];
 	registry: CalloutRegistry;
-	fallbackId: string;
 	/** Force-disable the "delete without replacing" row. Ignored in `replace`
 	 * mode (which never shows that row). */
 	disallowDeleteWithoutReplace?: boolean;
@@ -47,7 +46,7 @@ export interface ReplaceCalloutModalOptions {
 export class ReplaceCalloutModal extends Modal {
 	private resolved = false;
 	private resolve: (value: DeleteAction) => void = () => {};
-	private selectedId: string | null = null;
+	private selectedId: string | null | undefined = undefined;
 	private itemEls = new Map<string | null, HTMLElement>();
 	private confirmBtn: HTMLButtonElement | null = null;
 
@@ -56,7 +55,6 @@ export class ReplaceCalloutModal extends Modal {
 	private confirmLabel?: string;
 	private availableCallouts: CalloutDefinition[];
 	private registry: CalloutRegistry;
-	private fallbackId: string;
 	private disallowDeleteWithoutReplace: boolean;
 
 	constructor(app: App, options: ReplaceCalloutModalOptions) {
@@ -66,7 +64,6 @@ export class ReplaceCalloutModal extends Modal {
 		this.confirmLabel = options.confirmLabel;
 		this.availableCallouts = options.availableCallouts;
 		this.registry = options.registry;
-		this.fallbackId = options.fallbackId;
 		this.disallowDeleteWithoutReplace =
 			this.mode === "replace"
 				? true
@@ -89,17 +86,6 @@ export class ReplaceCalloutModal extends Modal {
 			cls: "callout-studio-replace-list",
 		});
 
-		// Pre-select fallback if available, otherwise first callout
-		const hasCallouts = this.availableCallouts.length > 0;
-		if (hasCallouts) {
-			const fallbackExists = this.availableCallouts.some(
-				(c) => c.id === this.fallbackId,
-			);
-			this.selectedId = fallbackExists
-				? this.fallbackId
-				: (this.availableCallouts[0]?.id ?? null);
-		}
-
 		for (const def of this.availableCallouts) {
 			const item = this.renderCalloutItem(listEl, def);
 			this.itemEls.set(def.id, item);
@@ -119,10 +105,6 @@ export class ReplaceCalloutModal extends Modal {
 				text: `${t("vault.deleteWithout")} ${t("replaceModal.deleteWithoutReplaceSuffix")}`,
 			});
 			this.itemEls.set(null, noReplaceItem);
-			if (!hasCallouts) {
-				this.selectedId = null;
-				noReplaceItem.addClass("is-selected");
-			}
 			noReplaceItem.addEventListener("click", () =>
 				this.selectItem(null),
 			);
@@ -142,7 +124,9 @@ export class ReplaceCalloutModal extends Modal {
 			text: confirmText,
 			cls: this.mode === "replace" ? "mod-cta" : "mod-warning",
 		});
+		this.confirmBtn.disabled = true;
 		this.confirmBtn.addEventListener("click", () => {
+			if (this.selectedId === undefined) return;
 			this.resolved = true;
 			if (this.selectedId) {
 				this.resolve({
@@ -164,6 +148,7 @@ export class ReplaceCalloutModal extends Modal {
 		this.selectedId = id;
 		const el = this.itemEls.get(id);
 		if (el) el.addClass("is-selected");
+		if (this.confirmBtn) this.confirmBtn.disabled = false;
 
 		// Scroll selected item into view
 		el?.scrollIntoView({ block: "nearest" });
