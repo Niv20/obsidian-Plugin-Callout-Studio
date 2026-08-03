@@ -172,7 +172,7 @@ export const ms: Record<string, string> = {
 	"editor.idCannotDelete":
 		"ID ini dipautkan ke nama paparan dan tidak boleh dipadam — edit nama untuk menukarnya",
 	"editor.icon": "Ikon",
-	"editor.pickIcon": "Pilih ikon",
+	"editor.pickIcon": "Tukar ikon",
 	"editor.resetIcon": "Tetapkan semula ikon ke lalai",
 	"editor.livePreview": "Pratonton langsung",
 	"editor.iconAdjustment": "Pelarasan ikon",

@@ -186,7 +186,7 @@ export const sv: Record<string, string> = {
 	"editor.idCannotDelete":
 		"Detta ID är länkat till visningsnamnet och kan inte tas bort — redigera namnet för att ändra det",
 	"editor.icon": "Ikon",
-	"editor.pickIcon": "Välj ikon",
+	"editor.pickIcon": "Ändra ikon",
 	"editor.resetIcon": "Återställ ikon till standard",
 	"editor.livePreview": "Live-förhandsvisning",
 	"editor.iconAdjustment": "Ikonjustering",

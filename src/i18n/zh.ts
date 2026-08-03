@@ -178,7 +178,7 @@ export const zh: Record<string, string> = {
 	"editor.idCannotDelete":
 		"此 ID 已关联到显示名称，无法删除——请编辑名称以更改",
 	"editor.icon": "图标",
-	"editor.pickIcon": "选择图标",
+	"editor.pickIcon": "更改图标",
 	"editor.resetIcon": "重置图标为默认",
 	"editor.livePreview": "实时预览",
 	"editor.iconAdjustment": "图标调整",

@@ -170,7 +170,7 @@ export const fi: Record<string, string> = {
 	"editor.idCannotDelete":
 		"Tämä tunnus on linkitetty näyttönimeen eikä sitä voi poistaa — muuta nimeä muuttaaksesi sitä",
 	"editor.icon": "Kuvake",
-	"editor.pickIcon": "Valitse kuvake",
+	"editor.pickIcon": "Vaihda kuvake",
 	"editor.resetIcon": "Palauta kuvake oletukseksi",
 	"editor.livePreview": "Reaaliaikainen esikatselu",
 	"editor.iconAdjustment": "Kuvakkeen säätö",

@@ -184,7 +184,7 @@ export const fa: Record<string, string> = {
 	"editor.idCannotDelete":
 		"این شناسه به نام نمایشی متصل است و قابل حذف نیست — برای تغییر آن، نام را ویرایش کنید",
 	"editor.icon": "آیکون",
-	"editor.pickIcon": "انتخاب نماد",
+	"editor.pickIcon": "تغییر نماد",
 	"editor.resetIcon": "بازنشانی نماد به پیش‌فرض",
 	"editor.livePreview": "پیش‌نمایش زنده",
 	"editor.iconAdjustment": "تنظیم آیکون",

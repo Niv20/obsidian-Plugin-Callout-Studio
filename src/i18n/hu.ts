@@ -187,7 +187,7 @@ export const hu: Record<string, string> = {
 	"editor.idCannotDelete":
 		"Ez az azonosító a megjelenítési névhez van kapcsolva, és nem törölhető — a módosításhoz szerkessze a nevet",
 	"editor.icon": "Ikon",
-	"editor.pickIcon": "Ikon kiválasztása",
+	"editor.pickIcon": "Ikon módosítása",
 	"editor.resetIcon": "Ikon visszaállítása alapértelmezettre",
 	"editor.livePreview": "Élő előnézet",
 	"editor.iconAdjustment": "Ikon igazítása",

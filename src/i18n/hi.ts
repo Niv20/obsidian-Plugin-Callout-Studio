@@ -185,7 +185,7 @@ export const hi: Record<string, string> = {
 	"editor.idCannotDelete":
 		"यह ID प्रदर्शन नाम से जुड़ी है और इसे हटाया नहीं जा सकता — बदलने के लिए नाम संपादित करें",
 	"editor.icon": "आइकन",
-	"editor.pickIcon": "आइकॉन चुनें",
+	"editor.pickIcon": "आइकॉन बदलें",
 	"editor.resetIcon": "आइकॉन को डिफ़ॉल्ट पर रीसेट करें",
 	"editor.livePreview": "लाइव पूर्वावलोकन",
 	"editor.iconAdjustment": "आइकन समायोजन",

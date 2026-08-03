@@ -184,7 +184,7 @@ export const ru: Record<string, string> = {
 	"editor.idCannotDelete":
 		"Этот ID связан с отображаемым именем и не может быть удалён — измените имя, чтобы изменить его",
 	"editor.icon": "Иконка",
-	"editor.pickIcon": "Выбрать значок",
+	"editor.pickIcon": "Изменить значок",
 	"editor.resetIcon": "Сбросить значок по умолчанию",
 	"editor.livePreview": "Живой предпросмотр",
 	"editor.iconAdjustment": "Настройка иконки",

@@ -186,7 +186,7 @@ export const pl: Record<string, string> = {
 	"editor.idCannotDelete":
 		"To ID jest powiązane z nazwą wyświetlaną i nie można go usunąć — edytuj nazwę, aby je zmienić",
 	"editor.icon": "Ikona",
-	"editor.pickIcon": "Wybierz ikonę",
+	"editor.pickIcon": "Zmień ikonę",
 	"editor.resetIcon": "Zresetuj ikonę do domyślnej",
 	"editor.livePreview": "Podgląd na żywo",
 	"editor.iconAdjustment": "Dostosowanie ikony",

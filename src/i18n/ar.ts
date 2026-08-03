@@ -182,7 +182,7 @@ export const ar: Record<string, string> = {
 	"editor.idCannotDelete":
 		"هذا المعرّف مرتبط بالاسم المعروض ولا يمكن حذفه — عدّل الاسم لتغييره",
 	"editor.icon": "أيقونة",
-	"editor.pickIcon": "اختر أيقونة",
+	"editor.pickIcon": "تغيير الأيقونة",
 	"editor.resetIcon": "إعادة تعيين الأيقونة إلى الافتراضي",
 	"editor.livePreview": "معاينة مباشرة",
 	"editor.iconAdjustment": "ضبط الأيقونة",

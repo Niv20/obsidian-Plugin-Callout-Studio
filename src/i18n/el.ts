@@ -175,7 +175,7 @@ export const el: Record<string, string> = {
 	"editor.idCannotDelete":
 		"Αυτό το ID είναι συνδεδεμένο με το εμφανιζόμενο όνομα και δεν μπορεί να διαγραφεί — επεξεργαστείτε το όνομα για να το αλλάξετε",
 	"editor.icon": "Εικονίδιο",
-	"editor.pickIcon": "Επιλογή εικονιδίου",
+	"editor.pickIcon": "Αλλαγή εικονιδίου",
 	"editor.resetIcon": "Επαναφορά εικονιδίου στην προεπιλογή",
 	"editor.livePreview": "Ζωντανή προεπισκόπηση",
 	"editor.iconAdjustment": "Ρύθμιση εικονιδίου",

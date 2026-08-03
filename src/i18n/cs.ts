@@ -184,7 +184,7 @@ export const cs: Record<string, string> = {
 	"editor.idCannotDelete":
 		"Toto ID je propojeno se zobrazovaným názvem a nelze ho smazat — upravte název, abyste ho změnili",
 	"editor.icon": "Ikona",
-	"editor.pickIcon": "Vybrat ikonu",
+	"editor.pickIcon": "Změnit ikonu",
 	"editor.resetIcon": "Obnovit ikonu na výchozí",
 	"editor.livePreview": "Živý náhled",
 	"editor.iconAdjustment": "Úprava ikony",

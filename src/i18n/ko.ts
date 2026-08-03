@@ -183,7 +183,7 @@ export const ko: Record<string, string> = {
 	"editor.idCannotDelete":
 		"이 ID는 표시 이름에 연결되어 있어 삭제할 수 없습니다 — 이름을 편집하여 변경하세요",
 	"editor.icon": "아이콘",
-	"editor.pickIcon": "아이콘 선택",
+	"editor.pickIcon": "아이콘 변경",
 	"editor.resetIcon": "아이콘을 기본값으로 재설정",
 	"editor.livePreview": "라이브 미리 보기",
 	"editor.iconAdjustment": "아이콘 조정",

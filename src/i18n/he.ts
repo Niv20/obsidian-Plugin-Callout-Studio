@@ -206,7 +206,7 @@ export const he: Record<string, string> = {
 	"editor.idCannotDelete":
 		"לא ניתן למחוק מזהה זה — הוא מקושר לשם התצוגה. כדי לשנותו, ערכו את השם",
 	"editor.icon": "אייקון",
-	"editor.pickIcon": "בחר סמל",
+	"editor.pickIcon": "שנה סמל",
 	"editor.resetIcon": "אפס אייקון לברירת המחדל",
 	"editor.livePreview": "תצוגה מקדימה בזמן אמת",
 	"editor.iconAdjustment": "התאמת אייקון",
@@ -725,7 +725,8 @@ export const he: Record<string, string> = {
 	"import.cmPlaceholder": "הדביקו כאן את הסגנונות שהועתקו…",
 	"import.cmBtnCancel": "ביטול",
 	"import.cmBtnImport": "ייבוא",
-	"import.err.cmNoBlocksFound": "לא נמצאו סגנונות של Callout Manager בטקסט שהודבק.",
+	"import.err.cmNoBlocksFound":
+		"לא נמצאו סגנונות של Callout Manager בטקסט שהודבק.",
 	"import.err.cmNoColorForNew":
 		'לא נמצא צבע תקין עבור תיבת־ההבלטה החדשה "{{value}}"; היא דולגה.',
 	"import.err.cmIdConflict":
@@ -755,7 +756,7 @@ export const he: Record<string, string> = {
 	"import.err.admTypeMissing": 'להתראה הזו אין "type", ולכן היא דולגה.',
 	"import.warn.admIconUnknown":
 		'לא נמצא אייקון בשם "{{value}}" באף ספריית אייקונים, ולכן נעשה ' +
-		'שימוש באייקון ברירת המחדל.',
+		"שימוש באייקון ברירת המחדל.",
 	"import.warn.admIconUnknownExisting":
 		'לא נמצא אייקון בשם "{{value}}" באף ספריית אייקונים, ולכן ' +
 		'"{{id}}" נשאר עם האייקון הקיים שלו.',
@@ -765,7 +766,8 @@ export const he: Record<string, string> = {
 	"import.warn.admIconWithCss":
 		"ההתראה הזו מעוצבת על־ידי קטע CSS ב־Admonition. העיצוב הזה אינו " +
 		"חלק מהייבוא, ולכן עברו רק השם, האייקון והצבע.",
-	"import.warn.admNoColor": "לא הוגדר צבע, ולכן נעשה שימוש בכחול ברירת המחדל.",
+	"import.warn.admNoColor":
+		"לא הוגדר צבע, ולכן נעשה שימוש בכחול ברירת המחדל.",
 	"import.warn.admTitleTruncated":
 		"הכותרת באורך {{length}} תווים; היא קוצרה ל־{{max}}.",
 };

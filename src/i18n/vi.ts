@@ -184,7 +184,7 @@ export const vi: Record<string, string> = {
 	"editor.idCannotDelete":
 		"ID này được liên kết với tên hiển thị và không thể xóa — chỉnh sửa tên để thay đổi nó",
 	"editor.icon": "Biểu tượng",
-	"editor.pickIcon": "Chọn biểu tượng",
+	"editor.pickIcon": "Thay đổi biểu tượng",
 	"editor.resetIcon": "Đặt lại biểu tượng về mặc định",
 	"editor.livePreview": "Xem trước trực tiếp",
 	"editor.iconAdjustment": "Điều chỉnh biểu tượng",

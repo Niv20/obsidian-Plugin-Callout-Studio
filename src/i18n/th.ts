@@ -183,7 +183,7 @@ export const th: Record<string, string> = {
 	"editor.idCannotDelete":
 		"ID นี้เชื่อมโยงกับชื่อที่แสดงและไม่สามารถลบได้ — แก้ไขชื่อเพื่อเปลี่ยน",
 	"editor.icon": "ไอคอน",
-	"editor.pickIcon": "เลือกไอคอน",
+	"editor.pickIcon": "เปลี่ยนไอคอน",
 	"editor.resetIcon": "รีเซ็ตไอคอนเป็นค่าเริ่มต้น",
 	"editor.livePreview": "ตัวอย่างสด",
 	"editor.iconAdjustment": "ปรับไอคอน",

@@ -184,7 +184,7 @@ export const id: Record<string, string> = {
 	"editor.idCannotDelete":
 		"ID ini terhubung ke nama tampilan dan tidak dapat dihapus — edit nama untuk mengubahnya",
 	"editor.icon": "Ikon",
-	"editor.pickIcon": "Pilih ikon",
+	"editor.pickIcon": "Ganti ikon",
 	"editor.resetIcon": "Setel ulang ikon ke default",
 	"editor.livePreview": "Pratinjau langsung",
 	"editor.iconAdjustment": "Penyesuaian ikon",

@@ -173,7 +173,7 @@ export const bg: Record<string, string> = {
 	"editor.idCannotDelete":
 		"Това ID е свързано с показваното име и не може да бъде изтрито — редактирайте името, за да го промените",
 	"editor.icon": "Икона",
-	"editor.pickIcon": "Изберете икона",
+	"editor.pickIcon": "Смяна на икона",
 	"editor.resetIcon": "Нулиране на иконата по подразбиране",
 	"editor.livePreview": "Преглед на живо",
 	"editor.iconAdjustment": "Настройка на иконата",

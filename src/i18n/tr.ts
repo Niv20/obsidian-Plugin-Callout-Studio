@@ -186,7 +186,7 @@ export const tr: Record<string, string> = {
 	"editor.idCannotDelete":
 		"Bu ID, görünen ada bağlı olduğu için silinemez — değiştirmek için adı düzenleyin",
 	"editor.icon": "Simge",
-	"editor.pickIcon": "Simge seç",
+	"editor.pickIcon": "Simge değiştir",
 	"editor.resetIcon": "Simgeyi varsayılana sıfırla",
 	"editor.livePreview": "Canlı önizleme",
 	"editor.iconAdjustment": "Simge ayarı",

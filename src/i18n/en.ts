@@ -206,7 +206,7 @@ export const en: Record<string, string> = {
 	"editor.idCannotDelete":
 		"This ID is linked to the display name and can't be deleted — edit the name to change it",
 	"editor.icon": "Icon",
-	"editor.pickIcon": "Pick icon",
+	"editor.pickIcon": "Change icon",
 	"editor.resetIcon": "Reset icon to default",
 	"editor.livePreview": "Live preview",
 	"editor.iconAdjustment": "Icon adjustment",
@@ -215,7 +215,8 @@ export const en: Record<string, string> = {
 	"editor.horizontalOffset": "Horizontal offset",
 	"editor.verticalOffset": "Vertical offset",
 	"editor.colors": "Color",
-	"editor.colorsDesc": "Sets this callout's border, background, and text colors.",
+	"editor.colorsDesc":
+		"Sets this callout's border, background, and text colors.",
 	"editor.resetColors": "Reset colors to default",
 	"editor.paletteDeleted": "Deleted color",
 	"editor.paletteGroupObsidian": "Obsidian callouts",
@@ -708,7 +709,8 @@ export const en: Record<string, string> = {
 	// Import — source chooser
 	"import.chooseSource": "Import from",
 	"import.sourceStudio": "Callout Studio",
-	"import.sourceStudioDesc": "Load a .json file exported from Callout Studio.",
+	"import.sourceStudioDesc":
+		"Load a .json file exported from Callout Studio.",
 	"import.sourceCalloutManager": "Callout Manager",
 	"import.sourceCalloutManagerDesc":
 		"Paste the styles you copied from Callout Manager's Copy button.",
@@ -764,8 +766,7 @@ export const en: Record<string, string> = {
 	"import.warn.admIconWithCss":
 		"This admonition is styled by a CSS snippet in Admonition. That styling " +
 		"is not part of the import, so only its name, icon, and color came over.",
-	"import.warn.admNoColor":
-		"No color was set, so the default blue was used.",
+	"import.warn.admNoColor": "No color was set, so the default blue was used.",
 	"import.warn.admTitleTruncated":
 		"The title is {{length}} characters; it was shortened to {{max}}.",
 

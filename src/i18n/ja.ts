@@ -183,7 +183,7 @@ export const ja: Record<string, string> = {
 	"editor.idCannotDelete":
 		"このIDは表示名にリンクされているため削除できません。名前を編集して変更してください",
 	"editor.icon": "アイコン",
-	"editor.pickIcon": "アイコンを選択",
+	"editor.pickIcon": "アイコンを変更",
 	"editor.resetIcon": "アイコンをデフォルトにリセット",
 	"editor.livePreview": "ライブプレビュー",
 	"editor.iconAdjustment": "アイコン調整",

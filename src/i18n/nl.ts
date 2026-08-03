@@ -187,7 +187,7 @@ export const nl: Record<string, string> = {
 	"editor.idCannotDelete":
 		"Deze ID is gekoppeld aan de weergavenaam en kan niet worden verwijderd — bewerk de naam om deze te wijzigen",
 	"editor.icon": "Pictogram",
-	"editor.pickIcon": "Pictogram kiezen",
+	"editor.pickIcon": "Pictogram wijzigen",
 	"editor.resetIcon": "Pictogram terugzetten naar standaard",
 	"editor.livePreview": "Live voorbeeld",
 	"editor.iconAdjustment": "Pictogramaanpassing",

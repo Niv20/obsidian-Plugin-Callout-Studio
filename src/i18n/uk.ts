@@ -186,7 +186,7 @@ export const uk: Record<string, string> = {
 	"editor.idCannotDelete":
 		"Цей ID пов'язаний з відображуваною назвою і не може бути видалений — щоб змінити його, відредагуйте назву",
 	"editor.icon": "Іконка",
-	"editor.pickIcon": "Вибрати значок",
+	"editor.pickIcon": "Змінити значок",
 	"editor.resetIcon": "Скинути значок до типового",
 	"editor.livePreview": "Живий попередній перегляд",
 	"editor.iconAdjustment": "Налаштування іконки",

@@ -171,7 +171,7 @@ export const da: Record<string, string> = {
 	"editor.idCannotDelete":
 		"Dette ID er knyttet til visningsnavnet og kan ikke slettes — rediger navnet for at ændre det",
 	"editor.icon": "Ikon",
-	"editor.pickIcon": "Vælg ikon",
+	"editor.pickIcon": "Skift ikon",
 	"editor.resetIcon": "Nulstil ikon til standard",
 	"editor.livePreview": "Live-forhåndsvisning",
 	"editor.iconAdjustment": "Ikontilpasning",

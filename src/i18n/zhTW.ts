@@ -164,7 +164,7 @@ export const zhTW: Record<string, string> = {
 	"editor.idCannotDelete":
 		"此 ID 已連結到顯示名稱，無法刪除——請編輯名稱以變更",
 	"editor.icon": "圖示",
-	"editor.pickIcon": "選擇圖示",
+	"editor.pickIcon": "更改圖示",
 	"editor.resetIcon": "重設圖示為預設",
 	"editor.livePreview": "即時預覽",
 	"editor.iconAdjustment": "圖示調整",
