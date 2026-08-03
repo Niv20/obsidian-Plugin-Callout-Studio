@@ -27,7 +27,10 @@ export class ConfirmModal extends Modal {
 
 	onOpen(): void {
 		const { contentEl } = this;
-		const btnContainer = applyModalChrome(this, { footer: true });
+		const btnContainer = applyModalChrome(this, {
+			footer: true,
+			title: false,
+		});
 		if (typeof this.message === "string") {
 			const paragraphs = this.message.split(/\n+/);
 			for (const p of paragraphs) {

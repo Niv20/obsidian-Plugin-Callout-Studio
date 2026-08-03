@@ -129,7 +129,10 @@ export class ReplaceCalloutModal extends Modal {
 		}
 
 		// Single confirm button
-		const btnContainer = applyModalChrome(this, { footer: true });
+		const btnContainer = applyModalChrome(this, {
+			footer: true,
+			title: false,
+		});
 		const confirmText =
 			this.confirmLabel ??
 			(this.mode === "replace"

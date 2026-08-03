@@ -35,6 +35,11 @@ export interface ModalChromeOptions {
 	footer?: boolean;
 	/** Wider window with a roomier inset — the callout and palette editors. */
 	wide?: boolean;
+	/** Set false for windows that never call `setTitle`/`titleEl.setText` — the
+	 * confirmation and replace-picker modals. Obsidian hides the empty title
+	 * itself but not the header band around it; this hides that band outright
+	 * instead of leaving a padded rule over nothing. Defaults to true. */
+	title?: boolean;
 }
 
 /**
@@ -60,6 +65,7 @@ export function applyModalChrome(
 	const { modalEl } = modal;
 	modalEl.addClass("cs-modal");
 	modalEl.toggleClass("cs-modal-wide", options.wide === true);
+	modalEl.toggleClass("cs-modal-no-title", options.title === false);
 	detachFooter(modalEl);
 
 	if (!options.footer) return null;
@@ -74,7 +80,7 @@ export function applyModalChrome(
 export function removeModalChrome(modal: Modal): void {
 	const { modalEl } = modal;
 	detachFooter(modalEl);
-	modalEl.removeClasses(["cs-modal", "cs-modal-wide"]);
+	modalEl.removeClasses(["cs-modal", "cs-modal-wide", "cs-modal-no-title"]);
 }
 
 function detachFooter(modalEl: HTMLElement): void {
