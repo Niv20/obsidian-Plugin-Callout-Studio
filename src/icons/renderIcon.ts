@@ -20,6 +20,7 @@ import { setIcon } from "obsidian";
 import type { CalloutIcon, CalloutRenderRole } from "../types";
 import type { IconResolver } from "./types";
 import { packFor } from "./registry";
+import { resolveLucideId } from "./lucideId";
 import { followsCalloutColor, userImageFor } from "./packs/userImages";
 import { isolateSvgCopy } from "./isolateSvg";
 
@@ -127,7 +128,13 @@ function paint(
 		case "builtin":
 			// Already a visible DOM SVG stroked with currentColor, so it needs
 			// none of the colouring below and survives PDF export as-is.
-			setIcon(target, icon.value);
+			//
+			// Through `resolveLucideId` because a value can still arrive spelled
+			// the way v2.7.0-2.7.1 wrote it — from a vault synced by a device
+			// that has not updated, a restored backup, or a JSON export from
+			// those versions (the import validator only length-checks `value`).
+			// `load()`'s migration cannot reach any of those; this can.
+			setIcon(target, resolveLucideId(icon.value));
 			return "painted";
 		case "glyph":
 			// textContent, never innerHTML — the glyph is user data. A wrapper

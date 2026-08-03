@@ -9,7 +9,6 @@
  */
 import type {
 	CalloutDefinition,
-	CalloutIcon,
 	ContextMenuItemConfig,
 	ContextMenuItemId,
 	ContextMenuSettings,
@@ -30,6 +29,7 @@ import {
 	FALLBACK_ICON,
 } from "../constants";
 import { iconCacheKey, packFor } from "../icons/registry";
+import { iconsEqual, resolveLucideId } from "../icons/lucideId";
 import { materialPack } from "../icons/packs/material";
 import type { CalloutManagerPlanItem } from "../utils/calloutManagerImport";
 import type { AdmonitionPlan } from "../utils/admonitionImport";
@@ -326,45 +326,24 @@ export class CalloutRegistry {
 		this.settings = structuredClone(DEFAULT_SETTINGS);
 		this.syncUserImages();
 		for (const def of SORTED_DEFAULT_CALLOUTS) {
-			const cloned = structuredClone(def);
-			// Keep this snapshot's icon spelling in lockstep with the runtime
-			// normalization `load()` applies to `this.callouts` (see the Lucide
-			// migration below) — `isModified`/`isBuiltInModified` diff a live
-			// callout against this exact map, so if the two ever disagreed on
-			// spelling alone, every untouched built-in would read as customized.
-			cloned.icon = CalloutRegistry.normalizeLucideIcon(cloned.icon);
-			this.builtInDefaults.set(def.id, cloned);
+			this.builtInDefaults.set(def.id, structuredClone(def));
 		}
 	}
 
 	/**
-	 * `constants.ts` and older imports store bare Lucide names ("pencil"),
-	 * while the icon picker's grid always produces the `getIconIds()` spelling
-	 * ("lucide-pencil") — see nameCheck.ts. Both name the same real icon, but
-	 * anything that compares `CalloutIcon.value` by strict string equality
-	 * (the picker's selection match, {@link isModified}) sees them as
-	 * different icons. Used by {@link setCallout} and the constructor's
-	 * `builtInDefaults` seeding so nothing is ever diffed or matched across
-	 * the two spellings.
-	 */
-	private static normalizeLucideIcon(icon: CalloutIcon): CalloutIcon {
-		if (icon.type === "lucide" && !icon.value.startsWith("lucide-")) {
-			return { ...icon, value: `lucide-${icon.value}` };
-		}
-		return icon;
-	}
-
-	/**
-	 * The only place `this.callouts` is written. Every `CalloutIcon` that
-	 * enters the registry — a fresh default, merged/saved data, an import, or
-	 * a live edit — passes through here, so {@link normalizeLucideIcon} runs
-	 * once at the boundary instead of needing a separate migration pass after
-	 * the fact (which is exactly how the fresh-install and "Reset all" paths
-	 * previously slipped past a post-hoc loop and kept comparing a bare value
-	 * against `builtInDefaults`' normalized one).
+	 * The only place `this.callouts` is written — a fresh default, merged/saved
+	 * data, an import or a live edit all land here.
+	 *
+	 * It deliberately does **not** touch the icon on the way through. v2.7.0 had
+	 * it rewrite every bare Lucide value to the `lucide-` spelling so the two
+	 * things that compare icons by string equality (the picker's selection
+	 * match, {@link isModified}) would stop seeing one icon as two — but that
+	 * prefix is a lookup instruction to Obsidian, not a synonym, and forcing it
+	 * onto ids that are not core Lucide unnamed them entirely. See
+	 * `icons/lucideId.ts`. Those two comparisons normalize themselves now; the
+	 * stored value stays exactly as `getIconIds()` spelled it.
 	 */
 	private setCallout(id: string, def: CalloutDefinition): void {
-		def.icon = CalloutRegistry.normalizeLucideIcon(def.icon);
 		this.callouts.set(id, def);
 	}
 
@@ -433,14 +412,33 @@ export class CalloutRegistry {
 		}
 		// Migration: any callout that still references the removed `svg` icon
 		// type falls back to a generic lucide pencil so renders don't crash.
-		// Already the picker's spelling (see {@link normalizeLucideIcon}) since
-		// every other entry point normalizes through {@link setCallout} — this
-		// is the one place that reassigns `.icon` directly on an already-stored
-		// definition rather than going through it.
+		// `lucide-pencil` rather than `pencil` only because that is the spelling
+		// `getIconIds()` hands back for it, which is what the picker will match
+		// against when the user opens it on this callout.
 		for (const def of this.callouts.values()) {
 			const t = (def.icon?.type as string | undefined) ?? "lucide";
 			if (t === "svg") {
 				def.icon = { type: "lucide", value: "lucide-pencil" };
+			}
+		}
+		// Migration: v2.7.0-2.7.1 prepended `lucide-` to every bare Lucide value
+		// on the way into the registry and then persisted it. That prefix tells
+		// `getIcon` to look in Obsidian's core Lucide table and nowhere else, so
+		// on an id that came from another plugin's `addIcon()` (`remix-*`) or
+		// from Obsidian's own internal set (`dice`, `discord`, `help`) it named
+		// nothing and the callout lost its icon everywhere at once. Undo it for
+		// exactly those, leaving real core ids alone — see `icons/lucideId.ts`.
+		//
+		// Safe this early in load: the test inside `resolveLucideId` is
+		// membership in the *prefixed* half of `getIconIds()`, which Obsidian has
+		// fully registered before any plugin runs. An id belonging to a plugin
+		// that has not loaded yet is simply absent from that half, which is the
+		// answer we want anyway.
+		for (const def of this.callouts.values()) {
+			if (def.icon?.type !== "lucide") continue;
+			const repaired = resolveLucideId(def.icon.value);
+			if (repaired !== def.icon.value) {
+				def.icon = { ...def.icon, value: repaired };
 			}
 		}
 		// Migration: `recolor` used to live on the picture, shared by every
@@ -623,12 +621,19 @@ export class CalloutRegistry {
 		current: CalloutDefinition,
 		original: CalloutDefinition,
 	): boolean {
-		// Structural compare, so nested values (`icon`, `bgGradient`, `aliases`,
+		// Structural compare, so nested values (`bgGradient`, `aliases`,
 		// `metadata`) are covered without a per-field spelling of each one.
 		// `?? null` keeps "absent" and "explicitly undefined" equal, which is
 		// what a JSON round-trip through data.json produces anyway.
+		//
+		// `icon` is the one field a raw string diff gets wrong: `constants.ts`
+		// spells a built-in's icon bare (`pencil`) and the picker spells the
+		// same drawing `lucide-pencil`, so an untouched built-in would read as
+		// customized the moment its owner opened the picker. `iconsEqual` knows
+		// the two spellings are one icon.
 		return Object.keys(CalloutRegistry.COMPARED_FIELDS).some((field) => {
 			const key = field as keyof CalloutDefinition;
+			if (key === "icon") return !iconsEqual(current.icon, original.icon);
 			return (
 				JSON.stringify(current[key] ?? null) !==
 				JSON.stringify(original[key] ?? null)

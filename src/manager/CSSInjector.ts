@@ -969,8 +969,15 @@ export class CSSInjector {
 	private getIconCSS(def: CalloutDefinition): string {
 		const pack = packFor(def.icon);
 		if (!pack) return "";
-		// Lucide is Obsidian's own set, so its id is the value core CSS wants.
-		// getIconIds() already returns ids with the "lucide-" prefix.
+		// Lucide is Obsidian's own set, so the stored id is already the value
+		// core CSS wants — emitted verbatim, and deliberately not put through
+		// `resolveLucideId` first. That repair asks whether an id is core
+		// Lucide, and this runs during plugin load, before a plugin that
+		// registered its own ids with `addIcon()` has necessarily loaded; a
+		// wrong answer here would be baked into the stylesheet *and* into the
+		// localStorage startup snapshot. `load()`'s migration has already
+		// repaired the stored value by this point, and the DOM pass
+		// (`paintIcons` → `renderIconInto`) resolves again at render time.
 		if (pack.kind === "builtin") return def.icon.value;
 		// Everything else needs a valid Lucide id as a placeholder
 		// --callout-icon so Obsidian renders *something* at first paint. The

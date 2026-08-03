@@ -25,6 +25,7 @@ import type {
 import { filterIcons } from "../../icons/search";
 import { renderIconInto } from "../../icons/renderIcon";
 import { getSource, packFor } from "../../icons/registry";
+import { canonicalIconValue } from "../../icons/lucideId";
 import {
 	MATERIAL_DEFAULT_STYLE,
 	ensureMaterialFontLoaded,
@@ -593,6 +594,13 @@ export class PackPanel {
 	 * the source it belongs to: one source can own several icon types (Font
 	 * Awesome's three styles), and only the produced icon says which one this
 	 * cell is currently offering.
+	 *
+	 * Through `canonicalIconValue` because a stored Lucide value may be spelled
+	 * bare (`constants.ts`, the Callout Manager importer) while this grid always
+	 * produces the `getIconIds()` spelling. Field by field rather than
+	 * `iconsEqual` on purpose: Material's weight is a live toolbar setting, not
+	 * part of which cell the user picked, and folding it in would leave the grid
+	 * with nothing highlighted every time the weight slider moved.
 	 */
 	private isSelected(entry: IconEntry): boolean {
 		const selected = this.host.selectedIcon();
@@ -601,7 +609,7 @@ export class PackPanel {
 		const candidate = owner.makeIcon(entry, this.variantsOf(entry));
 		return (
 			candidate.type === selected.type &&
-			candidate.value === selected.value &&
+			canonicalIconValue(candidate) === canonicalIconValue(selected) &&
 			candidate.style === selected.style
 		);
 	}

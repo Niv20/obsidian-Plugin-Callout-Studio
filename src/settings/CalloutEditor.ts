@@ -65,6 +65,7 @@ import { renderCalloutEditorIconPreview } from "./editor/CalloutEditorIconRender
 import { performCalloutEditorSave } from "./editor/CalloutEditorSave";
 import { findUserImage } from "../icons/packs/userImages";
 import { describeIcon } from "../icons/describeIcon";
+import { iconsEqual } from "../icons/lucideId";
 import { createControlGroup, setSliderDisplay } from "./styleControls";
 import { applyModalChrome, removeModalChrome } from "./modalChrome";
 import { refreshAllMarkdownEditors } from "../editor/livepreview/refresh";
@@ -504,11 +505,14 @@ export class CalloutEditor extends Modal {
 		setIcon(iconTile.createDiv("cs-icon-tile-edit"), "pencil");
 
 		// Reverts the icon alone to the built-in's shipped value; only shown once
-		// it has actually diverged from that default.
+		// it has actually diverged from that default. `iconsEqual` rather than a
+		// string diff because `constants.ts` spells a built-in's icon bare
+		// (`pencil`) and the picker spells the same drawing `lucide-pencil` — on
+		// a raw compare every built-in offered this button the moment its editor
+		// opened, having changed nothing.
 		let iconRevertBtn: ExtraButtonComponent | null = null;
 		const iconMatchesDefault = (): boolean =>
-			!originalDef ||
-			JSON.stringify(this.icon) === JSON.stringify(originalDef.icon);
+			!originalDef || iconsEqual(this.icon, originalDef.icon);
 		const syncIconRevert = (): void => {
 			iconRevertBtn?.extraSettingsEl.toggleClass(
 				"cs-hidden",

@@ -15,6 +15,7 @@
 import { getIconIds } from "obsidian";
 import type { CalloutIcon, IconPackId } from "../types";
 import { packFor } from "./registry";
+import { bareLucideName } from "./lucideId";
 
 /**
  * Packs whose `value` is not a name in an index, and so cannot be checked here.
@@ -29,24 +30,18 @@ const UNCHECKABLE: ReadonlySet<IconPackId> = new Set<IconPackId>([
 ]);
 
 /**
- * Lucide names exist in two spellings and both are legitimate.
- *
- * `constants.ts` and the Callout Manager importer store the bare name
- * ("pencil"), while the picker stores whatever `getIconIds()` returned, which
- * carries the `lucide-` prefix. `setIcon` accepts either, which is exactly why
- * the inconsistency has never surfaced — but a membership test that did not
- * normalize would declare one half of the vault's icons imaginary.
- */
-function bareLucideName(name: string): string {
-	return name.startsWith("lucide-") ? name.slice("lucide-".length) : name;
-}
-
-/**
  * A membership test over Obsidian's icon set, built once for a whole batch.
  *
  * Read fresh on every call rather than memoized, for the reason `lucide.ts`
  * gives: other plugins register their own ids at runtime, so the set is not
  * fixed for the lifetime of the app.
+ *
+ * Both sides go through `bareLucideName` because Lucide names exist in two
+ * legitimate spellings — `constants.ts` and the Callout Manager importer store
+ * the bare name ("pencil"), the picker stores whatever `getIconIds()` returned
+ * — and a test that did not normalize would declare one half of the vault's
+ * icons imaginary. `lucideId.ts` has the rest of that story, including why the
+ * prefix must never be *added* to reconcile the two.
  */
 export function createLucideNameCheck(): (value: string) => boolean {
 	const known = new Set(getIconIds().map(bareLucideName));
