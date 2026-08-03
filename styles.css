@@ -813,64 +813,22 @@ button.callout-studio-icon-picker-loading {
 	flex-shrink: 0;
 	margin: 0;
 	padding: var(--size-4-4) var(--cs-modal-inset) 12px;
-	/* The close button is absolutely positioned against the window's end edge
-	   and knows nothing about the header, so a long title needs its own room.
-	   Measured off the button rather than guessed at: its corner-side edge sits
-	   at `inset` and it is 24px wide, so its inner edge is at `inset + 24px`
-	   and this leaves 8px of air before the text reaches it. A flat
-	   `max(inset, 40px)` was right only while the button stayed in the corner —
-	   in a wide window the title would now run under it. */
-	padding-inline-end: calc(var(--cs-modal-inset) + 32px);
+	/* The close button stays at Obsidian's own stock position (the corner) —
+	   see the "Close button" note below — so the title only needs room for a
+	   24px box 6px off the edge: `max(inset, 40px)` covers that in both the
+	   normal and wide windows. */
+	padding-inline-end: max(var(--cs-modal-inset), 40px);
 	border-bottom: 1px solid var(--background-modifier-border);
 }
 
 /* ── Close button ─────────────────────────────────────────────────
-   The ✕ is a child of `modalEl`, not of the header, so it knows nothing about
-   any of this: Obsidian parks it in the window's corner at
-   `top / inset-inline-end: var(--size-2-3)`, 6px from both edges. That was the
-   right place while the whole window was one padded box, and reads as an
-   afterthought now — the glyph floats above the title's line, hard against the
-   edge the title stands clear of.
-
-   Vertically it is centred ON the title's line box rather than given a top
-   offset of its own: the line's midpoint is the header's top padding plus half
-   of `font-size × line-height`, and `translateY(-50%)` does the rest, which
-   keeps the button's own height the theme's business and not ours. The offset
-   follows `--font-ui-large` too, so a larger UI font moves both together.
-
-   Horizontally, backing the 24px hit box off the edge by `--size-2-3` (6px)
-   only moved it 4px past Obsidian's own 6px default — imperceptible, and it
-   still read as hugging the corner. The box now sits at the SAME inset as the
-   title and body instead, so its corner-side edge lines up with where the
-   rest of the chrome already starts, and the ✕ inside it reads as part of the
-   header rather than a stray mark in the corner.
-
-   `.modal.cs-modal`, not `.cs-modal`, for the same reason `.cs-modal-wide`
-   above stacks onto `.modal`: off macOS, Obsidian ships
-   `body.styled-scrollbars .modal-close-button { inset-inline-end: 12px }`
-   (app.css) at specificity (0,2,1), and a bare `.cs-modal > .modal-close-button`
-   is (0,2,0) — it loses, silently, on every platform except macOS (where that
-   body class is never added, so this reads as working in local testing and
-   ships broken to Windows/Linux users). Stacking `.modal` reaches (0,3,0),
-   clearing it on class count with no `!important`. */
-.modal.cs-modal > .modal-close-button {
-	inset-inline-end: var(--cs-modal-inset);
-}
-
-/* Only where there is a title to line up with. The two headerless windows keep
-   the corner position — with no rule to sit above, a lowered ✕ would come down
-   on the first line of their text. */
-.cs-modal:not(:has(> .modal-header > .modal-title:empty, > .modal-title:empty))
-	> .modal-close-button {
-	/* Both fall back to their stock values: an undefined var here would take the
-	   whole declaration down to `top: auto` with nothing to fall back to, and
-	   the button would drop to its static position. */
-	top: calc(
-		var(--size-4-4) + var(--font-ui-large, 20px) *
-			var(--line-height-tight, 1.3) / 2
-	);
-	transform: translateY(-50%);
-}
+   Left at Obsidian's own default position (`top` / `inset-inline-end:
+   var(--size-2-3)`, in the window's corner). A custom position was tried here
+   and rolled back: it never took visible effect during testing on this setup
+   even at extreme debug offsets, which points at something about how this
+   plugin's CSS is (or isn't) reaching the running window rather than a
+   selector problem — not worth chasing further. Default behaviour is safe and
+   correct; it just sits in the corner like every other Obsidian modal. */
 
 /* ── Body ─────────────────────────────────────────────────────────
    The one scroll container in the window. `min-height: 0` lets it shrink past
