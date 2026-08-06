@@ -604,6 +604,8 @@ export const ar: Record<string, string> = {
 		'المعرّف "{{value}}" يتكون من {{length}} حرفاً؛ الحد الأقصى هو {{max}}.',
 	"import.err.idBadChar":
 		'يحتوي المعرّف "{{value}}" على أحرف غير صالحة ("|" و"[" و"]" وعلامات الجدولة وفواصل الأسطر غير مسموح بها).',
+	"import.err.idMetadata":
+		'المعرّف "{{value}}" يحتوي على "|". في Obsidian كل ما يأتي بعد "|" الأولى هو بيانات وصفية للـ callout وليس جزءاً من النوع، لذا فإن هذا الإدخال يصف الـ callout "{{id}}". تم التخطي، وبالتالي يبقى "{{id}}" الحالي دون تغيير.',
 	"import.err.displayNameEmpty": "يجب ألا يكون الاسم المعروض فارغاً.",
 	"import.err.displayNameTooLong":
 		"الاسم المعروض يتكون من {{length}} حرفاً؛ الحد الأقصى هو {{max}}.",

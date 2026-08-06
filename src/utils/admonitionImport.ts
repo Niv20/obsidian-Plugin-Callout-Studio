@@ -153,7 +153,7 @@ export async function planAdmonitionImport(
 		}
 
 		const id = normalizeCalloutId(rawType);
-		if (!validateIdString(id, push, "type")) continue;
+		if (!validateIdString(id, push, "type", rawType)) continue;
 
 		const firstSeen = seenIds.get(id);
 		if (firstSeen !== undefined) {

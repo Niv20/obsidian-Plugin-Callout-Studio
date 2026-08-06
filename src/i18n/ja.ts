@@ -617,6 +617,8 @@ export const ja: Record<string, string> = {
 		'ID"{{value}}"は{{length}}文字です。最大は{{max}}文字です。',
 	"import.err.idBadChar":
 		'ID"{{value}}"に無効な文字が含まれています（"|"、"["、"]"、タブ、改行は使用できません）。',
+	"import.err.idMetadata":
+		'ID"{{value}}"に"|"が含まれています。Obsidianでは最初の"|"以降はすべてcalloutのメタデータであり、タイプの一部ではありません。このため、このエントリは"{{id}}"calloutを説明しています。スキップされました。既存の"{{id}}"はそのまま変更されていません。',
 	"import.err.displayNameEmpty": "表示名は空であってはなりません。",
 	"import.err.displayNameTooLong":
 		"表示名は{{length}}文字です。最大は{{max}}文字です。",

@@ -574,7 +574,8 @@ export const zhTW: Record<string, string> = {
 		"ID「{{value}}」長度為 {{length}} 個字元；最大值為 {{max}}。",
 	"import.err.idBadChar":
 		"ID「{{value}}」包含無效字元（不允許使用「|」、「[」、「]」、定位字元和換行字元）。",
-	"import.err.displayNameEmpty": "顯示名稱不能為空。",
+	"import.err.idMetadata":
+		"ID「{{value}}」包含「|」。在 Obsidian 中，第一個「|」後面的所有內容都是 callout 的中繼資料，而非類型的一部分，因此此條目描述的是「{{id}}」callout。已略過，您現有的「{{id}}」保持不變。",
 	"import.err.displayNameTooLong":
 		"顯示名稱長度為 {{length}} 個字元；最大值為 {{max}}。",
 	"import.err.boolField": "「{{field}}」必須是布林值（true 或 false）。",

@@ -595,6 +595,8 @@ export const fi: Record<string, string> = {
 		'Tunnus "{{value}}" on {{length}} merkkiä; enimmäismäärä on {{max}}.',
 	"import.err.idBadChar":
 		'Tunnus "{{value}}" sisältää virheellisiä merkkejä ("|", "[", "]", sarkaimet ja rivinvaihdot eivät ole sallittuja).',
+	"import.err.idMetadata":
+		'Tunnus "{{value}}" sisältää "|". Obsidianissa kaikki ensimmäisen "|" jälkeen on callout-metatietoa, ei osa tyyppiä, joten tämä merkintä kuvaa calloutia "{{id}}". Ohitettu, jotta olemassa oleva "{{id}}" pysyy muuttumattomana.',
 	"import.err.displayNameEmpty": "Näyttönimi ei saa olla tyhjä.",
 	"import.err.displayNameTooLong":
 		"Näyttönimi on {{length}} merkkiä; enimmäismäärä on {{max}}.",

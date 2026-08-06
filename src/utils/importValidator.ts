@@ -168,11 +168,23 @@ function deriveLabel(
  * The id rules, shared with the Admonition importer rather than restated there:
  * a type name from another plugin has to clear exactly the same bar as one from
  * our own export file, and two copies of these limits would drift.
+ *
+ * `raw` is the value as the file spelled it, before normalizeCalloutId ran. The
+ * character checks need it: normalization drops `|metadata` and folds tabs and
+ * line breaks into spaces, so running them on the canonical form would pass
+ * anything. Defaults to `id` for callers that never had a separate raw value.
+ *
+ * A `|` is rejected rather than accepted-and-stripped on purpose. `note|purple`
+ * is the `note` callout carrying metadata, so importing that entry as `note`
+ * would repaint the reader's real `note` with a style they never chose — and
+ * every metadata value in the file would collide on the same base id. Skipping
+ * the entry is what the importer already did before the pipe was understood.
  */
 export function validateIdString(
 	id: string,
 	push: (issue: Omit<ValidationIssue, "index" | "entryLabel">) => void,
 	field: string,
+	raw: string = id,
 ): boolean {
 	let ok = true;
 	if (id.length === 0) {
@@ -188,12 +200,20 @@ export function validateIdString(
 		});
 		ok = false;
 	}
-	if (ID_BAD_CHAR_RE.test(id)) {
+	if (raw.includes("|")) {
+		push({
+			field,
+			level: "error",
+			messageKey: "import.err.idMetadata",
+			params: { value: raw, id },
+		});
+		ok = false;
+	} else if (ID_BAD_CHAR_RE.test(raw)) {
 		push({
 			field,
 			level: "error",
 			messageKey: "import.err.idBadChar",
-			params: { value: id },
+			params: { value: raw },
 		});
 		ok = false;
 	}
@@ -735,7 +755,7 @@ function validateCalloutArray(
 		const idRaw =
 			typeof entry.id === "string" ? normalizeCalloutId(entry.id) : "";
 		if (typeof entry.id === "string") {
-			if (!validateIdString(idRaw, push, "id")) entryOk = false;
+			if (!validateIdString(idRaw, push, "id", entry.id)) entryOk = false;
 		}
 
 		// ── displayName ─────────────────────────────────────────
@@ -881,7 +901,9 @@ function validateCalloutArray(
 						return;
 					}
 					const trimmed = normalizeCalloutId(alias);
-					if (!validateIdString(trimmed, push, `aliases[${ai}]`)) {
+					if (
+						!validateIdString(trimmed, push, `aliases[${ai}]`, alias)
+					) {
 						entryOk = false;
 						return;
 					}

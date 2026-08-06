@@ -31,6 +31,7 @@ import {
 	scanLineForCalloutTokens,
 	stripInlineCode,
 } from "../editor/calloutTokens";
+import { splitCalloutMetadata } from "../utils/calloutId";
 import {
 	CSS_ANIM_IN,
 	CSS_HEADING_LINE,
@@ -156,6 +157,7 @@ function transformHeading(
 	if (!renderedMatch) return;
 
 	let rawId: string;
+	let metadata: string;
 	let hasTitle: boolean;
 	const lines = getSectionLines();
 	if (lines) {
@@ -164,10 +166,13 @@ function transformHeading(
 		);
 		if (!headToken) return; // escaped / link / not a heading-callout block
 		rawId = headToken.rawId;
+		metadata = headToken.metadata;
 		hasTitle = headToken.hasTitle;
 	} else {
 		// No source info (embeds, some export paths): trust the rendered text.
-		rawId = renderedMatch[1] ?? "";
+		const parts = splitCalloutMetadata(renderedMatch[1] ?? "");
+		rawId = parts.id;
+		metadata = parts.metadata;
 		hasTitle =
 			(textNode.textContent ?? "").length > renderedMatch[0].length ||
 			textNode.nextSibling !== null;
@@ -183,6 +188,9 @@ function transformHeading(
 	// instead, but only during the startup entrance window.
 	if (isStartupEntranceActive()) h.classList.add(CSS_ANIM_IN);
 	h.setAttribute("data-callout", calloutDomId(rawId, resolved));
+	// Mirrors what Obsidian stamps on a blockquote callout, so a theme can hook
+	// this role the same way. Omitted when absent — an empty attribute matches.
+	if (metadata) h.setAttribute("data-callout-metadata", metadata);
 
 	// Strip the `[!id] ` prefix from the rendered text and put the token
 	// DOM (icon + optional name) in its place.
@@ -191,6 +199,7 @@ function transformHeading(
 	);
 	const tokenEl = buildCalloutTokenDom({
 		rawId,
+		metadata,
 		registry: host.registry,
 		variant: "heading",
 		showName: !hasTitle,
@@ -277,7 +286,9 @@ function transformHeadingRefLinks(
 		// truncated tail keeps this precise and idempotent (once repaired the
 		// value ends in `]` and no longer matches).
 		if (token.truncated) {
-			const suffix = `[!${token.rawId}`;
+			// `rawContent`, not `rawId`: this has to match the raw link text
+			// character for character, so any `|metadata` must stay in.
+			const suffix = `[!${token.rawContent}`;
 			for (const attr of ["data-href", "href"] as const) {
 				const val = anchor.getAttribute(attr);
 				if (val !== null && val.endsWith(suffix)) {
@@ -354,6 +365,7 @@ interface PillCandidate {
 	from: number;
 	to: number;
 	rawId: string;
+	metadata: string;
 }
 
 /**
@@ -403,6 +415,7 @@ function transformInlinePills(
 				from: token.from,
 				to: token.to,
 				rawId: token.rawId,
+				metadata: token.metadata,
 			});
 		}
 	}
@@ -422,6 +435,7 @@ function transformInlinePills(
 		const tokenPart = c.node.splitText(c.from);
 		const pill = buildCalloutTokenDom({
 			rawId: c.rawId,
+			metadata: c.metadata,
 			registry: host.registry,
 			variant: "inline",
 			showName: true,

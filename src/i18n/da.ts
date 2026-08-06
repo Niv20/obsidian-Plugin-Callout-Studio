@@ -593,6 +593,8 @@ export const da: Record<string, string> = {
 		'ID\'et "{{value}}" er {{length}} tegn; maksimum er {{max}}.',
 	"import.err.idBadChar":
 		'ID\'et "{{value}}" indeholder ugyldige tegn ("|", "[", "]", tabulatorer og linjeskift er ikke tilladt).',
+	"import.err.idMetadata":
+		'ID\'et "{{value}}" indeholder et "|". I Obsidian er alt efter det første "|" callout-metadata, ikke en del af typen, så denne post beskriver calloutet "{{id}}". Sprunget over, så dit eksisterende "{{id}}" er berørt.',
 	"import.err.displayNameEmpty": "Visningsnavnet må ikke være tomt.",
 	"import.err.displayNameTooLong":
 		"Visningsnavnet er {{length}} tegn; maksimum er {{max}}.",

@@ -623,6 +623,8 @@ export const it: Record<string, string> = {
 		'L\'ID "{{value}}" è di {{length}} caratteri; il massimo è {{max}}.',
 	"import.err.idBadChar":
 		'L\'ID "{{value}}" contiene caratteri non validi ("|", "[", "]", tabulazioni e a capo non sono consentiti).',
+	"import.err.idMetadata":
+		'L\'ID "{{value}}" contiene un "|". In Obsidian tutto ciò che segue il primo "|" è metadata del callout, non parte del tipo; quindi questa voce descrive il callout "{{id}}". Saltata, in modo che il tuo "{{id}}" esistente resti invariato.',
 	"import.err.displayNameEmpty":
 		"Il nome visualizzato non deve essere vuoto.",
 	"import.err.displayNameTooLong":

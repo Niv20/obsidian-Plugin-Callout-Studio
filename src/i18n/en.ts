@@ -652,6 +652,8 @@ export const en: Record<string, string> = {
 		'ID "{{value}}" is {{length}} characters; the maximum is {{max}}.',
 	"import.err.idBadChar":
 		'ID "{{value}}" contains invalid characters ("|", "[", "]", tabs, and line breaks are not allowed).',
+	"import.err.idMetadata":
+		'ID "{{value}}" contains a "|". In Obsidian everything after the first "|" is callout metadata, not part of the type, so this entry describes the "{{id}}" callout. Skipped, so your existing "{{id}}" is left untouched.',
 	"import.err.displayNameEmpty": "Display name must not be empty.",
 	"import.err.displayNameTooLong":
 		"Display name is {{length}} characters; the maximum is {{max}}.",

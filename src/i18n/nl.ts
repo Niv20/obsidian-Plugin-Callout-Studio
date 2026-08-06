@@ -620,6 +620,8 @@ export const nl: Record<string, string> = {
 		'De ID "{{value}}" is {{length}} tekens; het maximum is {{max}}.',
 	"import.err.idBadChar":
 		'De ID "{{value}}" bevat ongeldige tekens ("|", "[", "]", tabs en regeleinden zijn niet toegestaan).',
+	"import.err.idMetadata":
+		'De ID "{{value}}" bevat een "|". In Obsidian is alles na het eerste "|" callout-metadata, niet een onderdeel van het type, dus beschrijft dit item de callout "{{id}}". Overgeslagen, zodat uw bestaande "{{id}}" ongewijzigd blijft.',
 	"import.err.displayNameEmpty": "De weergavenaam mag niet leeg zijn.",
 	"import.err.displayNameTooLong":
 		"De weergavenaam is {{length}} tekens; het maximum is {{max}}.",

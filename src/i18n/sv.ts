@@ -614,6 +614,8 @@ export const sv: Record<string, string> = {
 		'ID:t "{{value}}" är {{length}} tecken; maxvärdet är {{max}}.',
 	"import.err.idBadChar":
 		'ID:t "{{value}}" innehåller ogiltiga tecken ("|", "[", "]", tabbar och radbrytningar är inte tillåtna).',
+	"import.err.idMetadata":
+		'ID:t "{{value}}" innehåller ett "|". I Obsidian är allt efter det första "|" callout-metadata, inte en del av typen, så den här posten beskriver callouten "{{id}}". Hoppades över, så att ditt befintliga "{{id}}" lämnas oförändrat.',
 	"import.err.displayNameEmpty": "Visningsnamnet får inte vara tomt.",
 	"import.err.displayNameTooLong":
 		"Visningsnamnet är {{length}} tecken; maxvärdet är {{max}}.",

@@ -24,6 +24,7 @@ import { CalloutEditor } from "../settings/CalloutEditor";
 import { renderIconInto } from "../icons/renderIcon";
 import { createIconResolver } from "../icons/resolver";
 import { getLocale, t } from "../i18n";
+import { splitCalloutMetadata } from "../utils/calloutId";
 import {
 	getSortedCalloutIds,
 	sortCalloutsByDisplayName,
@@ -219,16 +220,23 @@ export class CalloutAutoComplete extends EditorSuggest<CalloutSuggestion> {
 		}
 		this.triggerRole = role;
 
-		// Capture the full id token (from `[!` to the next `]`, or end of line),
-		// independent of where the cursor sits within it. Reading only up to the
-		// cursor would mis-filter a mid-token cursor (e.g. `[!dang|aaaaa]` would
-		// match "Danger" instead of offering "Create new: dangaaaaa").
+		// Capture the full token body (from `[!` to the next `]`, or end of
+		// line), independent of where the cursor sits within it. Reading only up
+		// to the cursor would mis-filter a mid-token cursor (e.g. `[!dang⎸aaaaa]`
+		// would match "Danger" instead of offering "Create new: dangaaaaa").
 		const afterTrigger = line.slice(triggerIdx + 2);
 		const closeIdx = afterTrigger.indexOf("]");
-		const query =
+		const body =
 			closeIdx === -1 ? afterTrigger : afterTrigger.slice(0, closeIdx);
 
-		// Stop once the cursor moves past the id into the fold mark / title.
+		// Only the type is a callout name; anything past the first `|` is
+		// Obsidian metadata. Matching on the body whole would offer
+		// "Create new: note|purple" for a perfectly ordinary `note` callout.
+		const { id: query } = splitCalloutMetadata(body);
+
+		// Stop once the cursor moves past the id — into the metadata, the fold
+		// mark, or the title. All three are things the type dropdown has no say
+		// over, so the popup closes rather than filtering on them.
 		const idEndCh = triggerIdx + 2 + query.length;
 		if (cursor.ch > idEndCh) return null;
 
@@ -365,6 +373,23 @@ export class CalloutAutoComplete extends EditorSuggest<CalloutSuggestion> {
 		});
 	}
 
+	/**
+	 * The `|metadata` suffix (pipe included) of the `[!…]` token opening at
+	 * `startCh` on `line`, or "" when it carried none.
+	 *
+	 * Every rewrite path below replaces the whole bracket span, so it has to put
+	 * back what the user already wrote there: metadata belongs to the
+	 * occurrence, not to the callout type, and picking a different type from the
+	 * dropdown is no reason to drop it.
+	 */
+	private tokenMetadataSuffix(line: string, startCh: number): string {
+		const afterTrigger = line.slice(startCh + 2);
+		const closeIdx = afterTrigger.indexOf("]");
+		if (closeIdx === -1) return "";
+		const parts = splitCalloutMetadata(afterTrigger.slice(0, closeIdx));
+		return parts.hasMetadata ? `|${parts.metadata}` : "";
+	}
+
 	selectSuggestion(
 		item: CalloutSuggestion,
 		evt: MouseEvent | KeyboardEvent,
@@ -409,6 +434,7 @@ export class CalloutAutoComplete extends EditorSuggest<CalloutSuggestion> {
 		const closeIdx = afterTrigger.indexOf("]");
 		const afterHeader =
 			closeIdx === -1 ? "" : afterTrigger.slice(closeIdx + 1);
+		const metaSuffix = this.tokenMetadataSuffix(line, start.ch);
 
 		// Replace from trigger start to end of line
 		const lineEnd: EditorPosition = {
@@ -424,7 +450,8 @@ export class CalloutAutoComplete extends EditorSuggest<CalloutSuggestion> {
 		if (this.triggerRole === "heading") {
 			const headingTitle = afterHeader.trim();
 			const replacement =
-				`[!${matchedId}]` + (headingTitle ? ` ${headingTitle}` : "");
+				`[!${matchedId}${metaSuffix}]` +
+				(headingTitle ? ` ${headingTitle}` : "");
 			editor.replaceRange(replacement, start, lineEnd);
 			this.pendingEditor = editor;
 			this.pendingLine = start.line;
@@ -455,7 +482,7 @@ export class CalloutAutoComplete extends EditorSuggest<CalloutSuggestion> {
 			title = existingTitle;
 		}
 
-		const replacement = `[!${matchedId}]${foldMark} ${title}`;
+		const replacement = `[!${matchedId}${metaSuffix}]${foldMark} ${title}`;
 		editor.replaceRange(replacement, start, lineEnd);
 
 		if (isNewCallout) {
@@ -485,7 +512,7 @@ export class CalloutAutoComplete extends EditorSuggest<CalloutSuggestion> {
 			closeIdx === -1
 				? contextEnd
 				: { line: start.line, ch: start.ch + 2 + closeIdx + 1 };
-		const token = `[!${insertId}]`;
+		const token = `[!${insertId}${this.tokenMetadataSuffix(line, start.ch)}]`;
 		editor.replaceRange(token, start, tokenEnd);
 
 		const afterCh = start.ch + token.length;
@@ -530,9 +557,16 @@ export class CalloutAutoComplete extends EditorSuggest<CalloutSuggestion> {
 			return;
 		}
 
+		// Re-read after the modal round-trip: the token the user typed is still
+		// on the line, metadata included, and every branch below replaces it.
+		const metaSuffix = this.tokenMetadataSuffix(
+			editor.getLine(start.line),
+			start.ch,
+		);
+
 		if (role === "heading") {
 			// No title text — the rendered token shows the display name.
-			editor.replaceRange(`[!${result.id}]`, start, lineEnd);
+			editor.replaceRange(`[!${result.id}${metaSuffix}]`, start, lineEnd);
 			// close() already ran (before the modal), so place the cursor
 			// directly rather than via the pending mechanism.
 			editor.focus();
@@ -545,7 +579,7 @@ export class CalloutAutoComplete extends EditorSuggest<CalloutSuggestion> {
 				? "-"
 				: "+"
 			: "";
-		const replacement = `[!${result.id}]${foldMark} ${result.displayName}`;
+		const replacement = `[!${result.id}${metaSuffix}]${foldMark} ${result.displayName}`;
 		editor.replaceRange(replacement, start, lineEnd);
 		this.pendingEditor = editor;
 		this.pendingLine = start.line;

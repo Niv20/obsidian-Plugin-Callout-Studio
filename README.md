@@ -18,6 +18,8 @@ The same callout definition can be used in **three** different forms, each with 
 
 All three forms render in Live Preview, Reading view, and PDF export.
 
+Obsidian lets you attach **metadata** to a callout after a pipe — `> [!note|purple]` is the `note` callout carrying the metadata `purple`, which themes and CSS snippets can style through `data-callout-metadata`. Callout Studio ignores the metadata when deciding *which* callout you meant, so `[!note]`, `[!note|purple]` and `[!note|green]` are all one **Note**, with a single row in your callout list. All three forms honour this, and heading and inline callouts carry `data-callout-metadata` too.
+
 <img alt="Three ways to use a callout" src="https://github.com/user-attachments/assets/3cf88262-184d-42e6-b810-d43889629afb" />
 
 

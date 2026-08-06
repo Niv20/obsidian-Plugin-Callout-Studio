@@ -618,6 +618,8 @@ export const tr: Record<string, string> = {
 		'"{{value}}" ID\'si {{length}} karakter; maksimum {{max}}.',
 	"import.err.idBadChar":
 		'"{{value}}" ID\'si geçersiz karakterler içeriyor ("|", "[", "]", sekmeler ve satır sonları kullanılamaz).',
+	"import.err.idMetadata":
+		'"{{value}}" ID\'si "|" içeriyor. Obsidian\'da ilk "|"den sonraki her şey callout\'un meta verisidir, türün bir parçası değildir; bu nedenle bu giriş "{{id}}" callout\'unu tanımlar. Mevcut "{{id}}"niz değiştirilmeden bırakılması için atlandı.',
 	"import.err.displayNameEmpty": "Görünen ad boş olmamalıdır.",
 	"import.err.displayNameTooLong":
 		"Görünen ad {{length}} karakter; maksimum {{max}}.",

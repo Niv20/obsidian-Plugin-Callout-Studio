@@ -24,6 +24,7 @@ Callout Studio is an Obsidian plugin that lets users create and manage custom ca
 
 - **CalloutRegistry** — single source of truth for all callout definitions. Owns the `Map<id, CalloutDefinition>`, serializes to/from `data.json`, runs CRUD and data migrations, fires `onChange` callbacks on every mutation.
 - **CSSInjector** — reads the registry and generates dynamic CSS custom properties per callout (colors, icons, light/dark overrides). Uses `adoptedStyleSheets` (one global per window). Injects synchronously, guarded by a re-entrancy latch. Calls `app.workspace.trigger("css-change")` after inject to force Obsidian re-render.
+  **Our background is opaque; Obsidian's is not** — core paints `.callout` with `color-mix(in oklch, var(--callout-color) 10%, transparent)`, so nested callouts composite and step darker. A solid `background-color` hides what's under it and flattens every depth onto one shade, so `nestedDepthCSS()` puts the step back (10% / 19% / 27.1% — `1 - 0.9ⁿ`) by mixing the accent into the callout's **own** `--cs-bg` rather than the parent's rendered colour: ours are authored as final tints, and compositing would muddy a colour the user picked. That makes `--cs-bg` a two-file contract — `bgProps()` emits it, and `styles.css` **must** reset `.callout { --cs-bg: transparent }`, because custom properties inherit and a nested callout would otherwise tint its parent's background. Left at `transparent` the rules evaluate to core's own value exactly, so an unpainted callout is untouched.
 - **CalloutDiscovery** — watches file-open/modify events and scans markdown for unknown `[!id]` patterns. Auto-creates "fallback" rows for new IDs. Prunes unused auto-created rows in a background debounced pass.
 - **IconService** (`src/icons/`) — the one entry point to icon artwork. Owns `IconFetchManager` (Material's per-icon fetches from fonts.gstatic.com) and `PackDataStore` (whole-pack downloads, SHA-256 verified on download *and* on every disk read, cached under `<plugin-dir>/icon-packs/`). Notifies listeners when artwork lands so CSS can re-inject. `ensureArtwork()` covers one icon (the picker); **`ensureArtworkFor()` is the only repair path** — it takes a batch, skips anything already drawable from `iconSvgCache`, groups the rest by `icon.type` so a pack downloads once, and is what import and startup both call.
 
@@ -97,6 +98,16 @@ Search indexes are bundled (packed by `icons/data/codec.ts`); artwork is not. Re
 | `theme`/`plugin` | Injected by other plugins via the public API |
 
 Built-in callouts are never stored unless modified — `toSaveData()` only persists modified built-ins and all user callouts.
+
+### Callout metadata (`[!type|metadata]`)
+
+Obsidian splits a callout header at the **first `|`**: the part before it is the type, everything after is metadata, emitted as `data-callout-metadata` (verified in its bundled parser — `type.trim().toLowerCase().replace(/\s+/g,"-")`, `data: e.substr(i+1)`, untrimmed, further pipes included). So `> [!note|purple]` is the `note` callout, not a callout named `note|purple`.
+
+**`splitCalloutMetadata` (`utils/calloutId.ts`) is where that rule lives, and `normalizeCalloutId` calls it** — which is what makes it structurally impossible for a piped id to reach the registry, since every path from raw markdown to a definition already funnels through that one function. `obsidianCalloutAttrId` deliberately does *not* strip: Obsidian removed the metadata before that attribute existed, so stripping there could only take a stray stored id and collapse it onto a real callout's CSS rule.
+
+The tokenizer carries `rawId` (type alone) and `metadata` separately while **`from`/`to` keep spanning the whole `[!…]`** — every vault rewriter and Live Preview decoration is built from those offsets, so nothing may derive a length from `rawId`. Anything that rewrites a token must put the metadata back (`replaceCalloutIdsInVault`, every autocomplete insertion path); the plugin's own heading/inline DOM stamps `data-callout-metadata` so themes get the same hook Obsidian gives blockquotes. Import **rejects** a piped id rather than folding it onto the base — importing `note|purple` as `note` would repaint the reader's real `note`.
+
+`CalloutRegistry.stripMetadataFromIds()` retires rows left behind by builds that predate all this, in **both** spellings a vault can hold them: the piped id itself (`note|green`), and the `notegreen`/`Note|green` pair an editor save produced when the old sanitizer ate the pipe as just another disallowed character (`legacyPipeEatenId`). Renamed to the base when it's free, dropped when it isn't — the base is usually a built-in, and merging would silently restyle a callout nobody asked to change. The legacy branch fires only when the id is *exactly* the pipe-eaten form of the display name, so a name the user chose with a pipe in it (`Pros|Cons`) is never touched.
 
 ### Public API (`src/api/PluginAPI.ts`)
 

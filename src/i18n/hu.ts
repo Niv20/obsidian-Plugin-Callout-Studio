@@ -619,6 +619,8 @@ export const hu: Record<string, string> = {
 		'A "{{value}}" azonosító {{length}} karakter; a maximum {{max}}.',
 	"import.err.idBadChar":
 		'A "{{value}}" azonosító érvénytelen karaktereket tartalmaz ("|", "[", "]", tabulátorok és sortörések nem megengedettek).',
+	"import.err.idMetadata":
+		'A "{{value}}" azonosító "|" karaktert tartalmaz. Az Obsidianban az első "|" utáni minden szöveg callout-metaadat, nem a típus része, ezért ez a bejegyzés a "{{id}}" calloutot írja le. Kihagyva, hogy a meglévő "{{id}}" érintetlen maradjon.',
 	"import.err.displayNameEmpty": "A megjelenítési név nem lehet üres.",
 	"import.err.displayNameTooLong":
 		"A megjelenítési név {{length}} karakter; a maximum {{max}}.",

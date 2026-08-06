@@ -617,6 +617,8 @@ export const pl: Record<string, string> = {
 		'ID "{{value}}" ma {{length}} znaków; maksimum to {{max}}.',
 	"import.err.idBadChar":
 		'ID "{{value}}" zawiera nieprawidłowe znaki ("|", "[", "]", tabulatory i znaki nowej linii są niedozwolone).',
+	"import.err.idMetadata":
+		'ID "{{value}}" zawiera "|". W Obsidianie wszystko po pierwszym "|" to metadane callout-a, nie część typu, więc ten wpis opisuje callout "{{id}}". Pominięto, aby Twoje istniejące "{{id}}" pozostało niezmienione.',
 	"import.err.displayNameEmpty": "Nazwa wyświetlana nie może być pusta.",
 	"import.err.displayNameTooLong":
 		"Nazwa wyświetlana ma {{length}} znaków; maksimum to {{max}}.",

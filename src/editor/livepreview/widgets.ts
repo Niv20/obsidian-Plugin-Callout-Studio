@@ -50,6 +50,16 @@ export class CalloutTokenWidget extends WidgetType {
 		private readonly registry: CalloutRegistry,
 		private readonly variant: CalloutTokenVariant,
 		private readonly showName: boolean,
+		/** Raw `|metadata` for this occurrence; "" when the token carried none. */
+		private readonly metadata = "",
+		/**
+		 * Width of the token's source span (`[!…]`), `|metadata` included. Only
+		 * the inline branch of toDOM reads it — a ref token is never followed by
+		 * offset math — but it must be the real span, never `rawId.length + 3`:
+		 * `rawId` is the type alone, so on `[!note|purple]` that would place the
+		 * caret short by the metadata's width.
+		 */
+		private readonly sourceLen = rawId.length + 3,
 	) {
 		super();
 		this.renderKey = this.computeRenderKey();
@@ -68,6 +78,9 @@ export class CalloutTokenWidget extends WidgetType {
 			this.variant,
 			this.showName ? "n" : "",
 			this.rawId,
+			// Two pills of the same type with different metadata render
+			// different DOM, so they must not share a cached node.
+			this.metadata,
 			unknown ? "u" : "",
 			def?.id ?? "",
 			def?.displayName ?? "",
@@ -82,6 +95,7 @@ export class CalloutTokenWidget extends WidgetType {
 	override toDOM(view: EditorView): HTMLElement {
 		const el = buildCalloutTokenDom({
 			rawId: this.rawId,
+			metadata: this.metadata,
 			registry: this.registry,
 			variant: this.variant,
 			showName: this.showName,
@@ -102,11 +116,10 @@ export class CalloutTokenWidget extends WidgetType {
 				// normalize to the `[` that opens `[!id]` before offsetting.
 				const pos = view.posAtDOM(el);
 				const doc = view.state.doc;
-				const tokenLen = this.rawId.length + 3; // `[!` + id + `]`
 				const from =
 					doc.sliceString(pos, pos + 2) === "[!"
 						? pos
-						: pos - tokenLen;
+						: pos - this.sourceLen;
 				view.dispatch({ selection: EditorSelection.cursor(from + 2) });
 				view.focus();
 			});

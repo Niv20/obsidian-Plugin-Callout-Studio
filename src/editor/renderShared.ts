@@ -207,7 +207,15 @@ export const VARIANT_ROLE: Record<CalloutTokenVariant, CalloutRenderRole> = {
 };
 
 export interface CalloutTokenDomOptions {
+	/** Callout type, metadata already split off (see splitCalloutMetadata). */
 	rawId: string;
+	/**
+	 * Raw `|metadata` for this occurrence, stamped as `data-callout-metadata`
+	 * exactly as Obsidian does on a blockquote callout. "" (the default) leaves
+	 * the attribute off entirely. Ref tokens always pass "": a `|` inside a
+	 * wikilink is its alias separator, so a reference can never carry metadata.
+	 */
+	metadata?: string;
 	registry: CalloutRegistry;
 	/**
 	 * "inline" renders the pill; "heading" renders the in-heading token;
@@ -230,12 +238,14 @@ export interface CalloutTokenDomOptions {
  *    <span class="cs-callout-name">…</span>?
  *  </span>`
  * `data-callout` carries the normalized id so per-callout CSS (including
- * alias selectors) and the context menu can target it on both surfaces.
+ * alias selectors) and the context menu can target it on both surfaces, and
+ * `data-callout-metadata` mirrors what Obsidian stamps on a blockquote callout
+ * so a theme can style these two roles by the same hook.
  */
 export function buildCalloutTokenDom(
 	options: CalloutTokenDomOptions,
 ): HTMLElement {
-	const { rawId, registry, variant, showName } = options;
+	const { rawId, metadata = "", registry, variant, showName } = options;
 	const resolved = resolveCalloutDef(registry, rawId);
 	const { def, unknown } = resolved;
 
@@ -248,6 +258,7 @@ export function buildCalloutTokenDom(
 		root.classList.add(CSS_ANIM_IN);
 	}
 	root.setAttribute("data-callout", calloutDomId(rawId, resolved));
+	if (metadata) root.setAttribute("data-callout-metadata", metadata);
 
 	const iconEl = createSpan();
 	iconEl.classList.add(CSS_TOKEN_ICON);

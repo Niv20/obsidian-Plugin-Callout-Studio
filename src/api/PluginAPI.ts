@@ -52,8 +52,16 @@ export class CalloutStudioAPI {
 	/**
 	 * Registers a new callout definition from an external plugin.
 	 * Returns true if successfully added, false if the ID already exists.
+	 *
+	 * An ID or alias containing `|` is refused: in Obsidian everything after the
+	 * first pipe is callout metadata, so `note|purple` names the `note` callout
+	 * and could never be matched under that spelling. Refused rather than
+	 * silently rewritten — a caller handed back a different ID than it
+	 * registered could never unregister its own callout.
 	 */
 	registerCallout(def: CalloutDefinition): boolean {
+		if (def.id.includes("|")) return false;
+		if (def.aliases?.some((a) => a.includes("|"))) return false;
 		return this.plugin.registry.add({
 			...def,
 			source: "plugin",

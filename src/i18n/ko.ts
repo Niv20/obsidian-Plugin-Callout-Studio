@@ -614,6 +614,8 @@ export const ko: Record<string, string> = {
 		'ID "{{value}}"는 {{length}}자입니다. 최대 {{max}}자입니다.',
 	"import.err.idBadChar":
 		'ID "{{value}}"에 유효하지 않은 문자가 포함되어 있습니다 ("|", "[", "]", 탭, 줄 바꿈은 허용되지 않습니다).',
+	"import.err.idMetadata":
+		'ID "{{value}}"에 "|"가 포함되어 있습니다. Obsidian에서 첫 번째 "|" 이후의 모든 것은 callout 메타데이터이며 유형의 일부가 아니므로 이 항목은 "{{id}}" callout을 설명합니다. 건너뜀, 기존 "{{id}}"는 변경되지 않습니다.',
 	"import.err.displayNameEmpty": "표시 이름은 비어 있으면 안 됩니다.",
 	"import.err.displayNameTooLong":
 		"표시 이름은 {{length}}자입니다. 최대 {{max}}자입니다.",

@@ -594,6 +594,8 @@ export const ms: Record<string, string> = {
 		'ID "{{value}}" mempunyai {{length}} aksara; maksimum ialah {{max}}.',
 	"import.err.idBadChar":
 		'ID "{{value}}" mengandungi aksara tidak sah ("|", "[", "]", tab dan pemisah baris tidak dibenarkan).',
+	"import.err.idMetadata":
+		'ID "{{value}}" mengandungi "|". Dalam Obsidian, semua yang berada selepas "|" pertama adalah metadata callout, bukan sebahagian daripada jenisnya, jadi entri ini menerangkan callout "{{id}}". Dilangkau, supaya "{{id}}" sedia ada anda tidak terjejas.',
 	"import.err.displayNameEmpty": "Nama paparan tidak boleh kosong.",
 	"import.err.displayNameTooLong":
 		"Nama paparan mempunyai {{length}} aksara; maksimum ialah {{max}}.",

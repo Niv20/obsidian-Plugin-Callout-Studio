@@ -33,12 +33,21 @@ function escapeRegex(str: string): string {
 }
 
 /**
- * End offset of a token's `[!id]` bracket span. Deliberately *not*
- * `token.to`, which for heading tokens also covers the trailing fold mark —
- * an id swap has to leave that mark in place.
+ * End offset of a token's `[!…]` bracket span — the whole of it, `|metadata`
+ * included. Kept as its own helper rather than inlining `token.to` so the two
+ * readings of "where the token ends" stay named apart; an id swap replaces this
+ * span and rebuilds the metadata itself (see replaceCalloutIdsInVault).
+ *
+ * Must NOT be derived from `token.rawId.length`: that is the type alone, so on
+ * `[!note|purple]` it would cut the bracket short by the metadata's width.
  */
 function tokenBracketEnd(token: LineCalloutToken): number {
-	return token.from + 2 + token.rawId.length + 1;
+	return token.to;
+}
+
+/** The `|metadata` suffix to re-emit for a token, or "" when it had none. */
+function metadataSuffix(token: LineCalloutToken): string {
+	return token.hasMetadata ? `|${token.metadata}` : "";
 }
 
 /**
@@ -377,7 +386,9 @@ export async function convertCalloutsToPlainTextInVault(
  * does, and a rename that skipped them would leave a dead id behind that
  * renders as "unknown".
  *
- * Any heading fold mark is preserved: only the bracket span is swapped.
+ * Any heading fold mark is preserved: only the bracket span is swapped. So is
+ * any `|metadata` — that belongs to the occurrence, not to the callout type, so
+ * renaming `note` must turn `[!note|purple]` into `[!newId|purple]`.
  *
  * Returns the number of references replaced.
  */
@@ -397,7 +408,10 @@ export async function replaceCalloutIdsInVault(
 		const result = rewriteCalloutLines(content, (line, tokens) =>
 			rewriteTokensOnLine(line, tokens, (token) =>
 				idSet.has(normalizeCalloutId(token.rawId))
-					? { text: `[!${newId}]`, end: tokenBracketEnd(token) }
+					? {
+							text: `[!${newId}${metadataSuffix(token)}]`,
+							end: tokenBracketEnd(token),
+						}
 					: null,
 			),
 		);
@@ -419,6 +433,11 @@ export async function replaceCalloutIdsInVault(
  * for a blockquote callout alone. A heading callout has no fold syntax — its
  * folding is driven by the two chevrons — so anything after `## [!id]` there is
  * plain title text and must not be touched.
+ *
+ * The optional `|…` before `]` matches occurrences carrying Obsidian metadata:
+ * `> [!note|purple]-` is a fold mark on the `note` callout like any other, and
+ * an id-only pattern would silently skip it. The marker sits after the closing
+ * bracket, so the metadata is only ever passed through.
  */
 export async function normalizeFoldMarkersInVault(
 	app: App,
@@ -428,7 +447,10 @@ export async function normalizeFoldMarkersInVault(
 	if (ids.length === 0) return 0;
 
 	const pattern = ids.map(escapeRegex).join("|");
-	const regex = new RegExp(`(^>\\s*\\[!(?:${pattern})\\])([+-]?)`, "gim");
+	const regex = new RegExp(
+		`(^>\\s*\\[!(?:${pattern})(?:\\|[^\\]\\n\\r]*)?\\])([+-]?)`,
+		"gim",
+	);
 
 	const files = app.vault.getMarkdownFiles();
 	let totalReplacements = 0;

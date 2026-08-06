@@ -644,6 +644,8 @@ export const he: Record<string, string> = {
 		'ה־ID "{{value}}" ארוך מדי ({{length}} תווים); המקסימום המותר הוא {{max}}.',
 	"import.err.idBadChar":
 		'ה־ID "{{value}}" מכיל תווים לא חוקיים ("|", "[", "]", טאבים ומעברי שורה אינם מורשים).',
+	"import.err.idMetadata":
+		'ה־ID "{{value}}" מכיל "|". באובסידיאן כל מה שבא אחרי ה־"|" הראשון הוא מטא־דאטה של ה־callout ולא חלק מהסוג, ולכן הרשומה הזאת מתארת את ה־callout "{{id}}". הרשומה דולגה, כך שה־"{{id}}" הקיים שלך נשאר ללא שינוי.',
 	"import.err.displayNameEmpty": "שם התצוגה לא יכול להיות ריק.",
 	"import.err.displayNameTooLong":
 		"שם התצוגה ארוך מדי ({{length}} תווים); המקסימום המותר הוא {{max}}.",

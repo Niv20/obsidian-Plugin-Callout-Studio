@@ -241,6 +241,10 @@ export class CSSInjector {
 		// Global callout style rules
 		rules.push(this.generateGlobalStyleCSS());
 
+		// Per-level darkening for nested callouts. Global, not per-definition —
+		// it reads `--cs-bg` / `--cs-color-rgb` off whichever callout it lands on.
+		rules.push(this.nestedDepthCSS());
+
 		// The DOM inline-SVG/emoji copies that paintIcons bakes in are the icons
 		// shown in PDF export (print). Hide them on screen (live view uses the
 		// ::after icon above); `@media screen` means they reveal themselves in
@@ -310,6 +314,11 @@ export class CSSInjector {
 	 * `print-color-adjust: exact` keeps the image from being stripped when
 	 * exporting to PDF / printing. Empty when the mode has no background
 	 * color (a gradient alone has no base to render on).
+	 *
+	 * `--cs-bg` mirrors the solid color as a custom property so nestedDepthCSS
+	 * can mix its depth tint against it. Emitted here rather than at the call
+	 * sites so every consumer of this helper — per-callout, alias, token and the
+	 * `!important` fallback block — carries it without knowing about the tint.
 	 */
 	private bgProps(
 		def: CalloutDefinition,
@@ -319,7 +328,10 @@ export class CSSInjector {
 		const bg = mode === "dark" ? def.bgColorDark : def.bgColorLight;
 		if (!bg) return [];
 		const imp = important ? " !important" : "";
-		const props = [`  background-color: ${bg}${imp};`];
+		const props = [
+			`  background-color: ${bg}${imp};`,
+			`  --cs-bg: ${bg}${imp};`,
+		];
 		const layer = this.bgImageFor(def, mode);
 		if (layer) {
 			props.push(
@@ -329,6 +341,70 @@ export class CSSInjector {
 			);
 		}
 		return props;
+	}
+
+	/**
+	 * Restore the per-level darkening that Obsidian gives nested callouts.
+	 *
+	 * Core paints `.callout` with
+	 * `color-mix(in oklch, var(--callout-color) 10%, transparent)` — translucent,
+	 * so each nested callout composites another 10% layer over the one beneath
+	 * it and the levels step visibly darker. Our own background is an OPAQUE
+	 * color (bgProps), which hides whatever is under it and flattens every depth
+	 * onto one shade. These rules put the step back by mixing that same 10% of
+	 * the callout's accent into its own background, once per level.
+	 *
+	 * The tint mixes against the callout's OWN base (`--cs-bg`), not against the
+	 * parent's rendered color the way compositing would. Core's way turns a red
+	 * callout inside a blue one purple; ours are authored as final opaque tints,
+	 * so muddying one the user picked deliberately would be the wrong trade. Each
+	 * callout keeps its identity and still separates from its parent — and for
+	 * same-type nesting the two approaches agree exactly.
+	 *
+	 * Where a callout has no background of its own, `--cs-bg` is the
+	 * `transparent` that styles.css resets it to, and each rule evaluates to
+	 * precisely core's own value — so those callouts look untouched.
+	 *
+	 * Gradient callouts are the one exception: bgImageFor paints a
+	 * `background-image` over the color, so the tint does not show through them.
+	 */
+	private nestedDepthCSS(): string {
+		// 1 - 0.9^n: what n repeated 10% overlays actually compound to. Depth 1
+		// gets none — the authored background already IS the first level. Three
+		// levels is the cap; past that the step stops being visible anyway.
+		const steps = ["10%", "19%", "27.1%"];
+		const rules = steps.map((pct, i) => {
+			// `.callout` repeated i+2 times, the innermost one carrying the
+			// attribute: specificity rises with depth, so the deepest matching
+			// rule wins without relying on source order.
+			const sel = `${Array(i + 2)
+				.fill(".callout")
+				.join(" ")}[data-callout]`;
+			// `!important` is load-bearing, not stylistic: generateFallbackCSS
+			// paints unrecognized callouts with `background-color: … !important`,
+			// which no amount of specificity beats.
+			//
+			// `--cs-color-rgb` rather than `--callout-color`: the latter is a full
+			// color on Obsidian 1.13+ and a bare RGB triplet on ≤1.12 (see
+			// calloutColorValue), so it cannot be fed to color-mix portably. If it
+			// were ever unset the declaration simply drops and core's own
+			// background wins, which is a safe failure.
+			//
+			// color-mix() is new to this file but safe: manifest.json pins
+			// minAppVersion 1.6.6 (Chromium 122), it shipped in Chromium 111, and
+			// core's own app.css uses it for this very rule.
+			return (
+				`${sel} {\n` +
+				`  background-color: color-mix(in oklch, rgb(var(--cs-color-rgb)) ${pct}, var(--cs-bg, transparent)) !important;\n` +
+				`  -webkit-print-color-adjust: exact !important;\n` +
+				`  print-color-adjust: exact !important;\n` +
+				`}`
+			);
+		});
+		return (
+			"/* Nested callouts: one accent layer per level, as core composites */\n" +
+			rules.join("\n")
+		);
 	}
 
 	/**

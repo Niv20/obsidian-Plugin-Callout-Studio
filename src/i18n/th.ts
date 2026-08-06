@@ -612,6 +612,8 @@ export const th: Record<string, string> = {
 		'ID "{{value}}" มี {{length}} อักขระ สูงสุด {{max}}',
 	"import.err.idBadChar":
 		'ID "{{value}}" มีอักขระที่ไม่ถูกต้อง (ไม่อนุญาตให้ใช้ "|" "[" "]" แท็บ และการขึ้นบรรทัดใหม่)',
+	"import.err.idMetadata":
+		'ID "{{value}}" มี "|" อยู่ด้วย ใน Obsidian ทุกอย่างหลัง "|" แรกคือ metadata ของ callout ไม่ใช่ส่วนหนึ่งของประเภท ดังนั้น entry นี้อธิบาย callout "{{id}}" ถูกข้ามไป เพื่อให้ "{{id}}" ที่มีอยู่ของคุณไม่ถูกเปลี่ยนแปลง',
 	"import.err.displayNameEmpty": "ชื่อที่แสดงต้องไม่ว่างเปล่า",
 	"import.err.displayNameTooLong":
 		"ชื่อที่แสดงมี {{length}} อักขระ สูงสุด {{max}}",

@@ -621,6 +621,8 @@ export const uk: Record<string, string> = {
 		"ID «{{value}}» має {{length}} символів; максимум — {{max}}.",
 	"import.err.idBadChar":
 		"ID «{{value}}» містить недійсні символи («|», «[», «]», табуляції та переноси рядків не дозволені).",
+	"import.err.idMetadata":
+		"ID «{{value}}» містить «|». В Obsidian усе після першого «|» є метаданими callout, а не частиною типу, тому цей запис описує callout «{{id}}». Пропущено, щоб ваш наявний «{{id}}» залишився без змін.",
 	"import.err.displayNameEmpty":
 		"Відображувана назва не повинна бути порожньою.",
 	"import.err.displayNameTooLong":

@@ -600,6 +600,8 @@ export const bg: Record<string, string> = {
 		'ID-то "{{value}}" е {{length}} символа; максимумът е {{max}}.',
 	"import.err.idBadChar":
 		'ID-то "{{value}}" съдържа невалидни символи ("|", "[", "]", табулации и нови редове не се разрешават).',
+	"import.err.idMetadata":
+		'ID-то "{{value}}" съдържа "|". В Obsidian всичко след първото "|" е метаданни на callout-а, а не част от типа, така че този запис описва callout-а "{{id}}". Пропуснат, за да остане съществуващият ви "{{id}}" непроменен.',
 	"import.err.displayNameEmpty": "Показваното име не трябва да е празно.",
 	"import.err.displayNameTooLong":
 		"Показваното име е {{length}} символа; максимумът е {{max}}.",

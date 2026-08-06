@@ -618,6 +618,8 @@ export const id: Record<string, string> = {
 		'ID "{{value}}" memiliki {{length}} karakter; maksimum adalah {{max}}.',
 	"import.err.idBadChar":
 		'ID "{{value}}" mengandung karakter tidak valid ("|", "[", "]", tab, dan baris baru tidak diizinkan).',
+	"import.err.idMetadata":
+		'ID "{{value}}" mengandung "|". Di Obsidian, semua yang ada setelah "|" pertama adalah metadata callout, bukan bagian dari tipenya, sehingga entri ini mendeskripsikan callout "{{id}}". Dilewati, sehingga "{{id}}" yang sudah ada tidak berubah.',
 	"import.err.displayNameEmpty": "Nama tampilan tidak boleh kosong.",
 	"import.err.displayNameTooLong":
 		"Nama tampilan memiliki {{length}} karakter; maksimum adalah {{max}}.",

@@ -17,8 +17,15 @@
  * anything inside a wikilink (`[[#[!name] Title]]` — a heading reference, not
  * a callout) are also never tokens; wikilink heading references get their own
  * display cleanup via findWikilinkCalloutRefs / parseHeadingRefDisplayText.
+ *
+ * Metadata: everything after the first `|` inside the brackets is Obsidian's
+ * `data-callout-metadata`, not part of the id (see splitCalloutMetadata). Every
+ * token type below therefore carries `rawId` (the type alone) and `metadata`
+ * separately, while `from`/`to` keep spanning the whole `[!…]` — offsets are
+ * what the vault rewriters and Live Preview decorations are built from.
  */
 import type { CalloutRenderRole } from "../types";
+import { splitCalloutMetadata, type CalloutIdParts } from "../utils/calloutId";
 
 /**
  * Heading callout header: 1–6 hashes, at least one space/tab, then the token
@@ -73,8 +80,16 @@ const OUTLINE_ID_MAX_WORDS = 6;
 
 /** Parsed callout token from an Outline pane item's displayed text. */
 export interface OutlineHeadingToken {
-	/** Raw id exactly as written (pass through normalizeCalloutId to match). */
+	/** Callout type as written, metadata removed (normalizeCalloutId to match). */
 	rawId: string;
+	/** Raw `|metadata`, verbatim; "" when the token carried none. */
+	metadata: string;
+	/**
+	 * True when the token body contained a `|`. Together with `metadata` this
+	 * makes the body reconstructible character for character, which the outline
+	 * decorator needs to match a token against the text the pane displays.
+	 */
+	hasMetadata: boolean;
 	/** Text following the token, verbatim — the separating space included. */
 	rest: string;
 	/** Displayed title: `rest` minus its one separating space/tab. */
@@ -89,11 +104,18 @@ export interface OutlineHeadingToken {
 }
 
 function makeOutlineToken(
-	rawId: string,
+	parts: CalloutIdParts,
 	rest: string,
 	bracketed: boolean,
 ): OutlineHeadingToken {
-	return { rawId, rest, title: rest.replace(/^[ \t]/, ""), bracketed };
+	return {
+		rawId: parts.id,
+		metadata: parts.metadata,
+		hasMetadata: parts.hasMetadata,
+		rest,
+		title: rest.replace(/^[ \t]/, ""),
+		bracketed,
+	};
 }
 
 /**
@@ -130,6 +152,40 @@ function resolveBareOutlineId(
 }
 
 /**
+ * Resolve the bracketless form when the text carries a `|`, which the greedy
+ * scan above cannot: every candidate starting `note|…` normalizes to `note`, so
+ * longest-first would match the whole line and swallow the title.
+ *
+ * The outline pane strips the brackets, so nothing delimits the metadata the way
+ * `]` does in the source. The rule here is that the id ends at the first `|` and
+ * the metadata runs to the next whitespace — bare-form metadata containing a
+ * space cannot be recognised, which no other surface is limited by.
+ *
+ * Returns null when the text before the pipe is not an id this file actually
+ * uses, so an ordinary heading that merely contains a pipe falls through to the
+ * whitespace-delimited parse.
+ */
+function resolveBareOutlineMetadata(
+	body: string,
+	isKnownId: (rawId: string) => boolean,
+): { parts: CalloutIdParts; consumed: number } | null {
+	const pipe = body.indexOf("|");
+	if (pipe === -1) return null;
+	const id = body.slice(0, pipe);
+	if (!id.trim() || !isKnownId(id)) return null;
+	let end = pipe + 1;
+	while (end < body.length && body[end] !== " " && body[end] !== "\t") end++;
+	return {
+		parts: {
+			id,
+			metadata: body.slice(pipe + 1, end),
+			hasMetadata: true,
+		},
+		consumed: end,
+	};
+}
+
+/**
  * Parses the displayed text of an Outline pane item. Returns null when the
  * text does not start with a callout token — callers must then leave the
  * item untouched.
@@ -148,32 +204,49 @@ export function parseOutlineHeadingText(
 ): OutlineHeadingToken | null {
 	const bracketed = OUTLINE_BRACKETED_TOKEN_RE.exec(text);
 	if (bracketed) {
-		const rawId = bracketed[1] ?? "";
-		if (!rawId.trim()) return null;
-		return makeOutlineToken(rawId, text.slice(bracketed[0].length), true);
+		const parts = splitCalloutMetadata(bracketed[1] ?? "");
+		if (!parts.id.trim()) return null;
+		return makeOutlineToken(parts, text.slice(bracketed[0].length), true);
 	}
 
 	if (!text.startsWith("!")) return null;
 	const body = text.slice(1);
+	// Piped form first: the greedy scan below cannot delimit it (see
+	// resolveBareOutlineMetadata).
+	const piped = isKnownId ? resolveBareOutlineMetadata(body, isKnownId) : null;
+	if (piped) {
+		return makeOutlineToken(piped.parts, body.slice(piped.consumed), false);
+	}
 	const resolved = isKnownId ? resolveBareOutlineId(body, isKnownId) : null;
 	if (resolved !== null) {
-		return makeOutlineToken(resolved, body.slice(resolved.length), false);
+		const parts = splitCalloutMetadata(resolved);
+		if (!parts.id.trim()) return null;
+		return makeOutlineToken(parts, body.slice(resolved.length), false);
 	}
 
 	const bare = OUTLINE_BARE_TOKEN_RE.exec(text);
 	const rawId = bare?.[1] ?? "";
 	if (!rawId) return null;
-	return makeOutlineToken(rawId, body.slice(rawId.length), false);
+	const parts = splitCalloutMetadata(rawId);
+	if (!parts.id.trim()) return null;
+	return makeOutlineToken(parts, body.slice(rawId.length), false);
 }
 
 /** One `[!name]` token found on a line, with its role and exact position. */
 export interface LineCalloutToken {
 	role: CalloutRenderRole;
-	/** Raw id exactly as written (pass through normalizeCalloutId to match). */
+	/** Callout type as written, metadata removed (normalizeCalloutId to match). */
 	rawId: string;
-	/** Offset of `[` within the line. */
+	/**
+	 * Raw `|metadata`, verbatim; "" when the token carried none. `hasMetadata`
+	 * is what distinguishes `[!x|]` from `[!x]`, since both yield "".
+	 */
+	metadata: string;
+	/** True when the token body contained a `|`. */
+	hasMetadata: boolean;
+	/** Offset of `[` within the line. Spans the WHOLE token, metadata included. */
 	from: number;
-	/** Offset just past `]`. */
+	/** Offset just past `]`. Spans the WHOLE token, metadata included. */
 	to: number;
 	/** Heading tokens only: true when custom title text follows the token. */
 	hasTitle: boolean;
@@ -232,14 +305,19 @@ export function scanLineForCalloutTokens(rawLine: string): LineCalloutToken[] {
 	const quoteHeader = line.match(BLOCKQUOTE_CALLOUT_HEADER_RE);
 	if (quoteHeader) {
 		const prefix = quoteHeader[1] ?? "";
-		const rawId = quoteHeader[2] ?? "";
-		if (!rawId.trim()) return [];
+		const body = quoteHeader[2] ?? "";
+		const parts = splitCalloutMetadata(body);
+		// A blank type (`[!|purple]`) names no callout; Obsidian renders it with
+		// an empty `data-callout`, and there is nothing here for us to resolve.
+		if (!parts.id.trim()) return [];
 		return [
 			{
 				role: "regular",
-				rawId,
+				rawId: parts.id,
+				metadata: parts.metadata,
+				hasMetadata: parts.hasMetadata,
 				from: prefix.length,
-				to: prefix.length + 2 + rawId.length + 1,
+				to: prefix.length + 2 + body.length + 1,
 				hasTitle: false,
 				headingLevel: 0,
 			},
@@ -253,15 +331,18 @@ export function scanLineForCalloutTokens(rawLine: string): LineCalloutToken[] {
 	let inlineScanFrom = 0;
 	const heading = line.match(HEADING_CALLOUT_RE);
 	if (heading) {
-		const rawId = heading[2] ?? "";
+		const body = heading[2] ?? "";
+		const parts = splitCalloutMetadata(body);
 		const from = line.indexOf("[!");
-		const to = from + 2 + rawId.length + 1;
+		const to = from + 2 + body.length + 1;
 		// `# [!text](url)` is a markdown link at heading start, not a callout.
 		const isLink = line[to] === "(";
-		if (rawId.trim() && !isLink) {
+		if (parts.id.trim() && !isLink) {
 			tokens.push({
 				role: "heading",
-				rawId,
+				rawId: parts.id,
+				metadata: parts.metadata,
+				hasMetadata: parts.hasMetadata,
 				from,
 				to,
 				hasTitle: (heading[3] ?? "").trim().length > 0,
@@ -283,10 +364,11 @@ export function scanLineForCalloutTokens(rawLine: string): LineCalloutToken[] {
 		if (before === "[") continue; // defensive; stripWikilinks blanks [[!name]]
 		const close = line.indexOf("]", idx + 2);
 		if (close === -1) break; // unclosed — nothing further can close either
-		const rawId = line.slice(idx + 2, close);
+		const body = line.slice(idx + 2, close);
+		const parts = splitCalloutMetadata(body);
 		// The \n guard matters when scanning rendered multi-line text nodes
 		// (reading view); raw markdown lines never contain newlines.
-		if (!rawId.trim() || rawId.includes("[") || rawId.includes("\n"))
+		if (!parts.id.trim() || body.includes("[") || body.includes("\n"))
 			continue;
 		if (line[close + 1] === "(") {
 			// Markdown link whose text starts with `!`: [!name](url)
@@ -295,7 +377,9 @@ export function scanLineForCalloutTokens(rawLine: string): LineCalloutToken[] {
 		}
 		tokens.push({
 			role: "inline",
-			rawId,
+			rawId: parts.id,
+			metadata: parts.metadata,
+			hasMetadata: parts.hasMetadata,
 			from: idx,
 			to: close + 1,
 			hasTitle: false,
@@ -402,7 +486,11 @@ export function forEachCalloutToken(
  * link reads `#Title`.
  */
 export interface WikilinkCalloutRef {
-	/** Raw id exactly as written (pass through normalizeCalloutId to match). */
+	/**
+	 * Callout type as written, metadata removed (normalizeCalloutId to match).
+	 * A `|` inside a wikilink is its alias separator, so a token here can only
+	 * ever carry metadata in the alias half — the split is defensive.
+	 */
 	rawId: string;
 	/** Offset of `[` of the token within the line. */
 	from: number;
@@ -452,8 +540,9 @@ export function findWikilinkCalloutRefs(rawLine: string): WikilinkCalloutRef[] {
 			search = tokenStart + 2;
 			const close = target.indexOf("]", tokenStart + 2);
 			if (close === -1) break;
-			const rawId = target.slice(tokenStart + 2, close);
-			if (!rawId.trim() || rawId.includes("[")) continue;
+			const tokenBody = target.slice(tokenStart + 2, close);
+			const rawId = splitCalloutMetadata(tokenBody).id;
+			if (!rawId.trim() || tokenBody.includes("[")) continue;
 			let to = close + 1;
 			if (target[to] === " " || target[to] === "\t") to++;
 			// Title runs to the next subpath separator (nested heading paths).
@@ -480,8 +569,9 @@ export function findWikilinkCalloutRefs(rawLine: string): WikilinkCalloutRef[] {
 		if (!alias.startsWith("[!")) continue;
 		const aliasClose = alias.indexOf("]", 2);
 		if (aliasClose === -1) continue;
-		const aliasId = alias.slice(2, aliasClose);
-		if (!aliasId.trim() || aliasId.includes("[")) continue;
+		const aliasBody = alias.slice(2, aliasClose);
+		const aliasId = splitCalloutMetadata(aliasBody).id;
+		if (!aliasId.trim() || aliasBody.includes("[")) continue;
 		let aliasTo = aliasClose + 1;
 		if (alias[aliasTo] === " " || alias[aliasTo] === "\t") aliasTo++;
 		const aliasStart = innerStart + pipeIdx + 1;
@@ -504,8 +594,14 @@ export function findWikilinkCalloutRefs(rawLine: string): WikilinkCalloutRef[] {
 export interface HeadingRefDisplayToken {
 	/** Display text before the token (`#`, `Note#`, or "") — kept verbatim. */
 	prefix: string;
-	/** Raw id exactly as written (pass through normalizeCalloutId to match). */
+	/** Callout type as written, metadata removed (normalizeCalloutId to match). */
 	rawId: string;
+	/**
+	 * The whole token body verbatim, `|metadata` included — what the raw link
+	 * text actually spells. The href repair below rebuilds `[!<body>` to match
+	 * an anchor Obsidian truncated, so it must not use the split `rawId`.
+	 */
+	rawContent: string;
 	/** Display text after the token ("" when the heading has no title). */
 	title: string;
 	/**
@@ -559,11 +655,13 @@ export function parseHeadingRefDisplayText(
 	const rest = text.slice(idx);
 	const m = RENDERED_HEADING_TOKEN_RE.exec(rest);
 	if (m) {
-		const rawId = m[1] ?? "";
+		const rawContent = m[1] ?? "";
+		const rawId = splitCalloutMetadata(rawContent).id;
 		if (!rawId.trim()) return null;
 		return {
 			prefix: text.slice(0, idx),
 			rawId,
+			rawContent,
 			title: text.slice(idx + m[0].length),
 			truncated: false,
 		};
@@ -572,11 +670,13 @@ export function parseHeadingRefDisplayText(
 	// HeadingRefDisplayToken.truncated doc).
 	const cut = TRUNCATED_HEADING_TOKEN_RE.exec(rest);
 	if (!cut) return null;
-	const rawId = cut[1] ?? "";
+	const rawContent = cut[1] ?? "";
+	const rawId = splitCalloutMetadata(rawContent).id;
 	if (!rawId.trim()) return null;
 	return {
 		prefix: text.slice(0, idx),
 		rawId,
+		rawContent,
 		title: "",
 		truncated: true,
 	};

@@ -68,9 +68,15 @@ const collapse = (text: string): string => text.replace(/\s+/g, " ").trim();
  * that starts right at the bracket stays glued to the id exactly as the pane
  * shows it. Used to tell two same-id headings apart when a file happens to
  * contain both `# [!bug] A` and `# !bug B`.
+ *
+ * The token body is rebuilt whole, `|metadata` included: the pane strips the
+ * brackets and nothing else, so comparing against the split id alone would
+ * never match a heading written `# [!bug|urgent] A`.
  */
 const outlineTextOf = (token: OutlineHeadingToken): string =>
-	collapse(`!${token.rawId}${token.rest}`);
+	collapse(
+		`!${token.rawId}${token.hasMetadata ? `|${token.metadata}` : ""}${token.rest}`,
+	);
 
 export class OutlineDecorator {
 	private readonly attachments = new Map<WorkspaceLeaf, OutlineAttachment>();

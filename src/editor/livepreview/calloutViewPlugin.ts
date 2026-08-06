@@ -275,6 +275,12 @@ function decorateLine(
 					attributes: {
 						class: cls,
 						"data-callout": calloutDomId(token.rawId, resolved),
+						// Mirrors what Obsidian stamps on a blockquote callout,
+						// so a theme can hook this role the same way. Omitted
+						// when absent — an empty attribute is a selector match.
+						...(token.metadata
+							? { "data-callout-metadata": token.metadata }
+							: {}),
 					},
 				}),
 			);
@@ -314,6 +320,8 @@ function decorateLine(
 							host.registry,
 							"heading",
 							!token.hasTitle,
+							token.metadata,
+							token.to - token.from,
 						),
 					}),
 				});
@@ -347,6 +355,8 @@ function decorateLine(
 					host.registry,
 					"inline",
 					true,
+					token.metadata,
+					token.to - token.from,
 				),
 			}),
 		});

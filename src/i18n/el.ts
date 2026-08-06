@@ -607,6 +607,8 @@ export const el: Record<string, string> = {
 		'Το ID "{{value}}" έχει {{length}} χαρακτήρες· το μέγιστο είναι {{max}}.',
 	"import.err.idBadChar":
 		'Το ID "{{value}}" περιέχει μη έγκυρους χαρακτήρες ("|", "[", "]", στηλοθέτες και αλλαγές γραμμής δεν επιτρέπονται).',
+	"import.err.idMetadata":
+		'Το ID "{{value}}" περιέχει "|".Στο Obsidian, όλα μετά το πρώτο "|" είναι μεταδεδομένα callout και όχι μέρος του τύπου· αυτή η καταχώρηση περιγράφει το callout "{{id}}". Παραλείφθηκε, ώστε το υπάρχον σας "{{id}}" να παραμείνει αναλλοίωτο.',
 	"import.err.displayNameEmpty":
 		"Το εμφανιζόμενο όνομα δεν πρέπει να είναι κενό.",
 	"import.err.displayNameTooLong":

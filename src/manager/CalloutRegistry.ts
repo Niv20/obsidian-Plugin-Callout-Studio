@@ -285,6 +285,44 @@ function withIdentityOf(
 	};
 }
 
+/**
+ * The ID the pre-metadata editor derived from a display name: the old
+ * `sanitizeCalloutIdInput`, which dropped `|` as just another disallowed
+ * character instead of recognizing it as the metadata separator.
+ *
+ * Reproduced here verbatim rather than reused, because it is a fingerprint of
+ * data already on disk, not a rule anything still applies. Discovery created
+ * `note|green` (display name `Note|green`); opening that row in the editor once
+ * re-derived the ID and saved it as `notegreen` — so a vault can carry the same
+ * dead row under either spelling.
+ */
+const legacyPipeEatenId = (displayName: string): string =>
+	displayName
+		.toLowerCase()
+		.replace(/[^\p{L}\p{N}\s-]/gu, "")
+		.replace(/[\s-]+/g, " ")
+		.trim();
+
+/**
+ * The callout a definition was really describing when its ID came from a
+ * `[!type|metadata]` token, or null when it is an ordinary definition.
+ *
+ * The legacy branch is deliberately narrow: it fires only when the display name
+ * still carries the pipe AND the ID is exactly what the old sanitizer would
+ * have made of that name. A row someone renamed themselves no longer matches
+ * that pairing and is left alone.
+ */
+function metadataBase(def: CalloutDefinition): string | null {
+	if (def.id.includes("|")) {
+		const base = normalizeCalloutId(def.id);
+		return base === def.id ? null : base;
+	}
+	if (!def.displayName.includes("|")) return null;
+	if (def.id !== legacyPipeEatenId(def.displayName)) return null;
+	const base = normalizeCalloutId(def.displayName);
+	return base && base !== def.id ? base : null;
+}
+
 export class CalloutRegistry {
 	private callouts: Map<string, CalloutDefinition> = new Map();
 	private builtInDefaults: Map<string, CalloutDefinition> = new Map();
@@ -322,6 +360,13 @@ export class CalloutRegistry {
 	 */
 	private previewIsDemo = false;
 
+	/**
+	 * Set when a {@link load} migration rewrote the stored definitions, so the
+	 * result gets written back once instead of riding on the next incidental
+	 * save. Read (and cleared) through {@link needsSaveAfterLoad}.
+	 */
+	private pendingLoadMigrationSave = false;
+
 	constructor() {
 		this.settings = structuredClone(DEFAULT_SETTINGS);
 		this.syncUserImages();
@@ -349,6 +394,7 @@ export class CalloutRegistry {
 
 	load(data: Partial<PluginData> | null): void {
 		this.callouts.clear();
+		this.pendingLoadMigrationSave = false;
 
 		// Always start with built-in defaults
 		for (const def of SORTED_DEFAULT_CALLOUTS) {
@@ -477,7 +523,90 @@ export class CalloutRegistry {
 				if (match) def.paletteId = match.id;
 			}
 		}
+		// Before reconcileAttrIdCollisions: a row this pass renames back to its
+		// base ID has to go through the dash/space reconcile like any other.
+		this.stripMetadataFromIds();
 		this.reconcileAttrIdCollisions();
+	}
+
+	/**
+	 * Migration: retire definitions whose ID carries Obsidian callout metadata.
+	 *
+	 * Everything after the first `|` in `[!note|purple]` is metadata, not part
+	 * of the type (see splitCalloutMetadata). Before that was understood here,
+	 * discovery read the whole bracket body as an ID and auto-created a separate
+	 * `fallback` row for every metadata value a vault used — `note|green`,
+	 * `note|purple`, `note|yellow` alongside the real `note`. Those rows also
+	 * styled nothing where it mattered: their selector is
+	 * `.callout[data-callout="note|green"]`, and Obsidian writes `note`.
+	 *
+	 * Two stored spellings need retiring, both handled by {@link metadataBase}:
+	 * the piped ID itself, and the `notegreen` shape an editor save left behind
+	 * (see legacyPipeEatenId).
+	 *
+	 * A row is renamed to its base ID when that ID is free, so a genuinely
+	 * customized one keeps its icon and colors and starts matching the callout
+	 * it always named. When the base is taken — the common case, since the base
+	 * is usually a built-in — the row is dropped: it can no longer be reached by
+	 * any spelling, and merging it into the survivor would silently restyle a
+	 * callout the user never asked to change.
+	 *
+	 * Keyed on the definitions' content rather than on `data.version`, like the
+	 * other migrations in {@link load}: an imported or hand-edited file can
+	 * carry any version it likes, and this way the pass is idempotent.
+	 */
+	private stripMetadataFromIds(): void {
+		const removed: string[] = [];
+		const renamed: string[] = [];
+
+		for (const def of Array.from(this.callouts.values())) {
+			// Aliases first, so a row that survives on its ID is clean too.
+			if (def.aliases?.some((a) => a.includes("|"))) {
+				const seen = new Set<string>();
+				def.aliases = def.aliases
+					.map((a) => normalizeCalloutId(a))
+					.filter((a) => {
+						if (!a || a === def.id || seen.has(a)) return false;
+						// A base an ALREADY-existing row owns is not ours to claim.
+						if (this.callouts.has(a)) return false;
+						seen.add(a);
+						return true;
+					});
+			}
+
+			// Built-ins ship without metadata; never risk dropping one.
+			if (def.builtIn) continue;
+			const base = metadataBase(def);
+			if (base === null) continue;
+
+			this.callouts.delete(def.id);
+			// An empty base (`[!|purple]` named nothing at all) has nowhere to go.
+			if (!base || this.callouts.has(base)) {
+				removed.push(def.id);
+				continue;
+			}
+			renamed.push(`${def.id} → ${base}`);
+			this.setCallout(base, { ...def, id: base });
+		}
+
+		if (removed.length === 0 && renamed.length === 0) return;
+		this.pendingLoadMigrationSave = true;
+		console.debug(
+			"[CalloutStudio] callout metadata migration:",
+			{ removed, renamed },
+		);
+	}
+
+	/**
+	 * True when {@link load} rewrote the stored definitions and the result has
+	 * not been written back yet. `main.ts` flushes it with a single save right
+	 * after loading, so a cleaned-up list survives the next reload instead of
+	 * waiting for whatever incidental save happens to come first.
+	 */
+	needsSaveAfterLoad(): boolean {
+		const pending = this.pendingLoadMigrationSave;
+		this.pendingLoadMigrationSave = false;
+		return pending;
 	}
 
 	/**

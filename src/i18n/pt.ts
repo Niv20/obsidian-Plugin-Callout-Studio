@@ -619,6 +619,8 @@ export const pt: Record<string, string> = {
 		'O ID "{{value}}" tem {{length}} caracteres; o máximo é {{max}}.',
 	"import.err.idBadChar":
 		'O ID "{{value}}" contém caracteres inválidos ("|", "[", "]", tabulações e quebras de linha não são permitidos).',
+	"import.err.idMetadata":
+		'O ID "{{value}}" contém um "|". No Obsidian, tudo após o primeiro "|" é metadado do callout, não parte do tipo; portanto, esta entrada descreve o callout "{{id}}". Ignorada, para que o seu "{{id}}" existente não seja alterado.',
 	"import.err.displayNameEmpty": "O nome de exibição não deve estar vazio.",
 	"import.err.displayNameTooLong":
 		"O nome de exibição tem {{length}} caracteres; o máximo é {{max}}.",

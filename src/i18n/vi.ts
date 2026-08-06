@@ -619,6 +619,8 @@ export const vi: Record<string, string> = {
 		'ID "{{value}}" có {{length}} ký tự; tối đa là {{max}}.',
 	"import.err.idBadChar":
 		'ID "{{value}}" chứa ký tự không hợp lệ ("|", "[", "]", tab và ngắt dòng không được phép).',
+	"import.err.idMetadata":
+		'ID "{{value}}" chứa "|". Trong Obsidian, mọi thứ sau "|" đầu tiên là siêu dữ liệu callout, không phải một phần của loại, vì vậy mục này mô tả callout "{{id}}". Đã bỏ qua để "{{id}}" hiện có của bạn không bị thay đổi.',
 	"import.err.displayNameEmpty": "Tên hiển thị không được để trống.",
 	"import.err.displayNameTooLong":
 		"Tên hiển thị có {{length}} ký tự; tối đa là {{max}}.",

@@ -598,6 +598,8 @@ export const zh: Record<string, string> = {
 		'ID"{{value}}"长度为 {{length}} 个字符；最大值为 {{max}}。',
 	"import.err.idBadChar":
 		'ID"{{value}}"包含无效字符（不允许使用"|"、"["、"]"、制表符和换行符）。',
+	"import.err.idMetadata":
+		'ID"{{value}}"包含"|"。在 Obsidian 中，第一个"|"后面的所有内容都是 callout 元数据，而非类型的一部分，因此此条目描述的是“{{id}}”callout。已跳过，您现有的“{{id}}”保持不变。',
 	"import.err.displayNameEmpty": "显示名称不能为空。",
 	"import.err.displayNameTooLong":
 		"显示名称长度为 {{length}} 个字符；最大值为 {{max}}。",

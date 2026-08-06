@@ -613,6 +613,8 @@ export const hi: Record<string, string> = {
 		'ID "{{value}}" में {{length}} अक्षर हैं; अधिकतम {{max}} है।',
 	"import.err.idBadChar":
 		'ID "{{value}}" में अमान्य अक्षर हैं ("|", "[", "]", टैब और लाइन ब्रेक की अनुमति नहीं है)।',
+	"import.err.idMetadata":
+		'ID "{{value}}" में "|" है। Obsidian में पहले "|" के बाद सब कुछ callout मेटाडेटा होता है, type का हिस्सा नहीं, इसलिए यह entry "{{id}}" callout का वर्णन करती है। छोड़ दिया गया, ताकि आपका मौजूदा "{{id}}" अपरिवर्तित रहे।',
 	"import.err.displayNameEmpty": "प्रदर्शन नाम खाली नहीं होना चाहिए।",
 	"import.err.displayNameTooLong":
 		"प्रदर्शन नाम में {{length}} अक्षर हैं; अधिकतम {{max}} है।",

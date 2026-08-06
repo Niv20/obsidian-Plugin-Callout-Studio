@@ -613,6 +613,8 @@ export const fa: Record<string, string> = {
 		'شناسه "{{value}}" دارای {{length}} کاراکتر است؛ حداکثر {{max}} است.',
 	"import.err.idBadChar":
 		'شناسه "{{value}}" دارای کاراکترهای نامعتبر است ("|"، "["، "]"، تب و خط جدید مجاز نیستند).',
+	"import.err.idMetadata":
+		'شناسه "{{value}}" حاوی "|" است. در Obsidian هر چیزی بعد از اولین "|" متادیتای callout است و بخشی از نوع نیست، بنابراین این ورودی callout "{{id}}" را توصیف می‌کند. رد شد تا "{{id}}" موجود شما دست‌نخورده بماند.',
 	"import.err.displayNameEmpty": "نام نمایشی نباید خالی باشد.",
 	"import.err.displayNameTooLong":
 		"نام نمایشی دارای {{length}} کاراکتر است؛ حداکثر {{max}} است.",

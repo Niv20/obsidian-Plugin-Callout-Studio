@@ -615,6 +615,8 @@ export const cs: Record<string, string> = {
 		'ID "{{value}}" má {{length}} znaků; maximum je {{max}}.',
 	"import.err.idBadChar":
 		'ID "{{value}}" obsahuje neplatné znaky ("|", "[", "]", tabulátory a konce řádků nejsou povoleny).',
+	"import.err.idMetadata":
+		'ID "{{value}}" obsahuje "|". V Obsidianu je vše za prvním "|" metadata calloutu, nikoli součást typu, takže tento záznam popisuje callout "{{id}}". Přeskočeno, aby vaše stávající "{{id}}" zůstalo beze změny.',
 	"import.err.displayNameEmpty": "Zobrazovaný název nesmí být prázdný.",
 	"import.err.displayNameTooLong":
 		"Zobrazovaný název má {{length}} znaků; maximum je {{max}}.",

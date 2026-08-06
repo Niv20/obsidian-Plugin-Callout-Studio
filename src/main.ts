@@ -88,6 +88,12 @@ export default class CalloutStudioPlugin extends Plugin {
 		// Load persisted data
 		const savedData = (await this.loadData()) as Partial<PluginData> | null;
 		this.registry.load(savedData);
+		// A load-time migration that rewrote definitions is flushed right away,
+		// so the cleaned-up list survives the next reload rather than waiting on
+		// whatever incidental save happens to come first.
+		if (this.registry.needsSaveAfterLoad()) {
+			await this.saveSettings();
+		}
 
 		// Distinguish a brand-new install (no data.json yet) from an existing
 		// user updating into this version. This drives WHERE the welcome screen

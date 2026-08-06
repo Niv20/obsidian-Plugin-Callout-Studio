@@ -2,6 +2,20 @@
    Callout Studio — Plugin Styles
    ═══════════════════════════════════════════════════════════════ */
 
+/* ─── Nested callout tint base ────────────────────────────────── */
+
+/* Base color that CSSInjector's nested-depth rules mix their tint into. The
+   injected per-callout rules set the real value; this only resets it, because
+   custom properties inherit and a nested callout would otherwise mix against
+   its PARENT's background instead of its own. Left at `transparent`, those
+   rules evaluate to exactly Obsidian's own translucent value, so a callout we
+   don't paint keeps core's nesting behaviour untouched.
+
+   Specificity (0,1,0) deliberately loses to `.callout[data-callout="…"]`. */
+.callout {
+	--cs-bg: transparent;
+}
+
 /* ─── Settings Panel ──────────────────────────────────────────── */
 
 .callout-studio-settings {

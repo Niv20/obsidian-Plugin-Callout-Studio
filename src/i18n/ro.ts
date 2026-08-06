@@ -620,6 +620,8 @@ export const ro: Record<string, string> = {
 		'ID-ul "{{value}}" are {{length}} caractere; maximul este {{max}}.',
 	"import.err.idBadChar":
 		'ID-ul "{{value}}" conține caractere invalide ("|", "[", "]", tabulatorii și sfârșiturile de linie nu sunt permise).',
+	"import.err.idMetadata":
+		'ID-ul "{{value}}" conține un "|". În Obsidian, tot ce urmează după primul "|" reprezintă metadate ale callout-ului, nu parte a tipului, deci această intrare descrie callout-ul "{{id}}". Ignorată, pentru ca "{{id}}" existent să rămână neschimbat.',
 	"import.err.displayNameEmpty": "Numele afișat nu trebuie să fie gol.",
 	"import.err.displayNameTooLong":
 		"Numele afișat are {{length}} caractere; maximul este {{max}}.",
