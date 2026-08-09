@@ -56,6 +56,7 @@ import {
 	resolveCalloutDef,
 	shouldRenderToken,
 } from "../editor/renderShared";
+import { refreshAllMarkdownEditors } from "../editor/livepreview/refresh";
 import { obsidianCalloutAttrId } from "../utils/calloutId";
 import type { CalloutRegistry } from "./CalloutRegistry";
 import { StartupStyleCache } from "./StartupStyleCache";
@@ -361,6 +362,16 @@ export class CSSInjector {
 		// Re-paint DOM icons: keeps Lucide icons in sync after edits, and bakes
 		// the hidden material/emoji export fallback nodes (see paintIcon).
 		this.paintIcons();
+
+		// The one surface that sweep deliberately skips is CodeMirror's widget
+		// DOM, so ask CodeMirror to rebuild it the supported way. Not optional:
+		// several inject() callers reach us with no other refresh of their own
+		// (pack artwork read on startup, a Material download landing,
+		// registry.onChange from the API or from discovery), and without this
+		// their Live Preview pills would keep drawing the pencil placeholder
+		// until the next edit. A widget whose renderKey is unchanged is reused
+		// as-is, so a rebuild that changes nothing costs no DOM work.
+		refreshAllMarkdownEditors(this.app);
 
 		// Trigger Obsidian to re-render callouts with updated styles — but only
 		// when *we* are the source of the change. When reacting to an external
@@ -1335,9 +1346,16 @@ export class CSSInjector {
 	 * stylesheet — and thus the CSS that draws the live icon — is dropped.
 	 *
 	 * `root` may be the document (full sweep, on inject), a rendered container
-	 * (from a markdown post-processor), or a single callout element.
+	 * (from a markdown post-processor), or a single callout element. Omitting it
+	 * sweeps EVERY open window rather than just `activeDocument`: with a pop-out
+	 * focused that variable is the pop-out's document, so the default used to
+	 * silently skip the main window (and the other way round).
 	 */
-	paintIcons(root: ParentNode = activeDocument): void {
+	paintIcons(root?: ParentNode): void {
+		if (root === undefined) {
+			for (const doc of this.openDocuments()) this.paintIcons(doc);
+			return;
+		}
 		const calloutEls: HTMLElement[] = [];
 		// A post-processor can hand us the callout element itself.
 		if (
@@ -1408,8 +1426,33 @@ export class CSSInjector {
 			`.${CSS_INLINE_TOKEN}[data-callout], .${CSS_HEADING_TOKEN}[data-callout]`,
 		);
 		for (const tokenEl of Array.from(tokenEls)) {
+			// Inside .cm-content the token is CodeMirror's own widget DOM, and
+			// this sweep runs from arbitrary continuations (a pack read off
+			// disk, a Material download landing, a slider drag's rAF) with no
+			// way to wrap the work in view.observer.ignore(). CM rebuilds those
+			// widgets itself the moment the decoration set changes, so inject()
+			// dispatches the refresh effect instead (see injectNow) — the same
+			// hazard the heading sweep above already refuses to touch.
+			if (tokenEl.closest(".cm-content")) continue;
 			this.paintTokenEl(tokenEl);
 		}
+	}
+
+	/**
+	 * Every document the workspace currently draws into: the main renderer
+	 * window plus one per pop-out. `activeDocument` alone is not enough — it
+	 * follows focus, so a full sweep driven by it repaints one window and
+	 * leaves the others stale.
+	 */
+	private openDocuments(): Document[] {
+		const docs = new Set<Document>();
+		docs.add(this.app.workspace.containerEl.ownerDocument);
+		docs.add(activeDocument);
+		this.app.workspace.iterateAllLeaves((leaf) => {
+			const doc = leaf.view.containerEl?.ownerDocument;
+			if (doc) docs.add(doc);
+		});
+		return Array.from(docs);
 	}
 
 	/** Repaint one heading/inline token's icon (and name, for known ids). */
