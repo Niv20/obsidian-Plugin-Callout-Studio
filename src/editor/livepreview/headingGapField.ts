@@ -54,8 +54,22 @@ function buildGaps(state: EditorState, host: LivePreviewHost): DecorationSet {
 		side: -1,
 	});
 
+	// Lezer parses incrementally under a time budget, so on a large note the
+	// tree routinely stops short of the end. Past that frontier resolveInner()
+	// answers with the top node, whose name matches nothing in SKIP_NODE_RE —
+	// the code-block / frontmatter skip below would silently pass, and a
+	// `## [!id]` written inside a fence would get a gap it must not have. Stop
+	// at the frontier instead; it is monotonic, so everything after the first
+	// unparsed line is unparsed too. The tail is not lost: the field rebuilds
+	// when the parse worker advances the tree (see the update() below).
+	// A zero-length tree means there is no tree to consult at all (a surface
+	// without the markdown language), where the old whole-document scan is
+	// still the better answer.
+	const frontier = tree.length > 0 ? tree.length : doc.length;
+
 	for (let n = 1; n <= doc.lines; n++) {
 		const line = doc.line(n);
+		if (line.from >= frontier) break;
 		if (line.text.indexOf("[!") === -1) continue;
 		// Skip fenced code / frontmatter, exactly as the bar decoration does.
 		if (SKIP_NODE_RE.test(tree.resolveInner(line.from, 1).name)) continue;
@@ -90,7 +104,18 @@ export function createHeadingGapField(host: LivePreviewHost): Extension {
 			const refreshed = tr.effects.some((e) =>
 				e.is(calloutStudioRefresh),
 			);
-			if (tr.docChanged || refreshed) return buildGaps(tr.state, host);
+			// buildGaps stops at the syntax tree's parse frontier, so the set it
+			// produced on a large note covers only the parsed head. CodeMirror's
+			// parse worker dispatches a transaction every time it advances that
+			// frontier, which is this rebuild's cue: identity is enough, since
+			// the tree object is replaced wholesale on each advance and shared
+			// by reference on every other transaction (a selection change costs
+			// one field read and nothing more).
+			const treeAdvanced =
+				syntaxTree(tr.startState) !== syntaxTree(tr.state);
+			if (tr.docChanged || refreshed || treeAdvanced) {
+				return buildGaps(tr.state, host);
+			}
 			return value;
 		},
 		provide: (f) => EditorView.decorations.from(f),
