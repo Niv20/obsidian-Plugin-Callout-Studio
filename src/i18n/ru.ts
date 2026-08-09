@@ -170,6 +170,8 @@ export const ru: Record<string, string> = {
 	"notice.externalStyleOff": 'Callout Studio снова оформляет "{{name}}".',
 	"notice.nothingToWrap": "Нечего оборачивать.",
 	"notice.cursorNotInsideCallout": "Курсор не находится внутри callout.",
+	"notice.autocompleteTargetMoved":
+		"Ничего не вставлено — строка изменилась, пока редактор был открыт.",
 	"notice.openHotkeysFailed":
 		"Не удалось открыть настройки сочетаний клавиш Obsidian.",
 	"notice.filterHotkeysFailed":

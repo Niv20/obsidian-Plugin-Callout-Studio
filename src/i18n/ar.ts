@@ -169,6 +169,8 @@ export const ar: Record<string, string> = {
 	"notice.externalStyleOff": 'يعيد Callout Studio تنسيق "{{name}}" من جديد.',
 	"notice.nothingToWrap": "لا يوجد شيء للالتفاف.",
 	"notice.cursorNotInsideCallout": "المؤشر ليس داخل callout.",
+	"notice.autocompleteTargetMoved":
+		"لم يُدرج أي شيء — تغيّر السطر أثناء فتح المحرّر.",
 	"notice.openHotkeysFailed": "تعذّر فتح إعدادات الاختصارات في Obsidian.",
 	"notice.filterHotkeysFailed":
 		"تم فتح اختصارات Obsidian، لكن تعذّر تطبيق مرشح Callout Studio.",

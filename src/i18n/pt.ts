@@ -171,6 +171,8 @@ export const pt: Record<string, string> = {
 	"notice.externalStyleOff": 'O Callout Studio volta a estilizar "{{name}}".',
 	"notice.nothingToWrap": "Nada para envolver.",
 	"notice.cursorNotInsideCallout": "O cursor não está dentro de um callout.",
+	"notice.autocompleteTargetMoved":
+		"Nada foi inserido: a linha mudou enquanto o editor estava aberto.",
 	"notice.openHotkeysFailed":
 		"Não foi possível abrir as configurações de atalhos do Obsidian.",
 	"notice.filterHotkeysFailed":

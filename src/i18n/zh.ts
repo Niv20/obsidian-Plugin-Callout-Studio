@@ -164,6 +164,7 @@ export const zh: Record<string, string> = {
 	"notice.externalStyleOff": 'Callout Studio 重新为 "{{name}}" 设置样式。',
 	"notice.nothingToWrap": "没有可包裹的内容。",
 	"notice.cursorNotInsideCallout": "光标不在 callout 内部。",
+	"notice.autocompleteTargetMoved": "未插入任何内容 — 编辑器打开期间该行已更改。",
 	"notice.openHotkeysFailed": "无法打开 Obsidian 快捷键设置。",
 	"notice.filterHotkeysFailed":
 		"已打开 Obsidian 快捷键，但无法应用 Callout Studio 过滤器。",

@@ -172,6 +172,8 @@ export const de: Record<string, string> = {
 	"notice.nothingToWrap": "Nichts zum Einbetten.",
 	"notice.cursorNotInsideCallout":
 		"Der Cursor befindet sich nicht in einem Callout.",
+	"notice.autocompleteTargetMoved":
+		"Nichts wurde eingefügt – die Zeile hat sich geändert, während der Editor geöffnet war.",
 	"notice.openHotkeysFailed":
 		"Obsidians Tastaturkürzel-Einstellungen konnten nicht geöffnet werden.",
 	"notice.filterHotkeysFailed":

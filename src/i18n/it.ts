@@ -172,6 +172,8 @@ export const it: Record<string, string> = {
 		'Callout Studio applica di nuovo lo stile a "{{name}}".',
 	"notice.nothingToWrap": "Niente da racchiudere.",
 	"notice.cursorNotInsideCallout": "Il cursore non è dentro un callout.",
+	"notice.autocompleteTargetMoved":
+		"Non è stato inserito nulla: la riga è cambiata mentre l'editor era aperto.",
 	"notice.openHotkeysFailed":
 		"Impossibile aprire le impostazioni scorciatoie di Obsidian.",
 	"notice.filterHotkeysFailed":

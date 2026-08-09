@@ -171,6 +171,8 @@ export const vi: Record<string, string> = {
 	"notice.externalStyleOff": 'Callout Studio tạo kiểu lại cho "{{name}}".',
 	"notice.nothingToWrap": "Không có gì để bọc.",
 	"notice.cursorNotInsideCallout": "Con trỏ không nằm trong callout.",
+	"notice.autocompleteTargetMoved":
+		"Không có gì được chèn — dòng đã thay đổi khi trình chỉnh sửa đang mở.",
 	"notice.openHotkeysFailed": "Không thể mở cài đặt phím tắt Obsidian.",
 	"notice.filterHotkeysFailed":
 		"Đã mở phím tắt Obsidian, nhưng không thể áp dụng bộ lọc Callout Studio.",

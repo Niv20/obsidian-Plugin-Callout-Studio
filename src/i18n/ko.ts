@@ -168,6 +168,8 @@ export const ko: Record<string, string> = {
 	"notice.externalStyleOff": 'Callout Studio가 다시 "{{name}}"의 스타일을 지정합니다.',
 	"notice.nothingToWrap": "감쌀 내용이 없습니다.",
 	"notice.cursorNotInsideCallout": "커서가 callout 안에 있지 않습니다.",
+	"notice.autocompleteTargetMoved":
+		"아무것도 삽입되지 않았습니다 — 편집기가 열려 있는 동안 줄이 변경되었습니다.",
 	"notice.openHotkeysFailed": "Obsidian 단축키 설정을 열 수 없습니다.",
 	"notice.filterHotkeysFailed":
 		"Obsidian 단축키를 열었지만 Callout Studio 필터를 적용할 수 없습니다.",

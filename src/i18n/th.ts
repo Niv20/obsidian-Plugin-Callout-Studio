@@ -169,6 +169,8 @@ export const th: Record<string, string> = {
 	"notice.externalStyleOff": 'Callout Studio จัดสไตล์ "{{name}}" อีกครั้ง',
 	"notice.nothingToWrap": "ไม่มีอะไรให้ห่อ",
 	"notice.cursorNotInsideCallout": "เคอร์เซอร์ไม่อยู่ใน callout",
+	"notice.autocompleteTargetMoved":
+		"ไม่ได้แทรกสิ่งใด — บรรทัดเปลี่ยนไปขณะที่ตัวแก้ไขเปิดอยู่",
 	"notice.openHotkeysFailed":
 		"ไม่สามารถเปิดการตั้งค่าแป้นพิมพ์ลัดของ Obsidian ได้",
 	"notice.filterHotkeysFailed":

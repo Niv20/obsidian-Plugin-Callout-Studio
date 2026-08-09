@@ -158,6 +158,8 @@ export const fi: Record<string, string> = {
 	"notice.externalStyleOff": 'Callout Studio tyylittelee jälleen "{{name}}".',
 	"notice.nothingToWrap": "Ei mitään kääriä.",
 	"notice.cursorNotInsideCallout": "Kursori ei ole calloutin sisällä.",
+	"notice.autocompleteTargetMoved":
+		"Mitään ei lisätty — rivi muuttui, kun editori oli auki.",
 	"notice.openHotkeysFailed": "Obsidianin oikotieasetuksia ei voitu avata.",
 	"notice.filterHotkeysFailed":
 		"Obsidianin oikotiet avattiin, mutta Callout Studio -suodatinta ei voitu käyttää.",

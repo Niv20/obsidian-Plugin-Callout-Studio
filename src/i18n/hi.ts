@@ -173,6 +173,8 @@ export const hi: Record<string, string> = {
 		'Callout Studio फिर से "{{name}}" को स्टाइल करता है।',
 	"notice.nothingToWrap": "लपेटने के लिए कुछ नहीं।",
 	"notice.cursorNotInsideCallout": "कर्सर callout के अंदर नहीं है।",
+	"notice.autocompleteTargetMoved":
+		"कुछ भी नहीं जोड़ा गया — संपादक खुला रहते हुए पंक्ति बदल गई।",
 	"notice.openHotkeysFailed": "Obsidian हॉटकी सेटिंग नहीं खुल सकी।",
 	"notice.filterHotkeysFailed":
 		"Obsidian हॉटकी खुल गई, लेकिन Callout Studio फ़िल्टर लागू नहीं हो सका।",

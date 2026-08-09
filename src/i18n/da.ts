@@ -158,6 +158,8 @@ export const da: Record<string, string> = {
 	"notice.externalStyleOff": 'Callout Studio styler igen "{{name}}".',
 	"notice.nothingToWrap": "Intet at indpakke.",
 	"notice.cursorNotInsideCallout": "Markøren er ikke inde i en callout.",
+	"notice.autocompleteTargetMoved":
+		"Intet blev indsat — linjen blev ændret, mens editoren var åben.",
 	"notice.openHotkeysFailed":
 		"Kunne ikke åbne Obsidians genvejsindstillinger.",
 	"notice.filterHotkeysFailed":

@@ -15,6 +15,8 @@ import {
 	EditorSuggest,
 	EditorSuggestContext,
 	EditorSuggestTriggerInfo,
+	MarkdownView,
+	Notice,
 	TFile,
 	setIcon,
 } from "obsidian";
@@ -532,6 +534,40 @@ export class CalloutAutoComplete extends EditorSuggest<CalloutSuggestion> {
 		editor.setCursor({ line: start.line, ch: afterCh + 1 });
 	}
 
+	/**
+	 * The live text of the line the trigger was typed on, or null when it is no
+	 * longer the line we started from.
+	 *
+	 * Every position `openCreateForQuery` captured is a snapshot taken before an
+	 * unbounded wait: the user can sit in CalloutEditor for minutes while the
+	 * note is edited from another pane, rewritten by sync, or swapped out of the
+	 * leaf entirely. Writing a captured range then would run past the end of a
+	 * line that shrank, clobber text typed after the trigger, or land in a
+	 * different note. Same principle the context-menu handlers already follow —
+	 * recompute from the live document and compare against what was expected.
+	 */
+	private liveTriggerLine(
+		editor: Editor,
+		file: TFile,
+		start: EditorPosition,
+	): string | null {
+		// Did this editor's leaf move to another note while the modal was open?
+		// Compared against the editor's OWN view rather than the active one, so
+		// a write into an unfocused-but-unchanged pane is not refused.
+		for (const leaf of this.app.workspace.getLeavesOfType("markdown")) {
+			const view = leaf.view;
+			if (view instanceof MarkdownView && view.editor === editor) {
+				if (view.file !== file) return null;
+				break;
+			}
+		}
+		if (start.line >= editor.lineCount()) return null;
+		const line = editor.getLine(start.line);
+		// onTrigger anchors `start` on the `[!` it matched (see its return), so
+		// anything else there means the token moved or is gone.
+		return line.startsWith("[!", start.ch) ? line : null;
+	}
+
 	private async openCreateForQuery(
 		query: string,
 		ctx: EditorSuggestContext,
@@ -541,12 +577,9 @@ export class CalloutAutoComplete extends EditorSuggest<CalloutSuggestion> {
 		const role = this.triggerRole;
 		this.close();
 		const editor = ctx.editor;
+		const file = ctx.file;
 		const start = ctx.start;
 		const end = ctx.end;
-		const lineEnd: EditorPosition = {
-			line: end.line,
-			ch: editor.getLine(end.line).length,
-		};
 		const modal = new CalloutEditor(this.plugin, undefined, {
 			seedDisplayName: query,
 			createFromAutocomplete: true,
@@ -554,24 +587,31 @@ export class CalloutAutoComplete extends EditorSuggest<CalloutSuggestion> {
 		const result = await modal.openAndWait();
 		if (!result) return;
 
+		// Nothing below may trust a position captured before that await.
+		const line = this.liveTriggerLine(editor, file, start);
+		if (line === null) {
+			new Notice(t("notice.autocompleteTargetMoved"));
+			return;
+		}
+		// Both ends are re-derived from the line as it stands now. `end` was the
+		// cursor at trigger time and only matters for an unterminated token (no
+		// `]` to close it), where it stops the insert from eating the rest of
+		// the line — so it is clamped rather than replaced.
+		const lineEnd: EditorPosition = { line: start.line, ch: line.length };
+		const tokenEnd: EditorPosition = {
+			line: start.line,
+			ch: Math.min(Math.max(end.ch, start.ch), line.length),
+		};
+
 		if (role === "inline") {
 			editor.focus();
-			this.insertInlineToken(
-				editor,
-				start,
-				end,
-				editor.getLine(start.line),
-				result.id,
-			);
+			this.insertInlineToken(editor, start, tokenEnd, line, result.id);
 			return;
 		}
 
-		// Re-read after the modal round-trip: the token the user typed is still
-		// on the line, metadata included, and every branch below replaces it.
-		const metaSuffix = this.tokenMetadataSuffix(
-			editor.getLine(start.line),
-			start.ch,
-		);
+		// The token the user typed is still on the line, metadata included, and
+		// every branch below replaces it.
+		const metaSuffix = this.tokenMetadataSuffix(line, start.ch);
 
 		if (role === "heading") {
 			// No title text — the rendered token shows the display name.

@@ -158,6 +158,8 @@ export const ms: Record<string, string> = {
 	"notice.externalStyleOff": 'Callout Studio menggayakan semula "{{name}}".',
 	"notice.nothingToWrap": "Tiada apa untuk dibalut.",
 	"notice.cursorNotInsideCallout": "Kursor tidak berada dalam callout.",
+	"notice.autocompleteTargetMoved":
+		"Tiada apa-apa disisipkan — baris berubah semasa penyunting dibuka.",
 	"notice.openHotkeysFailed":
 		"Tidak dapat membuka tetapan pintasan Obsidian.",
 	"notice.filterHotkeysFailed":

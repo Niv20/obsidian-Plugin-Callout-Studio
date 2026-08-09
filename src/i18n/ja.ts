@@ -169,6 +169,7 @@ export const ja: Record<string, string> = {
 	"notice.externalStyleOff": 'Callout Studioが再び"{{name}}"にスタイルを適用します。',
 	"notice.nothingToWrap": "囲むものがありません。",
 	"notice.cursorNotInsideCallout": "カーソルがcallout内にありません。",
+	"notice.autocompleteTargetMoved": "何も挿入されませんでした — エディタを開いている間に行が変更されました。",
 	"notice.openHotkeysFailed": "Obsidianのホットキー設定を開けませんでした。",
 	"notice.filterHotkeysFailed":
 		"Obsidianのホットキーを開きましたが、Callout Studioフィルターを適用できませんでした。",

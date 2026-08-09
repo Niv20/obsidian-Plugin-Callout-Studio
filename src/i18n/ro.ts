@@ -173,6 +173,8 @@ export const ro: Record<string, string> = {
 	"notice.nothingToWrap": "Nimic de înfășurat.",
 	"notice.cursorNotInsideCallout":
 		"Cursorul nu este în interiorul unui callout.",
+	"notice.autocompleteTargetMoved":
+		"Nu s-a inserat nimic — linia s-a schimbat cât timp editorul a fost deschis.",
 	"notice.openHotkeysFailed":
 		"Nu s-au putut deschide setările de scurtături Obsidian.",
 	"notice.filterHotkeysFailed":

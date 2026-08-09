@@ -192,6 +192,8 @@ export const en: Record<string, string> = {
 	"notice.externalStyleOff": 'Callout Studio styles "{{name}}" again.',
 	"notice.nothingToWrap": "Nothing to wrap.",
 	"notice.cursorNotInsideCallout": "Cursor is not inside a callout.",
+	"notice.autocompleteTargetMoved":
+		"Nothing was inserted — the line changed while the editor was open.",
 	"notice.openHotkeysFailed": "Could not open Obsidian hotkeys settings.",
 	"notice.filterHotkeysFailed":
 		"Opened Obsidian hotkeys, but could not apply the Callout Studio filter.",

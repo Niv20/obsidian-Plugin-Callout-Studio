@@ -171,6 +171,8 @@ export const uk: Record<string, string> = {
 	"notice.externalStyleOff": 'Callout Studio знову оформлює "{{name}}".',
 	"notice.nothingToWrap": "Нічого для обгортання.",
 	"notice.cursorNotInsideCallout": "Курсор не знаходиться всередині callout.",
+	"notice.autocompleteTargetMoved":
+		"Нічого не вставлено — рядок змінився, поки редактор був відкритий.",
 	"notice.openHotkeysFailed":
 		"Не вдалося відкрити налаштування гарячих клавіш Obsidian.",
 	"notice.filterHotkeysFailed":

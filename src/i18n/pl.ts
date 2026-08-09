@@ -172,6 +172,8 @@ export const pl: Record<string, string> = {
 	"notice.externalStyleOff": 'Callout Studio ponownie stylizuje "{{name}}".',
 	"notice.nothingToWrap": "Nic do owinięcia.",
 	"notice.cursorNotInsideCallout": "Kursor nie jest wewnątrz callout.",
+	"notice.autocompleteTargetMoved":
+		"Nic nie wstawiono — wiersz zmienił się, gdy edytor był otwarty.",
 	"notice.openHotkeysFailed":
 		"Nie można otworzyć ustawień skrótów klawiszowych Obsidian.",
 	"notice.filterHotkeysFailed":

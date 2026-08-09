@@ -161,6 +161,8 @@ export const el: Record<string, string> = {
 	"notice.nothingToWrap": "Δεν υπάρχει τίποτα για αναδίπλωση.",
 	"notice.cursorNotInsideCallout":
 		"Ο κέρσορας δεν βρίσκεται μέσα σε callout.",
+	"notice.autocompleteTargetMoved":
+		"Δεν εισήχθη τίποτα — η γραμμή άλλαξε ενώ ο επεξεργαστής ήταν ανοιχτός.",
 	"notice.openHotkeysFailed":
 		"Αδυναμία ανοίγματος ρυθμίσεων συντομεύσεων Obsidian.",
 	"notice.filterHotkeysFailed":

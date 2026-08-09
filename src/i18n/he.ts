@@ -191,6 +191,8 @@ export const he: Record<string, string> = {
 	"notice.externalStyleOff": 'Callout Studio חוזרת לעצב את "{{name}}".',
 	"notice.nothingToWrap": "אין תוכן לעטוף.",
 	"notice.cursorNotInsideCallout": "הסמן אינו נמצא בתוך תיבת־הבלטה.",
+	"notice.autocompleteTargetMoved":
+		"לא נוסף דבר — השורה השתנתה בזמן שהעורך היה פתוח.",
 	"notice.openHotkeysFailed":
 		"לא ניתן לפתוח את מסך קיצורי המקלדת של Obsidian.",
 	"notice.filterHotkeysFailed":

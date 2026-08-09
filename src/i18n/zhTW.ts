@@ -151,6 +151,7 @@ export const zhTW: Record<string, string> = {
 	"notice.externalStyleOff": 'Callout Studio 重新為 "{{name}}" 設定樣式。',
 	"notice.nothingToWrap": "沒有可包覆的內容。",
 	"notice.cursorNotInsideCallout": "游標不在 callout 內部。",
+	"notice.autocompleteTargetMoved": "未插入任何內容 — 編輯器開啟期間該行已變更。",
 	"notice.openHotkeysFailed": "無法開啟 Obsidian 快速鍵設定。",
 	"notice.filterHotkeysFailed":
 		"已開啟 Obsidian 快速鍵，但無法套用 Callout Studio 篩選器。",

@@ -173,6 +173,8 @@ export const hu: Record<string, string> = {
 		'A Callout Studio ismét formázza a(z) "{{name}}" elemet.',
 	"notice.nothingToWrap": "Nincs mit becsomagolni.",
 	"notice.cursorNotInsideCallout": "A kurzor nem callout-on belül van.",
+	"notice.autocompleteTargetMoved":
+		"Semmi nem lett beszúrva — a sor megváltozott, amíg a szerkesztő nyitva volt.",
 	"notice.openHotkeysFailed":
 		"Az Obsidian billentyűparancs-beállításai nem nyithatók meg.",
 	"notice.filterHotkeysFailed":

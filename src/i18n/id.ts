@@ -170,6 +170,8 @@ export const id: Record<string, string> = {
 	"notice.externalStyleOff": 'Callout Studio kembali menata gaya "{{name}}".',
 	"notice.nothingToWrap": "Tidak ada yang perlu dibungkus.",
 	"notice.cursorNotInsideCallout": "Kursor tidak berada di dalam callout.",
+	"notice.autocompleteTargetMoved":
+		"Tidak ada yang disisipkan — baris berubah saat editor terbuka.",
 	"notice.openHotkeysFailed":
 		"Tidak dapat membuka pengaturan pintasan Obsidian.",
 	"notice.filterHotkeysFailed":

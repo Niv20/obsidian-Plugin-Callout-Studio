@@ -172,6 +172,8 @@ export const sv: Record<string, string> = {
 	"notice.externalStyleOff": 'Callout Studio stylar återigen "{{name}}".',
 	"notice.nothingToWrap": "Inget att lägga i callout.",
 	"notice.cursorNotInsideCallout": "Markören är inte inne i en callout.",
+	"notice.autocompleteTargetMoved":
+		"Ingenting infogades — raden ändrades medan redigeraren var öppen.",
 	"notice.openHotkeysFailed":
 		"Det gick inte att öppna Obsidians genväginställningar.",
 	"notice.filterHotkeysFailed":

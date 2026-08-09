@@ -171,6 +171,8 @@ export const fa: Record<string, string> = {
 		'Callout Studio دوباره "{{name}}" را استایل می‌دهد.',
 	"notice.nothingToWrap": "چیزی برای پیچیدن وجود ندارد.",
 	"notice.cursorNotInsideCallout": "مکان‌نما داخل callout نیست.",
+	"notice.autocompleteTargetMoved":
+		"چیزی درج نشد — خط در حالی که ویرایشگر باز بود تغییر کرد.",
 	"notice.openHotkeysFailed":
 		"باز کردن تنظیمات میانبرهای Obsidian امکان‌پذیر نبود.",
 	"notice.filterHotkeysFailed":

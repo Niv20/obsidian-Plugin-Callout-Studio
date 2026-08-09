@@ -170,6 +170,8 @@ export const cs: Record<string, string> = {
 	"notice.externalStyleOff": 'Callout Studio opět stylizuje "{{name}}".',
 	"notice.nothingToWrap": "Není co zabalit.",
 	"notice.cursorNotInsideCallout": "Kurzor není uvnitř callout.",
+	"notice.autocompleteTargetMoved":
+		"Nic nebylo vloženo — řádek se změnil, zatímco byl editor otevřený.",
 	"notice.openHotkeysFailed":
 		"Nelze otevřít nastavení klávesových zkratek Obsidian.",
 	"notice.filterHotkeysFailed":

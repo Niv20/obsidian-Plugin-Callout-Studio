@@ -160,6 +160,8 @@ export const bg: Record<string, string> = {
 	"notice.externalStyleOff": 'Callout Studio отново стилизира "{{name}}".',
 	"notice.nothingToWrap": "Няма какво да се обвие.",
 	"notice.cursorNotInsideCallout": "Курсорът не е вътре в callout.",
+	"notice.autocompleteTargetMoved":
+		"Нищо не беше вмъкнато — редът се промени, докато редакторът беше отворен.",
 	"notice.openHotkeysFailed":
 		"Не може да се отворят настройките за клавишни комбинации на Obsidian.",
 	"notice.filterHotkeysFailed":

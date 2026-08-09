@@ -173,6 +173,8 @@ export const tr: Record<string, string> = {
 		'Callout Studio "{{name}}" öğesini yeniden stillendiriyor.',
 	"notice.nothingToWrap": "Sarılacak bir şey yok.",
 	"notice.cursorNotInsideCallout": "İmleç callout içinde değil.",
+	"notice.autocompleteTargetMoved":
+		"Hiçbir şey eklenmedi — düzenleyici açıkken satır değişti.",
 	"notice.openHotkeysFailed": "Obsidian kısayol ayarları açılamadı.",
 	"notice.filterHotkeysFailed":
 		"Obsidian kısayolları açıldı, ancak Callout Studio filtresi uygulanamadı.",

@@ -172,6 +172,8 @@ export const nl: Record<string, string> = {
 	"notice.nothingToWrap": "Niets om in te pakken.",
 	"notice.cursorNotInsideCallout":
 		"De cursor bevindt zich niet in een callout.",
+	"notice.autocompleteTargetMoved":
+		"Er is niets ingevoegd — de regel is gewijzigd terwijl de editor open was.",
 	"notice.openHotkeysFailed":
 		"Kan de sneltoetseninstellingen van Obsidian niet openen.",
 	"notice.filterHotkeysFailed":
