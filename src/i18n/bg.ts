@@ -242,6 +242,7 @@ export const bg: Record<string, string> = {
 	"palette.bgStyle": "Стил",
 	"palette.bgSolid": "Плътен цвят",
 	"palette.bgGradient": "Градиент",
+	"palette.bgTransparent": "Прозрачен",
 	"palette.gradientTo": "Втори цвят",
 	"palette.gradientDirection": "Посока",
 	"palette.gradientText": "Текст на заглавието с градиент",

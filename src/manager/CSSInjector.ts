@@ -431,14 +431,32 @@ export class CSSInjector {
 	 * purely by compositing translucent layers, and an opaque fill hides
 	 * everything behind it — under `mix-blend-mode: darken` a colour over itself
 	 * is `min(x, x) = x`, a step of exactly zero. The callout looks unchanged on
-	 * its own; only what shows *through* it changes. There is no opt-out: a flat
-	 * fill would break nesting for every callout stacked inside it.
+	 * its own; only what shows *through* it changes. There is no opt-out into an
+	 * opaque fill: it would break nesting for every callout stacked inside it.
+	 *
+	 * `transparentBg` is the one way out and is checked FIRST, before the
+	 * no-background return below — a transparent def carries no bg hex at all,
+	 * so it would otherwise fall out here emitting nothing, and "nothing" is not
+	 * transparent: it hands the callout back to core's own default tint. It is
+	 * also not the opaque opt-out in disguise (see `CalloutDefinition`): zero
+	 * alpha hides nothing, so a callout nested inside a transparent one still
+	 * tints normally.
 	 */
 	private bgProps(
 		def: CalloutDefinition,
 		mode: "light" | "dark",
 		important = false,
 	): string[] {
+		if (def.transparentBg) {
+			const impT = important ? " !important" : "";
+			// `background-image: none` is load-bearing, not belt-and-braces: a
+			// theme can paint one, and it also stops a gradient left behind by
+			// hand-edited data from showing through the cleared colour.
+			return [
+				`  background-color: transparent${impT};`,
+				`  background-image: none${impT};`,
+			];
+		}
 		const bg = mode === "dark" ? def.bgColorDark : def.bgColorLight;
 		if (!bg) return [];
 		const imp = important ? " !important" : "";
@@ -473,6 +491,10 @@ export class CSSInjector {
 		def: CalloutDefinition,
 		mode: "light" | "dark",
 	): BgLayer | null {
+		// A sweep is a background, so transparency wins over it. `bgProps`
+		// already returns before reaching here; this guards the hand-edited case
+		// where a gradient survived alongside the flag.
+		if (def.transparentBg) return null;
 		const bg = mode === "dark" ? def.bgColorDark : def.bgColorLight;
 		if (!bg) return null;
 		if (!def.bgGradient) return null;

@@ -253,6 +253,7 @@ export const vi: Record<string, string> = {
 	"palette.bgStyle": "Kiểu",
 	"palette.bgSolid": "Màu đơn",
 	"palette.bgGradient": "Chuyển sắc",
+	"palette.bgTransparent": "Trong suốt",
 	"palette.gradientTo": "Màu thứ hai",
 	"palette.gradientDirection": "Hướng",
 	"palette.gradientText": "Văn bản tiêu đề chuyển sắc",

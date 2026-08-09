@@ -239,6 +239,7 @@ export const fi: Record<string, string> = {
 	"palette.bgStyle": "Tyyli",
 	"palette.bgSolid": "Yksivärinen",
 	"palette.bgGradient": "Liukuväri",
+	"palette.bgTransparent": "Läpinäkyvä",
 	"palette.gradientTo": "Toinen väri",
 	"palette.gradientDirection": "Suunta",
 	"palette.gradientText": "Otsikkoteksti liukuvärillä",

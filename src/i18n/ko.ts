@@ -251,6 +251,7 @@ export const ko: Record<string, string> = {
 	"palette.bgStyle": "스타일",
 	"palette.bgSolid": "단색",
 	"palette.bgGradient": "그라데이션",
+	"palette.bgTransparent": "투명",
 	"palette.gradientTo": "두 번째 색상",
 	"palette.gradientDirection": "방향",
 	"palette.gradientText": "그라데이션 제목 텍스트",

@@ -253,6 +253,7 @@ export const ru: Record<string, string> = {
 	"palette.bgStyle": "Стиль",
 	"palette.bgSolid": "Однотонный",
 	"palette.bgGradient": "Градиент",
+	"palette.bgTransparent": "Прозрачный",
 	"palette.gradientTo": "Второй цвет",
 	"palette.gradientDirection": "Направление",
 	"palette.gradientText": "Текст заголовка градиентом",

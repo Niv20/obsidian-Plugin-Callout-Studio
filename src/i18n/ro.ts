@@ -257,6 +257,7 @@ export const ro: Record<string, string> = {
 	"palette.bgStyle": "Stil",
 	"palette.bgSolid": "Uniformă",
 	"palette.bgGradient": "Degrade",
+	"palette.bgTransparent": "Transparent",
 	"palette.gradientTo": "A doua culoare",
 	"palette.gradientDirection": "Direcție",
 	"palette.gradientText": "Text de titlu cu degrade",

@@ -254,6 +254,7 @@ export const hi: Record<string, string> = {
 	"palette.bgStyle": "शैली",
 	"palette.bgSolid": "ठोस",
 	"palette.bgGradient": "ग्रेडिएंट",
+	"palette.bgTransparent": "पारदर्शी",
 	"palette.gradientTo": "दूसरा रंग",
 	"palette.gradientDirection": "दिशा",
 	"palette.gradientText": "ग्रेडिएंट वाला शीर्षक टेक्स्ट",

@@ -255,6 +255,7 @@ export const cs: Record<string, string> = {
 	"palette.bgStyle": "Styl",
 	"palette.bgSolid": "Jednobarevný",
 	"palette.bgGradient": "Přechod",
+	"palette.bgTransparent": "Průhledné",
 	"palette.gradientTo": "Druhá barva",
 	"palette.gradientDirection": "Směr",
 	"palette.gradientText": "Text nadpisu s přechodem",

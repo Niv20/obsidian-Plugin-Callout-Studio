@@ -259,6 +259,7 @@ export const de: Record<string, string> = {
 	"palette.bgStyle": "Stil",
 	"palette.bgSolid": "Einfarbig",
 	"palette.bgGradient": "Verlauf",
+	"palette.bgTransparent": "Transparent",
 	"palette.gradientTo": "Zweite Farbe",
 	"palette.gradientDirection": "Richtung",
 	"palette.gradientText": "Verlaufs-Titeltext",

@@ -245,6 +245,7 @@ export const zh: Record<string, string> = {
 	"palette.bgStyle": "样式",
 	"palette.bgSolid": "纯色",
 	"palette.bgGradient": "渐变",
+	"palette.bgTransparent": "透明",
 	"palette.gradientTo": "第二种颜色",
 	"palette.gradientDirection": "方向",
 	"palette.gradientText": "标题文字渐变",

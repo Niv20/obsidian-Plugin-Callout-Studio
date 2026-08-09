@@ -48,7 +48,6 @@ import { TagInput } from "../ui/TagInput";
 import {
 	renderColorCircles,
 	resolveCurrentModeColors,
-	type SwatchColors,
 } from "../ui/ColorCircles";
 import { PaletteEditorModal } from "./PaletteEditorModal";
 import type { CalloutEditorPlugin } from "./editor/types";
@@ -138,6 +137,14 @@ type EditorColorState = {
 	bgColorLight: string;
 	bgColorDark: string;
 	bgGradient: BgGradient | undefined;
+	/**
+	 * Paint no background — a separate axis from the two colours above, which
+	 * stay concrete hexes throughout the form even while this is on. The form
+	 * must always hold a real colour (a swatch has to show something, and
+	 * `matchesPalette` compares the strings), so the now-unused hex is simply
+	 * not persisted; see `performCalloutEditorSave`.
+	 */
+	transparentBg: boolean;
 	textColorLight: string;
 	textColorDark: string;
 };
@@ -152,12 +159,17 @@ type EditorColorState = {
  * concrete derived value.
  */
 function defaultColorStateFor(def: CalloutDefinition): EditorColorState {
+	// Key order here must match `readColorState()` exactly: the two are compared
+	// as JSON strings (see `colorMatchesDefault`), which is order-sensitive, so a
+	// field added to one at a different position silently breaks the comparison
+	// even when every value agrees.
 	return {
 		colorLight: def.colorLight,
 		colorDark: def.colorDark,
 		bgColorLight: def.bgColorLight ?? bgTintFor(def.colorLight, false),
 		bgColorDark: def.bgColorDark ?? bgTintFor(def.colorDark, true),
 		bgGradient: def.bgGradient ? { ...def.bgGradient } : undefined,
+		transparentBg: def.transparentBg === true,
 		textColorLight: def.textColorLight ?? DEFAULT_TEXT_COLOR_LIGHT,
 		textColorDark: def.textColorDark ?? DEFAULT_TEXT_COLOR_DARK,
 	};
@@ -180,6 +192,8 @@ export class CalloutEditor extends Modal {
 	private bgColorDark: string;
 	/** Background gradient baked from the applied palette, if any. */
 	private bgGradient: BgGradient | undefined;
+	/** Paint no background at all — see `EditorColorState.transparentBg`. */
+	private transparentBg: boolean;
 	private textColorLight: string;
 	private textColorDark: string;
 	private foldable: boolean;
@@ -267,6 +281,11 @@ export class CalloutEditor extends Modal {
 			bgTintFor(this.colorDark, true);
 		const baseGradient = existing?.bgGradient ?? fallbackBase?.bgGradient;
 		this.bgGradient = baseGradient ? { ...baseGradient } : undefined;
+		// The bg hexes above stay as derived: a transparent def carries none, so
+		// they fall back to the accent tint and sit unused until the user picks a
+		// colour again, exactly as the form expects.
+		this.transparentBg =
+			(existing?.transparentBg ?? fallbackBase?.transparentBg) === true;
 		this.textColorLight =
 			existing?.textColorLight ??
 			fallbackBase?.textColorLight ??
@@ -733,12 +752,14 @@ export class CalloutEditor extends Modal {
 		let selectedId = "";
 		let menuOpen = false;
 		const itemEls: HTMLElement[] = [];
+		// Key order must match `defaultColorStateFor` — see the note there.
 		const readColorState = (): EditorColorState => ({
 			colorLight: this.colorLight,
 			colorDark: this.colorDark,
 			bgColorLight: this.bgColorLight,
 			bgColorDark: this.bgColorDark,
 			bgGradient: this.bgGradient ? { ...this.bgGradient } : undefined,
+			transparentBg: this.transparentBg,
 			textColorLight: this.textColorLight,
 			textColorDark: this.textColorDark,
 		});
@@ -769,6 +790,7 @@ export class CalloutEditor extends Modal {
 			this.bgGradient = state.bgGradient
 				? { ...state.bgGradient }
 				: undefined;
+			this.transparentBg = state.transparentBg;
 			this.textColorLight = state.textColorLight;
 			this.textColorDark = state.textColorDark;
 			// A real selection supersedes whatever was being hovered.
@@ -777,24 +799,36 @@ export class CalloutEditor extends Modal {
 			this.updatePreview();
 		};
 
-		// The trigger swatch mirrors the row swatches: accent + background
-		// for the current theme mode.
-		const renderTriggerCircles = (colors: SwatchColors): void => {
+		// The trigger swatch mirrors the row swatches: accent + background for
+		// the current theme mode. Drawn from the FORM rather than from the
+		// matched palette so the "Deleted color" case — where there is no
+		// palette to read — needs no branch of its own.
+		const renderTriggerCircles = (): void => {
 			triggerCircles.empty();
-			renderColorCircles(triggerCircles, colors, { size: 16 });
-		};
-		const renderTriggerCirclesFromState = (): void => {
-			renderTriggerCircles(resolveCurrentModeColors(readColorState()));
+			renderColorCircles(
+				triggerCircles,
+				resolveCurrentModeColors(readColorState()),
+				{ size: 16 },
+			);
 		};
 		const matchesPalette = (palette: ColorPalette): boolean =>
+			// Transparency is compared first and alone, and it decides whether
+			// the background comparisons below are even the right question. A
+			// "None" palette keeps the hexes (and any gradient) that a switch
+			// back to Solid would restore, while a transparent callout persists
+			// none of them — so under transparency the accent is all there is to
+			// match on, and comparing what the form merely derived would push
+			// every such callout onto the "Deleted color" branch.
+			(palette.transparentBg === true) === this.transparentBg &&
 			palette.colorLight.toLowerCase() ===
 				this.colorLight.toLowerCase() &&
 			palette.colorDark.toLowerCase() === this.colorDark.toLowerCase() &&
-			(palette.bgColorLight?.toLowerCase() ?? "") ===
-				this.bgColorLight.toLowerCase() &&
-			(palette.bgColorDark?.toLowerCase() ?? "") ===
-				this.bgColorDark.toLowerCase() &&
-			bgGradientsEqual(palette.bgGradient, this.bgGradient);
+			(this.transparentBg ||
+				((palette.bgColorLight?.toLowerCase() ?? "") ===
+					this.bgColorLight.toLowerCase() &&
+					(palette.bgColorDark?.toLowerCase() ?? "") ===
+						this.bgColorDark.toLowerCase() &&
+					bgGradientsEqual(palette.bgGradient, this.bgGradient)));
 
 		/**
 		 * Re-resolves the trigger's label/swatch from whatever the form's
@@ -823,12 +857,11 @@ export class CalloutEditor extends Modal {
 				selectedId = matched.id;
 				this.paletteId = matched.id;
 				triggerLabel.setText(matched.name);
-				renderTriggerCircles(resolveCurrentModeColors(matched.palette));
 			} else {
 				this.paletteId = undefined;
 				triggerLabel.setText(t("editor.paletteDeleted"));
-				renderTriggerCirclesFromState();
 			}
+			renderTriggerCircles();
 		};
 		refreshTriggerFromCurrentColors();
 
@@ -872,6 +905,7 @@ export class CalloutEditor extends Modal {
 			bgGradient: palette.bgGradient
 				? { ...palette.bgGradient }
 				: undefined,
+			transparentBg: palette.transparentBg === true,
 			textColorLight: palette.textColorLight ?? DEFAULT_TEXT_COLOR_LIGHT,
 			textColorDark: palette.textColorDark ?? DEFAULT_TEXT_COLOR_DARK,
 		});
@@ -933,7 +967,7 @@ export class CalloutEditor extends Modal {
 			this.paletteId = entry.id;
 			applyPaletteColors(entry.palette);
 			triggerLabel.setText(entry.name);
-			renderTriggerCircles(resolveCurrentModeColors(entry.palette));
+			renderTriggerCircles();
 			this.updateSaveState();
 			closeMenu();
 		};
@@ -1031,7 +1065,7 @@ export class CalloutEditor extends Modal {
 			this.paletteId = palette.id;
 			applyPaletteColors(customPaletteToColorPalette(palette));
 			triggerLabel.setText(palette.name);
-			renderTriggerCircles(resolveCurrentModeColors(palette));
+			renderTriggerCircles();
 			this.updateSaveState();
 		};
 
@@ -1771,6 +1805,14 @@ export class CalloutEditor extends Modal {
 	 * mid-edit the form's id may not match any real row at all.
 	 */
 	private buildPreviewDefinition(): CalloutDefinition {
+		// `transparentBg` is pulled out of the hover override rather than riding
+		// along in the spread below: it is a plain boolean in the form but
+		// `?: true` on a definition, where "off" is an absent key and not `false`.
+		const {
+			transparentBg: hoveredTransparent,
+			...hoveredColors
+		}: Partial<EditorColorState> = this.previewColorOverride ?? {};
+		const transparent = hoveredTransparent ?? this.transparentBg;
 		return {
 			id: this.currentPreviewId(),
 			displayName: this.displayName.trim() || t("editor.untitledCallout"),
@@ -1790,7 +1832,8 @@ export class CalloutEditor extends Modal {
 			source: "user",
 			// Layered last: a hovered-but-uncommitted palette reaches the
 			// CSS/preview pipeline without ever touching the form state above.
-			...(this.previewColorOverride ?? {}),
+			...hoveredColors,
+			...(transparent ? { transparentBg: true as const } : {}),
 		};
 	}
 
@@ -1818,6 +1861,7 @@ export class CalloutEditor extends Modal {
 				bgColorLight: this.bgColorLight,
 				bgColorDark: this.bgColorDark,
 				bgGradient: this.bgGradient,
+				transparentBg: this.transparentBg,
 				textColorLight: this.textColorLight,
 				textColorDark: this.textColorDark,
 				foldable: this.foldable,

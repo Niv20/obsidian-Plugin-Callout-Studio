@@ -255,6 +255,7 @@ export const sv: Record<string, string> = {
 	"palette.bgStyle": "Stil",
 	"palette.bgSolid": "Enfärgad",
 	"palette.bgGradient": "Gradient",
+	"palette.bgTransparent": "Genomskinlig",
 	"palette.gradientTo": "Andra färgen",
 	"palette.gradientDirection": "Riktning",
 	"palette.gradientText": "Titeltext med gradient",

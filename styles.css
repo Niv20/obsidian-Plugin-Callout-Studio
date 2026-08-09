@@ -1350,6 +1350,29 @@ button.callout-studio-icon-picker-loading {
 	z-index: 0;
 }
 
+/* The background circle for a callout that paints no background at all: the
+   standard transparency checkerboard, because an empty circle at 16px is
+   indistinguishable from a swatch that failed to render.
+
+   Both tones are derived from the page itself, so one rule reads correctly on a
+   light and a dark theme — white-on-grey where the page is white, and two quiet
+   darks where it is dark (a fixed white checker would glow on a dark page). The
+   mix, rather than --background-modifier-border, guarantees the squares stay
+   apart in themes that make that variable nearly invisible.
+
+   Tile size is half the circle so each square is a quarter of it: the accent
+   circle in front covers ~40%, leaving roughly a 10px crescent to read in, and
+   anything finer than ~4px turns to mush at this scale. */
+.cs-color-circle.is-transparent {
+	background-image: repeating-conic-gradient(
+		color-mix(in srgb, var(--text-normal) 22%, var(--background-primary)) 0%
+			25%,
+		var(--background-primary) 0% 50%
+	);
+	background-size: calc(var(--cs-circle-size) / 2)
+		calc(var(--cs-circle-size) / 2);
+}
+
 /* ─── Compact Color Grid ──────────────────────────────────────── */
 
 .callout-studio-color-grid {
@@ -2600,54 +2623,6 @@ input.cs-input-invalid:focus {
 	margin: 0;
 }
 
-/* Segmented control (used for title layout) */
-.cs-segmented {
-	display: inline-flex;
-	gap: 0;
-	border: 1px solid var(--background-modifier-border);
-	border-radius: 6px;
-	overflow: hidden;
-}
-.cs-segmented-btn {
-	background: transparent;
-	border: none;
-	border-right: 1px solid var(--background-modifier-border);
-	padding: 4px 10px;
-	font-size: 0.85em;
-	color: var(--text-muted);
-	cursor: pointer;
-	box-shadow: none;
-}
-.cs-segmented-btn:last-child {
-	border-right: none;
-}
-.cs-segmented-btn:hover {
-	background: var(--background-modifier-hover);
-	color: var(--text-normal);
-}
-.cs-segmented-btn.is-active {
-	background: var(--interactive-accent);
-	color: var(--text-on-accent);
-}
-
-.cs-segmented-vertical {
-	display: flex;
-	flex-direction: column;
-	margin: 8px 10px 10px;
-}
-
-.cs-segmented-vertical .cs-segmented-btn {
-	width: 100%;
-	border-right: none;
-	border-bottom: 1px solid var(--background-modifier-border);
-	text-align: start;
-	padding: 7px 10px;
-}
-
-.cs-segmented-vertical .cs-segmented-btn:last-child {
-	border-bottom: none;
-}
-
 /* ─── Settings group (sub-sections) ───────────────────────────── */
 
 .cs-settings-group {
@@ -2936,6 +2911,57 @@ input.cs-input-invalid:focus {
 	margin: 0;
 }
 
+/* ── Name field + Style dropdown: one shared width ───────────────
+   The column above is 240px, and these are the only two rows in it whose
+   control is a box with an edge of its own (everything below is a colour
+   swatch, a slider or a toggle). Left alone they size to their content — the
+   text input to its browser default, the select to its longest option — so the
+   two boxes stacked directly on top of each other ended on different edges.
+
+   One variable rather than a number on each rule, mirroring
+   `--cs-editor-control-width` in the callout editor: the phone case is then a
+   single override instead of one per control. `flex: 0 0 auto` because
+   Obsidian's `.setting-item-control` is a growing flex item and would otherwise
+   ignore the width and fill the row.
+
+   The value leaves ~100px for the name column beside it, which every label
+   here fits on one line — including the longest translations of "Name" and
+   "Style". */
+.callout-studio-palette-editor {
+	--cs-palette-control-width: 140px;
+}
+
+/* Phone stacks the rows and forces controls to full width anyway (see the note
+   on `.is-phone .callout-studio-editor`); re-point the variable rather than
+   fight that rule twice. */
+.is-phone .callout-studio-palette-editor {
+	--cs-palette-control-width: 100%;
+}
+
+.callout-studio-palette-editor .cs-palette-name-setting .setting-item-control,
+.callout-studio-palette-editor
+	.cs-palette-bgstyle-setting
+	.setting-item-control {
+	flex: 0 0 auto;
+	width: var(--cs-palette-control-width);
+	max-width: 100%;
+}
+
+/* `min-width: 0` matters on the select: a `<select>` refuses to shrink below
+   its widest option by default, which would push it past the shared edge the
+   moment a translation runs long. */
+.callout-studio-palette-editor
+	.cs-palette-name-setting
+	.setting-item-control
+	input[type="text"],
+.callout-studio-palette-editor
+	.cs-palette-bgstyle-setting
+	.setting-item-control
+	select {
+	width: 100%;
+	min-width: 0;
+}
+
 /* ── Option-column row rhythm ────────────────────────────────────
    Obsidian 1.13 gives every modal setting row its own hairline plus 16px of air
    on each side of it, so consecutive rows are symmetric on their own:
@@ -3104,36 +3130,6 @@ input.cs-input-invalid:focus {
    as one rule down the column. */
 .cs-palette-divider {
 	border-top: var(--border-width) solid var(--background-modifier-border);
-}
-
-/* Two-option segmented control (Solid|Gradient, Linear|Radial) */
-.cs-segmented {
-	display: inline-flex;
-	border: 1px solid var(--background-modifier-border);
-	border-radius: var(--radius-s, 4px);
-	overflow: hidden;
-}
-.cs-segmented-btn {
-	appearance: none;
-	margin: 0;
-	padding: 4px 12px;
-	border: none;
-	border-radius: 0;
-	box-shadow: none;
-	background: var(--background-secondary);
-	color: var(--text-muted);
-	font-size: var(--font-small);
-	cursor: pointer;
-}
-.cs-segmented-btn + .cs-segmented-btn {
-	border-inline-start: 1px solid var(--background-modifier-border);
-}
-.cs-segmented-btn:hover {
-	color: var(--text-normal);
-}
-.cs-segmented-btn.is-active {
-	background: var(--interactive-accent);
-	color: var(--text-on-accent);
 }
 
 /* linear-gradient direction picker */

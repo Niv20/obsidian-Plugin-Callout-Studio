@@ -39,6 +39,12 @@ export interface SwatchColors {
 	 * size, and the editor previews it for real.
 	 */
 	bgTo?: string;
+	/**
+	 * The callout paints no background. Drawn as the usual checkerboard rather
+	 * than as an empty circle, which at 16px is indistinguishable from a swatch
+	 * that failed to render. {@link bg} is then meaningless and ignored.
+	 */
+	transparent?: true;
 }
 
 /**
@@ -53,9 +59,23 @@ export function resolveCurrentModeColors(source: {
 	bgColorLight?: string;
 	bgColorDark?: string;
 	bgGradient?: BgGradient;
+	/**
+	 * Widened from the `true`-only field on a definition: this reads a source
+	 * for display, and the editor's in-progress form state carries a plain
+	 * boolean (a control needs an off position). The narrow type exists to keep
+	 * `false` out of what gets *persisted*, which is not this.
+	 */
+	transparentBg?: boolean;
 }): SwatchColors {
 	const isDark = activeDocument.body.classList.contains("theme-dark");
 	const accent = isDark ? source.colorDark : source.colorLight;
+	// Checked before the tint fallback below, which fires on a missing
+	// background — exactly the state transparency leaves the source in. Falling
+	// through would draw a pale tinted circle for a callout that paints nothing,
+	// i.e. a swatch that lies about what the callout looks like.
+	if (source.transparentBg) {
+		return { accent, bg: "", transparent: true };
+	}
 	const bg =
 		(isDark ? source.bgColorDark : source.bgColorLight) ??
 		bgTintFor(accent, isDark);
@@ -93,7 +113,14 @@ export function renderColorCircles(
 	left.style.backgroundColor = colors.accent;
 
 	const right = wrap.createDiv({ cls: "cs-color-circle cs-color-circle-r" });
-	right.style.backgroundColor = colors.bg;
+	// A class, not an inline colour: the checkerboard's two tones come from the
+	// theme's own variables so it reads as "empty" on a light and a dark page
+	// alike, which an inline value here could not follow.
+	if (colors.transparent) {
+		right.addClass("is-transparent");
+	} else {
+		right.style.backgroundColor = colors.bg;
+	}
 
 	if (colors.bgTo) {
 		const far = wrap.createDiv({

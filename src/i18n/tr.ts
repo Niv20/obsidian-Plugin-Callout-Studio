@@ -256,6 +256,7 @@ export const tr: Record<string, string> = {
 	"palette.bgStyle": "Stil",
 	"palette.bgSolid": "Düz renk",
 	"palette.bgGradient": "Gradyan",
+	"palette.bgTransparent": "Şeffaf",
 	"palette.gradientTo": "İkinci renk",
 	"palette.gradientDirection": "Yön",
 	"palette.gradientText": "Gradyanlı başlık metni",

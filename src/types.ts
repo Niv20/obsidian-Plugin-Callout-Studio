@@ -175,6 +175,41 @@ export interface CalloutDefinition {
 	 * bg color is set.
 	 */
 	bgGradient?: BgGradient;
+	/**
+	 * Paint no background at all — `background-color: transparent`, on every
+	 * render role (blockquote, heading bar, inline pill).
+	 * `bgColorLight`/`bgColorDark`/`bgGradient` are omitted alongside it, so
+	 * this flag is the whole background state; absent means the def is painted
+	 * normally.
+	 *
+	 * It reaches a callout down exactly one path: a custom palette saved from
+	 * the palette editor's "None" background style, baked on by
+	 * `bakePaletteColors`. There is deliberately no "Transparent" entry in the
+	 * color dropdown and no per-callout switch — transparency is a property of a
+	 * palette the user made and named, so every callout wearing it can be found
+	 * and changed back in one place instead of one at a time.
+	 *
+	 * Deliberately a flag and not the string `"transparent"` in the bg colors:
+	 * every consumer of those fields assumes `#rrggbb` and fails *silently* on
+	 * anything else — `hexToRgb` parses it as NaN and renders black,
+	 * `<input type="color">` resets itself to `#000000` and writes that back,
+	 * `isValidHexColor` makes `sanitizeCustomPalettes` drop the whole palette,
+	 * and the importer's `HEX_COLOR_RE` drops the whole callout. A separate
+	 * field leaves all four paths untouched.
+	 *
+	 * NOT the retired `solidBackground` flag in reverse. That one was retired
+	 * because an OPAQUE fill hides what is behind it, which is what flattens
+	 * Obsidian's nesting step to exactly zero. Transparent hides nothing — a
+	 * blue callout nested inside a transparent one still paints its own tint.
+	 * What it does give up is stepping between stacked transparent callouts of
+	 * the same type, which is the literal meaning of the choice.
+	 *
+	 * Typed `true` rather than `boolean` on purpose: `CalloutRegistry.isModified`
+	 * compares `JSON.stringify(value ?? null)`, so an explicit `false` would read
+	 * as *different* from a pristine `undefined` and persist a built-in nobody
+	 * edited. Writers must omit the key instead, the same shape `bgGradient` uses.
+	 */
+	transparentBg?: true;
 	/** Custom content text color – light mode */
 	textColorLight?: string;
 	/** Custom content text color – dark mode */
@@ -226,6 +261,21 @@ export interface CustomPalette {
 	 * six colors when the palette is applied.
 	 */
 	bgGradient?: BgGradient;
+	/**
+	 * The palette paints no background — see `CalloutDefinition.transparentBg`,
+	 * which this bakes onto every callout that applies it. Set by the palette
+	 * editor's "None" background style.
+	 *
+	 * The six colors stay valid hexes beside it, unlike on a definition, where
+	 * the flag replaces them: `sanitizeCustomPalettes` requires all six, and the
+	 * editor keeps deriving `bgColorLight`/`bgColorDark` from the base color so
+	 * switching back to Solid finds them ready. They are simply never read while
+	 * this is set — `bakePaletteColors` drops them on the way onto a callout.
+	 *
+	 * Typed `true` rather than `boolean` for the same reason the definition's
+	 * field is: writers omit the key instead of writing `false`.
+	 */
+	transparentBg?: true;
 	/**
 	 * Share of the accent color mixed into the background tint (0..1). Absent =
 	 * `DEFAULT_BG_COLOR_AMOUNT`. Higher = a bolder, less transparent-looking

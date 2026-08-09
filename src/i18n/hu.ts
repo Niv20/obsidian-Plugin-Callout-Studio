@@ -257,6 +257,7 @@ export const hu: Record<string, string> = {
 	"palette.bgStyle": "Stílus",
 	"palette.bgSolid": "Egyszínű",
 	"palette.bgGradient": "Színátmenet",
+	"palette.bgTransparent": "Átlátszó",
 	"palette.gradientTo": "Második szín",
 	"palette.gradientDirection": "Irány",
 	"palette.gradientText": "Címszöveg színátmenettel",

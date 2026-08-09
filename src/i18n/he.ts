@@ -274,6 +274,7 @@ export const he: Record<string, string> = {
 	"palette.bgStyle": "סגנון",
 	"palette.bgSolid": "אחיד",
 	"palette.bgGradient": "גרדיאנט",
+	"palette.bgTransparent": "שקוף",
 	"palette.gradientTo": "צבע שני",
 	"palette.gradientDirection": "כיוון",
 	"palette.gradientText": "טקסט כותרת בגרדיאנט",

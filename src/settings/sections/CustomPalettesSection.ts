@@ -13,7 +13,11 @@ import { Setting, setIcon } from "obsidian";
 import { t } from "../../i18n";
 import type { CustomPalette } from "../../types";
 import type { SettingsSectionContext } from "./types";
-import { generatePaletteId } from "../../utils/colorPalettes";
+import {
+	bakePaletteColors,
+	customPaletteToColorPalette,
+	generatePaletteId,
+} from "../../utils/colorPalettes";
 import {
 	renderColorCircles,
 	resolveCurrentModeColors,
@@ -62,29 +66,21 @@ export function renderCustomPalettesSection(
 		// Object.assign never removes keys: when the edit switched the palette
 		// to another background style, the absent bgGradient must still clear
 		// the stored one (and cascade as an explicit undefined below). Same
-		// reasoning for colorMode: toggling back to simple and saving must
-		// actually clear a stale "advanced" flag, not leave the editor
-		// auto-expanded next time it's opened.
+		// reasoning for transparentBg — an edit from the "None" style back to
+		// Solid has to actually un-transparent the palette — and for colorMode:
+		// toggling back to simple and saving must actually clear a stale
+		// "advanced" flag, not leave the editor auto-expanded next time.
 		palette.bgGradient = result.bgGradient;
+		palette.transparentBg = result.transparentBg;
 		palette.colorMode = result.colorMode;
-		const {
-			colorLight,
-			colorDark,
-			bgColorLight,
-			bgColorDark,
-			textColorLight,
-			textColorDark,
-			bgGradient,
-		} = result;
-		ctx.plugin.registry.applyPaletteColors(palette.id, {
-			colorLight,
-			colorDark,
-			bgColorLight,
-			bgColorDark,
-			textColorLight,
-			textColorDark,
-			bgGradient,
-		});
+		// Baked through the same function the import path uses, so "what this
+		// palette means as callout colors" is decided in exactly one place — and
+		// every field comes back set (undefined included), which is what lets the
+		// cascade clear a background the previous style had left behind.
+		ctx.plugin.registry.applyPaletteColors(
+			palette.id,
+			bakePaletteColors(customPaletteToColorPalette(palette)),
+		);
 		await ctx.plugin.saveSettings();
 		renderList();
 	};

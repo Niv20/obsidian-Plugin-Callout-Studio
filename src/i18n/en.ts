@@ -276,6 +276,7 @@ export const en: Record<string, string> = {
 	"palette.bgStyle": "Style",
 	"palette.bgSolid": "Solid",
 	"palette.bgGradient": "Gradient",
+	"palette.bgTransparent": "Transparent",
 	"palette.gradientTo": "Second color",
 	"palette.gradientDirection": "Direction",
 	"palette.gradientText": "Gradient title text",

@@ -251,6 +251,7 @@ export const ja: Record<string, string> = {
 	"palette.bgStyle": "スタイル",
 	"palette.bgSolid": "単色",
 	"palette.bgGradient": "グラデーション",
+	"palette.bgTransparent": "透明",
 	"palette.gradientTo": "2番目の色",
 	"palette.gradientDirection": "方向",
 	"palette.gradientText": "グラデーションタイトルテキスト",

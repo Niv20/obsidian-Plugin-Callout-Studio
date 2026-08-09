@@ -256,6 +256,7 @@ export const uk: Record<string, string> = {
 	"palette.bgStyle": "Стиль",
 	"palette.bgSolid": "Суцільний",
 	"palette.bgGradient": "Градієнт",
+	"palette.bgTransparent": "Прозорий",
 	"palette.gradientTo": "Другий колір",
 	"palette.gradientDirection": "Напрямок",
 	"palette.gradientText": "Текст заголовка градієнтом",

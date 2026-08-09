@@ -240,6 +240,7 @@ export const ms: Record<string, string> = {
 	"palette.bgStyle": "Gaya",
 	"palette.bgSolid": "Warna pejal",
 	"palette.bgGradient": "Gradien",
+	"palette.bgTransparent": "Lutsinar",
 	"palette.gradientTo": "Warna kedua",
 	"palette.gradientDirection": "Arah",
 	"palette.gradientText": "Teks tajuk bergradien",

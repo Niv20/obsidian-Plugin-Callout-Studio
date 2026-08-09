@@ -246,6 +246,7 @@ export const el: Record<string, string> = {
 	"palette.bgStyle": "Στυλ",
 	"palette.bgSolid": "Συμπαγές",
 	"palette.bgGradient": "Διαβάθμιση",
+	"palette.bgTransparent": "Διαφανές",
 	"palette.gradientTo": "Δεύτερο χρώμα",
 	"palette.gradientDirection": "Κατεύθυνση",
 	"palette.gradientText": "Κείμενο τίτλου με διαβάθμιση",

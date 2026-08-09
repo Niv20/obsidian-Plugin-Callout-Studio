@@ -253,6 +253,7 @@ export const id: Record<string, string> = {
 	"palette.bgStyle": "Gaya",
 	"palette.bgSolid": "Polos",
 	"palette.bgGradient": "Gradien",
+	"palette.bgTransparent": "Transparan",
 	"palette.gradientTo": "Warna kedua",
 	"palette.gradientDirection": "Arah",
 	"palette.gradientText": "Teks judul bergradien",

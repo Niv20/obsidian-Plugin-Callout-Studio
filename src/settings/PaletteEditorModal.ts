@@ -69,7 +69,15 @@ const DEFAULT_GRADIENT_ANGLE = 135;
 /** Hue offset for the auto-suggested gradient second color. */
 const GRADIENT_HUE_SHIFT = 45;
 
-type BgStyle = "solid" | "gradient";
+/**
+ * How the palette paints its background. `"none"` is not a third way of
+ * colouring one — it is the absence of a background (`transparentBg`), which is
+ * why it lives here rather than at the bottom of the Intensity slider: an
+ * intensity near zero is still an OPAQUE fill in the page's own colour, so it
+ * looks transparent while quietly flattening the nesting step of every callout
+ * stacked inside it (see `CalloutDefinition.transparentBg`).
+ */
+type BgStyle = "solid" | "gradient" | "none";
 
 export class PaletteEditorModal extends Modal {
 	private existing: CustomPalette | null;
@@ -143,7 +151,14 @@ export class PaletteEditorModal extends Modal {
 		this.name = this.existing?.name ?? "";
 		this.baseColor = this.existing?.colorLight ?? DEFAULT_BASE_COLOR;
 		const g = this.existing?.bgGradient;
-		this.bgStyle = g ? "gradient" : "solid";
+		// Transparency is checked first: a palette can carry a stale gradient
+		// beside the flag (nothing clears it when the style switches, so a
+		// switch back to Gradient finds it intact), and the flag is what
+		// actually gets painted.
+		this.bgStyle =
+			this.existing?.transparentBg ? "none"
+			: g ? "gradient"
+			: "solid";
 		// Set before any derivation below: deriveGradientEnd() and the new-palette
 		// branch both read this to decide how strong the background reads. A
 		// fresh palette seeds from the per-style default (gradients default
@@ -223,6 +238,10 @@ export class PaletteEditorModal extends Modal {
 
 		const nameSetting = new Setting(adjustCol)
 			.setName(t("palette.name"))
+			// Shares one control width with the Style row directly below it, so
+			// the field and the dropdown end on the same edge instead of each
+			// taking whatever its own content asks for (see styles.css).
+			.setClass("cs-palette-name-setting")
 			.addText((text) => {
 				this.nameInputEl = text.inputEl;
 				text.inputEl.maxLength = MAX_NAME_LENGTH;
@@ -366,42 +385,55 @@ export class PaletteEditorModal extends Modal {
 		return gradient;
 	}
 
-	/** Solid|Gradient segmented switch — sits above the base color. */
+	/**
+	 * Solid|Gradient|None picker — sits above the base color.
+	 *
+	 * A dropdown rather than the segmented switch this used to be: the options
+	 * column is 240px, and three labelled buttons beside a name left the name
+	 * itself ellipsised to "St…" in English and worse in every language with a
+	 * longer word for "gradient". A `<select>` costs one fixed width no matter
+	 * how many options it holds or how they translate. `cs-palette-bgstyle-setting`
+	 * is what pins that width to the Name field's above it (see styles.css).
+	 */
 	private buildBgStyleRow(parent: HTMLElement): void {
-		const bgStyleSetting = new Setting(parent).setName(
-			t("palette.bgStyle"),
-		);
-		this.buildSegmented<BgStyle>(
-			bgStyleSetting.controlEl,
-			[
-				{ value: "solid", label: t("palette.bgSolid") },
-				{ value: "gradient", label: t("palette.bgGradient") },
-			],
-			this.bgStyle,
-			(v) => {
-				this.bgStyle = v;
-				// Follow the per-style default until the user drags the slider
-				// themselves; once touched, their chosen intensity sticks across
-				// style toggles instead of being overwritten.
-				if (!this.bgIntensityTouched) {
-					this.bgIntensity =
-						v === "gradient"
-							? DEFAULT_BG_INTENSITY_GRADIENT
-							: DEFAULT_BG_INTENSITY_SOLID;
-					this.bgIntensitySlider?.setValue(
-						Math.round(this.bgIntensity * 100),
-					);
-					this.applyDerived();
-				} else {
-					this.preview?.refresh();
-				}
-				this.updateGradientVisibility();
-				// The advanced grid and the Intensity row are Solid-only; a switch
-				// to Gradient hides them (colors/intensity stay exactly as they
-				// were, ready to reappear if the user switches back to Solid).
-				this.renderColorSection();
-			},
-		);
+		const bgStyleSetting = new Setting(parent)
+			.setName(t("palette.bgStyle"))
+			.setClass("cs-palette-bgstyle-setting");
+		bgStyleSetting.addDropdown((dd) => {
+			dd.addOption("solid", t("palette.bgSolid"))
+				.addOption("gradient", t("palette.bgGradient"))
+				.addOption("none", t("palette.bgTransparent"))
+				.setValue(this.bgStyle)
+				.onChange((raw) => {
+					const v = raw as BgStyle;
+					this.bgStyle = v;
+					// Follow the per-style default until the user drags the
+					// slider themselves; once touched, their chosen intensity
+					// sticks across style changes instead of being overwritten.
+					// "None" is skipped entirely: it paints no background, so it
+					// has no strength of its own to default to, and re-seeding
+					// here would silently rewrite the value a switch back to
+					// Solid is meant to restore.
+					if (!this.bgIntensityTouched && v !== "none") {
+						this.bgIntensity =
+							v === "gradient"
+								? DEFAULT_BG_INTENSITY_GRADIENT
+								: DEFAULT_BG_INTENSITY_SOLID;
+						this.bgIntensitySlider?.setValue(
+							Math.round(this.bgIntensity * 100),
+						);
+						this.applyDerived();
+					} else {
+						this.preview?.refresh();
+					}
+					this.updateGradientVisibility();
+					// The advanced grid and the Intensity row are Solid-only; a
+					// switch to Gradient or None hides them (colors/intensity
+					// stay exactly as they were, ready to reappear if the user
+					// switches back).
+					this.renderColorSection();
+				});
+		});
 	}
 
 	/**
@@ -415,15 +447,13 @@ export class PaletteEditorModal extends Modal {
 	 *
 	 * Hidden while the advanced per-color grid is showing: intensity only
 	 * steers the Base-color derivation, which the advanced grid bypasses
-	 * (its rows write colors directly).
+	 * (its rows write colors directly). Hidden under None too — see
+	 * {@link syncBgIntensityRow}.
 	 */
 	private buildBgIntensityRow(parent: HTMLElement): void {
 		const setting = new Setting(parent).setName(t("palette.bgIntensity"));
 		this.bgIntensityRowEl = setting.settingEl;
-		this.bgIntensityRowEl.toggleClass(
-			"cs-row-hidden",
-			this.advancedColors && this.bgStyle === "solid",
-		);
+		this.syncBgIntensityRow();
 		setting.addSlider((slider) => {
 			this.bgIntensitySlider = slider;
 			slider
@@ -444,6 +474,20 @@ export class PaletteEditorModal extends Modal {
 	}
 
 	/**
+	 * Shows the Intensity row only where a strength is a real question: it is
+	 * meaningless under None (nothing is painted) and bypassed by the advanced
+	 * grid (whose rows write colors directly instead of deriving them). Both
+	 * callers go through here so the two conditions can't drift apart.
+	 */
+	private syncBgIntensityRow(): void {
+		this.bgIntensityRowEl?.toggleClass(
+			"cs-row-hidden",
+			(this.advancedColors && this.bgStyle === "solid") ||
+				this.bgStyle === "none",
+		);
+	}
+
+	/**
 	 * Rebuilds the color section: the single Base color control, or — only
 	 * while Solid and opted in — the advanced per-color grid. Called on open
 	 * and whenever advancedColors or bgStyle changes; never touches any
@@ -454,7 +498,7 @@ export class PaletteEditorModal extends Modal {
 		if (!this.colorSectionEl) return;
 		this.colorSectionEl.empty();
 		const showAdvanced = this.advancedColors && this.bgStyle === "solid";
-		this.bgIntensityRowEl?.toggleClass("cs-row-hidden", showAdvanced);
+		this.syncBgIntensityRow();
 		if (showAdvanced) {
 			this.buildAdvancedColorRows(this.colorSectionEl);
 		} else {
@@ -707,32 +751,6 @@ export class PaletteEditorModal extends Modal {
 		}
 	}
 
-	/** Segmented control that manages its own active state. */
-	private buildSegmented<T extends string>(
-		parent: HTMLElement,
-		options: { value: T; label: string }[],
-		initial: T,
-		onSelect: (value: T) => void,
-	): void {
-		const wrap = parent.createDiv({ cls: "cs-segmented" });
-		const btns: HTMLButtonElement[] = [];
-		for (const opt of options) {
-			const btn = wrap.createEl("button", {
-				cls: "cs-segmented-btn",
-				text: opt.label,
-			});
-			if (opt.value === initial) btn.addClass("is-active");
-			btn.addEventListener("click", (e) => {
-				e.preventDefault();
-				if (btn.hasClass("is-active")) return;
-				for (const b of btns) b.removeClass("is-active");
-				btn.addClass("is-active");
-				onSelect(opt.value);
-			});
-			btns.push(btn);
-		}
-	}
-
 	/** Shows/hides the gradient rows to match the current style choice. */
 	private updateGradientVisibility(): void {
 		const off = this.bgStyle !== "gradient";
@@ -790,6 +808,11 @@ export class PaletteEditorModal extends Modal {
 			bgColorLight: this.colors.bgColorLight,
 			bgColorDark: this.colors.bgColorDark,
 			bgGradient: this.currentGradient() ?? undefined,
+			// The flag beats the two hexes above wherever both are present
+			// (CSSInjector.bgProps returns before reading them), so the preview
+			// shows what a saved None palette will actually paint without the
+			// derivation having to be torn down and rebuilt on every toggle.
+			...(this.bgStyle === "none" ? { transparentBg: true as const } : {}),
 			textColorLight: this.colors.textColorLight,
 			textColorDark: this.colors.textColorDark,
 			foldable: false,
@@ -820,6 +843,13 @@ export class PaletteEditorModal extends Modal {
 				...this.colors,
 				bgIntensity: this.bgIntensity,
 				...(gradient ? { bgGradient: gradient } : {}),
+				// The six colors above are saved unchanged under None: the
+				// backgrounds among them are what a later switch back to Solid
+				// restores, and `bakePaletteColors` is what keeps them from
+				// reaching a callout meanwhile.
+				...(this.bgStyle === "none"
+					? { transparentBg: true as const }
+					: {}),
 				// Saved regardless of the current bgStyle so a palette left in
 				// advanced mode while Gradient was selected still reopens
 				// advanced if the user switches back to Solid later.

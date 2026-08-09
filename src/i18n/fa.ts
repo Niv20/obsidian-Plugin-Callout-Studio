@@ -254,6 +254,7 @@ export const fa: Record<string, string> = {
 	"palette.bgStyle": "سبک",
 	"palette.bgSolid": "یکدست",
 	"palette.bgGradient": "گرادیان",
+	"palette.bgTransparent": "شفاف",
 	"palette.gradientTo": "رنگ دوم",
 	"palette.gradientDirection": "جهت",
 	"palette.gradientText": "متن عنوان با گرادیان",

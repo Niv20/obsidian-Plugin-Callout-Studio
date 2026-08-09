@@ -249,6 +249,7 @@ export const ar: Record<string, string> = {
 	"palette.bgStyle": "النمط",
 	"palette.bgSolid": "لون واحد",
 	"palette.bgGradient": "تدرج لوني",
+	"palette.bgTransparent": "شفاف",
 	"palette.gradientTo": "اللون الثاني",
 	"palette.gradientDirection": "الاتجاه",
 	"palette.gradientText": "نص العنوان بتدرج لوني",

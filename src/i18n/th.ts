@@ -250,6 +250,7 @@ export const th: Record<string, string> = {
 	"palette.bgStyle": "รูปแบบ",
 	"palette.bgSolid": "สีพื้น",
 	"palette.bgGradient": "ไล่ระดับสี",
+	"palette.bgTransparent": "โปร่งใส",
 	"palette.gradientTo": "สีที่สอง",
 	"palette.gradientDirection": "ทิศทาง",
 	"palette.gradientText": "ข้อความหัวเรื่องแบบไล่ระดับสี",

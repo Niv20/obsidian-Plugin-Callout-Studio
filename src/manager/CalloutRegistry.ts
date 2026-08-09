@@ -844,6 +844,7 @@ export class CalloutRegistry {
 		bgColorLight: true,
 		bgColorDark: true,
 		bgGradient: true,
+		transparentBg: true,
 		textColorLight: true,
 		textColorDark: true,
 		aliases: true,
@@ -1008,6 +1009,10 @@ export class CalloutRegistry {
 			// spread below clears a stale value when the palette switched
 			// background style.
 			| "bgGradient"
+			// Same contract, and for the same reason: a palette edited from the
+			// "None" background style back to Solid must actually un-transparent
+			// its callouts, which only an explicit undefined can do.
+			| "transparentBg"
 			| "textColorLight"
 			| "textColorDark"
 		>,

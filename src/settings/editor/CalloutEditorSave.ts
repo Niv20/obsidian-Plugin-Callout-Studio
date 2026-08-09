@@ -29,6 +29,12 @@ export type CalloutEditorSaveState = {
 	bgColorLight: string;
 	bgColorDark: string;
 	bgGradient?: CalloutDefinition["bgGradient"];
+	/**
+	 * Paint no background at all. A plain boolean here (the form needs an off
+	 * position) but `?: true` on the saved definition, so the off case must drop
+	 * the key rather than write `false` — see `CalloutDefinition.transparentBg`.
+	 */
+	transparentBg: boolean;
 	textColorLight: string;
 	textColorDark: string;
 	foldable: boolean;
@@ -156,10 +162,21 @@ export async function performCalloutEditorSave(
 	// just the accent tinted is dropped here rather than stored: it renders the
 	// same and leaves Obsidian's own translucent fill in place. A colour the
 	// user actually picked no longer matches the derivation and is kept.
+	//
+	// Transparency short-circuits all of that: the flag IS the background, so
+	// the hexes the form is still holding (and any gradient) are dropped
+	// outright rather than left beside it as a second, contradicting source of
+	// truth. It also means an older build reading this export degrades to "no
+	// background" — Obsidian's own tint — instead of to a stale opaque colour.
+	const transparent = fallbackBase
+		? fallbackBase.transparentBg === true
+		: state.transparentBg;
 	const authoredBg =
-		state.bgGradient !== undefined ||
-		derivedBgAmount(state.colorLight, state.bgColorLight, false) === null ||
-		derivedBgAmount(state.colorDark, state.bgColorDark, true) === null;
+		!transparent &&
+		(state.bgGradient !== undefined ||
+			derivedBgAmount(state.colorLight, state.bgColorLight, false) ===
+				null ||
+			derivedBgAmount(state.colorDark, state.bgColorDark, true) === null);
 
 	const def: CalloutDefinition = {
 		id: state.calloutId,
@@ -179,7 +196,15 @@ export async function performCalloutEditorSave(
 				: undefined,
 		// Like paletteId below: when mirroring the fallback style, its (possibly
 		// absent) gradient wins outright rather than falling through to state.
-		bgGradient: fallbackBase ? fallbackBase.bgGradient : state.bgGradient,
+		// A sweep is a background, so transparency clears it either way; the
+		// editor already does, and this covers a gradient reaching us from data
+		// the editor never wrote.
+		bgGradient: transparent
+			? undefined
+			: fallbackBase
+				? fallbackBase.bgGradient
+				: state.bgGradient,
+		...(transparent ? { transparentBg: true as const } : {}),
 		textColorLight: fallbackBase?.textColorLight ?? state.textColorLight,
 		textColorDark: fallbackBase?.textColorDark ?? state.textColorDark,
 		foldable: fallbackBase?.foldable ?? state.foldable,

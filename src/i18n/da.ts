@@ -241,6 +241,7 @@ export const da: Record<string, string> = {
 	"palette.bgStyle": "Stil",
 	"palette.bgSolid": "Ensfarvet",
 	"palette.bgGradient": "Gradient",
+	"palette.bgTransparent": "Gennemsigtig",
 	"palette.gradientTo": "Anden farve",
 	"palette.gradientDirection": "Retning",
 	"palette.gradientText": "Titeltekst med gradient",

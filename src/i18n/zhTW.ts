@@ -230,6 +230,7 @@ export const zhTW: Record<string, string> = {
 	"palette.bgStyle": "樣式",
 	"palette.bgSolid": "純色",
 	"palette.bgGradient": "漸層",
+	"palette.bgTransparent": "透明",
 	"palette.gradientTo": "第二種顏色",
 	"palette.gradientDirection": "方向",
 	"palette.gradientText": "標題文字漸層",

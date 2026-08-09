@@ -100,6 +100,7 @@ const KNOWN_FIELD_MAP: Record<keyof CalloutDefinition, true> = {
 	bgColorLight: true,
 	bgColorDark: true,
 	bgGradient: true,
+	transparentBg: true,
 	textColorLight: true,
 	textColorDark: true,
 	aliases: true,
@@ -982,6 +983,23 @@ function validateCalloutArray(
 			entryOk = false;
 		}
 
+		// ── transparent background flag (optional) ───────────
+		// Same shape as `customized` above: a malformed value is an error like
+		// every other typed field, while a well-formed `false` passes here and is
+		// normalized to an absent key on the rebuild below.
+		if (
+			entry.transparentBg !== undefined &&
+			typeof entry.transparentBg !== "boolean"
+		) {
+			push({
+				field: "transparentBg",
+				level: "error",
+				messageKey: "import.err.boolField",
+				params: { field: "transparentBg" },
+			});
+			entryOk = false;
+		}
+
 		// ── metadata ─────────────────────────────────────────
 		if (entry.metadata !== undefined) {
 			if (!validateMetadata(entry.metadata, push)) entryOk = false;
@@ -1120,6 +1138,11 @@ function validateCalloutArray(
 				def.bgColorDark = entry.bgColorDark;
 			const bgGradientClean = sanitizeBgGradient(entry.bgGradient);
 			if (bgGradientClean) def.bgGradient = bgGradientClean;
+			// Only `true` survives: the field is `?: true` on a definition, where
+			// "off" is an absent key rather than `false` (an explicit `false`
+			// would read as a difference in `CalloutRegistry.isModified` and
+			// persist a built-in nobody edited).
+			if (entry.transparentBg === true) def.transparentBg = true;
 			if (typeof entry.textColorLight === "string")
 				def.textColorLight = entry.textColorLight;
 			if (typeof entry.textColorDark === "string")

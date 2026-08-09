@@ -257,6 +257,7 @@ export const nl: Record<string, string> = {
 	"palette.bgStyle": "Stijl",
 	"palette.bgSolid": "Effen",
 	"palette.bgGradient": "Verloop",
+	"palette.bgTransparent": "Transparant",
 	"palette.gradientTo": "Tweede kleur",
 	"palette.gradientDirection": "Richting",
 	"palette.gradientText": "Titeltekst met verloop",

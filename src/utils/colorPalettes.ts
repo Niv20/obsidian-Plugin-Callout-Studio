@@ -48,6 +48,17 @@ export interface ColorPalette {
 	textColorDark?: string;
 	/** Background gradient (only custom palettes carry gradients) */
 	bgGradient?: BgGradient;
+	/**
+	 * Paint no background at all — see `CalloutDefinition.transparentBg`. Only a
+	 * *custom* palette can set it, from the palette editor's "None" background
+	 * style: transparency is deliberately not offered as a preset, so the one
+	 * route to it is a palette the user made and named themselves.
+	 *
+	 * The six colors stay valid hexes beside it (see `CustomPalette.transparentBg`);
+	 * `bakePaletteColors` is what keeps the backgrounds among them from reaching
+	 * a callout while this is set.
+	 */
+	transparentBg?: true;
 }
 
 function makePalette(
@@ -71,6 +82,15 @@ function makePalette(
 		...(legacyIds ? { legacyIds } : {}),
 	};
 }
+
+/**
+ * There is deliberately no "Transparent" preset here, and none should be added.
+ * A preset is a *colour*, and every consumer of this list — the editor's
+ * dropdown, its swatches, `resolveCalloutManagerColor`'s hex matching — reads it
+ * as one. Transparency is the absence of a background instead, and it reaches a
+ * callout the one way the user can name and re-find it: a custom palette saved
+ * from the palette editor's "None" background style.
+ */
 
 /**
  * Palettes derived from Obsidian's built-in callout types, named for the hue
@@ -232,6 +252,10 @@ export function customPaletteToColorPalette(p: CustomPalette): ColorPalette {
 		textColorLight: p.textColorLight,
 		textColorDark: p.textColorDark,
 		bgGradient: p.bgGradient ? { ...p.bgGradient } : undefined,
+		// The two background hexes above are copied even under the flag: they are
+		// what a switch back to Solid restores (see `CustomPalette.transparentBg`),
+		// and `bakePaletteColors` is what drops them on the way onto a callout.
+		...(p.transparentBg === true ? { transparentBg: true as const } : {}),
 	};
 }
 
@@ -286,6 +310,10 @@ export function sanitizeCustomPalettes(raw: unknown): CustomPalette[] {
 			textColorLight: p.textColorLight,
 			textColorDark: p.textColorDark,
 			...(bgGradient ? { bgGradient } : {}),
+			// Only `true` survives, the same normalization the import validator
+			// applies to a definition's copy of this flag: the field is `?: true`,
+			// where "off" is an absent key rather than `false`.
+			...(p.transparentBg === true ? { transparentBg: true as const } : {}),
 			...(bgIntensity !== undefined ? { bgIntensity } : {}),
 			...(p.colorMode === "advanced" ? { colorMode: "advanced" as const } : {}),
 		});
@@ -303,6 +331,7 @@ export type CalloutManagerBakedColors = Pick<
 	| "textColorLight"
 	| "textColorDark"
 	| "bgGradient"
+	| "transparentBg"
 >;
 
 export interface CalloutManagerColorResolution {
@@ -317,7 +346,32 @@ export interface CalloutManagerColorResolution {
 	createdPalette?: CustomPalette;
 }
 
-function bakeColors(palette: ColorPalette): CalloutManagerBakedColors {
+/**
+ * The colors a palette bakes onto a callout that applies it — the one place
+ * that decides what a `ColorPalette` means as a `CalloutDefinition`. Every
+ * field is set explicitly, `undefined` included, so spreading the result over
+ * an existing definition clears whatever the previous palette left behind
+ * (`CalloutRegistry.applyPaletteColors` relies on exactly that).
+ */
+export function bakePaletteColors(
+	palette: ColorPalette,
+): CalloutManagerBakedColors {
+	// A transparent palette bakes to the flag ALONE. The tint fallbacks below
+	// fire on a missing background, which is precisely the state transparency
+	// leaves the palette in — running them would hand the callout an opaque
+	// colour the palette never had.
+	if (palette.transparentBg) {
+		return {
+			colorLight: palette.colorLight,
+			colorDark: palette.colorDark,
+			bgColorLight: undefined,
+			bgColorDark: undefined,
+			textColorLight: palette.textColorLight ?? DEFAULT_TEXT_COLOR_LIGHT,
+			textColorDark: palette.textColorDark ?? DEFAULT_TEXT_COLOR_DARK,
+			bgGradient: undefined,
+			transparentBg: true,
+		};
+	}
 	return {
 		colorLight: palette.colorLight,
 		colorDark: palette.colorDark,
@@ -326,6 +380,11 @@ function bakeColors(palette: ColorPalette): CalloutManagerBakedColors {
 		textColorLight: palette.textColorLight ?? DEFAULT_TEXT_COLOR_LIGHT,
 		textColorDark: palette.textColorDark ?? DEFAULT_TEXT_COLOR_DARK,
 		bgGradient: palette.bgGradient ? { ...palette.bgGradient } : undefined,
+		// Spelled out rather than omitted, like `bgGradient` beside it: a palette
+		// edited from the "None" background style back to Solid has to actually
+		// un-transparent the callouts linked to it, and a key that isn't there
+		// clears nothing when this is spread over an existing definition.
+		transparentBg: undefined,
 	};
 }
 
@@ -359,6 +418,12 @@ export function resolveCalloutManagerColor(
 
 	const match = candidates.find(
 		(p) =>
+			// An imported colour is always an opaque background, so it can never
+			// mean a transparent palette. The hex comparisons below cannot rule
+			// one out on their own: a custom palette keeps its six colors beside
+			// the flag, so a "None" palette can match every hex here and would
+			// otherwise bake transparency onto a callout that asked for a fill.
+			!p.transparentBg &&
 			p.colorLight.toLowerCase() === derived.colorLight.toLowerCase() &&
 			p.colorDark.toLowerCase() === derived.colorDark.toLowerCase() &&
 			(p.bgColorLight ?? "").toLowerCase() ===
@@ -368,7 +433,7 @@ export function resolveCalloutManagerColor(
 			bgGradientsEqual(p.bgGradient, undefined),
 	);
 	if (match) {
-		return { paletteId: match.id, colors: bakeColors(match) };
+		return { paletteId: match.id, colors: bakePaletteColors(match) };
 	}
 
 	const takenNames = new Set(
@@ -383,7 +448,7 @@ export function resolveCalloutManagerColor(
 	};
 	return {
 		paletteId: createdPalette.id,
-		colors: bakeColors(customPaletteToColorPalette(createdPalette)),
+		colors: bakePaletteColors(customPaletteToColorPalette(createdPalette)),
 		createdPalette,
 	};
 }

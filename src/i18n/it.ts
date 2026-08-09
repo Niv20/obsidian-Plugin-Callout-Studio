@@ -255,6 +255,7 @@ export const it: Record<string, string> = {
 	"palette.bgStyle": "Stile",
 	"palette.bgSolid": "Tinta unita",
 	"palette.bgGradient": "Sfumatura",
+	"palette.bgTransparent": "Trasparente",
 	"palette.gradientTo": "Secondo colore",
 	"palette.gradientDirection": "Direzione",
 	"palette.gradientText": "Testo del titolo sfumato",
