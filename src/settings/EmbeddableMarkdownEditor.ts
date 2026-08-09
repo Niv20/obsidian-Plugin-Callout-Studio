@@ -187,6 +187,9 @@ export interface EmbeddableMarkdownEditorOptions {
 export class EmbeddableMarkdownEditor {
 	private readonly instance: InternalMarkdownEditor;
 	private readonly readOnly: boolean;
+	private destroyed = false;
+	/** Handle of the pending blur-park timer, so destroy() can cancel it. */
+	private parkTimer: number | null = null;
 
 	constructor(
 		app: App,
@@ -270,8 +273,18 @@ export class EmbeddableMarkdownEditor {
 				EditorView.domEventHandlers({
 					blur: () => {
 						// Deferred: let CodeMirror finish processing the focus
-						// change before we move the selection.
-						window.setTimeout(() => this.parkCursor(), 0);
+						// change before we move the selection. Blur is also
+						// exactly what fires when the modal closes, and the
+						// teardown runs in that same turn — so the handle is
+						// kept for destroy() to cancel, and a second blur
+						// replaces the pending timer rather than stacking one.
+						if (this.parkTimer !== null) {
+							window.clearTimeout(this.parkTimer);
+						}
+						this.parkTimer = window.setTimeout(() => {
+							this.parkTimer = null;
+							this.parkCursor();
+						}, 0);
 						return false;
 					},
 				}),
@@ -298,6 +311,11 @@ export class EmbeddableMarkdownEditor {
 	 * regular callout, and the caret is parked there on build, reseed and blur.
 	 */
 	private parkCursor(): void {
+		// destroy() does not null `instance`, so `cm` still hands back the
+		// cached EditorView after teardown and the dispatch would go through.
+		// The try/catch below only swallows a throw — it cannot undo state that
+		// already landed — so the flag is what actually stops it.
+		if (this.destroyed) return;
 		const cm = this.cm;
 		if (!cm) return;
 		try {
@@ -340,6 +358,11 @@ export class EmbeddableMarkdownEditor {
 	}
 
 	destroy(): void {
+		this.destroyed = true;
+		if (this.parkTimer !== null) {
+			window.clearTimeout(this.parkTimer);
+			this.parkTimer = null;
+		}
 		try {
 			this.instance.destroy?.();
 		} catch {
