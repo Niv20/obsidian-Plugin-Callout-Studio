@@ -153,6 +153,12 @@ export function createCalloutViewPlugin(host: LivePreviewHost) {
 				const foldChanged =
 					host.settings.headingCallouts.enabled &&
 					foldsChanged(update.startState, update.state);
+				// Not covered here: a change to CodeMirror's line gaps, which it
+				// flags separately from `viewportChanged`. That would shrink or
+				// grow `visibleRanges` without a rebuild. Unreachable in practice
+				// — Obsidian only inserts a gap into a line of 20,000 characters
+				// (4,000 with wrapping off) — and the watermark in
+				// buildDecorations keeps the split harmless either way.
 				if (
 					update.docChanged ||
 					update.viewportChanged ||
@@ -214,10 +220,25 @@ function buildDecorations(
 		? getFoldedLines(view)
 		: NO_FOLDS;
 
+	// `visibleRanges` is NOT the viewport: CodeMirror subtracts every state-level
+	// point decoration of 20 chars or more from it, so one line can be split
+	// across two spans (a fold ending at end-of-line, or a line gap inside a very
+	// long line). `pos = line.to + 1` then leaves the first span, and the next
+	// span's start resolves back to the SAME line — decorating it twice. Two
+	// tokens on such a line make RangeSetBuilder throw "Ranges must be added
+	// sorted", which costs the whole editor its decorations; one token lands a
+	// silent duplicate in a second layer. The ranges are ordered, so a single
+	// high-water mark of the last line handled is enough to rule both out.
+	let lastLineFrom = -1;
 	for (const range of view.visibleRanges) {
 		let pos = range.from;
 		while (pos <= range.to) {
 			const line = doc.lineAt(pos);
+			if (line.from <= lastLineFrom) {
+				pos = line.to + 1;
+				continue;
+			}
+			lastLineFrom = line.from;
 			if (line.text.indexOf("[!") !== -1) {
 				decorateLine(
 					builder,
