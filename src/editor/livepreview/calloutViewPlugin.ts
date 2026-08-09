@@ -85,6 +85,9 @@ export function createCalloutViewPlugin(host: LivePreviewHost) {
 			 * with the live selection — rare, and it self-corrects at mouseup.
 			 */
 			private wasMousedown = false;
+			private destroyed = false;
+			/** Handle of the pending safety-net timer, so destroy() can cancel it. */
+			private mouseUpTimer: number | null = null;
 			private readonly ownerDoc: Document;
 			private readonly onDocMouseUp: () => void;
 
@@ -96,13 +99,38 @@ export function createCalloutViewPlugin(host: LivePreviewHost) {
 				// the freeze by the next macrotask, force one via the no-op
 				// refresh effect. When core already dispatched on mouseup this
 				// is a no-op because wasMousedown is false by then.
+				//
+				// The listener sits on the shared document and one instance of
+				// this plugin exists per EditorView (notes, table cells, canvas
+				// cards, the settings preview), so a single physical mouseup
+				// reaches every one of them. Three things keep that from turning
+				// into a fan-out of dispatches into unrelated views: only an
+				// ARMED view (one that saw the mousedown) acts, the timer always
+				// disarms itself even when it bails — so a view that stopped
+				// receiving updates cannot stay armed forever and re-fire on
+				// every later mouseup — and destroy() cancels a timer still in
+				// flight instead of letting it land in a torn-down editor.
 				this.onDocMouseUp = () => {
-					window.setTimeout(() => {
-						if (!this.wasMousedown || !this.view.dom.isConnected)
+					if (this.mouseUpTimer !== null) return;
+					this.mouseUpTimer = window.setTimeout(() => {
+						this.mouseUpTimer = null;
+						const armed = this.wasMousedown;
+						this.wasMousedown = false;
+						if (
+							this.destroyed ||
+							!armed ||
+							!this.view.dom.isConnected
+						) {
 							return;
-						this.view.dispatch({
-							effects: calloutStudioRefresh.of(null),
-						});
+						}
+						try {
+							this.view.dispatch({
+								effects: calloutStudioRefresh.of(null),
+							});
+						} catch {
+							// View torn down mid-flight — same contract as
+							// refreshAllMarkdownEditors.
+						}
 					}, 0);
 				};
 				this.ownerDoc.addEventListener("mouseup", this.onDocMouseUp);
@@ -140,6 +168,11 @@ export function createCalloutViewPlugin(host: LivePreviewHost) {
 			}
 
 			destroy(): void {
+				this.destroyed = true;
+				if (this.mouseUpTimer !== null) {
+					window.clearTimeout(this.mouseUpTimer);
+					this.mouseUpTimer = null;
+				}
 				this.ownerDoc.removeEventListener(
 					"mouseup",
 					this.onDocMouseUp,
