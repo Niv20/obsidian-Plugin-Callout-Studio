@@ -31,6 +31,11 @@ export function renderLanguageSection(
 				await ctx.plugin.saveSettings();
 				// Re-render the whole tab so every label picks up the new locale.
 				ctx.display();
+				// Rendered notes carry localized strings too — the heading fold
+				// chevron's tooltip is one. Both surfaces snapshot the text at
+				// build time, so they need an explicit rebuild; nothing else on
+				// this path touches the registry or the CSS.
+				ctx.plugin.refreshRenderModes();
 			});
 		});
 }

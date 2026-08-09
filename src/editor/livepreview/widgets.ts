@@ -91,6 +91,12 @@ export class CalloutTokenWidget extends WidgetType {
 			def?.id ?? "",
 			def?.displayName ?? "",
 			iconKey,
+			// buildCalloutTokenDom stamps CSS_ANIM_IN from the startup-entrance
+			// flag (see renderShared), and it reads it at build time — so a
+			// widget built inside the entrance window would otherwise compare
+			// equal to one built after it closed, and CodeMirror would keep the
+			// old DOM with a stale animation class on it.
+			this.variant !== "ref" && isStartupEntranceActive() ? "a" : "",
 		].join("|");
 	}
 
@@ -337,6 +343,16 @@ export class HeadingRefLinkWidget extends WidgetType {
  * Obsidian's native pre-heading arrow folds.
  */
 export class HeadingFoldArrowWidget extends WidgetType {
+	/**
+	 * The two build-time globals toDOM also reads, snapshotted here rather than
+	 * consulted from eq(). eq() must be pure and cheap, and comparing against a
+	 * live global is worse than not comparing at all: two widgets built at
+	 * different times would read the same value and match, while a widget would
+	 * stop matching itself once the global moved.
+	 */
+	private readonly entrance = isStartupEntranceActive();
+	private readonly label = t("heading.toggleFold");
+
 	constructor(
 		/** Normalized callout id — part of eq() so id edits refresh the arrow. */
 		private readonly rawId: string,
@@ -347,7 +363,12 @@ export class HeadingFoldArrowWidget extends WidgetType {
 	}
 
 	override eq(other: HeadingFoldArrowWidget): boolean {
-		return this.folded === other.folded && this.rawId === other.rawId;
+		return (
+			this.folded === other.folded &&
+			this.rawId === other.rawId &&
+			this.entrance === other.entrance &&
+			this.label === other.label
+		);
 	}
 
 	override toDOM(view: EditorView): HTMLElement {
@@ -356,10 +377,10 @@ export class HeadingFoldArrowWidget extends WidgetType {
 		if (this.folded) arrow.classList.add("cs-collapsed");
 		// Fade the chevron in during the startup entrance window (trails the
 		// bar and token — see the staggered delays in styles.css).
-		if (isStartupEntranceActive()) arrow.classList.add(CSS_ANIM_IN);
+		if (this.entrance) arrow.classList.add(CSS_ANIM_IN);
 		setIcon(arrow, "chevron-down");
-		arrow.setAttribute("aria-label", t("heading.toggleFold"));
-		arrow.setAttribute("title", t("heading.toggleFold"));
+		arrow.setAttribute("aria-label", this.label);
+		arrow.setAttribute("title", this.label);
 		arrow.addEventListener("mousedown", (evt) => {
 			if (evt.button !== 0) return; // left click only
 			// Take over the event so the caret does not land on the line
