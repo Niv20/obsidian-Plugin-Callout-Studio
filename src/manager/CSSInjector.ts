@@ -1426,14 +1426,25 @@ export class CSSInjector {
 			`.${CSS_INLINE_TOKEN}[data-callout], .${CSS_HEADING_TOKEN}[data-callout]`,
 		);
 		for (const tokenEl of Array.from(tokenEls)) {
-			// Inside .cm-content the token is CodeMirror's own widget DOM, and
-			// this sweep runs from arbitrary continuations (a pack read off
-			// disk, a Material download landing, a slider drag's rAF) with no
-			// way to wrap the work in view.observer.ignore(). CM rebuilds those
-			// widgets itself the moment the decoration set changes, so inject()
-			// dispatches the refresh effect instead (see injectNow) — the same
-			// hazard the heading sweep above already refuses to touch.
-			if (tokenEl.closest(".cm-content")) continue;
+			// Inside .cm-content a token is one of two very different things.
+			// CodeMirror's own widget DOM (our Live Preview decorations) is
+			// CM's to rebuild, and this sweep runs from arbitrary continuations
+			// — a pack read off disk, a Material download landing, a slider
+			// drag's rAF — with no way to wrap the work in
+			// view.observer.ignore(). CM re-renders those widgets itself the
+			// moment the decoration set changes, so inject() dispatches the
+			// refresh effect instead (see injectNow) and the sweep leaves them
+			// alone, exactly as the heading sweep above already does.
+			// Post-processor output embedded IN the editor (a `![[note]]`
+			// transclusion, marked .markdown-rendered like every other rendered
+			// container) is ours, and no decoration rebuild will ever reach it
+			// — so it stays in the sweep.
+			if (
+				tokenEl.closest(".cm-content") &&
+				!tokenEl.closest(".markdown-rendered")
+			) {
+				continue;
+			}
 			this.paintTokenEl(tokenEl);
 		}
 	}
