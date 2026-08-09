@@ -51,7 +51,11 @@ import {
 	HeadingRefLinkWidget,
 } from "./widgets";
 import { getFoldedLines, foldsChanged } from "./fold";
-import { calloutStudioRefresh } from "./refresh";
+import {
+	calloutStudioRefresh,
+	registerCalloutEditorView,
+	unregisterCalloutEditorView,
+} from "./refresh";
 
 /** Narrow structural host type (avoids importing the concrete plugin class). */
 export interface LivePreviewHost {
@@ -94,6 +98,12 @@ export function createCalloutViewPlugin(host: LivePreviewHost) {
 			constructor(private readonly view: EditorView) {
 				this.decorations = buildDecorations(view, host);
 				this.ownerDoc = view.dom.ownerDocument;
+				// Registry edits don't touch the document, so this view only
+				// rebuilds when something dispatches the refresh effect into
+				// it — which needs it to be findable. Leaf or not (table cell,
+				// canvas card, editable transclusion, settings preview), it is
+				// tracked from here until destroy() (see refresh.ts).
+				registerCalloutEditorView(view);
 				// Safety net for drags that end outside the editor (or over a
 				// widget that swallowed the event): if no transaction cleared
 				// the freeze by the next macrotask, force one via the no-op
@@ -129,7 +139,7 @@ export function createCalloutViewPlugin(host: LivePreviewHost) {
 							});
 						} catch {
 							// View torn down mid-flight — same contract as
-							// refreshAllMarkdownEditors.
+							// refreshAllCalloutEditors.
 						}
 					}, 0);
 				};
@@ -175,6 +185,7 @@ export function createCalloutViewPlugin(host: LivePreviewHost) {
 
 			destroy(): void {
 				this.destroyed = true;
+				unregisterCalloutEditorView(this.view);
 				if (this.mouseUpTimer !== null) {
 					window.clearTimeout(this.mouseUpTimer);
 					this.mouseUpTimer = null;

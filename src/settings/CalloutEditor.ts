@@ -67,7 +67,7 @@ import { describeIcon } from "../icons/describeIcon";
 import { iconsEqual } from "../icons/lucideId";
 import { createControlGroup, setSliderDisplay } from "./styleControls";
 import { applyModalChrome, removeModalChrome } from "./modalChrome";
-import { refreshAllMarkdownEditors } from "../editor/livepreview/refresh";
+import { refreshAllCalloutEditors } from "../editor/livepreview/refresh";
 
 // Derive a callout ID from the display name. Spaces are preserved (the ID may
 // be a human-readable, multi-word label like "multi word callout"); the shared
@@ -613,7 +613,7 @@ export class CalloutEditor extends Modal {
 				// Synchronous, unlike the scheduled call above: this is the
 				// teardown that reverts open notes to their committed state, and
 				// onClose cancels any frame still pending by the time it runs.
-				refreshAllMarkdownEditors(this.app);
+				refreshAllCalloutEditors();
 			},
 		});
 
@@ -1711,7 +1711,7 @@ export class CalloutEditor extends Modal {
 		if (this.noteRefreshFrame !== null) return;
 		this.noteRefreshFrame = window.requestAnimationFrame(() => {
 			this.noteRefreshFrame = null;
-			refreshAllMarkdownEditors(this.app);
+			refreshAllCalloutEditors();
 		});
 	}
 

@@ -43,6 +43,7 @@ import {
 	clearGradientChars,
 } from "../reading/gradientTitleText";
 import {
+	CSS_CM_WIDGET,
 	CSS_FOLD_ARROW,
 	CSS_HEADING_LINE,
 	CSS_HEADING_TITLE,
@@ -56,7 +57,7 @@ import {
 	resolveCalloutDef,
 	shouldRenderToken,
 } from "../editor/renderShared";
-import { refreshAllMarkdownEditors } from "../editor/livepreview/refresh";
+import { refreshAllCalloutEditors } from "../editor/livepreview/refresh";
 import { obsidianCalloutAttrId } from "../utils/calloutId";
 import type { CalloutRegistry } from "./CalloutRegistry";
 import { StartupStyleCache } from "./StartupStyleCache";
@@ -371,7 +372,7 @@ export class CSSInjector {
 		// their Live Preview pills would keep drawing the pencil placeholder
 		// until the next edit. A widget whose renderKey is unchanged is reused
 		// as-is, so a rebuild that changes nothing costs no DOM work.
-		refreshAllMarkdownEditors(this.app);
+		refreshAllCalloutEditors();
 
 		// Trigger Obsidian to re-render callouts with updated styles — but only
 		// when *we* are the source of the change. When reacting to an external
@@ -1426,25 +1427,23 @@ export class CSSInjector {
 			`.${CSS_INLINE_TOKEN}[data-callout], .${CSS_HEADING_TOKEN}[data-callout]`,
 		);
 		for (const tokenEl of Array.from(tokenEls)) {
-			// Inside .cm-content a token is one of two very different things.
-			// CodeMirror's own widget DOM (our Live Preview decorations) is
-			// CM's to rebuild, and this sweep runs from arbitrary continuations
-			// — a pack read off disk, a Material download landing, a slider
-			// drag's rAF — with no way to wrap the work in
-			// view.observer.ignore(). CM re-renders those widgets itself the
-			// moment the decoration set changes, so inject() dispatches the
-			// refresh effect instead (see injectNow) and the sweep leaves them
-			// alone, exactly as the heading sweep above already does.
-			// Post-processor output embedded IN the editor (a `![[note]]`
-			// transclusion, marked .markdown-rendered like every other rendered
-			// container) is ours, and no decoration rebuild will ever reach it
-			// — so it stays in the sweep.
-			if (
-				tokenEl.closest(".cm-content") &&
-				!tokenEl.closest(".markdown-rendered")
-			) {
-				continue;
-			}
+			// CodeMirror's own widget DOM is CM's to rebuild, and this sweep
+			// runs from arbitrary continuations (a pack read off disk, a
+			// Material download landing, a slider drag's rAF) with no way to
+			// wrap the work in view.observer.ignore(). CM re-renders those
+			// widgets itself the moment the decoration set changes, so inject()
+			// dispatches the refresh effect instead (see injectNow) and the
+			// sweep leaves them alone, exactly as the heading sweep above does.
+			//
+			// Every other token — reading view, and post-processor output
+			// embedded IN the editor (a `![[note]]` transclusion) — is ours,
+			// and no decoration rebuild will ever reach it, so it stays in the
+			// sweep. The two are told apart by the marker the widget stamps on
+			// itself, never by where the node sits: a transclusion renders
+			// under the editor's own `.cm-content`, and an editable table cell
+			// nests a `.cm-content` under a rendered container, so no ancestry
+			// test gets both right (see CSS_CM_WIDGET).
+			if (tokenEl.classList.contains(CSS_CM_WIDGET)) continue;
 			this.paintTokenEl(tokenEl);
 		}
 	}

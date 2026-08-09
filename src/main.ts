@@ -29,7 +29,7 @@ import { registerContextMenu } from "./editor/contextmenu";
 import { createCalloutViewPlugin } from "./editor/livepreview/calloutViewPlugin";
 import { createHeadingGapField } from "./editor/livepreview/headingGapField";
 import { beginStartupEntranceWindow } from "./editor/renderShared";
-import { refreshAllMarkdownEditors } from "./editor/livepreview/refresh";
+import { refreshAllCalloutEditors } from "./editor/livepreview/refresh";
 import { OutlineDecorator } from "./outline/OutlineDecorator";
 import { createCalloutReadingPostProcessor } from "./reading/calloutPostProcessor";
 import { registerCalloutCommands } from "./editor/commands";
@@ -321,7 +321,7 @@ export default class CalloutStudioPlugin extends Plugin {
 		this.cssInjector.inject();
 		// Rebuild Live Preview heading/inline decorations: registry changes
 		// don't touch the document, so CodeMirror won't rebuild them itself.
-		refreshAllMarkdownEditors(this.app);
+		refreshAllCalloutEditors();
 	}
 
 	/**
@@ -331,7 +331,7 @@ export default class CalloutStudioPlugin extends Plugin {
 	 * heading bars are added or stripped immediately.
 	 */
 	refreshRenderModes(): void {
-		refreshAllMarkdownEditors(this.app);
+		refreshAllCalloutEditors();
 		for (const leaf of this.app.workspace.getLeavesOfType("markdown")) {
 			const view = leaf.view;
 			if (view instanceof MarkdownView) view.previewMode?.rerender(true);

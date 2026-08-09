@@ -23,7 +23,7 @@ import {
 	renderBordersGroup,
 } from "./styleControls";
 import type { SettingsTabPlugin } from "./sections/types";
-import { refreshAllMarkdownEditors } from "../editor/livepreview/refresh";
+import { refreshAllCalloutEditors } from "../editor/livepreview/refresh";
 import { CSS_FOLD_ARROW, CSS_HEADING_LINE } from "../editor/renderShared";
 import { applyModalChrome } from "./modalChrome";
 
@@ -244,12 +244,12 @@ export class GlobalStyleModal extends Modal {
 			onDragStart: () => this.showGapDemo(),
 			onDragEnd: () => {
 				this.hideGapDemo();
-				// Rebuild this modal's own embedded editor's decorations (not
-				// reached by refreshAllMarkdownEditors — it isn't a workspace
-				// leaf) plus every open note's Live Preview, so the new gap
-				// widget appears without needing to reopen the note.
+				// Rebuild every open note's Live Preview so the new gap widget
+				// appears without needing to reopen the note. The preview call
+				// stays for the STATIC fallback render, which is no editor at
+				// all and so is reached by no dispatch.
 				this.preview?.refresh();
-				refreshAllMarkdownEditors(this.app);
+				refreshAllCalloutEditors();
 			},
 		});
 
@@ -273,11 +273,11 @@ export class GlobalStyleModal extends Modal {
 						// doesn't come along with the editor refresh below.
 						this.syncDemoChevrons();
 						// Emits no CSS — the chevron is a CM6 widget, so the
-						// editors have to rebuild their decorations. The modal's
-						// own embedded editor isn't a workspace leaf, so
-						// refreshAllMarkdownEditors doesn't reach it.
+						// editors have to rebuild their decorations. The preview
+						// call stays for the static fallback render, which is no
+						// editor and so is reached by no dispatch.
 						this.preview?.refresh();
-						refreshAllMarkdownEditors(this.app);
+						refreshAllCalloutEditors();
 					});
 			});
 	}

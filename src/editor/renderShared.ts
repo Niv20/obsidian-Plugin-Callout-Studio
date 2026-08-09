@@ -73,6 +73,23 @@ export const CSS_REF_LINK = "cs-ref-link";
 export const CSS_ANIM_IN = "cs-anim-in";
 
 /**
+ * Marker on token DOM built inside a CodeMirror widget (see widgets.ts). Not a
+ * style hook — it exists so the CSSInjector icon sweep can tell the DOM
+ * CodeMirror OWNS from the byte-identical DOM the reading post-processor
+ * produces, which it must repaint.
+ *
+ * The sweep used to tell them apart by where they sat: skip anything under
+ * `.cm-content`. That is wrong for a `![[note]]` transclusion, whose rendered
+ * content lives under the editor's own `.cm-content` and is repainted by
+ * nothing else. Narrowing the test to Obsidian's embed classes only moves the
+ * guess — those are undocumented internals, and the editable table/canvas
+ * editors nest a real `.cm-content` *inside* rendered containers, so both
+ * directions of the ancestry test have a counter-example. Only the builder
+ * knows for sure, so the builder says so.
+ */
+export const CSS_CM_WIDGET = "cs-cm-widget";
+
+/**
  * Startup entrance state. When the plugin loads while the UI is already
  * visible (mobile FOUC, or a desktop enable/reload where a note is on screen),
  * the callout DOM transforms arrive AFTER the raw text was painted, so we let

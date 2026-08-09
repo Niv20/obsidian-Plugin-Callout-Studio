@@ -22,6 +22,7 @@ import { findWikilinkCalloutRefs } from "../calloutTokens";
 import { t } from "../../i18n";
 import {
 	CSS_ANIM_IN,
+	CSS_CM_WIDGET,
 	CSS_FOLD_ARROW,
 	CSS_REF_LINK,
 	CSS_REF_TOKEN_LINK,
@@ -112,6 +113,10 @@ export class CalloutTokenWidget extends WidgetType {
 			variant: this.variant,
 			showName: this.showName,
 		});
+		// This node is CodeMirror's from here on: it is rebuilt when the
+		// decoration set changes and never touched by the icon sweep, which
+		// reads this marker to know that (see CSS_CM_WIDGET).
+		el.classList.add(CSS_CM_WIDGET);
 		// LP ref tokens always sit inside a wikilink, so they carry the
 		// click-to-navigate class (outline/popup tokens never do).
 		if (this.variant === "ref") el.classList.add(CSS_REF_TOKEN_LINK);
@@ -263,6 +268,7 @@ export class HeadingRefLinkWidget extends WidgetType {
 				variant: "ref",
 				showName: false,
 			});
+			iconEl.classList.add(CSS_CM_WIDGET);
 			iconEl.classList.add(CSS_REF_TOKEN_LINK);
 			// The icon is the click-to-navigate surface (the name text keeps
 			// the caret-drop editing behavior of the widget handler below).
