@@ -11,6 +11,7 @@ import { t } from "../../i18n";
 import type { App } from "obsidian";
 import type { CalloutDefinition } from "../../types";
 import { packFor } from "../../icons/registry";
+import { derivedBgAmount } from "../../utils/colorUtils";
 import type { CalloutEditorPlugin } from "./types";
 import {
 	countCalloutUsages,
@@ -146,14 +147,36 @@ export async function performCalloutEditorSave(
 
 	const fallbackBase = saveAsFallback ? getFallbackBase() : undefined;
 
+	// The form always holds a concrete background — the modal derives one from
+	// the accent when the callout has none, because a colour swatch has to show
+	// something. Persisting it unconditionally is what used to turn every
+	// callout the user so much as opened into an opaque one, and an opaque
+	// background is exactly what stops nested callouts from stepping (see
+	// CalloutRegistry.dropDerivedBackgrounds). So a background that is still
+	// just the accent tinted is dropped here rather than stored: it renders the
+	// same and leaves Obsidian's own translucent fill in place. A colour the
+	// user actually picked no longer matches the derivation and is kept.
+	const authoredBg =
+		state.bgGradient !== undefined ||
+		derivedBgAmount(state.colorLight, state.bgColorLight, false) === null ||
+		derivedBgAmount(state.colorDark, state.bgColorDark, true) === null;
+
 	const def: CalloutDefinition = {
 		id: state.calloutId,
 		displayName: newDisplayName,
 		icon: { ...(fallbackBase?.icon ?? state.icon) },
 		colorLight: fallbackBase?.colorLight ?? state.colorLight,
 		colorDark: fallbackBase?.colorDark ?? state.colorDark,
-		bgColorLight: fallbackBase?.bgColorLight ?? state.bgColorLight,
-		bgColorDark: fallbackBase?.bgColorDark ?? state.bgColorDark,
+		bgColorLight: fallbackBase
+			? fallbackBase.bgColorLight
+			: authoredBg
+				? state.bgColorLight
+				: undefined,
+		bgColorDark: fallbackBase
+			? fallbackBase.bgColorDark
+			: authoredBg
+				? state.bgColorDark
+				: undefined,
 		// Like paletteId below: when mirroring the fallback style, its (possibly
 		// absent) gradient wins outright rather than falling through to state.
 		bgGradient: fallbackBase ? fallbackBase.bgGradient : state.bgGradient,

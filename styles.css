@@ -3682,8 +3682,10 @@ input.cs-input-invalid:focus {
 }
 
 /* ══ Heading & inline callout tokens ═══════════════════════════ */
-/* Structural rules only — per-callout colors (--cs-color-rgb) are
-   injected dynamically by CSSInjector, keyed by data-callout.     */
+/* Structural rules only — the per-callout accent (--cs-accent) is
+   injected dynamically by CSSInjector, keyed by data-callout. For an
+   unmodified built-in it resolves to Obsidian's own --callout-* variable,
+   so these surfaces follow the active theme.                      */
 
 /* Inline pill: icon + display name at body-text scale. */
 .cs-inline-callout {
@@ -3699,7 +3701,7 @@ input.cs-input-invalid:focus {
 	font-size: calc(0.9em * var(--cs-inline-scale, 1));
 	line-height: 1.4;
 	vertical-align: baseline;
-	background-color: rgba(var(--cs-color-rgb, 68, 138, 255), 0.12);
+	background-color: color-mix(in oklch, var(--cs-accent, #086ddd) 12%, transparent);
 	font-weight: var(--font-medium, 500);
 	white-space: nowrap;
 	/* Hint that clicking the pill drops the caret into the id for editing. */
@@ -3718,7 +3720,7 @@ input.cs-input-invalid:focus {
    pill's gradient title sweep, which is 3 selectors and sets
    -webkit-text-fill-color rather than color, so the two never collide. */
 .cs-inline-callout.cs-inline-callout {
-	color: rgb(var(--cs-color-rgb, 68, 138, 255));
+	color: var(--cs-accent, #086ddd);
 }
 
 /* Heading callout bar: applied to the hN element (reading view) or the
@@ -3738,7 +3740,7 @@ input.cs-input-invalid:focus {
      the same element and would otherwise win, and which nothing per-callout
      ever overrides. */
 .cs-heading-callout {
-	background-color: rgba(var(--cs-color-rgb, 68, 138, 255), 0.12);
+	background-color: color-mix(in oklch, var(--cs-accent, #086ddd) 12%, transparent);
 	border-radius: var(--cs-heading-radius, var(--radius-s, 4px));
 }
 
@@ -3770,7 +3772,7 @@ input.cs-input-invalid:focus {
 	padding-bottom: var(--cs-heading-pad-bottom, 0.25em);
 	padding-inline-start: 10px;
 	padding-inline-end: 0.45em;
-	color: rgb(var(--cs-color-rgb, 68, 138, 255));
+	color: var(--cs-accent, #086ddd);
 }
 
 /* Gap above the bar (Callout types → Heading → Global callout style). Static
@@ -3891,7 +3893,7 @@ input.cs-input-invalid:focus {
 	vertical-align: baseline;
 	margin-inline-start: 0.4em;
 	cursor: pointer;
-	color: rgb(var(--cs-color-rgb, 68, 138, 255));
+	color: var(--cs-accent, #086ddd);
 	opacity: 0.65;
 	/* Only opacity: the rotation lives on the svg below, so a transform
 	   transition here would have nothing to animate. */
@@ -3940,13 +3942,13 @@ input.cs-input-invalid:focus {
    inside the hN; tint it with the callout color so it matches the Live Preview
    chevron. */
 .cs-heading-callout .heading-collapse-indicator {
-	color: rgb(var(--cs-color-rgb, 68, 138, 255));
+	color: var(--cs-accent, #086ddd);
 }
 
 /* Compact token (icon + optional name) shown where a heading callout is
    referenced: Outline-pane items, rendered internal links (incl. TOC
    plugins), and the link suggestion popup. Colored by the per-callout
-   --cs-color-rgb injected on the element itself. */
+   --cs-accent injected on the element itself. */
 .cs-ref-token {
 	display: inline-flex;
 	align-items: center;
@@ -3955,7 +3957,7 @@ input.cs-input-invalid:focus {
 	line-height: 1;
 	margin-inline-end: 0.35em;
 	unicode-bidi: isolate;
-	color: rgb(var(--cs-color-rgb, 68, 138, 255));
+	color: var(--cs-accent, #086ddd);
 }
 .cs-ref-token .cs-callout-icon {
 	display: inline-flex;

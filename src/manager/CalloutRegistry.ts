@@ -42,6 +42,7 @@ import {
 	resolveCalloutManagerColor,
 	sanitizeCustomPalettes,
 } from "../utils/colorPalettes";
+import { derivedBgAmount } from "../utils/colorUtils";
 import { sanitizeUserImages } from "../utils/userImages";
 import { setUserImages } from "../icons/packs/userImages";
 import { sortCalloutsByDisplayName } from "../utils/sorting";
@@ -485,10 +486,86 @@ export class CalloutRegistry {
 				if (match) def.paletteId = match.id;
 			}
 		}
+		this.dropDerivedBackgrounds();
+		this.dropSolidBackgroundFlags();
 		// Before reconcileAttrIdCollisions: a row this pass renames back to its
 		// base ID has to go through the dash/space reconcile like any other.
 		this.stripMetadataFromIds();
 		this.reconcileAttrIdCollisions();
+	}
+
+	/**
+	 * Migration: drop backgrounds the plugin derived rather than the user chose.
+	 *
+	 * Obsidian gives nested callouts their stacked look purely by compositing —
+	 * every `.callout` paints a ~10% tint of its own accent, so each level lays
+	 * another translucent layer over the one beneath it. A callout carrying an
+	 * OPAQUE `bgColorLight`/`bgColorDark` hides everything behind it, and under
+	 * core's `mix-blend-mode: darken` a colour over itself is `min(x, x) = x` —
+	 * so nesting two of them produces a step of exactly zero. Vaults filled up
+	 * with such rows without anyone asking: opening the editor on a callout
+	 * materialized `bgTintFor(accent, mode)` into the form, saving wrote it back
+	 * whatever the user had actually come to change, and
+	 * {@link restyleUncustomizedFallbackRows} then copied it onto every
+	 * auto-discovered row. Both halves are fixed at the source; this retires
+	 * what they already wrote.
+	 *
+	 * A background is dropped only when {@link derivedBgAmount} can show it IS
+	 * the accent at some tint strength, in BOTH modes — such a value carries no
+	 * information the accent doesn't already carry, so losing it changes only
+	 * what shows through the callout. Anything else was picked by hand or by a
+	 * palette and is kept; `CSSInjector` re-expresses those as a translucent
+	 * tint of the same rendered colour, so they nest too without being altered.
+	 *
+	 * Keyed on the definitions' content rather than on `data.version`, like the
+	 * other migrations here, which also makes it idempotent: a dropped
+	 * background cannot be re-derived into existence on the next load.
+	 */
+	private dropDerivedBackgrounds(): void {
+		let changed = 0;
+		for (const def of this.callouts.values()) {
+			const { bgColorLight, bgColorDark } = def;
+			if (!bgColorLight || !bgColorDark) continue;
+			// A gradient is authored, never derived, and its start colour is the
+			// stop the sweep runs from — removing it would delete the gradient.
+			if (def.bgGradient) continue;
+			if (derivedBgAmount(def.colorLight, bgColorLight, false) === null) {
+				continue;
+			}
+			if (derivedBgAmount(def.colorDark, bgColorDark, true) === null) {
+				continue;
+			}
+			delete def.bgColorLight;
+			delete def.bgColorDark;
+			changed++;
+		}
+		if (changed > 0) this.pendingLoadMigrationSave = true;
+	}
+
+	/**
+	 * Migration: retire the `solidBackground` opt-out.
+	 *
+	 * It painted one callout's background as the authored hex rather than as the
+	 * translucent tint that renders as that same hex (see `CSSInjector.bgProps`)
+	 * — which is precisely what flattens nesting: an opaque layer hides what is
+	 * behind it, and under core's `mix-blend-mode: darken` a colour over itself
+	 * steps by exactly zero. Every background is a tint now, so nothing reads the
+	 * flag; deleting it is only so a key no code understands stops being
+	 * re-written by `toSaveData()` and copied into every new export (the same
+	 * reason `mergeHeadingStyle` drops `paddingStart`).
+	 *
+	 * The cast is the point: the field is gone from `CalloutDefinition`, and this
+	 * is the one place still allowed to name it.
+	 */
+	private dropSolidBackgroundFlags(): void {
+		let changed = 0;
+		for (const def of this.callouts.values()) {
+			const legacy = def as { solidBackground?: boolean };
+			if (legacy.solidBackground === undefined) continue;
+			delete legacy.solidBackground;
+			changed++;
+		}
+		if (changed > 0) this.pendingLoadMigrationSave = true;
 	}
 
 	/**
@@ -978,6 +1055,29 @@ export class CalloutRegistry {
 		const original = this.builtInDefaults.get(id);
 		if (!current || !original) return false;
 		return this.isModified(current, original);
+	}
+
+	/**
+	 * True for a built-in still exactly as shipped — the one case where this
+	 * plugin should not override Obsidian's `--callout-color` at all.
+	 *
+	 * `CSSInjector` reads this to decide whether to emit the accent as a hex or
+	 * as a reference to core's own `--callout-*` variable. Leaving it alone is
+	 * what makes an untouched `[!info]` render identically with the plugin on or
+	 * off, and what lets a theme that redefines `--color-blue` reach it. The
+	 * moment the user edits the callout it is theirs and the hex wins.
+	 *
+	 * Takes the definition rather than an ID so the caller cannot accidentally
+	 * ask about a *different* row than the one it is emitting CSS for — the
+	 * transient live-preview definition is registered under a real built-in's ID
+	 * while holding unsaved colours, and answering for the stored row there
+	 * would drop the very colours the preview exists to show.
+	 */
+	isUnmodifiedBuiltIn(def: CalloutDefinition): boolean {
+		if (!def.builtIn) return false;
+		const original = this.builtInDefaults.get(def.id);
+		if (!original) return false;
+		return !this.isModified(def, original);
 	}
 
 	resetBuiltIn(id: string): boolean {

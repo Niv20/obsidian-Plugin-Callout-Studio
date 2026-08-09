@@ -76,6 +76,13 @@ function makePalette(
  * Palettes derived from Obsidian's built-in callout types, named for the hue
  * itself rather than the callout role it happens to match (so the same
  * dropdown entry reads sensibly for a `[!bug]` as for a `[!failure]`).
+ *
+ * The six that mirror a built-in carry Obsidian's own hexes, per theme —
+ * picking "Blue" gives the blue Obsidian would have given. `teal` and `crimson`
+ * keep their Material values on purpose: Obsidian collapses tip onto the same
+ * cyan as abstract and danger onto the same red as failure, so following it
+ * exactly would leave two pairs of identical entries in the dropdown. They stay
+ * as the near-hues they always were, and the dropdown keeps its variety.
  * `legacyIds` carries the old callout-name-based id each preset used to be
  * saved under, so a callout picked before this rename still resolves to the
  * right preset (see the palette-dropdown lookup in CalloutEditor.ts) instead
@@ -91,8 +98,8 @@ export function getObsidianPalettes(): ColorPalette[] {
 			"blue",
 			t("colorName.blue"),
 			"obsidian",
-			"#448aff",
-			"#448aff",
+			"#086ddd",
+			"#027aff",
 			undefined,
 			undefined,
 			["note"],
@@ -101,8 +108,8 @@ export function getObsidianPalettes(): ColorPalette[] {
 			"cyan",
 			t("colorName.cyan"),
 			"obsidian",
-			"#00bcd4",
-			"#00bcd4",
+			"#00bfbc",
+			"#53dfdd",
 			undefined,
 			undefined,
 			["abstract"],
@@ -121,8 +128,8 @@ export function getObsidianPalettes(): ColorPalette[] {
 			"green",
 			t("colorName.green"),
 			"obsidian",
-			"#00c853",
-			"#00c853",
+			"#08b94e",
+			"#44cf6e",
 			undefined,
 			undefined,
 			["success"],
@@ -131,8 +138,8 @@ export function getObsidianPalettes(): ColorPalette[] {
 			"orange",
 			t("colorName.orange"),
 			"obsidian",
-			"#ff9100",
-			"#ff9100",
+			"#ec7500",
+			"#e9973f",
 			undefined,
 			undefined,
 			["question"],
@@ -141,8 +148,8 @@ export function getObsidianPalettes(): ColorPalette[] {
 			"red",
 			t("colorName.red"),
 			"obsidian",
-			"#ff5252",
-			"#ff5252",
+			"#e93147",
+			"#fb464c",
 			undefined,
 			undefined,
 			["failure"],
@@ -161,8 +168,8 @@ export function getObsidianPalettes(): ColorPalette[] {
 			"violet",
 			t("colorName.violet"),
 			"obsidian",
-			"#7c4dff",
-			"#7c4dff",
+			"#7852ee",
+			"#a882ff",
 			undefined,
 			undefined,
 			["example"],

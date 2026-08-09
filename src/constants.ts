@@ -67,13 +67,62 @@ export const FALLBACK_ICON: CalloutIcon = Object.freeze({
 	value: "lucide-pencil",
 });
 
+/**
+ * The Obsidian CSS variable each built-in takes its accent from.
+ *
+ * These are core's own names, defined on `body` in `app.css`, and they are what
+ * a theme redefines when it restyles callouts. `CSSInjector` hands an untouched
+ * built-in this variable instead of a baked hex, so the plugin's own surfaces
+ * (heading bars, inline pills, borders, icon tints) follow whatever the active
+ * theme paints rather than pinning Material colours over it.
+ *
+ * `note` has no rule of its own in `app.css` — it falls through to the base
+ * `.callout` rule — so it maps to `--callout-default` like every unrecognized
+ * type. Aliases are deliberately absent: they resolve to their parent's
+ * definition long before this map is read.
+ */
+export const OBSIDIAN_CALLOUT_VAR: Readonly<Record<string, string>> =
+	Object.freeze({
+		note: "--callout-default",
+		abstract: "--callout-summary",
+		info: "--callout-info",
+		todo: "--callout-todo",
+		tip: "--callout-tip",
+		success: "--callout-success",
+		question: "--callout-question",
+		warning: "--callout-warning",
+		failure: "--callout-fail",
+		danger: "--callout-error",
+		bug: "--callout-bug",
+		example: "--callout-example",
+		quote: "--callout-quote",
+	});
+
+/**
+ * The 13 built-ins, coloured to match Obsidian.
+ *
+ * The hexes are the resolved values of {@link OBSIDIAN_CALLOUT_VAR} in core's
+ * default theme, read out of the shipped `app.css` (`--color-blue` and friends
+ * under `.theme-light` / `.theme-dark`). They are a *seed*, not the rendering
+ * path: an untouched built-in never has its `--callout-color` overridden at all,
+ * so what actually paints is the theme's. These values are what the editor
+ * shows in its swatches, what a customized copy starts from, and what
+ * `resetBuiltIn` restores.
+ *
+ * This is the first time a built-in's light and dark accents differ — Obsidian's
+ * own palette shifts between themes (its `example` purple moves by ΔE00 15.4),
+ * and carrying one value for both was a large part of why the plugin's colours
+ * never quite matched. Backgrounds are still deliberately absent: a definition
+ * with no `bgColorLight`/`bgColorDark` emits no background rule, which leaves
+ * core's translucent fill in place and is what lets nested callouts step.
+ */
 export const DEFAULT_CALLOUTS: CalloutDefinition[] = [
 	{
 		id: "note",
 		displayName: "Note",
 		icon: { type: "lucide", value: "pencil" },
-		colorLight: "#448aff",
-		colorDark: "#448aff",
+		colorLight: "#086ddd",
+		colorDark: "#027aff",
 		foldable: false,
 		defaultFolded: false,
 		builtIn: true,
@@ -83,8 +132,8 @@ export const DEFAULT_CALLOUTS: CalloutDefinition[] = [
 		id: "abstract",
 		displayName: "Abstract",
 		icon: { type: "lucide", value: "clipboard-list" },
-		colorLight: "#00bcd4",
-		colorDark: "#00bcd4",
+		colorLight: "#00bfbc",
+		colorDark: "#53dfdd",
 		foldable: false,
 		defaultFolded: false,
 		builtIn: true,
@@ -95,8 +144,8 @@ export const DEFAULT_CALLOUTS: CalloutDefinition[] = [
 		id: "info",
 		displayName: "Info",
 		icon: { type: "lucide", value: "info" },
-		colorLight: "#448aff",
-		colorDark: "#448aff",
+		colorLight: "#086ddd",
+		colorDark: "#027aff",
 		foldable: false,
 		defaultFolded: false,
 		builtIn: true,
@@ -106,8 +155,8 @@ export const DEFAULT_CALLOUTS: CalloutDefinition[] = [
 		id: "todo",
 		displayName: "Todo",
 		icon: { type: "lucide", value: "check-circle-2" },
-		colorLight: "#448aff",
-		colorDark: "#448aff",
+		colorLight: "#086ddd",
+		colorDark: "#027aff",
 		foldable: false,
 		defaultFolded: false,
 		builtIn: true,
@@ -117,8 +166,8 @@ export const DEFAULT_CALLOUTS: CalloutDefinition[] = [
 		id: "tip",
 		displayName: "Tip",
 		icon: { type: "lucide", value: "flame" },
-		colorLight: "#00bfa5",
-		colorDark: "#00bfa5",
+		colorLight: "#00bfbc",
+		colorDark: "#53dfdd",
 		foldable: false,
 		defaultFolded: false,
 		builtIn: true,
@@ -129,8 +178,8 @@ export const DEFAULT_CALLOUTS: CalloutDefinition[] = [
 		id: "success",
 		displayName: "Success",
 		icon: { type: "lucide", value: "check" },
-		colorLight: "#00c853",
-		colorDark: "#00c853",
+		colorLight: "#08b94e",
+		colorDark: "#44cf6e",
 		foldable: false,
 		defaultFolded: false,
 		builtIn: true,
@@ -141,8 +190,8 @@ export const DEFAULT_CALLOUTS: CalloutDefinition[] = [
 		id: "question",
 		displayName: "Question",
 		icon: { type: "lucide", value: "help-circle" },
-		colorLight: "#ff9100",
-		colorDark: "#ff9100",
+		colorLight: "#ec7500",
+		colorDark: "#e9973f",
 		foldable: false,
 		defaultFolded: false,
 		builtIn: true,
@@ -153,8 +202,8 @@ export const DEFAULT_CALLOUTS: CalloutDefinition[] = [
 		id: "warning",
 		displayName: "Warning",
 		icon: { type: "lucide", value: "alert-triangle" },
-		colorLight: "#ff9100",
-		colorDark: "#ff9100",
+		colorLight: "#ec7500",
+		colorDark: "#e9973f",
 		foldable: false,
 		defaultFolded: false,
 		builtIn: true,
@@ -165,8 +214,8 @@ export const DEFAULT_CALLOUTS: CalloutDefinition[] = [
 		id: "failure",
 		displayName: "Failure",
 		icon: { type: "lucide", value: "x" },
-		colorLight: "#ff5252",
-		colorDark: "#ff5252",
+		colorLight: "#e93147",
+		colorDark: "#fb464c",
 		foldable: false,
 		defaultFolded: false,
 		builtIn: true,
@@ -177,8 +226,8 @@ export const DEFAULT_CALLOUTS: CalloutDefinition[] = [
 		id: "danger",
 		displayName: "Danger",
 		icon: { type: "lucide", value: "zap" },
-		colorLight: "#ff1744",
-		colorDark: "#ff1744",
+		colorLight: "#e93147",
+		colorDark: "#fb464c",
 		foldable: false,
 		defaultFolded: false,
 		builtIn: true,
@@ -189,8 +238,8 @@ export const DEFAULT_CALLOUTS: CalloutDefinition[] = [
 		id: "bug",
 		displayName: "Bug",
 		icon: { type: "lucide", value: "bug" },
-		colorLight: "#ff5252",
-		colorDark: "#ff5252",
+		colorLight: "#e93147",
+		colorDark: "#fb464c",
 		foldable: false,
 		defaultFolded: false,
 		builtIn: true,
@@ -200,8 +249,8 @@ export const DEFAULT_CALLOUTS: CalloutDefinition[] = [
 		id: "example",
 		displayName: "Example",
 		icon: { type: "lucide", value: "list" },
-		colorLight: "#7c4dff",
-		colorDark: "#7c4dff",
+		colorLight: "#7852ee",
+		colorDark: "#a882ff",
 		foldable: false,
 		defaultFolded: false,
 		builtIn: true,

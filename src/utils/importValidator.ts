@@ -109,6 +109,20 @@ const KNOWN_FIELD_MAP: Record<keyof CalloutDefinition, true> = {
 };
 const KNOWN_FIELDS = new Set<string>(Object.keys(KNOWN_FIELD_MAP));
 
+/**
+ * Fields this plugin used to write and no longer reads. Dropped in silence
+ * rather than reported: the warning above exists to flag a file the plugin
+ * does not understand, and an export made by an older build of the plugin
+ * itself is not that. Entries here are never re-added to a definition, so the
+ * value is gone after the first save.
+ *
+ * `solidBackground` painted a callout's background as a flat, opaque fill
+ * instead of the translucent tint the injector emits. An opaque fill is
+ * exactly what stops nested callouts from stepping (see `CSSInjector.bgProps`),
+ * so the opt-out was retired and every background is a tint now.
+ */
+const RETIRED_FIELDS = new Set<string>(["solidBackground"]);
+
 /** Recognized `CalloutIcon` keys. Total for the same reason as `KNOWN_FIELD_MAP`. */
 const KNOWN_ICON_FIELD_MAP: Record<keyof CalloutIcon, true> = {
 	type: true,
@@ -974,7 +988,9 @@ function validateCalloutArray(
 		}
 
 		// ── unknown fields (warning, non-fatal) ──────────────
-		const unknown = Object.keys(entry).filter((k) => !KNOWN_FIELDS.has(k));
+		const unknown = Object.keys(entry).filter(
+			(k) => !KNOWN_FIELDS.has(k) && !RETIRED_FIELDS.has(k),
+		);
 		if (unknown.length > 0) {
 			push({
 				level: "warning",

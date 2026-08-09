@@ -26,9 +26,15 @@ import { packFor } from "../icons/registry";
 import type { IconResolver } from "../icons/types";
 import {
 	bgGradientCss,
+	calloutAccentVarRef,
 	calloutColorValue,
 	hexToRgbString,
+	minTintAlpha,
+	resolveTintAlpha,
+	tintColorAt,
+	tintCss,
 } from "../utils/colorUtils";
+import { OBSIDIAN_CALLOUT_VAR } from "../constants";
 import { svgToDataUri } from "../icons/svg";
 import { ensureMaterialFontLoaded } from "../icons/packs/material";
 import {
@@ -304,12 +310,129 @@ export class CSSInjector {
 	}
 
 	/**
-	 * Background declarations for one theme mode: the solid color plus, when a
-	 * gradient is set, the image layered on top. The solid `background-color`
+	 * The accent declarations for one theme mode, for any surface that carries
+	 * a callout's colors.
+	 *
+	 * Three variables, and the reason there are three is version drift plus one
+	 * deliberate hand-off:
+	 *
+	 * - `--callout-color` is Obsidian's own, consumed by its callout chrome. Its
+	 *   format changed in 1.13 (full color; a bare RGB triplet before), which
+	 *   `calloutColorValue` resolves. **Omitted entirely for a built-in the user
+	 *   has not modified** — that is what lets core's own rule, and any theme
+	 *   that overrides it, keep deciding the accent, instead of this plugin
+	 *   pinning its own hex over a theme the user chose.
+	 * - `--cs-accent` is ours, and is always a real color on every version, so
+	 *   it can be fed to `color-mix()`. For an untouched built-in it points at
+	 *   the same Obsidian variable core is using, so our surfaces follow the
+	 *   theme in lockstep with the callout itself.
+	 * - `--cs-color-rgb` is the legacy bare triplet, kept for one release for
+	 *   anything outside this plugin still reading it. It cannot follow a theme
+	 *   — a triplet cannot be derived from a `var()` — so on an untouched
+	 *   built-in it carries the shipped default as a best effort. Nothing in
+	 *   this plugin depends on it any more.
+	 *
+	 * `imposed` is for the fallback block, which paints callouts that are NOT
+	 * the one it took its style from. Dropping `--callout-color` there would
+	 * leave an unrecognized callout on its own core default rather than on the
+	 * fallback's colour — i.e. quietly break the setting. It gets the variable
+	 * spelled out instead, which still follows the theme AND still imposes the
+	 * right hue. Referencing the variable raw is correct on both Obsidian
+	 * generations precisely because it is core's own: whichever format that
+	 * version expects, `--callout-error` is already in it.
+	 */
+	private accentProps(
+		def: CalloutDefinition,
+		mode: "light" | "dark",
+		important = false,
+		imposed = false,
+	): string[] {
+		const imp = important ? " !important" : "";
+		const hex = mode === "dark" ? def.colorDark : def.colorLight;
+		const themeVar = this.themeAccentVar(def);
+		const props: string[] = [];
+		if (!themeVar) {
+			props.push(`  --callout-color: ${calloutColorValue(hex)}${imp};`);
+		} else if (imposed) {
+			props.push(`  --callout-color: var(${themeVar})${imp};`);
+		}
+		props.push(...this.ownAccentProps(def, mode, important));
+		return props;
+	}
+
+	/**
+	 * The Obsidian variable this def should defer to, or undefined when it
+	 * carries its own color. Only an unmodified built-in defers — the moment the
+	 * user edits one it becomes their color, theme or no theme.
+	 */
+	private themeAccentVar(def: CalloutDefinition): string | undefined {
+		if (!this.registry.isUnmodifiedBuiltIn(def)) return undefined;
+		return OBSIDIAN_CALLOUT_VAR[def.id];
+	}
+
+	/**
+	 * The two variables this plugin owns (see {@link accentProps}), without
+	 * Obsidian's `--callout-color`. Used on the heading-bar / inline-pill / ref
+	 * token DOM, which is ours and where core's variable would go unread.
+	 */
+	private ownAccentProps(
+		def: CalloutDefinition,
+		mode: "light" | "dark",
+		important = false,
+	): string[] {
+		const imp = important ? " !important" : "";
+		const hex = mode === "dark" ? def.colorDark : def.colorLight;
+		const themeVar = this.themeAccentVar(def);
+		return [
+			`  --cs-accent: ${themeVar ? calloutAccentVarRef(themeVar) : hex}${imp};`,
+			`  --cs-color-rgb: ${hexToRgbString(hex)}${imp};`,
+		];
+	}
+
+	/**
+	 * The alpha this def's background is painted at in one mode, or null when it
+	 * is painted opaque.
+	 *
+	 * A gradient's two stops share one alpha: they are a single
+	 * `linear-gradient`, and ramping the alpha across it would tilt the sweep,
+	 * so the shared value has to clear whichever stop sits further from the
+	 * page. Null means no alpha at or below the ceiling can reproduce the
+	 * colour — see `translucentTintFor`.
+	 */
+	private bgAlphaFor(
+		def: CalloutDefinition,
+		mode: "light" | "dark",
+	): number | null {
+		const bg = mode === "dark" ? def.bgColorDark : def.bgColorLight;
+		if (!bg) return null;
+		const isDark = mode === "dark";
+		const minima = [minTintAlpha(bg, isDark)];
+		if (def.bgGradient) {
+			const to =
+				mode === "dark"
+					? def.bgGradient.toColorDark
+					: def.bgGradient.toColorLight;
+			minima.push(minTintAlpha(to, isDark));
+		}
+		return resolveTintAlpha(...minima);
+	}
+
+	/**
+	 * Background declarations for one theme mode: the color plus, when a
+	 * gradient is set, the image layered on top. The `background-color`
 	 * doubles as the fallback if a renderer drops the image;
 	 * `print-color-adjust: exact` keeps the image from being stripped when
 	 * exporting to PDF / printing. Empty when the mode has no background
 	 * color (a gradient alone has no base to render on).
+	 *
+	 * The color is emitted as a TRANSLUCENT tint that renders as the authored
+	 * hex on the theme's own background, not as the hex itself. That is what
+	 * restores Obsidian's nesting: core gives nested callouts their stepped look
+	 * purely by compositing translucent layers, and an opaque fill hides
+	 * everything behind it — under `mix-blend-mode: darken` a colour over itself
+	 * is `min(x, x) = x`, a step of exactly zero. The callout looks unchanged on
+	 * its own; only what shows *through* it changes. There is no opt-out: a flat
+	 * fill would break nesting for every callout stacked inside it.
 	 */
 	private bgProps(
 		def: CalloutDefinition,
@@ -319,7 +442,12 @@ export class CSSInjector {
 		const bg = mode === "dark" ? def.bgColorDark : def.bgColorLight;
 		if (!bg) return [];
 		const imp = important ? " !important" : "";
-		const props = [`  background-color: ${bg}${imp};`];
+		const alpha = this.bgAlphaFor(def, mode);
+		const color =
+			alpha === null
+				? bg
+				: tintCss(tintColorAt(bg, mode === "dark", alpha), alpha);
+		const props = [`  background-color: ${color}${imp};`];
 		const layer = this.bgImageFor(def, mode);
 		if (layer) {
 			props.push(
@@ -335,6 +463,11 @@ export class CSSInjector {
 	 * The `background-image` layer for one mode: the gradient sweep, or null
 	 * when the def has no gradient, or when the mode has no background color
 	 * to sweep from.
+	 *
+	 * Both stops go through the same tint solve as the flat color above, at the
+	 * one shared alpha from `bgAlphaFor`. They have to: an opaque gradient
+	 * painted over a translucent `background-color` would put the opaque layer
+	 * back on top and re-hide the backdrop the tint just exposed.
 	 */
 	private bgImageFor(
 		def: CalloutDefinition,
@@ -343,11 +476,21 @@ export class CSSInjector {
 		const bg = mode === "dark" ? def.bgColorDark : def.bgColorLight;
 		if (!bg) return null;
 		if (!def.bgGradient) return null;
-		const to =
-			mode === "dark"
-				? def.bgGradient.toColorDark
-				: def.bgGradient.toColorLight;
-		return { image: bgGradientCss(bg, to, def.bgGradient) };
+		const isDark = mode === "dark";
+		const to = isDark
+			? def.bgGradient.toColorDark
+			: def.bgGradient.toColorLight;
+		const alpha = this.bgAlphaFor(def, mode);
+		if (alpha === null) {
+			return { image: bgGradientCss(bg, to, def.bgGradient) };
+		}
+		return {
+			image: bgGradientCss(
+				tintCss(tintColorAt(bg, isDark, alpha), alpha),
+				tintCss(tintColorAt(to, isDark, alpha), alpha),
+				def.bgGradient,
+			),
+		};
 	}
 
 	/**
@@ -465,20 +608,13 @@ export class CSSInjector {
 	}
 
 	private generateCalloutCSS(def: CalloutDefinition): string {
-		const lightRgb = hexToRgbString(def.colorLight);
-		const darkRgb = hexToRgbString(def.colorDark);
 		const iconCSS = this.getIconCSS(def);
 
 		const parts: string[] = [];
 
-		// Light mode (default).
-		// --callout-color: full color (Obsidian 1.13+) or RGB triplet (≤1.12),
-		// for Obsidian's own callout chrome. --cs-color-rgb: always a triplet,
-		// for our own rgb()/rgba() consumers (borders, Material icon fill).
-		const lightProps: string[] = [
-			`  --callout-color: ${calloutColorValue(def.colorLight)};`,
-			`  --cs-color-rgb: ${lightRgb};`,
-		];
+		// Light mode (default). See accentProps for what the three color
+		// variables are and why an untouched built-in gets only two of them.
+		const lightProps: string[] = [...this.accentProps(def, "light")];
 		if (iconCSS) lightProps.push(`  --callout-icon: ${iconCSS};`);
 		lightProps.push(...this.bgProps(def, "light"));
 		parts.push(
@@ -487,10 +623,7 @@ export class CSSInjector {
 
 		// Dark mode override
 		if (this.needsDarkBlock(def)) {
-			const darkProps: string[] = [
-				`  --callout-color: ${calloutColorValue(def.colorDark)};`,
-				`  --cs-color-rgb: ${darkRgb};`,
-			];
+			const darkProps: string[] = [...this.accentProps(def, "dark")];
 			darkProps.push(...this.bgProps(def, "dark"));
 			parts.push(
 				`${calloutSel(def.id, ".theme-dark ")} {\n${darkProps.join("\n")}\n}`,
@@ -583,8 +716,7 @@ export class CSSInjector {
 				);
 				if (this.needsDarkBlock(def)) {
 					const aliasDarkProps: string[] = [
-						`  --callout-color: ${calloutColorValue(def.colorDark)};`,
-						`  --cs-color-rgb: ${darkRgb};`,
+						...this.accentProps(def, "dark"),
 					];
 					aliasDarkProps.push(...this.bgProps(def, "dark"));
 					parts.push(
@@ -692,8 +824,6 @@ export class CSSInjector {
 	 * and every alias in one selector list.
 	 */
 	private generateTokenColorCSS(def: CalloutDefinition): string {
-		const lightRgb = hexToRgbString(def.colorLight);
-		const darkRgb = hexToRgbString(def.colorDark);
 		const ids = [def.id, ...(def.aliases ?? [])];
 
 		const selectorsFor = (themePrefix: string): string =>
@@ -707,11 +837,11 @@ export class CSSInjector {
 				.join(",\n");
 
 		const parts: string[] = [
-			`${selectorsFor("")} {\n  --cs-color-rgb: ${lightRgb};\n}`,
+			`${selectorsFor("")} {\n${this.ownAccentProps(def, "light").join("\n")}\n}`,
 		];
 		if (def.colorLight !== def.colorDark) {
 			parts.push(
-				`${selectorsFor(".theme-dark ")} {\n  --cs-color-rgb: ${darkRgb};\n}`,
+				`${selectorsFor(".theme-dark ")} {\n${this.ownAccentProps(def, "dark").join("\n")}\n}`,
 			);
 		}
 
@@ -1023,7 +1153,7 @@ export class CSSInjector {
 			`  mask-size: contain;\n` +
 			`  -webkit-mask-repeat: no-repeat;\n` +
 			`  mask-repeat: no-repeat;\n` +
-			`  background-color: rgb(var(--cs-color-rgb));\n` +
+			`  background-color: var(--cs-accent);\n` +
 			`}\n` +
 			`}`
 		);
@@ -1295,7 +1425,9 @@ export class CSSInjector {
 		const { top, right, bottom, left } = gs.borderSides;
 		const allSides = top && right && bottom && left;
 		const anySide = top || right || bottom || left;
-		const bStyle = `${gs.borderWidth}px solid rgba(var(--cs-color-rgb), 0.45)`;
+		const bStyle =
+			`${gs.borderWidth}px solid ` +
+			`color-mix(in oklch, var(--cs-accent, currentColor) 45%, transparent)`;
 
 		if (allSides) {
 			props.push(`  border: ${bStyle};`);
@@ -1418,7 +1550,9 @@ export class CSSInjector {
 		const { top, right, bottom, left } = frame.borderSides;
 		const anySide = top || right || bottom || left;
 		if (!anySide) return [];
-		const bStyle = `${frame.borderWidth}px solid rgba(var(--cs-color-rgb, 68, 138, 255), 0.45)`;
+		const bStyle =
+			`${frame.borderWidth}px solid ` +
+			`color-mix(in oklch, var(--cs-accent, currentColor) 45%, transparent)`;
 		if (top && right && bottom && left) {
 			return [`  border: ${bStyle};`];
 		}
@@ -1463,8 +1597,6 @@ export class CSSInjector {
 			.map((id) => `:not([data-callout="${id}"])`)
 			.join("");
 
-		const lightRgb = hexToRgbString(fallbackDef.colorLight);
-		const darkRgb = hexToRgbString(fallbackDef.colorDark);
 		const iconCSS = this.getIconCSS(fallbackDef);
 
 		const parts: string[] = [
@@ -1472,10 +1604,15 @@ export class CSSInjector {
 		];
 
 		// Use `body` prefix + `!important` so the fallback wins over Obsidian's
-		// built-in callout color/icon definitions.
+		// built-in callout color/icon definitions. The `:not()` chain makes this
+		// selector's specificity grow by one class-unit per known callout and
+		// alias — already (0,26,1) in a modest vault — so it outranks every
+		// per-callout rule on specificity alone, before the `!important` is even
+		// consulted. It also matches at any nesting depth, which is fine: the
+		// background it sets is a tint like every other, so nested unknown
+		// callouts still step.
 		const lightProps: string[] = [
-			`  --callout-color: ${calloutColorValue(fallbackDef.colorLight)} !important;`,
-			`  --cs-color-rgb: ${lightRgb} !important;`,
+			...this.accentProps(fallbackDef, "light", true, true),
 		];
 		if (iconCSS)
 			lightProps.push(`  --callout-icon: ${iconCSS} !important;`);
@@ -1486,8 +1623,7 @@ export class CSSInjector {
 
 		if (this.needsDarkBlock(fallbackDef)) {
 			const darkProps: string[] = [
-				`  --callout-color: ${calloutColorValue(fallbackDef.colorDark)} !important;`,
-				`  --cs-color-rgb: ${darkRgb} !important;`,
+				...this.accentProps(fallbackDef, "dark", true, true),
 			];
 			darkProps.push(...this.bgProps(fallbackDef, "dark", true));
 			parts.push(
@@ -1539,7 +1675,7 @@ export class CSSInjector {
 						`  mask-size: contain;\n` +
 						`  -webkit-mask-repeat: no-repeat;\n` +
 						`  mask-repeat: no-repeat;\n` +
-						`  background-color: rgb(var(--cs-color-rgb)) !important;\n`;
+						`  background-color: var(--cs-accent) !important;\n`;
 			parts.push(`@media screen {\n${hide}${box}${paint}}\n}`);
 		}
 
@@ -1564,11 +1700,11 @@ export class CSSInjector {
 		// Unknown heading/inline tokens: the token renderer tags unresolved ids
 		// with .cs-unknown, so a plain class rule suffices — no :not() chain.
 		parts.push(
-			`.${CSS_INLINE_TOKEN}.${CSS_UNKNOWN}, .${CSS_HEADING_LINE}.${CSS_UNKNOWN}, .${CSS_REF_TOKEN}.${CSS_UNKNOWN} {\n  --cs-color-rgb: ${lightRgb};\n}`,
+			`.${CSS_INLINE_TOKEN}.${CSS_UNKNOWN}, .${CSS_HEADING_LINE}.${CSS_UNKNOWN}, .${CSS_REF_TOKEN}.${CSS_UNKNOWN} {\n${this.ownAccentProps(fallbackDef, "light").join("\n")}\n}`,
 		);
 		if (fallbackDef.colorLight !== fallbackDef.colorDark) {
 			parts.push(
-				`.theme-dark .${CSS_INLINE_TOKEN}.${CSS_UNKNOWN}, .theme-dark .${CSS_HEADING_LINE}.${CSS_UNKNOWN}, .theme-dark .${CSS_REF_TOKEN}.${CSS_UNKNOWN} {\n  --cs-color-rgb: ${darkRgb};\n}`,
+				`.theme-dark .${CSS_INLINE_TOKEN}.${CSS_UNKNOWN}, .theme-dark .${CSS_HEADING_LINE}.${CSS_UNKNOWN}, .theme-dark .${CSS_REF_TOKEN}.${CSS_UNKNOWN} {\n${this.ownAccentProps(fallbackDef, "dark").join("\n")}\n}`,
 			);
 		}
 
