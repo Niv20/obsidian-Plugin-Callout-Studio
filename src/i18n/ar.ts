@@ -89,6 +89,10 @@ export const ar: Record<string, string> = {
 	"settings.makeFallbackAction": "استخدام النمط الاحتياطي الافتراضي",
 
 	"settings.colorSwatchAria": "التمييز: {{accent}} · الخلفية: {{bg}}",
+	"settings.externalStyleTag": "نمط خارجي",
+	"settings.externalStyleAction": "استخدام النمط الخارجي (السمة أو CSS)",
+	"settings.externalStyleBlocked":
+		"هذه هي تيبة الاسترجاع الافتراضية، يرجى اختيار تيبة أخرى أولاً",
 	"settings.fallbackCallout": "Callout الاحتياطي الافتراضي",
 	"settings.fallbackCalloutDesc":
 		"ستَرِث أنواع الـ callout غير المعروفة في مخزنك نمط هذا الـ callout.",
@@ -160,6 +164,9 @@ export const ar: Record<string, string> = {
 		"لم يتم استيراد أنواع callout جديدة (قد تكون المعرّفات موجودة بالفعل).",
 	"notice.iconDownloadFailed":
 		'تعذّر تنزيل أيقونة Material "{{name}}". قد تكون غير متاحة لهذا الأسلوب/الوزن، أو قد يكون اتصالك بالإنترنت منقطعًا.',
+	"notice.externalStyleOn":
+		'"{{name}}" أصبحت الآن منسّقة بواسطة السمة أو مقتطف CSS الخاص بك.',
+	"notice.externalStyleOff": 'يعيد Callout Studio تنسيق "{{name}}" من جديد.',
 	"notice.nothingToWrap": "لا يوجد شيء للالتفاف.",
 	"notice.cursorNotInsideCallout": "المؤشر ليس داخل callout.",
 	"notice.openHotkeysFailed": "تعذّر فتح إعدادات الاختصارات في Obsidian.",
@@ -224,6 +231,26 @@ export const ar: Record<string, string> = {
 		"Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
 	"editor.sampleInlineText": "إليك شارة [!{id}] مضمّنة داخل فقرة.",
 	"editor.previewReadOnly": "لا يمكن تعديل المعاينة المباشرة",
+
+	// External style window (opens instead of the editor for a callout the
+	// user handed to their theme / a CSS snippet)
+	"editor.externalStyleTitle": "تم التنسيق خارج Callout Studio",
+	"editor.externalStyleBody":
+		"لا يطبّق Callout Studio أي نمط على {{id}}. مظهرها يأتي من السمة أو مقتطف CSS أو إعدادات Obsidian الافتراضية.",
+	"editor.externalStyleWhat": "ماذا يعني هذا",
+	"editor.externalStyleWhatHeading":
+		"تيبة عنوان مثل ## [!{{id}}] العنوان لن تُعرض — يبقى النص كما كُتب.",
+	"editor.externalStyleWhatInline": "ولا تيبة مضمّنة، مثل كلمة [!{{id}}] كلمة.",
+	"editor.externalStyleWhatGlobal":
+		"إعدادات النمط العامة (الحدود، الانحناء، حجم النص) لا تنطبق عليها.",
+	"editor.externalStylePreviewTitle": "كيف تُعرض الآن",
+	"editor.externalStyleSample":
+		"## [!{{id}}] العنوان\n\n" +
+		"هذا ما تبدو عليه جملة تحتوي [!{{id}}].\n\n" +
+		"> [!{{id}}] {{name}}\n" +
+		"> هذا ما يبدو عليه محتوى التيبة.\n",
+	"editor.externalStyleResume": "استعادة التنسيق",
+	"editor.externalStyleClose": "فهمت",
 
 	// Palette editor modal
 	"palette.newTitle": "لوحة ألوان جديدة",

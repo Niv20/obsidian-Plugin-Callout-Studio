@@ -106,6 +106,7 @@ const KNOWN_FIELD_MAP: Record<keyof CalloutDefinition, true> = {
 	aliases: true,
 	paletteId: true,
 	customized: true,
+	externalStyle: true,
 	metadata: true,
 };
 const KNOWN_FIELDS = new Set<string>(Object.keys(KNOWN_FIELD_MAP));
@@ -1000,6 +1001,23 @@ function validateCalloutArray(
 			entryOk = false;
 		}
 
+		// ── external style flag (optional) ───────────────────
+		// Same shape as the two above. Worth carrying across an import: it says
+		// the reader's theme owns this callout, which is a decision about the
+		// reader's vault, not a colour the exporter picked.
+		if (
+			entry.externalStyle !== undefined &&
+			typeof entry.externalStyle !== "boolean"
+		) {
+			push({
+				field: "externalStyle",
+				level: "error",
+				messageKey: "import.err.boolField",
+				params: { field: "externalStyle" },
+			});
+			entryOk = false;
+		}
+
 		// ── metadata ─────────────────────────────────────────
 		if (entry.metadata !== undefined) {
 			if (!validateMetadata(entry.metadata, push)) entryOk = false;
@@ -1162,6 +1180,10 @@ function validateCalloutArray(
 			if (!isBuiltIn && entry.customized === true) {
 				def.customized = true;
 			}
+			// Same `true`-only rule. Unlike `customized` this one *does* apply to
+			// a built-in: handing `[!note]` to the reader's theme is exactly the
+			// kind of thing a shared file is worth carrying.
+			if (entry.externalStyle === true) def.externalStyle = true;
 			if (isPlainObject(entry.metadata)) {
 				const meta: Record<string, string> = {};
 				for (const [k, v] of Object.entries(entry.metadata)) {

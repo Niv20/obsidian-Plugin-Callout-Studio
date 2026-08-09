@@ -46,6 +46,7 @@ import {
 	isStartupEntranceActive,
 	calloutDomId,
 	resolveCalloutDef,
+	shouldRenderToken,
 } from "../editor/renderShared";
 import { applyTitleGradient } from "./gradientTitleText";
 
@@ -180,6 +181,10 @@ function transformHeading(
 	}
 
 	const resolved = resolveCalloutDef(host.registry, rawId);
+	// The theme owns this callout: leave the heading exactly as Obsidian
+	// rendered it, `[!id]` prefix and all. Before the first classList.add, so
+	// nothing of ours reaches the element.
+	if (!shouldRenderToken(resolved)) return;
 	const { def, unknown } = resolved;
 	h.classList.add(CSS_HEADING_LINE);
 	if (unknown) h.classList.add(CSS_UNKNOWN);
@@ -301,7 +306,10 @@ function transformHeadingRefLinks(
 		// user turned title-cleaning off — navigation is already fixed.
 		if (!host.settings.headingCallouts.refCleanTitles) continue;
 
-		const { def, unknown } = resolveCalloutDef(host.registry, token.rawId);
+		const refResolved = resolveCalloutDef(host.registry, token.rawId);
+		// Theme-owned: the link keeps the raw `[!id]` text it already shows.
+		if (!shouldRenderToken(refResolved)) continue;
+		const { def, unknown } = refResolved;
 		const title =
 			token.title.trim() !== ""
 				? token.title
@@ -429,6 +437,13 @@ function transformInlinePills(
 	for (let i = candidates.length - 1; i >= 0; i--) {
 		if (escaped[i]) continue;
 		const c = candidates[i]!;
+		// Theme-owned: leave the `[!id]` as the literal text it already is.
+		// Deliberately here and not at candidate-collection time —
+		// resolveEscapedCandidates pairs candidates with source `[!`
+		// occurrences by ordinal position, so dropping one early would shift
+		// every later pairing and mis-detect escapes.
+		const resolved = resolveCalloutDef(host.registry, c.rawId);
+		if (!shouldRenderToken(resolved)) continue;
 		// First split leaves the post-token tail in place; the second isolates
 		// the token text itself, which the pill then replaces.
 		c.node.splitText(c.to);
@@ -446,7 +461,7 @@ function transformInlinePills(
 		// reason as the heading token above — paintIcons ran before this pill
 		// existed). The sweep lives on the pill root but the text is in its
 		// name span, so that is what gets wrapped.
-		const { def, unknown } = resolveCalloutDef(host.registry, c.rawId);
+		const { def, unknown } = resolved;
 		if (def && !unknown && def.bgGradient?.textGradient) {
 			const nameEl = pill.querySelector<HTMLElement>(`.${CSS_TOKEN_NAME}`);
 			if (nameEl) applyTitleGradient(nameEl, def);

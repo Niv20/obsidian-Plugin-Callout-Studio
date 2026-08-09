@@ -15,6 +15,7 @@ import type {
 	CalloutRenderRole,
 } from "../types";
 import { CalloutEditor } from "../settings/CalloutEditor";
+import { openCalloutEditorFor } from "../settings/openCalloutEditor";
 import { IconPicker } from "../settings/iconpicker";
 
 /**
@@ -95,7 +96,10 @@ export class CalloutStudioAPI {
 	async openCalloutEditor(
 		existing?: CalloutDefinition,
 	): Promise<CalloutDefinition | null> {
-		const editor = new CalloutEditor(this.plugin, existing);
+		// An existing callout may have been handed to the theme, in which case
+		// this opens the explanation window instead — see openCalloutEditorFor.
+		if (existing) return openCalloutEditorFor(this.plugin, existing);
+		const editor = new CalloutEditor(this.plugin);
 		return editor.openAndWait();
 	}
 

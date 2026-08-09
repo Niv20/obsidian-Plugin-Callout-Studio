@@ -84,6 +84,10 @@ export const el: Record<string, string> = {
 	"settings.resetAction": "Επαναφορά στις προεπιλογές",
 	"settings.makeFallbackAction": "Χρήση προεπιλεγμένου εφεδρικού στυλ",
 	"settings.colorSwatchAria": "Έμφαση: {{accent}} · Φόντο: {{bg}}",
+	"settings.externalStyleTag": "Εξωτερικό στιλ",
+	"settings.externalStyleAction": "Χρήση εξωτερικού στιλ (θέμα ή CSS)",
+	"settings.externalStyleBlocked":
+		"αυτό είναι το προεπιλεγμένο callout εφεδρείας, επιλέξτε πρώτα ένα άλλο",
 	"settings.fallbackCallout": "Προεπιλεγμένο εφεδρικό callout",
 	"settings.fallbackCalloutDesc":
 		"Οι άγνωστοι τύποι callout στο vault σας θα κληρονομήσουν το στυλ αυτού του callout.",
@@ -151,6 +155,9 @@ export const el: Record<string, string> = {
 		"Δεν εισήχθησαν νέοι τύποι callout (τα IDs μπορεί να υπάρχουν ήδη).",
 	"notice.iconDownloadFailed":
 		'Αποτυχία λήψης εικονιδίου Material "{{name}}". Ενδέχεται να μην είναι διαθέσιμο για αυτό το στυλ/βάρος ή η σύνδεσή σας να είναι εκτός σύνδεσης.',
+	"notice.externalStyleOn":
+		'Το "{{name}}" μορφοποιείται πλέον από το θέμα ή το απόσπασμα CSS σας.',
+	"notice.externalStyleOff": 'Το Callout Studio μορφοποιεί ξανά το "{{name}}".',
 	"notice.nothingToWrap": "Δεν υπάρχει τίποτα για αναδίπλωση.",
 	"notice.cursorNotInsideCallout":
 		"Ο κέρσορας δεν βρίσκεται μέσα σε callout.",
@@ -221,6 +228,27 @@ export const el: Record<string, string> = {
 		"Εδώ υπάρχει ένα ενσωματωμένο [!{id}] χάπι μέσα σε μια παράγραφο.",
 	"editor.previewReadOnly":
 		"Η ζωντανή προεπισκόπηση δεν μπορεί να επεξεργαστεί",
+
+	// External style window (opens instead of the editor for a callout the
+	// user handed to their theme / a CSS snippet)
+	"editor.externalStyleTitle": "Μορφοποιημένο εκτός Callout Studio",
+	"editor.externalStyleBody":
+		"Το Callout Studio δεν εφαρμόζει κανένα στιλ στο {{id}}. Η εμφάνισή του προέρχεται από το θέμα σας, ένα απόσπασμα CSS ή τις προεπιλογές του Obsidian.",
+	"editor.externalStyleWhat": "Τι σημαίνει αυτό",
+	"editor.externalStyleWhatHeading":
+		"Ένα callout επικεφαλίδας όπως ## [!{{id}}] Τίτλος δεν θα αποδοθεί — το κείμενο παραμένει όπως γράφτηκε.",
+	"editor.externalStyleWhatInline":
+		"Ούτε ένα ενσωματωμένο, όπως λέξη [!{{id}}] λέξη.",
+	"editor.externalStyleWhatGlobal":
+		"Οι καθολικές ρυθμίσεις στιλ (περίγραμμα, ακτίνα, μέγεθος κειμένου) δεν ισχύουν γι' αυτό.",
+	"editor.externalStylePreviewTitle": "Πώς αποδίδεται τώρα",
+	"editor.externalStyleSample":
+		"## [!{{id}}] Τίτλος\n\n" +
+		"Έτσι φαίνεται μια πρόταση με [!{{id}}] μέσα της.\n\n" +
+		"> [!{{id}}] {{name}}\n" +
+		"> Έτσι φαίνεται το περιεχόμενο του callout.\n",
+	"editor.externalStyleResume": "Επαναφορά μορφοποίησης",
+	"editor.externalStyleClose": "Το κατάλαβα",
 	// Palette editor modal
 	"palette.newTitle": "Νέα παλέτα χρωμάτων",
 	"palette.editTitle": "Επεξεργασία παλέτας χρωμάτων",

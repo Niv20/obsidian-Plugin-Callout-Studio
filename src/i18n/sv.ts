@@ -91,6 +91,10 @@ export const sv: Record<string, string> = {
 	"settings.resetAction": "Återställ till standard",
 	"settings.makeFallbackAction": "Använd standard reservstil",
 	"settings.colorSwatchAria": "Accent: {{accent}} · Bakgrund: {{bg}}",
+	"settings.externalStyleTag": "Extern stil",
+	"settings.externalStyleAction": "Använd extern stil (tema eller CSS)",
+	"settings.externalStyleBlocked":
+		"detta är standard-reserv-callouten, välj en annan först",
 
 	"settings.fallbackCallout": "Standard reservcallout",
 	"settings.fallbackCalloutDesc":
@@ -163,6 +167,9 @@ export const sv: Record<string, string> = {
 		"Inga nya callout-typer importerades (ID:n kan redan finnas).",
 	"notice.iconDownloadFailed":
 		'Det gick inte att ladda ned Material-ikonen "{{name}}". Den kanske inte är tillgänglig för den här stilen/vikten, eller så är anslutningen offline.',
+	"notice.externalStyleOn":
+		'"{{name}}" stylas nu av ditt tema eller CSS-utdrag.',
+	"notice.externalStyleOff": 'Callout Studio stylar återigen "{{name}}".',
 	"notice.nothingToWrap": "Inget att lägga i callout.",
 	"notice.cursorNotInsideCallout": "Markören är inte inne i en callout.",
 	"notice.openHotkeysFailed":
@@ -230,6 +237,27 @@ export const sv: Record<string, string> = {
 	"editor.sampleInlineText":
 		"Här är en infogad [!{id}]-pill inuti ett stycke.",
 	"editor.previewReadOnly": "Livevyn kan inte redigeras",
+
+	// External style window (opens instead of the editor for a callout the
+	// user handed to their theme / a CSS snippet)
+	"editor.externalStyleTitle": "Stylad utanför Callout Studio",
+	"editor.externalStyleBody":
+		"Callout Studio tillämpar ingen stil på {{id}}. Utseendet kommer från ditt tema, ett CSS-utdrag eller Obsidians standardinställningar.",
+	"editor.externalStyleWhat": "Vad detta innebär",
+	"editor.externalStyleWhatHeading":
+		"En rubrik-callout som ## [!{{id}}] Titel renderas inte — texten förblir som den skrevs.",
+	"editor.externalStyleWhatInline":
+		"Inte heller en inline sådan, som ord [!{{id}}] ord.",
+	"editor.externalStyleWhatGlobal":
+		"Globala stilinställningar (kant, radie, textstorlek) gäller inte för den.",
+	"editor.externalStylePreviewTitle": "Hur den renderas nu",
+	"editor.externalStyleSample":
+		"## [!{{id}}] Titel\n\n" +
+		"Så här ser en mening med [!{{id}}] i sig ut.\n\n" +
+		"> [!{{id}}] {{name}}\n" +
+		"> Så här ser calloutens innehåll ut.\n",
+	"editor.externalStyleResume": "Ta tillbaka stylingen",
+	"editor.externalStyleClose": "Förstått",
 
 	// Palette editor modal
 	"palette.newTitle": "Ny färgpalett",

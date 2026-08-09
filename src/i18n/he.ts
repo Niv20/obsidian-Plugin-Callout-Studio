@@ -107,6 +107,10 @@ export const he: Record<string, string> = {
 
 	// Settings — Fallback callout
 	"settings.colorSwatchAria": "הדגשה: {{accent}} · רקע: {{bg}}",
+	"settings.externalStyleTag": "עיצוב חיצוני",
+	"settings.externalStyleAction": "שימוש בעיצוב חיצוני (ערכת נושא או CSS)",
+	"settings.externalStyleBlocked":
+		"זוהי תיבת־ההבלטה לברירת המחדל, יש לבחור אחרת קודם",
 	"settings.fallbackCallout": "ברירת־מחדל לתיבות־הבלטה",
 	"settings.fallbackCalloutDesc":
 		"סוגי תיבות־הבלטה לא מוכרות יקבלו את העיצוב של תיבת־הבלטה זו.",
@@ -182,6 +186,9 @@ export const he: Record<string, string> = {
 		"לא יובאו תיבות־הבלטה חדשות (ייתכן שהמזהים כבר קיימים).",
 	"notice.iconDownloadFailed":
 		'לא ניתן להוריד את אייקון Material "{{name}}". ייתכן שאינו זמין בסגנון/משקל הזה, או שאין חיבור לאינטרנט.',
+	"notice.externalStyleOn":
+		'"{{name}}" מעוצבת כעת על ידי ערכת הנושא או קטע ה-CSS שלכם.',
+	"notice.externalStyleOff": 'Callout Studio חוזרת לעצב את "{{name}}".',
 	"notice.nothingToWrap": "אין תוכן לעטוף.",
 	"notice.cursorNotInsideCallout": "הסמן אינו נמצא בתוך תיבת־הבלטה.",
 	"notice.openHotkeysFailed":
@@ -248,6 +255,27 @@ export const he: Record<string, string> = {
 		"לורם איפסום דולור סיט אמט, קונסקטורר אדיפיסינג אלית.",
 	"editor.sampleInlineText": "כאן יש תגית [!{id}] מוטבעת בתוך פסקה.",
 	"editor.previewReadOnly": "לא ניתן לערוך את התצוגה המקדימה",
+
+	// External style window (opens instead of the editor for a callout the
+	// user handed to their theme / a CSS snippet)
+	"editor.externalStyleTitle": "מעוצבת מחוץ ל-Callout Studio",
+	"editor.externalStyleBody":
+		"Callout Studio לא מחילה שום עיצוב על {{id}}. המראה שלה מגיע מערכת הנושא, קטע CSS, או ברירות המחדל של Obsidian.",
+	"editor.externalStyleWhat": "מה זה אומר",
+	"editor.externalStyleWhatHeading":
+		"תיבת כותרת כמו ## [!{{id}}] כותרת לא תיוצג — הטקסט יישאר כפי שנכתב.",
+	"editor.externalStyleWhatInline":
+		"וגם לא תיבה מוטבעת, כמו מילה [!{{id}}] מילה.",
+	"editor.externalStyleWhatGlobal":
+		"הגדרות עיצוב גלובליות (מסגרת, רדיוס, גודל טקסט) לא חלות עליה.",
+	"editor.externalStylePreviewTitle": "איך היא מוצגת כעת",
+	"editor.externalStyleSample":
+		"## [!{{id}}] כותרת\n\n" +
+		"כך נראה משפט עם [!{{id}}] בתוכו.\n\n" +
+		"> [!{{id}}] {{name}}\n" +
+		"> כך נראה תוכן התיבה.\n",
+	"editor.externalStyleResume": "החזרת העיצוב",
+	"editor.externalStyleClose": "הבנתי",
 
 	// Icon Picker
 	// Palette editor modal

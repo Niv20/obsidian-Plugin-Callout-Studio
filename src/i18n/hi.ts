@@ -91,6 +91,10 @@ export const hi: Record<string, string> = {
 	"settings.makeFallbackAction": "डिफ़ॉल्ट फ़ॉलबैक स्टाइल उपयोग करें",
 
 	"settings.colorSwatchAria": "एक्सेंट: {{accent}} · पृष्ठभूमि: {{bg}}",
+	"settings.externalStyleTag": "बाहरी स्टाइल",
+	"settings.externalStyleAction": "बाहरी स्टाइल का उपयोग करें (थीम या CSS)",
+	"settings.externalStyleBlocked":
+		"यह डिफ़ॉल्ट फ़ॉलबैक callout है, पहले कोई दूसरा चुनें",
 	"settings.fallbackCallout": "डिफ़ॉल्ट फ़ॉलबैक callout",
 	"settings.fallbackCalloutDesc":
 		"vault में अज्ञात callout प्रकार इस callout की स्टाइल विरासत में लेंगे।",
@@ -163,6 +167,10 @@ export const hi: Record<string, string> = {
 		"कोई नए callout प्रकार आयात नहीं हुए (ID पहले से मौजूद हो सकते हैं)।",
 	"notice.iconDownloadFailed":
 		'Material आइकन "{{name}}" डाउनलोड नहीं हो सका। यह इस स्टाइल/वेट के लिए उपलब्ध नहीं हो सकता, या आपका कनेक्शन ऑफलाइन हो सकता है।',
+	"notice.externalStyleOn":
+		'"{{name}}" अब आपकी थीम या CSS स्निपेट द्वारा स्टाइल की गई है।',
+	"notice.externalStyleOff":
+		'Callout Studio फिर से "{{name}}" को स्टाइल करता है।',
 	"notice.nothingToWrap": "लपेटने के लिए कुछ नहीं।",
 	"notice.cursorNotInsideCallout": "कर्सर callout के अंदर नहीं है।",
 	"notice.openHotkeysFailed": "Obsidian हॉटकी सेटिंग नहीं खुल सकी।",
@@ -229,6 +237,27 @@ export const hi: Record<string, string> = {
 	"editor.sampleInlineText":
 		"यहाँ एक पैराग्राफ के भीतर एक इनलाइन [!{id}] पिल है।",
 	"editor.previewReadOnly": "लाइव पूर्वावलोकन संपादित नहीं किया जा सकता",
+
+	// External style window (opens instead of the editor for a callout the
+	// user handed to their theme / a CSS snippet)
+	"editor.externalStyleTitle": "Callout Studio के बाहर स्टाइल की गई",
+	"editor.externalStyleBody":
+		"Callout Studio {{id}} पर कोई स्टाइल लागू नहीं कर रहा है। इसका रूप आपकी थीम, किसी CSS स्निपेट, या Obsidian की डिफ़ॉल्ट सेटिंग्स से आता है।",
+	"editor.externalStyleWhat": "इसका मतलब",
+	"editor.externalStyleWhatHeading":
+		"## [!{{id}}] शीर्षक जैसा हेडिंग callout रेंडर नहीं होगा — टेक्स्ट जैसा लिखा गया वैसा ही रहेगा।",
+	"editor.externalStyleWhatInline":
+		"इनलाइन वाला भी नहीं, जैसे शब्द [!{{id}}] शब्द।",
+	"editor.externalStyleWhatGlobal":
+		"वैश्विक स्टाइल सेटिंग्स (बॉर्डर, रेडियस, टेक्स्ट आकार) इस पर लागू नहीं होतीं।",
+	"editor.externalStylePreviewTitle": "यह अभी कैसे रेंडर होता है",
+	"editor.externalStyleSample":
+		"## [!{{id}}] शीर्षक\n\n" +
+		"इसमें [!{{id}}] वाला वाक्य ऐसा दिखता है।\n\n" +
+		"> [!{{id}}] {{name}}\n" +
+		"> callout की सामग्री ऐसी दिखती है।\n",
+	"editor.externalStyleResume": "स्टाइल वापस लें",
+	"editor.externalStyleClose": "समझ गया",
 
 	// Palette editor modal
 	"palette.newTitle": "नया रंग पैलेट",

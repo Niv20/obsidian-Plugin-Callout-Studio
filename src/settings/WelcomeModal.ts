@@ -34,7 +34,9 @@ export class WelcomeModal extends Modal {
 		// No title bar — the hero lives in the left column.
 		this.titleEl.remove();
 
-		const panel = this.contentEl.createDiv({ cls: "cs-welcome-panel" });
+		const panel = this.contentEl.createDiv({
+			cls: "cs-split-panel cs-welcome-panel",
+		});
 
 		// ── Left column: hero + slogan, centered ────────────────────────
 		const left = panel.createDiv({ cls: "cs-welcome-left" });

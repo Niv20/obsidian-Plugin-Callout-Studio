@@ -83,6 +83,10 @@ export const da: Record<string, string> = {
 	"settings.resetAction": "Nulstil til standard",
 	"settings.makeFallbackAction": "Brug standard reservestil",
 	"settings.colorSwatchAria": "Accent: {{accent}} · Baggrund: {{bg}}",
+	"settings.externalStyleTag": "Ekstern stil",
+	"settings.externalStyleAction": "Brug ekstern stil (tema eller CSS)",
+	"settings.externalStyleBlocked":
+		"dette er standard-fallback-callouten, vælg en anden først",
 	"settings.fallbackCallout": "Standard reserve-callout",
 	"settings.fallbackCalloutDesc":
 		"Ukendte callout-typer i din vault arver stilen fra denne callout.",
@@ -149,6 +153,9 @@ export const da: Record<string, string> = {
 		"Ingen nye callout-typer importeret (ID'er eksisterer muligvis allerede).",
 	"notice.iconDownloadFailed":
 		'Kunne ikke downloade Material-ikonet "{{name}}". Det er muligvis ikke tilgængeligt for denne stil/vægt, eller din forbindelse er offline.',
+	"notice.externalStyleOn":
+		'"{{name}}" styles nu af dit tema eller CSS-uddrag.',
+	"notice.externalStyleOff": 'Callout Studio styler igen "{{name}}".',
 	"notice.nothingToWrap": "Intet at indpakke.",
 	"notice.cursorNotInsideCallout": "Markøren er ikke inde i en callout.",
 	"notice.openHotkeysFailed":
@@ -216,6 +223,27 @@ export const da: Record<string, string> = {
 	"editor.sampleInlineText":
 		"Her er en indlejret [!{id}] pille inde i et afsnit.",
 	"editor.previewReadOnly": "Livevisningen kan ikke redigeres",
+
+	// External style window (opens instead of the editor for a callout the
+	// user handed to their theme / a CSS snippet)
+	"editor.externalStyleTitle": "Stylet uden for Callout Studio",
+	"editor.externalStyleBody":
+		"Callout Studio anvender ingen stil på {{id}}. Udseendet kommer fra dit tema, et CSS-uddrag eller Obsidians standarder.",
+	"editor.externalStyleWhat": "Hvad dette betyder",
+	"editor.externalStyleWhatHeading":
+		"En overskrifts-callout som ## [!{{id}}] Titel bliver ikke gengivet — teksten forbliver som skrevet.",
+	"editor.externalStyleWhatInline":
+		"Det samme gælder en indlejret, som ord [!{{id}}] ord.",
+	"editor.externalStyleWhatGlobal":
+		"Globale stilindstillinger (kant, radius, tekststørrelse) gælder ikke for den.",
+	"editor.externalStylePreviewTitle": "Sådan gengives den nu",
+	"editor.externalStyleSample":
+		"## [!{{id}}] Titel\n\n" +
+		"Sådan ser en sætning med [!{{id}}] i sig ud.\n\n" +
+		"> [!{{id}}] {{name}}\n" +
+		"> Sådan ser calloutens indhold ud.\n",
+	"editor.externalStyleResume": "Genoptag styling",
+	"editor.externalStyleClose": "Forstået",
 	// Palette editor modal
 	"palette.newTitle": "Ny farvepalet",
 	"palette.editTitle": "Rediger farvepalet",

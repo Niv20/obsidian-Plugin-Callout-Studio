@@ -11,7 +11,7 @@ import type { Editor, Menu } from "obsidian";
 import type CalloutStudioPlugin from "../../main";
 import type { CalloutRenderRole, ContextMenuItemId } from "../../types";
 import { t } from "../../i18n";
-import { CalloutEditor } from "../../settings/CalloutEditor";
+import { openCalloutEditorFor } from "../../settings/openCalloutEditor";
 import { resolveCalloutDef } from "../renderShared";
 import {
 	CALLOUT_FOLD_MARK_REGEX,
@@ -48,7 +48,7 @@ const buildEdit: ItemBuilder = (plugin, menu, context) => {
 			.setIcon("pencil")
 			.setSection(MENU_SECTION)
 			.onClick(() => {
-				void new CalloutEditor(plugin, def).openAndWait();
+				void openCalloutEditorFor(plugin, def);
 			});
 	});
 };

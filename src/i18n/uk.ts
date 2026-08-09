@@ -91,6 +91,10 @@ export const uk: Record<string, string> = {
 		"Використовувати резервний стиль за замовчуванням",
 
 	"settings.colorSwatchAria": "Акцент: {{accent}} · Фон: {{bg}}",
+	"settings.externalStyleTag": "Зовнішній стиль",
+	"settings.externalStyleAction": "Використати зовнішній стиль (тема або CSS)",
+	"settings.externalStyleBlocked":
+		"це стандартний резервний callout, спершу виберіть інший",
 	"settings.fallbackCallout": "Резервний callout за замовчуванням",
 	"settings.fallbackCalloutDesc":
 		"Нерозпізнані типи callout у сховищі успадкують стиль цього callout.",
@@ -162,6 +166,9 @@ export const uk: Record<string, string> = {
 		"Нові типи callout не імпортовано (ID можуть вже існувати).",
 	"notice.iconDownloadFailed":
 		"Не вдалося завантажити іконку Material «{{name}}». Вона може бути недоступна для цього стилю/товщини або відсутнє підключення до мережі.",
+	"notice.externalStyleOn":
+		'"{{name}}" тепер оформлюється вашою темою або фрагментом CSS.',
+	"notice.externalStyleOff": 'Callout Studio знову оформлює "{{name}}".',
 	"notice.nothingToWrap": "Нічого для обгортання.",
 	"notice.cursorNotInsideCallout": "Курсор не знаходиться всередині callout.",
 	"notice.openHotkeysFailed":
@@ -231,6 +238,27 @@ export const uk: Record<string, string> = {
 	"editor.sampleInlineText":
 		"Ось вбудована капсула [!{id}] всередині абзацу.",
 	"editor.previewReadOnly": "Живий перегляд не можна редагувати",
+
+	// External style window (opens instead of the editor for a callout the
+	// user handed to their theme / a CSS snippet)
+	"editor.externalStyleTitle": "Оформлено поза Callout Studio",
+	"editor.externalStyleBody":
+		"Callout Studio не застосовує жодного стилю до {{id}}. Його вигляд визначається вашою темою, фрагментом CSS або типовими налаштуваннями Obsidian.",
+	"editor.externalStyleWhat": "Що це означає",
+	"editor.externalStyleWhatHeading":
+		"Callout-заголовок на кшталт ## [!{{id}}] Заголовок не буде відрендерено — текст залишиться таким, як написано.",
+	"editor.externalStyleWhatInline":
+		"Так само і вбудований, наприклад слово [!{{id}}] слово.",
+	"editor.externalStyleWhatGlobal":
+		"Глобальні налаштування стилю (рамка, радіус, розмір тексту) до нього не застосовуються.",
+	"editor.externalStylePreviewTitle": "Як це виглядає зараз",
+	"editor.externalStyleSample":
+		"## [!{{id}}] Заголовок\n\n" +
+		"Ось як виглядає речення з [!{{id}}] у ньому.\n\n" +
+		"> [!{{id}}] {{name}}\n" +
+		"> Ось як виглядає вміст callout.\n",
+	"editor.externalStyleResume": "Повернути оформлення",
+	"editor.externalStyleClose": "Зрозуміло",
 
 	// Palette editor modal
 	"palette.newTitle": "Нова кольорова палітра",

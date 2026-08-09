@@ -83,6 +83,10 @@ export const ms: Record<string, string> = {
 	"settings.resetAction": "Set semula ke lalai",
 	"settings.makeFallbackAction": "Gunakan gaya sandaran lalai",
 	"settings.colorSwatchAria": "Aksen: {{accent}} · Latar belakang: {{bg}}",
+	"settings.externalStyleTag": "Gaya luaran",
+	"settings.externalStyleAction": "Guna gaya luaran (tema atau CSS)",
+	"settings.externalStyleBlocked":
+		"ini ialah callout sandaran lalai, pilih yang lain dahulu",
 	"settings.fallbackCallout": "Callout sandaran lalai",
 	"settings.fallbackCalloutDesc":
 		"Jenis callout yang tidak dikenali dalam vault anda akan mewarisi gaya callout ini.",
@@ -149,6 +153,9 @@ export const ms: Record<string, string> = {
 		"Tiada jenis callout baharu diimport (ID mungkin sudah wujud).",
 	"notice.iconDownloadFailed":
 		'Gagal memuat turun ikon Material "{{name}}". Ikon ini mungkin tidak tersedia untuk gaya/ketebalan ini, atau sambungan anda tidak tersambung.',
+	"notice.externalStyleOn":
+		'"{{name}}" kini digayakan oleh tema atau serpihan CSS anda.',
+	"notice.externalStyleOff": 'Callout Studio menggayakan semula "{{name}}".',
 	"notice.nothingToWrap": "Tiada apa untuk dibalut.",
 	"notice.cursorNotInsideCallout": "Kursor tidak berada dalam callout.",
 	"notice.openHotkeysFailed":
@@ -216,6 +223,27 @@ export const ms: Record<string, string> = {
 	"editor.sampleInlineText":
 		"Berikut ialah pil [!{id}] sebaris di dalam perenggan.",
 	"editor.previewReadOnly": "Pratonton langsung tidak boleh diedit",
+
+	// External style window (opens instead of the editor for a callout the
+	// user handed to their theme / a CSS snippet)
+	"editor.externalStyleTitle": "Digayakan di luar Callout Studio",
+	"editor.externalStyleBody":
+		"Callout Studio tidak menggunakan sebarang gaya pada {{id}}. Rupanya datang daripada tema anda, serpihan CSS, atau lalai Obsidian.",
+	"editor.externalStyleWhat": "Apa maksudnya",
+	"editor.externalStyleWhatHeading":
+		"Callout tajuk seperti ## [!{{id}}] Tajuk tidak akan dipaparkan — teks kekal seperti yang ditulis.",
+	"editor.externalStyleWhatInline":
+		"Begitu juga yang sebaris, seperti perkataan [!{{id}}] perkataan.",
+	"editor.externalStyleWhatGlobal":
+		"Tetapan gaya global (sempadan, jejari, saiz teks) tidak terpakai padanya.",
+	"editor.externalStylePreviewTitle": "Cara ia dipaparkan sekarang",
+	"editor.externalStyleSample":
+		"## [!{{id}}] Tajuk\n\n" +
+		"Beginilah rupa ayat dengan [!{{id}}] di dalamnya.\n\n" +
+		"> [!{{id}}] {{name}}\n" +
+		"> Beginilah rupa kandungan callout.\n",
+	"editor.externalStyleResume": "Ambil semula gaya",
+	"editor.externalStyleClose": "Faham",
 	// Palette editor modal
 	"palette.newTitle": "Palet warna baharu",
 	"palette.editTitle": "Edit palet warna",

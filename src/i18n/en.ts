@@ -105,6 +105,10 @@ export const en: Record<string, string> = {
 	"settings.resetAction": "Reset to default",
 	"settings.makeFallbackAction": "Use default fallback style",
 	"settings.colorSwatchAria": "Accent: {{accent}} · Background: {{bg}}",
+	"settings.externalStyleTag": "External style",
+	"settings.externalStyleAction": "Use external style (theme or CSS)",
+	"settings.externalStyleBlocked":
+		"this is the default fallback callout, pick a different one first",
 
 	// Settings — Fallback callout
 	"settings.fallbackCallout": "Default fallback callout",
@@ -183,6 +187,9 @@ export const en: Record<string, string> = {
 		"No new callout types were imported (ids may already exist).",
 	"notice.iconDownloadFailed":
 		'Could not download Material icon "{{name}}". It may be unavailable for this style/weight, or your connection may be offline.',
+	"notice.externalStyleOn":
+		'"{{name}}" is now styled by your theme or CSS snippet.',
+	"notice.externalStyleOff": 'Callout Studio styles "{{name}}" again.',
 	"notice.nothingToWrap": "Nothing to wrap.",
 	"notice.cursorNotInsideCallout": "Cursor is not inside a callout.",
 	"notice.openHotkeysFailed": "Could not open Obsidian hotkeys settings.",
@@ -251,6 +258,27 @@ export const en: Record<string, string> = {
 	"editor.sampleInlineText":
 		"Here is an inline [!{id}] pill inside a paragraph.",
 	"editor.previewReadOnly": "The live preview can't be edited",
+
+	// External style window (opens instead of the editor for a callout the
+	// user handed to their theme / a CSS snippet)
+	"editor.externalStyleTitle": "Styled outside Callout Studio",
+	"editor.externalStyleBody":
+		"Callout Studio isn't applying any style to {{id}}. Its look comes from your theme, a CSS snippet, or Obsidian's defaults.",
+	"editor.externalStyleWhat": "What this means",
+	"editor.externalStyleWhatHeading":
+		"A heading callout like ## [!{{id}}] Title won't be rendered — the text just stays as written.",
+	"editor.externalStyleWhatInline":
+		"Neither will an inline one, like word [!{{id}}] word.",
+	"editor.externalStyleWhatGlobal":
+		"Global style settings (border, radius, text size) don't apply to it.",
+	"editor.externalStylePreviewTitle": "How it renders now",
+	"editor.externalStyleSample":
+		"## [!{{id}}] Title\n\n" +
+		"This is what a sentence with [!{{id}}] in it looks like.\n\n" +
+		"> [!{{id}}] {{name}}\n" +
+		"> This is what the callout's content looks like.\n",
+	"editor.externalStyleResume": "Take back styling",
+	"editor.externalStyleClose": "Got it",
 
 	// Palette editor modal
 	"palette.newTitle": "New color palette",

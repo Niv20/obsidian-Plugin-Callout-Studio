@@ -19,7 +19,11 @@ import type { App } from "obsidian";
 import type { PluginSettings } from "../types";
 import type { CalloutRegistry } from "../manager/CalloutRegistry";
 import { parseOutlineHeadingText } from "./calloutTokens";
-import { buildCalloutTokenDom, resolveCalloutDef } from "./renderShared";
+import {
+	buildCalloutTokenDom,
+	resolveCalloutDef,
+	shouldRenderToken,
+} from "./renderShared";
 import { normalizeCalloutId } from "../utils/calloutId";
 
 /** Narrow structural host type (avoids importing the concrete plugin class). */
@@ -141,7 +145,10 @@ function decorateHeadingSuggestion(
 	const text = textNode.nodeValue ?? "";
 	if (!text.startsWith(head)) return;
 
-	const { def, unknown } = resolveCalloutDef(host.registry, token.rawId);
+	const resolved = resolveCalloutDef(host.registry, token.rawId);
+	// Theme-owned: the suggestion keeps the heading's raw text.
+	if (!shouldRenderToken(resolved)) return;
+	const { def, unknown } = resolved;
 	if (token.title.trim() !== "") {
 		textNode.nodeValue = text.slice(consumed);
 	} else {

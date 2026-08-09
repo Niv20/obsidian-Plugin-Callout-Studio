@@ -91,6 +91,10 @@ export const ro: Record<string, string> = {
 	"settings.makeFallbackAction": "Utilizați stilul de rezervă implicit",
 
 	"settings.colorSwatchAria": "Accent: {{accent}} · Fundal: {{bg}}",
+	"settings.externalStyleTag": "Stil extern",
+	"settings.externalStyleAction": "Utilizează stilul extern (temă sau CSS)",
+	"settings.externalStyleBlocked":
+		"acesta este callout-ul de rezervă implicit, alege mai întâi altul",
 	"settings.fallbackCallout": "Callout de rezervă implicit",
 	"settings.fallbackCalloutDesc":
 		"Tipurile de callout nerecunoscute din vault vor moșteni stilul acestui callout.",
@@ -163,6 +167,9 @@ export const ro: Record<string, string> = {
 		"Nu au fost importate tipuri noi de callout (ID-urile pot exista deja).",
 	"notice.iconDownloadFailed":
 		'Nu s-a putut descărca pictograma Material "{{name}}". Poate fi indisponibilă pentru acest stil/grosime sau conexiunea este offline.',
+	"notice.externalStyleOn":
+		'"{{name}}" este acum stilizat de tema sau fragmentul CSS.',
+	"notice.externalStyleOff": 'Callout Studio stilizează din nou "{{name}}".',
 	"notice.nothingToWrap": "Nimic de înfășurat.",
 	"notice.cursorNotInsideCallout":
 		"Cursorul nu este în interiorul unui callout.",
@@ -232,6 +239,27 @@ export const ro: Record<string, string> = {
 	"editor.sampleInlineText":
 		"Iată o pastilă [!{id}] inline în interiorul unui paragraf.",
 	"editor.previewReadOnly": "Previzualizarea live nu poate fi editată",
+
+	// External style window (opens instead of the editor for a callout the
+	// user handed to their theme / a CSS snippet)
+	"editor.externalStyleTitle": "Stilizat în afara Callout Studio",
+	"editor.externalStyleBody":
+		"Callout Studio nu aplică niciun stil pentru {{id}}. Aspectul provine din tema ta, un fragment CSS sau setările implicite Obsidian.",
+	"editor.externalStyleWhat": "Ce înseamnă asta",
+	"editor.externalStyleWhatHeading":
+		"Un callout de titlu precum ## [!{{id}}] Titlu nu va fi redat — textul rămâne așa cum a fost scris.",
+	"editor.externalStyleWhatInline":
+		"Nici unul inline, precum cuvânt [!{{id}}] cuvânt.",
+	"editor.externalStyleWhatGlobal":
+		"Setările globale de stil (bordură, rază, dimensiunea textului) nu i se aplică.",
+	"editor.externalStylePreviewTitle": "Cum este redat acum",
+	"editor.externalStyleSample":
+		"## [!{{id}}] Titlu\n\n" +
+		"Așa arată o propoziție cu [!{{id}}] în ea.\n\n" +
+		"> [!{{id}}] {{name}}\n" +
+		"> Așa arată conținutul callout-ului.\n",
+	"editor.externalStyleResume": "Recuperează stilizarea",
+	"editor.externalStyleClose": "Am înțeles",
 
 	// Palette editor modal
 	"palette.newTitle": "Paletă de culori nouă",

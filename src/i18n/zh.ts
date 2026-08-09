@@ -88,6 +88,9 @@ export const zh: Record<string, string> = {
 	"settings.makeFallbackAction": "使用默认回退样式",
 
 	"settings.colorSwatchAria": "强调色：{{accent}} · 背景：{{bg}}",
+	"settings.externalStyleTag": "外部样式",
+	"settings.externalStyleAction": "使用外部样式（主题或 CSS）",
+	"settings.externalStyleBlocked": "这是默认的后备 callout，请先选择其他一个",
 	"settings.fallbackCallout": "默认回退 callout",
 	"settings.fallbackCalloutDesc":
 		"库中无法识别的 callout 类型将继承此 callout 的样式。",
@@ -157,6 +160,8 @@ export const zh: Record<string, string> = {
 	"notice.noNewJSON": "未导入新的 callout 类型（ID 可能已存在）。",
 	"notice.iconDownloadFailed":
 		'无法下载 Material 图标"{{name}}"。该图标可能不支持此样式/字重，或您的网络连接已断开。',
+	"notice.externalStyleOn": '"{{name}}" 现在由你的主题或 CSS 代码片段设置样式。',
+	"notice.externalStyleOff": 'Callout Studio 重新为 "{{name}}" 设置样式。',
 	"notice.nothingToWrap": "没有可包裹的内容。",
 	"notice.cursorNotInsideCallout": "光标不在 callout 内部。",
 	"notice.openHotkeysFailed": "无法打开 Obsidian 快捷键设置。",
@@ -220,6 +225,25 @@ export const zh: Record<string, string> = {
 		"Lorem ipsum dolor sit amet，consectetur adipiscing elit。",
 	"editor.sampleInlineText": "这是一个嵌入在段落中的行内 [!{id}] 徽标。",
 	"editor.previewReadOnly": "实时预览无法编辑",
+
+	// External style window (opens instead of the editor for a callout the
+	// user handed to their theme / a CSS snippet)
+	"editor.externalStyleTitle": "在 Callout Studio 之外设置了样式",
+	"editor.externalStyleBody":
+		"Callout Studio 没有对 {{id}} 应用任何样式。它的外观来自你的主题、CSS 代码片段或 Obsidian 的默认设置。",
+	"editor.externalStyleWhat": "这意味着什么",
+	"editor.externalStyleWhatHeading":
+		"像 ## [!{{id}}] 标题 这样的标题 callout 不会被渲染——文本将保持原样。",
+	"editor.externalStyleWhatInline": "行内 callout 也是如此，例如 单词 [!{{id}}] 单词。",
+	"editor.externalStyleWhatGlobal": "全局样式设置（边框、圆角、文字大小）不适用于它。",
+	"editor.externalStylePreviewTitle": "现在的渲染方式",
+	"editor.externalStyleSample":
+		"## [!{{id}}] 标题\n\n" +
+		"这是包含 [!{{id}}] 的句子的样子。\n\n" +
+		"> [!{{id}}] {{name}}\n" +
+		"> 这是 callout 内容的样子。\n",
+	"editor.externalStyleResume": "恢复样式",
+	"editor.externalStyleClose": "知道了",
 
 	// Palette editor modal
 	"palette.newTitle": "新建调色板",

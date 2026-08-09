@@ -90,6 +90,10 @@ export const nl: Record<string, string> = {
 	"settings.resetAction": "Terugzetten naar standaard",
 	"settings.makeFallbackAction": "Standaard fallback-stijl gebruiken",
 	"settings.colorSwatchAria": "Accent: {{accent}} · Achtergrond: {{bg}}",
+	"settings.externalStyleTag": "Externe stijl",
+	"settings.externalStyleAction": "Externe stijl gebruiken (thema of CSS)",
+	"settings.externalStyleBlocked":
+		"dit is de standaard fallback-callout, kies eerst een andere",
 
 	"settings.fallbackCallout": "Standaard fallback-callout",
 	"settings.fallbackCalloutDesc":
@@ -162,6 +166,9 @@ export const nl: Record<string, string> = {
 		"Geen nieuwe callout-types geïmporteerd (ID's bestaan mogelijk al).",
 	"notice.iconDownloadFailed":
 		'Kan Material-pictogram "{{name}}" niet downloaden. Het is mogelijk niet beschikbaar voor deze stijl/dikte, of uw verbinding is offline.',
+	"notice.externalStyleOn":
+		'"{{name}}" wordt nu gestyled door je thema of CSS-snippet.',
+	"notice.externalStyleOff": 'Callout Studio stylet "{{name}}" weer.',
 	"notice.nothingToWrap": "Niets om in te pakken.",
 	"notice.cursorNotInsideCallout":
 		"De cursor bevindt zich niet in een callout.",
@@ -232,6 +239,27 @@ export const nl: Record<string, string> = {
 	"editor.sampleInlineText":
 		"Hier is een inline [!{id}] pil binnen een alinea.",
 	"editor.previewReadOnly": "De live-voorvertoning kan niet worden bewerkt",
+
+	// External style window (opens instead of the editor for a callout the
+	// user handed to their theme / a CSS snippet)
+	"editor.externalStyleTitle": "Gestyled buiten Callout Studio",
+	"editor.externalStyleBody":
+		"Callout Studio past geen stijl toe op {{id}}. Het uiterlijk komt van je thema, een CSS-snippet of de standaardinstellingen van Obsidian.",
+	"editor.externalStyleWhat": "Wat dit betekent",
+	"editor.externalStyleWhatHeading":
+		"Een koptekst-callout zoals ## [!{{id}}] Titel wordt niet gerenderd — de tekst blijft zoals geschreven.",
+	"editor.externalStyleWhatInline":
+		"Ook een inline-callout niet, zoals woord [!{{id}}] woord.",
+	"editor.externalStyleWhatGlobal":
+		"Globale stijlinstellingen (rand, radius, tekstgrootte) zijn er niet op van toepassing.",
+	"editor.externalStylePreviewTitle": "Hoe het nu wordt weergegeven",
+	"editor.externalStyleSample":
+		"## [!{{id}}] Titel\n\n" +
+		"Zo ziet een zin met [!{{id}}] erin eruit.\n\n" +
+		"> [!{{id}}] {{name}}\n" +
+		"> Zo ziet de inhoud van de callout eruit.\n",
+	"editor.externalStyleResume": "Stijl terugnemen",
+	"editor.externalStyleClose": "Begrepen",
 
 	// Palette editor modal
 	"palette.newTitle": "Nieuw kleurenpalet",

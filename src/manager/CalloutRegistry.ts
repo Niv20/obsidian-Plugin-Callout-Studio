@@ -850,6 +850,7 @@ export class CalloutRegistry {
 		aliases: true,
 		paletteId: true,
 		customized: true,
+		externalStyle: true,
 		metadata: true,
 	};
 
@@ -958,6 +959,10 @@ export class CalloutRegistry {
 			if (def.builtIn) continue;
 			if (def.source !== "fallback") continue;
 			if (def.customized === true) continue;
+			// Nothing reads this row's colours while the theme owns it, so
+			// mirroring onto it would only churn data.json on every fallback
+			// change and make the row look edited in an export.
+			if (def.externalStyle === true) continue;
 			if (def.id === fallbackId) continue;
 			this.setCallout(def.id, {
 				...def,
@@ -1051,6 +1056,38 @@ export class CalloutRegistry {
 		delete next.customized;
 		this.setCallout(id, next);
 		this.restyleUncustomizedFallbackRows();
+		this.notifyChange();
+		return true;
+	}
+
+	/**
+	 * Turn {@link CalloutDefinition.externalStyle} on or off — the only writer
+	 * of that field, so the two rules below can't drift to a call site.
+	 *
+	 * Turning it off *deletes* the key rather than writing `false`, because
+	 * {@link isModified} compares `JSON.stringify(value ?? null)` and an
+	 * explicit `false` would leave a built-in nobody edited looking customized
+	 * forever.
+	 *
+	 * Refuses on the active Default fallback callout: `CSSInjector.generateFallbackCSS`
+	 * paints every unknown callout *from* that definition, so a fallback target
+	 * that styles nothing is self-contradictory — it would silently keep
+	 * imposing its colours on the rest of the vault while claiming to be
+	 * hands-off. The caller disables the menu item for the same reason.
+	 *
+	 * Returns `true` when the row actually changed.
+	 */
+	setExternalStyle(id: string, on: boolean): boolean {
+		const existing = this.callouts.get(id);
+		if (!existing) return false;
+		if (on && id === this.settings.fallbackCalloutId) return false;
+		if ((existing.externalStyle === true) === on) return false;
+
+		const next: CalloutDefinition = { ...existing };
+		if (on) next.externalStyle = true;
+		else delete next.externalStyle;
+
+		this.setCallout(id, next);
 		this.notifyChange();
 		return true;
 	}

@@ -173,9 +173,19 @@ export class CalloutDiscovery {
 	 */
 	async pruneUnused(): Promise<number> {
 		if (this.pruneSuspended) return 0;
+		// `externalStyle` is as sticky as `customized`, and for a sharper reason:
+		// pruning the row would take the flag with it, and the id would fall
+		// straight back under `generateFallbackCSS`'s `!important` catch-all —
+		// so a theme callout the user handed back to their theme would silently
+		// start being repainted again the first time it left the vault.
 		const candidates = this.host.registry
 			.getUserDefined()
-			.filter((d) => d.source === "fallback" && d.customized !== true);
+			.filter(
+				(d) =>
+					d.source === "fallback" &&
+					d.customized !== true &&
+					d.externalStyle !== true,
+			);
 		if (candidates.length === 0) return 0;
 
 		// A row owns every spelling that renders as it does, so one written in
@@ -212,7 +222,12 @@ export class CalloutDiscovery {
 			if (!def) continue;
 			// Re-check: another flow (e.g. settings edit) may have
 			// customized this row while the scan was in flight.
-			if (def.source !== "fallback" || def.customized === true) continue;
+			if (
+				def.source !== "fallback" ||
+				def.customized === true ||
+				def.externalStyle === true
+			)
+				continue;
 			if (this.host.registry.remove(id)) removed++;
 		}
 		if (removed > 0) {

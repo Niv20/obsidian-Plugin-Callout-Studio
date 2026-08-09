@@ -90,6 +90,9 @@ export const ko: Record<string, string> = {
 	"settings.makeFallbackAction": "기본 폴백 스타일 사용",
 
 	"settings.colorSwatchAria": "강조색: {{accent}} · 배경: {{bg}}",
+	"settings.externalStyleTag": "외부 스타일",
+	"settings.externalStyleAction": "외부 스타일 사용 (테마 또는 CSS)",
+	"settings.externalStyleBlocked": "이것은 기본 대체 callout입니다. 먼저 다른 것을 선택하세요",
 	"settings.fallbackCallout": "기본 폴백 callout",
 	"settings.fallbackCalloutDesc":
 		"볼트에서 인식되지 않는 callout 유형은 이 callout의 스타일을 상속합니다.",
@@ -161,6 +164,8 @@ export const ko: Record<string, string> = {
 		"새로운 callout 유형을 가져오지 못했습니다 (ID가 이미 존재할 수 있습니다).",
 	"notice.iconDownloadFailed":
 		'Material 아이콘 "{{name}}"을(를) 다운로드할 수 없습니다. 이 스타일/굵기에서 사용할 수 없거나 연결이 오프라인 상태일 수 있습니다.',
+	"notice.externalStyleOn": '"{{name}}"은(는) 이제 테마 또는 CSS 스니펫에 의해 스타일이 지정됩니다.',
+	"notice.externalStyleOff": 'Callout Studio가 다시 "{{name}}"의 스타일을 지정합니다.',
 	"notice.nothingToWrap": "감쌀 내용이 없습니다.",
 	"notice.cursorNotInsideCallout": "커서가 callout 안에 있지 않습니다.",
 	"notice.openHotkeysFailed": "Obsidian 단축키 설정을 열 수 없습니다.",
@@ -226,6 +231,25 @@ export const ko: Record<string, string> = {
 		"Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
 	"editor.sampleInlineText": "다음은 단락 안에 있는 인라인 [!{id}] 필입니다.",
 	"editor.previewReadOnly": "실시간 미리보기는 편집할 수 없습니다",
+
+	// External style window (opens instead of the editor for a callout the
+	// user handed to their theme / a CSS snippet)
+	"editor.externalStyleTitle": "Callout Studio 외부에서 스타일 지정됨",
+	"editor.externalStyleBody":
+		"Callout Studio는 {{id}}에 스타일을 적용하지 않습니다. 모양은 테마, CSS 스니펫 또는 Obsidian의 기본값에서 나옵니다.",
+	"editor.externalStyleWhat": "이것이 의미하는 것",
+	"editor.externalStyleWhatHeading":
+		"## [!{{id}}] 제목과 같은 헤딩 callout은 렌더링되지 않습니다 — 텍스트는 작성된 그대로 유지됩니다.",
+	"editor.externalStyleWhatInline": "인라인 callout도 마찬가지입니다, 예: 단어 [!{{id}}] 단어.",
+	"editor.externalStyleWhatGlobal": "전역 스타일 설정(테두리, 반경, 텍스트 크기)이 적용되지 않습니다.",
+	"editor.externalStylePreviewTitle": "현재 렌더링 방식",
+	"editor.externalStyleSample":
+		"## [!{{id}}] 제목\n\n" +
+		"[!{{id}}]이(가) 포함된 문장은 이렇게 보입니다.\n\n" +
+		"> [!{{id}}] {{name}}\n" +
+		"> callout 내용은 이렇게 보입니다.\n",
+	"editor.externalStyleResume": "스타일 되찾기",
+	"editor.externalStyleClose": "확인",
 
 	// Palette editor modal
 	"palette.newTitle": "새 색상 팔레트",

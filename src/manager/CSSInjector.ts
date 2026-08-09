@@ -7,6 +7,7 @@
  * `css-change` this emits from starting a second pass through the plugin's own
  * listener. Also manages the Material Symbols font link element when needed.
  */
+import { setIcon } from "obsidian";
 import type { App } from "obsidian";
 import type {
 	CalloutDefinition,
@@ -53,6 +54,7 @@ import {
 	CSS_UNKNOWN,
 	paintRoleIcon,
 	resolveCalloutDef,
+	shouldRenderToken,
 } from "../editor/renderShared";
 import { obsidianCalloutAttrId } from "../utils/calloutId";
 import type { CalloutRegistry } from "./CalloutRegistry";
@@ -103,6 +105,67 @@ function iconBoxWidth(picture: UserImageIcon | undefined): string {
 	// Within a hair of square, the multiplication is noise in the output CSS.
 	if (Math.abs(aspect - 1) < 0.01) return size;
 	return `calc(${size} * ${aspect.toFixed(3)})`;
+}
+
+/**
+ * The icon Obsidian itself would draw in a callout, read the way core reads it:
+ * the `data-callout-icon` attribute the renderer stamps from the callout node,
+ * and failing that the computed `--callout-icon`.
+ *
+ * The unwrapping matches core's because a custom property keeps its CSS quoting
+ * through the computed value — a theme writing `--callout-icon: 'lucide-star'`
+ * hands back the apostrophes as well, and `setIcon` would look up an icon by
+ * that name and find none. The double-quoted form goes through `JSON.parse`
+ * for the escapes; a malformed one is used verbatim, which is also what core
+ * does with it.
+ */
+function coreIconValue(calloutEl: HTMLElement): string {
+	const attr = calloutEl.getAttribute("data-callout-icon")?.trim() ?? "";
+	const raw =
+		attr.length > 0
+			? attr
+			: calloutEl.getCssPropertyValue("--callout-icon").trim();
+	if (raw.startsWith("'") && raw.endsWith("'")) {
+		return raw.slice(1, -1).replace(/\\'/g, "'");
+	}
+	if (raw.startsWith('"')) {
+		try {
+			const parsed: unknown = JSON.parse(raw);
+			if (typeof parsed === "string") return parsed;
+		} catch {
+			// Fall through to the raw value, as core does.
+		}
+	}
+	return raw;
+}
+
+/**
+ * A theme may write its icon as literal markup — `--callout-icon: '<svg …>'` —
+ * and Obsidian honours that, so a faithful restore has to as well. Sized and
+ * painted exactly as core's reader does it: 16px, `currentColor` for both fill
+ * and stroke, so the drawing tracks whatever colour the theme gives the callout.
+ *
+ * Parsed as `image/svg+xml`, which builds no scripting context, and the markup
+ * can only have come from a stylesheet the user installed — the same trust
+ * boundary as the `background-image` any theme is already free to put here.
+ * (Separate from `icons/svg.ts`, whose two sanitizers guard artwork arriving
+ * over the network and artwork the user uploaded; neither describes this.)
+ */
+function importCoreIconSvg(markup: string, doc: Document): Element | null {
+	const parsed = new DOMParser().parseFromString(markup, "image/svg+xml");
+	const root = parsed.documentElement;
+	if (
+		parsed.querySelector("parsererror") ||
+		root.nodeName.toLowerCase() !== "svg"
+	) {
+		return null;
+	}
+	const copy = doc.importNode(root, true);
+	copy.setAttribute("width", "16");
+	copy.setAttribute("height", "16");
+	copy.setAttribute("fill", "currentColor");
+	copy.setAttribute("stroke", "currentColor");
+	return copy;
 }
 
 /** One `background-image` layer: a gradient sweep. */
@@ -630,6 +693,15 @@ export class CSSInjector {
 	}
 
 	private generateCalloutCSS(def: CalloutDefinition): string {
+		// The theme (or a CSS snippet, or Obsidian itself) owns this one — see
+		// CalloutDefinition.externalStyle. Guarding the whole function rather
+		// than its one call site means every block below goes quiet together:
+		// accent variables, --callout-icon, background and gradient, content
+		// colour, the ::after icon override that hides core's own <svg>, icon
+		// transforms, title sweeps, token colours, the fold arrow, the print
+		// ::before — and the alias copies of all of them at the end.
+		if (def.externalStyle === true) return "";
+
 		const iconCSS = this.getIconCSS(def);
 
 		const parts: string[] = [];
@@ -1284,16 +1356,24 @@ export class CSSInjector {
 			const id = calloutEl.getAttribute("data-callout");
 			if (!id) continue;
 			const def = this.resolveDef(id);
-			if (!def) continue;
 			const iconEl = calloutEl.querySelector<HTMLElement>(
 				".callout-title .callout-icon",
 			);
-			if (iconEl) this.paintIcon(iconEl, def);
 			// Per-grapheme print colors for a gradient title (PDF export
 			// support — see gradientTitleText.ts).
 			const titleInner = calloutEl.querySelector<HTMLElement>(
 				".callout-title .callout-title-inner",
 			);
+			if (!def) {
+				// Handed to the theme (see resolveDef). Skipping this callout is
+				// not enough, because an earlier pass may already have painted
+				// it and nothing else will ever take that back — see
+				// restoreCoreIcon.
+				if (iconEl) this.restoreCoreIcon(calloutEl, iconEl);
+				if (titleInner) clearGradientChars(titleInner);
+				continue;
+			}
+			if (iconEl) this.paintIcon(iconEl, def);
 			if (titleInner) this.syncTitleGradient(titleInner, def);
 		}
 
@@ -1310,7 +1390,9 @@ export class CSSInjector {
 			if (headingEl.classList.contains("cm-line")) continue;
 			const id = headingEl.getAttribute("data-callout");
 			if (!id) continue;
-			const { def, unknown } = resolveCalloutDef(this.registry, id);
+			const resolved = resolveCalloutDef(this.registry, id);
+			if (!shouldRenderToken(resolved)) continue;
+			const { def, unknown } = resolved;
 			if (!def || unknown) continue;
 			const titleEl = headingEl.querySelector<HTMLElement>(
 				`.${CSS_HEADING_TITLE}`,
@@ -1334,7 +1416,14 @@ export class CSSInjector {
 	private paintTokenEl(tokenEl: HTMLElement): void {
 		const id = tokenEl.getAttribute("data-callout");
 		if (!id) return;
-		const { def, unknown } = resolveCalloutDef(this.registry, id);
+		const resolved = resolveCalloutDef(this.registry, id);
+		// A token whose callout was handed to the theme should not exist —
+		// the render sites stopped building them. One can still be on screen
+		// for the moment between the flag flipping and the re-render, and
+		// repainting it then would be the plugin styling a callout it just
+		// promised to leave alone.
+		if (!shouldRenderToken(resolved)) return;
+		const { def, unknown } = resolved;
 		if (!def) return;
 		const iconEl = tokenEl.querySelector<HTMLElement>(
 			`.${CSS_TOKEN_ICON}`,
@@ -1380,6 +1469,10 @@ export class CSSInjector {
 	 * configured fallback callout so unknown IDs paint the fallback icon (the
 	 * DOM equivalent of generateFallbackCSS).
 	 *
+	 * Returns undefined for a callout marked `externalStyle`, which is the one
+	 * case where a *recognized* ID resolves to nothing: the caller's job is to
+	 * paint, and there is nothing of ours to paint there.
+	 *
 	 * Only for `.callout[data-callout]` elements. Heading-bar and inline-pill
 	 * DOM is ours and carries the space-form ID; those go through
 	 * renderShared.resolveCalloutDef instead, which tries the exact ID and alias
@@ -1387,10 +1480,16 @@ export class CSSInjector {
 	 * `.cs-unknown` class.
 	 */
 	private resolveDef(attrId: string): CalloutDefinition | undefined {
-		return (
-			this.registry.findByAttrId(attrId) ??
-			this.registry.get(this.registry.settings.fallbackCalloutId)
-		);
+		const direct = this.registry.findByAttrId(attrId);
+		// An externally styled callout resolves to nothing, which sends
+		// paintIcons down its restore path instead of its paint path. This
+		// matters even though no CSS is emitted for it: renderIconInto REPLACES
+		// the <svg> Obsidian (or the theme, via --callout-icon) already
+		// rendered, so continuing to paint would be the loudest possible way to
+		// keep interfering. Returned rather than skipped at the call site so the
+		// title-gradient sync goes quiet on the same check.
+		if (direct) return direct.externalStyle === true ? undefined : direct;
+		return this.registry.get(this.registry.settings.fallbackCalloutId);
 	}
 
 	/**
@@ -1433,9 +1532,110 @@ export class CSSInjector {
 		});
 	}
 
+	/**
+	 * Put a `.callout-icon` back the way Obsidian drew it.
+	 *
+	 * Obsidian resolves that element once and never again: its callout
+	 * post-processor returns early on an icon element that already has a child,
+	 * so `--callout-icon` is read exactly once per rendered callout and no
+	 * amount of `css-change` makes it look a second time. Everything else about
+	 * handing a callout to the theme is CSS and lands on the next frame; this
+	 * one node would keep our artwork until the user edited the block into a
+	 * re-render — and in fact would show *nothing*, since `renderIconInto`
+	 * replaced Obsidian's `<svg>` and the `@media screen` rule that reveals the
+	 * replacement went away with the rest of the callout's block.
+	 *
+	 * So the resolution is re-run here the way core runs it (see
+	 * {@link coreIconValue}). Re-read rather than stashed at paint time, so a
+	 * theme swapped in between is picked up; safe to read now because
+	 * `injectNow` paints only once the new stylesheet is in place, which means
+	 * the property already resolves to whatever the theme, a snippet or
+	 * Obsidian itself says rather than to the block we just stopped emitting.
+	 *
+	 * Unconditional — no "did we paint this one" flag gating it. Reading view's
+	 * blockquote callouts get a fresh element from `previewMode.rerender(true)`
+	 * (see `refreshRenderModes`) where core resolves the icon itself and this
+	 * is a no-op either way, but Live Preview's native callout widget has no
+	 * equivalent forced rebuild this plugin can reach: the very element the
+	 * user is looking at when they flip the toggle is the one this has to fix,
+	 * and there is no reliable signal for "has *this* element been corrected
+	 * since the last flip" cheaper than just re-deriving and comparing. Runs on
+	 * every inject for every externally-styled callout as a result — the same
+	 * price {@link paintIcon} already pays, unconditionally, for every callout
+	 * this plugin *does* still style.
+	 */
+	private restoreCoreIcon(calloutEl: HTMLElement, iconEl: HTMLElement): void {
+		iconEl.empty();
+		const value = coreIconValue(calloutEl);
+		if (!value) return;
+		if (value.startsWith("<svg")) {
+			const svg = importCoreIconSvg(value, iconEl.ownerDocument);
+			if (svg) iconEl.appendChild(svg);
+			return;
+		}
+		setIcon(iconEl, value);
+	}
+
+	/**
+	 * Selector suffix that lifts every externally styled callout out of a rule
+	 * keyed on nothing but `.callout` — `""` when the user has handed none to
+	 * their theme.
+	 *
+	 * The `:where()` is the whole point. `:not()` normally takes the specificity
+	 * of its argument, so a plain `:not([data-callout="a"]):not([data-callout="b"])`
+	 * chain would add one class-unit per excluded callout and make these global
+	 * rules progressively *harder* for the very theme the user is handing them
+	 * to. `:where()` contributes zero, so the rules keep the exact weight they
+	 * have today no matter how many rows carry the flag.
+	 *
+	 * (`generateFallbackCSS` builds a chain that deliberately does the opposite —
+	 * there the inflation is what lets the catch-all outrank per-callout rules.)
+	 */
+	private externalExclusion(): string {
+		const attrIds = new Set<string>();
+		for (const def of this.registry.getAll()) {
+			if (def.externalStyle !== true) continue;
+			attrIds.add(obsidianCalloutAttrId(def.id));
+			for (const alias of def.aliases ?? []) {
+				attrIds.add(obsidianCalloutAttrId(alias));
+			}
+		}
+		if (attrIds.size === 0) return "";
+		const list = Array.from(attrIds)
+			.map((id) => `[data-callout="${id}"]`)
+			.join(",");
+		return `:not(:where(${list}))`;
+	}
+
 	private generateGlobalStyleCSS(): string {
 		const gs = this.registry.settings.globalStyle;
 		const parts: string[] = ["/* Global callout style */"];
+		const excl = this.externalExclusion();
+
+		// Space between the icon and the title text. Obsidian core sets
+		// `.callout-title { gap: var(--size-4-1) }` — a fixed 4px — while this
+		// plugin's own tokens use em-relative gaps (0.35em heading, 0.3em
+		// inline), and the regular icon box is the largest of the three
+		// (--icon-size, 1.2em, against 1em). The regular icon therefore reads as
+		// the most cramped of the three roles, and grows tighter still as a
+		// theme's base font size rises, because px does not scale. Top up the
+		// icon's own trailing side so the three match optically.
+		//
+		// Deliberately on the icon rather than on the title's `gap`: the title
+		// row's other flex gap — the one before the fold chevron — is left
+		// exactly as the theme set it. Baked-in default, overridable via
+		// --cs-regular-icon-gap in a CSS snippet, same as --cs-heading-icon-offset.
+		//
+		// Generated rather than shipped in styles.css, where it used to live: it
+		// is the only rule the plugin puts on a real vault callout
+		// unconditionally, and a static rule has no way to exclude one the user
+		// handed to their theme. Emitted unconditionally here for the same reason
+		// it was static before — it is a default, not a setting.
+		parts.push(
+			`.callout${excl} > .callout-title > .callout-icon {\n` +
+				`  margin-inline-end: var(--cs-regular-icon-gap, 0.15em);\n` +
+				`}`,
+		);
 
 		const props: string[] = [];
 
@@ -1462,14 +1662,19 @@ export class CSSInjector {
 			if (left) props.push(`  border-left: ${bStyle};`);
 		}
 
+		// Every rule from here down is keyed on nothing but `.callout`, so each
+		// carries the exclusion — a callout handed to the theme must not keep
+		// the plugin's border, radius or text scale. The border especially:
+		// it reads `var(--cs-accent, currentColor)`, so merely withholding the
+		// accent would leave a border in the *wrong* colour rather than none.
 		if (props.length > 0) {
-			parts.push(`.callout {\n${props.join("\n")}\n}`);
+			parts.push(`.callout${excl} {\n${props.join("\n")}\n}`);
 		}
 
 		// Title scale
 		if (gs.titleScale !== 1) {
 			parts.push(
-				`.callout > .callout-title > .callout-title-inner {\n` +
+				`.callout${excl} > .callout-title > .callout-title-inner {\n` +
 					`  font-size: ${gs.titleScale}em;\n` +
 					`}`,
 			);
@@ -1478,7 +1683,7 @@ export class CSSInjector {
 		// Content scale
 		if (gs.contentScale !== 1) {
 			parts.push(
-				`.callout > .callout-content {\n` +
+				`.callout${excl} > .callout-content {\n` +
 					`  font-size: ${gs.contentScale}em;\n` +
 					`}`,
 			);
@@ -1493,7 +1698,7 @@ export class CSSInjector {
 		// that margin and the body would sit left of the title text.
 		if (gs.alignContentWithTitle) {
 			parts.push(
-				`.callout > .callout-content {\n` +
+				`.callout${excl} > .callout-content {\n` +
 					`  padding-inline-start: calc(var(--icon-size, 1.2em) + 0.2em + var(--cs-regular-icon-gap, 0.15em));\n` +
 					`}`,
 			);
@@ -1607,6 +1812,13 @@ export class CSSInjector {
 		//
 		// The transient settings-preview definition is registered under its real
 		// ID, so it is already included here and thus excluded from the tint.
+		//
+		// An `externalStyle` row is included too, and that is load-bearing rather
+		// than an oversight: everything below carries `!important` at a
+		// specificity no theme can reach, so dropping such a row from this set
+		// would paint the callout *harder* than a normal one — the exact
+		// opposite of handing it to the theme. "Emit nothing for it" is achieved
+		// by generateCalloutCSS returning early, not by hiding it from here.
 		const knownAttrIds = new Set<string>();
 		for (const def of callouts) {
 			knownAttrIds.add(obsidianCalloutAttrId(def.id));

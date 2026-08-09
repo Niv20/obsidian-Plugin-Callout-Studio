@@ -83,6 +83,10 @@ export const bg: Record<string, string> = {
 	"settings.resetAction": "Нулиране до стандартното",
 	"settings.makeFallbackAction": "Използване на стандартния резервен стил",
 	"settings.colorSwatchAria": "Акцент: {{accent}} · Фон: {{bg}}",
+	"settings.externalStyleTag": "Външен стил",
+	"settings.externalStyleAction": "Използване на външен стил (тема или CSS)",
+	"settings.externalStyleBlocked":
+		"това е стандартният резервен callout, изберете друг първо",
 	"settings.fallbackCallout": "Стандартен резервен callout",
 	"settings.fallbackCalloutDesc":
 		"Непознатите типове callout в хранилището ви ще наследят стила на този callout.",
@@ -151,6 +155,9 @@ export const bg: Record<string, string> = {
 		"Не са импортирани нови типове callout (ID-тата може вече да съществуват).",
 	"notice.iconDownloadFailed":
 		'Неуспешно изтегляне на икона Material "{{name}}". Може да е недостъпна за този стил/тегло или да нямате интернет връзка.',
+	"notice.externalStyleOn":
+		'"{{name}}" вече се стилизира от вашата тема или CSS фрагмент.',
+	"notice.externalStyleOff": 'Callout Studio отново стилизира "{{name}}".',
 	"notice.nothingToWrap": "Няма какво да се обвие.",
 	"notice.cursorNotInsideCallout": "Курсорът не е вътре в callout.",
 	"notice.openHotkeysFailed":
@@ -217,6 +224,27 @@ export const bg: Record<string, string> = {
 		"Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
 	"editor.sampleInlineText": "Ето вградена [!{id}] капсула вътре в абзац.",
 	"editor.previewReadOnly": "Прегледът на живо не може да се редактира",
+
+	// External style window (opens instead of the editor for a callout the
+	// user handed to their theme / a CSS snippet)
+	"editor.externalStyleTitle": "Стилизиран извън Callout Studio",
+	"editor.externalStyleBody":
+		"Callout Studio не прилага стил към {{id}}. Външният му вид идва от вашата тема, CSS фрагмент или стандартните настройки на Obsidian.",
+	"editor.externalStyleWhat": "Какво означава това",
+	"editor.externalStyleWhatHeading":
+		"Callout за заглавие като ## [!{{id}}] Заглавие няма да се изобрази — текстът остава такъв, какъвто е написан.",
+	"editor.externalStyleWhatInline":
+		"Нито вграден такъв, като дума [!{{id}}] дума.",
+	"editor.externalStyleWhatGlobal":
+		"Общите настройки за стил (рамка, радиус, размер на текста) не се прилагат към него.",
+	"editor.externalStylePreviewTitle": "Как се изобразява сега",
+	"editor.externalStyleSample":
+		"## [!{{id}}] Заглавие\n\n" +
+		"Ето как изглежда изречение с [!{{id}}] в него.\n\n" +
+		"> [!{{id}}] {{name}}\n" +
+		"> Ето как изглежда съдържанието на callout-а.\n",
+	"editor.externalStyleResume": "Възстановяване на стилизирането",
+	"editor.externalStyleClose": "Разбрах",
 	// Palette editor modal
 	"palette.newTitle": "Нова цветова палитра",
 	"palette.editTitle": "Редактиране на цветова палитра",

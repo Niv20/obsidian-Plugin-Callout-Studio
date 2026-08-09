@@ -92,6 +92,10 @@ export const hu: Record<string, string> = {
 	"settings.makeFallbackAction": "Alapértelmezett tartalékstílus használata",
 
 	"settings.colorSwatchAria": "Kiemelés: {{accent}} · Háttér: {{bg}}",
+	"settings.externalStyleTag": "Külső stílus",
+	"settings.externalStyleAction": "Külső stílus használata (téma vagy CSS)",
+	"settings.externalStyleBlocked":
+		"ez az alapértelmezett tartalék callout, először válassz egy másikat",
 	"settings.fallbackCallout": "Alapértelmezett tartalék callout",
 	"settings.fallbackCalloutDesc":
 		"A tárban fel nem ismert callout-típusok öröklik ennek a callout-nak a stílusát.",
@@ -163,6 +167,10 @@ export const hu: Record<string, string> = {
 		"Nem importáltunk új callout-típust (az azonosítók már létezhetnek).",
 	"notice.iconDownloadFailed":
 		'A "{{name}}" Material ikon letöltése nem sikerült. Lehet, hogy ez a stílus/vastagság nem érhető el, vagy nincs internetkapcsolata.',
+	"notice.externalStyleOn":
+		'"{{name}}" mostantól a témád vagy a CSS-részleted formázza.',
+	"notice.externalStyleOff":
+		'A Callout Studio ismét formázza a(z) "{{name}}" elemet.',
 	"notice.nothingToWrap": "Nincs mit becsomagolni.",
 	"notice.cursorNotInsideCallout": "A kurzor nem callout-on belül van.",
 	"notice.openHotkeysFailed":
@@ -232,6 +240,27 @@ export const hu: Record<string, string> = {
 	"editor.sampleInlineText":
 		"Íme egy soron belüli [!{id}] pirula egy bekezdésen belül.",
 	"editor.previewReadOnly": "Az élő előnézet nem szerkeszthető",
+
+	// External style window (opens instead of the editor for a callout the
+	// user handed to their theme / a CSS snippet)
+	"editor.externalStyleTitle": "A Callout Studión kívül stílusozva",
+	"editor.externalStyleBody":
+		"A Callout Studio nem alkalmaz stílust erre: {{id}}. A megjelenése a témádból, egy CSS-részletből vagy az Obsidian alapértelmezéseiből származik.",
+	"editor.externalStyleWhat": "Ez mit jelent",
+	"editor.externalStyleWhatHeading":
+		"Egy fejléc callout, mint a ## [!{{id}}] Cím, nem jelenik meg formázva — a szöveg úgy marad, ahogy leírtad.",
+	"editor.externalStyleWhatInline":
+		"Ahogy egy beágyazott sem, mint a szó [!{{id}}] szó.",
+	"editor.externalStyleWhatGlobal":
+		"A globális stílusbeállítások (keret, lekerekítés, szövegméret) nem érvényesek rá.",
+	"editor.externalStylePreviewTitle": "Hogyan jelenik meg most",
+	"editor.externalStyleSample":
+		"## [!{{id}}] Cím\n\n" +
+		"Így néz ki egy mondat, amiben [!{{id}}] szerepel.\n\n" +
+		"> [!{{id}}] {{name}}\n" +
+		"> Így néz ki a callout tartalma.\n",
+	"editor.externalStyleResume": "Stílus visszavétele",
+	"editor.externalStyleClose": "Értem",
 
 	// Palette editor modal
 	"palette.newTitle": "Új színpaletta",

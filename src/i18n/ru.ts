@@ -90,6 +90,10 @@ export const ru: Record<string, string> = {
 	"settings.makeFallbackAction": "Использовать резервный стиль по умолчанию",
 
 	"settings.colorSwatchAria": "Акцент: {{accent}} · Фон: {{bg}}",
+	"settings.externalStyleTag": "Внешний стиль",
+	"settings.externalStyleAction": "Использовать внешний стиль (тема или CSS)",
+	"settings.externalStyleBlocked":
+		"это стандартный резервный callout, сначала выберите другой",
 	"settings.fallbackCallout": "Резервный callout по умолчанию",
 	"settings.fallbackCalloutDesc":
 		"Нераспознанные типы callout в хранилище унаследуют стиль этого callout.",
@@ -161,6 +165,9 @@ export const ru: Record<string, string> = {
 		"Новые типы callout не импортированы (ID могут уже существовать).",
 	"notice.iconDownloadFailed":
 		'Не удалось загрузить иконку Material "{{name}}". Она может быть недоступна для данного стиля/насыщенности или отсутствует подключение к сети.',
+	"notice.externalStyleOn":
+		'"{{name}}" теперь оформляется вашей темой или CSS-фрагментом.',
+	"notice.externalStyleOff": 'Callout Studio снова оформляет "{{name}}".',
 	"notice.nothingToWrap": "Нечего оборачивать.",
 	"notice.cursorNotInsideCallout": "Курсор не находится внутри callout.",
 	"notice.openHotkeysFailed":
@@ -228,6 +235,27 @@ export const ru: Record<string, string> = {
 		"Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
 	"editor.sampleInlineText": "Вот встроенная капсула [!{id}] внутри абзаца.",
 	"editor.previewReadOnly": "Живой предпросмотр нельзя редактировать",
+
+	// External style window (opens instead of the editor for a callout the
+	// user handed to their theme / a CSS snippet)
+	"editor.externalStyleTitle": "Оформлено вне Callout Studio",
+	"editor.externalStyleBody":
+		"Callout Studio не применяет стиль к {{id}}. Его вид определяется вашей темой, CSS-фрагментом или настройками Obsidian по умолчанию.",
+	"editor.externalStyleWhat": "Что это значит",
+	"editor.externalStyleWhatHeading":
+		"Callout-заголовок вроде ## [!{{id}}] Заголовок не будет отрендерен — текст останется таким, как написан.",
+	"editor.externalStyleWhatInline":
+		"Как и встроенный, например слово [!{{id}}] слово.",
+	"editor.externalStyleWhatGlobal":
+		"Глобальные настройки стиля (рамка, радиус, размер текста) к нему не применяются.",
+	"editor.externalStylePreviewTitle": "Как это выглядит сейчас",
+	"editor.externalStyleSample":
+		"## [!{{id}}] Заголовок\n\n" +
+		"Вот как выглядит предложение с [!{{id}}] внутри.\n\n" +
+		"> [!{{id}}] {{name}}\n" +
+		"> Вот как выглядит содержимое callout.\n",
+	"editor.externalStyleResume": "Вернуть оформление",
+	"editor.externalStyleClose": "Понятно",
 
 	// Palette editor modal
 	"palette.newTitle": "Новая цветовая палитра",

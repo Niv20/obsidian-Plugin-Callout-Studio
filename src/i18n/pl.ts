@@ -91,6 +91,10 @@ export const pl: Record<string, string> = {
 	"settings.makeFallbackAction": "Użyj domyślnego stylu zapasowego",
 
 	"settings.colorSwatchAria": "Akcent: {{accent}} · Tło: {{bg}}",
+	"settings.externalStyleTag": "Styl zewnętrzny",
+	"settings.externalStyleAction": "Użyj stylu zewnętrznego (motyw lub CSS)",
+	"settings.externalStyleBlocked":
+		"to jest domyślny callout zastępczy, najpierw wybierz inny",
 	"settings.fallbackCallout": "Domyślny zapasowy callout",
 	"settings.fallbackCalloutDesc":
 		"Nierozpoznane typy callout w vault odziedziczą styl tego callout.",
@@ -163,6 +167,9 @@ export const pl: Record<string, string> = {
 		"Nie zaimportowano nowych typów callout (ID mogą już istnieć).",
 	"notice.iconDownloadFailed":
 		'Nie można pobrać ikony Material "{{name}}". Może być niedostępna dla tego stylu/grubości lub połączenie jest offline.',
+	"notice.externalStyleOn":
+		'"{{name}}" jest teraz stylizowany przez Twój motyw lub fragment CSS.',
+	"notice.externalStyleOff": 'Callout Studio ponownie stylizuje "{{name}}".',
 	"notice.nothingToWrap": "Nic do owinięcia.",
 	"notice.cursorNotInsideCallout": "Kursor nie jest wewnątrz callout.",
 	"notice.openHotkeysFailed":
@@ -231,6 +238,27 @@ export const pl: Record<string, string> = {
 	"editor.sampleInlineText":
 		"Oto wbudowana pigułka [!{id}] wewnątrz akapitu.",
 	"editor.previewReadOnly": "Podglądu na żywo nie można edytować",
+
+	// External style window (opens instead of the editor for a callout the
+	// user handed to their theme / a CSS snippet)
+	"editor.externalStyleTitle": "Stylizowany poza Callout Studio",
+	"editor.externalStyleBody":
+		"Callout Studio nie stosuje żadnego stylu do {{id}}. Jego wygląd pochodzi z Twojego motywu, fragmentu CSS lub domyślnych ustawień Obsidiana.",
+	"editor.externalStyleWhat": "Co to oznacza",
+	"editor.externalStyleWhatHeading":
+		"Callout nagłówkowy, taki jak ## [!{{id}}] Tytuł, nie zostanie wyrenderowany — tekst pozostanie tak, jak został napisany.",
+	"editor.externalStyleWhatInline":
+		"Podobnie jak wstawiony w tekst, np. słowo [!{{id}}] słowo.",
+	"editor.externalStyleWhatGlobal":
+		"Globalne ustawienia stylu (obramowanie, promień, rozmiar tekstu) nie mają do niego zastosowania.",
+	"editor.externalStylePreviewTitle": "Jak wygląda teraz",
+	"editor.externalStyleSample":
+		"## [!{{id}}] Tytuł\n\n" +
+		"Tak wygląda zdanie z [!{{id}}] w środku.\n\n" +
+		"> [!{{id}}] {{name}}\n" +
+		"> Tak wygląda zawartość callouta.\n",
+	"editor.externalStyleResume": "Odzyskaj stylizację",
+	"editor.externalStyleClose": "Rozumiem",
 
 	// Palette editor modal
 	"palette.newTitle": "Nowa paleta kolorów",

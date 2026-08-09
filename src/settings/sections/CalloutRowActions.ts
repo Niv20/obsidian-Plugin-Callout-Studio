@@ -79,6 +79,10 @@ export async function openBuiltInRowMenu(
 		);
 	}
 
+	// The two blocks above are both conditional, so an unmodified, unused
+	// built-in has added nothing since the separator after the usage line.
+	addExternalStyleMenuItem(menu, ctx, def, modified || usage.fileCount > 0);
+
 	menu.showAtMouseEvent(event);
 }
 
@@ -127,7 +131,68 @@ export async function openRowMenu(
 		);
 	}
 
+	// A user row always has the Delete item above, so the divider always lands
+	// on something.
+	addExternalStyleMenuItem(menu, ctx, def, true);
+
 	menu.showAtMouseEvent(event);
+}
+
+/**
+ * The "External style" toggle, shared by both row menus — it applies to every
+ * callout, built-in or user-made.
+ *
+ * Shown disabled rather than hidden on the active Default fallback callout, so
+ * the reason is discoverable: that definition is what
+ * `CSSInjector.generateFallbackCSS` paints every *unknown* callout with, so it
+ * cannot also style nothing (`CalloutRegistry.setExternalStyle` refuses it too).
+ */
+function addExternalStyleMenuItem(
+	menu: Menu,
+	ctx: SettingsSectionContext,
+	def: CalloutDefinition,
+	/** False when nothing was added since the last separator, so the divider
+	 * this item sits under would land directly on another one. */
+	separate: boolean,
+): void {
+	const external = def.externalStyle === true;
+	const isFallbackTarget = def.id === ctx.plugin.settings.fallbackCalloutId;
+	if (separate) menu.addSeparator();
+	menu.addItem((item) => {
+		item.setTitle(t("settings.externalStyleAction"))
+			.setIcon("paintbrush")
+			.setChecked(external)
+			.onClick(() => {
+				void handleToggleExternalStyle(ctx, def, !external);
+			});
+		if (isFallbackTarget && !external) {
+			item.setDisabled(true).setTitle(
+				`${t("settings.externalStyleAction")} — ${t("settings.externalStyleBlocked")}`,
+			);
+		}
+	});
+}
+
+async function handleToggleExternalStyle(
+	ctx: SettingsSectionContext,
+	def: CalloutDefinition,
+	on: boolean,
+): Promise<void> {
+	if (!ctx.plugin.registry.setExternalStyle(def.id, on)) return;
+	await ctx.plugin.saveSettings();
+	ctx.plugin.refreshCallouts();
+	// And the reading view on top of it. refreshCallouts rebuilds Live
+	// Preview's decorations, but a reading-view heading bar or inline pill is
+	// baked DOM that only a post-processor pass adds or strips — without this
+	// the `[!id]` the theme now owns keeps its bar until the note is reopened.
+	// Same call, and the same reason, as a render-role toggle.
+	ctx.plugin.refreshRenderModes();
+	ctx.display();
+	new Notice(
+		t(on ? "notice.externalStyleOn" : "notice.externalStyleOff", {
+			name: def.displayName,
+		}),
+	);
 }
 
 function addUsageInfoMenuItem(

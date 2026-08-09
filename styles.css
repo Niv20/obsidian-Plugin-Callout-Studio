@@ -3661,21 +3661,11 @@ input.cs-input-invalid:focus {
 
 /* ══ Regular callout title ═════════════════════════════════════ */
 
-/* Space between the icon and the title text. Obsidian core sets
-   `.callout-title { gap: var(--size-4-1) }` — a fixed 4px — while this plugin's
-   own tokens below use em-relative gaps (0.35em heading, 0.3em inline), and the
-   regular icon box is the largest of the three (--icon-size, 1.2em, against 1em).
-   The regular icon therefore reads as the most cramped of the three roles, and
-   grows tighter still as a theme's base font size rises, because px does not
-   scale. Top up the icon's own trailing side so the three match optically.
-
-   Deliberately on the icon rather than on the title's `gap`: the title row's
-   other flex gap — the one before the fold chevron — is left exactly as the
-   theme set it. Baked-in default, overridable via --cs-regular-icon-gap in a
-   CSS snippet, same as --cs-heading-icon-offset below. */
-.callout > .callout-title > .callout-icon {
-	margin-inline-end: var(--cs-regular-icon-gap, 0.15em);
-}
+/* The icon's trailing gap (--cs-regular-icon-gap) used to be a static rule
+   here. It now lives in CSSInjector.generateGlobalStyleCSS, because it was the
+   only rule in this file touching a real vault callout unconditionally and a
+   static rule cannot exclude a callout the user marked "External style". Its
+   reasoning moved with it; this note only exists so nobody adds it back. */
 
 /* ══ Heading & inline callout tokens ═══════════════════════════ */
 /* Structural rules only — the per-callout accent (--cs-accent) is
@@ -4097,7 +4087,10 @@ body.cs-anim-window .cs-heading-callout {
 	max-width: min(760px, 95vw);
 }
 
-.cs-welcome-panel {
+/* Two-column body: explanation on the left, a live preview on the right.
+   Shared by the welcome splash and the External style window — same shape,
+   same stacking breakpoint, so they stay in step. */
+.cs-split-panel {
 	display: grid;
 	grid-template-columns: 1fr 1.2fr;
 	gap: 24px;
@@ -4154,9 +4147,75 @@ body.cs-anim-window .cs-heading-callout {
 }
 
 @media (max-width: 640px) {
-	.cs-welcome-panel {
+	.cs-split-panel {
 		grid-template-columns: 1fr;
 	}
+}
+
+/* ══ External style window ═════════════════════════════════════ */
+/* Opens instead of the callout editor for a callout handed to the theme
+   (see ExternalStyleModal). Left column explains, right column proves it
+   with a real preview rendered by the theme's own CSS. */
+
+.modal.cs-external-modal {
+	width: min(760px, 95vw);
+	max-width: min(760px, 95vw);
+}
+
+.cs-external-left {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	gap: 10px;
+	min-width: 0;
+}
+
+.cs-external-lead {
+	margin: 0;
+	font-size: var(--font-ui-medium);
+	color: var(--text-normal);
+	line-height: 1.5;
+}
+
+.cs-external-what {
+	margin: 6px 0 0;
+	font-size: var(--font-ui-small);
+	font-weight: 600;
+	color: var(--text-muted);
+}
+
+.cs-external-list {
+	margin: 0;
+	padding-inline-start: 1.2em;
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+	font-size: var(--font-ui-small);
+	color: var(--text-muted);
+	line-height: 1.5;
+}
+
+.cs-external-right {
+	min-width: 0;
+	display: flex;
+	flex-direction: column;
+}
+
+.cs-external-right .cs-live-preview-container {
+	flex: 1;
+}
+
+.cs-external-right .cs-live-preview-body {
+	min-height: 200px;
+	max-height: 340px;
+	overflow-y: auto;
+}
+
+/* Settings row for an externally styled callout. Dimmed as a whole so the
+   row reads as "not ours"; its icon slot is left empty and its color
+   swatches are omitted entirely (see CalloutRowRenderer). */
+.callout-studio-row.is-external-style {
+	opacity: 0.65;
 }
 
 /* Sources the pooled "All sources" list cannot include yet. */

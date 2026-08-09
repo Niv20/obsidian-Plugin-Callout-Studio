@@ -91,6 +91,10 @@ export const vi: Record<string, string> = {
 	"settings.makeFallbackAction": "Sử dụng kiểu dự phòng mặc định",
 
 	"settings.colorSwatchAria": "Điểm nhấn: {{accent}} · Nền: {{bg}}",
+	"settings.externalStyleTag": "Kiểu bên ngoài",
+	"settings.externalStyleAction": "Dùng kiểu bên ngoài (chủ đề hoặc CSS)",
+	"settings.externalStyleBlocked":
+		"đây là callout dự phòng mặc định, hãy chọn cái khác trước",
 	"settings.fallbackCallout": "Callout dự phòng mặc định",
 	"settings.fallbackCalloutDesc":
 		"Các loại callout không nhận dạng được trong vault sẽ kế thừa kiểu của callout này.",
@@ -162,6 +166,9 @@ export const vi: Record<string, string> = {
 		"Không có loại callout mới nào được nhập (ID có thể đã tồn tại).",
 	"notice.iconDownloadFailed":
 		'Không thể tải biểu tượng Material "{{name}}". Nó có thể không có sẵn cho kiểu/độ dày này, hoặc kết nối của bạn đang ngoại tuyến.',
+	"notice.externalStyleOn":
+		'"{{name}}" giờ được tạo kiểu bởi chủ đề hoặc đoạn CSS của bạn.',
+	"notice.externalStyleOff": 'Callout Studio tạo kiểu lại cho "{{name}}".',
 	"notice.nothingToWrap": "Không có gì để bọc.",
 	"notice.cursorNotInsideCallout": "Con trỏ không nằm trong callout.",
 	"notice.openHotkeysFailed": "Không thể mở cài đặt phím tắt Obsidian.",
@@ -227,6 +234,27 @@ export const vi: Record<string, string> = {
 	"editor.sampleInlineText":
 		"Đây là một viên [!{id}] nội tuyến bên trong một đoạn văn.",
 	"editor.previewReadOnly": "Không thể chỉnh sửa bản xem trước trực tiếp",
+
+	// External style window (opens instead of the editor for a callout the
+	// user handed to their theme / a CSS snippet)
+	"editor.externalStyleTitle": "Được tạo kiểu bên ngoài Callout Studio",
+	"editor.externalStyleBody":
+		"Callout Studio không áp dụng bất kỳ kiểu nào cho {{id}}. Giao diện của nó đến từ chủ đề, đoạn CSS, hoặc mặc định của Obsidian.",
+	"editor.externalStyleWhat": "Điều này có nghĩa là",
+	"editor.externalStyleWhatHeading":
+		"Một callout tiêu đề như ## [!{{id}}] Tiêu đề sẽ không được hiển thị — văn bản giữ nguyên như đã viết.",
+	"editor.externalStyleWhatInline":
+		"Callout nội tuyến cũng vậy, như từ [!{{id}}] từ.",
+	"editor.externalStyleWhatGlobal":
+		"Cài đặt kiểu chung (viền, bo góc, cỡ chữ) không áp dụng cho nó.",
+	"editor.externalStylePreviewTitle": "Cách nó hiển thị hiện tại",
+	"editor.externalStyleSample":
+		"## [!{{id}}] Tiêu đề\n\n" +
+		"Đây là cách một câu có [!{{id}}] trông như thế nào.\n\n" +
+		"> [!{{id}}] {{name}}\n" +
+		"> Đây là cách nội dung callout trông như thế nào.\n",
+	"editor.externalStyleResume": "Lấy lại kiểu dáng",
+	"editor.externalStyleClose": "Đã hiểu",
 
 	// Palette editor modal
 	"palette.newTitle": "Bảng màu mới",

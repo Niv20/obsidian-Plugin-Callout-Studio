@@ -90,6 +90,10 @@ export const th: Record<string, string> = {
 	"settings.makeFallbackAction": "ใช้สไตล์สำรองเริ่มต้น",
 
 	"settings.colorSwatchAria": "จุดเน้น: {{accent}} · พื้นหลัง: {{bg}}",
+	"settings.externalStyleTag": "สไตล์ภายนอก",
+	"settings.externalStyleAction": "ใช้สไตล์ภายนอก (ธีมหรือ CSS)",
+	"settings.externalStyleBlocked":
+		"นี่คือ callout สำรองเริ่มต้น โปรดเลือกอันอื่นก่อน",
 	"settings.fallbackCallout": "Callout สำรองเริ่มต้น",
 	"settings.fallbackCalloutDesc":
 		"ประเภท callout ที่ไม่รู้จักใน vault จะสืบทอดสไตล์ของ callout นี้",
@@ -160,6 +164,9 @@ export const th: Record<string, string> = {
 	"notice.noNewJSON": "ไม่มีประเภท callout ใหม่ที่นำเข้า (ID อาจมีอยู่แล้ว)",
 	"notice.iconDownloadFailed":
 		'ไม่สามารถดาวน์โหลดไอคอน Material "{{name}}" ได้ อาจไม่มีให้บริการสำหรับสไตล์/น้ำหนักนี้ หรือการเชื่อมต่อของคุณออฟไลน์อยู่',
+	"notice.externalStyleOn":
+		'"{{name}}" ตอนนี้ถูกจัดสไตล์โดยธีมหรือ CSS snippet ของคุณ',
+	"notice.externalStyleOff": 'Callout Studio จัดสไตล์ "{{name}}" อีกครั้ง',
 	"notice.nothingToWrap": "ไม่มีอะไรให้ห่อ",
 	"notice.cursorNotInsideCallout": "เคอร์เซอร์ไม่อยู่ใน callout",
 	"notice.openHotkeysFailed":
@@ -225,6 +232,27 @@ export const th: Record<string, string> = {
 		"Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
 	"editor.sampleInlineText": "นี่คือแคปซูล [!{id}] แบบอินไลน์ภายในย่อหน้า",
 	"editor.previewReadOnly": "ไม่สามารถแก้ไขตัวอย่างสดได้",
+
+	// External style window (opens instead of the editor for a callout the
+	// user handed to their theme / a CSS snippet)
+	"editor.externalStyleTitle": "จัดสไตล์นอก Callout Studio",
+	"editor.externalStyleBody":
+		"Callout Studio ไม่ได้ใช้สไตล์ใด ๆ กับ {{id}} รูปลักษณ์ของมันมาจากธีมของคุณ CSS snippet หรือค่าเริ่มต้นของ Obsidian",
+	"editor.externalStyleWhat": "สิ่งนี้หมายความว่าอย่างไร",
+	"editor.externalStyleWhatHeading":
+		"callout แบบหัวข้ออย่าง ## [!{{id}}] ชื่อเรื่อง จะไม่ถูกเรนเดอร์ — ข้อความจะคงอยู่ตามที่เขียนไว้",
+	"editor.externalStyleWhatInline":
+		"เช่นเดียวกับแบบอินไลน์ เช่น คำ [!{{id}}] คำ",
+	"editor.externalStyleWhatGlobal":
+		"การตั้งค่าสไตล์ทั่วไป (ขอบ รัศมี ขนาดข้อความ) จะไม่ถูกนำไปใช้กับมัน",
+	"editor.externalStylePreviewTitle": "วิธีที่มันแสดงผลตอนนี้",
+	"editor.externalStyleSample":
+		"## [!{{id}}] ชื่อเรื่อง\n\n" +
+		"นี่คือลักษณะของประโยคที่มี [!{{id}}] อยู่ในนั้น\n\n" +
+		"> [!{{id}}] {{name}}\n" +
+		"> นี่คือลักษณะของเนื้อหา callout\n",
+	"editor.externalStyleResume": "นำสไตล์กลับคืนมา",
+	"editor.externalStyleClose": "เข้าใจแล้ว",
 
 	// Palette editor modal
 	"palette.newTitle": "ชุดสีใหม่",

@@ -80,6 +80,9 @@ export const zhTW: Record<string, string> = {
 	"settings.resetAction": "重置為預設值",
 	"settings.makeFallbackAction": "使用預設備用樣式",
 	"settings.colorSwatchAria": "強調色：{{accent}} · 背景：{{bg}}",
+	"settings.externalStyleTag": "外部樣式",
+	"settings.externalStyleAction": "使用外部樣式（佈景主題或 CSS）",
+	"settings.externalStyleBlocked": "這是預設的備援 callout，請先選擇其他一個",
 	"settings.fallbackCallout": "預設備用 callout",
 	"settings.fallbackCalloutDesc":
 		"vault 中無法辨識的 callout 類型將繼承此 callout 的樣式。",
@@ -144,6 +147,8 @@ export const zhTW: Record<string, string> = {
 	"notice.noNewJSON": "未匯入新的 callout 類型（ID 可能已存在）。",
 	"notice.iconDownloadFailed":
 		"無法下載 Material 圖示「{{name}}」。該圖示可能不支援此樣式/字重，或您的網路連線已中斷。",
+	"notice.externalStyleOn": '"{{name}}" 現在由你的佈景主題或 CSS 片段設定樣式。',
+	"notice.externalStyleOff": 'Callout Studio 重新為 "{{name}}" 設定樣式。',
 	"notice.nothingToWrap": "沒有可包覆的內容。",
 	"notice.cursorNotInsideCallout": "游標不在 callout 內部。",
 	"notice.openHotkeysFailed": "無法開啟 Obsidian 快速鍵設定。",
@@ -206,6 +211,25 @@ export const zhTW: Record<string, string> = {
 		"Lorem ipsum dolor sit amet，consectetur adipiscing elit。",
 	"editor.sampleInlineText": "這是一個嵌入在段落中的行內 [!{id}] 徽標。",
 	"editor.previewReadOnly": "即時預覽無法編輯",
+
+	// External style window (opens instead of the editor for a callout the
+	// user handed to their theme / a CSS snippet)
+	"editor.externalStyleTitle": "在 Callout Studio 之外設定了樣式",
+	"editor.externalStyleBody":
+		"Callout Studio 沒有對 {{id}} 套用任何樣式。它的外觀來自你的佈景主題、CSS 片段或 Obsidian 的預設值。",
+	"editor.externalStyleWhat": "這代表什麼",
+	"editor.externalStyleWhatHeading":
+		"像 ## [!{{id}}] 標題 這樣的標題 callout 不會被渲染——文字會保持原樣。",
+	"editor.externalStyleWhatInline": "行內 callout 也是如此，例如 文字 [!{{id}}] 文字。",
+	"editor.externalStyleWhatGlobal": "全域樣式設定（邊框、圓角、文字大小）不適用於它。",
+	"editor.externalStylePreviewTitle": "現在的渲染方式",
+	"editor.externalStyleSample":
+		"## [!{{id}}] 標題\n\n" +
+		"這是包含 [!{{id}}] 的句子的樣子。\n\n" +
+		"> [!{{id}}] {{name}}\n" +
+		"> 這是 callout 內容的樣子。\n",
+	"editor.externalStyleResume": "恢復樣式",
+	"editor.externalStyleClose": "知道了",
 	// Palette editor modal
 	"palette.newTitle": "新增調色盤",
 	"palette.editTitle": "編輯調色盤",

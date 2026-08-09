@@ -90,6 +90,10 @@ export const de: Record<string, string> = {
 	"settings.resetAction": "Auf Standard zurücksetzen",
 	"settings.makeFallbackAction": "Standard-Fallback-Stil verwenden",
 	"settings.colorSwatchAria": "Akzent: {{accent}} · Hintergrund: {{bg}}",
+	"settings.externalStyleTag": "Externer Stil",
+	"settings.externalStyleAction": "Externen Stil verwenden (Theme oder CSS)",
+	"settings.externalStyleBlocked":
+		"dies ist der Standard-Fallback-Callout, wähle zuerst einen anderen",
 
 	"settings.fallbackCallout": "Standard-Fallback-Callout",
 	"settings.fallbackCalloutDesc":
@@ -162,6 +166,9 @@ export const de: Record<string, string> = {
 		"Keine neuen Callout-Typen importiert (IDs möglicherweise bereits vorhanden).",
 	"notice.iconDownloadFailed":
 		'Material-Symbol "{{name}}" konnte nicht heruntergeladen werden. Es ist möglicherweise für diesen Stil/diese Stärke nicht verfügbar oder Sie sind offline.',
+	"notice.externalStyleOn":
+		'"{{name}}" wird jetzt von deinem Theme oder CSS-Snippet gestylt.',
+	"notice.externalStyleOff": 'Callout Studio stylt "{{name}}" wieder.',
 	"notice.nothingToWrap": "Nichts zum Einbetten.",
 	"notice.cursorNotInsideCallout":
 		"Der Cursor befindet sich nicht in einem Callout.",
@@ -233,6 +240,27 @@ export const de: Record<string, string> = {
 	"editor.sampleInlineText":
 		"Hier ist eine eingebettete [!{id}] Pille innerhalb eines Absatzes.",
 	"editor.previewReadOnly": "Die Live-Vorschau kann nicht bearbeitet werden",
+
+	// External style window (opens instead of the editor for a callout the
+	// user handed to their theme / a CSS snippet)
+	"editor.externalStyleTitle": "Außerhalb von Callout Studio gestylt",
+	"editor.externalStyleBody":
+		"Callout Studio wendet keinen Stil auf {{id}} an. Das Aussehen stammt von deinem Theme, einem CSS-Snippet oder den Standardeinstellungen von Obsidian.",
+	"editor.externalStyleWhat": "Was das bedeutet",
+	"editor.externalStyleWhatHeading":
+		"Ein Überschriften-Callout wie ## [!{{id}}] Titel wird nicht gerendert — der Text bleibt so, wie er geschrieben wurde.",
+	"editor.externalStyleWhatInline":
+		"Ebenso wenig ein Inline-Callout wie Wort [!{{id}}] Wort.",
+	"editor.externalStyleWhatGlobal":
+		"Globale Stileinstellungen (Rahmen, Radius, Textgröße) gelten nicht dafür.",
+	"editor.externalStylePreviewTitle": "So wird er jetzt gerendert",
+	"editor.externalStyleSample":
+		"## [!{{id}}] Titel\n\n" +
+		"So sieht ein Satz mit [!{{id}}] darin aus.\n\n" +
+		"> [!{{id}}] {{name}}\n" +
+		"> So sieht der Inhalt des Callouts aus.\n",
+	"editor.externalStyleResume": "Styling zurückholen",
+	"editor.externalStyleClose": "Verstanden",
 
 	// Palette editor modal
 	"palette.newTitle": "Neue Farbpalette",

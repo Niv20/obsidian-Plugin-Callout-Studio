@@ -24,6 +24,7 @@ import {
 	CSS_REF_TOKEN,
 	buildCalloutTokenDom,
 	resolveCalloutDef,
+	shouldRenderToken,
 } from "../editor/renderShared";
 import { iconRenderKey } from "../icons/renderIcon";
 import { createIconResolver } from "../icons/resolver";
@@ -270,7 +271,15 @@ export class OutlineDecorator {
 			return;
 		}
 
-		const { def, unknown } = resolveCalloutDef(this.host.registry, token.rawId);
+		const resolved = resolveCalloutDef(this.host.registry, token.rawId);
+		// Theme-owned: the outline entry keeps the heading's raw text. Routed
+		// through restoreItem rather than a bare return so an entry decorated
+		// before the user flipped the flag is put back, not left stale.
+		if (!shouldRenderToken(resolved)) {
+			this.restoreItem(el);
+			return;
+		}
+		const { def, unknown } = resolved;
 		const customTitle = token.title.trim();
 		const title =
 			customTitle !== ""

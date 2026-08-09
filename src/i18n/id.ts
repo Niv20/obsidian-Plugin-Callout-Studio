@@ -90,6 +90,10 @@ export const id: Record<string, string> = {
 	"settings.makeFallbackAction": "Gunakan gaya fallback default",
 
 	"settings.colorSwatchAria": "Aksen: {{accent}} · Latar belakang: {{bg}}",
+	"settings.externalStyleTag": "Gaya eksternal",
+	"settings.externalStyleAction": "Gunakan gaya eksternal (tema atau CSS)",
+	"settings.externalStyleBlocked":
+		"ini adalah callout cadangan default, pilih yang lain terlebih dahulu",
 	"settings.fallbackCallout": "Callout fallback default",
 	"settings.fallbackCalloutDesc":
 		"Tipe callout yang tidak dikenal di vault Anda akan mewarisi gaya callout ini.",
@@ -161,6 +165,9 @@ export const id: Record<string, string> = {
 		"Tidak ada tipe callout baru yang diimpor (ID mungkin sudah ada).",
 	"notice.iconDownloadFailed":
 		'Gagal mengunduh ikon Material "{{name}}". Ikon ini mungkin tidak tersedia untuk gaya/ketebalan ini, atau koneksi Anda sedang offline.',
+	"notice.externalStyleOn":
+		'"{{name}}" sekarang bergaya sesuai tema atau cuplikan CSS Anda.',
+	"notice.externalStyleOff": 'Callout Studio kembali menata gaya "{{name}}".',
 	"notice.nothingToWrap": "Tidak ada yang perlu dibungkus.",
 	"notice.cursorNotInsideCallout": "Kursor tidak berada di dalam callout.",
 	"notice.openHotkeysFailed":
@@ -228,6 +235,27 @@ export const id: Record<string, string> = {
 	"editor.sampleInlineText":
 		"Berikut adalah pil [!{id}] sebaris di dalam sebuah paragraf.",
 	"editor.previewReadOnly": "Pratinjau langsung tidak dapat diedit",
+
+	// External style window (opens instead of the editor for a callout the
+	// user handed to their theme / a CSS snippet)
+	"editor.externalStyleTitle": "Ditata di luar Callout Studio",
+	"editor.externalStyleBody":
+		"Callout Studio tidak menerapkan gaya apa pun pada {{id}}. Tampilannya berasal dari tema, cuplikan CSS, atau default Obsidian Anda.",
+	"editor.externalStyleWhat": "Artinya",
+	"editor.externalStyleWhatHeading":
+		"Callout judul seperti ## [!{{id}}] Judul tidak akan dirender — teksnya tetap seperti yang ditulis.",
+	"editor.externalStyleWhatInline":
+		"Begitu juga callout sebaris, seperti kata [!{{id}}] kata.",
+	"editor.externalStyleWhatGlobal":
+		"Pengaturan gaya global (batas, radius, ukuran teks) tidak berlaku untuknya.",
+	"editor.externalStylePreviewTitle": "Cara tampilannya sekarang",
+	"editor.externalStyleSample":
+		"## [!{{id}}] Judul\n\n" +
+		"Begini tampilan kalimat dengan [!{{id}}] di dalamnya.\n\n" +
+		"> [!{{id}}] {{name}}\n" +
+		"> Begini tampilan konten callout.\n",
+	"editor.externalStyleResume": "Ambil kembali gaya",
+	"editor.externalStyleClose": "Mengerti",
 
 	// Palette editor modal
 	"palette.newTitle": "Palet warna baru",

@@ -308,7 +308,16 @@ export class CalloutAutoComplete extends EditorSuggest<CalloutSuggestion> {
 		el.addClass("callout-studio-suggestion");
 
 		const isDark = activeDocument.body.classList.contains("theme-dark");
-		const color = isDark ? def.colorDark : def.colorLight;
+		// A callout handed to the theme keeps its place in the list — it is
+		// still a real id worth inserting — but not its stored colour, which
+		// nothing renders any more. Naming a colour here that the callout will
+		// not have on the page is the one thing the entry must not do.
+		const external = def.externalStyle === true;
+		const color = external
+			? "var(--text-muted)"
+			: isDark
+				? def.colorDark
+				: def.colorLight;
 
 		// Icon
 		const iconEl = el.createDiv({

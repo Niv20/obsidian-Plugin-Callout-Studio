@@ -12,6 +12,7 @@
 import { MarkdownView, PluginSettingTab } from "obsidian";
 import type { App, EventRef } from "obsidian";
 import { CalloutEditor } from "./CalloutEditor";
+import { openCalloutEditorFor } from "./openCalloutEditor";
 import { scanStringForUnknownCallouts } from "../utils/vaultCalloutScanner";
 import { renderHotkeySection } from "./sections/HotkeySection";
 import { renderCreditsSection } from "./sections/CreditsSection";
@@ -222,8 +223,7 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 		if (!def) return;
 
 		if (isBuiltIn) {
-			const editorModal = new CalloutEditor(this.plugin, def);
-			const result = await editorModal.openAndWait();
+			const result = await openCalloutEditorFor(this.plugin, def);
 			if (result) {
 				this.plugin.registry.update(def.id, {
 					displayName: result.displayName,
@@ -244,8 +244,7 @@ export class CalloutStudioSettingsTab extends PluginSettingTab {
 				});
 			}
 		} else {
-			const editorModal = new CalloutEditor(this.plugin, def);
-			await editorModal.openAndWait();
+			await openCalloutEditorFor(this.plugin, def);
 		}
 		this.display();
 	}

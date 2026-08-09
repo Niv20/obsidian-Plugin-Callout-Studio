@@ -31,10 +31,20 @@ export function renderCalloutRow(
 	isBuiltIn: boolean,
 	handlers: RowRendererHandlers,
 ): void {
+	const external = def.externalStyle === true;
 	const row = containerEl.createDiv({ cls: "callout-studio-row" });
+	if (external) row.addClass("is-external-style");
 
 	const iconEl = row.createDiv({ cls: "callout-studio-row-icon" });
-	renderRowIcon(ctx, iconEl, def);
+	if (external) {
+		// The stored icon and colours are still on disk, but nothing renders
+		// them while the theme owns the callout — showing them would advertise
+		// an appearance the reader will never see. Left empty rather than
+		// standing in with a placeholder glyph; the slot's fixed width/height
+		// (see styles.css) keeps the row lined up with its neighbours either way.
+	} else {
+		renderRowIcon(ctx, iconEl, def);
+	}
 
 	const infoEl = row.createDiv({ cls: "callout-studio-row-info" });
 	const nameLine = infoEl.createDiv({
@@ -45,7 +55,15 @@ export function renderCalloutRow(
 		text: def.displayName,
 		attr: { title: def.displayName },
 	});
-	if (def.id === ctx.plugin.settings.fallbackCalloutId) {
+	if (external) {
+		// First branch on purpose: it outranks both badges below, because
+		// "the theme styles this" is the only one of the three that says the
+		// plugin is not painting the callout at all.
+		nameLine.createSpan({
+			cls: "cs-fallback-tag",
+			text: t("settings.externalStyleTag"),
+		});
+	} else if (def.id === ctx.plugin.settings.fallbackCalloutId) {
 		nameLine.createSpan({
 			cls: "cs-fallback-tag",
 			text: t("settings.fallbackTag"),
@@ -67,15 +85,22 @@ export function renderCalloutRow(
 		});
 	}
 
-	const colorsEl = row.createDiv({ cls: "callout-studio-row-colors" });
-	const colors = resolveCurrentModeColors(def);
-	renderColorCircles(colorsEl, colors, {
-		size: 18,
-		ariaLabel: t("settings.colorSwatchAria", {
-			accent: colors.accent,
-			bg: colors.bg,
-		}),
-	});
+	// Swatches are omitted entirely for an external row rather than dimmed: the
+	// theme's real colours can't be read back honestly (a nested `.theme-dark`
+	// wrapper misses a theme that writes `body.theme-dark …`, so only the
+	// current mode could ever be probed), and showing the stored pair would
+	// name two colours that are not in effect.
+	if (!external) {
+		const colorsEl = row.createDiv({ cls: "callout-studio-row-colors" });
+		const colors = resolveCurrentModeColors(def);
+		renderColorCircles(colorsEl, colors, {
+			size: 18,
+			ariaLabel: t("settings.colorSwatchAria", {
+				accent: colors.accent,
+				bg: colors.bg,
+			}),
+		});
+	}
 
 	const buttonsEl = row.createDiv({ cls: "callout-studio-row-buttons" });
 

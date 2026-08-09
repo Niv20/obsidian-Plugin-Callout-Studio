@@ -90,6 +90,9 @@ export const ja: Record<string, string> = {
 	"settings.makeFallbackAction": "デフォルトフォールバックスタイルを使用",
 
 	"settings.colorSwatchAria": "アクセント: {{accent}} · 背景: {{bg}}",
+	"settings.externalStyleTag": "外部スタイル",
+	"settings.externalStyleAction": "外部スタイルを使用（テーマまたはCSS）",
+	"settings.externalStyleBlocked": "これはデフォルトのフォールバックcalloutです。先に別のものを選択してください",
 	"settings.fallbackCallout": "デフォルトフォールバックcallout",
 	"settings.fallbackCalloutDesc":
 		"vaultで認識されないcalloutタイプはこのcalloutのスタイルを継承します。",
@@ -162,6 +165,8 @@ export const ja: Record<string, string> = {
 		"新しいcalloutタイプはインポートされませんでした（IDがすでに存在する可能性があります）。",
 	"notice.iconDownloadFailed":
 		'Materialアイコン"{{name}}"をダウンロードできませんでした。このスタイル/ウェイトでは利用できないか、接続がオフラインの可能性があります。',
+	"notice.externalStyleOn": '"{{name}}"は現在、テーマまたはCSSスニペットによってスタイルが適用されています。',
+	"notice.externalStyleOff": 'Callout Studioが再び"{{name}}"にスタイルを適用します。',
 	"notice.nothingToWrap": "囲むものがありません。",
 	"notice.cursorNotInsideCallout": "カーソルがcallout内にありません。",
 	"notice.openHotkeysFailed": "Obsidianのホットキー設定を開けませんでした。",
@@ -226,6 +231,25 @@ export const ja: Record<string, string> = {
 		"Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
 	"editor.sampleInlineText": "段落内にインラインの [!{id}] ピルがあります。",
 	"editor.previewReadOnly": "ライブプレビューは編集できません",
+
+	// External style window (opens instead of the editor for a callout the
+	// user handed to their theme / a CSS snippet)
+	"editor.externalStyleTitle": "Callout Studioの外でスタイルされています",
+	"editor.externalStyleBody":
+		"Callout Studioは{{id}}にスタイルを適用していません。見た目はテーマ、CSSスニペット、またはObsidianのデフォルトから来ています。",
+	"editor.externalStyleWhat": "これが意味すること",
+	"editor.externalStyleWhatHeading":
+		"## [!{{id}}] タイトルのような見出しcalloutはレンダリングされません — テキストは書かれたままになります。",
+	"editor.externalStyleWhatInline": "インラインのもの、例えば 単語 [!{{id}}] 単語 も同様です。",
+	"editor.externalStyleWhatGlobal": "グローバルスタイル設定（枠線、角の丸み、文字サイズ）は適用されません。",
+	"editor.externalStylePreviewTitle": "現在の表示方法",
+	"editor.externalStyleSample":
+		"## [!{{id}}] タイトル\n\n" +
+		"[!{{id}}] を含む文はこのように表示されます。\n\n" +
+		"> [!{{id}}] {{name}}\n" +
+		"> calloutの内容はこのように表示されます。\n",
+	"editor.externalStyleResume": "スタイルを取り戻す",
+	"editor.externalStyleClose": "了解",
 
 	// Palette editor modal
 	"palette.newTitle": "新しいカラーパレット",

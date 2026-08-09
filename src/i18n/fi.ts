@@ -83,6 +83,10 @@ export const fi: Record<string, string> = {
 	"settings.resetAction": "Palauta oletukseksi",
 	"settings.makeFallbackAction": "Käytä oletusvaratyyliä",
 	"settings.colorSwatchAria": "Aksentti: {{accent}} · Tausta: {{bg}}",
+	"settings.externalStyleTag": "Ulkoinen tyyli",
+	"settings.externalStyleAction": "Käytä ulkoista tyyliä (teema tai CSS)",
+	"settings.externalStyleBlocked":
+		"tämä on oletusarvoinen varakorosteboksi, valitse ensin toinen",
 	"settings.fallbackCallout": "Oletus-varausCallout",
 	"settings.fallbackCalloutDesc":
 		"Holvisi tuntemattomat callout-tyypit perivät tämän calloutin tyylin.",
@@ -149,6 +153,9 @@ export const fi: Record<string, string> = {
 		"Uusia callout-tyyppejä ei tuotu (tunnukset voivat jo olla olemassa).",
 	"notice.iconDownloadFailed":
 		'Material-kuvakkeen "{{name}}" lataaminen epäonnistui. Se ei ehkä ole saatavilla tälle tyylille/painolle tai yhteys on poikki.',
+	"notice.externalStyleOn":
+		'"{{name}}" saa nyt tyylinsä teemastasi tai CSS-katkelmasta.',
+	"notice.externalStyleOff": 'Callout Studio tyylittelee jälleen "{{name}}".',
 	"notice.nothingToWrap": "Ei mitään kääriä.",
 	"notice.cursorNotInsideCallout": "Kursori ei ole calloutin sisällä.",
 	"notice.openHotkeysFailed": "Obsidianin oikotieasetuksia ei voitu avata.",
@@ -215,6 +222,27 @@ export const fi: Record<string, string> = {
 	"editor.sampleInlineText":
 		"Tässä on upotettu [!{id}] -pilleri kappaleen sisällä.",
 	"editor.previewReadOnly": "Live-esikatselua ei voi muokata",
+
+	// External style window (opens instead of the editor for a callout the
+	// user handed to their theme / a CSS snippet)
+	"editor.externalStyleTitle": "Tyylitelty Callout Studion ulkopuolella",
+	"editor.externalStyleBody":
+		"Callout Studio ei käytä mitään tyyliä kohteeseen {{id}}. Sen ulkoasu tulee teemastasi, CSS-katkelmasta tai Obsidianin oletusasetuksista.",
+	"editor.externalStyleWhat": "Mitä tämä tarkoittaa",
+	"editor.externalStyleWhatHeading":
+		"Otsikkokorosteboksia, kuten ## [!{{id}}] Otsikko, ei renderöidä — teksti pysyy sellaisenaan.",
+	"editor.externalStyleWhatInline":
+		"Ei myöskään rivinsisäistä, kuten sana [!{{id}}] sana.",
+	"editor.externalStyleWhatGlobal":
+		"Yleiset tyyliasetukset (reunus, pyöristys, tekstin koko) eivät koske sitä.",
+	"editor.externalStylePreviewTitle": "Miten se näkyy nyt",
+	"editor.externalStyleSample":
+		"## [!{{id}}] Otsikko\n\n" +
+		"Näin näyttää lause, jossa on [!{{id}}].\n\n" +
+		"> [!{{id}}] {{name}}\n" +
+		"> Näin näyttää korosteboksin sisältö.\n",
+	"editor.externalStyleResume": "Ota tyylitys takaisin",
+	"editor.externalStyleClose": "Selvä",
 	// Palette editor modal
 	"palette.newTitle": "Uusi väripaletti",
 	"palette.editTitle": "Muokkaa väripalettia",

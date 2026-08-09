@@ -42,6 +42,7 @@ import {
 	CSS_UNKNOWN,
 	calloutDomId,
 	resolveCalloutDef,
+	shouldRenderToken,
 } from "../renderShared";
 import { isHeadingFoldEnabled } from "../headingFold";
 import {
@@ -261,6 +262,14 @@ function decorateLine(
 		const from = lineFrom + token.from;
 		const to = lineFrom + token.to;
 
+		// The theme owns this callout: no bar, no title mark, no token widget,
+		// no fold chevron, no pill — the `[!id]` stays as the literal text the
+		// user typed. One guard here rather than five below, because every
+		// decoration in this loop is keyed off the same token.
+		if (!shouldRenderToken(resolveCalloutDef(host.registry, token.rawId))) {
+			continue;
+		}
+
 		if (token.role === "heading") {
 			if (!headingEnabled) continue;
 			const resolved = resolveCalloutDef(host.registry, token.rawId);
@@ -377,6 +386,10 @@ function decorateLine(
 		// so target-side tokens stay skipped; alias-side tokens (TOC-plugin
 		// links) render like their target-side counterparts.
 		if (ref.hasAlias && !ref.inAlias) continue;
+		// Same hand-off as the token loop above: the link keeps its plain text.
+		if (!shouldRenderToken(resolveCalloutDef(host.registry, ref.rawId))) {
+			continue;
+		}
 		// The whole link reveals raw while the selection touches it (matching
 		// Obsidian revealing the `[[`/`]]` brackets), so no token decoration.
 		if (

@@ -111,6 +111,33 @@ export interface ResolvedCalloutDef {
 	def: CalloutDefinition | undefined;
 	/** True when the id matched neither a definition nor an alias. */
 	unknown: boolean;
+	/**
+	 * True when the id resolved to a callout marked
+	 * {@link CalloutDefinition.externalStyle} — render nothing at all for it
+	 * (see {@link shouldRenderToken}).
+	 *
+	 * Deliberately separate from `unknown`, which stays false: an unknown token
+	 * gets `.cs-unknown` styling and keeps the raw id as its label, and both of
+	 * those are still this plugin painting something.
+	 */
+	external: boolean;
+}
+
+/**
+ * Whether the heading-bar / inline-pill / ref-token DOM should be built for a
+ * resolved token at all.
+ *
+ * These three surfaces are the plugin's own invented syntax — no theme and no
+ * CSS snippet styles a `## [!id]` bar, so unlike a blockquote callout there is
+ * nothing for "external style" to hand them *to*. Rendering them anyway would
+ * leave the pill drawn in the fallback accent from styles.css, which is this
+ * plugin very visibly still deciding how the callout looks. So the token is not
+ * built and the `[!id]` stays as the literal text the user typed.
+ *
+ * Every consumer of {@link resolveCalloutDef} that builds DOM calls this first.
+ */
+export function shouldRenderToken(resolved: ResolvedCalloutDef): boolean {
+	return !resolved.external;
 }
 
 /**
@@ -132,10 +159,20 @@ export function resolveCalloutDef(
 	const id = normalizeCalloutId(rawId);
 	const direct =
 		registry.get(id) ?? registry.findByAlias(id) ?? registry.findByAttrId(id);
-	if (direct) return { def: direct, unknown: false };
+	if (direct)
+		return {
+			def: direct,
+			unknown: false,
+			external: direct.externalStyle === true,
+		};
+	// An unrecognized id is NOT external even when the fallback callout it
+	// borrows happens to be: `external` describes the token's own callout, and
+	// the fallback's own flag is refused by CalloutRegistry.setExternalStyle
+	// anyway.
 	return {
 		def: registry.get(registry.settings.fallbackCalloutId),
 		unknown: true,
+		external: false,
 	};
 }
 

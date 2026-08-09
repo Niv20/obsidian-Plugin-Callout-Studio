@@ -90,6 +90,10 @@ export const fa: Record<string, string> = {
 	"settings.makeFallbackAction": "استفاده از سبک پشتیبان پیش‌فرض",
 
 	"settings.colorSwatchAria": "برجسته: {{accent}} · پس‌زمینه: {{bg}}",
+	"settings.externalStyleTag": "استایل خارجی",
+	"settings.externalStyleAction": "استفاده از استایل خارجی (پوسته یا CSS)",
+	"settings.externalStyleBlocked":
+		"این کالوت پیش‌فرض جایگزین است، ابتدا یکی دیگر را انتخاب کنید",
 	"settings.fallbackCallout": "callout پشتیبان پیش‌فرض",
 	"settings.fallbackCalloutDesc":
 		"انواع callout ناشناخته در vault سبک این callout را به ارث می‌برند.",
@@ -161,6 +165,10 @@ export const fa: Record<string, string> = {
 		"هیچ نوع callout جدیدی وارد نشد (شناسه‌ها ممکن است از قبل وجود داشته باشند).",
 	"notice.iconDownloadFailed":
 		'دانلود آیکون Material "{{name}}" ناموفق بود. ممکن است برای این سبک/وزن در دسترس نباشد، یا اتصال شما قطع باشد.',
+	"notice.externalStyleOn":
+		'"{{name}}" اکنون توسط پوسته یا قطعه CSS شما استایل می‌گیرد.',
+	"notice.externalStyleOff":
+		'Callout Studio دوباره "{{name}}" را استایل می‌دهد.',
 	"notice.nothingToWrap": "چیزی برای پیچیدن وجود ندارد.",
 	"notice.cursorNotInsideCallout": "مکان‌نما داخل callout نیست.",
 	"notice.openHotkeysFailed":
@@ -228,6 +236,27 @@ export const fa: Record<string, string> = {
 	"editor.sampleInlineText":
 		"در اینجا یک قرص [!{id}] درون‌خطی در داخل یک پاراگراف وجود دارد.",
 	"editor.previewReadOnly": "پیش‌نمایش زنده قابل ویرایش نیست",
+
+	// External style window (opens instead of the editor for a callout the
+	// user handed to their theme / a CSS snippet)
+	"editor.externalStyleTitle": "استایل‌گرفته خارج از Callout Studio",
+	"editor.externalStyleBody":
+		"Callout Studio هیچ استایلی به {{id}} اعمال نمی‌کند. ظاهر آن از پوسته شما، یک قطعه CSS یا پیش‌فرض‌های Obsidian می‌آید.",
+	"editor.externalStyleWhat": "این یعنی چه",
+	"editor.externalStyleWhatHeading":
+		"کالوتِ عنوان مانند ## [!{{id}}] عنوان رندر نخواهد شد — متن همان‌طور که نوشته شده باقی می‌ماند.",
+	"editor.externalStyleWhatInline":
+		"نه یک کالوتِ درون‌خطی، مانند کلمه [!{{id}}] کلمه.",
+	"editor.externalStyleWhatGlobal":
+		"تنظیمات سراسری استایل (حاشیه، شعاع، اندازه متن) روی آن اعمال نمی‌شود.",
+	"editor.externalStylePreviewTitle": "اکنون چگونه رندر می‌شود",
+	"editor.externalStyleSample":
+		"## [!{{id}}] عنوان\n\n" +
+		"این شکل جمله‌ای است که [!{{id}}] در آن است.\n\n" +
+		"> [!{{id}}] {{name}}\n" +
+		"> این شکل محتوای کالوت است.\n",
+	"editor.externalStyleResume": "بازپس‌گیری استایل",
+	"editor.externalStyleClose": "متوجه شدم",
 
 	// Palette editor modal
 	"palette.newTitle": "پالت رنگ جدید",

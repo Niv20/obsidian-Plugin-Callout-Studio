@@ -82,6 +82,10 @@ export const nb: Record<string, string> = {
 	"settings.resetAction": "Tilbakestill til standard",
 	"settings.makeFallbackAction": "Bruk standard reservestil",
 	"settings.colorSwatchAria": "Aksent: {{accent}} · Bakgrunn: {{bg}}",
+	"settings.externalStyleTag": "Ekstern stil",
+	"settings.externalStyleAction": "Bruk ekstern stil (tema eller CSS)",
+	"settings.externalStyleBlocked":
+		"dette er standard reserve-callouten, velg en annen først",
 	"settings.fallbackCallout": "Standard reserve-callout",
 	"settings.fallbackCalloutDesc":
 		"Ukjente callout-typer i valvet ditt vil arve stilen fra denne callout-en.",
@@ -148,6 +152,9 @@ export const nb: Record<string, string> = {
 		"Ingen nye callout-typer importert (ID-er kan allerede eksistere).",
 	"notice.iconDownloadFailed":
 		'Kunne ikke laste ned Material-ikonet "{{name}}". Det kan være utilgjengelig for denne stilen/vekten, eller tilkoblingen er frakoblet.',
+	"notice.externalStyleOn":
+		'"{{name}}" er nå stylet av temaet ditt eller CSS-utdraget.',
+	"notice.externalStyleOff": 'Callout Studio styler igjen "{{name}}".',
 	"notice.nothingToWrap": "Ingenting å pakke inn.",
 	"notice.cursorNotInsideCallout": "Markøren er ikke inne i en callout.",
 	"notice.openHotkeysFailed":
@@ -217,6 +224,27 @@ export const nb: Record<string, string> = {
 	"editor.sampleInlineText":
 		"Her er en innebygd [!{id}] pille inne i et avsnitt.",
 	"editor.previewReadOnly": "Direktevisningen kan ikke redigeres",
+
+	// External style window (opens instead of the editor for a callout the
+	// user handed to their theme / a CSS snippet)
+	"editor.externalStyleTitle": "Stylet utenfor Callout Studio",
+	"editor.externalStyleBody":
+		"Callout Studio bruker ingen stil på {{id}}. Utseendet kommer fra temaet ditt, et CSS-utdrag eller Obsidians standardverdier.",
+	"editor.externalStyleWhat": "Hva dette betyr",
+	"editor.externalStyleWhatHeading":
+		"En overskrifts-callout som ## [!{{id}}] Tittel vil ikke bli gjengitt — teksten forblir som skrevet.",
+	"editor.externalStyleWhatInline":
+		"Heller ikke en innebygd, som ord [!{{id}}] ord.",
+	"editor.externalStyleWhatGlobal":
+		"Globale stilinnstillinger (kant, radius, tekststørrelse) gjelder ikke for den.",
+	"editor.externalStylePreviewTitle": "Hvordan den gjengis nå",
+	"editor.externalStyleSample":
+		"## [!{{id}}] Tittel\n\n" +
+		"Slik ser en setning med [!{{id}}] i seg ut.\n\n" +
+		"> [!{{id}}] {{name}}\n" +
+		"> Slik ser innholdet i callouten ut.\n",
+	"editor.externalStyleResume": "Ta tilbake stylingen",
+	"editor.externalStyleClose": "Forstått",
 	// Palette editor modal
 	"palette.newTitle": "Ny fargepalett",
 	"palette.editTitle": "Rediger fargepalett",

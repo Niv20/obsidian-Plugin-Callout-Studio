@@ -81,6 +81,19 @@ Regular, heading, and inline callouts each get their own style popup, opened fro
 
 When a note uses a callout ID that doesn't exist in the registry, Callout Studio styles it using the **default fallback callout**. You can pick which callout acts as the fallback in settings.
 
+### External style — let your theme own a callout
+
+Some themes (ITS, Border, AnuPpuccin…) ship elaborate callout styling of their own, and Callout Studio wins those conflicts by default: its CSS is applied last, so at the specificity a theme normally writes, the plugin's rule takes precedence.
+
+**External style** turns that off for one callout at a time. Open the **⋯** menu on any row — built-in or custom — and pick **Use external style (theme or CSS)**. From then on Callout Studio emits no CSS and renders no DOM for that callout: no colors, no background, no icon, no border, radius or text-size from Global style, and no icon repainting. Your theme, your CSS snippet, or plain Obsidian decides how it looks.
+
+Two things to know:
+
+- The callout's **heading** (`## [!type]`) and **inline** (`word [!type] word`) forms stop rendering too. Those are Callout Studio's own syntax, so there is no theme styling for them to fall back to — the `[!type]` simply stays as the text you wrote.
+- The row stays in your list, tagged **External style**, with its icon and color swatches hidden — they no longer describe anything you'd see. Clicking edit opens a window that explains the situation and shows a live preview of how your theme actually renders it, with one button to take control back.
+
+The **default fallback callout** can't be marked this way; pick a different fallback first.
+
 ### Vault discovery
 
 Callout Studio keeps the registry in sync with what's actually used in your vault:

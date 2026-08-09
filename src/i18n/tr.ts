@@ -91,6 +91,10 @@ export const tr: Record<string, string> = {
 	"settings.makeFallbackAction": "Varsayılan geri dönüş stilini kullan",
 
 	"settings.colorSwatchAria": "Vurgu: {{accent}} · Arka plan: {{bg}}",
+	"settings.externalStyleTag": "Harici stil",
+	"settings.externalStyleAction": "Harici stili kullan (tema veya CSS)",
+	"settings.externalStyleBlocked":
+		"bu varsayılan yedek callout, önce başka birini seçin",
 	"settings.fallbackCallout": "Varsayılan geri dönüş callout'u",
 	"settings.fallbackCalloutDesc":
 		"Vault'unuzdaki tanınmayan callout türleri bu callout'un stilini devralır.",
@@ -163,6 +167,10 @@ export const tr: Record<string, string> = {
 		"Yeni callout türü içe aktarılmadı (ID'ler zaten mevcut olabilir).",
 	"notice.iconDownloadFailed":
 		'"{{name}}" Material simgesi indirilemedi. Bu stil/ağırlık için mevcut olmayabilir veya bağlantınız çevrimdışı olabilir.',
+	"notice.externalStyleOn":
+		'"{{name}}" artık temanız veya CSS parçanız tarafından stillendiriliyor.',
+	"notice.externalStyleOff":
+		'Callout Studio "{{name}}" öğesini yeniden stillendiriyor.',
 	"notice.nothingToWrap": "Sarılacak bir şey yok.",
 	"notice.cursorNotInsideCallout": "İmleç callout içinde değil.",
 	"notice.openHotkeysFailed": "Obsidian kısayol ayarları açılamadı.",
@@ -230,6 +238,27 @@ export const tr: Record<string, string> = {
 	"editor.sampleInlineText":
 		"İşte bir paragraf içinde satır içi bir [!{id}] hapı.",
 	"editor.previewReadOnly": "Canlı önizleme düzenlenemez",
+
+	// External style window (opens instead of the editor for a callout the
+	// user handed to their theme / a CSS snippet)
+	"editor.externalStyleTitle": "Callout Studio dışında stillendirildi",
+	"editor.externalStyleBody":
+		"Callout Studio, {{id}} öğesine hiçbir stil uygulamıyor. Görünümü temanızdan, bir CSS parçasından veya Obsidian'ın varsayılanlarından geliyor.",
+	"editor.externalStyleWhat": "Bunun anlamı",
+	"editor.externalStyleWhatHeading":
+		"## [!{{id}}] Başlık gibi bir başlık callout'u işlenmeyecek — metin yazıldığı gibi kalır.",
+	"editor.externalStyleWhatInline":
+		"Satır içi bir tane de öyle, örneğin kelime [!{{id}}] kelime.",
+	"editor.externalStyleWhatGlobal":
+		"Genel stil ayarları (kenarlık, yarıçap, metin boyutu) buna uygulanmaz.",
+	"editor.externalStylePreviewTitle": "Şu anda nasıl görüntüleniyor",
+	"editor.externalStyleSample":
+		"## [!{{id}}] Başlık\n\n" +
+		"İçinde [!{{id}}] olan bir cümle böyle görünür.\n\n" +
+		"> [!{{id}}] {{name}}\n" +
+		"> Callout içeriği böyle görünür.\n",
+	"editor.externalStyleResume": "Stili geri al",
+	"editor.externalStyleClose": "Anladım",
 
 	// Palette editor modal
 	"palette.newTitle": "Yeni renk paleti",

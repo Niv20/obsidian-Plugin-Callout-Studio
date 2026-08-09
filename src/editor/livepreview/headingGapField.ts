@@ -24,6 +24,7 @@ import type { DecorationSet } from "@codemirror/view";
 import { syntaxTree } from "@codemirror/language";
 import { editorLivePreviewField } from "obsidian";
 import { scanLineForCalloutTokens } from "../calloutTokens";
+import { resolveCalloutDef, shouldRenderToken } from "../renderShared";
 import { HeadingGapWidget } from "./headingGapWidget";
 import { calloutStudioRefresh } from "./refresh";
 import type { LivePreviewHost } from "./calloutViewPlugin";
@@ -61,7 +62,15 @@ function buildGaps(state: EditorState, host: LivePreviewHost): DecorationSet {
 		const tokens = scanLineForCalloutTokens(line.text);
 		// Native `> [!id]` blockquote callouts belong to Obsidian's rendering.
 		if (tokens.some((tk) => tk.role === "regular")) continue;
-		if (tokens.some((tk) => tk.role === "heading")) {
+		// The gap belongs to the bar, so it goes wherever the bar goes: a
+		// heading whose callout was handed to the theme renders as plain text
+		// and would otherwise sit under a blank band with nothing above it.
+		const drawsBar = tokens.some(
+			(tk) =>
+				tk.role === "heading" &&
+				shouldRenderToken(resolveCalloutDef(host.registry, tk.rawId)),
+		);
+		if (drawsBar) {
 			builder.add(line.from, line.from, gap);
 		}
 	}

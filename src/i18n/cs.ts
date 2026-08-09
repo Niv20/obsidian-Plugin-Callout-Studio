@@ -90,6 +90,10 @@ export const cs: Record<string, string> = {
 	"settings.makeFallbackAction": "Použít výchozí záložní styl",
 
 	"settings.colorSwatchAria": "Akcent: {{accent}} · Pozadí: {{bg}}",
+	"settings.externalStyleTag": "Externí styl",
+	"settings.externalStyleAction": "Použít externí styl (motiv nebo CSS)",
+	"settings.externalStyleBlocked":
+		"toto je výchozí záložní callout, nejprve vyberte jiný",
 	"settings.fallbackCallout": "Výchozí záložní callout",
 	"settings.fallbackCalloutDesc":
 		"Nerozpoznané typy callout ve vaultu zdědí styl tohoto callout.",
@@ -161,6 +165,9 @@ export const cs: Record<string, string> = {
 		"Žádné nové typy callout nebyly importovány (ID mohou již existovat).",
 	"notice.iconDownloadFailed":
 		'Ikonu Material "{{name}}" nelze stáhnout. Může být nedostupná pro tento styl/tloušťku nebo jste offline.',
+	"notice.externalStyleOn":
+		'"{{name}}" je nyní stylizován vaším motivem nebo CSS fragmentem.',
+	"notice.externalStyleOff": 'Callout Studio opět stylizuje "{{name}}".',
 	"notice.nothingToWrap": "Není co zabalit.",
 	"notice.cursorNotInsideCallout": "Kurzor není uvnitř callout.",
 	"notice.openHotkeysFailed":
@@ -229,6 +236,27 @@ export const cs: Record<string, string> = {
 	"editor.sampleInlineText":
 		"Zde je vložená pilulka [!{id}] uvnitř odstavce.",
 	"editor.previewReadOnly": "Živý náhled nelze upravovat",
+
+	// External style window (opens instead of the editor for a callout the
+	// user handed to their theme / a CSS snippet)
+	"editor.externalStyleTitle": "Stylizováno mimo Callout Studio",
+	"editor.externalStyleBody":
+		"Callout Studio na {{id}} neaplikuje žádný styl. Jeho vzhled pochází z vašeho motivu, CSS fragmentu nebo výchozího nastavení Obsidianu.",
+	"editor.externalStyleWhat": "Co to znamená",
+	"editor.externalStyleWhatHeading":
+		"Nadpisový callout jako ## [!{{id}}] Nadpis se nevykreslí — text zůstane tak, jak byl napsán.",
+	"editor.externalStyleWhatInline":
+		"Stejně tak ani vložený, například slovo [!{{id}}] slovo.",
+	"editor.externalStyleWhatGlobal":
+		"Globální nastavení stylu (ohraničení, zaoblení, velikost textu) se na něj nevztahují.",
+	"editor.externalStylePreviewTitle": "Jak se nyní vykresluje",
+	"editor.externalStyleSample":
+		"## [!{{id}}] Nadpis\n\n" +
+		"Takto vypadá věta s [!{{id}}].\n\n" +
+		"> [!{{id}}] {{name}}\n" +
+		"> Takto vypadá obsah calloutu.\n",
+	"editor.externalStyleResume": "Obnovit stylizaci",
+	"editor.externalStyleClose": "Rozumím",
 
 	// Palette editor modal
 	"palette.newTitle": "Nová barevná paleta",
