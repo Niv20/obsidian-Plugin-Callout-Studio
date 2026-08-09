@@ -81,6 +81,12 @@ export class CalloutTokenWidget extends WidgetType {
 			// Two pills of the same type with different metadata render
 			// different DOM, so they must not share a cached node.
 			this.metadata,
+			// And `sourceLen`, which no other field implies: `[!x]` and `[!x|]`
+			// agree on rawId AND on metadata (both ""), so without this they
+			// share a key, eq() reuses the widget, and the mousedown closure
+			// keeps a span width one short of the token it now stands for —
+			// putting the caret in the wrong place after a `|` is typed.
+			String(this.sourceLen),
 			unknown ? "u" : "",
 			def?.id ?? "",
 			def?.displayName ?? "",

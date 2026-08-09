@@ -11,7 +11,8 @@
  *   or matching against the registry. Drops metadata, then normalizes
  *   whitespace and case; all other characters are preserved.
  * - sanitizeCalloutIdInput — restrictive; used when the user *creates* an ID in
- *   the editor. Restricts the allowed character set.
+ *   the editor. Restricts the allowed character set. Does NOT split metadata:
+ *   its input is a display name, not a token body.
  * - obsidianCalloutAttrId — the form Obsidian itself writes into a blockquote
  *   callout's `data-callout` attribute. Used *only* for `.callout[…]` selectors
  *   and when reading that attribute back.
@@ -79,14 +80,17 @@ export const normalizeCalloutId = (raw: string): string =>
 
 /**
  * Sanitize raw text typed into the editor's ID field into a valid callout ID.
- * Drops any `|metadata`, lowercases, keeps only letters/numbers/space/dash, and
- * folds dash runs into the same single-space word separator as whitespace,
- * trimming the result. May return "" when the input has no usable characters
- * (callers reject empty IDs).
+ * Lowercases, keeps only letters/numbers/space/dash, and folds dash runs into
+ * the same single-space word separator as whitespace, trimming the result. May
+ * return "" when the input has no usable characters (callers reject empty IDs).
  *
- * The metadata split runs first so pasting `note|purple` here yields `note` —
- * the callout that text actually names — rather than the `notepurple` the bare
- * character filter would produce.
+ * Deliberately does NOT split on `|`, unlike normalizeCalloutId: nothing that
+ * reaches here is a `[!…]` token body. Its callers are the editor deriving an
+ * ID from a *display name* (CalloutEditor.generateId) and alias entry
+ * (TagInput) — in both, a pipe is a character the user typed in a name, not a
+ * metadata separator, so splitting would silently throw away the second half of
+ * it (`Q|A` → `q` rather than `qa`). The pipe still falls out below as a
+ * disallowed character, which is all the ID field ever needed.
  *
  * Dashes are folded rather than preserved because Obsidian itself can never
  * tell the two apart: its own default callout title generation runs
@@ -98,8 +102,8 @@ export const normalizeCalloutId = (raw: string): string =>
  * obsidianCalloutAttrId below.
  */
 export const sanitizeCalloutIdInput = (raw: string): string =>
-	splitCalloutMetadata(raw)
-		.id.toLowerCase()
+	raw
+		.toLowerCase()
 		.replace(/[^\p{L}\p{N}\s-]/gu, "")
 		.replace(/[\s-]+/g, " ")
 		.trim();

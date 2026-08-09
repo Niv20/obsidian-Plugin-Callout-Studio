@@ -285,44 +285,6 @@ function withIdentityOf(
 	};
 }
 
-/**
- * The ID the pre-metadata editor derived from a display name: the old
- * `sanitizeCalloutIdInput`, which dropped `|` as just another disallowed
- * character instead of recognizing it as the metadata separator.
- *
- * Reproduced here verbatim rather than reused, because it is a fingerprint of
- * data already on disk, not a rule anything still applies. Discovery created
- * `note|green` (display name `Note|green`); opening that row in the editor once
- * re-derived the ID and saved it as `notegreen` — so a vault can carry the same
- * dead row under either spelling.
- */
-const legacyPipeEatenId = (displayName: string): string =>
-	displayName
-		.toLowerCase()
-		.replace(/[^\p{L}\p{N}\s-]/gu, "")
-		.replace(/[\s-]+/g, " ")
-		.trim();
-
-/**
- * The callout a definition was really describing when its ID came from a
- * `[!type|metadata]` token, or null when it is an ordinary definition.
- *
- * The legacy branch is deliberately narrow: it fires only when the display name
- * still carries the pipe AND the ID is exactly what the old sanitizer would
- * have made of that name. A row someone renamed themselves no longer matches
- * that pairing and is left alone.
- */
-function metadataBase(def: CalloutDefinition): string | null {
-	if (def.id.includes("|")) {
-		const base = normalizeCalloutId(def.id);
-		return base === def.id ? null : base;
-	}
-	if (!def.displayName.includes("|")) return null;
-	if (def.id !== legacyPipeEatenId(def.displayName)) return null;
-	const base = normalizeCalloutId(def.displayName);
-	return base && base !== def.id ? base : null;
-}
-
 export class CalloutRegistry {
 	private callouts: Map<string, CalloutDefinition> = new Map();
 	private builtInDefaults: Map<string, CalloutDefinition> = new Map();
@@ -540,16 +502,28 @@ export class CalloutRegistry {
 	 * styled nothing where it mattered: their selector is
 	 * `.callout[data-callout="note|green"]`, and Obsidian writes `note`.
 	 *
-	 * Two stored spellings need retiring, both handled by {@link metadataBase}:
-	 * the piped ID itself, and the `notegreen` shape an editor save left behind
-	 * (see legacyPipeEatenId).
-	 *
 	 * A row is renamed to its base ID when that ID is free, so a genuinely
 	 * customized one keeps its icon and colors and starts matching the callout
 	 * it always named. When the base is taken — the common case, since the base
 	 * is usually a built-in — the row is dropped: it can no longer be reached by
 	 * any spelling, and merging it into the survivor would silently restyle a
-	 * callout the user never asked to change.
+	 * callout the user never asked to change. Renaming is safe precisely because
+	 * the retired spelling was never a real callout ID: Obsidian split the pipe
+	 * off long before this plugin saw the token, so no note can contain a
+	 * `[!note|green]` that meant anything other than `note`.
+	 *
+	 * **Only the piped ID is retired.** Opening such a row in a pre-metadata
+	 * editor could also leave the pipe-eaten spelling `notegreen` behind, and an
+	 * earlier draft of this migration retired that too — by matching an ID that
+	 * equalled the old sanitizer's reading of its own display name. That test
+	 * has no false negatives and plenty of false positives: the old editor
+	 * *pinned* the ID to the display name, so every user callout ever named with
+	 * a pipe (`Pros|Cons` → `proscons`) matched it by construction and would
+	 * have been renamed to `pros` — silently breaking every `[!proscons]`
+	 * already written in the vault. Unlike the piped spelling, `notegreen` IS a
+	 * reachable ID, so it is left alone; an uncustomized one is already swept up
+	 * by {@link CalloutDiscovery.pruneUnused}, and a customized one is the
+	 * user's to delete.
 	 *
 	 * Keyed on the definitions' content rather than on `data.version`, like the
 	 * other migrations in {@link load}: an imported or hand-edited file can
@@ -558,11 +532,13 @@ export class CalloutRegistry {
 	private stripMetadataFromIds(): void {
 		const removed: string[] = [];
 		const renamed: string[] = [];
+		let aliasesChanged = false;
 
 		for (const def of Array.from(this.callouts.values())) {
 			// Aliases first, so a row that survives on its ID is clean too.
 			if (def.aliases?.some((a) => a.includes("|"))) {
 				const seen = new Set<string>();
+				const before = def.aliases;
 				def.aliases = def.aliases
 					.map((a) => normalizeCalloutId(a))
 					.filter((a) => {
@@ -572,29 +548,82 @@ export class CalloutRegistry {
 						seen.add(a);
 						return true;
 					});
+				// Rewriting aliases is a rewrite of the stored definitions like
+				// any other, so it has to flush too. Missing this left an
+				// alias-only cleanup redone on every load and never written back
+				// — the exact failure needsSaveAfterLoad exists to prevent.
+				if (
+					def.aliases.length !== before.length ||
+					def.aliases.some((a, i) => a !== before[i])
+				) {
+					aliasesChanged = true;
+				}
 			}
 
 			// Built-ins ship without metadata; never risk dropping one.
 			if (def.builtIn) continue;
-			const base = metadataBase(def);
-			if (base === null) continue;
+			if (!def.id.includes("|")) continue;
+			// normalizeCalloutId truncates at the first pipe, so this can never
+			// come back equal to an ID that contains one.
+			const base = normalizeCalloutId(def.id);
 
 			this.callouts.delete(def.id);
 			// An empty base (`[!|purple]` named nothing at all) has nowhere to go.
 			if (!base || this.callouts.has(base)) {
 				removed.push(def.id);
+				this.releaseFallbackTarget(def.id, null);
 				continue;
 			}
 			renamed.push(`${def.id} → ${base}`);
-			this.setCallout(base, { ...def, id: base });
+			this.setCallout(base, {
+				...def,
+				id: base,
+				// The display name carried the metadata too — a discovery row for
+				// `[!custom|meta]` was named "Custom|meta". Left alone it would
+				// still read that way in the settings list AND on screen, since
+				// the heading bar and inline pill are painted from displayName.
+				// Re-derive it the way discovery would have for the base id.
+				displayName: def.displayName.includes("|")
+					? obsidianDefaultTitle(base)
+					: def.displayName,
+			});
+			this.releaseFallbackTarget(def.id, base);
 		}
 
-		if (removed.length === 0 && renamed.length === 0) return;
+		if (
+			removed.length === 0 &&
+			renamed.length === 0 &&
+			!aliasesChanged
+		) {
+			return;
+		}
 		this.pendingLoadMigrationSave = true;
-		console.debug(
-			"[CalloutStudio] callout metadata migration:",
-			{ removed, renamed },
-		);
+		if (removed.length > 0 || renamed.length > 0) {
+			console.debug(
+				"[CalloutStudio] callout metadata migration:",
+				{ removed, renamed },
+			);
+		}
+	}
+
+	/**
+	 * Re-point `settings.fallbackCalloutId` when the migration retires the row
+	 * it names — to `replacement` if the row was renamed, or to the default when
+	 * it is gone for good.
+	 *
+	 * {@link remove} does this for every other deletion path; the migration
+	 * deletes straight off the map, so it has to do the same by hand. A dangling
+	 * value is not inert: `generateFallbackCSS` bails when the id resolves to
+	 * nothing, and every unrecognized callout in the vault silently loses its
+	 * colour, icon and background.
+	 */
+	private releaseFallbackTarget(
+		retiredId: string,
+		replacement: string | null,
+	): void {
+		if (this.settings.fallbackCalloutId !== retiredId) return;
+		this.settings.fallbackCalloutId =
+			replacement ?? DEFAULT_SETTINGS.fallbackCalloutId;
 	}
 
 	/**
