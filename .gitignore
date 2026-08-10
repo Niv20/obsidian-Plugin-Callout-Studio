@@ -24,6 +24,11 @@ data.json
 # Icon packs downloaded at runtime — served from the packs-v1 tag, never committed
 icon-packs/
 
+# Material Symbols webfonts cached at runtime — fetched from fonts.gstatic.com on
+# first use of the picker's Material grid. A cache, never a dependency: Google
+# reissues the file whenever the icon set changes, so a pinned copy would go stale.
+icon-fonts/
+
 # local agent state
 .serena/
 graphify-out/
