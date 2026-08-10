@@ -10,7 +10,7 @@ npm run build     # production build (typecheck + minify)
 npm run lint      # ESLint across src/
 ```
 
-No automated test suite — testing is manual: copy `main.js` + `manifest.json` to `<Vault>/.obsidian/plugins/callout-studio/` and reload Obsidian.
+No automated test suite — testing is manual: copy `main.js`, `manifest.json`, and `styles.css` to `<Vault>/.obsidian/plugins/callout-studio/` and reload Obsidian.
 
 Versions: bump `manifest.json` + `versions.json` together. Tag must match `manifest.json` version exactly (no leading `v`).
 
@@ -58,22 +58,7 @@ They differ only for Font Awesome (one source, three files — `fa-solid`/`fa-re
 
 `IconPackKind` decides how artwork reaches the screen: `builtin` (Lucide, via `setIcon`), `glyph` (emoji), `perIconRemote` (Material — 100,000+ style/weight variants, so fetched one at a time), `bundledRemote` (Tabler, Font Awesome, Octicons, RPG Awesome — files downloaded on request, listed per source in `dataPacks`), `local` (**Your images** — the user's own files, held in `settings.userImages`, never fetched).
 
-### Stroked artwork (Tabler outline)
-
-Every other downloadable pack is solid artwork the renderer fills. Tabler's outline set is drawn with a stroke and `fill="none"`, which the drawing has to state for itself — so **the stroke lives in `packs/tabler.ts` as a `PackStroke` constant, never in the downloaded file**, which stays path data and 1s and therefore still skips SVG sanitization. `buildPackSvg` takes it as an optional argument and puts it on the root; `PackGlyph`'s `f`/`n` flags let the 77 solid details inside an outline (dice pips, `brand-reddit`'s eyes) opt out, and are flags rather than values for the same reason. **`PACK_FORMAT` was deliberately not bumped** — the additions are optional and appear only in a pack no older build can name.
-
-Two consumers see that paint and neither needed changing: a CSS `mask-image` reads alpha only, and `currentColor` inside a data URI resolves to black there (the behaviour `renderIcon.ts`'s `SVG_INITIAL_COLOR` already documents). In the DOM, `paintSvgIcon` recognises a stroked drawing by the `stroke` on its root (`isStroked`) and leaves it alone on screen — `currentColor` already tracks the surrounding colour, as `builtin` Lucide does — while a baked export colour goes through the existing `stencilSvg`, which rewrites declared paint without ever colouring a `none`.
-
-### Your images (`icon.type === "image"`)
-
-The one source the user writes to. `CalloutIcon.value` is a `UserImageIcon.id`, not artwork — the import validator caps `value` at 200 chars.
-
-- **Everything is stored as SVG markup.** An uploaded SVG stays vector; a PNG/JPEG/WebP is canvas-scaled to ≤128px and wrapped in `<svg><image href="data:…"></svg>` (`icons/userImageImport.ts`). That single representation is why `IconResolver`, `renderIconInto`, the settings list and the PDF-export path needed no changes — `resolver.ts` already falls back to `pack.buildSvg()`.
-- **`sanitizeUserSvg` (`icons/svg.ts`) is an allow-list**, separate from `sanitizeSVG` (Material's deny-list, for one trusted vendor). It re-runs on every read via `sanitizeUserImages`, because `data.json` syncs and can be hand-edited.
-- **Whether a picture follows the callout's colour is the *callout's* choice, not the picture's** — `CalloutIcon.recolor`, so one logo can be tinted in `[!bug]` and left alone in `[!note]`. The picture only carries `monochrome`, detected on import, which seeds that flag in `makeIcon`. `followsCalloutColor(icon, image)` holds both halves (the callout's choice *and* the SVG-only capability) so the three call sites can't drift.
-- **Two places branch on `followsCalloutColor`, and only two.** In CSS, a picture *not* following the callout is emitted as `background-image` (`generateImageOverride`), not `mask-image`, because a mask is a stencil and would flatten it to a silhouette. In the DOM, `renderIcon`'s `stencilSvg` does what that mask does — rewrites every paint the artwork declares (attributes, `style`, `<style>` classes) to the callout's colour — because the heading, inline and ref surfaces paint a real SVG and a `fill` on its root only ever reaches the shapes that declared no colour of their own. `cacheVariant` keys on `icon.recolor` for the same reason — two callouts sharing a picture must not share a render key.
-- **`registry.setUserImages()` is the single writer**, which re-syncs the pack's module-level snapshot (`buildSvg` is synchronous by contract, so it cannot read settings itself).
-- **The picker uses `ImagePanel`, not `PackPanel`** — add and delete are affordances the `IconPack` contract deliberately has no room for. The "Follow callout color" toggle is *not* there; it lives in `CalloutEditor`'s Picture section, beside the icon's size and offsets, because it belongs to the callout.
+Two subsystems are narrow enough to live in their own skill rather than here: Tabler's stroked outline drawings (`tabler-outline-stroke` skill) and the **Your images** user-upload source (`user-image-icons` skill).
 
 A pack's optional `entryMatches` filters the grid by variant (Font Awesome's style and Tabler's pick *which* icons exist, not just how they look — only 1,054 of Tabler's 5,130 have a filled drawing), and `pickerNotice` scopes a standing notice to certain variants (the Brands trademark note).
 
@@ -83,13 +68,7 @@ Search indexes are bundled (packed by `icons/data/codec.ts`); artwork is not. Re
 
 ### Callout colour and the nesting invariant
 
-**Backgrounds are painted as translucent tints, never as the authored hex, and that is load-bearing.** Obsidian gives nested callouts their stepped look purely by compositing — core paints `color-mix(in oklch, var(--callout-color) 10%, transparent)` under `mix-blend-mode: darken`/`lighten`, so each level lays another layer over the one beneath it and the group alpha climbs as `1 - 0.9ⁿ`, unbounded in depth. An opaque fill hides what is behind it, and `min(x, x) = x` makes the step *exactly* zero. **CSS cannot count nesting depth** (a self-incrementing custom property is a dependency cycle, `:has()` is a predicate not a counter, `counter()` only reaches `content:`), so an explicit per-level rule can only ever approximate a few levels — one was written and deleted for that reason. Translucency is the only real answer.
-
-`translucentTintFor` (`utils/colorUtils.ts`) solves `alpha * colour + (1 - alpha) * backdrop === authored` per channel, so the callout renders *identically* on its own and only what shows through it changes. The alpha is the smallest that keeps the solved colour in gamut, so a colour further from the page gets a weaker — never absent — step; a gradient's two stops share one alpha, since ramping it would tilt the sweep. There is **no opt-out** — a flat fill breaks nesting for everything stacked inside it, so the `solidBackground` flag that used to offer one was retired (`CalloutRegistry.dropSolidBackgroundFlags()` deletes it from old data; `importValidator`'s `RETIRED_FIELDS` drops it from old export files without warning).
-
-**An unmodified built-in gets no `--callout-color` at all** (`CSSInjector.accentProps` + `CalloutRegistry.isUnmodifiedBuiltIn`), so core's rule — and any theme overriding it — keeps deciding the accent. `--cs-accent` is the plugin's own accent variable and is **always a real colour on every Obsidian version**, which is why it, not `--callout-color`, is what our `color-mix()` calls read: core's variable is a bare RGB triplet on ≤1.12 and a full colour on 1.13+. For an untouched built-in it points at core's own variable via `OBSIDIAN_CALLOUT_VAR` (`constants.ts`). `--cs-color-rgb` is legacy, kept one release for external consumers, and nothing here depends on it. The fallback block passes `imposed: true` because its job is to paint callouts *other* than the one it copied — omitting `--callout-color` there would silently disable the setting.
-
-Two migrations keep old data from re-breaking this: `CalloutRegistry.dropDerivedBackgrounds()` retires a stored background that `derivedBgAmount` can show IS just the accent tinted, and `CalloutEditorSave` stops writing one back. The editor form always holds a concrete background (a swatch must show something) — persisting it unconditionally is what turned every callout the user merely opened into an opaque one.
+**Backgrounds are painted as translucent tints, never the authored hex — there is no opt-out.** Obsidian's nested-callout stepping only works by compositing translucent layers; an opaque fill hides everything behind it and breaks nesting for anything stacked inside. This is why the old `solidBackground` flag was retired rather than kept as a toggle. `translucentTintFor` (`utils/colorUtils.ts`) does the actual color-mix math, and an unmodified built-in still gets no `--callout-color` at all so theme overrides keep deciding its accent. See the `callout-color-nesting` skill for the full alpha-solving derivation and the two migrations that clean up old data.
 
 ### Key types (`src/types.ts`)
 
@@ -110,15 +89,7 @@ Built-in callouts are never stored unless modified — `toSaveData()` only persi
 
 ### Callout metadata (`[!type|metadata]`)
 
-Obsidian splits a callout header at the **first `|`**: the part before it is the type, everything after is metadata, emitted as `data-callout-metadata` (verified in its bundled parser — `type.trim().toLowerCase().replace(/\s+/g,"-")`, `data: e.substr(i+1)`, untrimmed, further pipes included). So `> [!note|purple]` is the `note` callout, not a callout named `note|purple`.
-
-**`splitCalloutMetadata` (`utils/calloutId.ts`) is where that rule lives, and `normalizeCalloutId` calls it** — which is what makes it structurally impossible for a piped id to reach the registry, since every path from raw markdown to a definition already funnels through that one function. `obsidianCalloutAttrId` deliberately does *not* strip: Obsidian removed the metadata before that attribute existed, so stripping there could only take a stray stored id and collapse it onto a real callout's CSS rule.
-
-The tokenizer carries `rawId` (type alone) and `metadata` separately while **`from`/`to` keep spanning the whole `[!…]`** — every vault rewriter and Live Preview decoration is built from those offsets, so nothing may derive a length from `rawId`. Anything that rewrites a token must put the metadata back (`replaceCalloutIdsInVault`, every autocomplete insertion path); the plugin's own heading/inline DOM stamps `data-callout-metadata` so themes get the same hook Obsidian gives blockquotes. Import **rejects** a piped id rather than folding it onto the base — importing `note|purple` as `note` would repaint the reader's real `note`.
-
-`CalloutRegistry.stripMetadataFromIds()` retires rows left behind by builds that predate all this — renamed to the base when it's free, dropped when it isn't (the base is usually a built-in, and merging would silently restyle a callout nobody asked to change). It touches **only the piped id** (`note|green`), because that spelling was never reachable: Obsidian split the pipe off before the plugin ever saw the token, so renaming can't orphan a `[!…]` anyone wrote. It deliberately does *not* retire the pipe-eaten `notegreen` an old editor save could also leave behind — that one **is** a real id, and the only test for it (id equals the old sanitizer's reading of its own display name) matches every user callout ever named with a pipe, since the old editor pinned id to display name. `Pros|Cons` → `proscons` would have been renamed to `pros`. An unused `notegreen` is swept up by `CalloutDiscovery.pruneUnused()` anyway.
-
-`sanitizeCalloutIdInput` is the one id helper that does **not** split on the pipe: its callers derive an id from a *display name* or an alias, never from a token body, so a `|` there is a character the user typed and is dropped by the character filter rather than treated as a separator.
+Obsidian splits a callout header at the **first `|`**: everything before it is the type, everything after is metadata (`data-callout-metadata`) — so `> [!note|purple]` is the `note` callout, not one named `note|purple`. **`splitCalloutMetadata`/`normalizeCalloutId` (`utils/calloutId.ts`) is the one funnel every raw-markdown path goes through**, which is what makes a piped id structurally unreachable by the registry — token `from`/`to` still span the whole `[!…]`, so nothing may derive a length from `rawId` alone, and anything that rewrites a token must put the metadata back. See the `callout-metadata-pipe` skill for the migration/edge-case reasoning (`stripMetadataFromIds`, the `notegreen` case, import rejection).
 
 ### Public API (`src/api/PluginAPI.ts`)
 
@@ -126,17 +97,25 @@ Exposes registry and discovery methods to other Obsidian plugins. Treat this sur
 
 ### Localization (`src/i18n/`)
 
-`t()` for all user-facing strings. English (`en.ts`) and Hebrew (`he.ts`) supported. Add new strings to both files.
+`t()` for all user-facing strings — never hardcode UI text. 32 locales live here (see `index.ts` for the loading/fallback-to-English logic). When adding or changing a string, only touch `en.ts`; don't re-translate the rest on every small edit — wait until the user confirms they're happy with the wording, then offer to translate it into the other locale files.
 
 ## Coding conventions
 
 - Keep `src/main.ts` minimal — lifecycle and wiring only. All logic lives in sub-modules.
 - Files over ~300 lines should be split by responsibility.
 - All listeners and intervals must use `this.registerEvent` / `this.registerInterval` / `this.registerDomEvent` so they are cleaned up on unload.
-- Command IDs are stable API — never rename after release.
-- Network calls must remain opt-graceful: always have an offline fallback, and never fetch without an explicit user action. No new network calls without disclosure in the README's *Network usage and privacy* section.
+- Command IDs are stable API — never rename after release. So is `manifest.json`'s `id`: changing it breaks every existing install, since both the vault folder name and the community-plugins registry key off it.
+- Network calls must remain opt-graceful: always have an offline fallback, and never fetch without an explicit user action. No new network calls without disclosure in the README's *Network usage and privacy* section. Never execute remote code or eval a fetched script; read/write only what's necessary inside the vault, never files outside it.
+- `isDesktopOnly` is `false` (`manifest.json`) — avoid Node/Electron-only APIs. The startup CSS-snapshot cache (see README's *What is stored locally*) exists specifically to soften slow mobile launches.
 - TypeScript strict mode is enforced. No `any` without explicit ESLint disable comment.
 - UI copy: sentence case for headings/buttons; **bold** for UI labels; arrow notation (`Settings → Hotkeys`) for navigation.
+
+## References
+
+- Obsidian API docs: https://docs.obsidian.md
+- Developer policies: https://docs.obsidian.md/Developer+policies
+- Plugin guidelines: https://docs.obsidian.md/Plugins/Releasing/Plugin+guidelines
+- Manifest validation rules (canonical): https://github.com/obsidianmd/obsidian-releases/blob/master/.github/workflows/validate-plugin-entry.yml
 
 ## graphify
 
