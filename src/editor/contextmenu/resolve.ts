@@ -149,19 +149,39 @@ function resolveHeadingContext(
 	const view = findMarkdownViewForTarget(plugin, trigger.targetEl);
 	if (!view) return null;
 
-	// Locate the heading's source line: editor coords in LP, section info in
-	// reading view.
+	// Locate the heading's source line: the matched element in LP, section info
+	// in reading view.
 	let headingLine: number | null = null;
 	const cmRoot = trigger.targetEl.closest(".cm-editor");
 	if (cmRoot instanceof HTMLElement) {
 		const editorView = EditorView.findFromDOM(cmRoot);
 		if (editorView) {
-			const coords = { x: trigger.clientX, y: trigger.clientY };
-			const offset =
-				editorView.posAtCoords(coords) ??
-				editorView.posAtCoords(coords, false);
-			if (offset != null) {
-				headingLine = view.editor.offsetToPos(offset).line;
+			// `headingEl` is the bar itself — a Decoration.line, so it IS the
+			// .cm-line — or the token widget inside it. Either way its own
+			// document position names the heading line exactly, with no
+			// dependence on where in the row the pointer landed.
+			//
+			// posAtCoords cannot do that: the bar's vertical padding bands
+			// (--cs-heading-pad-top/bottom) and the empty tail after the title
+			// are inside the element but outside any text row, so it returns
+			// null there and the `, false` fallback snaps to a NEIGHBOURING
+			// line. The re-verify below then finds no heading token and the
+			// whole menu disappears — which is why right-click only worked
+			// when it landed exactly on the heading's text.
+			try {
+				headingLine = view.editor.offsetToPos(
+					editorView.posAtDOM(headingEl),
+				).line;
+			} catch {
+				// Element not part of this view's content (detached mid-menu):
+				// fall back to the pointer, which is better than no menu.
+				const coords = { x: trigger.clientX, y: trigger.clientY };
+				const offset =
+					editorView.posAtCoords(coords) ??
+					editorView.posAtCoords(coords, false);
+				if (offset != null) {
+					headingLine = view.editor.offsetToPos(offset).line;
+				}
 			}
 		}
 	} else {
