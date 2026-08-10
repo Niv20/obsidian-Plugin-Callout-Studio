@@ -9,7 +9,7 @@
  *
  * The picker previews the grid with the Material Symbols webfont instead, which
  * is why this pack renders its grid from a font while every other SVG pack
- * renders it from path data.
+ * renders it from path data. That font lives in `materialFont.ts`.
  */
 import { requestUrl } from "obsidian";
 import type { CalloutIcon, MaterialIconStyle } from "../../types";
@@ -24,7 +24,6 @@ import { MATERIAL_INDEX } from "../data/material.index";
 import { sanitizeSVG } from "../svg";
 
 const loadIndex = memoizeIndex(() => decodeIndex(MATERIAL_INDEX));
-const fontLoads = new Map<string, Promise<void>>();
 
 /** Defaults applied when an icon omits the fields (pre-2.0 data, or imports). */
 export const MATERIAL_DEFAULT_STYLE: MaterialIconStyle = "outlined";
@@ -123,80 +122,6 @@ export const materialPack: IconPack = {
 		return `${style}|${weight}`;
 	},
 };
-
-// ── Webfont (grid preview only) ─────────────────────────────────────────
-
-/** The CSS font-family each style renders under. */
-export function materialFontFamily(style: MaterialIconStyle): string {
-	switch (style) {
-		case "outlined":
-			return "Material Symbols Outlined";
-		case "rounded":
-			return "Material Symbols Rounded";
-		case "sharp":
-			return "Material Symbols Sharp";
-		case "filled":
-			// Filled is the same font at FILL 1, not a separate family.
-			return "Material Symbols Outlined";
-	}
-}
-
-/**
- * Load the Material Symbols variable font for a style, for the picker grid.
- *
- * Injected as a stylesheet `<link>` rather than fetched through `requestUrl`
- * deliberately: the browser sends its own Chrome user-agent, and Google only
- * returns the variable woff2 carrying the FILL axis to a browser. Fetching it
- * ourselves yields per-weight static TTFs that cannot render filled glyphs.
- *
- * Never rejects — an unreachable font must not stop the user browsing; the
- * ligature names simply show as text until it arrives.
- */
-export function ensureMaterialFontLoaded(
-	style: MaterialIconStyle,
-): Promise<void> {
-	const family = materialFontFamily(style);
-	const cached = fontLoads.get(family);
-	if (cached) return cached;
-
-	const load = new Promise<void>((resolve) => {
-		const doc = activeDocument;
-		const href =
-			`https://fonts.googleapis.com/css2?family=${family.replace(/ /g, "+")}` +
-			`:opsz,wght,FILL,GRAD@24,100..700,0..1,0`;
-
-		// The <link> firing `load` only means the CSS arrived; force the font
-		// file itself to download so glyphs are ready on the first paint.
-		const ready = () =>
-			doc.fonts
-				.load(`24px "${family}"`)
-				.then(() => resolve())
-				.catch(() => resolve());
-
-		// Reuse an existing link (after a reload, or in a popout window).
-		const existing = doc.head.querySelector<HTMLLinkElement>(
-			`link[data-cs-material-font="${family}"]`,
-		);
-		if (existing) {
-			void ready();
-			return;
-		}
-
-		// The bare global createEl is deliberate: document.createElement trips
-		// obsidianmd/prefer-create-el, and a member doc.createEl("link") trips
-		// obsidianmd/no-forbidden-elements. The global helper trips neither.
-		const link = createEl("link");
-		link.rel = "stylesheet";
-		link.href = href;
-		link.setAttribute("data-cs-material-font", family);
-		link.onload = () => void ready();
-		link.onerror = () => resolve();
-		doc.head.appendChild(link);
-	});
-
-	fontLoads.set(family, load);
-	return load;
-}
 
 // ── Per-icon artwork ────────────────────────────────────────────────────
 

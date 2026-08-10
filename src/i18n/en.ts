@@ -365,6 +365,9 @@ export const en: Record<string, string> = {
 	"iconPicker.materialWeight500": "Medium",
 	"iconPicker.materialWeight600": "Semi Bold",
 	"iconPicker.materialWeight700": "Bold",
+	"iconPicker.materialFontFailed":
+		"Couldn't load the Material icon previews. Icon names are shown instead — searching and picking still work.",
+	"iconPicker.materialFontRetry": "Try again",
 	"iconPicker.searchMaterial": "Search Material icons",
 	"iconPicker.searchEmoji": "Search emojis",
 	"iconPicker.skinTone": "Skin tone",

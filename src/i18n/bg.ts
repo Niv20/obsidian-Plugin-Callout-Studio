@@ -330,6 +330,9 @@ export const bg: Record<string, string> = {
 	"iconPicker.materialWeight500": "Среден (Medium)",
 	"iconPicker.materialWeight600": "Полунаситен (Semi Bold)",
 	"iconPicker.materialWeight700": "Наситен (Bold)",
+	"iconPicker.materialFontFailed":
+		"Не можа да се заредят прегледите на иконите от Material. Вместо това се показват имената на иконите — търсенето и изборът продължават да работят.",
+	"iconPicker.materialFontRetry": "Опитай отново",
 	"iconPicker.searchMaterial": "търсене на икони Material",
 	"iconPicker.searchEmoji": "Търси емоджи",
 	"iconPicker.skinTone": "Тон на кожата",

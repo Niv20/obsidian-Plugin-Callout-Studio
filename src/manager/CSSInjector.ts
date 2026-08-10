@@ -37,7 +37,7 @@ import {
 } from "../utils/colorUtils";
 import { OBSIDIAN_CALLOUT_VAR } from "../constants";
 import { svgToDataUri } from "../icons/svg";
-import { ensureMaterialFontLoaded } from "../icons/packs/material";
+import { ensureMaterialFontLoaded } from "../icons/packs/materialFont";
 import {
 	applyTitleGradient,
 	clearGradientChars,
@@ -1325,6 +1325,14 @@ export class CSSInjector {
 		);
 	}
 
+	/**
+	 * Warm the webfont for the styles rendered callouts use.
+	 *
+	 * Fires on every inject, which is safe only because `ensureMaterialFontLoaded`
+	 * holds a failed family off for a cooldown — an offline vault would otherwise
+	 * retry here on each one, now that a failure is no longer (wrongly) cached as
+	 * a success for the session.
+	 */
 	private updateMaterialFontLinks(needed: Set<string>): void {
 		for (const style of needed) {
 			if (

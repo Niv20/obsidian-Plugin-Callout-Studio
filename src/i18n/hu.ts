@@ -346,6 +346,9 @@ export const hu: Record<string, string> = {
 	"iconPicker.materialWeight500": "Közepes (Medium)",
 	"iconPicker.materialWeight600": "Félkövér (Semi Bold)",
 	"iconPicker.materialWeight700": "Kövér (Bold)",
+	"iconPicker.materialFontFailed":
+		"A Material ikonok előnézeteit nem sikerült betölteni. Ehelyett az ikonok nevei látszanak — a keresés és a kiválasztás továbbra is működik.",
+	"iconPicker.materialFontRetry": "Próbáld újra",
 	"iconPicker.searchMaterial": "Material ikonok keresése",
 	"iconPicker.searchEmoji": "Emoji keresése",
 	"iconPicker.skinTone": "Bőrtónus",

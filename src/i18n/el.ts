@@ -157,7 +157,8 @@ export const el: Record<string, string> = {
 		'Αποτυχία λήψης εικονιδίου Material "{{name}}". Ενδέχεται να μην είναι διαθέσιμο για αυτό το στυλ/βάρος ή η σύνδεσή σας να είναι εκτός σύνδεσης.',
 	"notice.externalStyleOn":
 		'Το "{{name}}" μορφοποιείται πλέον από το θέμα ή το απόσπασμα CSS σας.',
-	"notice.externalStyleOff": 'Το Callout Studio μορφοποιεί ξανά το "{{name}}".',
+	"notice.externalStyleOff":
+		'Το Callout Studio μορφοποιεί ξανά το "{{name}}".',
 	"notice.nothingToWrap": "Δεν υπάρχει τίποτα για αναδίπλωση.",
 	"notice.cursorNotInsideCallout":
 		"Ο κέρσορας δεν βρίσκεται μέσα σε callout.",
@@ -334,6 +335,9 @@ export const el: Record<string, string> = {
 	"iconPicker.materialWeight500": "Μεσαίο (Medium)",
 	"iconPicker.materialWeight600": "Ημιέξτρα (Semi Bold)",
 	"iconPicker.materialWeight700": "Έξτρα (Bold)",
+	"iconPicker.materialFontFailed":
+		"Δεν ήταν δυνατή η φόρτωση των προεπισκοπήσεων εικονιδίων Material. Αντί γι' αυτό εμφανίζονται τα ονόματα των εικονιδίων — η αναζήτηση και η επιλογή εξακολουθούν να λειτουργούν.",
+	"iconPicker.materialFontRetry": "Δοκιμάστε ξανά",
 	"iconPicker.searchMaterial": "αναζήτηση εικονιδίων Material",
 	"iconPicker.searchEmoji": "Αναζήτηση emoji",
 	"iconPicker.skinTone": "Χρώμα δέρματος",

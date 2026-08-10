@@ -18,6 +18,10 @@ import type {
 import { CalloutRegistry } from "./manager/CalloutRegistry";
 import { CSSInjector } from "./manager/CSSInjector";
 import { IconService } from "./icons/IconService";
+import {
+	clearMaterialFontStore,
+	setMaterialFontStore,
+} from "./icons/materialFontStore";
 import { CalloutDiscovery } from "./manager/CalloutDiscovery";
 import { removeLegacyStartupSnippet } from "./manager/legacyStartupSnippet";
 import { CalloutStudioSettingsTab } from "./settings/SettingsTab";
@@ -143,6 +147,10 @@ export default class CalloutStudioPlugin extends Plugin {
 				closeEntrance();
 			});
 		}
+
+		// The picker's Material grid is drawn from a webfont; this lets it be
+		// read back from the plugin folder instead of Google on every launch.
+		setMaterialFontStore(this.app, this.manifest);
 
 		// Sub-managers (composition keeps main.ts focused on lifecycle).
 		this.icons = new IconService({
@@ -304,6 +312,7 @@ export default class CalloutStudioPlugin extends Plugin {
 	onunload() {
 		this.discovery?.destroy();
 		this.cssInjector?.destroy();
+		clearMaterialFontStore();
 	}
 
 	async saveSettings(): Promise<void> {

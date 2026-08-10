@@ -1795,6 +1795,32 @@ button.callout-studio-icon-picker-loading {
 	display: none;
 }
 
+/* Raised when Material's webfont could not be loaded. Sits above the grid
+   rather than under it, because the grid it explains is the thing that looks
+   wrong — its cells are ligature names, so without the font they read as text
+   (see the degradation rule further down). */
+.icon-picker-font-notice {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	margin: 8px 0 0;
+	padding: 8px 10px;
+	border-radius: var(--radius-s);
+	background-color: var(--background-modifier-error-hover);
+	color: var(--text-normal);
+	font-size: var(--font-ui-smaller);
+	line-height: 1.45;
+}
+
+.icon-picker-font-notice.is-hidden {
+	display: none;
+}
+
+.icon-picker-font-notice button {
+	flex-shrink: 0;
+	margin-inline-start: auto;
+}
+
 .icon-picker-pack-credit {
 	margin-top: 10px;
 	color: var(--text-faint);
@@ -1968,6 +1994,12 @@ button.callout-studio-icon-picker-loading {
 	cursor: pointer;
 	color: var(--text-normal);
 	transition: background-color 0.1s;
+	/* Nothing legitimately overflows a cell — icons are 20px, emoji 24px,
+	   pictures padded, and `is-selected` draws its outline inset. This is here
+	   so that content which is *not* legitimate can never paint over the grid:
+	   a Material cell whose webfont is missing falls back to its ligature name,
+	   and 24px of nowrap text used to spill ~150px across its neighbours. */
+	overflow: hidden;
 }
 
 .icon-picker-cell:hover {
@@ -1999,10 +2031,29 @@ button.callout-studio-icon-picker-loading {
 	text-transform: none;
 	white-space: nowrap;
 	direction: ltr;
+	max-width: 100%;
 	-webkit-font-feature-settings: "liga";
 	font-feature-settings: "liga";
 	-webkit-font-smoothing: antialiased;
 	font-variation-settings: "FILL" var(--cs-material-fill, 0);
+}
+
+/* Material's grid cells are ligature names, not artwork, so a webfont that
+   cannot be reached leaves each cell showing its raw name. Rather than paint
+   over that with a placeholder — which would make every cell identical and the
+   grid useless — the names are set in the interface font, small enough to fit
+   and wrap inside their own square. Offline, the grid stays searchable and an
+   icon can still be picked; the notice above says why it looks like this. */
+.is-material-font-missing .icon-picker-material-icon {
+	font-family: var(--font-interface);
+	font-size: 8px;
+	font-weight: var(--font-normal);
+	line-height: 1.15;
+	white-space: normal;
+	overflow-wrap: anywhere;
+	text-align: center;
+	color: var(--text-muted);
+	font-variation-settings: normal;
 }
 
 .icon-picker-emoji-cell {

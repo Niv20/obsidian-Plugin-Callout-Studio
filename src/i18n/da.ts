@@ -329,6 +329,9 @@ export const da: Record<string, string> = {
 	"iconPicker.materialWeight500": "Middel (Medium)",
 	"iconPicker.materialWeight600": "Halvfed (Semi Bold)",
 	"iconPicker.materialWeight700": "Fed (Bold)",
+	"iconPicker.materialFontFailed":
+		"Material-ikonforhåndsvisningerne kunne ikke indlæses. I stedet vises ikonnavnene — søgning og valg virker stadig.",
+	"iconPicker.materialFontRetry": "Prøv igen",
 	"iconPicker.searchMaterial": "søg Material-ikoner",
 	"iconPicker.searchEmoji": "Søg emoji",
 	"iconPicker.skinTone": "Hudfarve",

@@ -338,6 +338,9 @@ export const th: Record<string, string> = {
 	"iconPicker.materialWeight500": "ปานกลาง (Medium)",
 	"iconPicker.materialWeight600": "ค่อนข้างหนา (Semi Bold)",
 	"iconPicker.materialWeight700": "หนา (Bold)",
+	"iconPicker.materialFontFailed":
+		"ไม่สามารถโหลดตัวอย่างไอคอน Material ได้ จะแสดงชื่อไอคอนแทน — การค้นหาและการเลือกยังใช้งานได้ตามปกติ",
+	"iconPicker.materialFontRetry": "ลองอีกครั้ง",
 	"iconPicker.searchMaterial": "ค้นหาไอคอน Material",
 	"iconPicker.searchEmoji": "ค้นหาอีโมจิ",
 	"iconPicker.skinTone": "โทนสีผิว",

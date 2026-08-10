@@ -92,7 +92,8 @@ export const ja: Record<string, string> = {
 	"settings.colorSwatchAria": "アクセント: {{accent}} · 背景: {{bg}}",
 	"settings.externalStyleTag": "外部スタイル",
 	"settings.externalStyleAction": "外部スタイルを使用（テーマまたはCSS）",
-	"settings.externalStyleBlocked": "これはデフォルトのフォールバックcalloutです。先に別のものを選択してください",
+	"settings.externalStyleBlocked":
+		"これはデフォルトのフォールバックcalloutです。先に別のものを選択してください",
 	"settings.fallbackCallout": "デフォルトフォールバックcallout",
 	"settings.fallbackCalloutDesc":
 		"vaultで認識されないcalloutタイプはこのcalloutのスタイルを継承します。",
@@ -165,11 +166,14 @@ export const ja: Record<string, string> = {
 		"新しいcalloutタイプはインポートされませんでした（IDがすでに存在する可能性があります）。",
 	"notice.iconDownloadFailed":
 		'Materialアイコン"{{name}}"をダウンロードできませんでした。このスタイル/ウェイトでは利用できないか、接続がオフラインの可能性があります。',
-	"notice.externalStyleOn": '"{{name}}"は現在、テーマまたはCSSスニペットによってスタイルが適用されています。',
-	"notice.externalStyleOff": 'Callout Studioが再び"{{name}}"にスタイルを適用します。',
+	"notice.externalStyleOn":
+		'"{{name}}"は現在、テーマまたはCSSスニペットによってスタイルが適用されています。',
+	"notice.externalStyleOff":
+		'Callout Studioが再び"{{name}}"にスタイルを適用します。',
 	"notice.nothingToWrap": "囲むものがありません。",
 	"notice.cursorNotInsideCallout": "カーソルがcallout内にありません。",
-	"notice.autocompleteTargetMoved": "何も挿入されませんでした — エディタを開いている間に行が変更されました。",
+	"notice.autocompleteTargetMoved":
+		"何も挿入されませんでした — エディタを開いている間に行が変更されました。",
 	"notice.openHotkeysFailed": "Obsidianのホットキー設定を開けませんでした。",
 	"notice.filterHotkeysFailed":
 		"Obsidianのホットキーを開きましたが、Callout Studioフィルターを適用できませんでした。",
@@ -241,8 +245,10 @@ export const ja: Record<string, string> = {
 	"editor.externalStyleWhat": "これが意味すること",
 	"editor.externalStyleWhatHeading":
 		"## [!{{id}}] タイトルのような見出しcalloutはレンダリングされません — テキストは書かれたままになります。",
-	"editor.externalStyleWhatInline": "インラインのもの、例えば 単語 [!{{id}}] 単語 も同様です。",
-	"editor.externalStyleWhatGlobal": "グローバルスタイル設定（枠線、角の丸み、文字サイズ）は適用されません。",
+	"editor.externalStyleWhatInline":
+		"インラインのもの、例えば 単語 [!{{id}}] 単語 も同様です。",
+	"editor.externalStyleWhatGlobal":
+		"グローバルスタイル設定（枠線、角の丸み、文字サイズ）は適用されません。",
 	"editor.externalStylePreviewTitle": "現在の表示方法",
 	"editor.externalStyleSample":
 		"## [!{{id}}] タイトル\n\n" +
@@ -334,6 +340,9 @@ export const ja: Record<string, string> = {
 	"iconPicker.materialWeight500": "中 (Medium)",
 	"iconPicker.materialWeight600": "やや太 (Semi Bold)",
 	"iconPicker.materialWeight700": "太 (Bold)",
+	"iconPicker.materialFontFailed":
+		"Material アイコンのプレビューを読み込めませんでした。代わりにアイコン名が表示されます。検索と選択は引き続き使えます。",
+	"iconPicker.materialFontRetry": "もう一度試す",
 	"iconPicker.searchMaterial": "Materialアイコンを検索",
 	"iconPicker.searchEmoji": "絵文字を検索",
 	"iconPicker.skinTone": "肌の色調",

@@ -328,6 +328,9 @@ export const ms: Record<string, string> = {
 	"iconPicker.materialWeight500": "Sederhana (Medium)",
 	"iconPicker.materialWeight600": "Semi tebal (Semi Bold)",
 	"iconPicker.materialWeight700": "Tebal (Bold)",
+	"iconPicker.materialFontFailed":
+		"Pratonton ikon Material tidak dapat dimuat. Nama ikon dipaparkan sebagai gantinya — carian dan pemilihan masih berfungsi.",
+	"iconPicker.materialFontRetry": "Cuba lagi",
 	"iconPicker.searchMaterial": "cari ikon Material",
 	"iconPicker.searchEmoji": "Cari emoji",
 	"iconPicker.skinTone": "Warna kulit",

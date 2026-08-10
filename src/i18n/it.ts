@@ -344,6 +344,9 @@ export const it: Record<string, string> = {
 	"iconPicker.materialWeight500": "Medio (Medium)",
 	"iconPicker.materialWeight600": "Semi-grassetto (Semi Bold)",
 	"iconPicker.materialWeight700": "Grassetto (Bold)",
+	"iconPicker.materialFontFailed":
+		"Impossibile caricare l'anteprima delle icone Material. Al loro posto vengono mostrati i nomi delle icone — la ricerca e la selezione continuano a funzionare.",
+	"iconPicker.materialFontRetry": "Riprova",
 	"iconPicker.searchMaterial": "cerca icone Material",
 	"iconPicker.searchEmoji": "Cerca emoji",
 	"iconPicker.skinTone": "Tono della pelle",

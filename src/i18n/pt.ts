@@ -343,6 +343,9 @@ export const pt: Record<string, string> = {
 	"iconPicker.materialWeight500": "Médio (Medium)",
 	"iconPicker.materialWeight600": "Semi-negrito (Semi Bold)",
 	"iconPicker.materialWeight700": "Negrito (Bold)",
+	"iconPicker.materialFontFailed":
+		"Não foi possível carregar as pré-visualizações dos ícones Material. Em vez disso, os nomes dos ícones são mostrados — a pesquisa e a seleção continuam funcionando.",
+	"iconPicker.materialFontRetry": "Tentar novamente",
 	"iconPicker.searchMaterial": "pesquisar ícones Material",
 	"iconPicker.searchEmoji": "Pesquisar emojis",
 	"iconPicker.skinTone": "Tom de pele",

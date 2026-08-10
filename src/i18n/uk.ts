@@ -92,7 +92,8 @@ export const uk: Record<string, string> = {
 
 	"settings.colorSwatchAria": "Акцент: {{accent}} · Фон: {{bg}}",
 	"settings.externalStyleTag": "Зовнішній стиль",
-	"settings.externalStyleAction": "Використати зовнішній стиль (тема або CSS)",
+	"settings.externalStyleAction":
+		"Використати зовнішній стиль (тема або CSS)",
 	"settings.externalStyleBlocked":
 		"це стандартний резервний callout, спершу виберіть інший",
 	"settings.fallbackCallout": "Резервний callout за замовчуванням",
@@ -344,6 +345,9 @@ export const uk: Record<string, string> = {
 	"iconPicker.materialWeight500": "Середній (Medium)",
 	"iconPicker.materialWeight600": "Напівжирний (Semi Bold)",
 	"iconPicker.materialWeight700": "Жирний (Bold)",
+	"iconPicker.materialFontFailed":
+		"Не вдалося завантажити попередній перегляд іконок Material. Натомість показуються назви іконок — пошук і вибір і далі працюють.",
+	"iconPicker.materialFontRetry": "Спробувати ще раз",
 	"iconPicker.searchMaterial": "пошук іконок Material",
 	"iconPicker.searchEmoji": "Пошук емодзі",
 	"iconPicker.skinTone": "Відтінок шкіри",

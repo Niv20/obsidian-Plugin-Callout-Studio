@@ -343,6 +343,9 @@ export const sv: Record<string, string> = {
 	"iconPicker.materialWeight500": "Medel (Medium)",
 	"iconPicker.materialWeight600": "Halvfet (Semi Bold)",
 	"iconPicker.materialWeight700": "Fet (Bold)",
+	"iconPicker.materialFontFailed":
+		"Det gick inte att läsa in förhandsgranskningarna av Material-ikonerna. I stället visas ikonernas namn — sökning och val fungerar fortfarande.",
+	"iconPicker.materialFontRetry": "Försök igen",
 	"iconPicker.searchMaterial": "sök Material-ikoner",
 	"iconPicker.searchEmoji": "Sök emoji",
 	"iconPicker.skinTone": "Hudton",

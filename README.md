@@ -209,11 +209,11 @@ Each download is checked against a SHA-256 checksum built into the plugin, and r
 
 Material Symbols is the exception: it has over 100,000 style and weight combinations, so there is no single file to ship. It fetches one drawing at a time instead:
 
-- While its tab is open, the Google Fonts stylesheet is loaded from `https://fonts.googleapis.com/css2?...` so the grid can preview icons in the chosen style and weight.
+- While its tab is open, the Google Fonts stylesheet is loaded from `https://fonts.googleapis.com/css2?...` so the grid can preview icons in the chosen style and weight. The font file it points at is then saved to `.obsidian/plugins/callout-studio/icon-fonts/`, so every later launch previews the grid from disk and this source works offline too. One file per style you open, 1.0–1.5 MB each; deleting them is safe, and they are fetched again the next time you open that style.
 - When you pick an icon, that one SVG is downloaded from `https://fonts.gstatic.com/s/i/short-term/...`.
 - On startup, if a callout uses a Material icon whose artwork is missing locally (after an import, say), only those are fetched.
 
-If you never open the Material source, none of this happens.
+If you never open the Material source, none of this happens. If the preview font cannot be reached, the grid says so and shows icon names instead — searching and picking still work, and a **Try again** button retries once you are back online.
 
 ### Your own pictures
 
@@ -229,6 +229,7 @@ If you never open the Material source, none of this happens.
 - **The artwork of icons you actually use** is copied into the plugin's `data.json`, so your callouts still render on a device that synced your settings but never downloaded the source, and after a cached pack file is deleted. Unused entries are cleaned up automatically when you edit or delete a callout; **Reset all** clears them outright.
 - **The pictures you added yourself**, also in `data.json` — typically five to twenty kilobytes each after the size cap above. The picker shows the running total, and **Reset all** clears them along with everything else you made.
 - **Downloaded icon sources** live in `.obsidian/plugins/callout-studio/icon-packs/`. Deleting them is safe: your callouts keep rendering from the copy in `data.json`, and the picker offers the download again. If a callout does turn out to need artwork that only the deleted file had, it is fetched again on the next launch.
+- **The Material Symbols preview font**, in `.obsidian/plugins/callout-studio/icon-fonts/` — one 1.0–1.5 MB file per style you have opened in the picker. It is only used to draw the picker's grid, never your notes, so deleting it costs nothing beyond re-downloading it the next time you browse that style.
 - **A snapshot of the plugin's generated CSS**, to shorten the brief flash of unstyled callouts on slow startups (mainly mobile). It is a small per-device cache in the app's own local storage — not a file in your vault — and it holds only generated styling, never vault content. It never leaves your device, and it is re-read the moment the plugin starts loading, before anything is fetched from disk. Versions up to 2.5.0 also wrote a CSS snippet into `.obsidian/snippets/`; that file is no longer created, and any copy left from an older version is deleted automatically the next time the plugin loads.
 
 ## Icon licences and attribution

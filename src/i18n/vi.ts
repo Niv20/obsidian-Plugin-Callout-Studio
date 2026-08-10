@@ -341,6 +341,9 @@ export const vi: Record<string, string> = {
 	"iconPicker.materialWeight500": "Vừa (Medium)",
 	"iconPicker.materialWeight600": "Hơi đậm (Semi Bold)",
 	"iconPicker.materialWeight700": "Đậm (Bold)",
+	"iconPicker.materialFontFailed":
+		"Không thể tải bản xem trước biểu tượng Material. Thay vào đó, tên biểu tượng sẽ được hiển thị — việc tìm kiếm và chọn vẫn hoạt động.",
+	"iconPicker.materialFontRetry": "Thử lại",
 	"iconPicker.searchMaterial": "tìm biểu tượng Material",
 	"iconPicker.searchEmoji": "Tìm kiếm emoji",
 	"iconPicker.skinTone": "Tông màu da",

@@ -362,6 +362,9 @@ export const he: Record<string, string> = {
 	"iconPicker.materialWeight500": "בינוני (Medium)",
 	"iconPicker.materialWeight600": "חצי-שמן (Semi Bold)",
 	"iconPicker.materialWeight700": "שמן (Bold)",
+	"iconPicker.materialFontFailed":
+		"לא הצלחנו לטעון את תצוגת האייקונים של Material. במקומם מוצגים שמות האייקונים — חיפוש ובחירה עדיין עובדים.",
+	"iconPicker.materialFontRetry": "ניסיון חוזר",
 	"iconPicker.searchMaterial": "חיפוש אייקוני Material",
 	"iconPicker.searchEmoji": "חיפוש אימוג'י",
 	"iconPicker.skinTone": "גוון עור",

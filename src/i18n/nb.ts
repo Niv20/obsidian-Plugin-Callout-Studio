@@ -330,6 +330,9 @@ export const nb: Record<string, string> = {
 	"iconPicker.materialWeight500": "Middels (Medium)",
 	"iconPicker.materialWeight600": "Halvfet (Semi Bold)",
 	"iconPicker.materialWeight700": "Fet (Bold)",
+	"iconPicker.materialFontFailed":
+		"Kunne ikke laste forhåndsvisningene av Material-ikonene. I stedet vises ikonnavnene — søk og valg fungerer fortsatt.",
+	"iconPicker.materialFontRetry": "Prøv igjen",
 	"iconPicker.searchMaterial": "søk Material-ikoner",
 	"iconPicker.searchEmoji": "Søk etter emoji",
 	"iconPicker.skinTone": "Hudtone",

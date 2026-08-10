@@ -341,6 +341,9 @@ export const ru: Record<string, string> = {
 	"iconPicker.materialWeight500": "Средний (Medium)",
 	"iconPicker.materialWeight600": "Полужирный (Semi Bold)",
 	"iconPicker.materialWeight700": "Жирный (Bold)",
+	"iconPicker.materialFontFailed":
+		"Не удалось загрузить предпросмотр значков Material. Вместо этого показываются названия значков — поиск и выбор по-прежнему работают.",
+	"iconPicker.materialFontRetry": "Попробовать снова",
 	"iconPicker.searchMaterial": "поиск иконок Material",
 	"iconPicker.searchEmoji": "Поиск эмодзи",
 	"iconPicker.skinTone": "Тон кожи",

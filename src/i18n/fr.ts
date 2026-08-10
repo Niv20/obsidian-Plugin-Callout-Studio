@@ -345,6 +345,9 @@ export const fr: Record<string, string> = {
 	"iconPicker.materialWeight500": "Moyen (Medium)",
 	"iconPicker.materialWeight600": "Semi-gras (Semi Bold)",
 	"iconPicker.materialWeight700": "Gras (Bold)",
+	"iconPicker.materialFontFailed":
+		"Impossible de charger les aperçus des icônes Material. Les noms des icônes s'affichent à la place — la recherche et la sélection fonctionnent toujours.",
+	"iconPicker.materialFontRetry": "Réessayer",
 	"iconPicker.searchMaterial": "rechercher des icônes Material",
 	"iconPicker.searchEmoji": "Rechercher des emojis",
 	"iconPicker.skinTone": "Teinte de peau",

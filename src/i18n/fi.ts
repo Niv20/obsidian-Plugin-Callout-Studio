@@ -327,6 +327,9 @@ export const fi: Record<string, string> = {
 	"iconPicker.materialWeight500": "Keskipaksu (Medium)",
 	"iconPicker.materialWeight600": "Puolilihava (Semi Bold)",
 	"iconPicker.materialWeight700": "Lihava (Bold)",
+	"iconPicker.materialFontFailed":
+		"Material-kuvakkeiden esikatselujen lataaminen ei onnistunut. Kuvakkeiden nimet näytetään sen sijaan — haku ja valitseminen toimivat silti.",
+	"iconPicker.materialFontRetry": "Yritä uudelleen",
 	"iconPicker.searchMaterial": "hae Material-kuvakkeita",
 	"iconPicker.searchEmoji": "Hae emojeja",
 	"iconPicker.skinTone": "Ihonsävy",

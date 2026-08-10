@@ -242,7 +242,8 @@ export const ar: Record<string, string> = {
 	"editor.externalStyleWhat": "ماذا يعني هذا",
 	"editor.externalStyleWhatHeading":
 		"تيبة عنوان مثل ## [!{{id}}] العنوان لن تُعرض — يبقى النص كما كُتب.",
-	"editor.externalStyleWhatInline": "ولا تيبة مضمّنة، مثل كلمة [!{{id}}] كلمة.",
+	"editor.externalStyleWhatInline":
+		"ولا تيبة مضمّنة، مثل كلمة [!{{id}}] كلمة.",
 	"editor.externalStyleWhatGlobal":
 		"إعدادات النمط العامة (الحدود، الانحناء، حجم النص) لا تنطبق عليها.",
 	"editor.externalStylePreviewTitle": "كيف تُعرض الآن",
@@ -336,6 +337,9 @@ export const ar: Record<string, string> = {
 	"iconPicker.materialWeight500": "متوسط (Medium)",
 	"iconPicker.materialWeight600": "شبه سميك (Semi Bold)",
 	"iconPicker.materialWeight700": "سميك (Bold)",
+	"iconPicker.materialFontFailed":
+		"تعذّر تحميل معاينات أيقونات Material. ستظهر أسماء الأيقونات بدلًا من ذلك — يظل البحث والاختيار يعملان.",
+	"iconPicker.materialFontRetry": "أعد المحاولة",
 	"iconPicker.searchMaterial": "بحث في أيقونات Material",
 	"iconPicker.searchEmoji": "بحث في الرموز التعبيرية",
 	"iconPicker.skinTone": "لون البشرة",

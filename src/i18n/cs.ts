@@ -343,6 +343,9 @@ export const cs: Record<string, string> = {
 	"iconPicker.materialWeight500": "Střední (Medium)",
 	"iconPicker.materialWeight600": "Poločerno (Semi Bold)",
 	"iconPicker.materialWeight700": "Černá (Bold)",
+	"iconPicker.materialFontFailed":
+		"Nepodařilo se načíst náhledy ikon Material. Místo toho se zobrazují názvy ikon — vyhledávání i vybírání stále fungují.",
+	"iconPicker.materialFontRetry": "Zkusit znovu",
 	"iconPicker.searchMaterial": "hledat ikony Material",
 	"iconPicker.searchEmoji": "Hledat emoji",
 	"iconPicker.skinTone": "Tón pleti",

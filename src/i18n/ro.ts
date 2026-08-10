@@ -345,6 +345,9 @@ export const ro: Record<string, string> = {
 	"iconPicker.materialWeight500": "Mediu (Medium)",
 	"iconPicker.materialWeight600": "Semi-îngroșat (Semi Bold)",
 	"iconPicker.materialWeight700": "Îngroșat (Bold)",
+	"iconPicker.materialFontFailed":
+		"Previzualizările pictogramelor Material nu au putut fi încărcate. În schimb, sunt afișate numele pictogramelor — căutarea și alegerea funcționează în continuare.",
+	"iconPicker.materialFontRetry": "Încearcă din nou",
 	"iconPicker.searchMaterial": "caută pictograme Material",
 	"iconPicker.searchEmoji": "Caută emoji",
 	"iconPicker.skinTone": "Ton de piele",

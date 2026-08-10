@@ -26,12 +26,12 @@ import { filterIcons } from "../../icons/search";
 import { renderIconInto } from "../../icons/renderIcon";
 import { getSource, packFor } from "../../icons/registry";
 import { canonicalIconValue } from "../../icons/lucideId";
+import { MATERIAL_DEFAULT_STYLE, materialPack } from "../../icons/packs/material";
 import {
-	MATERIAL_DEFAULT_STYLE,
 	ensureMaterialFontLoaded,
+	isMaterialFontReady,
 	materialFontFamily,
-	materialPack,
-} from "../../icons/packs/material";
+} from "../../icons/packs/materialFont";
 import type { PackDataStore } from "../../icons/PackDataStore";
 import { isAllSources } from "./allSources";
 import { IconGrid } from "./IconGrid";
@@ -91,6 +91,13 @@ export class PackPanel {
 	/** Rebuilt on every variant change — Font Awesome's applies to Brands only. */
 	private noticeEl: HTMLElement | null = null;
 	/**
+	 * Shown only when Material's webfont could not be loaded, which is the one
+	 * failure the grid cannot draw around: its cells *are* ligature names, so
+	 * without the font they read as text. Separate from `noticeEl` because that
+	 * one is driven by the pack's static `pickerNotice` key and holds no button.
+	 */
+	private fontNoticeEl: HTMLElement | null = null;
+	/**
 	 * The entry behind the current selection, so a later variant change (weight,
 	 * style, skin tone) can redraw it from the same name instead of leaving the
 	 * host holding the icon as it looked before the toolbar changed.
@@ -120,6 +127,7 @@ export class PackPanel {
 	/** Build the panel and show whatever state the source is in. */
 	async render(): Promise<void> {
 		this.buildToolbar();
+		this.renderFontNotice();
 		this.grid = new IconGrid(this.bodyEl, {
 			renderCell: (cell, entry) => this.renderCell(cell, entry),
 			isSelected: (entry) => this.isSelected(entry),
@@ -267,10 +275,7 @@ export class PackPanel {
 	 */
 	private async onVariantChanged(): Promise<void> {
 		if (this.pack.kind === "perIconRemote") {
-			await ensureMaterialFontLoaded(this.materialStyle()).catch(() => {
-				// An unreachable font must not block browsing; ligature names
-				// simply show as text until it arrives.
-			});
+			await this.syncMaterialFont();
 			if (this.disposed) return;
 		}
 		this.syncSelectionToVariants();
@@ -333,12 +338,8 @@ export class PackPanel {
 		// Material previews its grid with the webfont rather than SVGs, since
 		// its artwork is fetched one icon at a time and none of it is local
 		// yet. The pooled list contains Material cells too, so it waits as well.
-		if (this.pack.kind === "perIconRemote" || isAllSources(this.pack)) {
-			await ensureMaterialFontLoaded(this.materialStyle()).catch(
-				() => undefined,
-			);
-			if (this.disposed) return;
-		}
+		await this.syncMaterialFont();
+		if (this.disposed) return;
 
 		this.index = await this.pack.loadIndex();
 		if (this.disposed) return;
@@ -552,6 +553,72 @@ export class PackPanel {
 			? this.host.variantsFor(materialPack.id)
 			: this.variants;
 		return variants.style ?? MATERIAL_DEFAULT_STYLE;
+	}
+
+	// ── Material's webfont ──────────────────────────────────────────────
+
+	/**
+	 * Whether this panel draws any cell from the Material webfont — its own
+	 * source being Material, or the pooled list, which mixes Material cells in
+	 * among everyone else's.
+	 */
+	private showsMaterialCells(): boolean {
+		return this.pack.kind === "perIconRemote" || isAllSources(this.pack);
+	}
+
+	/**
+	 * Load the webfont this panel's Material cells need, then say on screen how
+	 * it went. A no-op for sources that draw no Material cells.
+	 */
+	private async syncMaterialFont(opts?: { force?: boolean }): Promise<void> {
+		if (!this.showsMaterialCells()) return;
+		await ensureMaterialFontLoaded(this.materialStyle(), {
+			...opts,
+			doc: this.bodyEl.ownerDocument,
+		});
+		if (this.disposed) return;
+		this.refreshFontState();
+	}
+
+	/**
+	 * Reflect whether Material's glyphs are drawable: a class the CSS uses to
+	 * shrink the ligature names into something readable and clipped, and the
+	 * notice offering a retry.
+	 *
+	 * Asks `document.fonts` rather than remembering what the last load returned.
+	 * The font can arrive from another panel, another window, or the disk cache
+	 * without this panel being told, and a remembered flag would then be stale
+	 * in the one direction the user notices.
+	 */
+	private refreshFontState(): void {
+		const ready =
+			!this.showsMaterialCells() ||
+			isMaterialFontReady(this.materialStyle(), this.bodyEl.ownerDocument);
+		this.bodyEl.toggleClass("is-material-font-missing", !ready);
+		this.fontNoticeEl?.toggleClass("is-hidden", ready);
+	}
+
+	/**
+	 * The one notice the panel raises for itself rather than taking from the
+	 * pack. Built up front and hidden, so the failure path never has to insert
+	 * a node above a grid the user is already scrolling.
+	 */
+	private renderFontNotice(): void {
+		if (!this.showsMaterialCells()) return;
+		const el = this.bodyEl.createDiv("icon-picker-font-notice is-hidden");
+		el.createSpan({ text: t("iconPicker.materialFontFailed") });
+		const retry = el.createEl("button", {
+			text: t("iconPicker.materialFontRetry"),
+		});
+		retry.addEventListener("click", () => {
+			retry.disabled = true;
+			// `force` skips the cooldown a failed family is otherwise held off
+			// for: the press is the user saying the connection has changed.
+			void this.syncMaterialFont({ force: true }).finally(() => {
+				if (!this.disposed) retry.disabled = false;
+			});
+		});
+		this.fontNoticeEl = el;
 	}
 
 	/** The toolbar values that apply to an entry's own source. */

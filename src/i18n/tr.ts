@@ -345,6 +345,9 @@ export const tr: Record<string, string> = {
 	"iconPicker.materialWeight500": "Orta (Medium)",
 	"iconPicker.materialWeight600": "Yarı kalın (Semi Bold)",
 	"iconPicker.materialWeight700": "Kalın (Bold)",
+	"iconPicker.materialFontFailed":
+		"Material simgelerinin önizlemeleri yüklenemedi. Bunun yerine simge adları gösterilir — arama ve seçme yine de çalışır.",
+	"iconPicker.materialFontRetry": "Tekrar dene",
 	"iconPicker.searchMaterial": "Material simgelerini ara",
 	"iconPicker.searchEmoji": "Emoji ara",
 	"iconPicker.skinTone": "Ten rengi",

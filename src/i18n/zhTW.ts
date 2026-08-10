@@ -147,11 +147,13 @@ export const zhTW: Record<string, string> = {
 	"notice.noNewJSON": "未匯入新的 callout 類型（ID 可能已存在）。",
 	"notice.iconDownloadFailed":
 		"無法下載 Material 圖示「{{name}}」。該圖示可能不支援此樣式/字重，或您的網路連線已中斷。",
-	"notice.externalStyleOn": '"{{name}}" 現在由你的佈景主題或 CSS 片段設定樣式。',
+	"notice.externalStyleOn":
+		'"{{name}}" 現在由你的佈景主題或 CSS 片段設定樣式。',
 	"notice.externalStyleOff": 'Callout Studio 重新為 "{{name}}" 設定樣式。',
 	"notice.nothingToWrap": "沒有可包覆的內容。",
 	"notice.cursorNotInsideCallout": "游標不在 callout 內部。",
-	"notice.autocompleteTargetMoved": "未插入任何內容 — 編輯器開啟期間該行已變更。",
+	"notice.autocompleteTargetMoved":
+		"未插入任何內容 — 編輯器開啟期間該行已變更。",
 	"notice.openHotkeysFailed": "無法開啟 Obsidian 快速鍵設定。",
 	"notice.filterHotkeysFailed":
 		"已開啟 Obsidian 快速鍵，但無法套用 Callout Studio 篩選器。",
@@ -221,8 +223,10 @@ export const zhTW: Record<string, string> = {
 	"editor.externalStyleWhat": "這代表什麼",
 	"editor.externalStyleWhatHeading":
 		"像 ## [!{{id}}] 標題 這樣的標題 callout 不會被渲染——文字會保持原樣。",
-	"editor.externalStyleWhatInline": "行內 callout 也是如此，例如 文字 [!{{id}}] 文字。",
-	"editor.externalStyleWhatGlobal": "全域樣式設定（邊框、圓角、文字大小）不適用於它。",
+	"editor.externalStyleWhatInline":
+		"行內 callout 也是如此，例如 文字 [!{{id}}] 文字。",
+	"editor.externalStyleWhatGlobal":
+		"全域樣式設定（邊框、圓角、文字大小）不適用於它。",
 	"editor.externalStylePreviewTitle": "現在的渲染方式",
 	"editor.externalStyleSample":
 		"## [!{{id}}] 標題\n\n" +
@@ -313,6 +317,9 @@ export const zhTW: Record<string, string> = {
 	"iconPicker.materialWeight500": "中等 (Medium)",
 	"iconPicker.materialWeight600": "半粗 (Semi Bold)",
 	"iconPicker.materialWeight700": "粗體 (Bold)",
+	"iconPicker.materialFontFailed":
+		"無法載入 Material 圖示預覽。現在會改顯示圖示名稱——搜尋與選取仍可正常運作。",
+	"iconPicker.materialFontRetry": "再試一次",
 	"iconPicker.searchMaterial": "搜尋 Material 圖示",
 	"iconPicker.searchEmoji": "搜尋表情符號",
 	"iconPicker.skinTone": "膚色",

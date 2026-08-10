@@ -343,6 +343,9 @@ export const fa: Record<string, string> = {
 	"iconPicker.materialWeight500": "متوسط (Medium)",
 	"iconPicker.materialWeight600": "نیمه‌پررنگ (Semi Bold)",
 	"iconPicker.materialWeight700": "پررنگ (Bold)",
+	"iconPicker.materialFontFailed":
+		"پیش‌نمایش‌های نمادهای Material بارگیری نشدند. به‌جای آن نام نمادها نمایش داده می‌شود — جست‌وجو و انتخاب همچنان کار می‌کنند.",
+	"iconPicker.materialFontRetry": "دوباره تلاش کنید",
 	"iconPicker.searchMaterial": "جستجوی آیکون‌های Material",
 	"iconPicker.searchEmoji": "جستجوی ایموجی",
 	"iconPicker.skinTone": "رنگ پوست",
