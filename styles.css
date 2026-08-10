@@ -3981,6 +3981,41 @@ input.cs-input-invalid:focus {
 .cs-heading-callout .cs-fold-arrow:hover {
 	opacity: 1;
 }
+
+/* Tap target. The drawn chevron is 0.85em wide by one line-height tall — on a
+   phone that is small enough that a near-miss lands on the line instead, and
+   the caret arriving there is what "it thinks I want to edit the heading"
+   looks like. The 0.4em margin-inline-start above sits OUTSIDE the box, so it
+   is dead space that can be reclaimed for free.
+
+   An absolutely-positioned pseudo rather than padding: this chevron is an
+   inline widget living inside the .cm-line, and padding would grow the inline
+   box CodeMirror measures for that line (see the .cm-line geometry warning by
+   the gap rule above). A pseudo is out of flow, so the measured box is
+   untouched and only the hit region grows. The element already swallows its
+   own mousedown — preventDefault + stopPropagation in HeadingFoldArrowWidget —
+   so the extra area cannot place a caret either.
+
+   Phones and tablets get a taller, wider one: `.is-mobile` rather than a width
+   query, matching how the rest of this file targets touch (see the note above
+   the .is-phone modal rules). The end inset is the most generous side because
+   it runs into the empty tail of the line, where there is nothing to steal
+   from; the start inset never exceeds the chevron's own margin. */
+.cs-heading-callout .cs-fold-arrow {
+	position: relative;
+}
+.cs-heading-callout .cs-fold-arrow::after {
+	content: "";
+	position: absolute;
+	inset-block: -0.3em;
+	inset-inline-start: -0.4em;
+	inset-inline-end: -0.7em;
+}
+.is-mobile .cs-heading-callout .cs-fold-arrow::after {
+	inset-block: -0.55em;
+	inset-inline-start: -0.4em;
+	inset-inline-end: -1.1em;
+}
 /* The rotation is on the svg, never on the span: the span is no longer square
    (0.85em wide by one line-height tall), so rotating it would swing the
    chevron out of place. --cs-heading-fold-offset is an escape hatch for a
