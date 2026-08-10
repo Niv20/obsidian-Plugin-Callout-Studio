@@ -33,7 +33,6 @@ import {
 	setContrastWarning,
 } from "../ui/ColorSwatchInput";
 import { LiveCalloutPreview } from "./LiveCalloutPreview";
-import { PREVIEW_PLACEHOLDER_ID } from "../constants";
 import {
 	dedupeColorName,
 	normalizeName,
@@ -53,6 +52,22 @@ interface PaletteEditorPlugin {
 	registry: CalloutRegistry;
 	cssInjector: CSSInjector;
 }
+
+/**
+ * Reserved id for the stand-in callout this modal previews the palette on, in
+ * the same spirit as GlobalStyleModal's `STYLE_DEMO_ID`. Registered only while
+ * the modal is open; if a user callout ever occupies the same id, the preview
+ * slot shadows and later restores it.
+ *
+ * Deliberately NOT `PREVIEW_PLACEHOLDER_ID`: the registry's preview slot feeds
+ * `getAll()`, which is what CSSInjector generates from, and it never consults
+ * the `isDemo` flag (that only keeps the row out of the settings lists). So
+ * whatever id this demo takes gets globally restyled for as long as the modal
+ * is open — and that placeholder is `example`, a shipped built-in present in
+ * every vault, so every real `[!example]` in the vault used to flicker through
+ * each intermediate palette as the sliders moved.
+ */
+const PALETTE_DEMO_ID = "palette-demo";
 
 const DEFAULT_BASE_COLOR = "#448aff";
 /** Keeps the name readable in the dropdown/list rows, which truncate past this. */
@@ -784,7 +799,7 @@ export class PaletteEditorModal extends Modal {
 	 * LiveCalloutPreview's focus policy).
 	 */
 	private buildSampleText(): string {
-		const id = PREVIEW_PLACEHOLDER_ID;
+		const id = PALETTE_DEMO_ID;
 		const name = t("editor.untitledCallout");
 		return [
 			`## [!${id}] ${name}`,
@@ -800,7 +815,7 @@ export class PaletteEditorModal extends Modal {
 	/** Snapshot the derived palette colors as a transient preview definition. */
 	private buildPreviewDefinition(): CalloutDefinition {
 		return {
-			id: PREVIEW_PLACEHOLDER_ID,
+			id: PALETTE_DEMO_ID,
 			displayName: t("editor.untitledCallout"),
 			icon: { type: "lucide", value: "palette" },
 			colorLight: this.colors.colorLight,

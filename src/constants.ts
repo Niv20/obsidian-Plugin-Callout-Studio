@@ -27,13 +27,21 @@ export const MAX_TAG_LENGTH: number = 200;
 export const MAX_TAGS_COUNT: number = 4;
 
 /**
- * Placeholder callout ID shown in the settings live preview only while the
- * callout being created has no ID yet (empty name). Once the user types a name,
- * the preview switches to the real ID being edited. Kept as a readable word so
- * that, on the rare empty-state moment, the preview reads as an intentional
- * example rather than an internal marker.
+ * Placeholder callout ID the editor's live preview renders under while the
+ * callout being created has no ID yet (empty name). Once the user types one,
+ * the preview switches to the real ID being edited.
+ *
+ * Reserved rather than readable, and that is the whole point. The registry's
+ * preview slot feeds `getAll()`, which is what CSSInjector generates from, and
+ * the `isDemo` flag only keeps the row out of the settings lists — it never
+ * reaches the injector. So this id is globally restyled for as long as the
+ * modal sits in its empty state, which is why it must be one nothing here ships
+ * and `generateId` would not plausibly produce. It used to be `example`, a
+ * built-in every vault has, so every real `[!example]` note repainted behind
+ * the modal. The name the user actually sees is `editor.untitledCallout`, so
+ * the id itself is all but invisible.
  */
-export const PREVIEW_PLACEHOLDER_ID = "example";
+export const PREVIEW_PLACEHOLDER_ID = "new-callout-preview";
 
 /**
  * First-run vault-scan threshold (number of markdown files).

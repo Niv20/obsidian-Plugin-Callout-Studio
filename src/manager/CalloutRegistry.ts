@@ -317,9 +317,12 @@ export class CalloutRegistry {
 	 * True when the active preview is a *demo* placeholder — the palette editor,
 	 * the per-role global-style popups, or a brand-new unnamed callout draft —
 	 * rather than the in-progress edit of a real, existing callout. A demo must
-	 * never affect the settings lists: it neither adds a phantom row nor hides
-	 * the real callout it happens to overlay (e.g. the built-in `example`, whose
-	 * id doubles as the preview placeholder `example`). See {@link definitionsForLists}.
+	 * never affect the settings lists: it neither adds a phantom row nor hides a
+	 * real callout it happens to overlay. Every demo takes a reserved id for
+	 * that reason — the flag is not enough on its own, since `getAll()` (and so
+	 * the CSS the injector generates) never consults it, meaning a demo sharing
+	 * an id with a real callout restyles it vault-wide while the modal is open.
+	 * See {@link definitionsForLists}.
 	 */
 	private previewIsDemo = false;
 

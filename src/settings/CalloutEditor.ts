@@ -62,6 +62,11 @@ import {
 } from "./editor/CalloutEditorValidation";
 import { renderCalloutEditorIconPreview } from "./editor/CalloutEditorIconRenderer";
 import { performCalloutEditorSave } from "./editor/CalloutEditorSave";
+import {
+	hasAuthoredBackground,
+	hasAuthoredIconAdjust,
+	hasAuthoredTextColors,
+} from "./editor/authoredStyle";
 import { findUserImage } from "../icons/packs/userImages";
 import { describeIcon } from "../icons/describeIcon";
 import { iconsEqual } from "../icons/lucideId";
@@ -180,6 +185,13 @@ export class CalloutEditor extends Modal {
 	private existingId: string | null;
 	private isBuiltIn: boolean;
 	private createFromAutocomplete: boolean;
+	/**
+	 * The definition the form fields below were seeded from, or undefined for a
+	 * blank draft. Kept so `buildPreviewDefinition()` can tell a value the user
+	 * chose from one the constructor's `??` chains invented — the form fields
+	 * themselves cannot answer that, since both look like a concrete colour.
+	 */
+	private readonly baselineDef: CalloutDefinition | undefined;
 	private resolve: ((result: CalloutDefinition | null) => void) | null = null;
 
 	// Form state
@@ -257,6 +269,7 @@ export class CalloutEditor extends Modal {
 			this.createFromAutocomplete && !existing
 				? this.getFallbackBase()
 				: undefined;
+		this.baselineDef = existing ?? fallbackBase;
 
 		this.displayName =
 			existing?.displayName ?? options?.seedDisplayName ?? "";
@@ -591,9 +604,9 @@ export class CalloutEditor extends Modal {
 			// preview ID and re-inject CSS so colours/icons render live.
 			beforeRender: () => {
 				// A brand-new callout has no real row yet, so its preview is a
-				// demo (kept out of the settings lists — otherwise its
-				// placeholder id, the built-in `example`, would leak a phantom
-				// row). Editing an existing callout previews the real row live.
+				// demo (kept out of the settings lists — otherwise the reserved
+				// placeholder id it renders under would leak a phantom row).
+				// Editing an existing callout previews the real row live.
 				this.plugin.registry.setPreviewDefinition(
 					this.buildPreviewDefinition(),
 					this.existingId === null,
@@ -752,17 +765,7 @@ export class CalloutEditor extends Modal {
 		let selectedId = "";
 		let menuOpen = false;
 		const itemEls: HTMLElement[] = [];
-		// Key order must match `defaultColorStateFor` — see the note there.
-		const readColorState = (): EditorColorState => ({
-			colorLight: this.colorLight,
-			colorDark: this.colorDark,
-			bgColorLight: this.bgColorLight,
-			bgColorDark: this.bgColorDark,
-			bgGradient: this.bgGradient ? { ...this.bgGradient } : undefined,
-			transparentBg: this.transparentBg,
-			textColorLight: this.textColorLight,
-			textColorDark: this.textColorDark,
-		});
+		const readColorState = (): EditorColorState => this.colorState();
 		// Reverts colours (and background/text) to the built-in's shipped
 		// values; only shown once they have actually diverged from that
 		// default. Mirrors `iconMatchesDefault`/`syncIconRevert` above.
@@ -1795,6 +1798,24 @@ export class CalloutEditor extends Modal {
 	}
 
 	/**
+	 * The colour half of the form state, as a plain value.
+	 *
+	 * Key order must match `defaultColorStateFor` — see the note there.
+	 */
+	private colorState(): EditorColorState {
+		return {
+			colorLight: this.colorLight,
+			colorDark: this.colorDark,
+			bgColorLight: this.bgColorLight,
+			bgColorDark: this.bgColorDark,
+			bgGradient: this.bgGradient ? { ...this.bgGradient } : undefined,
+			transparentBg: this.transparentBg,
+			textColorLight: this.textColorLight,
+			textColorDark: this.textColorDark,
+		};
+	}
+
+	/**
 	 * Snapshot the current form state as a transient preview definition.
 	 *
 	 * The ownership fields below (`builtIn`, `source`, and the empty `aliases`)
@@ -1803,37 +1824,69 @@ export class CalloutEditor extends Modal {
 	 * re-stamps it with that callout's real identity on the way into the map
 	 * (`withIdentityOf` in CalloutRegistry) — so don't try to derive them here:
 	 * mid-edit the form's id may not match any real row at all.
+	 *
+	 * The three `hasAuthored…` gates are what keep this snapshot *faithful*, and
+	 * they are not cosmetic. This definition goes into the real registry, and the
+	 * CSS it generates is global — the live preview is a genuine embedded editor
+	 * in the same document, so styling it means styling every callout of that
+	 * type in the vault behind the modal. Emitting a field the committed
+	 * definition does not carry therefore repaints those notes for as long as the
+	 * modal is open: a derived background replaces Obsidian's own 10% fill with a
+	 * stronger tint, and any extra field at all flips `isUnmodifiedBuiltIn`,
+	 * dropping a built-in's deference to the theme's `--callout-*` variables.
 	 */
 	private buildPreviewDefinition(): CalloutDefinition {
-		// `transparentBg` is pulled out of the hover override rather than riding
-		// along in the spread below: it is a plain boolean in the form but
-		// `?: true` on a definition, where "off" is an absent key and not `false`.
-		const {
-			transparentBg: hoveredTransparent,
-			...hoveredColors
-		}: Partial<EditorColorState> = this.previewColorOverride ?? {};
-		const transparent = hoveredTransparent ?? this.transparentBg;
+		// A hovered-but-uncommitted palette replaces the colour half wholesale —
+		// it is a complete EditorColorState, so there is nothing to merge field
+		// by field — and reaches the CSS/preview pipeline without ever touching
+		// the form state.
+		const colors = this.previewColorOverride ?? this.colorState();
+		const adjust = this.iconAdjustState();
 		return {
 			id: this.currentPreviewId(),
 			displayName: this.displayName.trim() || t("editor.untitledCallout"),
 			icon: { ...this.icon },
-			colorLight: this.colorLight,
-			colorDark: this.colorDark,
-			bgColorLight: this.bgColorLight,
-			bgColorDark: this.bgColorDark,
-			bgGradient: this.bgGradient,
-			textColorLight: this.textColorLight,
-			textColorDark: this.textColorDark,
+			colorLight: colors.colorLight,
+			colorDark: colors.colorDark,
+			// Omitted rather than set to undefined, and for the same reason the
+			// save path drops it: an absent background is what leaves Obsidian's
+			// translucent fill in place, which is what lets nested callouts step.
+			...(hasAuthoredBackground(colors)
+				? {
+						bgColorLight: colors.bgColorLight,
+						bgColorDark: colors.bgColorDark,
+					}
+				: {}),
+			bgGradient: colors.transparentBg ? undefined : colors.bgGradient,
+			...(hasAuthoredTextColors(
+				this.baselineDef,
+				colors.textColorLight,
+				colors.textColorDark,
+			)
+				? {
+						textColorLight: colors.textColorLight,
+						textColorDark: colors.textColorDark,
+					}
+				: {}),
 			foldable: this.foldable,
 			defaultFolded: this.defaultFolded,
-			...this.iconAdjustState(),
+			// The per-role map is never a mere default (`buildIconAdjust` returns
+			// undefined once every role agrees), so only the flat trio below —
+			// the Regular role's own values — needs the gate.
+			iconAdjust: adjust.iconAdjust,
+			...(hasAuthoredIconAdjust(this.baselineDef, this.iconAdjust.regular)
+				? {
+						iconOffsetX: adjust.iconOffsetX,
+						iconOffsetY: adjust.iconOffsetY,
+						iconSize: adjust.iconSize,
+					}
+				: {}),
 			aliases: [],
 			builtIn: false,
 			source: "user",
-			// Layered last: a hovered-but-uncommitted palette reaches the
-			// CSS/preview pipeline without ever touching the form state above.
-			...hoveredColors,
-			...(transparent ? { transparentBg: true as const } : {}),
+			// A plain boolean in the form but `?: true` on a definition, where
+			// "off" is an absent key and not `false`.
+			...(colors.transparentBg ? { transparentBg: true as const } : {}),
 		};
 	}
 
@@ -1852,6 +1905,9 @@ export class CalloutEditor extends Modal {
 			plugin: this.plugin,
 			existingId: this.existingId,
 			isBuiltIn: this.isBuiltIn,
+			// The same baseline the live preview's `hasAuthored…` gates read, so
+			// the definition that gets saved matches the one being previewed.
+			baselineDef: this.baselineDef,
 			state: {
 				displayName: this.displayName,
 				calloutId: this.calloutId,
