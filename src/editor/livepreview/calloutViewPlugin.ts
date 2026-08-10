@@ -37,6 +37,7 @@ import {
 	scanLineForCalloutTokens,
 } from "../calloutTokens";
 import {
+	CSS_HEADING_HIDE_MARKS,
 	CSS_HEADING_LINE,
 	CSS_HEADING_TITLE,
 	CSS_UNKNOWN,
@@ -79,16 +80,32 @@ export function createCalloutViewPlugin(host: LivePreviewHost) {
 		class {
 			decorations: DecorationSet;
 			/**
-			 * Selection-driven rebuilds are frozen while the left mouse button
-			 * is held (Obsidian's livePreviewState.mousedown). Core defers its
-			 * own `#`-mark reveal to mouseup; without the freeze our raw
-			 * `[!id]` reveal lands a beat earlier, producing a two-stage
-			 * flash. Freezing also keeps widgets stable during drag-selection
-			 * and stops an already-revealed line from re-collapsing mid-click.
-			 * Known imperfection: a viewport scroll mid-drag still rebuilds
-			 * with the live selection — rare, and it self-corrects at mouseup.
+			 * Raw-syntax reveal is frozen while the left mouse button is held
+			 * (Obsidian's livePreviewState.mousedown). Core defers its own
+			 * `#`-mark reveal to mouseup; without the freeze our raw `[!id]`
+			 * reveal lands a beat earlier, producing a two-stage flash.
+			 * Freezing also keeps widgets stable during drag-selection and
+			 * stops an already-revealed line from re-collapsing mid-click.
+			 *
+			 * On mobile this window is much wider than a physical click: core
+			 * arms the same flag on EVERY caret move and clears it on a 700ms
+			 * debounce, so almost any tap is followed by two-thirds of a second
+			 * during which core will not re-render.
 			 */
 			private wasMousedown = false;
+			/**
+			 * The selection and focus the reveal is drawn from — a snapshot,
+			 * not a live read. The freeze above only ever gated rebuilds
+			 * TRIGGERED by a selection change; a rebuild triggered by anything
+			 * else (a fold, a refresh effect, a viewport scroll mid-drag) read
+			 * the live selection and revealed a line core was still holding
+			 * closed, or collapsed one core was still holding open — which is
+			 * how a raw `###` ends up in front of a finished bar. Snapshotting
+			 * makes every rebuild agree with whatever core last acted on,
+			 * whichever trigger fired it.
+			 */
+			private selection: EditorSelection;
+			private focused: boolean;
 			private destroyed = false;
 			/** Handle of the pending safety-net timer, so destroy() can cancel it. */
 			private mouseUpTimer: number | null = null;
@@ -96,7 +113,14 @@ export function createCalloutViewPlugin(host: LivePreviewHost) {
 			private readonly onDocMouseUp: () => void;
 
 			constructor(private readonly view: EditorView) {
-				this.decorations = buildDecorations(view, host);
+				this.selection = view.state.selection;
+				this.focused = view.hasFocus;
+				this.decorations = buildDecorations(
+					view,
+					host,
+					this.selection,
+					this.focused,
+				);
 				this.ownerDoc = view.dom.ownerDocument;
 				// Registry edits don't touch the document, so this view only
 				// rebuilds when something dispatches the refresh effect into
@@ -169,6 +193,18 @@ export function createCalloutViewPlugin(host: LivePreviewHost) {
 				// — Obsidian only inserts a gap into a line of 20,000 characters
 				// (4,000 with wrapping off) — and the watermark in
 				// buildDecorations keeps the split harmless either way.
+				//
+				// The snapshot moves BEFORE the rebuild so an unfrozen rebuild
+				// still sees the current selection. Frozen, it only maps through
+				// the document changes, which keeps its offsets valid without
+				// letting a caret core has not acted on yet reach the reveal.
+				if (update.docChanged) {
+					this.selection = this.selection.map(update.changes);
+				}
+				if (!mousedown) {
+					this.selection = update.state.selection;
+					this.focused = update.view.hasFocus;
+				}
 				if (
 					update.docChanged ||
 					update.viewportChanged ||
@@ -178,7 +214,12 @@ export function createCalloutViewPlugin(host: LivePreviewHost) {
 					((update.selectionSet || update.focusChanged) &&
 						!mousedown)
 				) {
-					this.decorations = buildDecorations(update.view, host);
+					this.decorations = buildDecorations(
+						update.view,
+						host,
+						this.selection,
+						this.focused,
+					);
 				}
 				this.wasMousedown = mousedown;
 			}
@@ -203,6 +244,10 @@ export function createCalloutViewPlugin(host: LivePreviewHost) {
 function buildDecorations(
 	view: EditorView,
 	host: LivePreviewHost,
+	/** Frozen snapshot, not `view.state.selection` — see the plugin class. */
+	selection: EditorSelection,
+	/** Frozen snapshot of `view.hasFocus`, for the same reason. */
+	focused: boolean,
 ): DecorationSet {
 	const headingEnabled = host.settings.headingCallouts.enabled;
 	const inlineEnabled = host.settings.inlineCallouts.enabled;
@@ -216,7 +261,6 @@ function buildDecorations(
 
 	const builder = new RangeSetBuilder<Decoration>();
 	const doc = view.state.doc;
-	const selection = view.state.selection;
 	const tree = syntaxTree(view.state);
 
 	// Heading fold state: only relevant when heading callouts render, the user
@@ -257,6 +301,7 @@ function buildDecorations(
 					host,
 					tree,
 					selection,
+					focused,
 					line.from,
 					line.to,
 					line.text,
@@ -278,6 +323,7 @@ function decorateLine(
 	host: LivePreviewHost,
 	tree: ReturnType<typeof syntaxTree>,
 	selection: EditorSelection,
+	focused: boolean,
 	lineFrom: number,
 	lineTo: number,
 	lineText: string,
@@ -303,14 +349,19 @@ function decorateLine(
 	// Native blockquote callouts belong to Obsidian's own rendering.
 	if (tokens.some((t) => t.role === "regular")) return;
 
-	// Raw-syntax reveal follows the caret only while the editor is focused,
-	// matching core Live Preview (which re-collapses formatting on blur). This
-	// also keeps unfocused embedded previews (settings cards) fully rendered:
-	// their caret parks at position 0, which would otherwise permanently
-	// reveal a token on the first line.
+	// Raw-syntax reveal follows the caret only while the editor is focused —
+	// the same predicate core uses (`view.hasFocus ? state.selection.ranges :
+	// []`). It also keeps unfocused embedded previews (settings cards) fully
+	// rendered: their caret parks at position 0, which would otherwise
+	// permanently reveal a token on the first line.
+	//
+	// Both values are the frozen snapshot, never a live read: core does not
+	// rebuild on focusChanged at all, so on blur it keeps whatever it last
+	// drew while this plugin would otherwise collapse immediately — and a
+	// heading whose `[!id]` collapsed under a `###` core is still showing is
+	// exactly the half-rendered bar this pairing exists to prevent.
 	const selectionTouches = (from: number, to: number): boolean =>
-		view.hasFocus &&
-		selection.ranges.some((r) => r.from <= to && r.to >= from);
+		focused && selection.ranges.some((r) => r.from <= to && r.to >= from);
 
 	// The heading fold chevron sits at the end of the line, but the same line
 	// can carry inline tokens after the heading token (e.g. a pill in the
@@ -338,9 +389,16 @@ function decorateLine(
 		if (token.role === "heading") {
 			if (!headingEnabled) continue;
 			const resolved = resolveCalloutDef(host.registry, token.rawId);
-			const cls = resolved.unknown
-				? `${CSS_HEADING_LINE} ${CSS_UNKNOWN}`
-				: CSS_HEADING_LINE;
+			// One predicate for the whole heading: it decides the token widget
+			// below AND the class that hides the ATX `###`. Obsidian owns the
+			// hashes on a rebuild schedule that is allowed to stall (see
+			// CSS_HEADING_HIDE_MARKS), so leaving them to it lets a raw `###`
+			// surface in front of an otherwise finished bar.
+			const collapsed = !selectionTouches(lineFrom, lineTo);
+			const cls =
+				CSS_HEADING_LINE +
+				(resolved.unknown ? ` ${CSS_UNKNOWN}` : "") +
+				(collapsed ? ` ${CSS_HEADING_HIDE_MARKS}` : "");
 			// The bar stays on the line even while editing it…
 			builder.add(
 				lineFrom,
@@ -382,7 +440,7 @@ function decorateLine(
 			}
 			// …but the token collapses to icon(+name) only while the caret
 			// is elsewhere, so the raw syntax is editable in place.
-			if (!selectionTouches(lineFrom, lineTo)) {
+			if (collapsed) {
 				const headingLine = view.state.doc.lineAt(lineFrom).number - 1;
 				midLine.push({
 					from,

@@ -19,6 +19,20 @@ import { createIconResolver } from "../icons/resolver";
 /** Class names shared between Live Preview widgets and reading-view DOM. */
 export const CSS_INLINE_TOKEN = "cs-inline-callout";
 export const CSS_HEADING_LINE = "cs-heading-callout";
+/**
+ * Live Preview only: added to the bar for exactly as long as the `[!id]` token
+ * is collapsed behind its widget, so the CSS rule that hides the ATX `###` runs
+ * off the SAME predicate the widget does.
+ *
+ * Obsidian hides the hashes with a replace decoration of its own, on its own
+ * rebuild schedule — one that skips entirely while the mouse is held (on mobile
+ * that is a 700ms window after EVERY caret move), while an IME is composing,
+ * and while the syntax tree sits behind the viewport. This plugin's rebuilds
+ * have no such skips, so the two pipelines can disagree for a frame or longer
+ * and the raw `###` surfaces in front of a fully rendered bar. Owning the
+ * hashes here makes that disagreement unreachable.
+ */
+export const CSS_HEADING_HIDE_MARKS = "cs-heading-hide-marks";
 export const CSS_HEADING_TOKEN = "cs-heading-token";
 /**
  * The heading's own title text (everything after the `[!id]` token), wrapped

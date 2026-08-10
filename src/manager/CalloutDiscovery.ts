@@ -122,34 +122,44 @@ export class CalloutDiscovery {
 			DEFAULT_CALLOUTS.find((c) => c.id === "note") ??
 			DEFAULT_CALLOUTS[0]!;
 		const fallback = this.host.registry.get(fallbackId) ?? noteDefault;
-		let added = 0;
-		for (const id of unknownIds) {
-			if (this.host.registry.get(id)) continue;
-			// Also skip a spelling an existing callout already owns through its
-			// `data-callout` form. buildKnownIds keeps the discovery paths from
-			// reaching here at all; this covers the first-run scan modal, which
-			// hands a user-approved list straight in.
-			if (this.host.registry.findAttrIdConflict(id, null)) continue;
-			const def = {
-				...fallback,
-				icon: fallback.icon,
-				id,
-				// Dash-to-space before capitalizing, matching Obsidian's own
-				// default-title algorithm — see obsidianDefaultTitle.
-				displayName: obsidianDefaultTitle(id),
-				aliases: [],
-				builtIn: false,
-				source: "fallback" as const,
-			};
-			if (this.host.registry.add(def)) {
-				added++;
-				// Being (re)discovered means it currently appears in file
-				// content — any stale "confirmed zero usage" verdict from an
-				// earlier scan no longer applies.
-				this.zeroUsageFallbackIds.delete(normalizeCalloutId(id));
+		// One notification for the whole batch. Each `add` below would otherwise
+		// fire its own, and a single one costs a full stylesheet regeneration, a
+		// document-wide icon repaint, an editor refresh in every leaf, a
+		// data.json write and a `css-change` — which core answers by rebuilding
+		// every open editor. A template carrying half a dozen unknown ids paid
+		// all of that six times over, synchronously, and on mobile that reads as
+		// the view jumping. The per-id guards inside the loop still see live
+		// registry state, so nothing about WHICH rows get created changes.
+		return this.host.registry.batch(() => {
+			let added = 0;
+			for (const id of unknownIds) {
+				if (this.host.registry.get(id)) continue;
+				// Also skip a spelling an existing callout already owns through
+				// its `data-callout` form. buildKnownIds keeps the discovery
+				// paths from reaching here at all; this covers the first-run
+				// scan modal, which hands a user-approved list straight in.
+				if (this.host.registry.findAttrIdConflict(id, null)) continue;
+				const def = {
+					...fallback,
+					icon: fallback.icon,
+					id,
+					// Dash-to-space before capitalizing, matching Obsidian's own
+					// default-title algorithm — see obsidianDefaultTitle.
+					displayName: obsidianDefaultTitle(id),
+					aliases: [],
+					builtIn: false,
+					source: "fallback" as const,
+				};
+				if (this.host.registry.add(def)) {
+					added++;
+					// Being (re)discovered means it currently appears in file
+					// content — any stale "confirmed zero usage" verdict from an
+					// earlier scan no longer applies.
+					this.zeroUsageFallbackIds.delete(normalizeCalloutId(id));
+				}
 			}
-		}
-		return added;
+			return added;
+		});
 	}
 
 	/**
@@ -206,33 +216,38 @@ export class CalloutDiscovery {
 			return 0;
 		}
 
-		let removed = 0;
-		for (const { id } of candidates) {
-			const normalized = normalizeCalloutId(id);
-			const hasUsage = (formsById.get(id) ?? [id]).some((form) => {
-				const stat = usage.get(normalizeCalloutId(form));
-				return stat !== undefined && stat.fileCount > 0;
-			});
-			if (hasUsage) {
-				this.zeroUsageFallbackIds.delete(normalized);
-				continue;
+		// Batched for the same reason the discovery adds are: one `onChange` per
+		// removed row means one full stylesheet regeneration, icon repaint,
+		// editor refresh and `css-change` per row.
+		const removed = this.host.registry.batch(() => {
+			let count = 0;
+			for (const { id } of candidates) {
+				const normalized = normalizeCalloutId(id);
+				const hasUsage = (formsById.get(id) ?? [id]).some((form) => {
+					const stat = usage.get(normalizeCalloutId(form));
+					return stat !== undefined && stat.fileCount > 0;
+				});
+				if (hasUsage) {
+					this.zeroUsageFallbackIds.delete(normalized);
+					continue;
+				}
+				this.zeroUsageFallbackIds.add(normalized);
+				const def = this.host.registry.get(id);
+				if (!def) continue;
+				// Re-check: another flow (e.g. settings edit) may have
+				// customized this row while the scan was in flight.
+				if (
+					def.source !== "fallback" ||
+					def.customized === true ||
+					def.externalStyle === true
+				)
+					continue;
+				if (this.host.registry.remove(id)) count++;
 			}
-			this.zeroUsageFallbackIds.add(normalized);
-			const def = this.host.registry.get(id);
-			if (!def) continue;
-			// Re-check: another flow (e.g. settings edit) may have
-			// customized this row while the scan was in flight.
-			if (
-				def.source !== "fallback" ||
-				def.customized === true ||
-				def.externalStyle === true
-			)
-				continue;
-			if (this.host.registry.remove(id)) removed++;
-		}
+			return count;
+		});
 		if (removed > 0) {
 			await this.host.saveSettings();
-			this.host.refreshCallouts();
 			console.debug(
 				"[CalloutStudio] pruned",
 				removed,
@@ -349,8 +364,10 @@ export class CalloutDiscovery {
 				file.path,
 				unknown,
 			);
+			// No refreshCallouts() here: the batch's single onChange already
+			// injected (which itself ends in refreshAllCalloutEditors), so a
+			// second pass would only regenerate identical CSS.
 			await this.host.saveSettings();
-			this.host.refreshCallouts();
 		}
 		// Always schedule a prune pass: even if no new rows were added,
 		// existing fallback rows may now be unused after this edit.

@@ -3781,6 +3781,34 @@ input.cs-input-invalid:focus {
 	border-radius: var(--cs-heading-radius, var(--radius-s, 4px));
 }
 
+/* The heading's own `###`, hidden for exactly as long as the view plugin keeps
+   the `[!id]` token collapsed (it adds .cs-heading-hide-marks then, and only
+   then — see renderShared's CSS_HEADING_HIDE_MARKS).
+
+   Obsidian hides the hashes itself, with a replace decoration over the
+   `cm-formatting-header` range, but its view plugin declines to rebuild while
+   the mouse is held (on mobile: a 700ms debounce armed by every caret move),
+   while an IME is composing, and while the syntax tree is behind the viewport.
+   Ours has none of those brakes, so the two can hold different opinions about
+   where the caret is for a frame or much longer, and the raw `###` shows up in
+   front of a bar that has otherwise finished rendering. This rule is the
+   backstop; when core is keeping up it matches an element core already removed
+   and costs nothing.
+
+   `font-size: 0` rather than `display: none`: the span stays in flow, so
+   CodeMirror's DOM-to-position mapping is untouched — the same trick core's own
+   legacy rule used on this exact selector. The two spacing properties come
+   along because neither scales with font-size when a theme spells them in px,
+   and either would otherwise leave a sliver of indent where the hashes were;
+   both are inherited on this span, so a direct declaration wins outright and
+   needs no !important. Inert in reading view, which has no
+   `cm-formatting-header` at all. */
+.cs-heading-callout.cs-heading-hide-marks .cm-formatting-header {
+	font-size: 0 !important;
+	letter-spacing: 0;
+	word-spacing: 0;
+}
+
 /* The class is repeated to 4 so these win on specificity alone, one more than
    the strongest rule each fights (same trick as .cs-tag-add-btn above, and
    unlike !important it leaves the entrance transition free to animate them):
@@ -3958,6 +3986,41 @@ input.cs-input-invalid:focus {
 }
 .cs-heading-callout .cs-fold-arrow:hover {
 	opacity: 1;
+}
+
+/* Tap target. The drawn chevron is 0.85em wide by one line-height tall — on a
+   phone that is small enough that a near-miss lands on the line instead, and
+   the caret arriving there is what "it thinks I want to edit the heading"
+   looks like. The 0.4em margin-inline-start above sits OUTSIDE the box, so it
+   is dead space that can be reclaimed for free.
+
+   An absolutely-positioned pseudo rather than padding: this chevron is an
+   inline widget living inside the .cm-line, and padding would grow the inline
+   box CodeMirror measures for that line (see the .cm-line geometry warning by
+   the gap rule above). A pseudo is out of flow, so the measured box is
+   untouched and only the hit region grows. The element already swallows its
+   own mousedown — preventDefault + stopPropagation in HeadingFoldArrowWidget —
+   so the extra area cannot place a caret either.
+
+   Phones and tablets get a taller, wider one: `.is-mobile` rather than a width
+   query, matching how the rest of this file targets touch (see the note above
+   the .is-phone modal rules). The end inset is the most generous side because
+   it runs into the empty tail of the line, where there is nothing to steal
+   from; the start inset never exceeds the chevron's own margin. */
+.cs-heading-callout .cs-fold-arrow {
+	position: relative;
+}
+.cs-heading-callout .cs-fold-arrow::after {
+	content: "";
+	position: absolute;
+	inset-block: -0.3em;
+	inset-inline-start: -0.4em;
+	inset-inline-end: -0.7em;
+}
+.is-mobile .cs-heading-callout .cs-fold-arrow::after {
+	inset-block: -0.55em;
+	inset-inline-start: -0.4em;
+	inset-inline-end: -1.1em;
 }
 /* The rotation is on the svg, never on the span: the span is no longer square
    (0.85em wide by one line-height tall), so rotating it would swing the
