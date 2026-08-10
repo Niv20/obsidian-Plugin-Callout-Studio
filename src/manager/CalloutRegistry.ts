@@ -290,6 +290,10 @@ export class CalloutRegistry {
 	private callouts: Map<string, CalloutDefinition> = new Map();
 	private builtInDefaults: Map<string, CalloutDefinition> = new Map();
 	private changeCallbacks: RegistryChangeCallback[] = [];
+	/** Nesting depth of {@link batch}; > 0 means notifications are held. */
+	private batchDepth = 0;
+	/** Whether anything mutated while the batch above was open. */
+	private batchDirty = false;
 	/**
 	 * Listeners for transient live-preview changes — a separate list from
 	 * {@link changeCallbacks} precisely because a preview is NOT a mutation:
@@ -1822,7 +1826,41 @@ export class CalloutRegistry {
 		setUserImages(this.settings.userImages);
 	}
 
+	/**
+	 * Run `body` with change notifications coalesced: every mutation inside it
+	 * fires at most ONE `onChange` round, at the end, and none at all if
+	 * nothing actually mutated.
+	 *
+	 * A single `onChange` is expensive — it regenerates the whole stylesheet,
+	 * repaints every callout icon in the document, refreshes every editor and
+	 * writes data.json (see main.ts). Paying that per id turns "a template
+	 * introduced six unknown callouts" into six full passes plus six
+	 * `css-change` storms in one synchronous burst, which on mobile is what a
+	 * jumping viewport looks like. Callers that mutate in a loop wrap it here.
+	 *
+	 * Re-entrant (depth-counted) and exception-safe, and it deliberately does
+	 * NOT change what each individual mutation does — only when the listeners
+	 * hear about it — so per-call guards that read live registry state from
+	 * inside the loop keep behaving exactly as they did.
+	 */
+	batch<T>(body: () => T): T {
+		this.batchDepth++;
+		try {
+			return body();
+		} finally {
+			this.batchDepth--;
+			if (this.batchDepth === 0 && this.batchDirty) {
+				this.batchDirty = false;
+				this.notifyChange();
+			}
+		}
+	}
+
 	private notifyChange(): void {
+		if (this.batchDepth > 0) {
+			this.batchDirty = true;
+			return;
+		}
 		for (const cb of this.changeCallbacks) {
 			cb();
 		}
