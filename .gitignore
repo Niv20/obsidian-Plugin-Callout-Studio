@@ -21,7 +21,7 @@ main.js
 # obsidian
 data.json
 
-# Icon packs downloaded at runtime — served from the packs-v1 tag, never committed
+# Icon packs downloaded at runtime — served from the packs-v2 tag, never committed
 icon-packs/
 
 # Material Symbols webfonts cached at runtime — fetched from fonts.gstatic.com on
@@ -33,12 +33,17 @@ icon-fonts/
 .serena/
 graphify-out/
 
-# .claude is local-only, except the release skill, which is part of the
-# project's release process and belongs in version control.
+# .claude is local-only, except the skills below — the release process and
+# the deep-dive architecture skills split out of CLAUDE.md — which belong
+# in version control.
 .claude/*
 !.claude/skills/
 .claude/skills/*
 !.claude/skills/release/
+!.claude/skills/tabler-outline-stroke/
+!.claude/skills/user-image-icons/
+!.claude/skills/callout-color-nesting/
+!.claude/skills/callout-metadata-pipe/
 
 # Exclude macOS Finder (System Explorer) View States
 .DS_Store
