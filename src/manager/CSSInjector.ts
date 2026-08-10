@@ -179,6 +179,24 @@ export class CSSInjector {
 	private styleSheet: CSSStyleSheet | null = null;
 	private styleDoc: Document | null = null;
 	private styleEl: HTMLStyleElement | null = null;
+	/**
+	 * The CSS text currently installed in BOTH targets, or null when that is
+	 * unknown (nothing written yet, or a target was just rebound and may hold
+	 * someone else's text).
+	 *
+	 * Injects are far more frequent than actual CSS changes: an icon download
+	 * landing, a prune pass that removed nothing, another plugin's css-change,
+	 * and every step of a multi-callout import all arrive here with output
+	 * identical to what is already installed. Ending such a pass in
+	 * `workspace.trigger("css-change")` is not free — core answers it by
+	 * running `cm.dispatch(clearCache)` + `editor.refresh()` in EVERY open
+	 * editor and re-rendering reading views, which on mobile is a whole-note
+	 * relayout and the reason the view visibly jumps. Comparing first keeps
+	 * that cost tied to real changes.
+	 *
+	 * Must be nulled whenever a style target is (re)bound — see ensureStyleEl.
+	 */
+	private lastCssText: string | null = null;
 	private injecting = false;
 	private registry: CalloutRegistry;
 	private app: App;
@@ -223,6 +241,9 @@ export class CSSInjector {
 		const existing = registryWindow[STYLE_SHEET_REGISTRY_KEY];
 		if (existing) {
 			this.styleSheet = existing;
+			// Adopted from another instance: its contents are not ours to
+			// assume, so the next inject must write unconditionally.
+			this.lastCssText = null;
 			return;
 		}
 
@@ -247,6 +268,8 @@ export class CSSInjector {
 		registryWindow[STYLE_SHEET_REGISTRY_KEY] = sheet;
 		this.styleSheet = sheet;
 		this.styleDoc = doc;
+		// Brand new and empty — nothing installed to compare against.
+		this.lastCssText = null;
 	}
 
 	/**
@@ -260,6 +283,10 @@ export class CSSInjector {
 	 */
 	private ensureStyleEl(): void {
 		if (this.styleEl && this.styleEl.isConnected) return;
+		// Past this point the element is being (re)bound — a fresh one is empty
+		// and an adopted one holds text we did not write, so either way the
+		// no-op guard in injectNow must not trust its cached copy.
+		this.lastCssText = null;
 		// Use the main renderer document (where Export to PDF operates), not
 		// activeDocument (which may transiently be a pop-out window). The
 		// workspace container always lives in the main window, so its
@@ -345,19 +372,28 @@ export class CSSInjector {
 		//  2. a real <style> in <head> — the ONLY one Obsidian's PDF export
 		//     honors (it ignores adoptedStyleSheets), so this is what makes
 		//     colors + material/emoji icons render correctly in exported PDFs.
-		if (this.styleSheet) this.styleSheet.replaceSync(cssText);
+		// Everything below the generation step is conditional on the text having
+		// actually moved (see lastCssText): a full stylesheet swap forces a
+		// global style recalc, the localStorage write is synchronous, and the
+		// css-change at the end makes core rebuild every open editor. Most
+		// injects reach here with byte-identical output and deserve none of it.
 		this.ensureStyleEl();
-		if (this.styleEl) this.styleEl.textContent = cssText;
+		const cssChanged = cssText !== this.lastCssText;
+		if (cssChanged) {
+			if (this.styleSheet) this.styleSheet.replaceSync(cssText);
+			if (this.styleEl) this.styleEl.textContent = cssText;
+			this.lastCssText = cssText;
 
-		// Snapshot the same text for next launch's startup fast path (see
-		// StartupStyleCache). Skipped while a transient live-preview definition
-		// is registered: that CSS describes an unsaved draft, which toSaveData()
-		// already goes out of its way to keep off disk, and hovering a colour in
-		// the editor's palette menu would otherwise cost a synchronous
-		// localStorage write each time. Clearing the preview re-injects, which
-		// persists the real CSS again.
-		if (!this.registry.hasPreviewDefinition()) {
-			this.startupCache.persist(cssText);
+			// Snapshot the same text for next launch's startup fast path (see
+			// StartupStyleCache). Skipped while a transient live-preview
+			// definition is registered: that CSS describes an unsaved draft,
+			// which toSaveData() already goes out of its way to keep off disk,
+			// and hovering a colour in the editor's palette menu would otherwise
+			// cost a synchronous localStorage write each time. Clearing the
+			// preview re-injects, which persists the real CSS again.
+			if (!this.registry.hasPreviewDefinition()) {
+				this.startupCache.persist(cssText);
+			}
 		}
 
 		// Re-paint DOM icons: keeps Lucide icons in sync after edits, and bakes
@@ -375,11 +411,17 @@ export class CSSInjector {
 		refreshAllCalloutEditors();
 
 		// Trigger Obsidian to re-render callouts with updated styles — but only
-		// when *we* are the source of the change. When reacting to an external
-		// css-change (theme/snippet, or another plugin), re-emitting would create
-		// a feedback loop with other css-change listeners that also re-emit
-		// (e.g. Style Settings), causing its settings UI to flicker endlessly.
-		if (emitCssChange) {
+		// when *we* are the source of the change, and only when there IS a
+		// change. When reacting to an external css-change (theme/snippet, or
+		// another plugin), re-emitting would create a feedback loop with other
+		// css-change listeners that also re-emit (e.g. Style Settings), causing
+		// its settings UI to flicker endlessly. And core answers this event by
+		// wiping every editor's widget cache and forcing a re-measure, so
+		// emitting it for CSS that did not move buys a whole-note relayout —
+		// the mobile "screen jumps" — for nothing. paintIcons and the editor
+		// refresh above still run either way: artwork can land while the
+		// generated CSS stays identical.
+		if (emitCssChange && cssChanged) {
 			this.app.workspace.trigger("css-change");
 		}
 	}
@@ -2072,5 +2114,7 @@ export class CSSInjector {
 
 		this.styleEl?.remove();
 		this.styleEl = null;
+		// Both targets are gone; nothing is installed to compare against.
+		this.lastCssText = null;
 	}
 }
