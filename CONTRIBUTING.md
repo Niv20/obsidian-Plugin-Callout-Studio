@@ -61,4 +61,4 @@ Don't bump `manifest.json`, `package.json`, or `versions.json` in a feature or f
 
 ## License
 
-[0BSD](LICENSE). By submitting a change you agree it's licensed under the same terms.
+A permissive [license](LICENSE) with one restriction: it may not be used to build another Obsidian plugin. By submitting a change you agree it's licensed under the same terms.
