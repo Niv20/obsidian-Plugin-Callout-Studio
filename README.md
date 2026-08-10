@@ -234,7 +234,7 @@ If you never open the Material source, none of this happens. If the preview font
 
 ## Icon licences and attribution
 
-Callout Studio's own code is [0BSD](LICENSE), but the icon libraries it draws on keep their own licences — see **[THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md)** for the full text of each, also reachable from *Settings → Icon licences and credits*.
+Callout Studio's own code is under a permissive [license](LICENSE) — free to use, copy, modify, and distribute, with one restriction: it may not be used to build another Obsidian plugin. The icon libraries it draws on keep their own licences — see **[THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md)** for the full text of each, also reachable from *Settings → Icon licences and credits*.
 
 Two points worth knowing before you publish something made with these icons:
 
@@ -283,6 +283,6 @@ Source lives under `src/` and is bundled by esbuild into `main.js`. The release 
 
 ## License
 
-Callout Studio's own code is [0BSD](LICENSE) — use it however you like, no attribution required.
+Callout Studio's own code is under a permissive [license](LICENSE) — use it however you like, no attribution required, with one restriction: it may not be used to build another Obsidian plugin.
 
-The icon libraries it offers are separate works under their own licences, which 0BSD does not cover. See [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md).
+The icon libraries it offers are separate works under their own licences, which this license does not cover. See [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md).

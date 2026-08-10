@@ -520,7 +520,7 @@ export const fi: Record<string, string> = {
 		"Callout Studio hyödyntää useita avoimia kuvakekirjastoja. Niiden lisenssit on toistettu alla, yhdessä sen kanssa, mitä muutettiin niiden käyttämiseksi täällä.",
 	"credits.fullNotices": "Täydelliset kolmannen osapuolen ilmoitukset",
 	"credits.pluginLicense":
-		"Callout Studion oma koodi on 0BSD-lisenssillä; kuvakekirjastot säilyttävät omat lisenssinsä.",
+		"Callout Studion oma koodi on permissive-lisenssissä (yhdellä rajoituksella: sitä ei saa käyttää toisen Obsidian-lisäosan rakentamiseen); kuvakekirjastot säilyttävät omat lisenssinsä.",
 	"contextMenu.editCallout": "Muokkaa callout-asetuksia",
 	"contextMenu.copyMarkdown": "Kopioi callout Markdown",
 	"contextMenu.openSettings": "Avaa Callout Studio -asetukset",

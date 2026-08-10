@@ -538,7 +538,7 @@ export const it: Record<string, string> = {
 		"Callout Studio si basa su diverse librerie di icone aperte. Le loro licenze sono riprodotte di seguito, insieme a ciò che è stato modificato per usarle qui.",
 	"credits.fullNotices": "Avvisi terze parti completi",
 	"credits.pluginLicense":
-		"Il codice proprio di Callout Studio è sotto licenza 0BSD; le librerie di icone mantengono le proprie licenze.",
+		"Il codice proprio di Callout Studio è rilasciato con una licenza permissive (con una sola restrizione: non può essere usato per creare un altro plugin per Obsidian); le librerie di icone mantengono le proprie licenze.",
 
 	"contextMenu.editCallout": "Modifica impostazioni callout",
 	"contextMenu.copyMarkdown": "Copia Markdown callout",

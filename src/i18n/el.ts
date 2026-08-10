@@ -531,7 +531,7 @@ export const el: Record<string, string> = {
 		"Το Callout Studio αντλεί από αρκετές ανοιχτές βιβλιοθήκες εικονιδίων. Οι άδειές τους αναπαράγονται παρακάτω, μαζί με ό,τι άλλαξε για τη χρήση τους εδώ.",
 	"credits.fullNotices": "Πλήρεις ανακοινώσεις τρίτων μερών",
 	"credits.pluginLicense":
-		"Ο κώδικας του Callout Studio είναι υπό άδεια 0BSD· οι βιβλιοθήκες εικονιδίων διατηρούν τις δικές τους άδειες.",
+		"Ο κώδικας του Callout Studio είναι υπό μια permissive άδεια (με μία προϋπόθεση: δεν επιτρέπεται να χρησιμοποιηθεί για τη δημιουργία ενός άλλου plugin του Obsidian)· οι βιβλιοθήκες εικονιδίων διατηρούν τις δικές τους άδειες.",
 	"contextMenu.editCallout": "Επεξεργασία ρυθμίσεων callout",
 	"contextMenu.copyMarkdown": "Αντιγραφή Markdown callout",
 	"contextMenu.openSettings": "Άνοιγμα ρυθμίσεων Callout Studio",

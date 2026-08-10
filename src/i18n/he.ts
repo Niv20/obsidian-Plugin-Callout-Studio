@@ -555,7 +555,7 @@ export const he: Record<string, string> = {
 		"Callout Studio נעזר בכמה ספריות אייקונים פתוחות. הרישיונות שלהן מופיעים כאן, יחד עם פירוט השינויים שנעשו כדי לשלב אותן.",
 	"credits.fullNotices": "הודעות צד־שלישי המלאות",
 	"credits.pluginLicense":
-		"הקוד של Callout Studio עצמו מופץ ברישיון 0BSD; ספריות האייקונים שומרות על הרישיונות שלהן.",
+		"הקוד של Callout Studio עצמו מופץ ברישיון permissive (עם הגבלה אחת: אסור להשתמש בו כדי לבנות פלאגין Obsidian אחר); ספריות האייקונים שומרות על הרישיונות שלהן.",
 
 	// Context Menu
 	"contextMenu.editCallout": "עריכת הגדרות תיבת־הבלטה",

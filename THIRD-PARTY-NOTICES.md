@@ -1,8 +1,9 @@
 # Third-party notices
 
-Callout Studio's own code is released under the [0BSD licence](LICENSE), which
-asks nothing of you. The icon libraries it draws on are separate works with
-their own licences, and those are reproduced here in full.
+Callout Studio's own code is released under a permissive [license](LICENSE)
+that asks nothing of you beyond one restriction: it may not be used to build
+another Obsidian plugin. The icon libraries it draws on are separate works
+with their own licences, and those are reproduced here in full.
 
 Two of them are worth reading before you use them, rather than after:
 

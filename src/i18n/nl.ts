@@ -536,7 +536,7 @@ export const nl: Record<string, string> = {
 		"Callout Studio maakt gebruik van verschillende open iconbibliotheken. Hun licenties worden hieronder weergegeven, samen met wat er is aangepast voor gebruik hier.",
 	"credits.fullNotices": "Volledige berichten van derden",
 	"credits.pluginLicense":
-		"De eigen code van Callout Studio valt onder de 0BSD-licentie; de iconbibliotheken behouden hun eigen licenties.",
+		"De eigen code van Callout Studio valt onder een permissieve licentie (met één beperking: hij mag niet worden gebruikt om een andere Obsidian-plugin te bouwen); de pictogrambibliotheken behouden hun eigen licenties.",
 
 	"contextMenu.editCallout": "Callout-instellingen bewerken",
 	"contextMenu.copyMarkdown": "Callout Markdown kopiëren",
