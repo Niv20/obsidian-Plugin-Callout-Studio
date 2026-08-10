@@ -532,7 +532,7 @@ export const ko: Record<string, string> = {
 		"Callout Studio는 여러 오픈 아이콘 라이브러리를 사용합니다. 라이선스는 아래에 재현되어 있으며, 여기서 사용하기 위해 변경된 내용도 포함되어 있습니다.",
 	"credits.fullNotices": "전체 서드파티 고지사항",
 	"credits.pluginLicense":
-		"Callout Studio 자체 코드는 0BSD 라이선스입니다. 아이콘 라이브러리는 각자의 라이선스를 유지합니다.",
+		"Callout Studio 자체 코드는 permissive 라이선스(단 하나의 제한이 있습니다: 다른 Obsidian 플러그인을 만드는 데 사용할 수 없습니다)입니다. 아이콘 라이브러리는 각자의 라이선스를 유지합니다.",
 
 	"contextMenu.editCallout": "callout 설정 편집",
 	"contextMenu.copyMarkdown": "callout Markdown 복사",

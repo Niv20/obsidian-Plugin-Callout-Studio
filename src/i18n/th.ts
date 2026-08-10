@@ -529,7 +529,7 @@ export const th: Record<string, string> = {
 		"Callout Studio ใช้ไลบรารีไอคอนแบบเปิดหลายแห่ง ใบอนุญาตของไลบรารีเหล่านั้นจะปรากฏด้านล่าง พร้อมกับสิ่งที่เปลี่ยนแปลงเพื่อใช้งานที่นี่",
 	"credits.fullNotices": "ประกาศบุคคลที่สามฉบับเต็ม",
 	"credits.pluginLicense":
-		"โค้ดของ Callout Studio เองอยู่ภายใต้ใบอนุญาต 0BSD ไลบรารีไอคอนยังคงใบอนุญาตของตนเอง",
+		"โค้ดของ Callout Studio เองอยู่ภายใต้สัญญาอนุญาต permissive (มีข้อจำกัดเดียว: ไม่อนุญาตให้ใช้เพื่อสร้างปลั๊กอิน Obsidian อื่น) ไลบรารีไอคอนยังคงใบอนุญาตของตนเอง",
 
 	"contextMenu.editCallout": "แก้ไขการตั้งค่า callout",
 	"contextMenu.copyMarkdown": "คัดลอก Markdown callout",

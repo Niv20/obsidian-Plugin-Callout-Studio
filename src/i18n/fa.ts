@@ -533,7 +533,7 @@ export const fa: Record<string, string> = {
 		"Callout Studio از چندین کتابخانه آیکون آزاد بهره می‌برد. مجوزهای آن‌ها در زیر بازتولید شده‌اند، همراه با تغییراتی که برای استفاده از آن‌ها اینجا انجام شده است.",
 	"credits.fullNotices": "اطلاعیه‌های کامل شخص ثالث",
 	"credits.pluginLicense":
-		"کد خاص Callout Studio تحت مجوز 0BSD است؛ کتابخانه‌های آیکون مجوزهای خود را حفظ می‌کنند.",
+		"کد خاص Callout Studio تحت یک مجوز permissive است (با یک محدودیت: نمی‌توان از آن برای ساخت افزونه Obsidian دیگری استفاده کرد)؛ کتابخانه‌های آیکون مجوزهای خود را حفظ می‌کنند.",
 
 	"contextMenu.editCallout": "ویرایش تنظیمات callout",
 	"contextMenu.copyMarkdown": "کپی Markdown callout",

@@ -521,7 +521,7 @@ export const nb: Record<string, string> = {
 		"Callout Studio bruker flere åpne ikonbiblioteker. Lisensene deres er gjengitt nedenfor, sammen med hva som ble endret for å bruke dem her.",
 	"credits.fullNotices": "Fullstendige tredjeparts meldinger",
 	"credits.pluginLicense":
-		"Callout Studios egen kode er under 0BSD; ikonbibliotekene beholder sine egne lisenser.",
+		"Callout Studios egen kode er under en permissiv lisens (med én begrensning: den kan ikke brukes til å lage et annet Obsidian-tillegg); ikonbibliotekene beholder sine egne lisenser.",
 	"contextMenu.editCallout": "Rediger callout-innstillinger",
 	"contextMenu.copyMarkdown": "Kopier callout Markdown",
 	"contextMenu.openSettings": "Åpne Callout Studio-innstillinger",
