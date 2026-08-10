@@ -25,6 +25,9 @@ import {
 	foldable,
 	foldEffect,
 	foldedRanges,
+	forceParsing,
+	language,
+	syntaxTree,
 	unfoldEffect,
 } from "@codemirror/language";
 import { StateEffect } from "@codemirror/state";
@@ -77,6 +80,57 @@ export function getFoldedLines(view: EditorView): ReadonlySet<number> {
 	return lines;
 }
 
+/** Time budget for the post-toggle parse catch-up below, in milliseconds. */
+const PARSE_CATCHUP_MS = 30;
+
+/**
+ * Let the parser catch up with the viewport a fold just moved.
+ *
+ * Obsidian's own Live Preview plugin — the one that hides `#` marks, list
+ * bullets and the rest of the markdown syntax — declines to rebuild ANY of its
+ * decorations while the syntax tree stops short of the viewport:
+ *
+ *     syntaxTree(state).length < view.viewport.to || view.composing ||
+ *         view.plugin(livePreviewState)?.mousedown
+ *             ? this.decorations = this.decorations.map(update.changes)   // skip
+ *             : (treeChanged || viewportChanged || selectionSet || …) && rebuild
+ *
+ * A fold or an unfold is exactly what pushes `viewport.to` past that frontier:
+ * hiding a section means CodeMirror has to reach further down the document to
+ * fill the same screen. So on a note big enough for Lezer's incremental parse to
+ * be behind, toggling a heading leaves every plain `#### Title` that came into
+ * view showing its raw hashes until the idle parse worker happens to catch up.
+ * (Heading callouts never show this: their hashes are hidden by this plugin's
+ * own CSS_HEADING_HIDE_MARKS, which has none of core's brakes.)
+ *
+ * Nudging the parser past the viewport ourselves ends it in the same frame:
+ * forceParsing dispatches an empty transaction whenever the tree advances, and
+ * a changed tree is precisely the trigger core rebuilds on. Time-boxed, and
+ * gated on the condition core actually skips for — so a note whose tree already
+ * covers the viewport (the common case) pays one field read and nothing else.
+ *
+ * Deferred by a task because `viewport` only reflects the fold after CodeMirror
+ * has re-measured.
+ */
+function scheduleParseCatchUp(view: EditorView): void {
+	const win = view.dom.ownerDocument.defaultView;
+	if (!win) return;
+	win.setTimeout(() => {
+		if (!view.dom.isConnected) return; // torn down while we waited
+		try {
+			// No parser in this surface — and forceParsing would still cost a
+			// dispatch: ensureSyntaxTree answers null without one, which never
+			// equals the empty tree it compares against.
+			if (!view.state.facet(language)) return;
+			if (syntaxTree(view.state).length >= view.viewport.to) return;
+			forceParsing(view, view.viewport.to, PARSE_CATCHUP_MS);
+		} catch {
+			// A surface without a language parser, or an editor mid-teardown:
+			// the catch-up is an optimization, never a correctness step.
+		}
+	}, 0);
+}
+
 /** Toggle the fold of the heading section starting on the given 0-based line. */
 export function toggleHeadingFold(
 	view: EditorView,
@@ -85,6 +139,7 @@ export function toggleHeadingFold(
 	const existing = foldStartingAt(view, headingLine);
 	if (existing) {
 		view.dispatch({ effects: unfoldEffect.of(existing) });
+		scheduleParseCatchUp(view);
 		return;
 	}
 
@@ -112,6 +167,7 @@ export function toggleHeadingFold(
 		view.dispatch({ effects: StateEffect.appendConfig.of(codeFolding()) });
 		view.dispatch({ effects: foldEffect.of(range) });
 	}
+	scheduleParseCatchUp(view);
 }
 
 /**

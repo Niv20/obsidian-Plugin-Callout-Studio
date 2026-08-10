@@ -34,7 +34,6 @@ import {
 } from "../renderShared";
 import { resolveMarkdownView } from "../headingFold";
 import { toggleHeadingFold } from "./fold";
-import { calloutStudioRefresh } from "./refresh";
 
 export class CalloutTokenWidget extends WidgetType {
 	/**
@@ -387,10 +386,28 @@ export class HeadingFoldArrowWidget extends WidgetType {
 		setIcon(arrow, "chevron-down");
 		arrow.setAttribute("aria-label", this.label);
 		arrow.setAttribute("title", this.label);
+		// mousedown takes the event over so the caret never lands on the line
+		// (which would reveal the raw heading syntax) — but it does NOT fold.
+		// click does, exactly as Obsidian's own pre-heading `cm-fold-indicator`
+		// splits the two.
+		//
+		// The split is what keeps a tap on a phone from folding and instantly
+		// unfolding again. WebKit synthesises mousedown → mouseup → click from
+		// one tap and re-hit-tests in between; folding from mousedown rebuilds
+		// the DOM under the still-moving finger — this chevron is replaced (its
+		// eq() flips on `folded`) and CodeMirror drops the fold placeholder in
+		// right beside it. That placeholder is a live, visible `…` whose own
+		// onclick UNFOLDS (core ships codeFolding() unconfigured, and its CSS
+		// paints the default widget in --text-faint), and it lands inside the
+		// generous mobile tap target below this chevron. Folding on click
+		// instead means nothing moves until the whole gesture is over.
 		arrow.addEventListener("mousedown", (evt) => {
 			if (evt.button !== 0) return; // left click only
-			// Take over the event so the caret does not land on the line
-			// (which would reveal the raw heading syntax).
+			evt.preventDefault();
+			evt.stopPropagation();
+		});
+		arrow.addEventListener("click", (evt) => {
+			if (evt.button !== 0) return; // left click only
 			evt.preventDefault();
 			evt.stopPropagation();
 			this.toggleFold(view, arrow);
@@ -399,11 +416,30 @@ export class HeadingFoldArrowWidget extends WidgetType {
 	}
 
 	/**
-	 * Toggle the fold of the heading section this arrow trails, then dispatch
-	 * the refresh effect so the chevron re-reflects the new state.
+	 * Toggle the fold of the heading section this arrow trails. No refresh
+	 * effect follows: the ViewPlugin already rebuilds on the fold transaction
+	 * itself (foldsChanged, see calloutViewPlugin's `foldChanged` trigger), so
+	 * dispatching one bought a second transaction per tap whose only real work
+	 * was making headingGapField re-scan the WHOLE document and swap its entire
+	 * block-widget set — a second height-map/measure pass one frame after the
+	 * fold's own, which is what nudged the view on every toggle. The settings
+	 * preview is covered too: `toggleHeadingFold` appends the fold field and
+	 * re-dispatches there, and foldedRanges() answers with the RangeSet.empty
+	 * singleton while the field is missing, so the identity check still moves.
 	 */
 	private toggleFold(view: EditorView, el: HTMLElement): void {
-		const pos = view.posAtDOM(el);
+		// posAtDOM throws for a node outside the editor, and the chevron can be
+		// gone by the time the click lands: a caret that reached the heading
+		// line first (on a phone the tap moves it before the synthetic mouse
+		// events run) reveals the raw syntax, and the chevron is only built
+		// while the token is collapsed. Nothing to toggle then.
+		if (!el.isConnected) return;
+		let pos: number;
+		try {
+			pos = view.posAtDOM(el);
+		} catch {
+			return;
+		}
 		const headingLine = view.state.doc.lineAt(pos).number - 1; // 0-based
 		// Touch hit-testing can resolve the trailing widget to a neighboring
 		// line; only fold when the resolved line really is an ATX heading.
@@ -411,7 +447,6 @@ export class HeadingFoldArrowWidget extends WidgetType {
 			return;
 		}
 		toggleHeadingFold(view, headingLine);
-		view.dispatch({ effects: calloutStudioRefresh.of(null) });
 	}
 
 	override ignoreEvent(): boolean {

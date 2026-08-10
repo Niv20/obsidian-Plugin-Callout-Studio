@@ -4120,11 +4120,30 @@ input.cs-input-invalid:focus {
 /* Live Preview heading bar: the .cm-line already exists (it held the raw
    text), the view plugin just adds .cs-heading-callout to it — so a transition
    scoped to the open window fires on that class flip, and never on lines that
-   are built already-styled. A transition also animates padding and color from
-   whatever the cascade resolved, so it stays correct however heavily those two
-   are declared — where a keyframe would have to restate them and would fight
-   the bar's own high-specificity rule. */
+   are built already-styled. A transition also animates color from whatever the
+   cascade resolved, so it stays correct however heavily it is declared — where
+   a keyframe would have to restate it and would fight the bar's own
+   high-specificity rule.
+
+   PADDING IS NOT ANIMATED HERE, and must not be added back: in Live Preview
+   .cs-heading-callout IS the .cm-line. CodeMirror measures each line's rendered
+   box once to build its height map, and an animated padding keeps changing that
+   box for a quarter second AFTERWARDS, while the height map holds the
+   pre-transition value — every heading bar on screen drifts, and the error
+   accumulates. Same hazard the margin warning by the gap rule above describes,
+   only from the one property that IS inside the measured box. The window is not
+   opt-in on phones either: main.ts arms it for three seconds on every mobile
+   launch. */
 body.cs-anim-window .cs-heading-callout {
+	transition:
+		background-color 350ms ease-out,
+		color 350ms ease-out;
+}
+
+/* Reading view has no height map to desync, so its bar keeps easing its inset
+   open. Restated in full because `transition` is a shorthand — it replaces the
+   rule above rather than adding to it. */
+body.cs-anim-window .cs-heading-callout:not(.cm-line) {
 	transition:
 		background-color 350ms ease-out,
 		color 350ms ease-out,
@@ -4155,7 +4174,10 @@ body.cs-anim-window .cs-heading-callout {
 
 /* Respect reduced-motion, and never animate into a print/PDF snapshot. */
 @media (prefers-reduced-motion: reduce) {
-	body.cs-anim-window .cs-heading-callout {
+	/* Both entrance rules above, the second of which is a class heavier — same
+	   selectors, later in the file, so source order settles it either way. */
+	body.cs-anim-window .cs-heading-callout,
+	body.cs-anim-window .cs-heading-callout:not(.cm-line) {
 		transition: none;
 	}
 	.cs-anim-in {

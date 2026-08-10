@@ -7,7 +7,7 @@
  * are no longer used. Owned by main.ts; destroyed in onunload.
  * Depends on CalloutRegistry, vaultCalloutScanner utilities, and PluginSettings.
  */
-import { TFile } from "obsidian";
+import { Platform, TFile } from "obsidian";
 import type { App, EventRef } from "obsidian";
 import type { CalloutRegistry } from "./CalloutRegistry";
 import type { PluginSettings } from "../types";
@@ -163,10 +163,26 @@ export class CalloutDiscovery {
 	}
 
 	/**
+	 * How long a prune waits after the last edit that asked for one.
+	 *
+	 * A prune reads EVERY markdown file in the vault through `cachedRead` and
+	 * tokenizes it, on the main thread. The debounce collapses bursts, so the
+	 * real pattern is one whole-vault pass shortly after the user stops typing
+	 * — i.e. at the exact moment they stop and look at the screen. On a phone,
+	 * with a few thousand notes, that reads as the editor freezing.
+	 *
+	 * Pushing the touch delay well past the interaction window is the whole
+	 * fix: nothing about the pass is urgent, and the only user-visible effect
+	 * of waiting is that an orphaned auto-created row lingers in the settings
+	 * list a few seconds longer before it disappears.
+	 */
+	private static readonly PRUNE_DELAY_MS = Platform.isMobile ? 10000 : 1500;
+
+	/**
 	 * Schedule a debounced prune of auto-created (`source: "fallback"`) rows
 	 * that have never been customized and have zero vault usages.
 	 */
-	schedulePrune(delayMs = 1500): void {
+	schedulePrune(delayMs = CalloutDiscovery.PRUNE_DELAY_MS): void {
 		if (this.pruneSuspended) return;
 		if (this.pruneTimer !== undefined) {
 			window.clearTimeout(this.pruneTimer);
