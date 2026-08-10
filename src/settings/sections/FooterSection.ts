@@ -25,7 +25,7 @@ export function renderFooterSection(
 	links.createSpan({ text: t("footer.madeBy") });
 	links.createEl("a", {
 		text: "GitHub",
-		href: "https://github.com/Niv20/obsidian-Plugin-Callout-Studio",
+		href: "https://github.com/Niv20/obsidian-plugin-callout-studio",
 		attr: { target: "_blank", rel: "noopener noreferrer" },
 	});
 	links.createSpan({ text: "  •  " });

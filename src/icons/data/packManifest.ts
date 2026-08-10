@@ -28,7 +28,7 @@ export const PACK_FORMAT = 1;
  */
 export const PACKS_TAG = "packs-v2";
 
-const REPO = "Niv20/obsidian-Plugin-Callout-Studio";
+const REPO = "Niv20/obsidian-plugin-callout-studio";
 
 /** Primary and fallback URLs for a pack file, in the order they are tried. */
 export function packUrls(id: IconPackId): string[] {

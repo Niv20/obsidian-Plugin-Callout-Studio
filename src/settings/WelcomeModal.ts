@@ -18,7 +18,7 @@ import { t } from "../i18n";
 import { LiveCalloutPreview } from "./LiveCalloutPreview";
 import type { SettingsTabPlugin } from "./sections/types";
 
-const REPO_URL = "https://github.com/Niv20/obsidian-Plugin-Callout-Studio";
+const REPO_URL = "https://github.com/Niv20/obsidian-plugin-callout-studio";
 
 export class WelcomeModal extends Modal {
 	private resolved = false;

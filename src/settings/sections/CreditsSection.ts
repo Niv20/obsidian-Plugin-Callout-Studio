@@ -17,7 +17,7 @@ import { t } from "../../i18n";
 import type { SettingsSectionContext } from "./types";
 
 const NOTICES_URL =
-	"https://github.com/Niv20/obsidian-Plugin-Callout-Studio/blob/master/THIRD-PARTY-NOTICES.md";
+	"https://github.com/Niv20/obsidian-plugin-callout-studio/blob/master/THIRD-PARTY-NOTICES.md";
 
 export function renderCreditsSection(
 	ctx: SettingsSectionContext,
