@@ -114,16 +114,7 @@ function makePalette(
  */
 export function getObsidianPalettes(): ColorPalette[] {
 	return [
-		makePalette(
-			"blue",
-			t("colorName.blue"),
-			"obsidian",
-			"#086ddd",
-			"#027aff",
-			undefined,
-			undefined,
-			["note"],
-		),
+		getDefaultNewCalloutPalette(),
 		makePalette(
 			"cyan",
 			t("colorName.cyan"),
@@ -237,6 +228,30 @@ export function getExtraPalettes(): ColorPalette[] {
 /** All available palettes */
 export function getAllColorPalettes(): ColorPalette[] {
 	return [...getObsidianPalettes(), ...getExtraPalettes()];
+}
+
+/**
+ * The palette a brand-new callout falls back to when there is no definition to
+ * seed it from at all — the last resort behind `CalloutEditor`'s fallback
+ * callout. It has to be a *real* preset, which is why this builds the entry
+ * `getObsidianPalettes()` leads with rather than inventing colours of its own:
+ * the editor's dropdown labels the current colour by resolving it back to a
+ * palette (by id, then legacyIds, then hex), so a default matching nothing
+ * would open every new callout reading "Deleted color".
+ */
+export const DEFAULT_NEW_CALLOUT_PALETTE_ID = "blue";
+
+export function getDefaultNewCalloutPalette(): ColorPalette {
+	return makePalette(
+		DEFAULT_NEW_CALLOUT_PALETTE_ID,
+		t("colorName.blue"),
+		"obsidian",
+		"#086ddd",
+		"#027aff",
+		undefined,
+		undefined,
+		["note"],
+	);
 }
 
 /** Adapts a user-saved palette to the dropdown's ColorPalette shape. */

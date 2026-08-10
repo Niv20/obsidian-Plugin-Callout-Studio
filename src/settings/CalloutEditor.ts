@@ -40,6 +40,8 @@ import {
 	getExtraPalettes,
 	customPaletteToColorPalette,
 	generatePaletteId,
+	getDefaultNewCalloutPalette,
+	DEFAULT_NEW_CALLOUT_PALETTE_ID,
 	type ColorPalette,
 } from "../utils/colorPalettes";
 import { t } from "../i18n";
@@ -184,12 +186,21 @@ export class CalloutEditor extends Modal {
 	private plugin: CalloutEditorPlugin;
 	private existingId: string | null;
 	private isBuiltIn: boolean;
+	/**
+	 * Governs how the result is SAVED, not how the form is seeded — every
+	 * create-new flow seeds from the fallback callout alike (see the
+	 * constructor). What this still decides: whether an untouched new callout
+	 * saves as `source: "fallback"`, whether it may overwrite a discovery-created
+	 * row of the same id, and whether a display name is required.
+	 */
 	private createFromAutocomplete: boolean;
 	/**
-	 * The definition the form fields below were seeded from, or undefined for a
-	 * blank draft. Kept so `buildPreviewDefinition()` can tell a value the user
-	 * chose from one the constructor's `??` chains invented — the form fields
-	 * themselves cannot answer that, since both look like a concrete colour.
+	 * The definition the form fields below were seeded from — the callout being
+	 * edited, or the fallback callout for a new one; undefined only if the
+	 * registry held no fallback at all. Kept so `buildPreviewDefinition()` can
+	 * tell a value the user chose from one the constructor inherited or invented
+	 * — the form fields themselves cannot answer that, since both look like a
+	 * concrete colour.
 	 */
 	private readonly baselineDef: CalloutDefinition | undefined;
 	private resolve: ((result: CalloutDefinition | null) => void) | null = null;
@@ -265,62 +276,63 @@ export class CalloutEditor extends Modal {
 		this.existingId = existing?.id ?? null;
 		this.isBuiltIn = existing?.builtIn ?? false;
 		this.createFromAutocomplete = options?.createFromAutocomplete === true;
-		const fallbackBase =
-			this.createFromAutocomplete && !existing
-				? this.getFallbackBase()
-				: undefined;
-		this.baselineDef = existing ?? fallbackBase;
+		// EVERY create-new flow seeds from the fallback callout, not just the
+		// autocomplete one. That callout is what the user picked under "Default
+		// fallback callout", whose own description promises unrecognized types
+		// inherit its style — so a callout being created deliberately should open
+		// looking the same, no matter which button opened this editor (settings'
+		// add button, the command palette, or autocomplete's "Create new").
+		const fallbackBase = existing ? undefined : this.getFallbackBase();
+		// The one definition every field below reads through. Also the baseline
+		// the `hasAuthored…` gates measure against, so a value merely inherited
+		// from the fallback is omitted from the save rather than baked on.
+		const seed = existing ?? fallbackBase;
+		this.baselineDef = seed;
+		// Last resort for the accents, only reachable if the registry somehow holds
+		// neither the configured fallback nor `note`. It must be a real palette:
+		// colours matching none open the dropdown reading "Deleted color".
+		// Accents ONLY — the backgrounds below stay derived from whatever accent
+		// won, or a non-blue fallback would open wearing blue's tint.
+		const defaultPalette = getDefaultNewCalloutPalette();
 
 		this.displayName =
 			existing?.displayName ?? options?.seedDisplayName ?? "";
 		this.calloutId =
 			existing?.id ?? generateId(options?.seedDisplayName ?? "");
-		this.icon = existing?.icon
-			? { ...existing.icon }
-			: fallbackBase?.icon
-				? { ...fallbackBase.icon }
-				: { type: "lucide", value: "lucide-pencil" };
-		this.colorLight =
-			existing?.colorLight ?? fallbackBase?.colorLight ?? "#448aff";
-		this.colorDark =
-			existing?.colorDark ?? fallbackBase?.colorDark ?? "#448aff";
+		this.icon = seed?.icon
+			? { ...seed.icon }
+			: { type: "lucide", value: "lucide-pencil" };
+		this.colorLight = seed?.colorLight ?? defaultPalette.colorLight;
+		this.colorDark = seed?.colorDark ?? defaultPalette.colorDark;
 		this.bgColorLight =
-			existing?.bgColorLight ??
-			fallbackBase?.bgColorLight ??
-			bgTintFor(this.colorLight, false);
-		this.bgColorDark =
-			existing?.bgColorDark ??
-			fallbackBase?.bgColorDark ??
-			bgTintFor(this.colorDark, true);
-		const baseGradient = existing?.bgGradient ?? fallbackBase?.bgGradient;
+			seed?.bgColorLight ?? bgTintFor(this.colorLight, false);
+		this.bgColorDark = seed?.bgColorDark ?? bgTintFor(this.colorDark, true);
+		const baseGradient = seed?.bgGradient;
 		this.bgGradient = baseGradient ? { ...baseGradient } : undefined;
 		// The bg hexes above stay as derived: a transparent def carries none, so
 		// they fall back to the accent tint and sit unused until the user picks a
 		// colour again, exactly as the form expects.
-		this.transparentBg =
-			(existing?.transparentBg ?? fallbackBase?.transparentBg) === true;
-		this.textColorLight =
-			existing?.textColorLight ??
-			fallbackBase?.textColorLight ??
-			DEFAULT_TEXT_COLOR_LIGHT;
-		this.textColorDark =
-			existing?.textColorDark ??
-			fallbackBase?.textColorDark ??
-			DEFAULT_TEXT_COLOR_DARK;
-		this.foldable = existing?.foldable ?? fallbackBase?.foldable ?? false;
-		this.defaultFolded =
-			existing?.defaultFolded ?? fallbackBase?.defaultFolded ?? false;
+		this.transparentBg = seed?.transparentBg === true;
+		this.textColorLight = seed?.textColorLight ?? DEFAULT_TEXT_COLOR_LIGHT;
+		this.textColorDark = seed?.textColorDark ?? DEFAULT_TEXT_COLOR_DARK;
+		this.foldable = seed?.foldable ?? false;
+		this.defaultFolded = seed?.defaultFolded ?? false;
 		// resolveIconAdjust already falls a role back to the legacy flat trio and
 		// clamps, so data written before per-role adjustment opens with all three
 		// groups showing that shared value — exactly what it renders as today.
-		const adjustBase = existing ?? fallbackBase;
 		this.iconAdjust = {
-			regular: resolveIconAdjust(adjustBase, "regular"),
-			heading: resolveIconAdjust(adjustBase, "heading"),
-			inline: resolveIconAdjust(adjustBase, "inline"),
+			regular: resolveIconAdjust(seed, "regular"),
+			heading: resolveIconAdjust(seed, "heading"),
+			inline: resolveIconAdjust(seed, "inline"),
 		};
 		this.aliases = [...(existing?.aliases ?? [])];
-		this.paletteId = existing?.paletteId ?? fallbackBase?.paletteId;
+		// Keyed off whether there is a seed at all, NOT `seed?.paletteId ?? blue`:
+		// a fallback saved before paletteId existed carries none, and defaulting it
+		// to blue would label the dropdown "Blue" over that callout's real hexes.
+		// With no seed, the colours above ARE the blue preset, so the id fits.
+		this.paletteId = seed
+			? seed.paletteId
+			: DEFAULT_NEW_CALLOUT_PALETTE_ID;
 		this.previewFoldCollapsed = this.foldable && this.defaultFolded;
 		this.hasHadCalloutId =
 			this.calloutId.trim().length > 0 || this.aliases.length > 0;
