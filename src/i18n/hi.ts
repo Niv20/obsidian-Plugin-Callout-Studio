@@ -532,7 +532,7 @@ export const hi: Record<string, string> = {
 		"Callout Studio कई खुली आइकन लाइब्रेरी पर निर्भर करता है। उनके लाइसेंस नीचे पुनः प्रस्तुत किए गए हैं, साथ ही यहां उनके उपयोग के लिए क्या बदला गया।",
 	"credits.fullNotices": "पूर्ण तृतीय-पक्ष सूचनाएं",
 	"credits.pluginLicense":
-		"Callout Studio का अपना कोड permissive लाइसेंस के अंतर्गत है (एक शर्त के साथ: इसे किसी दूसरे Obsidian plugin के निर्माण के लिए इस्तेमाल नहीं किया जा सकता); आइकन लाइब्रेरी अपने अपने लाइसेंस बनाए रखती हैं।",
+		"Callout Studio का अपना कोड permissive लाइसेंस के अंतर्गत है; आइकन लाइब्रेरी अपने अपने लाइसेंस बनाए रखती हैं।",
 
 	"contextMenu.editCallout": "callout सेटिंग संपादित करें",
 	"contextMenu.copyMarkdown": "callout Markdown कॉपी करें",

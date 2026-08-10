@@ -542,7 +542,7 @@ export const de: Record<string, string> = {
 		"Callout Studio nutzt mehrere offene Symbol-Bibliotheken. Ihre Lizenzen sind nachfolgend wiedergegeben, zusammen mit den vorgenommenen Anpassungen für die hiesige Verwendung.",
 	"credits.fullNotices": "Vollständige Drittanbieter-Hinweise",
 	"credits.pluginLicense":
-		"Callout Studios eigener Code steht unter einer permissiven Lizenz (mit einer Einschränkung: Er darf nicht für die Entwicklung eines weiteren Obsidian-Plugins verwendet werden); die Symbol-Bibliotheken behalten ihre eigenen Lizenzen.",
+		"Callout Studios eigener Code steht unter einer permissiven Lizenz; die Symbol-Bibliotheken behalten ihre eigenen Lizenzen.",
 
 	"contextMenu.editCallout": "Callout-Einstellungen bearbeiten",
 	"contextMenu.copyMarkdown": "Callout-Markdown kopieren",

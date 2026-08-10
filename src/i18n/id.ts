@@ -534,7 +534,7 @@ export const id: Record<string, string> = {
 		"Callout Studio menggunakan beberapa pustaka ikon terbuka. Lisensinya direproduksi di bawah, bersama dengan apa yang diubah untuk menggunakannya di sini.",
 	"credits.fullNotices": "Pemberitahuan pihak ketiga lengkap",
 	"credits.pluginLicense":
-		"Kode milik Callout Studio sendiri berada di bawah lisensi permissive (dengan satu batasan: tidak boleh digunakan untuk membuat plugin Obsidian lain); pustaka ikon mempertahankan lisensinya sendiri.",
+		"Kode milik Callout Studio sendiri berada di bawah lisensi permissive; pustaka ikon mempertahankan lisensinya sendiri.",
 
 	"contextMenu.editCallout": "Edit pengaturan callout",
 	"contextMenu.copyMarkdown": "Salin Markdown callout",

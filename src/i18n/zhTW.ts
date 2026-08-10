@@ -505,7 +505,7 @@ export const zhTW: Record<string, string> = {
 		"Callout Studio 使用了多個開源圖示庫。其授權條款以及為在此使用所做的更改均已在下方列出。",
 	"credits.fullNotices": "完整的第三方聲明",
 	"credits.pluginLicense":
-		"Callout Studio 自身的程式碼採用 permissive 授權（有一項限制：不得用來建立另一個 Obsidian 插件）；圖示庫保留各自的授權。",
+		"Callout Studio 自身的程式碼採用 permissive 授權；圖示庫保留各自的授權。",
 	"contextMenu.editCallout": "編輯 callout 設定",
 	"contextMenu.copyMarkdown": "複製 callout Markdown",
 	"contextMenu.openSettings": "開啟 Callout Studio 設定",

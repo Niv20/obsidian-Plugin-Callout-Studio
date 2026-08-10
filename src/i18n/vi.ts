@@ -535,7 +535,7 @@ export const vi: Record<string, string> = {
 		"Callout Studio sử dụng một số thư viện biểu tượng mở. Giấy phép của chúng được tái bản dưới đây, cùng với những gì đã được thay đổi để sử dụng ở đây.",
 	"credits.fullNotices": "Thông báo đầy đủ của bên thứ ba",
 	"credits.pluginLicense":
-		"Mã nguồn của Callout Studio thuộc giấy phép permissive (với một hạn chế: không được dùng để xây dựng một plugin Obsidian khác); các thư viện biểu tượng giữ nguyên giấy phép riêng.",
+		"Mã nguồn của Callout Studio thuộc giấy phép permissive; các thư viện biểu tượng giữ nguyên giấy phép riêng.",
 
 	"contextMenu.editCallout": "Chỉnh sửa cài đặt callout",
 	"contextMenu.copyMarkdown": "Sao chép Markdown callout",

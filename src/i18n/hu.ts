@@ -539,7 +539,7 @@ export const hu: Record<string, string> = {
 		"A Callout Studio számos nyílt ikonkönyvtárra támaszkodik. Licenszeik alább találhatók, a felhasználáshoz szükséges módosításokkal együtt.",
 	"credits.fullNotices": "Teljes harmadik féltől származó megjegyzések",
 	"credits.pluginLicense":
-		"A Callout Studio saját kódja egy permissive licenc alatt áll (egy korlátozással: nem használható más Obsidian-bővítmény építésére); az ikonkönyvtárak megőrzik saját licencüket.",
+		"A Callout Studio saját kódja egy permissive licenc alatt áll; az ikonkönyvtárak megőrzik saját licencüket.",
 
 	"contextMenu.editCallout": "Callout-beállítások szerkesztése",
 	"contextMenu.copyMarkdown": "Callout Markdown másolása",

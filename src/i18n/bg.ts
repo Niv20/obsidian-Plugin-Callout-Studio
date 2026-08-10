@@ -525,7 +525,7 @@ export const bg: Record<string, string> = {
 		"Callout Studio използва няколко отворени библиотеки с икони. Техните лицензи са възпроизведени по-долу, заедно с промените за използването им тук.",
 	"credits.fullNotices": "Пълни известия за трети страни",
 	"credits.pluginLicense":
-		"Собственият код на Callout Studio е под лиценз permissive (с едно ограничение: не може да се използва за създаване на друг plugin за Obsidian); библиотеките с икони запазват своите собствени лицензи.",
+		"Собственият код на Callout Studio е под лиценз permissive; библиотеките с икони запазват своите собствени лицензи.",
 	"contextMenu.editCallout": "Редактиране на настройките на callout",
 	"contextMenu.copyMarkdown": "Копиране на Markdown на callout",
 	"contextMenu.openSettings": "Отваряне на настройките на Callout Studio",

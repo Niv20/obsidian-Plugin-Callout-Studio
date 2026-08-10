@@ -536,7 +536,7 @@ export const tr: Record<string, string> = {
 		"Callout Studio birçok açık simge kitaplığından yararlanır. Lisansları aşağıda yeniden üretilmiştir; burada kullanım için yapılan değişikliklerle birlikte.",
 	"credits.fullNotices": "Tam üçüncü taraf bildirimleri",
 	"credits.pluginLicense":
-		"Callout Studio'nun kendi kodu permissive lisansı altında (tek bir kısıtlamayla: başka bir Obsidian eklentisi oluşturmak için kullanılamaz); simge kütüphaneleri kendi lisanslarını korur.",
+		"Callout Studio'nun kendi kodu permissive lisansı altında; simge kütüphaneleri kendi lisanslarını korur.",
 
 	"contextMenu.editCallout": "Callout ayarlarını düzenle",
 	"contextMenu.copyMarkdown": "Callout Markdown'ı kopyala",

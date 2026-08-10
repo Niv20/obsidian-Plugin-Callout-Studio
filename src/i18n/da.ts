@@ -519,7 +519,7 @@ export const da: Record<string, string> = {
 		"Callout Studio bruger flere åbne ikonbiblioteker. Deres licenser er gengivet nedenfor, sammen med hvad der blev ændret for at bruge dem her.",
 	"credits.fullNotices": "Fulde tredjepartsmeddelelser",
 	"credits.pluginLicense":
-		"Callout Studios egen kode er under en permissiv licens (med én begrænsning: den må ikke bruges til at lave et andet Obsidian-plugin); ikonbibliotekerne beholder deres egne licenser.",
+		"Callout Studios egen kode er under en permissiv licens; ikonbibliotekerne beholder deres egne licenser.",
 	"contextMenu.editCallout": "Rediger callout-indstillinger",
 	"contextMenu.copyMarkdown": "Kopiér callout Markdown",
 	"contextMenu.openSettings": "Åbn Callout Studio-indstillinger",

@@ -559,7 +559,7 @@ export const en: Record<string, string> = {
 		"Callout Studio draws on several open icon libraries. Their licences are reproduced below, along with what was changed to use them here.",
 	"credits.fullNotices": "Full third-party notices",
 	"credits.pluginLicense":
-		"Callout Studio's own code is under a permissive license (with one restriction: it may not be used to build another Obsidian plugin); the icon libraries keep their own licences.",
+		"Callout Studio's own code is under a permissive license; the icon libraries keep their own licences.",
 
 	// Context Menu
 	"contextMenu.editCallout": "Edit callout settings",

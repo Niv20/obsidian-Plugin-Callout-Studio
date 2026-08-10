@@ -534,7 +534,7 @@ export const ru: Record<string, string> = {
 		"Callout Studio использует несколько открытых библиотек иконок. Их лицензии воспроизведены ниже вместе с описанием изменений для использования здесь.",
 	"credits.fullNotices": "Полные уведомления третьих сторон",
 	"credits.pluginLicense":
-		"Собственный код Callout Studio находится под permissive-лицензией (с одним ограничением: его нельзя использовать для создания другого плагина Obsidian); библиотеки иконок сохраняют свои лицензии.",
+		"Собственный код Callout Studio находится под permissive-лицензией; библиотеки иконок сохраняют свои лицензии.",
 
 	"contextMenu.editCallout": "Редактировать настройки callout",
 	"contextMenu.copyMarkdown": "Копировать Markdown callout",

@@ -520,7 +520,7 @@ export const zh: Record<string, string> = {
 		"Callout Studio 使用了多个开源图标库。其许可证以及为在此使用所做的更改均已在下方列出。",
 	"credits.fullNotices": "完整的第三方声明",
 	"credits.pluginLicense":
-		"Callout Studio 自身代码采用 permissive 许可证（有一个限制：不得用于构建另一个 Obsidian 插件）；图标库保留各自的许可证。",
+		"Callout Studio 自身代码采用 permissive 许可证；图标库保留各自的许可证。",
 
 	"contextMenu.editCallout": "编辑 callout 设置",
 	"contextMenu.copyMarkdown": "复制 callout Markdown",

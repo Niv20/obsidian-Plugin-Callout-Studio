@@ -537,7 +537,7 @@ export const pl: Record<string, string> = {
 		"Callout Studio korzysta z kilku otwartych bibliotek ikon. Ich licencje są odtworzone poniżej wraz z informacją, co zostało zmienione na potrzeby użycia tutaj.",
 	"credits.fullNotices": "Pełne informacje o stronach trzecich",
 	"credits.pluginLicense":
-		"Własny kod Callout Studio jest objęty licencją permissive (z jednym ograniczeniem: nie można go używać do tworzenia innej wtyczki Obsidian); biblioteki ikon zachowują własne licencje.",
+		"Własny kod Callout Studio jest objęty licencją permissive; biblioteki ikon zachowują własne licencje.",
 
 	"contextMenu.editCallout": "Edytuj ustawienia callout",
 	"contextMenu.copyMarkdown": "Kopiuj Markdown callout",

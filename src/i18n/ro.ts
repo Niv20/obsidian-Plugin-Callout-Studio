@@ -538,7 +538,7 @@ export const ro: Record<string, string> = {
 		"Callout Studio folosește mai multe biblioteci deschise de pictograme. Licențele lor sunt reproduse mai jos, împreună cu ce a fost schimbat pentru utilizarea lor aici.",
 	"credits.fullNotices": "Notificări complete ale terților",
 	"credits.pluginLicense":
-		"Codul propriu al Callout Studio este sub o licență permissive (cu o singură restricție: nu poate fi folosit pentru a crea un alt plugin Obsidian); bibliotecile de pictograme păstrează propriile licențe.",
+		"Codul propriu al Callout Studio este sub o licență permissive; bibliotecile de pictograme păstrează propriile licențe.",
 
 	"contextMenu.editCallout": "Editați setările callout",
 	"contextMenu.copyMarkdown": "Copiați Markdown callout",

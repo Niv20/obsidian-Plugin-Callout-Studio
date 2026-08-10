@@ -527,7 +527,7 @@ export const ar: Record<string, string> = {
 		"يستخدم Callout Studio عدة مكتبات أيقونات مفتوحة. تراخيصها مستنسخة أدناه، مع ما تم تغييره لاستخدامها هنا.",
 	"credits.fullNotices": "إشعارات الأطراف الثالثة الكاملة",
 	"credits.pluginLicense":
-		"يخضع كود Callout Studio الخاص لرخصة permissive (مع قيد واحد: لا يمكن استخدامه لبناء إضافة Obsidian أخرى)؛ وتحتفظ مكتبات الأيقونات برخصاتها الخاصة.",
+		"يخضع كود Callout Studio الخاص لرخصة permissive؛ وتحتفظ مكتبات الأيقونات برخصاتها الخاصة.",
 
 	"contextMenu.editCallout": "تعديل إعدادات الـ callout",
 	"contextMenu.copyMarkdown": "نسخ Markdown الـ callout",

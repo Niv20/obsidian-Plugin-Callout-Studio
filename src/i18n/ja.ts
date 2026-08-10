@@ -534,7 +534,7 @@ export const ja: Record<string, string> = {
 		"Callout Studioはいくつかのオープンなアイコンライブラリを使用しています。それらのライセンスと、ここでの使用のために変更された点を以下に掲載します。",
 	"credits.fullNotices": "サードパーティの完全な通知",
 	"credits.pluginLicense":
-		"Callout Studio自体のコードは permissive ライセンス（1 つだけ制限あり：別の Obsidian プラグインを作るためには使用できません）です。アイコン ライブラリはそれぞれのライセンスを保持します。",
+		"Callout Studio自体のコードは permissive ライセンスです。アイコン ライブラリはそれぞれのライセンスを保持します。",
 
 	"contextMenu.editCallout": "callout設定を編集",
 	"contextMenu.copyMarkdown": "callout Markdownをコピー",
