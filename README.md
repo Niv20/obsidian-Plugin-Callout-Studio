@@ -283,6 +283,10 @@ npm run lint   # ESLint with the official obsidianmd plugin rules
 
 Source lives under `src/` and is bundled by esbuild into `main.js`. The release artifacts are `main.js`, `manifest.json`, and `styles.css`.
 
+### Plugin API
+
+Callout Studio exposes a small read-only API so other plugins can list the user's callout types and react when that list changes. See [API.md](API.md).
+
 ## License
 
 Callout Studio's own code is under a permissive [license](LICENSE) — use it however you like, no attribution required.

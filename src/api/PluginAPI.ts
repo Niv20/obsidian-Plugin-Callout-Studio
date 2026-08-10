@@ -1,129 +1,155 @@
 /**
  * api/PluginAPI.ts — Public API surface for other Obsidian plugins.
  *
- * Exposed at `app.plugins.plugins['callout-studio'].api`.
- * Provides read access to all registered callouts and lets external plugins
- * add or remove their own callout definitions at runtime without touching the
- * registry directly.
- * Depends on CalloutRegistry (data) and CalloutEditor / IconPicker (UI entry
- * points that external callers can open programmatically).
+ * Exposed at `app.plugins.plugins['callout-studio'].api`. Read-only: it answers
+ * "which callouts exist, what are they called, and tell me when that changes".
+ * Writing a callout into a note is the caller's job — it is one line of markdown
+ * and every plugin wants to place it differently.
+ *
+ * Everything handed out is a frozen copy built by the mappers at the bottom of
+ * this file, never a live `CalloutDefinition`. The registry stores real objects
+ * that the renderer reads on every paint; letting a consumer hold one meant a
+ * stray assignment could change styling with no re-inject and no save.
+ *
+ * Depends on CalloutRegistry for data and CalloutDiscovery (via the plugin's
+ * forwarders) to know which auto-discovered callouts are actually in use.
+ * See API.md for the consumer-facing documentation.
  */
 import type CalloutStudioPlugin from "../main";
+import type { CalloutDefinition, CalloutIcon } from "../types";
 import type {
-	CalloutDefinition,
-	CalloutIcon,
-	CalloutRenderRole,
-} from "../types";
-import { CalloutEditor } from "../settings/CalloutEditor";
-import { openCalloutEditorFor } from "../settings/openCalloutEditor";
-import { IconPicker } from "../settings/iconpicker";
+	Callout,
+	CalloutDetails,
+	CalloutIconInfo,
+	CalloutStudioApi,
+} from "./types";
+import { getLocale } from "../i18n";
+import { normalizeCalloutId } from "../utils/calloutId";
+import { sortCalloutsByDisplayName } from "../utils/sorting";
 
-/**
- * Public API exposed at `app.plugins.plugins['callout-studio'].api`
- * for use by other Obsidian plugins.
- */
-export class CalloutStudioAPI {
-	private plugin: CalloutStudioPlugin;
+export class CalloutStudioAPI implements CalloutStudioApi {
+	readonly version = 1;
 
-	constructor(plugin: CalloutStudioPlugin) {
-		this.plugin = plugin;
+	constructor(private readonly plugin: CalloutStudioPlugin) {}
+
+	getCallouts(): readonly Callout[] {
+		return Object.freeze(this.usableDefinitions().map(toCallout));
 	}
 
-	/**
-	 * Returns all registered callout definitions.
-	 */
-	getAllCallouts(): CalloutDefinition[] {
-		return this.plugin.registry.getAll();
+	getCalloutsDetailed(): readonly CalloutDetails[] {
+		const dark = isDarkMode();
+		return Object.freeze(
+			this.usableDefinitions().map((def) => toDetails(def, dark)),
+		);
 	}
 
-	/**
-	 * Returns a single callout by its ID, or undefined.
-	 */
-	getCallout(id: string): CalloutDefinition | undefined {
-		return this.plugin.registry.get(id);
+	getCallout(id: string): Callout | undefined {
+		const { registry } = this.plugin;
+		const wanted = normalizeCalloutId(id);
+		// The first three rungs of resolveCalloutDef — id, then alias, then the
+		// dashed `data-callout` spelling. Deliberately NOT the fourth: the
+		// renderer substitutes the fallback callout for an unknown id because it
+		// still has to draw something, but an API that answered every id with a
+		// definition would be useless for asking whether one exists.
+		const resolved =
+			registry.get(wanted) ??
+			registry.findByAlias(wanted) ??
+			registry.findByAttrId(wanted);
+		if (!resolved) return undefined;
+		// Re-find it in the published list rather than returning `resolved`
+		// directly. That list is the one filtered view: it hides the transient
+		// live-preview row and unused discovered callouts, and where a preview
+		// shadows a real callout it substitutes the real one back. Matching by id
+		// rather than by identity is what makes that substitution work.
+		const published = this.usableDefinitions().find(
+			(def) => def.id === resolved.id,
+		);
+		return published ? toCallout(published) : undefined;
 	}
 
-	/**
-	 * Returns only user-defined (non-built-in) callouts.
-	 */
-	getUserCallouts(): CalloutDefinition[] {
-		return this.plugin.registry.getUserDefined();
-	}
-
-	/**
-	 * Registers a new callout definition from an external plugin.
-	 * Returns true if successfully added, false if the ID already exists.
-	 *
-	 * An ID or alias containing `|` is refused: in Obsidian everything after the
-	 * first pipe is callout metadata, so `note|purple` names the `note` callout
-	 * and could never be matched under that spelling. Refused rather than
-	 * silently rewritten — a caller handed back a different ID than it
-	 * registered could never unregister its own callout.
-	 */
-	registerCallout(def: CalloutDefinition): boolean {
-		if (def.id.includes("|")) return false;
-		if (def.aliases?.some((a) => a.includes("|"))) return false;
-		return this.plugin.registry.add({
-			...def,
-			source: "plugin",
-		});
-	}
-
-	/**
-	 * Unregisters a previously registered callout by ID.
-	 * Only callouts with source="plugin" can be unregistered.
-	 * Returns true if removed, false otherwise.
-	 */
-	unregisterCallout(id: string): boolean {
-		const existing = this.plugin.registry.get(id);
-		if (!existing || existing.source !== "plugin") return false;
-		return this.plugin.registry.remove(id);
-	}
-
-	/**
-	 * Opens the icon picker modal and returns the selected icon, or null.
-	 */
-	async openIconPicker(
-		currentIcon?: CalloutIcon,
-	): Promise<CalloutIcon | null> {
-		const picker = new IconPicker(this.plugin, currentIcon);
-		return picker.openAndWait();
-	}
-
-	/**
-	 * Opens the callout editor modal and returns the resulting definition, or null.
-	 */
-	async openCalloutEditor(
-		existing?: CalloutDefinition,
-	): Promise<CalloutDefinition | null> {
-		// An existing callout may have been handed to the theme, in which case
-		// this opens the explanation window instead — see openCalloutEditorFor.
-		if (existing) return openCalloutEditorFor(this.plugin, existing);
-		const editor = new CalloutEditor(this.plugin);
-		return editor.openAndWait();
-	}
-
-	/**
-	 * Subscribes to callout registry changes.
-	 * Returns an unsubscribe function.
-	 */
-	onCalloutChange(callback: () => void): () => void {
+	onChange(callback: () => void): () => void {
 		this.plugin.registry.onChange(callback);
 		return () => this.plugin.registry.offChange(callback);
 	}
 
 	/**
-	 * Reports whether a given render role is currently enabled. "regular" is
-	 * always enabled; "heading" and "inline" follow their settings toggles.
+	 * Every callout a user could write today, in display order.
+	 *
+	 * `getBuiltIn()` and `getUserDefined()` both read through the registry's
+	 * list view, so their union already excludes the settings live-preview
+	 * placeholder. Between them they cover all five sources — the built-ins are
+	 * seeded into the registry on every load, so all of Obsidian's own types are
+	 * here whether or not the user has ever touched them.
+	 *
+	 * Auto-discovered rows are then dropped unless they are customized or still
+	 * used somewhere in the vault. Discovery creates one for every `[!id]` it
+	 * has ever seen, so without this a consumer building a command per callout
+	 * would offer a list full of ids the user deleted from their notes hours
+	 * ago. Same predicate the autocomplete dropdown uses, for the same reason.
 	 */
-	isRoleEnabled(role: CalloutRenderRole): boolean {
-		switch (role) {
-			case "heading":
-				return this.plugin.settings.headingCallouts.enabled;
-			case "inline":
-				return this.plugin.settings.inlineCallouts.enabled;
-			default:
-				return true;
-		}
+	private usableDefinitions(): CalloutDefinition[] {
+		const defs = [
+			...this.plugin.registry.getBuiltIn(),
+			...this.plugin.registry.getUserDefined(),
+		].filter(
+			(def) =>
+				def.source !== "fallback" ||
+				def.customized === true ||
+				!this.plugin.isKnownZeroUsageFallback(def.id),
+		);
+		return sortCalloutsByDisplayName(defs, getLocale());
 	}
 }
+
+/** Whether the window is currently showing the dark theme. */
+const isDarkMode = (): boolean =>
+	activeDocument.body.classList.contains("theme-dark");
+
+const toIconInfo = (icon: CalloutIcon): CalloutIconInfo => {
+	const info: {
+		pack: string;
+		name: string;
+		style?: string;
+		weight?: number;
+	} = {
+		// `value` is stored in whatever spelling its pack expects — for Lucide
+		// that is exactly what Obsidian's own `setIcon()` takes, prefix or not.
+		pack: icon.type,
+		name: icon.value,
+	};
+	if (icon.style) info.style = icon.style;
+	if (icon.weight !== undefined) info.weight = icon.weight;
+	return Object.freeze(info);
+};
+
+const toCallout = (def: CalloutDefinition): Callout =>
+	Object.freeze({
+		id: def.id,
+		title: def.displayName,
+		aliases: Object.freeze([...(def.aliases ?? [])]),
+	});
+
+const toDetails = (def: CalloutDefinition, dark: boolean): CalloutDetails => {
+	const details: {
+		-readonly [K in keyof CalloutDetails]: CalloutDetails[K];
+	} = {
+		...toCallout(def),
+		color: dark ? def.colorDark : def.colorLight,
+		colorLight: def.colorLight,
+		colorDark: def.colorDark,
+		icon: toIconInfo(def.icon),
+		foldable: def.foldable,
+		defaultFolded: def.defaultFolded,
+		builtIn: def.builtIn,
+		source: def.source,
+		externalStyle: def.externalStyle === true,
+	};
+	// Left absent rather than set to undefined: "no authored background" is a
+	// real state that means Obsidian's own tint applies, and a consumer using
+	// `in` or `Object.keys` should be able to tell the two apart.
+	if (def.bgColorLight) details.bgColorLight = def.bgColorLight;
+	if (def.bgColorDark) details.bgColorDark = def.bgColorDark;
+	if (def.textColorLight) details.textColorLight = def.textColorLight;
+	if (def.textColorDark) details.textColorDark = def.textColorDark;
+	return Object.freeze(details);
+};

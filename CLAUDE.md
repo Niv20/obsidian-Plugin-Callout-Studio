@@ -72,7 +72,7 @@ Search indexes are bundled (packed by `icons/data/codec.ts`); artwork is not. Re
 
 ### Key types (`src/types.ts`)
 
-`CalloutDefinition` is the core data model: `id`, `displayName`, `icon`, `color`, `darkColor`, `aliases`, `transforms`, `source` (`"builtin" | "user" | "fallback" | "theme" | "plugin"`), `metadata`.
+`CalloutDefinition` is the core data model: `id`, `displayName`, `icon`, `colorLight`, `colorDark`, `aliases`, `iconAdjust`, `source` (`"builtin" | "user" | "fallback" | "theme" | "plugin"`), `metadata`.
 
 `PluginSettings` holds global style (border, radius, scale), feature toggles (autocomplete, context menu, icon source preferences), and the two lists the user builds up: `customPalettes` and `userImages`. Both live in settings rather than on `PluginData` precisely so `exportToJSONv2()` carries them — and both must therefore be **merged by id** on import, never `Object.assign`ed, or importing a file without them wipes the user's own.
 
@@ -80,12 +80,12 @@ Search indexes are bundled (packed by `icons/data/codec.ts`); artwork is not. Re
 
 | Source | Meaning |
 |--------|---------|
-| `builtin` | One of the 14 defaults in `src/constants.ts` |
+| `builtin` | One of the 13 defaults in `src/constants.ts` |
 | `user` | User-created or customized |
 | `fallback` | Auto-created by discovery for unknown IDs |
-| `theme`/`plugin` | Injected by other plugins via the public API |
+| `theme`/`plugin` | Injected by an import or an older build's API |
 
-Built-in callouts are never stored unless modified — `toSaveData()` only persists modified built-ins and all user callouts.
+Built-in callouts are never stored unless modified — `toSaveData()` only persists modified built-ins and all user callouts. That rule is about `data.json` alone: `load()` seeds all 13 into the in-memory map unconditionally, so `getAll()` always returns every built-in.
 
 ### Callout metadata (`[!type|metadata]`)
 
@@ -93,7 +93,14 @@ Obsidian splits a callout header at the **first `|`**: everything before it is t
 
 ### Public API (`src/api/PluginAPI.ts`)
 
-Exposes registry and discovery methods to other Obsidian plugins. Treat this surface as stable — don't remove or rename exported methods.
+**Read-only, five members, and it stays that way.** `version`, `getCallouts()`, `getCalloutsDetailed()`, `getCallout(id)`, `onChange(cb)` — exposed at `app.plugins.plugins['callout-studio'].api` and documented for third parties in `API.md`, which is the contract. Treat it as stable: don't rename or change the meaning of a member without bumping `version`; new members may be added freely, since consumers are told to feature-detect those.
+
+Two rules the implementation exists to enforce, both of which had been broken before:
+
+- **Nothing live escapes.** Every return value is a frozen copy built by the mappers at the bottom of the file. The registry hands out real objects the renderer reads on every paint, so a consumer holding one could change styling with no re-inject and no save.
+- **`usableDefinitions()` is the only list.** It unions `getBuiltIn()` + `getUserDefined()` (both read through the registry's list view, so the transient live-preview row can't leak) and then drops unused discovered rows with the same predicate AutoComplete uses. `getCallout(id)` resolves through the registry ladder but then re-finds the result *in that list by id*, which is what keeps a lookup from returning something the list won't show.
+
+`src/api/types.ts` holds the public shapes, deliberately separate from `src/types.ts` — `CalloutDefinition` moves whenever a feature lands, and this surface must not. Mutation, modals, icon artwork and wrap/unwrap are all intentionally absent; the earlier `registerCallout`/`unregisterCallout` pair was removed rather than fixed because it had no ownership model and leaked `source: "plugin"` rows into `data.json` forever.
 
 ### Localization (`src/i18n/`)
 
