@@ -3796,12 +3796,24 @@ input.cs-input-invalid:focus {
    and costs nothing.
 
    `font-size: 0` rather than `display: none`: the span stays in flow, so
-   CodeMirror's DOM-to-position mapping is untouched — the same trick core's own
-   legacy rule used on this exact selector. The two spacing properties come
-   along because neither scales with font-size when a theme spells them in px,
-   and either would otherwise leave a sliver of indent where the hashes were;
-   both are inherited on this span, so a direct declaration wins outright and
-   needs no !important. Inert in reading view, which has no
+   CodeMirror's DOM-to-position mapping is untouched — the same trick core's
+   own legacy rule uses on this exact selector, in app.css:
+   `.hmd-inactive-line span.cm-formatting-header { font-size: 0 !important }`.
+   That's why THIS property, alone in this file, keeps its !important: no
+   amount of added specificity outranks an !important declaration on the same
+   property, and core already plays that card here, so ours has to match it
+   to stay reliable once a theme joins the same fight (many shrink formatting
+   marks and would need !important themselves, to beat core's). Don't replace
+   it with a selector-repetition trick like the rule below — that would
+   silence the linter but reopen the raw-`###` flash on any theme that also
+   declares font-size on this selector, since no specificity trick outranks
+   an !important rule it might use.
+
+   The two spacing properties come along because neither scales with
+   font-size when a theme spells them in px, and either would otherwise leave
+   a sliver of indent where the hashes were; both are inherited on this span
+   with nothing else declaring them, so a direct declaration wins outright and
+   needs no !important of its own. Inert in reading view, which has no
    `cm-formatting-header` at all. */
 .cs-heading-callout.cs-heading-hide-marks .cm-formatting-header {
 	font-size: 0 !important;
