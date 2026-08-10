@@ -3781,6 +3781,28 @@ input.cs-input-invalid:focus {
 	border-radius: var(--cs-heading-radius, var(--radius-s, 4px));
 }
 
+/* The heading's own `###`, hidden for exactly as long as the view plugin keeps
+   the `[!id]` token collapsed (it adds .cs-heading-hide-marks then, and only
+   then — see renderShared's CSS_HEADING_HIDE_MARKS).
+
+   Obsidian hides the hashes itself, with a replace decoration over the
+   `cm-formatting-header` range, but its view plugin declines to rebuild while
+   the mouse is held (on mobile: a 700ms debounce armed by every caret move),
+   while an IME is composing, and while the syntax tree is behind the viewport.
+   Ours has none of those brakes, so the two can hold different opinions about
+   where the caret is for a frame or much longer, and the raw `###` shows up in
+   front of a bar that has otherwise finished rendering. This rule is the
+   backstop; when core is keeping up it matches an element core already removed
+   and costs nothing.
+
+   `font-size: 0` rather than `display: none`: the span stays in flow, so
+   CodeMirror's DOM-to-position mapping is untouched — the same trick core's own
+   legacy rule used on this exact selector. Inert in reading view, which has no
+   `cm-formatting-header` at all. */
+.cs-heading-callout.cs-heading-hide-marks .cm-formatting-header {
+	font-size: 0 !important;
+}
+
 /* The class is repeated to 4 so these win on specificity alone, one more than
    the strongest rule each fights (same trick as .cs-tag-add-btn above, and
    unlike !important it leaves the entrance transition free to animate them):

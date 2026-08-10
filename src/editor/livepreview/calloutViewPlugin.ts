@@ -37,6 +37,7 @@ import {
 	scanLineForCalloutTokens,
 } from "../calloutTokens";
 import {
+	CSS_HEADING_HIDE_MARKS,
 	CSS_HEADING_LINE,
 	CSS_HEADING_TITLE,
 	CSS_UNKNOWN,
@@ -338,9 +339,16 @@ function decorateLine(
 		if (token.role === "heading") {
 			if (!headingEnabled) continue;
 			const resolved = resolveCalloutDef(host.registry, token.rawId);
-			const cls = resolved.unknown
-				? `${CSS_HEADING_LINE} ${CSS_UNKNOWN}`
-				: CSS_HEADING_LINE;
+			// One predicate for the whole heading: it decides the token widget
+			// below AND the class that hides the ATX `###`. Obsidian owns the
+			// hashes on a rebuild schedule that is allowed to stall (see
+			// CSS_HEADING_HIDE_MARKS), so leaving them to it lets a raw `###`
+			// surface in front of an otherwise finished bar.
+			const collapsed = !selectionTouches(lineFrom, lineTo);
+			const cls =
+				CSS_HEADING_LINE +
+				(resolved.unknown ? ` ${CSS_UNKNOWN}` : "") +
+				(collapsed ? ` ${CSS_HEADING_HIDE_MARKS}` : "");
 			// The bar stays on the line even while editing it…
 			builder.add(
 				lineFrom,
@@ -382,7 +390,7 @@ function decorateLine(
 			}
 			// …but the token collapses to icon(+name) only while the caret
 			// is elsewhere, so the raw syntax is editable in place.
-			if (!selectionTouches(lineFrom, lineTo)) {
+			if (collapsed) {
 				const headingLine = view.state.doc.lineAt(lineFrom).number - 1;
 				midLine.push({
 					from,
