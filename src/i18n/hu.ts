@@ -785,4 +785,30 @@ export const hu: Record<string, string> = {
 	"footer.tagline":
 		"Van visszajelzése, megjegyzése vagy javaslata? Szívesen meghallgatom!",
 	"footer.madeBy": "Készítette: Niv  •  ",
+	"settings.deletePaletteConfirmLinkedOne":
+		'Törli a(z) "{{name}}" palettát?\n1 callout használja. Megtartja a színeit, és később újra összekapcsolhatod a szerkesztőjében a Szín sorból.',
+	"settings.deletePaletteConfirmLinked":
+		'Törli a(z) "{{name}}" palettát?\n{{count}} callout használja. Megtartják a színeiket, és később újra összekapcsolhatod őket bármelyik szerkesztőjük Szín sorából.',
+	"settings.unlinkedColors": "Nem kapcsolt színek",
+	"settings.unlinkedColorsDesc":
+		"Olyan calloutok, amelyeknek a mentett színe törölve lett. Megtartják a korábbi színeiket; a visszaállítás újra elmenti a színt és újrakapcsolja az egész csoportot.",
+	"settings.unlinkedColorOne": "1 callout",
+	"settings.unlinkedColorCount": "{{count}} callout",
+	"settings.restoreColor": "Visszaállítás",
+	"settings.palettesMergedNotice":
+		"{{count}} importált paletta összevonva olyan mentett színekkel, amelyek már ugyanazokat a színeket használták.",
+	"notice.palettesMerged":
+		"{{count}} azonos színű mentett szín összevonva: {{names}}. Az ezeket használó calloutok megtartják a színeiket, és most a megmaradt színhez kapcsolódnak.",
+	"editor.colorsDescDeleted":
+		"Ennek a calloutnak a mentett színe törölve lett. Újra elmentheted {{link}}.",
+	"editor.colorsDescDeletedOther":
+		"Ennek a calloutnak a mentett színe törölve lett. Újra elmentheted {{link}} — 1 másik, ezt használó callout is újra kapcsolódik.",
+	"editor.colorsDescDeletedOthers":
+		"Ennek a calloutnak a mentett színe törölve lett. Újra elmentheted {{link}} — {{count}} másik, ezt használó callout is újra kapcsolódik.",
+	"editor.colorsDescDeletedLink": "ide kattintva",
+	"palette.colorExists":
+		'Ezek a színek megegyeznek ezzel: "{{name}}". Két mentett szín nem lehet ugyanaz — módosíts egy színt, hogy megkülönböztesd őket.',
+	"palette.colorExistsUse":
+		'Ezek a színek megegyeznek ezzel: "{{name}}". Két mentett szín nem lehet ugyanaz — módosíts egy színt, vagy {{link}}.',
+	"palette.colorExistsUseLink": "használd a meglévőt",
 };

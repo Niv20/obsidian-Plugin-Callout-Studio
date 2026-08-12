@@ -783,4 +783,30 @@ export const es: Record<string, string> = {
 	"footer.tagline":
 		"¿Tiene comentarios, sugerencias o ideas? ¡Me encantaría escucharle!",
 	"footer.madeBy": "Creado por Niv  •  ",
+	"settings.deletePaletteConfirmLinkedOne":
+		'¿Eliminar la paleta "{{name}}"?\n1 callout la usa. Conserva sus colores y puedes volver a conectarla más tarde desde la fila Color en su editor.',
+	"settings.deletePaletteConfirmLinked":
+		'¿Eliminar la paleta "{{name}}"?\n{{count}} callouts la usan. Conservan sus colores y puedes volver a conectarlos más tarde desde la fila Color en cualquiera de sus editores.',
+	"settings.unlinkedColors": "Colores desvinculados",
+	"settings.unlinkedColorsDesc":
+		"Callouts cuyo color guardado fue eliminado. Conservan los colores que tenían; restaurar vuelve a guardar el color y reconecta todo el grupo.",
+	"settings.unlinkedColorOne": "1 callout",
+	"settings.unlinkedColorCount": "{{count}} callouts",
+	"settings.restoreColor": "Restaurar",
+	"settings.palettesMergedNotice":
+		"Se fusionaron {{count}} paleta(s) importada(s) con colores guardados que ya tenían los mismos colores.",
+	"notice.palettesMerged":
+		"Se fusionaron {{count}} color(es) guardado(s) que tenían colores idénticos: {{names}}. Los callouts que los usan conservan sus colores y ahora están vinculados al color que permanece.",
+	"editor.colorsDescDeleted":
+		"El color guardado de este callout fue eliminado. Puedes guardarlo de nuevo {{link}}.",
+	"editor.colorsDescDeletedOther":
+		"El color guardado de este callout fue eliminado. Puedes guardarlo de nuevo {{link}} — también se volverá a conectar 1 callout más que lo usa.",
+	"editor.colorsDescDeletedOthers":
+		"El color guardado de este callout fue eliminado. Puedes guardarlo de nuevo {{link}} — también se volverán a conectar {{count}} callouts más que lo usan.",
+	"editor.colorsDescDeletedLink": "haciendo clic aquí",
+	"palette.colorExists":
+		'Estos colores son idénticos a "{{name}}". Dos colores guardados no pueden ser iguales — cambia un color para diferenciarlos.',
+	"palette.colorExistsUse":
+		'Estos colores son idénticos a "{{name}}". Dos colores guardados no pueden ser iguales — cambia un color, o {{link}}.',
+	"palette.colorExistsUseLink": "usar el existente",
 };

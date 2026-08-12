@@ -237,7 +237,15 @@ export async function performCalloutEditorSave(
 			: fallbackBase
 				? fallbackBase.bgGradient
 				: state.bgGradient,
-		...(transparent ? { transparentBg: true as const } : {}),
+		// Spelled out rather than omitted, for the same reason `bakePaletteColors`
+		// spells it out: `registry.update()` merges this over the existing
+		// definition, and a key that isn't there clears nothing. Omitting it made
+		// transparency a one-way door — a callout switched to "None" once kept
+		// `transparentBg: true` through every later save, while the background
+		// hexes beside it (always written, `undefined` included) went on
+		// updating. `CSSInjector` checks the flag first, so such a row rendered
+		// with no background while the settings swatch drew the stale hexes.
+		transparentBg: transparent ? true : undefined,
 		textColorLight: fallbackBase
 			? fallbackBase.textColorLight
 			: authoredText

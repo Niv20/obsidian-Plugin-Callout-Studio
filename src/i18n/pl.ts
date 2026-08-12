@@ -777,4 +777,30 @@ export const pl: Record<string, string> = {
 
 	"footer.tagline": "Masz uwagi, komentarze lub sugestie? Chętnie wysłucham!",
 	"footer.madeBy": "Stworzone przez Niv  •  ",
+	"settings.deletePaletteConfirmLinkedOne":
+		'Usunąć paletę "{{name}}"?\n1 callout jej używa. Zachowa swoje kolory, a później możesz połączyć go ponownie z poziomu wiersza Kolor w jego edytorze.',
+	"settings.deletePaletteConfirmLinked":
+		'Usunąć paletę "{{name}}"?\n{{count}} calloutów jej używa. Zachowają swoje kolory, a później możesz połączyć je ponownie z poziomu wiersza Kolor w dowolnym z ich edytorów.',
+	"settings.unlinkedColors": "Niepołączone kolory",
+	"settings.unlinkedColorsDesc":
+		"Callouty, których zapisany kolor został usunięty. Zachowują kolory, które miały; przywrócenie zapisuje kolor ponownie i ponownie łączy całą grupę.",
+	"settings.unlinkedColorOne": "1 callout",
+	"settings.unlinkedColorCount": "{{count}} calloutów",
+	"settings.restoreColor": "Przywróć",
+	"settings.palettesMergedNotice":
+		"Scalono {{count}} zaimportowanych palet z zapisanymi kolorami, które miały już takie same kolory.",
+	"notice.palettesMerged":
+		"Scalono {{count}} zapisanych kolorów o identycznych kolorach: {{names}}. Callouty, które ich używają, zachowują swoje kolory i są teraz połączone z kolorem, który pozostał.",
+	"editor.colorsDescDeleted":
+		"Zapisany kolor tego callouta został usunięty. Możesz zapisać go ponownie, {{link}}.",
+	"editor.colorsDescDeletedOther":
+		"Zapisany kolor tego callouta został usunięty. Możesz zapisać go ponownie, {{link}} — 1 inny callout, który go używa, też zostanie ponownie połączony.",
+	"editor.colorsDescDeletedOthers":
+		"Zapisany kolor tego callouta został usunięty. Możesz zapisać go ponownie, {{link}} — {{count}} innych calloutów, które go używają, też zostanie ponownie połączonych.",
+	"editor.colorsDescDeletedLink": "klikając tutaj",
+	"palette.colorExists":
+		'Te kolory są identyczne jak "{{name}}". Dwa zapisane kolory nie mogą być takie same — zmień jeden kolor, aby je rozróżnić.',
+	"palette.colorExistsUse":
+		'Te kolory są identyczne jak "{{name}}". Dwa zapisane kolory nie mogą być takie same — zmień kolor albo {{link}}.',
+	"palette.colorExistsUseLink": "użyć istniejącego",
 };

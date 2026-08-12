@@ -769,4 +769,30 @@ export const ko: Record<string, string> = {
 
 	"footer.tagline": "피드백, 의견 또는 제안이 있으신가요? 꼭 들려주세요!",
 	"footer.madeBy": "Niv 제작  •  ",
+	"settings.deletePaletteConfirmLinkedOne":
+		'팔레트 "{{name}}"을 삭제할까요?\n1개의 callout이 이 팔레트를 사용합니다. 색상은 유지되며, 나중에 편집기의 색상 행에서 다시 연결할 수 있습니다.',
+	"settings.deletePaletteConfirmLinked":
+		'팔레트 "{{name}}"을 삭제할까요?\n{{count}}개의 callout이 이 팔레트를 사용합니다. 색상은 유지되며, 나중에 각 편집기의 색상 행에서 다시 연결할 수 있습니다.',
+	"settings.unlinkedColors": "연결 해제된 색상",
+	"settings.unlinkedColorsDesc":
+		"저장된 색상이 삭제된 callout입니다. 기존 색상은 유지되며, 복원하면 색상을 다시 저장하고 전체 그룹을 다시 연결합니다.",
+	"settings.unlinkedColorOne": "1개 callout",
+	"settings.unlinkedColorCount": "{{count}}개 callout",
+	"settings.restoreColor": "복원",
+	"settings.palettesMergedNotice":
+		"이미 같은 색상을 가진 저장된 색상에 가져온 팔레트 {{count}}개를 병합했습니다.",
+	"notice.palettesMerged":
+		"동일한 색상을 가진 저장된 색상 {{count}}개를 병합했습니다: {{names}}. 이를 사용하는 callout은 색상을 유지하며, 이제 남은 색상에 연결됩니다.",
+	"editor.colorsDescDeleted":
+		"이 callout의 저장된 색상이 삭제되었습니다. {{link}} 다시 저장할 수 있습니다.",
+	"editor.colorsDescDeletedOther":
+		"이 callout의 저장된 색상이 삭제되었습니다. {{link}} 다시 저장할 수 있으며, 이를 사용하는 다른 callout 1개도 다시 연결됩니다.",
+	"editor.colorsDescDeletedOthers":
+		"이 callout의 저장된 색상이 삭제되었습니다. {{link}} 다시 저장할 수 있으며, 이를 사용하는 다른 callout {{count}}개도 다시 연결됩니다.",
+	"editor.colorsDescDeletedLink": "여기를 클릭해",
+	"palette.colorExists":
+		'이 색상은 "{{name}}"과 동일합니다. 저장된 색상 두 개는 같을 수 없습니다. 구분하려면 색상 하나를 변경하세요.',
+	"palette.colorExistsUse":
+		'이 색상은 "{{name}}"과 동일합니다. 저장된 색상 두 개는 같을 수 없습니다. 색상을 변경하거나 {{link}}.',
+	"palette.colorExistsUseLink": "기존 색상 사용",
 };

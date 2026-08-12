@@ -1150,17 +1150,48 @@ function validateCalloutArray(
 				builtIn: isBuiltIn,
 				source: isBuiltIn ? "builtin" : "user",
 			};
-			if (typeof entry.bgColorLight === "string")
-				def.bgColorLight = entry.bgColorLight;
-			if (typeof entry.bgColorDark === "string")
-				def.bgColorDark = entry.bgColorDark;
+			// The whole background block is spelled out — `undefined` included —
+			// rather than attached only when the file carries a value. An import
+			// onto an id that already exists lands through
+			// `registry.update(def.id, def)` (see DataManagementSection), which
+			// merges `{ ...existing, ...partial }`, and a key that isn't there
+			// clears nothing. Attaching conditionally meant importing a
+			// transparent callout over a coloured one left the old hexes
+			// standing beside the new flag — the same contradictory row
+			// `CalloutRegistry.dropStaleTransparencyFlags` exists to repair, and
+			// one where the flag is the NEWER intent, so that pass would have
+			// undone the import on the next launch.
+			//
+			// Safe for the built-in concern below: `isModified` compares
+			// `JSON.stringify(value ?? null)`, so an explicit `undefined` still
+			// reads as equal to an absent key and cannot make a built-in nobody
+			// edited look customized, and `JSON.stringify` drops it on save.
 			const bgGradientClean = sanitizeBgGradient(entry.bgGradient);
-			if (bgGradientClean) def.bgGradient = bgGradientClean;
+			// Transparency short-circuits the background here exactly as it does
+			// in `performCalloutEditorSave` and `bakePaletteColors`: the flag IS
+			// the background, so a self-contradictory entry (hand-edited, or
+			// exported from a vault damaged by the bug above) is normalized at
+			// the boundary instead of being carried inward. Keeping the importer
+			// unable to emit both is what leaves that migration facing only rows
+			// damaged by the old merge, where deleting the flag is right.
+			const importTransparent = entry.transparentBg === true;
+			def.bgColorLight =
+				!importTransparent && typeof entry.bgColorLight === "string"
+					? entry.bgColorLight
+					: undefined;
+			def.bgColorDark =
+				!importTransparent && typeof entry.bgColorDark === "string"
+					? entry.bgColorDark
+					: undefined;
+			def.bgGradient = importTransparent
+				? undefined
+				: (bgGradientClean ?? undefined);
 			// Only `true` survives: the field is `?: true` on a definition, where
 			// "off" is an absent key rather than `false` (an explicit `false`
 			// would read as a difference in `CalloutRegistry.isModified` and
-			// persist a built-in nobody edited).
-			if (entry.transparentBg === true) def.transparentBg = true;
+			// persist a built-in nobody edited). `undefined` is not `false` — it
+			// is what lets the merge above clear a flag the target row still has.
+			def.transparentBg = importTransparent ? true : undefined;
 			if (typeof entry.textColorLight === "string")
 				def.textColorLight = entry.textColorLight;
 			if (typeof entry.textColorDark === "string")

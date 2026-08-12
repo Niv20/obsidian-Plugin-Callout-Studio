@@ -783,4 +783,30 @@ export const ro: Record<string, string> = {
 	"footer.tagline":
 		"Aveți feedback, comentarii sau sugestii? Mi-ar plăcea să aud!",
 	"footer.madeBy": "Creat de Niv  •  ",
+	"settings.deletePaletteConfirmLinkedOne":
+		'Ștergeți paleta "{{name}}"?\n1 callout o folosește. Își păstrează culorile, iar mai târziu îl puteți reconecta din rândul Culoare din editorul lui.',
+	"settings.deletePaletteConfirmLinked":
+		'Ștergeți paleta "{{name}}"?\n{{count}} callout-uri o folosesc. Își păstrează culorile, iar mai târziu le puteți reconecta din rândul Culoare din oricare dintre editoarele lor.',
+	"settings.unlinkedColors": "Culori nelegate",
+	"settings.unlinkedColorsDesc":
+		"Callout-uri a căror culoare salvată a fost ștearsă. Își păstrează culorile pe care le aveau; restaurarea salvează din nou culoarea și reconectează întregul grup.",
+	"settings.unlinkedColorOne": "1 callout",
+	"settings.unlinkedColorCount": "{{count}} callout-uri",
+	"settings.restoreColor": "Restabilește",
+	"settings.palettesMergedNotice":
+		"A fuzionat {{count}} paletă/palete importată/importate în culori salvate care aveau deja aceleași culori.",
+	"notice.palettesMerged":
+		"A fuzionat {{count}} culoare/culori salvată/salvate cu culori identice: {{names}}. Callout-urile care le folosesc își păstrează culorile și acum sunt legate de culoarea rămasă.",
+	"editor.colorsDescDeleted":
+		"Culoarea salvată a acestui callout a fost ștearsă. O puteți salva din nou {{link}}.",
+	"editor.colorsDescDeletedOther":
+		"Culoarea salvată a acestui callout a fost ștearsă. O puteți salva din nou {{link}} — încă 1 alt callout care o folosește va fi reconectat.",
+	"editor.colorsDescDeletedOthers":
+		"Culoarea salvată a acestui callout a fost ștearsă. O puteți salva din nou {{link}} — încă {{count}} alte callout-uri care o folosesc vor fi reconectate.",
+	"editor.colorsDescDeletedLink": "făcând clic aici",
+	"palette.colorExists":
+		'Aceste culori sunt identice cu "{{name}}". Două culori salvate nu pot fi la fel — schimbați o culoare ca să le diferențiați.',
+	"palette.colorExistsUse":
+		'Aceste culori sunt identice cu "{{name}}". Două culori salvate nu pot fi la fel — schimbați o culoare sau {{link}}.',
+	"palette.colorExistsUseLink": "folosiți-o pe cea existentă",
 };

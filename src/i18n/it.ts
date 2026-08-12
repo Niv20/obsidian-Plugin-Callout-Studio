@@ -789,4 +789,30 @@ export const it: Record<string, string> = {
 	"footer.tagline":
 		"Hai feedback, commenti o suggerimenti? Mi farebbe piacere sentirti!",
 	"footer.madeBy": "Creato da Niv  •  ",
+	"settings.deletePaletteConfirmLinkedOne":
+		'Eliminare la palette "{{name}}"?\n1 callout la usa. Mantiene i suoi colori e potrai ricollegarla più tardi dalla riga Colore nel suo editor.',
+	"settings.deletePaletteConfirmLinked":
+		'Eliminare la palette "{{name}}"?\n{{count}} callout la usano. Mantengono i loro colori e potrai ricollegarli più tardi dalla riga Colore in uno qualsiasi dei loro editor.',
+	"settings.unlinkedColors": "Colori scollegati",
+	"settings.unlinkedColorsDesc":
+		"Callout il cui colore salvato è stato eliminato. Mantengono i colori che avevano; ripristinare salva di nuovo il colore e ricollega l'intero gruppo.",
+	"settings.unlinkedColorOne": "1 callout",
+	"settings.unlinkedColorCount": "{{count}} callout",
+	"settings.restoreColor": "Ripristina",
+	"settings.palettesMergedNotice":
+		"Unite {{count}} palette importate nei colori salvati che avevano già gli stessi colori.",
+	"notice.palettesMerged":
+		"Uniti {{count}} colori salvati con colori identici: {{names}}. I callout che li usano mantengono i loro colori e ora sono collegati al colore rimasto.",
+	"editor.colorsDescDeleted":
+		"Il colore salvato di questo callout è stato eliminato. Puoi salvarlo di nuovo {{link}}.",
+	"editor.colorsDescDeletedOther":
+		"Il colore salvato di questo callout è stato eliminato. Puoi salvarlo di nuovo {{link}} — verrà ricollegato anche 1 altro callout che lo usa.",
+	"editor.colorsDescDeletedOthers":
+		"Il colore salvato di questo callout è stato eliminato. Puoi salvarlo di nuovo {{link}} — verranno ricollegati anche altri {{count}} callout che lo usano.",
+	"editor.colorsDescDeletedLink": "facendo clic qui",
+	"palette.colorExists":
+		'Questi colori sono identici a "{{name}}". Due colori salvati non possono essere uguali: cambia un colore per distinguerli.',
+	"palette.colorExistsUse":
+		'Questi colori sono identici a "{{name}}". Due colori salvati non possono essere uguali: cambia un colore, oppure {{link}}.',
+	"palette.colorExistsUseLink": "usa quello esistente",
 };

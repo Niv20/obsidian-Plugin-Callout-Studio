@@ -775,4 +775,30 @@ export const ru: Record<string, string> = {
 	"footer.tagline":
 		"Есть отзывы, комментарии или предложения? Буду рад услышать!",
 	"footer.madeBy": "Создано Нивом  •  ",
+	"settings.deletePaletteConfirmLinkedOne":
+		'Удалить палитру "{{name}}"?\nЕё использует 1 callout. Он сохранит свои цвета, и вы сможете снова связать его позже из строки «Цвет» в его редакторе.',
+	"settings.deletePaletteConfirmLinked":
+		'Удалить палитру "{{name}}"?\nЕё используют {{count}} callout-ов. Они сохранят свои цвета, и вы сможете снова связать их позже из строки «Цвет» в любом из их редакторов.',
+	"settings.unlinkedColors": "Отвязанные цвета",
+	"settings.unlinkedColorsDesc":
+		"Callout-ы, у которых сохранённый цвет был удалён. Они сохраняют прежние цвета; восстановление снова сохраняет цвет и перепривязывает всю группу.",
+	"settings.unlinkedColorOne": "1 callout",
+	"settings.unlinkedColorCount": "{{count}} callout-ов",
+	"settings.restoreColor": "Восстановить",
+	"settings.palettesMergedNotice":
+		"Объединено {{count}} импортированных палитр(ы) с сохранёнными цветами, у которых уже были те же цвета.",
+	"notice.palettesMerged":
+		"Объединено {{count}} сохранённых цветов с одинаковыми цветами: {{names}}. Callout-ы, которые их используют, сохраняют свои цвета и теперь привязаны к оставшемуся цвету.",
+	"editor.colorsDescDeleted":
+		"Сохранённый цвет этого callout-а был удалён. Вы можете сохранить его снова, {{link}}.",
+	"editor.colorsDescDeletedOther":
+		"Сохранённый цвет этого callout-а был удалён. Вы можете сохранить его снова, {{link}} — также будет перепривязан ещё 1 callout, который его использует.",
+	"editor.colorsDescDeletedOthers":
+		"Сохранённый цвет этого callout-а был удалён. Вы можете сохранить его снова, {{link}} — также будут перепривязаны ещё {{count}} callout-ов, которые его используют.",
+	"editor.colorsDescDeletedLink": "нажав здесь",
+	"palette.colorExists":
+		'Эти цвета совпадают с "{{name}}". Два сохранённых цвета не могут быть одинаковыми — измените один цвет, чтобы различать их.',
+	"palette.colorExistsUse":
+		'Эти цвета совпадают с "{{name}}". Два сохранённых цвета не могут быть одинаковыми — измените цвет или {{link}}.',
+	"palette.colorExistsUseLink": "использовать существующий",
 };

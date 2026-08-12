@@ -787,4 +787,30 @@ export const fr: Record<string, string> = {
 	"footer.tagline":
 		"Des retours, commentaires ou suggestions ? J'adorerais vous entendre !",
 	"footer.madeBy": "Créé par Niv  •  ",
+	"settings.deletePaletteConfirmLinkedOne":
+		'Supprimer la palette "{{name}}" ?\n1 callout l’utilise. Il conserve ses couleurs, et vous pourrez la reconnecter plus tard depuis la ligne Couleur dans son éditeur.',
+	"settings.deletePaletteConfirmLinked":
+		'Supprimer la palette "{{name}}" ?\n{{count}} callouts l’utilisent. Ils conservent leurs couleurs, et vous pourrez les reconnecter plus tard depuis la ligne Couleur dans n’importe lequel de leurs éditeurs.',
+	"settings.unlinkedColors": "Couleurs dissociées",
+	"settings.unlinkedColorsDesc":
+		"Callouts dont la couleur enregistrée a été supprimée. Ils conservent leurs couleurs actuelles ; restaurer enregistre à nouveau la couleur et reconnecte tout le groupe.",
+	"settings.unlinkedColorOne": "1 callout",
+	"settings.unlinkedColorCount": "{{count}} callouts",
+	"settings.restoreColor": "Restaurer",
+	"settings.palettesMergedNotice":
+		"{{count}} palette(s) importée(s) ont été fusionnées avec des couleurs enregistrées qui avaient déjà les mêmes couleurs.",
+	"notice.palettesMerged":
+		"{{count}} couleur(s) enregistrée(s) avec des couleurs identiques ont été fusionnées : {{names}}. Les callouts qui les utilisent conservent leurs couleurs et sont maintenant liés à la couleur restante.",
+	"editor.colorsDescDeleted":
+		"La couleur enregistrée de ce callout a été supprimée. Vous pouvez l’enregistrer à nouveau en {{link}}.",
+	"editor.colorsDescDeletedOther":
+		"La couleur enregistrée de ce callout a été supprimée. Vous pouvez l’enregistrer à nouveau en {{link}} — 1 autre callout qui l’utilise sera aussi reconnecté.",
+	"editor.colorsDescDeletedOthers":
+		"La couleur enregistrée de ce callout a été supprimée. Vous pouvez l’enregistrer à nouveau en {{link}} — {{count}} autres callouts qui l’utilisent seront aussi reconnectés.",
+	"editor.colorsDescDeletedLink": "cliquant ici",
+	"palette.colorExists":
+		'Ces couleurs sont identiques à "{{name}}". Deux couleurs enregistrées ne peuvent pas être identiques — modifiez une couleur pour les différencier.',
+	"palette.colorExistsUse":
+		'Ces couleurs sont identiques à "{{name}}". Deux couleurs enregistrées ne peuvent pas être identiques — modifiez une couleur, ou {{link}}.',
+	"palette.colorExistsUseLink": "utiliser celle existante",
 };

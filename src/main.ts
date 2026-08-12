@@ -110,6 +110,23 @@ export default class CalloutStudioPlugin extends Plugin {
 		// tracks Obsidian's interface language.
 		setLocale(this.settings.language);
 
+		// After setLocale, since this is the first user-facing string of the
+		// session. Saved palettes that turned out to hold identical colors were
+		// folded together during load — the callouts using them kept both their
+		// appearance and their link, but one palette's NAME is gone, and that is
+		// worth saying out loud rather than letting the user find a color
+		// missing from the list later.
+		const paletteMerges = this.registry.takePaletteMerges();
+		if (paletteMerges.length > 0) {
+			new Notice(
+				t("notice.palettesMerged", {
+					count: paletteMerges.length,
+					names: paletteMerges.map((m) => m.from).join(", "),
+				}),
+				10000,
+			);
+		}
+
 		// Full CSS inject now that the registry holds real definitions
 		// (replaces the startup snapshot applied above).
 		this.cssInjector.initialize();

@@ -777,4 +777,30 @@ export const vi: Record<string, string> = {
 
 	"footer.tagline": "Có phản hồi, nhận xét hoặc đề xuất? Tôi rất muốn nghe!",
 	"footer.madeBy": "Được tạo bởi Niv  •  ",
+	"settings.deletePaletteConfirmLinkedOne":
+		'Xóa bảng màu "{{name}}"?\nCó 1 callout đang dùng nó. Callout đó giữ nguyên màu, và bạn có thể liên kết lại sau từ hàng Màu trong trình chỉnh sửa của nó.',
+	"settings.deletePaletteConfirmLinked":
+		'Xóa bảng màu "{{name}}"?\nCó {{count}} callout đang dùng nó. Chúng giữ nguyên màu, và bạn có thể liên kết lại sau từ hàng Màu trong bất kỳ trình chỉnh sửa nào của chúng.',
+	"settings.unlinkedColors": "Màu chưa liên kết",
+	"settings.unlinkedColorsDesc":
+		"Các callout có màu đã lưu bị xóa. Chúng vẫn giữ màu hiện có; khôi phục sẽ lưu lại màu và liên kết lại cả nhóm.",
+	"settings.unlinkedColorOne": "1 callout",
+	"settings.unlinkedColorCount": "{{count}} callout",
+	"settings.restoreColor": "Khôi phục",
+	"settings.palettesMergedNotice":
+		"Đã gộp {{count}} bảng màu nhập vào các màu đã lưu vốn đã có cùng màu.",
+	"notice.palettesMerged":
+		"Đã gộp {{count}} màu đã lưu có màu giống hệt nhau: {{names}}. Các callout dùng chúng vẫn giữ màu và giờ được liên kết với màu còn lại.",
+	"editor.colorsDescDeleted":
+		"Màu đã lưu của callout này đã bị xóa. Bạn có thể lưu lại bằng cách {{link}}.",
+	"editor.colorsDescDeletedOther":
+		"Màu đã lưu của callout này đã bị xóa. Bạn có thể lưu lại bằng cách {{link}} — 1 callout khác đang dùng màu này cũng sẽ được liên kết lại.",
+	"editor.colorsDescDeletedOthers":
+		"Màu đã lưu của callout này đã bị xóa. Bạn có thể lưu lại bằng cách {{link}} — {{count}} callout khác đang dùng màu này cũng sẽ được liên kết lại.",
+	"editor.colorsDescDeletedLink": "nhấp vào đây",
+	"palette.colorExists":
+		'Những màu này giống hệt "{{name}}". Hai màu đã lưu không thể giống nhau — hãy đổi một màu để phân biệt.',
+	"palette.colorExistsUse":
+		'Những màu này giống hệt "{{name}}". Hai màu đã lưu không thể giống nhau — hãy đổi một màu, hoặc {{link}}.',
+	"palette.colorExistsUseLink": "dùng màu hiện có",
 };

@@ -767,4 +767,30 @@ export const hi: Record<string, string> = {
 
 	"footer.tagline": "कोई फ़ीडबैक, टिप्पणी या सुझाव है? मुझे बताएँ!",
 	"footer.madeBy": "Niv द्वारा निर्मित  •  ",
+	"settings.deletePaletteConfirmLinkedOne":
+		'"{{name}}" पैलेट हटाएँ?\nइसे 1 callout उपयोग करता है। उसके रंग बने रहेंगे, और आप बाद में उसके एडिटर की Color पंक्ति से फिर से जोड़ सकते हैं।',
+	"settings.deletePaletteConfirmLinked":
+		'"{{name}}" पैलेट हटाएँ?\nइसे {{count}} callout उपयोग करते हैं। उनके रंग बने रहेंगे, और आप बाद में उनके किसी भी एडिटर की Color पंक्ति से फिर से जोड़ सकते हैं।',
+	"settings.unlinkedColors": "अनलिंक किए गए रंग",
+	"settings.unlinkedColorsDesc":
+		"वे callout जिनका सहेजा गया रंग हट गया है। वे अपने पुराने रंग बनाए रखते हैं; Restore करने पर रंग फिर से सहेजा जाता है और पूरा समूह फिर से लिंक हो जाता है।",
+	"settings.unlinkedColorOne": "1 callout",
+	"settings.unlinkedColorCount": "{{count}} callout",
+	"settings.restoreColor": "Restore",
+	"settings.palettesMergedNotice":
+		"{{count}} आयातित पैलेट को उन सहेजे गए रंगों में मिला दिया गया जिनके रंग पहले से समान थे।",
+	"notice.palettesMerged":
+		"समान रंग वाले {{count}} सहेजे गए रंगों को मिला दिया गया: {{names}}। इन्हें उपयोग करने वाले callout अपने रंग बनाए रखते हैं और अब बचे हुए रंग से लिंक हैं।",
+	"editor.colorsDescDeleted":
+		"इस callout का सहेजा गया रंग हट गया है। आप इसे {{link}} फिर से सहेज सकते हैं।",
+	"editor.colorsDescDeletedOther":
+		"इस callout का सहेजा गया रंग हट गया है। आप इसे {{link}} फिर से सहेज सकते हैं — इसे उपयोग करने वाला 1 अन्य callout भी फिर से लिंक हो जाएगा।",
+	"editor.colorsDescDeletedOthers":
+		"इस callout का सहेजा गया रंग हट गया है। आप इसे {{link}} फिर से सहेज सकते हैं — इसे उपयोग करने वाले {{count}} अन्य callout भी फिर से लिंक हो जाएंगे।",
+	"editor.colorsDescDeletedLink": "यहाँ क्लिक करके",
+	"palette.colorExists":
+		'ये रंग "{{name}}" के समान हैं। दो सहेजे गए रंग एक जैसे नहीं हो सकते — अलग दिखाने के लिए एक रंग बदलें।',
+	"palette.colorExistsUse":
+		'ये रंग "{{name}}" के समान हैं। दो सहेजे गए रंग एक जैसे नहीं हो सकते — एक रंग बदलें, या {{link}}।',
+	"palette.colorExistsUseLink": "मौजूदा वाला उपयोग करें",
 };

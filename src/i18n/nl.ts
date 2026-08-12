@@ -780,4 +780,30 @@ export const nl: Record<string, string> = {
 	"footer.tagline":
 		"Hebt u feedback, opmerkingen of suggesties? Ik hoor het graag!",
 	"footer.madeBy": "Gemaakt door Niv  •  ",
+	"settings.deletePaletteConfirmLinkedOne":
+		'Palet "{{name}}" verwijderen?\n1 callout gebruikt het. Het behoudt zijn kleuren en je kunt het later opnieuw koppelen via de rij Kleur in de editor.',
+	"settings.deletePaletteConfirmLinked":
+		'Palet "{{name}}" verwijderen?\n{{count}} callouts gebruiken het. Ze behouden hun kleuren en je kunt ze later opnieuw koppelen via de rij Kleur in een van hun editors.',
+	"settings.unlinkedColors": "Ontkoppelde kleuren",
+	"settings.unlinkedColorsDesc":
+		"Callouts waarvan de opgeslagen kleur is verwijderd. Ze behouden de kleuren die ze hadden; herstellen slaat de kleur opnieuw op en koppelt de hele groep weer.",
+	"settings.unlinkedColorOne": "1 callout",
+	"settings.unlinkedColorCount": "{{count}} callouts",
+	"settings.restoreColor": "Herstellen",
+	"settings.palettesMergedNotice":
+		"{{count}} geïmporteerde palet(ten) samengevoegd met opgeslagen kleuren die al dezelfde kleuren hadden.",
+	"notice.palettesMerged":
+		"{{count}} opgeslagen kleur(en) met identieke kleuren samengevoegd: {{names}}. De callouts die ze gebruiken behouden hun kleuren en zijn nu gekoppeld aan de kleur die is overgebleven.",
+	"editor.colorsDescDeleted":
+		"De opgeslagen kleur van deze callout is verwijderd. Je kunt deze opnieuw opslaan door {{link}}.",
+	"editor.colorsDescDeletedOther":
+		"De opgeslagen kleur van deze callout is verwijderd. Je kunt deze opnieuw opslaan door {{link}} — 1 andere callout die deze kleur gebruikt wordt ook opnieuw gekoppeld.",
+	"editor.colorsDescDeletedOthers":
+		"De opgeslagen kleur van deze callout is verwijderd. Je kunt deze opnieuw opslaan door {{link}} — {{count}} andere callouts die deze kleur gebruiken worden ook opnieuw gekoppeld.",
+	"editor.colorsDescDeletedLink": "hier te klikken",
+	"palette.colorExists":
+		'Deze kleuren zijn identiek aan "{{name}}". Twee opgeslagen kleuren mogen niet hetzelfde zijn — wijzig een kleur om ze te onderscheiden.',
+	"palette.colorExistsUse":
+		'Deze kleuren zijn identiek aan "{{name}}". Twee opgeslagen kleuren mogen niet hetzelfde zijn — wijzig een kleur, of {{link}}.',
+	"palette.colorExistsUseLink": "de bestaande gebruiken",
 };

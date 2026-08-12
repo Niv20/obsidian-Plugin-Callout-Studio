@@ -751,4 +751,30 @@ export const da: Record<string, string> = {
 	"footer.tagline":
 		"Har du feedback, kommentarer eller forslag? Jeg vil meget gerne høre det!",
 	"footer.madeBy": "Lavet af Niv  •  ",
+	"settings.deletePaletteConfirmLinkedOne":
+		'Slet paletten "{{name}}"?\n1 callout bruger den. Den beholder sine farver, og du kan forbinde den igen senere fra Farve-rækken i editoren.',
+	"settings.deletePaletteConfirmLinked":
+		'Slet paletten "{{name}}"?\n{{count}} callouts bruger den. De beholder deres farver, og du kan forbinde dem igen senere fra Farve-rækken i en af deres editorer.',
+	"settings.unlinkedColors": "Frakoblede farver",
+	"settings.unlinkedColorsDesc":
+		"Callouts, hvis gemte farve blev slettet. De beholder de farver, de havde; gendan gemmer farven igen og forbinder hele gruppen igen.",
+	"settings.unlinkedColorOne": "1 callout",
+	"settings.unlinkedColorCount": "{{count}} callouts",
+	"settings.restoreColor": "Gendan",
+	"settings.palettesMergedNotice":
+		"Flettede {{count}} importerede palette(r) ind i gemte farver, der allerede havde de samme farver.",
+	"notice.palettesMerged":
+		"Flettede {{count}} gemte farve(r) med identiske farver: {{names}}. Callouts, der bruger dem, beholder deres farver og er nu knyttet til farven, der blev tilbage.",
+	"editor.colorsDescDeleted":
+		"Denne callouts gemte farve blev slettet. Du kan gemme den igen ved {{link}}.",
+	"editor.colorsDescDeletedOther":
+		"Denne callouts gemte farve blev slettet. Du kan gemme den igen ved {{link}} — 1 anden callout, der bruger den, bliver også forbundet igen.",
+	"editor.colorsDescDeletedOthers":
+		"Denne callouts gemte farve blev slettet. Du kan gemme den igen ved {{link}} — {{count}} andre callouts, der bruger den, bliver også forbundet igen.",
+	"editor.colorsDescDeletedLink": "at klikke her",
+	"palette.colorExists":
+		'Disse farver er identiske med "{{name}}". To gemte farver kan ikke være ens — ændr en farve for at skelne dem.',
+	"palette.colorExistsUse":
+		'Disse farver er identiske med "{{name}}". To gemte farver kan ikke være ens — ændr en farve, eller {{link}}.',
+	"palette.colorExistsUseLink": "brug den eksisterende",
 };

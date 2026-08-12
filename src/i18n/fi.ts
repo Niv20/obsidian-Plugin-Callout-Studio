@@ -751,4 +751,30 @@ export const fi: Record<string, string> = {
 	"footer.tagline":
 		"Onko sinulla palautetta, kommentteja tai ehdotuksia? Kuulisin mielelläni!",
 	"footer.madeBy": "Luonut Niv  •  ",
+	"settings.deletePaletteConfirmLinkedOne":
+		'Poistetaanko paletti "{{name}}"?\n1 callout käyttää sitä. Se säilyttää värinsä, ja voit yhdistää sen myöhemmin uudelleen editorin Väririviltä.',
+	"settings.deletePaletteConfirmLinked":
+		'Poistetaanko paletti "{{name}}"?\n{{count}} calloutia käyttää sitä. Ne säilyttävät värinsä, ja voit yhdistää ne myöhemmin uudelleen minkä tahansa editorinsa Väririviltä.',
+	"settings.unlinkedColors": "Irrotetut värit",
+	"settings.unlinkedColorsDesc":
+		"Calloutit, joiden tallennettu väri poistettiin. Ne säilyttävät aiemmat värinsä; palauttaminen tallentaa värin uudelleen ja yhdistää koko ryhmän uudelleen.",
+	"settings.unlinkedColorOne": "1 callout",
+	"settings.unlinkedColorCount": "{{count}} calloutia",
+	"settings.restoreColor": "Palauta",
+	"settings.palettesMergedNotice":
+		"Yhdistettiin {{count}} tuotua palettia tallennettuihin väreihin, joilla oli jo samat värit.",
+	"notice.palettesMerged":
+		"Yhdistettiin {{count}} tallennettua väriä, joilla oli samat värit: {{names}}. Niitä käyttävät calloutit säilyttävät värinsä ja ovat nyt linkitetty jäljelle jääneeseen väriin.",
+	"editor.colorsDescDeleted":
+		"Tämän calloutin tallennettu väri poistettiin. Voit tallentaa sen uudelleen {{link}}.",
+	"editor.colorsDescDeletedOther":
+		"Tämän calloutin tallennettu väri poistettiin. Voit tallentaa sen uudelleen {{link}} — myös 1 muu sitä käyttävä callout yhdistetään uudelleen.",
+	"editor.colorsDescDeletedOthers":
+		"Tämän calloutin tallennettu väri poistettiin. Voit tallentaa sen uudelleen {{link}} — myös {{count}} muuta sitä käyttävää calloutia yhdistetään uudelleen.",
+	"editor.colorsDescDeletedLink": "klikkaamalla tästä",
+	"palette.colorExists":
+		'Nämä värit ovat samat kuin "{{name}}". Kaksi tallennettua väriä ei voi olla sama — muuta yhtä väriä erottaaksesi ne.',
+	"palette.colorExistsUse":
+		'Nämä värit ovat samat kuin "{{name}}". Kaksi tallennettua väriä ei voi olla sama — muuta yhtä väriä tai {{link}}.',
+	"palette.colorExistsUseLink": "käytä olemassa olevaa",
 };

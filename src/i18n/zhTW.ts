@@ -714,4 +714,30 @@ export const zhTW: Record<string, string> = {
 
 	"footer.tagline": "有反饋、意見或建議？歡迎告訴我！",
 	"footer.madeBy": "由 Niv 製作  •  ",
+	"settings.deletePaletteConfirmLinkedOne":
+		'刪除色盤「{{name}}」？\n1 個 callout 正在使用它。它會保留原有色彩，你之後可以在其編輯器的顏色列重新連結。',
+	"settings.deletePaletteConfirmLinked":
+		'刪除色盤「{{name}}」？\n{{count}} 個 callout 正在使用它。它們會保留原有色彩，你之後可以在任一編輯器的顏色列重新連結。',
+	"settings.unlinkedColors": "未連結色彩",
+	"settings.unlinkedColorsDesc":
+		"這些 callout 的已儲存色彩已被刪除。它們會保留原有色彩；還原會重新儲存該色彩並重新連結整個群組。",
+	"settings.unlinkedColorOne": "1 個 callout",
+	"settings.unlinkedColorCount": "{{count}} 個 callout",
+	"settings.restoreColor": "還原",
+	"settings.palettesMergedNotice":
+		"已將 {{count}} 個匯入色盤合併到已儲存且色彩相同的色彩項目中。",
+	"notice.palettesMerged":
+		"已合併 {{count}} 個色彩完全相同的已儲存色彩：{{names}}。使用它們的 callout 會保留原有色彩，並已連結到保留的色彩。",
+	"editor.colorsDescDeleted":
+		"此 callout 的已儲存色彩已被刪除。你可以透過{{link}}重新儲存。",
+	"editor.colorsDescDeletedOther":
+		"此 callout 的已儲存色彩已被刪除。你可以透過{{link}}重新儲存——另外 1 個使用該色彩的 callout 也會重新連結。",
+	"editor.colorsDescDeletedOthers":
+		"此 callout 的已儲存色彩已被刪除。你可以透過{{link}}重新儲存——另外 {{count}} 個使用該色彩的 callout 也會重新連結。",
+	"editor.colorsDescDeletedLink": "點這裡",
+	"palette.colorExists":
+		'這些色彩與「{{name}}」完全相同。兩個已儲存色彩不能相同——請修改一個色彩以區分它們。',
+	"palette.colorExistsUse":
+		'這些色彩與「{{name}}」完全相同。兩個已儲存色彩不能相同——請修改一個色彩，或{{link}}。',
+	"palette.colorExistsUseLink": "使用現有色彩",
 };

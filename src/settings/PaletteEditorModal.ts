@@ -32,13 +32,21 @@ import {
 	createColorSwatchInput,
 	setContrastWarning,
 } from "../ui/ColorSwatchInput";
+import { renderInlineLinkHint } from "../ui/inlineLinkHint";
 import { LiveCalloutPreview } from "./LiveCalloutPreview";
 import {
 	dedupeColorName,
 	normalizeName,
 	suggestColorName,
 } from "../utils/colorNames";
-import { getObsidianPalettes, getExtraPalettes } from "../utils/colorPalettes";
+import {
+	customPaletteToColorPalette,
+	getAllColorPalettes,
+	getObsidianPalettes,
+	getExtraPalettes,
+	palettesVisuallyEqual,
+	type ColorPalette,
+} from "../utils/colorPalettes";
 import { t } from "../i18n";
 import type { CalloutRegistry } from "../manager/CalloutRegistry";
 import type { CSSInjector } from "../manager/CSSInjector";
@@ -98,6 +106,11 @@ export class PaletteEditorModal extends Modal {
 	private existing: CustomPalette | null;
 	/** Normalized names of every other palette (custom AND built-in presets). */
 	private takenNames: Set<string>;
+	/** Every other palette (custom AND built-in presets) this one may not duplicate. */
+	private takenColors: ColorPalette[];
+	/** The palette the current colors duplicate, if any; blocks Save while set. */
+	private colorClash: ColorPalette | null = null;
+	private onUseExisting: ((paletteId: string, name: string) => void) | null;
 	private name: string;
 	private baseColor: string;
 	private colors: DerivedPalette;
@@ -141,6 +154,9 @@ export class PaletteEditorModal extends Modal {
 	private outerPreviewIsDemo = false;
 	private nameInputEl: HTMLInputElement | null = null;
 	private nameErrorEl: HTMLElement | null = null;
+	private colorErrorEl: HTMLElement | null = null;
+	/** Identity of the clash the error line currently shows; "" when clear. */
+	private renderedClashKey = "";
 	private saveBtnEl: HTMLButtonElement | null = null;
 	// Gradient UI refs for show/hide and programmatic color sync.
 	private gradientRows: HTMLElement[] = [];
@@ -148,10 +164,41 @@ export class PaletteEditorModal extends Modal {
 
 	constructor(
 		private plugin: PaletteEditorPlugin,
-		options: { existing?: CustomPalette; takenNames?: string[] } = {},
+		options: {
+			existing?: CustomPalette;
+			/**
+			 * Pre-fill every colour field but stay a NEW palette: the name comes
+			 * up empty and the title still reads "New color palette". Used to
+			 * rebuild a palette that was deleted out from under a callout, so the
+			 * user only has to type a name.
+			 */
+			seed?: Omit<CustomPalette, "id" | "name">;
+			takenNames?: string[];
+			/**
+			 * The other saved palettes this one may not duplicate the colors of.
+			 * Callers pass their custom palettes minus the one being edited; the
+			 * built-in presets are merged in here, exactly as `takenNames` does.
+			 */
+			takenColors?: CustomPalette[];
+			/**
+			 * Offered as an inline "use it instead" action on the duplicate-color
+			 * error. Only worth passing from a caller that can act on an existing
+			 * palette (the callout editor applies it); the settings list, which is
+			 * only managing the collection, leaves it off and shows the bare error.
+			 */
+			onUseExisting?: (paletteId: string, name: string) => void;
+		} = {},
 	) {
 		super(plugin.app);
 		this.existing = options.existing ?? null;
+		this.onUseExisting = options.onUseExisting ?? null;
+		// Everything the form *seeds from*. `this.existing` stays reserved for
+		// the two things that decide whether this is an edit at all — the name
+		// (line below) and the title in onOpen — so a seed fills the colours
+		// without the modal claiming to be editing a palette that no longer
+		// exists.
+		const base: Omit<CustomPalette, "id" | "name"> | null =
+			options.existing ?? options.seed ?? null;
 		// Callers pass the other CUSTOM palette names; the fixed preset names
 		// are merged here so a custom palette can't shadow "Blue" etc. Read via
 		// the getters (not a cached const) so the comparison is against the
@@ -163,15 +210,21 @@ export class PaletteEditorModal extends Modal {
 				...getExtraPalettes().map((p) => p.name),
 			].map(normalizeName),
 		);
+		// Same shape as takenNames, one axis over: the presets are pooled in so a
+		// custom palette can't be an unnamed copy of "Blue" either.
+		this.takenColors = [
+			...(options.takenColors ?? []).map(customPaletteToColorPalette),
+			...getAllColorPalettes(),
+		];
 		this.name = this.existing?.name ?? "";
-		this.baseColor = this.existing?.colorLight ?? DEFAULT_BASE_COLOR;
-		const g = this.existing?.bgGradient;
+		this.baseColor = base?.colorLight ?? DEFAULT_BASE_COLOR;
+		const g = base?.bgGradient;
 		// Transparency is checked first: a palette can carry a stale gradient
 		// beside the flag (nothing clears it when the style switches, so a
 		// switch back to Gradient finds it intact), and the flag is what
 		// actually gets painted.
 		this.bgStyle =
-			this.existing?.transparentBg ? "none"
+			base?.transparentBg ? "none"
 			: g ? "gradient"
 			: "solid";
 		// Set before any derivation below: deriveGradientEnd() and the new-palette
@@ -179,23 +232,32 @@ export class PaletteEditorModal extends Modal {
 		// fresh palette seeds from the per-style default (gradients default
 		// higher — a two-stop sweep reads fainter than a solid fill at the same
 		// amount); a saved value is the user's own choice and always wins.
-		this.bgIntensityTouched = this.existing?.bgIntensity !== undefined;
+		// A seed counts as touched even though it carries no intensity: its six
+		// colours are authoritative (they are a real callout's current
+		// appearance), and an untouched flag lets the Background-style dropdown
+		// re-derive all six from the base colour on the first Solid↔Gradient
+		// flip — silently discarding the very colours the seed exists to
+		// preserve. The cost is that a seeded palette switched to Gradient keeps
+		// the solid default intensity instead of the higher gradient one, which
+		// the slider is right there to change.
+		this.bgIntensityTouched =
+			base?.bgIntensity !== undefined || options.seed !== undefined;
 		this.bgIntensity =
-			this.existing?.bgIntensity ??
+			base?.bgIntensity ??
 			(this.bgStyle === "gradient"
 				? DEFAULT_BG_INTENSITY_GRADIENT
 				: DEFAULT_BG_INTENSITY_SOLID);
-		this.colors = this.existing
+		this.colors = base
 			? {
-					colorLight: this.existing.colorLight,
-					colorDark: this.existing.colorDark,
-					bgColorLight: this.existing.bgColorLight,
-					bgColorDark: this.existing.bgColorDark,
-					textColorLight: this.existing.textColorLight,
-					textColorDark: this.existing.textColorDark,
+					colorLight: base.colorLight,
+					colorDark: base.colorDark,
+					bgColorLight: base.bgColorLight,
+					bgColorDark: base.bgColorDark,
+					textColorLight: base.textColorLight,
+					textColorDark: base.textColorDark,
 				}
 			: derivePaletteFromColor(this.baseColor, this.bgIntensity);
-		this.advancedColors = this.existing?.colorMode === "advanced";
+		this.advancedColors = base?.colorMode === "advanced";
 		this.angleDeg = g?.angleDeg ?? DEFAULT_GRADIENT_ANGLE;
 		// A saved gradient's end colors are authoritative (derivation is not
 		// invertible); a fresh gradient starts from a hue-shifted base color
@@ -264,7 +326,7 @@ export class PaletteEditorModal extends Modal {
 					.setValue(this.name)
 					.onChange((v) => {
 						this.name = v;
-						this.updateNameValidity();
+						this.updateValidity();
 					});
 			});
 		// Error line in the info column, mirroring the callout IDs error.
@@ -277,6 +339,12 @@ export class PaletteEditorModal extends Modal {
 		// Obsidian's `:first-child { border-top: none }` modal rule — this div
 		// puts the missing line back.
 		adjustCol.createDiv({ cls: "cs-palette-divider" });
+
+		// Above the color controls it is about, and outside colorSectionEl —
+		// renderColorSection() empties that on every Simple/Advanced toggle.
+		this.colorErrorEl = adjustCol.createDiv({
+			cls: "cs-tag-error cs-palette-color-error",
+		});
 
 		this.colorSectionEl = adjustCol.createDiv({
 			cls: "cs-palette-color-section",
@@ -310,6 +378,11 @@ export class PaletteEditorModal extends Modal {
 					true,
 				);
 				this.plugin.cssInjector.inject(false);
+				// The one funnel every color change already passes through, so
+				// the duplicate-color block cannot drift out of step with the
+				// form. It also runs once before the footer exists, which is
+				// why updateValidity guards the button it cannot reach yet.
+				this.updateValidity();
 			},
 			onDestroy: () => {
 				this.plugin.registry.setPreviewDefinition(
@@ -329,7 +402,7 @@ export class PaletteEditorModal extends Modal {
 			cls: "mod-cta",
 		});
 		this.saveBtnEl.addEventListener("click", () => this.finish(true));
-		this.updateNameValidity();
+		this.updateValidity();
 	}
 
 	/** True when the typed name collides with another palette or a preset. */
@@ -337,18 +410,87 @@ export class PaletteEditorModal extends Modal {
 		return this.takenNames.has(normalizeName(this.name));
 	}
 
+	/** The current form colors as a palette, for comparison and preview alike. */
+	private currentColorPalette(): ColorPalette {
+		const gradient = this.currentGradient();
+		return {
+			id: this.existing?.id ?? "",
+			name: this.name,
+			group: "custom",
+			...this.colors,
+			bgGradient: gradient ?? undefined,
+			...(this.bgStyle === "none" ? { transparentBg: true as const } : {}),
+		};
+	}
+
+	/** The saved palette or preset these colors already duplicate, if any. */
+	private findColorClash(): ColorPalette | null {
+		const current = this.currentColorPalette();
+		return (
+			this.takenColors.find((p) => palettesVisuallyEqual(p, current)) ?? null
+		);
+	}
+
 	/**
-	 * Duplicate names are hard-blocked: the input turns red, an error shows
-	 * under the label, and Save is disabled until the name is unique.
+	 * Duplicate names AND duplicate colors are both hard-blocked: the offending
+	 * control is marked, an error shows beside it, and Save stays disabled until
+	 * the palette is unique on both axes.
+	 *
+	 * The color half runs from the live preview's `beforeRender`, which is the
+	 * one funnel every color change already goes through — hooking the
+	 * individual swatches, the intensity slider, the gradient rows and the
+	 * background-style toggle separately would leave the block one forgotten
+	 * call site away from being wrong.
 	 */
-	private updateNameValidity(): void {
-		const taken = this.isNameTaken();
-		this.nameInputEl?.toggleClass("cs-input-invalid", taken);
+	private updateValidity(): void {
+		const nameTaken = this.isNameTaken();
+		this.nameInputEl?.toggleClass("cs-input-invalid", nameTaken);
 		if (this.nameErrorEl) {
-			this.nameErrorEl.setText(taken ? t("palette.nameExists") : "");
-			this.nameErrorEl.toggleClass("is-visible", taken);
+			this.nameErrorEl.setText(nameTaken ? t("palette.nameExists") : "");
+			this.nameErrorEl.toggleClass("is-visible", nameTaken);
 		}
-		if (this.saveBtnEl) this.saveBtnEl.disabled = taken;
+		this.colorClash = this.findColorClash();
+		this.renderColorError();
+		if (this.saveBtnEl) {
+			this.saveBtnEl.disabled = nameTaken || this.colorClash !== null;
+		}
+	}
+
+	/**
+	 * The duplicate-color message. Unlike a duplicate name — which the user
+	 * fixes by typing — a duplicate color can only be fixed by changing the
+	 * design or by going to find the other palette, so the message names the
+	 * palette and, where the caller can act on one, offers to use it instead.
+	 */
+	private renderColorError(): void {
+		const el = this.colorErrorEl;
+		if (!el) return;
+		const clash = this.colorClash;
+		// Rebuilt only when the clash itself changes. This runs on every preview
+		// frame, and re-creating the message mid-drag would tear the "use the
+		// existing one" button out from under the pointer on its way past.
+		const key = clash ? `${clash.id} ${clash.name}` : "";
+		if (key === this.renderedClashKey) return;
+		this.renderedClashKey = key;
+		el.empty();
+		el.toggleClass("is-visible", clash !== null);
+		if (!clash) return;
+		if (!this.onUseExisting) {
+			el.setText(t("palette.colorExists", { name: clash.name }));
+			return;
+		}
+		renderInlineLinkHint(el, {
+			textKey: "palette.colorExistsUse",
+			linkKey: "palette.colorExistsUseLink",
+			vars: { name: clash.name },
+			onClick: () => {
+				const use = this.onUseExisting;
+				// Resolve as a cancel: the caller is applying an existing palette,
+				// so there is no new palette for it to save.
+				this.finish(false);
+				use?.(clash.id, clash.name);
+			},
+		});
 	}
 
 	/** Re-derives all six colors from the base color and refreshes the UI. */
@@ -535,43 +677,15 @@ export class PaletteEditorModal extends Modal {
 			this.applyDerived();
 		});
 		if (this.bgStyle === "solid") {
-			this.renderInlineLinkHint(
-				baseSetting.descEl,
-				"palette.baseColorHint",
-				"palette.baseColorHintLink",
-				() => {
+			renderInlineLinkHint(baseSetting.descEl, {
+				textKey: "palette.baseColorHint",
+				linkKey: "palette.baseColorHintLink",
+				onClick: () => {
 					this.advancedColors = true;
 					this.renderColorSection();
 				},
-			);
+			});
 		}
-	}
-
-	/**
-	 * Renders `t(textKey)` — which must contain a literal "{{link}}" token —
-	 * as plain text with a single low-emphasis inline link standing in for
-	 * the token, instead of a full-width button. Used for the Base color
-	 * auto-background hint and the advanced grid's "revert to a single
-	 * color" hint.
-	 */
-	private renderInlineLinkHint(
-		parent: HTMLElement,
-		textKey: string,
-		linkKey: string,
-		onClick: () => void,
-	): void {
-		const [before, after] = t(textKey).split("{{link}}");
-		const line = parent.createDiv({ cls: "cs-inline-hint" });
-		if (before) line.createSpan({ text: before });
-		const link = line.createEl("button", {
-			cls: "cs-link-btn cs-link-btn-inline",
-			text: t(linkKey),
-		});
-		link.addEventListener("click", (e) => {
-			e.preventDefault();
-			onClick();
-		});
-		if (after) line.createSpan({ text: after });
 	}
 
 	/**
@@ -593,15 +707,14 @@ export class PaletteEditorModal extends Modal {
 				mode: isDark ? t("palette.darkMode") : t("palette.lightMode"),
 			}),
 		);
-		this.renderInlineLinkHint(
-			header.descEl,
-			"palette.revertHint",
-			"palette.revertHintLink",
-			() => {
+		renderInlineLinkHint(header.descEl, {
+			textKey: "palette.revertHint",
+			linkKey: "palette.revertHintLink",
+			onClick: () => {
 				this.advancedColors = false;
 				this.renderColorSection();
 			},
-		);
+		});
 
 		const accentKey: "colorLight" | "colorDark" = isDark
 			? "colorDark"
@@ -839,8 +952,9 @@ export class PaletteEditorModal extends Modal {
 	}
 
 	private finish(save: boolean): void {
-		// Save stays disabled on a duplicate name, but guard anyway.
-		if (save && this.isNameTaken()) return;
+		// Save stays disabled on a duplicate name or duplicate colors, but
+		// guard anyway.
+		if (save && (this.isNameTaken() || this.findColorClash())) return;
 		const resolve = this.resolve;
 		this.resolve = null;
 		let result: PaletteEditorResult | null = null;

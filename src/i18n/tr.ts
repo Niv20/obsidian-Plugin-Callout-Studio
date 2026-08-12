@@ -776,4 +776,30 @@ export const tr: Record<string, string> = {
 	"footer.tagline":
 		"Geri bildiriminiz, yorumlarınız veya önerileriniz var mı? Duymak isterim!",
 	"footer.madeBy": "Niv tarafından yapıldı  •  ",
+	"settings.deletePaletteConfirmLinkedOne":
+		'"{{name}}" paleti silinsin mi?\n1 callout bunu kullanıyor. Renklerini korur ve daha sonra düzenleyicisindeki Renk satırından yeniden bağlayabilirsiniz.',
+	"settings.deletePaletteConfirmLinked":
+		'"{{name}}" paleti silinsin mi?\n{{count}} callout bunu kullanıyor. Renklerini korurlar ve daha sonra düzenleyicilerindeki Renk satırından yeniden bağlayabilirsiniz.',
+	"settings.unlinkedColors": "Bağlantısı kaldırılmış renkler",
+	"settings.unlinkedColorsDesc":
+		"Kaydedilmiş rengi silinen callout'lar. Sahip oldukları renkleri korurlar; geri yükleme rengi tekrar kaydeder ve tüm grubu yeniden bağlar.",
+	"settings.unlinkedColorOne": "1 callout",
+	"settings.unlinkedColorCount": "{{count}} callout",
+	"settings.restoreColor": "Geri yükle",
+	"settings.palettesMergedNotice":
+		"Aynı renklere zaten sahip kayıtlı renklere {{count}} içe aktarılan palet birleştirildi.",
+	"notice.palettesMerged":
+		"Aynı renklere sahip {{count}} kayıtlı renk birleştirildi: {{names}}. Bunları kullanan callout'lar renklerini korur ve artık kalan renge bağlıdır.",
+	"editor.colorsDescDeleted":
+		"Bu callout'un kaydedilmiş rengi silindi. {{link}} tekrar kaydedebilirsiniz.",
+	"editor.colorsDescDeletedOther":
+		"Bu callout'un kaydedilmiş rengi silindi. {{link}} tekrar kaydedebilirsiniz — bunu kullanan 1 diğer callout da yeniden bağlanacaktır.",
+	"editor.colorsDescDeletedOthers":
+		"Bu callout'un kaydedilmiş rengi silindi. {{link}} tekrar kaydedebilirsiniz — bunu kullanan {{count}} diğer callout da yeniden bağlanacaktır.",
+	"editor.colorsDescDeletedLink": "buraya tıklayarak",
+	"palette.colorExists":
+		'Bu renkler "{{name}}" ile aynı. İki kayıtlı renk aynı olamaz — ayırt etmek için bir rengi değiştirin.',
+	"palette.colorExistsUse":
+		'Bu renkler "{{name}}" ile aynı. İki kayıtlı renk aynı olamaz — bir rengi değiştirin veya {{link}}.',
+	"palette.colorExistsUseLink": "mevcut olanı kullanın",
 };

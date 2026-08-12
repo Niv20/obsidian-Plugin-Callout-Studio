@@ -809,5 +809,31 @@ export const en: Record<string, string> = {
 	// Footer
 	"footer.tagline":
 		"Have feedback, comments, or suggestions? I'd love to hear from you!",
+	"settings.deletePaletteConfirmLinkedOne":
+		'Delete palette "{{name}}"?\n1 callout uses it. It keeps its colors, and you can reconnect it later from the Color row in its editor.',
+	"settings.deletePaletteConfirmLinked":
+		'Delete palette "{{name}}"?\n{{count}} callouts use it. They keep their colors, and you can reconnect them later from the Color row in any of their editors.',
+	"settings.unlinkedColors": "Unlinked colors",
+	"settings.unlinkedColorsDesc":
+		"Callouts whose saved color was deleted. They keep the colors they had; restoring saves the color again and reconnects the whole group.",
+	"settings.unlinkedColorOne": "1 callout",
+	"settings.unlinkedColorCount": "{{count}} callouts",
+	"settings.restoreColor": "Restore",
+	"settings.palettesMergedNotice":
+		"Merged {{count}} imported palette(s) into saved colors that already had the same colors.",
+	"notice.palettesMerged":
+		"Merged {{count}} saved color(s) that had identical colors: {{names}}. The callouts using them keep their colors and are now linked to the color that remains.",
+	"editor.colorsDescDeleted":
+		"This callout's saved color was deleted. You can save it again by {{link}}.",
+	"editor.colorsDescDeletedOther":
+		"This callout's saved color was deleted. You can save it again by {{link}} — 1 other callout using it will be reconnected too.",
+	"editor.colorsDescDeletedOthers":
+		"This callout's saved color was deleted. You can save it again by {{link}} — {{count}} other callouts using it will be reconnected too.",
+	"editor.colorsDescDeletedLink": "clicking here",
+	"palette.colorExists":
+		'These colors are identical to "{{name}}". Two saved colors cannot be the same — change a color to tell them apart.',
+	"palette.colorExistsUse":
+		'These colors are identical to "{{name}}". Two saved colors cannot be the same — change a color, or {{link}}.',
+	"palette.colorExistsUseLink": "use the existing one",
 	"footer.madeBy": "Made by Niv  •  ",
 };

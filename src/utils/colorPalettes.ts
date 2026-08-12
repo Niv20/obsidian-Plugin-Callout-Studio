@@ -336,6 +336,162 @@ export function sanitizeCustomPalettes(raw: unknown): CustomPalette[] {
 	return result;
 }
 
+/**
+ * Whether two palettes are the same *color* — the equality behind the rule that
+ * a vault may not hold two palettes with identical colors, the color-side twin
+ * of the duplicate-name block the palette editor already applies.
+ *
+ * Deliberately ignores `id`, `name`, `bgIntensity` and `colorMode`. The first
+ * two are identity rather than color; the last two are pure editor state that
+ * is already baked into the six hexes, so a palette built with the Simple
+ * base-color slider and one assembled channel-by-channel in Advanced DO collide
+ * when they land on the same colors. That is the honest reading of "the same
+ * color", and the palette editor's error text has to say so.
+ *
+ * Absent backgrounds and text colors fall back exactly the way
+ * `bakePaletteColors` fills them in, so a preset leaving them implicit compares
+ * equal to a custom palette spelling out the same derived values — the two
+ * render identically, which is the only thing being asked here.
+ *
+ * This compares both background hexes even under `transparentBg`, and is
+ * therefore deliberately stricter than `CalloutEditor.matchesPalette`, which
+ * skips them. That test compares a *baked callout*, where transparency means
+ * the backgrounds were never persisted at all; a transparent palette keeps them
+ * (they are what a switch back to Solid restores), so two transparent palettes
+ * differing only there really do diverge the moment the user flips that
+ * control. Stricter also means fewer collisions, and so fewer of the
+ * consolidations below — which is the safe direction to err in.
+ */
+export function palettesVisuallyEqual(
+	a: ColorPalette,
+	b: ColorPalette,
+): boolean {
+	if ((a.transparentBg === true) !== (b.transparentBg === true)) return false;
+	if (!bgGradientsEqual(a.bgGradient, b.bgGradient)) return false;
+	const eq = (x: string, y: string): boolean =>
+		x.toLowerCase() === y.toLowerCase();
+	return (
+		eq(a.colorLight, b.colorLight) &&
+		eq(a.colorDark, b.colorDark) &&
+		eq(
+			a.bgColorLight ?? bgTintFor(a.colorLight, false),
+			b.bgColorLight ?? bgTintFor(b.colorLight, false),
+		) &&
+		eq(
+			a.bgColorDark ?? bgTintFor(a.colorDark, true),
+			b.bgColorDark ?? bgTintFor(b.colorDark, true),
+		) &&
+		eq(
+			a.textColorLight ?? DEFAULT_TEXT_COLOR_LIGHT,
+			b.textColorLight ?? DEFAULT_TEXT_COLOR_LIGHT,
+		) &&
+		eq(
+			a.textColorDark ?? DEFAULT_TEXT_COLOR_DARK,
+			b.textColorDark ?? DEFAULT_TEXT_COLOR_DARK,
+		)
+	);
+}
+
+/** Convenience wrapper: the first saved palette whose colors equal `candidate`. */
+export function findPaletteWithSameColors(
+	candidate: ColorPalette,
+	palettes: CustomPalette[],
+	exceptId?: string,
+): CustomPalette | undefined {
+	return palettes.find(
+		(p) =>
+			p.id !== exceptId &&
+			palettesVisuallyEqual(customPaletteToColorPalette(p), candidate),
+	);
+}
+
+/**
+ * A saved callout's appearance as a palette seed — everything a `CustomPalette`
+ * needs except the identity the user is about to give it. Used to rebuild a
+ * palette that was deleted out from under a group of callouts, from any one
+ * member of that group.
+ *
+ * The optional fields fall back exactly the way the renderer resolves them, so
+ * the seed describes what the callout actually looks like rather than what it
+ * happens to store. `transparentBg` is carried on its own axis, leaving all six
+ * colors valid beside it — which is what `sanitizeCustomPalettes` requires, and
+ * what a switch back to Solid inside the palette editor restores.
+ *
+ * `colorMode: "advanced"` is deliberate: nothing guarantees a real callout's six
+ * colors are derivable from one base color, and the simple control's Intensity
+ * slider would re-derive (and so discard) them on a single drag.
+ */
+export function paletteSeedFromDefinition(
+	def: CalloutDefinition,
+): Omit<CustomPalette, "id" | "name"> {
+	return {
+		colorLight: def.colorLight,
+		colorDark: def.colorDark,
+		bgColorLight: def.bgColorLight ?? bgTintFor(def.colorLight, false),
+		bgColorDark: def.bgColorDark ?? bgTintFor(def.colorDark, true),
+		textColorLight: def.textColorLight ?? DEFAULT_TEXT_COLOR_LIGHT,
+		textColorDark: def.textColorDark ?? DEFAULT_TEXT_COLOR_DARK,
+		bgGradient: def.bgGradient ? { ...def.bgGradient } : undefined,
+		...(def.transparentBg === true ? { transparentBg: true as const } : {}),
+		colorMode: "advanced",
+	};
+}
+
+export interface PaletteConsolidation {
+	/** The surviving palettes, in their original relative order. */
+	palettes: CustomPalette[];
+	/** Dropped palette id → the id that absorbed it. Empty when nothing merged. */
+	remap: Map<string, string>;
+	/** Names of what merged into what, for the user-facing notice. */
+	merged: Array<{ from: string; to: string }>;
+}
+
+/**
+ * Enforces "no two saved palettes with identical colors" on untrusted data
+ * (`data.json` on load, a merged import) — the layer the palette editor's Save
+ * block cannot reach.
+ *
+ * It MERGES rather than drops. A duplicate is removed from the list, but its id
+ * is reported in `remap` so the caller can re-point every callout that linked to
+ * it at the survivor (`CalloutRegistry.relinkPalette`). Dropping alone would
+ * orphan those callouts — leaving them with a dangling `paletteId` and no route
+ * home — which would turn a tidy-up into silent data loss on a vault the user
+ * built before the rule existed. Colors are baked onto the callouts either way,
+ * so nothing changes appearance; what the user loses is the duplicate's *name*,
+ * and the caller is expected to say so out loud.
+ *
+ * The survivor is the earliest entry in the array — insertion order, so the
+ * oldest palette keeps its name and id, and re-running this over its own output
+ * is a no-op.
+ *
+ * Custom palettes are compared only against each other, never against the
+ * built-in presets. Preset hexes may be retuned between plugin versions (which
+ * is what `legacyIds` already exists to survive), and folding presets in here
+ * would let a plugin update retroactively swallow a custom palette that was
+ * perfectly valid when the user made it. The editor blocks that collision at
+ * creation time instead, where the user is present to react.
+ */
+export function consolidatePalettesByColor(
+	palettes: CustomPalette[],
+): PaletteConsolidation {
+	const survivors: CustomPalette[] = [];
+	const remap = new Map<string, string>();
+	const merged: Array<{ from: string; to: string }> = [];
+	for (const palette of palettes) {
+		const survivor = findPaletteWithSameColors(
+			customPaletteToColorPalette(palette),
+			survivors,
+		);
+		if (survivor) {
+			remap.set(palette.id, survivor.id);
+			merged.push({ from: palette.name, to: survivor.name });
+			continue;
+		}
+		survivors.push(palette);
+	}
+	return { palettes: survivors, remap, merged };
+}
+
 /** The `CalloutDefinition` fields a resolved palette bakes onto a callout. */
 export type CalloutManagerBakedColors = Pick<
 	CalloutDefinition,

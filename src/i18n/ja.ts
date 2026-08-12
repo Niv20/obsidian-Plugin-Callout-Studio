@@ -776,4 +776,30 @@ export const ja: Record<string, string> = {
 	"footer.tagline":
 		"フィードバック、コメント、提案はありますか？ぜひお聞かせください！",
 	"footer.madeBy": "Nivが作成  •  ",
+	"settings.deletePaletteConfirmLinkedOne":
+		'パレット「{{name}}」を削除しますか？\n1 件の callout が使用しています。色は保持され、後でエディターの色の行から再接続できます。',
+	"settings.deletePaletteConfirmLinked":
+		'パレット「{{name}}」を削除しますか？\n{{count}} 件の callout が使用しています。色は保持され、後で各エディターの色の行から再接続できます。',
+	"settings.unlinkedColors": "未リンクの色",
+	"settings.unlinkedColorsDesc":
+		"保存済みの色が削除された callout です。現在の色は保持されます。復元すると色が再保存され、グループ全体が再リンクされます。",
+	"settings.unlinkedColorOne": "1 件の callout",
+	"settings.unlinkedColorCount": "{{count}} 件の callout",
+	"settings.restoreColor": "復元",
+	"settings.palettesMergedNotice":
+		"同じ色を持つ保存済み色に、インポートしたパレット {{count}} 件を統合しました。",
+	"notice.palettesMerged":
+		"同一の色を持つ保存済み色 {{count}} 件を統合しました: {{names}}。それらを使用している callout は色を保持し、残った色にリンクされました。",
+	"editor.colorsDescDeleted":
+		"この callout の保存済み色は削除されました。{{link}}ことで再保存できます。",
+	"editor.colorsDescDeletedOther":
+		"この callout の保存済み色は削除されました。{{link}}ことで再保存できます — 同じ色を使う他の 1 件の callout も再リンクされます。",
+	"editor.colorsDescDeletedOthers":
+		"この callout の保存済み色は削除されました。{{link}}ことで再保存できます — 同じ色を使う他の {{count}} 件の callout も再リンクされます。",
+	"editor.colorsDescDeletedLink": "ここをクリックする",
+	"palette.colorExists":
+		'これらの色は「{{name}}」と同じです。保存済みの色を 2 つ同じにすることはできません — 区別するために色を変更してください。',
+	"palette.colorExistsUse":
+		'これらの色は「{{name}}」と同じです。保存済みの色を 2 つ同じにすることはできません — 色を変更するか、{{link}}。',
+	"palette.colorExistsUseLink": "既存の色を使う",
 };

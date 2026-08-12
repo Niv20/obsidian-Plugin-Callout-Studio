@@ -39,10 +39,12 @@ import {
 	obsidianDefaultTitle,
 } from "../utils/calloutId";
 import {
+	consolidatePalettesByColor,
+	getAllColorPalettes,
 	resolveCalloutManagerColor,
 	sanitizeCustomPalettes,
 } from "../utils/colorPalettes";
-import { derivedBgAmount } from "../utils/colorUtils";
+import { bgGradientsEqual, derivedBgAmount } from "../utils/colorUtils";
 import { sanitizeUserImages } from "../utils/userImages";
 import { setUserImages } from "../icons/packs/userImages";
 import { sortCalloutsByDisplayName } from "../utils/sorting";
@@ -336,6 +338,8 @@ export class CalloutRegistry {
 	 * save. Read (and cleared) through {@link needsSaveAfterLoad}.
 	 */
 	private pendingLoadMigrationSave = false;
+	/** Palette merges from the last load, awaiting {@link takePaletteMerges}. */
+	private pendingPaletteMerges: Array<{ from: string; to: string }> = [];
 
 	constructor() {
 		this.settings = structuredClone(DEFAULT_SETTINGS);
@@ -365,6 +369,7 @@ export class CalloutRegistry {
 	load(data: Partial<PluginData> | null): void {
 		this.callouts.clear();
 		this.pendingLoadMigrationSave = false;
+		this.pendingPaletteMerges = [];
 
 		// Always start with built-in defaults
 		for (const def of SORTED_DEFAULT_CALLOUTS) {
@@ -469,30 +474,23 @@ export class CalloutRegistry {
 			);
 			def.icon = { ...def.icon, recolor: picture?.monochrome === true };
 		}
+		// Before the palette matching below: that test compares transparency
+		// first, so it has to run against the repaired truth rather than against
+		// a flag this pass is about to delete.
+		this.dropStaleTransparencyFlags();
+		// Migration: a vault may not hold two saved palettes with identical
+		// colors. Runs BEFORE the adoption pass below so `isLivePaletteId` there
+		// is asked about an already-consolidated list, and a callout that linked
+		// to a merged-away duplicate arrives already re-pointed rather than
+		// looking like an orphan to be re-matched.
+		this.pendingPaletteMerges = this.consolidateDuplicatePalettes();
+		if (this.pendingPaletteMerges.length > 0) {
+			this.pendingLoadMigrationSave = true;
+		}
 		// Migration: link any callout saved before `paletteId` existed but whose
 		// baked colors still exactly match a saved custom palette, so an edit to
 		// that palette (applyPaletteColors) cascades onto it too.
-		if (this.settings.customPalettes.length > 0) {
-			for (const def of this.callouts.values()) {
-				if (def.paletteId) continue;
-				const match = this.settings.customPalettes.find(
-					(p) =>
-						p.colorLight.toLowerCase() ===
-							def.colorLight.toLowerCase() &&
-						p.colorDark.toLowerCase() ===
-							def.colorDark.toLowerCase() &&
-						p.bgColorLight.toLowerCase() ===
-							(def.bgColorLight ?? "").toLowerCase() &&
-						p.bgColorDark.toLowerCase() ===
-							(def.bgColorDark ?? "").toLowerCase() &&
-						p.textColorLight.toLowerCase() ===
-							(def.textColorLight ?? "").toLowerCase() &&
-						p.textColorDark.toLowerCase() ===
-							(def.textColorDark ?? "").toLowerCase(),
-				);
-				if (match) def.paletteId = match.id;
-			}
-		}
+		this.adoptOrphansMatchingPalettes();
 		this.dropDerivedBackgrounds();
 		this.dropSolidBackgroundFlags();
 		// Before reconcileAttrIdCollisions: a row this pass renames back to its
@@ -544,6 +542,56 @@ export class CalloutRegistry {
 			}
 			delete def.bgColorLight;
 			delete def.bgColorDark;
+			changed++;
+		}
+		if (changed > 0) this.pendingLoadMigrationSave = true;
+	}
+
+	/**
+	 * Migration: retire a transparency flag left standing beside a background.
+	 *
+	 * The two cannot legitimately coexist. Every writer that turns a callout
+	 * transparent drops its background in the same breath — `performCalloutEditorSave`
+	 * gates the hexes behind `hasAuthoredBackground`, which is false under
+	 * transparency, and `bakePaletteColors` returns the flag alone. So a row
+	 * carrying both is not an odd preference; it is damage.
+	 *
+	 * Which half to believe follows from how the damage happened. Both writers
+	 * reach the map through `update()`, which merges (`{ ...existing, ...partial }`),
+	 * and the background fields are always spelled out — `undefined` included —
+	 * while `transparentBg` used to be spread in conditionally and so was simply
+	 * absent whenever it was off. An absent key overrides nothing. Transparency
+	 * was therefore a one-way door: the backgrounds beside it went on updating
+	 * while the flag itself could never be switched back off. A background
+	 * sitting next to the flag is thus proof of a later, deliberate,
+	 * non-transparent write — it is the newer intent, and the flag is the stale
+	 * one. Hence the flag goes, not the colours.
+	 *
+	 * `CSSInjector` checks the flag before it looks at any background
+	 * (`generateCalloutCSS`), so until this runs such a callout renders with no
+	 * background at all while the settings swatch — which reads the hexes —
+	 * draws them. One definition, two answers, depending on who is asking.
+	 *
+	 * The writers are fixed at the source (that conditional spread is gone, and
+	 * {@link restyleUncustomizedFallbackRows} now mirrors the flag along with
+	 * the colours it always copied). This retires what they already wrote.
+	 *
+	 * Keyed on content rather than on `data.version`, like the migrations around
+	 * it, which also makes it idempotent: once the flag is gone there is nothing
+	 * left to contradict.
+	 */
+	private dropStaleTransparencyFlags(): void {
+		let changed = 0;
+		for (const def of this.callouts.values()) {
+			if (def.transparentBg !== true) continue;
+			if (
+				def.bgColorLight === undefined &&
+				def.bgColorDark === undefined &&
+				def.bgGradient === undefined
+			) {
+				continue;
+			}
+			delete def.transparentBg;
 			changed++;
 		}
 		if (changed > 0) this.pendingLoadMigrationSave = true;
@@ -981,6 +1029,15 @@ export class CalloutRegistry {
 				bgGradient: fallback.bgGradient
 					? { ...fallback.bgGradient }
 					: undefined,
+				// Transparency travels with the backgrounds it replaces, and is
+				// spelled out (`undefined` included) like they are — this spread
+				// merges onto the row, so a key that isn't there leaves the old
+				// value standing. Omitting it meant a mirrored row could receive
+				// the fallback's hexes while keeping its own stale flag, which is
+				// the contradiction `dropStaleTransparencyFlags` exists to repair,
+				// and meant a transparent fallback was never mirrored as
+				// transparent at all.
+				transparentBg: fallback.transparentBg,
 				textColorLight: fallback.textColorLight,
 				textColorDark: fallback.textColorDark,
 				// Both layers travel together: the per-role map alone would be
@@ -1044,6 +1101,200 @@ export class CalloutRegistry {
 			this.notifyChange();
 		}
 		return updated;
+	}
+
+	/**
+	 * How many callouts still carry `paletteId`, optionally ignoring one.
+	 *
+	 * Used to tell the user how many *other* callouts a revive will regroup, so
+	 * it deliberately walks the same `this.callouts` map {@link relinkPalette}
+	 * will walk: a count taken from `getAll()` (or from any list view) could
+	 * promise a number the relink then fails to touch.
+	 *
+	 * Transient live-preview rows cannot skew it — {@link setPreviewDefinition}
+	 * stores a definition built without a `paletteId` at all, so a preview never
+	 * matches here whatever the form is currently showing.
+	 */
+	countPaletteLinks(paletteId: string, exceptCalloutId?: string | null): number {
+		let count = 0;
+		for (const def of this.callouts.values()) {
+			if (def.paletteId !== paletteId) continue;
+			if (exceptCalloutId != null && def.id === exceptCalloutId) continue;
+			count++;
+		}
+		return count;
+	}
+
+	/**
+	 * Re-points every callout linked to a now-deleted palette at its
+	 * replacement, so reviving the palette from one member of the group
+	 * regroups the rest — a later edit of that palette then cascades to all of
+	 * them again instead of only the one that was reopened.
+	 *
+	 * Colours are deliberately NOT touched here. The link and the paint are two
+	 * separate steps: the caller follows this with
+	 * `applyPaletteColors(toPaletteId, …)`, which repaints exactly the rows this
+	 * just re-stamped (and fires the single `notifyChange` for both). Baking
+	 * colours in here would also silently overwrite a group member whose hexes
+	 * the user had since edited by hand.
+	 *
+	 * Returns how many callouts were re-pointed.
+	 */
+	relinkPalette(
+		fromPaletteId: string,
+		toPaletteId: string,
+		exceptCalloutId?: string | null,
+	): number {
+		if (fromPaletteId === toPaletteId) return 0;
+		let updated = 0;
+		for (const def of this.callouts.values()) {
+			if (def.paletteId !== fromPaletteId) continue;
+			if (exceptCalloutId != null && def.id === exceptCalloutId) continue;
+			this.setCallout(def.id, { ...def, paletteId: toPaletteId });
+			updated++;
+		}
+		return updated;
+	}
+
+	/**
+	 * Whether a `paletteId` still names something that exists — a saved custom
+	 * palette, or a built-in preset under its current or a legacy id.
+	 *
+	 * The preset half is not decoration. Preset ids ("blue", …) never appear in
+	 * `customPalettes`, so without it a callout sitting on a live preset would
+	 * look orphaned and be eligible for adoption by any custom palette whose
+	 * hexes happen to match.
+	 */
+	private isLivePaletteId(id: string): boolean {
+		return (
+			this.settings.customPalettes.some((p) => p.id === id) ||
+			getAllColorPalettes().some(
+				(p) => p.id === id || p.legacyIds?.includes(id),
+			)
+		);
+	}
+
+	/**
+	 * Links every callout whose baked colors exactly match a saved custom
+	 * palette but whose `paletteId` names nothing, so a later edit of that
+	 * palette cascades onto it too. Returns how many were adopted.
+	 *
+	 * Two populations reach this. Callouts saved before `paletteId` existed
+	 * carry no link at all; callouts orphaned by a palette deletion keep the
+	 * dangling id as their group marker (the editor no longer wipes it, so
+	 * reviving from one member can regroup the rest). The guard skips only ids
+	 * that still RESOLVE, not merely ids that are present — a `continue` on any
+	 * truthy id would cost the second group the passive route home, where
+	 * recreating the same colors as a new palette re-adopts them.
+	 *
+	 * Called from {@link load} and again whenever the user adds or edits a
+	 * palette, so a matching group is picked up immediately instead of waiting
+	 * for the next launch.
+	 */
+	adoptOrphansMatchingPalettes(): number {
+		if (this.settings.customPalettes.length === 0) return 0;
+		let adopted = 0;
+		for (const def of this.callouts.values()) {
+			if (def.paletteId && this.isLivePaletteId(def.paletteId)) continue;
+			const match = this.settings.customPalettes.find(
+				(p) =>
+					// Both background axes have to agree, not just the six
+					// hexes — and they matter more now that an orphan with a
+					// dangling id reaches this loop at all. A "None" palette
+					// keeps real background hexes beside its flag (they are
+					// what a switch back to Solid restores), and a gradient
+					// palette keeps them too, so on hexes alone a plain solid
+					// callout matches all three variants of the same colour
+					// and can be adopted by the wrong one. Same test the
+					// editor's dropdown uses (`matchesPalette`).
+					(p.transparentBg === true) === (def.transparentBg === true) &&
+					bgGradientsEqual(p.bgGradient, def.bgGradient) &&
+					p.colorLight.toLowerCase() === def.colorLight.toLowerCase() &&
+					p.colorDark.toLowerCase() === def.colorDark.toLowerCase() &&
+					p.bgColorLight.toLowerCase() ===
+						(def.bgColorLight ?? "").toLowerCase() &&
+					p.bgColorDark.toLowerCase() ===
+						(def.bgColorDark ?? "").toLowerCase() &&
+					p.textColorLight.toLowerCase() ===
+						(def.textColorLight ?? "").toLowerCase() &&
+					p.textColorDark.toLowerCase() ===
+						(def.textColorDark ?? "").toLowerCase(),
+			);
+			if (!match) continue;
+			this.setCallout(def.id, { ...def, paletteId: match.id });
+			adopted++;
+		}
+		return adopted;
+	}
+
+	/**
+	 * Enforces "no two saved palettes with identical colors" on the settings
+	 * this registry holds, and re-points every callout that linked to a merged-
+	 * away duplicate at the palette that absorbed it.
+	 *
+	 * The relink is the whole point. Dropping the duplicate alone would leave
+	 * its callouts with a dangling `paletteId` and no route home, turning a
+	 * tidy-up into silent data loss on any vault built before the rule existed.
+	 * Colors are baked onto the callouts, so nothing changes appearance — what
+	 * the user loses is the duplicate's *name*, which is why the returned pairs
+	 * exist for the caller to say so out loud.
+	 *
+	 * Deliberately does not save or notify: {@link load} runs before either is
+	 * meaningful, and the import path already does both once for the whole
+	 * operation.
+	 */
+	consolidateDuplicatePalettes(): Array<{ from: string; to: string }> {
+		const { palettes, remap, merged } = consolidatePalettesByColor(
+			this.settings.customPalettes,
+		);
+		if (merged.length === 0) return [];
+		this.settings.customPalettes = palettes;
+		for (const [loserId, survivorId] of remap) {
+			this.relinkPalette(loserId, survivorId);
+		}
+		return merged;
+	}
+
+	/**
+	 * Palette merges performed by the last {@link load}, handed over exactly
+	 * once so the caller can surface a notice and never repeat it on a later
+	 * settings render.
+	 */
+	takePaletteMerges(): Array<{ from: string; to: string }> {
+		const merges = this.pendingPaletteMerges;
+		this.pendingPaletteMerges = [];
+		return merges;
+	}
+
+	/**
+	 * The groups of callouts left behind by deleted palettes: one entry per
+	 * dangling `paletteId`, with a member to seed a replacement palette from.
+	 *
+	 * Every callout orphaned by one deletion carries the same dead id, so the
+	 * id is what reconstitutes the group — the colors cannot, since a member the
+	 * user has since restyled by hand would no longer match its siblings.
+	 * `sample` is the first member in map order, which is stable across renders.
+	 */
+	listOrphanPaletteGroups(): Array<{
+		paletteId: string;
+		count: number;
+		sample: CalloutDefinition;
+	}> {
+		const groups = new Map<
+			string,
+			{ paletteId: string; count: number; sample: CalloutDefinition }
+		>();
+		for (const def of this.callouts.values()) {
+			const id = def.paletteId;
+			if (!id || this.isLivePaletteId(id)) continue;
+			const existing = groups.get(id);
+			if (existing) {
+				existing.count++;
+				continue;
+			}
+			groups.set(id, { paletteId: id, count: 1, sample: def });
+		}
+		return [...groups.values()];
 	}
 
 	/**

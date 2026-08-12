@@ -750,4 +750,30 @@ export const ms: Record<string, string> = {
 	"footer.tagline":
 		"Ada maklum balas, komen atau cadangan? Saya ingin mendengarnya!",
 	"footer.madeBy": "Dicipta oleh Niv  •  ",
+	"settings.deletePaletteConfirmLinkedOne":
+		'Padam palet "{{name}}"?\n1 callout menggunakannya. Ia mengekalkan warnanya, dan anda boleh sambungkan semula kemudian dari baris Warna dalam editornya.',
+	"settings.deletePaletteConfirmLinked":
+		'Padam palet "{{name}}"?\n{{count}} callout menggunakannya. Mereka mengekalkan warna masing-masing, dan anda boleh sambungkan semula kemudian dari baris Warna dalam mana-mana editor mereka.',
+	"settings.unlinkedColors": "Warna tidak dipaut",
+	"settings.unlinkedColorsDesc":
+		"Callout yang warna tersimpannya telah dipadam. Mereka mengekalkan warna sedia ada; pulih akan menyimpan semula warna itu dan memautkan semula seluruh kumpulan.",
+	"settings.unlinkedColorOne": "1 callout",
+	"settings.unlinkedColorCount": "{{count}} callout",
+	"settings.restoreColor": "Pulihkan",
+	"settings.palettesMergedNotice":
+		"Menggabungkan {{count}} palet import ke dalam warna tersimpan yang sudah mempunyai warna yang sama.",
+	"notice.palettesMerged":
+		"Menggabungkan {{count}} warna tersimpan yang mempunyai warna serupa: {{names}}. Callout yang menggunakannya mengekalkan warna masing-masing dan kini dipautkan kepada warna yang tinggal.",
+	"editor.colorsDescDeleted":
+		"Warna tersimpan untuk callout ini telah dipadam. Anda boleh simpan semula dengan {{link}}.",
+	"editor.colorsDescDeletedOther":
+		"Warna tersimpan untuk callout ini telah dipadam. Anda boleh simpan semula dengan {{link}} — 1 callout lain yang menggunakannya juga akan dipautkan semula.",
+	"editor.colorsDescDeletedOthers":
+		"Warna tersimpan untuk callout ini telah dipadam. Anda boleh simpan semula dengan {{link}} — {{count}} callout lain yang menggunakannya juga akan dipautkan semula.",
+	"editor.colorsDescDeletedLink": "klik di sini",
+	"palette.colorExists":
+		'Warna-warna ini sama dengan "{{name}}". Dua warna tersimpan tidak boleh sama — ubah satu warna untuk membezakannya.',
+	"palette.colorExistsUse":
+		'Warna-warna ini sama dengan "{{name}}". Dua warna tersimpan tidak boleh sama — ubah satu warna, atau {{link}}.',
+	"palette.colorExistsUseLink": "guna yang sedia ada",
 };

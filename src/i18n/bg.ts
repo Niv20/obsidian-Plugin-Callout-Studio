@@ -760,4 +760,30 @@ export const bg: Record<string, string> = {
 	"footer.tagline":
 		"Имате коментари, забележки или предложения? Ще се радвам да ги чуя!",
 	"footer.madeBy": "Създадено от Niv  •  ",
+	"settings.deletePaletteConfirmLinkedOne":
+		'Да изтрия ли палитрата "{{name}}"?\n1 callout я използва. Той запазва цветовете си и можете да го свържете отново по-късно от реда „Цвят“ в редактора му.',
+	"settings.deletePaletteConfirmLinked":
+		'Да изтрия ли палитрата "{{name}}"?\n{{count}} callout-а я използват. Те запазват цветовете си и можете да ги свържете отново по-късно от реда „Цвят“ в който и да е от редакторите им.',
+	"settings.unlinkedColors": "Несвързани цветове",
+	"settings.unlinkedColorsDesc":
+		"Callout-и, чийто запазен цвят е изтрит. Те запазват цветовете, които са имали; възстановяването записва цвета отново и свързва цялата група.",
+	"settings.unlinkedColorOne": "1 callout",
+	"settings.unlinkedColorCount": "{{count}} callout-а",
+	"settings.restoreColor": "Възстанови",
+	"settings.palettesMergedNotice":
+		"Сля {{count}} импортирани палитри със запазени цветове, които вече имаха същите цветове.",
+	"notice.palettesMerged":
+		"Сля {{count}} запазени цвята с еднакви цветове: {{names}}. Callout-ите, които ги използват, запазват цветовете си и сега са свързани с останалия цвят.",
+	"editor.colorsDescDeleted":
+		"Запазеният цвят на този callout беше изтрит. Можете да го запишете отново чрез {{link}}.",
+	"editor.colorsDescDeletedOther":
+		"Запазеният цвят на този callout беше изтрит. Можете да го запишете отново чрез {{link}} — още 1 друг callout, който го използва, също ще бъде свързан отново.",
+	"editor.colorsDescDeletedOthers":
+		"Запазеният цвят на този callout беше изтрит. Можете да го запишете отново чрез {{link}} — още {{count}} други callout-и, които го използват, също ще бъдат свързани отново.",
+	"editor.colorsDescDeletedLink": "като щракнете тук",
+	"palette.colorExists":
+		'Тези цветове са идентични с "{{name}}". Два запазени цвята не могат да бъдат еднакви — променете цвят, за да ги различите.',
+	"palette.colorExistsUse":
+		'Тези цветове са идентични с "{{name}}". Два запазени цвята не могат да бъдат еднакви — променете цвят или {{link}}.',
+	"palette.colorExistsUseLink": "използвайте съществуващия",
 };

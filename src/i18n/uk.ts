@@ -782,4 +782,30 @@ export const uk: Record<string, string> = {
 
 	"footer.tagline": "Є відгуки, коментарі або пропозиції? Буду радий почути!",
 	"footer.madeBy": "Створено Нівом  •  ",
+	"settings.deletePaletteConfirmLinkedOne":
+		'Видалити палітру "{{name}}"?\nЇї використовує 1 callout. Він збереже свої кольори, і ви зможете знову прив’язати його пізніше з рядка «Колір» у редакторі.',
+	"settings.deletePaletteConfirmLinked":
+		'Видалити палітру "{{name}}"?\nЇї використовують {{count}} callout-ів. Вони збережуть свої кольори, і ви зможете знову прив’язати їх пізніше з рядка «Колір» у будь-якому з їхніх редакторів.',
+	"settings.unlinkedColors": "Неприв’язані кольори",
+	"settings.unlinkedColorsDesc":
+		"Callout-и, у яких збережений колір було видалено. Вони зберігають наявні кольори; відновлення знову збереже колір і переприв’яже всю групу.",
+	"settings.unlinkedColorOne": "1 callout",
+	"settings.unlinkedColorCount": "{{count}} callout-ів",
+	"settings.restoreColor": "Відновити",
+	"settings.palettesMergedNotice":
+		"Об’єднано {{count}} імпортованих палітр(и) із збереженими кольорами, які вже мали ті самі кольори.",
+	"notice.palettesMerged":
+		"Об’єднано {{count}} збережених кольорів із однаковими кольорами: {{names}}. Callout-и, що їх використовують, зберігають свої кольори й тепер прив’язані до кольору, який залишився.",
+	"editor.colorsDescDeleted":
+		"Збережений колір цього callout-а було видалено. Ви можете зберегти його знову, {{link}}.",
+	"editor.colorsDescDeletedOther":
+		"Збережений колір цього callout-а було видалено. Ви можете зберегти його знову, {{link}} — також буде переприв’язано ще 1 callout, що його використовує.",
+	"editor.colorsDescDeletedOthers":
+		"Збережений колір цього callout-а було видалено. Ви можете зберегти його знову, {{link}} — також буде переприв’язано ще {{count}} callout-ів, що його використовують.",
+	"editor.colorsDescDeletedLink": "натиснувши тут",
+	"palette.colorExists":
+		'Ці кольори збігаються з "{{name}}". Два збережені кольори не можуть бути однаковими — змініть один колір, щоб розрізняти їх.',
+	"palette.colorExistsUse":
+		'Ці кольори збігаються з "{{name}}". Два збережені кольори не можуть бути однаковими — змініть колір або {{link}}.',
+	"palette.colorExistsUseLink": "використати наявний",
 };

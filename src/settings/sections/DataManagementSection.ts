@@ -260,6 +260,18 @@ export async function processImportedJSON(
 				byId.set(palette.id, palette);
 			}
 			ctx.plugin.registry.settings.customPalettes = [...byId.values()];
+			// Merging by id routinely brings in a palette that duplicates a
+			// local one's colors under a different id — the two vaults named
+			// the same color independently. No vault may hold two of those, so
+			// fold them together here rather than leaving a state the next
+			// launch would silently repair. The callouts that referenced the
+			// dropped id are re-pointed, so nothing is orphaned by the merge.
+			const merges = ctx.plugin.registry.consolidateDuplicatePalettes();
+			if (merges.length > 0) {
+				new Notice(
+					t("settings.palettesMergedNotice", { count: merges.length }),
+				);
+			}
 		}
 		if (importedImages) {
 			const byId = new Map(

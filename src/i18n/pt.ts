@@ -782,4 +782,30 @@ export const pt: Record<string, string> = {
 	"footer.tagline":
 		"Tem feedback, comentários ou sugestões? Adoraria ouvir de você!",
 	"footer.madeBy": "Feito por Niv  •  ",
+	"settings.deletePaletteConfirmLinkedOne":
+		'Excluir a paleta "{{name}}"?\n1 callout a utiliza. Ele mantém suas cores, e você pode reconectá-la depois na linha Cor do editor.',
+	"settings.deletePaletteConfirmLinked":
+		'Excluir a paleta "{{name}}"?\n{{count}} callouts a utilizam. Eles mantêm suas cores, e você pode reconectá-los depois na linha Cor de qualquer um dos editores.',
+	"settings.unlinkedColors": "Cores desvinculadas",
+	"settings.unlinkedColorsDesc":
+		"Callouts cuja cor salva foi excluída. Eles mantêm as cores que tinham; restaurar salva a cor novamente e reconecta todo o grupo.",
+	"settings.unlinkedColorOne": "1 callout",
+	"settings.unlinkedColorCount": "{{count}} callouts",
+	"settings.restoreColor": "Restaurar",
+	"settings.palettesMergedNotice":
+		"Mesclou {{count}} paleta(s) importada(s) com cores salvas que já tinham as mesmas cores.",
+	"notice.palettesMerged":
+		"Mesclou {{count}} cor(es) salva(s) com cores idênticas: {{names}}. Os callouts que as usam mantêm suas cores e agora estão vinculados à cor que permaneceu.",
+	"editor.colorsDescDeleted":
+		"A cor salva deste callout foi excluída. Você pode salvá-la novamente {{link}}.",
+	"editor.colorsDescDeletedOther":
+		"A cor salva deste callout foi excluída. Você pode salvá-la novamente {{link}} — 1 outro callout que a usa também será reconectado.",
+	"editor.colorsDescDeletedOthers":
+		"A cor salva deste callout foi excluída. Você pode salvá-la novamente {{link}} — {{count}} outros callouts que a usam também serão reconectados.",
+	"editor.colorsDescDeletedLink": "clicando aqui",
+	"palette.colorExists":
+		'Estas cores são idênticas a "{{name}}". Duas cores salvas não podem ser iguais — altere uma cor para diferenciá-las.',
+	"palette.colorExistsUse":
+		'Estas cores são idênticas a "{{name}}". Duas cores salvas não podem ser iguais — altere uma cor, ou {{link}}.',
+	"palette.colorExistsUseLink": "usar a existente",
 };

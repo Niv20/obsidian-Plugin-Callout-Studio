@@ -751,4 +751,30 @@ export const nb: Record<string, string> = {
 	"footer.tagline":
 		"Har du tilbakemeldinger, kommentarer eller forslag? Jeg vil gjerne høre det!",
 	"footer.madeBy": "Laget av Niv  •  ",
+	"settings.deletePaletteConfirmLinkedOne":
+		'Slette paletten "{{name}}"?\n1 callout bruker den. Den beholder fargene sine, og du kan koble den til igjen senere fra Farge-raden i redigereren.',
+	"settings.deletePaletteConfirmLinked":
+		'Slette paletten "{{name}}"?\n{{count}} callouts bruker den. De beholder fargene sine, og du kan koble dem til igjen senere fra Farge-raden i en av redigererne deres.',
+	"settings.unlinkedColors": "Frakoblede farger",
+	"settings.unlinkedColorsDesc":
+		"Callouts der lagret farge ble slettet. De beholder fargene de hadde; gjenoppretting lagrer fargen på nytt og kobler hele gruppen til igjen.",
+	"settings.unlinkedColorOne": "1 callout",
+	"settings.unlinkedColorCount": "{{count}} callouts",
+	"settings.restoreColor": "Gjenopprett",
+	"settings.palettesMergedNotice":
+		"Flettet {{count}} importerte palett(er) inn i lagrede farger som allerede hadde samme farger.",
+	"notice.palettesMerged":
+		"Flettet {{count}} lagrede farge(r) som hadde identiske farger: {{names}}. Calloutene som bruker dem beholder fargene sine og er nå koblet til fargen som ble igjen.",
+	"editor.colorsDescDeleted":
+		"Denne calloutens lagrede farge ble slettet. Du kan lagre den på nytt ved å {{link}}.",
+	"editor.colorsDescDeletedOther":
+		"Denne calloutens lagrede farge ble slettet. Du kan lagre den på nytt ved å {{link}} — 1 annen callout som bruker den blir også koblet til igjen.",
+	"editor.colorsDescDeletedOthers":
+		"Denne calloutens lagrede farge ble slettet. Du kan lagre den på nytt ved å {{link}} — {{count}} andre callouts som bruker den blir også koblet til igjen.",
+	"editor.colorsDescDeletedLink": "klikke her",
+	"palette.colorExists":
+		'Disse fargene er identiske med "{{name}}". To lagrede farger kan ikke være like — endre en farge for å skille dem.',
+	"palette.colorExistsUse":
+		'Disse fargene er identiske med "{{name}}". To lagrede farger kan ikke være like — endre en farge, eller {{link}}.',
+	"palette.colorExistsUseLink": "bruk den eksisterende",
 };

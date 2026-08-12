@@ -2318,6 +2318,17 @@ input.cs-input-invalid:focus {
 	margin-top: 4px;
 }
 
+/*
+ * The duplicate-color error stands alone in the palette editor's options
+ * column rather than inside a setting's info block, so it needs room for the
+ * sentence to wrap around its inline "use it instead" link — the 2em ceiling
+ * above is sized for the one-line ID errors.
+ */
+.cs-palette-color-error.is-visible {
+	max-height: 6em;
+	margin-bottom: 8px;
+}
+
 /* The + does not take a slice of this row — it is absolutely positioned over
    the field's trailing edge (`.cs-tag-add-slot` below), so the field itself is
    the full width of the row whether the button is showing or not. That is the

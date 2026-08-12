@@ -38,7 +38,9 @@ import {
 import {
 	getObsidianPalettes,
 	getExtraPalettes,
+	bakePaletteColors,
 	customPaletteToColorPalette,
+	findPaletteWithSameColors,
 	generatePaletteId,
 	getDefaultNewCalloutPalette,
 	DEFAULT_NEW_CALLOUT_PALETTE_ID,
@@ -47,6 +49,7 @@ import {
 import { t } from "../i18n";
 import { sanitizeCalloutIdInput } from "../utils/calloutId";
 import { TagInput } from "../ui/TagInput";
+import { renderInlineLinkHint } from "../ui/inlineLinkHint";
 import {
 	renderColorCircles,
 	resolveCurrentModeColors,
@@ -179,6 +182,45 @@ function defaultColorStateFor(def: CalloutDefinition): EditorColorState {
 		transparentBg: def.transparentBg === true,
 		textColorLight: def.textColorLight ?? DEFAULT_TEXT_COLOR_LIGHT,
 		textColorDark: def.textColorDark ?? DEFAULT_TEXT_COLOR_DARK,
+	};
+}
+
+/**
+ * The form's current colours as a palette seed — everything a `CustomPalette`
+ * needs except the identity the user is about to give it.
+ *
+ * Safe under `transparentBg`, which is why it maps the two axes separately: the
+ * form always holds concrete background hexes beside the flag (see
+ * {@link EditorColorState}), and `CustomPalette` wants exactly that — all six
+ * colours valid, with transparency as its own field. It is also what
+ * `sanitizeCustomPalettes` requires, and what a switch back to Solid inside the
+ * palette editor restores.
+ *
+ * `transparentBg` is spread conditionally rather than assigned: the field is
+ * typed `true`, not `boolean`, because writers omit the key instead of writing
+ * `false`.
+ *
+ * `colorMode: "advanced"` is deliberate. These six colours are a real callout's
+ * current appearance, and nothing guarantees they are derivable from one base
+ * colour — a callout may carry a hand-picked background or text colour that the
+ * single Base swatch simply cannot express. The advanced grid shows them as
+ * they are, and it is also the mode that keeps them: the Intensity slider
+ * beside the simple control re-derives all six from the base colour on a single
+ * drag. The grid's "prefer a single base color" link is the way back.
+ */
+function paletteSeedFromColorState(
+	state: EditorColorState,
+): Omit<CustomPalette, "id" | "name"> {
+	return {
+		colorLight: state.colorLight,
+		colorDark: state.colorDark,
+		bgColorLight: state.bgColorLight,
+		bgColorDark: state.bgColorDark,
+		textColorLight: state.textColorLight,
+		textColorDark: state.textColorDark,
+		bgGradient: state.bgGradient ? { ...state.bgGradient } : undefined,
+		...(state.transparentBg ? { transparentBg: true as const } : {}),
+		colorMode: "advanced",
 	};
 }
 
@@ -845,6 +887,64 @@ export class CalloutEditor extends Modal {
 						this.bgColorDark.toLowerCase() &&
 					bgGradientsEqual(palette.bgGradient, this.bgGradient)));
 
+		// ── "Deleted color" state ──
+		// The row resolves to no palette at all: the one it was saved under was
+		// deleted from Settings. Reading "Deleted color" and stopping there is a
+		// dead end, so the Color row's description turns into an explanation
+		// plus the one action that gets out of it (see updateColorDesc).
+		let isOrphanColor = false;
+		/** Stale id of the deleted palette, when the orphan still carries one. */
+		let orphanPaletteId: string | undefined;
+
+		/**
+		 * Swaps the Color row's description between its normal sentence and the
+		 * "your saved color was deleted" notice.
+		 *
+		 * `setDesc` replaces `descEl` wholesale, which is safe *here* only
+		 * because this row's description holds nothing else — unlike the callout
+		 * IDs row, which appends its own error element into `descEl`.
+		 *
+		 * The sibling count comes from the registry rather than from anything
+		 * the editor holds, so the number the user is promised is measured
+		 * against the same map the relink will walk.
+		 */
+		const updateColorDesc = (): void => {
+			if (!isOrphanColor) {
+				colorSetting.setDesc(t("editor.colorsDesc"));
+				return;
+			}
+			const others = orphanPaletteId
+				? this.plugin.registry.countPaletteLinks(
+						orphanPaletteId,
+						this.existingId,
+					)
+				: 0;
+			const textKey =
+				others === 0 ? "editor.colorsDescDeleted"
+				: others === 1 ? "editor.colorsDescDeletedOther"
+				: "editor.colorsDescDeletedOthers";
+			colorSetting.setDesc("");
+			renderInlineLinkHint(colorSetting.descEl, {
+				textKey,
+				linkKey: "editor.colorsDescDeletedLink",
+				vars: { count: others },
+				onClick: () => void reviveDeletedPalette(),
+			});
+		};
+
+		/**
+		 * Leave the deleted-colour state. For the paths that set the trigger
+		 * label themselves and so never re-run `refreshTriggerFromCurrentColors`
+		 * — picking a palette from the menu, or creating one through
+		 * "+ New color…".
+		 */
+		const clearOrphanState = (): void => {
+			if (!isOrphanColor) return;
+			isOrphanColor = false;
+			orphanPaletteId = undefined;
+			updateColorDesc();
+		};
+
 		/**
 		 * Re-resolves the trigger's label/swatch from whatever the form's
 		 * colours currently are. Prefers the stable paletteId link (survives a
@@ -855,6 +955,14 @@ export class CalloutEditor extends Modal {
 		 * setup and again after a colour revert, so (unlike the one-shot setup
 		 * this replaced) the "no match" branch must explicitly reset the label
 		 * — it may already be showing a previously selected palette's name.
+		 *
+		 * The no-match branch deliberately KEEPS `this.paletteId`. It is the
+		 * only thing identifying which deleted palette this callout belonged to,
+		 * and every callout orphaned by that deletion carries the same one — so
+		 * it is what lets reviving the palette from any one of them regroup the
+		 * rest. Clearing it here (as this once did) meant merely opening and
+		 * saving an orphaned callout silently dissolved its group, since
+		 * `performCalloutEditorSave` persists whatever this holds.
 		 */
 		const refreshTriggerFromCurrentColors = (): void => {
 			const matched =
@@ -872,13 +980,34 @@ export class CalloutEditor extends Modal {
 				selectedId = matched.id;
 				this.paletteId = matched.id;
 				triggerLabel.setText(matched.name);
+				isOrphanColor = false;
+				orphanPaletteId = undefined;
 			} else {
-				this.paletteId = undefined;
 				triggerLabel.setText(t("editor.paletteDeleted"));
+				isOrphanColor = true;
+				orphanPaletteId = this.paletteId;
 			}
 			renderTriggerCircles();
+			updateColorDesc();
+			// This function writes `this.paletteId`, which is part of the dirty
+			// snapshot, so it owns re-deciding the Save button too. The colour
+			// revert is why: it clears the link, then calls `applyColorState`
+			// (whose `updatePreview` computes the save state) and only then lands
+			// here to re-resolve the link — so the last word on Save was spoken
+			// while the id was still momentarily cleared, leaving the button lit
+			// over a form that had just returned to its baseline.
+			// A no-op during setup, where `updateSaveState` returns early because
+			// the button does not exist yet.
+			this.updateSaveState();
 		};
 		refreshTriggerFromCurrentColors();
+		// Re-baseline for the same reason `normalizeNameIdLink()` runs before
+		// the snapshot above: this first pass RESOLVES the link rather than
+		// changing it — a row saved before `paletteId` existed adopts the id its
+		// colours hex-match here — and `paletteId` is part of the snapshot now,
+		// so without this every such callout would open already claiming
+		// unsaved changes.
+		this.initialSnapshot = this.stateSnapshot();
 
 		colorSetting.addExtraButton((btn) => {
 			colorRevertBtn = btn;
@@ -983,6 +1112,7 @@ export class CalloutEditor extends Modal {
 			applyPaletteColors(entry.palette);
 			triggerLabel.setText(entry.name);
 			renderTriggerCircles();
+			clearOrphanState();
 			this.updateSaveState();
 			closeMenu();
 		};
@@ -1056,6 +1186,41 @@ export class CalloutEditor extends Modal {
 			);
 		};
 
+		/**
+		 * Select a palette that already exists, optionally taking a group of
+		 * orphaned siblings along with it.
+		 *
+		 * The escape hatch behind the palette editor's duplicate-color block: a
+		 * user who lands on colors another palette already has is offered that
+		 * palette instead of a Save button that will not move.
+		 */
+		const adoptExistingPalette = (
+			paletteId: string,
+			orphanId: string | null | undefined,
+		): void => {
+			rebuildPaletteEntries();
+			const index = paletteEntries.findIndex((e) => e.id === paletteId);
+			const entry = paletteEntries[index];
+			if (!entry) return;
+			// Same two-step as a revive, and for the same reason: re-point the
+			// siblings, then repaint them through the ordinary cascade. This
+			// callout is excluded from both — the editor owns its own row until
+			// Save, and commitSelection below is what moves it.
+			if (orphanId) {
+				this.plugin.registry.relinkPalette(
+					orphanId,
+					paletteId,
+					this.existingId,
+				);
+				this.plugin.registry.applyPaletteColors(
+					paletteId,
+					bakePaletteColors(entry.palette),
+				);
+				void this.plugin.saveSettings();
+			}
+			commitSelection(index);
+		};
+
 		// ── "+ New color…" flow ──
 		// Opens the same palette editor the settings section uses; saving the
 		// new palette immediately selects and applies it to this callout.
@@ -1067,6 +1232,9 @@ export class CalloutEditor extends Modal {
 				takenNames: this.plugin.settings.customPalettes.map(
 					(p) => p.name,
 				),
+				takenColors: this.plugin.settings.customPalettes,
+				onUseExisting: (paletteId) =>
+					adoptExistingPalette(paletteId, null),
 			}).openAndWait();
 			if (!result) return;
 			const palette: CustomPalette = {
@@ -1081,6 +1249,79 @@ export class CalloutEditor extends Modal {
 			applyPaletteColors(customPaletteToColorPalette(palette));
 			triggerLabel.setText(palette.name);
 			renderTriggerCircles();
+			clearOrphanState();
+			this.updateSaveState();
+		};
+
+		// ── "Deleted color" → save it again ──
+		// Same palette editor as "+ New color…", but seeded with this callout's
+		// own colours, so reviving a deleted palette is only a matter of naming
+		// it. Every other callout orphaned by the same deletion is re-pointed at
+		// the result, which is what puts the group back together.
+		const reviveDeletedPalette = async (): Promise<void> => {
+			// Read before the modal runs: the callbacks below reset it.
+			const orphanId = orphanPaletteId;
+			// Drop any uncommitted hover-preview colors before the modal opens.
+			this.previewColorsTransient(null);
+			closeMenu();
+			const seed = paletteSeedFromColorState(readColorState());
+			// A saved palette may already carry exactly these colors — the user
+			// recreated it from the settings list, or another group was revived
+			// onto them first. Rebuilding it is then impossible: no vault may
+			// hold two palettes with identical colors, so the editor would open
+			// on a seed it refuses to save. Link the group to what exists, which
+			// is what reviving was asking for in the first place.
+			const twin = findPaletteWithSameColors(
+				{ id: "", name: "", group: "custom", ...seed },
+				this.plugin.settings.customPalettes,
+			);
+			if (twin) {
+				adoptExistingPalette(twin.id, orphanId);
+				return;
+			}
+			const result = await new PaletteEditorModal(this.plugin, {
+				seed,
+				takenNames: this.plugin.settings.customPalettes.map(
+					(p) => p.name,
+				),
+				takenColors: this.plugin.settings.customPalettes,
+				onUseExisting: (paletteId) =>
+					adoptExistingPalette(paletteId, orphanId),
+			}).openAndWait();
+			if (!result) return;
+			const palette: CustomPalette = {
+				id: generatePaletteId(),
+				...result,
+			};
+			this.plugin.settings.customPalettes.push(palette);
+			// Regroup the siblings, then repaint them through the ordinary
+			// cascade so they match the palette even if its colours were tweaked
+			// in the modal. This callout is excluded from both: the editor owns
+			// its own row until Save, and it takes the new colours through the
+			// form below instead.
+			if (orphanId) {
+				this.plugin.registry.relinkPalette(
+					orphanId,
+					palette.id,
+					this.existingId,
+				);
+				this.plugin.registry.applyPaletteColors(
+					palette.id,
+					bakePaletteColors(customPaletteToColorPalette(palette)),
+				);
+			}
+			// After the registry work, not before: one write then covers the new
+			// palette AND the re-pointed siblings. (`applyPaletteColors` also
+			// notifies, and `onChange` saves — but only when it actually
+			// repainted a row, so this is what makes the save unconditional.)
+			await this.plugin.saveSettings();
+			rebuildPaletteEntries();
+			selectedId = palette.id;
+			this.paletteId = palette.id;
+			applyPaletteColors(customPaletteToColorPalette(palette));
+			triggerLabel.setText(palette.name);
+			renderTriggerCircles();
+			clearOrphanState();
 			this.updateSaveState();
 		};
 
@@ -1428,12 +1669,14 @@ export class CalloutEditor extends Modal {
 			bgColorLight: this.bgColorLight,
 			bgColorDark: this.bgColorDark,
 			bgGradient: this.bgGradient,
+			transparentBg: this.transparentBg,
 			textColorLight: this.textColorLight,
 			textColorDark: this.textColorDark,
 			foldable: this.foldable,
 			defaultFolded: this.defaultFolded,
 			...this.iconAdjustState(),
 			aliases: this.aliases,
+			paletteId: this.paletteId,
 		});
 	}
 
@@ -1447,6 +1690,7 @@ export class CalloutEditor extends Modal {
 			bgColorLight: this.bgColorLight,
 			bgColorDark: this.bgColorDark,
 			bgGradient: this.bgGradient,
+			transparentBg: this.transparentBg,
 			textColorLight: this.textColorLight,
 			textColorDark: this.textColorDark,
 			foldable: this.foldable,

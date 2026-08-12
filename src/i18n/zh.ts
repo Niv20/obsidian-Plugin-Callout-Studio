@@ -739,4 +739,30 @@ export const zh: Record<string, string> = {
 
 	"footer.tagline": "有反馈、意见或建议？欢迎告诉我！",
 	"footer.madeBy": "由 Niv 制作  •  ",
+	"settings.deletePaletteConfirmLinkedOne":
+		'删除调色板“{{name}}”？\n1 个 callout 正在使用它。它会保留原有颜色，你之后可以在其编辑器的颜色行重新关联。',
+	"settings.deletePaletteConfirmLinked":
+		'删除调色板“{{name}}”？\n{{count}} 个 callout 正在使用它。它们会保留原有颜色，你之后可以在任一编辑器的颜色行重新关联。',
+	"settings.unlinkedColors": "未关联颜色",
+	"settings.unlinkedColorsDesc":
+		"这些 callout 的已保存颜色已被删除。它们会保留原有颜色；恢复会重新保存该颜色并重新关联整个组。",
+	"settings.unlinkedColorOne": "1 个 callout",
+	"settings.unlinkedColorCount": "{{count}} 个 callout",
+	"settings.restoreColor": "恢复",
+	"settings.palettesMergedNotice":
+		"已将 {{count}} 个导入调色板合并到已保存且颜色相同的颜色项中。",
+	"notice.palettesMerged":
+		"已合并 {{count}} 个颜色完全相同的已保存颜色：{{names}}。使用它们的 callout 会保留原有颜色，并已关联到保留的颜色。",
+	"editor.colorsDescDeleted":
+		"此 callout 的已保存颜色已被删除。你可以通过{{link}}重新保存。",
+	"editor.colorsDescDeletedOther":
+		"此 callout 的已保存颜色已被删除。你可以通过{{link}}重新保存——另外 1 个使用该颜色的 callout 也会重新关联。",
+	"editor.colorsDescDeletedOthers":
+		"此 callout 的已保存颜色已被删除。你可以通过{{link}}重新保存——另外 {{count}} 个使用该颜色的 callout 也会重新关联。",
+	"editor.colorsDescDeletedLink": "点击这里",
+	"palette.colorExists":
+		'这些颜色与“{{name}}”完全相同。两个已保存颜色不能相同——请修改一个颜色以区分它们。',
+	"palette.colorExistsUse":
+		'这些颜色与“{{name}}”完全相同。两个已保存颜色不能相同——请修改一个颜色，或{{link}}。',
+	"palette.colorExistsUseLink": "使用现有颜色",
 };

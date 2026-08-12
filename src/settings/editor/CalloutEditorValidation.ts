@@ -35,6 +35,13 @@ export type SnapshotInput = {
 	bgColorLight: string;
 	bgColorDark: string;
 	bgGradient?: CalloutDefinition["bgGradient"];
+	/**
+	 * Part of the dirty check because it is part of what gets saved, and because
+	 * it is an axis of its own: switching a callout between "None" and Solid
+	 * changes nothing else in the form, so leaving it out left Save disabled on
+	 * the one edit the user had come to make.
+	 */
+	transparentBg: boolean;
 	textColorLight: string;
 	textColorDark: string;
 	foldable: boolean;
@@ -45,6 +52,14 @@ export type SnapshotInput = {
 	iconOffsetY: number;
 	iconSize: number;
 	aliases: string[];
+	/**
+	 * Which palette the row is linked to — part of the dirty check because it
+	 * is part of what gets saved, and because re-pointing a callout at another
+	 * palette is a real change even when the two carry identical colours (the
+	 * link is what decides whose later edits cascade onto this callout).
+	 * Omitted by `styleSnapshot`, which compares appearance only.
+	 */
+	paletteId?: string;
 };
 
 export function buildStateSnapshot(input: SnapshotInput): string {

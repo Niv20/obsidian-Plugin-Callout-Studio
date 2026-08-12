@@ -789,4 +789,30 @@ export const de: Record<string, string> = {
 	"footer.tagline":
 		"Feedback, Kommentare oder Vorschläge? Ich würde mich freuen, von Ihnen zu hören!",
 	"footer.madeBy": "Erstellt von Niv  •  ",
+	"settings.deletePaletteConfirmLinkedOne":
+		'Palette "{{name}}" löschen?\n1 Callout verwendet sie. Es behält seine Farben, und du kannst sie später über die Farbzeile im Editor wieder verknüpfen.',
+	"settings.deletePaletteConfirmLinked":
+		'Palette "{{name}}" löschen?\n{{count}} Callouts verwenden sie. Sie behalten ihre Farben, und du kannst sie später über die Farbzeile in jedem ihrer Editoren wieder verknüpfen.',
+	"settings.unlinkedColors": "Nicht verknüpfte Farben",
+	"settings.unlinkedColorsDesc":
+		"Callouts, deren gespeicherte Farbe gelöscht wurde. Sie behalten ihre bisherigen Farben; beim Wiederherstellen wird die Farbe erneut gespeichert und die ganze Gruppe wieder verknüpft.",
+	"settings.unlinkedColorOne": "1 Callout",
+	"settings.unlinkedColorCount": "{{count}} Callouts",
+	"settings.restoreColor": "Wiederherstellen",
+	"settings.palettesMergedNotice":
+		"{{count}} importierte Palette(n) wurden mit gespeicherten Farben zusammengeführt, die bereits dieselben Farben hatten.",
+	"notice.palettesMerged":
+		"{{count}} gespeicherte Farbe(n) mit identischen Farben wurden zusammengeführt: {{names}}. Die Callouts, die sie verwenden, behalten ihre Farben und sind jetzt mit der verbleibenden Farbe verknüpft.",
+	"editor.colorsDescDeleted":
+		"Die gespeicherte Farbe dieses Callouts wurde gelöscht. Du kannst sie wieder speichern, indem du {{link}}.",
+	"editor.colorsDescDeletedOther":
+		"Die gespeicherte Farbe dieses Callouts wurde gelöscht. Du kannst sie wieder speichern, indem du {{link}} — 1 weiteres Callout, das sie nutzt, wird ebenfalls wieder verknüpft.",
+	"editor.colorsDescDeletedOthers":
+		"Die gespeicherte Farbe dieses Callouts wurde gelöscht. Du kannst sie wieder speichern, indem du {{link}} — {{count}} weitere Callouts, die sie nutzen, werden ebenfalls wieder verknüpft.",
+	"editor.colorsDescDeletedLink": "hier klickst",
+	"palette.colorExists":
+		'Diese Farben sind identisch mit "{{name}}". Zwei gespeicherte Farben dürfen nicht gleich sein — ändere eine Farbe, um sie zu unterscheiden.',
+	"palette.colorExistsUse":
+		'Diese Farben sind identisch mit "{{name}}". Zwei gespeicherte Farben dürfen nicht gleich sein — ändere eine Farbe oder {{link}}.',
+	"palette.colorExistsUseLink": "die bestehende verwenden",
 };
