@@ -562,7 +562,7 @@ export const de: Record<string, string> = {
 	"settings.globalSettingsInlineDesc":
 		"Fügen Sie irgendwo innerhalb einer Textzeile ein Callout-Token hinzu (z. B. `[!type]`), um es als kleine Inline-Pille darzustellen. Sie können Rahmen und Form anpassen.",
 	"settings.globalSettingsCustomize": "Anpassen",
-	"settings.calloutTypeRegular": "Regulärer Callout",
+	"settings.calloutTypeRegular": "Block callout",
 	"settings.calloutTypeHeading": "Überschrift-Callout",
 	"settings.calloutTypeInline": "Inline-Callout",
 	"settings.customizeMenu": "Menüelemente anpassen",
@@ -572,7 +572,7 @@ export const de: Record<string, string> = {
 	"menuCustomize.title": "Rechtsklickmenü anpassen",
 	"menuCustomize.desc":
 		"Aktionen ein- oder ausschalten und den Griff ziehen, um sie neu anzuordnen. Änderungen werden automatisch gespeichert.",
-	"menuCustomize.regular": "Regulärer Callout",
+	"menuCustomize.regular": "Block callout",
 	"menuCustomize.heading": "Überschrift-Callout",
 	"menuCustomize.inline": "Inline-Callout",
 	"menuCustomize.dragHandle": "Zum Neuanordnen ziehen",

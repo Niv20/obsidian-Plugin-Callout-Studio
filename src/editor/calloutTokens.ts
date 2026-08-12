@@ -4,10 +4,10 @@
  * A `[!name]` token can play one of three render roles depending on where it
  * sits on the line (see CalloutRenderRole in types.ts):
  *
- * - regular: `> [!name]` — blockquote callout header (rendered natively by
+ * - block: `> [!name]` — block callout header (rendered natively by
  *   Obsidian; this plugin only restyles it via CSS).
  * - heading: `## [!name]` — `[!` is the first content after the `#` marks.
- * - inline:  any other `[!name]` mid-line — rendered as a small pill.
+ * - inline:  any other `[!name]` mid-line — rendered as a small inline callout.
  *
  * The classifier here is shared by the vault scanner (discovery/statistics),
  * the Live Preview decoration builder, the reading-view post-processor, and
@@ -41,14 +41,14 @@ export const HEADING_CALLOUT_RE =
 	/^(#{1,6})[ \t]+\[!([^\]\n\r]+)\][ \t]?(.*)$/;
 
 /**
- * Native blockquote callout header prefix (any nesting depth). Lines matching
+ * Native block callout header prefix (any nesting depth). Lines matching
  * this belong to Obsidian's own callout rendering — the heading/inline logic
  * must leave them alone. Captures: 1=quote prefix.
  */
 export const BLOCKQUOTE_CALLOUT_PREFIX_RE = /^(\s*(?:>[ \t]?)+)\[!/;
 
 /**
- * Full blockquote callout header including the id.
+ * Full block callout header including the id.
  * Captures: 1=quote prefix, 2=raw id.
  */
 export const BLOCKQUOTE_CALLOUT_HEADER_RE =
@@ -300,7 +300,7 @@ export function scanLineForCalloutTokens(rawLine: string): LineCalloutToken[] {
 	if (rawLine.indexOf("[!") === -1) return [];
 	const line = stripWikilinks(stripInlineCode(rawLine));
 
-	// Native blockquote callout header → single regular token; the rest of the
+	// Native block callout header → single block token; the rest of the
 	// line is the callout's title, which Obsidian renders — no pills inside it.
 	const quoteHeader = line.match(BLOCKQUOTE_CALLOUT_HEADER_RE);
 	if (quoteHeader) {

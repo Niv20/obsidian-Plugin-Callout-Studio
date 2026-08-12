@@ -14,7 +14,7 @@
  *   order wins for *both*. What that looked like was the non-recoloured callout
  *   going flat black in the settings list, the autocomplete menu and the
  *   heading/inline tokens, while the recoloured one kept its uploaded yellows on
- *   exactly the shapes that carry a class. The regular callout body was right
+ *   exactly the shapes that carry a class. The block callout body was right
  *   the whole time, because that path is a data-URI background image (see
  *   CSSInjector.generateImageOverride) and a data URI is its own document.
  * - `id` attributes. `url(#grad)` resolves against the whole document, so the

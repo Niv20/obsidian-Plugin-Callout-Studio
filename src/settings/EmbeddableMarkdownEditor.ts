@@ -308,7 +308,7 @@ export class EmbeddableMarkdownEditor {
 	 * the widget's full width, and that bogus width is cached and applied to
 	 * the raw source lines the next time a click reveals them (every wrapped
 	 * row squeezed to ~one character). Sample texts therefore end outside any
-	 * regular callout, and the caret is parked there on build, reseed and blur.
+	 * block callout, and the caret is parked there on build, reseed and blur.
 	 */
 	private parkCursor(): void {
 		// destroy() does not null `instance`, so `cm` still hands back the

@@ -1,7 +1,7 @@
 /**
  * editor/livepreview/widgets.ts — CodeMirror widget for `[!id]` tokens.
  *
- * CalloutTokenWidget serves the inline pill, the in-heading token, and the
+ * CalloutTokenWidget serves the inline callout, the in-heading token, and the
  * in-link ref token; its DOM comes from the shared builder
  * (renderShared.buildCalloutTokenDom), so Live Preview and reading view
  * render identically. HeadingRefLinkWidget replaces a whole title-less
@@ -233,7 +233,7 @@ export class HeadingRefLinkWidget extends WidgetType {
 	) {
 		super();
 		const { def, unknown } = resolveCalloutDef(registry, rawId);
-		// A reference token is a compact copy of the inline pill, so it draws
+		// A reference token is a compact copy of the inline callout, so it draws
 		// from the same artwork.
 		const iconKey = def
 			? iconRenderKey(def.icon, createIconResolver(registry), "inline")
@@ -343,7 +343,7 @@ export class HeadingRefLinkWidget extends WidgetType {
 /**
  * Standalone fold chevron for a heading callout, rendered as an end-of-line
  * widget so it trails the whole heading (icon + name/title) — mirroring a
- * regular callout's disclosure arrow, which follows the label. Built only when
+ * block callout's disclosure arrow, which follows the label. Built only when
  * the core "Fold heading" setting is on; clicking it folds the same section
  * Obsidian's native pre-heading arrow folds.
  */

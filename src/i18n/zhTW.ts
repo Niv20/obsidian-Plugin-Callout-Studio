@@ -524,7 +524,7 @@ export const zhTW: Record<string, string> = {
 	"settings.globalSettingsInlineDesc":
 		"在文字行中的任意位置新增 callout 標記（例如 `[!type]`）以將其顯示為小型行內徽標。您可以調整其邊框和形狀。",
 	"settings.globalSettingsCustomize": "自訂",
-	"settings.calloutTypeRegular": "一般 callout",
+	"settings.calloutTypeRegular": "Block callout",
 	"settings.calloutTypeHeading": "標題 callout",
 	"settings.calloutTypeInline": "行內 callout",
 	"settings.customizeMenu": "自訂選單項目",
@@ -534,7 +534,7 @@ export const zhTW: Record<string, string> = {
 	"menuCustomize.title": "自訂右鍵選單",
 	"menuCustomize.desc":
 		"啟用或停用操作，並拖曳把手調整順序。變更會自動儲存。",
-	"menuCustomize.regular": "一般 callout",
+	"menuCustomize.regular": "Block callout",
 	"menuCustomize.heading": "標題 callout",
 	"menuCustomize.inline": "行內 callout",
 	"menuCustomize.dragHandle": "拖曳以重新排序",

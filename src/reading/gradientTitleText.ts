@@ -59,7 +59,7 @@ function graphemes(text: string): string[] {
 }
 
 /**
- * True when `node` sits inside a nested inline pill or icon box *within*
+ * True when `node` sits inside a nested inline callout or icon box *within*
  * `root` — those glyphs are excluded from the sweep (a nested pill inside a
  * swept heading title has a sweep and colors of its own; icons stay solid),
  * so they must not receive this root's print colors either.

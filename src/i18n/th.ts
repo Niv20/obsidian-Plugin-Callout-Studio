@@ -552,7 +552,7 @@ export const th: Record<string, string> = {
 		"เพิ่มโทเค็น callout ที่ใดก็ได้ภายในบรรทัดข้อความ (เช่น `[!type]`) เพื่อแสดงผลเป็นแคปซูลอินไลน์ขนาดเล็ก คุณสามารถปรับขอบและรูปร่างได้",
 	"settings.globalSettingsCustomize": "ปรับแต่ง",
 
-	"settings.calloutTypeRegular": "Callout ปกติ",
+	"settings.calloutTypeRegular": "Block callout",
 	"settings.calloutTypeHeading": "Callout หัวข้อ",
 	"settings.calloutTypeInline": "Callout อินไลน์",
 
@@ -563,7 +563,7 @@ export const th: Record<string, string> = {
 	"menuCustomize.title": "ปรับแต่งเมนูคลิกขวา",
 	"menuCustomize.desc":
 		"เปิดหรือปิดการดำเนินการและลากที่จับเพื่อจัดลำดับใหม่ การเปลี่ยนแปลงจะถูกบันทึกโดยอัตโนมัติ",
-	"menuCustomize.regular": "Callout ปกติ",
+	"menuCustomize.regular": "Block callout",
 	"menuCustomize.heading": "Callout หัวข้อ",
 	"menuCustomize.inline": "Callout อินไลน์",
 	"menuCustomize.dragHandle": "ลากเพื่อจัดลำดับใหม่",

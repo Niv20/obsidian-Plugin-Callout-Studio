@@ -660,7 +660,7 @@ export class CSSInjector {
 	 * The trailing `border-box` is load-bearing: `background-clip` governs
 	 * `background-color` too (via the LAST layer's value), so a lone
 	 * `background-clip: text` would clip an element's solid background to its
-	 * text as well — erasing the heading bar and the inline pill. Keeping a
+	 * text as well — erasing the heading callout and the inline callout. Keeping a
 	 * final `none` layer gives the color a `border-box` clip to use.
 	 *
 	 * One sweep is declared per element, never per child, so it runs across
@@ -909,7 +909,7 @@ export class CSSInjector {
 
 	/**
 	 * Fold-chevron color for gradient palettes, across both foldable roles: the
-	 * regular callout's disclosure arrow and the heading callout's chevron (the
+	 * block callout's disclosure arrow and the heading callout's chevron (the
 	 * Live Preview widget and, in reading view, Obsidian's own collapse
 	 * indicator). All three default to the accent color — where the palette's
 	 * sweep STARTS — so they take the second color instead and the arrow closes
@@ -994,7 +994,7 @@ export class CSSInjector {
 		}
 
 		// The callout's background — solid color OR gradient — is applied to
-		// heading bars and inline pills too, so all three render roles share the
+		// heading callouts and inline callouts too, so all three render roles share the
 		// exact same background. bgProps emits nothing when the def has no custom
 		// bg, leaving those roles on the static accent tint from styles.css as
 		// their default; ref tokens are bare icons with no surface to paint. The
@@ -1013,7 +1013,7 @@ export class CSSInjector {
 			parts.push(`${bgSelectorsFor("")} {\n${lightBg.join("\n")}\n}`);
 		}
 		const darkBg = this.bgProps(def, "dark");
-		// Same explicit-undefined cascade as regular callouts: no dark bg set →
+		// Same explicit-undefined cascade as block callouts: no dark bg set →
 		// the light rule (unscoped, so it matches both themes) keeps applying in
 		// dark mode; identical dark values → skip the no-op.
 		if (darkBg.length > 0 && darkBg.join("") !== lightBg.join("")) {
@@ -1050,7 +1050,7 @@ export class CSSInjector {
 		);
 		if (headingPrint) parts.push(headingPrint);
 
-		// Gradient title text for the inline pill: ONE sweep on the pill root,
+		// Gradient title text for the inline callout: ONE sweep on the callout root,
 		// which hugs its own content, so the gradient runs edge to edge across
 		// the pill. It carries the background layer, so that layer is restated
 		// underneath. The class is repeated to reach 3 selectors, outranking
@@ -1069,7 +1069,7 @@ export class CSSInjector {
 			),
 		);
 
-		// Gradient title text for the heading bar. The bar is a full-width
+		// Gradient title text for the heading callout. The callout is a full-width
 		// block, so sweeping it directly would stretch the gradient across the
 		// whole line and leave the text showing only its opening slice —
 		// instead each of the two text runs a bar can hold is swept on its own
@@ -1113,7 +1113,7 @@ export class CSSInjector {
 	 *
 	 * `hideElementGradient` drops the element's own `background-image` in
 	 * print: required for the pill (problem 1 paints it in the end color
-	 * otherwise); left off for block roles (regular callout, heading bar) so
+	 * otherwise); left off for block roles (block callout, heading callout) so
 	 * a callout fragmented across pages keeps at least the vector gradient
 	 * where the `::before` doesn't reach. The `background-color` (first
 	 * stop) always stays on the element as the fallback. Empty when the mode
@@ -1448,7 +1448,7 @@ export class CSSInjector {
 
 		// Heading-bar title spans: reading view wraps the heading's own
 		// title in .cs-heading-title (see calloutPostProcessor), the element
-		// the title sweep runs on. Live Preview heading bars are CodeMirror's
+		// the title sweep runs on. Live Preview heading callouts are CodeMirror's
 		// own .cm-line DOM — its text nodes must never be rewrapped (CM owns
 		// them, and Live Preview never reaches PDF export anyway). Unknown
 		// ids get no sweep CSS, so they must not get print colors either.
@@ -1532,7 +1532,7 @@ export class CSSInjector {
 			`.${CSS_TOKEN_ICON}`,
 		);
 		if (iconEl) {
-			// Heading tokens draw at heading size, inline pills at pill size;
+			// Heading tokens draw at heading size, inline callouts at callout size;
 			// packs with per-size artwork pick their drawing from that.
 			const role = tokenEl.classList.contains(CSS_HEADING_TOKEN)
 				? "heading"
@@ -1656,7 +1656,7 @@ export class CSSInjector {
 	 * Obsidian itself says rather than to the block we just stopped emitting.
 	 *
 	 * Unconditional — no "did we paint this one" flag gating it. Reading view's
-	 * blockquote callouts get a fresh element from `previewMode.rerender(true)`
+	 * block callouts get a fresh element from `previewMode.rerender(true)`
 	 * (see `refreshRenderModes`) where core resolves the icon itself and this
 	 * is a no-op either way, but Live Preview's native callout widget has no
 	 * equivalent forced rebuild this plugin can reach: the very element the
@@ -1864,7 +1864,7 @@ export class CSSInjector {
 	}
 
 	/**
-	 * Border declarations for a role frame (heading bar / inline pill),
+	 * Border declarations for a role frame (heading callout / inline callout),
 	 * mirroring the regular-callout border logic: tinted by the element's own
 	 * per-callout accent (--cs-color-rgb). Empty when no side is enabled.
 	 */
@@ -1907,7 +1907,7 @@ export class CSSInjector {
 		if (!fallbackDef) return "";
 
 		// Collect the *attr-form* of every known callout ID and alias — the form
-		// Obsidian actually writes into `data-callout` on a blockquote callout.
+		// Obsidian actually writes into `data-callout` on a block callout.
 		// A space-form `:not([data-callout="multi word callout"])` never excludes
 		// the element Obsidian tagged `multi-word-callout`, so the fallback rules
 		// below (which carry `!important`) would forcibly override that callout's
@@ -2045,8 +2045,8 @@ export class CSSInjector {
 			);
 		}
 
-		// Fallback background (solid OR gradient) on unknown heading bars /
-		// inline pills, mirroring generateTokenColorCSS for registered ids so all
+		// Fallback background (solid OR gradient) on unknown heading callouts /
+		// inline callouts, mirroring generateTokenColorCSS for registered ids so all
 		// three roles share one background (ref tokens have no surface to paint).
 		// The .cs-unknown class doubles the class count, so this outranks the
 		// static styles.css tint without !important. bgProps emits nothing when
@@ -2086,7 +2086,7 @@ export class CSSInjector {
 			false,
 		);
 		if (unknownHeadingPrint) parts.push(unknownHeadingPrint);
-		// Unknown regular callouts: the fallback tint carries the gradient too,
+		// Unknown block callouts: the fallback tint carries the gradient too,
 		// so it needs the same Preview-safe raster repaint. The selector mirrors
 		// the fallback rules above (`body` prefix + :not() list).
 		const unknownCalloutPrint = this.printGradientCSS(

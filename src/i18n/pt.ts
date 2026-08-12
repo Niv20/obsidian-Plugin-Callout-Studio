@@ -558,7 +558,7 @@ export const pt: Record<string, string> = {
 	"settings.globalSettingsInlineDesc":
 		"Adicione um token de callout em qualquer parte de uma linha de texto (por exemplo, `[!type]`) para renderizá-lo como uma pequena pílula em linha. Você pode ajustar a borda e a forma.",
 	"settings.globalSettingsCustomize": "Personalizar",
-	"settings.calloutTypeRegular": "Callout regular",
+	"settings.calloutTypeRegular": "Block Callout",
 	"settings.calloutTypeHeading": "Callout de cabeçalho",
 	"settings.calloutTypeInline": "Callout em linha",
 	"settings.customizeMenu": "Personalizar itens do menu",
@@ -568,7 +568,7 @@ export const pt: Record<string, string> = {
 	"menuCustomize.title": "Personalizar menu de clique direito",
 	"menuCustomize.desc":
 		"Ative ou desative ações e arraste a alça para reordená-las. As alterações são salvas automaticamente.",
-	"menuCustomize.regular": "Callout regular",
+	"menuCustomize.regular": "Block Callout",
 	"menuCustomize.heading": "Callout de cabeçalho",
 	"menuCustomize.inline": "Callout em linha",
 	"menuCustomize.dragHandle": "Arrastar para reordenar",

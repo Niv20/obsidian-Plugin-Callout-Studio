@@ -191,7 +191,7 @@ function paintSvgIcon(
 		// on the root reaches exactly the shapes that declared no colour of their
 		// own, and those are the black ones (SVG fills black by default), so it
 		// left the heading and inline copies with their black lines wearing the
-		// callout's colour while the regular callout — a background image, which
+		// callout's colour while the block callout — a background image, which
 		// nothing outside it can paint — showed them black.
 		if (!svgEl.hasAttribute("color")) {
 			// A presentation attribute, so anything the artwork declares for itself
@@ -316,7 +316,7 @@ interface PaintState {
 
 /**
  * Draw a picture as a one-colour stencil — the DOM equivalent of the CSS mask
- * the regular callout paints a followed picture through (see CSSInjector).
+ * the block callout paints a followed picture through (see CSSInjector).
  *
  * A `fill` on the `<svg>` root only reaches shapes that declare no paint of
  * their own, so a multi-coloured drawing came out half recoloured on the

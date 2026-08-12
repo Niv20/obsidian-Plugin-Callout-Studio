@@ -98,8 +98,8 @@ export interface BgGradient {
 	toColorDark: string;
 	/**
 	 * Paint the same sweep THROUGH the title text of all three render roles —
-	 * the regular callout's title, the heading callout's title, and the inline
-	 * pill's label — on top of whatever background each surface already has.
+	 * the block callout's title, the heading callout's title, and the inline
+	 * callout's label — on top of whatever background each surface already has.
 	 * One sweep per element, so it runs across the whole title at once rather
 	 * than restarting on each glyph. Off by default: gradient text is a
 	 * deliberate accent and it costs some legibility.
@@ -145,7 +145,7 @@ export interface CalloutDefinition {
 	source: "user" | "theme" | "plugin" | "builtin" | "fallback";
 	/**
 	 * Icon size and offsets per render role, so a nudge that fixes the heading
-	 * token cannot knock the blockquote icon out of place.
+	 * token cannot knock the block-callout icon out of place.
 	 *
 	 * A role missing here — or a single field missing inside one — falls back to
 	 * the flat trio below, which is precisely what that trio meant before this
@@ -158,7 +158,7 @@ export interface CalloutDefinition {
 	iconAdjust?: Partial<Record<CalloutRenderRole, IconAdjust>>;
 	/**
 	 * Horizontal icon offset in px (−10 to 10). Legacy shared value and the
-	 * mirror of `iconAdjust.regular`; see `iconAdjust` above.
+	 * mirror of the block-callout entry in `iconAdjust`; see `iconAdjust` above.
 	 */
 	iconOffsetX?: number;
 	/** Vertical icon offset in px (−10 to 10). See `iconOffsetX`. */
@@ -177,7 +177,7 @@ export interface CalloutDefinition {
 	bgGradient?: BgGradient;
 	/**
 	 * Paint no background at all — `background-color: transparent`, on every
-	 * render role (blockquote, heading bar, inline pill).
+	 * render role (block callout, heading callout, inline callout).
 	 * `bgColorLight`/`bgColorDark`/`bgGradient` are omitted alongside it, so
 	 * this flag is the whole background state; absent means the def is painted
 	 * normally.
@@ -410,7 +410,7 @@ export interface EmojiEntry {
 
 /**
  * The three rendering roles a single callout definition can play:
- * - "regular": the native blockquote callout (`> [!name]`)
+ * - "regular": the native block callout (`> [!name]`)
  * - "heading": a heading line whose first content is the token (`## [!name]`)
  * - "inline": a `[!name]` token in the middle of any other line, shown as a pill
  * One shared definition list serves all roles; only the rendering differs.
@@ -420,7 +420,7 @@ export type CalloutRenderRole = "regular" | "heading" | "inline";
 /**
  * Every render role, for code that has to consider all of them at once — most
  * importantly the icon cache sweep, which must keep the artwork each role draws
- * from rather than only the blockquote's.
+ * from rather than only the block callout's.
  */
 export const CALLOUT_RENDER_ROLES: readonly CalloutRenderRole[] = [
 	"regular",
@@ -529,8 +529,9 @@ export interface BorderSidesSettings {
 }
 
 /**
- * Frame styling for an optional render role's surface (heading bar / inline
- * pill): which border sides to draw, how thick, and the corner rounding.
+ * Frame styling for an optional render role's surface (heading callout /
+ * inline callout): which border sides to draw, how thick, and the corner
+ * rounding.
  */
 export interface RoleFrameStyleSettings {
 	borderSides: BorderSidesSettings;
@@ -541,7 +542,7 @@ export interface RoleFrameStyleSettings {
 }
 
 /**
- * Heading-bar frame styling plus the vertical text spacing inside the bar.
+ * Heading-callout frame styling plus the vertical text spacing inside the bar.
  * Both paddings are in em (relative to the heading's own font size) so the
  * bar scales with the heading level.
  */
@@ -551,7 +552,7 @@ export interface HeadingFrameStyleSettings extends RoleFrameStyleSettings {
 	/** Space below the heading text inside the bar, in em. */
 	paddingBottom: number;
 	/**
-	 * Vertical gap *above* each heading bar, in em (the *outer* margin, distinct
+	 * Vertical gap *above* each heading callout, in em (the *outer* margin, distinct
 	 * from paddingTop which is the inner text spacing). This is the knob that
 	 * separates heading callouts from whatever precedes them — most importantly
 	 * from each other: several collapsed heading callouts stacked back-to-back
@@ -562,25 +563,25 @@ export interface HeadingFrameStyleSettings extends RoleFrameStyleSettings {
 }
 
 /**
- * Inline-pill frame styling plus a font scale for the pill's text and icon.
- * The scale multiplies the pill's base font size (0.9em) so the pill grows or
+ * Inline-callout frame styling plus a font scale for the callout's text and icon.
+ * The scale multiplies the callout's base font size (0.9em) so the callout grows or
  * shrinks relative to the surrounding paragraph text.
  */
 export interface InlineFrameStyleSettings extends RoleFrameStyleSettings {
-	/** Scale factor for the inline pill's font size (e.g. 0.8 – 1.5) */
+	/** Scale factor for the inline callout's font size (e.g. 0.8 – 1.5) */
 	fontScale: number;
 }
 
 export interface GlobalStyleSettings {
-	/** Which border sides are enabled (regular callouts) */
+	/** Which border sides are enabled (block callouts) */
 	borderSides: BorderSidesSettings;
-	/** Border thickness in px (regular callouts) */
+	/** Border thickness in px (block callouts) */
 	borderWidth: number;
 	/** Scale factor for callout title font size (e.g. 0.8 – 1.5) */
 	titleScale: number;
 	/** Scale factor for callout content font size (e.g. 0.8 – 1.5) */
 	contentScale: number;
-	/** Border-radius in px for callout corners (regular callouts) */
+	/** Border-radius in px for callout corners (block callouts) */
 	borderRadius: number;
 	/** When true, indent callout body to align under the title text (not the icon) */
 	alignContentWithTitle: boolean;
@@ -597,7 +598,7 @@ export interface PluginSettings {
 	iconSources: IconSourceSettings;
 	/** Heading callouts (`## [!name]`) — optional role, can be disabled. */
 	headingCallouts: HeadingCalloutSettings;
-	/** Inline callout pills (`[!name]` mid-line) — optional role, can be disabled. */
+	/** Inline callouts (`[!name]` mid-line) — optional role, can be disabled. */
 	inlineCallouts: RoleToggleSettings;
 	/** Has the first-run vault scan been completed? */
 	firstRunCompleted?: boolean;

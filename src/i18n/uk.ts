@@ -561,7 +561,7 @@ export const uk: Record<string, string> = {
 		"Додайте токен callout будь-де всередині рядка тексту (напр., `[!type]`), щоб відобразити його як маленьку вбудовану капсулу. Ви можете налаштувати його рамку та форму.",
 	"settings.globalSettingsCustomize": "Налаштувати",
 
-	"settings.calloutTypeRegular": "Звичайний callout",
+	"settings.calloutTypeRegular": "Block callout",
 	"settings.calloutTypeHeading": "Callout-заголовок",
 	"settings.calloutTypeInline": "Вбудований callout",
 
@@ -572,7 +572,7 @@ export const uk: Record<string, string> = {
 	"menuCustomize.title": "Налаштування контекстного меню",
 	"menuCustomize.desc":
 		"Вмикайте або вимикайте дії та перетягуйте маркер, щоб змінити їх порядок. Зміни зберігаються автоматично.",
-	"menuCustomize.regular": "Звичайний callout",
+	"menuCustomize.regular": "Block callout",
 	"menuCustomize.heading": "Callout-заголовок",
 	"menuCustomize.inline": "Вбудований callout",
 	"menuCustomize.dragHandle": "Перетягніть, щоб змінити порядок",

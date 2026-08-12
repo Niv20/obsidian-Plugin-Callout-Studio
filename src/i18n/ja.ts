@@ -40,7 +40,7 @@ export const ja: Record<string, string> = {
 		"## [!tip] 見出しとして\n" +
 		"見出しをcallout風にするには、`#`の直後に`[!type]`を追加します。\n\n" +
 		"この[!warning]のようなインラインcalloutにしたい場合は、文章の途中に`[!type]`を追加するだけです。流れを止める必要はありません。\n\n" +
-		"> [!note] 通常のcallout\n" +
+		"> [!note] Block Callout\n" +
 		"> もちろん、従来のcalloutもこれまでと同じ構文でそのまま使えます：`> [!type]`。\n\n" +
 		"Callout Studioにはまだまだ多くの機能があります！[詳しく見る]({{repoUrl}})。\n",
 
@@ -557,7 +557,7 @@ export const ja: Record<string, string> = {
 		"テキスト行の中のどこかにcalloutトークンを追加すると（例: `[!type]`）、小さなインラインピルとして表示されます。ボーダーと形状を調整できます。",
 	"settings.globalSettingsCustomize": "カスタマイズ",
 
-	"settings.calloutTypeRegular": "通常のcallout",
+	"settings.calloutTypeRegular": "Block Callout",
 	"settings.calloutTypeHeading": "見出しcallout",
 	"settings.calloutTypeInline": "インラインcallout",
 
@@ -568,7 +568,7 @@ export const ja: Record<string, string> = {
 	"menuCustomize.title": "右クリックメニューをカスタマイズ",
 	"menuCustomize.desc":
 		"操作のオン/オフを切り替え、ハンドルをドラッグして並べ替えます。変更は自動的に保存されます。",
-	"menuCustomize.regular": "通常のcallout",
+	"menuCustomize.regular": "Block Callout",
 	"menuCustomize.heading": "見出しcallout",
 	"menuCustomize.inline": "インラインcallout",
 	"menuCustomize.dragHandle": "ドラッグして並べ替え",

@@ -139,12 +139,12 @@ export default class CalloutStudioPlugin extends Plugin {
 			this.cssInjector.paintIcons(el);
 		});
 
-		// Reading-view rendering for heading callouts and inline pills.
+		// Reading-view rendering for heading callouts and inline callouts.
 		this.registerMarkdownPostProcessor(
 			createCalloutReadingPostProcessor(this),
 		);
 
-		// Live Preview rendering for heading callouts and inline pills.
+		// Live Preview rendering for heading callouts and inline callouts.
 		this.registerEditorExtension(createCalloutViewPlugin(this));
 
 		// The heading "gap above the bar" spacer. A separate StateField because
@@ -152,7 +152,7 @@ export default class CalloutStudioPlugin extends Plugin {
 		this.registerEditorExtension(createHeadingGapField(this));
 
 		// Open the startup entrance window if the UI was already visible, so the
-		// heading bars, pills, icons and fold chevrons that these render surfaces
+		// heading callouts, inline callouts, icons and fold chevrons that these render surfaces
 		// are about to build animate in gently instead of snapping over the raw
 		// text the user briefly saw. Done here — synchronously, before the first
 		// render pass — so `body.cs-anim-window` and the flag are set in time.
@@ -353,8 +353,8 @@ export default class CalloutStudioPlugin extends Plugin {
 	/**
 	 * Fully re-render both preview modes. Used when a render-role toggle
 	 * flips: unlike refreshCallouts(), this also re-runs reading-view
-	 * post-processors (via previewMode.rerender) so already-baked pills and
-	 * heading bars are added or stripped immediately.
+	 * post-processors (via previewMode.rerender) so already-baked inline
+	 * callouts and heading callouts are added or stripped immediately.
 	 */
 	refreshRenderModes(): void {
 		refreshAllCalloutEditors();

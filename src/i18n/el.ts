@@ -550,7 +550,7 @@ export const el: Record<string, string> = {
 	"settings.globalSettingsInlineDesc":
 		"Προσθέστε ένα token callout οπουδήποτε μέσα σε μια γραμμή κειμένου (π.χ. `[!type]`) για να εμφανιστεί ως μικρό ενσωματωμένο χάπι. Μπορείτε να προσαρμόσετε το περίγραμμά του και το σχήμα του.",
 	"settings.globalSettingsCustomize": "Προσαρμογή",
-	"settings.calloutTypeRegular": "Κανονικό callout",
+	"settings.calloutTypeRegular": "Block callout",
 	"settings.calloutTypeHeading": "Callout επικεφαλίδας",
 	"settings.calloutTypeInline": "Ενσωματωμένο callout",
 	"settings.customizeMenu": "Προσαρμογή στοιχείων μενού",
@@ -560,7 +560,7 @@ export const el: Record<string, string> = {
 	"menuCustomize.title": "Προσαρμογή μενού δεξιού κλικ",
 	"menuCustomize.desc":
 		"Ενεργοποιήστε ή απενεργοποιήστε ενέργειες και σύρετε τη λαβή για να τις αναδιατάξετε. Οι αλλαγές αποθηκεύονται αυτόματα.",
-	"menuCustomize.regular": "Κανονικό callout",
+	"menuCustomize.regular": "Block callout",
 	"menuCustomize.heading": "Callout επικεφαλίδας",
 	"menuCustomize.inline": "Ενσωματωμένο callout",
 	"menuCustomize.dragHandle": "Σύρετε για αναδιάταξη",

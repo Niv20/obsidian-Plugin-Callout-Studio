@@ -2,7 +2,7 @@
 
 Callout Studio is a powerful callout management **plugin** for [Obsidian.](https://obsidian.md)
 
-It lets you create, edit, and style your own callout types, override the built-in ones, pick icons from large libraries, and use every callout as a regular blockquote, a section heading, or an inline pill - all from a single settings tab!
+It lets you create, edit, and style your own callout types, override the built-in ones, pick icons from large libraries, and use every callout as a Block Callout, a Heading Callout, or an Inline Callout - all from a single settings tab!
 
 <img alt="hero" src="https://github.com/user-attachments/assets/e24ff986-cf0c-4f18-95be-33a75283d83a" />
 
@@ -12,9 +12,9 @@ It lets you create, edit, and style your own callout types, override the built-i
 
 The same callout definition can be used in **three** different forms, each with its own vault-wide style controls:
 
-1. **Regular callout** — the classic Obsidian blockquote: `> [!note]`.
-2. **Heading callout** — put the token right after the heading marks, e.g. `## [!note]`, to turn the whole heading into a colored, foldable bar.
-3. **Inline callout** — drop the token in the middle of a sentence, e.g. `[!note]`, to get a small colored pill without breaking the paragraph.
+1. **Block Callout** — the classic Obsidian blockquote: `> [!note]`.
+2. **Heading Callout** — put the token right after the heading marks, e.g. `## [!note]`, to turn the whole heading into a colored, foldable bar.
+3. **Inline Callout** — drop the token in the middle of a sentence, e.g. `[!note]`, to get a small colored callout without breaking the paragraph.
 
 All three forms render in Live Preview, Reading view, and PDF export.
 
@@ -69,11 +69,11 @@ When you type `[!` inside a blockquote, Callout Studio shows a suggestion list o
 
 ### Global callout style
 
-Regular, heading, and inline callouts each get their own style popup, opened from **Settings → Global settings**:
+Block, heading, and inline callouts each get their own style popup, opened from **Settings → Global settings**:
 
-- **Regular callouts** — border sides and thickness, corner rounding, independent Title scale and Content scale, and an option to align the body with the title.
+- **Block callouts** — border sides and thickness, corner rounding, independent Title scale and Content scale, and an option to align the body with the title.
 - **Heading callouts** — border sides and thickness, corner rounding, vertical padding around the heading text, and a horizontal icon inset.
-- **Inline callouts** — border sides and thickness, corner rounding, and a dedicated font scale for the pill text.
+- **Inline callouts** — border sides and thickness, corner rounding, and a dedicated font scale for the callout text.
 
 <img alt="Global callout style" src="https://github.com/user-attachments/assets/7558c077-1396-43de-9715-6538b4ca8297" />
 
@@ -106,11 +106,11 @@ Callout Studio keeps the registry in sync with what's actually used in your vaul
 
 ### Right-click context menu
 
-Right-click on any callout - regular, heading, or inline - to get extra actions injected into Obsidian's native menu:
+Right-click on any callout - block, heading, or inline - to get extra actions injected into Obsidian's native menu:
 
 - Edit callout settings
 - Open Callout Studio settings
-- Regular callouts: copy callout Markdown, set the fold state (open / closed / non-collapsible)
+- Block callouts: copy callout Markdown, set the fold state (open / closed / non-collapsible)
 - Heading callouts: cut, copy, or delete the whole heading section
 
 You can choose which of these actions appear for each of the three forms, and reorder them, from **Settings → Customize menu items**.

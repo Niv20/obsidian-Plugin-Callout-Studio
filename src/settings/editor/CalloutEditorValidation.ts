@@ -130,11 +130,12 @@ export type AttrIdCollisionInput = AttrIdLookup & {
  * Obsidian dasherizes it into `data-callout`, or null when there is none.
  *
  * `my note` and `my-note` both render as `data-callout="my-note"`, so the two
- * would fight over a single CSS rule — the regular callout could only ever show
+ * would fight over a single CSS rule — the block callout could only ever show
  * one of them. That makes the pair unusable in practice, so this counts as a
  * duplicate ID and blocks saving (see isStateValid), exactly like an exact
- * clash. Heading bars and inline pills keep their own space-form attribute and
- * would stay distinct, but that is not worth shipping a half-broken type over.
+ * clash. Heading callouts and inline callouts keep their own space-form
+ * attribute and would stay distinct, but that is not worth shipping a
+ * half-broken type over.
  *
  * Exact ID/alias clashes are NOT reported here — canUseCalloutId owns those,
  * and reporting both would show two different messages for one problem.

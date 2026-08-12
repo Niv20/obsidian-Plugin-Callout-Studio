@@ -346,7 +346,7 @@ function decorateLine(
 			: [];
 	if (tokens.length === 0 && refs.length === 0) return;
 
-	// Native blockquote callouts belong to Obsidian's own rendering.
+	// Native block callouts belong to Obsidian's own rendering.
 	if (tokens.some((t) => t.role === "regular")) return;
 
 	// Raw-syntax reveal follows the caret only while the editor is focused —
@@ -407,7 +407,7 @@ function decorateLine(
 					attributes: {
 						class: cls,
 						"data-callout": calloutDomId(token.rawId, resolved),
-						// Mirrors what Obsidian stamps on a blockquote callout,
+						// Mirrors what Obsidian stamps on a block callout,
 						// so a theme can hook this role the same way. Omitted
 						// when absent — an empty attribute is a selector match.
 						...(token.metadata

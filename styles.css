@@ -574,7 +574,7 @@
    (.cs-heading-callout:not(.cm-line)), which the live editor preview never
    shows. While the gap slider is dragged, only the editor *body* is swapped
    for this stacked reading-view demo — the Preview card's frame and "Preview"
-   header stay put, so it reads as the same Preview box: bodyless heading bars
+   header stay put, so it reads as the same Preview box: bodyless heading callouts
    stacked exactly as collapsed callouts do in a note, with only the gap margin
    between them — no animation, no special rendering. The gap itself is driven
    by an inline --cs-heading-gap-top (set from the slider value in
@@ -3781,7 +3781,7 @@ input.cs-input-invalid:focus {
    - Here, at one class, sit the properties CSSInjector overrides per callout.
      Its `.cs-heading-callout[data-callout="id"]` rules are 2 selectors and
      beat this by design (see generateTokenColorCSS) — that is how a custom
-     palette's background or gradient reaches a heading bar at all. Raising
+     palette's background or gradient reaches a heading callout at all. Raising
      this rule's weight would silently strand every custom background on the
      default tint.
    - Below, at four classes, sit the properties Obsidian's own CSS declares on
@@ -3880,7 +3880,7 @@ input.cs-input-invalid:focus {
 .cs-heading-callout.cs-heading-callout:not(.cm-line) {
 	margin-top: var(--cs-heading-gap-top, 0em);
 	/* Zero the theme's heading margin-bottom so the gap slider (margin-top) is
-	   the *sole* thing between two stacked heading bars — otherwise a collapsed
+	   the *sole* thing between two stacked heading callouts — otherwise a collapsed
 	   heading callout keeps invisible slack the slider can't remove, and at
 	   gap 0 the bars still don't touch. This also makes reading view match
 	   Live Preview, where the HeadingGapWidget already gives gap-only spacing,
@@ -3888,7 +3888,7 @@ input.cs-input-invalid:focus {
 	margin-bottom: 0;
 }
 
-/* The [!id] token inside a heading bar (icon + optional name). */
+/* The [!id] token inside a heading callout (icon + optional name). */
 .cs-heading-token {
 	display: inline-flex;
 	align-items: center;
@@ -3960,7 +3960,7 @@ input.cs-input-invalid:focus {
 }
 
 /* Fold chevron trailing a heading callout (Live Preview). Rendered as an
-   end-of-line widget after the heading title, so it mirrors a regular callout's
+   end-of-line widget after the heading title, so it mirrors a block callout's
    disclosure arrow. Sized to the heading font, tinted with the callout's own
    color (like the icon and name), subtle until hover, and rotated when its
    section is folded. Only rendered when the core "Fold heading" setting is on.
@@ -4117,7 +4117,7 @@ input.cs-input-invalid:focus {
 
 /* On a slow launch (mobile every time, desktop on a mid-session enable /
    reload) the note's raw text paints before the plugin transforms it, so the
-   heading bar, pill, icon and fold chevron would otherwise SNAP into place.
+   heading callout, inline callout, icon and fold chevron would otherwise SNAP into place.
    During the time-boxed entrance window (main.ts opens it by tagging <body>
    with .cs-anim-window and stamping fresh token/bar/chevron DOM with
    .cs-anim-in) they instead ease in. One-shot, opacity/transform/background
@@ -4140,7 +4140,7 @@ input.cs-input-invalid:focus {
 	}
 }
 
-/* Live Preview heading bar: the .cm-line already exists (it held the raw
+/* Live Preview heading callout: the .cm-line already exists (it held the raw
    text), the view plugin just adds .cs-heading-callout to it — so a transition
    scoped to the open window fires on that class flip, and never on lines that
    are built already-styled. A transition also animates color from whatever the
@@ -4152,7 +4152,7 @@ input.cs-input-invalid:focus {
    .cs-heading-callout IS the .cm-line. CodeMirror measures each line's rendered
    box once to build its height map, and an animated padding keeps changing that
    box for a quarter second AFTERWARDS, while the height map holds the
-   pre-transition value — every heading bar on screen drifts, and the error
+   pre-transition value — every heading callout on screen drifts, and the error
    accumulates. Same hazard the margin warning by the gap rule above describes,
    only from the one property that IS inside the measured box. The window is not
    opt-in on phones either: main.ts arms it for three seconds on every mobile
@@ -4173,7 +4173,7 @@ body.cs-anim-window .cs-heading-callout:not(.cm-line) {
 		padding 250ms ease-out;
 }
 
-/* Reading-view heading bar: the hN is created fresh WITH the bar class, so a
+/* Reading-view heading callout: the hN is created fresh WITH the callout class, so a
    transition has no prior state to animate from — use a keyframe instead. */
 .cs-heading-callout.cs-anim-in {
 	animation: cs-bar-in 350ms ease-out;

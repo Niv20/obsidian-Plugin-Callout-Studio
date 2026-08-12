@@ -38,7 +38,7 @@ export const fi: Record<string, string> = {
 		"## [!tip] Otsikkona\n" +
 		"Muuttaaksesi minkä tahansa otsikon callout-tyyliseksi otsikoksi, lisää `[!type]` heti `#`-merkkien jälkeen.\n\n" +
 		"Haluatko tällaisen upotetun calloutin [!warning]? Lisää vain `[!type]` keskelle lausetta, kirjoituksen kulkua katkaisematta.\n\n" +
-		"> [!note] Tavallinen callout\n" +
+		"> [!note] Block Callout\n" +
 		"> Klassinen callout toimii tietysti täsmälleen samalla syntaksilla, johon olet jo tottunut: `> [!type]`.\n\n" +
 		"Callout Studiolla on paljon muutakin tarjottavaa! [Lue lisää]({{repoUrl}}).\n",
 
@@ -539,7 +539,7 @@ export const fi: Record<string, string> = {
 	"settings.globalSettingsInlineDesc":
 		"Lisää callout-token mihin tahansa kohtaan tekstiriviä (esim. `[!type]`), jolloin se näkyy pienenä rivinsisäisenä pillerinä. Voit säätää sen reunaa ja muotoa.",
 	"settings.globalSettingsCustomize": "Mukauta",
-	"settings.calloutTypeRegular": "Tavallinen callout",
+	"settings.calloutTypeRegular": "Block callout",
 	"settings.calloutTypeHeading": "Otsikko-callout",
 	"settings.calloutTypeInline": "Rivinsisäinen callout",
 	"settings.customizeMenu": "Mukauta valikon kohteita",
@@ -549,7 +549,7 @@ export const fi: Record<string, string> = {
 	"menuCustomize.title": "Mukauta hiiren kakkospainikkeen valikkoa",
 	"menuCustomize.desc":
 		"Ota toimintoja käyttöön tai pois käytöstä ja järjestä niitä uudelleen vetämällä kahvasta. Muutokset tallennetaan automaattisesti.",
-	"menuCustomize.regular": "Tavallinen callout",
+	"menuCustomize.regular": "Block callout",
 	"menuCustomize.heading": "Otsikko-callout",
 	"menuCustomize.inline": "Rivinsisäinen callout",
 	"menuCustomize.dragHandle": "Vedä järjestääksesi uudelleen",

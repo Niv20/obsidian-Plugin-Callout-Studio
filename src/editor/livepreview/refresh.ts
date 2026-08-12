@@ -25,7 +25,7 @@ export const calloutStudioRefresh = StateEffect.define<null>();
  * a registered editor extension to every CM6 instance it builds, and several
  * of those are not workspace leaves: table cells and canvas cards in Live
  * Preview, an editable `![[note]]` transclusion, and this plugin's own
- * settings preview. Their pills and heading bars are widget DOM the icon sweep
+ * settings preview. Their inline callouts and heading callouts are widget DOM the icon sweep
  * deliberately will not touch (see CSS_CM_WIDGET), so missing them here left
  * them with no refresh path at all — they kept the old icon until the next
  * keystroke in that editor. GlobalStyleModal had already grown a local

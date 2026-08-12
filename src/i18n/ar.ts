@@ -40,7 +40,7 @@ export const ar: Record<string, string> = {
 		"## [!tip] كعنوان\n" +
 		"لتحويل أي عنوان إلى عنوان بنمط callout، أضف `[!type]` مباشرة بعد علامات `#`.\n\n" +
 		"هل تريد callout مضمّنًا مثل هذا [!warning]؟ فقط أضف `[!type]` داخل الجملة، دون كسر تسلسل الكتابة.\n\n" +
-		"> [!note] callout عادي\n" +
+		"> [!note] Block Callout\n" +
 		"> بالطبع، الـ callout الكلاسيكي يعمل بنفس الصيغة التي اعتدت عليها تمامًا: `> [!type]`.\n\n" +
 		"هناك الكثير مما يقدمه Callout Studio! [معرفة المزيد]({{repoUrl}}).\n",
 
@@ -547,7 +547,7 @@ export const ar: Record<string, string> = {
 	"settings.globalSettingsInlineDesc":
 		"أضف رمز callout في أي مكان داخل سطر من النص (مثل `[!type]`) لعرضه كشارة صغيرة مضمّنة. يمكنك ضبط حدوده وشكله.",
 	"settings.globalSettingsCustomize": "تخصيص",
-	"settings.calloutTypeRegular": "callout عادي",
+	"settings.calloutTypeRegular": "Block callout",
 	"settings.calloutTypeHeading": "callout العنوان",
 	"settings.calloutTypeInline": "callout مضمّن",
 	"settings.customizeMenu": "تخصيص عناصر القائمة",
@@ -557,7 +557,7 @@ export const ar: Record<string, string> = {
 	"menuCustomize.title": "تخصيص قائمة النقر بزر الماوس الأيمن",
 	"menuCustomize.desc":
 		"قم بتفعيل الإجراءات أو تعطيلها واسحب المقبض لإعادة ترتيبها. تُحفظ التغييرات تلقائياً.",
-	"menuCustomize.regular": "callout عادي",
+	"menuCustomize.regular": "Block callout",
 	"menuCustomize.heading": "callout العنوان",
 	"menuCustomize.inline": "callout مضمّن",
 	"menuCustomize.dragHandle": "اسحب لإعادة الترتيب",

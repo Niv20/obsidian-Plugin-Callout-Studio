@@ -38,7 +38,7 @@ export const nb: Record<string, string> = {
 		"## [!tip] Som overskrift\n" +
 		"For å gjøre en overskrift om til en overskrift i callout-stil, legg til `[!type]` rett etter `#`-tegnene.\n\n" +
 		"Vil du ha en innebygd callout som denne [!warning]? Bare legg til `[!type]` midt i en setning, uten å bryte skriveflyten.\n\n" +
-		"> [!note] Vanlig callout\n" +
+		"> [!note] Block Callout\n" +
 		"> Den klassiske callout-en fungerer selvfølgelig med akkurat den samme syntaksen du allerede er vant til: `> [!type]`.\n\n" +
 		"Callout Studio har mye mer å tilby! [Les mer]({{repoUrl}}).\n",
 
@@ -540,7 +540,7 @@ export const nb: Record<string, string> = {
 	"settings.globalSettingsInlineDesc":
 		"Legg til et callout-token hvor som helst inne i en tekstlinje (f.eks. `[!type]`) for å vise det som en liten innebygd pille. Du kan justere kant og form.",
 	"settings.globalSettingsCustomize": "Tilpass",
-	"settings.calloutTypeRegular": "Vanlig callout",
+	"settings.calloutTypeRegular": "Block callout",
 	"settings.calloutTypeHeading": "Overskrift-callout",
 	"settings.calloutTypeInline": "Innebygd callout",
 	"settings.customizeMenu": "Tilpass menyelementer",
@@ -550,7 +550,7 @@ export const nb: Record<string, string> = {
 	"menuCustomize.title": "Tilpass høyreklikkmenyen",
 	"menuCustomize.desc":
 		"Slå handlinger av eller på, og dra i håndtaket for å endre rekkefølgen. Endringer lagres automatisk.",
-	"menuCustomize.regular": "Vanlig callout",
+	"menuCustomize.regular": "Block callout",
 	"menuCustomize.heading": "Overskrift-callout",
 	"menuCustomize.inline": "Innebygd callout",
 	"menuCustomize.dragHandle": "Dra for å endre rekkefølge",

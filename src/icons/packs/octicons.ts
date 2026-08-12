@@ -4,8 +4,8 @@
  * The one pack that draws the same icon at more than one size. Octicons ships
  * 16px and 24px artwork for almost everything — genuinely different drawings,
  * not one scaled — so the size is chosen from the surface the icon lands on,
- * never by the user: 16px art for inline pills, 24px for blockquote callouts
- * and heading bars.
+ * never by the user: 16px art for inline callouts, 24px for block callouts
+ * and heading callouts.
  *
  * The coverage is lopsided (16px for 380 of 383 icons, 24px for 350, 12px for
  * nine, 48/96 for one), so the choice is a preference list with a fallback to

@@ -132,7 +132,7 @@ export class ExternalStyleModal extends Modal {
 		if (this.plugin.registry.setExternalStyle(this.def.id, false)) {
 			await this.plugin.saveSettings();
 			this.plugin.refreshCallouts();
-			// Reading view's heading bars and pills come back only on a
+			// Reading view's heading callouts and inline callouts come back only on a
 			// post-processor pass — see the same pairing in CalloutRowActions.
 			this.plugin.refreshRenderModes();
 			this.resumed = true;

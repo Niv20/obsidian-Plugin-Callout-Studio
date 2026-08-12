@@ -38,10 +38,10 @@ export const nl: Record<string, string> = {
 	"welcome.sample":
 		"Met Callout Studio kunt u callouts maken met een eigen icoon, kleuren en naam.\n\n" +
 		"U kunt dezelfde callout op **drie** verschillende manieren gebruiken:\n\n" +
-		"## [!tip] Als kop\n" +
+		"## [!tip] Als Heading Callout\n" +
 		"Om een kop om te zetten in een kop in callout-stijl, voegt u `[!type]` direct na de `#`'s toe.\n\n" +
-		"Wilt u een inline callout zoals deze [!warning]? Voeg gewoon `[!type]` midden in een zin toe, zonder uw schrijfflow te onderbreken.\n\n" +
-		"> [!note] Reguliere callout\n" +
+		"Wilt u een Inline Callout zoals deze [!warning]? Voeg gewoon `[!type]` midden in een zin toe, zonder uw schrijfflow te onderbreken.\n\n" +
+		"> [!note] Block Callout\n" +
 		"> Natuurlijk werkt de klassieke callout met precies dezelfde syntaxis die u al gewend bent: `> [!type]`.\n\n" +
 		"Callout Studio heeft nog veel meer te bieden! [Meer informatie]({{repoUrl}}).\n",
 
@@ -133,7 +133,7 @@ export const nl: Record<string, string> = {
 		'Palet "{{name}}" verwijderen?\nCallouts die de kleuren ervan gebruiken, worden niet beïnvloed.',
 	"settings.enableAutocomplete": "[! Automatisch aanvullen inschakelen",
 	"settings.enableAutocompleteDesc":
-		'Toont suggesties wanneer u "[!" typt in een blokcitaat in de editor. Kies een callout-type uit de lijst om een volledig callout-koptekst in te voegen.',
+		'Toont suggesties wanneer u "[!" typt in een Block Callout in de editor. Kies een callout-type uit de lijst om een volledig callout-koptekst in te voegen.',
 
 	"settings.openHotkeys": "Callout Studio-sneltoetsen",
 	"settings.openHotkeysDesc":
@@ -239,7 +239,7 @@ export const nl: Record<string, string> = {
 	"editor.loremIpsumShort":
 		"Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
 	"editor.sampleInlineText":
-		"Hier is een inline [!{id}] pil binnen een alinea.",
+		"Hier is een Inline Callout [!{id}] binnen een alinea.",
 	"editor.previewReadOnly": "De live-voorvertoning kan niet worden bewerkt",
 
 	// External style window (opens instead of the editor for a callout the
@@ -249,9 +249,9 @@ export const nl: Record<string, string> = {
 		"Callout Studio past geen stijl toe op {{id}}. Het uiterlijk komt van je thema, een CSS-snippet of de standaardinstellingen van Obsidian.",
 	"editor.externalStyleWhat": "Wat dit betekent",
 	"editor.externalStyleWhatHeading":
-		"Een koptekst-callout zoals ## [!{{id}}] Titel wordt niet gerenderd — de tekst blijft zoals geschreven.",
+		"Een Heading Callout zoals ## [!{{id}}] Titel wordt niet gerenderd — de tekst blijft zoals geschreven.",
 	"editor.externalStyleWhatInline":
-		"Ook een inline-callout niet, zoals woord [!{{id}}] woord.",
+		"Ook een Inline Callout niet, zoals woord [!{{id}}] woord.",
 	"editor.externalStyleWhatGlobal":
 		"Globale stijlinstellingen (rand, radius, tekstgrootte) zijn er niet op van toepassing.",
 	"editor.externalStylePreviewTitle": "Hoe het nu wordt weergegeven",
@@ -550,13 +550,13 @@ export const nl: Record<string, string> = {
 	"heading.toggleFold": "Vouwen omschakelen",
 	"settings.globalSettings": "Globale instellingen",
 	"settings.globalSettingsRegularDesc":
-		"Voeg een callout-token toe aan een blockquote (bijvoorbeeld `> [!type]`) om het ingebouwde callout-vak van Obsidian weer te geven. U kunt de rand, hoekafronding, lettertypeschaal en uitlijning aanpassen.",
+		"Voeg een callout-token toe aan een block callout (bijvoorbeeld `> [!type]`) om het ingebouwde callout-vak van Obsidian weer te geven. U kunt de rand, hoekafronding, lettertypeschaal en uitlijning aanpassen.",
 	"settings.globalSettingsHeadingDesc":
 		"Voeg een callout-token direct na de kop-hekjes toe (bijvoorbeeld `## [!type]`) om het als een gestileerde callout-kop weer te geven. U kunt de rand, vorm en verticale afstand aanpassen.",
 	"settings.globalSettingsInlineDesc":
-		"Voeg een callout-token ergens in een tekstregel toe (bijvoorbeeld `[!type]`) om het als een kleine inline pil weer te geven. U kunt de rand en vorm aanpassen.",
+		"Voeg een callout-token ergens in een tekstregel toe (bijvoorbeeld `[!type]`) om het als een kleine Inline Callout weer te geven. U kunt de rand en vorm aanpassen.",
 	"settings.globalSettingsCustomize": "Aanpassen",
-	"settings.calloutTypeRegular": "Gewone callout",
+	"settings.calloutTypeRegular": "Block Callout",
 	"settings.calloutTypeHeading": "Kop-callout",
 	"settings.calloutTypeInline": "Inline callout",
 	"settings.customizeMenu": "Menu-items aanpassen",
@@ -566,7 +566,7 @@ export const nl: Record<string, string> = {
 	"menuCustomize.title": "Rechtsklikmenu aanpassen",
 	"menuCustomize.desc":
 		"Schakel acties in of uit en sleep de handgreep om de volgorde te wijzigen. Wijzigingen worden automatisch opgeslagen.",
-	"menuCustomize.regular": "Gewone callout",
+	"menuCustomize.regular": "Block Callout",
 	"menuCustomize.heading": "Kop-callout",
 	"menuCustomize.inline": "Inline callout",
 	"menuCustomize.dragHandle": "Sleep om te herschikken",

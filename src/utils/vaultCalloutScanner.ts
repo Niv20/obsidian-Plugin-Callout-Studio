@@ -10,7 +10,7 @@
  * Both the read-only scanners (statistics, unknown discovery, usage counting)
  * and the write operations (bulk id/title replacement, plain-text conversion)
  * go through the shared tokenizer in editor/calloutTokens, so they all see the
- * same three render roles — regular (`> [!id]`), heading (`## [!id]`), and
+ * same three render roles — block (`> [!id]`), heading (`## [!id]`), and
  * inline (`[!id]` mid-line) — and all agree on which occurrences are real:
  * escapes, markdown links, wikilink contents, inline code, fenced code blocks
  * and YAML frontmatter are excluded once, in one place. Keeping the writers on
@@ -171,7 +171,7 @@ export async function scanVaultCalloutStatistics(
 
 /**
  * Scan a single Markdown file (cheap; reads from cache) and return the set of
- * callout IDs referenced in any role (regular / heading / inline) that are
+ * callout IDs referenced in any role (block / heading / inline) that are
  * NOT in `knownIds`. Used for incremental tracking on file save / create.
  */
 export async function scanFileForUnknownCallouts(
@@ -337,7 +337,7 @@ export async function convertCalloutsToPlainTextInVault(
 				}
 			}
 
-			// Not a blockquote header we own → heading and inline tokens.
+			// Not a block callout header we own → heading and inline tokens.
 			if (line.indexOf("[!") !== -1) {
 				const result = rewriteTokensOnLine(
 					line,
@@ -382,7 +382,7 @@ export async function convertCalloutsToPlainTextInVault(
 /**
  * Replace callout IDs in all markdown files. Every occurrence of `[!oldId]`
  * (for any oldId in `oldIds`) becomes `[!newId]`, in all three render roles —
- * a heading callout and an inline pill carry the id just as a blockquote header
+ * a heading callout and an inline callout carry the id just as a block callout
  * does, and a rename that skipped them would leave a dead id behind that
  * renders as "unknown".
  *
@@ -430,7 +430,7 @@ export async function replaceCalloutIdsInVault(
  * Only writes a file if at least one line changed.
  *
  * Blockquote-only, unlike the other writers in this file: `+/-` is fold syntax
- * for a blockquote callout alone. A heading callout has no fold syntax — its
+ * for a block callout alone. A heading callout has no fold syntax — its
  * folding is driven by the two chevrons — so anything after `## [!id]` there is
  * plain title text and must not be touched.
  *
@@ -531,7 +531,7 @@ export async function replaceCalloutTitlesInVault(
 				if (token.role === "inline") return null;
 				if (!idSet.has(normalizeCalloutId(token.rawId))) return null;
 				const rest = line.slice(token.to);
-				// A blockquote header may carry a fold marker right after `]`;
+				// A block callout header may carry a fold marker right after `]`;
 				// that is syntax, not title, and has to survive the rename. A
 				// heading has no such syntax — everything after `]` is its
 				// title, so `## [!id]- Old Title` is titled `- Old Title` and

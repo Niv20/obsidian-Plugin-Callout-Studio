@@ -41,7 +41,7 @@ export const it: Record<string, string> = {
 		"## [!tip] Come titolo\n" +
 		"Per trasformare qualsiasi titolo in un titolo in stile callout, aggiungi `[!type]` subito dopo i `#`.\n\n" +
 		"Vuoi un callout inline come questo [!warning]? Basta aggiungere `[!type]` in mezzo a una frase, senza interrompere il flusso.\n\n" +
-		"> [!note] Callout normale\n" +
+		"> [!note] Block Callout\n" +
 		"> Naturalmente, il callout classico funziona con la stessa identica sintassi a cui sei già abituato: `> [!type]`.\n\n" +
 		"Callout Studio ha molto altro da offrire! [Scopri di più]({{repoUrl}}).\n",
 
@@ -561,7 +561,7 @@ export const it: Record<string, string> = {
 		"Aggiungi un token callout in un punto qualsiasi di una riga di testo (ad es. `[!type]`) per visualizzarlo come una piccola pillola in linea. Puoi regolarne bordo e forma.",
 	"settings.globalSettingsCustomize": "Personalizza",
 
-	"settings.calloutTypeRegular": "Callout normale",
+	"settings.calloutTypeRegular": "Block callout",
 	"settings.calloutTypeHeading": "Callout di intestazione",
 	"settings.calloutTypeInline": "Callout in linea",
 
@@ -572,7 +572,7 @@ export const it: Record<string, string> = {
 	"menuCustomize.title": "Personalizza il menu del clic destro",
 	"menuCustomize.desc":
 		"Attiva o disattiva le azioni e trascina la maniglia per riordinarle. Le modifiche vengono salvate automaticamente.",
-	"menuCustomize.regular": "Callout normale",
+	"menuCustomize.regular": "Block callout",
 	"menuCustomize.heading": "Callout di intestazione",
 	"menuCustomize.inline": "Callout in linea",
 	"menuCustomize.dragHandle": "Trascina per riordinare",

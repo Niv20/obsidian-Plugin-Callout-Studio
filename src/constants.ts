@@ -81,7 +81,7 @@ export const FALLBACK_ICON: CalloutIcon = Object.freeze({
  * These are core's own names, defined on `body` in `app.css`, and they are what
  * a theme redefines when it restyles callouts. `CSSInjector` hands an untouched
  * built-in this variable instead of a baked hex, so the plugin's own surfaces
- * (heading bars, inline pills, borders, icon tints) follow whatever the active
+ * (heading callouts, inline callouts, borders, icon tints) follow whatever the active
  * theme paints rather than pinning Material colours over it.
  *
  * `note` has no rule of its own in `app.css` — it falls through to the base
@@ -328,7 +328,7 @@ export const DEFAULT_SETTINGS: PluginSettings = {
 			// pushes heading text toward the bottom).
 			paddingTop: 0.25,
 			paddingBottom: 0.25,
-			// Extra gap above each heading bar (em). 0 → keep the theme's own
+			// Extra gap above each heading callout (em). 0 → keep the theme's own
 			// heading spacing untouched; raising it separates stacked/collapsed
 			// heading callouts that otherwise render glued together. Defaults to
 			// a gentle half-em so stacked heading callouts read as distinct out

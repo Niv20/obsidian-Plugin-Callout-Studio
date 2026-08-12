@@ -3,9 +3,9 @@
  * context, now role-aware.
  *
  * Resolution order (most specific first):
- *   1. inline pill  (`.cs-inline-callout` — same DOM on both surfaces)
- *   2. heading bar  (`.cs-heading-callout` line/hN or its `.cs-heading-token`)
- *   3. regular callout (native widget → editor coords → reading DOM),
+ *   1. inline callout (`.cs-inline-callout` — same DOM on both surfaces)
+ *   2. heading callout (`.cs-heading-callout` line/hN or its `.cs-heading-token`)
+ *   3. block callout (native widget → editor coords → reading DOM),
  *      unchanged from the pre-role implementation.
  */
 import { EditorView } from "@codemirror/view";
@@ -111,7 +111,7 @@ function resolveRegularContext(
 	);
 }
 
-// ─── Inline pill ─────────────────────────────────────────────────────────────
+// ─── Inline callout ──────────────────────────────────────────────────────────
 
 function resolveInlinePillContext(
 	plugin: CalloutStudioPlugin,
@@ -208,7 +208,7 @@ function resolveHeadingContext(
 	};
 }
 
-// ─── Regular callout resolvers (pre-existing behavior) ──────────────────────
+// ─── Block callout resolvers (pre-existing behavior) ────────────────────────
 
 function resolveCalloutWidgetContext(
 	plugin: CalloutStudioPlugin,

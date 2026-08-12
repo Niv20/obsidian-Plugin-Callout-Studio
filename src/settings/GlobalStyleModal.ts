@@ -213,7 +213,7 @@ export class GlobalStyleModal extends Modal {
 			},
 		});
 
-		// Outer gap above each heading bar (em). Separates a heading callout
+		// Outer gap above each heading callout (em). Separates a heading callout
 		// from what precedes it — chiefly from other heading callouts, which
 		// otherwise stack glued together when collapsed. Distinct from the
 		// vertical-spacing slider above, which is the padding *inside* the bar.

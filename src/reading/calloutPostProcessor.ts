@@ -142,7 +142,7 @@ function findLeadingTextNode(h: HTMLElement): Text | null {
 /**
  * Restyle `# [!id] title` headings in place. The block's first source line
  * is authoritative when available: it rejects escaped tokens (`# \[!id]`),
- * heading-like lines inside callouts (`> # [!id]` — those are inline pills),
+ * heading-like lines inside callouts (`> # [!id]` — those are inline callouts),
  * and link syntax (`# [!id](url)`).
  */
 function transformHeading(
@@ -193,7 +193,7 @@ function transformHeading(
 	// instead, but only during the startup entrance window.
 	if (isStartupEntranceActive()) h.classList.add(CSS_ANIM_IN);
 	h.setAttribute("data-callout", calloutDomId(rawId, resolved));
-	// Mirrors what Obsidian stamps on a blockquote callout, so a theme can hook
+	// Mirrors what Obsidian stamps on a block callout, so a theme can hook
 	// this role the same way. Omitted when absent — an empty attribute matches.
 	if (metadata) h.setAttribute("data-callout-metadata", metadata);
 
@@ -355,7 +355,7 @@ function transformHeadingRefLinks(
 /**
  * True when `node` is the leading text node of a heading element. A token
  * starting there is heading-role by definition (it followed `#…` in source)
- * and must never degrade into an inline pill — even when transformHeading
+ * and must never degrade into an inline callout — even when transformHeading
  * skipped the heading (export DOM shapes, unexpected chrome before the text).
  * After a successful heading transform the token DOM element precedes the
  * remaining title text, so findLeadingTextNode returns null and genuine

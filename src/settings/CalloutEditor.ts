@@ -117,7 +117,7 @@ function iconAdjustHeader(role: CalloutRenderRole): string {
  * sweeps iterate, and reordering it to suit this panel would move behaviour to
  * serve a layout.
  *
- * Regular closes the group rather than opening it. Its icon is the one that
+ * Block callout closes the group rather than opening it. Its icon is the one that
  * already sits right by default, so it is the least likely of the three to be
  * touched, while the two token roles — which share a baseline-aligned icon and
  * so are the ones a nudge is usually for — lead.
@@ -267,7 +267,7 @@ export class CalloutEditor extends Modal {
 	 * Icon size and offsets, resolved into one independent triple per render
 	 * role at open. Resolving up front (rather than leaving roles implicitly
 	 * sharing the legacy value) is what keeps the three groups independent:
-	 * dragging Regular never drags Heading along behind it.
+	 * dragging Block callout never drags Heading along behind it.
 	 */
 	private iconAdjust: Record<CalloutRenderRole, ResolvedIconAdjust>;
 	private aliases: string[];
@@ -1951,7 +1951,7 @@ export class CalloutEditor extends Modal {
 	 * the modal's own live preview.
 	 *
 	 * Colours and geometry ride the injected CSS and need no help — that is why
-	 * a regular callout in the note restyles the instant the CSS does. Heading
+	 * a block callout in the note restyles the instant the CSS does. Heading
 	 * and inline callouts are different: their icon and display name are baked
 	 * into Live Preview widget DOM, and a registry change never touches the
 	 * document, so CodeMirror has no reason to rebuild them. Without this
@@ -2031,8 +2031,8 @@ export class CalloutEditor extends Modal {
 
 	/**
 	 * The sample markdown seeding the preview: a mini-document exercising all
-	 * three roles. A titled heading callout opens it, an inline pill sits in
-	 * the paragraph below, then the regular callout closes it. The trailing
+	 * three roles. A titled heading callout opens it, an inline callout sits in
+	 * the paragraph below, then the block callout closes it. The trailing
 	 * blank line keeps the read-only caret parked outside that last block (see
 	 * LiveCalloutPreview's focus policy).
 	 */

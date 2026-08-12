@@ -36,7 +36,7 @@ export const CSS_HEADING_HIDE_MARKS = "cs-heading-hide-marks";
 export const CSS_HEADING_TOKEN = "cs-heading-token";
 /**
  * The heading's own title text (everything after the `[!id]` token), wrapped
- * so it has an inline box that hugs the words. The heading bar itself is a
+ * so it has an inline box that hugs the words. The heading callout itself is a
  * full-width block, so a gradient title sweep declared on the bar would only
  * ever show its opening slice through the text; declared on this span, the
  * sweep starts on the first letter and finishes on the last one. Both render
@@ -79,8 +79,9 @@ export const CSS_REF_TOKEN_LINK = "cs-ref-token-link";
 export const CSS_REF_LINK = "cs-ref-link";
 
 /**
- * Class stamped on freshly built inline pills / heading tokens / reading-view
- * heading bars / fold chevrons while the startup entrance window is open, so
+ * Class stamped on freshly built inline callouts / heading tokens / reading-view
+ * heading callouts / fold chevrons while the startup entrance window is open,
+ * so
  * they animate in (see styles.css). Never stamped once the window has closed —
  * ordinary file opens, scrolling and typing must not animate.
  */
@@ -155,15 +156,16 @@ export interface ResolvedCalloutDef {
 }
 
 /**
- * Whether the heading-bar / inline-pill / ref-token DOM should be built for a
+ * Whether the heading-callout / inline-callout / ref-token DOM should be built for a
  * resolved token at all.
  *
  * These three surfaces are the plugin's own invented syntax — no theme and no
- * CSS snippet styles a `## [!id]` bar, so unlike a blockquote callout there is
- * nothing for "external style" to hand them *to*. Rendering them anyway would
- * leave the pill drawn in the fallback accent from styles.css, which is this
- * plugin very visibly still deciding how the callout looks. So the token is not
- * built and the `[!id]` stays as the literal text the user typed.
+ * CSS snippet styles a `## [!id]` heading callout, so unlike a block callout
+ * there is nothing for "external style" to hand them *to*. Rendering them
+ * anyway would leave the callout drawn in the fallback accent from styles.css,
+ * which is this plugin very visibly still deciding how the callout looks. So
+ * the token is not built and the `[!id]` stays as the literal text the user
+ * typed.
  *
  * Every consumer of {@link resolveCalloutDef} that builds DOM calls this first.
  */
@@ -177,9 +179,9 @@ export function shouldRenderToken(resolved: ResolvedCalloutDef): boolean {
  * CSSInjector.resolveDef so DOM icons and CSS colors always agree.
  *
  * The attribute-form step is what keeps the three roles consistent: a
- * blockquote `> [!a-b]` already picks up `a b`'s styling, because Obsidian
+ *   block callout `> [!a-b]` already picks up `a b`'s styling, because Obsidian
  * renders both spellings as `data-callout="a-b"` and the generated CSS
- * selectors are built from that form. Heading bars and inline pills carry our
+ *   selectors are built from that form. Heading callouts and inline callouts carry our
  * own space-preserving id, so without this step the same spelling would render
  * here as an unknown callout.
  */
@@ -208,7 +210,7 @@ export function resolveCalloutDef(
 }
 
 /**
- * The id our OWN DOM stamps into `data-callout` (heading bars, inline pills,
+ * The id our OWN DOM stamps into `data-callout` (heading callouts, inline callouts,
  * ref tokens) for a raw token id.
  *
  * Per-callout CSS is emitted for a definition's own id and for each of its
@@ -218,7 +220,7 @@ export function resolveCalloutDef(
  * selectors, so it is stamped with the definition's id instead. Without this it
  * renders with its icon painted but no colour: the icon comes from JS, which
  * resolves the definition, while the colour comes from CSS, which does not.
- * The regular callout has never had the problem — its selector is built from
+ * The block callout has never had the problem — its selector is built from
  * the attribute form to begin with.
  *
  * Unknown tokens keep the raw spelling, which is what `.cs-unknown` styling and
@@ -266,7 +268,7 @@ const VARIANT_CLASS: Record<CalloutTokenVariant, string> = {
 
 /**
  * Render role a token variant draws at. A reference token is a compact copy of
- * the inline pill — same size, so same artwork.
+ * the inline callout — same size, so same artwork.
  */
 export const VARIANT_ROLE: Record<CalloutTokenVariant, CalloutRenderRole> = {
 	inline: "inline",
@@ -279,7 +281,7 @@ export interface CalloutTokenDomOptions {
 	rawId: string;
 	/**
 	 * Raw `|metadata` for this occurrence, stamped as `data-callout-metadata`
-	 * exactly as Obsidian does on a blockquote callout. "" (the default) leaves
+	 * exactly as Obsidian does on a block callout. "" (the default) leaves
 	 * the attribute off entirely. Ref tokens always pass "": a `|` inside a
 	 * wikilink is its alias separator, so a reference can never carry metadata.
 	 */
@@ -307,7 +309,7 @@ export interface CalloutTokenDomOptions {
  *  </span>`
  * `data-callout` carries the normalized id so per-callout CSS (including
  * alias selectors) and the context menu can target it on both surfaces, and
- * `data-callout-metadata` mirrors what Obsidian stamps on a blockquote callout
+ * `data-callout-metadata` mirrors what Obsidian stamps on a block callout
  * so a theme can style these two roles by the same hook.
  */
 export function buildCalloutTokenDom(

@@ -37,10 +37,10 @@ export const id: Record<string, string> = {
 	"welcome.sample":
 		"Callout Studio memungkinkan Anda membuat callout dengan ikon, warna, dan nama khusus.\n\n" +
 		"Anda dapat menggunakan callout yang sama dengan **tiga** cara berbeda:\n\n" +
-		"## [!tip] Sebagai judul\n" +
+		"## [!tip] Sebagai Heading Callout\n" +
 		"Untuk mengubah judul apa pun menjadi judul bergaya callout, tambahkan `[!type]` tepat setelah `#`.\n\n" +
-		"Ingin callout inline seperti ini [!warning]? Cukup tambahkan `[!type]` di tengah kalimat, tanpa mengganggu alur tulisan Anda.\n\n" +
-		"> [!note] Callout biasa\n" +
+		"Ingin Inline Callout seperti ini [!warning]? Cukup tambahkan `[!type]` di tengah kalimat, tanpa mengganggu alur tulisan Anda.\n\n" +
+		"> [!note] Block Callout\n" +
 		"> Tentu saja, callout klasik tetap berfungsi dengan sintaks yang sama persis seperti yang sudah Anda kenal: `> [!type]`.\n\n" +
 		"Callout Studio masih punya banyak hal lain untuk ditawarkan! [Pelajari lebih lanjut]({{repoUrl}}).\n",
 
@@ -132,7 +132,7 @@ export const id: Record<string, string> = {
 		'Hapus palet "{{name}}"?\nCallout yang menggunakan warna ini tidak terpengaruh.',
 	"settings.enableAutocomplete": "Aktifkan pelengkapan otomatis [!",
 	"settings.enableAutocompleteDesc":
-		'Menampilkan saran saat Anda mengetik "[!" di dalam blockquote di editor. Pilih tipe callout dari daftar untuk menyisipkan header callout lengkap.',
+		'Menampilkan saran saat Anda mengetik "[!" di dalam Block Callout di editor. Pilih tipe callout dari daftar untuk menyisipkan header callout lengkap.',
 
 	"settings.openHotkeys": "Pintasan Callout Studio",
 	"settings.openHotkeysDesc":
@@ -235,7 +235,7 @@ export const id: Record<string, string> = {
 	"editor.loremIpsumShort":
 		"Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
 	"editor.sampleInlineText":
-		"Berikut adalah pil [!{id}] sebaris di dalam sebuah paragraf.",
+		"Berikut adalah Inline Callout [!{id}] di dalam sebuah paragraf.",
 	"editor.previewReadOnly": "Pratinjau langsung tidak dapat diedit",
 
 	// External style window (opens instead of the editor for a callout the
@@ -245,9 +245,9 @@ export const id: Record<string, string> = {
 		"Callout Studio tidak menerapkan gaya apa pun pada {{id}}. Tampilannya berasal dari tema, cuplikan CSS, atau default Obsidian Anda.",
 	"editor.externalStyleWhat": "Artinya",
 	"editor.externalStyleWhatHeading":
-		"Callout judul seperti ## [!{{id}}] Judul tidak akan dirender — teksnya tetap seperti yang ditulis.",
+		"Heading Callout seperti ## [!{{id}}] Judul tidak akan dirender — teksnya tetap seperti yang ditulis.",
 	"editor.externalStyleWhatInline":
-		"Begitu juga callout sebaris, seperti kata [!{{id}}] kata.",
+		"Begitu juga Inline Callout, seperti kata [!{{id}}] kata.",
 	"editor.externalStyleWhatGlobal":
 		"Pengaturan gaya global (batas, radius, ukuran teks) tidak berlaku untuknya.",
 	"editor.externalStylePreviewTitle": "Cara tampilannya sekarang",
@@ -550,14 +550,14 @@ export const id: Record<string, string> = {
 
 	"settings.globalSettings": "Pengaturan global",
 	"settings.globalSettingsRegularDesc":
-		"Tambahkan token callout ke blockquote (mis., `> [!type]`) untuk menampilkan kotak callout native Obsidian. Anda dapat menyesuaikan batas, radius, skala font, dan perataannya.",
+		"Tambahkan token callout ke block callout (mis., `> [!type]`) untuk menampilkan kotak callout native Obsidian. Anda dapat menyesuaikan batas, radius, skala font, dan perataannya.",
 	"settings.globalSettingsHeadingDesc":
 		"Tambahkan token callout tepat setelah tanda pagar heading (mis., `## [!type]`) untuk menampilkannya sebagai heading callout bergaya. Anda dapat menyesuaikan batas, bentuk, dan jarak vertikalnya.",
 	"settings.globalSettingsInlineDesc":
-		"Tambahkan token callout di mana saja di dalam baris teks (mis., `[!type]`) untuk menampilkannya sebagai pil sebaris kecil. Anda dapat menyesuaikan batas dan bentuknya.",
+		"Tambahkan token callout di mana saja di dalam baris teks (mis., `[!type]`) untuk menampilkannya sebagai Inline Callout kecil. Anda dapat menyesuaikan batas dan bentuknya.",
 	"settings.globalSettingsCustomize": "Sesuaikan",
 
-	"settings.calloutTypeRegular": "Callout reguler",
+	"settings.calloutTypeRegular": "Block Callout",
 	"settings.calloutTypeHeading": "Callout heading",
 	"settings.calloutTypeInline": "Callout sebaris",
 
@@ -568,7 +568,7 @@ export const id: Record<string, string> = {
 	"menuCustomize.title": "Sesuaikan menu klik kanan",
 	"menuCustomize.desc":
 		"Aktifkan atau nonaktifkan tindakan dan seret gagang untuk mengatur ulang urutannya. Perubahan disimpan secara otomatis.",
-	"menuCustomize.regular": "Callout reguler",
+	"menuCustomize.regular": "Block Callout",
 	"menuCustomize.heading": "Callout heading",
 	"menuCustomize.inline": "Callout sebaris",
 	"menuCustomize.dragHandle": "Seret untuk mengatur ulang urutan",

@@ -713,7 +713,7 @@ export class CalloutRegistry {
 				// The display name carried the metadata too — a discovery row for
 				// `[!custom|meta]` was named "Custom|meta". Left alone it would
 				// still read that way in the settings list AND on screen, since
-				// the heading bar and inline pill are painted from displayName.
+				// the heading callout and inline callout are painted from displayName.
 				// Re-derive it the way discovery would have for the base id.
 				displayName: def.displayName.includes("|")
 					? obsidianDefaultTitle(base)
@@ -1485,7 +1485,7 @@ export class CalloutRegistry {
 	}
 
 	/**
-	 * Resolve the ID Obsidian wrote into a blockquote callout's `data-callout`
+	 * Resolve the ID Obsidian wrote into a block callout's `data-callout`
 	 * back to a definition. That attribute is the DASH form of whatever the user
 	 * typed (see obsidianCalloutAttrId), so a definition stored as
 	 * `multi word callout` must be findable from `multi-word-callout`.
@@ -1772,7 +1772,7 @@ export class CalloutRegistry {
 	 * A single icon can occupy several entries at once, because a pack may draw
 	 * it differently per render role — so every role's variant has to be
 	 * collected, not just the one the blockquote uses. Miss that and each save
-	 * would evict the artwork the inline pills are rendering from.
+	 * would evict the artwork the inline callouts are rendering from.
 	 */
 	cleanupUnusedIconSvgs(): void {
 		const usedKeys = new Set<string>();

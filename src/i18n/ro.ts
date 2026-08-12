@@ -41,7 +41,7 @@ export const ro: Record<string, string> = {
 		"## [!tip] Ca titlu\n" +
 		"Pentru a transforma orice titlu într-un titlu în stil callout, adăugați `[!type]` imediat după `#`-uri.\n\n" +
 		"Doriți un callout inline ca acesta [!warning]? Adăugați pur și simplu `[!type]` în mijlocul unei propoziții, fără a vă întrerupe scrisul.\n\n" +
-		"> [!note] Callout obișnuit\n" +
+		"> [!note] Block Callout\n" +
 		"> Desigur, callout-ul clasic funcționează cu exact aceeași sintaxă cu care sunteți deja obișnuiți: `> [!type]`.\n\n" +
 		"Callout Studio are mult mai multe de oferit! [Aflați mai multe]({{repoUrl}}).\n",
 
@@ -558,7 +558,7 @@ export const ro: Record<string, string> = {
 	"settings.globalSettingsInlineDesc":
 		"Adăugați un token callout oriunde într-o linie de text (de ex. `[!type]`) pentru a-l afișa ca o pastilă mică inline. Puteți ajusta bordura și forma.",
 	"settings.globalSettingsCustomize": "Personalizați",
-	"settings.calloutTypeRegular": "Callout obișnuit",
+	"settings.calloutTypeRegular": "Block callout",
 	"settings.calloutTypeHeading": "Callout tip titlu",
 	"settings.calloutTypeInline": "Callout inline",
 	"settings.customizeMenu": "Personalizați elementele meniului",
@@ -568,7 +568,7 @@ export const ro: Record<string, string> = {
 	"menuCustomize.title": "Personalizare meniu clic dreapta",
 	"menuCustomize.desc":
 		"Activați sau dezactivați acțiuni și trageți mânerul pentru a le reordona. Modificările sunt salvate automat.",
-	"menuCustomize.regular": "Callout obișnuit",
+	"menuCustomize.regular": "Block callout",
 	"menuCustomize.heading": "Callout tip titlu",
 	"menuCustomize.inline": "Callout inline",
 	"menuCustomize.dragHandle": "Trageți pentru a reordona",

@@ -558,7 +558,7 @@ export const vi: Record<string, string> = {
 		"Thêm token callout vào bất kỳ đâu trong một dòng văn bản (ví dụ: `[!type]`) để hiển thị dưới dạng viên nội tuyến nhỏ. Bạn có thể điều chỉnh viền và hình dạng của nó.",
 	"settings.globalSettingsCustomize": "Tùy chỉnh",
 
-	"settings.calloutTypeRegular": "Callout thông thường",
+	"settings.calloutTypeRegular": "Block callout",
 	"settings.calloutTypeHeading": "Callout tiêu đề",
 	"settings.calloutTypeInline": "Callout nội tuyến",
 
@@ -569,7 +569,7 @@ export const vi: Record<string, string> = {
 	"menuCustomize.title": "Tùy chỉnh menu chuột phải",
 	"menuCustomize.desc":
 		"Bật hoặc tắt các hành động và kéo tay cầm để sắp xếp lại. Thay đổi được lưu tự động.",
-	"menuCustomize.regular": "Callout thông thường",
+	"menuCustomize.regular": "Block callout",
 	"menuCustomize.heading": "Callout tiêu đề",
 	"menuCustomize.inline": "Callout nội tuyến",
 	"menuCustomize.dragHandle": "Kéo để sắp xếp lại",

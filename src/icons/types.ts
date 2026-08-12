@@ -2,7 +2,7 @@
  * icons/types.ts — Contracts shared by every icon source.
  *
  * The plugin draws the same icon onto eight different surfaces (reading-view
- * callouts, heading bars, inline pills, the settings list, the callout editor
+ * callouts, heading callouts, inline callouts, the settings list, the callout editor
  * preview, the `[!` autocomplete popup, the replace-callout modal and the vault
  * statistics modal). Each of those used to re-implement "look the SVG up in the
  * cache, parse it, colour it, put it in the DOM" itself, which meant a new icon
@@ -231,7 +231,7 @@ export interface IconResolver {
 	 * `role` is passed because some packs ship several drawings of the same icon
 	 * and pick between them by surface — Octicons, whose 16px artwork is drawn
 	 * for small sizes and 24px for large — so one CalloutIcon can legitimately
-	 * resolve to different SVGs in a blockquote and in an inline pill.
+	 * resolve to different SVGs in a block callout and in an inline callout.
 	 */
 	resolveSvg(icon: CalloutIcon, role: CalloutRenderRole): string | null;
 

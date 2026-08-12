@@ -49,10 +49,10 @@ export const en: Record<string, string> = {
 	"welcome.sample":
 		"Callout Studio lets you create callouts with a custom icon, colors, and name.\n\n" +
 		"You can use the same callout in **three** different ways:\n\n" +
-		"## [!tip] As a heading\n" +
+		"## [!tip] As a Heading Callout\n" +
 		"To turn any heading into a callout-style heading, add `[!type]` right after the `#`s.\n\n" +
-		"Want an inline callout like this [!warning]? Just add `[!type]` right in a sentence, without breaking your flow.\n\n" +
-		"> [!note] Regular callout\n" +
+		"Want an Inline Callout like this [!warning]? Just add `[!type]` right in a sentence, without breaking your flow.\n\n" +
+		"> [!note] Block Callout\n" +
 		"> Of course, the classic callout works with the exact same syntax you're already used to: `> [!type]`.\n\n" +
 		"There's a lot more Callout Studio has to offer! [Learn more]({{repoUrl}}).\n",
 
@@ -152,7 +152,7 @@ export const en: Record<string, string> = {
 	// Settings — Autocomplete
 	"settings.enableAutocomplete": "Enable [! Autocomplete",
 	"settings.enableAutocompleteDesc":
-		'Show suggestions when you type "[!" inside a blockquote in the editor. Pick a callout type from the list to insert a complete callout header.',
+		'Show suggestions when you type "[!" inside a block callout in the editor. Pick a callout type from the list to insert a complete callout header.',
 
 	// Settings — Keyboard shortcuts
 	"settings.openHotkeys": "Callout Studio hotkeys",
@@ -164,7 +164,7 @@ export const en: Record<string, string> = {
 	"settings.vaultMaintenance": "Vault insights & maintenance",
 	"settings.vaultStats": "Callout statistics",
 	"settings.vaultStatsDesc":
-		"Count every callout block in your Markdown notes and group them by type.",
+		"Count every block callout in your Markdown notes and group them by type.",
 	"settings.vaultStatsButton": "View statistics",
 	"settings.vaultStatsScanning": "Scanning",
 	"settings.resetAll": "Reset",
@@ -258,7 +258,7 @@ export const en: Record<string, string> = {
 	"editor.loremIpsumShort":
 		"Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
 	"editor.sampleInlineText":
-		"Here is an inline [!{id}] pill inside a paragraph.",
+		"Here is an inline [!{id}] callout inside a paragraph.",
 	"editor.previewReadOnly": "The live preview can't be edited",
 
 	// External style window (opens instead of the editor for a callout the
@@ -268,9 +268,9 @@ export const en: Record<string, string> = {
 		"Callout Studio isn't applying any style to {{id}}. Its look comes from your theme, a CSS snippet, or Obsidian's defaults.",
 	"editor.externalStyleWhat": "What this means",
 	"editor.externalStyleWhatHeading":
-		"A heading callout like ## [!{{id}}] Title won't be rendered — the text just stays as written.",
+		"A Heading Callout like ## [!{{id}}] Title won't be rendered — the text just stays as written.",
 	"editor.externalStyleWhatInline":
-		"Neither will an inline one, like word [!{{id}}] word.",
+		"Neither will an Inline Callout, like word [!{{id}}] word.",
 	"editor.externalStyleWhatGlobal":
 		"Global style settings (border, radius, text size) don't apply to it.",
 	"editor.externalStylePreviewTitle": "How it renders now",
@@ -578,15 +578,15 @@ export const en: Record<string, string> = {
 	// Global settings section (per-role style popups)
 	"settings.globalSettings": "Global settings",
 	"settings.globalSettingsRegularDesc":
-		"Add a callout token to a blockquote (e.g., `> [!type]`) to render Obsidian's native callout box. You can adjust its border, radius, font scale, and alignment.",
+		"Add a callout token to a block callout (e.g., `> [!type]`) to render Obsidian's native callout box. You can adjust its border, radius, font scale, and alignment.",
 	"settings.globalSettingsHeadingDesc":
 		"Add a callout token directly after the heading hashes (e.g., `## [!type]`) to render it as a styled callout heading. You can adjust its border, shape, and vertical spacing.",
 	"settings.globalSettingsInlineDesc":
-		"Add a callout token anywhere inside a line of text (e.g., `[!type]`) to render it as a small inline pill. You can adjust its border and shape.",
+		"Add a callout token anywhere inside a line of text (e.g., `[!type]`) to render it as a small inline callout. You can adjust its border and shape.",
 	"settings.globalSettingsCustomize": "Customize",
 
 	// Callout types section
-	"settings.calloutTypeRegular": "Regular callout",
+	"settings.calloutTypeRegular": "Block callout",
 	"settings.calloutTypeHeading": "Heading callout",
 	"settings.calloutTypeInline": "Inline callout",
 
@@ -598,7 +598,7 @@ export const en: Record<string, string> = {
 	"menuCustomize.title": "Customize right-click menu",
 	"menuCustomize.desc":
 		"Toggle actions on or off and drag the handle to reorder them. Changes are saved automatically.",
-	"menuCustomize.regular": "Regular callout",
+	"menuCustomize.regular": "Block callout",
 	"menuCustomize.heading": "Heading callout",
 	"menuCustomize.inline": "Inline callout",
 	"menuCustomize.dragHandle": "Drag to reorder",
@@ -715,7 +715,7 @@ export const en: Record<string, string> = {
 	"import.err.iconSizeRange":
 		'"{{field}}" must be a number between {{min}} and {{max}} (got "{{value}}").',
 	"import.err.iconAdjustShape":
-		'"iconAdjust" must be an object mapping a callout type ("regular", "heading", "inline") to its icon size and offsets.',
+		'"iconAdjust" must be an object mapping a callout type ("block", "heading", "inline") to its icon size and offsets.',
 	"import.err.aliasesNotArray": '"aliases" must be an array of strings.',
 	"import.err.aliasNotString": "Alias must be a string.",
 	"import.err.aliasDup": 'Alias "{{value}}" is duplicated within this entry.',

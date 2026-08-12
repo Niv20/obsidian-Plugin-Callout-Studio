@@ -40,7 +40,7 @@ export const cs: Record<string, string> = {
 		"## [!tip] Jako nadpis\n" +
 		"Chcete-li proměnit jakýkoli nadpis v nadpis ve stylu callout, přidejte `[!type]` hned za `#`.\n\n" +
 		"Chcete vložený callout, jako je tento [!warning]? Stačí přidat `[!type]` doprostřed věty, aniž byste přerušili plynulost textu.\n\n" +
-		"> [!note] Běžný callout\n" +
+		"> [!note] Block Callout\n" +
 		"> Klasický callout samozřejmě funguje se stejnou syntaxí, na kterou jste už zvyklí: `> [!type]`.\n\n" +
 		"Callout Studio má mnohem víc co nabídnout! [Zjistit více]({{repoUrl}}).\n",
 
@@ -554,7 +554,7 @@ export const cs: Record<string, string> = {
 	"settings.globalSettingsInlineDesc":
 		"Přidejte token callout kamkoli do řádku textu (např. `[!type]`) a vykreslete ho jako malou vloženou pilulku. Můžete upravit jeho ohraničení a tvar.",
 	"settings.globalSettingsCustomize": "Přizpůsobit",
-	"settings.calloutTypeRegular": "Běžný callout",
+	"settings.calloutTypeRegular": "Block callout",
 	"settings.calloutTypeHeading": "Callout nadpisu",
 	"settings.calloutTypeInline": "Vložený callout",
 	"settings.customizeMenu": "Přizpůsobit položky menu",
@@ -564,7 +564,7 @@ export const cs: Record<string, string> = {
 	"menuCustomize.title": "Přizpůsobit kontextovou nabídku",
 	"menuCustomize.desc":
 		"Zapínejte nebo vypínejte akce a přetažením úchytu je přeuspořádejte. Změny se ukládají automaticky.",
-	"menuCustomize.regular": "Běžný callout",
+	"menuCustomize.regular": "Block callout",
 	"menuCustomize.heading": "Callout nadpisu",
 	"menuCustomize.inline": "Vložený callout",
 	"menuCustomize.dragHandle": "Přetažením změníte pořadí",

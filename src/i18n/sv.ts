@@ -42,7 +42,7 @@ export const sv: Record<string, string> = {
 		"## [!tip] Som rubrik\n" +
 		"För att göra en rubrik till en rubrik i callout-stil, lägg till `[!type]` direkt efter `#`-tecknen.\n\n" +
 		"Vill du ha en infogad callout som denna [!warning]? Lägg bara till `[!type]` mitt i en mening, utan att bryta ditt flyt.\n\n" +
-		"> [!note] Vanlig callout\n" +
+		"> [!note] Block Callout\n" +
 		"> Den klassiska callouten fungerar förstås med exakt samma syntax som du redan är van vid: `> [!type]`.\n\n" +
 		"Callout Studio har mycket mer att erbjuda! [Läs mer]({{repoUrl}}).\n",
 
@@ -554,7 +554,7 @@ export const sv: Record<string, string> = {
 	"settings.globalSettingsInlineDesc":
 		"Lägg till en callout-token var som helst i en textrad (t.ex. `[!type]`) för att rendera den som en liten infogad pill. Du kan justera dess kant och form.",
 	"settings.globalSettingsCustomize": "Anpassa",
-	"settings.calloutTypeRegular": "Vanlig callout",
+	"settings.calloutTypeRegular": "Block callout",
 	"settings.calloutTypeHeading": "Rubrik-callout",
 	"settings.calloutTypeInline": "Infogad callout",
 	"settings.customizeMenu": "Anpassa menyalternativ",
@@ -564,7 +564,7 @@ export const sv: Record<string, string> = {
 	"menuCustomize.title": "Anpassa högerklicksmenyn",
 	"menuCustomize.desc":
 		"Aktivera eller inaktivera åtgärder och dra i handtaget för att ändra ordningen. Ändringar sparas automatiskt.",
-	"menuCustomize.regular": "Vanlig callout",
+	"menuCustomize.regular": "Block callout",
 	"menuCustomize.heading": "Rubrik-callout",
 	"menuCustomize.inline": "Infogad callout",
 	"menuCustomize.dragHandle": "Dra för att ändra ordning",

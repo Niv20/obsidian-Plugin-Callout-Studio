@@ -41,7 +41,7 @@ export const tr: Record<string, string> = {
 		"## [!tip] Başlık olarak\n" +
 		"Herhangi bir başlığı callout stiline dönüştürmek için `#` işaretlerinin hemen ardından `[!type]` ekleyin.\n\n" +
 		"Bunun gibi satır içi bir callout mu istiyorsunuz [!warning]? Akışınızı bozmadan bir cümlenin ortasına `[!type]` eklemeniz yeterli.\n\n" +
-		"> [!note] Normal callout\n" +
+		"> [!note] Block Callout\n" +
 		"> Elbette, klasik callout zaten alışık olduğunuz aynı sözdizimiyle çalışır: `> [!type]`.\n\n" +
 		"Callout Studio'nun sunacağı çok daha fazlası var! [Daha fazla bilgi]({{repoUrl}}).\n",
 
@@ -559,7 +559,7 @@ export const tr: Record<string, string> = {
 		"Küçük bir satır içi hap olarak görüntülemek için callout belirtecini bir metin satırının herhangi bir yerine ekleyin (örn. `[!type]`). Kenarlığını ve şeklini ayarlayabilirsiniz.",
 	"settings.globalSettingsCustomize": "Özelleştir",
 
-	"settings.calloutTypeRegular": "Normal callout",
+	"settings.calloutTypeRegular": "Block callout",
 	"settings.calloutTypeHeading": "Başlık callout'u",
 	"settings.calloutTypeInline": "Satır içi callout",
 
@@ -570,7 +570,7 @@ export const tr: Record<string, string> = {
 	"menuCustomize.title": "Sağ tık menüsünü özelleştir",
 	"menuCustomize.desc":
 		"Eylemleri açıp kapatın ve yeniden sıralamak için tutamacı sürükleyin. Değişiklikler otomatik olarak kaydedilir.",
-	"menuCustomize.regular": "Normal callout",
+	"menuCustomize.regular": "Block callout",
 	"menuCustomize.heading": "Başlık callout'u",
 	"menuCustomize.inline": "Satır içi callout",
 	"menuCustomize.dragHandle": "Yeniden sıralamak için sürükleyin",

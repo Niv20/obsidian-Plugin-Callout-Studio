@@ -539,7 +539,7 @@ export const ms: Record<string, string> = {
 	"settings.globalSettingsInlineDesc":
 		"Tambah token callout di mana-mana dalam baris teks (cth. `[!type]`) untuk memaparkannya sebagai pil sebaris kecil. Anda boleh melaraskan sempadan dan bentuknya.",
 	"settings.globalSettingsCustomize": "Sesuaikan",
-	"settings.calloutTypeRegular": "Callout biasa",
+	"settings.calloutTypeRegular": "Block callout",
 	"settings.calloutTypeHeading": "Callout tajuk",
 	"settings.calloutTypeInline": "Callout sebaris",
 	"settings.customizeMenu": "Sesuaikan item menu",
@@ -549,7 +549,7 @@ export const ms: Record<string, string> = {
 	"menuCustomize.title": "Sesuaikan menu klik kanan",
 	"menuCustomize.desc":
 		"Hidupkan atau matikan tindakan dan seret pemegang untuk menyusun semula. Perubahan disimpan secara automatik.",
-	"menuCustomize.regular": "Callout biasa",
+	"menuCustomize.regular": "Block callout",
 	"menuCustomize.heading": "Callout tajuk",
 	"menuCustomize.inline": "Callout sebaris",
 	"menuCustomize.dragHandle": "Seret untuk menyusun semula",

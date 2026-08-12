@@ -552,7 +552,7 @@ export const hi: Record<string, string> = {
 	"settings.globalSettingsInlineDesc":
 		"इसे एक छोटे इनलाइन पिल के रूप में दिखाने के लिए टेक्स्ट की किसी भी पंक्ति के भीतर कहीं भी एक callout टोकन जोड़ें (जैसे, `[!type]`)। आप इसका बॉर्डर और आकार समायोजित कर सकते हैं।",
 	"settings.globalSettingsCustomize": "कस्टमाइज़ करें",
-	"settings.calloutTypeRegular": "सामान्य callout",
+	"settings.calloutTypeRegular": "Block callout",
 	"settings.calloutTypeHeading": "शीर्षक callout",
 	"settings.calloutTypeInline": "इनलाइन callout",
 	"settings.customizeMenu": "मेनू आइटम कस्टमाइज़ करें",
@@ -562,7 +562,7 @@ export const hi: Record<string, string> = {
 	"menuCustomize.title": "राइट-क्लिक मेनू कस्टमाइज़ करें",
 	"menuCustomize.desc":
 		"क्रियाओं को चालू या बंद करें और उन्हें पुनः क्रमबद्ध करने के लिए हैंडल को खींचें। परिवर्तन स्वतः सहेजे जाते हैं।",
-	"menuCustomize.regular": "सामान्य callout",
+	"menuCustomize.regular": "Block callout",
 	"menuCustomize.heading": "शीर्षक callout",
 	"menuCustomize.inline": "इनलाइन callout",
 	"menuCustomize.dragHandle": "पुनः क्रमबद्ध करने के लिए खींचें",

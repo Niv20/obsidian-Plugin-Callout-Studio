@@ -41,7 +41,7 @@ export const pl: Record<string, string> = {
 		"## [!tip] Jako nagłówek\n" +
 		"Aby zamienić dowolny nagłówek w nagłówek w stylu callout, dodaj `[!type]` zaraz po `#`.\n\n" +
 		"Chcesz callout w tekście, taki jak ten [!warning]? Po prostu dodaj `[!type]` w środku zdania, bez przerywania toku pisania.\n\n" +
-		"> [!note] Zwykły callout\n" +
+		"> [!note] Block Callout\n" +
 		"> Klasyczny callout oczywiście działa dokładnie z taką samą składnią, do jakiej już się przyzwyczaiłeś: `> [!type]`.\n\n" +
 		"Callout Studio ma o wiele więcej do zaoferowania! [Dowiedz się więcej]({{repoUrl}}).\n",
 
@@ -557,7 +557,7 @@ export const pl: Record<string, string> = {
 	"settings.globalSettingsInlineDesc":
 		"Dodaj token callout w dowolnym miejscu wiersza tekstu (np. `[!type]`), aby wyświetlić go jako małą pigułkę śródtekstową. Możesz dostosować jego obramowanie i kształt.",
 	"settings.globalSettingsCustomize": "Dostosuj",
-	"settings.calloutTypeRegular": "Zwykły callout",
+	"settings.calloutTypeRegular": "Block callout",
 	"settings.calloutTypeHeading": "Callout-nagłówek",
 	"settings.calloutTypeInline": "Callout śródtekstowy",
 	"settings.customizeMenu": "Dostosuj elementy menu",
@@ -567,7 +567,7 @@ export const pl: Record<string, string> = {
 	"menuCustomize.title": "Dostosuj menu kontekstowe",
 	"menuCustomize.desc":
 		"Włączaj lub wyłączaj akcje i przeciągaj uchwyt, aby zmienić ich kolejność. Zmiany są zapisywane automatycznie.",
-	"menuCustomize.regular": "Zwykły callout",
+	"menuCustomize.regular": "Block callout",
 	"menuCustomize.heading": "Callout-nagłówek",
 	"menuCustomize.inline": "Callout śródtekstowy",
 	"menuCustomize.dragHandle": "Przeciągnij, aby zmienić kolejność",

@@ -13,7 +13,7 @@
  * - sanitizeCalloutIdInput — restrictive; used when the user *creates* an ID in
  *   the editor. Restricts the allowed character set. Does NOT split metadata:
  *   its input is a display name, not a token body.
- * - obsidianCalloutAttrId — the form Obsidian itself writes into a blockquote
+ * - obsidianCalloutAttrId — the form Obsidian itself writes into a block
  *   callout's `data-callout` attribute. Used *only* for `.callout[…]` selectors
  *   and when reading that attribute back.
  *
@@ -109,14 +109,14 @@ export const sanitizeCalloutIdInput = (raw: string): string =>
 		.trim();
 
 /**
- * The form Obsidian itself writes into a blockquote callout's `data-callout`
+ * The form Obsidian itself writes into a block callout's `data-callout`
  * attribute. Obsidian parses `> [!My Multi Word]` as
  * `t.trim().toLowerCase().replace(/\s+/g, "-")` in BOTH its reading-view block
  * parser and its Live Preview CodeMirror mode, so the rendered DOM is always
  * `<div class="callout" data-callout="my-multi-word">` — dashes, never spaces.
  *
  * Use this ONLY for `.callout[data-callout=…]` selectors and when reading that
- * attribute back. The heading-bar / inline-pill / ref-token DOM is stamped by
+ * attribute back. The heading-callout / inline-callout / ref-token DOM is stamped by
  * US (buildCalloutTokenDom, calloutPostProcessor, calloutViewPlugin) with the
  * space-preserving `normalizeCalloutId` form — those must NOT go through here.
  *
@@ -136,7 +136,7 @@ export const obsidianCalloutAttrId = (raw: string): string =>
 		.replace(/\s+/g, "-");
 
 /**
- * The title Obsidian shows for a blockquote callout that carries no explicit
+ * The title Obsidian shows for a block callout that carries no explicit
  * title text: `type.trim().replace(/-/g, " ").toLowerCase()`, first letter
  * capitalized (verified in its bundled renderer — see obsidianCalloutAttrId's
  * doc). Used when we generate a display name ourselves (auto-discovered

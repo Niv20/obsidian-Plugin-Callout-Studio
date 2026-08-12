@@ -182,7 +182,7 @@ async function handleToggleExternalStyle(
 	await ctx.plugin.saveSettings();
 	ctx.plugin.refreshCallouts();
 	// And the reading view on top of it. refreshCallouts rebuilds Live
-	// Preview's decorations, but a reading-view heading bar or inline pill is
+	// Preview's decorations, but a reading-view heading callout or inline callout is
 	// baked DOM that only a post-processor pass adds or strips — without this
 	// the `[!id]` the theme now owns keeps its bar until the note is reopened.
 	// Same call, and the same reason, as a render-role toggle.

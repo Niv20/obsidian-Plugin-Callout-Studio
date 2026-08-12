@@ -40,7 +40,7 @@ export const ko: Record<string, string> = {
 		"## [!tip] 제목으로 사용\n" +
 		"제목을 callout 스타일로 바꾸려면 `#` 바로 뒤에 `[!type]`을 추가하세요.\n\n" +
 		"이 [!warning]처럼 인라인 callout을 원하시나요? 문장 중간에 `[!type]`을 추가하기만 하면 흐름을 끊지 않고 삽입할 수 있습니다.\n\n" +
-		"> [!note] 일반 callout\n" +
+		"> [!note] Block Callout\n" +
 		"> 물론 기존에 사용하던 것과 동일한 문법으로 클래식 callout도 그대로 사용할 수 있습니다: `> [!type]`.\n\n" +
 		"Callout Studio에는 훨씬 더 많은 기능이 있습니다! [자세히 보기]({{repoUrl}}).\n",
 
@@ -555,7 +555,7 @@ export const ko: Record<string, string> = {
 		"텍스트 줄 안 어디든 callout 토큰을 추가하면(예: `[!type]`) 작은 인라인 필로 표시됩니다. 테두리와 모양을 조정할 수 있습니다.",
 	"settings.globalSettingsCustomize": "사용자 지정",
 
-	"settings.calloutTypeRegular": "일반 callout",
+	"settings.calloutTypeRegular": "Block Callout",
 	"settings.calloutTypeHeading": "제목 callout",
 	"settings.calloutTypeInline": "인라인 callout",
 
@@ -566,7 +566,7 @@ export const ko: Record<string, string> = {
 	"menuCustomize.title": "마우스 오른쪽 버튼 메뉴 사용자 지정",
 	"menuCustomize.desc":
 		"작업을 켜거나 끄고 핸들을 드래그하여 순서를 변경합니다. 변경 사항은 자동으로 저장됩니다.",
-	"menuCustomize.regular": "일반 callout",
+	"menuCustomize.regular": "Block Callout",
 	"menuCustomize.heading": "제목 callout",
 	"menuCustomize.inline": "인라인 callout",
 	"menuCustomize.dragHandle": "드래그하여 순서 변경",

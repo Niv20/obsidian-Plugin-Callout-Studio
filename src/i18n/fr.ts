@@ -562,7 +562,7 @@ export const fr: Record<string, string> = {
 	"settings.globalSettingsInlineDesc":
 		"Ajoutez un jeton de callout n'importe où dans une ligne de texte (p. ex. `[!type]`) pour l'afficher comme une petite pastille en ligne. Vous pouvez ajuster sa bordure et sa forme.",
 	"settings.globalSettingsCustomize": "Personnaliser",
-	"settings.calloutTypeRegular": "Callout classique",
+	"settings.calloutTypeRegular": "Block callout",
 	"settings.calloutTypeHeading": "Callout de titre",
 	"settings.calloutTypeInline": "Callout en ligne",
 	"settings.customizeMenu": "Personnaliser les éléments du menu",
@@ -572,7 +572,7 @@ export const fr: Record<string, string> = {
 	"menuCustomize.title": "Personnaliser le menu du clic droit",
 	"menuCustomize.desc":
 		"Activez ou désactivez les actions et faites glisser la poignée pour les réorganiser. Les modifications sont enregistrées automatiquement.",
-	"menuCustomize.regular": "Callout classique",
+	"menuCustomize.regular": "Block callout",
 	"menuCustomize.heading": "Callout de titre",
 	"menuCustomize.inline": "Callout en ligne",
 	"menuCustomize.dragHandle": "Faire glisser pour réorganiser",

@@ -582,7 +582,7 @@ export const he: Record<string, string> = {
 	"settings.globalSettingsCustomize": "התאמה אישית",
 
 	// Callout types section
-	"settings.calloutTypeRegular": "תיבת־הבלטה רגילה",
+	"settings.calloutTypeRegular": "Block callout",
 	"settings.calloutTypeHeading": "תיבת־הבלטה ככותרת",
 	"settings.calloutTypeInline": "תיבת־הבלטה מוטבעת",
 
@@ -594,7 +594,7 @@ export const he: Record<string, string> = {
 	"menuCustomize.title": "התאמת תפריט הקליק־הימני",
 	"menuCustomize.desc":
 		"הפעלה או כיבוי של פעולות וגרירת הידית כדי לשנות את סדרן. השינויים נשמרים אוטומטית.",
-	"menuCustomize.regular": "תיבת־הבלטה רגילה",
+	"menuCustomize.regular": "Block callout",
 	"menuCustomize.heading": "תיבת־הבלטה ככותרת",
 	"menuCustomize.inline": "תיבת־הבלטה מוטבעת",
 	"menuCustomize.dragHandle": "גררו כדי לשנות סדר",

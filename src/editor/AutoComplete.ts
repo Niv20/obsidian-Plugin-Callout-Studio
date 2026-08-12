@@ -3,8 +3,8 @@
  *
  * Extends Obsidian's EditorSuggest to show a dropdown of known callout types
  * whenever the user types `[!` in any of the three role positions: after a
- * blockquote prefix (`> [!` — regular callout), after heading hashes
- * (`## [!` — heading callout), or mid-line (inline pill). Selecting a
+ * blockquote prefix (`> [!` — block callout), after heading hashes
+ * (`## [!` — heading callout), or mid-line (inline callout). Selecting a
  * suggestion inserts role-appropriate markdown, and Enter placement differs
  * per role (see close()/selectSuggestion). The "Create new" row opens the
  * CalloutEditor pre-filled with the typed query in all three contexts.
@@ -205,18 +205,18 @@ export class CalloutAutoComplete extends EditorSuggest<CalloutSuggestion> {
 		const { headingCallouts, inlineCallouts } = this.plugin.settings;
 		let role: CalloutRenderRole;
 		if (/^>[\s>]*$/.test(trimmedPrefix)) {
-			// "> [!", ">> [!", … — a native blockquote callout header.
+			// "> [!", ">> [!", … — a native block callout header.
 			role = "regular";
 		} else if (HEADING_TRIGGER_PREFIX_REGEX.test(rawPrefix)) {
 			// "## [!" — heading callout; no popup while the role is off.
 			if (!headingCallouts.enabled) return null;
 			role = "heading";
 		} else if (trimmedPrefix === "") {
-			// Bare "[!" at line start: an inline pill when the role is on;
-			// otherwise keep the legacy regular-callout behavior.
+			// Bare "[!" at line start: an inline callout when the role is on;
+			// otherwise keep the legacy block-callout behavior.
 			role = inlineCallouts.enabled ? "inline" : "regular";
 		} else {
-			// Any other text before the token — inline pill mid-line.
+			// Any other text before the token — inline callout mid-line.
 			if (!inlineCallouts.enabled) return null;
 			role = "inline";
 		}

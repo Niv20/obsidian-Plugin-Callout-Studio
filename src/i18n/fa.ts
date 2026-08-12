@@ -40,7 +40,7 @@ export const fa: Record<string, string> = {
 		"## [!tip] به‌عنوان یک تیتر\n" +
 		"برای تبدیل هر تیتر به تیتری با سبک callout، بلافاصله بعد از `#`ها عبارت `[!type]` را اضافه کنید.\n\n" +
 		"می‌خواهید یک callout درون‌خطی مثل این [!warning] داشته باشید؟ فقط `[!type]` را وسط یک جمله اضافه کنید، بدون آنکه روند نوشتن قطع شود.\n\n" +
-		"> [!note] callout معمولی\n" +
+		"> [!note] Block Callout\n" +
 		"> البته، callout کلاسیک دقیقاً با همان نحوی که به آن عادت دارید کار می‌کند: `> [!type]`.\n\n" +
 		"Callout Studio قابلیت‌های بیشتری هم دارد! [بیشتر بدانید]({{repoUrl}}).\n",
 
@@ -553,7 +553,7 @@ export const fa: Record<string, string> = {
 	"settings.globalSettingsInlineDesc":
 		"یک توکن callout را در هر جای یک خط متن اضافه کنید (مثلاً `[!type]`) تا به‌صورت یک قرص کوچک درون‌خطی نمایش داده شود. می‌توانید حاشیه و شکل آن را تنظیم کنید.",
 	"settings.globalSettingsCustomize": "سفارشی‌سازی",
-	"settings.calloutTypeRegular": "callout معمولی",
+	"settings.calloutTypeRegular": "Block Callout",
 	"settings.calloutTypeHeading": "callout عنوان",
 	"settings.calloutTypeInline": "callout درون‌خطی",
 	"settings.customizeMenu": "سفارشی‌سازی موارد منو",
@@ -563,7 +563,7 @@ export const fa: Record<string, string> = {
 	"menuCustomize.title": "سفارشی‌سازی منوی کلیک راست",
 	"menuCustomize.desc":
 		"اقدامات را روشن یا خاموش کنید و با کشیدن دستگیره ترتیب آن‌ها را تغییر دهید. تغییرات به‌طور خودکار ذخیره می‌شوند.",
-	"menuCustomize.regular": "callout معمولی",
+	"menuCustomize.regular": "Block Callout",
 	"menuCustomize.heading": "callout عنوان",
 	"menuCustomize.inline": "callout درون‌خطی",
 	"menuCustomize.dragHandle": "برای تغییر ترتیب بکشید",

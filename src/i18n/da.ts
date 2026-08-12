@@ -38,7 +38,7 @@ export const da: Record<string, string> = {
 		"## [!tip] Som overskrift\n" +
 		"For at gøre en overskrift til en overskrift i callout-stil, tilføj `[!type]` lige efter `#`-tegnene.\n\n" +
 		"Vil du have en indlejret callout som denne [!warning]? Bare tilføj `[!type]` midt i en sætning, uden at bryde dit flow.\n\n" +
-		"> [!note] Almindelig callout\n" +
+		"> [!note] Block Callout\n" +
 		"> Den klassiske callout fungerer selvfølgelig med præcis den samme syntaks, du allerede kender: `> [!type]`.\n\n" +
 		"Callout Studio har meget mere at byde på! [Læs mere]({{repoUrl}}).\n",
 
@@ -538,7 +538,7 @@ export const da: Record<string, string> = {
 	"settings.globalSettingsInlineDesc":
 		"Tilføj et callout-token et vilkårligt sted inde i en tekstlinje (f.eks. `[!type]`) for at vise det som en lille indlejret pille. Du kan justere dens kant og form.",
 	"settings.globalSettingsCustomize": "Tilpas",
-	"settings.calloutTypeRegular": "Almindelig callout",
+	"settings.calloutTypeRegular": "Block callout",
 	"settings.calloutTypeHeading": "Overskrift-callout",
 	"settings.calloutTypeInline": "Indlejret callout",
 	"settings.customizeMenu": "Tilpas menupunkter",
@@ -548,7 +548,7 @@ export const da: Record<string, string> = {
 	"menuCustomize.title": "Tilpas højreklikmenuen",
 	"menuCustomize.desc":
 		"Slå handlinger til eller fra, og træk i håndtaget for at omarrangere dem. Ændringer gemmes automatisk.",
-	"menuCustomize.regular": "Almindelig callout",
+	"menuCustomize.regular": "Block callout",
 	"menuCustomize.heading": "Overskrift-callout",
 	"menuCustomize.inline": "Indlejret callout",
 	"menuCustomize.dragHandle": "Træk for at omarrangere",

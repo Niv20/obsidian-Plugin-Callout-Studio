@@ -40,7 +40,7 @@ export const ru: Record<string, string> = {
 		"## [!tip] Как заголовок\n" +
 		"Чтобы превратить любой заголовок в заголовок в стиле callout, добавьте `[!type]` сразу после `#`.\n\n" +
 		"Хотите встроенный callout, как этот [!warning]? Просто добавьте `[!type]` прямо в середину предложения, не прерывая свой текст.\n\n" +
-		"> [!note] Обычный callout\n" +
+		"> [!note] Block Callout\n" +
 		"> Разумеется, классический callout работает по тому же самому синтаксису, к которому вы уже привыкли: `> [!type]`.\n\n" +
 		"Callout Studio может предложить намного больше! [Узнать больше]({{repoUrl}}).\n",
 
@@ -554,7 +554,7 @@ export const ru: Record<string, string> = {
 	"settings.globalSettingsInlineDesc":
 		"Добавьте токен callout в любом месте строки текста (например, `[!type]`), чтобы отобразить его в виде маленькой встроенной капсулы. Вы можете настроить его рамку и форму.",
 	"settings.globalSettingsCustomize": "Настроить",
-	"settings.calloutTypeRegular": "Обычный callout",
+	"settings.calloutTypeRegular": "Block callout",
 	"settings.calloutTypeHeading": "Callout-заголовок",
 	"settings.calloutTypeInline": "Встроенный callout",
 	"settings.customizeMenu": "Настройка пунктов меню",
@@ -564,7 +564,7 @@ export const ru: Record<string, string> = {
 	"menuCustomize.title": "Настройка контекстного меню",
 	"menuCustomize.desc":
 		"Включайте и отключайте действия и перетаскивайте маркер, чтобы изменить их порядок. Изменения сохраняются автоматически.",
-	"menuCustomize.regular": "Обычный callout",
+	"menuCustomize.regular": "Block callout",
 	"menuCustomize.heading": "Callout-заголовок",
 	"menuCustomize.inline": "Встроенный callout",
 	"menuCustomize.dragHandle": "Перетащите для изменения порядка",

@@ -234,7 +234,7 @@ export class IconService implements IconResolver {
 	 *
 	 * All roles, not just the one on screen: `copyPackArtwork` stores them all,
 	 * so anything short of that means the pack is still needed — to fill in the
-	 * heading bar or inline pill the user may enable later.
+	 * heading callout or inline callout the user may enable later.
 	 */
 	private isFullyCached(icon: CalloutIcon): boolean {
 		const pack = packFor(icon);
@@ -263,7 +263,7 @@ export class IconService implements IconResolver {
 	 *
 	 * Every render role is copied, not just the one on screen: a pack can draw
 	 * the same icon differently per surface (Octicons' 16px and 24px art), and
-	 * enabling inline pills later must not require the pack to still be around.
+	 * enabling inline callouts later must not require the pack to still be around.
 	 * Two roles that share a drawing collapse to one entry via the cache key.
 	 */
 	private copyPackArtwork(icon: CalloutIcon): boolean {

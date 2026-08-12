@@ -74,7 +74,7 @@ function buildGaps(state: EditorState, host: LivePreviewHost): DecorationSet {
 		// Skip fenced code / frontmatter, exactly as the bar decoration does.
 		if (SKIP_NODE_RE.test(tree.resolveInner(line.from, 1).name)) continue;
 		const tokens = scanLineForCalloutTokens(line.text);
-		// Native `> [!id]` blockquote callouts belong to Obsidian's rendering.
+		// Native `> [!id]` block callouts belong to Obsidian's rendering.
 		if (tokens.some((tk) => tk.role === "regular")) continue;
 		// The gap belongs to the bar, so it goes wherever the bar goes: a
 		// heading whose callout was handed to the theme renders as plain text

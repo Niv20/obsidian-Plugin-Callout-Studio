@@ -559,7 +559,7 @@ export const hu: Record<string, string> = {
 	"settings.globalSettingsInlineDesc":
 		"Adjon hozzá egy callout tokent egy szövegsor bármelyik pontján (pl. `[!type]`), hogy kis beágyazott pirulaként jelenjen meg. Beállíthatja a szegélyét és az alakját.",
 	"settings.globalSettingsCustomize": "Testreszabás",
-	"settings.calloutTypeRegular": "Normál callout",
+	"settings.calloutTypeRegular": "Block callout",
 	"settings.calloutTypeHeading": "Címsor callout",
 	"settings.calloutTypeInline": "Beágyazott callout",
 	"settings.customizeMenu": "Menüelemek testreszabása",
@@ -569,7 +569,7 @@ export const hu: Record<string, string> = {
 	"menuCustomize.title": "Jobb gombos menü testreszabása",
 	"menuCustomize.desc":
 		"Kapcsolja be vagy ki a műveleteket, és húzza a fogantyút az átrendezéshez. A módosítások automatikusan mentésre kerülnek.",
-	"menuCustomize.regular": "Normál callout",
+	"menuCustomize.regular": "Block callout",
 	"menuCustomize.heading": "Címsor callout",
 	"menuCustomize.inline": "Beágyazott callout",
 	"menuCustomize.dragHandle": "Húzás az átrendezéshez",

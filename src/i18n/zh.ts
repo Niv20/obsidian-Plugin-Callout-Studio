@@ -543,7 +543,7 @@ export const zh: Record<string, string> = {
 		"在文本行中的任意位置添加 callout 标记（例如 `[!type]`）以将其显示为小型行内徽标。您可以调整其边框和形状。",
 	"settings.globalSettingsCustomize": "自定义",
 
-	"settings.calloutTypeRegular": "常规 callout",
+	"settings.calloutTypeRegular": "Block callout",
 	"settings.calloutTypeHeading": "标题 callout",
 	"settings.calloutTypeInline": "行内 callout",
 
@@ -554,7 +554,7 @@ export const zh: Record<string, string> = {
 	"menuCustomize.title": "自定义右键菜单",
 	"menuCustomize.desc":
 		"启用或禁用操作，并拖动手柄调整顺序。更改会自动保存。",
-	"menuCustomize.regular": "常规 callout",
+	"menuCustomize.regular": "Block callout",
 	"menuCustomize.heading": "标题 callout",
 	"menuCustomize.inline": "行内 callout",
 	"menuCustomize.dragHandle": "拖动以重新排序",
