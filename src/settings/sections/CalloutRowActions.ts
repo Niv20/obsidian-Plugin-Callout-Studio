@@ -257,8 +257,18 @@ async function handleCalloutDelete(
 			}),
 		);
 	}
+	// Delete is authoritative. Suppress before removing, so the open-editor scan
+	// that ctx.display() runs one line down cannot resurrect the row from a
+	// CodeMirror buffer that has not yet caught up with the conversion above —
+	// it would come back as an uncustomized fallback row, reading as "delete
+	// only reset my callout". Every id form goes in, not just the primary one.
+	ctx.plugin.suppressCalloutRediscovery(allIds);
 	ctx.plugin.registry.remove(def.id);
 	ctx.plugin.registry.cleanupUnusedIconSvgs();
+	// Awaited, and not just for tidiness: cleanupUnusedIconSvgs does not notify,
+	// so without this its trimmed cache misses the save `remove` kicked off and
+	// rides on whatever save happens next.
+	await ctx.plugin.saveSettings();
 	ctx.display();
 }
 
@@ -326,10 +336,18 @@ async function handleCalloutReplace(
 	if (result.action !== "replace") return;
 
 	if (fileCount > 0) {
+		// The name travels with the type. A header this plugin wrote carries the
+		// callout's display name as its title, so swapping the token alone would
+		// leave `> [!danger] Warning` behind. Only a title that is exactly the
+		// old name is touched — one the user wrote themselves is theirs.
+		const target = otherCallouts.find((c) => c.id === result.replaceWith);
 		const replaced = await replaceCalloutIdsInVault(
 			ctx.app,
 			allIds,
 			result.replaceWith,
+			target && target.displayName !== def.displayName
+				? { from: def.displayName, to: target.displayName }
+				: undefined,
 		);
 		new Notice(t("vault.filesUpdated", { count: String(replaced) }));
 	} else {

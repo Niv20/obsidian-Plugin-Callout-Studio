@@ -422,6 +422,10 @@ export default class CalloutStudioPlugin extends Plugin {
 		return this.discovery.addUnknownCalloutsAsFallback(unknownIds);
 	}
 
+	suppressCalloutRediscovery(ids: string[]): void {
+		this.discovery.suppressRediscovery(ids);
+	}
+
 	schedulePruneUnusedFallbacks(delayMs?: number): void {
 		this.discovery.schedulePrune(delayMs);
 	}

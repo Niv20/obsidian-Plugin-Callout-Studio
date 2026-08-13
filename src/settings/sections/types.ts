@@ -29,6 +29,12 @@ export type SettingsTabPlugin = Plugin & {
 	onIconCacheChange(cb: () => void): () => void;
 	schedulePruneUnusedFallbacks(delayMs?: number): void;
 	addUnknownCalloutsAsFallback(unknownIds: string[]): number;
+	/**
+	 * Keep discovery from auto-creating rows for these ids for a few seconds —
+	 * what makes an explicit delete stick while the open editors are still
+	 * showing the text it just rewrote.
+	 */
+	suppressCalloutRediscovery(ids: string[]): void;
 	saveSettings(): Promise<void>;
 	refreshCallouts(): void;
 	refreshRenderModes(): void;

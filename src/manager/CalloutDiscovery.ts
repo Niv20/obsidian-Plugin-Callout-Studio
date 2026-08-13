@@ -56,6 +56,31 @@ export class CalloutDiscovery {
 	 */
 	private readonly zeroUsageFallbackIds = new Set<string>();
 
+	/**
+	 * How long an explicit delete keeps discovery from re-creating the row it
+	 * just removed. Only has to outlast the open editors catching up with the
+	 * vault writes the delete made — see {@link suppressedIds}.
+	 */
+	private static readonly REDISCOVERY_SUPPRESS_MS = 5000;
+
+	/**
+	 * Ids an explicit delete just removed → the timestamp their suppression
+	 * expires. Discovery refuses to auto-create a row for them until then.
+	 *
+	 * Deleting a callout rewrites its vault usages with `vault.modify`, but an
+	 * open editor's CodeMirror buffer catches up with that asynchronously — and
+	 * `SettingsTab.display()`, which the delete calls synchronously on the very
+	 * next line, scans exactly those buffers for unknown ids. Without this the
+	 * row is re-created one tick after it was removed, arriving back as a fresh
+	 * *uncustomized* fallback row: the user sees their customized row survive
+	 * the delete with its styling reset to the default.
+	 *
+	 * Deliberately time-bounded rather than permanent. It answers a race, not a
+	 * policy — an id the user genuinely writes again later deserves its row
+	 * back, and that is discovery's whole job.
+	 */
+	private readonly suppressedIds = new Map<string, number>();
+
 	constructor(private readonly host: DiscoveryHost) {}
 
 	destroy(): void {
@@ -78,6 +103,39 @@ export class CalloutDiscovery {
 	 */
 	isKnownZeroUsageFallback(id: string): boolean {
 		return this.zeroUsageFallbackIds.has(normalizeCalloutId(id));
+	}
+
+	/**
+	 * Refuse to auto-create rows for these ids for the next few seconds — see
+	 * {@link suppressedIds}. Pass every id form the deleted row owned
+	 * (`CalloutRegistry.vaultIdFormsFor`), or a leftover `[!my-id]` spelling
+	 * would just create the row back under the dash form.
+	 */
+	suppressRediscovery(ids: string[]): void {
+		const until = Date.now() + CalloutDiscovery.REDISCOVERY_SUPPRESS_MS;
+		for (const id of ids) {
+			const normalized = normalizeCalloutId(id);
+			if (normalized) this.suppressedIds.set(normalized, until);
+		}
+	}
+
+	/**
+	 * Drop every suppression. An explicitly requested vault scan is the user
+	 * asking for these rows, so it must not be silently filtered.
+	 */
+	clearRediscoverySuppression(): void {
+		this.suppressedIds.clear();
+	}
+
+	/** True while a just-deleted id is still inside its suppression window. */
+	private isRediscoverySuppressed(id: string): boolean {
+		const normalized = normalizeCalloutId(id);
+		const until = this.suppressedIds.get(normalized);
+		if (until === undefined) return false;
+		if (Date.now() < until) return true;
+		// Expired. Dropped on read, so the map needs no timer of its own.
+		this.suppressedIds.delete(normalized);
+		return false;
 	}
 
 	/**
@@ -134,6 +192,11 @@ export class CalloutDiscovery {
 			let added = 0;
 			for (const id of unknownIds) {
 				if (this.host.registry.get(id)) continue;
+				// An id the user just deleted. Placed with the other per-id
+				// guards on purpose: this one spot covers the incremental file
+				// scan, the settings tab's open-editor scan and the first-run
+				// modal alike.
+				if (this.isRediscoverySuppressed(id)) continue;
 				// Also skip a spelling an existing callout already owns through
 				// its `data-callout` form. buildKnownIds keeps the discovery
 				// paths from reaching here at all; this covers the first-run
@@ -288,6 +351,8 @@ export class CalloutDiscovery {
 	 * them as fallback-source rows that mirror the current fallback style.
 	 */
 	async runVaultScan(markFirstRun = false): Promise<number> {
+		// The user asked for this scan, so nothing may be held back from it.
+		this.clearRediscoverySuppression();
 		const known = this.buildKnownIds();
 		const unknown = await scanVaultForUnknownCallouts(this.host.app, known);
 		const added = this.addUnknownCalloutsAsFallback(unknown);
