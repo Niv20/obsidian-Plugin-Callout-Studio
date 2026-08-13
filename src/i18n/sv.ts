@@ -5,6 +5,11 @@ export const sv: Record<string, string> = {
 	"cmd.calloutWrap": "Lägg i callout",
 	"cmd.calloutUnwrap": "Ta bort callout",
 
+	"cmd.customWrapBlock": "Lägg i callout {{name}}",
+	"cmd.customInsertBlock": "Infoga callout {{name}}",
+	"cmd.customInsertHeading": "Infoga H{{level}}-rubrikcallout {{name}}",
+	"cmd.customInsertInline": "Infoga infogad callout {{name}}",
+
 	"autocomplete.createNew": 'Skapa ny callout: "{{name}}"',
 
 	"settings.fallbackTag": "Standard",
@@ -136,10 +141,50 @@ export const sv: Record<string, string> = {
 	"settings.enableAutocompleteDesc":
 		'Visar förslag när du skriver "[!" i ett blockcitat i editorn. Välj en callout-typ från listan för att infoga en komplett callout-rubrik.',
 
-	"settings.openHotkeys": "Callout Studio-genvägar",
-	"settings.openHotkeysDesc":
-		"Öppnar Obsidians genväginställningar för Callout Studio-kommandon, där du kan välja egna genvägar för Skapa ny typ, Öppna inställningar, Ta bort callout och Lägg i callout. Inga genvägar tilldelas som standard.",
-	"settings.openHotkeysButton": "Öppna genväginställningar",
+	"settings.customCommands": "Kommandon och genvägar",
+	"settings.customCommandsDesc":
+		"Se alla Callout Studio-kommandon och genvägen de är bundna till, och skapa egna kommandon för de callouts du använder mest. Inga genvägar tilldelas som standard.",
+	"settings.customCommandsButton": "Hantera kommandon",
+
+	"commandBuilder.title": "Kommandon och genvägar",
+	"commandBuilder.desc":
+		"Använd +-knappen för att ställa in eller ändra en genväg i Obsidians genväginställningar.",
+	"commandBuilder.builtIn": "Inbyggda kommandon",
+	"commandBuilder.toggleAria": "Slå på eller av {{name}}",
+	"commandBuilder.hotkeyBlank": "Tom",
+	"commandBuilder.hotkeyAria": "Ställ in en genväg för {{name}}",
+	"commandBuilder.yourCommands": "Dina kommandon",
+	"commandBuilder.newCommand": "Nytt kommando",
+	"commandBuilder.empty": "Inga egna kommandon än.",
+	"commandBuilder.unknownCommand": "detta kommando",
+	"commandBuilder.editAria": "Redigera {{name}}",
+	"commandBuilder.deleteAria": "Ta bort {{name}}",
+	"commandBuilder.deleteConfirm":
+		"Ta bort kommandot {{name}}? Eventuell genväg som tilldelats det slutar fungera.",
+	"commandBuilder.newTitle": "Nytt kommando",
+	"commandBuilder.editTitle": "Redigera kommando",
+	"commandBuilder.format": "Callout-format",
+	"commandBuilder.formatDesc": "Vilken typ av callout kommandot skriver.",
+	"commandBuilder.formatHeading": "Rubrik",
+	"commandBuilder.formatInline": "Infogad",
+	"commandBuilder.formatBlock": "Block",
+	"commandBuilder.roleDisabled":
+		"Detta format är avstängt, så kommandot infogar vanlig text tills du slår på det igen.",
+	"commandBuilder.callout": "Callout-typ",
+	"commandBuilder.calloutDesc": "Callouten kommandot infogar.",
+	"commandBuilder.headingLevel": "Rubriknivå",
+	"commandBuilder.headingLevelDesc": "Vilken rubriknivå som ska skrivas.",
+	"commandBuilder.action": "Åtgärd",
+	"commandBuilder.actionDesc":
+		"Lägg i omvandlar markeringen till en callout; infoga lägger till en tom.",
+	"commandBuilder.actionWrap": "Lägg i markering",
+	"commandBuilder.actionInsert": "Infoga ny",
+	"commandBuilder.preview": "Kommandonamn",
+	"commandBuilder.duplicate":
+		"Du har redan ett kommando som gör exakt detta.",
+	"commandBuilder.noCallouts":
+		"Det finns inga callout-typer att bygga ett kommando från än.",
+	"commandBuilder.save": "Spara",
 
 	"settings.vaultMaintenance": "Vault-insikter och underhåll",
 	"settings.vaultStats": "Callout-statistik",
@@ -155,6 +200,10 @@ export const sv: Record<string, string> = {
 		"Detta tar bort alla anpassade callouts, återställer inbyggda callouts, globala stilar, sparade färgpaletter, anpassningen av högerklicksmenyn och alla cachade Material-SVG:er. Åtgärden kan inte ångras. Är du säker?",
 	"notice.resetAllDone": "Allt har återställts till standard.",
 
+	"notice.customCommandsRemoved":
+		"{{count}} eget kommando/egna kommandon vars callout-typ inte längre finns togs bort.",
+	"notice.customCommandMissingCallout":
+		"Kommandots callout-typ finns inte längre.",
 	"notice.exported": "Callouts exporterade till callout-studio-export.json",
 	"notice.importedJSON": "{{count}} callout-typ(er) importerade från JSON.",
 	"notice.importedSettings": "Tilläggets inställningar importerade.",

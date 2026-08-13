@@ -4,6 +4,10 @@ export const bg: Record<string, string> = {
 	"cmd.insertEmptyCallout": "Вмъкване на празен callout",
 	"cmd.calloutWrap": "Обвиване в callout",
 	"cmd.calloutUnwrap": "Премахване на callout",
+	"cmd.customWrapBlock": "Обвиване в callout {{name}}",
+	"cmd.customInsertBlock": "Вмъкване на callout {{name}}",
+	"cmd.customInsertHeading": "Вмъкване на заглавен callout {{name}} (H{{level}})",
+	"cmd.customInsertInline": "Вмъкване на вграден callout {{name}}",
 	"autocomplete.createNew": 'Създаване на нов callout: "{{name}}"',
 	"settings.fallbackTag": "По подразбиране",
 	"settings.fallbackTagAuto": "Авт. по подразбиране",
@@ -124,11 +128,48 @@ export const bg: Record<string, string> = {
 	"settings.enableAutocomplete": "Активиране на автоматично довършване [!",
 	"settings.enableAutocompleteDesc":
 		'Показва предложения при въвеждане на "[!" в блоков цитат в редактора. Изберете тип callout от списъка, за да вмъкнете пълно заглавие на callout.',
-	"settings.openHotkeys": "Клавишни комбинации на Callout Studio",
-	"settings.openHotkeysDesc":
-		"Отваря настройките за клавишни комбинации на Obsidian за командите на Callout Studio. По подразбиране не са зададени комбинации.",
-	"settings.openHotkeysButton":
-		"Отваряне на настройките за клавишни комбинации",
+	"settings.customCommands": "Команди и клавишни комбинации",
+	"settings.customCommandsDesc":
+		"Вижте всяка команда на Callout Studio и клавишната комбинация, към която е обвързана, и създайте свои команди за callout-ите, които използвате най-често. По подразбиране не са зададени комбинации.",
+	"settings.customCommandsButton": "Управление на командите",
+	"commandBuilder.title": "Команди и клавишни комбинации",
+	"commandBuilder.desc":
+		"Използвайте бутона +, за да зададете или промените клавишна комбинация в настройките на Obsidian.",
+	"commandBuilder.builtIn": "Вградени команди",
+	"commandBuilder.toggleAria": "Включване или изключване на {{name}}",
+	"commandBuilder.hotkeyBlank": "Празно",
+	"commandBuilder.hotkeyAria": "Задаване на комбинация за {{name}}",
+	"commandBuilder.yourCommands": "Вашите команди",
+	"commandBuilder.newCommand": "Нова команда",
+	"commandBuilder.empty": "Все още няма персонализирани команди.",
+	"commandBuilder.unknownCommand": "тази команда",
+	"commandBuilder.editAria": "Редактиране на {{name}}",
+	"commandBuilder.deleteAria": "Изтриване на {{name}}",
+	"commandBuilder.deleteConfirm":
+		"Изтриване на командата {{name}}? Всяка зададена ѝ комбинация ще спре да работи.",
+	"commandBuilder.newTitle": "Нова команда",
+	"commandBuilder.editTitle": "Редактиране на команда",
+	"commandBuilder.format": "Формат на callout",
+	"commandBuilder.formatDesc": "Какъв вид callout записва командата.",
+	"commandBuilder.formatHeading": "Заглавие",
+	"commandBuilder.formatInline": "Вграден",
+	"commandBuilder.formatBlock": "Блоков",
+	"commandBuilder.roleDisabled":
+		"Този формат е изключен, затова командата ще вмъква обикновен текст, докато не го включите отново.",
+	"commandBuilder.callout": "Тип callout",
+	"commandBuilder.calloutDesc": "Callout-ът, който вмъква тази команда.",
+	"commandBuilder.headingLevel": "Ниво на заглавие",
+	"commandBuilder.headingLevelDesc": "На кое ниво да се запише заглавието.",
+	"commandBuilder.action": "Действие",
+	"commandBuilder.actionDesc":
+		"Обвиването превръща избора в callout; вмъкването добавя празен.",
+	"commandBuilder.actionWrap": "Обвиване на избора",
+	"commandBuilder.actionInsert": "Вмъкване на нов",
+	"commandBuilder.preview": "Име на командата",
+	"commandBuilder.duplicate": "Вече имате команда, която прави точно това.",
+	"commandBuilder.noCallouts":
+		"Все още няма типове callout, от които да се създаде команда.",
+	"commandBuilder.save": "Запазване",
 	"settings.vaultMaintenance": "Прегледи и поддръжка на хранилището",
 	"settings.vaultStats": "Статистика за callout",
 	"settings.vaultStatsDesc":
@@ -142,6 +183,10 @@ export const bg: Record<string, string> = {
 	"settings.resetAllConfirm":
 		"Това ще изтрие всички персонализирани callout-и, ще нулира вградените callout-и, глобалните стилове, запазените цветови палитри, персонализирането на контекстното меню и всички кеширани SVG файлове на Material. Действието не може да бъде отменено. Сигурни ли сте?",
 	"notice.resetAllDone": "Всичко е нулирано до стандартните стойности.",
+	"notice.customCommandsRemoved":
+		"Премахнати са {{count}} персонализирана(и) команда(и), чийто тип callout вече не съществува.",
+	"notice.customCommandMissingCallout":
+		"Типът callout на тази команда вече не съществува.",
 	"notice.exported":
 		"Callout-ите са експортирани в callout-studio-export.json",
 	"notice.importedJSON": "Импортирани са {{count}} тип(а) callout от JSON.",

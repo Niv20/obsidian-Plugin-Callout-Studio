@@ -5,6 +5,11 @@ export const ru: Record<string, string> = {
 	"cmd.calloutWrap": "Обернуть в callout",
 	"cmd.calloutUnwrap": "Убрать callout",
 
+	"cmd.customWrapBlock": "Обернуть в callout «{{name}}»",
+	"cmd.customInsertBlock": "Вставить callout «{{name}}»",
+	"cmd.customInsertHeading": "Вставить заголовок H{{level}} callout «{{name}}»",
+	"cmd.customInsertInline": "Вставить встроенный callout «{{name}}»",
+
 	"autocomplete.createNew": 'Создать новый callout: "{{name}}"',
 
 	"settings.fallbackTag": "По умолчанию",
@@ -134,10 +139,50 @@ export const ru: Record<string, string> = {
 	"settings.enableAutocompleteDesc":
 		'Показывает предложения при вводе "[!" в блочной цитате в редакторе. Выберите тип callout из списка, чтобы вставить полный заголовок callout.',
 
-	"settings.openHotkeys": "Сочетания клавиш Callout Studio",
-	"settings.openHotkeysDesc":
-		"Открывает настройки сочетаний клавиш Obsidian для команд Callout Studio, где можно задать собственные сочетания для создания нового типа, открытия настроек, удаления и добавления callout. По умолчанию сочетания не назначены.",
-	"settings.openHotkeysButton": "Открыть настройки сочетаний клавиш",
+	"settings.customCommands": "Команды и сочетания клавиш",
+	"settings.customCommandsDesc":
+		"Просмотрите все команды Callout Studio и назначенные им сочетания клавиш, а также создайте собственные команды для callout, которые вы используете чаще всего. По умолчанию сочетания не назначены.",
+	"settings.customCommandsButton": "Управление командами",
+
+	"commandBuilder.title": "Команды и сочетания клавиш",
+	"commandBuilder.desc":
+		"Используйте кнопку +, чтобы задать или изменить сочетание клавиш в настройках Obsidian.",
+	"commandBuilder.builtIn": "Встроенные команды",
+	"commandBuilder.toggleAria": "Включить или выключить {{name}}",
+	"commandBuilder.hotkeyBlank": "Пусто",
+	"commandBuilder.hotkeyAria": "Задать сочетание клавиш для {{name}}",
+	"commandBuilder.yourCommands": "Ваши команды",
+	"commandBuilder.newCommand": "Новая команда",
+	"commandBuilder.empty": "Пользовательских команд пока нет.",
+	"commandBuilder.unknownCommand": "эта команда",
+	"commandBuilder.editAria": "Редактировать {{name}}",
+	"commandBuilder.deleteAria": "Удалить {{name}}",
+	"commandBuilder.deleteConfirm":
+		"Удалить команду {{name}}? Назначенное ей сочетание клавиш перестанет работать.",
+	"commandBuilder.newTitle": "Новая команда",
+	"commandBuilder.editTitle": "Редактировать команду",
+	"commandBuilder.format": "Формат callout",
+	"commandBuilder.formatDesc": "Какой вид callout создаёт эта команда.",
+	"commandBuilder.formatHeading": "Заголовок",
+	"commandBuilder.formatInline": "Встроенный",
+	"commandBuilder.formatBlock": "Блочный",
+	"commandBuilder.roleDisabled":
+		"Этот формат отключён, поэтому команда будет вставлять обычный текст, пока вы не включите его снова.",
+	"commandBuilder.callout": "Тип callout",
+	"commandBuilder.calloutDesc": "Callout, который вставляет эта команда.",
+	"commandBuilder.headingLevel": "Уровень заголовка",
+	"commandBuilder.headingLevelDesc": "Какой уровень заголовка использовать.",
+	"commandBuilder.action": "Действие",
+	"commandBuilder.actionDesc":
+		"«Обернуть» превращает выделение в callout; «вставить» добавляет пустой.",
+	"commandBuilder.actionWrap": "Обернуть выделение",
+	"commandBuilder.actionInsert": "Вставить новый",
+	"commandBuilder.preview": "Название команды",
+	"commandBuilder.duplicate":
+		"У вас уже есть команда, которая делает то же самое.",
+	"commandBuilder.noCallouts":
+		"Пока нет типов callout, из которых можно создать команду.",
+	"commandBuilder.save": "Сохранить",
 
 	"settings.vaultMaintenance": "Аналитика и обслуживание хранилища",
 	"settings.vaultStats": "Статистика callout",
@@ -152,6 +197,11 @@ export const ru: Record<string, string> = {
 	"settings.resetAllConfirm":
 		"Это удалит все пользовательские callout, сбросит встроенные callout, глобальные стили, сохранённые цветовые палитры, настройку контекстного меню и все кешированные SVG Material. Действие нельзя отменить. Вы уверены?",
 	"notice.resetAllDone": "Всё сброшено до значений по умолчанию.",
+
+	"notice.customCommandsRemoved":
+		"Удалено {{count}} пользовательских команд, тип callout которых больше не существует.",
+	"notice.customCommandMissingCallout":
+		"Тип callout этой команды больше не существует.",
 
 	"notice.exported": "Callout экспортированы в callout-studio-export.json",
 	"notice.importedJSON": "Импортировано {{count}} типов callout из JSON.",

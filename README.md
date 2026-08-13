@@ -121,12 +121,27 @@ You can choose which of these actions appear for each of the three forms, and re
 
 ### Editor commands
 
-Callout Studio adds the following commands. **No keyboard shortcuts are assigned by default**; you can configure them from **Settings → Hotkeys** or from the in-plugin shortcut button.
+Callout Studio adds the following commands. **No keyboard shortcuts are assigned by default.** **Settings → Keyboard shortcuts → Manage commands** lists every one of them with the shortcut it is currently bound to; selecting a shortcut — or the word *Blank*, where there isn't one — opens Obsidian's own hotkey settings on that command.
 
 - **Open settings** — opens the Callout Studio settings tab.
 - **Create new callout type** — opens the callout editor.
+- **Insert empty callout** — starts a new callout at the cursor, then triggers the autocomplete so you can pick a type.
 - **Wrap in callout** — wraps the current paragraph or selection in a callout, then triggers the autocomplete so you can pick a type.
 - **Unwrap from callout** — removes one callout level around the cursor or selection.
+
+### Custom commands
+
+Those five are all Callout Studio ever adds on its own — it deliberately does **not** register a command per callout type, which would flood the command palette with hundreds of entries.
+
+Instead, build the specific ones you want in that same **Manage commands** window. Pick a format (heading, inline or block), a callout type, and — where the format offers a choice — a heading level or whether the command wraps the selection or inserts a new callout. Each command you create is registered with Obsidian, so it shows up in the command palette and in **Settings → Hotkeys** ready for a shortcut:
+
+- *Wrap in Warning callout*
+- *Insert H2 Note heading callout*
+- *Insert Important inline callout*
+
+They behave exactly like the generic commands above — same handling of selections, cursor position, nesting, code blocks and frontmatter — with the type already chosen, so there is no autocomplete step.
+
+Custom commands stay tied to the callout they use. Renaming a callout updates the command's name and keeps your shortcut; deleting a callout removes the commands that depended on it, so nothing broken is left behind in the palette. Editing a command keeps its shortcut, because a command's identity is independent of what it does.
 
 ### Vault insights & maintenance
 
@@ -230,6 +245,7 @@ If you never open the Material source, none of this happens. If the preview font
 
 - **The artwork of icons you actually use** is copied into the plugin's `data.json`, so your callouts still render on a device that synced your settings but never downloaded the source, and after a cached pack file is deleted. Unused entries are cleaned up automatically when you edit or delete a callout; **Reset all** clears them outright.
 - **The pictures you added yourself**, also in `data.json` — typically five to twenty kilobytes each after the size cap above. The picker shows the running total, and **Reset all** clears them along with everything else you made.
+- **The commands you built**, in `data.json` — a few bytes each, recording only the format, callout and heading level you chose. The shortcut itself belongs to Obsidian and lives in its own `hotkeys.json`, so it survives the command being edited.
 - **Downloaded icon sources** live in `.obsidian/plugins/callout-studio/icon-packs/`. Deleting them is safe: your callouts keep rendering from the copy in `data.json`, and the picker offers the download again. If a callout does turn out to need artwork that only the deleted file had, it is fetched again on the next launch.
 - **The Material Symbols preview font**, in `.obsidian/plugins/callout-studio/icon-fonts/` — one 1.0–1.5 MB file per style you have opened in the picker. It is only used to draw the picker's grid, never your notes, so deleting it costs nothing beyond re-downloading it the next time you browse that style.
 - **A snapshot of the plugin's generated CSS**, to shorten the brief flash of unstyled callouts on slow startups (mainly mobile). It is a small per-device cache in the app's own local storage — not a file in your vault — and it holds only generated styling, never vault content. It never leaves your device, and it is re-read the moment the plugin starts loading, before anything is fetched from disk. Versions up to 2.5.0 also wrote a CSS snippet into `.obsidian/snippets/`; that file is no longer created, and any copy left from an older version is deleted automatically the next time the plugin loads.

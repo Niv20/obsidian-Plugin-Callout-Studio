@@ -5,6 +5,11 @@ export const id: Record<string, string> = {
 	"cmd.calloutWrap": "Bungkus dalam callout",
 	"cmd.calloutUnwrap": "Hapus callout",
 
+	"cmd.customWrapBlock": "Bungkus dalam callout {{name}}",
+	"cmd.customInsertBlock": "Sisipkan callout {{name}}",
+	"cmd.customInsertHeading": "Sisipkan heading callout {{name}} H{{level}}",
+	"cmd.customInsertInline": "Sisipkan inline callout {{name}}",
+
 	"autocomplete.createNew": 'Buat callout baru: "{{name}}"',
 
 	"settings.fallbackTag": "Default",
@@ -134,10 +139,50 @@ export const id: Record<string, string> = {
 	"settings.enableAutocompleteDesc":
 		'Menampilkan saran saat Anda mengetik "[!" di dalam Block Callout di editor. Pilih tipe callout dari daftar untuk menyisipkan header callout lengkap.',
 
-	"settings.openHotkeys": "Pintasan Callout Studio",
-	"settings.openHotkeysDesc":
-		"Membuka pengaturan pintasan Obsidian untuk perintah Callout Studio, di mana Anda dapat memilih pintasan sendiri untuk Buat tipe baru, Buka pengaturan, Hapus callout, dan Bungkus dalam callout. Tidak ada pintasan yang ditetapkan secara default.",
-	"settings.openHotkeysButton": "Buka pengaturan pintasan",
+	"settings.customCommands": "Perintah dan pintasan",
+	"settings.customCommandsDesc":
+		"Lihat setiap perintah Callout Studio dan pintasan yang ditetapkan padanya, serta buat perintah Anda sendiri untuk callout yang paling sering Anda gunakan. Tidak ada pintasan yang ditetapkan secara default.",
+	"settings.customCommandsButton": "Kelola perintah",
+
+	"commandBuilder.title": "Perintah dan pintasan",
+	"commandBuilder.desc":
+		"Gunakan tombol + untuk menetapkan atau mengubah pintasan di pengaturan hotkey Obsidian.",
+	"commandBuilder.builtIn": "Perintah bawaan",
+	"commandBuilder.toggleAria": "Aktifkan atau nonaktifkan {{name}}",
+	"commandBuilder.hotkeyBlank": "Kosong",
+	"commandBuilder.hotkeyAria": "Tetapkan pintasan untuk {{name}}",
+	"commandBuilder.yourCommands": "Perintah Anda",
+	"commandBuilder.newCommand": "Perintah baru",
+	"commandBuilder.empty": "Belum ada perintah kustom.",
+	"commandBuilder.unknownCommand": "perintah ini",
+	"commandBuilder.editAria": "Edit {{name}}",
+	"commandBuilder.deleteAria": "Hapus {{name}}",
+	"commandBuilder.deleteConfirm":
+		"Hapus perintah {{name}}? Pintasan apa pun yang ditetapkan padanya akan berhenti berfungsi.",
+	"commandBuilder.newTitle": "Perintah baru",
+	"commandBuilder.editTitle": "Edit perintah",
+	"commandBuilder.format": "Format callout",
+	"commandBuilder.formatDesc": "Jenis callout apa yang ditulis perintah ini.",
+	"commandBuilder.formatHeading": "Heading",
+	"commandBuilder.formatInline": "Inline",
+	"commandBuilder.formatBlock": "Block",
+	"commandBuilder.roleDisabled":
+		"Format ini dimatikan, sehingga perintah akan menyisipkan teks biasa sampai Anda mengaktifkannya kembali.",
+	"commandBuilder.callout": "Tipe callout",
+	"commandBuilder.calloutDesc": "Callout yang disisipkan oleh perintah ini.",
+	"commandBuilder.headingLevel": "Level heading",
+	"commandBuilder.headingLevelDesc": "Level heading mana yang akan ditulis.",
+	"commandBuilder.action": "Aksi",
+	"commandBuilder.actionDesc":
+		"Bungkus mengubah seleksi menjadi callout; sisipkan menambahkan callout kosong.",
+	"commandBuilder.actionWrap": "Bungkus seleksi",
+	"commandBuilder.actionInsert": "Sisipkan baru",
+	"commandBuilder.preview": "Nama perintah",
+	"commandBuilder.duplicate":
+		"Anda sudah memiliki perintah yang melakukan persis hal ini.",
+	"commandBuilder.noCallouts":
+		"Belum ada tipe callout untuk membuat perintah.",
+	"commandBuilder.save": "Simpan",
 
 	"settings.vaultMaintenance": "Wawasan & pemeliharaan vault",
 	"settings.vaultStats": "Statistik callout",
@@ -152,6 +197,11 @@ export const id: Record<string, string> = {
 	"settings.resetAllConfirm":
 		"Ini akan menghapus semua callout kustom, mereset callout bawaan, gaya global, palet warna tersimpan, penyesuaian menu klik kanan, dan semua SVG Material yang di-cache. Tindakan ini tidak dapat dibatalkan. Apakah Anda yakin?",
 	"notice.resetAllDone": "Semua telah direset ke default.",
+
+	"notice.customCommandsRemoved":
+		"Menghapus {{count}} perintah kustom yang tipe callout-nya sudah tidak ada.",
+	"notice.customCommandMissingCallout":
+		"Tipe callout untuk perintah tersebut sudah tidak ada.",
 
 	"notice.exported": "Callout diekspor ke callout-studio-export.json",
 	"notice.importedJSON": "{{count}} tipe callout diimpor dari JSON.",

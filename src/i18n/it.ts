@@ -5,6 +5,11 @@ export const it: Record<string, string> = {
 	"cmd.calloutWrap": "Racchiudi in callout",
 	"cmd.calloutUnwrap": "Rimuovi callout",
 
+	"cmd.customWrapBlock": "Racchiudi in callout {{name}}",
+	"cmd.customInsertBlock": "Inserisci callout {{name}}",
+	"cmd.customInsertHeading": "Inserisci titolo callout H{{level}} {{name}}",
+	"cmd.customInsertInline": "Inserisci callout in linea {{name}}",
+
 	"autocomplete.createNew": 'Crea nuovo callout: "{{name}}"',
 
 	"settings.fallbackTag": "Predefinito",
@@ -135,10 +140,50 @@ export const it: Record<string, string> = {
 	"settings.enableAutocompleteDesc":
 		"Mostra suggerimenti quando si digita \"[!\" in una citazione nell'editor. Scegli un tipo di callout dall'elenco per inserire un'intestazione callout completa.",
 
-	"settings.openHotkeys": "Scorciatoie Callout Studio",
-	"settings.openHotkeysDesc":
-		"Apre le impostazioni scorciatoie di Obsidian per i comandi di Callout Studio, dove puoi scegliere le tue scorciatoie per Crea nuovo tipo, Apri impostazioni, Rimuovi callout e Racchiudi in callout. Nessuna scorciatoia assegnata per impostazione predefinita.",
-	"settings.openHotkeysButton": "Apri impostazioni scorciatoie",
+	"settings.customCommands": "Comandi e scorciatoie",
+	"settings.customCommandsDesc":
+		"Visualizza ogni comando di Callout Studio e la scorciatoia a cui è associato, e crea i tuoi comandi personalizzati per i callout che usi di più. Nessuna scorciatoia è assegnata per impostazione predefinita.",
+	"settings.customCommandsButton": "Gestisci comandi",
+
+	"commandBuilder.title": "Comandi e scorciatoie",
+	"commandBuilder.desc":
+		"Usa il pulsante + per impostare o cambiare una scorciatoia nelle impostazioni scorciatoie di Obsidian.",
+	"commandBuilder.builtIn": "Comandi integrati",
+	"commandBuilder.toggleAria": "Attiva o disattiva {{name}}",
+	"commandBuilder.hotkeyBlank": "Vuoto",
+	"commandBuilder.hotkeyAria": "Imposta una scorciatoia per {{name}}",
+	"commandBuilder.yourCommands": "I tuoi comandi",
+	"commandBuilder.newCommand": "Nuovo comando",
+	"commandBuilder.empty": "Nessun comando personalizzato ancora.",
+	"commandBuilder.unknownCommand": "questo comando",
+	"commandBuilder.editAria": "Modifica {{name}}",
+	"commandBuilder.deleteAria": "Elimina {{name}}",
+	"commandBuilder.deleteConfirm":
+		"Eliminare il comando {{name}}? Qualsiasi scorciatoia assegnata smetterà di funzionare.",
+	"commandBuilder.newTitle": "Nuovo comando",
+	"commandBuilder.editTitle": "Modifica comando",
+	"commandBuilder.format": "Formato callout",
+	"commandBuilder.formatDesc": "Il tipo di callout che il comando scrive.",
+	"commandBuilder.formatHeading": "Intestazione",
+	"commandBuilder.formatInline": "In linea",
+	"commandBuilder.formatBlock": "Block",
+	"commandBuilder.roleDisabled":
+		"Questo formato è disattivato, quindi il comando inserirà testo semplice finché non lo riattivi.",
+	"commandBuilder.callout": "Tipo di callout",
+	"commandBuilder.calloutDesc": "Il callout che questo comando inserisce.",
+	"commandBuilder.headingLevel": "Livello di intestazione",
+	"commandBuilder.headingLevelDesc": "Quale livello di intestazione scrivere.",
+	"commandBuilder.action": "Azione",
+	"commandBuilder.actionDesc":
+		"Racchiudi trasforma la selezione in un callout; inserisci ne aggiunge uno vuoto.",
+	"commandBuilder.actionWrap": "Racchiudi selezione",
+	"commandBuilder.actionInsert": "Inserisci nuovo",
+	"commandBuilder.preview": "Nome del comando",
+	"commandBuilder.duplicate":
+		"Hai già un comando che fa esattamente questo.",
+	"commandBuilder.noCallouts":
+		"Non ci sono ancora tipi di callout da cui creare un comando.",
+	"commandBuilder.save": "Salva",
 
 	"settings.vaultMaintenance": "Approfondimenti e manutenzione vault",
 	"settings.vaultStats": "Statistiche callout",
@@ -153,6 +198,11 @@ export const it: Record<string, string> = {
 	"settings.resetAllConfirm":
 		"Questo eliminerà tutti i callout personalizzati, ripristinerà i callout integrati, gli stili globali, le tavolozze di colori salvate, la personalizzazione del menu del clic destro e tutti gli SVG Material nella cache. Questa azione non può essere annullata. Sei sicuro?",
 	"notice.resetAllDone": "Tutto è stato ripristinato ai valori predefiniti.",
+
+	"notice.customCommandsRemoved":
+		"Rimosso/i {{count}} comando/i personalizzato/i il cui tipo di callout non esiste più.",
+	"notice.customCommandMissingCallout":
+		"Il tipo di callout di questo comando non esiste più.",
 
 	"notice.exported": "Callout esportati in callout-studio-export.json",
 	"notice.importedJSON": "Importato/i {{count}} tipo/i di callout da JSON.",

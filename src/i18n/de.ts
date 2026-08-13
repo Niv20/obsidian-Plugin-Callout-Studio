@@ -5,6 +5,11 @@ export const de: Record<string, string> = {
 	"cmd.calloutWrap": "In Callout einbetten",
 	"cmd.calloutUnwrap": "Aus Callout entfernen",
 
+	"cmd.customWrapBlock": "In {{name}}-Callout einbetten",
+	"cmd.customInsertBlock": "{{name}}-Callout einfügen",
+	"cmd.customInsertHeading": "H{{level}}-{{name}}-Überschrift-Callout einfügen",
+	"cmd.customInsertInline": "{{name}}-Inline-Callout einfügen",
+
 	"autocomplete.createNew": 'Neuen Callout erstellen: "{{name}}"',
 
 	"settings.fallbackTag": "Standard",
@@ -135,10 +140,50 @@ export const de: Record<string, string> = {
 	"settings.enableAutocompleteDesc":
 		'Zeigt Vorschläge an, wenn Sie "[!" in einem Blockzitat im Editor eingeben. Wählen Sie einen Callout-Typ aus der Liste, um eine vollständige Callout-Überschrift einzufügen.',
 
-	"settings.openHotkeys": "Callout Studio-Tastaturkürzel",
-	"settings.openHotkeysDesc":
-		"Öffnet Obsidians Tastaturkürzel-Einstellungen für Callout Studio-Befehle, wo Sie eigene Kürzel für Neuen Callout-Typ erstellen, Einstellungen öffnen, Aus Callout entfernen und In Callout einbetten festlegen können. Standardmäßig sind keine Kürzel zugewiesen.",
-	"settings.openHotkeysButton": "Tastaturkürzel öffnen",
+	"settings.customCommands": "Befehle und Tastaturkürzel",
+	"settings.customCommandsDesc":
+		"Sehen Sie jeden Callout Studio-Befehl und das Tastaturkürzel, an das er gebunden ist, und erstellen Sie eigene Befehle für die Callouts, die Sie am häufigsten verwenden. Standardmäßig sind keine Kürzel zugewiesen.",
+	"settings.customCommandsButton": "Befehle verwalten",
+
+	"commandBuilder.title": "Befehle und Tastaturkürzel",
+	"commandBuilder.desc":
+		"Nutzen Sie die +-Schaltfläche, um in Obsidians Tastaturkürzel-Einstellungen ein Kürzel festzulegen oder zu ändern.",
+	"commandBuilder.builtIn": "Integrierte Befehle",
+	"commandBuilder.toggleAria": "{{name}} ein- oder ausschalten",
+	"commandBuilder.hotkeyBlank": "Leer",
+	"commandBuilder.hotkeyAria": "Kürzel für {{name}} festlegen",
+	"commandBuilder.yourCommands": "Ihre Befehle",
+	"commandBuilder.newCommand": "Neuer Befehl",
+	"commandBuilder.empty": "Noch keine eigenen Befehle.",
+	"commandBuilder.unknownCommand": "diesen Befehl",
+	"commandBuilder.editAria": "{{name}} bearbeiten",
+	"commandBuilder.deleteAria": "{{name}} löschen",
+	"commandBuilder.deleteConfirm":
+		"Befehl {{name}} löschen? Ein zugewiesenes Kürzel funktioniert dann nicht mehr.",
+	"commandBuilder.newTitle": "Neuer Befehl",
+	"commandBuilder.editTitle": "Befehl bearbeiten",
+	"commandBuilder.format": "Callout-Format",
+	"commandBuilder.formatDesc": "Welche Art von Callout der Befehl schreibt.",
+	"commandBuilder.formatHeading": "Überschrift",
+	"commandBuilder.formatInline": "Inline",
+	"commandBuilder.formatBlock": "Block",
+	"commandBuilder.roleDisabled":
+		"Dieses Format ist deaktiviert, daher fügt der Befehl reinen Text ein, bis Sie es wieder aktivieren.",
+	"commandBuilder.callout": "Callout-Typ",
+	"commandBuilder.calloutDesc": "Der Callout, den dieser Befehl einfügt.",
+	"commandBuilder.headingLevel": "Überschriftsebene",
+	"commandBuilder.headingLevelDesc": "Welche Überschriftsebene geschrieben wird.",
+	"commandBuilder.action": "Aktion",
+	"commandBuilder.actionDesc":
+		"Einbetten verwandelt die Auswahl in einen Callout; Einfügen fügt einen leeren hinzu.",
+	"commandBuilder.actionWrap": "Auswahl einbetten",
+	"commandBuilder.actionInsert": "Neu einfügen",
+	"commandBuilder.preview": "Befehlsname",
+	"commandBuilder.duplicate":
+		"Sie haben bereits einen Befehl, der genau das tut.",
+	"commandBuilder.noCallouts":
+		"Es gibt noch keine Callout-Typen, aus denen ein Befehl erstellt werden kann.",
+	"commandBuilder.save": "Speichern",
 
 	"settings.vaultMaintenance": "Vault-Einblicke & Wartung",
 	"settings.vaultStats": "Callout-Statistiken",
@@ -154,6 +199,10 @@ export const de: Record<string, string> = {
 		"Dadurch werden alle benutzerdefinierten Callouts gelöscht, integrierte Callouts, globale Stile, gespeicherte Farbpaletten, die Anpassung des Rechtsklickmenüs und alle gecachten Material-SVGs zurückgesetzt. Diese Aktion kann nicht rückgängig gemacht werden. Sind Sie sicher?",
 	"notice.resetAllDone": "Alles wurde auf die Standardwerte zurückgesetzt.",
 
+	"notice.customCommandsRemoved":
+		"{{count}} eigene(r) Befehl(e) entfernt, deren Callout-Typ nicht mehr existiert.",
+	"notice.customCommandMissingCallout":
+		"Der Callout-Typ dieses Befehls existiert nicht mehr.",
 	"notice.exported": "Callouts nach callout-studio-export.json exportiert",
 	"notice.importedJSON": "{{count}} Callout-Typ(en) aus JSON importiert.",
 	"notice.importedSettings": "Plugin-Einstellungen importiert.",

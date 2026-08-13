@@ -5,6 +5,11 @@ export const zh: Record<string, string> = {
 	"cmd.calloutWrap": "用 callout 包裹",
 	"cmd.calloutUnwrap": "从 callout 中解包",
 
+	"cmd.customWrapBlock": "用 {{name}} callout 包裹",
+	"cmd.customInsertBlock": "插入 {{name}} callout",
+	"cmd.customInsertHeading": "插入 H{{level}} {{name}} 标题 callout",
+	"cmd.customInsertInline": "插入 {{name}} 行内 callout",
+
 	"autocomplete.createNew": '创建新 callout："{{name}}"',
 
 	"settings.fallbackTag": "默认",
@@ -131,10 +136,48 @@ export const zh: Record<string, string> = {
 	"settings.enableAutocompleteDesc":
 		'在编辑器块引用中输入"[!"时显示建议。从列表中选择 callout 类型以插入完整的 callout 标题。',
 
-	"settings.openHotkeys": "Callout Studio 快捷键",
-	"settings.openHotkeysDesc":
-		"打开 Obsidian 的快捷键设置，在那里您可以为「创建新 callout 类型」、「打开设置」、「从 callout 中解包」和「用 callout 包裹」设置快捷键。默认不分配快捷键。",
-	"settings.openHotkeysButton": "打开快捷键设置",
+	"settings.customCommands": "命令与快捷键",
+	"settings.customCommandsDesc":
+		"查看每个 Callout Studio 命令及其绑定的快捷键，并为您最常用的 callout 创建自己的命令。默认不分配快捷键。",
+	"settings.customCommandsButton": "管理命令",
+
+	"commandBuilder.title": "命令与快捷键",
+	"commandBuilder.desc":
+		"点击「+」按钮以在 Obsidian 的快捷键设置中设置或更改快捷键。",
+	"commandBuilder.builtIn": "内置命令",
+	"commandBuilder.toggleAria": "开启或关闭 {{name}}",
+	"commandBuilder.hotkeyBlank": "空",
+	"commandBuilder.hotkeyAria": "为 {{name}} 设置快捷键",
+	"commandBuilder.yourCommands": "您的命令",
+	"commandBuilder.newCommand": "新建命令",
+	"commandBuilder.empty": "还没有自定义命令。",
+	"commandBuilder.unknownCommand": "此命令",
+	"commandBuilder.editAria": "编辑 {{name}}",
+	"commandBuilder.deleteAria": "删除 {{name}}",
+	"commandBuilder.deleteConfirm":
+		"删除命令 {{name}}？为其分配的快捷键将停止生效。",
+	"commandBuilder.newTitle": "新建命令",
+	"commandBuilder.editTitle": "编辑命令",
+	"commandBuilder.format": "Callout 格式",
+	"commandBuilder.formatDesc": "此命令写入的 callout 类型。",
+	"commandBuilder.formatHeading": "标题",
+	"commandBuilder.formatInline": "行内",
+	"commandBuilder.formatBlock": "块",
+	"commandBuilder.roleDisabled":
+		"此格式已关闭，因此在您重新开启之前，该命令将插入纯文本。",
+	"commandBuilder.callout": "Callout 类型",
+	"commandBuilder.calloutDesc": "此命令插入的 callout。",
+	"commandBuilder.headingLevel": "标题级别",
+	"commandBuilder.headingLevelDesc": "要写入的标题级别。",
+	"commandBuilder.action": "操作",
+	"commandBuilder.actionDesc":
+		"「包裹」将选中内容转换为 callout；「插入」添加一个空 callout。",
+	"commandBuilder.actionWrap": "包裹所选内容",
+	"commandBuilder.actionInsert": "插入新的",
+	"commandBuilder.preview": "命令名称",
+	"commandBuilder.duplicate": "您已经有一个执行完全相同操作的命令。",
+	"commandBuilder.noCallouts": "目前还没有可用于创建命令的 callout 类型。",
+	"commandBuilder.save": "保存",
 
 	"settings.vaultMaintenance": "库洞察与维护",
 	"settings.vaultStats": "Callout 统计",
@@ -150,6 +193,9 @@ export const zh: Record<string, string> = {
 		"此操作将删除所有自定义 callout，重置内置 callout、全局样式、已保存的调色板、右键菜单自定义设置和所有缓存的 Material SVG。此操作无法撤销。确定吗？",
 	"notice.resetAllDone": "所有内容已重置为默认值。",
 
+	"notice.customCommandsRemoved":
+		"已移除 {{count}} 个 callout 类型已不存在的自定义命令。",
+	"notice.customCommandMissingCallout": "该命令的 callout 类型已不存在。",
 	"notice.exported": "Callout 已导出到 callout-studio-export.json",
 	"notice.importedJSON": "已从 JSON 导入 {{count}} 个 callout 类型。",
 	"notice.importedSettings": "已导入插件设置。",

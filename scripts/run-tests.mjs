@@ -44,7 +44,7 @@ const stubDir = mkdtempSync(path.join(tmpdir(), "cs-test-stub-"));
 const obsidianStub = path.join(stubDir, "obsidian.js");
 writeFileSync(
 	obsidianStub,
-	`export const Platform = { isMobile: false, isDesktop: true };
+	`export const Platform = { isMobile: false, isDesktop: true, isMacOS: false };
 export class TFile {}
 export class Plugin {}
 export class Notice {}

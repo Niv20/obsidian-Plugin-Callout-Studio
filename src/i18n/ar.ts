@@ -5,6 +5,11 @@ export const ar: Record<string, string> = {
 	"cmd.calloutWrap": "التفاف في callout",
 	"cmd.calloutUnwrap": "إزالة callout",
 
+	"cmd.customWrapBlock": "التفاف في callout {{name}}",
+	"cmd.customInsertBlock": "إدراج callout {{name}}",
+	"cmd.customInsertHeading": "إدراج عنوان callout {{name}} من المستوى H{{level}}",
+	"cmd.customInsertInline": "إدراج callout {{name}} ضمن السطر",
+
 	"autocomplete.createNew": 'إنشاء callout جديد: "{{name}}"',
 
 	"settings.fallbackTag": "افتراضي",
@@ -133,10 +138,48 @@ export const ar: Record<string, string> = {
 	"settings.enableAutocompleteDesc":
 		'يعرض اقتراحات عند كتابة "[!" داخل اقتباس محظور في المحرر. اختر نوع callout من القائمة لإدراج عنوان callout كامل.',
 
-	"settings.openHotkeys": "اختصارات Callout Studio",
-	"settings.openHotkeysDesc":
-		"يفتح إعدادات الاختصارات في Obsidian لأوامر Callout Studio، حيث يمكنك اختيار اختصاراتك الخاصة لإنشاء نوع جديد وفتح الإعدادات وإزالة الـ callout والالتفاف فيه. لا يتم تعيين أي اختصارات افتراضياً.",
-	"settings.openHotkeysButton": "فتح إعدادات الاختصارات",
+	"settings.customCommands": "الأوامر والاختصارات",
+	"settings.customCommandsDesc":
+		"اطّلع على كل أوامر Callout Studio والاختصار المرتبط بكل منها، وأنشئ أوامرك الخاصة للـ callouts التي تستخدمها كثيرًا. لا يتم تعيين أي اختصارات افتراضياً.",
+	"settings.customCommandsButton": "إدارة الأوامر",
+
+	"commandBuilder.title": "الأوامر والاختصارات",
+	"commandBuilder.desc":
+		"استخدم زر + لتعيين اختصار أو تغييره في إعدادات اختصارات Obsidian.",
+	"commandBuilder.builtIn": "الأوامر المدمجة",
+	"commandBuilder.toggleAria": "تفعيل أو تعطيل {{name}}",
+	"commandBuilder.hotkeyBlank": "فارغ",
+	"commandBuilder.hotkeyAria": "تعيين اختصار لـ {{name}}",
+	"commandBuilder.yourCommands": "أوامرك",
+	"commandBuilder.newCommand": "أمر جديد",
+	"commandBuilder.empty": "لا توجد أوامر مخصصة بعد.",
+	"commandBuilder.unknownCommand": "هذا الأمر",
+	"commandBuilder.editAria": "تعديل {{name}}",
+	"commandBuilder.deleteAria": "حذف {{name}}",
+	"commandBuilder.deleteConfirm":
+		"حذف الأمر {{name}}؟ أي اختصار مُعيَّن له سيتوقف عن العمل.",
+	"commandBuilder.newTitle": "أمر جديد",
+	"commandBuilder.editTitle": "تعديل الأمر",
+	"commandBuilder.format": "تنسيق الـ callout",
+	"commandBuilder.formatDesc": "نوع الـ callout الذي يكتبه الأمر.",
+	"commandBuilder.formatHeading": "عنوان",
+	"commandBuilder.formatInline": "ضمن السطر",
+	"commandBuilder.formatBlock": "كتلة",
+	"commandBuilder.roleDisabled":
+		"هذا التنسيق معطّل، لذا سيُدرج الأمر نصًا عاديًا حتى تُعيد تفعيله.",
+	"commandBuilder.callout": "نوع الـ callout",
+	"commandBuilder.calloutDesc": "الـ callout الذي يُدرجه هذا الأمر.",
+	"commandBuilder.headingLevel": "مستوى العنوان",
+	"commandBuilder.headingLevelDesc": "مستوى العنوان الذي سيُكتب.",
+	"commandBuilder.action": "الإجراء",
+	"commandBuilder.actionDesc":
+		"الالتفاف يحوّل التحديد إلى callout؛ الإدراج يضيف واحدًا فارغًا.",
+	"commandBuilder.actionWrap": "التفاف حول التحديد",
+	"commandBuilder.actionInsert": "إدراج جديد",
+	"commandBuilder.preview": "اسم الأمر",
+	"commandBuilder.duplicate": "لديك بالفعل أمر يقوم بنفس الشيء تمامًا.",
+	"commandBuilder.noCallouts": "لا توجد أنواع callout لإنشاء أمر منها بعد.",
+	"commandBuilder.save": "حفظ",
 
 	"settings.vaultMaintenance": "رؤى المخزن والصيانة",
 	"settings.vaultStats": "إحصائيات الـ callout",
@@ -152,6 +195,10 @@ export const ar: Record<string, string> = {
 		"سيؤدي هذا إلى حذف جميع الـ callouts المخصصة، وإعادة تعيين الـ callouts المدمجة والأنماط العامة، ولوحات الألوان المحفوظة، وتخصيص قائمة النقر بزر الماوس الأيمن، وجميع SVGs Material المخزنة مؤقتاً. لا يمكن التراجع عن هذا الإجراء. هل أنت متأكد؟",
 	"notice.resetAllDone": "تمت إعادة تعيين كل شيء إلى الإعدادات الافتراضية.",
 
+	"notice.customCommandsRemoved":
+		"تمت إزالة {{count}} أمر/أوامر مخصصة لم يعد نوع الـ callout الخاص بها موجودًا.",
+	"notice.customCommandMissingCallout":
+		"نوع الـ callout لهذا الأمر لم يعد موجودًا.",
 	"notice.exported": "تم تصدير الـ callouts إلى callout-studio-export.json",
 	"notice.importedJSON": "تم استيراد {{count}} نوع callout من JSON.",
 	"notice.importedSettings": "تم استيراد إعدادات الإضافة.",

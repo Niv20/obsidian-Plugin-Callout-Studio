@@ -10,6 +10,14 @@
 import { Editor, Notice } from "obsidian";
 import type { EditorPosition } from "obsidian";
 import { t } from "../i18n";
+import type { CalloutDefinition } from "../types";
+import {
+	buildBlockHeaderToken,
+	buildHeadingToken,
+	buildInlineContentToken,
+	buildInlineToken,
+} from "./calloutWriter";
+import { HEADING_CALLOUT_RE } from "./calloutTokens";
 
 interface QuoteStripResult {
 	text: string;
@@ -325,9 +333,20 @@ const getOrderedCursorLines = (
 		endLine: Math.max(anchor.line, head.line),
 	};
 };
+/**
+ * The header text that opens a new block callout.
+ *
+ * With no definition this is the deliberately unfinished `[!`, which is what
+ * lets the generic commands park the cursor there and open the type
+ * autocomplete. A user-built command already knows its type, so it gets the
+ * finished header and no popover.
+ */
+const openingHeaderToken = (def?: CalloutDefinition): string =>
+	def ? buildBlockHeaderToken(def) : "[!";
+
 export const wrapSelectionInCallout = (
 	editor: Editor,
-	options?: { requireSelection?: boolean },
+	options?: { requireSelection?: boolean; def?: CalloutDefinition },
 ): boolean => {
 	const lineCount = editor.lineCount();
 	if (lineCount === 0) {
@@ -386,7 +405,7 @@ export const wrapSelectionInCallout = (
 	const headerPrefix = buildPrefix(
 		Math.max(nestLevel - (wrappingExistingCallout ? 1 : 0), 0),
 	);
-	const headerLine = `${headerPrefix}> [!`;
+	const headerLine = `${headerPrefix}> ${openingHeaderToken(options?.def)}`;
 	const replacementLines: string[] = [headerLine];
 
 	for (let line = contentStartLine; line <= endLine; line++) {
@@ -417,16 +436,20 @@ export const wrapSelectionInCallout = (
 	return true;
 };
 
-export const insertEmptyCallout = (editor: Editor): boolean => {
+export const insertEmptyCallout = (
+	editor: Editor,
+	options?: { def?: CalloutDefinition },
+): boolean => {
 	const head = editor.getCursor("head");
 	const lineText = editor.getLine(head.line);
 	const nestLevel = countLeadingQuoteTokens(lineText);
 	const prefix = buildPrefix(nestLevel);
-	const header = `${prefix}> [!`;
+	const header = `${prefix}> ${openingHeaderToken(options?.def)}`;
 
 	if (isBlankCalloutLine(lineText)) {
-		// Blank line (or blank callout line): drop the header in place so the
-		// user lands right after `[!` and the type autocomplete opens.
+		// Blank line (or blank callout line): drop the header in place. With no
+		// type chosen that lands the user right after `[!`, where the
+		// autocomplete opens; with one, it lands after the finished title.
 		editor.replaceRange(
 			header,
 			{ line: head.line, ch: 0 },
@@ -451,6 +474,136 @@ export const insertEmptyCallout = (editor: Editor): boolean => {
 	editor.replaceRange(`\n${separator}\n${header}${trailing}`, lineEnd);
 	const headerLine = head.line + 2;
 	editor.setCursor({ line: headerLine, ch: header.length });
+
+	return true;
+};
+
+/**
+ * Turn the cursor's line into a heading callout: `## [!note] Title`.
+ *
+ * The line's own text becomes the title, so nothing is lost — running this on
+ * a plain line titles the heading with it, and running it on a line that is
+ * already a heading (callout or not) re-levels and re-types it in place rather
+ * than nesting a second token. A blank line gets an untitled heading, which is
+ * what the autocomplete writes too: the rendered widget already shows the
+ * callout's display name.
+ *
+ * Heading callouts must start at column 0 (`HEADING_CALLOUT_RE` is anchored),
+ * so a quoted line is never rewritten — the heading goes below the blockquote
+ * instead, which is the only place it could render.
+ */
+export const insertHeadingCallout = (
+	editor: Editor,
+	def: CalloutDefinition,
+	level: number,
+	options?: { isKnownDisplayName?: (title: string) => boolean },
+): boolean => {
+	if (editor.lineCount() === 0) return false;
+
+	const hashes = "#".repeat(Math.min(Math.max(Math.round(level), 1), 6));
+	const frontmatterEnd = findFrontmatterEnd(editor);
+	const head = editor.getCursor("head");
+	const targetLine = Math.min(
+		Math.max(head.line, frontmatterEnd + 1),
+		editor.lineCount() - 1,
+	);
+	const lineText = editor.getLine(targetLine);
+
+	if (countLeadingQuoteTokens(lineText) > 0) {
+		const token = buildHeadingToken(def);
+		const insertion = `\n\n${hashes} ${token}`;
+		const lineEnd = { line: targetLine, ch: lineText.length };
+		editor.replaceRange(insertion, lineEnd);
+		const headingLine = targetLine + 2;
+		editor.setCursor({
+			line: headingLine,
+			ch: editor.getLine(headingLine).length,
+		});
+		return true;
+	}
+
+	// Re-typing an existing heading keeps its title; a plain line donates its
+	// whole text. Both go through the same builder so the "title is only a
+	// known display name" rule applies either way.
+	const headingMatch = HEADING_CALLOUT_RE.exec(lineText);
+	const plainHeading = /^#{1,6}[ \t]+(.*)$/.exec(lineText);
+	const existingTitle = headingMatch
+		? (headingMatch[3] ?? "")
+		: (plainHeading?.[1] ?? lineText);
+
+	const token = buildHeadingToken(def, {
+		existingTitle,
+		...(options?.isKnownDisplayName
+			? { isKnownDisplayName: options.isKnownDisplayName }
+			: {}),
+	});
+	const replacement = `${hashes} ${token}`;
+	editor.replaceRange(
+		replacement,
+		{ line: targetLine, ch: 0 },
+		{ line: targetLine, ch: lineText.length },
+	);
+	editor.setCursor({ line: targetLine, ch: replacement.length });
+
+	return true;
+};
+
+/** Whether `{`/`}` pair up in order, so wrapping the text can't run away. */
+const hasBalancedBraces = (text: string): boolean => {
+	let depth = 0;
+	for (const char of text) {
+		if (char === "{") depth += 1;
+		else if (char === "}" && --depth < 0) return false;
+	}
+	return depth === 0;
+};
+
+/**
+ * Write an inline callout pill at the cursor: `[!important] `.
+ *
+ * With text selected on a single line and content pills enabled, the selection
+ * becomes the pill's label (`[!important]{selected}`) — the documented brace
+ * syntax. Otherwise the pill is inserted at the start of the selection and the
+ * text is left alone, so the command never eats what the user had. Either way
+ * the cursor lands after the pill on the SAME line, because pressing Enter on
+ * an inline pill must not break the paragraph.
+ */
+export const insertInlineCallout = (
+	editor: Editor,
+	def: CalloutDefinition,
+	options?: { allowContent?: boolean },
+): boolean => {
+	if (editor.lineCount() === 0) return false;
+
+	const from = editor.getCursor("from");
+	const to = editor.getCursor("to");
+	const selected = editor.getSelection();
+
+	// Braces cannot span lines and nest by depth with no escape (see
+	// inlineContent.ts), so a multi-line selection — or one whose own braces
+	// don't balance, which would swallow the rest of the line — falls through
+	// to the plain-pill path instead of producing a broken pill.
+	if (
+		options?.allowContent === true &&
+		selected.trim() !== "" &&
+		from.line === to.line &&
+		hasBalancedBraces(selected)
+	) {
+		const token = buildInlineContentToken(def, selected.trim());
+		editor.replaceRange(token, from, to);
+		editor.setCursor({ line: from.line, ch: from.ch + token.length });
+		return true;
+	}
+
+	const token = buildInlineToken(def);
+	editor.replaceRange(token, from, from);
+
+	const afterCh = from.ch + token.length;
+	const newLine = editor.getLine(from.line);
+	if (newLine[afterCh] !== " ") {
+		editor.replaceRange(" ", { line: from.line, ch: afterCh });
+	}
+	editor.setCursor({ line: from.line, ch: afterCh + 1 });
 
 	return true;
 };

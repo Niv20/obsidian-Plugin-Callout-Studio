@@ -46,6 +46,7 @@ import {
 } from "../utils/colorPalettes";
 import { bgGradientsEqual, derivedBgAmount } from "../utils/colorUtils";
 import { sanitizeUserImages } from "../utils/userImages";
+import { sanitizeCustomCommands } from "../utils/customCommands";
 import { setUserImages } from "../icons/packs/userImages";
 import { sortCalloutsByDisplayName } from "../utils/sorting";
 
@@ -253,6 +254,16 @@ export function mergeSavedSettings(
 		language: savedSettings.language ?? DEFAULT_SETTINGS.language,
 		customPalettes: sanitizeCustomPalettes(savedSettings.customPalettes),
 		userImages: sanitizeUserImages(savedSettings.userImages),
+		customCommands: sanitizeCustomCommands(savedSettings.customCommands),
+		disabledFixedCommands: Array.isArray(savedSettings.disabledFixedCommands)
+			? [
+					...new Set(
+						savedSettings.disabledFixedCommands.filter(
+							(id): id is string => typeof id === "string",
+						),
+					),
+				]
+			: [],
 	};
 }
 
@@ -1865,6 +1876,10 @@ export class CalloutRegistry {
 		// them behind would keep the largest thing in `data.json` after a reset
 		// that is meant to empty it.
 		this.settings.userImages = [];
+		// The commands the user built point at callouts this reset just wiped.
+		// The manager's sync would drop them anyway; clearing here keeps the
+		// reset atomic instead of leaving a list that empties a moment later.
+		this.settings.customCommands = [];
 		this.syncUserImages();
 		// Clear SVG caches
 		this.clearIconSvgCache();

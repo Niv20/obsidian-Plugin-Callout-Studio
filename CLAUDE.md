@@ -45,7 +45,16 @@ Callout Studio is an Obsidian plugin that lets users create and manage custom ca
 
 - **AutoComplete** — `EditorSuggest` triggered by `> [!`; shows callout list + "Create new" option.
 - **ContextMenu** — right-click menu on callout blocks (edit, copy, settings).
-- **Commands** — 4 commands: open settings, create new type, wrap selection, unwrap block.
+- **Commands** — the 5 fixed commands: open settings, create new type, insert empty, wrap selection, unwrap block. Deliberately *not* one per callout type — that would flood the palette.
+- **calloutWriter** — the only place a `CalloutDefinition` becomes token markdown, per role. Both AutoComplete and the custom commands write through it so the fold mark, the title policy and the `|metadata` carry-over can't drift apart.
+- **CustomCommandManager** — the commands the user builds in *Settings → Keyboard shortcuts → Manage commands*, stored in `settings.customCommands`. That one window is the whole section: `CommandBuilderModal` puts the user's own list first and the five fixed commands under it (same row, minus the icon column and the buttons — there is nothing to edit), and both carry the shortcut chip from `settings/hotkeyLink.ts`. `commands.ts` exports `FIXED_COMMAND_IDS`/`FIXED_COMMAND_NAME_KEYS` so that list can't drift from what is really registered.
+
+  **Its whole design is one idempotent sweep, `syncAll()`, subscribed to `registry.onChange`.** That event carries no payload and an id rename is really `remove()` + `add()`, so no listener can tell a delete from an update; re-deriving the desired set from the registry converges from any state instead, which is what makes delete, auto-prune, edit, import, startup and re-enable all one code path. Three things follow, and each had to be true:
+  - **A command's `id` is minted identity, never derived from its content** — Obsidian keys the user's hotkey by the command id, and `Commands.removeCommand` clears only `defaultKeys`, so re-registering at the same id keeps the binding. Editing a command must not change it.
+  - **Only a changed rendered *name* triggers re-registration.** An icon or colour edit leaves it identical (no churn); a `displayName` edit changes it (label stays accurate). `addCommand` also mutates its argument and appends an unload callback, so it must get a fresh object and must not be called needlessly.
+  - **Rename is the one case a sweep can't infer.** `CalloutEditorSave` wraps its remove/add pair in `registry.batch()` and calls `migrateCalloutId()` inside, so the single event that follows sees a consistent world. Subscribed *before* `main.ts`'s save listener, so a prune lands before either save snapshots settings.
+
+  `CalloutDiscovery`'s prune skips ids a command references — a command is a claim on a callout, like customizing it.
 
 ### Icon sources (`src/icons/`)
 
@@ -76,7 +85,7 @@ Search indexes are bundled (packed by `icons/data/codec.ts`); artwork is not. Re
 
 **`hideIcon` is a display flag, not an icon.** It is deliberately not a `"none"` member of `IconPackId`: that union means *one body of artwork* (pack manifest entry, downloaded file, SVG cache key), a sentinel there would have to overwrite `icon` and lose the user's pick, and every older build would reject the whole entry on import since `validateIcon` only accepts a type it knows. So `icon` keeps holding the last drawing — turning the icon back on is instant and offline, because `cleanupUnusedIconSvgs` still counts it as in use. `true`-or-absent, like `transparentBg`/`externalStyle`. Three seams: `CSSInjector.iconHiddenCSS` (`display: none` on `.callout-icon`, outside `@media screen` so it holds in print, plus the per-callout reset of the global *Align content with title* indent); `buildCalloutTokenDom` builds no icon span at all (flex `gap` collapses with it, same trick as `refShowIcon`); and `renderNoIcon` draws a muted dashed ring on the surfaces that *manage* callouts, where a blank slot would read as a stalled download. `CalloutRegistry.COLOUR_NEUTRAL_FIELDS` is why hiding a built-in's icon persists without costing it the theme's `--callout-*` deference.
 
-`PluginSettings` holds global style (border, radius, scale), feature toggles (autocomplete, context menu, icon source preferences), and the two lists the user builds up: `customPalettes` and `userImages`. Both live in settings rather than on `PluginData` precisely so `exportToJSONv2()` carries them — and both must therefore be **merged by id** on import, never `Object.assign`ed, or importing a file without them wipes the user's own.
+`PluginSettings` holds global style (border, radius, scale), feature toggles (autocomplete, context menu, icon source preferences), and the three lists the user builds up: `customPalettes`, `userImages` and `customCommands`. All live in settings rather than on `PluginData` precisely so `exportToJSONv2()` carries them — and all must therefore be **merged by id** on import, never `Object.assign`ed, or importing a file without them wipes the user's own. A new list also needs registering in **three** places or it is silently dropped on load: the `PluginSettings` interface, `DEFAULT_SETTINGS`, and `mergeSavedSettings()`.
 
 ### Callout sources
 

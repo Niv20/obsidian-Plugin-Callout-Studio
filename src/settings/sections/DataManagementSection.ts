@@ -243,9 +243,13 @@ export async function processImportedJSON(
 		// replace the arrays — otherwise importing a file with none of either
 		// would silently wipe the user's existing ones. This mirrors how
 		// callouts are merged (add new / overwrite same id).
+		// Commands are on that list too: an export predating them carries
+		// none, and replacing the array wholesale would delete every
+		// command the user had built here.
 		const {
 			customPalettes: importedPalettes,
 			userImages: importedImages,
+			customCommands: importedCommands,
 			...restSettings
 		} = result.settings;
 		Object.assign(ctx.plugin.registry.settings, restSettings);
@@ -285,6 +289,21 @@ export async function processImportedJSON(
 			// Through the registry rather than by assignment: it is what
 			// hands the new pictures to the pack that draws them.
 			ctx.plugin.registry.setUserImages([...byId.values()]);
+		}
+		if (importedCommands) {
+			const byId = new Map(
+				ctx.plugin.registry.settings.customCommands.map((c) => [
+					c.id,
+					c,
+				]),
+			);
+			for (const command of importedCommands) {
+				byId.set(command.id, command);
+			}
+			ctx.plugin.registry.settings.customCommands = [...byId.values()];
+			// Anything pointing at a callout this vault doesn't have is
+			// dropped by the sweep, which also registers the rest.
+			ctx.plugin.customCommands.syncAll();
 		}
 		await ctx.plugin.saveSettings();
 		ctx.plugin.refreshRenderModes();

@@ -5,6 +5,11 @@ export const tr: Record<string, string> = {
 	"cmd.calloutWrap": "Callout'a sar",
 	"cmd.calloutUnwrap": "Callout'u kaldır",
 
+	"cmd.customWrapBlock": "{{name}} callout'una sar",
+	"cmd.customInsertBlock": "{{name}} callout'u ekle",
+	"cmd.customInsertHeading": "H{{level}} {{name}} başlık callout'u ekle",
+	"cmd.customInsertInline": "{{name}} satır içi callout'u ekle",
+
 	"autocomplete.createNew": 'Yeni callout oluştur: "{{name}}"',
 
 	"settings.fallbackTag": "Varsayılan",
@@ -135,10 +140,50 @@ export const tr: Record<string, string> = {
 	"settings.enableAutocompleteDesc":
 		'Düzenleyicide blok alıntı içinde "[!" yazdığınızda öneriler gösterir. Tam bir callout başlığı eklemek için listeden bir callout türü seçin.',
 
-	"settings.openHotkeys": "Callout Studio kısayolları",
-	"settings.openHotkeysDesc":
-		"Callout Studio komutları için Obsidian kısayol ayarlarını açar; burada Yeni callout türü oluştur, Ayarları aç, Callout'u kaldır ve Callout'a sar için kendi kısayollarınızı belirleyebilirsiniz. Varsayılan olarak kısayol atanmamıştır.",
-	"settings.openHotkeysButton": "Kısayol ayarlarını aç",
+	"settings.customCommands": "Komutlar ve kısayollar",
+	"settings.customCommandsDesc":
+		"Her Callout Studio komutunu ve bağlı olduğu kısayolu görün, en sık kullandığınız callout'lar için kendi komutlarınızı oluşturun. Varsayılan olarak kısayol atanmamıştır.",
+	"settings.customCommandsButton": "Komutları yönet",
+
+	"commandBuilder.title": "Komutlar ve kısayollar",
+	"commandBuilder.desc":
+		"Obsidian'ın kısayol ayarlarında bir kısayol belirlemek veya değiştirmek için + düğmesini kullanın.",
+	"commandBuilder.builtIn": "Yerleşik komutlar",
+	"commandBuilder.toggleAria": "{{name}} komutunu aç veya kapat",
+	"commandBuilder.hotkeyBlank": "Boş",
+	"commandBuilder.hotkeyAria": "{{name}} için bir kısayol belirle",
+	"commandBuilder.yourCommands": "Komutlarınız",
+	"commandBuilder.newCommand": "Yeni komut",
+	"commandBuilder.empty": "Henüz özel komut yok.",
+	"commandBuilder.unknownCommand": "bu komut",
+	"commandBuilder.editAria": "{{name}} düzenle",
+	"commandBuilder.deleteAria": "{{name}} sil",
+	"commandBuilder.deleteConfirm":
+		"{{name}} komutu silinsin mi? Ona atanmış kısayol varsa çalışmayı durduracak.",
+	"commandBuilder.newTitle": "Yeni komut",
+	"commandBuilder.editTitle": "Komutu düzenle",
+	"commandBuilder.format": "Callout biçimi",
+	"commandBuilder.formatDesc": "Komutun yazacağı callout türü.",
+	"commandBuilder.formatHeading": "Başlık",
+	"commandBuilder.formatInline": "Satır içi",
+	"commandBuilder.formatBlock": "Blok",
+	"commandBuilder.roleDisabled":
+		"Bu biçim kapalı, bu yüzden siz tekrar açana kadar komut düz metin ekleyecek.",
+	"commandBuilder.callout": "Callout türü",
+	"commandBuilder.calloutDesc": "Bu komutun ekleyeceği callout.",
+	"commandBuilder.headingLevel": "Başlık düzeyi",
+	"commandBuilder.headingLevelDesc": "Hangi başlık düzeyinin yazılacağı.",
+	"commandBuilder.action": "Eylem",
+	"commandBuilder.actionDesc":
+		"Sar, seçimi bir callout'a dönüştürür; ekle boş bir tane ekler.",
+	"commandBuilder.actionWrap": "Seçimi sar",
+	"commandBuilder.actionInsert": "Yeni ekle",
+	"commandBuilder.preview": "Komut adı",
+	"commandBuilder.duplicate":
+		"Tam olarak aynısını yapan bir komutunuz zaten var.",
+	"commandBuilder.noCallouts":
+		"Henüz bir komut oluşturabileceğiniz callout türü yok.",
+	"commandBuilder.save": "Kaydet",
 
 	"settings.vaultMaintenance": "Vault içgörüleri ve bakımı",
 	"settings.vaultStats": "Callout istatistikleri",
@@ -154,6 +199,10 @@ export const tr: Record<string, string> = {
 		"Bu işlem tüm özel callout'ları siler, yerleşik callout'ları, global stilleri, kaydedilmiş renk paletlerini, sağ tık menüsü özelleştirmesini ve önbelleğe alınmış tüm Material SVG'leri sıfırlar. Bu işlem geri alınamaz. Emin misiniz?",
 	"notice.resetAllDone": "Her şey varsayılanlara sıfırlandı.",
 
+	"notice.customCommandsRemoved":
+		"Callout türü artık mevcut olmayan {{count}} özel komut kaldırıldı.",
+	"notice.customCommandMissingCallout":
+		"Bu komutun callout türü artık mevcut değil.",
 	"notice.exported":
 		"Callout'lar callout-studio-export.json dosyasına dışa aktarıldı",
 	"notice.importedJSON": "JSON'dan {{count}} callout türü içe aktarıldı.",

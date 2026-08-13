@@ -4,6 +4,10 @@ export const el: Record<string, string> = {
 	"cmd.insertEmptyCallout": "Εισαγωγή κενού callout",
 	"cmd.calloutWrap": "Αναδίπλωση σε callout",
 	"cmd.calloutUnwrap": "Αφαίρεση callout",
+	"cmd.customWrapBlock": "Αναδίπλωση σε callout {{name}}",
+	"cmd.customInsertBlock": "Εισαγωγή callout {{name}}",
+	"cmd.customInsertHeading": "Εισαγωγή callout επικεφαλίδας H{{level}} {{name}}",
+	"cmd.customInsertInline": "Εισαγωγή ενσωματωμένου callout {{name}}",
 	"autocomplete.createNew": 'Δημιουργία νέου callout: "{{name}}"',
 	"settings.fallbackTag": "Προεπιλογή",
 	"settings.fallbackTagAuto": "Αυτόματη προεπιλογή",
@@ -126,10 +130,49 @@ export const el: Record<string, string> = {
 	"settings.enableAutocomplete": "Ενεργοποίηση αυτόματης συμπλήρωσης [!",
 	"settings.enableAutocompleteDesc":
 		'Εμφανίζει προτάσεις όταν πληκτρολογείτε "[!" μέσα σε αποσπασματική παράθεση στον επεξεργαστή. Επιλέξτε τύπο callout από τη λίστα για εισαγωγή πλήρους επικεφαλίδας callout.',
-	"settings.openHotkeys": "Συντομεύσεις Callout Studio",
-	"settings.openHotkeysDesc":
-		"Ανοίγει τις ρυθμίσεις συντομεύσεων του Obsidian για εντολές Callout Studio. Καμία συντόμευση δεν έχει ανατεθεί από προεπιλογή.",
-	"settings.openHotkeysButton": "Άνοιγμα ρυθμίσεων συντομεύσεων",
+	"settings.customCommands": "Εντολές και συντομεύσεις",
+	"settings.customCommandsDesc":
+		"Δείτε κάθε εντολή του Callout Studio και τη συντόμευση στην οποία είναι δεσμευμένη, και δημιουργήστε τις δικές σας εντολές για τα callouts που χρησιμοποιείτε περισσότερο. Καμία συντόμευση δεν έχει ανατεθεί από προεπιλογή.",
+	"settings.customCommandsButton": "Διαχείριση εντολών",
+	"commandBuilder.title": "Εντολές και συντομεύσεις",
+	"commandBuilder.desc":
+		"Χρησιμοποιήστε το κουμπί + για να ορίσετε ή να αλλάξετε μια συντόμευση στις ρυθμίσεις συντομεύσεων του Obsidian.",
+	"commandBuilder.builtIn": "Ενσωματωμένες εντολές",
+	"commandBuilder.toggleAria": "Ενεργοποίηση ή απενεργοποίηση του {{name}}",
+	"commandBuilder.hotkeyBlank": "Κενό",
+	"commandBuilder.hotkeyAria": "Ορισμός συντόμευσης για {{name}}",
+	"commandBuilder.yourCommands": "Οι εντολές σας",
+	"commandBuilder.newCommand": "Νέα εντολή",
+	"commandBuilder.empty": "Δεν υπάρχουν ακόμη προσαρμοσμένες εντολές.",
+	"commandBuilder.unknownCommand": "αυτή την εντολή",
+	"commandBuilder.editAria": "Επεξεργασία {{name}}",
+	"commandBuilder.deleteAria": "Διαγραφή {{name}}",
+	"commandBuilder.deleteConfirm":
+		"Διαγραφή της εντολής {{name}}; Τυχόν συντόμευση που της έχει ανατεθεί θα σταματήσει να λειτουργεί.",
+	"commandBuilder.newTitle": "Νέα εντολή",
+	"commandBuilder.editTitle": "Επεξεργασία εντολής",
+	"commandBuilder.format": "Μορφή callout",
+	"commandBuilder.formatDesc": "Τι είδους callout γράφει η εντολή.",
+	"commandBuilder.formatHeading": "Επικεφαλίδα",
+	"commandBuilder.formatInline": "Ενσωματωμένο",
+	"commandBuilder.formatBlock": "Μπλοκ",
+	"commandBuilder.roleDisabled":
+		"Αυτή η μορφή είναι απενεργοποιημένη, οπότε η εντολή θα εισάγει απλό κείμενο μέχρι να την ενεργοποιήσετε ξανά.",
+	"commandBuilder.callout": "Τύπος callout",
+	"commandBuilder.calloutDesc": "Το callout που εισάγει αυτή η εντολή.",
+	"commandBuilder.headingLevel": "Επίπεδο επικεφαλίδας",
+	"commandBuilder.headingLevelDesc": "Ποιο επίπεδο επικεφαλίδας θα γραφτεί.",
+	"commandBuilder.action": "Ενέργεια",
+	"commandBuilder.actionDesc":
+		"Η αναδίπλωση μετατρέπει την επιλογή σε callout· η εισαγωγή προσθέτει ένα κενό.",
+	"commandBuilder.actionWrap": "Αναδίπλωση επιλογής",
+	"commandBuilder.actionInsert": "Εισαγωγή νέου",
+	"commandBuilder.preview": "Όνομα εντολής",
+	"commandBuilder.duplicate":
+		"Έχετε ήδη μια εντολή που κάνει ακριβώς αυτό.",
+	"commandBuilder.noCallouts":
+		"Δεν υπάρχουν ακόμη τύποι callout για να δημιουργήσετε μια εντολή.",
+	"commandBuilder.save": "Αποθήκευση",
 	"settings.vaultMaintenance": "Πληροφορίες vault και συντήρηση",
 	"settings.vaultStats": "Στατιστικά callout",
 	"settings.vaultStatsDesc":
@@ -143,6 +186,10 @@ export const el: Record<string, string> = {
 	"settings.resetAllConfirm":
 		"Αυτό θα διαγράψει όλα τα προσαρμοσμένα callouts, θα επαναφέρει τα ενσωματωμένα callouts, τα καθολικά στυλ, τις αποθηκευμένες παλέτες χρωμάτων, την προσαρμογή του μενού δεξιού κλικ και όλα τα αποθηκευμένα SVG Material. Η ενέργεια δεν μπορεί να αναιρεθεί. Είστε σίγουροι;",
 	"notice.resetAllDone": "Όλα επαναφέρθηκαν στις προεπιλογές.",
+	"notice.customCommandsRemoved":
+		"Αφαιρέθηκαν {{count}} προσαρμοσμένη(-ες) εντολή(-ές) των οποίων ο τύπος callout δεν υπάρχει πια.",
+	"notice.customCommandMissingCallout":
+		"Ο τύπος callout αυτής της εντολής δεν υπάρχει πια.",
 	"notice.exported": "Τα callouts εξήχθησαν στο callout-studio-export.json",
 	"notice.importedJSON": "Εισήχθησαν {{count}} τύπος/τύποι callout από JSON.",
 	"notice.importedSettings": "Οι ρυθμίσεις του προσθέτου εισήχθησαν.",

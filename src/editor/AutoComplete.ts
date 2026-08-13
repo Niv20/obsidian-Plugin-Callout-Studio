@@ -27,6 +27,13 @@ import { renderIconInto, renderNoIcon } from "../icons/renderIcon";
 import { createIconResolver } from "../icons/resolver";
 import { getLocale, t } from "../i18n";
 import { splitCalloutMetadata } from "../utils/calloutId";
+import { filterUsableCallouts } from "../utils/usableCallouts";
+import {
+	buildBlockHeaderToken,
+	buildHeadingToken,
+	buildInlineToken,
+	metadataSuffixOf,
+} from "./calloutWriter";
 import {
 	getSortedCalloutIds,
 	sortCalloutsByDisplayName,
@@ -256,11 +263,8 @@ export class CalloutAutoComplete extends EditorSuggest<CalloutSuggestion> {
 		// token typed and abandoned before the async prune catches up. A
 		// fallback row that's genuinely used elsewhere (just never adopted
 		// via the editor) still autocompletes normally.
-		const all = this.plugin.registry.getAll().filter(
-			(d) =>
-				d.source !== "fallback" ||
-				d.customized === true ||
-				!this.plugin.isKnownZeroUsageFallback(d.id),
+		const all = filterUsableCallouts(this.plugin.registry.getAll(), (id) =>
+			this.plugin.isKnownZeroUsageFallback(id),
 		);
 
 		// Filter
@@ -398,12 +402,14 @@ export class CalloutAutoComplete extends EditorSuggest<CalloutSuggestion> {
 	 * dropdown is no reason to drop it.
 	 */
 	private tokenMetadataSuffix(line: string, startCh: number): string {
-		const afterTrigger = line.slice(startCh + 2);
-		const closeIdx = afterTrigger.indexOf("]");
-		if (closeIdx === -1) return "";
-		const parts = splitCalloutMetadata(afterTrigger.slice(0, closeIdx));
-		return parts.hasMetadata ? `|${parts.metadata}` : "";
+		return metadataSuffixOf(line, startCh);
 	}
+
+	/** Whether a title is just some callout's display name, not the user's own. */
+	private isKnownDisplayName = (title: string): boolean =>
+		this.plugin.registry
+			.getAll()
+			.some((d) => d.displayName.toLowerCase() === title.toLowerCase());
 
 	selectSuggestion(
 		item: CalloutSuggestion,
@@ -438,7 +444,7 @@ export class CalloutAutoComplete extends EditorSuggest<CalloutSuggestion> {
 		// Inline pill: only the token itself is written; Enter continues on
 		// the same line (see insertInlineToken).
 		if (this.triggerRole === "inline") {
-			this.insertInlineToken(editor, start, end, line, matchedId);
+			this.insertInlineToken(editor, start, end, line, def, matchedId);
 			return;
 		}
 
@@ -463,10 +469,11 @@ export class CalloutAutoComplete extends EditorSuggest<CalloutSuggestion> {
 		// syntax of its own. Enter then moves to the start of the next line (no
 		// `>` prefix — heading callouts have no body), via close().
 		if (this.triggerRole === "heading") {
-			const headingTitle = afterHeader.trim();
-			const replacement =
-				`[!${matchedId}${metaSuffix}]` +
-				(headingTitle ? ` ${headingTitle}` : "");
+			const replacement = buildHeadingToken(def, {
+				matchedId,
+				metaSuffix,
+				existingTitle: afterHeader,
+			});
 			editor.replaceRange(replacement, start, lineEnd);
 			this.pendingEditor = editor;
 			this.pendingLine = start.line;
@@ -478,26 +485,16 @@ export class CalloutAutoComplete extends EditorSuggest<CalloutSuggestion> {
 		// optional title.
 		const restMatch = /^([+-]?)\s*(.*)$/.exec(afterHeader);
 		const existingTitle = restMatch?.[2]?.trim() ?? "";
-		const foldMark = def.foldable ? (def.defaultFolded ? "-" : "+") : "";
 
 		// Detect if this is a brand-new callout (no title text after the header)
 		const isNewCallout = existingTitle === "";
 
-		// Check if the existing title matches any known callout display name
-		const allDefs = this.plugin.registry.getAll();
-		const isKnownCalloutName = allDefs.some(
-			(d) => d.displayName.toLowerCase() === existingTitle.toLowerCase(),
-		);
-
-		// Decide what title to use
-		let title: string;
-		if (existingTitle === "" || isKnownCalloutName) {
-			title = def.displayName;
-		} else {
-			title = existingTitle;
-		}
-
-		const replacement = `[!${matchedId}${metaSuffix}]${foldMark} ${title}`;
+		const replacement = buildBlockHeaderToken(def, {
+			matchedId,
+			metaSuffix,
+			existingTitle,
+			isKnownDisplayName: this.isKnownDisplayName,
+		});
 		editor.replaceRange(replacement, start, lineEnd);
 
 		if (isNewCallout) {
@@ -519,6 +516,7 @@ export class CalloutAutoComplete extends EditorSuggest<CalloutSuggestion> {
 		start: EditorPosition,
 		contextEnd: EditorPosition,
 		line: string,
+		def: CalloutDefinition,
 		insertId: string,
 	): void {
 		const afterTrigger = line.slice(start.ch + 2);
@@ -527,7 +525,10 @@ export class CalloutAutoComplete extends EditorSuggest<CalloutSuggestion> {
 			closeIdx === -1
 				? contextEnd
 				: { line: start.line, ch: start.ch + 2 + closeIdx + 1 };
-		const token = `[!${insertId}${this.tokenMetadataSuffix(line, start.ch)}]`;
+		const token = buildInlineToken(def, {
+			matchedId: insertId,
+			metaSuffix: this.tokenMetadataSuffix(line, start.ch),
+		});
 		editor.replaceRange(token, start, tokenEnd);
 
 		const afterCh = start.ch + token.length;
@@ -609,7 +610,14 @@ export class CalloutAutoComplete extends EditorSuggest<CalloutSuggestion> {
 
 		if (role === "inline") {
 			editor.focus();
-			this.insertInlineToken(editor, start, tokenEnd, line, result.id);
+			this.insertInlineToken(
+				editor,
+				start,
+				tokenEnd,
+				line,
+				result,
+				result.id,
+			);
 			return;
 		}
 
@@ -619,7 +627,11 @@ export class CalloutAutoComplete extends EditorSuggest<CalloutSuggestion> {
 
 		if (role === "heading") {
 			// No title text — the rendered token shows the display name.
-			editor.replaceRange(`[!${result.id}${metaSuffix}]`, start, lineEnd);
+			editor.replaceRange(
+				buildHeadingToken(result, { metaSuffix }),
+				start,
+				lineEnd,
+			);
 			// close() already ran (before the modal), so place the cursor
 			// directly rather than via the pending mechanism.
 			editor.focus();
@@ -627,12 +639,7 @@ export class CalloutAutoComplete extends EditorSuggest<CalloutSuggestion> {
 			return;
 		}
 
-		const foldMark = result.foldable
-			? result.defaultFolded
-				? "-"
-				: "+"
-			: "";
-		const replacement = `[!${result.id}${metaSuffix}]${foldMark} ${result.displayName}`;
+		const replacement = buildBlockHeaderToken(result, { metaSuffix });
 		editor.replaceRange(replacement, start, lineEnd);
 		this.pendingEditor = editor;
 		this.pendingLine = start.line;

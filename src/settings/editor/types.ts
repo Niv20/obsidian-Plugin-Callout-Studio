@@ -28,4 +28,12 @@ export interface CalloutEditorPlugin {
 	hasIconFetchFailed(icon: CalloutIcon, role: CalloutRenderRole): boolean;
 	/** Icon sources and their downloadable artwork, for the picker. */
 	icons: { packs: PackDataStore };
+	/**
+	 * Only the one method the save path needs: an id change here is a remove
+	 * plus an add, which nothing downstream can tell apart from a delete, so
+	 * the user's commands have to be pointed at the new id explicitly.
+	 */
+	customCommands: {
+		migrateCalloutId(oldId: string, newId: string): void;
+	};
 }

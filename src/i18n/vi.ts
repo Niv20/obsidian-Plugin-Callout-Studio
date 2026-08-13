@@ -5,6 +5,11 @@ export const vi: Record<string, string> = {
 	"cmd.calloutWrap": "Bọc trong callout",
 	"cmd.calloutUnwrap": "Bỏ callout",
 
+	"cmd.customWrapBlock": "Bọc trong callout {{name}}",
+	"cmd.customInsertBlock": "Chèn callout {{name}}",
+	"cmd.customInsertHeading": "Chèn tiêu đề callout H{{level}} {{name}}",
+	"cmd.customInsertInline": "Chèn callout nội dòng {{name}}",
+
 	"autocomplete.createNew": 'Tạo callout mới: "{{name}}"',
 
 	"settings.fallbackTag": "Mặc định",
@@ -135,10 +140,49 @@ export const vi: Record<string, string> = {
 	"settings.enableAutocompleteDesc":
 		'Hiển thị gợi ý khi bạn gõ "[!" trong trích dẫn khối trong trình soạn thảo. Chọn loại callout từ danh sách để chèn tiêu đề callout đầy đủ.',
 
-	"settings.openHotkeys": "Phím tắt Callout Studio",
-	"settings.openHotkeysDesc":
-		"Mở cài đặt phím tắt Obsidian cho các lệnh Callout Studio, nơi bạn có thể chọn phím tắt riêng cho Tạo loại mới, Mở cài đặt, Bỏ callout và Bọc trong callout. Không có phím tắt nào được gán theo mặc định.",
-	"settings.openHotkeysButton": "Mở cài đặt phím tắt",
+	"settings.customCommands": "Lệnh và phím tắt",
+	"settings.customCommandsDesc":
+		"Xem mọi lệnh của Callout Studio và phím tắt được gán cho lệnh đó, đồng thời tạo lệnh riêng cho những callout bạn dùng nhiều nhất. Không có phím tắt nào được gán theo mặc định.",
+	"settings.customCommandsButton": "Quản lý lệnh",
+
+	"commandBuilder.title": "Lệnh và phím tắt",
+	"commandBuilder.desc":
+		"Dùng nút + để đặt hoặc thay đổi phím tắt trong cài đặt phím tắt của Obsidian.",
+	"commandBuilder.builtIn": "Lệnh tích hợp",
+	"commandBuilder.toggleAria": "Bật hoặc tắt {{name}}",
+	"commandBuilder.hotkeyBlank": "Trống",
+	"commandBuilder.hotkeyAria": "Đặt phím tắt cho {{name}}",
+	"commandBuilder.yourCommands": "Lệnh của bạn",
+	"commandBuilder.newCommand": "Lệnh mới",
+	"commandBuilder.empty": "Chưa có lệnh tùy chỉnh nào.",
+	"commandBuilder.unknownCommand": "lệnh này",
+	"commandBuilder.editAria": "Chỉnh sửa {{name}}",
+	"commandBuilder.deleteAria": "Xóa {{name}}",
+	"commandBuilder.deleteConfirm":
+		"Xóa lệnh {{name}}? Phím tắt gán cho lệnh này sẽ ngừng hoạt động.",
+	"commandBuilder.newTitle": "Lệnh mới",
+	"commandBuilder.editTitle": "Chỉnh sửa lệnh",
+	"commandBuilder.format": "Định dạng callout",
+	"commandBuilder.formatDesc": "Loại callout mà lệnh này sẽ viết.",
+	"commandBuilder.formatHeading": "Tiêu đề",
+	"commandBuilder.formatInline": "Nội dòng",
+	"commandBuilder.formatBlock": "Khối",
+	"commandBuilder.roleDisabled":
+		"Định dạng này đang tắt, vì vậy lệnh sẽ chèn văn bản thường cho đến khi bạn bật lại.",
+	"commandBuilder.callout": "Loại callout",
+	"commandBuilder.calloutDesc": "Callout mà lệnh này chèn vào.",
+	"commandBuilder.headingLevel": "Cấp độ tiêu đề",
+	"commandBuilder.headingLevelDesc": "Cấp độ tiêu đề sẽ được viết.",
+	"commandBuilder.action": "Hành động",
+	"commandBuilder.actionDesc":
+		"Bọc sẽ biến phần chọn thành callout; chèn sẽ thêm một callout trống.",
+	"commandBuilder.actionWrap": "Bọc phần chọn",
+	"commandBuilder.actionInsert": "Chèn mới",
+	"commandBuilder.preview": "Tên lệnh",
+	"commandBuilder.duplicate": "Bạn đã có một lệnh làm chính xác việc này.",
+	"commandBuilder.noCallouts":
+		"Chưa có loại callout nào để tạo lệnh.",
+	"commandBuilder.save": "Lưu",
 
 	"settings.vaultMaintenance": "Thông tin & bảo trì vault",
 	"settings.vaultStats": "Thống kê callout",
@@ -154,6 +198,10 @@ export const vi: Record<string, string> = {
 		"Điều này sẽ xóa tất cả callouts tùy chỉnh, đặt lại callouts tích hợp, kiểu toàn cục, bảng màu đã lưu, tùy chỉnh menu chuột phải và tất cả SVG Material đã cache. Hành động này không thể hoàn tác. Bạn có chắc không?",
 	"notice.resetAllDone": "Đã đặt lại tất cả về mặc định.",
 
+	"notice.customCommandsRemoved":
+		"Đã xóa {{count}} lệnh tùy chỉnh có loại callout không còn tồn tại.",
+	"notice.customCommandMissingCallout":
+		"Loại callout của lệnh đó không còn tồn tại.",
 	"notice.exported": "Đã xuất callouts vào callout-studio-export.json",
 	"notice.importedJSON": "Đã nhập {{count}} loại callout từ JSON.",
 	"notice.importedSettings": "Đã nhập cài đặt plugin.",
