@@ -374,4 +374,6 @@ export const DEFAULT_SETTINGS: PluginSettings = {
 	language: "auto",
 	customPalettes: [],
 	userImages: [],
+	customCommands: [],
+	disabledFixedCommands: [],
 };

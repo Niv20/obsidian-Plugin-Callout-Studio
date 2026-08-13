@@ -73,11 +73,50 @@ export interface CalloutIcon {
 	recolor?: boolean;
 }
 
+/**
+ * A settings tab as `openTabById` hands it back. Only what this plugin reads:
+ * the hotkeys tab drives its own search box, which no other tab has.
+ */
+export interface ObsidianSettingTab {
+	setQuery?(query: string): void;
+}
+
+/**
+ * One binding as Obsidian *stores* it, which is looser than the public `Hotkey`:
+ * that interface requires `key`, while a stored binding may instead carry the
+ * newer physical `code` (`"KeyJ"`). Every field is optional so a shape this
+ * plugin has never seen degrades to an unreadable binding rather than a throw.
+ */
+export interface StoredHotkey {
+	modifiers?: string[];
+	key?: string;
+	code?: string;
+}
+
+/**
+ * Obsidian internals the plugin reads but that are not in the public typings.
+ *
+ * `openTabById` really returns the tab it opened, which is what lets a deep
+ * link into the hotkeys pane land on one command. `hotkeyManager` is the only
+ * way to find out what a command is bound to — there is no public API for it,
+ * so every call site still guards structurally rather than trusting this.
+ *
+ * The two key-table readers are declared alongside `printHotkeyForCommand`
+ * because that helper only ever prints the *first* binding; showing all of them
+ * means reading the tables directly. See `settings/hotkeyLink.ts`.
+ */
 declare module "obsidian" {
 	interface App {
 		setting: {
 			open(): void;
-			openTabById(id: string): void;
+			openTabById(id: string): ObsidianSettingTab | null;
+		};
+		hotkeyManager?: {
+			printHotkeyForCommand?(commandId: string): string;
+			/** The user's own bindings. Absent — not empty — means never customized. */
+			getHotkeys?(commandId: string): StoredHotkey[] | undefined;
+			/** What the command was registered with. */
+			getDefaultHotkeys?(commandId: string): StoredHotkey[] | undefined;
 		};
 	}
 }
@@ -490,6 +529,43 @@ export interface InlineCalloutSettings extends RoleToggleSettings {
 }
 
 /**
+ * What a custom command does to the editor.
+ *
+ * Only the block role has a real choice here: a heading callout has no body to
+ * wrap, and an inline pill is written at the cursor. Both of those always
+ * insert, which is why `CustomCommand.action` is optional rather than a value
+ * the other two roles have to carry meaninglessly.
+ */
+export type CustomCommandAction = "wrap" | "insert";
+
+/**
+ * One user-built command, registered with Obsidian so it can be given a hotkey.
+ *
+ * The plugin registers only its five fixed commands by default; everything here
+ * was explicitly created by the user in the command builder, and is registered
+ * and unregistered as that list changes.
+ */
+export interface CustomCommand {
+	/**
+	 * Stable identity, minted once and never derived from the command's
+	 * content.
+	 *
+	 * The Obsidian command id is built from this, and Obsidian keys a user's
+	 * hotkey by that command id — so editing a command's format, callout type
+	 * or heading level must leave this untouched, or the binding is orphaned.
+	 */
+	id: string;
+	/** The callout this writes. Always a canonical id, never an alias. */
+	calloutId: string;
+	/** Which of the three render roles the command writes. */
+	role: CalloutRenderRole;
+	/** 1–6. Only read when `role` is `"heading"`. */
+	headingLevel?: number;
+	/** Only read when `role` is `"regular"`; the other roles always insert. */
+	action?: CustomCommandAction;
+}
+
+/**
  * Identifiers for the right-click menu entries. `foldDefaults` covers the
  * whole open/closed/normal fold-default group as one toggleable unit; the
  * `*Section` items operate on an entire heading section (heading line +
@@ -653,6 +729,24 @@ export interface PluginSettings {
 	customPalettes: CustomPalette[];
 	/** Pictures the user added from their computer, usable as callout icons. */
 	userImages: UserImageIcon[];
+	/**
+	 * Commands the user built for specific callouts, registered with Obsidian
+	 * so they can be given hotkeys. Empty by default — the command palette
+	 * carries only the five fixed commands unless the user adds to this.
+	 */
+	customCommands: CustomCommand[];
+	/**
+	 * Ids of the five fixed commands (`editor/commands.ts`) the user has
+	 * turned off. Empty by default — every fixed command is registered unless
+	 * listed here. A disabled command is not registered with Obsidian at all,
+	 * so it drops out of the command palette and the hotkeys pane, but any
+	 * hotkey already bound to it is untouched and comes back the moment it's
+	 * re-enabled. Kept as a plain `string[]` rather than `FixedCommandId[]`
+	 * because `types.ts` stays a leaf module — the five real ids live in
+	 * `editor/commands.ts` and are what everything reading this list checks
+	 * membership against.
+	 */
+	disabledFixedCommands: string[];
 }
 
 export interface PluginData {
