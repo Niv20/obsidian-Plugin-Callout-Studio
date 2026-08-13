@@ -37,7 +37,12 @@ import { beginStartupEntranceWindow } from "./editor/renderShared";
 import { refreshAllCalloutEditors } from "./editor/livepreview/refresh";
 import { OutlineDecorator } from "./outline/OutlineDecorator";
 import { createCalloutReadingPostProcessor } from "./reading/calloutPostProcessor";
-import { registerCalloutCommands } from "./editor/commands";
+import {
+	registerCalloutCommands,
+	setFixedCommandEnabled as applyFixedCommandToggle,
+	type FixedCommandId,
+} from "./editor/commands";
+import { CustomCommandManager } from "./editor/CustomCommandManager";
 import { CalloutStudioAPI } from "./api/PluginAPI";
 import { FirstRunScanModal } from "./utils/FirstRunScanModal";
 import { HEAVY_VAULT_FILE_THRESHOLD } from "./constants";
@@ -55,6 +60,7 @@ export default class CalloutStudioPlugin extends Plugin {
 	cssInjector!: CSSInjector;
 	api!: CalloutStudioAPI;
 	autoComplete!: CalloutAutoComplete;
+	customCommands!: CustomCommandManager;
 	outlineDecorator!: OutlineDecorator;
 	icons!: IconService;
 	private discovery!: CalloutDiscovery;
@@ -203,6 +209,25 @@ export default class CalloutStudioPlugin extends Plugin {
 			),
 		);
 		this.register(() => this.outlineDecorator.destroy());
+
+		// The user's own commands, on top of the five fixed ones. Registering
+		// them during onload is what makes them survive a restart or a
+		// disable/enable — Obsidian tears every plugin command down on unload
+		// by itself. The sweep re-derives the whole set from the registry, so
+		// it doubles as the startup pass that drops commands whose callout is
+		// gone.
+		//
+		// Subscribed BEFORE the save listener below, and that order is load
+		// bearing: deleting a callout invalidates the commands that used it,
+		// and both listeners then call saveSettings(). Each call snapshots the
+		// settings as they stand at that moment, so if the save ran first it
+		// would snapshot the list *including* the commands about to be pruned,
+		// and two concurrent writes of different content would leave the file
+		// to whichever finished last. Pruning first makes both snapshots
+		// identical, so there is nothing to race over.
+		this.customCommands = new CustomCommandManager(this);
+		this.registry.onChange(() => this.customCommands.syncAll());
+		this.customCommands.syncAll();
 
 		// Re-inject CSS when registry changes. One call does both jobs:
 		// inject() emits "css-change" itself, and only once the new CSS is
@@ -378,6 +403,19 @@ export default class CalloutStudioPlugin extends Plugin {
 
 	isKnownZeroUsageFallback(id: string): boolean {
 		return this.discovery.isKnownZeroUsageFallback(id);
+	}
+
+	/**
+	 * Turn one of the five fixed commands on or off, from the command
+	 * builder. {@link registerCalloutCommands} only runs at startup, so this
+	 * is what (un)registers the command with Obsidian immediately.
+	 */
+	async setFixedCommandEnabled(
+		id: FixedCommandId,
+		enabled: boolean,
+	): Promise<void> {
+		applyFixedCommandToggle(this, () => new CalloutEditor(this), id, enabled);
+		await this.saveSettings();
 	}
 
 	addUnknownCalloutsAsFallback(unknownIds: string[]): number {

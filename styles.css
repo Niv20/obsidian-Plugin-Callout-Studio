@@ -328,29 +328,32 @@
 
 /* ─── Customize Right-Click Menu Modal ────────────────────────── */
 
-/* Role section headers: clearly a heading, spaced from the list above,
-   left-aligned with the row cards below. */
-.cs-menu-customize .setting-item.setting-item-heading {
-	margin-top: 28px;
-	padding: 0 0 6px 0;
+/* Section heading divider — shared with the Commands and shortcuts modal
+   (`.cs-command-builder`, see the Custom commands section below) so both
+   render identically. Same rule the main settings tab draws between "My
+   callout types" and "Built-in callouts": one symmetric block of space,
+   border, then space again, above the heading text — not an underline
+   below it — and Obsidian's own default heading color, size and weight
+   (no muted, uppercase treatment of its own). */
+.cs-menu-customize .setting-item.setting-item-heading,
+.cs-command-builder .setting-item.setting-item-heading {
+	margin-top: 36px;
+	padding: 36px 0 0 0;
 	border: none;
-	border-bottom: 1px solid var(--background-modifier-border);
+	border-top: 1px solid var(--background-modifier-border);
 	border-radius: 0;
 }
 
-.cs-menu-customize .setting-item.setting-item-heading .setting-item-name {
-	font-size: var(--font-ui-smaller);
-	font-weight: 700;
-	text-transform: uppercase;
-	letter-spacing: 0.06em;
-	color: var(--text-muted);
-}
-
-/* First header sits closer to the intro description. */
-.cs-menu-customize
-	.setting-item-description
-	+ .setting-item.setting-item-heading {
-	margin-top: 18px;
+/* The first heading in each modal sits directly under the intro
+   description, so — like "My callout types" in the main settings tab — it
+   gets no divider line of its own. It still wants clear air above it,
+   though — the paragraph above has no margin of its own, so without this
+   the heading would sit flush against it. */
+.cs-menu-customize .setting-item-description + .setting-item.setting-item-heading,
+.cs-command-builder .setting-item-description + .setting-item.setting-item-heading {
+	margin-top: 24px;
+	padding-top: 0;
+	border-top: none;
 }
 
 .cs-menu-customize-list {
@@ -3162,11 +3165,144 @@ input.cs-input-invalid:focus {
 	height: 14px;
 }
 
-/* Saved palettes list (settings section) */
+/* ─── Custom commands ─────────────────────────────────────────────────── */
+
+/* A little wider than a stock dialog (560px). A command row carries a long
+   generated name — "Insert H3 Abstract heading callout" — plus a shortcut chip
+   and two buttons, and at the default width the name was truncating with room
+   to spare on either side of it. Hung on `modalEl`, since `--dialog-width` is
+   read by `.modal` itself. */
+.modal.cs-command-builder {
+	--dialog-width: 620px;
+}
+
+/* Both lists, at the callout list's own 2px rhythm
+   (.callout-studio-callout-list) — these are the same row, so they get the
+   same spacing rather than a second, looser one. margin-top matches
+   .cs-menu-customize-list, so the gap from heading to list is the same in
+   both modals too. */
+.cs-command-list,
+.cs-command-fixed-list {
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+	margin-top: 8px;
+	margin-bottom: 12px;
+}
+
+/* Section heading divider is defined once, shared with the Customize
+   right-click menu modal — see ".cs-menu-customize .setting-item.setting-item-heading"
+   in the Customize Right-Click Menu Modal section above. */
+
+/* Command names run long, so the row text truncates rather than pushing the
+   chip and buttons off a narrow window. The shared 22ch cap is dropped: it is
+   measured for a callout's display name and would clip these long before the
+   row itself runs out of room. */
+.cs-command-row .callout-studio-row-name {
+	max-width: none;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+/* The five fixed commands wear the same row, minus the icon column — there is
+   no callout behind a built-in command, so the name starts at the row's own
+   padding instead. */
+.cs-command-fixed-row .callout-studio-row-info {
+	flex: 1;
+	min-width: 0;
+}
+
+/* Without an icon column, a fixed row's height is only text plus the row's
+   own padding — visibly shorter than a custom command's row next to it.
+   48px matches that row's real height (the 32px icon column plus 8px of
+   padding top and bottom), so the two lists line up. */
+.cs-command-fixed-row {
+	min-height: 48px;
+}
+
+/* Turned off: the row stays exactly where it was — this is a fixed set of
+   five the user is choosing among, not a list they're pruning — and fades
+   rather than disappears, since its shortcut is still worth reading in case
+   it comes back on. */
+.cs-command-fixed-row.is-disabled {
+	opacity: 0.55;
+}
+
+.cs-command-row-toggle {
+	display: flex;
+	align-items: center;
+	flex-shrink: 0;
+}
+
+/* The name and its shortcut pills share the callout list's own name line, which
+   already wraps — so a command bound to several shortcuts breaks onto a second
+   line instead of pushing the buttons off the end. `flex` + `min-width` because
+   .callout-studio-row-info is itself a flex row: without them the line will not
+   shrink, and the name's ellipsis (above) never gets the chance to fire. */
+.cs-command-row .callout-studio-row-name-line {
+	flex: 1;
+	min-width: 0;
+}
+
+/* The shortcut pill itself is defined with .cs-fallback-tag — see "name +
+   fallback tag" further down; they are one design on purpose. */
+
+/* A switched-off fixed command's shortcut button: nowhere left for a click to
+   lead while nothing is registered, so it neither hovers nor invites one. The
+   row is already faded by .cs-command-fixed-row.is-disabled, so nothing here
+   dims it a second time. */
+.cs-command-row .callout-studio-row-buttons button:disabled {
+	cursor: default;
+	pointer-events: none;
+}
+
+/* Editor: the generated command name, shown as the user picks. */
+.cs-command-preview {
+	margin-top: 16px;
+	padding: 10px 12px;
+	border: 1px solid var(--background-modifier-border);
+	border-radius: var(--radius-s);
+	background: var(--background-secondary);
+}
+
+.cs-command-preview-label {
+	font-size: var(--font-ui-smaller);
+	color: var(--text-muted);
+	margin-bottom: 2px;
+}
+
+.cs-command-preview-name {
+	font-size: var(--font-ui-small);
+	color: var(--text-normal);
+}
+
+/* Same show/hide shape as .cs-tag-error, in the warning colour: an off render
+   role is worth flagging but does not stop the command being saved. */
+.cs-command-role-notice {
+	color: var(--text-warning);
+	font-size: var(--font-ui-smaller);
+	overflow: hidden;
+	opacity: 0;
+	max-height: 0;
+	transition:
+		opacity 0.3s ease,
+		max-height 0.3s ease;
+}
+
+.cs-command-role-notice.is-visible {
+	opacity: 1;
+	max-height: 4em;
+	margin-top: 4px;
+}
+
+/* Saved palettes list (settings section). Its rows are .callout-studio-rows,
+   so they sit on the same 2px rhythm as the callout list above them rather
+   than on a looser one of their own. */
 .cs-palette-list {
 	display: flex;
 	flex-direction: column;
-	gap: 6px;
+	gap: 2px;
 	margin-bottom: 12px;
 }
 
@@ -3495,7 +3631,14 @@ input.cs-input-invalid:focus {
 	gap: 8px;
 	flex-wrap: wrap;
 }
-.cs-fallback-tag {
+/* One pill, two uses: a callout row's tag ("Default", "Default fallback",
+   "External style") and a command's shortcut in the Commands and shortcuts
+   window. The same surface on purpose — both are a fact about the row rather
+   than something to press, and in the command list the button that changes the
+   shortcut sits in the row's button group instead. Hence no hover, no focus and
+   no disabled state anywhere in this rule: there is nothing here to click. */
+.cs-fallback-tag,
+.cs-hotkey-chip {
 	display: inline-flex;
 	align-items: center;
 	height: 18px;
@@ -3506,6 +3649,10 @@ input.cs-input-invalid:focus {
 	font-size: var(--font-smallest, 11px);
 	line-height: 1;
 	border: 1px solid var(--background-modifier-border);
+	/* A chord must not be broken across lines mid-glyph; the line wraps between
+	   whole pills instead. */
+	white-space: nowrap;
+	flex-shrink: 0;
 }
 
 /* Phase 7: delete-without-replace styling */
