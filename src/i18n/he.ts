@@ -13,6 +13,12 @@ export const he: Record<string, string> = {
 	"cmd.calloutWrap": "עטיפה ב־callout",
 	"cmd.calloutUnwrap": "חילוץ מתוך callout",
 
+	// Commands — names generated for the user's own commands
+	"cmd.customWrapBlock": "עטיפה בתיבת־הבלטה {{name}}",
+	"cmd.customInsertBlock": "הוספת תיבת־הבלטה {{name}}",
+	"cmd.customInsertHeading": "הוספת כותרת H{{level}} מסוג {{name}}",
+	"cmd.customInsertInline": "הוספת תיבת־הבלטה מוטבעת {{name}}",
+
 	// Autocomplete
 	"autocomplete.createNew": 'יצירת תיבת־הבלטה חדשה: "{{name}}"',
 
@@ -154,10 +160,50 @@ export const he: Record<string, string> = {
 		'מציג הצעות בעת הקלדת "[!" בתוך בלוק ציטוט בעורך. בחירה של סוג מתוך הרשימה תשלים אוטומטית את כותרת תיבת־ההבלטה.',
 
 	// Settings — Keyboard shortcuts
-	"settings.openHotkeys": "קיצורי המקלדת של Callout Studio",
-	"settings.openHotkeysDesc":
-		"פתיחת מסך קיצורי המקלדת של Obsidian עבור פקודות Callout Studio, שם תוכלו לבחור קיצורים ליצירת סוג חדש, פתיחת הגדרות, עטיפה בתוך או חילוץ מתיבת־הבלטה. כברירת־מחדל, לא מוגדרים קיצורי מקלדת.",
-	"settings.openHotkeysButton": "פתיחת הגדרות",
+	"settings.customCommands": "פקודות וקיצורי מקלדת",
+	"settings.customCommandsDesc":
+		"צפו בכל פקודה של Callout Studio ובקיצור המקלדת המשויך לה, וצרו פקודות משלכם לתיבות־ההבלטה שבהן אתם משתמשים הכי הרבה. כברירת־מחדל, לא מוגדרים קיצורי מקלדת.",
+	"settings.customCommandsButton": "ניהול פקודות",
+
+	// Command builder
+	"commandBuilder.title": "פקודות וקיצורי מקלדת",
+	"commandBuilder.desc":
+		"השתמשו בכפתור + כדי להגדיר או לשנות קיצור מקלדת בהגדרות קיצורי המקלדת של Obsidian.",
+	"commandBuilder.builtIn": "פקודות מובנות",
+	"commandBuilder.toggleAria": "הפעלה או כיבוי של {{name}}",
+	"commandBuilder.hotkeyBlank": "ריק",
+	"commandBuilder.hotkeyAria": "הגדרת קיצור מקלדת עבור {{name}}",
+	"commandBuilder.yourCommands": "הפקודות שלכם",
+	"commandBuilder.newCommand": "פקודה חדשה",
+	"commandBuilder.empty": "אין עדיין פקודות מותאמות־אישית.",
+	"commandBuilder.unknownCommand": "הפקודה הזו",
+	"commandBuilder.editAria": "עריכת {{name}}",
+	"commandBuilder.deleteAria": "מחיקת {{name}}",
+	"commandBuilder.deleteConfirm":
+		"למחוק את הפקודה {{name}}? כל קיצור מקלדת שהוגדר עבורה יפסיק לפעול.",
+	"commandBuilder.newTitle": "פקודה חדשה",
+	"commandBuilder.editTitle": "עריכת פקודה",
+	"commandBuilder.format": "פורמט תיבת־הבלטה",
+	"commandBuilder.formatDesc": "איזה סוג תיבת־הבלטה הפקודה כותבת.",
+	"commandBuilder.formatHeading": "כותרת",
+	"commandBuilder.formatInline": "מוטבעת",
+	"commandBuilder.formatBlock": "בלוק",
+	"commandBuilder.roleDisabled":
+		"הפורמט הזה כבוי, כך שהפקודה תוסיף טקסט רגיל עד שתפעילו אותו מחדש.",
+	"commandBuilder.callout": "סוג תיבת־הבלטה",
+	"commandBuilder.calloutDesc": "תיבת־ההבלטה שהפקודה הזו מוסיפה.",
+	"commandBuilder.headingLevel": "רמת כותרת",
+	"commandBuilder.headingLevelDesc": "איזו רמת כותרת לכתוב.",
+	"commandBuilder.action": "פעולה",
+	"commandBuilder.actionDesc":
+		"עטיפה הופכת את הבחירה לתיבת־הבלטה; הוספה מוסיפה תיבה ריקה.",
+	"commandBuilder.actionWrap": "עטיפת הבחירה",
+	"commandBuilder.actionInsert": "הוספת חדשה",
+	"commandBuilder.preview": "שם הפקודה",
+	"commandBuilder.duplicate": "כבר יש לכם פקודה שעושה בדיוק את זה.",
+	"commandBuilder.noCallouts":
+		"אין עדיין סוגי תיבות־הבלטה שניתן לבנות מהם פקודה.",
+	"commandBuilder.save": "שמירה",
 
 	// Settings — Reset
 	"settings.vaultMaintenance": "סקירה ותחזוקה של הכספת",
@@ -173,6 +219,10 @@ export const he: Record<string, string> = {
 	"settings.resetAllConfirm":
 		"פעולה זו תמחק תיבות־הבלטה מותאמות־אישית, תאפס תיבות מובנות, סגנונות גלובליים, פלטות צבעים שמורות, התאמת תפריט הקליק־הימני ותמחק קובצי Material SVG שהורדו. לא ניתן לבטל פעולה זו. להמשיך?",
 	"notice.resetAllDone": "הכול אופס לברירות־המחדל.",
+
+	"notice.customCommandsRemoved":
+		"הוסרו {{count}} פקודות מותאמות־אישית שסוג תיבת־ההבלטה שלהן כבר לא קיים.",
+	"notice.customCommandMissingCallout": "סוג תיבת־ההבלטה של הפקודה הזו כבר לא קיים.",
 
 	// Notices
 	"notice.exported": "תיבות־ההבלטה יוצאו לקובץ callout-studio-export.json",

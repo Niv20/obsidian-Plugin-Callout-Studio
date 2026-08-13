@@ -5,6 +5,11 @@ export const pl: Record<string, string> = {
 	"cmd.calloutWrap": "Owiń w callout",
 	"cmd.calloutUnwrap": "Usuń callout",
 
+	"cmd.customWrapBlock": "Owiń w callout {{name}}",
+	"cmd.customInsertBlock": "Wstaw callout {{name}}",
+	"cmd.customInsertHeading": "Wstaw nagłówek H{{level}} callout {{name}}",
+	"cmd.customInsertInline": "Wstaw śródtekstowy callout {{name}}",
+
 	"autocomplete.createNew": 'Utwórz nowy callout: "{{name}}"',
 
 	"settings.fallbackTag": "Domyślny",
@@ -135,10 +140,50 @@ export const pl: Record<string, string> = {
 	"settings.enableAutocompleteDesc":
 		'Wyświetla sugestie przy wpisywaniu "[!" w bloku cytatu w edytorze. Wybierz typ callout z listy, aby wstawić pełny nagłówek callout.',
 
-	"settings.openHotkeys": "Skróty klawiszowe Callout Studio",
-	"settings.openHotkeysDesc":
-		"Otwiera ustawienia skrótów klawiszowych Obsidian dla poleceń Callout Studio, gdzie możesz wybrać własne skróty dla Utwórz nowy typ, Otwórz ustawienia, Usuń callout i Owiń w callout. Domyślnie nie są przypisane żadne skróty.",
-	"settings.openHotkeysButton": "Otwórz ustawienia skrótów",
+	"settings.customCommands": "Polecenia i skróty",
+	"settings.customCommandsDesc":
+		"Zobacz każde polecenie Callout Studio i skrót, do którego jest przypisane, i twórz własne polecenia dla najczęściej używanych callouts. Domyślnie nie są przypisane żadne skróty.",
+	"settings.customCommandsButton": "Zarządzaj poleceniami",
+
+	"commandBuilder.title": "Polecenia i skróty",
+	"commandBuilder.desc":
+		"Użyj przycisku +, aby ustawić lub zmienić skrót w ustawieniach skrótów klawiszowych Obsidian.",
+	"commandBuilder.builtIn": "Wbudowane polecenia",
+	"commandBuilder.toggleAria": "Włącz lub wyłącz {{name}}",
+	"commandBuilder.hotkeyBlank": "Puste",
+	"commandBuilder.hotkeyAria": "Ustaw skrót dla {{name}}",
+	"commandBuilder.yourCommands": "Twoje polecenia",
+	"commandBuilder.newCommand": "Nowe polecenie",
+	"commandBuilder.empty": "Brak własnych poleceń.",
+	"commandBuilder.unknownCommand": "to polecenie",
+	"commandBuilder.editAria": "Edytuj {{name}}",
+	"commandBuilder.deleteAria": "Usuń {{name}}",
+	"commandBuilder.deleteConfirm":
+		"Usunąć polecenie {{name}}? Przypisany do niego skrót przestanie działać.",
+	"commandBuilder.newTitle": "Nowe polecenie",
+	"commandBuilder.editTitle": "Edytuj polecenie",
+	"commandBuilder.format": "Format callout",
+	"commandBuilder.formatDesc": "Jaki rodzaj callout tworzy polecenie.",
+	"commandBuilder.formatHeading": "Nagłówek",
+	"commandBuilder.formatInline": "Śródtekstowy",
+	"commandBuilder.formatBlock": "Blokowy",
+	"commandBuilder.roleDisabled":
+		"Ten format jest wyłączony, więc polecenie będzie wstawiać zwykły tekst, dopóki go nie włączysz ponownie.",
+	"commandBuilder.callout": "Typ callout",
+	"commandBuilder.calloutDesc": "Callout wstawiany przez to polecenie.",
+	"commandBuilder.headingLevel": "Poziom nagłówka",
+	"commandBuilder.headingLevelDesc": "Który poziom nagłówka zapisać.",
+	"commandBuilder.action": "Akcja",
+	"commandBuilder.actionDesc":
+		"Owiń zamienia zaznaczenie w callout; wstaw dodaje pusty.",
+	"commandBuilder.actionWrap": "Owiń zaznaczenie",
+	"commandBuilder.actionInsert": "Wstaw nowy",
+	"commandBuilder.preview": "Nazwa polecenia",
+	"commandBuilder.duplicate":
+		"Masz już polecenie, które robi dokładnie to samo.",
+	"commandBuilder.noCallouts":
+		"Nie ma jeszcze żadnych typów callout, na podstawie których można zbudować polecenie.",
+	"commandBuilder.save": "Zapisz",
 
 	"settings.vaultMaintenance": "Wgląd w vault i konserwacja",
 	"settings.vaultStats": "Statystyki callout",
@@ -154,6 +199,11 @@ export const pl: Record<string, string> = {
 		"Spowoduje to usunięcie wszystkich niestandardowych callouts, zresetowanie wbudowanych callouts, globalnych stylów, zapisanych palet kolorów, dostosowania menu kontekstowego i wszystkich buforowanych SVG Material. Tej akcji nie można cofnąć. Czy jesteś pewien?",
 	"notice.resetAllDone":
 		"Wszystko zostało zresetowane do wartości domyślnych.",
+
+	"notice.customCommandsRemoved":
+		"Usunięto {{count}} niestandardowe(ych) polecenie/polecenia, których typ callout już nie istnieje.",
+	"notice.customCommandMissingCallout":
+		"Typ callout tego polecenia już nie istnieje.",
 
 	"notice.exported": "Callouts wyeksportowane do callout-studio-export.json",
 	"notice.importedJSON": "Zaimportowano {{count}} typ(ów) callout z JSON.",

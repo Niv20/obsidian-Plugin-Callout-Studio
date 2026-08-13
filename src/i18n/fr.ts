@@ -5,6 +5,11 @@ export const fr: Record<string, string> = {
 	"cmd.calloutWrap": "Envelopper dans un callout",
 	"cmd.calloutUnwrap": "Retirer le callout",
 
+	"cmd.customWrapBlock": "Envelopper dans un callout {{name}}",
+	"cmd.customInsertBlock": "Insérer un callout {{name}}",
+	"cmd.customInsertHeading": "Insérer un titre H{{level}} callout {{name}}",
+	"cmd.customInsertInline": "Insérer un callout en ligne {{name}}",
+
 	"autocomplete.createNew": 'Créer un nouveau callout : "{{name}}"',
 
 	"settings.fallbackTag": "Par défaut",
@@ -136,10 +141,51 @@ export const fr: Record<string, string> = {
 	"settings.enableAutocompleteDesc":
 		'Affiche des suggestions lorsque vous tapez "[!" dans une citation de l\'éditeur. Choisissez un type de callout dans la liste pour insérer un en-tête de callout complet.',
 
-	"settings.openHotkeys": "Raccourcis de Callout Studio",
-	"settings.openHotkeysDesc":
-		"Ouvre les paramètres de raccourcis d'Obsidian pour les commandes de Callout Studio, où vous pouvez choisir vos propres raccourcis pour Créer un type, Ouvrir les paramètres, Retirer le callout et Envelopper dans un callout. Aucun raccourci n'est attribué par défaut.",
-	"settings.openHotkeysButton": "Ouvrir les raccourcis",
+	"settings.customCommands": "Commandes et raccourcis",
+	"settings.customCommandsDesc":
+		"Consultez chaque commande de Callout Studio et le raccourci auquel elle est associée, et créez vos propres commandes pour les callouts que vous utilisez le plus. Aucun raccourci n'est attribué par défaut.",
+	"settings.customCommandsButton": "Gérer les commandes",
+
+	// Générateur de commandes
+	"commandBuilder.title": "Commandes et raccourcis",
+	"commandBuilder.desc":
+		"Utilisez le bouton + pour définir ou modifier un raccourci dans les paramètres de raccourcis d'Obsidian.",
+	"commandBuilder.builtIn": "Commandes intégrées",
+	"commandBuilder.toggleAria": "Activer ou désactiver {{name}}",
+	"commandBuilder.hotkeyBlank": "Vide",
+	"commandBuilder.hotkeyAria": "Définir un raccourci pour {{name}}",
+	"commandBuilder.yourCommands": "Vos commandes",
+	"commandBuilder.newCommand": "Nouvelle commande",
+	"commandBuilder.empty": "Aucune commande personnalisée pour l'instant.",
+	"commandBuilder.unknownCommand": "cette commande",
+	"commandBuilder.editAria": "Modifier {{name}}",
+	"commandBuilder.deleteAria": "Supprimer {{name}}",
+	"commandBuilder.deleteConfirm":
+		"Supprimer la commande {{name}} ? Tout raccourci qui lui est assigné cessera de fonctionner.",
+	"commandBuilder.newTitle": "Nouvelle commande",
+	"commandBuilder.editTitle": "Modifier la commande",
+	"commandBuilder.format": "Format de callout",
+	"commandBuilder.formatDesc": "Le type de callout écrit par la commande.",
+	"commandBuilder.formatHeading": "Titre",
+	"commandBuilder.formatInline": "En ligne",
+	"commandBuilder.formatBlock": "Bloc",
+	"commandBuilder.roleDisabled":
+		"Ce format est désactivé, la commande insérera donc du texte brut jusqu'à ce que vous le réactiviez.",
+	"commandBuilder.callout": "Type de callout",
+	"commandBuilder.calloutDesc": "Le callout que cette commande insère.",
+	"commandBuilder.headingLevel": "Niveau de titre",
+	"commandBuilder.headingLevelDesc": "Quel niveau de titre écrire.",
+	"commandBuilder.action": "Action",
+	"commandBuilder.actionDesc":
+		"Envelopper transforme la sélection en callout ; insérer en ajoute un vide.",
+	"commandBuilder.actionWrap": "Envelopper la sélection",
+	"commandBuilder.actionInsert": "Insérer un nouveau",
+	"commandBuilder.preview": "Nom de la commande",
+	"commandBuilder.duplicate":
+		"Vous avez déjà une commande qui fait exactement cela.",
+	"commandBuilder.noCallouts":
+		"Il n'y a pas encore de type de callout à partir duquel créer une commande.",
+	"commandBuilder.save": "Enregistrer",
 
 	"settings.vaultMaintenance": "Informations et maintenance du vault",
 	"settings.vaultStats": "Statistiques des callouts",
@@ -154,6 +200,11 @@ export const fr: Record<string, string> = {
 	"settings.resetAllConfirm":
 		"Cela supprimera tous les callouts personnalisés, réinitialisera les callouts intégrés, les styles globaux, les palettes de couleurs enregistrées, la personnalisation du menu du clic droit et tous les SVG Material en cache. Cette action est irréversible. Êtes-vous sûr ?",
 	"notice.resetAllDone": "Tout a été réinitialisé aux valeurs par défaut.",
+
+	"notice.customCommandsRemoved":
+		"{{count}} commande(s) personnalisée(s) supprimée(s) car leur type de callout n'existe plus.",
+	"notice.customCommandMissingCallout":
+		"Le type de callout de cette commande n'existe plus.",
 
 	"notice.exported": "Callouts exportés vers callout-studio-export.json",
 	"notice.importedJSON":

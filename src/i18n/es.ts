@@ -5,6 +5,11 @@ export const es: Record<string, string> = {
 	"cmd.calloutWrap": "Envolver en callout",
 	"cmd.calloutUnwrap": "Desenvolver del callout",
 
+	"cmd.customWrapBlock": "Envolver en callout {{name}}",
+	"cmd.customInsertBlock": "Insertar callout {{name}}",
+	"cmd.customInsertHeading": "Insertar encabezado H{{level}} de callout {{name}}",
+	"cmd.customInsertInline": "Insertar callout en línea {{name}}",
+
 	"autocomplete.createNew": 'Crear nuevo callout: "{{name}}"',
 
 	"settings.fallbackTag": "Predeterminado",
@@ -135,10 +140,51 @@ export const es: Record<string, string> = {
 	"settings.enableAutocompleteDesc":
 		'Muestra sugerencias cuando escribe "[!" dentro de una cita en el editor. Elija un tipo de callout de la lista para insertar un encabezado de callout completo.',
 
-	"settings.openHotkeys": "Atajos de Callout Studio",
-	"settings.openHotkeysDesc":
-		"Abre los ajustes de atajos de Obsidian para los comandos de Callout Studio, donde puede elegir sus propios atajos para Crear nuevo tipo de callout, Abrir ajustes, Desenvolver del callout y Envolver en callout. No hay atajos asignados por defecto.",
-	"settings.openHotkeysButton": "Abrir ajustes de atajos",
+	"settings.customCommands": "Comandos y atajos",
+	"settings.customCommandsDesc":
+		"Vea todos los comandos de Callout Studio y el atajo al que están vinculados, y cree sus propios comandos para los callouts que más usa. No hay atajos asignados por defecto.",
+	"settings.customCommandsButton": "Gestionar comandos",
+
+	// Constructor de comandos
+	"commandBuilder.title": "Comandos y atajos",
+	"commandBuilder.desc":
+		"Use el botón + para establecer o cambiar un atajo en los ajustes de atajos de Obsidian.",
+	"commandBuilder.builtIn": "Comandos integrados",
+	"commandBuilder.toggleAria": "Activar o desactivar {{name}}",
+	"commandBuilder.hotkeyBlank": "Vacío",
+	"commandBuilder.hotkeyAria": "Establecer un atajo para {{name}}",
+	"commandBuilder.yourCommands": "Sus comandos",
+	"commandBuilder.newCommand": "Nuevo comando",
+	"commandBuilder.empty": "Todavía no hay comandos personalizados.",
+	"commandBuilder.unknownCommand": "este comando",
+	"commandBuilder.editAria": "Editar {{name}}",
+	"commandBuilder.deleteAria": "Eliminar {{name}}",
+	"commandBuilder.deleteConfirm":
+		"¿Eliminar el comando {{name}}? Cualquier atajo asignado a él dejará de funcionar.",
+	"commandBuilder.newTitle": "Nuevo comando",
+	"commandBuilder.editTitle": "Editar comando",
+	"commandBuilder.format": "Formato de callout",
+	"commandBuilder.formatDesc": "Qué tipo de callout escribe el comando.",
+	"commandBuilder.formatHeading": "Encabezado",
+	"commandBuilder.formatInline": "En línea",
+	"commandBuilder.formatBlock": "Bloque",
+	"commandBuilder.roleDisabled":
+		"Este formato está desactivado, así que el comando insertará texto sin formato hasta que vuelva a activarlo.",
+	"commandBuilder.callout": "Tipo de callout",
+	"commandBuilder.calloutDesc": "El callout que inserta este comando.",
+	"commandBuilder.headingLevel": "Nivel de encabezado",
+	"commandBuilder.headingLevelDesc": "Qué nivel de encabezado escribir.",
+	"commandBuilder.action": "Acción",
+	"commandBuilder.actionDesc":
+		"Envolver convierte la selección en un callout; insertar añade uno vacío.",
+	"commandBuilder.actionWrap": "Envolver selección",
+	"commandBuilder.actionInsert": "Insertar nuevo",
+	"commandBuilder.preview": "Nombre del comando",
+	"commandBuilder.duplicate":
+		"Ya tiene un comando que hace exactamente esto.",
+	"commandBuilder.noCallouts":
+		"Todavía no hay tipos de callout con los que crear un comando.",
+	"commandBuilder.save": "Guardar",
 
 	"settings.vaultMaintenance": "Información y mantenimiento del vault",
 	"settings.vaultStats": "Estadísticas de callouts",
@@ -154,6 +200,11 @@ export const es: Record<string, string> = {
 		"Esto eliminará todos los callouts personalizados, restablecerá los callouts integrados, los estilos globales, las paletas de colores guardadas, la personalización del menú de clic derecho y todos los SVG de Material en caché. Esta acción no se puede deshacer. ¿Está seguro?",
 	"notice.resetAllDone":
 		"Todo se ha restablecido a los valores predeterminados.",
+
+	"notice.customCommandsRemoved":
+		"Se eliminaron {{count}} comando(s) personalizado(s) cuyo tipo de callout ya no existe.",
+	"notice.customCommandMissingCallout":
+		"El tipo de callout de ese comando ya no existe.",
 
 	"notice.exported": "Callouts exportados a callout-studio-export.json",
 	"notice.importedJSON":

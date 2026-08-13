@@ -4,6 +4,10 @@ export const nb: Record<string, string> = {
 	"cmd.insertEmptyCallout": "Sett inn tom callout",
 	"cmd.calloutWrap": "Pakk inn i callout",
 	"cmd.calloutUnwrap": "Fjern callout",
+	"cmd.customWrapBlock": "Pakk inn i {{name}}-callout",
+	"cmd.customInsertBlock": "Sett inn {{name}}-callout",
+	"cmd.customInsertHeading": "Sett inn H{{level}} {{name}}-overskriftscallout",
+	"cmd.customInsertInline": "Sett inn {{name}}-inline-callout",
 	"autocomplete.createNew": 'Opprett ny callout: "{{name}}"',
 	"settings.fallbackTag": "Standard",
 	"settings.fallbackTagAuto": "Automatisk standard",
@@ -123,10 +127,49 @@ export const nb: Record<string, string> = {
 	"settings.enableAutocomplete": "Aktiver [! autofullføring",
 	"settings.enableAutocompleteDesc":
 		'Viser forslag når du skriver "[!" inne i et blokkssitat i redigeringsprogrammet. Velg en callout-type fra listen for å sette inn en komplett callout-overskrift.',
-	"settings.openHotkeys": "Callout Studio-snarveier",
-	"settings.openHotkeysDesc":
-		"Åpner Obsidians snarveisinnstillinger for Callout Studio-kommandoer. Som standard er ingen snarveier tildelt.",
-	"settings.openHotkeysButton": "Åpne snarveisinnstillinger",
+	"settings.customCommands": "Kommandoer og snarveier",
+	"settings.customCommandsDesc":
+		"Se alle Callout Studio-kommandoer og snarveien de er bundet til, og lag dine egne kommandoer for callouts du bruker mest. Ingen snarveier er tildelt som standard.",
+	"settings.customCommandsButton": "Administrer kommandoer",
+	"commandBuilder.title": "Kommandoer og snarveier",
+	"commandBuilder.desc":
+		"Bruk +-knappen for å angi eller endre en snarvei i Obsidians hurtigtastinnstillinger.",
+	"commandBuilder.builtIn": "Innebygde kommandoer",
+	"commandBuilder.toggleAria": "Slå {{name}} av eller på",
+	"commandBuilder.hotkeyBlank": "Tom",
+	"commandBuilder.hotkeyAria": "Angi en snarvei for {{name}}",
+	"commandBuilder.yourCommands": "Dine kommandoer",
+	"commandBuilder.newCommand": "Ny kommando",
+	"commandBuilder.empty": "Ingen tilpassede kommandoer ennå.",
+	"commandBuilder.unknownCommand": "denne kommandoen",
+	"commandBuilder.editAria": "Rediger {{name}}",
+	"commandBuilder.deleteAria": "Slett {{name}}",
+	"commandBuilder.deleteConfirm":
+		"Slette kommandoen {{name}}? Eventuelle snarveier tildelt den vil slutte å fungere.",
+	"commandBuilder.newTitle": "Ny kommando",
+	"commandBuilder.editTitle": "Rediger kommando",
+	"commandBuilder.format": "Callout-format",
+	"commandBuilder.formatDesc": "Hvilken type callout kommandoen skriver.",
+	"commandBuilder.formatHeading": "Overskrift",
+	"commandBuilder.formatInline": "Inline",
+	"commandBuilder.formatBlock": "Blokk",
+	"commandBuilder.roleDisabled":
+		"Dette formatet er slått av, så kommandoen setter inn ren tekst til du slår det på igjen.",
+	"commandBuilder.callout": "Callout-type",
+	"commandBuilder.calloutDesc": "Callouten denne kommandoen setter inn.",
+	"commandBuilder.headingLevel": "Overskriftsnivå",
+	"commandBuilder.headingLevelDesc": "Hvilket overskriftsnivå som skrives.",
+	"commandBuilder.action": "Handling",
+	"commandBuilder.actionDesc":
+		"Pakk inn gjør utvalget om til en callout; sett inn legger til en tom en.",
+	"commandBuilder.actionWrap": "Pakk inn utvalg",
+	"commandBuilder.actionInsert": "Sett inn ny",
+	"commandBuilder.preview": "Kommandonavn",
+	"commandBuilder.duplicate":
+		"Du har allerede en kommando som gjør nøyaktig dette.",
+	"commandBuilder.noCallouts":
+		"Det finnes ingen callout-typer å bygge en kommando fra ennå.",
+	"commandBuilder.save": "Lagre",
 	"settings.vaultMaintenance": "Vault-innsikt og vedlikehold",
 	"settings.vaultStats": "Callout-statistikk",
 	"settings.vaultStatsDesc":
@@ -140,6 +183,10 @@ export const nb: Record<string, string> = {
 	"settings.resetAllConfirm":
 		"Dette sletter alle tilpassede callouts, tilbakestiller innebygde callouts, globale stiler, lagrede fargepaletter, tilpasningen av høyreklikkmenyen og alle cachede Material-SVG-er. Handlingen kan ikke angres. Er du sikker?",
 	"notice.resetAllDone": "Alt er tilbakestilt til standardinnstillingene.",
+	"notice.customCommandsRemoved":
+		"Fjernet {{count}} tilpasset(e) kommando(er) hvis callout-type ikke lenger finnes.",
+	"notice.customCommandMissingCallout":
+		"Denne kommandoens callout-type finnes ikke lenger.",
 	"notice.exported": "Callouts eksportert til callout-studio-export.json",
 	"notice.importedJSON": "{{count}} callout-type(r) importert fra JSON.",
 	"notice.importedSettings": "Plugin-innstillinger importert.",

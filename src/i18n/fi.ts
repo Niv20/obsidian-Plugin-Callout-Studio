@@ -4,6 +4,10 @@ export const fi: Record<string, string> = {
 	"cmd.insertEmptyCallout": "Lisää tyhjä callout",
 	"cmd.calloutWrap": "Kääri calloutiin",
 	"cmd.calloutUnwrap": "Poista callout",
+	"cmd.customWrapBlock": "Kääri {{name}}-calloutiin",
+	"cmd.customInsertBlock": "Lisää {{name}}-callout",
+	"cmd.customInsertHeading": "Lisää H{{level}}-otsikkocallout ({{name}})",
+	"cmd.customInsertInline": "Lisää {{name}}-rivin sisäinen callout",
 	"autocomplete.createNew": 'Luo uusi callout: "{{name}}"',
 	"settings.fallbackTag": "Oletus",
 	"settings.fallbackTagAuto": "Automaattinen oletus",
@@ -125,10 +129,48 @@ export const fi: Record<string, string> = {
 	"settings.enableAutocomplete": "Ota [! automaattinen täydennys käyttöön",
 	"settings.enableAutocompleteDesc":
 		'Näyttää ehdotuksia, kun kirjoitat "[!" lainausblokissa editorissa. Valitse callout-tyyppi luettelosta lisätäksesi täydellisen callout-otsikon.',
-	"settings.openHotkeys": "Callout Studio -oikotiet",
-	"settings.openHotkeysDesc":
-		"Avaa Obsidianin oikotieasetukset Callout Studio -komennoille. Oletuksena ei ole määritetty oikoteitä.",
-	"settings.openHotkeysButton": "Avaa oikotieasetukset",
+	"settings.customCommands": "Komennot ja pikanäppäimet",
+	"settings.customCommandsDesc":
+		"Näytä jokainen Callout Studion komento ja sen pikanäppäin, ja luo omia komentoja eniten käyttämillesi callouteille. Oletuksena ei ole määritetty pikanäppäimiä.",
+	"settings.customCommandsButton": "Hallinnoi komentoja",
+	"commandBuilder.title": "Komennot ja pikanäppäimet",
+	"commandBuilder.desc":
+		"Aseta tai vaihda pikanäppäin Obsidianin pikanäppäinasetuksista +-painikkeella.",
+	"commandBuilder.builtIn": "Sisäänrakennetut komennot",
+	"commandBuilder.toggleAria": "Ota {{name}} käyttöön tai pois käytöstä",
+	"commandBuilder.hotkeyBlank": "Tyhjä",
+	"commandBuilder.hotkeyAria": "Aseta pikanäppäin komennolle {{name}}",
+	"commandBuilder.yourCommands": "Omat komentosi",
+	"commandBuilder.newCommand": "Uusi komento",
+	"commandBuilder.empty": "Ei vielä mukautettuja komentoja.",
+	"commandBuilder.unknownCommand": "tämä komento",
+	"commandBuilder.editAria": "Muokkaa {{name}}",
+	"commandBuilder.deleteAria": "Poista {{name}}",
+	"commandBuilder.deleteConfirm":
+		"Poistetaanko komento {{name}}? Sille asetettu pikanäppäin lakkaa toimimasta.",
+	"commandBuilder.newTitle": "Uusi komento",
+	"commandBuilder.editTitle": "Muokkaa komentoa",
+	"commandBuilder.format": "Callout-muoto",
+	"commandBuilder.formatDesc": "Minkä tyyppisen calloutin komento kirjoittaa.",
+	"commandBuilder.formatHeading": "Otsikko",
+	"commandBuilder.formatInline": "Rivin sisäinen",
+	"commandBuilder.formatBlock": "Lohko",
+	"commandBuilder.roleDisabled":
+		"Tämä muoto on pois käytöstä, joten komento lisää tavallista tekstiä, kunnes otat sen taas käyttöön.",
+	"commandBuilder.callout": "Callout-tyyppi",
+	"commandBuilder.calloutDesc": "Callout, jonka tämä komento lisää.",
+	"commandBuilder.headingLevel": "Otsikkotaso",
+	"commandBuilder.headingLevelDesc": "Mikä otsikkotaso kirjoitetaan.",
+	"commandBuilder.action": "Toiminto",
+	"commandBuilder.actionDesc":
+		"Kääri muuttaa valinnan calloutiksi; lisää lisää tyhjän.",
+	"commandBuilder.actionWrap": "Kääri valinta",
+	"commandBuilder.actionInsert": "Lisää uusi",
+	"commandBuilder.preview": "Komennon nimi",
+	"commandBuilder.duplicate": "Sinulla on jo täsmälleen tämän tekevä komento.",
+	"commandBuilder.noCallouts":
+		"Ei vielä callout-tyyppejä, joista rakentaa komento.",
+	"commandBuilder.save": "Tallenna",
 	"settings.vaultMaintenance": "Holvin näkemykset ja huolto",
 	"settings.vaultStats": "Callout-tilastot",
 	"settings.vaultStatsDesc":
@@ -142,6 +184,9 @@ export const fi: Record<string, string> = {
 	"settings.resetAllConfirm":
 		"Tämä poistaa kaikki mukautetut calloutit, palauttaa sisäänrakennetut calloutit, yleiset tyylit, tallennetut väripaletit, hiiren kakkospainikkeen valikon mukautukset ja kaikki välimuistissa olevat Material-SVG:t. Toimintoa ei voi kumota. Oletko varma?",
 	"notice.resetAllDone": "Kaikki on palautettu oletuksiksi.",
+	"notice.customCommandsRemoved":
+		"Poistettiin {{count}} mukautettu(a) komento(a), joiden callout-tyyppiä ei enää ole.",
+	"notice.customCommandMissingCallout": "Tämän komennon callout-tyyppiä ei enää ole.",
 	"notice.exported": "Calloutit viety tiedostoon callout-studio-export.json",
 	"notice.importedJSON": "{{count}} callout-tyyppiä tuotu JSONista.",
 	"notice.importedSettings": "Lisäosan asetukset tuotu.",

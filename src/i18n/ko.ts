@@ -5,6 +5,11 @@ export const ko: Record<string, string> = {
 	"cmd.calloutWrap": "callout으로 감싸기",
 	"cmd.calloutUnwrap": "callout 제거",
 
+	"cmd.customWrapBlock": "{{name}} callout으로 감싸기",
+	"cmd.customInsertBlock": "{{name}} callout 삽입",
+	"cmd.customInsertHeading": "H{{level}} {{name}} 제목 callout 삽입",
+	"cmd.customInsertInline": "{{name}} 인라인 callout 삽입",
+
 	"autocomplete.createNew": '새 callout 만들기: "{{name}}"',
 
 	"settings.fallbackTag": "기본값",
@@ -134,10 +139,49 @@ export const ko: Record<string, string> = {
 	"settings.enableAutocompleteDesc":
 		'편집기의 인용 블록에서 "[!"를 입력하면 제안을 표시합니다. 목록에서 callout 유형을 선택하여 완전한 callout 헤더를 삽입합니다.',
 
-	"settings.openHotkeys": "Callout Studio 단축키",
-	"settings.openHotkeysDesc":
-		"Callout Studio 명령어에 대한 Obsidian 단축키 설정을 엽니다. 새 callout 유형 만들기, 설정 열기, callout 제거, callout으로 감싸기에 대한 단축키를 설정할 수 있습니다. 기본적으로 단축키가 할당되어 있지 않습니다.",
-	"settings.openHotkeysButton": "단축키 설정 열기",
+	"settings.customCommands": "명령 및 단축키",
+	"settings.customCommandsDesc":
+		"모든 Callout Studio 명령어와 여기에 지정된 단축키를 확인하고, 자주 사용하는 callout을 위해 직접 명령어를 만들어 보세요. 기본적으로 지정된 단축키는 없습니다.",
+	"settings.customCommandsButton": "명령어 관리",
+
+	"commandBuilder.title": "명령 및 단축키",
+	"commandBuilder.desc":
+		"+ 버튼을 사용하여 Obsidian 단축키 설정에서 단축키를 지정하거나 변경하세요.",
+	"commandBuilder.builtIn": "기본 제공 명령어",
+	"commandBuilder.toggleAria": "{{name}} 켜기/끄기",
+	"commandBuilder.hotkeyBlank": "비어 있음",
+	"commandBuilder.hotkeyAria": "{{name}}의 단축키 설정",
+	"commandBuilder.yourCommands": "내 명령어",
+	"commandBuilder.newCommand": "새 명령어",
+	"commandBuilder.empty": "아직 사용자 정의 명령어가 없습니다.",
+	"commandBuilder.unknownCommand": "이 명령어",
+	"commandBuilder.editAria": "{{name}} 편집",
+	"commandBuilder.deleteAria": "{{name}} 삭제",
+	"commandBuilder.deleteConfirm":
+		"명령어 {{name}}을(를) 삭제하시겠습니까? 여기에 지정된 단축키는 더 이상 작동하지 않습니다.",
+	"commandBuilder.newTitle": "새 명령어",
+	"commandBuilder.editTitle": "명령어 편집",
+	"commandBuilder.format": "callout 형식",
+	"commandBuilder.formatDesc": "명령어가 작성하는 callout의 종류입니다.",
+	"commandBuilder.formatHeading": "제목",
+	"commandBuilder.formatInline": "인라인",
+	"commandBuilder.formatBlock": "Block",
+	"commandBuilder.roleDisabled":
+		"이 형식은 꺼져 있어서, 다시 켜기 전까지 명령어는 일반 텍스트를 삽입합니다.",
+	"commandBuilder.callout": "callout 유형",
+	"commandBuilder.calloutDesc": "이 명령어가 삽입하는 callout입니다.",
+	"commandBuilder.headingLevel": "제목 수준",
+	"commandBuilder.headingLevelDesc": "작성할 제목 수준입니다.",
+	"commandBuilder.action": "작업",
+	"commandBuilder.actionDesc":
+		"감싸기는 선택 영역을 callout으로 바꾸고, 삽입은 빈 callout을 추가합니다.",
+	"commandBuilder.actionWrap": "선택 영역 감싸기",
+	"commandBuilder.actionInsert": "새로 삽입",
+	"commandBuilder.preview": "명령어 이름",
+	"commandBuilder.duplicate": "이미 똑같은 작업을 하는 명령어가 있습니다.",
+	"commandBuilder.noCallouts":
+		"아직 명령어를 만들 수 있는 callout 유형이 없습니다.",
+	"commandBuilder.save": "저장",
 
 	"settings.vaultMaintenance": "볼트 인사이트 및 유지보수",
 	"settings.vaultStats": "Callout 통계",
@@ -152,6 +196,11 @@ export const ko: Record<string, string> = {
 	"settings.resetAllConfirm":
 		"모든 사용자 정의 callout이 삭제되고 기본 제공 callout, 전역 스타일, 저장된 색상 팔레트, 마우스 오른쪽 버튼 메뉴 사용자 지정, 캐시된 Material SVG가 재설정됩니다. 이 작업은 취소할 수 없습니다. 계속하시겠습니까?",
 	"notice.resetAllDone": "모든 항목이 기본값으로 재설정되었습니다.",
+
+	"notice.customCommandsRemoved":
+		"callout 유형이 더 이상 존재하지 않는 사용자 정의 명령어 {{count}}개를 제거했습니다.",
+	"notice.customCommandMissingCallout":
+		"해당 명령어의 callout 유형이 더 이상 존재하지 않습니다.",
 
 	"notice.exported": "callout을 callout-studio-export.json으로 내보냈습니다",
 	"notice.importedJSON":

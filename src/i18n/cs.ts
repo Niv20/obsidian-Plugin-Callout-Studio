@@ -5,6 +5,11 @@ export const cs: Record<string, string> = {
 	"cmd.calloutWrap": "Zabalit do callout",
 	"cmd.calloutUnwrap": "Odebrat callout",
 
+	"cmd.customWrapBlock": "Zabalit do callout {{name}}",
+	"cmd.customInsertBlock": "Vložit callout {{name}}",
+	"cmd.customInsertHeading": "Vložit nadpisový callout {{name}} (H{{level}})",
+	"cmd.customInsertInline": "Vložit vložený callout {{name}}",
+
 	"autocomplete.createNew": 'Vytvořit nový callout: "{{name}}"',
 
 	"settings.fallbackTag": "Výchozí",
@@ -134,10 +139,49 @@ export const cs: Record<string, string> = {
 	"settings.enableAutocompleteDesc":
 		'Zobrazuje návrhy při psaní "[!" v bloku citace v editoru. Vyberte typ callout ze seznamu a vložte úplnou hlavičku callout.',
 
-	"settings.openHotkeys": "Klávesové zkratky Callout Studio",
-	"settings.openHotkeysDesc":
-		"Otevře nastavení klávesových zkratek Obsidian pro příkazy Callout Studio, kde si můžete zvolit vlastní zkratky pro Vytvořit nový typ, Otevřít nastavení, Odebrat callout a Zabalit do callout. Ve výchozím nastavení nejsou přiřazeny žádné zkratky.",
-	"settings.openHotkeysButton": "Otevřít nastavení zkratek",
+	"settings.customCommands": "Příkazy a zkratky",
+	"settings.customCommandsDesc":
+		"Prohlédněte si všechny příkazy Callout Studio a zkratku, ke které je každý přiřazen, a vytvořte si vlastní příkazy pro callouty, které používáte nejčastěji. Ve výchozím nastavení nejsou přiřazeny žádné zkratky.",
+	"settings.customCommandsButton": "Spravovat příkazy",
+
+	"commandBuilder.title": "Příkazy a zkratky",
+	"commandBuilder.desc":
+		"Pomocí tlačítka + nastavte nebo změňte zkratku v nastavení klávesových zkratek Obsidian.",
+	"commandBuilder.builtIn": "Vestavěné příkazy",
+	"commandBuilder.toggleAria": "Zapnout nebo vypnout {{name}}",
+	"commandBuilder.hotkeyBlank": "Prázdné",
+	"commandBuilder.hotkeyAria": "Nastavit zkratku pro {{name}}",
+	"commandBuilder.yourCommands": "Vaše příkazy",
+	"commandBuilder.newCommand": "Nový příkaz",
+	"commandBuilder.empty": "Zatím žádné vlastní příkazy.",
+	"commandBuilder.unknownCommand": "tento příkaz",
+	"commandBuilder.editAria": "Upravit {{name}}",
+	"commandBuilder.deleteAria": "Smazat {{name}}",
+	"commandBuilder.deleteConfirm":
+		"Smazat příkaz {{name}}? Případná přiřazená zkratka přestane fungovat.",
+	"commandBuilder.newTitle": "Nový příkaz",
+	"commandBuilder.editTitle": "Upravit příkaz",
+	"commandBuilder.format": "Formát callout",
+	"commandBuilder.formatDesc": "Jaký druh callout příkaz zapisuje.",
+	"commandBuilder.formatHeading": "Nadpis",
+	"commandBuilder.formatInline": "Vložený",
+	"commandBuilder.formatBlock": "Blokový",
+	"commandBuilder.roleDisabled":
+		"Tento formát je vypnutý, takže příkaz bude vkládat obyčejný text, dokud jej znovu nezapnete.",
+	"commandBuilder.callout": "Typ callout",
+	"commandBuilder.calloutDesc": "Callout, který tento příkaz vkládá.",
+	"commandBuilder.headingLevel": "Úroveň nadpisu",
+	"commandBuilder.headingLevelDesc": "Jakou úroveň nadpisu zapsat.",
+	"commandBuilder.action": "Akce",
+	"commandBuilder.actionDesc":
+		"Zabalení promění výběr v callout; vložení přidá prázdný.",
+	"commandBuilder.actionWrap": "Zabalit výběr",
+	"commandBuilder.actionInsert": "Vložit nový",
+	"commandBuilder.preview": "Název příkazu",
+	"commandBuilder.duplicate": "Takový příkaz už máte.",
+	"commandBuilder.noCallouts":
+		"Zatím neexistují žádné typy callout, ze kterých by šlo příkaz vytvořit.",
+	"commandBuilder.save": "Uložit",
 
 	"settings.vaultMaintenance": "Statistiky a údržba vaultu",
 	"settings.vaultStats": "Statistiky callout",
@@ -153,6 +197,10 @@ export const cs: Record<string, string> = {
 		"Tím se odstraní všechny vlastní callouts, obnoví vestavěné callouts, globální styly, uložené barevné palety, přizpůsobení kontextové nabídky a všechny SVG Material v mezipaměti. Tuto akci nelze vrátit zpět. Jste si jisti?",
 	"notice.resetAllDone": "Vše bylo obnoveno na výchozí hodnoty.",
 
+	"notice.customCommandsRemoved":
+		"Odstraněno {{count}} vlastní(ch) příkaz(ů), jejichž typ callout již neexistuje.",
+	"notice.customCommandMissingCallout":
+		"Typ callout tohoto příkazu již neexistuje.",
 	"notice.exported": "Callouts exportovány do callout-studio-export.json",
 	"notice.importedJSON": "Importováno {{count}} typ(ů) callout z JSON.",
 	"notice.importedSettings": "Importováno nastavení doplňku.",

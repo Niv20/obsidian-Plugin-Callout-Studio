@@ -5,6 +5,11 @@ export const nl: Record<string, string> = {
 	"cmd.calloutWrap": "In callout inpakken",
 	"cmd.calloutUnwrap": "Callout verwijderen",
 
+	"cmd.customWrapBlock": "In {{name}}-callout inpakken",
+	"cmd.customInsertBlock": "{{name}}-callout invoegen",
+	"cmd.customInsertHeading": "H{{level}} {{name}}-kopcallout invoegen",
+	"cmd.customInsertInline": "Inline {{name}}-callout invoegen",
+
 	"autocomplete.createNew": 'Nieuwe callout aanmaken: "{{name}}"',
 
 	"settings.fallbackTag": "Standaard",
@@ -135,10 +140,50 @@ export const nl: Record<string, string> = {
 	"settings.enableAutocompleteDesc":
 		'Toont suggesties wanneer u "[!" typt in een Block Callout in de editor. Kies een callout-type uit de lijst om een volledig callout-koptekst in te voegen.',
 
-	"settings.openHotkeys": "Callout Studio-sneltoetsen",
-	"settings.openHotkeysDesc":
-		"Opent de sneltoetseninstellingen van Obsidian voor Callout Studio-opdrachten, waar u uw eigen sneltoetsen kunt kiezen voor Nieuw callout-type aanmaken, Instellingen openen, Callout verwijderen en In callout inpakken. Standaard zijn er geen sneltoetsen toegewezen.",
-	"settings.openHotkeysButton": "Sneltoetseninstellingen openen",
+	"settings.customCommands": "Opdrachten en sneltoetsen",
+	"settings.customCommandsDesc":
+		"Bekijk elke Callout Studio-opdracht en de sneltoets waaraan die is gekoppeld, en maak uw eigen opdrachten voor de callouts die u het meest gebruikt. Standaard zijn er geen sneltoetsen toegewezen.",
+	"settings.customCommandsButton": "Opdrachten beheren",
+
+	"commandBuilder.title": "Opdrachten en sneltoetsen",
+	"commandBuilder.desc":
+		"Gebruik de +-knop om een sneltoets in te stellen of te wijzigen in Obsidians sneltoetsinstellingen.",
+	"commandBuilder.builtIn": "Ingebouwde opdrachten",
+	"commandBuilder.toggleAria": "{{name}} in- of uitschakelen",
+	"commandBuilder.hotkeyBlank": "Leeg",
+	"commandBuilder.hotkeyAria": "Een sneltoets instellen voor {{name}}",
+	"commandBuilder.yourCommands": "Uw opdrachten",
+	"commandBuilder.newCommand": "Nieuwe opdracht",
+	"commandBuilder.empty": "Nog geen aangepaste opdrachten.",
+	"commandBuilder.unknownCommand": "deze opdracht",
+	"commandBuilder.editAria": "{{name}} bewerken",
+	"commandBuilder.deleteAria": "{{name}} verwijderen",
+	"commandBuilder.deleteConfirm":
+		"De opdracht {{name}} verwijderen? Een eventueel toegewezen sneltoets stopt met werken.",
+	"commandBuilder.newTitle": "Nieuwe opdracht",
+	"commandBuilder.editTitle": "Opdracht bewerken",
+	"commandBuilder.format": "Callout-formaat",
+	"commandBuilder.formatDesc": "Welk type callout de opdracht schrijft.",
+	"commandBuilder.formatHeading": "Kop",
+	"commandBuilder.formatInline": "Inline",
+	"commandBuilder.formatBlock": "Blok",
+	"commandBuilder.roleDisabled":
+		"Dit formaat is uitgeschakeld, dus de opdracht voegt gewone tekst in totdat u het weer inschakelt.",
+	"commandBuilder.callout": "Callout-type",
+	"commandBuilder.calloutDesc": "De callout die deze opdracht invoegt.",
+	"commandBuilder.headingLevel": "Kopniveau",
+	"commandBuilder.headingLevelDesc": "Welk kopniveau wordt geschreven.",
+	"commandBuilder.action": "Actie",
+	"commandBuilder.actionDesc":
+		"Inpakken maakt van de selectie een callout; invoegen voegt een lege toe.",
+	"commandBuilder.actionWrap": "Selectie inpakken",
+	"commandBuilder.actionInsert": "Nieuwe invoegen",
+	"commandBuilder.preview": "Opdrachtnaam",
+	"commandBuilder.duplicate":
+		"U hebt al een opdracht die precies hetzelfde doet.",
+	"commandBuilder.noCallouts":
+		"Er zijn nog geen callout-types om een opdracht van te maken.",
+	"commandBuilder.save": "Opslaan",
 
 	"settings.vaultMaintenance": "Vault-inzichten & onderhoud",
 	"settings.vaultStats": "Callout-statistieken",
@@ -154,6 +199,10 @@ export const nl: Record<string, string> = {
 		"Dit verwijdert alle aangepaste callouts, zet ingebouwde callouts, globale stijlen, opgeslagen kleurenpaletten, de aanpassing van het rechtsklikmenu en alle gecachte Material SVG's terug. Deze actie kan niet ongedaan worden gemaakt. Weet u het zeker?",
 	"notice.resetAllDone": "Alles is teruggezet naar de standaardinstellingen.",
 
+	"notice.customCommandsRemoved":
+		"{{count}} aangepaste opdracht(en) verwijderd waarvan het callout-type niet meer bestaat.",
+	"notice.customCommandMissingCallout":
+		"Het callout-type van deze opdracht bestaat niet meer.",
 	"notice.exported": "Callouts geëxporteerd naar callout-studio-export.json",
 	"notice.importedJSON": "{{count}} callout-type(s) geïmporteerd uit JSON.",
 	"notice.importedSettings": "Plugin-instellingen geïmporteerd.",

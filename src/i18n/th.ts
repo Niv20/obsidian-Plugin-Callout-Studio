@@ -5,6 +5,11 @@ export const th: Record<string, string> = {
 	"cmd.calloutWrap": "ห่อใน callout",
 	"cmd.calloutUnwrap": "นำ callout ออก",
 
+	"cmd.customWrapBlock": "ห่อใน callout {{name}}",
+	"cmd.customInsertBlock": "แทรก callout {{name}}",
+	"cmd.customInsertHeading": "แทรกหัวข้อ callout H{{level}} {{name}}",
+	"cmd.customInsertInline": "แทรก callout แบบอินไลน์ {{name}}",
+
 	"autocomplete.createNew": 'สร้าง callout ใหม่: "{{name}}"',
 
 	"settings.fallbackTag": "ค่าเริ่มต้น",
@@ -134,10 +139,49 @@ export const th: Record<string, string> = {
 	"settings.enableAutocompleteDesc":
 		'แสดงคำแนะนำเมื่อพิมพ์ "[!" ในบล็อกอ้างอิงในตัวแก้ไข เลือกประเภท callout จากรายการเพื่อแทรกส่วนหัว callout ที่สมบูรณ์',
 
-	"settings.openHotkeys": "แป้นพิมพ์ลัด Callout Studio",
-	"settings.openHotkeysDesc":
-		"เปิดการตั้งค่าแป้นพิมพ์ลัดของ Obsidian สำหรับคำสั่ง Callout Studio ซึ่งคุณสามารถเลือกแป้นพิมพ์ลัดของคุณเองสำหรับการสร้างประเภทใหม่ เปิดการตั้งค่า นำ callout ออก และห่อใน callout ไม่มีการกำหนดแป้นพิมพ์ลัดโดยค่าเริ่มต้น",
-	"settings.openHotkeysButton": "เปิดการตั้งค่าแป้นพิมพ์ลัด",
+	"settings.customCommands": "คำสั่งและแป้นพิมพ์ลัด",
+	"settings.customCommandsDesc":
+		"ดูคำสั่งทั้งหมดของ Callout Studio และแป้นพิมพ์ลัดที่ผูกไว้ พร้อมสร้างคำสั่งของคุณเองสำหรับ callout ที่คุณใช้บ่อยที่สุด ไม่มีการกำหนดแป้นพิมพ์ลัดโดยค่าเริ่มต้น",
+	"settings.customCommandsButton": "จัดการคำสั่ง",
+
+	"commandBuilder.title": "คำสั่งและแป้นพิมพ์ลัด",
+	"commandBuilder.desc":
+		"ใช้ปุ่ม + เพื่อตั้งค่าหรือเปลี่ยนแป้นพิมพ์ลัดในการตั้งค่าแป้นพิมพ์ลัดของ Obsidian",
+	"commandBuilder.builtIn": "คำสั่งในตัว",
+	"commandBuilder.toggleAria": "เปิดหรือปิด {{name}}",
+	"commandBuilder.hotkeyBlank": "ว่าง",
+	"commandBuilder.hotkeyAria": "ตั้งค่าแป้นพิมพ์ลัดสำหรับ {{name}}",
+	"commandBuilder.yourCommands": "คำสั่งของคุณ",
+	"commandBuilder.newCommand": "คำสั่งใหม่",
+	"commandBuilder.empty": "ยังไม่มีคำสั่งแบบกำหนดเอง",
+	"commandBuilder.unknownCommand": "คำสั่งนี้",
+	"commandBuilder.editAria": "แก้ไข {{name}}",
+	"commandBuilder.deleteAria": "ลบ {{name}}",
+	"commandBuilder.deleteConfirm":
+		"ลบคำสั่ง {{name}} หรือไม่? แป้นพิมพ์ลัดที่กำหนดไว้จะใช้งานไม่ได้อีกต่อไป",
+	"commandBuilder.newTitle": "คำสั่งใหม่",
+	"commandBuilder.editTitle": "แก้ไขคำสั่ง",
+	"commandBuilder.format": "รูปแบบ callout",
+	"commandBuilder.formatDesc": "ชนิดของ callout ที่คำสั่งนี้เขียน",
+	"commandBuilder.formatHeading": "หัวข้อ",
+	"commandBuilder.formatInline": "อินไลน์",
+	"commandBuilder.formatBlock": "บล็อก",
+	"commandBuilder.roleDisabled":
+		"รูปแบบนี้ถูกปิดอยู่ คำสั่งจึงจะแทรกข้อความธรรมดาจนกว่าคุณจะเปิดใช้อีกครั้ง",
+	"commandBuilder.callout": "ประเภท callout",
+	"commandBuilder.calloutDesc": "callout ที่คำสั่งนี้แทรก",
+	"commandBuilder.headingLevel": "ระดับหัวข้อ",
+	"commandBuilder.headingLevelDesc": "ระดับหัวข้อที่จะเขียน",
+	"commandBuilder.action": "การกระทำ",
+	"commandBuilder.actionDesc":
+		"ห่อจะเปลี่ยนข้อความที่เลือกให้เป็น callout ส่วนแทรกจะเพิ่ม callout เปล่า",
+	"commandBuilder.actionWrap": "ห่อข้อความที่เลือก",
+	"commandBuilder.actionInsert": "แทรกใหม่",
+	"commandBuilder.preview": "ชื่อคำสั่ง",
+	"commandBuilder.duplicate": "คุณมีคำสั่งที่ทำแบบนี้อยู่แล้ว",
+	"commandBuilder.noCallouts":
+		"ยังไม่มีประเภท callout ให้สร้างคำสั่งจาก",
+	"commandBuilder.save": "บันทึก",
 
 	"settings.vaultMaintenance": "ข้อมูลเชิงลึกและการบำรุงรักษา vault",
 	"settings.vaultStats": "สถิติ callout",
@@ -153,6 +197,10 @@ export const th: Record<string, string> = {
 		"การดำเนินการนี้จะลบ callout แบบกำหนดเองทั้งหมด รีเซ็ต callout ในตัว สไตล์ส่วนกลาง ชุดสีที่บันทึกไว้ การปรับแต่งเมนูคลิกขวา และ SVG Material ที่แคชทั้งหมด ไม่สามารถยกเลิกได้ คุณแน่ใจหรือไม่?",
 	"notice.resetAllDone": "รีเซ็ตทุกอย่างเป็นค่าเริ่มต้นแล้ว",
 
+	"notice.customCommandsRemoved":
+		"ลบคำสั่งแบบกำหนดเอง {{count}} รายการที่ประเภท callout ไม่มีอยู่แล้ว",
+	"notice.customCommandMissingCallout":
+		"ประเภท callout ของคำสั่งนี้ไม่มีอยู่แล้ว",
 	"notice.exported": "ส่งออก callout ไปยัง callout-studio-export.json แล้ว",
 	"notice.importedJSON": "นำเข้า {{count}} ประเภท callout จาก JSON แล้ว",
 	"notice.importedSettings": "นำเข้าการตั้งค่าปลั๊กอินแล้ว",

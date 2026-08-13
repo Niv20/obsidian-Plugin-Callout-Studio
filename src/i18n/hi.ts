@@ -5,6 +5,11 @@ export const hi: Record<string, string> = {
 	"cmd.calloutWrap": "callout में लपेटें",
 	"cmd.calloutUnwrap": "callout हटाएँ",
 
+	"cmd.customWrapBlock": "{{name}} callout में लपेटें",
+	"cmd.customInsertBlock": "{{name}} callout डालें",
+	"cmd.customInsertHeading": "H{{level}} {{name}} हेडिंग callout डालें",
+	"cmd.customInsertInline": "{{name}} इनलाइन callout डालें",
+
 	"autocomplete.createNew": 'नया callout बनाएँ: "{{name}}"',
 
 	"settings.fallbackTag": "डिफ़ॉल्ट",
@@ -135,10 +140,50 @@ export const hi: Record<string, string> = {
 	"settings.enableAutocompleteDesc":
 		'एडिटर में ब्लॉककोट के अंदर "[!" टाइप करने पर सुझाव दिखाता है। पूरा callout हेडर डालने के लिए सूची से callout प्रकार चुनें।',
 
-	"settings.openHotkeys": "Callout Studio शॉर्टकट",
-	"settings.openHotkeysDesc":
-		"Callout Studio कमांड के लिए Obsidian की हॉटकी सेटिंग खोलता है, जहाँ आप नया callout प्रकार बनाएँ, सेटिंग खोलें, callout हटाएँ और callout में लपेटें के लिए अपने शॉर्टकट चुन सकते हैं। डिफ़ॉल्ट रूप से कोई शॉर्टकट असाइन नहीं है।",
-	"settings.openHotkeysButton": "हॉटकी सेटिंग खोलें",
+	"settings.customCommands": "कमांड और शॉर्टकट",
+	"settings.customCommandsDesc":
+		"हर Callout Studio कमांड और उसे सौंपा गया शॉर्टकट देखें, और अपने सबसे ज़्यादा इस्तेमाल किए जाने वाले callouts के लिए अपने खुद के कमांड बनाएँ। डिफ़ॉल्ट रूप से कोई शॉर्टकट असाइन नहीं है।",
+	"settings.customCommandsButton": "कमांड प्रबंधित करें",
+
+	// कमांड बिल्डर
+	"commandBuilder.title": "कमांड और शॉर्टकट",
+	"commandBuilder.desc":
+		"Obsidian की हॉटकी सेटिंग में शॉर्टकट सेट या बदलने के लिए + बटन का उपयोग करें।",
+	"commandBuilder.builtIn": "बिल्ट-इन कमांड",
+	"commandBuilder.toggleAria": "{{name}} चालू या बंद करें",
+	"commandBuilder.hotkeyBlank": "खाली",
+	"commandBuilder.hotkeyAria": "{{name}} के लिए शॉर्टकट सेट करें",
+	"commandBuilder.yourCommands": "आपके कमांड",
+	"commandBuilder.newCommand": "नया कमांड",
+	"commandBuilder.empty": "अभी तक कोई कस्टम कमांड नहीं है।",
+	"commandBuilder.unknownCommand": "यह कमांड",
+	"commandBuilder.editAria": "{{name}} संपादित करें",
+	"commandBuilder.deleteAria": "{{name}} हटाएँ",
+	"commandBuilder.deleteConfirm":
+		"कमांड {{name}} हटाएँ? इसे सौंपा गया कोई भी शॉर्टकट काम करना बंद कर देगा।",
+	"commandBuilder.newTitle": "नया कमांड",
+	"commandBuilder.editTitle": "कमांड संपादित करें",
+	"commandBuilder.format": "Callout प्रारूप",
+	"commandBuilder.formatDesc": "कमांड किस तरह का callout लिखता है।",
+	"commandBuilder.formatHeading": "हेडिंग",
+	"commandBuilder.formatInline": "इनलाइन",
+	"commandBuilder.formatBlock": "ब्लॉक",
+	"commandBuilder.roleDisabled":
+		"यह प्रारूप बंद है, इसलिए जब तक आप इसे फिर से चालू नहीं करते, कमांड सादा टेक्स्ट डालेगा।",
+	"commandBuilder.callout": "Callout प्रकार",
+	"commandBuilder.calloutDesc": "वह callout जिसे यह कमांड डालता है।",
+	"commandBuilder.headingLevel": "हेडिंग स्तर",
+	"commandBuilder.headingLevelDesc": "कौन सा हेडिंग स्तर लिखना है।",
+	"commandBuilder.action": "क्रिया",
+	"commandBuilder.actionDesc":
+		"लपेटें चयन को callout में बदल देता है; डालें एक खाली callout जोड़ता है।",
+	"commandBuilder.actionWrap": "चयन लपेटें",
+	"commandBuilder.actionInsert": "नया डालें",
+	"commandBuilder.preview": "कमांड का नाम",
+	"commandBuilder.duplicate": "आपके पास पहले से ही बिल्कुल यही काम करने वाला कमांड है।",
+	"commandBuilder.noCallouts":
+		"अभी तक कोई callout प्रकार नहीं है जिससे कमांड बनाया जा सके।",
+	"commandBuilder.save": "सहेजें",
 
 	"settings.vaultMaintenance": "vault अंतर्दृष्टि और रखरखाव",
 	"settings.vaultStats": "Callout आँकड़े",
@@ -153,6 +198,10 @@ export const hi: Record<string, string> = {
 	"settings.resetAllConfirm":
 		"इससे सभी कस्टम callouts हट जाएँगे, बिल्ट-इन callouts, वैश्विक स्टाइल, सहेजे गए रंग पैलेट, राइट-क्लिक मेनू का कस्टमाइज़ेशन और सभी कैश किए गए Material SVG रीसेट हो जाएँगे। यह क्रिया पूर्ववत नहीं की जा सकती। क्या आप सुनिश्चित हैं?",
 	"notice.resetAllDone": "सब कुछ डिफ़ॉल्ट पर रीसेट हो गया।",
+
+	"notice.customCommandsRemoved":
+		"{{count}} कस्टम कमांड हटा दिए गए जिनका callout प्रकार अब मौजूद नहीं है।",
+	"notice.customCommandMissingCallout": "उस कमांड का callout प्रकार अब मौजूद नहीं है।",
 
 	"notice.exported":
 		"Callouts को callout-studio-export.json में निर्यात किया गया",

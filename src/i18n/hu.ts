@@ -5,6 +5,11 @@ export const hu: Record<string, string> = {
 	"cmd.calloutWrap": "Callout-ba csomagolás",
 	"cmd.calloutUnwrap": "Callout eltávolítása",
 
+	"cmd.customWrapBlock": "Becsomagolás {{name}} callout-ba",
+	"cmd.customInsertBlock": "{{name}} callout beszúrása",
+	"cmd.customInsertHeading": "H{{level}} {{name}} címsor callout beszúrása",
+	"cmd.customInsertInline": "{{name}} beágyazott callout beszúrása",
+
 	"autocomplete.createNew": 'Új callout létrehozása: "{{name}}"',
 
 	"settings.fallbackTag": "Alapértelmezett",
@@ -136,10 +141,50 @@ export const hu: Record<string, string> = {
 	"settings.enableAutocompleteDesc":
 		'Javaslatokat jelenít meg, amikor "[!" szöveget gépel egy blokkidézet-belsejébe a szerkesztőben. Válasszon callout-típust a listából egy teljes callout fejléc beillesztéséhez.',
 
-	"settings.openHotkeys": "Callout Studio billentyűparancsok",
-	"settings.openHotkeysDesc":
-		"Megnyitja az Obsidian billentyűparancs-beállításait a Callout Studio parancsaihoz, ahol saját parancsokat rendelhet az Új típus létrehozása, Beállítások megnyitása, Callout eltávolítása és Callout-ba csomagolás funkciókhoz. Alapértelmezés szerint nincs hozzárendelt parancs.",
-	"settings.openHotkeysButton": "Billentyűparancs-beállítások megnyitása",
+	"settings.customCommands": "Parancsok és billentyűparancsok",
+	"settings.customCommandsDesc":
+		"Tekintse meg az összes Callout Studio parancsot és a hozzájuk rendelt billentyűparancsot, valamint hozzon létre saját parancsokat a leggyakrabban használt callout-okhoz. Alapértelmezés szerint nincs hozzárendelt billentyűparancs.",
+	"settings.customCommandsButton": "Parancsok kezelése",
+
+	"commandBuilder.title": "Parancsok és billentyűparancsok",
+	"commandBuilder.desc":
+		"Használja a + gombot billentyűparancs beállításához vagy módosításához az Obsidian billentyűparancs-beállításaiban.",
+	"commandBuilder.builtIn": "Beépített parancsok",
+	"commandBuilder.toggleAria": "{{name}} be- vagy kikapcsolása",
+	"commandBuilder.hotkeyBlank": "Üres",
+	"commandBuilder.hotkeyAria": "Billentyűparancs beállítása ehhez: {{name}}",
+	"commandBuilder.yourCommands": "Saját parancsai",
+	"commandBuilder.newCommand": "Új parancs",
+	"commandBuilder.empty": "Még nincsenek egyéni parancsok.",
+	"commandBuilder.unknownCommand": "ez a parancs",
+	"commandBuilder.editAria": "{{name}} szerkesztése",
+	"commandBuilder.deleteAria": "{{name}} törlése",
+	"commandBuilder.deleteConfirm":
+		"Törli a(z) {{name}} parancsot? A hozzárendelt billentyűparancs megszűnik működni.",
+	"commandBuilder.newTitle": "Új parancs",
+	"commandBuilder.editTitle": "Parancs szerkesztése",
+	"commandBuilder.format": "Callout formátum",
+	"commandBuilder.formatDesc": "Milyen típusú callout-ot ír be a parancs.",
+	"commandBuilder.formatHeading": "Címsor",
+	"commandBuilder.formatInline": "Beágyazott",
+	"commandBuilder.formatBlock": "Block",
+	"commandBuilder.roleDisabled":
+		"Ez a formátum ki van kapcsolva, ezért a parancs egyszerű szöveget szúr be, amíg vissza nem kapcsolja.",
+	"commandBuilder.callout": "Callout típus",
+	"commandBuilder.calloutDesc": "A callout, amelyet ez a parancs beszúr.",
+	"commandBuilder.headingLevel": "Címsorszint",
+	"commandBuilder.headingLevelDesc": "Melyik címsorszintet írja be.",
+	"commandBuilder.action": "Művelet",
+	"commandBuilder.actionDesc":
+		"A becsomagolás callout-tá alakítja a kijelölést; a beszúrás egy üreset ad hozzá.",
+	"commandBuilder.actionWrap": "Kijelölés becsomagolása",
+	"commandBuilder.actionInsert": "Új beszúrása",
+	"commandBuilder.preview": "Parancs neve",
+	"commandBuilder.duplicate":
+		"Már van egy parancsa, amely pontosan ezt teszi.",
+	"commandBuilder.noCallouts":
+		"Még nincs callout-típus, amiből parancsot lehetne készíteni.",
+	"commandBuilder.save": "Mentés",
 
 	"settings.vaultMaintenance": "Tár-elemzések és karbantartás",
 	"settings.vaultStats": "Callout-statisztikák",
@@ -154,6 +199,11 @@ export const hu: Record<string, string> = {
 	"settings.resetAllConfirm":
 		"Ez törli az összes egyéni callout-ot, visszaállítja a beépített callout-okat, a globális stílusokat, a mentett színpalettákat, a jobb gombos menü testreszabását és az összes gyorsítótárazott Material SVG-t. Ez a művelet nem vonható vissza. Biztos benne?",
 	"notice.resetAllDone": "Minden visszaállt az alapértelmezettekre.",
+
+	"notice.customCommandsRemoved":
+		"{{count}} egyéni parancs eltávolítva, amelyek callout-típusa már nem létezik.",
+	"notice.customCommandMissingCallout":
+		"Ennek a parancsnak a callout-típusa már nem létezik.",
 
 	"notice.exported": "A callout-ok exportálva: callout-studio-export.json",
 	"notice.importedJSON": "{{count}} callout-típus importálva JSON-ból.",

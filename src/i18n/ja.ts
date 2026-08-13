@@ -5,6 +5,11 @@ export const ja: Record<string, string> = {
 	"cmd.calloutWrap": "calloutで囲む",
 	"cmd.calloutUnwrap": "calloutを解除",
 
+	"cmd.customWrapBlock": "{{name}}calloutで囲む",
+	"cmd.customInsertBlock": "{{name}}calloutを挿入",
+	"cmd.customInsertHeading": "H{{level}} {{name}}見出しcalloutを挿入",
+	"cmd.customInsertInline": "{{name}}インラインcalloutを挿入",
+
 	"autocomplete.createNew": '新しいcalloutを作成: "{{name}}"',
 
 	"settings.fallbackTag": "デフォルト",
@@ -134,10 +139,50 @@ export const ja: Record<string, string> = {
 	"settings.enableAutocompleteDesc":
 		'エディターの引用ブロック内で"[!"と入力すると候補を表示します。リストからcalloutタイプを選択して完全なcalloutヘッダーを挿入します。',
 
-	"settings.openHotkeys": "Callout Studioショートカット",
-	"settings.openHotkeysDesc":
-		"Callout StudioコマンドのObsidianホットキー設定を開きます。新しいcalloutタイプの作成、設定を開く、callout解除、calloutで囲むの独自ショートカットを設定できます。デフォルトではショートカットは割り当てられていません。",
-	"settings.openHotkeysButton": "ホットキー設定を開く",
+	"settings.customCommands": "コマンドとショートカット",
+	"settings.customCommandsDesc":
+		"すべてのCallout Studioコマンドと割り当てられたショートカットを確認し、よく使うcalloutのために独自のコマンドを作成できます。デフォルトではショートカットは割り当てられていません。",
+	"settings.customCommandsButton": "コマンドを管理",
+
+	"commandBuilder.title": "コマンドとショートカット",
+	"commandBuilder.desc":
+		"+ボタンを使って、Obsidianのホットキー設定でショートカットを設定または変更します。",
+	"commandBuilder.builtIn": "組み込みコマンド",
+	"commandBuilder.toggleAria": "{{name}}のオン/オフを切り替え",
+	"commandBuilder.hotkeyBlank": "未設定",
+	"commandBuilder.hotkeyAria": "{{name}}のショートカットを設定",
+	"commandBuilder.yourCommands": "あなたのコマンド",
+	"commandBuilder.newCommand": "新規コマンド",
+	"commandBuilder.empty": "まだカスタムコマンドはありません。",
+	"commandBuilder.unknownCommand": "このコマンド",
+	"commandBuilder.editAria": "{{name}}を編集",
+	"commandBuilder.deleteAria": "{{name}}を削除",
+	"commandBuilder.deleteConfirm":
+		"コマンド{{name}}を削除しますか？割り当てられているショートカットは機能しなくなります。",
+	"commandBuilder.newTitle": "新規コマンド",
+	"commandBuilder.editTitle": "コマンドを編集",
+	"commandBuilder.format": "calloutの形式",
+	"commandBuilder.formatDesc": "コマンドが書き込むcalloutの種類。",
+	"commandBuilder.formatHeading": "見出し",
+	"commandBuilder.formatInline": "インライン",
+	"commandBuilder.formatBlock": "Block",
+	"commandBuilder.roleDisabled":
+		"この形式はオフになっているため、再度オンにするまでコマンドはプレーンテキストを挿入します。",
+	"commandBuilder.callout": "calloutタイプ",
+	"commandBuilder.calloutDesc": "このコマンドが挿入するcallout。",
+	"commandBuilder.headingLevel": "見出しレベル",
+	"commandBuilder.headingLevelDesc": "どの見出しレベルを書き込むか。",
+	"commandBuilder.action": "アクション",
+	"commandBuilder.actionDesc":
+		"「囲む」は選択範囲をcalloutに変換し、「挿入」は空のcalloutを追加します。",
+	"commandBuilder.actionWrap": "選択範囲を囲む",
+	"commandBuilder.actionInsert": "新規挿入",
+	"commandBuilder.preview": "コマンド名",
+	"commandBuilder.duplicate":
+		"まったく同じことを行うコマンドが既に存在します。",
+	"commandBuilder.noCallouts":
+		"コマンドを作成するためのcalloutタイプがまだありません。",
+	"commandBuilder.save": "保存",
 
 	"settings.vaultMaintenance": "vaultの洞察とメンテナンス",
 	"settings.vaultStats": "callout統計",
@@ -152,6 +197,11 @@ export const ja: Record<string, string> = {
 	"settings.resetAllConfirm":
 		"すべてのカスタムcalloutを削除し、組み込みcallout、グローバルスタイル、保存済みのカラーパレット、右クリックメニューのカスタマイズ、キャッシュ済みMaterial SVGをリセットします。この操作は元に戻せません。よろしいですか？",
 	"notice.resetAllDone": "すべてデフォルトにリセットされました。",
+
+	"notice.customCommandsRemoved":
+		"calloutタイプが存在しなくなったカスタムコマンドを{{count}}件削除しました。",
+	"notice.customCommandMissingCallout":
+		"このコマンドのcalloutタイプはもう存在しません。",
 
 	"notice.exported":
 		"calloutをcallout-studio-export.jsonにエクスポートしました",
