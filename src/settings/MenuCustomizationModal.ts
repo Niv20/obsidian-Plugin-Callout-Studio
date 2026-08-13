@@ -29,7 +29,7 @@ export interface MenuCustomizationHost {
 	saveSettings(): Promise<void>;
 }
 
-const ROLE_ORDER: CalloutRenderRole[] = ["regular", "heading", "inline"];
+const ROLE_ORDER: CalloutRenderRole[] = ["heading", "inline", "regular"];
 
 /** i18n key for each role's section heading. */
 const ROLE_TITLE_KEY: Record<CalloutRenderRole, string> = {
