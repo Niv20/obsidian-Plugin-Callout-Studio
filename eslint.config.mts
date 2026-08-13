@@ -9,7 +9,7 @@ export default tseslint.config(
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	...(obsidianmd.configs.recommended as any[]),
 	{
-		files: ["src/**/*.ts"],
+		files: ["src/**/*.ts", "tests/**/*.ts"],
 		languageOptions: {
 			globals: {
 				...globals.browser,
@@ -47,10 +47,21 @@ export default tseslint.config(
 			"obsidianmd/prefer-instanceof": "off",
 		},
 	},
+	{
+		// Tests run in Node, never in Obsidian — `npm test` bundles them
+		// separately and nothing here reaches main.js. The mobile-availability
+		// rule is about shipped plugin code, so it is scoped off here rather
+		// than suppressed per-import (obsidianmd/* disables are blocked by
+		// eslint-comments/no-restricted-disable, and rightly so for src/).
+		files: ["tests/**/*.ts"],
+		rules: { "obsidianmd/no-nodejs-modules": "off" },
+	},
 	globalIgnores([
 		"node_modules",
 		"dist",
 		"scripts",
+		// Bundled test output (npm test) — generated, and a copy of tests/.
+		".test-out",
 		"esbuild.config.mjs",
 		"eslint.config.js",
 		"eslint.config.mts",

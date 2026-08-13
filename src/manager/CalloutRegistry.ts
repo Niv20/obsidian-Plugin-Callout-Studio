@@ -238,6 +238,9 @@ export function mergeSavedSettings(
 			enabled:
 				savedSettings.inlineCallouts?.enabled ??
 				DEFAULT_SETTINGS.inlineCallouts.enabled,
+			allowContent:
+				savedSettings.inlineCallouts?.allowContent ??
+				DEFAULT_SETTINGS.inlineCallouts.allowContent,
 		},
 		firstRunCompleted:
 			savedSettings.firstRunCompleted ??

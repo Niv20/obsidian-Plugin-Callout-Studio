@@ -367,7 +367,7 @@ export const DEFAULT_SETTINGS: PluginSettings = {
 		refShowIcon: true,
 		showFoldArrow: true,
 	},
-	inlineCallouts: { enabled: true },
+	inlineCallouts: { enabled: true, allowContent: true },
 	firstRunCompleted: false,
 	welcomeSeen: false,
 	fallbackCalloutId: "note",

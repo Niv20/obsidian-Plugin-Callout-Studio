@@ -56,6 +56,26 @@ export const CSS_TOKEN_ICON = "cs-callout-icon";
 export const CSS_TOKEN_NAME = "cs-callout-name";
 export const CSS_UNKNOWN = "cs-unknown";
 /**
+ * Modifier on an inline pill carrying `{…}` content (`[!warning]{be careful}`).
+ * The root keeps CSS_INLINE_TOKEN so every per-callout accent, background and
+ * gradient CSSInjector emits for `.cs-inline-callout[data-callout]` still lands,
+ * and so the context menu keeps resolving it; this class only turns off the
+ * plain pill's flex layout and nowrap, which a run of flowing markdown can't use.
+ */
+export const CSS_INLINE_HAS_CONTENT = "cs-inline-has-content";
+/**
+ * The icon opening a content pill — it stands in for the `[!id]{` the user
+ * typed. Its own element rather than a bare icon span because Live Preview
+ * builds it as a CodeMirror widget while reading view builds it inline, and one
+ * class keeps both looking the same.
+ *
+ * It carries no background and no corner radius: those belong to the pill box,
+ * which is a single unbroken element on both surfaces. Reading view builds that
+ * element directly; Live Preview replaces the whole `[!id]{…}` with one widget
+ * holding this same DOM, so nothing foreign can get inside it there either.
+ */
+export const CSS_CALLOUT_LEAD = "cs-callout-lead";
+/**
  * The fold chevron trailing a heading callout in Live Preview. Reading view
  * uses Obsidian's own `.heading-collapse-indicator` instead, so both surfaces
  * are tinted together (see CSSInjector's fold-arrow rules).
@@ -343,5 +363,67 @@ export function buildCalloutTokenDom(
 		root.appendChild(nameEl);
 	}
 
+	return root;
+}
+
+/**
+ * Class list for the root of a content pill (`[!warning]{be careful}`).
+ *
+ * Live Preview applies these to a CM6 mark and reading view to a real element,
+ * so both must be built here or the two surfaces drift apart.
+ */
+export function contentPillClasses(resolved: ResolvedCalloutDef): string[] {
+	const classes = [CSS_INLINE_TOKEN, CSS_INLINE_HAS_CONTENT];
+	if (resolved.unknown) classes.push(CSS_UNKNOWN);
+	return classes;
+}
+
+/**
+ * The icon that opens a content pill — it stands in for the `[!id]{` the user
+ * typed. No display name: the whole point of the payload is that it *is* the
+ * label, and repeating "Warning" before the author's own words reads as noise
+ * (see CSS_CALLOUT_LEAD for why it is a separate element at all).
+ */
+export function buildCalloutLeadDom(
+	rawId: string,
+	registry: CalloutRegistry,
+): HTMLElement {
+	const lead = createSpan();
+	lead.classList.add(CSS_CALLOUT_LEAD);
+	const iconEl = createSpan();
+	iconEl.classList.add(CSS_TOKEN_ICON);
+	lead.appendChild(iconEl);
+	const { def } = resolveCalloutDef(registry, rawId);
+	if (def) paintRoleIcon(iconEl, def, registry, "inline");
+	return lead;
+}
+
+/**
+ * Reading view's content pill, icon only:
+ * `<span class="cs-inline-callout cs-inline-has-content" data-callout="…">
+ *    <span class="cs-callout-lead">…icon…</span>
+ *  </span>`
+ *
+ * The caller appends the payload after the icon. Reading view appends the nodes
+ * Obsidian already rendered — moved, never re-rendered, which is what keeps the
+ * author's `**bold**`, links and code spans intact. Live Preview has only the
+ * raw source at that point, so it renders the payload itself
+ * (livepreview/contentPillRender.ts) into this same shape.
+ */
+export function buildContentPillDom(options: {
+	rawId: string;
+	metadata?: string;
+	registry: CalloutRegistry;
+}): HTMLElement {
+	const { rawId, metadata = "", registry } = options;
+	const resolved = resolveCalloutDef(registry, rawId);
+
+	const root = createSpan();
+	root.classList.add(...contentPillClasses(resolved));
+	if (startupEntranceActive) root.classList.add(CSS_ANIM_IN);
+	root.setAttribute("data-callout", calloutDomId(rawId, resolved));
+	if (metadata) root.setAttribute("data-callout-metadata", metadata);
+
+	root.appendChild(buildCalloutLeadDom(rawId, registry));
 	return root;
 }

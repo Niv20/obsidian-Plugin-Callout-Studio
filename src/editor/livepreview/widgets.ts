@@ -4,7 +4,9 @@
  * CalloutTokenWidget serves the inline callout, the in-heading token, and the
  * in-link ref token; its DOM comes from the shared builder
  * (renderShared.buildCalloutTokenDom), so Live Preview and reading view
- * render identically. HeadingRefLinkWidget replaces a whole title-less
+ * render identically. CalloutContentPillWidget replaces a whole content pill
+ * (`[!id]{…}`), payload included, which is what makes that pill a single
+ * indivisible element. HeadingRefLinkWidget replaces a whole title-less
  * reference link (`[[#[!id]]]`) with a link-styled icon + display name.
  * HeadingFoldArrowWidget is a separate end-of-line chevron for heading
  * callouts (when the core "Fold heading" setting is on) that trails the title
@@ -13,12 +15,12 @@
 import { WidgetType } from "@codemirror/view";
 import type { EditorView } from "@codemirror/view";
 import { EditorSelection } from "@codemirror/state";
-import { Keymap, setIcon } from "obsidian";
+import { Component, Keymap, setIcon } from "obsidian";
 import type { App } from "obsidian";
 import type { CalloutRegistry } from "../../manager/CalloutRegistry";
 import { iconRenderKey } from "../../icons/renderIcon";
 import { createIconResolver } from "../../icons/resolver";
-import { findWikilinkCalloutRefs } from "../calloutTokens";
+import { contentPayloadStart, findWikilinkCalloutRefs } from "../calloutTokens";
 import { t } from "../../i18n";
 import {
 	CSS_ANIM_IN,
@@ -27,12 +29,14 @@ import {
 	CSS_REF_LINK,
 	CSS_REF_TOKEN_LINK,
 	buildCalloutTokenDom,
+	buildContentPillDom,
 	isStartupEntranceActive,
 	VARIANT_ROLE,
 	resolveCalloutDef,
 	type CalloutTokenVariant,
 } from "../renderShared";
 import { resolveMarkdownView } from "../headingFold";
+import { renderPayloadInto } from "./contentPillRender";
 import { toggleHeadingFold } from "./fold";
 
 export class CalloutTokenWidget extends WidgetType {
@@ -201,6 +205,249 @@ export class CalloutTokenWidget extends WidgetType {
 	override ignoreEvent(): boolean {
 		// The editor never handles events on the token; right-clicks reach
 		// the document-level context-menu listener regardless.
+		return true;
+	}
+}
+
+/**
+ * The two spellings of "which text position is under this point", behind one
+ * name — declared locally on purpose.
+ *
+ * `caretPositionFromPoint` is the standard, and it only reached Safari in 17.4;
+ * `caretRangeFromPoint` is the older WebKit spelling every engine still answers,
+ * and it is formally deprecated. This plugin is not desktop-only, so it needs
+ * both: the standard where it exists, the old one everywhere else. Typing them
+ * here rather than reaching for the lib.dom declarations is what keeps the
+ * deprecated half from being a lint suppression.
+ */
+interface CaretPointDocument {
+	caretPositionFromPoint?: (
+		x: number,
+		y: number,
+	) => { offsetNode: Node; offset: number } | null;
+	caretRangeFromPoint?: (x: number, y: number) => Range | null;
+}
+
+/** The text position under a viewport point, or null when there is none. */
+function caretFromPoint(
+	doc: Document,
+	x: number,
+	y: number,
+): { node: Node; offset: number } | null {
+	const api = doc as unknown as CaretPointDocument;
+	const position = api.caretPositionFromPoint?.(x, y);
+	if (position) return { node: position.offsetNode, offset: position.offset };
+	const range = api.caretRangeFromPoint?.(x, y);
+	return range ? { node: range.startContainer, offset: range.startOffset } : null;
+}
+
+/**
+ * A whole content pill (`[!warning]{be careful}`) in Live Preview: the token,
+ * the braces and the payload, all replaced by one widget.
+ *
+ * It is one widget rather than a mark around live document text, and that is the
+ * entire point. A mark's box is only a single DOM element for as long as
+ * CodeMirror never has to split it around someone else's decoration — and inside
+ * a pill it always does, because Obsidian decorates the payload's own markdown
+ * (`**bold**`, backticks, links) from its own decoration set and styles inline
+ * code as a chip with its own background and rounded caps. Two rounds of
+ * precedence tuning did not make that reliable. A replace decoration ends the
+ * question: `SpanCursor.next` skips every decoration that ends inside a replaced
+ * range, so nothing foreign can reach in and the pill is indivisible by
+ * construction.
+ *
+ * The payload is rendered here instead (contentPillRender.ts), which is also
+ * what keeps this identical to reading view, where the pill is built by moving
+ * Obsidian's already-rendered nodes.
+ *
+ * The trade is that the payload is not editable in place — clicking reveals the
+ * raw `[!id]{…}` and edits happen there, exactly as a plain pill has always
+ * behaved.
+ */
+export class CalloutContentPillWidget extends WidgetType {
+	/** Snapshot for eq(); same strategy as CalloutTokenWidget.renderKey. */
+	private readonly renderKey: string;
+	/** Owns whatever the payload render registers; unloaded in destroy(). */
+	private component: Component | null = null;
+
+	constructor(
+		private readonly app: App,
+		private readonly rawId: string,
+		/** Raw `|metadata` for this occurrence; "" when the token carried none. */
+		private readonly metadata: string,
+		private readonly registry: CalloutRegistry,
+		/** Payload source, braces excluded — the markdown to render. */
+		private readonly payload: string,
+		/** Owning file, for link/embed resolution inside the payload. */
+		private readonly sourcePath: string,
+		/**
+		 * Width of the whole replaced span (`[!…]{…}`), so the click handler can
+		 * find the `[` from either edge of the replaced range. Must be the real
+		 * span: neither `rawId` nor `payload` implies it on their own.
+		 */
+		private readonly sourceLen: number,
+	) {
+		super();
+		const { def, unknown } = resolveCalloutDef(registry, rawId);
+		const iconKey = def
+			? iconRenderKey(def.icon, createIconResolver(registry), "inline")
+			: "";
+		this.renderKey = [
+			this.rawId,
+			this.metadata,
+			// The payload is rendered content, so it belongs in the key: without
+			// it, editing the text inside the braces would leave CodeMirror
+			// reusing a widget that still shows the old words.
+			this.payload,
+			// And the path, because the same payload resolves its links
+			// differently in a different note.
+			this.sourcePath,
+			String(this.sourceLen),
+			unknown ? "u" : "",
+			def?.id ?? "",
+			iconKey,
+			isStartupEntranceActive() ? "a" : "",
+		].join("|");
+	}
+
+	override eq(other: CalloutContentPillWidget): boolean {
+		return other.renderKey === this.renderKey;
+	}
+
+	override toDOM(view: EditorView): HTMLElement {
+		const el = buildContentPillDom({
+			rawId: this.rawId,
+			metadata: this.metadata,
+			registry: this.registry,
+		});
+		// CodeMirror's DOM from here on — keeps the CSSInjector icon sweep off it
+		// (see CSS_CM_WIDGET); CM rebuilds it on the refresh effect instead.
+		el.classList.add(CSS_CM_WIDGET);
+		// Obsidian styles rendered inline markup through a `.markdown-rendered`
+		// ANCESTOR (`.markdown-rendered code`, `… a`, `… mark`, app.css) — which
+		// reading view has and a CodeMirror widget does not. Without this the
+		// same payload would come out unstyled here and styled there. The class
+		// is the one this plugin's other MarkdownRenderer hosts already use
+		// (GlobalStyleModal's gap demo, LiveCalloutPreview's fallback), and the
+		// unwrap guard keeps block content out, so only inline rules can apply.
+		el.classList.add("markdown-rendered");
+
+		// A widget can be re-rendered without an intervening destroy(); never
+		// leave the previous render's registrations behind.
+		this.component?.unload();
+		const component = new Component();
+		component.load();
+		this.component = component;
+		renderPayloadInto(
+			this.app,
+			el,
+			this.payload,
+			this.sourcePath,
+			component,
+		);
+
+		// Clicking reveals the raw `[!id]{…}` for editing (the decoration is
+		// skipped while the selection touches the pill) and puts the caret on
+		// the character that was clicked — see clickOffset.
+		el.addEventListener("mousedown", (evt) => {
+			if (evt.button !== 0) return; // left click only; right-click → context menu
+			// A link in the payload is a real link: let Obsidian's own handler
+			// have the click rather than swallowing it to move the caret. The
+			// right-click path is guarded the same way (contextmenu/resolve.ts).
+			//
+			// Narrowed by nodeType rather than `instanceof Element`: in a pop-out
+			// window the nodes come from that window's constructors, so an
+			// instanceof against this one's silently answers false and the guard
+			// would quietly stop working there.
+			const node = evt.target as Node | null;
+			const target =
+				node?.nodeType === Node.ELEMENT_NODE
+					? (node as Element)
+					: (node?.parentElement ?? null);
+			if (target?.closest("a")) return;
+			evt.preventDefault(); // take over focus/selection ourselves
+			const from = this.resolveFrom(view, el);
+			view.dispatch({
+				selection: EditorSelection.cursor(
+					this.payloadStart(from) + this.clickOffset(el, evt),
+				),
+			});
+			view.focus();
+		});
+		return el;
+	}
+
+	/** Document offset of the payload's first character (see the shared formula). */
+	private payloadStart(from: number): number {
+		return contentPayloadStart(from, this.sourceLen, this.payload.length);
+	}
+
+	/**
+	 * Document offset of this pill's `[`.
+	 *
+	 * `posAtDOM` may report either edge of a replaced range, so the answer has
+	 * to be checked. Checking for a leading `[!` is not enough: two pills
+	 * written back to back (`[!warning]{a}[!warning]{b}`) put a `[!` right after
+	 * the first one, so an end-edge resolution reads as a start and the caret
+	 * lands in the neighbouring pill. The payload is what actually identifies
+	 * THIS pill, so that is what gets tested.
+	 */
+	private resolveFrom(view: EditorView, el: HTMLElement): number {
+		const pos = view.posAtDOM(el);
+		const doc = view.state.doc;
+		const start = this.payloadStart(pos);
+		const payloadAt =
+			doc.sliceString(start, start + this.payload.length) === this.payload;
+		return payloadAt ? pos : pos - this.sourceLen;
+	}
+
+	/**
+	 * How many characters into the payload the click landed.
+	 *
+	 * Answerable exactly only while the rendered payload is character-for-
+	 * character its source — which is to say, while the payload holds no
+	 * markdown. `**bold**` renders four characters shorter than it is written,
+	 * and recovering that mapping would mean diffing source against rendered
+	 * text on every click; the payload's start is the honest answer there, and
+	 * still far better than the old "caret after `[!`". A click on the icon
+	 * lands here as 0 for the same reason — it is not a text position at all.
+	 *
+	 * Everything is inside one try: a click that resolves to a node outside the
+	 * widget (the pill's own padding, a hit-test near its edge) can then only
+	 * ever degrade to the payload start.
+	 */
+	private clickOffset(el: HTMLElement, evt: MouseEvent): number {
+		const lead = el.firstElementChild;
+		if (!lead) return 0;
+		const doc = el.ownerDocument;
+		try {
+			const body = doc.createRange();
+			body.selectNodeContents(el);
+			body.setStartAfter(lead);
+			if (body.toString() !== this.payload) return 0;
+
+			const caret = caretFromPoint(doc, evt.clientX, evt.clientY);
+			if (!caret) return 0;
+			const upto = doc.createRange();
+			upto.selectNodeContents(el);
+			upto.setStartAfter(lead);
+			// An end BEFORE the start collapses the range, so a click on the
+			// icon measures as an empty string rather than throwing.
+			upto.setEnd(caret.node, caret.offset);
+			return Math.min(upto.toString().length, this.payload.length);
+		} catch {
+			return 0;
+		}
+	}
+
+	override destroy(): void {
+		this.component?.unload();
+		this.component = null;
+	}
+
+	override ignoreEvent(): boolean {
+		// CodeMirror never handles events on the widget. They still reach the
+		// document, which is where Obsidian's link handling lives.
 		return true;
 	}
 }

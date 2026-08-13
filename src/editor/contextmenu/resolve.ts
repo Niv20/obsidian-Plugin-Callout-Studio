@@ -119,6 +119,13 @@ function resolveInlinePillContext(
 ): ResolvedCalloutContext | null {
 	const pill = targetEl.closest(`.${CSS_INLINE_TOKEN}[data-callout]`);
 	if (!pill) return null;
+	// A content pill (`[!warning]{see [docs](url)}`) holds the user's own
+	// markdown, links included. This resolver runs first, so without the guard a
+	// right-click on such a link would open the callout menu instead of
+	// Obsidian's link menu. The pill's own chrome and plain text still resolve.
+	if (targetEl.closest("a") && pill.contains(targetEl.closest("a"))) {
+		return null;
+	}
 	const id = normalizeCalloutId(pill.getAttribute("data-callout") ?? "");
 	if (!id) return null;
 

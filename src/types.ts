@@ -452,6 +452,24 @@ export interface HeadingCalloutSettings extends RoleToggleSettings {
 }
 
 /**
+ * Inline-callout role settings. Inert while `enabled` is false.
+ */
+export interface InlineCalloutSettings extends RoleToggleSettings {
+	/**
+	 * Render `[!id]{text}` as a pill whose label is `text` (the callout's own
+	 * display name is dropped when content is present).
+	 *
+	 * Off restores the pre-2.9 reading of that line exactly: `[!id]` is a plain
+	 * pill and the `{text}` stays literal markdown. Kept as a real switch rather
+	 * than hard-wired because the brace syntax claims a character sequence a
+	 * vault may already use for something else — and because it changes what an
+	 * existing note renders as. No settings UI (matching `enabled` itself);
+	 * flip it in `data.json`.
+	 */
+	allowContent: boolean;
+}
+
+/**
  * Identifiers for the right-click menu entries. `foldDefaults` covers the
  * whole open/closed/normal fold-default group as one toggleable unit; the
  * `*Section` items operate on an entire heading section (heading line +
@@ -599,7 +617,7 @@ export interface PluginSettings {
 	/** Heading callouts (`## [!name]`) — optional role, can be disabled. */
 	headingCallouts: HeadingCalloutSettings;
 	/** Inline callouts (`[!name]` mid-line) — optional role, can be disabled. */
-	inlineCallouts: RoleToggleSettings;
+	inlineCallouts: InlineCalloutSettings;
 	/** Has the first-run vault scan been completed? */
 	firstRunCompleted?: boolean;
 	/** Has the welcome/splash screen been shown at least once? */

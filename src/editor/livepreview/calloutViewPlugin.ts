@@ -13,7 +13,9 @@
  *   their frame during editing) + a replace widget over the `[!id]` token
  *   when the caret is elsewhere.
  * - Inline token  → replace widget (pill) unless the selection touches it,
- *   in which case the raw text is revealed for editing.
+ *   in which case the raw text is revealed for editing. A pill carrying a
+ *   `{…}` payload is replaced WHOLE, payload included, which is what keeps it a
+ *   single indivisible element (see CalloutContentPillWidget).
  * - Native `> [!id]` headers, code, math and frontmatter are never touched.
  *
  * Active in Live Preview only (source mode shows raw markdown, matching how
@@ -34,7 +36,9 @@ import type { PluginSettings } from "../../types";
 import type { CalloutRegistry } from "../../manager/CalloutRegistry";
 import {
 	findWikilinkCalloutRefs,
+	nestedInlineTokens,
 	scanLineForCalloutTokens,
+	tokenEnd,
 } from "../calloutTokens";
 import {
 	CSS_HEADING_HIDE_MARKS,
@@ -45,8 +49,9 @@ import {
 	resolveCalloutDef,
 	shouldRenderToken,
 } from "../renderShared";
-import { isHeadingFoldEnabled } from "../headingFold";
+import { isHeadingFoldEnabled, resolveMarkdownView } from "../headingFold";
 import {
+	CalloutContentPillWidget,
 	CalloutTokenWidget,
 	HeadingFoldArrowWidget,
 	HeadingRefLinkWidget,
@@ -76,7 +81,7 @@ function isSpaceAt(text: string, i: number): boolean {
 }
 
 export function createCalloutViewPlugin(host: LivePreviewHost) {
-	return ViewPlugin.fromClass(
+	const plugin = ViewPlugin.fromClass(
 		class {
 			decorations: DecorationSet;
 			/**
@@ -239,6 +244,7 @@ export function createCalloutViewPlugin(host: LivePreviewHost) {
 		},
 		{ decorations: (v) => v.decorations },
 	);
+	return plugin;
 }
 
 function buildDecorations(
@@ -262,6 +268,16 @@ function buildDecorations(
 	const builder = new RangeSetBuilder<Decoration>();
 	const doc = view.state.doc;
 	const tree = syntaxTree(view.state);
+
+	// Owning file, for resolving links and embeds inside a content pill's
+	// payload. Resolved once per rebuild rather than per pill (it walks the open
+	// markdown leaves), and "" is a fine answer: an unowned editor — a settings
+	// preview, a detached sub-editor — just resolves links relative to the vault
+	// root, which is what reading view does there too.
+	const contentSourcePath =
+		inlineEnabled && host.settings.inlineCallouts.allowContent
+			? (resolveMarkdownView(host.app, view)?.file?.path ?? "")
+			: "";
 
 	// Heading fold state: only relevant when heading callouts render, the user
 	// wants our trailing chevron, AND the core "Fold heading" setting is on
@@ -309,6 +325,7 @@ function buildDecorations(
 					inlineEnabled,
 					foldEnabled,
 					foldedLines,
+					contentSourcePath,
 				);
 			}
 			pos = line.to + 1;
@@ -331,11 +348,18 @@ function decorateLine(
 	inlineEnabled: boolean,
 	foldEnabled: boolean,
 	foldedLines: ReadonlySet<number>,
+	/** Owning file path, for links inside a content pill's payload. */
+	contentSourcePath: string,
 ): void {
 	// Skip whole lines inside fenced code / frontmatter.
 	if (SKIP_NODE_RE.test(tree.resolveInner(lineFrom, 1).name)) return;
 
-	const tokens = scanLineForCalloutTokens(lineText);
+	const tokens = scanLineForCalloutTokens(lineText, {
+		inlineContent: host.settings.inlineCallouts.allowContent,
+	});
+	// Tokens sitting inside another token's payload; skipped below (see
+	// nestedInlineTokens for why the scanner still reports them).
+	const nested = nestedInlineTokens(tokens);
 	// Heading-callout refs inside wikilinks (`[[#[!id] Title]]`): never
 	// callouts, but their token is hidden (optionally behind the callout's
 	// icon) so the displayed link reads `#Title`.
@@ -473,13 +497,53 @@ function decorateLine(
 
 		// Inline pill.
 		if (!inlineEnabled) continue;
-		if (selectionTouches(from, to)) continue;
+		// A payload the user has not finished typing (`[!warning]{…`): the token
+		// is still reported so counters and discovery see it, but flashing a
+		// pill in front of half-written text would be noise.
+		if (token.contentOpen) continue;
+		// A token inside another token's payload. Refused here rather than in
+		// the scanner, which must keep reporting it so this surface and reading
+		// view agree on the token list (see scanLineForCalloutTokens).
+		if (nested.has(token)) continue;
+
+		const end = lineFrom + tokenEnd(token);
 		// Per-token guard for constructs the line-level check can't see
 		// (inline code via multi-backtick spans, inline math, …).
 		if (SKIP_NODE_RE.test(tree.resolveInner(from + 1, 0).name)) continue;
+
+		// Both kinds of pill reveal their raw source whole while the selection
+		// touches them — that is the only editing affordance either one has.
+		if (selectionTouches(from, end)) continue;
+
+		// Content pill: the token, the braces and the payload, all replaced by
+		// ONE widget, which is what makes it a single indivisible element (see
+		// CalloutContentPillWidget for why a mark around live document text
+		// cannot be).
+		//
+		// Empty content takes the plain path below instead: a pill with nothing
+		// to render is just the token, and the plain widget draws that better.
+		if (token.content && token.content.to > token.content.from + 2) {
+			midLine.push({
+				from,
+				to: end,
+				deco: Decoration.replace({
+					widget: new CalloutContentPillWidget(
+						host.app,
+						token.rawId,
+						token.metadata,
+						host.registry,
+						token.content.text,
+						contentSourcePath,
+						end - from,
+					),
+				}),
+			});
+			continue;
+		}
+
 		midLine.push({
 			from,
-			to,
+			to: end,
 			deco: Decoration.replace({
 				widget: new CalloutTokenWidget(
 					host.app,
@@ -488,7 +552,7 @@ function decorateLine(
 					"inline",
 					true,
 					token.metadata,
-					token.to - token.from,
+					end - from,
 				),
 			}),
 		});
@@ -582,8 +646,11 @@ function decorateLine(
 	}
 
 	// startSide breaks `from` ties: a mark and a replace can legally open at the
-	// same offset (`## [!info][!tip] …`), and RangeSetBuilder rejects them in
-	// the wrong order — a non-inclusive replace opens before a mark.
+	// same offset — a heading title mark right after its token widget on
+	// `## [!info][!tip] …`. This comparator is deliberately the exact key
+	// RangeSetBuilder.addInner throws on, so a tie can never be an error, and the
+	// order it produces is the one the title mark needs: a non-inclusive mark
+	// (startSide 500000000) sorts AFTER a replace (499999999).
 	midLine.sort((a, b) => a.from - b.from || a.deco.startSide - b.deco.startSide);
 	for (const r of midLine) builder.add(r.from, r.to, r.deco);
 

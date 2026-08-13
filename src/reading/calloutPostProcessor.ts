@@ -30,8 +30,13 @@ import {
 	parseHeadingRefDisplayText,
 	scanLineForCalloutTokens,
 	stripInlineCode,
+	tokenEnd,
 } from "../editor/calloutTokens";
 import { splitCalloutMetadata } from "../utils/calloutId";
+import {
+	matchContentParts,
+	type ContentPart,
+} from "../editor/inlineContent";
 import {
 	CSS_ANIM_IN,
 	CSS_HEADING_LINE,
@@ -43,6 +48,7 @@ import {
 	CSS_TOKEN_NAME,
 	CSS_UNKNOWN,
 	buildCalloutTokenDom,
+	buildContentPillDom,
 	isStartupEntranceActive,
 	calloutDomId,
 	resolveCalloutDef,
@@ -55,6 +61,35 @@ export interface ReadingRenderHost {
 	registry: CalloutRegistry;
 	settings: PluginSettings;
 }
+
+/**
+ * Subtrees whose braces do not count while matching a `{…}` payload.
+ *
+ * This list is a parity contract with Live Preview, which counts braces on
+ * `blankInlineMath(stripWikilinks(stripInlineCode(line)))` — so exactly the
+ * constructs blanked there must be skipped here, or the two surfaces close a
+ * payload at different places. In particular `a.internal-link` is opaque
+ * because `stripWikilinks` blanks the whole `[[…]]`, while a plain
+ * `[a}b](url)` renders as `a.external-link` and is deliberately NOT opaque —
+ * Live Preview counts that `}` too.
+ */
+const CONTENT_OPAQUE_SELECTOR = [
+	"code",
+	"pre",
+	".math",
+	"a.internal-link",
+	".internal-embed",
+	".image-embed",
+	`.${CSS_INLINE_TOKEN}`,
+].join(", ");
+
+/**
+ * Elements that end the search outright. A `<br>` is a soft line break, and
+ * Live Preview scans one line at a time — so a payload could never span one
+ * there. The block-level entries are belt and braces for embeds that render
+ * something structural inside a paragraph.
+ */
+const CONTENT_STOP_SELECTOR = "br, p, div, blockquote, table, ul, ol, li";
 
 /** Elements whose text must never be turned into pills. */
 const PILL_EXCLUDE_SELECTOR = [
@@ -109,7 +144,13 @@ export function createCalloutReadingPostProcessor(
 			transformHeadingRefLinks(el, host);
 		}
 		if (inlineEnabled) {
-			transformInlinePills(el, host, getSectionLines);
+			// Content pills first: they absorb whole runs of already-rendered
+			// nodes, and PILL_EXCLUDE_SELECTOR then keeps the plain-pill pass
+			// out of everything they swallowed.
+			const contentPills = host.settings.inlineCallouts.allowContent
+				? transformContentPills(el, host)
+				: 0;
+			transformInlinePills(el, host, getSectionLines, contentPills > 0);
 		}
 	};
 }
@@ -367,6 +408,208 @@ function isHeadingLeadingTextNode(node: Text): boolean {
 	return findLeadingTextNode(h) === node;
 }
 
+/** Where a `{…}` payload closes: the text node holding `}`, and its offset. */
+interface ContentEnd {
+	node: Text;
+	/** Offset of the closing `}` within that node. */
+	offset: number;
+}
+
+/**
+ * Find where an inline callout's `{…}` payload closes, starting at the `{` in
+ * `startNode`.
+ *
+ * Text-node splitting alone cannot do this: by the time this post-processor
+ * runs, `[!warning]{a **b** c}` has already been rendered into three siblings —
+ * `"…[!warning]{a "`, `<strong>b</strong>`, `" c}"` — so the closing brace is
+ * simply not in the node the payload opened in. The walk therefore advances
+ * over following siblings, counting depth.
+ *
+ * It is deliberately strict about shape, and returns null rather than guess:
+ *
+ * - The search never leaves the opening node's parent, and the closing `}` must
+ *   be in a DIRECT child text node of that parent. Braces inside a nested
+ *   element still *count* (Live Preview counts them), but a payload that would
+ *   close inside one is interleaved markup — `**[!a]{bold** text}` — and stays
+ *   literal text instead of being torn apart.
+ * - Opaque subtrees contribute nothing, and stop elements abort (see the two
+ *   selectors above).
+ */
+function findContentEnd(startNode: Text, startOffset: number): ContentEnd | null {
+	if (!startNode.parentNode) return null;
+
+	// Flatten the sibling run into segments the pure matcher understands, and
+	// keep the Text node behind each closable segment so a hit can be mapped
+	// back to the DOM. Only direct-child text nodes are closable: a payload
+	// ending inside a nested element is interleaved markup we refuse to wrap.
+	const parts: ContentPart[] = [{ text: startNode.data }];
+	const nodes: Array<Text | null> = [startNode];
+
+	for (let cur = startNode.nextSibling; cur; cur = cur.nextSibling) {
+		if (cur.nodeType === Node.TEXT_NODE) {
+			parts.push({ text: (cur as Text).data });
+			nodes.push(cur as Text);
+			continue;
+		}
+		if (cur.nodeType !== Node.ELEMENT_NODE) continue;
+		const el = cur as Element;
+		if (el.matches(CONTENT_STOP_SELECTOR)) {
+			parts.push({ text: "", stop: true });
+			nodes.push(null);
+			break;
+		}
+		if (el.matches(CONTENT_OPAQUE_SELECTOR)) {
+			parts.push({ text: "", opaque: true });
+			nodes.push(null);
+			continue;
+		}
+		// Nested inline markup (bold, italic, external links, …): its braces
+		// count, but closing inside it refuses the match.
+		const inner = el.ownerDocument.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+		for (let n = inner.nextNode(); n !== null; n = inner.nextNode()) {
+			const opaque =
+				(n.parentElement as Element | null)?.closest(
+					CONTENT_OPAQUE_SELECTOR,
+				) !== null;
+			parts.push({ text: (n as Text).data, nested: true, opaque });
+			nodes.push(null);
+		}
+	}
+
+	const hit = matchContentParts(parts, 0, startOffset);
+	const node = hit ? nodes[hit.part] : null;
+	return node ? { node, offset: hit!.offset } : null;
+}
+
+/**
+ * Turn one matched payload into a pill: split the text nodes at the `[` and the
+ * `}`, insert the pill shell, and MOVE every node between the two into it.
+ *
+ * Moving rather than re-rendering is the point — `<strong>`, `<code>` and
+ * `<a>` produced by Obsidian's own renderer arrive intact, so the payload keeps
+ * normal inline Markdown for free.
+ */
+function spliceContentPill(
+	host: ReadingRenderHost,
+	openNode: Text,
+	tokenFrom: number,
+	braceOffset: number,
+	end: ContentEnd,
+	rawId: string,
+	metadata: string,
+): void {
+	// Identity, before any split: splitText keeps the original node as the head
+	// and returns a new tail, so `end.node === openNode` only reads true here.
+	const sameNode = end.node === openNode;
+	// Right-to-left: cutting after the `}` first leaves the `[` offset valid
+	// when both land in the same node.
+	end.node.splitText(end.offset + 1);
+	// `openNode` keeps the text before `[`; `body` starts at `[`.
+	const body = openNode.splitText(tokenFrom);
+	// Drop `[!id]{` — the lead cap stands in for it. When the payload closed in
+	// this same node, the split above moved the tail into `body` as well.
+	const firstContent = body.splitText(braceOffset - tokenFrom + 1);
+	const lastContent = sameNode ? firstContent : end.node;
+	body.remove();
+
+	const root = buildContentPillDom({
+		rawId,
+		metadata,
+		registry: host.registry,
+	});
+	firstContent.parentNode?.insertBefore(root, firstContent);
+
+	// Move [firstContent … lastContent] inside, after the icon.
+	for (let cur: Node | null = firstContent; cur; ) {
+		const next: Node | null = cur === lastContent ? null : cur.nextSibling;
+		root.appendChild(cur);
+		cur = next;
+	}
+	// The closing `}` is the last character of the last moved node; drop it.
+	const closer = root.lastChild;
+	if (closer && closer.nodeType === Node.TEXT_NODE) {
+		const text = closer as Text;
+		if (text.data.endsWith("}")) text.data = text.data.slice(0, -1);
+		if (text.data === "") text.remove();
+	}
+}
+
+/**
+ * Pass A — content pills (`[!warning]{be careful}`).
+ *
+ * Runs before the plain-pill pass and restarts its walk after every splice:
+ * moving nodes invalidates any positions taken before it, and re-deriving is
+ * far easier to trust than patching offsets. Bounded by the number of content
+ * pills in one rendered block, so the repetition costs nothing real.
+ *
+ * Returns how many pills it built, so the plain-pill pass can tell whether its
+ * escape pairing is still trustworthy.
+ */
+function transformContentPills(el: HTMLElement, host: ReadingRenderHost): number {
+	const doc = el.ownerDocument;
+	let built = 0;
+
+	for (let guard = 0; guard < 256; guard++) {
+		const walker = doc.createTreeWalker(el, NodeFilter.SHOW_TEXT, {
+			acceptNode: (node) => {
+				if ((node.textContent ?? "").indexOf("[!") === -1)
+					return NodeFilter.FILTER_REJECT;
+				const parent = node.parentElement;
+				if (!parent || parent.closest(PILL_EXCLUDE_SELECTOR))
+					return NodeFilter.FILTER_REJECT;
+				return NodeFilter.FILTER_ACCEPT;
+			},
+		});
+
+		let spliced = false;
+		for (let node = walker.nextNode(); node !== null; node = walker.nextNode()) {
+			const text = node as Text;
+			const tokens = scanLineForCalloutTokens(text.data);
+			for (const token of tokens) {
+				if (token.role !== "inline") continue;
+				// The payload may be closed inside this node (`content`) or run
+				// past its end into rendered siblings (`contentOpen`) — both are
+				// candidates; only the walk can tell them apart.
+				if (!token.content && !token.contentOpen) continue;
+				const braceOffset = token.to;
+				if (text.data[braceOffset] !== "{") continue;
+				// Empty payload: nothing to move, so the plain pill widened over
+				// the braces renders it better. Left to pass B.
+				if (token.content && token.content.to === token.content.from + 2) {
+					continue;
+				}
+				if (
+					token.from === 0 &&
+					host.settings.headingCallouts.enabled &&
+					isHeadingLeadingTextNode(text)
+				) {
+					continue;
+				}
+				if (!shouldRenderToken(resolveCalloutDef(host.registry, token.rawId))) {
+					continue;
+				}
+				const end = findContentEnd(text, braceOffset);
+				if (!end) continue;
+				spliceContentPill(
+					host,
+					text,
+					token.from,
+					braceOffset,
+					end,
+					token.rawId,
+					token.metadata,
+				);
+				built++;
+				spliced = true;
+				break;
+			}
+			if (spliced) break;
+		}
+		if (!spliced) break;
+	}
+	return built;
+}
+
 /** A pill candidate found in the rendered DOM. */
 interface PillCandidate {
 	node: Text;
@@ -385,6 +628,15 @@ function transformInlinePills(
 	el: HTMLElement,
 	host: ReadingRenderHost,
 	getSectionLines: () => string[] | null,
+	/**
+	 * True when pass A already turned some tokens into content pills. Those are
+	 * gone from the plain text this pass walks, so the ordinal escape pairing —
+	 * which assumes the i-th candidate here is the i-th visible `[!` in the
+	 * source — can no longer line up. It degrades to "render everything", which
+	 * is the same safety valve resolveEscapedCandidates already uses when the
+	 * counts disagree.
+	 */
+	skipEscapePairing: boolean,
 ): void {
 	const doc = el.ownerDocument;
 	const walker = doc.createTreeWalker(el, NodeFilter.SHOW_TEXT, {
@@ -409,7 +661,9 @@ function transformInlinePills(
 		const text = node.textContent ?? "";
 		// Rendered text is never a blockquote/heading source line, so every
 		// token the shared classifier finds here is an inline candidate.
-		for (const token of scanLineForCalloutTokens(text)) {
+		for (const token of scanLineForCalloutTokens(text, {
+			inlineContent: host.settings.inlineCallouts.allowContent,
+		})) {
 			if (token.role !== "inline") continue;
 			if (
 				token.from === 0 &&
@@ -418,10 +672,22 @@ function transformInlinePills(
 			) {
 				continue;
 			}
+			// A payload still being typed renders nothing at all, matching Live
+			// Preview — a pill in front of half-written text is noise.
+			if (token.contentOpen) continue;
+			// A non-empty payload belongs to pass A. Reaching here means its
+			// walk refused the shape (interleaved markup, a `<br>`, a block
+			// element); rendering a plain pill widened over the braces would
+			// swallow the author's own words, so leave the raw text alone.
+			if (token.content && token.content.to > token.content.from + 2) {
+				continue;
+			}
+			// What's left is a plain pill — widened over an empty `{}` when the
+			// author wrote one, so the braces don't survive as stray text.
 			candidates.push({
 				node: node as Text,
 				from: token.from,
-				to: token.to,
+				to: tokenEnd(token),
 				rawId: token.rawId,
 				metadata: token.metadata,
 			});
@@ -431,7 +697,9 @@ function transformInlinePills(
 
 	// Escape handling: only when the source really contains `\[!` do we pay
 	// for the pairing pass; otherwise every candidate is a real token.
-	const escaped = resolveEscapedCandidates(candidates.length, getSectionLines);
+	const escaped = skipEscapePairing
+		? new Array<boolean>(candidates.length).fill(false)
+		: resolveEscapedCandidates(candidates.length, getSectionLines);
 
 	// Replace per node in reverse order so earlier offsets stay valid.
 	for (let i = candidates.length - 1; i >= 0; i--) {

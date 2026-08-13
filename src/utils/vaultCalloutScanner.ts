@@ -25,7 +25,9 @@ import type { LineCalloutToken } from "../editor/calloutTokens";
 import {
 	createDocumentLineFilter,
 	forEachCalloutToken,
+	nestedInlineTokens,
 	scanLineForCalloutTokens,
+	tokenEnd,
 } from "../editor/calloutTokens";
 
 function escapeRegex(str: string): string {
@@ -339,16 +341,32 @@ export async function convertCalloutsToPlainTextInVault(
 
 			// Not a block callout header we own → heading and inline tokens.
 			if (line.indexOf("[!") !== -1) {
+				const lineTokens = scanLineForCalloutTokens(line);
+				// A token inside another's `{…}` payload is rewritten by the
+				// outer token's own edit. Letting it match too would splice the
+				// same characters twice (rewriteTokensOnLine works
+				// right-to-left over overlapping ranges).
+				const nested = nestedInlineTokens(lineTokens);
 				const result = rewriteTokensOnLine(
 					line,
-					scanLineForCalloutTokens(line),
+					lineTokens,
 					(token) => {
 						if (token.role === "regular") return null;
+						if (nested.has(token)) return null;
 						if (!idSet.has(normalizeCalloutId(token.rawId))) {
 							return null;
 						}
 						if (token.role === "inline") {
-							return { text: name, end: token.to };
+							// A content pill's payload is the user's own prose —
+							// keep it, prefixed by the callout name so the note
+							// still reads as "Warning: be careful" once the
+							// plugin's syntax is gone. Widened past the braces so
+							// no orphaned `{…}` is left behind.
+							const content = token.content?.text.trim();
+							return {
+								text: content ? `${name}: ${content}` : name,
+								end: tokenEnd(token),
+							};
 						}
 						// Heading: swallow the whitespace after the token and
 						// let the heading's own title stand — falling back to

@@ -31,6 +31,7 @@ import { CalloutAutoComplete } from "./editor/AutoComplete";
 import { LinkSuggestDecorator } from "./editor/LinkSuggestDecorator";
 import { registerContextMenu } from "./editor/contextmenu";
 import { createCalloutViewPlugin } from "./editor/livepreview/calloutViewPlugin";
+import { clearContentPillCache } from "./editor/livepreview/contentPillRender";
 import { createHeadingGapField } from "./editor/livepreview/headingGapField";
 import { beginStartupEntranceWindow } from "./editor/renderShared";
 import { refreshAllCalloutEditors } from "./editor/livepreview/refresh";
@@ -330,6 +331,7 @@ export default class CalloutStudioPlugin extends Plugin {
 		this.discovery?.destroy();
 		this.cssInjector?.destroy();
 		clearMaterialFontStore();
+		clearContentPillCache();
 	}
 
 	async saveSettings(): Promise<void> {
@@ -345,6 +347,10 @@ export default class CalloutStudioPlugin extends Plugin {
 		// second explicit trigger here would only re-enter our own listener
 		// and run the whole pass again.
 		this.cssInjector.inject();
+		// A content pill's payload is rendered markdown and can itself hold a
+		// callout token, so a registry edit can change what a cached payload
+		// should look like. Dropped before the rebuild below re-renders them.
+		clearContentPillCache();
 		// Rebuild Live Preview heading/inline decorations: registry changes
 		// don't touch the document, so CodeMirror won't rebuild them itself.
 		refreshAllCalloutEditors();

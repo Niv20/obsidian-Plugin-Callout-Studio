@@ -3737,6 +3737,12 @@ input.cs-input-invalid:focus {
 
 /* Inline pill: icon + display name at body-text scale. */
 .cs-inline-callout {
+	/* How much smaller a pill reads than the body text around it. A variable
+	   rather than a literal because the content pill below has to UNDO it for
+	   the payload and RE-APPLY it to the icon, and those three numbers drifting
+	   apart is exactly what makes one pill's icon a different size from the
+	   next one's. */
+	--cs-inline-shrink: 0.9;
 	display: inline-flex;
 	align-items: center;
 	gap: 0.3em;
@@ -3744,9 +3750,9 @@ input.cs-input-invalid:focus {
 	/* Corner rounding is user-tunable (Callout types → Inline → Global
 	   callout style); the fallback keeps the classic full-pill shape. */
 	border-radius: var(--cs-inline-radius, 1em);
-	/* Base 0.9em pill text, multiplied by a user-tunable scale (Callout types →
+	/* Shrunken pill text, multiplied by a user-tunable scale (Callout types →
 	   Inline → Global callout style); the icon tracks it via its 1em sizing. */
-	font-size: calc(0.9em * var(--cs-inline-scale, 1));
+	font-size: calc(var(--cs-inline-shrink) * 1em * var(--cs-inline-scale, 1));
 	line-height: 1.4;
 	vertical-align: baseline;
 	background-color: color-mix(in oklch, var(--cs-accent, #086ddd) 12%, transparent);
@@ -3770,6 +3776,94 @@ input.cs-input-invalid:focus {
 .cs-inline-callout.cs-inline-callout {
 	color: var(--cs-accent, #086ddd);
 }
+
+/* Inline pill carrying `{…}` content: `[!warning]{be careful}`.
+   Same root class as the plain pill on purpose — that is what makes every
+   per-callout accent, background and gradient CSSInjector emits for
+   `.cs-inline-callout[data-callout]` land here too, with no injector change.
+   The accent `color` above is inherited deliberately: the payload reading in
+   the callout's own colour is what makes the pill read as a warning. Links
+   inside still set their own colour.
+
+   Four overrides, each load-bearing:
+   - `display: inline`. The plain pill is an inline-flex box holding an icon and
+     one word. This one holds flowing markdown, and in Live Preview the box is a
+     CodeMirror mark wrapping *editable document text* — a flex container there
+     breaks wrapping, baselines and caret placement.
+   - `white-space: normal`. The label is the author's prose and must wrap.
+   - `font-size` without the plain pill's 0.9 shrink, and `line-height: inherit`.
+     Both of the plain pill's values are right for a one-word badge and wrong
+     for a sentence: they render the author's prose smaller than the paragraph
+     it sits in, and a different line-height on an inline box changes that
+     line's height — which CodeMirror then has to measure and reconcile. The
+     user's inline-scale slider still applies.
+
+   Everything else — the tint, the padding, the corner radius — is inherited
+   from the plain pill unchanged, and that works because the box is a single
+   unbroken element on both surfaces: reading view builds it directly, and Live
+   Preview replaces the whole `[!id]{…}` with one widget, so no decoration of
+   Obsidian's can reach inside and cut it (see CalloutContentPillWidget). With
+   the default `box-decoration-break: slice`, a soft line wrap then rounds only
+   the true start and end, which is exactly what you want. */
+.cs-inline-callout.cs-inline-has-content {
+	display: inline;
+	white-space: normal;
+	font-size: calc(1em * var(--cs-inline-scale, 1));
+	line-height: inherit;
+}
+
+/* A code span inside a payload. Obsidian's own `code` chip is an OPAQUE
+   background plus a border and its own radius (`.markdown-rendered code`,
+   app.css), and an opaque box inside the pill's translucent tint reads as a
+   hole punched through it — the pill looks cut in two rather than holding a
+   code span. The monospace face, size and code color all stay; only the chip
+   that competes with the pill goes. Written at two classes so it also covers
+   the widget copy, which carries `markdown-rendered` itself. */
+.cs-inline-callout.cs-inline-has-content code {
+	background-color: transparent;
+	border-color: transparent;
+	padding-inline: 0.1em;
+}
+
+/* The icon standing in for `[!id]{`.
+
+   No background of its own, deliberately: it sits INSIDE the box, which already
+   paints the tint, and that tint is translucent — so re-declaring it here (even
+   as `background-color: inherit`) composites 12% over 12% and draws a visibly
+   darker rectangle behind the icon. Nothing about this element should paint. */
+.cs-callout-lead {
+	display: inline-flex;
+	align-items: center;
+	/* The icon is drawn at the PLAIN pill's size, not the payload's, and that
+	   is the whole of matching the two — there is no vertical nudge here and
+	   there must not be one.
+
+	   Both pills put their icon in the same place already: an inline-flex box
+	   takes its baseline from its first flex item (CSS Flexbox §8.5 — with
+	   `align-items: center` no item is baseline-aligned, so the FIRST item's own
+	   baseline is used), that item is the icon, and a replaced <svg>'s baseline
+	   is its bottom margin edge. So in both pills the icon's bottom edge sits
+	   exactly on the paragraph baseline; the plain pill's line-height and
+	   padding move its name, never its icon. What differed was size: the plain
+	   pill's 1em SVG is 0.9em of body text, while the content pill sets 1em so
+	   its PAYLOAD matches the paragraph, and the icon inherited that. Two icons
+	   sharing a bottom edge at different heights read as one sitting higher.
+
+	   No `* var(--cs-inline-scale)` in this calc: it is relative to the content
+	   pill's own font size, which already carries the scale. Per-callout nudges
+	   still belong to the icon-adjust sliders, which land on .cs-callout-icon
+	   (see CSSInjector.iconTransformSelector). */
+	font-size: calc(var(--cs-inline-shrink, 0.9) * 1em);
+	margin-inline-end: 0.3em;
+	vertical-align: baseline;
+	/* Hint that clicking drops the caret into the id, as on the plain pill. */
+	cursor: text;
+	unicode-bidi: isolate;
+}
+/* No icon rules needed here: the lead is a child of .cs-inline-callout on both
+   surfaces (in Live Preview it is built inside the widget's own pill root), so
+   the shared `.cs-inline-callout .cs-callout-icon` rules below already reach
+   it. */
 
 /* Heading callout bar: applied to the hN element (reading view) or the
    .cm-line (Live Preview). Font size is inherited from the heading itself,

@@ -48,6 +48,7 @@ import {
 	CSS_HEADING_LINE,
 	CSS_HEADING_TITLE,
 	CSS_HEADING_TOKEN,
+	CSS_CALLOUT_LEAD,
 	CSS_INLINE_TOKEN,
 	CSS_REF_TOKEN,
 	CSS_TOKEN_ICON,
@@ -1175,7 +1176,24 @@ export class CSSInjector {
 			case "heading":
 				return `.${CSS_HEADING_TOKEN}[data-callout="${id}"] > .${CSS_TOKEN_ICON}`;
 			case "inline":
-				return `.${CSS_INLINE_TOKEN}[data-callout="${id}"] > .${CSS_TOKEN_ICON}`;
+				// Two depths, spelled out rather than collapsed to a descendant
+				// combinator. A plain pill holds its icon directly; a content
+				// pill (`[!id]{…}`) holds it inside the lead that stands in for
+				// `[!id]{`, and without the second selector the user's inline
+				// icon adjustment silently skipped every content pill. A
+				// descendant combinator would cover both — and would also reach
+				// the icon of a pill NESTED in another pill's payload, applying
+				// the outer callout's offset to the inner callout's icon.
+				//
+				// Both land on .cs-callout-icon, never on the lead itself. The
+				// lead owns the content pill's icon SIZE (see .cs-callout-lead
+				// in styles.css), so keeping the two on separate elements means
+				// a per-callout offset can never be the thing that silently
+				// resizes the icon, or vice versa.
+				return (
+					`.${CSS_INLINE_TOKEN}[data-callout="${id}"] > .${CSS_TOKEN_ICON}, ` +
+					`.${CSS_INLINE_TOKEN}[data-callout="${id}"] > .${CSS_CALLOUT_LEAD} > .${CSS_TOKEN_ICON}`
+				);
 		}
 	}
 

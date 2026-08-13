@@ -26,6 +26,7 @@
  */
 import type { CalloutRenderRole } from "../types";
 import { splitCalloutMetadata, type CalloutIdParts } from "../utils/calloutId";
+import { blankInlineMath, matchInlineContent } from "./inlineContent";
 
 /**
  * Heading callout header: 1–6 hashes, at least one space/tab, then the token
@@ -232,6 +233,23 @@ export function parseOutlineHeadingText(
 	return makeOutlineToken(parts, body.slice(rawId.length), false);
 }
 
+/**
+ * The `{…}` payload of an inline callout (`[!warning]{important text}`).
+ * See editor/inlineContent.ts for the grammar.
+ */
+export interface InlineCalloutContent {
+	/** Offset of `{` within the line. Always equal to the token's `to`. */
+	from: number;
+	/** Offset just past the matching `}`. */
+	to: number;
+	/**
+	 * Text between the braces, sliced from the ORIGINAL line — not from the
+	 * blanked copy the braces were matched on, which would come back with
+	 * inline code, wikilinks and math replaced by runs of spaces.
+	 */
+	text: string;
+}
+
 /** One `[!name]` token found on a line, with its role and exact position. */
 export interface LineCalloutToken {
 	role: CalloutRenderRole;
@@ -252,6 +270,92 @@ export interface LineCalloutToken {
 	hasTitle: boolean;
 	/** Heading level 1–6 for heading tokens, 0 otherwise. */
 	headingLevel: number;
+	/**
+	 * Inline tokens only: the balanced `{…}` payload immediately after `]`.
+	 * Absent when the token carried none.
+	 *
+	 * `from`/`to` above deliberately keep spanning ONLY the `[!…]` bracket. Every
+	 * vault rewriter and offset consumer predates this field, so leaving them
+	 * alone is what makes an id rename rewrite the id and leave `{content}`
+	 * untouched, for free. Renderers that need the whole span use `tokenEnd()`.
+	 */
+	content?: InlineCalloutContent;
+	/**
+	 * Inline tokens only: a `{` followed `]` but never closed on this line.
+	 *
+	 * RENDERERS must skip such a token — that is a payload mid-typing, and
+	 * flashing a pill in front of it would be noise. Everything that COUNTS
+	 * tokens must still see it: the reading-view escape pairing matches rendered
+	 * candidates to source `[!` occurrences by ordinal position and desyncs if
+	 * either side drops one, vault statistics would silently change ("N uses in
+	 * M files"), and discovery would stop creating a row for an id typed with a
+	 * trailing brace. So the parser reports, and the renderers decide — the same
+	 * split `shouldRenderToken` already uses.
+	 */
+	contentOpen?: boolean;
+}
+
+/**
+ * End offset of everything a token owns on the line: the `[!…]` bracket plus its
+ * `{…}` payload when it has one.
+ *
+ * The counterpart to reading `token.to` directly, which is the bracket alone.
+ * Rendering and the plain-text rewriter want this one; id rewriting wants `to`.
+ */
+export function tokenEnd(token: LineCalloutToken): number {
+	return token.content ? token.content.to : token.to;
+}
+
+/**
+ * Offset of a content pill's payload — the first character the author wrote
+ * inside `{…}`.
+ *
+ * Stated as arithmetic over the token's own width rather than as
+ * `token.content.from + 1`, because the one caller that needs it does not have
+ * the token: Live Preview's content-pill widget resolves a click back to a
+ * document position from the width of the span it replaced. Shared so the
+ * formula has exactly one definition, and a test.
+ *
+ * Deriving `tokenLen` from the id instead is the mistake this guards: `rawId` is
+ * the callout type alone, so on `[!note|purple]{…}` an id-derived width is short
+ * by the metadata and every offset past it lands early. The trailing `- 1` is
+ * the closing `}`, which `tokenLen` includes and the payload does not.
+ */
+export function contentPayloadStart(
+	/** Offset of the token's `[`. */
+	tokenFrom: number,
+	/** Full width of `[!…]{…}` — see {@link tokenEnd}. */
+	tokenLen: number,
+	/** Length of the payload text, braces excluded. */
+	payloadLen: number,
+): number {
+	return tokenFrom + tokenLen - payloadLen - 1;
+}
+
+/**
+ * The tokens that sit inside another token's `{…}` payload.
+ *
+ * Nesting (`[!a]{outer [!b]{inner}}`) is not a supported syntax, but the scanner
+ * still reports the inner token — it has to, or Live Preview and reading view
+ * would work from different token lists and the reading-view escape pairing
+ * (which matches DOM candidates to source occurrences by ordinal) would desync.
+ * So the render surfaces filter with this instead, and the inner `[!b]{inner}`
+ * stays part of the outer pill's text.
+ */
+export function nestedInlineTokens(
+	tokens: readonly LineCalloutToken[],
+): Set<LineCalloutToken> {
+	const nested = new Set<LineCalloutToken>();
+	for (const outer of tokens) {
+		if (!outer.content) continue;
+		for (const inner of tokens) {
+			if (inner === outer) continue;
+			if (inner.from >= outer.content.from && inner.to <= outer.content.to) {
+				nested.add(inner);
+			}
+		}
+	}
+	return nested;
 }
 
 /**
@@ -289,6 +393,20 @@ export function stripWikilinks(line: string): string {
 	return out;
 }
 
+/** Options for {@link scanLineForCalloutTokens}. */
+export interface ScanLineOptions {
+	/**
+	 * Parse the `{…}` payload of an inline callout (default true).
+	 *
+	 * Pass `settings.inlineCallouts.allowContent` from the render surfaces and
+	 * the vault rewriters — the two places where the answer changes what the
+	 * user sees or what gets written to disk. Everything else (discovery,
+	 * statistics, the context menu) reads only `rawId`, which is identical
+	 * either way, so it keeps the default.
+	 */
+	inlineContent?: boolean;
+}
+
 /**
  * Scans one raw markdown line and returns every callout token on it, already
  * classified by role. Cheap for the common case: bails immediately when the
@@ -296,9 +414,25 @@ export function stripWikilinks(line: string): string {
  * multi-line context (fenced code blocks, frontmatter, math) — callers that
  * scan whole documents must skip those lines themselves.
  */
-export function scanLineForCalloutTokens(rawLine: string): LineCalloutToken[] {
+export function scanLineForCalloutTokens(
+	rawLine: string,
+	options: ScanLineOptions = {},
+): LineCalloutToken[] {
 	if (rawLine.indexOf("[!") === -1) return [];
 	const line = stripWikilinks(stripInlineCode(rawLine));
+	const parseContent = options.inlineContent !== false;
+	/**
+	 * The line the `{…}` matcher runs on. Math is blanked here and ONLY here:
+	 * reading view renders `$…$` into a `.math` element whose text the DOM walk
+	 * skips, so a brace inside math must not count on this side either. Widening
+	 * the token scan itself would change which `[!id]` tokens exist, which is
+	 * settled behavior. Built lazily — most lines have no `{` at all.
+	 */
+	let contentLine: string | null = null;
+	const contentScanLine = (): string => {
+		contentLine ??= blankInlineMath(line);
+		return contentLine;
+	};
 
 	// Native block callout header → single block token; the rest of the
 	// line is the callout's title, which Obsidian renders — no pills inside it.
@@ -375,7 +509,7 @@ export function scanLineForCalloutTokens(rawLine: string): LineCalloutToken[] {
 			searchFrom = close + 1;
 			continue;
 		}
-		tokens.push({
+		const token: LineCalloutToken = {
 			role: "inline",
 			rawId: parts.id,
 			metadata: parts.metadata,
@@ -384,7 +518,30 @@ export function scanLineForCalloutTokens(rawLine: string): LineCalloutToken[] {
 			to: close + 1,
 			hasTitle: false,
 			headingLevel: 0,
-		});
+		};
+		// `{…}` payload, when the role allows it. A `{` must sit directly on the
+		// `]` — `[!warning] {x}` is a plain pill and literal text, because prose
+		// uses braces freely and a looser rule would eat them.
+		if (parseContent) {
+			const match = matchInlineContent(contentScanLine(), close + 1);
+			if (match.kind === "content") {
+				token.content = {
+					from: match.from,
+					to: match.to,
+					// From rawLine, not the blanked copy: the payload's own
+					// inline code / wikilinks / math are real text.
+					text: rawLine.slice(match.from + 1, match.to - 1),
+				};
+			} else if (match.kind === "open") {
+				token.contentOpen = true;
+			}
+		}
+		tokens.push(token);
+		// Deliberately NOT `tokenEnd(token)`: a token inside another's payload
+		// must still be found here, or the reading-view escape pairing (which
+		// matches DOM candidates to source `[!` occurrences by ordinal) would
+		// see a different list than this one. Nesting is refused by the
+		// renderers instead.
 		searchFrom = close + 1;
 	}
 
