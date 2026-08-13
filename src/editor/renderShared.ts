@@ -58,9 +58,9 @@ export const CSS_TOKEN_NAME = "cs-callout-name";
  * A token that ended up with nothing to draw: a callout set to `hideIcon` whose
  * variant also shows no name (the ref token, and the content pill's lead, which
  * is nothing but an icon). The span still has to exist — callers insert it at a
- * known position and the accent rules key on `[data-callout]` — but it carries a
- * `gap` and a `margin-inline-end` that would show up as a stray space before the
- * text it precedes, so the class hides it outright.
+ * known position and the accent rules key on `[data-callout]` — but as a flex
+ * item it would still claim the container's `gap`, which reads as a stray space
+ * before the text it precedes, so the class takes it out of flow outright.
  */
 export const CSS_TOKEN_EMPTY = "cs-token-empty";
 export const CSS_UNKNOWN = "cs-unknown";
@@ -68,8 +68,12 @@ export const CSS_UNKNOWN = "cs-unknown";
  * Modifier on an inline pill carrying `{…}` content (`[!warning]{be careful}`).
  * The root keeps CSS_INLINE_TOKEN so every per-callout accent, background and
  * gradient CSSInjector emits for `.cs-inline-callout[data-callout]` still lands,
- * and so the context menu keeps resolving it; this class only turns off the
- * plain pill's flex layout and nowrap, which a run of flowing markdown can't use.
+ * and so the context menu keeps resolving it.
+ *
+ * The two pills are the SAME box — one inline-flex badge, the payload standing
+ * where the plain pill's display name stands — so this modifier is down to the
+ * two things a payload needs and a one-word name does not: a width ceiling, and
+ * permission to wrap inside (see styles.css).
  */
 export const CSS_INLINE_HAS_CONTENT = "cs-inline-has-content";
 /**
@@ -84,6 +88,19 @@ export const CSS_INLINE_HAS_CONTENT = "cs-inline-has-content";
  * holding this same DOM, so nothing foreign can get inside it there either.
  */
 export const CSS_CALLOUT_LEAD = "cs-callout-lead";
+/**
+ * Everything inside a content pill's braces, in one element.
+ *
+ * **This wrapper is load-bearing and must never be removed.** The pill is a flex
+ * container, and CSS Flexbox §4 wraps each contiguous run of child text in its
+ * OWN anonymous flex item — so appending the payload's nodes to the pill root
+ * would turn `text with **bold**` into three items, each taking the container's
+ * `gap`. That is precisely the "the pill looks split into pieces" bug, arriving
+ * by a new route. With the wrapper the pill is permanently two items, lead and
+ * payload, whatever markdown the payload holds, and the formatting inside it is
+ * back in an ordinary inline formatting context where flex never sees it.
+ */
+export const CSS_CALLOUT_PAYLOAD = "cs-callout-payload";
 /**
  * The fold chevron trailing a heading callout in Live Preview. Reading view
  * uses Obsidian's own `.heading-collapse-indicator` instead, so both surfaces
@@ -441,22 +458,27 @@ export function buildCalloutLeadDom(
 }
 
 /**
- * Reading view's content pill, icon only:
+ * The empty shell of a content pill:
  * `<span class="cs-inline-callout cs-inline-has-content" data-callout="…">
  *    <span class="cs-callout-lead">…icon…</span>
+ *    <span class="cs-callout-payload"></span>
  *  </span>`
  *
- * The caller appends the payload after the icon. Reading view appends the nodes
- * Obsidian already rendered — moved, never re-rendered, which is what keeps the
- * author's `**bold**`, links and code spans intact. Live Preview has only the
- * raw source at that point, so it renders the payload itself
- * (livepreview/contentPillRender.ts) into this same shape.
+ * Both surfaces fill `payload` themselves, and it is returned rather than left
+ * to be rediscovered by position — the lead is still there when the callout
+ * hides its icon (empty, and hidden by CSS_TOKEN_EMPTY), so "the last child" and
+ * "the second child" are not reliably the same element.
+ *
+ * Reading view moves in the nodes Obsidian already rendered — never re-rendered,
+ * which is what keeps the author's `**bold**`, links and code spans intact. Live
+ * Preview has only the raw source at that point, so it renders the payload
+ * itself (livepreview/contentPillRender.ts) into this same shape.
  */
 export function buildContentPillDom(options: {
 	rawId: string;
 	metadata?: string;
 	registry: CalloutRegistry;
-}): HTMLElement {
+}): { root: HTMLElement; payload: HTMLElement } {
 	const { rawId, metadata = "", registry } = options;
 	const resolved = resolveCalloutDef(registry, rawId);
 
@@ -467,5 +489,10 @@ export function buildContentPillDom(options: {
 	if (metadata) root.setAttribute("data-callout-metadata", metadata);
 
 	root.appendChild(buildCalloutLeadDom(rawId, registry));
-	return root;
+	// One element for the whole payload, always — see CSS_CALLOUT_PAYLOAD for
+	// why the pill breaks apart without it.
+	const payload = createSpan();
+	payload.classList.add(CSS_CALLOUT_PAYLOAD);
+	root.appendChild(payload);
+	return { root, payload };
 }

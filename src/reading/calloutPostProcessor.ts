@@ -512,21 +512,23 @@ function spliceContentPill(
 	const lastContent = sameNode ? firstContent : end.node;
 	body.remove();
 
-	const root = buildContentPillDom({
+	const { root, payload } = buildContentPillDom({
 		rawId,
 		metadata,
 		registry: host.registry,
 	});
 	firstContent.parentNode?.insertBefore(root, firstContent);
 
-	// Move [firstContent … lastContent] inside, after the icon.
+	// Move [firstContent … lastContent] into the payload element — never onto
+	// the pill root, which is a flex container and would give each run of text
+	// its own anonymous item (see CSS_CALLOUT_PAYLOAD).
 	for (let cur: Node | null = firstContent; cur; ) {
 		const next: Node | null = cur === lastContent ? null : cur.nextSibling;
-		root.appendChild(cur);
+		payload.appendChild(cur);
 		cur = next;
 	}
 	// The closing `}` is the last character of the last moved node; drop it.
-	const closer = root.lastChild;
+	const closer = payload.lastChild;
 	if (closer && closer.nodeType === Node.TEXT_NODE) {
 		const text = closer as Text;
 		if (text.data.endsWith("}")) text.data = text.data.slice(0, -1);

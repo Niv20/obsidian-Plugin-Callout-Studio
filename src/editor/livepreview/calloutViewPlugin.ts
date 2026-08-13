@@ -58,6 +58,7 @@ import {
 } from "./widgets";
 import { getFoldedLines, foldsChanged } from "./fold";
 import {
+	calloutStudioCaretDrop,
 	calloutStudioRefresh,
 	registerCalloutEditorView,
 	unregisterCalloutEditorView,
@@ -181,6 +182,14 @@ export function createCalloutViewPlugin(host: LivePreviewHost) {
 				const refreshed = update.transactions.some((tr) =>
 					tr.effects.some((e) => e.is(calloutStudioRefresh)),
 				);
+				// A caret this plugin dropped itself: a click on an inline pill,
+				// whose only editing affordance is the raw source it reveals.
+				// The freeze below must not touch it — see calloutStudioCaretDrop
+				// for why deferring this one can lose the reveal entirely rather
+				// than merely delay it.
+				const caretDrop = update.transactions.some((tr) =>
+					tr.effects.some((e) => e.is(calloutStudioCaretDrop)),
+				);
 				const mouseReleased = this.wasMousedown && !mousedown;
 				// A fold/unfold made anywhere — crucially including Obsidian's own
 				// pre-heading fold arrow — changes the folded-range set but need
@@ -206,7 +215,7 @@ export function createCalloutViewPlugin(host: LivePreviewHost) {
 				if (update.docChanged) {
 					this.selection = this.selection.map(update.changes);
 				}
-				if (!mousedown) {
+				if (!mousedown || caretDrop) {
 					this.selection = update.state.selection;
 					this.focused = update.view.hasFocus;
 				}
@@ -214,6 +223,7 @@ export function createCalloutViewPlugin(host: LivePreviewHost) {
 					update.docChanged ||
 					update.viewportChanged ||
 					refreshed ||
+					caretDrop ||
 					mouseReleased ||
 					foldChanged ||
 					((update.selectionSet || update.focusChanged) &&

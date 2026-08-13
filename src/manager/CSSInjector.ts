@@ -1203,10 +1203,10 @@ export class CSSInjector {
 				// the outer callout's offset to the inner callout's icon.
 				//
 				// Both land on .cs-callout-icon, never on the lead itself. The
-				// lead owns the content pill's icon SIZE (see .cs-callout-lead
-				// in styles.css), so keeping the two on separate elements means
-				// a per-callout offset can never be the thing that silently
-				// resizes the icon, or vice versa.
+				// lead is the pill's first flex item and is what the pill's own
+				// `align-items: center` positions (see .cs-callout-lead in
+				// styles.css); a transform written onto it would fight that,
+				// while on the icon inside it it composes cleanly.
 				return (
 					`.${CSS_INLINE_TOKEN}[data-callout="${id}"] > .${CSS_TOKEN_ICON}, ` +
 					`.${CSS_INLINE_TOKEN}[data-callout="${id}"] > .${CSS_CALLOUT_LEAD} > .${CSS_TOKEN_ICON}`

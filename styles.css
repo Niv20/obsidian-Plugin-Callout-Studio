@@ -3969,14 +3969,13 @@ input.cs-input-invalid:focus {
    unmodified built-in it resolves to Obsidian's own --callout-* variable,
    so these surfaces follow the active theme.                      */
 
-/* Inline pill: icon + display name at body-text scale. */
+/* Inline pill: icon + display name at body-text scale.
+   ONE box for both kinds of pill. `[!warning]` puts its display name in the
+   second flex item and `[!warning]{…}` puts the author's payload there; nothing
+   else about them differs, which is the whole reason their icons, heights,
+   radii and text now match by construction rather than by two sets of numbers
+   kept in step by hand. */
 .cs-inline-callout {
-	/* How much smaller a pill reads than the body text around it. A variable
-	   rather than a literal because the content pill below has to UNDO it for
-	   the payload and RE-APPLY it to the icon, and those three numbers drifting
-	   apart is exactly what makes one pill's icon a different size from the
-	   next one's. */
-	--cs-inline-shrink: 0.9;
 	display: inline-flex;
 	align-items: center;
 	gap: 0.3em;
@@ -3986,9 +3985,47 @@ input.cs-input-invalid:focus {
 	border-radius: var(--cs-inline-radius, 1em);
 	/* Shrunken pill text, multiplied by a user-tunable scale (Callout types →
 	   Inline → Global callout style); the icon tracks it via its 1em sizing. */
-	font-size: calc(var(--cs-inline-shrink) * 1em * var(--cs-inline-scale, 1));
+	font-size: calc(0.9em * var(--cs-inline-scale, 1));
 	line-height: 1.4;
-	vertical-align: baseline;
+	/* Centred on the line, not hung off its baseline — the answer to "shrink
+	   the font scale and the pill stays welded to the bottom of the line".
+
+	   With `vertical-align: baseline` this box's baseline is its ICON'S BOTTOM
+	   EDGE: CSS Flexbox §8.5 gives a flex container the baseline of its first
+	   item (with `align-items: center` no item is baseline-aligned, so the
+	   first one's own baseline is used), that item is the icon box, and a
+	   replaced <svg>'s baseline is its bottom margin edge. So the pill's bottom
+	   was pinned near the baseline and every bit of shrinking came off the top.
+	   `middle` anchors the box's CENTRE instead — parent baseline plus half its
+	   x-height — so a small pill contracts around a fixed point and floats.
+
+	   Two knock-on effects, both wanted: at the default scale the pill settles
+	   ~2px lower than it used to (its text baseline lands on the paragraph's,
+	   where before it rode ~0.12em above it), and the box's top no longer
+	   reaches as far above the line, so it is LESS likely to grow a line's
+	   height than the old anchoring was — which matters inside .cm-line, where
+	   a taller inline box is something CodeMirror has to measure. */
+	vertical-align: middle;
+	/* Optical lift on top of that centring, and the one hand-tuned number in
+	   the pill.
+
+	   `middle` is not the middle of the line: it anchors the box to the
+	   baseline plus half the parent's X-HEIGHT, while the line box's own centre
+	   sits at baseline + (descent − ascent) / 2. Those two points differ by
+	   (ascent − descent) / 2 − x-height / 2 — around 0.09em, ~1.4px at 16px
+	   text, and always on the low side. (The fold chevron met the same constant
+	   and answered it with a flex strut; a pill has no container to be centred
+	   in, so it takes the offset directly.)
+
+	   Deliberately absolute rather than em: it corrects for where letters sit
+	   in their line box, not for the pill's own size, so it must NOT grow with
+	   the inline font scale. Deliberately not a setting either — change it
+	   here. `position: relative` and not a margin (which would change the line
+	   box and make CodeMirror re-measure) and not a transform (spoken for by
+	   the cs-token-in entrance animation, which would overwrite it mid-flight). */
+	--cs-inline-lift: 1px;
+	position: relative;
+	top: calc(-1 * var(--cs-inline-lift));
 	background-color: color-mix(in oklch, var(--cs-accent, #086ddd) 12%, transparent);
 	font-weight: var(--font-medium, 500);
 	white-space: nowrap;
@@ -4012,38 +4049,40 @@ input.cs-input-invalid:focus {
 }
 
 /* Inline pill carrying `{…}` content: `[!warning]{be careful}`.
-   Same root class as the plain pill on purpose — that is what makes every
-   per-callout accent, background and gradient CSSInjector emits for
-   `.cs-inline-callout[data-callout]` land here too, with no injector change.
-   The accent `color` above is inherited deliberately: the payload reading in
-   the callout's own colour is what makes the pill read as a warning. Links
-   inside still set their own colour.
 
-   Four overrides, each load-bearing:
-   - `display: inline`. The plain pill is an inline-flex box holding an icon and
-     one word. This one holds flowing markdown, and in Live Preview the box is a
-     CodeMirror mark wrapping *editable document text* — a flex container there
-     breaks wrapping, baselines and caret placement.
-   - `white-space: normal`. The label is the author's prose and must wrap.
-   - `font-size` without the plain pill's 0.9 shrink, and `line-height: inherit`.
-     Both of the plain pill's values are right for a one-word badge and wrong
-     for a sentence: they render the author's prose smaller than the paragraph
-     it sits in, and a different line-height on an inline box changes that
-     line's height — which CodeMirror then has to measure and reconcile. The
-     user's inline-scale slider still applies.
+   Same root class as the plain pill, and now the same BOX as the plain pill —
+   the payload simply stands where the display name stands. That is what makes
+   every per-callout accent, background and gradient CSSInjector emits for
+   `.cs-inline-callout[data-callout]` land here too, and it is why there are no
+   font-size, line-height, icon-size or icon-offset corrections left in this
+   file: two boxes built the same way cannot drift apart. The accent `color` is
+   inherited deliberately — the payload reading in the callout's own colour is
+   what makes the pill read as a warning. Links inside still set their own.
 
-   Everything else — the tint, the padding, the corner radius — is inherited
-   from the plain pill unchanged, and that works because the box is a single
-   unbroken element on both surfaces: reading view builds it directly, and Live
-   Preview replaces the whole `[!id]{…}` with one widget, so no decoration of
-   Obsidian's can reach inside and cut it (see CalloutContentPillWidget). With
-   the default `box-decoration-break: slice`, a soft line wrap then rounds only
-   the true start and end, which is exactly what you want. */
+   The pill is one atomic inline-level box, so it does not break across a line:
+   a payload with no room left on its line moves to the next one whole, and one
+   wider than the note wraps inside itself. That is the accepted trade for the
+   two variants being the same thing. It is also why the payload lives in its
+   own element — a flex container gives every contiguous run of child text its
+   own anonymous item, so an un-wrapped payload would come apart at each
+   `**bold**` with the container's `gap` between the pieces (see
+   CSS_CALLOUT_PAYLOAD in renderShared.ts). */
 .cs-inline-callout.cs-inline-has-content {
-	display: inline;
+	/* A payload is as long as the author makes it; without a ceiling the
+	   shrink-to-fit box can be wider than the note it sits in. */
+	max-width: 100%;
+}
+
+/* Everything between the braces. */
+.cs-callout-payload {
+	/* Overrides the pill's own `nowrap`: the box cannot break across a line but
+	   the prose inside it still must. */
 	white-space: normal;
-	font-size: calc(1em * var(--cs-inline-scale, 1));
-	line-height: inherit;
+	/* Drops the automatic minimum size a flex item gets (`min-width: auto` ==
+	   min-content == its longest word), which is a floor the item cannot shrink
+	   below and which would push the pill past the max-width above rather than
+	   wrap inside it. */
+	min-width: 0;
 }
 
 /* A code span inside a payload. Obsidian's own `code` chip is an OPAQUE
@@ -4068,28 +4107,15 @@ input.cs-input-invalid:focus {
 .cs-callout-lead {
 	display: inline-flex;
 	align-items: center;
-	/* The icon is drawn at the PLAIN pill's size, not the payload's, and that
-	   is the whole of matching the two — there is no vertical nudge here and
-	   there must not be one.
-
-	   Both pills put their icon in the same place already: an inline-flex box
-	   takes its baseline from its first flex item (CSS Flexbox §8.5 — with
-	   `align-items: center` no item is baseline-aligned, so the FIRST item's own
-	   baseline is used), that item is the icon, and a replaced <svg>'s baseline
-	   is its bottom margin edge. So in both pills the icon's bottom edge sits
-	   exactly on the paragraph baseline; the plain pill's line-height and
-	   padding move its name, never its icon. What differed was size: the plain
-	   pill's 1em SVG is 0.9em of body text, while the content pill sets 1em so
-	   its PAYLOAD matches the paragraph, and the icon inherited that. Two icons
-	   sharing a bottom edge at different heights read as one sitting higher.
-
-	   No `* var(--cs-inline-scale)` in this calc: it is relative to the content
-	   pill's own font size, which already carries the scale. Per-callout nudges
-	   still belong to the icon-adjust sliders, which land on .cs-callout-icon
-	   (see CSSInjector.iconTransformSelector). */
-	font-size: calc(var(--cs-inline-shrink, 0.9) * 1em);
-	margin-inline-end: 0.3em;
-	vertical-align: baseline;
+	/* Nothing here sizes or positions the icon, and nothing here should. The
+	   lead is the pill's first flex item exactly as the plain pill's icon box
+	   is, so it inherits the pill's font size (making the icon the same 1em SVG
+	   at the same scale) and `align-items: center` on the pill centres it the
+	   same way. Every one of the corrections that used to live here — a 0.9
+	   re-shrink, a translateY nudge, a baseline override, a margin standing in
+	   for the container's own `gap` — existed only because the content pill was
+	   a different box. Per-callout adjustment belongs to the icon-adjust
+	   sliders, which land on .cs-callout-icon (CSSInjector.iconTransformSelector). */
 	/* Hint that clicking drops the caret into the id, as on the plain pill. */
 	cursor: text;
 	unicode-bidi: isolate;
@@ -4247,8 +4273,9 @@ input.cs-input-invalid:focus {
 /* A token whose callout draws no icon and whose variant shows no name has
    nothing left in it — a reference token, or a content pill's lead, which is
    the icon and nothing else. The span still has to exist (callers insert it at
-   a known position), but its `margin-inline-end` would show up as a space
-   before the text it precedes, so it goes away entirely. */
+   a known position), but as a flex item it would still claim its container's
+   `gap`, which reads as a space before the text it precedes; `display: none`
+   takes it out of flow so no gap is reserved for it. */
 .cs-token-empty {
 	display: none;
 }

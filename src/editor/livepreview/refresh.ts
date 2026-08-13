@@ -1,6 +1,6 @@
 /**
- * editor/livepreview/refresh.ts — Editor-wide refresh signal for the
- * heading/inline callout decorations.
+ * editor/livepreview/refresh.ts — the two signals this plugin sends its own
+ * decorations: an editor-wide refresh, and "this caret is ours".
  *
  * Registry changes (colors, icons, renames, new definitions) and settings
  * toggles do not change the document, so CodeMirror would never rebuild our
@@ -12,6 +12,23 @@ import type { EditorView } from "@codemirror/view";
 
 /** No-payload effect: "callout definitions or toggles changed — rebuild". */
 export const calloutStudioRefresh = StateEffect.define<null>();
+
+/**
+ * Marks a transaction whose selection THIS PLUGIN placed: a click on an inline
+ * pill, which has no editing affordance other than revealing its raw source
+ * under the caret.
+ *
+ * It exists to opt that one transaction out of the reveal freeze (see the
+ * ViewPlugin's `wasMousedown`). The freeze holds our raw reveal back until the
+ * mouse is released so it lands in the same paint as core's own — but a pill is
+ * decoration of ours alone, with no core-owned syntax to wait for, so freezing
+ * it buys nothing and can lose the reveal outright: if core's mousedown flag is
+ * still set when the mouseup safety net fires, that rebuild reads the frozen
+ * (pre-click) selection, and the transaction that eventually clears the flag is
+ * not itself a rebuild trigger. The pill then stays shut until the next
+ * keystroke — which is exactly "clicking a pill does nothing, arrow keys work".
+ */
+export const calloutStudioCaretDrop = StateEffect.define<null>();
 
 /**
  * Every EditorView our ViewPlugin is currently mounted in.

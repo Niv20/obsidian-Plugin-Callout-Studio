@@ -37,6 +37,7 @@ import {
 import { resolveMarkdownView } from "../headingFold";
 import { renderPayloadInto } from "./contentPillRender";
 import { toggleHeadingFold } from "./fold";
+import { calloutStudioCaretDrop } from "./refresh";
 
 export class CalloutTokenWidget extends WidgetType {
 	/**
@@ -128,17 +129,12 @@ export class CalloutTokenWidget extends WidgetType {
 		if (this.variant === "inline") {
 			el.addEventListener("mousedown", (evt) => {
 				if (evt.button !== 0) return; // left click only; right-click → context menu
+				const from = this.resolveFrom(view, el, evt);
+				// Unplaceable: hand the click back to CodeMirror rather than
+				// swallow it (see resolveFrom and ignoreEvent).
+				if (from === null) return;
 				evt.preventDefault(); // take over focus/selection ourselves
-				// posAtDOM may resolve to either edge of the replaced range;
-				// normalize to the `[` that opens `[!id]` before offsetting.
-				const pos = view.posAtDOM(el);
-				const doc = view.state.doc;
-				const from =
-					doc.sliceString(pos, pos + 2) === "[!"
-						? pos
-						: pos - this.sourceLen;
-				view.dispatch({ selection: EditorSelection.cursor(from + 2) });
-				view.focus();
+				dropCaret(view, from + 2);
 			});
 		}
 
@@ -199,11 +195,88 @@ export class CalloutTokenWidget extends WidgetType {
 		return el;
 	}
 
-	override ignoreEvent(): boolean {
-		// The editor never handles events on the token; right-clicks reach
-		// the document-level context-menu listener regardless.
-		return true;
+	/**
+	 * Document offset of this token's `[`, or null when no reading of the DOM
+	 * can be trusted.
+	 *
+	 * `posAtDOM` reports EITHER edge of a replaced range, so the two readings
+	 * have to be told apart by what the document actually holds there — and the
+	 * answer can also be neither. Obsidian's fork of `posFromDOM` does not throw
+	 * for a node it cannot place in its tile tree (upstream CodeMirror does): it
+	 * quietly returns 0 or the document length. Subtracting `sourceLen` from
+	 * that used to hand `EditorSelection.cursor()` a negative offset, which
+	 * throws INSIDE this listener — so the click did nothing at all, while
+	 * arrow keys still revealed the pill because they never come this way.
+	 *
+	 * Hence: test every candidate against the text, and fall back to the point
+	 * that was actually clicked before giving up.
+	 */
+	private resolveFrom(
+		view: EditorView,
+		el: HTMLElement,
+		evt: MouseEvent,
+	): number | null {
+		const doc = view.state.doc;
+		const candidates: number[] = [];
+		try {
+			const pos = view.posAtDOM(el);
+			candidates.push(pos, pos - this.sourceLen);
+		} catch {
+			// Nothing to add; the coordinate reading below may still answer.
+		}
+		const at = view.posAtCoords({ x: evt.clientX, y: evt.clientY });
+		if (at !== null) candidates.push(at, at - this.sourceLen);
+		for (const from of candidates) {
+			if (from < 0 || from + this.sourceLen > doc.length) continue;
+			if (doc.sliceString(from, from + 2) === "[!") return from;
+		}
+		return null;
 	}
+
+	override ignoreEvent(event: Event): boolean {
+		// The editor never handles events on the token; right-clicks reach
+		// the document-level context-menu listener regardless — and must keep
+		// reaching it with the pill still under the pointer, which is why a
+		// non-left press stays ignored rather than moving the caret (that would
+		// re-render the line and pull the pill out from under the menu).
+		//
+		// The left press is CodeMirror's FALLBACK. Our listener normally takes
+		// it and calls preventDefault, which stops core dead (`handleEvent`
+		// bails on a prevented event), so this only engages when the listener
+		// could not place the click — and then CodeMirror's own handling puts
+		// the caret at the widget's edge, which `selectionTouches` counts as a
+		// touch, so the pill opens for editing anyway.
+		return event.type !== "mousedown" || (event as MouseEvent).button !== 0;
+	}
+}
+
+/**
+ * Put the caret at `pos` on behalf of a clicked pill, and open that pill.
+ *
+ * Two details, both of which the pill's reveal depends on and neither of which
+ * is obvious from the call site:
+ *
+ * - **Focus first.** The reveal predicate is "the editor is focused AND the
+ *   selection touches the token" (`selectionTouches` in calloutViewPlugin), and
+ *   it reads `view.hasFocus` off the update this dispatch produces. Focusing
+ *   afterwards means that update sees an unfocused editor, so a click into an
+ *   editor that did not already have focus would move the caret and leave the
+ *   pill shut. `focus()` dispatches nothing itself — it re-applies the current
+ *   selection to the DOM — so nothing is racing the dispatch below.
+ * - **Tagged as ours**, which opts it out of the reveal freeze; see
+ *   `calloutStudioCaretDrop`.
+ *
+ * Deliberately not used by the heading token or the ref link: both reveal
+ * markup CORE also owns (the `###` marks, the `[[…]]` brackets), and core
+ * reveals its half on mouse release. Opening ours a beat earlier is the
+ * two-stage flash the freeze was added to prevent.
+ */
+function dropCaret(view: EditorView, pos: number): void {
+	view.focus();
+	view.dispatch({
+		selection: EditorSelection.cursor(pos),
+		effects: calloutStudioCaretDrop.of(null),
+	});
 }
 
 /**
@@ -310,7 +383,7 @@ export class CalloutContentPillWidget extends WidgetType {
 	}
 
 	override toDOM(view: EditorView): HTMLElement {
-		const el = buildContentPillDom({
+		const { root: el, payload } = buildContentPillDom({
 			rawId: this.rawId,
 			metadata: this.metadata,
 			registry: this.registry,
@@ -335,7 +408,7 @@ export class CalloutContentPillWidget extends WidgetType {
 		this.component = component;
 		renderPayloadInto(
 			this.app,
-			el,
+			payload,
 			this.payload,
 			this.sourcePath,
 			component,
@@ -360,14 +433,16 @@ export class CalloutContentPillWidget extends WidgetType {
 					? (node as Element)
 					: (node?.parentElement ?? null);
 			if (target?.closest("a")) return;
+			// Both measurements are taken before the caret moves: clickOffset
+			// hit-tests the rendered payload, which this dispatch replaces with
+			// the raw source.
+			const from = this.resolveFrom(view, el, evt);
+			// Unplaceable: hand the click back to CodeMirror rather than
+			// swallow it (see resolveFrom and ignoreEvent).
+			if (from === null) return;
 			evt.preventDefault(); // take over focus/selection ourselves
-			const from = this.resolveFrom(view, el);
-			view.dispatch({
-				selection: EditorSelection.cursor(
-					this.payloadStart(from) + this.clickOffset(el, evt),
-				),
-			});
-			view.focus();
+			const offset = this.clickOffset(payload, evt);
+			dropCaret(view, this.payloadStart(from) + offset);
 		});
 		return el;
 	}
@@ -378,7 +453,10 @@ export class CalloutContentPillWidget extends WidgetType {
 	}
 
 	/**
-	 * Document offset of this pill's `[`.
+	 * Document offset of this pill's `[`, or null when no reading of the DOM
+	 * can be trusted (same contract, and the same Obsidian-fork hazard, as
+	 * CalloutTokenWidget.resolveFrom — a `posFromDOM` that answers 0 instead of
+	 * throwing used to turn into a negative caret offset and an exception).
 	 *
 	 * `posAtDOM` may report either edge of a replaced range, so the answer has
 	 * to be checked. Checking for a leading `[!` is not enough: two pills
@@ -387,13 +465,32 @@ export class CalloutContentPillWidget extends WidgetType {
 	 * lands in the neighbouring pill. The payload is what actually identifies
 	 * THIS pill, so that is what gets tested.
 	 */
-	private resolveFrom(view: EditorView, el: HTMLElement): number {
-		const pos = view.posAtDOM(el);
+	private resolveFrom(
+		view: EditorView,
+		el: HTMLElement,
+		evt: MouseEvent,
+	): number | null {
 		const doc = view.state.doc;
-		const start = this.payloadStart(pos);
-		const payloadAt =
-			doc.sliceString(start, start + this.payload.length) === this.payload;
-		return payloadAt ? pos : pos - this.sourceLen;
+		const candidates: number[] = [];
+		try {
+			const pos = view.posAtDOM(el);
+			candidates.push(pos, pos - this.sourceLen);
+		} catch {
+			// Nothing to add; the coordinate reading below may still answer.
+		}
+		const at = view.posAtCoords({ x: evt.clientX, y: evt.clientY });
+		if (at !== null) candidates.push(at, at - this.sourceLen);
+		for (const from of candidates) {
+			if (from < 0 || from + this.sourceLen > doc.length) continue;
+			const start = this.payloadStart(from);
+			if (
+				doc.sliceString(start, start + this.payload.length) ===
+				this.payload
+			) {
+				return from;
+			}
+		}
+		return null;
 	}
 
 	/**
@@ -410,22 +507,21 @@ export class CalloutContentPillWidget extends WidgetType {
 	 * Everything is inside one try: a click that resolves to a node outside the
 	 * widget (the pill's own padding, a hit-test near its edge) can then only
 	 * ever degrade to the payload start.
+	 *
+	 * `host` is the payload element, so the icon is out of the picture from the
+	 * start — measuring from it rather than from "after the pill's first child"
+	 * is also what keeps this right for a callout that hides its icon, whose
+	 * lead is still the first child and still empty.
 	 */
-	private clickOffset(el: HTMLElement, evt: MouseEvent): number {
-		const lead = el.firstElementChild;
-		if (!lead) return 0;
-		const doc = el.ownerDocument;
+	private clickOffset(host: HTMLElement, evt: MouseEvent): number {
+		const doc = host.ownerDocument;
 		try {
-			const body = doc.createRange();
-			body.selectNodeContents(el);
-			body.setStartAfter(lead);
-			if (body.toString() !== this.payload) return 0;
+			if ((host.textContent ?? "") !== this.payload) return 0;
 
 			const caret = caretFromPoint(doc, evt.clientX, evt.clientY);
 			if (!caret) return 0;
 			const upto = doc.createRange();
-			upto.selectNodeContents(el);
-			upto.setStartAfter(lead);
+			upto.selectNodeContents(host);
 			// An end BEFORE the start collapses the range, so a click on the
 			// icon measures as an empty string rather than throwing.
 			upto.setEnd(caret.node, caret.offset);
@@ -440,10 +536,13 @@ export class CalloutContentPillWidget extends WidgetType {
 		this.component = null;
 	}
 
-	override ignoreEvent(): boolean {
-		// CodeMirror never handles events on the widget. They still reach the
-		// document, which is where Obsidian's link handling lives.
-		return true;
+	override ignoreEvent(event: Event): boolean {
+		// CodeMirror never handles events on the widget — they still reach the
+		// document, which is where Obsidian's link handling lives — with one
+		// exception: the left press, which is left to CodeMirror as the
+		// caret-placing fallback when our own listener cannot place the click.
+		// Same reasoning as CalloutTokenWidget.ignoreEvent.
+		return event.type !== "mousedown" || (event as MouseEvent).button !== 0;
 	}
 }
 
