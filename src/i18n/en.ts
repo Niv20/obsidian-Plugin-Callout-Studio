@@ -13,6 +13,13 @@ export const en: Record<string, string> = {
 	"cmd.calloutWrap": "Wrap in callout",
 	"cmd.calloutUnwrap": "Unwrap from callout",
 
+	// Commands — names generated for the user's own commands. Obsidian adds
+	// the "Callout Studio: " prefix itself, so these must not repeat it.
+	"cmd.customWrapBlock": "Wrap in {{name}} callout",
+	"cmd.customInsertBlock": "Insert {{name}} callout",
+	"cmd.customInsertHeading": "Insert H{{level}} {{name}} heading callout",
+	"cmd.customInsertInline": "Insert {{name}} inline callout",
+
 	// Autocomplete
 	"autocomplete.createNew": 'Create new callout: "{{name}}"',
 
@@ -155,10 +162,51 @@ export const en: Record<string, string> = {
 		'Show suggestions when you type "[!" inside a block callout in the editor. Pick a callout type from the list to insert a complete callout header.',
 
 	// Settings — Keyboard shortcuts
-	"settings.openHotkeys": "Callout Studio hotkeys",
-	"settings.openHotkeysDesc":
-		"Open Obsidian's hotkeys settings for Callout Studio commands, where you can choose your own shortcuts for Create new callout type, Open settings, Unwrap from callout, and Wrap in callout. No shortcuts are assigned by default.",
-	"settings.openHotkeysButton": "Open hotkey settings",
+	"settings.customCommands": "Commands and shortcuts",
+	"settings.customCommandsDesc":
+		"See every Callout Studio command and the shortcut it is bound to, and create your own commands for the callouts you use most. No shortcuts are assigned by default.",
+	"settings.customCommandsButton": "Manage commands",
+
+	// Command builder
+	"commandBuilder.title": "Commands and shortcuts",
+	"commandBuilder.desc":
+		"Use the + button to set or change a shortcut in Obsidian's hotkey settings.",
+	"commandBuilder.builtIn": "Built-in commands",
+	"commandBuilder.toggleAria": "Turn {{name}} on or off",
+	"commandBuilder.hotkeyBlank": "Blank",
+	"commandBuilder.hotkeyAria": "Set a shortcut for {{name}}",
+	"commandBuilder.yourCommands": "Your commands",
+	"commandBuilder.newCommand": "New command",
+	"commandBuilder.empty": "No custom commands yet.",
+	"commandBuilder.unknownCommand": "this command",
+	"commandBuilder.editAria": "Edit {{name}}",
+	"commandBuilder.deleteAria": "Delete {{name}}",
+	"commandBuilder.deleteConfirm":
+		"Delete the command {{name}}? Any shortcut assigned to it will stop working.",
+	"commandBuilder.newTitle": "New command",
+	"commandBuilder.editTitle": "Edit command",
+	"commandBuilder.format": "Callout format",
+	"commandBuilder.formatDesc": "Which kind of callout the command writes.",
+	"commandBuilder.formatHeading": "Heading",
+	"commandBuilder.formatInline": "Inline",
+	"commandBuilder.formatBlock": "Block",
+	"commandBuilder.roleDisabled":
+		"This format is turned off, so the command will insert plain text until you switch it back on.",
+	"commandBuilder.callout": "Callout type",
+	"commandBuilder.calloutDesc": "The callout this command inserts.",
+	"commandBuilder.headingLevel": "Heading level",
+	"commandBuilder.headingLevelDesc": "Which heading level to write.",
+	"commandBuilder.action": "Action",
+	"commandBuilder.actionDesc":
+		"Wrap turns the selection into a callout; insert adds an empty one.",
+	"commandBuilder.actionWrap": "Wrap selection",
+	"commandBuilder.actionInsert": "Insert new",
+	"commandBuilder.preview": "Command name",
+	"commandBuilder.duplicate":
+		"You already have a command that does exactly this.",
+	"commandBuilder.noCallouts":
+		"There are no callout types to build a command from yet.",
+	"commandBuilder.save": "Save",
 
 	// Settings — Reset
 	"settings.vaultMaintenance": "Vault insights & maintenance",
@@ -176,6 +224,10 @@ export const en: Record<string, string> = {
 	"notice.resetAllDone": "Everything has been reset to defaults.",
 
 	// Notices
+	"notice.customCommandsRemoved":
+		"Removed {{count}} custom command(s) whose callout type no longer exists.",
+	"notice.customCommandMissingCallout":
+		"That command's callout type no longer exists.",
 	"notice.exported": "Callouts exported to callout-studio-export.json",
 	"notice.importedJSON": "Imported {{count}} callout type(s) from JSON.",
 	"notice.importedSettings": "Imported plugin settings.",
