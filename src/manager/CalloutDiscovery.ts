@@ -258,6 +258,16 @@ export class CalloutDiscovery {
 					def.externalStyle === true
 				)
 					continue;
+				// A command the user built for this row is a deliberate claim
+				// on it, the same as customizing it. Pruning here would delete
+				// that command — and the hotkey bound to it — the moment the
+				// last note using the callout went away.
+				if (
+					this.host.settings.customCommands.some(
+						(command) => command.calloutId === id,
+					)
+				)
+					continue;
 				if (this.host.registry.remove(id)) count++;
 			}
 			return count;

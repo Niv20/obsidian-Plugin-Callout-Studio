@@ -24,6 +24,7 @@ import type {
 	CalloutStudioApi,
 } from "./types";
 import { getLocale } from "../i18n";
+import { filterUsableCallouts } from "../utils/usableCallouts";
 import { normalizeCalloutId } from "../utils/calloutId";
 import { sortCalloutsByDisplayName } from "../utils/sorting";
 
@@ -88,14 +89,12 @@ export class CalloutStudioAPI implements CalloutStudioApi {
 	 * ago. Same predicate the autocomplete dropdown uses, for the same reason.
 	 */
 	private usableDefinitions(): CalloutDefinition[] {
-		const defs = [
-			...this.plugin.registry.getBuiltIn(),
-			...this.plugin.registry.getUserDefined(),
-		].filter(
-			(def) =>
-				def.source !== "fallback" ||
-				def.customized === true ||
-				!this.plugin.isKnownZeroUsageFallback(def.id),
+		const defs = filterUsableCallouts(
+			[
+				...this.plugin.registry.getBuiltIn(),
+				...this.plugin.registry.getUserDefined(),
+			],
+			(id) => this.plugin.isKnownZeroUsageFallback(id),
 		);
 		return sortCalloutsByDisplayName(defs, getLocale());
 	}
