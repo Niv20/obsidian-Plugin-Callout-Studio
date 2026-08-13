@@ -138,6 +138,7 @@ const toDetails = (def: CalloutDefinition, dark: boolean): CalloutDetails => {
 		colorLight: def.colorLight,
 		colorDark: def.colorDark,
 		icon: toIconInfo(def.icon),
+		hideIcon: def.hideIcon === true,
 		foldable: def.foldable,
 		defaultFolded: def.defaultFolded,
 		builtIn: def.builtIn,

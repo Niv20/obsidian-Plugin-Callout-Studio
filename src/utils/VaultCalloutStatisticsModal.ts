@@ -10,7 +10,7 @@ import { Modal, setIcon } from "obsidian";
 import type { App } from "obsidian";
 import type { CalloutDefinition } from "../types";
 import type { CalloutRegistry } from "../manager/CalloutRegistry";
-import { renderIconInto } from "../icons/renderIcon";
+import { renderIconInto, renderNoIcon } from "../icons/renderIcon";
 import { createIconResolver } from "../icons/resolver";
 import { getLocale, t } from "../i18n";
 import { applyModalChrome } from "../settings/modalChrome";
@@ -195,6 +195,10 @@ export class VaultCalloutStatisticsModal extends Modal {
 	}
 
 	private renderIcon(iconEl: HTMLElement, def: CalloutDefinition): void {
+		if (def.hideIcon === true) {
+			renderNoIcon(iconEl);
+			return;
+		}
 		renderIconInto(iconEl, def.icon, createIconResolver(this.registry), {
 			role: "regular",
 			fill: "currentColor",

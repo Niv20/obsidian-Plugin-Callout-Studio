@@ -14,7 +14,7 @@ import {
 	resolveCurrentModeColors,
 } from "../../ui/ColorCircles";
 import type { CalloutDefinition } from "../../types";
-import { renderIconInto } from "../../icons/renderIcon";
+import { renderIconInto, renderNoIcon } from "../../icons/renderIcon";
 import { createStatusIconResolver } from "../../icons/resolver";
 import type { SettingsSectionContext } from "./types";
 
@@ -137,6 +137,10 @@ function renderRowIcon(
 	container: HTMLElement,
 	def: CalloutDefinition,
 ): void {
+	if (def.hideIcon === true) {
+		renderNoIcon(container);
+		return;
+	}
 	renderIconInto(container, def.icon, createStatusIconResolver(ctx.plugin), {
 		role: "regular",
 		fill: "currentColor",

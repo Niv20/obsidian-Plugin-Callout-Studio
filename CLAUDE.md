@@ -72,7 +72,9 @@ Search indexes are bundled (packed by `icons/data/codec.ts`); artwork is not. Re
 
 ### Key types (`src/types.ts`)
 
-`CalloutDefinition` is the core data model: `id`, `displayName`, `icon`, `colorLight`, `colorDark`, `aliases`, `iconAdjust`, `source` (`"builtin" | "user" | "fallback" | "theme" | "plugin"`), `metadata`.
+`CalloutDefinition` is the core data model: `id`, `displayName`, `icon`, `hideIcon`, `colorLight`, `colorDark`, `aliases`, `iconAdjust`, `source` (`"builtin" | "user" | "fallback" | "theme" | "plugin"`), `metadata`.
+
+**`hideIcon` is a display flag, not an icon.** It is deliberately not a `"none"` member of `IconPackId`: that union means *one body of artwork* (pack manifest entry, downloaded file, SVG cache key), a sentinel there would have to overwrite `icon` and lose the user's pick, and every older build would reject the whole entry on import since `validateIcon` only accepts a type it knows. So `icon` keeps holding the last drawing — turning the icon back on is instant and offline, because `cleanupUnusedIconSvgs` still counts it as in use. `true`-or-absent, like `transparentBg`/`externalStyle`. Three seams: `CSSInjector.iconHiddenCSS` (`display: none` on `.callout-icon`, outside `@media screen` so it holds in print, plus the per-callout reset of the global *Align content with title* indent); `buildCalloutTokenDom` builds no icon span at all (flex `gap` collapses with it, same trick as `refShowIcon`); and `renderNoIcon` draws a muted dashed ring on the surfaces that *manage* callouts, where a blank slot would read as a stalled download. `CalloutRegistry.COLOUR_NEUTRAL_FIELDS` is why hiding a built-in's icon persists without costing it the theme's `--callout-*` deference.
 
 `PluginSettings` holds global style (border, radius, scale), feature toggles (autocomplete, context menu, icon source preferences), and the two lists the user builds up: `customPalettes` and `userImages`. Both live in settings rather than on `PluginData` precisely so `exportToJSONv2()` carries them — and both must therefore be **merged by id** on import, never `Object.assign`ed, or importing a file without them wipes the user's own.
 

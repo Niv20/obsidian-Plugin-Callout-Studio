@@ -87,6 +87,7 @@ const KNOWN_FIELD_MAP: Record<keyof CalloutDefinition, true> = {
 	id: true,
 	displayName: true,
 	icon: true,
+	hideIcon: true,
 	colorLight: true,
 	colorDark: true,
 	foldable: true,
@@ -1001,6 +1002,20 @@ function validateCalloutArray(
 			entryOk = false;
 		}
 
+		// ── no-icon flag (optional) ──────────────────────────
+		// Same shape again. `icon` stays required and is validated as usual: a
+		// no-icon callout still carries the drawing it would show, so the flag
+		// never excuses a missing or malformed one.
+		if (entry.hideIcon !== undefined && typeof entry.hideIcon !== "boolean") {
+			push({
+				field: "hideIcon",
+				level: "error",
+				messageKey: "import.err.boolField",
+				params: { field: "hideIcon" },
+			});
+			entryOk = false;
+		}
+
 		// ── external style flag (optional) ───────────────────
 		// Same shape as the two above. Worth carrying across an import: it says
 		// the reader's theme owns this callout, which is a decision about the
@@ -1192,6 +1207,10 @@ function validateCalloutArray(
 			// persist a built-in nobody edited). `undefined` is not `false` — it
 			// is what lets the merge above clear a flag the target row still has.
 			def.transparentBg = importTransparent ? true : undefined;
+			// Same `true`-only rule, and `undefined` for the same reason: it is
+			// what lets an import that turns the icon back on clear the flag on a
+			// row that still has it.
+			def.hideIcon = entry.hideIcon === true ? true : undefined;
 			if (typeof entry.textColorLight === "string")
 				def.textColorLight = entry.textColorLight;
 			if (typeof entry.textColorDark === "string")

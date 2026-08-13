@@ -18,8 +18,6 @@ import { EditorSelection } from "@codemirror/state";
 import { Component, Keymap, setIcon } from "obsidian";
 import type { App } from "obsidian";
 import type { CalloutRegistry } from "../../manager/CalloutRegistry";
-import { iconRenderKey } from "../../icons/renderIcon";
-import { createIconResolver } from "../../icons/resolver";
 import { contentPayloadStart, findWikilinkCalloutRefs } from "../calloutTokens";
 import { t } from "../../i18n";
 import {
@@ -31,6 +29,7 @@ import {
 	buildCalloutTokenDom,
 	buildContentPillDom,
 	isStartupEntranceActive,
+	tokenIconKey,
 	VARIANT_ROLE,
 	resolveCalloutDef,
 	type CalloutTokenVariant,
@@ -71,13 +70,11 @@ export class CalloutTokenWidget extends WidgetType {
 
 	private computeRenderKey(): string {
 		const { def, unknown } = resolveCalloutDef(this.registry, this.rawId);
-		const iconKey = def
-			? iconRenderKey(
-					def.icon,
-					createIconResolver(this.registry),
-					VARIANT_ROLE[this.variant],
-				)
-			: "";
+		const iconKey = tokenIconKey(
+			def,
+			this.registry,
+			VARIANT_ROLE[this.variant],
+		);
 		return [
 			this.variant,
 			this.showName ? "n" : "",
@@ -289,9 +286,7 @@ export class CalloutContentPillWidget extends WidgetType {
 	) {
 		super();
 		const { def, unknown } = resolveCalloutDef(registry, rawId);
-		const iconKey = def
-			? iconRenderKey(def.icon, createIconResolver(registry), "inline")
-			: "";
+		const iconKey = tokenIconKey(def, registry, "inline");
 		this.renderKey = [
 			this.rawId,
 			this.metadata,
@@ -482,9 +477,7 @@ export class HeadingRefLinkWidget extends WidgetType {
 		const { def, unknown } = resolveCalloutDef(registry, rawId);
 		// A reference token is a compact copy of the inline callout, so it draws
 		// from the same artwork.
-		const iconKey = def
-			? iconRenderKey(def.icon, createIconResolver(registry), "inline")
-			: "";
+		const iconKey = tokenIconKey(def, registry, "inline");
 		this.renderKey = [
 			this.prefix,
 			this.target,

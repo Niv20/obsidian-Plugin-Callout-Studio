@@ -100,6 +100,9 @@ export function renderIconInto(
 ): RenderIconResult {
 	target.removeClass("is-loading");
 	target.removeClass("is-error");
+	// The same element is repainted in place when a row's icon comes back on,
+	// and the muted ring's colour would otherwise outlive the ring.
+	target.removeClass(CSS_ICON_NONE);
 	try {
 		return paint(target, icon, resolver, options);
 	} catch {
@@ -111,6 +114,30 @@ export function renderIconInto(
 		}
 		return "failed";
 	}
+}
+
+/** Class on the placeholder {@link renderNoIcon} draws. */
+export const CSS_ICON_NONE = "cs-icon-none";
+
+/**
+ * Draw the stand-in for a callout the user set to `hideIcon`.
+ *
+ * Only for the surfaces that *manage* callouts — the settings list, the
+ * autocomplete popup, the statistics and replace modals. Those are columns of
+ * rows, and a genuinely empty slot both breaks the column and reads exactly like
+ * an icon that is still downloading (which is a real state a row next to it may
+ * be in). A faint dashed ring says the emptiness is the answer.
+ *
+ * Content surfaces — the block callout, the heading and inline tokens, PDF
+ * export — draw nothing at all instead, and take the space back with it.
+ */
+export function renderNoIcon(target: HTMLElement): void {
+	target.removeClass("is-loading");
+	target.removeClass("is-error");
+	target.removeAttribute("aria-label");
+	target.empty();
+	target.addClass(CSS_ICON_NONE);
+	setIcon(target, "circle-dashed");
 }
 
 function paint(

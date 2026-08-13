@@ -891,6 +891,7 @@ export class CalloutRegistry {
 	> = {
 		displayName: true,
 		icon: true,
+		hideIcon: true,
 		colorLight: true,
 		colorDark: true,
 		foldable: true,
@@ -912,9 +913,25 @@ export class CalloutRegistry {
 		metadata: true,
 	};
 
+	/**
+	 * Fields that are a difference the user can see but *not* a claim on the
+	 * callout's colour — so {@link isUnmodifiedBuiltIn} skips them while
+	 * {@link toSaveData} still counts them.
+	 *
+	 * Only `hideIcon` so far. Dropping the icon from `[!note]` has to be
+	 * persisted, or it vanishes on the next reload; but it says nothing about
+	 * what colour the callout should be, and letting it count here would swap
+	 * core's `--callout-note` for a hard-coded hex — silently ending the
+	 * built-in's deference to whatever the theme says blue is.
+	 */
+	private static readonly COLOUR_NEUTRAL_FIELDS: ReadonlySet<
+		keyof CalloutDefinition
+	> = new Set(["hideIcon"]);
+
 	private isModified(
 		current: CalloutDefinition,
 		original: CalloutDefinition,
+		ignore?: ReadonlySet<keyof CalloutDefinition>,
 	): boolean {
 		// Structural compare, so nested values (`bgGradient`, `aliases`,
 		// `metadata`) are covered without a per-field spelling of each one.
@@ -928,6 +945,7 @@ export class CalloutRegistry {
 		// the two spellings are one icon.
 		return Object.keys(CalloutRegistry.COMPARED_FIELDS).some((field) => {
 			const key = field as keyof CalloutDefinition;
+			if (ignore?.has(key)) return false;
 			if (key === "icon") return !iconsEqual(current.icon, original.icon);
 			return (
 				JSON.stringify(current[key] ?? null) !==
@@ -1025,6 +1043,11 @@ export class CalloutRegistry {
 			this.setCallout(def.id, {
 				...def,
 				icon: { ...fallback.icon },
+				// Spelled out (`undefined` included) for the same reason
+				// `transparentBg` below is: this spread merges onto the row, so
+				// omitting the key would let a mirrored row keep its own stale
+				// flag while taking the fallback's icon.
+				hideIcon: fallback.hideIcon,
 				colorLight: fallback.colorLight,
 				colorDark: fallback.colorDark,
 				bgColorLight: fallback.bgColorLight,
@@ -1375,12 +1398,20 @@ export class CalloutRegistry {
 	 * transient live-preview definition is registered under a real built-in's ID
 	 * while holding unsaved colours, and answering for the stored row there
 	 * would drop the very colours the preview exists to show.
+	 *
+	 * Deliberately a *narrower* question than {@link isBuiltInModified}: see
+	 * {@link COLOUR_NEUTRAL_FIELDS} for the edits that are real edits without
+	 * being a claim on the colour.
 	 */
 	isUnmodifiedBuiltIn(def: CalloutDefinition): boolean {
 		if (!def.builtIn) return false;
 		const original = this.builtInDefaults.get(def.id);
 		if (!original) return false;
-		return !this.isModified(def, original);
+		return !this.isModified(
+			def,
+			original,
+			CalloutRegistry.COLOUR_NEUTRAL_FIELDS,
+		);
 	}
 
 	resetBuiltIn(id: string): boolean {

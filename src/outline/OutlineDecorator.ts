@@ -25,9 +25,8 @@ import {
 	buildCalloutTokenDom,
 	resolveCalloutDef,
 	shouldRenderToken,
+	tokenIconKey,
 } from "../editor/renderShared";
-import { iconRenderKey } from "../icons/renderIcon";
-import { createIconResolver } from "../icons/resolver";
 import { normalizeCalloutId } from "../utils/calloutId";
 
 /** Narrow structural host type (avoids importing the concrete plugin class). */
@@ -366,13 +365,11 @@ export class OutlineDecorator {
 	): string {
 		const { def } = resolveCalloutDef(this.host.registry, rawId);
 		// Outline entries are reference tokens: pill-sized, so pill artwork.
-		const iconKey = def
-			? iconRenderKey(
-					def.icon,
-					createIconResolver(this.host.registry),
-					"inline",
-				)
-			: "";
+		// Through tokenIconKey rather than iconRenderKey so that turning the
+		// callout's icon off changes the key — `showIcon` above stays true and
+		// the icon itself is untouched, so nothing else here would notice, and
+		// the `dataset.csKey` early-return would keep the stale row forever.
+		const iconKey = tokenIconKey(def, this.host.registry, "inline");
 		return [
 			rawId,
 			unknown ? "u" : "",

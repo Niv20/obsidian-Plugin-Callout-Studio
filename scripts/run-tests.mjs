@@ -49,8 +49,13 @@ export class TFile {}
 export class Plugin {}
 export class Notice {}
 export class Component {}
+export class Modal {}
 export class MarkdownRenderer { static render() { return Promise.resolve(); } }
 export function setIcon() {}
+export function getIconIds() { return []; }
+export function normalizePath(p) { return p; }
+export function requestUrl() { return Promise.reject(new Error("no network in tests")); }
+export function requireApiVersion() { return true; }
 export const Keymap = { isModEvent: () => false };
 `,
 );

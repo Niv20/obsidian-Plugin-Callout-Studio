@@ -77,6 +77,13 @@ export interface CalloutDetails extends Callout {
 	readonly textColorLight?: string;
 	readonly textColorDark?: string;
 	readonly icon: CalloutIconInfo;
+	/**
+	 * True when the user set this callout to render with no icon at all. Check
+	 * it before drawing `icon`: that field still names the drawing the callout
+	 * would use, deliberately, so the choice can be undone — but Callout Studio
+	 * paints nothing for it, and a consumer that ignores this will not match.
+	 */
+	readonly hideIcon: boolean;
 	/** Whether the callout renders with a fold arrow. */
 	readonly foldable: boolean;
 	/** Whether a foldable callout starts collapsed. Meaningless when not foldable. */

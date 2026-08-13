@@ -755,11 +755,24 @@ export class CSSInjector {
 		// colour, the ::after icon override that hides core's own <svg>, icon
 		// transforms, title sweeps, token colours, the fold arrow, the print
 		// ::before — and the alias copies of all of them at the end.
-		if (def.externalStyle === true) return "";
+		//
+		// One deliberate exception, below: a callout the user asked to draw with
+		// no icon at all. A theme cannot express that on the owner's behalf, and
+		// the single `display: none` it takes cannot fight the theme over any of
+		// the things this flag exists to protect.
+		const hidesIcon = def.hideIcon === true;
+		if (def.externalStyle === true) {
+			return hidesIcon ? this.iconHiddenCSS(def) : "";
+		}
 
-		const iconCSS = this.getIconCSS(def);
+		// Emitting `--callout-icon` for a hidden icon would be harmless (the box
+		// it lands in is display:none) but it would also keep Obsidian resolving
+		// artwork nobody sees, so the whole icon half of this function goes quiet
+		// together — the property, both ::after overrides and the transform.
+		const iconCSS = hidesIcon ? "" : this.getIconCSS(def);
 
 		const parts: string[] = [];
+		if (hidesIcon) parts.push(this.iconHiddenCSS(def));
 
 		// Light mode (default). See accentProps for what the three color
 		// variables are and why an untouched built-in gets only two of them.
@@ -800,18 +813,20 @@ export class CSSInjector {
 		// DOM copy is also baked in by paintIcons for PDF export, where this
 		// adopted stylesheet is dropped. Always the "regular" role: the
 		// selector is Obsidian's blockquote DOM, which no other role produces.
-		const iconSvg = this.icons.resolveSvg(def.icon, "regular");
+		const iconSvg = hidesIcon
+			? null
+			: this.icons.resolveSvg(def.icon, "regular");
 		if (iconSvg) {
 			parts.push(this.generateIconOverride(def.id, def.icon, iconSvg));
 		}
 
 		// Emoji icon override (renders the glyph via ::after) for live view.
-		if (def.icon.type === "emoji") {
+		if (!hidesIcon && def.icon.type === "emoji") {
 			parts.push(this.generateEmojiOverride(def.id, def.icon.value));
 		}
 
 		// Icon position/size transform
-		const iconTransform = this.getIconTransformCSS(def);
+		const iconTransform = hidesIcon ? "" : this.getIconTransformCSS(def);
 		if (iconTransform) {
 			parts.push(iconTransform);
 		}
@@ -890,15 +905,17 @@ export class CSSInjector {
 						this.generateIconOverride(alias, def.icon, iconSvg),
 					);
 				}
-				if (def.icon.type === "emoji") {
+				if (!hidesIcon && def.icon.type === "emoji") {
 					parts.push(
 						this.generateEmojiOverride(alias, def.icon.value),
 					);
 				}
-				const aliasTransform = this.getIconTransformCSS({
-					...def,
-					id: alias,
-				});
+				const aliasTransform = hidesIcon
+					? ""
+					: this.getIconTransformCSS({
+							...def,
+							id: alias,
+						});
 				if (aliasTransform) {
 					parts.push(aliasTransform);
 				}
@@ -1238,6 +1255,49 @@ export class CSSInjector {
 			);
 		}
 
+		return parts.join("\n\n");
+	}
+
+	/**
+	 * Everything a callout the user asked to draw with no icon needs, for its own
+	 * id and every alias.
+	 *
+	 * `display: none` rather than `visibility` or a zero size, because the point
+	 * is to take the icon *out of the layout*: `.callout-icon` is a flex item of
+	 * `.callout-title`, so removing it collapses core's own `gap` between icon and
+	 * title along with the `margin-inline-end` this plugin adds in
+	 * {@link generateGlobalStyleCSS}. Anything that merely hid the artwork would
+	 * leave the title floating a glyph-width in from the padding edge.
+	 *
+	 * Deliberately **not** wrapped in `@media screen`, unlike the three ::after
+	 * overrides. Those are screen-only so the DOM copy {@link paintIcon} bakes can
+	 * take over in print; here there is nothing to take over, and the icon has to
+	 * be just as absent in a PDF as it is on screen.
+	 *
+	 * The second rule undoes the global "Align content with title" indent, which
+	 * is a fixed `calc(--icon-size + gap)` on `.callout-content` and knows nothing
+	 * about whether this callout has an icon to align past. Left standing it would
+	 * indent the body under empty space. One class-unit more specific than the
+	 * global rule (whose `:where()` exclusion suffix contributes zero), so it wins
+	 * on weight alone and needs no `!important`.
+	 */
+	private iconHiddenCSS(def: CalloutDefinition): string {
+		const aligned = this.registry.settings.globalStyle.alignContentWithTitle;
+		const parts: string[] = [];
+		for (const id of [def.id, ...(def.aliases ?? [])]) {
+			parts.push(
+				`${calloutSel(id)} > .callout-title > .callout-icon {\n` +
+					`  display: none;\n` +
+					`}`,
+			);
+			if (aligned) {
+				parts.push(
+					`${calloutSel(id)} > .callout-content {\n` +
+						`  padding-inline-start: 0;\n` +
+						`}`,
+				);
+			}
+		}
 		return parts.join("\n\n");
 	}
 
@@ -1641,6 +1701,10 @@ export class CSSInjector {
 	 * artwork the callout does not own.
 	 */
 	private paintIcon(iconEl: HTMLElement, def: CalloutDefinition): void {
+		// Nothing to bake for print when the icon is off: iconHiddenCSS takes the
+		// whole box out of the layout in every medium, so a DOM copy here would
+		// only be an invisible child of a display:none parent.
+		if (def.hideIcon === true) return;
 		const doc = iconEl.ownerDocument;
 		const isDark = doc.body?.classList.contains("theme-dark") ?? false;
 		renderIconInto(iconEl, def.icon, createIconResolver(this.registry), {
@@ -1952,11 +2016,31 @@ export class CSSInjector {
 			.map((id) => `:not([data-callout="${id}"])`)
 			.join("");
 
-		const iconCSS = this.getIconCSS(fallbackDef);
+		// The fallback template drawn with no icon means every unknown id in the
+		// vault has none either — see iconHiddenCSS for what "no icon" costs. The
+		// rules here are the same two, rewritten for this selector: `!important`
+		// at a specificity the :not() chain already inflates past every
+		// per-callout rule, since that is the register the whole block speaks in.
+		const hidesIcon = fallbackDef.hideIcon === true;
+		const iconCSS = hidesIcon ? "" : this.getIconCSS(fallbackDef);
 
 		const parts: string[] = [
 			"/* Fallback callout style for unrecognized types */",
 		];
+		if (hidesIcon) {
+			parts.push(
+				`body .callout${notSelectors} > .callout-title > .callout-icon {\n` +
+					`  display: none !important;\n` +
+					`}`,
+			);
+			if (this.registry.settings.globalStyle.alignContentWithTitle) {
+				parts.push(
+					`body .callout${notSelectors} > .callout-content {\n` +
+						`  padding-inline-start: 0 !important;\n` +
+						`}`,
+				);
+			}
+		}
 
 		// Use `body` prefix + `!important` so the fallback wins over Obsidian's
 		// built-in callout color/icon definitions. The `:not()` chain makes this
@@ -2002,7 +2086,9 @@ export class CSSInjector {
 
 		// Pack icon override for fallback (live view; PDF uses the hidden DOM
 		// copy baked by paintIcons via resolveDef).
-		const fallbackSvg = this.icons.resolveSvg(fallbackDef.icon, "regular");
+		const fallbackSvg = hidesIcon
+			? null
+			: this.icons.resolveSvg(fallbackDef.icon, "regular");
 		if (fallbackSvg) {
 			const dataUri = svgToDataUri(fallbackSvg);
 			const picture = userImageFor(fallbackDef.icon);
@@ -2035,7 +2121,7 @@ export class CSSInjector {
 		}
 
 		// Emoji icon override for fallback (live view).
-		if (fallbackDef.icon.type === "emoji") {
+		if (!hidesIcon && fallbackDef.icon.type === "emoji") {
 			const safe = fallbackDef.icon.value
 				.replace(/\\/g, "\\\\")
 				.replace(/"/g, '\\"');

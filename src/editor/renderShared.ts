@@ -13,7 +13,7 @@
 import type { CalloutDefinition, CalloutRenderRole } from "../types";
 import type { CalloutRegistry } from "../manager/CalloutRegistry";
 import { normalizeCalloutId } from "../utils/calloutId";
-import { renderIconInto } from "../icons/renderIcon";
+import { iconRenderKey, renderIconInto } from "../icons/renderIcon";
 import { createIconResolver } from "../icons/resolver";
 
 /** Class names shared between Live Preview widgets and reading-view DOM. */
@@ -54,6 +54,15 @@ export const CSS_HEADING_TITLE = "cs-heading-title";
 export const CSS_HEADING_TITLE_GAP = "cs-heading-title-gap";
 export const CSS_TOKEN_ICON = "cs-callout-icon";
 export const CSS_TOKEN_NAME = "cs-callout-name";
+/**
+ * A token that ended up with nothing to draw: a callout set to `hideIcon` whose
+ * variant also shows no name (the ref token, and the content pill's lead, which
+ * is nothing but an icon). The span still has to exist — callers insert it at a
+ * known position and the accent rules key on `[data-callout]` — but it carries a
+ * `gap` and a `margin-inline-end` that would show up as a stray space before the
+ * text it precedes, so the class hides it outright.
+ */
+export const CSS_TOKEN_EMPTY = "cs-token-empty";
 export const CSS_UNKNOWN = "cs-unknown";
 /**
  * Modifier on an inline pill carrying `{…}` content (`[!warning]{be careful}`).
@@ -277,6 +286,24 @@ export function paintRoleIcon(
 	});
 }
 
+/**
+ * The icon half of a Live Preview widget's `eq()` snapshot.
+ *
+ * `iconRenderKey` alone is not enough: `hideIcon` changes the DOM this module
+ * builds — no icon span at all — without changing the icon it would have drawn,
+ * so two widgets either side of the toggle would compare equal and CodeMirror
+ * would keep the stale one until the line was edited.
+ */
+export function tokenIconKey(
+	def: CalloutDefinition | undefined,
+	registry: CalloutRegistry,
+	role: CalloutRenderRole,
+): string {
+	if (!def) return "";
+	if (def.hideIcon === true) return "none";
+	return iconRenderKey(def.icon, createIconResolver(registry), role);
+}
+
 /** Where a callout token DOM is rendered — decides its root class. */
 export type CalloutTokenVariant = "inline" | "heading" | "ref";
 
@@ -350,10 +377,19 @@ export function buildCalloutTokenDom(
 	root.setAttribute("data-callout", calloutDomId(rawId, resolved));
 	if (metadata) root.setAttribute("data-callout-metadata", metadata);
 
-	const iconEl = createSpan();
-	iconEl.classList.add(CSS_TOKEN_ICON);
-	root.appendChild(iconEl);
-	if (def) paintRoleIcon(iconEl, def, registry, VARIANT_ROLE[variant]);
+	// Drawn with no icon: build no span at all, rather than an empty one. The
+	// token roots are flex boxes, so an empty item would still claim the `gap`
+	// between icon and name — the same reason `refShowIcon` suppresses the ref
+	// token's icon by omission instead of by hiding it.
+	const hidesIcon = def?.hideIcon === true;
+	if (!hidesIcon) {
+		const iconEl = createSpan();
+		iconEl.classList.add(CSS_TOKEN_ICON);
+		root.appendChild(iconEl);
+		if (def) paintRoleIcon(iconEl, def, registry, VARIANT_ROLE[variant]);
+	} else if (!showName) {
+		root.classList.add(CSS_TOKEN_EMPTY);
+	}
 
 	if (showName) {
 		const nameEl = createSpan();
@@ -390,10 +426,16 @@ export function buildCalloutLeadDom(
 ): HTMLElement {
 	const lead = createSpan();
 	lead.classList.add(CSS_CALLOUT_LEAD);
+	const { def } = resolveCalloutDef(registry, rawId);
+	// The lead is nothing but the icon, so with no icon there is nothing left to
+	// draw — and its own `margin-inline-end` would open a gap before the payload.
+	if (def?.hideIcon === true) {
+		lead.classList.add(CSS_TOKEN_EMPTY);
+		return lead;
+	}
 	const iconEl = createSpan();
 	iconEl.classList.add(CSS_TOKEN_ICON);
 	lead.appendChild(iconEl);
-	const { def } = resolveCalloutDef(registry, rawId);
 	if (def) paintRoleIcon(iconEl, def, registry, "inline");
 	return lead;
 }

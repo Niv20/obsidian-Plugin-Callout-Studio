@@ -97,7 +97,14 @@ export class IconService implements IconResolver {
 	 * costs nothing.
 	 */
 	async initialize(): Promise<void> {
-		const icons = this.host.registry.getAll().map((def) => def.icon);
+		// A callout drawing no icon still stores one, but nothing paints it, so
+		// it must not pull a whole pack off disk (or, further down, off the
+		// network). Its cached SVG is left alone by cleanupUnusedIconSvgs, so
+		// turning the icon back on needs neither.
+		const icons = this.host.registry
+			.getAll()
+			.filter((def) => def.hideIcon !== true)
+			.map((def) => def.icon);
 		const results = await this.packs.loadUsed(icons.map((icon) => icon.type));
 		// Repaint: pack artwork read from disk arrives after the first inject.
 		this.host.cssInjector.inject();

@@ -43,6 +43,8 @@ Searching works offline for every source from the moment you install — the nam
 
 You can also fine-tune each callout's icon size and horizontal/vertical offset.
 
+**Or no icon at all.** Hover the icon tile in the callout editor and a small **✕** appears in its corner (always visible on phone and tablet, where there is no hover); press it and the callout renders with no icon anywhere — block, heading, inline, and in an exported PDF. The title moves left to the callout's edge, and if **Align content with title** is on, the body follows it rather than staying indented under nothing. The icon you had picked is remembered, so pressing the tile again reopens the picker on that exact drawing.
+
 ### Per-mode colors
 
 - Separate **Light** and **Dark** colors for every callout. Callout Studio honors Obsidian's current theme automatically.

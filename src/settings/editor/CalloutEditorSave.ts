@@ -28,6 +28,7 @@ export type CalloutEditorSaveState = {
 	displayName: string;
 	calloutId: string;
 	icon: CalloutDefinition["icon"];
+	hideIcon: boolean;
 	colorLight: string;
 	colorDark: string;
 	bgColorLight: string;
@@ -215,6 +216,13 @@ export async function performCalloutEditorSave(
 		id: state.calloutId,
 		displayName: newDisplayName,
 		icon: { ...(fallbackBase?.icon ?? state.icon) },
+		// `true` or absent, never `false` — an explicit `false` would leave a
+		// built-in nobody edited reading as customized forever (isModified
+		// compares `value ?? null`), which is the same trap setExternalStyle
+		// deletes its key to avoid.
+		hideIcon:
+			(fallbackBase ? fallbackBase.hideIcon === true : state.hideIcon) ||
+			undefined,
 		colorLight: fallbackBase?.colorLight ?? state.colorLight,
 		colorDark: fallbackBase?.colorDark ?? state.colorDark,
 		bgColorLight: fallbackBase
@@ -312,7 +320,7 @@ export async function performCalloutEditorSave(
 	// Packs served one icon at a time fetch on save, so the artwork is in the
 	// cache before the definition is rendered anywhere. Packs that ship or
 	// download their data whole already have it and return immediately.
-	if (packFor(def.icon)?.kind === "perIconRemote") {
+	if (def.hideIcon !== true && packFor(def.icon)?.kind === "perIconRemote") {
 		onMaterialDownloadStart?.();
 		try {
 			await plugin.ensureIconArtwork(def.icon);

@@ -616,6 +616,19 @@
 
 /* ─── Icon tile in the editor ─────────────────────────────────── */
 
+/* Holds the tile and the delete badge as SIBLINGS. The badge has to be its own
+   button (its own action, its own label, its own focus stop) and the tile is
+   already a <button> — a nested one is not parseable HTML, so the parser would
+   close the tile and re-parent the badge outside it.
+
+   `flex: 0 0 auto` for the same reason the tile carries it (see below): the
+   wrapper is now the flex item the setting row lays out. */
+.cs-icon-tile-wrap {
+	position: relative;
+	display: inline-flex;
+	flex: 0 0 auto;
+}
+
 /* The tile is the picker — the drawing the user is about to replace is the
    button that replaces it. `flex: 0 0 auto` because the 44px IS the design and
    there is nothing inside to give up: when the revert button appears on phone
@@ -684,20 +697,232 @@
 	height: 16px;
 }
 
-.cs-icon-tile:hover .callout-studio-icon-preview,
-.cs-icon-tile:focus-visible .callout-studio-icon-preview {
-	opacity: 0;
+/* Behind `hover: hover` so a touch device never matches it. Not a nicety: iOS
+   Safari applies :hover on the first tap of an element that has hover styles
+   ("sticky hover"), which here would blank the artwork and swap in the swap
+   arrow on the way into the picker. A phone has no pointer to reveal anything
+   with, so it simply keeps showing the drawing — which is the content. */
+@media (hover: hover) {
+	.cs-icon-tile:hover .callout-studio-icon-preview,
+	.cs-icon-tile:focus-visible .callout-studio-icon-preview {
+		opacity: 0;
+	}
+
+	.cs-icon-tile:hover .cs-icon-tile-edit,
+	.cs-icon-tile:focus-visible .cs-icon-tile-edit {
+		opacity: 1;
+		transform: none;
+	}
 }
 
-.cs-icon-tile:hover .cs-icon-tile-edit,
-.cs-icon-tile:focus-visible .cs-icon-tile-edit {
+/* ── Delete badge (the iOS home-screen ⓧ) ──
+
+   Straddling the corner, iOS-style: the offset is exactly half the badge, so
+   its CENTRE sits on the tile's corner point and it is half in, half out on
+   both axes. Overhanging is what makes it read as attached-to-but-not-part-of
+   the tile — a badge tucked inside the frame reads as an icon *in* the artwork.
+
+   `inset-inline-start`, not `left`: iOS puts the badge on the LEADING corner
+   and mirrors it with the layout, so the logical property is not a convenience
+   here — it is the behaviour, and it costs no RTL selector. It also happens to
+   be the safe direction. `.modal-content` is the scroll container, so its
+   `overflow-y: auto` computes `overflow-x` to `auto` as well and it DOES clip
+   horizontally — but the setting row's controls are trailing-aligned, so the
+   leading corner always points inward, into the modal, in both directions.
+
+   `--color-red`, not `--background-modifier-error`: that one is a translucent
+   wash meant to tint a row, and over the tile it came out muddy. `--color-red`
+   is the palette's solid red, redefined by Obsidian for dark mode and by any
+   theme that recolours the palette, so it needs no `.theme-dark` block here.
+   The glyph is a literal white rather than `--text-on-accent`: that variable
+   tracks the *accent* colour, which this surface is not, and white is right on
+   a saturated red in either mode.
+
+   The ring is what stops the circle from colliding with the tile's own 1px
+   border where it crosses: it punches the badge out of the modal's background,
+   which is exactly the separation iOS draws.
+
+   ── Why the four-class selector ──
+
+   Obsidian's `button:not(.clickable-icon)` is (0,1,1) — the `:not()` takes the
+   weight of its argument — and it sets `color`, `background-color` AND
+   `box-shadow`. A one-class rule here is (0,1,0) and loses all three: the badge
+   came out `--interactive-normal` grey with the theme's button shadow. Three
+   more of Obsidian's reach further still, and each would break something:
+
+     button:hover                                      (0,1,1)  grey on hover
+     button:not(.clickable-icon).mobile-tap            (0,2,1)  grey on tap
+     .is-phone .setting-item-control button            (0,2,1)  padding: 10px
+     .is-phone … button:not(.clickable-icon)           (0,3,1)  width: 100%
+
+   So the badge is written at (0,4,1) throughout — the same trick, and the same
+   reason, as the tile's width override above. Adding `clickable-icon` would
+   duck the first and last of those, but not the `.is-phone` padding, and it
+   would drag in that class's own styling to fight instead. */
+.callout-studio-editor
+	.setting-item
+	.setting-item-control
+	button.cs-icon-tile-clear {
+	position: absolute;
+	inset-block-start: -9px;
+	inset-inline-start: -9px;
+	width: 18px;
+	height: 18px;
+	padding: 0;
+	border: none;
+	border-radius: 50%;
+	background-color: var(--color-red, #e93147);
+	box-shadow: 0 0 0 1.5px var(--background-primary);
+	color: #fff;
+	cursor: pointer;
+	transition:
+		opacity 120ms ease,
+		background-color 120ms ease;
+}
+
+/* Layout and visibility are deliberately NOT in the rule above, and the split
+   is load-bearing in both directions. Obsidian contests colour, size and
+   shadow, so those need (0,4,1); it touches `display`, `opacity` and
+   `pointer-events` only on `[disabled]` and `.mod-loading`, so these belong at
+   one class — and they have to be there, because at (0,4,1) the `opacity: 0`
+   would outrank every reveal rule below and the `display: flex` would outrank
+   the empty-state rule after it. */
+.cs-icon-tile-clear {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	opacity: 0;
+	pointer-events: none;
+}
+
+/* No icon means nothing to remove, so the badge leaves the layout and the tab
+   order together. Keyed on the wrapper's own state class rather than a
+   `cs-hidden` toggled from TypeScript: one fact, one place, and (0,3,0) beats
+   the `display: flex` above outright instead of tying with it and depending on
+   which rule happens to come later in this file. */
+.cs-icon-tile-wrap.is-empty .cs-icon-tile-clear {
+	display: none;
+}
+
+/* Hover feedback of its own, because the (0,4,1) rule above also shut out
+   Obsidian's `button:hover` — which would have turned it grey anyway. */
+.callout-studio-editor
+	.setting-item
+	.setting-item-control
+	button.cs-icon-tile-clear:hover {
+	background-color: color-mix(
+		in oklch,
+		var(--color-red, #e93147) 85%,
+		black
+	);
+}
+
+.cs-icon-tile-clear svg {
+	width: 12px;
+	height: 12px;
+	/* Lucide strokes with currentColor; the badge's white has to beat the
+	   `.svg-icon` colour Obsidian sets on icons elsewhere in the modal. */
+	color: inherit;
+}
+
+/* Its own focus ring, outside the cutout ring, because the cutout occupies the
+   box-shadow Obsidian's `button:focus-visible` would have used — and that rule
+   is (0,1,1), so it would otherwise replace the cutout rather than join it. */
+.callout-studio-editor
+	.setting-item
+	.setting-item-control
+	button.cs-icon-tile-clear:focus-visible {
+	outline: none;
+	box-shadow:
+		0 0 0 1.5px var(--background-primary),
+		0 0 0 3.5px var(--background-modifier-border-focus);
+}
+
+/* Invisible but still tabbable, on purpose. `pointer-events: none` keeps a
+   stray click off a badge nobody can see, and does nothing to keyboard focus.
+
+   `:focus-visible` on the TILE (reaching the badge as its next sibling) rather
+   than `:focus-within` on the wrapper. A plain `:focus` — which is what
+   `:focus-within` tests — is left behind by a mouse click, so closing the icon
+   picker returned focus to the tile and the badge stayed lit with the pointer
+   nowhere near it, until something else was clicked. `:focus-visible` is only
+   set when the browser judges focus should be *shown*, i.e. keyboard
+   navigation, which is the case this rule exists for in the first place. */
+@media (hover: hover) {
+	.cs-icon-tile-wrap:hover .cs-icon-tile-clear,
+	.cs-icon-tile:focus-visible + .cs-icon-tile-clear,
+	.cs-icon-tile-clear:focus-visible {
+		opacity: 1;
+		pointer-events: auto;
+	}
+}
+
+/* No hover exists here, so the badge is permanent — the iPhone equivalent of
+   jiggle mode, minus the mode. Bigger, and with `::after` padding the tap area
+   out past the 22px circle, since half of it hangs off the tile and the half
+   that does not would otherwise be competing for taps with the picker. */
+@media (hover: none) {
+	/* Four classes again, and here it is the size that needs them: this is the
+	   phone, where `.is-phone .setting-item-control button:not(.clickable-icon)`
+	   (0,3,1) sets `width: 100%` and its sibling sets `padding: 10px`. A badge
+	   that inherited either would be a red bar across the row. */
+	.callout-studio-editor
+		.setting-item
+		.setting-item-control
+		button.cs-icon-tile-clear {
+		inset-block-start: -11px;
+		inset-inline-start: -11px;
+		width: 22px;
+		height: 22px;
+		padding: 0;
+	}
+
+	/* One class, like the base visibility rule it overrides — and after it in
+	   the file, which is what makes it win the tie. */
+	.cs-icon-tile-clear {
+		opacity: 1;
+		pointer-events: auto;
+	}
+
+	.cs-icon-tile-clear svg {
+		width: 14px;
+		height: 14px;
+	}
+
+	.cs-icon-tile-clear::after {
+		content: "";
+		position: absolute;
+		inset: -6px;
+	}
+}
+
+/* ── Empty state (the callout is set to draw no icon) ──
+
+   The `+` is permanent rather than hover-revealed: there is no hover on touch,
+   and an empty dashed box with nothing in it reads as broken rather than as
+   "add one". Hover only warms its colour. */
+.cs-icon-tile-wrap.is-empty .cs-icon-tile {
+	border-style: dashed;
+	background-color: transparent;
+}
+
+.cs-icon-tile-wrap.is-empty .cs-icon-tile-edit {
 	opacity: 1;
 	transform: none;
+	color: var(--text-faint);
+}
+
+@media (hover: hover) {
+	.cs-icon-tile-wrap.is-empty .cs-icon-tile:hover .cs-icon-tile-edit,
+	.cs-icon-tile-wrap.is-empty .cs-icon-tile:focus-visible .cs-icon-tile-edit {
+		color: var(--text-accent);
+	}
 }
 
 @media (prefers-reduced-motion: reduce) {
 	.cs-icon-tile,
 	.cs-icon-tile-edit,
+	.cs-icon-tile-clear,
 	.callout-studio-icon-preview {
 		transition: none;
 	}
@@ -705,6 +930,15 @@
 	.cs-icon-tile-edit {
 		transform: none;
 	}
+}
+
+/* The stand-in drawn by renderNoIcon in the surfaces that MANAGE callouts — the
+   settings list, autocomplete, the statistics and replace modals. Muted, so it
+   reads as "deliberately none" beside rows that carry real artwork; a blank
+   slot there would read as an icon still downloading. Content surfaces draw
+   nothing at all and never reach this rule. */
+.cs-icon-none {
+	color: var(--text-faint);
 }
 
 .callout-studio-icon-preview {
@@ -4000,8 +4234,23 @@ input.cs-input-invalid:focus {
    stripping the token prefix (calloutPostProcessor.ts), so without this the
    title text would sit glued directly against the icon. Only set when the
    source really had that space — `[!id]-Title` is glued in both views. */
-.cs-heading-callout:not(.cm-line) .cs-heading-token + .cs-heading-title-gap {
+   `:not(.cs-token-empty)` because a hidden sibling is still a sibling: a
+   heading callout drawn with no icon leaves a token with nothing in it, and
+   spacing the title away from something that occupies no width would indent it
+   0.35em past the bar's own inset for no visible reason. */
+.cs-heading-callout:not(.cm-line)
+	.cs-heading-token:not(.cs-token-empty)
+	+ .cs-heading-title-gap {
 	margin-inline-start: 0.35em;
+}
+
+/* A token whose callout draws no icon and whose variant shows no name has
+   nothing left in it — a reference token, or a content pill's lead, which is
+   the icon and nothing else. The span still has to exist (callers insert it at
+   a known position), but its `margin-inline-end` would show up as a space
+   before the text it precedes, so it goes away entirely. */
+.cs-token-empty {
+	display: none;
 }
 
 /* Icon boxes scale with the surrounding font (pill text or heading). */

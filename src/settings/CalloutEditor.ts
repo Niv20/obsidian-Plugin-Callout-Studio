@@ -251,6 +251,12 @@ export class CalloutEditor extends Modal {
 	private displayName: string;
 	private calloutId: string;
 	private icon: CalloutIcon;
+	/**
+	 * Draw this callout with no icon. `icon` above is left holding whatever was
+	 * last picked, so the tile's ⓧ is undoable: re-opening the picker lands on
+	 * that exact drawing, already highlighted.
+	 */
+	private hideIcon: boolean;
 	private colorLight: string;
 	private colorDark: string;
 	private bgColorLight: string;
@@ -284,6 +290,13 @@ export class CalloutEditor extends Modal {
 	 * that can invalidate it afterwards.
 	 */
 	private syncPictureBox: () => void = () => undefined;
+	/**
+	 * Shows or hides the three per-role icon-adjustment boxes. Size and offset
+	 * describe an icon, so with `hideIcon` on there is nothing for nine sliders
+	 * to move — and their stored values are kept, not reset, so turning the icon
+	 * back on restores the nudges with it.
+	 */
+	private syncIconAdjust: () => void = () => undefined;
 	/**
 	 * Colours the live preview shows *instead of* the committed ones while the
 	 * user hovers a palette that was never clicked. Deliberately kept out of
@@ -344,6 +357,7 @@ export class CalloutEditor extends Modal {
 		this.icon = seed?.icon
 			? { ...seed.icon }
 			: { type: "lucide", value: "lucide-pencil" };
+		this.hideIcon = seed?.hideIcon === true;
 		this.colorLight = seed?.colorLight ?? defaultPalette.colorLight;
 		this.colorDark = seed?.colorDark ?? defaultPalette.colorDark;
 		this.bgColorLight =
@@ -580,15 +594,27 @@ export class CalloutEditor extends Modal {
 		// The tile *is* the picker. A preview square beside a "Pick icon" button
 		// is two things pointing at one action; the drawing the user is about to
 		// replace is the most direct target that action has, so it is the button.
-		// The pencil is what says so — the icon fades out under it on hover and
-		// focus, which is also why it can share the box instead of overlaying it.
-		const iconTile = iconSetting.controlEl.createEl("button", {
+		// The swap arrow is what says so — the icon fades out under it on hover
+		// and focus, which is also why it can share the box instead of overlaying
+		// it. (An arrow rather than a pencil since the ⓧ moved in beside it: a
+		// pencil next to a delete badge reads as two flavours of "edit this".)
+		//
+		// A wrapper, not the tile itself, because the ⓧ is a second button and a
+		// <button> inside a <button> is not parseable HTML — the parser closes the
+		// outer one and re-parents the inner. Two siblings also give the two
+		// actions two real focus stops and two labels.
+		const iconTileWrap = iconSetting.controlEl.createDiv("cs-icon-tile-wrap");
+		const iconTile = iconTileWrap.createEl("button", {
 			cls: "cs-icon-tile",
-			attr: { type: "button", "aria-label": t("editor.pickIcon") },
+			attr: { type: "button" },
 		});
 		const iconPreviewEl = iconTile.createDiv("callout-studio-icon-preview");
-		this.renderIconPreview(iconPreviewEl);
-		setIcon(iconTile.createDiv("cs-icon-tile-edit"), "pencil");
+		const iconGlyphEl = iconTile.createDiv("cs-icon-tile-edit");
+		const iconClearBtn = iconTileWrap.createEl("button", {
+			cls: "cs-icon-tile-clear",
+			attr: { type: "button", "aria-label": t("editor.removeIcon") },
+		});
+		setIcon(iconClearBtn, "x");
 
 		// Reverts the icon alone to the built-in's shipped value; only shown once
 		// it has actually diverged from that default. `iconsEqual` rather than a
@@ -598,7 +624,9 @@ export class CalloutEditor extends Modal {
 		// opened, having changed nothing.
 		let iconRevertBtn: ExtraButtonComponent | null = null;
 		const iconMatchesDefault = (): boolean =>
-			!originalDef || iconsEqual(this.icon, originalDef.icon);
+			!originalDef ||
+			(iconsEqual(this.icon, originalDef.icon) &&
+				this.hideIcon === (originalDef.hideIcon === true));
 		const syncIconRevert = (): void => {
 			iconRevertBtn?.extraSettingsEl.toggleClass(
 				"cs-hidden",
@@ -606,23 +634,53 @@ export class CalloutEditor extends Modal {
 			);
 		};
 
+		// Everything the icon row shows, in one place: three call sites used to
+		// repeat four of these lines each and the fifth kept being forgotten.
+		const syncIconTile = (): void => {
+			iconTileWrap.toggleClass("is-empty", this.hideIcon);
+			iconPreviewEl.empty();
+			iconGlyphEl.empty();
+			if (this.hideIcon) {
+				setIcon(iconGlyphEl, "plus");
+				iconTile.setAttribute("aria-label", t("editor.pickIcon"));
+			} else {
+				this.renderIconPreview(iconPreviewEl);
+				setIcon(iconGlyphEl, "arrow-left-right");
+				iconTile.setAttribute("aria-label", t("editor.replaceIcon"));
+			}
+			// The ⓧ itself needs no toggle here: `is-empty` on the wrapper above
+			// is the one fact, and styles.css takes the badge out of the layout
+			// (and so out of the tab order) from that alone.
+			iconSetting.setDesc(this.getIconLabel());
+			syncIconRevert();
+			// The only thing that can turn the Picture section on or off.
+			this.syncPictureBox();
+			this.syncIconAdjust();
+		};
+
 		const openIconPicker = async (): Promise<void> => {
+			// `this.icon` even while hidden: the picker seeds its source, style
+			// controls and category from the current icon and highlights it in the
+			// grid, so an accidental ⓧ is two clicks from undone.
 			const picker = new IconPicker(this.plugin, this.icon);
 			const result = await picker.openAndWait();
 			if (!result) return;
 			this.icon = result;
+			// Picking a drawing is how you say you want one.
+			this.hideIcon = false;
 			// Material icons are already cached by the IconPicker
 			// before it closes, so the preview can render immediately.
-			iconSetting.setDesc(this.getIconLabel());
-			iconPreviewEl.empty();
-			this.renderIconPreview(iconPreviewEl);
-			// The only thing that can turn the Picture section on or off.
-			this.syncPictureBox();
-			syncIconRevert();
+			syncIconTile();
 			this.updatePreview();
 		};
 		iconTile.addEventListener("click", () => {
 			void openIconPicker();
+		});
+
+		iconClearBtn.addEventListener("click", () => {
+			this.hideIcon = true;
+			syncIconTile();
+			this.updatePreview();
 		});
 
 		iconSetting.addExtraButton((btn) => {
@@ -632,15 +690,15 @@ export class CalloutEditor extends Modal {
 				.onClick(() => {
 					if (!originalDef) return;
 					this.icon = { ...originalDef.icon };
-					iconSetting.setDesc(this.getIconLabel());
-					iconPreviewEl.empty();
-					this.renderIconPreview(iconPreviewEl);
-					this.syncPictureBox();
-					syncIconRevert();
+					this.hideIcon = originalDef.hideIcon === true;
+					syncIconTile();
 					this.updatePreview();
 				});
 		});
-		syncIconRevert();
+		// First paint. `syncPictureBox`/`syncIconAdjust` are still their no-op
+		// defaults here — the boxes they hide do not exist yet — so both are
+		// called again at the bottom of their own sections.
+		syncIconTile();
 
 		// ── Preview + Adjustments Panel (two-column) ────────────────
 		const previewPanel = contentEl.createDiv({
@@ -693,9 +751,15 @@ export class CalloutEditor extends Modal {
 		// Stacked rather than tabbed so all nine values stay on screen at once
 		// with no mode to remember; the preview column is sticky (styles.css),
 		// so it stays in view while this column scrolls.
-		for (const role of ICON_ADJUST_ORDER) {
-			this.renderIconAdjustGroup(adjustCol, role);
-		}
+		const adjustBoxes = ICON_ADJUST_ORDER.map((role) =>
+			this.renderIconAdjustGroup(adjustCol, role),
+		);
+		this.syncIconAdjust = () => {
+			for (const box of adjustBoxes) {
+				box.toggleClass("cs-hidden", this.hideIcon);
+			}
+		};
+		this.syncIconAdjust();
 
 		// ── Picture section ──
 		// Only a picture has anything to say here, so the box hides itself for
@@ -723,7 +787,7 @@ export class CalloutEditor extends Modal {
 			});
 		this.syncPictureBox = () => {
 			const picture =
-				this.icon.type === "image"
+				!this.hideIcon && this.icon.type === "image"
 					? findUserImage(this.icon.value)
 					: undefined;
 			// A mask is a stencil, so only a flat drawing can follow the callout;
@@ -1557,11 +1621,13 @@ export class CalloutEditor extends Modal {
 	 * respect but which field of `this.iconAdjust[role]` they write, so the box
 	 * is built from a small table rather than three near-copies — the shape the
 	 * single-triple version of this panel had, tripled.
+	 *
+	 * Returns the box so the caller can hide it when the callout draws no icon.
 	 */
 	private renderIconAdjustGroup(
 		parent: HTMLElement,
 		role: CalloutRenderRole,
-	): void {
+	): HTMLElement {
 		const box = parent.createDiv({ cls: "callout-studio-adjust-section" });
 		box.createDiv({
 			cls: "callout-studio-adjust-header",
@@ -1628,6 +1694,8 @@ export class CalloutEditor extends Modal {
 					});
 			});
 		}
+
+		return box;
 	}
 
 	/**
@@ -1664,6 +1732,7 @@ export class CalloutEditor extends Modal {
 			displayName: this.displayName,
 			calloutId: this.calloutId,
 			icon: this.icon,
+			hideIcon: this.hideIcon,
 			colorLight: this.colorLight,
 			colorDark: this.colorDark,
 			bgColorLight: this.bgColorLight,
@@ -1685,6 +1754,7 @@ export class CalloutEditor extends Modal {
 			displayName: "",
 			calloutId: "",
 			icon: this.icon,
+			hideIcon: this.hideIcon,
 			colorLight: this.colorLight,
 			colorDark: this.colorDark,
 			bgColorLight: this.bgColorLight,
@@ -1939,6 +2009,7 @@ export class CalloutEditor extends Modal {
 	}
 
 	private getIconLabel(): string {
+		if (this.hideIcon) return t("editor.noIcon");
 		return describeIcon(this.icon, this.plugin.settings.userImages ?? []);
 	}
 
@@ -2102,6 +2173,12 @@ export class CalloutEditor extends Modal {
 			id: this.currentPreviewId(),
 			displayName: this.displayName.trim() || t("editor.untitledCallout"),
 			icon: { ...this.icon },
+			// `true`-or-absent here too: the live preview is registered under a
+			// real built-in's id, and a literal `false` would read as an edit and
+			// drop that built-in's deference to the theme's `--callout-*` while
+			// the modal is merely open. Same reasoning as the omitted background
+			// above; see authoredStyle.ts.
+			...(this.hideIcon ? { hideIcon: true as const } : {}),
 			colorLight: colors.colorLight,
 			colorDark: colors.colorDark,
 			// Omitted rather than set to undefined, and for the same reason the
@@ -2168,6 +2245,7 @@ export class CalloutEditor extends Modal {
 				displayName: this.displayName,
 				calloutId: this.calloutId,
 				icon: this.icon,
+				hideIcon: this.hideIcon,
 				colorLight: this.colorLight,
 				colorDark: this.colorDark,
 				bgColorLight: this.bgColorLight,

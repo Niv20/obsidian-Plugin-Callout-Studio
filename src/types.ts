@@ -137,6 +137,26 @@ export interface CalloutDefinition {
 	id: string;
 	displayName: string;
 	icon: CalloutIcon;
+	/**
+	 * Render this callout with no icon at all.
+	 *
+	 * A display choice, not an icon — which is why it lives here rather than as a
+	 * `"none"` member of {@link IconPackId}. That union means *one body of
+	 * artwork*: a pack manifest entry, a downloaded file, an SVG cache key. A
+	 * sentinel there would need a pack behind it that draws nothing, would have
+	 * to overwrite `icon` (losing what the user picked), and would make every
+	 * older build reject the whole entry on import, since `validateIcon` only
+	 * accepts a type it knows.
+	 *
+	 * So `icon` is left exactly as it was. Turning the icon back on restores the
+	 * same drawing, offline: nothing overwrote it and `cleanupUnusedIconSvgs`
+	 * still counts it as in use, so the cached artwork is never pruned either.
+	 *
+	 * `true` or absent, never `false` — same shape as `transparentBg` below, so a
+	 * round-trip through `data.json` cannot make an untouched built-in read as
+	 * modified.
+	 */
+	hideIcon?: boolean;
 	colorLight: string;
 	colorDark: string;
 	foldable: boolean;

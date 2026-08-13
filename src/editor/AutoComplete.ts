@@ -23,7 +23,7 @@ import {
 import type CalloutStudioPlugin from "../main";
 import type { CalloutDefinition, CalloutRenderRole } from "../types";
 import { CalloutEditor } from "../settings/CalloutEditor";
-import { renderIconInto } from "../icons/renderIcon";
+import { renderIconInto, renderNoIcon } from "../icons/renderIcon";
 import { createIconResolver } from "../icons/resolver";
 import { getLocale, t } from "../i18n";
 import { splitCalloutMetadata } from "../utils/calloutId";
@@ -326,17 +326,21 @@ export class CalloutAutoComplete extends EditorSuggest<CalloutSuggestion> {
 			cls: "callout-studio-suggestion-icon",
 		});
 		iconEl.style.color = color;
-		renderIconInto(
-			iconEl,
-			def.icon,
-			createIconResolver(this.plugin.registry),
-			{
-				role: "regular",
-				fill: "currentColor",
-				missing: { kind: "placeholder", lucideId: "pencil" },
-				errorText: "📝",
-			},
-		);
+		if (def.hideIcon === true) {
+			renderNoIcon(iconEl);
+		} else {
+			renderIconInto(
+				iconEl,
+				def.icon,
+				createIconResolver(this.plugin.registry),
+				{
+					role: "regular",
+					fill: "currentColor",
+					missing: { kind: "placeholder", lucideId: "pencil" },
+					errorText: "📝",
+				},
+			);
+		}
 
 		// Text container
 		const textEl = el.createDiv({ cls: "callout-studio-suggestion-text" });

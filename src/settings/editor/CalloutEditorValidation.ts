@@ -30,6 +30,13 @@ export type SnapshotInput = {
 	displayName: string;
 	calloutId: string;
 	icon: unknown;
+	/**
+	 * Part of the dirty check for the same reason `transparentBg` is: removing
+	 * the icon changes nothing else in the form — `icon` deliberately keeps
+	 * holding the drawing it would have shown — so leaving it out left Save
+	 * disabled on the one edit the user had come to make.
+	 */
+	hideIcon: boolean;
 	colorLight: string;
 	colorDark: string;
 	bgColorLight: string;

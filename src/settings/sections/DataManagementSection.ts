@@ -304,8 +304,12 @@ export async function processImportedJSON(
 		ctx.display();
 		// An imported callout can name an icon from a source this vault has
 		// never downloaded, and the file carries no artwork. Fetch whatever
-		// is missing rather than leaving those callouts undrawable.
-		void ctx.plugin.ensureIconArtworkFor(defs.map((d) => d.icon));
+		// is missing rather than leaving those callouts undrawable. One that
+		// draws no icon is skipped: nothing renders its stored drawing, so it
+		// would be a download nobody could see.
+		void ctx.plugin.ensureIconArtworkFor(
+			defs.filter((d) => d.hideIcon !== true).map((d) => d.icon),
+		);
 	} else if (settingsImported) {
 		new Notice(t("notice.importedSettings"));
 		ctx.display();
