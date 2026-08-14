@@ -775,7 +775,7 @@
 	border: none;
 	border-radius: 50%;
 	background-color: var(--color-red, #e93147);
-	box-shadow: 0 0 0 1.5px var(--background-primary);
+	box-shadow: 0 0 0 1.5px var(--cs-surface, var(--background-primary));
 	color: #fff;
 	cursor: pointer;
 	transition:
@@ -837,7 +837,7 @@
 	button.cs-icon-tile-clear:focus-visible {
 	outline: none;
 	box-shadow:
-		0 0 0 1.5px var(--background-primary),
+		0 0 0 1.5px var(--cs-surface, var(--background-primary)),
 		0 0 0 3.5px var(--background-modifier-border-focus);
 }
 
@@ -1011,6 +1011,25 @@ button.callout-studio-icon-picker-loading {
 
 .modal.cs-modal {
 	--cs-modal-inset: var(--size-4-4);
+	/* The window's own paint, for anything inside it that has to read as flush
+	   with it — a fixed band, a panel, a popup, the ring cut out around a badge.
+
+	   It exists because `--background-primary` is NOT that colour on mobile.
+	   Obsidian ties the two together on the desktop (`--modal-background:
+	   var(--background-primary)`) and then breaks the tie twice over: mobile
+	   dark redefines `--color-base-00` to a true `#000` for OLED, and the tablet
+	   moves `--modal-background` off it onto `--background-secondary`. A band
+	   painted `--background-primary` therefore matched the window everywhere it
+	   was ever looked at and came out as a pure-black stripe across an iPad in
+	   dark mode. Following the window instead is right on all three, and is what
+	   the footer below already does.
+
+	   Defined here and nowhere else, so every call site reads it as
+	   `var(--cs-surface, var(--background-primary))`: outside a chromed modal
+	   the property is undefined and the fallback keeps the old behaviour, which
+	   is what the settings tab (painted `--background-primary` by Obsidian
+	   itself) still wants. */
+	--cs-surface: var(--modal-background);
 	display: flex;
 	flex-direction: column;
 	padding: 0;
@@ -1276,7 +1295,7 @@ button.callout-studio-icon-picker-loading {
 	/* Allow palette/fold popups to overflow outside the section while
 	   keeping the inner header's background clipped via its own radius. */
 	overflow: visible;
-	background: var(--background-primary);
+	background: var(--cs-surface, var(--background-primary));
 }
 
 .callout-studio-adjust-header {
@@ -1523,7 +1542,7 @@ button.callout-studio-icon-picker-loading {
 	padding: 6px 0;
 	border-radius: var(--radius-s);
 	border: 1px solid var(--background-modifier-border);
-	background-color: var(--background-primary);
+	background-color: var(--cs-surface, var(--background-primary));
 	box-shadow:
 		0 8px 18px rgba(0, 0, 0, 0.22),
 		0 2px 6px rgba(0, 0, 0, 0.18);
@@ -1896,7 +1915,7 @@ button.callout-studio-icon-picker-loading {
 	border-bottom: 1px solid var(--background-modifier-border);
 	padding: 10px var(--cs-modal-inset);
 	flex-shrink: 0;
-	background: var(--background-primary);
+	background: var(--cs-surface, var(--background-primary));
 }
 
 .icon-picker-source-label {
@@ -1969,7 +1988,7 @@ button.callout-studio-icon-picker-loading {
 	padding: 6px 0;
 	border-radius: var(--radius-s);
 	border: 1px solid var(--background-modifier-border);
-	background-color: var(--background-primary);
+	background-color: var(--cs-surface, var(--background-primary));
 	box-shadow:
 		0 8px 18px rgba(0, 0, 0, 0.22),
 		0 2px 6px rgba(0, 0, 0, 0.18);
@@ -2142,25 +2161,11 @@ button.callout-studio-icon-picker-loading {
 	padding: 0 var(--cs-modal-inset) 12px;
 }
 
-.icon-picker-search {
-	position: sticky;
-	top: 0;
-	z-index: 1;
-	background: var(--background-primary);
-	padding: 12px 0;
-	margin-bottom: 0;
-}
-
-.icon-picker-search input {
-	width: 100%;
-	padding: 6px 10px;
-}
-
 .icon-picker-toolbar {
 	position: sticky;
 	top: 0;
 	z-index: 1;
-	background: var(--background-primary);
+	background: var(--cs-surface, var(--background-primary));
 	display: flex;
 	gap: 8px;
 	padding: 12px 0;
@@ -2550,13 +2555,11 @@ button.callout-studio-icon-picker-loading {
 .callout-studio-settings .callout-studio-actions button:focus-visible,
 .callout-studio-row-buttons button:focus-visible,
 .cs-modal-footer button:focus-visible,
-.callout-studio-preview-toggle:focus-visible,
-.icon-picker-tab:focus-visible {
+.callout-studio-preview-toggle:focus-visible {
 	outline: 2px solid var(--text-accent);
 	outline-offset: -2px;
 }
 
-.icon-picker-search input:focus-visible,
 .icon-picker-toolbar input:focus-visible,
 .icon-picker-toolbar select:focus-visible {
 	outline: 2px solid var(--text-accent);
@@ -2564,7 +2567,6 @@ button.callout-studio-icon-picker-loading {
 }
 
 /* Minimum 32px touch targets */
-.icon-picker-search input,
 .icon-picker-toolbar input,
 .icon-picker-toolbar select {
 	min-height: 32px;
@@ -2991,7 +2993,7 @@ input.cs-input-invalid:focus {
 	padding: 0;
 	margin-bottom: 0;
 	overflow: visible;
-	background: var(--background-primary);
+	background: var(--cs-surface, var(--background-primary));
 }
 
 .cs-settings-group-header {
@@ -3189,7 +3191,7 @@ input.cs-input-invalid:focus {
 	right: -8px;
 	display: none;
 	color: var(--text-warning);
-	background: var(--background-primary);
+	background: var(--cs-surface, var(--background-primary));
 	border-radius: 50%;
 	line-height: 0;
 	padding: 1px;
@@ -3944,7 +3946,7 @@ input.cs-input-invalid:focus {
 	overflow-y: auto;
 	border: 1px solid var(--background-modifier-border);
 	border-radius: 6px;
-	background: var(--background-primary);
+	background: var(--cs-surface, var(--background-primary));
 }
 
 .callout-studio-vault-stats .cs-vault-stats-row {
