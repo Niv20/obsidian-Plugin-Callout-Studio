@@ -167,13 +167,18 @@
 	margin-bottom: 24px;
 }
 
+/* The row is a pill on whatever it sits on, and it sits on two different
+   things: the settings tab, where the token is undefined and the fallback keeps
+   `--background-secondary`, and a modal (Commands and shortcuts, the palette
+   list), where on mobile dark `--background-secondary` IS the window and the
+   pills would otherwise vanish. */
 .callout-studio-row {
 	display: flex;
 	align-items: center;
 	gap: 12px;
 	padding: 8px 12px;
 	border-radius: 8px;
-	background: var(--background-secondary);
+	background: var(--cs-surface-raised, var(--background-secondary));
 	transition: background 120ms ease;
 	container-type: inline-size;
 }
@@ -517,7 +522,7 @@
 	align-items: center;
 	justify-content: space-between;
 	padding: 6px 10px;
-	background: var(--background-secondary);
+	background: var(--cs-surface-raised, var(--background-secondary));
 	font-size: var(--font-ui-smaller);
 	color: var(--text-muted);
 	font-weight: var(--font-semibold);
@@ -1030,10 +1035,45 @@ button.callout-studio-icon-picker-loading {
 	   is what the settings tab (painted `--background-primary` by Obsidian
 	   itself) still wants. */
 	--cs-surface: var(--modal-background);
+	/* Its companion: the shade for anything that has to read as RAISED off that
+	   surface — a group box's header strip, a card, a control.
+
+	   The two only ever make sense as a pair, and setting one without the other
+	   is exactly how the group boxes regressed: the body was moved onto
+	   `--cs-surface` while the header stayed pinned to `--background-secondary`,
+	   which on mobile dark IS the window (see the override below), so the strip
+	   disappeared into it. Move one, move the other. */
+	--cs-surface-raised: var(--background-secondary);
 	display: flex;
 	flex-direction: column;
 	padding: 0;
 	overflow: hidden;
+}
+
+/* `--background-secondary` is the raised shade only while `--modal-background`
+   is `--background-primary`. Mobile dark is where that stops being true —
+   `.is-mobile.theme-dark` repoints `--modal-background` ONTO
+   `--background-secondary` (phone and tablet alike), so a band painted with it
+   lands exactly on the surface it is meant to sit above.
+
+   Step off `--cs-surface` rather than naming a replacement colour: that
+   reproduces desktop's own step (#1C1C1C → #282828, +12/255) on whatever the
+   window turns out to be — here #1e1e1e → ≈#292929 — and stays clear of the
+   #333 border, which a stock `--color-base-25` would nearly merge with.
+   `--mono-100` is `white` under `.theme-dark`, which this is scoped to, so the
+   literal fallback is the same colour. Should a theme ever make the whole
+   `color-mix` invalid at computed-value time, the property drops out and every
+   call site's `var(…, var(--background-secondary))` fallback restores today's
+   behaviour.
+
+   Dark only: mobile light keeps `--modal-background` on `--background-primary`
+   and so already matches the desktop exactly. */
+.is-mobile.theme-dark .modal.cs-modal {
+	--cs-surface-raised: color-mix(
+		in srgb,
+		var(--cs-surface) 95%,
+		var(--mono-100, #fff)
+	);
 }
 
 /* The two editors used to be inset by the modal's own 16px PLUS their
@@ -1298,12 +1338,15 @@ button.callout-studio-icon-picker-loading {
 	background: var(--cs-surface, var(--background-primary));
 }
 
+/* The strip must stay a step off `.callout-studio-adjust-section`'s own paint
+   above — hence the raised token rather than `--background-secondary`, which is
+   the window itself on mobile dark. */
 .callout-studio-adjust-header {
 	font-size: var(--font-ui-smaller);
 	font-weight: var(--font-semibold);
 	color: var(--text-muted);
 	padding: 6px 10px;
-	background: var(--background-secondary);
+	background: var(--cs-surface-raised, var(--background-secondary));
 	border-radius: 7px 7px 0 0;
 }
 
@@ -1475,7 +1518,7 @@ button.callout-studio-icon-picker-loading {
 	padding: 6px 8px;
 	border-radius: var(--radius-s);
 	border: 1px solid var(--background-modifier-border);
-	background-color: var(--background-secondary);
+	background-color: var(--cs-surface-raised, var(--background-secondary));
 	color: var(--text-normal);
 	font-size: var(--font-ui-small);
 	cursor: pointer;
@@ -2996,12 +3039,14 @@ input.cs-input-invalid:focus {
 	background: var(--cs-surface, var(--background-primary));
 }
 
+/* `createControlGroup()` hangs BOTH class pairs on the same two elements, so
+   this and `.callout-studio-adjust-header` above have to move together. */
 .cs-settings-group-header {
 	font-size: var(--font-ui-smaller);
 	font-weight: var(--font-semibold);
 	color: var(--text-muted);
 	padding: 6px 10px;
-	background: var(--background-secondary);
+	background: var(--cs-surface-raised, var(--background-secondary));
 	border-radius: 7px 7px 0 0;
 	margin-bottom: 0;
 }
@@ -3338,7 +3383,7 @@ input.cs-input-invalid:focus {
 	padding: 10px 12px;
 	border: 1px solid var(--background-modifier-border);
 	border-radius: var(--radius-s);
-	background: var(--background-secondary);
+	background: var(--cs-surface-raised, var(--background-secondary));
 }
 
 .cs-command-preview-label {
@@ -3638,7 +3683,7 @@ input.cs-input-invalid:focus {
 	height: 26px;
 	padding: 0;
 	box-shadow: none;
-	background: var(--background-secondary);
+	background: var(--cs-surface-raised, var(--background-secondary));
 	border: 1px solid var(--background-modifier-border);
 	border-radius: var(--radius-s, 4px);
 	color: var(--text-muted);
@@ -3679,7 +3724,7 @@ input.cs-input-invalid:focus {
 	padding: 4px 8px;
 	border-radius: 4px;
 	border: 1px solid var(--background-modifier-border);
-	background: var(--background-secondary);
+	background: var(--cs-surface-raised, var(--background-secondary));
 	color: var(--text-normal);
 	font-size: var(--font-small);
 }
@@ -3704,7 +3749,10 @@ input.cs-input-invalid:focus {
 	height: 18px;
 	padding: 0 8px;
 	border-radius: 9px;
-	background: var(--background-secondary);
+	/* Same fill as the `.callout-studio-row` it sits in — the border is what
+	   draws the pill's edge — so it has to follow the row onto the raised token
+	   or it would come out DARKER than its own row on mobile dark. */
+	background: var(--cs-surface-raised, var(--background-secondary));
 	color: var(--text-faint);
 	font-size: var(--font-smallest, 11px);
 	line-height: 1;
@@ -3745,7 +3793,7 @@ input.cs-input-invalid:focus {
 	padding: 0.5rem 0.75rem;
 	border: 1px solid var(--background-modifier-border);
 	border-radius: 6px;
-	background: var(--background-secondary);
+	background: var(--cs-surface-raised, var(--background-secondary));
 }
 .callout-studio-import-report
 	.cs-import-report-group
@@ -3922,7 +3970,7 @@ input.cs-input-invalid:focus {
 	padding: 10px 12px;
 	border: 1px solid var(--background-modifier-border);
 	border-radius: 6px;
-	background: var(--background-secondary);
+	background: var(--cs-surface-raised, var(--background-secondary));
 }
 
 .callout-studio-vault-stats .cs-vault-stats-metric-value {
@@ -3961,6 +4009,9 @@ input.cs-input-invalid:focus {
 	border-bottom: none;
 }
 
+/* Opaque on purpose — rows scroll under it — and a step off the list's own
+   `--cs-surface` paint, which is why it takes the raised token rather than
+   `--background-secondary`. */
 .callout-studio-vault-stats .cs-vault-stats-header {
 	position: sticky;
 	top: 0;
@@ -3968,7 +4019,7 @@ input.cs-input-invalid:focus {
 	font-size: var(--font-ui-smaller);
 	font-weight: 700;
 	color: var(--text-muted);
-	background: var(--background-secondary);
+	background: var(--cs-surface-raised, var(--background-secondary));
 }
 
 .callout-studio-vault-stats .cs-vault-stats-type {
