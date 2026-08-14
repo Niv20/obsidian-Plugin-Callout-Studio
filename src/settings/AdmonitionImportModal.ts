@@ -54,7 +54,7 @@ export class AdmonitionImportModal extends Modal {
 
 		this.contentEl.createEl("p", {
 			text: t("import.admInstructions"),
-			cls: "cs-adm-import-instructions",
+			cls: "cs-import-instructions",
 		});
 
 		// Created once and attached to the DOM, for the reason ImportSourceModal
@@ -76,10 +76,10 @@ export class AdmonitionImportModal extends Modal {
 
 		this.contentEl.createEl("p", {
 			text: t("import.admPasteLabel"),
-			cls: "cs-adm-import-paste-label",
+			cls: "cs-import-paste-label",
 		});
 		this.textareaEl = this.contentEl.createEl("textarea", {
-			cls: "cs-adm-import-textarea",
+			cls: "cs-import-textarea",
 			attr: { placeholder: t("import.admPlaceholder") },
 		});
 		this.textareaEl.addEventListener("input", () => {
@@ -107,17 +107,17 @@ export class AdmonitionImportModal extends Modal {
 	 * -------------------------------------------------------------- */
 
 	private renderVaultRow(): void {
-		const row = this.contentEl.createDiv({ cls: "cs-adm-import-row" });
-		const icon = row.createDiv({ cls: "cs-adm-import-row-icon" });
+		const row = this.contentEl.createDiv({ cls: "cs-import-row" });
+		const icon = row.createDiv({ cls: "cs-import-row-icon" });
 		setIcon(icon, "vault");
 
-		const text = row.createDiv({ cls: "cs-adm-import-row-text" });
+		const text = row.createDiv({ cls: "cs-import-row-text" });
 		text.createDiv({
-			cls: "cs-adm-import-row-title",
+			cls: "cs-import-row-title",
 			text: t("import.admFromVault"),
 		});
 		this.vaultStatusEl = text.createDiv({
-			cls: "cs-adm-import-row-desc",
+			cls: "cs-import-row-desc",
 			text: t("import.admVaultChecking"),
 		});
 
@@ -132,17 +132,17 @@ export class AdmonitionImportModal extends Modal {
 	}
 
 	private renderFileRow(): void {
-		const row = this.contentEl.createDiv({ cls: "cs-adm-import-row" });
-		const icon = row.createDiv({ cls: "cs-adm-import-row-icon" });
+		const row = this.contentEl.createDiv({ cls: "cs-import-row" });
+		const icon = row.createDiv({ cls: "cs-import-row-icon" });
 		setIcon(icon, "file-json");
 
-		const text = row.createDiv({ cls: "cs-adm-import-row-text" });
+		const text = row.createDiv({ cls: "cs-import-row-text" });
 		text.createDiv({
-			cls: "cs-adm-import-row-title",
+			cls: "cs-import-row-title",
 			text: t("import.admFromFile"),
 		});
 		text.createDiv({
-			cls: "cs-adm-import-row-desc",
+			cls: "cs-import-row-desc",
 			text: t("import.admFromFileDesc"),
 		});
 

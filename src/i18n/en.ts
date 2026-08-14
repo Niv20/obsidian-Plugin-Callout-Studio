@@ -795,10 +795,13 @@ export const en: Record<string, string> = {
 		'"paletteId" must be a non-empty text ID (got "{{value}}").',
 	"import.warn.iconNameUnknown":
 		'There is no "{{value}}" icon in {{type}}, so the default icon was used instead.',
+	// Not necessarily a typo: Callout Manager lets you pick any icon Obsidian
+	// knows about, which includes ones other plugins register — so the name can
+	// be perfectly real and simply belong to a plugin this vault does not have.
 	"import.warn.cmIconUnknownNew":
-		'There is no "{{value}}" icon in Obsidian, so the default icon was used instead.',
+		'The "{{value}}" icon is not available in this vault, so the default icon was used instead.',
 	"import.warn.cmIconUnknownExisting":
-		'There is no "{{value}}" icon in Obsidian, so "{{id}}" kept the icon it already had.',
+		'The "{{value}}" icon is not available in this vault, so "{{id}}" kept the icon it already had.',
 
 	// Import — source chooser
 	"import.chooseSource": "Import from",
@@ -807,25 +810,43 @@ export const en: Record<string, string> = {
 		"Load a .json file exported from Callout Studio.",
 	"import.sourceCalloutManager": "Callout Manager",
 	"import.sourceCalloutManagerDesc":
-		"Paste the styles you copied from Callout Manager's Copy button.",
+		"Bring your customized callouts over from the Callout Manager plugin.",
 	"import.sourceAdmonition": "Admonition",
 	"import.sourceAdmonitionDesc":
 		"Bring your custom admonitions over from the Admonition plugin.",
 
-	// Import — Callout Manager paste flow
+	// Import — Callout Manager
 	"import.cmTitle": "Import from Callout Manager",
 	"import.cmInstructions":
-		"In Callout Manager, use its Copy button to copy your customized " +
-		"callout styles, then paste them below.",
-	"import.cmPlaceholder": "Paste the copied styles here…",
+		"Each customized callout comes over with its icon and color. Per-theme " +
+		"styling and custom CSS have no equivalent here and are left behind.",
+	"import.cmFromVault": "This vault",
+	"import.cmVaultChecking": "Looking for the Callout Manager plugin…",
+	"import.cmVaultFound": "{{count}} customized callout(s) found.",
+	"import.cmVaultNotFound":
+		"No customized callouts were found in this vault.",
+	"import.cmPasteLabel": "Or paste Callout Manager's copied styles here:",
+	"import.cmPlaceholder": "Paste the copied styles, or a data.json, here…",
 	"import.cmBtnCancel": "Cancel",
 	"import.cmBtnImport": "Import",
 	"import.err.cmNoBlocksFound":
 		"No Callout Manager styles were found in the pasted text.",
+	"import.err.cmNotRecognized":
+		"Unrecognized file: expected the styles Callout Manager's Copy button " +
+		"produces, or a Callout Manager data.json.",
+	"import.err.cmNoEntries": "No customized callouts were found to import.",
 	"import.err.cmNoColorForNew":
 		'No usable color was found for the new callout "{{value}}"; it was skipped.',
 	"import.err.cmIdConflict":
 		'ID "{{value}}" is already used as an alias by another callout ("{{other}}") and was skipped.',
+	"import.warn.cmNoColorDefault":
+		"No color was set in Callout Manager, so its default gray was used.",
+	"import.warn.cmThemeCondition":
+		"This callout's color or icon was set for one theme only. Callout " +
+		"Studio has no per-theme styling, so it was brought over for every theme.",
+	"import.warn.cmCustomStyles":
+		"This callout also has custom CSS in Callout Manager. That styling is " +
+		"not part of the import, so only its icon and color came over.",
 
 	// Import — Admonition
 	"import.admTitle": "Import from Admonition",

@@ -682,8 +682,8 @@ export interface DerivedPalette {
 }
 
 /**
- * Derives a full palette from one base color. Backgrounds are pale tints of
- * the ORIGINAL color (same blend as makePalette in colorPalettes.ts) so the
+ * Derives a full palette from a base color per mode. Backgrounds are pale tints
+ * of the ORIGINAL color (same blend as makePalette in colorPalettes.ts) so the
  * hue is preserved; the accents are then auto-corrected per mode — a too-light
  * pick is darkened for light mode, a too-dark pick is lightened for dark mode
  * — so titles and icons always stay readable (>= 3:1, the WCAG non-text bar).
@@ -691,19 +691,37 @@ export interface DerivedPalette {
  * `amount` controls how strongly the background shows (see
  * {@link DEFAULT_BG_COLOR_AMOUNT}); the contrast auto-fix runs against the
  * resulting bg, so accents stay readable at any intensity.
+ *
+ * The two hexes exist for the Callout Manager vault import: that plugin stores
+ * a genuinely separate light and dark color per callout, and collapsing them
+ * would throw away a distinction the user set on purpose. Everything else in
+ * this plugin derives both modes from one pick, which is
+ * {@link derivePaletteFromColor} — the same function with both sides equal.
+ * Note the maths is per-mode either way (`bgTintFor` takes `isDark`, and the
+ * contrast fix pulls towards black in light mode and white in dark), so this
+ * is a parameter split rather than a second derivation.
  */
-export function derivePaletteFromColor(
-	hex: string,
+export function derivePaletteFromColors(
+	hexLight: string,
+	hexDark: string,
 	amount = DEFAULT_BG_COLOR_AMOUNT,
 ): DerivedPalette {
-	const bgColorLight = bgTintFor(hex, false, amount);
-	const bgColorDark = bgTintFor(hex, true, amount);
+	const bgColorLight = bgTintFor(hexLight, false, amount);
+	const bgColorDark = bgTintFor(hexDark, true, amount);
 	return {
-		colorLight: ensureContrast(hex, bgColorLight, "#000000", 3),
-		colorDark: ensureContrast(hex, bgColorDark, "#ffffff", 3),
+		colorLight: ensureContrast(hexLight, bgColorLight, "#000000", 3),
+		colorDark: ensureContrast(hexDark, bgColorDark, "#ffffff", 3),
 		bgColorLight,
 		bgColorDark,
 		textColorLight: DEFAULT_TEXT_COLOR_LIGHT,
 		textColorDark: DEFAULT_TEXT_COLOR_DARK,
 	};
+}
+
+/** Derives a full palette from one base color, for both modes. */
+export function derivePaletteFromColor(
+	hex: string,
+	amount = DEFAULT_BG_COLOR_AMOUNT,
+): DerivedPalette {
+	return derivePaletteFromColors(hex, hex, amount);
 }

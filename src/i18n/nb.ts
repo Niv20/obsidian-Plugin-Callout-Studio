@@ -6,7 +6,8 @@ export const nb: Record<string, string> = {
 	"cmd.calloutUnwrap": "Fjern callout",
 	"cmd.customWrapBlock": "Pakk inn i {{name}}-callout",
 	"cmd.customInsertBlock": "Sett inn {{name}}-callout",
-	"cmd.customInsertHeading": "Sett inn H{{level}} {{name}}-overskriftscallout",
+	"cmd.customInsertHeading":
+		"Sett inn H{{level}} {{name}}-overskriftscallout",
 	"cmd.customInsertInline": "Sett inn {{name}}-inline-callout",
 	"autocomplete.createNew": 'Opprett ny callout: "{{name}}"',
 	"settings.fallbackTag": "Standard",
@@ -746,6 +747,12 @@ export const nb: Record<string, string> = {
 	"import.sourceAdmonitionDesc":
 		"Hent dine egne admonitions fra Admonition-tillegget.",
 	"import.cmTitle": "Importer fra Callout Manager",
+	"import.cmFromVault": "Dette hvelvet",
+	"import.cmVaultChecking": "Ser etter Callout Manager-tillegget…",
+	"import.cmVaultFound": "Fant {{count}} tilpassede callouts.",
+	"import.cmVaultNotFound": "Fant ingen tilpassede callouts i dette hvelvet.",
+	"import.cmPasteLabel":
+		"Eller lim inn de kopierte stilene fra Callout Manager her:",
 	"import.cmInstructions":
 		"I Callout Manager bruker du Copy-knappen for å kopiere de tilpassede callout-stilene dine, og limer dem inn nedenfor.",
 	"import.cmPlaceholder": "Lim inn de kopierte stilene her…",
@@ -753,10 +760,19 @@ export const nb: Record<string, string> = {
 	"import.cmBtnImport": "Importer",
 	"import.err.cmNoBlocksFound":
 		"Ingen Callout Manager-stiler ble funnet i den innlimte teksten.",
+	"import.err.cmNotRecognized":
+		"Ukjent fil: forventet stilene fra Callout Managers Copy-knapp eller en data.json fra Callout Manager.",
+	"import.err.cmNoEntries": "Fant ingen tilpassede callouts å importere.",
 	"import.err.cmNoColorForNew":
 		'Ingen brukbar farge ble funnet for den nye callouten "{{value}}"; den ble hoppet over.',
 	"import.err.cmIdConflict":
 		'ID "{{value}}" brukes allerede som et alias av en annen callout ("{{other}}") og ble hoppet over.',
+	"import.warn.cmNoColorDefault":
+		"Ingen farge var angitt i Callout Manager, så standardgrå ble brukt.",
+	"import.warn.cmThemeCondition":
+		"Fargen eller ikonet til denne callouten var bare angitt for ett tema. Callout Studio støtter ikke temaspesifikk styling, så den ble tatt med for alle temaer.",
+	"import.warn.cmCustomStyles":
+		"Denne callouten har også egendefinert CSS i Callout Manager. Denne stylingen er ikke en del av importen, så bare ikonet og fargen ble tatt med.",
 
 	// Import — Admonition
 	"import.admTitle": "Importer fra Admonition",

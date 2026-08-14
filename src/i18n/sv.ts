@@ -755,31 +755,50 @@ export const sv: Record<string, string> = {
 	"import.warn.iconNameUnknown":
 		'Det finns ingen "{{value}}" ikon i {{type}}, så standardikonen användes istället.',
 	"import.warn.cmIconUnknownNew":
-		'Det finns ingen "{{value}}" ikon i Obsidian, så standardikonen användes istället.',
+		'Ikonen "{{value}}" finns inte i det här valvet, så standardikonen användes istället.',
 	"import.warn.cmIconUnknownExisting":
-		'Det finns ingen "{{value}}" ikon i Obsidian, så "{{id}}" behöll ikonen det redan hade.',
+		'Ikonen "{{value}}" finns inte i det här valvet, så "{{id}}" behöll ikonen det redan hade.',
 	"import.chooseSource": "Importera från",
 	"import.sourceStudio": "Callout Studio",
 	"import.sourceStudioDesc":
 		"Läs in en .json-fil exporterad från Callout Studio.",
 	"import.sourceCalloutManager": "Callout Manager",
 	"import.sourceCalloutManagerDesc":
-		"Klistra in stilarna du kopierade från Copy-knappen i Callout Manager.",
+		"Ta med dina anpassade callouts från tillägget Callout Manager.",
 	"import.sourceAdmonition": "Admonition",
 	"import.sourceAdmonitionDesc":
 		"Hämta dina egna admonitions från Admonition-tillägget.",
 	"import.cmTitle": "Importera från Callout Manager",
 	"import.cmInstructions":
-		"I Callout Manager, använd Copy-knappen för att kopiera dina anpassade callout-stilar och klistra sedan in dem nedan.",
-	"import.cmPlaceholder": "Klistra in de kopierade stilarna här…",
+		"Varje anpassad callout tas med tillsammans med sin ikon och färg. Temaspecifik " +
+		"styling och egen CSS har ingen motsvarighet här och lämnas kvar.",
+	"import.cmFromVault": "Det här valvet",
+	"import.cmVaultChecking": "Söker efter tillägget Callout Manager…",
+	"import.cmVaultFound": "{{count}} anpassad(e) callout(s) hittades.",
+	"import.cmVaultNotFound":
+		"Inga anpassade callouts hittades i det här valvet.",
+	"import.cmPasteLabel": "Eller klistra in Callout Managers kopierade stilar här:",
+	"import.cmPlaceholder": "Klistra in de kopierade stilarna, eller en data.json, här…",
 	"import.cmBtnCancel": "Avbryt",
 	"import.cmBtnImport": "Importera",
 	"import.err.cmNoBlocksFound":
 		"Inga Callout Manager-stilar hittades i den inklistrade texten.",
+	"import.err.cmNotRecognized":
+		"Filen kändes inte igen: förväntade stilarna från Callout Managers Copy-knapp, " +
+		"eller en data.json från Callout Manager.",
+	"import.err.cmNoEntries": "Inga anpassade callouts hittades att importera.",
 	"import.err.cmNoColorForNew":
 		'Ingen användbar färg hittades för den nya callouten "{{value}}"; den hoppades över.',
 	"import.err.cmIdConflict":
 		'ID "{{value}}" används redan som ett alias av en annan callout ("{{other}}") och hoppades över.',
+	"import.warn.cmNoColorDefault":
+		"Ingen färg var angiven i Callout Manager, så dess standardgrå användes.",
+	"import.warn.cmThemeCondition":
+		"Den här calloutens färg eller ikon var bara angiven för ett tema. Callout " +
+		"Studio har ingen temaspecifik styling, så den togs med för alla teman.",
+	"import.warn.cmCustomStyles":
+		"Den här callouten har också egen CSS i Callout Manager. Den stylingen är " +
+		"inte en del av importen, så bara dess ikon och färg togs med.",
 
 	// Import — Admonition
 	"import.admTitle": "Importera från Admonition",

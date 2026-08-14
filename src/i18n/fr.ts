@@ -766,32 +766,51 @@ export const fr: Record<string, string> = {
 	"import.warn.iconNameUnknown":
 		"Il n'y a aucune icône \"{{value}}\" dans {{type}}, donc l'icône par défaut a été utilisée.",
 	"import.warn.cmIconUnknownNew":
-		"Il n'y a aucune icône \"{{value}}\" dans Obsidian, donc l'icône par défaut a été utilisée.",
+		'L\'icône "{{value}}" n\'est pas disponible dans ce vault, donc l\'icône par défaut a été utilisée.',
 	"import.warn.cmIconUnknownExisting":
-		'Il n\'y a aucune icône "{{value}}" dans Obsidian, donc "{{id}}" a conservé l\'icône qu\'il avait déjà.',
+		'L\'icône "{{value}}" n\'est pas disponible dans ce vault, donc "{{id}}" a conservé l\'icône qu\'il avait déjà.',
 	"import.chooseSource": "Importer depuis",
 	"import.sourceStudio": "Callout Studio",
 	"import.sourceStudioDesc":
 		"Charger un fichier .json exporté depuis Callout Studio.",
 	"import.sourceCalloutManager": "Callout Manager",
 	"import.sourceCalloutManagerDesc":
-		"Collez les styles copiés depuis le bouton Copy de Callout Manager.",
+		"Récupérez vos callouts personnalisés depuis le plugin Callout Manager.",
 	"import.sourceAdmonition": "Admonition",
 	"import.sourceAdmonitionDesc":
 		"Récupérez vos admonitions personnalisées depuis le plugin " +
 		"Admonition.",
 	"import.cmTitle": "Importer depuis Callout Manager",
 	"import.cmInstructions":
-		"Dans Callout Manager, utilisez son bouton Copy pour copier vos styles de callout personnalisés, puis collez-les ci-dessous.",
-	"import.cmPlaceholder": "Collez les styles copiés ici…",
+		"Chaque callout personnalisé est récupéré avec son icône et sa couleur. Le style " +
+		"par thème et le CSS personnalisé n'ont pas d'équivalent ici et ne sont pas repris.",
+	"import.cmFromVault": "Ce vault",
+	"import.cmVaultChecking": "Recherche du plugin Callout Manager…",
+	"import.cmVaultFound": "{{count}} callout(s) personnalisé(s) trouvé(s).",
+	"import.cmVaultNotFound":
+		"Aucun callout personnalisé n'a été trouvé dans ce vault.",
+	"import.cmPasteLabel": "Ou collez ici les styles copiés depuis Callout Manager :",
+	"import.cmPlaceholder": "Collez ici les styles copiés, ou un data.json…",
 	"import.cmBtnCancel": "Annuler",
 	"import.cmBtnImport": "Importer",
 	"import.err.cmNoBlocksFound":
 		"Aucun style Callout Manager n'a été trouvé dans le texte collé.",
+	"import.err.cmNotRecognized":
+		"Fichier non reconnu : styles produits par le bouton Copy de Callout Manager, " +
+		"ou fichier data.json de Callout Manager attendus.",
+	"import.err.cmNoEntries": "Aucun callout personnalisé n'a été trouvé à importer.",
 	"import.err.cmNoColorForNew":
 		'Aucune couleur utilisable n\'a été trouvée pour le nouveau callout "{{value}}" ; il a été ignoré.',
 	"import.err.cmIdConflict":
 		'L\'ID "{{value}}" est déjà utilisé comme alias par un autre callout ("{{other}}") et a été ignoré.',
+	"import.warn.cmNoColorDefault":
+		"Aucune couleur n'était définie dans Callout Manager, donc son gris par défaut a été utilisé.",
+	"import.warn.cmThemeCondition":
+		"La couleur ou l'icône de ce callout n'était définie que pour un seul thème. Callout " +
+		"Studio n'a pas de style par thème, il a donc été récupéré pour tous les thèmes.",
+	"import.warn.cmCustomStyles":
+		"Ce callout possède aussi du CSS personnalisé dans Callout Manager. Ce style ne fait " +
+		"pas partie de l'import, seuls son icône et sa couleur ont été récupérés.",
 
 	// Import — Admonition
 	"import.admTitle": "Importer depuis Admonition",

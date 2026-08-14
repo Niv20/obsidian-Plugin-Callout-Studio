@@ -777,6 +777,13 @@ export const ja: Record<string, string> = {
 	"import.sourceAdmonitionDesc":
 		"Admonition プラグインからカスタム admonition を引き継ぎます。",
 	"import.cmTitle": "Callout Manager からインポート",
+	"import.cmFromVault": "この保管庫",
+	"import.cmVaultChecking": "Callout Manager プラグインを探しています…",
+	"import.cmVaultFound": "カスタム callout が {{count}} 件見つかりました。",
+	"import.cmVaultNotFound":
+		"この保管庫にカスタム callout は見つかりませんでした。",
+	"import.cmPasteLabel":
+		"または Callout Manager からコピーしたスタイルをここに貼り付け：",
 	"import.cmInstructions":
 		"Callout Manager で Copy ボタンを使用してカスタマイズされた callout スタイルをコピーし、以下に貼り付けてください。",
 	"import.cmPlaceholder": "コピーしたスタイルをここに貼り付け…",
@@ -784,10 +791,20 @@ export const ja: Record<string, string> = {
 	"import.cmBtnImport": "インポート",
 	"import.err.cmNoBlocksFound":
 		"貼り付けたテキストに Callout Manager のスタイルが見つかりませんでした。",
+	"import.err.cmNotRecognized":
+		"ファイルを認識できませんでした。Callout Manager の Copy ボタンで作成されたスタイル、または Callout Manager の data.json が必要です。",
+	"import.err.cmNoEntries":
+		"インポートするカスタム callout が見つかりませんでした。",
 	"import.err.cmNoColorForNew":
 		'新しい callout "{{value}}" に使用できる色が見つからなかったため、スキップされました。',
 	"import.err.cmIdConflict":
 		'ID "{{value}}" は別の callout ("{{other}}") によって既にエイリアスとして使用されているため、スキップされました。',
+	"import.warn.cmNoColorDefault":
+		"Callout Manager で色が設定されていなかったため、デフォルトのグレーが使用されました。",
+	"import.warn.cmThemeCondition":
+		"この callout の色またはアイコンは 1 つのテーマにのみ設定されていました。Callout Studio はテーマごとのスタイルに対応していないため、すべてのテーマに引き継がれました。",
+	"import.warn.cmCustomStyles":
+		"この callout には Callout Manager のカスタム CSS もあります。このスタイルはインポート対象外のため、アイコンと色だけが引き継がれました。",
 
 	// Import — Admonition
 	"import.admTitle": "Admonition からインポート",
@@ -831,9 +848,9 @@ export const ja: Record<string, string> = {
 		"フィードバック、コメント、提案はありますか？ぜひお聞かせください！",
 	"footer.madeBy": "Nivが作成  •  ",
 	"settings.deletePaletteConfirmLinkedOne":
-		'パレット「{{name}}」を削除しますか？\n1 件の callout が使用しています。色は保持され、後でエディターの色の行から再接続できます。',
+		"パレット「{{name}}」を削除しますか？\n1 件の callout が使用しています。色は保持され、後でエディターの色の行から再接続できます。",
 	"settings.deletePaletteConfirmLinked":
-		'パレット「{{name}}」を削除しますか？\n{{count}} 件の callout が使用しています。色は保持され、後で各エディターの色の行から再接続できます。',
+		"パレット「{{name}}」を削除しますか？\n{{count}} 件の callout が使用しています。色は保持され、後で各エディターの色の行から再接続できます。",
 	"settings.unlinkedColors": "未リンクの色",
 	"settings.unlinkedColorsDesc":
 		"保存済みの色が削除された callout です。現在の色は保持されます。復元すると色が再保存され、グループ全体が再リンクされます。",
@@ -852,8 +869,8 @@ export const ja: Record<string, string> = {
 		"この callout の保存済み色は削除されました。{{link}}ことで再保存できます — 同じ色を使う他の {{count}} 件の callout も再リンクされます。",
 	"editor.colorsDescDeletedLink": "ここをクリックする",
 	"palette.colorExists":
-		'これらの色は「{{name}}」と同じです。保存済みの色を 2 つ同じにすることはできません — 区別するために色を変更してください。',
+		"これらの色は「{{name}}」と同じです。保存済みの色を 2 つ同じにすることはできません — 区別するために色を変更してください。",
 	"palette.colorExistsUse":
-		'これらの色は「{{name}}」と同じです。保存済みの色を 2 つ同じにすることはできません — 色を変更するか、{{link}}。',
+		"これらの色は「{{name}}」と同じです。保存済みの色を 2 つ同じにすることはできません — 色を変更するか、{{link}}。",
 	"palette.colorExistsUseLink": "既存の色を使う",
 };

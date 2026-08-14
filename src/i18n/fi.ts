@@ -731,30 +731,49 @@ export const fi: Record<string, string> = {
 	"import.warn.iconNameUnknown":
 		'Kuvaketta "{{value}}" ei ole {{type}}:ssa, joten käytettiin oletuskuvaketta.',
 	"import.warn.cmIconUnknownNew":
-		'Kuvaketta "{{value}}" ei ole Obsidianissa, joten käytettiin oletuskuvaketta.',
+		'Kuvaketta "{{value}}" ei ole tässä holvissa, joten käytettiin oletuskuvaketta.',
 	"import.warn.cmIconUnknownExisting":
-		'Kuvaketta "{{value}}" ei ole Obsidianissa, joten "{{id}}" säilytti jo olemassa olevan kuvakkeensa.',
+		'Kuvaketta "{{value}}" ei ole tässä holvissa, joten "{{id}}" säilytti jo olemassa olevan kuvakkeensa.',
 	"import.chooseSource": "Tuo kohteesta",
 	"import.sourceStudio": "Callout Studio",
 	"import.sourceStudioDesc": "Lataa Callout Studiosta viety .json-tiedosto.",
 	"import.sourceCalloutManager": "Callout Manager",
 	"import.sourceCalloutManagerDesc":
-		"Liitä Callout Managerin Copy-painikkeella kopioimasi tyylit.",
+		"Tuo mukautetut calloutisi Callout Manager -laajennuksesta.",
 	"import.sourceAdmonition": "Admonition",
 	"import.sourceAdmonitionDesc":
 		"Tuo omat admonitionisi Admonition-laajennuksesta.",
 	"import.cmTitle": "Tuo Callout Managerista",
 	"import.cmInstructions":
-		"Kopioi Callout Managerissa mukautetut callout-tyylisi sen Copy-painikkeella ja liitä ne sitten alle.",
-	"import.cmPlaceholder": "Liitä kopioidut tyylit tähän…",
+		"Jokainen mukautettu callout tuodaan kuvakkeineen ja väreineen. Teemakohtaiselle " +
+		"tyylittelylle ja mukautetulle CSS:lle ei ole vastinetta täällä, joten ne jäävät tuomatta.",
+	"import.cmFromVault": "Tämä holvi",
+	"import.cmVaultChecking": "Etsitään Callout Manager -laajennusta…",
+	"import.cmVaultFound": "{{count}} mukautettua callouttia löydetty.",
+	"import.cmVaultNotFound":
+		"Tästä holvista ei löytynyt mukautettuja callouteja.",
+	"import.cmPasteLabel": "Tai liitä Callout Managerin kopioimat tyylit tähän:",
+	"import.cmPlaceholder": "Liitä kopioidut tyylit tai data.json tähän…",
 	"import.cmBtnCancel": "Peruuta",
 	"import.cmBtnImport": "Tuo",
 	"import.err.cmNoBlocksFound":
 		"Liitetystä tekstistä ei löydetty Callout Manager -tyylejä.",
+	"import.err.cmNotRecognized":
+		"Tuntematon tiedosto: odotettiin Callout Managerin Copy-painikkeen tuottamia " +
+		"tyylejä tai Callout Managerin data.json-tiedostoa.",
+	"import.err.cmNoEntries": "Tuotavia mukautettuja callouteja ei löytynyt.",
 	"import.err.cmNoColorForNew":
 		'Uudelle calloutille "{{value}}" ei löydetty käyttökelpoista väriä; se ohitettiin.',
 	"import.err.cmIdConflict":
 		'Tunnus "{{value}}" on jo käytössä toisen calloutin aliaksena ("{{other}}") ja se ohitettiin.',
+	"import.warn.cmNoColorDefault":
+		"Callout Managerissa ei ollut asetettu väriä, joten käytettiin sen oletusharmaata.",
+	"import.warn.cmThemeCondition":
+		"Tämän calloutin väri tai kuvake oli asetettu vain yhdelle teemalle. Callout " +
+		"Studiossa ei ole teemakohtaista tyylittelyä, joten se tuotiin kaikille teemoille.",
+	"import.warn.cmCustomStyles":
+		"Tällä calloutilla on myös mukautettu CSS Callout Managerissa. Kyseinen tyylittely " +
+		"ei ole osa tuontia, joten vain sen kuvake ja väri tuotiin.",
 
 	// Import — Admonition
 	"import.admTitle": "Tuo Admonitionista",

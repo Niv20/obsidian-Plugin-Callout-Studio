@@ -170,7 +170,8 @@ export const ro: Record<string, string> = {
 	"commandBuilder.roleDisabled":
 		"Acest format este dezactivat, așa că această comandă va insera text simplu până când îl reactivați.",
 	"commandBuilder.callout": "Tip de callout",
-	"commandBuilder.calloutDesc": "Callout-ul pe care îl inserează această comandă.",
+	"commandBuilder.calloutDesc":
+		"Callout-ul pe care îl inserează această comandă.",
 	"commandBuilder.headingLevel": "Nivel de titlu",
 	"commandBuilder.headingLevelDesc": "Ce nivel de titlu se scrie.",
 	"commandBuilder.action": "Acțiune",
@@ -778,15 +779,32 @@ export const ro: Record<string, string> = {
 	"import.sourceAdmonitionDesc":
 		"Adu-ți admonition-urile personalizate din pluginul Admonition.",
 	"import.cmTitle": "Importați din Callout Manager",
+	"import.cmFromVault": "Acest vault",
+	"import.cmVaultChecking": "Se caută pluginul Callout Manager…",
+	"import.cmVaultFound": "S-au găsit {{count}} callout-uri personalizate.",
+	"import.cmVaultNotFound":
+		"Nu s-au găsit callout-uri personalizate în acest vault.",
+	"import.cmPasteLabel":
+		"Sau lipește aici stilurile copiate din Callout Manager:",
 	"import.cmInstructions":
 		"În Callout Manager, utilizați butonul Copy pentru a copia stilurile de callout personalizate, apoi lipiți-le mai jos.",
 	"import.cmPlaceholder": "Lipiți stilurile copiate aici…",
 	"import.cmBtnCancel": "Anulare",
 	"import.cmBtnImport": "Importați",
+	"import.err.cmNotRecognized":
+		"Fișier nerecunoscut: se așteptau stilurile produse de butonul Copy din Callout Manager sau un data.json al pluginului Callout Manager.",
+	"import.err.cmNoEntries":
+		"Nu s-au găsit callout-uri personalizate de importat.",
 	"import.err.cmNoBlocksFound":
 		"Nu au fost găsite stiluri Callout Manager în textul lipit.",
 	"import.err.cmNoColorForNew":
 		'Nu a fost găsită nicio culoare utilizabilă pentru noul callout "{{value}}"; a fost omis.',
+	"import.warn.cmNoColorDefault":
+		"Nu a fost setată nicio culoare în Callout Manager, așa că s-a folosit griul implicit.",
+	"import.warn.cmThemeCondition":
+		"Culoarea sau pictograma acestui callout a fost setată pentru o singură temă. Callout Studio nu are stilizare per temă, așa că a fost adusă pentru toate temele.",
+	"import.warn.cmCustomStyles":
+		"Acest callout are și CSS personalizat în Callout Manager. Stilul nu face parte din import, așa că au fost aduse doar pictograma și culoarea.",
 	"import.err.cmIdConflict":
 		'ID-ul "{{value}}" este deja utilizat ca alias de un alt callout ("{{other}}") și a fost omis.',
 

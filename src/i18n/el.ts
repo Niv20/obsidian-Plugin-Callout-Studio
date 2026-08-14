@@ -749,32 +749,57 @@ export const el: Record<string, string> = {
 	"import.warn.iconNameUnknown":
 		'Δεν υπάρχει εικονίδιο "{{value}}" στο {{type}}, οπότε χρησιμοποιήθηκε το προεπιλεγμένο εικονίδιο.',
 	"import.warn.cmIconUnknownNew":
-		'Δεν υπάρχει εικονίδιο "{{value}}" στο Obsidian, οπότε χρησιμοποιήθηκε το προεπιλεγμένο εικονίδιο.',
+		'Το εικονίδιο "{{value}}" δεν είναι διαθέσιμο σε αυτό το vault, οπότε χρησιμοποιήθηκε το προεπιλεγμένο εικονίδιο.',
 	"import.warn.cmIconUnknownExisting":
-		'Δεν υπάρχει εικονίδιο "{{value}}" στο Obsidian, οπότε το "{{id}}" διατήρησε το εικονίδιο που είχε ήδη.',
+		'Το εικονίδιο "{{value}}" δεν είναι διαθέσιμο σε αυτό το vault, οπότε το "{{id}}" διατήρησε το εικονίδιο που είχε ήδη.',
 	"import.chooseSource": "Εισαγωγή από",
 	"import.sourceStudio": "Callout Studio",
 	"import.sourceStudioDesc":
 		"Φόρτωση αρχείου .json εξαγόμενου από το Callout Studio.",
 	"import.sourceCalloutManager": "Callout Manager",
 	"import.sourceCalloutManagerDesc":
-		"Επικολλήστε τα στυλ που αντιγράψατε από το κουμπί Copy του Callout Manager.",
+		"Μεταφέρετε τα προσαρμοσμένα σας callout από το πρόσθετο Callout Manager.",
 	"import.sourceAdmonition": "Admonition",
 	"import.sourceAdmonitionDesc":
 		"Φέρτε τα προσαρμοσμένα admonition σας από το πρόσθετο " +
 		"Admonition.",
 	"import.cmTitle": "Εισαγωγή από Callout Manager",
 	"import.cmInstructions":
-		"Στο Callout Manager, χρησιμοποιήστε το κουμπί Copy για να αντιγράψετε τα προσαρμοσμένα στυλ callout, και στη συνέχεια επικολλήστε τα παρακάτω.",
-	"import.cmPlaceholder": "Επικολλήστε τα αντιγραμμένα στυλ εδώ…",
+		"Κάθε προσαρμοσμένο callout μεταφέρεται με το εικονίδιο και το χρώμα " +
+		"του. Τα στυλ ανά θέμα και το προσαρμοσμένο CSS δεν έχουν αντίστοιχο " +
+		"εδώ και δεν μεταφέρονται.",
+	"import.cmFromVault": "Αυτό το vault",
+	"import.cmVaultChecking": "Αναζήτηση του πρόσθετου Callout Manager…",
+	"import.cmVaultFound": "Βρέθηκαν {{count}} προσαρμοσμένα callout.",
+	"import.cmVaultNotFound":
+		"Δεν βρέθηκαν προσαρμοσμένα callout σε αυτό το vault.",
+	"import.cmPasteLabel":
+		"Ή επικολλήστε εδώ τα αντιγραμμένα στυλ του Callout Manager:",
+	"import.cmPlaceholder": "Επικολλήστε τα αντιγραμμένα στυλ, ή ένα data.json, εδώ…",
 	"import.cmBtnCancel": "Ακύρωση",
 	"import.cmBtnImport": "Εισαγωγή",
 	"import.err.cmNoBlocksFound":
 		"Δεν βρέθηκαν στυλ Callout Manager στο επικολλημένο κείμενο.",
+	"import.err.cmNotRecognized":
+		"Μη αναγνωρίσιμο αρχείο: αναμένονται τα στυλ που παράγει το κουμπί " +
+		"Copy του Callout Manager, ή ένα data.json του Callout Manager.",
+	"import.err.cmNoEntries":
+		"Δεν βρέθηκαν προσαρμοσμένα callout προς εισαγωγή.",
 	"import.err.cmNoColorForNew":
 		'Δεν βρέθηκε χρησιμοποιήσιμο χρώμα για το νέο callout "{{value}}"· παραλείφθηκε.',
 	"import.err.cmIdConflict":
 		'Το ID "{{value}}" χρησιμοποιείται ήδη ως ψευδώνυμο από άλλο callout ("{{other}}") και παραλείφθηκε.',
+	"import.warn.cmNoColorDefault":
+		"Δεν είχε οριστεί χρώμα στο Callout Manager, οπότε χρησιμοποιήθηκε " +
+		"το προεπιλεγμένο γκρι του.",
+	"import.warn.cmThemeCondition":
+		"Το χρώμα ή το εικονίδιο αυτού του callout είχε οριστεί μόνο για ένα " +
+		"θέμα. Το Callout Studio δεν έχει στυλ ανά θέμα, οπότε μεταφέρθηκε " +
+		"για όλα τα θέματα.",
+	"import.warn.cmCustomStyles":
+		"Αυτό το callout έχει επίσης προσαρμοσμένο CSS στο Callout Manager. " +
+		"Αυτό το στυλ δεν αποτελεί μέρος της εισαγωγής, οπότε μεταφέρθηκαν " +
+		"μόνο το εικονίδιο και το χρώμα του.",
 
 	// Import — Admonition
 	"import.admTitle": "Εισαγωγή από το Admonition",

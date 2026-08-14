@@ -737,31 +737,49 @@ export const ms: Record<string, string> = {
 	"import.warn.iconNameUnknown":
 		'Tiada ikon "{{value}}" dalam {{type}}, jadi ikon lalai digunakan sebagai gantinya.',
 	"import.warn.cmIconUnknownNew":
-		'Tiada ikon "{{value}}" dalam Obsidian, jadi ikon lalai digunakan sebagai gantinya.',
+		'Ikon "{{value}}" tidak tersedia dalam vault ini, jadi ikon lalai digunakan sebagai gantinya.',
 	"import.warn.cmIconUnknownExisting":
-		'Tiada ikon "{{value}}" dalam Obsidian, jadi "{{id}}" mengekalkan ikon yang sudah ada.',
+		'Ikon "{{value}}" tidak tersedia dalam vault ini, jadi "{{id}}" mengekalkan ikon yang sudah ada.',
 	"import.chooseSource": "Import dari",
 	"import.sourceStudio": "Callout Studio",
 	"import.sourceStudioDesc":
 		"Muatkan fail .json yang dieksport dari Callout Studio.",
 	"import.sourceCalloutManager": "Callout Manager",
 	"import.sourceCalloutManagerDesc":
-		"Tampal gaya yang anda salin daripada butang Copy Callout Manager.",
+		"Bawa callout tersuai anda dari pemalam Callout Manager.",
 	"import.sourceAdmonition": "Admonition",
 	"import.sourceAdmonitionDesc":
 		"Bawa admonition tersuai anda dari pemalam Admonition.",
 	"import.cmTitle": "Import dari Callout Manager",
 	"import.cmInstructions":
-		"Dalam Callout Manager, gunakan butang Copy untuk menyalin gaya callout tersuai anda, kemudian tampalnya di bawah.",
-	"import.cmPlaceholder": "Tampal gaya yang disalin di sini…",
+		"Setiap callout tersuai dibawa masuk berserta ikon dan warnanya. Gaya " +
+		"khusus tema dan CSS tersuai tiada yang setara di sini dan tidak dibawa.",
+	"import.cmFromVault": "Vault ini",
+	"import.cmVaultChecking": "Mencari pemalam Callout Manager…",
+	"import.cmVaultFound": "{{count}} callout tersuai ditemukan.",
+	"import.cmVaultNotFound": "Tiada callout tersuai ditemukan dalam vault ini.",
+	"import.cmPasteLabel": "Atau tampal gaya yang disalin daripada Callout Manager di sini:",
+	"import.cmPlaceholder": "Tampal gaya yang disalin, atau fail data.json, di sini…",
 	"import.cmBtnCancel": "Batal",
 	"import.cmBtnImport": "Import",
 	"import.err.cmNoBlocksFound":
 		"Tiada gaya Callout Manager ditemukan dalam teks yang ditampal.",
+	"import.err.cmNotRecognized":
+		"Fail tidak dikenali: dijangka gaya yang dihasilkan oleh butang Copy " +
+		"Callout Manager, atau fail data.json Callout Manager.",
+	"import.err.cmNoEntries": "Tiada callout tersuai ditemukan untuk diimport.",
 	"import.err.cmNoColorForNew":
 		'Tiada warna yang boleh digunakan ditemukan untuk callout baru "{{value}}"; ia dilangkau.',
 	"import.err.cmIdConflict":
 		'ID "{{value}}" sudah digunakan sebagai alias oleh callout lain ("{{other}}") dan dilangkau.',
+	"import.warn.cmNoColorDefault":
+		"Tiada warna ditetapkan dalam Callout Manager, jadi kelabu lalainya digunakan.",
+	"import.warn.cmThemeCondition":
+		"Warna atau ikon callout ini hanya ditetapkan untuk satu tema. Callout " +
+		"Studio tiada gaya khusus tema, jadi ia dibawa untuk semua tema.",
+	"import.warn.cmCustomStyles":
+		"Callout ini juga mempunyai CSS tersuai dalam Callout Manager. Gaya " +
+		"tersebut bukan sebahagian daripada import, jadi hanya ikon dan warnanya dibawa.",
 
 	// Import — Admonition
 	"import.admTitle": "Import daripada Admonition",

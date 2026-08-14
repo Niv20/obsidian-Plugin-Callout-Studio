@@ -736,32 +736,56 @@ export const bg: Record<string, string> = {
 	"import.warn.iconNameUnknown":
 		'Няма икона "{{value}}" в {{type}}, затова беше използвана иконата по подразбиране.',
 	"import.warn.cmIconUnknownNew":
-		'Няма икона "{{value}}" в Obsidian, затова беше използвана иконата по подразбиране.',
+		'Иконата "{{value}}" не е налична в това хранилище, затова беше използвана иконата по подразбиране.',
 	"import.warn.cmIconUnknownExisting":
-		'Няма икона "{{value}}" в Obsidian, затова "{{id}}" запази иконата, която вече имаше.',
+		'Иконата "{{value}}" не е налична в това хранилище, затова "{{id}}" запази иконата, която вече имаше.',
 	"import.chooseSource": "Импортиране от",
 	"import.sourceStudio": "Callout Studio",
 	"import.sourceStudioDesc":
 		"Зареди .json файл, експортиран от Callout Studio.",
 	"import.sourceCalloutManager": "Callout Manager",
 	"import.sourceCalloutManagerDesc":
-		"Поставете стиловете, копирани от бутона Copy на Callout Manager.",
+		"Пренесете персонализираните си callout-и от приставката Callout Manager.",
 	"import.sourceAdmonition": "Admonition",
 	"import.sourceAdmonitionDesc":
 		"Пренесете своите персонализирани admonition от приставката " +
 		"Admonition.",
 	"import.cmTitle": "Импортиране от Callout Manager",
 	"import.cmInstructions":
-		"В Callout Manager използвайте бутона Copy, за да копирате персонализираните стилове на callout-ите, след което ги поставете по-долу.",
-	"import.cmPlaceholder": "Поставете копираните стилове тук…",
+		"Всеки персонализиран callout се пренася с иконата и цвета си. Стиловете " +
+		"по теми и персонализираният CSS нямат съответствие тук и не се пренасят.",
+	"import.cmFromVault": "Това хранилище",
+	"import.cmVaultChecking": "Търсене на приставката Callout Manager…",
+	"import.cmVaultFound": "Намерени са {{count}} персонализирани callout-и.",
+	"import.cmVaultNotFound":
+		"В това хранилище не бяха намерени персонализирани callout-и.",
+	"import.cmPasteLabel":
+		"Или поставете копираните от Callout Manager стилове тук:",
+	"import.cmPlaceholder":
+		"Поставете копираните стилове или файл data.json тук…",
 	"import.cmBtnCancel": "Отказ",
 	"import.cmBtnImport": "Импортиране",
 	"import.err.cmNoBlocksFound":
 		"Не бяха намерени стилове на Callout Manager в поставения текст.",
+	"import.err.cmNotRecognized":
+		"Непознат файл: очакваха се стиловете, генерирани от бутона Copy " +
+		"на Callout Manager, или файл data.json на Callout Manager.",
+	"import.err.cmNoEntries":
+		"Не бяха намерени персонализирани callout-и за импортиране.",
 	"import.err.cmNoColorForNew":
 		'Не беше намерен използваем цвят за новия callout "{{value}}"; той беше пропуснат.',
 	"import.err.cmIdConflict":
 		'ID "{{value}}" вече се използва като псевдоним от друг callout ("{{other}}") и беше пропуснат.',
+	"import.warn.cmNoColorDefault":
+		"В Callout Manager не беше зададен цвят, затова беше използвано " +
+		"стандартното сиво.",
+	"import.warn.cmThemeCondition":
+		"Цветът или иконата на този callout бяха зададени само за една тема. " +
+		"Callout Studio няма стилове по теми, затова той беше пренесен за " +
+		"всички теми.",
+	"import.warn.cmCustomStyles":
+		"Този callout има и персонализиран CSS в Callout Manager. Този стил не " +
+		"е част от импортирането, затова бяха пренесени само иконата и цветът.",
 
 	// Import — Admonition
 	"import.admTitle": "Внасяне от Admonition",

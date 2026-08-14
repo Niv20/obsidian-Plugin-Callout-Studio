@@ -717,14 +717,28 @@ export const zhTW: Record<string, string> = {
 	"import.sourceAdmonitionDesc":
 		"從 Admonition 外掛匯入您的自訂 admonition。",
 	"import.cmTitle": "從 Callout Manager 匯入",
+	"import.cmFromVault": "本儲存庫",
+	"import.cmVaultChecking": "正在尋找 Callout Manager 外掛…",
+	"import.cmVaultFound": "找到 {{count}} 個自訂 callout。",
+	"import.cmVaultNotFound": "在本儲存庫中找不到自訂 callout。",
+	"import.cmPasteLabel": "或在此貼上從 Callout Manager 複製的樣式：",
 	"import.cmInstructions":
 		"在 Callout Manager 中，使用其 Copy 按鈕複製您自訂的 callout 樣式，然後將其貼到下方。",
 	"import.cmPlaceholder": "在此貼上複製的樣式…",
 	"import.cmBtnCancel": "取消",
 	"import.cmBtnImport": "匯入",
+	"import.err.cmNotRecognized":
+		"無法辨識的檔案：應為 Callout Manager Copy 按鈕產生的樣式，或 Callout Manager 的 data.json。",
+	"import.err.cmNoEntries": "找不到可匯入的自訂 callout。",
 	"import.err.cmNoBlocksFound": "在貼上的文字中未找到 Callout Manager 樣式。",
 	"import.err.cmNoColorForNew":
 		'未找到適用於新 callout "{{value}}" 的可用顏色；已跳過。',
+	"import.warn.cmNoColorDefault":
+		"Callout Manager 未設定顏色，因此使用預設灰色。",
+	"import.warn.cmThemeCondition":
+		"此 callout 的顏色或圖示只為單一佈景主題設定。Callout Studio 不支援各主題獨立樣式，因此已套用至所有主題。",
+	"import.warn.cmCustomStyles":
+		"此 callout 在 Callout Manager 中還有自訂 CSS。該樣式不包含在匯入內容中，因此僅匯入其圖示與顏色。",
 	"import.err.cmIdConflict":
 		'ID "{{value}}" 已被另一個 callout ("{{other}}") 用作別名，已跳過。',
 
@@ -763,9 +777,9 @@ export const zhTW: Record<string, string> = {
 	"footer.tagline": "有反饋、意見或建議？歡迎告訴我！",
 	"footer.madeBy": "由 Niv 製作  •  ",
 	"settings.deletePaletteConfirmLinkedOne":
-		'刪除色盤「{{name}}」？\n1 個 callout 正在使用它。它會保留原有色彩，你之後可以在其編輯器的顏色列重新連結。',
+		"刪除色盤「{{name}}」？\n1 個 callout 正在使用它。它會保留原有色彩，你之後可以在其編輯器的顏色列重新連結。",
 	"settings.deletePaletteConfirmLinked":
-		'刪除色盤「{{name}}」？\n{{count}} 個 callout 正在使用它。它們會保留原有色彩，你之後可以在任一編輯器的顏色列重新連結。',
+		"刪除色盤「{{name}}」？\n{{count}} 個 callout 正在使用它。它們會保留原有色彩，你之後可以在任一編輯器的顏色列重新連結。",
 	"settings.unlinkedColors": "未連結色彩",
 	"settings.unlinkedColorsDesc":
 		"這些 callout 的已儲存色彩已被刪除。它們會保留原有色彩；還原會重新儲存該色彩並重新連結整個群組。",
@@ -784,8 +798,8 @@ export const zhTW: Record<string, string> = {
 		"此 callout 的已儲存色彩已被刪除。你可以透過{{link}}重新儲存——另外 {{count}} 個使用該色彩的 callout 也會重新連結。",
 	"editor.colorsDescDeletedLink": "點這裡",
 	"palette.colorExists":
-		'這些色彩與「{{name}}」完全相同。兩個已儲存色彩不能相同——請修改一個色彩以區分它們。',
+		"這些色彩與「{{name}}」完全相同。兩個已儲存色彩不能相同——請修改一個色彩以區分它們。",
 	"palette.colorExistsUse":
-		'這些色彩與「{{name}}」完全相同。兩個已儲存色彩不能相同——請修改一個色彩，或{{link}}。',
+		"這些色彩與「{{name}}」完全相同。兩個已儲存色彩不能相同——請修改一個色彩，或{{link}}。",
 	"palette.colorExistsUseLink": "使用現有色彩",
 };

@@ -759,31 +759,53 @@ export const pl: Record<string, string> = {
 	"import.warn.iconNameUnknown":
 		'Brak ikony "{{value}}" w {{type}}, więc użyto domyślnej ikony.',
 	"import.warn.cmIconUnknownNew":
-		'Brak ikony "{{value}}" w Obsidian, więc użyto domyślnej ikony.',
+		'Ikona "{{value}}" nie jest dostępna w tym sejfie, więc użyto domyślnej ikony.',
 	"import.warn.cmIconUnknownExisting":
-		'Brak ikony "{{value}}" w Obsidian, więc "{{id}}" zachowało ikonę, którą już miało.',
+		'Ikona "{{value}}" nie jest dostępna w tym sejfie, więc "{{id}}" zachowało ikonę, którą już miało.',
 	"import.chooseSource": "Importuj z",
 	"import.sourceStudio": "Callout Studio",
 	"import.sourceStudioDesc":
 		"Załaduj plik .json wyeksportowany z Callout Studio.",
 	"import.sourceCalloutManager": "Callout Manager",
 	"import.sourceCalloutManagerDesc":
-		"Wklej style skopiowane za pomocą przycisku Copy w Callout Manager.",
+		"Przenieś swoje własne calloty z wtyczki Callout Manager.",
 	"import.sourceAdmonition": "Admonition",
 	"import.sourceAdmonitionDesc":
 		"Przenieś swoje własne admonition z wtyczki Admonition.",
 	"import.cmTitle": "Importuj z Callout Manager",
 	"import.cmInstructions":
-		"W Callout Manager użyj przycisku Copy, aby skopiować niestandardowe style calloutów, a następnie wklej je poniżej.",
-	"import.cmPlaceholder": "Wklej skopiowane style tutaj…",
+		"Każdy własny callout trafia tu z ikoną i kolorem. Style dla " +
+		"poszczególnych motywów oraz niestandardowy CSS nie mają tu " +
+		"odpowiednika i zostają pominięte.",
+	"import.cmFromVault": "Ten sejf",
+	"import.cmVaultChecking": "Szukanie wtyczki Callout Manager…",
+	"import.cmVaultFound": "Znaleziono {{count}} własnych calloutów.",
+	"import.cmVaultNotFound":
+		"Nie znaleziono własnych calloutów w tym sejfie.",
+	"import.cmPasteLabel": "Albo wklej tutaj style skopiowane z Callout Manager:",
+	"import.cmPlaceholder": "Wklej skopiowane style lub plik data.json tutaj…",
 	"import.cmBtnCancel": "Anuluj",
 	"import.cmBtnImport": "Importuj",
 	"import.err.cmNoBlocksFound":
 		"W wklejonym tekście nie znaleziono żadnych stylów Callout Manager.",
+	"import.err.cmNotRecognized":
+		"Nierozpoznany plik: oczekiwano stylów utworzonych przyciskiem Copy " +
+		"w Callout Manager lub pliku data.json wtyczki Callout Manager.",
+	"import.err.cmNoEntries":
+		"Nie znaleziono żadnych własnych calloutów do zaimportowania.",
 	"import.err.cmNoColorForNew":
 		'Nie znaleziono użytecznego koloru dla nowego callouta "{{value}}"; został pominięty.',
 	"import.err.cmIdConflict":
 		'ID "{{value}}" jest już używane jako alias przez inny callout ("{{other}}") i zostało pominięte.',
+	"import.warn.cmNoColorDefault":
+		"W Callout Manager nie ustawiono koloru, więc użyto domyślnej szarości.",
+	"import.warn.cmThemeCondition":
+		"Kolor lub ikona tego callouta zostały ustawione tylko dla jednego " +
+		"motywu. Callout Studio nie obsługuje stylów dla poszczególnych " +
+		"motywów, więc przeniesiono je dla każdego motywu.",
+	"import.warn.cmCustomStyles":
+		"Ten callout ma też niestandardowy CSS w Callout Manager. Ten styl " +
+		"nie jest częścią importu, więc przeniesiono tylko jego ikonę i kolor.",
 
 	// Import — Admonition
 	"import.admTitle": "Importuj z Admonition",

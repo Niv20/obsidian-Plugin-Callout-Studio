@@ -757,31 +757,45 @@ export const ko: Record<string, string> = {
 	"import.warn.iconNameUnknown":
 		'"{{value}}" 아이콘이 {{type}}에 없어 기본 아이콘이 대신 사용되었습니다.',
 	"import.warn.cmIconUnknownNew":
-		'"{{value}}" 아이콘이 Obsidian에 없어 기본 아이콘이 대신 사용되었습니다.',
+		'"{{value}}" 아이콘을 이 vault에서 사용할 수 없어 기본 아이콘이 대신 사용되었습니다.',
 	"import.warn.cmIconUnknownExisting":
-		'"{{value}}" 아이콘이 Obsidian에 없어 "{{id}}"는 기존 아이콘을 유지했습니다.',
+		'"{{value}}" 아이콘을 이 vault에서 사용할 수 없어 "{{id}}"는 기존 아이콘을 유지했습니다.',
 	"import.chooseSource": "가져오기 위치",
 	"import.sourceStudio": "Callout Studio",
 	"import.sourceStudioDesc":
 		"Callout Studio에서 내보낸 .json 파일을 불러옵니다.",
 	"import.sourceCalloutManager": "Callout Manager",
 	"import.sourceCalloutManagerDesc":
-		"Callout Manager의 Copy 버튼으로 복사한 스타일을 붙여넣으세요.",
+		"Callout Manager 플러그인에서 사용자 지정 callout을 가져옵니다.",
 	"import.sourceAdmonition": "Admonition",
 	"import.sourceAdmonitionDesc":
 		"Admonition 플러그인에서 사용자 지정 admonition을 가져옵니다.",
 	"import.cmTitle": "Callout Manager에서 가져오기",
 	"import.cmInstructions":
-		"Callout Manager에서 Copy 버튼을 사용하여 사용자 정의 callout 스타일을 복사한 후, 아래에 붙여넣으세요.",
-	"import.cmPlaceholder": "복사한 스타일을 여기에 붙여넣으세요…",
+		"사용자 지정된 각 callout은 아이콘과 색상만 그대로 가져옵니다. 테마별 스타일과 사용자 지정 CSS는 여기에 대응되는 기능이 없어 제외됩니다.",
+	"import.cmFromVault": "이 vault",
+	"import.cmVaultChecking": "Callout Manager 플러그인을 찾는 중…",
+	"import.cmVaultFound": "사용자 지정 callout {{count}}개를 찾았습니다.",
+	"import.cmVaultNotFound": "이 vault에서 사용자 지정 callout을 찾지 못했습니다.",
+	"import.cmPasteLabel": "또는 Callout Manager에서 복사한 스타일을 여기에 붙여넣으세요:",
+	"import.cmPlaceholder": "복사한 스타일 또는 data.json을 여기에 붙여넣으세요…",
 	"import.cmBtnCancel": "취소",
 	"import.cmBtnImport": "가져오기",
 	"import.err.cmNoBlocksFound":
 		"붙여넣은 텍스트에서 Callout Manager 스타일을 찾을 수 없습니다.",
+	"import.err.cmNotRecognized":
+		"인식할 수 없는 파일입니다. Callout Manager의 Copy 버튼으로 생성한 스타일 또는 Callout Manager의 data.json 파일이 필요합니다.",
+	"import.err.cmNoEntries": "가져올 수 있는 사용자 지정 callout을 찾지 못했습니다.",
 	"import.err.cmNoColorForNew":
 		'새 callout "{{value}}"에 사용 가능한 색상을 찾을 수 없어 건너뛰었습니다.',
 	"import.err.cmIdConflict":
 		'ID "{{value}}"는 이미 다른 callout("{{other}}")의 alias로 사용 중이어서 건너뛰었습니다.',
+	"import.warn.cmNoColorDefault":
+		"Callout Manager에 색상이 설정되어 있지 않아 기본 회색이 사용되었습니다.",
+	"import.warn.cmThemeCondition":
+		"이 callout의 색상 또는 아이콘은 하나의 테마에만 설정되어 있었습니다. Callout Studio는 테마별 스타일을 지원하지 않으므로 모든 테마에 동일하게 적용되었습니다.",
+	"import.warn.cmCustomStyles":
+		"이 callout에는 Callout Manager에 사용자 지정 CSS도 있습니다. 해당 스타일은 가져오기 대상이 아니므로 아이콘과 색상만 반영되었습니다.",
 
 	// Import — Admonition
 	"import.admTitle": "Admonition에서 가져오기",

@@ -767,31 +767,56 @@ export const de: Record<string, string> = {
 	"import.warn.iconNameUnknown":
 		'Es gibt kein Symbol "{{value}}" in {{type}}, daher wurde das Standardsymbol verwendet.',
 	"import.warn.cmIconUnknownNew":
-		'Es gibt kein Symbol "{{value}}" in Obsidian, daher wurde das Standardsymbol verwendet.',
+		'Das Symbol "{{value}}" ist in diesem Vault nicht verfügbar, daher wurde das Standardsymbol verwendet.',
 	"import.warn.cmIconUnknownExisting":
-		'Es gibt kein Symbol "{{value}}" in Obsidian, daher hat "{{id}}" das bereits vorhandene Symbol behalten.',
+		'Das Symbol "{{value}}" ist in diesem Vault nicht verfügbar, daher hat "{{id}}" das bereits vorhandene Symbol behalten.',
 	"import.chooseSource": "Importieren aus",
 	"import.sourceStudio": "Callout Studio",
 	"import.sourceStudioDesc":
 		"Eine aus Callout Studio exportierte .json-Datei laden.",
 	"import.sourceCalloutManager": "Callout Manager",
 	"import.sourceCalloutManagerDesc":
-		"Füge die Stile ein, die du über den Copy-Button des Callout Managers kopiert hast.",
+		"Übernimm deine angepassten Callouts aus dem Callout Manager-Plugin.",
 	"import.sourceAdmonition": "Admonition",
 	"import.sourceAdmonitionDesc":
 		"Übernimm deine eigenen Admonitions aus dem Admonition-Plugin.",
 	"import.cmTitle": "Aus Callout Manager importieren",
 	"import.cmInstructions":
-		"Verwende in Callout Manager den Copy-Button, um deine angepassten Callout-Stile zu kopieren, und füge sie dann unten ein.",
-	"import.cmPlaceholder": "Kopierte Stile hier einfügen…",
+		"Jeder angepasste Callout wird mit Symbol und Farbe übernommen. " +
+		"Theme-abhängige Stile und eigenes CSS haben hier keine Entsprechung " +
+		"und werden nicht übernommen.",
+	"import.cmFromVault": "Dieser Tresor",
+	"import.cmVaultChecking": "Suche nach dem Callout Manager-Plugin…",
+	"import.cmVaultFound": "{{count}} angepasste(r) Callout(s) gefunden.",
+	"import.cmVaultNotFound":
+		"In diesem Tresor wurden keine angepassten Callouts gefunden.",
+	"import.cmPasteLabel":
+		"Oder füge die kopierten Stile von Callout Manager hier ein:",
+	"import.cmPlaceholder": "Kopierte Stile oder eine data.json hier einfügen…",
 	"import.cmBtnCancel": "Abbrechen",
 	"import.cmBtnImport": "Importieren",
 	"import.err.cmNoBlocksFound":
 		"Im eingefügten Text wurden keine Callout Manager-Stile gefunden.",
+	"import.err.cmNotRecognized":
+		"Unbekannte Datei: erwartet werden die Stile aus dem Copy-Button von " +
+		"Callout Manager oder eine data.json von Callout Manager.",
+	"import.err.cmNoEntries":
+		"Es wurden keine angepassten Callouts zum Importieren gefunden.",
 	"import.err.cmNoColorForNew":
 		'Für den neuen Callout "{{value}}" wurde keine verwendbare Farbe gefunden; er wurde übersprungen.',
 	"import.err.cmIdConflict":
 		'Die ID "{{value}}" wird bereits als Alias von einem anderen Callout ("{{other}}") verwendet und wurde übersprungen.',
+	"import.warn.cmNoColorDefault":
+		"In Callout Manager war keine Farbe festgelegt, daher wurde das " +
+		"Standardgrau verwendet.",
+	"import.warn.cmThemeCondition":
+		"Farbe oder Symbol dieses Callouts wurden nur für ein Theme " +
+		"festgelegt. Callout Studio kennt keine Theme-abhängigen Stile, " +
+		"daher wurde die Einstellung für alle Themes übernommen.",
+	"import.warn.cmCustomStyles":
+		"Dieser Callout hat außerdem eigenes CSS in Callout Manager. Diese " +
+		"Stile sind nicht Teil des Imports, daher wurden nur Symbol und " +
+		"Farbe übernommen.",
 
 	// Import — Admonition
 	"import.admTitle": "Aus Admonition importieren",

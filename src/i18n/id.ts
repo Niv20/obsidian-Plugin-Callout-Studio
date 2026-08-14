@@ -760,31 +760,47 @@ export const id: Record<string, string> = {
 	"import.warn.iconNameUnknown":
 		'Tidak ada ikon "{{value}}" di {{type}}, sehingga ikon default digunakan.',
 	"import.warn.cmIconUnknownNew":
-		'Tidak ada ikon "{{value}}" di Obsidian, sehingga ikon default digunakan.',
+		'Ikon "{{value}}" tidak tersedia di vault ini, sehingga ikon default digunakan.',
 	"import.warn.cmIconUnknownExisting":
-		'Tidak ada ikon "{{value}}" di Obsidian, sehingga "{{id}}" mempertahankan ikon yang sudah dimilikinya.',
+		'Ikon "{{value}}" tidak tersedia di vault ini, sehingga "{{id}}" mempertahankan ikon yang sudah dimilikinya.',
 	"import.chooseSource": "Impor dari",
 	"import.sourceStudio": "Callout Studio",
 	"import.sourceStudioDesc":
 		"Muat file .json yang diekspor dari Callout Studio.",
 	"import.sourceCalloutManager": "Callout Manager",
 	"import.sourceCalloutManagerDesc":
-		"Tempel gaya yang Anda salin dari tombol Copy Callout Manager.",
+		"Bawa callout kustom Anda dari plugin Callout Manager.",
 	"import.sourceAdmonition": "Admonition",
 	"import.sourceAdmonitionDesc":
 		"Bawa admonition kustom Anda dari plugin Admonition.",
 	"import.cmTitle": "Impor dari Callout Manager",
 	"import.cmInstructions":
-		"Di Callout Manager, gunakan tombol Copy untuk menyalin gaya callout yang disesuaikan, lalu tempelkan di bawah.",
-	"import.cmPlaceholder": "Tempel gaya yang disalin di sini…",
+		"Setiap callout yang disesuaikan dibawa beserta ikon dan warnanya. Gaya per-tema dan CSS kustom tidak memiliki padanan di sini dan tidak ikut dibawa.",
+	"import.cmFromVault": "Vault ini",
+	"import.cmVaultChecking": "Mencari plugin Callout Manager…",
+	"import.cmVaultFound": "{{count}} callout kustom ditemukan.",
+	"import.cmVaultNotFound":
+		"Tidak ada callout kustom yang ditemukan di vault ini.",
+	"import.cmPasteLabel": "Atau tempel gaya yang disalin dari Callout Manager di sini:",
+	"import.cmPlaceholder": "Tempel gaya yang disalin, atau file data.json, di sini…",
 	"import.cmBtnCancel": "Batal",
 	"import.cmBtnImport": "Impor",
 	"import.err.cmNoBlocksFound":
 		"Tidak ada gaya Callout Manager yang ditemukan dalam teks yang ditempel.",
+	"import.err.cmNotRecognized":
+		"File tidak dikenali: yang diharapkan adalah gaya yang dihasilkan oleh tombol Copy Callout Manager, atau file data.json Callout Manager.",
+	"import.err.cmNoEntries":
+		"Tidak ada callout kustom yang ditemukan untuk diimpor.",
 	"import.err.cmNoColorForNew":
 		'Tidak ada warna yang dapat digunakan ditemukan untuk callout baru "{{value}}"; dilewati.',
 	"import.err.cmIdConflict":
 		'ID "{{value}}" sudah digunakan sebagai alias oleh callout lain ("{{other}}") dan dilewati.',
+	"import.warn.cmNoColorDefault":
+		"Tidak ada warna yang diatur di Callout Manager, sehingga abu-abu default digunakan.",
+	"import.warn.cmThemeCondition":
+		"Warna atau ikon callout ini hanya diatur untuk satu tema. Callout Studio tidak memiliki gaya per-tema, sehingga dibawa untuk semua tema.",
+	"import.warn.cmCustomStyles":
+		"Callout ini juga memiliki CSS kustom di Callout Manager. Gaya tersebut bukan bagian dari impor, sehingga hanya ikon dan warnanya yang dibawa.",
 
 	// Import — Admonition
 	"import.admTitle": "Impor dari Admonition",

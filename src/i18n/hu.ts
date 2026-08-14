@@ -765,31 +765,47 @@ export const hu: Record<string, string> = {
 	"import.warn.iconNameUnknown":
 		'Nincs "{{value}}" ikon a következőben: {{type}}, ezért az alapértelmezett ikont használtuk.',
 	"import.warn.cmIconUnknownNew":
-		'Nincs "{{value}}" ikon az Obsidianban, ezért az alapértelmezett ikont használtuk.',
+		'A "{{value}}" ikon nem érhető el ebben a vaultban, ezért az alapértelmezett ikont használtuk.',
 	"import.warn.cmIconUnknownExisting":
-		'Nincs "{{value}}" ikon az Obsidianban, ezért a "{{id}}" megtartotta a korábban beállított ikont.',
+		'A "{{value}}" ikon nem érhető el ebben a vaultban, ezért a "{{id}}" megtartotta a korábban beállított ikont.',
 	"import.chooseSource": "Importálás innen",
 	"import.sourceStudio": "Callout Studio",
 	"import.sourceStudioDesc":
 		"Egy Callout Studióból exportált .json fájl betöltése.",
 	"import.sourceCalloutManager": "Callout Manager",
 	"import.sourceCalloutManagerDesc":
-		"Illeszd be a Callout Manager Copy gombjáról másolt stílusokat.",
+		"Hozd át a testreszabott callout-jaidat a Callout Manager bővítményből.",
 	"import.sourceAdmonition": "Admonition",
 	"import.sourceAdmonitionDesc":
 		"Hozd át a saját admonition-jeidet az Admonition bővítményből.",
 	"import.cmTitle": "Importálás a Callout Managerből",
 	"import.cmInstructions":
-		"A Callout Managerben használd a Copy gombot a testreszabott callout stílusaid másolásához, majd illeszd be őket lentebb.",
-	"import.cmPlaceholder": "Illeszd be a másolt stílusokat ide…",
+		"Minden testreszabott callout az ikonjával és a színével együtt kerül át. A témánkénti stílusoknak és az egyéni CSS-nek itt nincs megfelelője, ezek nem kerülnek át.",
+	"import.cmFromVault": "Ez a vault",
+	"import.cmVaultChecking": "Callout Manager bővítmény keresése…",
+	"import.cmVaultFound": "{{count}} testreszabott callout található.",
+	"import.cmVaultNotFound":
+		"Nem található testreszabott callout ebben a vaultban.",
+	"import.cmPasteLabel": "Vagy illeszd be ide a Callout Manager Copy gombjáról másolt stílusokat:",
+	"import.cmPlaceholder": "Illeszd be a másolt stílusokat, vagy egy data.json fájlt, ide…",
 	"import.cmBtnCancel": "Mégse",
 	"import.cmBtnImport": "Importálás",
 	"import.err.cmNoBlocksFound":
 		"Nem találhatók Callout Manager stílusok a beillesztett szövegben.",
+	"import.err.cmNotRecognized":
+		"Ismeretlen fájl: a Callout Manager Copy gombja által előállított stílusokat, vagy egy Callout Manager data.json fájlt vártunk.",
+	"import.err.cmNoEntries":
+		"Nem található importálható, testreszabott callout.",
 	"import.err.cmNoColorForNew":
 		'Nem található használható szín az új "{{value}}" callouthoz; kihagyva.',
 	"import.err.cmIdConflict":
 		'A "{{value}}" azonosítót már egy másik callout ("{{other}}") alias-ként használja, ezért kihagyva.',
+	"import.warn.cmNoColorDefault":
+		"A Callout Managerben nem volt beállítva szín, ezért az alapértelmezett szürkét használtuk.",
+	"import.warn.cmThemeCondition":
+		"Ennek a callout-nak a színe vagy ikonja csak egy témára volt beállítva. A Callout Studióban nincs témánkénti stílus, ezért minden témára átkerült.",
+	"import.warn.cmCustomStyles":
+		"Ennek a callout-nak egyéni CSS-e is van a Callout Managerben. Az a stílus nem része az importnak, csak az ikonja és a színe került át.",
 
 	// Import — Admonition
 	"import.admTitle": "Importálás az Admonitionből",

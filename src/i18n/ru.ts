@@ -7,7 +7,8 @@ export const ru: Record<string, string> = {
 
 	"cmd.customWrapBlock": "Обернуть в callout «{{name}}»",
 	"cmd.customInsertBlock": "Вставить callout «{{name}}»",
-	"cmd.customInsertHeading": "Вставить заголовок H{{level}} callout «{{name}}»",
+	"cmd.customInsertHeading":
+		"Вставить заголовок H{{level}} callout «{{name}}»",
 	"cmd.customInsertInline": "Вставить встроенный callout «{{name}}»",
 
 	"autocomplete.createNew": 'Создать новый callout: "{{name}}"',
@@ -772,15 +773,32 @@ export const ru: Record<string, string> = {
 		"Перенесите свои пользовательские admonition из плагина " +
 		"Admonition.",
 	"import.cmTitle": "Импорт из Callout Manager",
+	"import.cmFromVault": "Это хранилище",
+	"import.cmVaultChecking": "Поиск плагина Callout Manager…",
+	"import.cmVaultFound": "Найдено пользовательских callout: {{count}}.",
+	"import.cmVaultNotFound":
+		"В этом хранилище не найдено пользовательских callout.",
+	"import.cmPasteLabel":
+		"Или вставьте сюда стили, скопированные из Callout Manager:",
 	"import.cmInstructions":
 		"В Callout Manager нажмите кнопку Copy, чтобы скопировать настроенные стили callout, затем вставьте их ниже.",
 	"import.cmPlaceholder": "Вставьте скопированные стили сюда…",
 	"import.cmBtnCancel": "Отмена",
 	"import.cmBtnImport": "Импорт",
+	"import.err.cmNotRecognized":
+		"Файл не распознан: ожидались стили, созданные кнопкой Copy в Callout Manager, или data.json из Callout Manager.",
+	"import.err.cmNoEntries":
+		"Не найдено пользовательских callout для импорта.",
 	"import.err.cmNoBlocksFound":
 		"В вставленном тексте не найдено стилей Callout Manager.",
 	"import.err.cmNoColorForNew":
 		'Не найден подходящий цвет для нового callout "{{value}}"; он был пропущен.',
+	"import.warn.cmNoColorDefault":
+		"В Callout Manager цвет не задан, поэтому использован стандартный серый.",
+	"import.warn.cmThemeCondition":
+		"Цвет или значок этого callout были заданы только для одной темы. Callout Studio не поддерживает стили для отдельных тем, поэтому они перенесены для всех тем.",
+	"import.warn.cmCustomStyles":
+		"У этого callout также есть пользовательский CSS в Callout Manager. Этот стиль не входит в импорт, поэтому перенесены только значок и цвет.",
 	"import.err.cmIdConflict":
 		'ID "{{value}}" уже используется как псевдоним другим callout ("{{other}}") и был пропущен.',
 

@@ -13,7 +13,7 @@ import {
 	clampBgIntensity,
 	DEFAULT_TEXT_COLOR_DARK,
 	DEFAULT_TEXT_COLOR_LIGHT,
-	derivePaletteFromColor,
+	derivePaletteFromColors,
 	isValidHexColor,
 	sanitizeBgGradient,
 } from "./colorUtils";
@@ -560,8 +560,7 @@ export function bakePaletteColors(
 }
 
 /**
- * Resolves one imported Callout Manager color (a single hex, since that
- * plugin has no separate light/dark accents) against everything already
+ * Resolves one imported Callout Manager color against everything already
  * known: Obsidian/preset palettes and the user's saved custom palettes.
  * `customPalettes` should be the caller's live, growing array: the caller is
  * expected to push `createdPalette` onto it before resolving the next entry,
@@ -576,16 +575,31 @@ export function bakePaletteColors(
  * the caller to save, instead of the callout ending up with baked colors
  * that match nothing — which the editor would otherwise show as a
  * "Deleted color".
+ *
+ * Two hexes, because Callout Manager's own `data.json` really can hold a
+ * different color per color scheme (its per-scheme editor writes one entry
+ * conditioned on `{colorScheme: "light"}` and another on `"dark"`). The CSS
+ * its Copy button emits is already resolved for whichever scheme was active,
+ * so the paste importer only ever has one — that path calls
+ * {@link resolveCalloutManagerColor} and both sides are the same hex.
+ *
+ * The palette is *named* after the light hex: `suggestColorName` maps a hex to
+ * a human colour word, and running it twice would either produce a name that
+ * describes only half the palette anyway or an unreadable "blue / teal".
  */
-export function resolveCalloutManagerColor(
-	hex: string,
+export function resolveCalloutManagerColors(
+	hexLight: string,
+	hexDark: string,
 	customPalettes: CustomPalette[],
 ): CalloutManagerColorResolution {
-	const derived = derivePaletteFromColor(hex);
+	const derived = derivePaletteFromColors(hexLight, hexDark);
 	const candidates: ColorPalette[] = [
 		...getAllColorPalettes(),
 		...customPalettes.map(customPaletteToColorPalette),
 	];
+
+	const eqHex = (a: string, b: string): boolean =>
+		a.toLowerCase() === b.toLowerCase();
 
 	const match = candidates.find(
 		(p) =>
@@ -595,12 +609,31 @@ export function resolveCalloutManagerColor(
 			// the flag, so a "None" palette can match every hex here and would
 			// otherwise bake transparency onto a callout that asked for a fill.
 			!p.transparentBg &&
-			p.colorLight.toLowerCase() === derived.colorLight.toLowerCase() &&
-			p.colorDark.toLowerCase() === derived.colorDark.toLowerCase() &&
-			(p.bgColorLight ?? "").toLowerCase() ===
-				derived.bgColorLight.toLowerCase() &&
-			(p.bgColorDark ?? "").toLowerCase() ===
-				derived.bgColorDark.toLowerCase() &&
+			// Two spellings of the same colour, and a candidate may only ever be
+			// written in one of them. A palette a previous import minted stores
+			// the CONTRAST-CORRECTED accents `derivePaletteFromColors` produced,
+			// so it can only match on the left; a built-in preset stores the raw
+			// hex `makePalette` was given, with no correction, so it can only
+			// match on the right.
+			//
+			// Comparing the derived pair alone — as this once did — therefore made
+			// every preset whose own accent needs correcting unreachable: 10 of the
+			// 16, `Gray` among them, so importing #9e9e9e (literally Gray's hex)
+			// derived #868686, matched nothing and minted a near-duplicate "Gray 2".
+			//
+			// Matching on the right bakes the preset's raw accent, below the 3:1
+			// the derivation enforces. That is deliberate: it is exactly what
+			// choosing that preset in the editor's dropdown already gives, so this
+			// makes import agree with the editor instead of quietly inventing a
+			// palette the dropdown cannot name.
+			((eqHex(p.colorLight, derived.colorLight) &&
+				eqHex(p.colorDark, derived.colorDark)) ||
+				(eqHex(p.colorLight, hexLight) && eqHex(p.colorDark, hexDark))) &&
+			// Unchanged, and still correct on both branches: a preset's backgrounds
+			// are `bgTintFor(accent, mode)` at the same DEFAULT_BG_COLOR_AMOUNT the
+			// derivation uses, so equal accents give equal backgrounds either way.
+			eqHex(p.bgColorLight ?? "", derived.bgColorLight) &&
+			eqHex(p.bgColorDark ?? "", derived.bgColorDark) &&
 			bgGradientsEqual(p.bgGradient, undefined),
 	);
 	if (match) {
@@ -614,7 +647,7 @@ export function resolveCalloutManagerColor(
 	);
 	const createdPalette: CustomPalette = {
 		id: generatePaletteId(),
-		name: dedupeColorName(suggestColorName(hex), takenNames),
+		name: dedupeColorName(suggestColorName(hexLight), takenNames),
 		...derived,
 	};
 	return {
@@ -622,4 +655,12 @@ export function resolveCalloutManagerColor(
 		colors: bakePaletteColors(customPaletteToColorPalette(createdPalette)),
 		createdPalette,
 	};
+}
+
+/** Resolves one imported color used for both color schemes. */
+export function resolveCalloutManagerColor(
+	hex: string,
+	customPalettes: CustomPalette[],
+): CalloutManagerColorResolution {
+	return resolveCalloutManagerColors(hex, hex, customPalettes);
 }

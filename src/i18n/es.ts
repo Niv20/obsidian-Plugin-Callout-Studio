@@ -765,31 +765,56 @@ export const es: Record<string, string> = {
 	"import.warn.iconNameUnknown":
 		'No hay ningún ícono "{{value}}" en {{type}}, por lo que se usó el ícono predeterminado.',
 	"import.warn.cmIconUnknownNew":
-		'No hay ningún ícono "{{value}}" en Obsidian, por lo que se usó el ícono predeterminado.',
+		'El ícono "{{value}}" no está disponible en este vault, por lo que se usó el ícono predeterminado.',
 	"import.warn.cmIconUnknownExisting":
-		'No hay ningún ícono "{{value}}" en Obsidian, por lo que "{{id}}" conservó el ícono que ya tenía.',
+		'El ícono "{{value}}" no está disponible en este vault, por lo que "{{id}}" conservó el ícono que ya tenía.',
 	"import.chooseSource": "Importar desde",
 	"import.sourceStudio": "Callout Studio",
 	"import.sourceStudioDesc":
 		"Cargar un archivo .json exportado desde Callout Studio.",
 	"import.sourceCalloutManager": "Callout Manager",
 	"import.sourceCalloutManagerDesc":
-		"Pega los estilos que copiaste desde el botón Copy de Callout Manager.",
+		"Trae tus callouts personalizados desde el plugin Callout Manager.",
 	"import.sourceAdmonition": "Admonition",
 	"import.sourceAdmonitionDesc":
 		"Trae tus admonitions personalizadas desde el plugin Admonition.",
 	"import.cmTitle": "Importar desde Callout Manager",
 	"import.cmInstructions":
-		"En Callout Manager, usa su botón Copy para copiar tus estilos de callout personalizados y luego pégalos a continuación.",
-	"import.cmPlaceholder": "Pega los estilos copiados aquí…",
+		"Cada callout personalizado se trae con su ícono y color. Los " +
+		"estilos por tema y el CSS personalizado no tienen equivalente aquí " +
+		"y se dejan atrás.",
+	"import.cmFromVault": "Este vault",
+	"import.cmVaultChecking": "Buscando el plugin Callout Manager…",
+	"import.cmVaultFound": "Se encontraron {{count}} callout(s) personalizado(s).",
+	"import.cmVaultNotFound":
+		"No se encontraron callouts personalizados en este vault.",
+	"import.cmPasteLabel":
+		"O pega aquí los estilos copiados de Callout Manager:",
+	"import.cmPlaceholder": "Pega los estilos copiados, o un data.json, aquí…",
 	"import.cmBtnCancel": "Cancelar",
 	"import.cmBtnImport": "Importar",
 	"import.err.cmNoBlocksFound":
 		"No se encontraron estilos de Callout Manager en el texto pegado.",
+	"import.err.cmNotRecognized":
+		"Archivo no reconocido: se esperaban los estilos que produce el " +
+		"botón Copy de Callout Manager, o un data.json de Callout Manager.",
+	"import.err.cmNoEntries":
+		"No se encontraron callouts personalizados para importar.",
 	"import.err.cmNoColorForNew":
 		'No se encontró ningún color utilizable para el nuevo callout "{{value}}"; fue omitido.',
 	"import.err.cmIdConflict":
 		'El ID "{{value}}" ya está siendo usado como alias por otro callout ("{{other}}") y fue omitido.',
+	"import.warn.cmNoColorDefault":
+		"No se definió ningún color en Callout Manager, por lo que se usó " +
+		"su gris predeterminado.",
+	"import.warn.cmThemeCondition":
+		"El color o el ícono de este callout se definió solo para un tema. " +
+		"Callout Studio no tiene estilos por tema, así que se trajo para " +
+		"todos los temas.",
+	"import.warn.cmCustomStyles":
+		"Este callout también tiene CSS personalizado en Callout Manager. " +
+		"Ese estilo no forma parte de la importación, así que solo se " +
+		"trajeron su ícono y color.",
 
 	// Import — Admonition
 	"import.admTitle": "Importar desde Admonition",

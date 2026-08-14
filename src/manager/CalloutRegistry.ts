@@ -31,7 +31,10 @@ import {
 import { iconCacheKey, packFor } from "../icons/registry";
 import { iconsEqual, resolveLucideId } from "../icons/lucideId";
 import { materialPack } from "../icons/packs/material";
-import type { CalloutManagerPlanItem } from "../utils/calloutManagerImport";
+import type {
+	CalloutManagerEntry,
+	CalloutManagerPlanItem,
+} from "../utils/calloutManagerImport";
 import type { AdmonitionPlan } from "../utils/admonitionImport";
 import {
 	normalizeCalloutId,
@@ -42,6 +45,7 @@ import {
 	consolidatePalettesByColor,
 	getAllColorPalettes,
 	resolveCalloutManagerColor,
+	resolveCalloutManagerColors,
 	sanitizeCustomPalettes,
 } from "../utils/colorPalettes";
 import { bgGradientsEqual, derivedBgAmount } from "../utils/colorUtils";
@@ -1906,61 +1910,78 @@ export class CalloutRegistry {
 		// below fires the save.
 		let paletteCreated = false;
 
-		for (const item of items) {
-			if (item.action === "update") {
-				const partial: Partial<CalloutDefinition> = {};
-				if (item.entry.icon) partial.icon = item.entry.icon;
-				if (item.entry.color) {
-					const resolved = resolveCalloutManagerColor(
-						item.entry.color,
+		const resolveColor = (
+			entry: CalloutManagerEntry,
+		): ReturnType<typeof resolveCalloutManagerColor> => {
+			const light = entry.color as string;
+			// Two hexes only when the source really stated two. Anything else
+			// goes through the single-color path, so it keeps matching the same
+			// existing palettes it always did.
+			const resolved = entry.colorDark
+				? resolveCalloutManagerColors(
+						light,
+						entry.colorDark,
 						this.settings.customPalettes,
-					);
-					if (resolved.createdPalette) {
-						this.settings.customPalettes.push(resolved.createdPalette);
-						paletteCreated = true;
-					}
-					Object.assign(partial, resolved.colors);
-					partial.paletteId = resolved.paletteId;
-				}
-				if (Object.keys(partial).length > 0) {
-					this.update(item.existingId as string, partial);
-				}
-				updated++;
-				continue;
-			}
-
-			const id = normalizeCalloutId(item.entry.id);
-			const resolved = resolveCalloutManagerColor(
-				item.entry.color as string,
-				this.settings.customPalettes,
-			);
+					)
+				: resolveCalloutManagerColor(light, this.settings.customPalettes);
 			if (resolved.createdPalette) {
 				this.settings.customPalettes.push(resolved.createdPalette);
 				paletteCreated = true;
 			}
-			const def: CalloutDefinition = {
-				id,
-				displayName: obsidianDefaultTitle(item.entry.id),
-				// No icon in the paste, or one the planner rejected as naming
-				// nothing — either way there is nothing to keep, so take the
-				// shared import fallback.
-				icon: item.entry.icon ?? { ...FALLBACK_ICON },
-				...resolved.colors,
-				paletteId: resolved.paletteId,
-				foldable: true,
-				defaultFolded: false,
-				builtIn: false,
-				source: "user",
-			};
-			if (this.add(def)) created++;
-		}
+			return resolved;
+		};
 
-		// Safety net: add()/update() above already save on every successful
-		// mutation, but a created palette whose def failed to add (e.g. a
-		// same-id race) would otherwise sit unsaved until an unrelated change.
-		if (paletteCreated) {
-			this.notifyChange();
-		}
+		// One onChange for the whole import instead of one per callout: a
+		// vault's worth of callouts would otherwise regenerate the stylesheet,
+		// repaint every icon and rewrite data.json once each.
+		this.batch(() => {
+			for (const item of items) {
+				if (item.action === "update") {
+					const partial: Partial<CalloutDefinition> = {};
+					if (item.entry.icon) partial.icon = item.entry.icon;
+					if (item.entry.color) {
+						const resolved = resolveColor(item.entry);
+						Object.assign(partial, resolved.colors);
+						partial.paletteId = resolved.paletteId;
+					}
+					// Counted inside the guard, like applyAdmonitionImport does.
+					// An entry that states nothing changes nothing, and reading
+					// `data.json` makes those routine — an empty `{"changes": {}}`,
+					// a customStyles-only entry, a condition we declined — so a
+					// count outside here would claim work that never happened.
+					if (Object.keys(partial).length > 0) {
+						this.update(item.existingId as string, partial);
+						updated++;
+					}
+					continue;
+				}
+
+				const id = normalizeCalloutId(item.entry.id);
+				const resolved = resolveColor(item.entry);
+				const def: CalloutDefinition = {
+					id,
+					displayName: obsidianDefaultTitle(item.entry.id),
+					// No icon in the source, or one the planner rejected as naming
+					// nothing — either way there is nothing to keep, so take the
+					// shared import fallback.
+					icon: item.entry.icon ?? { ...FALLBACK_ICON },
+					...resolved.colors,
+					paletteId: resolved.paletteId,
+					foldable: true,
+					defaultFolded: false,
+					builtIn: false,
+					source: "user",
+				};
+				if (this.add(def)) created++;
+			}
+
+			// Safety net: add()/update() above already save on every successful
+			// mutation, but a created palette whose def failed to add (e.g. a
+			// same-id race) would otherwise sit unsaved until an unrelated change.
+			if (paletteCreated) {
+				this.notifyChange();
+			}
+		});
 
 		return { created, updated };
 	}
@@ -1981,14 +2002,6 @@ export class CalloutRegistry {
 		created: number;
 		updated: number;
 	} {
-		if (plan.newImages.length > 0) {
-			const byId = new Map(
-				this.settings.userImages.map((image) => [image.id, image]),
-			);
-			for (const image of plan.newImages) byId.set(image.id, image);
-			this.setUserImages([...byId.values()]);
-		}
-
 		let created = 0;
 		let updated = 0;
 		// Pushed onto settings.customPalettes as each is created rather than
@@ -2011,56 +2024,67 @@ export class CalloutRegistry {
 			return resolved;
 		};
 
-		for (const item of plan.toApply) {
-			if (item.action === "update") {
-				const { entry } = item;
-				const partial: Partial<CalloutDefinition> = {};
-				// Only what the admonition actually stated. An entry with no
-				// title must not rename the callout, and one whose icon named
-				// nothing must not blank the icon it already has.
-				if (entry.displayName) partial.displayName = entry.displayName;
-				if (entry.icon) partial.icon = entry.icon;
-				if (entry.color) {
-					const resolved = resolveColor(entry.color);
-					Object.assign(partial, resolved.colors);
-					partial.paletteId = resolved.paletteId;
-				}
-				// Counted only when something actually changed: an admonition
-				// that stated nothing but its type matches a callout that
-				// already exists, and reporting that as an update would claim
-				// work that never happened.
-				if (Object.keys(partial).length > 0) {
-					this.update(item.existingId, partial);
-					updated++;
-				}
-				continue;
+		// One onChange for the whole import, as in applyCalloutManagerImport.
+		this.batch(() => {
+			if (plan.newImages.length > 0) {
+				const byId = new Map(
+					this.settings.userImages.map((image) => [image.id, image]),
+				);
+				for (const image of plan.newImages) byId.set(image.id, image);
+				this.setUserImages([...byId.values()]);
 			}
 
-			const { entry } = item;
-			const resolved = resolveColor(entry.color);
-			const def: CalloutDefinition = {
-				id: entry.id,
-				displayName: entry.displayName ?? obsidianDefaultTitle(entry.id),
-				// No icon in the file, or one naming a drawing that exists in no
-				// library — either way there is nothing to keep, so take the
-				// shared import fallback.
-				icon: entry.icon ?? { ...FALLBACK_ICON },
-				...resolved.colors,
-				paletteId: resolved.paletteId,
-				foldable: true,
-				defaultFolded: false,
-				builtIn: false,
-				source: "user",
-			};
-			if (this.add(def)) created++;
-		}
+			for (const item of plan.toApply) {
+				if (item.action === "update") {
+					const { entry } = item;
+					const partial: Partial<CalloutDefinition> = {};
+					// Only what the admonition actually stated. An entry with no
+					// title must not rename the callout, and one whose icon named
+					// nothing must not blank the icon it already has.
+					if (entry.displayName) partial.displayName = entry.displayName;
+					if (entry.icon) partial.icon = entry.icon;
+					if (entry.color) {
+						const resolved = resolveColor(entry.color);
+						Object.assign(partial, resolved.colors);
+						partial.paletteId = resolved.paletteId;
+					}
+					// Counted only when something actually changed: an admonition
+					// that stated nothing but its type matches a callout that
+					// already exists, and reporting that as an update would claim
+					// work that never happened.
+					if (Object.keys(partial).length > 0) {
+						this.update(item.existingId, partial);
+						updated++;
+					}
+					continue;
+				}
 
-		// Safety net, as in applyCalloutManagerImport: add()/update() save on
-		// every successful mutation, but a palette created for a def that then
-		// failed to add would otherwise sit unsaved until an unrelated change.
-		if (paletteCreated) {
-			this.notifyChange();
-		}
+				const { entry } = item;
+				const resolved = resolveColor(entry.color);
+				const def: CalloutDefinition = {
+					id: entry.id,
+					displayName: entry.displayName ?? obsidianDefaultTitle(entry.id),
+					// No icon in the file, or one naming a drawing that exists in
+					// no library — either way there is nothing to keep, so take
+					// the shared import fallback.
+					icon: entry.icon ?? { ...FALLBACK_ICON },
+					...resolved.colors,
+					paletteId: resolved.paletteId,
+					foldable: true,
+					defaultFolded: false,
+					builtIn: false,
+					source: "user",
+				};
+				if (this.add(def)) created++;
+			}
+
+			// Safety net, as in applyCalloutManagerImport: add()/update() save on
+			// every successful mutation, but a palette created for a def that then
+			// failed to add would otherwise sit unsaved until an unrelated change.
+			if (paletteCreated) {
+				this.notifyChange();
+			}
+		});
 
 		return { created, updated };
 	}

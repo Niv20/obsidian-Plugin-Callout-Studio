@@ -731,29 +731,43 @@ export const zh: Record<string, string> = {
 	"import.warn.iconNameUnknown":
 		'"{{value}}" 图标在 {{type}} 中不存在，因此使用了默认图标。',
 	"import.warn.cmIconUnknownNew":
-		'"{{value}}" 图标在 Obsidian 中不存在，因此使用了默认图标。',
+		'"{{value}}" 图标在此 vault 中不可用，因此使用了默认图标。',
 	"import.warn.cmIconUnknownExisting":
-		'"{{value}}" 图标在 Obsidian 中不存在，因此 "{{id}}" 保留了它原有的图标。',
+		'"{{value}}" 图标在此 vault 中不可用，因此 "{{id}}" 保留了它原有的图标。',
 	"import.chooseSource": "从以下位置导入",
 	"import.sourceStudio": "Callout Studio",
 	"import.sourceStudioDesc": "加载从 Callout Studio 导出的 .json 文件。",
 	"import.sourceCalloutManager": "Callout Manager",
 	"import.sourceCalloutManagerDesc":
-		"粘贴您从 Callout Manager 的 Copy 按钮复制的样式。",
+		"从 Callout Manager 插件导入您自定义的 callout。",
 	"import.sourceAdmonition": "Admonition",
 	"import.sourceAdmonitionDesc":
 		"从 Admonition 插件中导入您的自定义 admonition。",
 	"import.cmTitle": "从 Callout Manager 导入",
 	"import.cmInstructions":
-		"在 Callout Manager 中，使用其 Copy 按钮复制您自定义的 callout 样式，然后将其粘贴到下方。",
-	"import.cmPlaceholder": "在此粘贴复制的样式…",
+		"每个自定义 callout 都会连同其图标和颜色一起导入。分主题样式和自定义 CSS 在此没有对应项，不会被导入。",
+	"import.cmFromVault": "此 vault",
+	"import.cmVaultChecking": "正在查找 Callout Manager 插件…",
+	"import.cmVaultFound": "找到 {{count}} 个自定义 callout。",
+	"import.cmVaultNotFound": "在此 vault 中未找到任何自定义 callout。",
+	"import.cmPasteLabel": "或将 Callout Manager 复制的样式粘贴到此处：",
+	"import.cmPlaceholder": "在此粘贴复制的样式，或一个 data.json 文件…",
 	"import.cmBtnCancel": "取消",
 	"import.cmBtnImport": "导入",
 	"import.err.cmNoBlocksFound": "在粘贴的文本中未找到 Callout Manager 样式。",
+	"import.err.cmNotRecognized":
+		"无法识别的文件：应为 Callout Manager 的 Copy 按钮生成的样式，或一个 Callout Manager 的 data.json 文件。",
+	"import.err.cmNoEntries": "未找到可导入的自定义 callout。",
 	"import.err.cmNoColorForNew":
 		'未找到适用于新 callout "{{value}}" 的可用颜色；已跳过。',
 	"import.err.cmIdConflict":
 		'ID "{{value}}" 已被另一个 callout ("{{other}}") 用作别名，已跳过。',
+	"import.warn.cmNoColorDefault":
+		"Callout Manager 中未设置颜色，因此使用了默认的灰色。",
+	"import.warn.cmThemeCondition":
+		"此 callout 的颜色或图标仅针对一个主题设置。Callout Studio 没有分主题样式，因此已将其应用于所有主题。",
+	"import.warn.cmCustomStyles":
+		"此 callout 在 Callout Manager 中还有自定义 CSS。该样式不在导入范围内，因此仅导入了图标和颜色。",
 
 	// Import — Admonition
 	"import.admTitle": "从 Admonition 导入",

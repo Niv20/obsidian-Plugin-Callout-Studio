@@ -179,7 +179,8 @@ export const fa: Record<string, string> = {
 	"commandBuilder.actionWrap": "پیچیدن انتخاب",
 	"commandBuilder.actionInsert": "درج جدید",
 	"commandBuilder.preview": "نام دستور",
-	"commandBuilder.duplicate": "شما همین حالا دستوری دارید که دقیقاً همین کار را انجام می‌دهد.",
+	"commandBuilder.duplicate":
+		"شما همین حالا دستوری دارید که دقیقاً همین کار را انجام می‌دهد.",
 	"commandBuilder.noCallouts":
 		"هنوز هیچ نوع calloutای برای ساخت یک دستور از آن وجود ندارد.",
 	"commandBuilder.save": "ذخیره",
@@ -200,7 +201,8 @@ export const fa: Record<string, string> = {
 
 	"notice.customCommandsRemoved":
 		"{{count}} دستور سفارشی که نوع callout آن‌ها دیگر وجود ندارد حذف شد.",
-	"notice.customCommandMissingCallout": "نوع callout آن دستور دیگر وجود ندارد.",
+	"notice.customCommandMissingCallout":
+		"نوع callout آن دستور دیگر وجود ندارد.",
 
 	"notice.exported": "callout‌ها در callout-studio-export.json صادر شدند",
 	"notice.importedJSON": "{{count}} نوع callout از JSON وارد شد.",
@@ -770,6 +772,12 @@ export const fa: Record<string, string> = {
 		"admonition‌های سفارشی خود را از افزونهٔ Admonition به اینجا " +
 		"بیاورید.",
 	"import.cmTitle": "وارد کردن از Callout Manager",
+	"import.cmFromVault": "این گاوصندوق",
+	"import.cmVaultChecking": "در حال جست‌وجوی افزونهٔ Callout Manager…",
+	"import.cmVaultFound": "{{count}} callout سفارشی پیدا شد.",
+	"import.cmVaultNotFound": "هیچ callout سفارشی در این گاوصندوق پیدا نشد.",
+	"import.cmPasteLabel":
+		"یا استایل‌های کپی‌شده از Callout Manager را اینجا بچسبانید:",
 	"import.cmInstructions":
 		"در Callout Manager، از دکمه Copy برای کپی کردن استایل‌های callout سفارشی خود استفاده کنید، سپس آن‌ها را در زیر بچسبانید.",
 	"import.cmPlaceholder": "استایل‌های کپی‌شده را اینجا بچسبانید…",
@@ -777,10 +785,19 @@ export const fa: Record<string, string> = {
 	"import.cmBtnImport": "وارد کردن",
 	"import.err.cmNoBlocksFound":
 		"هیچ استایل Callout Manager در متن چسبانده‌شده یافت نشد.",
+	"import.err.cmNotRecognized":
+		"فایل شناسایی نشد: استایل‌های تولیدشده با دکمهٔ Copy در Callout Manager یا data.json این افزونه مورد انتظار بود.",
+	"import.err.cmNoEntries": "هیچ callout سفارشی برای درون‌ریزی یافت نشد.",
 	"import.err.cmNoColorForNew":
 		'هیچ رنگ قابل استفاده‌ای برای callout جدید "{{value}}" یافت نشد؛ از آن صرف‌نظر شد.',
 	"import.err.cmIdConflict":
 		'شناسه "{{value}}" قبلاً به عنوان نام مستعار توسط callout دیگری ("{{other}}") استفاده می‌شود و از آن صرف‌نظر شد.',
+	"import.warn.cmNoColorDefault":
+		"در Callout Manager رنگی تنظیم نشده بود، بنابراین خاکستری پیش‌فرض استفاده شد.",
+	"import.warn.cmThemeCondition":
+		"رنگ یا نماد این callout فقط برای یک پوسته تنظیم شده بود. Callout Studio استایل‌دهی جداگانه برای پوسته‌ها ندارد، بنابراین برای همهٔ پوسته‌ها منتقل شد.",
+	"import.warn.cmCustomStyles":
+		"این callout در Callout Manager دارای CSS سفارشی نیز هست. این استایل بخشی از درون‌ریزی نیست، بنابراین فقط نماد و رنگ منتقل شدند.",
 
 	// Import — Admonition
 	"import.admTitle": "درون‌ریزی از Admonition",

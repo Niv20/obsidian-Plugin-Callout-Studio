@@ -773,15 +773,30 @@ export const tr: Record<string, string> = {
 	"import.sourceAdmonitionDesc":
 		"Özel admonition'larınızı Admonition eklentisinden getirin.",
 	"import.cmTitle": "Callout Manager'dan İçe Aktar",
+	"import.cmFromVault": "Bu kasa",
+	"import.cmVaultChecking": "Callout Manager eklentisi aranıyor…",
+	"import.cmVaultFound": "{{count}} özel callout bulundu.",
+	"import.cmVaultNotFound": "Bu kasada özel callout bulunamadı.",
+	"import.cmPasteLabel":
+		"Veya Callout Manager'dan kopyalanan stilleri buraya yapıştırın:",
 	"import.cmInstructions":
 		"Callout Manager'da, özelleştirilmiş callout stillerinizi kopyalamak için Copy düğmesini kullanın, ardından aşağıya yapıştırın.",
 	"import.cmPlaceholder": "Kopyalanan stilleri buraya yapıştırın…",
 	"import.cmBtnCancel": "İptal",
 	"import.cmBtnImport": "İçe aktar",
+	"import.err.cmNotRecognized":
+		"Dosya tanınmadı: Callout Manager'ın Copy düğmesiyle oluşturulan stiller veya Callout Manager data.json dosyası bekleniyordu.",
+	"import.err.cmNoEntries": "İçe aktarılacak özel callout bulunamadı.",
 	"import.err.cmNoBlocksFound":
 		"Yapıştırılan metinde Callout Manager stilleri bulunamadı.",
 	"import.err.cmNoColorForNew":
 		'Yeni callout "{{value}}" için kullanılabilir bir renk bulunamadı; atlandı.',
+	"import.warn.cmNoColorDefault":
+		"Callout Manager'da renk ayarlanmadığından varsayılan gri kullanıldı.",
+	"import.warn.cmThemeCondition":
+		"Bu callout'un rengi veya simgesi yalnızca bir tema için ayarlanmıştı. Callout Studio tema başına stil oluşturmadığından tüm temalara aktarıldı.",
+	"import.warn.cmCustomStyles":
+		"Bu callout'un Callout Manager'da özel CSS'i de var. Bu stil içe aktarmaya dahil olmadığından yalnızca simgesi ve rengi aktarıldı.",
 	"import.err.cmIdConflict":
 		'"{{value}}" ID\'si zaten başka bir callout ("{{other}}") tarafından takma ad olarak kullanılıyor ve atlandı.',
 

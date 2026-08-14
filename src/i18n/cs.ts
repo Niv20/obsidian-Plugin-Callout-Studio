@@ -754,31 +754,53 @@ export const cs: Record<string, string> = {
 	"import.warn.iconNameUnknown":
 		'Ikona "{{value}}" v {{type}} neexistuje, proto byla použita výchozí ikona.',
 	"import.warn.cmIconUnknownNew":
-		'Ikona "{{value}}" v Obsidian neexistuje, proto byla použita výchozí ikona.',
+		'Ikona "{{value}}" není v tomto trezoru dostupná, proto byla použita výchozí ikona.',
 	"import.warn.cmIconUnknownExisting":
-		'Ikona "{{value}}" v Obsidian neexistuje, proto "{{id}}" si ponechalo ikonu, kterou již mělo.',
+		'Ikona "{{value}}" není v tomto trezoru dostupná, proto "{{id}}" si ponechalo ikonu, kterou již mělo.',
 	"import.chooseSource": "Importovat z",
 	"import.sourceStudio": "Callout Studio",
 	"import.sourceStudioDesc":
 		"Načíst soubor .json exportovaný z Callout Studio.",
 	"import.sourceCalloutManager": "Callout Manager",
 	"import.sourceCalloutManagerDesc":
-		"Vložte styly zkopírované z tlačítka Copy v Callout Manager.",
+		"Přeneste své přizpůsobené callouty z pluginu Callout Manager.",
 	"import.sourceAdmonition": "Admonition",
 	"import.sourceAdmonitionDesc":
 		"Přeneste své vlastní admonition z pluginu Admonition.",
 	"import.cmTitle": "Import z Callout Manager",
 	"import.cmInstructions":
-		"V Callout Manager použijte tlačítko Copy ke zkopírování přizpůsobených stylů calloutů, poté je vložte níže.",
-	"import.cmPlaceholder": "Vložte zkopírované styly sem…",
+		"Každý přizpůsobený callout se přenese se svou ikonou a barvou. Styly " +
+		"pro jednotlivá témata a vlastní CSS zde nemají obdobu a nepřenášejí se.",
+	"import.cmFromVault": "Tento trezor",
+	"import.cmVaultChecking": "Hledání pluginu Callout Manager…",
+	"import.cmVaultFound": "Nalezeno přizpůsobených calloutů: {{count}}.",
+	"import.cmVaultNotFound":
+		"V tomto trezoru nebyly nalezeny žádné přizpůsobené callouty.",
+	"import.cmPasteLabel": "Nebo sem vložte styly zkopírované z Callout Manager:",
+	"import.cmPlaceholder": "Vložte zkopírované styly nebo soubor data.json sem…",
 	"import.cmBtnCancel": "Zrušit",
 	"import.cmBtnImport": "Importovat",
 	"import.err.cmNoBlocksFound":
 		"Ve vloženém textu nebyly nalezeny žádné styly Callout Manager.",
+	"import.err.cmNotRecognized":
+		"Nerozpoznaný soubor: očekávány byly styly generované tlačítkem Copy " +
+		"v Callout Manager, nebo soubor data.json z Callout Manager.",
+	"import.err.cmNoEntries":
+		"Nebyly nalezeny žádné přizpůsobené callouty k importu.",
 	"import.err.cmNoColorForNew":
 		'Pro nový callout "{{value}}" nebyla nalezena použitelná barva; byl přeskočen.',
 	"import.err.cmIdConflict":
 		'ID "{{value}}" je již používáno jako alias jiným calloutem ("{{other}}") a bylo přeskočeno.',
+	"import.warn.cmNoColorDefault":
+		"V Callout Manager nebyla nastavena barva, proto byla použita výchozí " +
+		"šedá.",
+	"import.warn.cmThemeCondition":
+		"Barva nebo ikona tohoto calloutu byla nastavena jen pro jedno téma. " +
+		"Callout Studio nemá styly pro jednotlivá témata, proto byla přenesena " +
+		"pro všechna témata.",
+	"import.warn.cmCustomStyles":
+		"Tento callout má v Callout Manager i vlastní CSS. Tento styl není " +
+		"součástí importu, proto se přenesla jen jeho ikona a barva.",
 
 	// Import — Admonition
 	"import.admTitle": "Import z Admonition",

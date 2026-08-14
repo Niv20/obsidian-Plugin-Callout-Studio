@@ -744,30 +744,48 @@ export const ar: Record<string, string> = {
 	"import.warn.iconNameUnknown":
 		'لا يوجد أيقونة باسم "{{value}}" في {{type}}، لذلك تم استخدام الأيقونة الافتراضية بدلاً منها.',
 	"import.warn.cmIconUnknownNew":
-		'لا يوجد أيقونة باسم "{{value}}" في Obsidian، لذلك تم استخدام الأيقونة الافتراضية بدلاً منها.',
+		'الأيقونة "{{value}}" غير متوفرة في هذه الخزينة، لذلك تم استخدام الأيقونة الافتراضية بدلاً منها.',
 	"import.warn.cmIconUnknownExisting":
-		'لا يوجد أيقونة باسم "{{value}}" في Obsidian، لذلك احتفظ "{{id}}" بالأيقونة التي كانت لديه.',
+		'الأيقونة "{{value}}" غير متوفرة في هذه الخزينة، لذلك احتفظ "{{id}}" بالأيقونة التي كانت لديه.',
 	"import.chooseSource": "استيراد من",
 	"import.sourceStudio": "Callout Studio",
 	"import.sourceStudioDesc": "تحميل ملف ‎.json تم تصديره من Callout Studio.",
 	"import.sourceCalloutManager": "Callout Manager",
 	"import.sourceCalloutManagerDesc":
-		"الصق الأنماط التي نسختها من زر Copy في Callout Manager.",
+		"انقل التلميحات المخصصة لديك من إضافة Callout Manager.",
 	"import.sourceAdmonition": "Admonition",
 	"import.sourceAdmonitionDesc":
 		"انقل تنبيهات admonition المخصصة لديك من إضافة Admonition.",
 	"import.cmTitle": "استيراد من Callout Manager",
 	"import.cmInstructions":
-		"في Callout Manager، استخدم زر Copy لنسخ أنماط تلميحاتك المخصصة، ثم الصقها أدناه.",
-	"import.cmPlaceholder": "الصق الأنماط المنسوخة هنا…",
+		"ينتقل كل تلميح مخصص بأيقونته ولونه. تنسيق كل سمة على حدة وأنماط " +
+		"CSS المخصصة لا مقابل لها هنا ولا يتم استيرادها.",
+	"import.cmFromVault": "هذه الخزينة",
+	"import.cmVaultChecking": "جارٍ البحث عن إضافة Callout Manager…",
+	"import.cmVaultFound": "تم العثور على {{count}} تلميح(ات) مخصصة.",
+	"import.cmVaultNotFound": "لم يتم العثور على أي تلميحات مخصصة في هذه الخزينة.",
+	"import.cmPasteLabel": "أو الصق الأنماط المنسوخة من Callout Manager هنا:",
+	"import.cmPlaceholder": "الصق الأنماط المنسوخة، أو ملف data.json، هنا…",
 	"import.cmBtnCancel": "إلغاء",
 	"import.cmBtnImport": "استيراد",
 	"import.err.cmNoBlocksFound":
 		"لم يتم العثور على أي أنماط Callout Manager في النص الملصق.",
+	"import.err.cmNotRecognized":
+		"ملف غير معروف: كان متوقعاً الأنماط الناتجة عن زر Copy في Callout " +
+		"Manager، أو ملف data.json الخاص به.",
+	"import.err.cmNoEntries": "لم يتم العثور على أي تلميحات مخصصة لاستيرادها.",
 	"import.err.cmNoColorForNew":
 		'لم يتم العثور على لون قابل للاستخدام للتلميح الجديد "{{value}}"; تم تخطيه.',
 	"import.err.cmIdConflict":
 		'المعرّف "{{value}}" مستخدم بالفعل كاسم مستعار لتلميح آخر ("{{other}}")، وتم تخطيه.',
+	"import.warn.cmNoColorDefault":
+		"لم يتم تعيين لون في Callout Manager، لذلك تم استخدام الرمادي الافتراضي.",
+	"import.warn.cmThemeCondition":
+		"تم تعيين لون أو أيقونة هذا التلميح لسمة واحدة فقط. لا يدعم Callout " +
+		"Studio تنسيقاً خاصاً بكل سمة، لذلك تم نقله ليشمل جميع السمات.",
+	"import.warn.cmCustomStyles":
+		"يحتوي هذا التلميح أيضاً على CSS مخصص في Callout Manager. هذا التنسيق " +
+		"ليس جزءاً من الاستيراد، لذلك تم نقل الأيقونة واللون فقط.",
 
 	// Import — Admonition
 	"import.admTitle": "استيراد من Admonition",

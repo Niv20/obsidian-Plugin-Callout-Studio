@@ -180,7 +180,8 @@ export const uk: Record<string, string> = {
 	"commandBuilder.actionWrap": "Обгорнути виділення",
 	"commandBuilder.actionInsert": "Вставити новий",
 	"commandBuilder.preview": "Назва команди",
-	"commandBuilder.duplicate": "У вас уже є команда, яка робить точно те саме.",
+	"commandBuilder.duplicate":
+		"У вас уже є команда, яка робить точно те саме.",
 	"commandBuilder.noCallouts":
 		"Поки немає типів callout, з яких можна створити команду.",
 	"commandBuilder.save": "Зберегти",
@@ -777,15 +778,30 @@ export const uk: Record<string, string> = {
 	"import.sourceAdmonitionDesc":
 		"Перенесіть свої власні admonition із плагіна Admonition.",
 	"import.cmTitle": "Імпорт з Callout Manager",
+	"import.cmFromVault": "Це сховище",
+	"import.cmVaultChecking": "Пошук плагіна Callout Manager…",
+	"import.cmVaultFound": "Знайдено власних callout: {{count}}.",
+	"import.cmVaultNotFound": "У цьому сховищі не знайдено власних callout.",
+	"import.cmPasteLabel":
+		"Або вставте сюди стилі, скопійовані з Callout Manager:",
 	"import.cmInstructions":
 		"У Callout Manager скористайтесь кнопкою Copy, щоб скопіювати налаштовані стилі callout, після чого вставте їх нижче.",
 	"import.cmPlaceholder": "Вставте скопійовані стилі сюди…",
 	"import.cmBtnCancel": "Скасувати",
 	"import.cmBtnImport": "Імпорт",
+	"import.err.cmNotRecognized":
+		"Файл не розпізнано: очікувалися стилі, створені кнопкою Copy у Callout Manager, або data.json із Callout Manager.",
+	"import.err.cmNoEntries": "Не знайдено власних callout для імпорту.",
 	"import.err.cmNoBlocksFound":
 		"У вставленому тексті не знайдено стилів Callout Manager.",
 	"import.err.cmNoColorForNew":
 		'Не знайдено придатного кольору для нового callout "{{value}}"; його було пропущено.',
+	"import.warn.cmNoColorDefault":
+		"У Callout Manager колір не задано, тому використано стандартний сірий.",
+	"import.warn.cmThemeCondition":
+		"Колір або піктограму цього callout задано лише для однієї теми. Callout Studio не підтримує стилі для окремих тем, тому їх перенесено для всіх тем.",
+	"import.warn.cmCustomStyles":
+		"Цей callout також має власний CSS у Callout Manager. Цей стиль не входить до імпорту, тому перенесено лише піктограму та колір.",
 	"import.err.cmIdConflict":
 		'ID "{{value}}" вже використовується як псевдонім іншим callout ("{{other}}") і було пропущено.',
 

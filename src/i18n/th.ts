@@ -179,8 +179,7 @@ export const th: Record<string, string> = {
 	"commandBuilder.actionInsert": "แทรกใหม่",
 	"commandBuilder.preview": "ชื่อคำสั่ง",
 	"commandBuilder.duplicate": "คุณมีคำสั่งที่ทำแบบนี้อยู่แล้ว",
-	"commandBuilder.noCallouts":
-		"ยังไม่มีประเภท callout ให้สร้างคำสั่งจาก",
+	"commandBuilder.noCallouts": "ยังไม่มีประเภท callout ให้สร้างคำสั่งจาก",
 	"commandBuilder.save": "บันทึก",
 
 	"settings.vaultMaintenance": "ข้อมูลเชิงลึกและการบำรุงรักษา vault",
@@ -749,9 +748,9 @@ export const th: Record<string, string> = {
 	"import.warn.iconNameUnknown":
 		'ไม่มีไอคอน "{{value}}" ใน {{type}} จึงใช้ไอคอนเริ่มต้นแทน',
 	"import.warn.cmIconUnknownNew":
-		'ไม่มีไอคอน "{{value}}" ใน Obsidian จึงใช้ไอคอนเริ่มต้นแทน',
+		'ไอคอน "{{value}}" ไม่พร้อมใช้งานในโวลต์นี้ จึงใช้ไอคอนเริ่มต้นแทน',
 	"import.warn.cmIconUnknownExisting":
-		'ไม่มีไอคอน "{{value}}" ใน Obsidian ดังนั้น "{{id}}" จึงยังคงใช้ไอคอนเดิม',
+		'ไอคอน "{{value}}" ไม่พร้อมใช้งานในโวลต์นี้ ดังนั้น "{{id}}" จึงยังคงใช้ไอคอนเดิม',
 	"import.chooseSource": "นำเข้าจาก",
 	"import.sourceStudio": "Callout Studio",
 	"import.sourceStudioDesc": "โหลดไฟล์ .json ที่ส่งออกจาก Callout Studio",
@@ -762,14 +761,28 @@ export const th: Record<string, string> = {
 	"import.sourceAdmonitionDesc":
 		"นำ admonition ที่คุณกำหนดเองมาจากปลั๊กอิน Admonition",
 	"import.cmTitle": "นำเข้าจาก Callout Manager",
+	"import.cmFromVault": "ห้องนิรภัยนี้",
+	"import.cmVaultChecking": "กำลังค้นหาปลั๊กอิน Callout Manager…",
+	"import.cmVaultFound": "พบ callout ที่กำหนดเอง {{count}} รายการ",
+	"import.cmVaultNotFound": "ไม่พบ callout ที่กำหนดเองในห้องนิรภัยนี้",
+	"import.cmPasteLabel": "หรือวางสไตล์ที่คัดลอกจาก Callout Manager ที่นี่:",
 	"import.cmInstructions":
 		"ใน Callout Manager ให้ใช้ปุ่ม Copy เพื่อคัดลอกสไตล์ callout ที่กำหนดเอง จากนั้นวางด้านล่าง",
 	"import.cmPlaceholder": "วางสไตล์ที่คัดลอกไว้ที่นี่…",
 	"import.cmBtnCancel": "ยกเลิก",
 	"import.cmBtnImport": "นำเข้า",
+	"import.err.cmNotRecognized":
+		"ไม่รู้จักไฟล์นี้: ต้องเป็นสไตล์ที่สร้างจากปุ่ม Copy ของ Callout Manager หรือไฟล์ data.json ของ Callout Manager",
+	"import.err.cmNoEntries": "ไม่พบ callout ที่กำหนดเองเพื่อนำเข้า",
 	"import.err.cmNoBlocksFound": "ไม่พบสไตล์ Callout Manager ในข้อความที่วาง",
 	"import.err.cmNoColorForNew":
 		'ไม่พบสีที่ใช้งานได้สำหรับ callout ใหม่ "{{value}}" จึงถูกข้ามไป',
+	"import.warn.cmNoColorDefault":
+		"ไม่ได้ตั้งค่าสีไว้ใน Callout Manager จึงใช้สีเทาเริ่มต้น",
+	"import.warn.cmThemeCondition":
+		"สีหรือไอคอนของ callout นี้ตั้งไว้สำหรับธีมเดียวเท่านั้น Callout Studio ไม่รองรับสไตล์แยกตามธีม จึงนำมาใช้กับทุกธีม",
+	"import.warn.cmCustomStyles":
+		"callout นี้มี CSS แบบกำหนดเองใน Callout Manager ด้วย สไตล์ดังกล่าวไม่รวมอยู่ในการนำเข้า จึงนำมาเฉพาะไอคอนและสี",
 	"import.err.cmIdConflict":
 		'ID "{{value}}" ถูกใช้เป็น alias โดย callout อื่น ("{{other}}") แล้ว จึงถูกข้ามไป',
 

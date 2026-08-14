@@ -774,15 +774,32 @@ export const nl: Record<string, string> = {
 	"import.sourceAdmonitionDesc":
 		"Haal je eigen admonitions op uit de Admonition-plug-in.",
 	"import.cmTitle": "Importeren uit Callout Manager",
+	"import.cmFromVault": "Deze kluis",
+	"import.cmVaultChecking": "De Callout Manager-plug-in wordt gezocht…",
+	"import.cmVaultFound": "{{count}} aangepaste callouts gevonden.",
+	"import.cmVaultNotFound":
+		"Geen aangepaste callouts gevonden in deze kluis.",
+	"import.cmPasteLabel":
+		"Of plak hier de gekopieerde stijlen uit Callout Manager:",
 	"import.cmInstructions":
 		"Gebruik in Callout Manager de Copy-knop om je aangepaste callout-stijlen te kopiëren en plak ze vervolgens hieronder.",
 	"import.cmPlaceholder": "Plak de gekopieerde stijlen hier…",
 	"import.cmBtnCancel": "Annuleren",
 	"import.cmBtnImport": "Importeren",
+	"import.err.cmNotRecognized":
+		"Bestand niet herkend: stijlen van de Copy-knop van Callout Manager of een data.json van Callout Manager verwacht.",
+	"import.err.cmNoEntries":
+		"Geen aangepaste callouts gevonden om te importeren.",
 	"import.err.cmNoBlocksFound":
 		"Er zijn geen Callout Manager-stijlen gevonden in de geplakte tekst.",
 	"import.err.cmNoColorForNew":
 		'Er is geen bruikbare kleur gevonden voor de nieuwe callout "{{value}}"; deze is overgeslagen.',
+	"import.warn.cmNoColorDefault":
+		"Er was geen kleur ingesteld in Callout Manager, dus het standaardgrijs is gebruikt.",
+	"import.warn.cmThemeCondition":
+		"De kleur of het pictogram van deze callout was maar voor één thema ingesteld. Callout Studio heeft geen themaspecifieke styling, dus deze is voor elk thema overgenomen.",
+	"import.warn.cmCustomStyles":
+		"Deze callout heeft ook aangepaste CSS in Callout Manager. Die styling maakt geen deel uit van de import, dus alleen het pictogram en de kleur zijn overgenomen.",
 	"import.err.cmIdConflict":
 		'ID "{{value}}" wordt al gebruikt als alias door een andere callout ("{{other}}") en is overgeslagen.',
 

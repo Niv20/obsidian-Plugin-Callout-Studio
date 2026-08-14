@@ -180,7 +180,8 @@ export const hi: Record<string, string> = {
 	"commandBuilder.actionWrap": "चयन लपेटें",
 	"commandBuilder.actionInsert": "नया डालें",
 	"commandBuilder.preview": "कमांड का नाम",
-	"commandBuilder.duplicate": "आपके पास पहले से ही बिल्कुल यही काम करने वाला कमांड है।",
+	"commandBuilder.duplicate":
+		"आपके पास पहले से ही बिल्कुल यही काम करने वाला कमांड है।",
 	"commandBuilder.noCallouts":
 		"अभी तक कोई callout प्रकार नहीं है जिससे कमांड बनाया जा सके।",
 	"commandBuilder.save": "सहेजें",
@@ -201,7 +202,8 @@ export const hi: Record<string, string> = {
 
 	"notice.customCommandsRemoved":
 		"{{count}} कस्टम कमांड हटा दिए गए जिनका callout प्रकार अब मौजूद नहीं है।",
-	"notice.customCommandMissingCallout": "उस कमांड का callout प्रकार अब मौजूद नहीं है।",
+	"notice.customCommandMissingCallout":
+		"उस कमांड का callout प्रकार अब मौजूद नहीं है।",
 
 	"notice.exported":
 		"Callouts को callout-studio-export.json में निर्यात किया गया",
@@ -765,6 +767,12 @@ export const hi: Record<string, string> = {
 	"import.sourceAdmonitionDesc":
 		"Admonition प्लगइन से अपने कस्टम admonition यहाँ ले आएँ।",
 	"import.cmTitle": "Callout Manager से आयात करें",
+	"import.cmFromVault": "यह वॉल्ट",
+	"import.cmVaultChecking": "Callout Manager प्लगइन खोजा जा रहा है…",
+	"import.cmVaultFound": "{{count}} कस्टम callout मिले।",
+	"import.cmVaultNotFound": "इस वॉल्ट में कोई कस्टम callout नहीं मिला।",
+	"import.cmPasteLabel":
+		"या Callout Manager से कॉपी किए गए स्टाइल यहाँ पेस्ट करें:",
 	"import.cmInstructions":
 		"Callout Manager में, अपने कस्टमाइज़ किए गए callout स्टाइल कॉपी करने के लिए Copy बटन का उपयोग करें, फिर उन्हें नीचे पेस्ट करें।",
 	"import.cmPlaceholder": "कॉपी किए गए स्टाइल यहाँ पेस्ट करें…",
@@ -772,10 +780,19 @@ export const hi: Record<string, string> = {
 	"import.cmBtnImport": "आयात",
 	"import.err.cmNoBlocksFound":
 		"पेस्ट किए गए टेक्स्ट में कोई Callout Manager स्टाइल नहीं मिले।",
+	"import.err.cmNotRecognized":
+		"फ़ाइल पहचानी नहीं गई: Callout Manager के Copy बटन से बनाए गए स्टाइल या Callout Manager की data.json अपेक्षित थी।",
+	"import.err.cmNoEntries": "आयात करने के लिए कोई कस्टम callout नहीं मिला।",
 	"import.err.cmNoColorForNew":
 		'नए callout "{{value}}" के लिए कोई उपयोगी रंग नहीं मिला; इसे छोड़ दिया गया।',
 	"import.err.cmIdConflict":
 		'ID "{{value}}" पहले से ही एक अन्य callout ("{{other}}") द्वारा alias के रूप में उपयोग की जा रही है और इसे छोड़ दिया गया।',
+	"import.warn.cmNoColorDefault":
+		"Callout Manager में कोई रंग सेट नहीं था, इसलिए उसका डिफ़ॉल्ट ग्रे इस्तेमाल किया गया।",
+	"import.warn.cmThemeCondition":
+		"इस callout का रंग या आइकन केवल एक थीम के लिए सेट था। Callout Studio में थीम-विशिष्ट स्टाइलिंग नहीं है, इसलिए इसे सभी थीम के लिए लाया गया।",
+	"import.warn.cmCustomStyles":
+		"इस callout में Callout Manager का कस्टम CSS भी है। यह स्टाइल आयात का हिस्सा नहीं है, इसलिए केवल इसका आइकन और रंग लाया गया।",
 
 	// Import — Admonition
 	"import.admTitle": "Admonition से आयात करें",

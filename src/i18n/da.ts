@@ -159,14 +159,16 @@ export const da: Record<string, string> = {
 	"commandBuilder.callout": "Callout-type",
 	"commandBuilder.calloutDesc": "Den callout, kommandoen indsætter.",
 	"commandBuilder.headingLevel": "Overskriftsniveau",
-	"commandBuilder.headingLevelDesc": "Hvilket overskriftsniveau der skal skrives.",
+	"commandBuilder.headingLevelDesc":
+		"Hvilket overskriftsniveau der skal skrives.",
 	"commandBuilder.action": "Handling",
 	"commandBuilder.actionDesc":
 		"Indpak gør markeringen til en callout; indsæt tilføjer en tom.",
 	"commandBuilder.actionWrap": "Indpak markering",
 	"commandBuilder.actionInsert": "Indsæt ny",
 	"commandBuilder.preview": "Kommandonavn",
-	"commandBuilder.duplicate": "Du har allerede en kommando, der gør præcis det samme.",
+	"commandBuilder.duplicate":
+		"Du har allerede en kommando, der gør præcis det samme.",
 	"commandBuilder.noCallouts":
 		"Der er endnu ingen callout-typer at bygge en kommando ud fra.",
 	"commandBuilder.save": "Gem",
@@ -743,6 +745,13 @@ export const da: Record<string, string> = {
 	"import.sourceAdmonitionDesc":
 		"Hent dine egne admonitions over fra Admonition-pluginnet.",
 	"import.cmTitle": "Importer fra Callout Manager",
+	"import.cmFromVault": "Denne boks",
+	"import.cmVaultChecking": "Leder efter Callout Manager-pluginnet…",
+	"import.cmVaultFound": "Der blev fundet {{count}} tilpassede callouts.",
+	"import.cmVaultNotFound":
+		"Der blev ikke fundet tilpassede callouts i denne boks.",
+	"import.cmPasteLabel":
+		"Eller indsæt de kopierede stilarter fra Callout Manager her:",
 	"import.cmInstructions":
 		"I Callout Manager skal du bruge dens Copy-knap til at kopiere dine tilpassede callout-stilarter og derefter indsætte dem nedenfor.",
 	"import.cmPlaceholder": "Indsæt de kopierede stilarter her…",
@@ -750,10 +759,20 @@ export const da: Record<string, string> = {
 	"import.cmBtnImport": "Importer",
 	"import.err.cmNoBlocksFound":
 		"Der blev ikke fundet nogen Callout Manager-stilarter i den indsatte tekst.",
+	"import.err.cmNotRecognized":
+		"Ukendt fil: forventede de stilarter, som Callout Managers Copy-knap opretter, eller en data.json fra Callout Manager.",
+	"import.err.cmNoEntries":
+		"Der blev ikke fundet tilpassede callouts at importere.",
 	"import.err.cmNoColorForNew":
 		'Der blev ikke fundet nogen brugbar farve til den nye callout "{{value}}"; den blev sprunget over.',
 	"import.err.cmIdConflict":
 		'ID "{{value}}" bruges allerede som et alias af en anden callout ("{{other}}") og blev sprunget over.',
+	"import.warn.cmNoColorDefault":
+		"Der blev ikke angivet en farve i Callout Manager, så standardgrå blev brugt.",
+	"import.warn.cmThemeCondition":
+		"Denne callouts farve eller ikon var kun angivet for ét tema. Callout Studio har ikke temaspecifik styling, så den blev hentet med til alle temaer.",
+	"import.warn.cmCustomStyles":
+		"Denne callout har også tilpasset CSS i Callout Manager. Denne styling er ikke en del af importen, så kun ikon og farve blev hentet med.",
 
 	// Import — Admonition
 	"import.admTitle": "Importér fra Admonition",

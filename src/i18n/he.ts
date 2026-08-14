@@ -222,7 +222,8 @@ export const he: Record<string, string> = {
 
 	"notice.customCommandsRemoved":
 		"הוסרו {{count}} פקודות מותאמות־אישית שסוג תיבת־ההבלטה שלהן כבר לא קיים.",
-	"notice.customCommandMissingCallout": "סוג תיבת־ההבלטה של הפקודה הזו כבר לא קיים.",
+	"notice.customCommandMissingCallout":
+		"סוג תיבת־ההבלטה של הפקודה הזו כבר לא קיים.",
 
 	// Notices
 	"notice.exported": "תיבות־ההבלטה יוצאו לקובץ callout-studio-export.json",
@@ -809,6 +810,12 @@ export const he: Record<string, string> = {
 
 	// ייבוא — הדבקה מתוך Callout Manager
 	"import.cmTitle": "ייבוא מתוך Callout Manager",
+	"import.cmFromVault": "הכספת הזו",
+	"import.cmVaultChecking": "מחפש את התוסף Callout Manager…",
+	"import.cmVaultFound": "נמצאו {{count}} תיבות־הבלטה מותאמות־אישית.",
+	"import.cmVaultNotFound": "לא נמצאו תיבות־הבלטה מותאמות־אישית בכספת הזו.",
+	"import.cmPasteLabel":
+		"או הדביקו כאן את הסגנונות שהועתקו מ־Callout Manager:",
 	"import.cmInstructions":
 		"ב־Callout Manager, השתמשו בכפתור ה־Copy שלו כדי להעתיק את סגנונות " +
 		"תיבות־ההבלטה המותאמות־אישית שלכם, ואז הדביקו אותם למטה.",
@@ -817,10 +824,19 @@ export const he: Record<string, string> = {
 	"import.cmBtnImport": "ייבוא",
 	"import.err.cmNoBlocksFound":
 		"לא נמצאו סגנונות של Callout Manager בטקסט שהודבק.",
+	"import.err.cmNotRecognized":
+		"קובץ לא מזוהה: נדרשו הסגנונות שנוצרים באמצעות כפתור ה־Copy של Callout Manager, או קובץ data.json של Callout Manager.",
+	"import.err.cmNoEntries": "לא נמצאו תיבות־הבלטה מותאמות־אישית לייבוא.",
 	"import.err.cmNoColorForNew":
 		'לא נמצא צבע תקין עבור תיבת־ההבלטה החדשה "{{value}}"; היא דולגה.',
 	"import.err.cmIdConflict":
 		'המזהה "{{value}}" כבר משמש ככינוי (alias) עבור תיבת־הבלטה אחרת ("{{other}}"), ולכן דולג.',
+	"import.warn.cmNoColorDefault":
+		"לא הוגדר צבע ב־Callout Manager, ולכן נעשה שימוש באפור ברירת־המחדל.",
+	"import.warn.cmThemeCondition":
+		"הצבע או הסמל של תיבת־הבלטה זו הוגדרו עבור ערכת נושא אחת בלבד. Callout Studio אינו תומך בעיצוב נפרד לכל ערכת נושא, ולכן הם הועברו לכל ערכות הנושא.",
+	"import.warn.cmCustomStyles":
+		"לתיבת־הבלטה הזו יש גם CSS מותאם־אישית ב־Callout Manager. הסגנון הזה אינו חלק מהייבוא, ולכן הועברו רק הסמל והצבע.",
 
 	// Import — Admonition
 	"import.admTitle": "ייבוא מתוך Admonition",

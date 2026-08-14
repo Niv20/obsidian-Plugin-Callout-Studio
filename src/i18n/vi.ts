@@ -759,30 +759,45 @@ export const vi: Record<string, string> = {
 	"import.warn.iconNameUnknown":
 		'Không có biểu tượng "{{value}}" trong {{type}}, vì vậy biểu tượng mặc định đã được sử dụng.',
 	"import.warn.cmIconUnknownNew":
-		'Không có biểu tượng "{{value}}" trong Obsidian, vì vậy biểu tượng mặc định đã được sử dụng.',
+		'Biểu tượng "{{value}}" không có sẵn trong vault này, vì vậy biểu tượng mặc định đã được sử dụng.',
 	"import.warn.cmIconUnknownExisting":
-		'Không có biểu tượng "{{value}}" trong Obsidian, vì vậy "{{id}}" giữ nguyên biểu tượng đã có.',
+		'Biểu tượng "{{value}}" không có sẵn trong vault này, vì vậy "{{id}}" giữ nguyên biểu tượng đã có.',
 	"import.chooseSource": "Nhập từ",
 	"import.sourceStudio": "Callout Studio",
 	"import.sourceStudioDesc": "Tải tệp .json được xuất từ Callout Studio.",
 	"import.sourceCalloutManager": "Callout Manager",
 	"import.sourceCalloutManagerDesc":
-		"Dán các kiểu bạn đã sao chép từ nút Copy của Callout Manager.",
+		"Mang các callout đã tùy chỉnh của bạn từ plugin Callout Manager sang.",
 	"import.sourceAdmonition": "Admonition",
 	"import.sourceAdmonitionDesc":
 		"Mang các admonition tùy chỉnh của bạn từ plugin Admonition sang.",
 	"import.cmTitle": "Nhập từ Callout Manager",
 	"import.cmInstructions":
-		"Trong Callout Manager, sử dụng nút Copy để sao chép các kiểu callout tùy chỉnh, sau đó dán bên dưới.",
-	"import.cmPlaceholder": "Dán các kiểu đã sao chép vào đây…",
+		"Mỗi callout đã tùy chỉnh được mang sang cùng biểu tượng và màu sắc. Kiểu dáng theo từng giao diện và CSS tùy chỉnh không có tương đương ở đây nên sẽ không được mang sang.",
+	"import.cmFromVault": "Vault này",
+	"import.cmVaultChecking": "Đang tìm plugin Callout Manager…",
+	"import.cmVaultFound": "Đã tìm thấy {{count}} callout đã tùy chỉnh.",
+	"import.cmVaultNotFound":
+		"Không tìm thấy callout đã tùy chỉnh nào trong vault này.",
+	"import.cmPasteLabel": "Hoặc dán các kiểu đã sao chép từ Callout Manager vào đây:",
+	"import.cmPlaceholder": "Dán các kiểu đã sao chép, hoặc một tệp data.json, vào đây…",
 	"import.cmBtnCancel": "Hủy",
 	"import.cmBtnImport": "Nhập",
 	"import.err.cmNoBlocksFound":
 		"Không tìm thấy kiểu Callout Manager nào trong văn bản đã dán.",
+	"import.err.cmNotRecognized":
+		"Tệp không nhận dạng được: cần các kiểu do nút Copy của Callout Manager tạo ra, hoặc một tệp data.json của Callout Manager.",
+	"import.err.cmNoEntries": "Không tìm thấy callout đã tùy chỉnh nào để nhập.",
 	"import.err.cmNoColorForNew":
 		'Không tìm thấy màu sắc có thể sử dụng cho callout mới "{{value}}"; đã bỏ qua.',
 	"import.err.cmIdConflict":
 		'ID "{{value}}" đã được sử dụng làm bí danh bởi một callout khác ("{{other}}") và đã bị bỏ qua.',
+	"import.warn.cmNoColorDefault":
+		"Không có màu nào được đặt trong Callout Manager, nên màu xám mặc định đã được sử dụng.",
+	"import.warn.cmThemeCondition":
+		"Màu hoặc biểu tượng của callout này chỉ được đặt cho một giao diện. Callout Studio không có kiểu dáng theo từng giao diện, nên nó đã được mang sang cho mọi giao diện.",
+	"import.warn.cmCustomStyles":
+		"Callout này cũng có CSS tùy chỉnh trong Callout Manager. Kiểu dáng đó không thuộc phạm vi nhập, nên chỉ biểu tượng và màu sắc được mang sang.",
 
 	// Import — Admonition
 	"import.admTitle": "Nhập từ Admonition",

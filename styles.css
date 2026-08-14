@@ -3925,33 +3925,22 @@ input.cs-input-invalid:focus {
 	color: var(--text-muted);
 }
 
-/* ─── Callout Manager paste modal ─────────────────────────── */
-.callout-studio-cm-import-modal {
-	max-width: 560px;
-}
-.cs-cm-import-instructions {
-	margin-top: 0;
-	color: var(--text-muted);
-}
-.cs-cm-import-textarea {
-	width: 100%;
-	min-height: 220px;
-	font-family: var(--font-monospace);
-	font-size: 0.85em;
-	resize: vertical;
-}
-
-/* ─── Admonition import modal ──────────────────────────────── */
+/* ─── Plugin import modals (Admonition, Callout Manager) ───── */
+/* One widget, two windows: both offer ready-made sources as rows with a paste
+   box underneath, so the rules are shared rather than copied per modal. */
+.callout-studio-cm-import-modal,
 .callout-studio-adm-import-modal {
 	max-width: 560px;
 }
-.cs-adm-import-instructions {
+.cs-import-instructions {
 	margin-top: 0;
 	color: var(--text-muted);
 }
 /* One row per ready-made source (this vault, a file). The paste box below is
-   the fallback, so these read as offers rather than as a list of steps. */
-.cs-adm-import-row {
+   the fallback, so these read as offers rather than as a list of steps.
+   Deliberately unpainted — a border and nothing else — so it needs no
+   --cs-surface / --cs-surface-raised pairing to stay right on mobile dark. */
+.cs-import-row {
 	display: flex;
 	align-items: center;
 	gap: 0.75rem;
@@ -3960,14 +3949,14 @@ input.cs-input-invalid:focus {
 	border: 1px solid var(--background-modifier-border);
 	border-radius: 6px;
 }
-.cs-adm-import-row-icon {
+.cs-import-row-icon {
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	color: var(--text-accent);
 	flex-shrink: 0;
 }
-.cs-adm-import-row-text {
+.cs-import-row-text {
 	display: flex;
 	flex-direction: column;
 	gap: 0.1rem;
@@ -3976,22 +3965,25 @@ input.cs-input-invalid:focus {
 	flex: 1;
 	min-width: 0;
 }
-.cs-adm-import-row-title {
+.cs-import-row-title {
 	font-weight: 600;
 	color: var(--text-normal);
 }
-.cs-adm-import-row-desc {
+.cs-import-row-desc {
 	font-size: 0.85em;
 	color: var(--text-muted);
 }
-.cs-adm-import-row button {
+.cs-import-row button {
 	flex-shrink: 0;
 }
-.cs-adm-import-paste-label {
+.cs-import-paste-label {
 	margin-bottom: 0.35rem;
 	color: var(--text-muted);
 }
-.cs-adm-import-textarea {
+/* 160px, not the 220px the Callout Manager box used while it was the whole
+   window: both modals now carry rows above it, and the taller box pushes the
+   pinned footer off a short window. */
+.cs-import-textarea {
 	width: 100%;
 	min-height: 160px;
 	font-family: var(--font-monospace);
