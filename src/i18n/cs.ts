@@ -21,6 +21,8 @@ export const cs: Record<string, string> = {
 	"settings.rescanComplete":
 		"Opětovné prohledávání dokončeno: přidáno {{count}} nových callout(ů).",
 	"replaceModal.deleteWithoutReplaceSuffix": "(vrátí se na výchozí)",
+	"replaceModal.titleDelete": "Smazat callout",
+	"replaceModal.titleReplace": "Nahradit ve vaultu",
 
 	"firstRun.title": "Najít existující callouts ve vaultu?",
 	"firstRun.body":
@@ -631,6 +633,13 @@ export const cs: Record<string, string> = {
 
 	"confirm.ok": "Smazat",
 	"confirm.cancel": "Zrušit",
+	// Headings for each confirmation — every window carries one, so each
+	// caller of ConfirmModal names what it is about to do.
+	"confirm.titleDeleteCommand": "Smazat příkaz",
+	"confirm.titleResetAll": "Obnovit všechny callouty",
+	"confirm.titleResetCallout": "Obnovit callout",
+	"confirm.titleDeletePalette": "Smazat paletu",
+	"confirm.titleDeleteImage": "Smazat obrázek",
 
 	"vault.filesUpdated":
 		"Aktualizováno {{count}} odkazů na callout v souborech vaultu.",

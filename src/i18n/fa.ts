@@ -21,6 +21,8 @@ export const fa: Record<string, string> = {
 	"settings.rescanComplete":
 		"اسکان مجدد کامل شد: {{count}} callout جدید اضافه شد.",
 	"replaceModal.deleteWithoutReplaceSuffix": "(به پیش‌فرض برمی‌گردد)",
+	"replaceModal.titleDelete": "حذف callout",
+	"replaceModal.titleReplace": "جایگزینی در vault",
 
 	"firstRun.title": "callout‌های موجود در vault را پیدا کنیم؟",
 	"firstRun.body":
@@ -632,6 +634,13 @@ export const fa: Record<string, string> = {
 
 	"confirm.ok": "حذف",
 	"confirm.cancel": "لغو",
+	// Headings for each confirmation — every window carries one, so each
+	// caller of ConfirmModal names what it is about to do.
+	"confirm.titleDeleteCommand": "حذف دستور",
+	"confirm.titleResetAll": "بازنشانی همه callout‌ها",
+	"confirm.titleResetCallout": "بازنشانی callout",
+	"confirm.titleDeletePalette": "حذف پالت",
+	"confirm.titleDeleteImage": "حذف تصویر",
 
 	"vault.filesUpdated":
 		"{{count}} مرجع callout در فایل‌های vault به‌روزرسانی شد.",

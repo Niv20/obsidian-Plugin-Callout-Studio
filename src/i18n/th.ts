@@ -21,6 +21,8 @@ export const th: Record<string, string> = {
 	"settings.rescanComplete":
 		"สแกนใหม่เสร็จแล้ว: เพิ่ม {{count}} callout ใหม่",
 	"replaceModal.deleteWithoutReplaceSuffix": "(กลับไปใช้ค่าเริ่มต้น)",
+	"replaceModal.titleDelete": "ลบ callout",
+	"replaceModal.titleReplace": "แทนที่ใน vault",
 
 	"firstRun.title": "ค้นหา callout ที่มีอยู่ใน vault หรือไม่?",
 	"firstRun.body":
@@ -628,6 +630,13 @@ export const th: Record<string, string> = {
 
 	"confirm.ok": "ลบ",
 	"confirm.cancel": "ยกเลิก",
+	// Headings for each confirmation — every window carries one, so each
+	// caller of ConfirmModal names what it is about to do.
+	"confirm.titleDeleteCommand": "ลบคำสั่ง",
+	"confirm.titleResetAll": "รีเซ็ต callout ทั้งหมด",
+	"confirm.titleResetCallout": "รีเซ็ต callout",
+	"confirm.titleDeletePalette": "ลบชุดสี",
+	"confirm.titleDeleteImage": "ลบรูปภาพ",
 
 	"vault.filesUpdated":
 		"อัปเดต {{count}} การอ้างอิง callout ในไฟล์ vault แล้ว",

@@ -20,6 +20,8 @@ export const ms: Record<string, string> = {
 	"settings.rescanComplete":
 		"Pengimbasan semula selesai: {{count}} callout baharu ditambah.",
 	"replaceModal.deleteWithoutReplaceSuffix": "(kembali ke lalai)",
+	"replaceModal.titleDelete": "Padam callout",
+	"replaceModal.titleReplace": "Ganti dalam vault",
 	"firstRun.title": "Cari callouts sedia ada dalam vault?",
 	"firstRun.body":
 		"Callout Studio boleh mengimbas vault anda untuk menemui callouts yang sudah anda gunakan, supaya ia muncul dalam senarai tetapan dan menggunakan gaya sandaran anda.",
@@ -620,6 +622,13 @@ export const ms: Record<string, string> = {
 	"menuItem.deleteSection": "Padam bahagian",
 	"confirm.ok": "Padam",
 	"confirm.cancel": "Batal",
+	// Headings for each confirmation — every window carries one, so each
+	// caller of ConfirmModal names what it is about to do.
+	"confirm.titleDeleteCommand": "Padam arahan",
+	"confirm.titleResetAll": "Set semula semua callout",
+	"confirm.titleResetCallout": "Set semula callout",
+	"confirm.titleDeletePalette": "Padam palet",
+	"confirm.titleDeleteImage": "Padam gambar",
 	"vault.filesUpdated":
 		"{{count}} rujukan callout dikemas kini dalam fail vault.",
 	"vault.idsUpdated":

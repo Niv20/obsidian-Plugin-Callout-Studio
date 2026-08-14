@@ -20,6 +20,8 @@ export const zh: Record<string, string> = {
 	"settings.rescanVaultHintAction": "立即扫描",
 	"settings.rescanComplete": "重新扫描完成：已添加 {{count}} 个新 callout。",
 	"replaceModal.deleteWithoutReplaceSuffix": "（回退到默认值）",
+	"replaceModal.titleDelete": "删除 callout",
+	"replaceModal.titleReplace": "在库中替换",
 
 	"firstRun.title": "在库中查找现有的 callout？",
 	"firstRun.body":
@@ -618,6 +620,13 @@ export const zh: Record<string, string> = {
 
 	"confirm.ok": "删除",
 	"confirm.cancel": "取消",
+	// Headings for each confirmation — every window carries one, so each
+	// caller of ConfirmModal names what it is about to do.
+	"confirm.titleDeleteCommand": "删除命令",
+	"confirm.titleResetAll": "重置所有 callout",
+	"confirm.titleResetCallout": "重置 callout",
+	"confirm.titleDeletePalette": "删除调色板",
+	"confirm.titleDeleteImage": "删除图片",
 
 	"vault.filesUpdated": "已更新库文件中的 {{count}} 个 callout 引用。",
 	"vault.idsUpdated":

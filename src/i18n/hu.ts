@@ -22,6 +22,8 @@ export const hu: Record<string, string> = {
 		"Újraszkennelés kész: {{count}} új callout hozzáadva.",
 	"replaceModal.deleteWithoutReplaceSuffix":
 		"(visszaesik az alapértelmezettre)",
+	"replaceModal.titleDelete": "Callout törlése",
+	"replaceModal.titleReplace": "Csere a tárban",
 
 	"firstRun.title": "Meglévő callout-ok keresése a tárban?",
 	"firstRun.body":
@@ -638,6 +640,13 @@ export const hu: Record<string, string> = {
 
 	"confirm.ok": "Törlés",
 	"confirm.cancel": "Mégse",
+	// Headings for each confirmation — every window carries one, so each
+	// caller of ConfirmModal names what it is about to do.
+	"confirm.titleDeleteCommand": "Parancs törlése",
+	"confirm.titleResetAll": "Összes callout visszaállítása",
+	"confirm.titleResetCallout": "Callout visszaállítása",
+	"confirm.titleDeletePalette": "Paletta törlése",
+	"confirm.titleDeleteImage": "Kép törlése",
 
 	"vault.filesUpdated":
 		"{{count}} callout-hivatkozás frissítve a tárfájlokban.",

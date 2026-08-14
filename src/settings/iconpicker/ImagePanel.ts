@@ -338,7 +338,11 @@ export class ImagePanel {
 			});
 		}
 
-		const confirmed = await new ConfirmModal(this.host.app, message).confirm();
+		const confirmed = await new ConfirmModal(
+			this.host.app,
+			t("confirm.titleDeleteImage"),
+			message,
+		).confirm();
 		if (!confirmed || this.disposed) return;
 
 		this.host.saveImages(

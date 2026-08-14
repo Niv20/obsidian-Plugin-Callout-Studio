@@ -31,6 +31,8 @@ export const he: Record<string, string> = {
 	"settings.rescanVaultHintAction": "סריקה עכשיו",
 	"settings.rescanComplete": "הסריקה הסתיימה: נוספו {{count}} בלוקים חדשים.",
 	"replaceModal.deleteWithoutReplaceSuffix": "(החלה של ברירת־מחדל)",
+	"replaceModal.titleDelete": "מחיקת תיבת־ההבלטה",
+	"replaceModal.titleReplace": "החלפה בכספת",
 
 	// פופאפ סריקה ראשונית (מוצג פעם אחת בהתקנה ראשונה ל-Vault גדול)
 	"firstRun.title": "לזהות תיבות־הבלטה קיימות בכספת שלכם?",
@@ -664,6 +666,13 @@ export const he: Record<string, string> = {
 	// Confirm modal
 	"confirm.ok": "מחיקה",
 	"confirm.cancel": "ביטול",
+	// Headings for each confirmation — every window carries one, so each
+	// caller of ConfirmModal names what it is about to do.
+	"confirm.titleDeleteCommand": "מחיקת פקודה",
+	"confirm.titleResetAll": "איפוס כל תיבות ההבלטה",
+	"confirm.titleResetCallout": "איפוס תיבת הבלטה",
+	"confirm.titleDeletePalette": "מחיקת פלטה",
+	"confirm.titleDeleteImage": "מחיקת תמונה",
 
 	// Vault edge-case modals
 	"vault.filesUpdated": "עודכנו {{count}} הפניות בקובצי הכספת.",

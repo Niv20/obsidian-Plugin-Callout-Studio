@@ -21,6 +21,8 @@ export const pt: Record<string, string> = {
 	"settings.rescanComplete":
 		"Redigitalização concluída: {{count}} novo(s) callout(s) adicionado(s).",
 	"replaceModal.deleteWithoutReplaceSuffix": "(volta ao padrão)",
+	"replaceModal.titleDelete": "Excluir callout",
+	"replaceModal.titleReplace": "Substituir no vault",
 
 	"firstRun.title": "Encontrar callouts existentes no seu vault?",
 	"firstRun.body":
@@ -636,6 +638,13 @@ export const pt: Record<string, string> = {
 
 	"confirm.ok": "Excluir",
 	"confirm.cancel": "Cancelar",
+	// Headings for each confirmation — every window carries one, so each
+	// caller of ConfirmModal names what it is about to do.
+	"confirm.titleDeleteCommand": "Excluir comando",
+	"confirm.titleResetAll": "Redefinir todos os callouts",
+	"confirm.titleResetCallout": "Redefinir callout",
+	"confirm.titleDeletePalette": "Excluir paleta",
+	"confirm.titleDeleteImage": "Excluir imagem",
 
 	"vault.filesUpdated":
 		"{{count}} referência(s) de callout atualizadas nos arquivos do vault.",

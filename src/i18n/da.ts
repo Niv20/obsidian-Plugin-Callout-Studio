@@ -18,6 +18,8 @@ export const da: Record<string, string> = {
 	"settings.rescanComplete":
 		"Genscanning færdig: {{count}} ny(e) callout(s) tilføjet.",
 	"replaceModal.deleteWithoutReplaceSuffix": "(falder tilbage til standard)",
+	"replaceModal.titleDelete": "Slet callout",
+	"replaceModal.titleReplace": "Erstat i vault",
 	"firstRun.title": "Find eksisterende callouts i din vault?",
 	"firstRun.body":
 		"Callout Studio kan scanne din vault for at opdage callouts, du allerede bruger, så de vises på din indstillingsliste og anvender din reservestil.",
@@ -613,6 +615,13 @@ export const da: Record<string, string> = {
 	"menuItem.deleteSection": "Slet sektion",
 	"confirm.ok": "Slet",
 	"confirm.cancel": "Annuller",
+	// Headings for each confirmation — every window carries one, so each
+	// caller of ConfirmModal names what it is about to do.
+	"confirm.titleDeleteCommand": "Slet kommando",
+	"confirm.titleResetAll": "Nulstil alle callouts",
+	"confirm.titleResetCallout": "Nulstil callout",
+	"confirm.titleDeletePalette": "Slet palet",
+	"confirm.titleDeleteImage": "Slet billede",
 	"vault.filesUpdated":
 		"{{count}} callout-reference(r) opdateret i vault-filer.",
 	"vault.idsUpdated":

@@ -21,6 +21,8 @@ export const ar: Record<string, string> = {
 	"settings.rescanComplete":
 		"اكتمل إعادة المسح: تمت إضافة {{count}} callout جديد.",
 	"replaceModal.deleteWithoutReplaceSuffix": "(يعود إلى الافتراضي)",
+	"replaceModal.titleDelete": "حذف الـ callout",
+	"replaceModal.titleReplace": "استبدال في المخزن",
 
 	"firstRun.title": "البحث عن callouts الموجودة في مخزنك؟",
 	"firstRun.body":
@@ -622,6 +624,13 @@ export const ar: Record<string, string> = {
 
 	"confirm.ok": "حذف",
 	"confirm.cancel": "إلغاء",
+	// Headings for each confirmation — every window carries one, so each
+	// caller of ConfirmModal names what it is about to do.
+	"confirm.titleDeleteCommand": "حذف الأمر",
+	"confirm.titleResetAll": "إعادة تعيين كل الـ callouts",
+	"confirm.titleResetCallout": "إعادة تعيين الـ callout",
+	"confirm.titleDeletePalette": "حذف لوحة الألوان",
+	"confirm.titleDeleteImage": "حذف الصورة",
 
 	"vault.filesUpdated": "تم تحديث {{count}} مرجع callout في ملفات المخزن.",
 	"vault.idsUpdated":

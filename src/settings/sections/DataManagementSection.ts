@@ -123,6 +123,7 @@ export function renderResetSection(
 
 					const confirmed = await new ConfirmModal(
 						ctx.app,
+						t("confirm.titleResetAll"),
 						messageFrag,
 					).confirm();
 					if (!confirmed) return;

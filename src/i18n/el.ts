@@ -18,6 +18,8 @@ export const el: Record<string, string> = {
 	"settings.rescanComplete":
 		"Η επανασάρωση ολοκληρώθηκε: προστέθηκαν {{count}} νέα callout(s).",
 	"replaceModal.deleteWithoutReplaceSuffix": "(επιστρέφει στην προεπιλογή)",
+	"replaceModal.titleDelete": "Διαγραφή callout",
+	"replaceModal.titleReplace": "Αντικατάσταση στο vault",
 	"firstRun.title": "Εύρεση υπαρχόντων callouts στο vault;",
 	"firstRun.body":
 		"Το Callout Studio μπορεί να σαρώσει το vault σας για να ανακαλύψει callouts που ήδη χρησιμοποιείτε, ώστε να εμφανίζονται στη λίστα ρυθμίσεων και να υιοθετούν το εφεδρικό σας στυλ.",
@@ -625,6 +627,13 @@ export const el: Record<string, string> = {
 	"menuItem.deleteSection": "Διαγραφή ενότητας",
 	"confirm.ok": "Διαγραφή",
 	"confirm.cancel": "Ακύρωση",
+	// Headings for each confirmation — every window carries one, so each
+	// caller of ConfirmModal names what it is about to do.
+	"confirm.titleDeleteCommand": "Διαγραφή εντολής",
+	"confirm.titleResetAll": "Επαναφορά όλων των callouts",
+	"confirm.titleResetCallout": "Επαναφορά callout",
+	"confirm.titleDeletePalette": "Διαγραφή παλέτας",
+	"confirm.titleDeleteImage": "Διαγραφή εικόνας",
 	"vault.filesUpdated":
 		"Ενημερώθηκαν {{count}} αναφορές callout σε αρχεία vault.",
 	"vault.idsUpdated":

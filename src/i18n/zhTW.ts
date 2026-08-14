@@ -17,6 +17,8 @@ export const zhTW: Record<string, string> = {
 	"settings.rescanVaultHintAction": "立即掃描",
 	"settings.rescanComplete": "重新掃描完成：已新增 {{count}} 個新 callout。",
 	"replaceModal.deleteWithoutReplaceSuffix": "（回復為預設值）",
+	"replaceModal.titleDelete": "刪除 callout",
+	"replaceModal.titleReplace": "在 vault 中替換",
 	"firstRun.title": "在 vault 中尋找現有的 callout？",
 	"firstRun.body":
 		"Callout Studio 可以掃描您的 vault 以探索您已在使用的 callout，使其出現在設定清單中並套用備用樣式。",
@@ -595,6 +597,13 @@ export const zhTW: Record<string, string> = {
 	"menuItem.deleteSection": "刪除部分",
 	"confirm.ok": "刪除",
 	"confirm.cancel": "取消",
+	// Headings for each confirmation — every window carries one, so each
+	// caller of ConfirmModal names what it is about to do.
+	"confirm.titleDeleteCommand": "刪除指令",
+	"confirm.titleResetAll": "重置所有 callout",
+	"confirm.titleResetCallout": "重置 callout",
+	"confirm.titleDeletePalette": "刪除調色盤",
+	"confirm.titleDeleteImage": "刪除圖片",
 	"vault.filesUpdated": "已更新 vault 檔案中的 {{count}} 個 callout 參照。",
 	"vault.idsUpdated":
 		"已更新 vault 檔案中的 {{count}} 個 callout ID：{{oldIds}} → {{newId}}",

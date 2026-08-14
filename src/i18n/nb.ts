@@ -19,6 +19,8 @@ export const nb: Record<string, string> = {
 	"settings.rescanComplete":
 		"Ny skanning ferdig: {{count}} ny(e) callout(er) lagt til.",
 	"replaceModal.deleteWithoutReplaceSuffix": "(faller tilbake til standard)",
+	"replaceModal.titleDelete": "Slett callout",
+	"replaceModal.titleReplace": "Erstatt i vault",
 	"firstRun.title": "Finn eksisterende callouts i valvet?",
 	"firstRun.body":
 		"Callout Studio kan skanne valvet ditt for å oppdage callouts du allerede bruker, slik at de vises i innstillingslisten og tar i bruk reservestilen din.",
@@ -615,6 +617,13 @@ export const nb: Record<string, string> = {
 	"menuItem.deleteSection": "Slett seksjon",
 	"confirm.ok": "Slett",
 	"confirm.cancel": "Avbryt",
+	// Headings for each confirmation — every window carries one, so each
+	// caller of ConfirmModal names what it is about to do.
+	"confirm.titleDeleteCommand": "Slett kommando",
+	"confirm.titleResetAll": "Tilbakestill alle callouts",
+	"confirm.titleResetCallout": "Tilbakestill callout",
+	"confirm.titleDeletePalette": "Slett palett",
+	"confirm.titleDeleteImage": "Slett bilde",
 	"vault.filesUpdated":
 		"{{count}} callout-referanse(r) oppdatert i vault-filer.",
 	"vault.idsUpdated":

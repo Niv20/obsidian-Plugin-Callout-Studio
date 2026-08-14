@@ -5,6 +5,12 @@
  * cancel) and resolves a Promise<boolean>. Used throughout the settings
  * sections whenever a destructive action needs user confirmation before
  * proceeding (e.g. bulk vault edits, data reset).
+ *
+ * `title` is required rather than optional on purpose. This window is generic —
+ * only the caller knows what is being confirmed — so a default heading would be
+ * vague ("Confirm") on every one of them, and an optional one would quietly let
+ * the next caller ship a headerless dialog. Making it a parameter the compiler
+ * insists on is what keeps "every window carries a title" true going forward.
  */
 import { Modal } from "obsidian";
 import type { App } from "obsidian";
@@ -17,6 +23,7 @@ export class ConfirmModal extends Modal {
 
 	constructor(
 		app: App,
+		private title: string,
 		private message: string | DocumentFragment,
 		private confirmLabel?: string,
 		private cancelLabel?: string,
@@ -27,10 +34,8 @@ export class ConfirmModal extends Modal {
 
 	onOpen(): void {
 		const { contentEl } = this;
-		const btnContainer = applyModalChrome(this, {
-			footer: true,
-			title: false,
-		});
+		const btnContainer = applyModalChrome(this, { footer: true });
+		this.setTitle(this.title);
 		if (typeof this.message === "string") {
 			const paragraphs = this.message.split(/\n+/);
 			for (const p of paragraphs) {

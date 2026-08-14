@@ -33,6 +33,8 @@ export const en: Record<string, string> = {
 	"settings.rescanComplete":
 		"Re-scan complete: {{count}} new callout(s) added.",
 	"replaceModal.deleteWithoutReplaceSuffix": "(falls back to default)",
+	"replaceModal.titleDelete": "Delete callout",
+	"replaceModal.titleReplace": "Replace in vault",
 
 	// First-run scan modal (shown once on first install for large vaults)
 	"firstRun.title": "Find existing callouts in your vault?",
@@ -671,6 +673,13 @@ export const en: Record<string, string> = {
 	// Confirm modal
 	"confirm.ok": "Delete",
 	"confirm.cancel": "Cancel",
+	// Headings for each confirmation — every window carries one, so each
+	// caller of ConfirmModal names what it is about to do.
+	"confirm.titleDeleteCommand": "Delete command",
+	"confirm.titleResetAll": "Reset all callouts",
+	"confirm.titleResetCallout": "Reset callout",
+	"confirm.titleDeletePalette": "Delete palette",
+	"confirm.titleDeleteImage": "Delete image",
 
 	// Vault edge-case modals
 	"vault.filesUpdated":

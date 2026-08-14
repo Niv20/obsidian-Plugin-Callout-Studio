@@ -21,6 +21,8 @@ export const tr: Record<string, string> = {
 	"settings.rescanComplete":
 		"Yeniden tarama tamamlandı: {{count}} yeni callout eklendi.",
 	"replaceModal.deleteWithoutReplaceSuffix": "(varsayılana geri döner)",
+	"replaceModal.titleDelete": "Callout'u sil",
+	"replaceModal.titleReplace": "Vault'ta değiştir",
 
 	"firstRun.title": "Vault'unuzdaki mevcut callout'ları bulsun mu?",
 	"firstRun.body":
@@ -637,6 +639,13 @@ export const tr: Record<string, string> = {
 
 	"confirm.ok": "Sil",
 	"confirm.cancel": "İptal",
+	// Headings for each confirmation — every window carries one, so each
+	// caller of ConfirmModal names what it is about to do.
+	"confirm.titleDeleteCommand": "Komutu sil",
+	"confirm.titleResetAll": "Tüm callout'ları sıfırla",
+	"confirm.titleResetCallout": "Callout'u sıfırla",
+	"confirm.titleDeletePalette": "Paleti sil",
+	"confirm.titleDeleteImage": "Resmi sil",
 
 	"vault.filesUpdated":
 		"Vault dosyalarında {{count}} callout referansı güncellendi.",

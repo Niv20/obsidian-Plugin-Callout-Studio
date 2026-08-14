@@ -21,6 +21,8 @@ export const ro: Record<string, string> = {
 	"settings.rescanComplete":
 		"Rescanare completă: {{count}} callout(uri) noi adăugate.",
 	"replaceModal.deleteWithoutReplaceSuffix": "(revine la implicit)",
+	"replaceModal.titleDelete": "Șterge callout",
+	"replaceModal.titleReplace": "Înlocuiți în vault",
 
 	"firstRun.title": "Găsiți callouts existente în vault?",
 	"firstRun.body":
@@ -638,6 +640,13 @@ export const ro: Record<string, string> = {
 
 	"confirm.ok": "Șterge",
 	"confirm.cancel": "Anulare",
+	// Headings for each confirmation — every window carries one, so each
+	// caller of ConfirmModal names what it is about to do.
+	"confirm.titleDeleteCommand": "Șterge comanda",
+	"confirm.titleResetAll": "Resetează toate callout-urile",
+	"confirm.titleResetCallout": "Resetează callout",
+	"confirm.titleDeletePalette": "Șterge paleta",
+	"confirm.titleDeleteImage": "Șterge imaginea",
 
 	"vault.filesUpdated":
 		"Au fost actualizate {{count}} referință(e) callout în fișierele vault.",

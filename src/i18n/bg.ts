@@ -18,6 +18,8 @@ export const bg: Record<string, string> = {
 	"settings.rescanComplete":
 		"Повторното сканиране завърши: добавени са {{count}} нови callout(а).",
 	"replaceModal.deleteWithoutReplaceSuffix": "(връща се към стандартното)",
+	"replaceModal.titleDelete": "Изтриване на callout",
+	"replaceModal.titleReplace": "Замяна в хранилището",
 	"firstRun.title": "Намиране на съществуващи callout-и в хранилището?",
 	"firstRun.body":
 		"Callout Studio може да сканира хранилището ви, за да открие callout-и, които вече използвате, така че да се показват в списъка с настройки и да приемат вашия резервен стил.",
@@ -617,6 +619,13 @@ export const bg: Record<string, string> = {
 	"menuItem.deleteSection": "Изтриване на раздел",
 	"confirm.ok": "Изтриване",
 	"confirm.cancel": "Отказ",
+	// Headings for each confirmation — every window carries one, so each
+	// caller of ConfirmModal names what it is about to do.
+	"confirm.titleDeleteCommand": "Изтриване на команда",
+	"confirm.titleResetAll": "Нулиране на всички callouts",
+	"confirm.titleResetCallout": "Нулиране на callout",
+	"confirm.titleDeletePalette": "Изтриване на палитра",
+	"confirm.titleDeleteImage": "Изтриване на изображение",
 	"vault.filesUpdated":
 		"Актуализирани са {{count}} препратка/и към callout в файловете на хранилището.",
 	"vault.idsUpdated":

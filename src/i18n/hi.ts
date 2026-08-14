@@ -21,6 +21,8 @@ export const hi: Record<string, string> = {
 	"settings.rescanComplete":
 		"पुनः स्कैन पूर्ण: {{count}} नए callout जोड़े गए।",
 	"replaceModal.deleteWithoutReplaceSuffix": "(डिफ़ॉल्ट पर वापस)",
+	"replaceModal.titleDelete": "callout हटाएँ",
+	"replaceModal.titleReplace": "vault में बदलें",
 
 	"firstRun.title": "vault में मौजूद callouts ढूँढें?",
 	"firstRun.body":
@@ -631,6 +633,13 @@ export const hi: Record<string, string> = {
 
 	"confirm.ok": "हटाएँ",
 	"confirm.cancel": "रद्द करें",
+	// Headings for each confirmation — every window carries one, so each
+	// caller of ConfirmModal names what it is about to do.
+	"confirm.titleDeleteCommand": "कमांड हटाएँ",
+	"confirm.titleResetAll": "सभी callouts रीसेट करें",
+	"confirm.titleResetCallout": "callout रीसेट करें",
+	"confirm.titleDeletePalette": "पैलेट हटाएँ",
+	"confirm.titleDeleteImage": "छवि हटाएँ",
 
 	"vault.filesUpdated":
 		"vault फ़ाइलों में {{count}} callout संदर्भ अपडेट किए गए।",

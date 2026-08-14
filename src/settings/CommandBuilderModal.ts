@@ -149,6 +149,7 @@ export class CommandBuilderModal extends Modal {
 			: t("commandBuilder.unknownCommand");
 		const ok = await new ConfirmModal(
 			this.app,
+			t("confirm.titleDeleteCommand"),
 			t("commandBuilder.deleteConfirm", { name }),
 		).confirm();
 		if (!ok) return;

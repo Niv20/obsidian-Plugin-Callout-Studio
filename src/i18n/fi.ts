@@ -18,6 +18,8 @@ export const fi: Record<string, string> = {
 	"settings.rescanComplete":
 		"Uudelleenskannaus valmis: {{count}} uutta callouttia lisätty.",
 	"replaceModal.deleteWithoutReplaceSuffix": "(palaa oletukseen)",
+	"replaceModal.titleDelete": "Poista callout",
+	"replaceModal.titleReplace": "Korvaa holvissa",
 	"firstRun.title": "Etsitkö olemassa olevia callouteja holvista?",
 	"firstRun.body":
 		"Callout Studio voi skannata holvisi löytääkseen jo käyttämäsi calloutit, jotta ne näkyvät asetusluettelossasi ja omaksuvat varatyylisi.",
@@ -611,6 +613,13 @@ export const fi: Record<string, string> = {
 	"menuItem.deleteSection": "Poista osio",
 	"confirm.ok": "Poista",
 	"confirm.cancel": "Peruuta",
+	// Headings for each confirmation — every window carries one, so each
+	// caller of ConfirmModal names what it is about to do.
+	"confirm.titleDeleteCommand": "Poista komento",
+	"confirm.titleResetAll": "Palauta kaikki calloutit",
+	"confirm.titleResetCallout": "Palauta callout",
+	"confirm.titleDeletePalette": "Poista paletti",
+	"confirm.titleDeleteImage": "Poista kuva",
 	"vault.filesUpdated":
 		"{{count}} callout-viite(ttä) päivitetty holvin tiedostoissa.",
 	"vault.idsUpdated":

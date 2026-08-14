@@ -21,6 +21,8 @@ export const ko: Record<string, string> = {
 	"settings.rescanComplete":
 		"재스캔 완료: {{count}}개의 새 callout이 추가되었습니다.",
 	"replaceModal.deleteWithoutReplaceSuffix": "(기본값으로 폴백)",
+	"replaceModal.titleDelete": "callout 삭제",
+	"replaceModal.titleReplace": "볼트에서 교체",
 
 	"firstRun.title": "볼트에서 기존 callout을 찾으시겠습니까?",
 	"firstRun.body":
@@ -633,6 +635,13 @@ export const ko: Record<string, string> = {
 
 	"confirm.ok": "삭제",
 	"confirm.cancel": "취소",
+	// Headings for each confirmation — every window carries one, so each
+	// caller of ConfirmModal names what it is about to do.
+	"confirm.titleDeleteCommand": "명령 삭제",
+	"confirm.titleResetAll": "모든 callout 재설정",
+	"confirm.titleResetCallout": "callout 재설정",
+	"confirm.titleDeletePalette": "팔레트 삭제",
+	"confirm.titleDeleteImage": "이미지 삭제",
 
 	"vault.filesUpdated":
 		"볼트 파일에서 {{count}}개의 callout 참조를 업데이트했습니다.",

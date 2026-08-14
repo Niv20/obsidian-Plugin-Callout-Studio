@@ -22,6 +22,8 @@ export const ru: Record<string, string> = {
 	"settings.rescanComplete":
 		"Сканирование завершено: добавлено {{count}} новых callout.",
 	"replaceModal.deleteWithoutReplaceSuffix": "(возврат к умолчанию)",
+	"replaceModal.titleDelete": "Удалить callout",
+	"replaceModal.titleReplace": "Заменить в хранилище",
 
 	"firstRun.title": "Найти существующие callout в хранилище?",
 	"firstRun.body":
@@ -634,6 +636,13 @@ export const ru: Record<string, string> = {
 
 	"confirm.ok": "Удалить",
 	"confirm.cancel": "Отмена",
+	// Headings for each confirmation — every window carries one, so each
+	// caller of ConfirmModal names what it is about to do.
+	"confirm.titleDeleteCommand": "Удалить команду",
+	"confirm.titleResetAll": "Сбросить все callouts",
+	"confirm.titleResetCallout": "Сбросить callout",
+	"confirm.titleDeletePalette": "Удалить палитру",
+	"confirm.titleDeleteImage": "Удалить изображение",
 
 	"vault.filesUpdated":
 		"Обновлено {{count}} ссылок на callout в файлах хранилища.",

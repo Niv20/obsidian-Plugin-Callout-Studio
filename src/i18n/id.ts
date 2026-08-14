@@ -21,6 +21,8 @@ export const id: Record<string, string> = {
 	"settings.rescanComplete":
 		"Pemindaian ulang selesai: {{count}} callout baru ditambahkan.",
 	"replaceModal.deleteWithoutReplaceSuffix": "(kembali ke default)",
+	"replaceModal.titleDelete": "Hapus callout",
+	"replaceModal.titleReplace": "Ganti di vault",
 
 	"firstRun.title": "Temukan callout yang ada di vault Anda?",
 	"firstRun.body":
@@ -636,6 +638,13 @@ export const id: Record<string, string> = {
 
 	"confirm.ok": "Hapus",
 	"confirm.cancel": "Batal",
+	// Headings for each confirmation — every window carries one, so each
+	// caller of ConfirmModal names what it is about to do.
+	"confirm.titleDeleteCommand": "Hapus perintah",
+	"confirm.titleResetAll": "Reset semua callout",
+	"confirm.titleResetCallout": "Reset callout",
+	"confirm.titleDeletePalette": "Hapus palet",
+	"confirm.titleDeleteImage": "Hapus gambar",
 
 	"vault.filesUpdated":
 		"{{count}} referensi callout diperbarui di file vault.",

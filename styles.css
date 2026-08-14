@@ -1155,20 +1155,11 @@ button.callout-studio-icon-picker-loading {
 	padding: var(--size-4-4) var(--cs-modal-inset);
 }
 
-/* Two windows never set a title — the generic confirmation and the replace
-   picker. Obsidian hides the empty title itself (`.modal-title:empty`) but not
-   the header around it, which would leave a padded band and a rule under
-   nothing: it reads as a heading that failed to load. Nothing has to be given
-   back to the body, which carries the full inset on all four sides anyway.
-
-   Driven by `.cs-modal-no-title` (set in modalChrome.ts by the two callers
-   that pass `title: false`) rather than `:has(> .modal-title:empty)` — a
-   `:has()` selector forces the browser to re-check this rule against every
-   ancestor whenever any descendant changes, which is needless cost paid on
-   every window when a plain, explicitly-set class says the same thing. */
-.cs-modal.cs-modal-no-title > .modal-header {
-	display: none;
-}
+/* There is no headerless variant. The generic confirmation and the replace
+   picker used to set no title and hide the band with `.cs-modal-no-title`;
+   both now name themselves, so every window wearing this chrome has a header.
+   Don't bring the class back — hiding the band is what let an unlabelled
+   window ship unnoticed in the first place. */
 
 /* Only the margin reset survives here. This selector is (0,3,0) and Obsidian's
    own `.modal:not(.mod-settings) .setting-item:not(.setting-item-heading)

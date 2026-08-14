@@ -21,6 +21,8 @@ export const vi: Record<string, string> = {
 	"settings.rescanComplete":
 		"Quét lại hoàn tất: đã thêm {{count}} callout mới.",
 	"replaceModal.deleteWithoutReplaceSuffix": "(quay lại mặc định)",
+	"replaceModal.titleDelete": "Xóa callout",
+	"replaceModal.titleReplace": "Thay thế trong vault",
 
 	"firstRun.title": "Tìm callouts hiện có trong vault?",
 	"firstRun.body":
@@ -635,6 +637,13 @@ export const vi: Record<string, string> = {
 
 	"confirm.ok": "Xóa",
 	"confirm.cancel": "Hủy",
+	// Headings for each confirmation — every window carries one, so each
+	// caller of ConfirmModal names what it is about to do.
+	"confirm.titleDeleteCommand": "Xóa lệnh",
+	"confirm.titleResetAll": "Đặt lại tất cả callout",
+	"confirm.titleResetCallout": "Đặt lại callout",
+	"confirm.titleDeletePalette": "Xóa bảng màu",
+	"confirm.titleDeleteImage": "Xóa hình ảnh",
 
 	"vault.filesUpdated":
 		"Đã cập nhật {{count}} tham chiếu callout trong các tệp vault.",

@@ -22,6 +22,8 @@ export const sv: Record<string, string> = {
 		"Omskanningen klar: {{count}} ny(a) callout(s) tillagd(a).",
 	"replaceModal.deleteWithoutReplaceSuffix":
 		"(faller tillbaka till standard)",
+	"replaceModal.titleDelete": "Ta bort callout",
+	"replaceModal.titleReplace": "Ersätt i vault",
 
 	"firstRun.title": "Hitta befintliga callouts i ditt vault?",
 	"firstRun.body":
@@ -631,6 +633,13 @@ export const sv: Record<string, string> = {
 
 	"confirm.ok": "Ta bort",
 	"confirm.cancel": "Avbryt",
+	// Headings for each confirmation — every window carries one, so each
+	// caller of ConfirmModal names what it is about to do.
+	"confirm.titleDeleteCommand": "Ta bort kommando",
+	"confirm.titleResetAll": "Återställ alla callouts",
+	"confirm.titleResetCallout": "Återställ callout",
+	"confirm.titleDeletePalette": "Ta bort palett",
+	"confirm.titleDeleteImage": "Ta bort bild",
 
 	"vault.filesUpdated":
 		"{{count}} callout-referens(er) uppdaterade i vault-filer.",

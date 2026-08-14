@@ -21,6 +21,8 @@ export const ja: Record<string, string> = {
 	"settings.rescanComplete":
 		"再スキャン完了: {{count}}件の新しいcalloutを追加しました。",
 	"replaceModal.deleteWithoutReplaceSuffix": "（デフォルトにフォールバック）",
+	"replaceModal.titleDelete": "calloutを削除",
+	"replaceModal.titleReplace": "vaultで置き換え",
 
 	"firstRun.title": "vault内の既存のcalloutを検索しますか？",
 	"firstRun.body":
@@ -636,6 +638,13 @@ export const ja: Record<string, string> = {
 
 	"confirm.ok": "削除",
 	"confirm.cancel": "キャンセル",
+	// Headings for each confirmation — every window carries one, so each
+	// caller of ConfirmModal names what it is about to do.
+	"confirm.titleDeleteCommand": "コマンドを削除",
+	"confirm.titleResetAll": "すべてのcalloutをリセット",
+	"confirm.titleResetCallout": "calloutをリセット",
+	"confirm.titleDeletePalette": "パレットを削除",
+	"confirm.titleDeleteImage": "画像を削除",
 
 	"vault.filesUpdated":
 		"vaultファイルの{{count}}件のcallout参照を更新しました。",

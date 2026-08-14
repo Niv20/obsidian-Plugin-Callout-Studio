@@ -26,6 +26,10 @@ export interface ReplaceCalloutModalOptions {
 	 * "delete without replacing" + warning copy). "replace" presents a pure
 	 * replacement picker with no delete option. */
 	mode?: "delete" | "replace";
+	/** Window heading. Defaults to the one that matches `mode`, which is what
+	 * every current caller wants; an override is here for a caller whose
+	 * wording needs to be more specific than "delete" or "replace". */
+	title?: string;
 	/** Heading paragraph above the picker. */
 	message: string;
 	/** Optional override for the confirm-button label. */
@@ -51,6 +55,7 @@ export class ReplaceCalloutModal extends Modal {
 	private confirmBtn: HTMLButtonElement | null = null;
 
 	private mode: "delete" | "replace";
+	private title: string;
 	private message: string;
 	private confirmLabel?: string;
 	private availableCallouts: CalloutDefinition[];
@@ -60,6 +65,13 @@ export class ReplaceCalloutModal extends Modal {
 	constructor(app: App, options: ReplaceCalloutModalOptions) {
 		super(app);
 		this.mode = options.mode ?? "delete";
+		this.title =
+			options.title ??
+			t(
+				this.mode === "replace"
+					? "replaceModal.titleReplace"
+					: "replaceModal.titleDelete",
+			);
 		this.message = options.message;
 		this.confirmLabel = options.confirmLabel;
 		this.availableCallouts = options.availableCallouts;
@@ -73,6 +85,7 @@ export class ReplaceCalloutModal extends Modal {
 	onOpen(): void {
 		const { contentEl } = this;
 		this.modalEl.addClass("callout-studio-replace-modal");
+		this.setTitle(this.title);
 
 		contentEl.createEl("p", { text: this.message });
 
@@ -111,10 +124,7 @@ export class ReplaceCalloutModal extends Modal {
 		}
 
 		// Single confirm button
-		const btnContainer = applyModalChrome(this, {
-			footer: true,
-			title: false,
-		});
+		const btnContainer = applyModalChrome(this, { footer: true });
 		const confirmText =
 			this.confirmLabel ??
 			(this.mode === "replace"

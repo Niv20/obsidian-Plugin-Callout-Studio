@@ -378,6 +378,7 @@ async function handleBuiltInReset(
 			if (fileCount > 0) {
 				const confirmed = await new ConfirmModal(
 					ctx.app,
+					t("confirm.titleResetCallout"),
 					t("vault.resetAliasWarning", {
 						count: String(totalCount),
 						files: String(fileCount),

@@ -35,11 +35,6 @@ export interface ModalChromeOptions {
 	footer?: boolean;
 	/** Wider window with a roomier inset — the callout and palette editors. */
 	wide?: boolean;
-	/** Set false for windows that never call `setTitle`/`titleEl.setText` — the
-	 * confirmation and replace-picker modals. Obsidian hides the empty title
-	 * itself but not the header band around it; this hides that band outright
-	 * instead of leaving a padded rule over nothing. Defaults to true. */
-	title?: boolean;
 }
 
 /**
@@ -47,6 +42,13 @@ export interface ModalChromeOptions {
  *
  * Safe to call again on a modal that is being reopened: Obsidian reuses `modalEl`
  * across open/close, so a previous footer is cleared rather than duplicated.
+ *
+ * Every window wearing this chrome must set a title (`setTitle` or
+ * `titleEl.setText`). There is deliberately no opt-out: the header band is what
+ * gives a window its name, and the two that used to skip it — the generic
+ * confirmation and the replace picker — read as an unlabelled box. Skipping it
+ * now leaves Obsidian's empty `.modal-title` behind, which is a visible padded
+ * band over nothing, so the omission shows up the first time the window opens.
  *
  * @returns the footer element when `footer` is set, otherwise `null`.
  */
@@ -65,7 +67,6 @@ export function applyModalChrome(
 	const { modalEl, containerEl } = modal;
 	modalEl.addClass("cs-modal");
 	modalEl.toggleClass("cs-modal-wide", options.wide === true);
-	modalEl.toggleClass("cs-modal-no-title", options.title === false);
 	detachFooter(modalEl);
 
 	// Marks the window's backdrop layer for styles.css, which paints the dim
@@ -95,7 +96,7 @@ export function applyModalChrome(
 export function removeModalChrome(modal: Modal): void {
 	const { modalEl, containerEl } = modal;
 	detachFooter(modalEl);
-	modalEl.removeClasses(["cs-modal", "cs-modal-wide", "cs-modal-no-title"]);
+	modalEl.removeClasses(["cs-modal", "cs-modal-wide"]);
 	containerEl.removeClasses(["cs-modal-container", "cs-modal-stacked"]);
 }
 
