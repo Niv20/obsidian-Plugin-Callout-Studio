@@ -263,19 +263,15 @@ Two points worth knowing before you publish something made with these icons:
 
 ## 💖 Special Thanks
 
-A huge thank you to all the wonderful people from around the world who helped shape this project! Whether by participating in discussions, reporting bugs, suggesting new features, or submitting pull requests — your contributions and support mean the world.
+A huge thank you to everyone who took the time to report bugs, identify issues, and help make Callout Studio more stable and reliable. Your reports, testing, and detailed feedback have been incredibly helpful:
 
-In chronological order:
+[brianjwalton](https://github.com/brianjwalton) · [astreloff](https://github.com/astreloff) · [rubcap](https://github.com/rubcap) · [Xto-tT0](https://github.com/Xto-tT0) · [Jarsgon](https://github.com/Jarsgon) · [Ravencaller213](https://github.com/Ravencaller213) · [frudolph77](https://github.com/frudolph77) · [DesertSnak3](https://github.com/DesertSnak3)
 
-* [@brianjwalton](https://github.com/brianjwalton) [#1](https://github.com/Niv20/obsidian-plugin-callout-studio/issues/1) Thank you for bringing to my attention that my plugin conflicted with Style Settings plugin, and a special thanks for being the very first! Thank you for believing in the plugin when it was just getting started. Thank you so much!
-* [@ericxob77](https://github.com/ericxob77) [#2](https://github.com/Niv20/obsidian-plugin-callout-studio/issues/2) In my original design, spaces in the callout name were replaced with hyphens (-) to keep it as a single word. I don't know what I was thinking in the original design or why I made it so strict. Thank you for pointing this out! It's possible now, and I'm sure many other people are grateful to you for this too.
-* [@astreloff](https://github.com/astreloff) [#3](https://github.com/Niv20/obsidian-plugin-callout-studio/issues/3) Just like with the first issue, you also pointed out the problem my plugin had with the Style Settings plugin. Thank you so much!
-* [@TechnoMaverick](https://github.com/TechnoMaverick) [#4](https://github.com/Niv20/obsidian-plugin-callout-studio/issues/4) You asked me to support gradient backgrounds for callouts. When I was just starting out, this was very complicated for me and I couldn't get it to work the way I wanted. But trust me, I haven't forgotten about you! It's still in the back of my mind, and hopefully, I'll be able to make it happen someday.
-* [@rubcap](https://github.com/rubcap) [#5](https://github.com/Niv20/obsidian-plugin-callout-studio/issues/5) Thank you for pointing out that starting from Obsidian version 1.13 (which was in Catalyst at the time), callouts weren't rendered properly anymore.
-* [@epilo9er](https://github.com/epilo9er) [#6](https://github.com/Niv20/obsidian-plugin-callout-studio/pull/6) The suggestion to add more right-click menu options was wonderful. A huge thanks for going the extra mile, opening a PR, and actually helping me write the code.
-* [@Xto-tT0](https://github.com/Xto-tT0) [#7](https://github.com/Niv20/obsidian-plugin-callout-studio/issues/7) [#8](https://github.com/Niv20/obsidian-plugin-callout-studio/issues/8) [#9](https://github.com/Niv20/obsidian-plugin-callout-studio/issues/9) [#10](https://github.com/Niv20/obsidian-plugin-callout-studio/issues/10) [#11](https://github.com/Niv20/obsidian-plugin-callout-studio/issues/11) Wow, man, I don't know how to thank you. You gave me so many great ideas - from saving custom color presets to long discussions about how a callout heading should look. Your contribution was so massive that it made me jump straight from version 1.6.0 of the plugin right to version 2.0.0!
+And a huge thank you to everyone who shared ideas, suggested enhancements, and helped shape the direction of Callout Studio. Many of the features and improvements in the plugin have been inspired by your feedback and suggestions:
 
-You can be on this list too! Feel free to open an issue to report bugs or share your ideas and suggestions. I would be more than happy to read them!
+[ericxob77](https://github.com/ericxob77) · [TechnoMaverick](https://github.com/TechnoMaverick) · [epilo9er](https://github.com/epilo9er) · [Xto-tT0](https://github.com/Xto-tT0) · [TyceHerrman](https://github.com/TyceHerrman) · [eth-p](https://github.com/eth-p) · [kwhsiung](https://github.com/kwhsiung) · [archangelglass](https://github.com/archangelglass) · [quantumstargazer](https://github.com/quantumstargazer)
+
+Thank you all for helping make Callout Studio better!
 
 ## Install
 
