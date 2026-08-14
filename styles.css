@@ -1155,6 +1155,67 @@ button.callout-studio-icon-picker-loading {
 	cursor: not-allowed;
 }
 
+/* ── Stacked windows on mobile ────────────────────────────────────
+   Opening a window on top of another one darkens everything behind the front
+   one — on desktop. On iPhone and iPad it doesn't, and the layer underneath is
+   plainly exposed (a picker sitting over the callout editor leaves the editor's
+   header above it and its button bar below), so there is nothing covering it:
+   Obsidian's backdrop just never paints. `Modal.open()` splits by platform —
+
+       Platform.isPhone ? this.animateOpen()
+                        : bgEl.style.opacity = dimBackground ? this.bgOpacity : "0"
+
+   so off the phone the opacity is set synchronously and unconditionally, while
+   on the phone it is only ever reached as the END STATE of the slide-up
+   animation, which `animateOpen()` skips outright when `shouldAnimate` is false.
+   The dim is a side effect of an animation there rather than a property of the
+   window, which is how it comes to be missing.
+
+   So this paints its own, on the container `applyModalChrome()` marks.
+
+   A pseudo-element rather than a `.modal-bg` override, and that is the point:
+   Obsidian drives that element's opacity from JS, so a rule there either loses
+   to the inline style or needs `!important` — and `!important` would also pin
+   the CLOSING fade, which animates the same property back to 0. A layer of our
+   own is purely additive, can't be overwritten, and leaves the animation alone;
+   if Obsidian ever fixes its mobile path the two simply composite.
+
+   `pointer-events: none` keeps tap-outside-to-close working — that listener
+   lives on `.modal-bg`, underneath. Layering needs no z-index: this and
+   `.modal-bg` are both `position: absolute; z-index: auto` and composite in DOM
+   order, and `.modal` is a later `position: relative` sibling so it stays on
+   top. `.modal-container` is itself positioned, so `inset: 0` covers the window;
+   being out of flow also keeps this from becoming a flex item in it.
+
+   The light colour is not picked by eye. It is desktop's own
+   `--background-modifier-cover` (`rgba(220,220,220,0.4)`) with `Modal.bgOpacity`
+   (0.85) folded into the alpha, so one stacked window lands on exactly the
+   shade desktop produces and three compound the same way. Deliberately NOT
+   `var(--background-modifier-cover)`: `.is-mobile` redefines that to
+   `rgba(0,0,0,0.25)` / `rgba(0,0,0,0.5)` for the sidebar drawer backdrop, a
+   heavier look than the dialog dim being matched here. The dark variant starts
+   from the same desktop base (`rgba(10,10,10,0.4)`) but its alpha is bumped
+   past the 0.34 the same fold would give it — on a dark theme the exact-match
+   shade read as too faint to tell a stacked window apart from a single one.
+
+   `WelcomeModal` opts out of the chrome entirely, so it is never marked and
+   never dims — it is a splash, and that is consistent with the rest of it. */
+.is-mobile .cs-modal-container.cs-modal-stacked {
+	--cs-stacked-cover: rgba(220, 220, 220, 0.34);
+}
+
+.is-mobile.theme-dark .cs-modal-container.cs-modal-stacked {
+	--cs-stacked-cover: rgba(10, 10, 10, 0.55);
+}
+
+.is-mobile .cs-modal-container.cs-modal-stacked::before {
+	content: "";
+	position: absolute;
+	inset: 0;
+	background-color: var(--cs-stacked-cover);
+	pointer-events: none;
+}
+
 /* ─── Callout / palette editor window size ────────────────────── */
 
 .modal.callout-studio-editor-modal {

@@ -62,11 +62,26 @@ export function applyModalChrome(
 	modal: Modal,
 	options: ModalChromeOptions = {},
 ): HTMLElement | null {
-	const { modalEl } = modal;
+	const { modalEl, containerEl } = modal;
 	modalEl.addClass("cs-modal");
 	modalEl.toggleClass("cs-modal-wide", options.wide === true);
 	modalEl.toggleClass("cs-modal-no-title", options.title === false);
 	detachFooter(modalEl);
+
+	// Marks the window's backdrop layer for styles.css, which paints the dim
+	// behind a stacked window on mobile itself (see "Stacked windows on mobile"
+	// there for why Obsidian's own backdrop can't be relied on).
+	//
+	// The count is trustworthy here: `Modal.open()` appends `containerEl` to the
+	// document BEFORE it calls `onOpen()`, and this runs from `onOpen()`, so this
+	// window is already in the tally and `> 1` means one was open underneath it.
+	// `toggleClass` rather than `addClass` because Obsidian reuses `containerEl`
+	// across open/close — a window reopened over nothing must lose the class.
+	containerEl.addClass("cs-modal-container");
+	containerEl.toggleClass(
+		"cs-modal-stacked",
+		containerEl.ownerDocument.querySelectorAll(".modal-container").length > 1,
+	);
 
 	if (!options.footer) return null;
 	return modalEl.createDiv({ cls: "cs-modal-footer" });
@@ -78,9 +93,10 @@ export function applyModalChrome(
  * survives the usual `contentEl.empty()`.
  */
 export function removeModalChrome(modal: Modal): void {
-	const { modalEl } = modal;
+	const { modalEl, containerEl } = modal;
 	detachFooter(modalEl);
 	modalEl.removeClasses(["cs-modal", "cs-modal-wide", "cs-modal-no-title"]);
+	containerEl.removeClasses(["cs-modal-container", "cs-modal-stacked"]);
 }
 
 function detachFooter(modalEl: HTMLElement): void {
