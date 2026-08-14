@@ -2,8 +2,11 @@
  * settings/PaletteEditorModal.ts — Create/edit a custom color palette.
  *
  * Modal opened from the "Saved color palettes" settings section. Two-column
- * body (same panel classes as the callout editor): options on the left, a
- * sticky live preview on the right. Default (simple) mode: the user picks ONE
+ * body wearing the same shape as the per-role "Global callout style" popups: a
+ * sticky live preview on the left, and on the right two titled control cards —
+ * a fixed "Palette" card (name + background style) above a "Colors" card whose
+ * rows are rebuilt for whatever the style dropdown is set to. Default (simple)
+ * mode: the user picks ONE
  * base color and the full palette — light/dark accents, backgrounds, text —
  * is auto-derived with contrast correction (see derivePaletteFromColor). The
  * background style is a 2-way choice: solid or a two-stop linear gradient
@@ -14,7 +17,7 @@
  * cancel/close.
  */
 import { Modal, Setting, setIcon } from "obsidian";
-import type { App, SliderComponent } from "obsidian";
+import type { App } from "obsidian";
 import type { BgGradient, CalloutDefinition, CustomPalette } from "../types";
 import {
 	bgTintFor,
@@ -51,6 +54,11 @@ import { t } from "../i18n";
 import type { CalloutRegistry } from "../manager/CalloutRegistry";
 import type { CSSInjector } from "../manager/CSSInjector";
 import { applyModalChrome, removeModalChrome } from "./modalChrome";
+import {
+	createControlGroup,
+	createSliderRow,
+	setSliderDisplay,
+} from "./styleControls";
 
 export type PaletteEditorResult = Omit<CustomPalette, "id">;
 
@@ -119,9 +127,6 @@ export class PaletteEditorModal extends Modal {
 	private bgIntensity: number;
 	/** Once the user drags the slider, style toggles stop overwriting it with a per-style default. */
 	private bgIntensityTouched: boolean;
-	private bgIntensitySlider: SliderComponent | null = null;
-	/** Row element for the Intensity slider, hidden while the advanced per-color grid is showing (it only steers derivation, which the advanced grid bypasses). */
-	private bgIntensityRowEl: HTMLElement | null = null;
 	/**
 	 * Whether the color section shows the advanced per-color grid instead of
 	 * the single Base color control. Only takes effect while `bgStyle` is
@@ -129,8 +134,15 @@ export class PaletteEditorModal extends Modal {
 	 * value, only which controls are shown.
 	 */
 	private advancedColors: boolean;
-	/** Container rebuilt by renderColorSection() whenever advancedColors or bgStyle changes. */
-	private colorSectionEl: HTMLElement | null = null;
+	/** The "Colors" card. Its header stays put; renderColorSection() rebuilds the rows under it. */
+	private colorCardEl: HTMLElement | null = null;
+	/**
+	 * Every row renderColorSection() has put in the card, so the next pass can
+	 * take them out again. They are direct children of the card rather than
+	 * living in a wrapper div, which is what lets the card's own sibling
+	 * separator rule draw the hairlines between them.
+	 */
+	private colorCardRows: HTMLElement[] = [];
 	// Gradient state. The end (stop-2) colors are tints of gradientToBase,
 	// derived exactly like the six colors are derived from the base color.
 	private angleDeg: number;
@@ -158,8 +170,7 @@ export class PaletteEditorModal extends Modal {
 	/** Identity of the clash the error line currently shows; "" when clear. */
 	private renderedClashKey = "";
 	private saveBtnEl: HTMLButtonElement | null = null;
-	// Gradient UI refs for show/hide and programmatic color sync.
-	private gradientRows: HTMLElement[] = [];
+	/** The second-color swatch, for programmatic sync. Null whenever the row is not built. */
 	private gradToInput: HTMLInputElement | null = null;
 
 	constructor(
@@ -302,18 +313,29 @@ export class PaletteEditorModal extends Modal {
 		this.modalEl.addClass("callout-studio-editor-modal");
 		const footer = applyModalChrome(this, { footer: true, wide: true });
 
-		// Two-column body from the very first row: options (including the name)
-		// on the left, sticky live preview on the right — the callout editor's
-		// panel classes.
+		// Two-column body in the same order as the per-role style popups: the
+		// sticky live preview on the left, the control cards on the right.
 		const panel = contentEl.createDiv({
 			cls: "callout-studio-preview-panel",
 		});
-		const adjustCol = panel.createDiv({ cls: "callout-studio-adjust-col" });
 		const previewCol = panel.createDiv({
 			cls: "callout-studio-preview-col",
 		});
+		const adjustCol = panel.createDiv({ cls: "callout-studio-adjust-col" });
 
-		const nameSetting = new Setting(adjustCol)
+		// The fixed card. It holds the two rows nothing else can change — the
+		// name, and the style dropdown that drives the card below it. Keeping
+		// the dropdown out here is what lets its own `change` handler rebuild
+		// that card without tearing the `<select>` out from under the pointer.
+		// `cs-layout-group` is the modifier for a box of plain Setting rows
+		// (the callout editor's Picture box, the style popups' Align box).
+		const paletteCard = createControlGroup(
+			adjustCol,
+			t("palette.groupPalette"),
+			"cs-layout-group",
+		);
+
+		const nameSetting = new Setting(paletteCard)
 			.setName(t("palette.name"))
 			// Shares one control width with the Style row directly below it, so
 			// the field and the dropdown end on the same edge instead of each
@@ -332,30 +354,23 @@ export class PaletteEditorModal extends Modal {
 		// Error line in the info column, mirroring the callout IDs error.
 		this.nameErrorEl = nameSetting.descEl.createDiv({ cls: "cs-tag-error" });
 
-		this.buildBgStyleRow(adjustCol);
-		// Always visible, regardless of Solid/Gradient. Every other row in this
-		// column draws its own top border, but the first row of the color
-		// section below is the first child of that wrapper and so matches
-		// Obsidian's `:first-child { border-top: none }` modal rule — this div
-		// puts the missing line back.
-		adjustCol.createDiv({ cls: "cs-palette-divider" });
+		this.buildBgStyleRow(paletteCard);
 
-		// Above the color controls it is about, and outside colorSectionEl —
-		// renderColorSection() empties that on every Simple/Advanced toggle.
+		// Between the two cards, and outside both: renderColorSection() tears
+		// its rows down on every switch, and this message must survive that
+		// (see renderColorError on why it is not rebuilt needlessly).
 		this.colorErrorEl = adjustCol.createDiv({
 			cls: "cs-tag-error cs-palette-color-error",
 		});
 
-		this.colorSectionEl = adjustCol.createDiv({
-			cls: "cs-palette-color-section",
-		});
+		this.colorCardEl = createControlGroup(
+			adjustCol,
+			// The same string the advanced grid used to head itself with — the
+			// card wears it now, so that inner heading is gone.
+			t("palette.advancedColors"),
+			"cs-layout-group",
+		);
 		this.renderColorSection();
-
-		this.buildGradientToRow(adjustCol);
-
-		this.buildBgIntensityRow(adjustCol);
-
-		this.buildGradientDirectionAndTextRows(adjustCol);
 
 		this.previewEl = previewCol.createDiv({
 			cls: "cs-palette-live-preview",
@@ -546,7 +561,7 @@ export class PaletteEditorModal extends Modal {
 	 * Solid|Gradient|None picker — sits above the base color.
 	 *
 	 * A dropdown rather than the segmented switch this used to be: the options
-	 * column is 240px, and three labelled buttons beside a name left the name
+	 * column is narrow, and three labelled buttons beside a name left the name
 	 * itself ellipsised to "St…" in English and worse in every language with a
 	 * longer word for "gradient". A `<select>` costs one fixed width no matter
 	 * how many options it holds or how they translate. `cs-palette-bgstyle-setting`
@@ -571,48 +586,50 @@ export class PaletteEditorModal extends Modal {
 					// has no strength of its own to default to, and re-seeding
 					// here would silently rewrite the value a switch back to
 					// Solid is meant to restore.
-					if (!this.bgIntensityTouched && v !== "none") {
+					const reseed = !this.bgIntensityTouched && v !== "none";
+					if (reseed) {
 						this.bgIntensity =
 							v === "gradient"
 								? DEFAULT_BG_INTENSITY_GRADIENT
 								: DEFAULT_BG_INTENSITY_SOLID;
-						this.bgIntensitySlider?.setValue(
-							Math.round(this.bgIntensity * 100),
-						);
-						this.applyDerived();
-					} else {
-						this.preview?.refresh();
 					}
-					this.updateGradientVisibility();
-					// The advanced grid and the Intensity row are Solid-only; a
-					// switch to Gradient or None hides them (colors/intensity
-					// stay exactly as they were, ready to reappear if the user
-					// switches back).
+					// Rebuild BEFORE re-deriving. Which rows the card holds is
+					// a function of the style (the advanced grid and Intensity
+					// are Solid-only, the gradient rows Gradient-only), and
+					// applyDerived() below pushes colours into the second-colour
+					// swatch — which has to be the fresh one, or the new value
+					// lands in a detached input. Colours and intensity are left
+					// exactly as they were, ready to reappear on a switch back.
 					this.renderColorSection();
+					if (reseed) this.applyDerived();
+					else this.preview?.refresh();
 				});
 		});
 	}
 
 	/**
 	 * Background-intensity slider: how strongly the color shows. Applies to
-	 * BOTH solid and gradient backgrounds, so — unlike the gradient-only rows
-	 * around it — it is always visible: sits right under Base color in Solid
-	 * (the hidden Second color row above it takes no space), and under Second
-	 * color in Gradient. Works in whole percent; the stored value is a 0..1
-	 * fraction. Re-deriving on change overwrites the six colors and gradient
-	 * tints (the same contract as changing the base color).
+	 * BOTH solid and gradient backgrounds, so it sits right under Base color in
+	 * Solid and under Second color in Gradient. Works in whole percent; the
+	 * stored value is a 0..1 fraction. Re-deriving on change overwrites the six
+	 * colors and gradient tints (the same contract as changing the base color).
 	 *
-	 * Hidden while the advanced per-color grid is showing: intensity only
-	 * steers the Base-color derivation, which the advanced grid bypasses
-	 * (its rows write colors directly). Hidden under None too — see
-	 * {@link syncBgIntensityRow}.
+	 * Built only where a strength is a real question — {@link renderColorSection}
+	 * skips it under None (nothing is painted) and under the advanced per-color
+	 * grid (whose rows write colors directly, bypassing the derivation this
+	 * steers).
+	 *
+	 * A `callout-studio-slider-row`, not a plain Setting: the card is ~250px
+	 * wide inside its padding, and a track sharing that line with its label
+	 * would be squeezed to half of it. The row puts the label and Obsidian's
+	 * value readout above a full-width track, exactly as the per-role style
+	 * popups do. `setDynamicTooltip` stays for builds below 1.13, where
+	 * `setDisplayFormat` is missing and there is no readout to read.
 	 */
 	private buildBgIntensityRow(parent: HTMLElement): void {
-		const setting = new Setting(parent).setName(t("palette.bgIntensity"));
-		this.bgIntensityRowEl = setting.settingEl;
-		this.syncBgIntensityRow();
-		setting.addSlider((slider) => {
-			this.bgIntensitySlider = slider;
+		const row = createSliderRow(parent, t("palette.bgIntensity"));
+		new Setting(row).addSlider((slider) => {
+			setSliderDisplay(slider, (v) => `${v}%`);
 			slider
 				.setLimits(
 					Math.round(MIN_BG_COLOR_AMOUNT * 100),
@@ -628,38 +645,48 @@ export class PaletteEditorModal extends Modal {
 					this.applyDerived();
 				});
 		});
+		this.colorCardRows.push(row);
 	}
 
 	/**
-	 * Shows the Intensity row only where a strength is a real question: it is
-	 * meaningless under None (nothing is painted) and bypassed by the advanced
-	 * grid (whose rows write colors directly instead of deriving them). Both
-	 * callers go through here so the two conditions can't drift apart.
-	 */
-	private syncBgIntensityRow(): void {
-		this.bgIntensityRowEl?.toggleClass(
-			"cs-row-hidden",
-			(this.advancedColors && this.bgStyle === "solid") ||
-				this.bgStyle === "none",
-		);
-	}
-
-	/**
-	 * Rebuilds the color section: the single Base color control, or — only
-	 * while Solid and opted in — the advanced per-color grid. Called on open
-	 * and whenever advancedColors or bgStyle changes; never touches any
-	 * color value, purely a view switch (see the class-level doc on
-	 * advancedColors).
+	 * Rebuilds every row of the "Colors" card for the current state: the single
+	 * Base color control or — only while Solid and opted in — the advanced
+	 * per-color grid, followed by whichever of Second color / Intensity /
+	 * Direction / Gradient title text that state calls for.
+	 *
+	 * Called on open and whenever advancedColors or bgStyle changes. It never
+	 * touches a color value, purely a view switch (see the class-level doc on
+	 * advancedColors) — every value it doesn't show is still in state, and the
+	 * rows come back carrying it if the user switches back.
+	 *
+	 * The rows are torn down and rebuilt rather than hidden in place. They are
+	 * direct children of the card so that its sibling-separator rule can draw
+	 * the hairline between them, and `+` is structural: a row left in the DOM
+	 * under `display: none` still counts as the previous sibling, so the first
+	 * *visible* row would draw a stray line right under the card header.
 	 */
 	private renderColorSection(): void {
-		if (!this.colorSectionEl) return;
-		this.colorSectionEl.empty();
+		const card = this.colorCardEl;
+		if (!card) return;
+		for (const row of this.colorCardRows) row.detach();
+		this.colorCardRows = [];
+		// Only ever points at a row this method built, so it goes stale the
+		// moment those are detached. syncGradientInputs() guards on it.
+		this.gradToInput = null;
+
 		const showAdvanced = this.advancedColors && this.bgStyle === "solid";
-		this.syncBgIntensityRow();
 		if (showAdvanced) {
-			this.buildAdvancedColorRows(this.colorSectionEl);
+			this.buildAdvancedColorRows(card);
 		} else {
-			this.buildSimpleColorRow(this.colorSectionEl);
+			this.buildSimpleColorRow(card);
+		}
+
+		if (this.bgStyle === "gradient") this.buildGradientToRow(card);
+		if (!showAdvanced && this.bgStyle !== "none") {
+			this.buildBgIntensityRow(card);
+		}
+		if (this.bgStyle === "gradient") {
+			this.buildGradientDirectionAndTextRows(card);
 		}
 	}
 
@@ -672,6 +699,7 @@ export class PaletteEditorModal extends Modal {
 	 */
 	private buildSimpleColorRow(parent: HTMLElement): void {
 		const baseSetting = new Setting(parent).setName(t("palette.baseColor"));
+		this.colorCardRows.push(baseSetting.settingEl);
 		createColorSwatchInput(baseSetting.controlEl, this.baseColor, (hex) => {
 			this.baseColor = hex;
 			this.applyDerived();
@@ -689,8 +717,9 @@ export class PaletteEditorModal extends Modal {
 	}
 
 	/**
-	 * Advanced per-color grid: independent Accent/Background/Text swatches
-	 * for ONLY the current Obsidian theme mode. Editing one infers a
+	 * Advanced per-color grid: a note saying which theme mode is being edited
+	 * (with the link back to the single Base color), then independent
+	 * Accent/Background/Text swatches for ONLY that mode. Editing one infers a
 	 * matching value for the hidden mode via inferOppositeModeColor (mirror
 	 * lightness, then contrast-correct for Accent/Text — see that
 	 * function's doc). Deliberately per-channel: editing Accent never
@@ -701,13 +730,16 @@ export class PaletteEditorModal extends Modal {
 	private buildAdvancedColorRows(parent: HTMLElement): void {
 		const isDark = activeDocument.body.classList.contains("theme-dark");
 
-		const header = new Setting(parent).setName(t("palette.advancedColors"));
-		header.setDesc(
+		// Description only, no name: the card's own header already reads
+		// "Colors", and a row repeating it would be a heading under a heading.
+		const note = new Setting(parent).setClass("cs-palette-mode-note");
+		this.colorCardRows.push(note.settingEl);
+		note.setDesc(
 			t("palette.advancedColorsHint", {
 				mode: isDark ? t("palette.darkMode") : t("palette.lightMode"),
 			}),
 		);
-		renderInlineLinkHint(header.descEl, {
+		renderInlineLinkHint(note.descEl, {
 			textKey: "palette.revertHint",
 			linkKey: "palette.revertHintLink",
 			onClick: () => {
@@ -735,8 +767,17 @@ export class PaletteEditorModal extends Modal {
 			? "textColorLight"
 			: "textColorDark";
 
+		// One helper for the three rows so each is registered for teardown
+		// exactly once — the swatch call used to build its Setting inline, and
+		// an inline Setting has no handle to push onto colorCardRows.
+		const channelRow = (label: string): HTMLElement => {
+			const setting = new Setting(parent).setName(label);
+			this.colorCardRows.push(setting.settingEl);
+			return setting.controlEl;
+		};
+
 		const accentSwatch = createColorSwatchInput(
-			new Setting(parent).setName(t("palette.accentColor")).controlEl,
+			channelRow(t("palette.accentColor")),
 			this.colors[accentKey],
 			(hex) => {
 				this.colors[accentKey] = hex;
@@ -752,8 +793,7 @@ export class PaletteEditorModal extends Modal {
 		);
 
 		createColorSwatchInput(
-			new Setting(parent).setName(t("palette.backgroundColorChannel"))
-				.controlEl,
+			channelRow(t("palette.backgroundColorChannel")),
 			this.colors[bgKey],
 			(hex) => {
 				this.colors[bgKey] = hex;
@@ -769,7 +809,7 @@ export class PaletteEditorModal extends Modal {
 		);
 
 		const textSwatch = createColorSwatchInput(
-			new Setting(parent).setName(t("palette.textColorChannel")).controlEl,
+			channelRow(t("palette.textColorChannel")),
 			this.colors[textKey],
 			(hex) => {
 				this.colors[textKey] = hex;
@@ -803,12 +843,12 @@ export class PaletteEditorModal extends Modal {
 
 	/**
 	 * Gradient-only row for the second color. Built separately from the rest
-	 * of the gradient controls so the always-visible Intensity row can sit
-	 * directly below it (falls back to right after Base color when Solid is
-	 * selected, since this row is hidden and takes no space then).
+	 * of the gradient controls so the Intensity row can sit directly below it
+	 * (see the order renderColorSection builds them in).
 	 */
 	private buildGradientToRow(parent: HTMLElement): void {
 		const toSetting = new Setting(parent).setName(t("palette.gradientTo"));
+		this.colorCardRows.push(toSetting.settingEl);
 		this.gradToInput = createColorSwatchInput(
 			toSetting.controlEl,
 			this.gradientToBase,
@@ -820,7 +860,6 @@ export class PaletteEditorModal extends Modal {
 				this.preview?.refresh();
 			},
 		).input;
-		this.gradientRows.push(toSetting.settingEl);
 	}
 
 	/**
@@ -831,11 +870,11 @@ export class PaletteEditorModal extends Modal {
 		const dirSetting = new Setting(parent).setName(
 			t("palette.gradientDirection"),
 		);
+		this.colorCardRows.push(dirSetting.settingEl);
 		this.buildDirectionPicker(dirSetting.controlEl, this.angleDeg, (deg) => {
 			this.angleDeg = deg;
 			this.preview?.refresh();
 		});
-		this.gradientRows.push(dirSetting.settingEl);
 
 		const textSetting = new Setting(parent)
 			.setName(t("palette.gradientText"))
@@ -845,8 +884,7 @@ export class PaletteEditorModal extends Modal {
 					this.preview?.refresh();
 				});
 			});
-		this.gradientRows.push(textSetting.settingEl);
-		this.updateGradientVisibility();
+		this.colorCardRows.push(textSetting.settingEl);
 	}
 
 	/**
@@ -879,15 +917,11 @@ export class PaletteEditorModal extends Modal {
 		}
 	}
 
-	/** Shows/hides the gradient rows to match the current style choice. */
-	private updateGradientVisibility(): void {
-		const off = this.bgStyle !== "gradient";
-		for (const row of this.gradientRows) {
-			row.toggleClass("cs-gradient-hidden", off);
-		}
-	}
-
-	/** Pushes gradient colors into their swatches after a programmatic change. */
+	/**
+	 * Pushes gradient colors into their swatches after a programmatic change.
+	 * A no-op while the second-color row isn't built — every other style leaves
+	 * `gradToInput` null (see renderColorSection).
+	 */
 	private syncGradientInputs(): void {
 		const entries: [HTMLInputElement | null | undefined, string][] = [
 			[this.gradToInput, this.gradientToBase],
@@ -995,6 +1029,11 @@ export class PaletteEditorModal extends Modal {
 		this.preview?.destroy();
 		this.preview = null;
 		this.contentEl.empty();
+		// Detached with the content above, so drop the handles rather than
+		// leave the card's rows reachable from a closed window.
+		this.colorCardEl = null;
+		this.colorCardRows = [];
+		this.gradToInput = null;
 		// The button bar is a sibling of contentEl, so emptying that misses it.
 		removeModalChrome(this);
 		if (this.resolve) {

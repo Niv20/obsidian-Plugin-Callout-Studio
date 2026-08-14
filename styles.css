@@ -3097,6 +3097,18 @@ input.cs-input-invalid:focus {
 		.callout-studio-preview-panel {
 		grid-template-columns: 1fr;
 	}
+	/* …and once stacked, put the options back on top. Its preview column comes
+	   FIRST in the DOM (that is what puts it on the left on a wide window), so
+	   the stack would otherwise open on a preview card up to 340px tall with
+	   every control pushed below the fold. `order` is all it takes — these are
+	   grid items. The callout editor needs no counterpart: its DOM order is
+	   preview-first too, but it stacks under a form that already fills the top
+	   of the window. */
+	.callout-studio-editor-modal
+		.callout-studio-palette-editor
+		.callout-studio-preview-col {
+		order: 2;
+	}
 	/* Same fix for the per-role "Global callout style" popups (opened from the
 	   3 "Customize" buttons in Global settings): their own unscoped override
 	   below (`.cs-role-style-modal .callout-studio-preview-panel`, 2 classes,
@@ -3387,11 +3399,13 @@ input.cs-input-invalid:focus {
 	display: flex;
 }
 
-/* Palette editor modal — two-column body: options (left, narrow) + sticky
-   preview (right, flexible). Columns follow DOM order, so only the widths
-   need overriding vs. the callout editor's panel. */
+/* Palette editor modal — two-column body: sticky preview (left, flexible) +
+   control cards (right, fixed). Columns follow DOM order, so only the widths
+   need overriding vs. the callout editor's panel. Deliberately the same pair of
+   values as `.cs-role-style-modal` below: the two windows are meant to read as
+   one layout, so they should stay in step. */
 .callout-studio-palette-editor .callout-studio-preview-panel {
-	grid-template-columns: 240px minmax(0, 1fr);
+	grid-template-columns: minmax(0, 1fr) 280px;
 	justify-content: stretch;
 }
 
@@ -3407,11 +3421,12 @@ input.cs-input-invalid:focus {
 }
 
 /* ── Name field + Style dropdown: one shared width ───────────────
-   The column above is 240px, and these are the only two rows in it whose
-   control is a box with an edge of its own (everything below is a colour
-   swatch, a slider or a toggle). Left alone they size to their content — the
-   text input to its browser default, the select to its longest option — so the
-   two boxes stacked directly on top of each other ended on different edges.
+   These two share the "Palette" card, and they are the only rows in the column
+   whose control is a box with an edge of its own (everything in the Colors card
+   below is a colour swatch, a slider or a toggle). Left alone they size to their
+   content — the text input to its browser default, the select to its longest
+   option — so the two boxes stacked directly on top of each other ended on
+   different edges.
 
    One variable rather than a number on each rule, mirroring
    `--cs-editor-control-width` in the callout editor: the phone case is then a
@@ -3419,9 +3434,9 @@ input.cs-input-invalid:focus {
    Obsidian's `.setting-item-control` is a growing flex item and would otherwise
    ignore the width and fill the row.
 
-   The value leaves ~100px for the name column beside it, which every label
-   here fits on one line — including the longest translations of "Name" and
-   "Style". */
+   The value leaves ~110px for the name column beside it (280px of column, less
+   the card's border and its 14px side padding), which every label here fits on
+   one line — including the longest translations of "Name" and "Style". */
 .callout-studio-palette-editor {
 	--cs-palette-control-width: 140px;
 }
@@ -3457,61 +3472,61 @@ input.cs-input-invalid:focus {
 	min-width: 0;
 }
 
-/* ── Option-column row rhythm ────────────────────────────────────
-   Obsidian 1.13 gives every modal setting row its own hairline plus 16px of air
-   on each side of it, so consecutive rows are symmetric on their own:
+/* ── Card row separators ─────────────────────────────────────────
+   This column holds two `cs-layout-group` cards (see createControlGroup), and
+   that modifier strips every row's chrome — including the border Obsidian draws
+   between consecutive modal rows — so a card of 3-5 rows would run together as
+   one block. Put a hairline back between siblings.
 
-     .modal:not(.mod-settings) .setting-item:not(.setting-item-heading)
-       :where(:not(.setting-group *)) { padding: var(--size-4-4) 0;
-                                        border-top: var(--border-width) … }
-     …:first-child { border-top: none; padding-top: 0 }      (0,5,0)
-     …:last-child  { padding-bottom: 0 }                     (0,5,0)
+   A universal sibling selector rather than `.setting-item + .setting-item`
+   because the Intensity row is a .callout-studio-slider-row div, not a Setting,
+   and it needs the same line above and below it as every other row. The
+   `:not()` excludes the card's own header band — it is child #1, so the first
+   row would otherwise take a hairline directly under it, which none of the
+   cards in the per-role style popups draw.
 
-   Two things pulled this column off that grid; both are undone below.
+   The class is doubled so this outweighs the `border: none` it has to beat,
+   which lives on `.modal .cs-settings-group.cs-layout-group > .setting-item:not(…)`
+   at (0,5,0) — the house style throughout this file, in preference to
+   !important.
 
-   1. The shared .callout-studio-adjust-col carries `gap: 8px`, which is right
-      where that column holds .callout-studio-adjust-section cards (the callout
-      editor, the per-role style popups) and wrong here, where it holds bare
-      setting rows: the gap lands BELOW a row's 16px bottom padding but ABOVE the
-      next row's border, so every line sat 24px under one row and 16px over the
-      next — most obvious on a short row like Direction. The rows already carry
-      their own spacing, so the gap goes rather than gets halved.
-
-   2. :first-child / :last-child are structural, not visual, so the
-      .cs-palette-color-section wrapper re-triggers both edge rules INSIDE
-      itself. In the simple view that wrapper holds exactly one row — Base color
-      — which therefore matched both and came out with no vertical padding at
-      all: visibly shorter than Second color, with its hint text flush against
-      the line below. In the advanced view the "Colors" header lost its top
-      padding and the Text color row its bottom padding. The column's own last
-      row is caught by the same rule, and that row is the Gradient title text one
-      — hidden in Solid — so the column ended flush in Gradient and 16px lower in
-      Solid.
-
-   Doubling .setting-item takes these to (0,6,0) so they beat the core rules
-   outright rather than on load order, the way the rest of this file does it. No
-   border-top is restored on the wrapper's first row: .cs-palette-divider already
-   draws that line. */
-.callout-studio-palette-editor .callout-studio-adjust-col {
-	gap: 0;
+   This works only because renderColorSection() REBUILDS the card's rows instead
+   of hiding them: `+` is structural, so a row parked under `display: none`
+   would still count as the previous sibling and hand a stray line to the first
+   row actually on screen. */
+.modal
+	.callout-studio-palette-editor
+	.cs-settings-group.cs-settings-group.cs-layout-group
+	> :not(.cs-settings-group-header) + * {
+	border-top: var(--border-width) solid var(--background-modifier-border);
 }
 
-.callout-studio-editor-modal
-	.callout-studio-palette-editor
-	.cs-palette-color-section
-	> .setting-item.setting-item:first-child {
-	padding-top: var(--size-4-4);
+/* The Intensity row is a .callout-studio-slider-row sharing a card with plain
+   Setting rows, and the two carry different side padding of their own — 10px on
+   the slider row, 14px from the cs-layout-group rule on the Settings — so its
+   label and track sat 4px left of every other label in the card. Only the
+   inline padding is taken over; the vertical rhythm is left exactly as the
+   per-role style popups have it, since that is the look being matched. */
+.callout-studio-palette-editor .callout-studio-slider-row {
+	padding-inline: 14px;
 }
 
-.callout-studio-editor-modal
-	.callout-studio-palette-editor
-	.cs-palette-color-section
-	> .setting-item.setting-item:last-child,
-.callout-studio-editor-modal
-	.callout-studio-palette-editor
-	.callout-studio-adjust-col
-	> .setting-item.setting-item:last-child {
-	padding-bottom: var(--size-4-4);
+/* The advanced grid's "you are editing {mode} colors" line is a Setting with a
+   description but no name. Drop the empty name element so it cannot contribute
+   a stray line box above the sentence. */
+.callout-studio-palette-editor .cs-palette-mode-note .setting-item-name:empty {
+	display: none;
+}
+
+/* The duplicate-colour message sits between the two cards, in a flex column
+   with `gap: 8px`. .cs-tag-error hides itself with opacity + max-height rather
+   than `display`, which keeps it a flex item — and so keeps its share of the
+   gap — leaving 8px of dead air between the cards whenever there is no clash.
+   Taking it out of flow costs the 0.3s fade, which is no loss here: this error
+   appears and disappears under a colour drag, where a fade is the wrong effect
+   anyway. The name error, which lives inside a row's description, keeps it. */
+.callout-studio-palette-editor .cs-palette-color-error:not(.is-visible) {
+	display: none;
 }
 
 /* "Customize all colors" collapsible card header. The button element keeps
@@ -3553,17 +3568,10 @@ input.cs-input-invalid:focus {
 	transform: rotate(90deg);
 }
 
-/* Rows/controls shown only while the gradient background is enabled.
-   Both hide utilities below land on a Setting's own .setting-item element,
-   whose `display: flex` is exactly as specific as a single class — so the
-   class is doubled to win on specificity rather than on which stylesheet
-   happens to be loaded last. */
-.cs-gradient-hidden.cs-gradient-hidden {
-	display: none;
-}
-
-/* Generic row-hide utility (e.g. the Intensity slider while the palette
-   editor's advanced per-color grid is showing) */
+/* Generic row-hide utility (e.g. the command editor's role-specific rows). It
+   lands on a Setting's own .setting-item element, whose `display: flex` is
+   exactly as specific as a single class — so the class is doubled to win on
+   specificity rather than on which stylesheet happens to be loaded last. */
 .cs-row-hidden.cs-row-hidden {
 	display: none;
 }
@@ -3614,17 +3622,6 @@ input.cs-input-invalid:focus {
 	display: inline;
 	margin: 0;
 	font-size: inherit;
-}
-
-/* Fixed divider under the palette editor's Style row, shown regardless of
-   Solid/Gradient. Modals do NOT suppress the setting-item border-top — each row
-   draws its own (see the rhythm block above). The line is needed here because
-   the row below is the first child of the .cs-palette-color-section wrapper and
-   so matches Obsidian's `:first-child { border-top: none }` rule, which is what
-   takes its own line away. Same hairline width as those borders, so the two read
-   as one rule down the column. */
-.cs-palette-divider {
-	border-top: var(--border-width) solid var(--background-modifier-border);
 }
 
 /* linear-gradient direction picker */

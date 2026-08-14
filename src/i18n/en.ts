@@ -340,6 +340,7 @@ export const en: Record<string, string> = {
 	// Palette editor modal
 	"palette.newTitle": "New color palette",
 	"palette.editTitle": "Edit color palette",
+	"palette.groupPalette": "Palette",
 	"palette.name": "Name",
 	"palette.namePlaceholder": "My palette",
 	"palette.nameExists": "A palette with this name already exists",
@@ -347,6 +348,8 @@ export const en: Record<string, string> = {
 	"palette.baseColorHint":
 		"We'll automatically match the background color to it. If you'd like, you can control it separately by {{link}}.",
 	"palette.baseColorHintLink": "clicking here",
+	// Doubles as the title of the palette editor's "Colors" card, which holds
+	// the simple Base color row as well as the advanced per-channel grid.
 	"palette.advancedColors": "Colors",
 	"palette.advancedColorsHint":
 		"Editing colors for {{mode}} mode - the other mode updates automatically. Switch Obsidian's theme to check it.",
