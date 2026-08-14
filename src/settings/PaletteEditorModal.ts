@@ -101,6 +101,26 @@ const DEFAULT_GRADIENT_ANGLE = 135;
 const GRADIENT_HUE_SHIFT = 45;
 
 /**
+ * Whether the advanced per-color grid offers a hand-editable **Text color**
+ * row (see buildAdvancedColorRows).
+ *
+ * Deliberately off: there is no need to hand-pick a callout's text color right
+ * now, so the channel simply isn't offered. This gates the CONTROL only —
+ * support for the channel is untouched everywhere else and is meant to stay
+ * that way: a palette still carries `textColorLight`/`textColorDark`,
+ * `derivePaletteFromColor` still derives them (contrast-corrected) from the
+ * base color, and import/CSS still honour whatever an existing palette
+ * already stores. So a palette saved with a hand-picked text color keeps
+ * painting it; it just can no longer be changed from here.
+ *
+ * Flipping this back to `true` restores the row exactly as it was, contrast
+ * warning included — that is the whole cost of bringing the feature back.
+ * Annotated `boolean` rather than left as the literal `false` so both branches
+ * stay type-checked while it is off.
+ */
+const SHOW_TEXT_COLOR_CHANNEL: boolean = false;
+
+/**
  * How the palette paints its background. `"none"` is not a third way of
  * colouring one — it is the absence of a background (`transparentBg`), which is
  * why it lives here rather than at the bottom of the Intensity slider: an
@@ -729,7 +749,8 @@ export class PaletteEditorModal extends Modal {
 	 * Advanced per-color grid: a note saying which theme mode is being edited
 	 * (with the "Revert" link back to the single Base color, which re-derives
 	 * all six from it rather than keeping the edits below), then independent
-	 * Accent/Background/Text swatches for ONLY that mode. Editing one infers a
+	 * Accent/Background swatches for ONLY that mode — plus Text, which is
+	 * gated off behind {@link SHOW_TEXT_COLOR_CHANNEL}. Editing one infers a
 	 * matching value for the hidden mode via inferOppositeModeColor (mirror
 	 * lightness, then contrast-correct for Accent/Text — see that
 	 * function's doc). Deliberately per-channel: editing Accent never
@@ -786,9 +807,11 @@ export class PaletteEditorModal extends Modal {
 			? "textColorLight"
 			: "textColorDark";
 
-		// One helper for the three rows so each is registered for teardown
+		// One helper for the channel rows so each is registered for teardown
 		// exactly once — the swatch call used to build its Setting inline, and
-		// an inline Setting has no handle to push onto colorCardRows.
+		// an inline Setting has no handle to push onto colorCardRows. Called
+		// only from a row that is actually built, so a gated-off channel adds
+		// nothing to the card and nothing to tear down.
 		const channelRow = (label: string): HTMLElement => {
 			const setting = new Setting(parent).setName(label);
 			this.colorCardRows.push(setting.settingEl);
@@ -827,35 +850,44 @@ export class PaletteEditorModal extends Modal {
 			},
 		);
 
-		const textSwatch = createColorSwatchInput(
-			channelRow(t("palette.textColorChannel")),
-			this.colors[textKey],
-			(hex) => {
-				this.colors[textKey] = hex;
-				this.colors[textOppositeKey] = inferOppositeModeColor(
-					hex,
-					isDark,
-					this.colors[bgOppositeKey],
-					4.5,
-				);
-				refreshWarnings();
-				this.preview?.refresh();
-			},
-		);
+		// Kept whole, behind the flag, rather than deleted: the channel is still
+		// a real part of a palette, so this stays ready to switch back on.
+		const textSwatch = SHOW_TEXT_COLOR_CHANNEL
+			? createColorSwatchInput(
+					channelRow(t("palette.textColorChannel")),
+					this.colors[textKey],
+					(hex) => {
+						this.colors[textKey] = hex;
+						this.colors[textOppositeKey] = inferOppositeModeColor(
+							hex,
+							isDark,
+							this.colors[bgOppositeKey],
+							4.5,
+						);
+						refreshWarnings();
+						this.preview?.refresh();
+					},
+				)
+			: null;
 
-		// Re-checks the two contrast-dependent swatches (Accent >=3:1, Text
-		// >=4.5:1) against the current mode's bg after any of the three rows
-		// changes — a non-blocking heads-up, never a block on Save.
+		// Re-checks the contrast-dependent swatches (Accent >=3:1, Text
+		// >=4.5:1) against the current mode's bg after any row changes — a
+		// non-blocking heads-up, never a block on Save. The Text check needs
+		// its swatch to have a badge to write to, so it follows the flag: with
+		// the row gone the text color is whatever derivation produced, which is
+		// already contrast-corrected, so there is nothing to warn about.
 		const refreshWarnings = (): void => {
 			const bg = this.colors[bgKey];
 			setContrastWarning(
 				accentSwatch.warnEl,
 				contrastRatio(this.colors[accentKey], bg) < 3,
 			);
-			setContrastWarning(
-				textSwatch.warnEl,
-				contrastRatio(this.colors[textKey], bg) < 4.5,
-			);
+			if (textSwatch) {
+				setContrastWarning(
+					textSwatch.warnEl,
+					contrastRatio(this.colors[textKey], bg) < 4.5,
+				);
+			}
 		};
 		refreshWarnings();
 	}
