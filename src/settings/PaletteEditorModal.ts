@@ -727,7 +727,12 @@ export class PaletteEditorModal extends Modal {
 	 * (requirement: Gradient is never affected by this feature).
 	 */
 	private buildSimpleColorRow(parent: HTMLElement): void {
-		const baseSetting = new Setting(parent).setName(t("palette.baseColor"));
+		// Every colour row in this card carries `cs-row-inline`: the control is
+		// one small swatch, which the phone would otherwise park on a full-width
+		// row of its own under the label. See the class in styles.css.
+		const baseSetting = new Setting(parent)
+			.setName(t("palette.baseColor"))
+			.setClass("cs-row-inline");
 		this.colorCardRows.push(baseSetting.settingEl);
 		createColorSwatchInput(baseSetting.controlEl, this.baseColor, (hex) => {
 			this.baseColor = hex;
@@ -813,7 +818,9 @@ export class PaletteEditorModal extends Modal {
 		// only from a row that is actually built, so a gated-off channel adds
 		// nothing to the card and nothing to tear down.
 		const channelRow = (label: string): HTMLElement => {
-			const setting = new Setting(parent).setName(label);
+			const setting = new Setting(parent)
+				.setName(label)
+				.setClass("cs-row-inline");
 			this.colorCardRows.push(setting.settingEl);
 			return setting.controlEl;
 		};
@@ -898,7 +905,9 @@ export class PaletteEditorModal extends Modal {
 	 * (see the order renderColorSection builds them in).
 	 */
 	private buildGradientToRow(parent: HTMLElement): void {
-		const toSetting = new Setting(parent).setName(t("palette.gradientTo"));
+		const toSetting = new Setting(parent)
+			.setName(t("palette.gradientTo"))
+			.setClass("cs-row-inline");
 		this.colorCardRows.push(toSetting.settingEl);
 		this.gradToInput = createColorSwatchInput(
 			toSetting.controlEl,
@@ -918,9 +927,11 @@ export class PaletteEditorModal extends Modal {
 	 * direction picker and the title-text sweep toggle.
 	 */
 	private buildGradientDirectionAndTextRows(parent: HTMLElement): void {
-		const dirSetting = new Setting(parent).setName(
-			t("palette.gradientDirection"),
-		);
+		// Three 26px arrows on the phone (see the .is-mobile rule that pins that
+		// size) — well under the width of a row, so `cs-row-inline` too.
+		const dirSetting = new Setting(parent)
+			.setName(t("palette.gradientDirection"))
+			.setClass("cs-row-inline");
 		this.colorCardRows.push(dirSetting.settingEl);
 		this.buildDirectionPicker(dirSetting.controlEl, this.angleDeg, (deg) => {
 			this.angleDeg = deg;

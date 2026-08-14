@@ -587,8 +587,12 @@ export class CalloutEditor extends Modal {
 			.setDesc(t("editor.colorsDesc"));
 
 		// Icon
+		// `cs-row-inline` keeps the tile beside the label on the phone instead
+		// of on a full-width row of its own — the tile is a fixed 44px box, so
+		// the row below it would be mostly empty. See the class in styles.css.
 		const iconSetting = new Setting(contentEl)
 			.setName(t("editor.icon"))
+			.setClass("cs-row-inline")
 			.setDesc(this.getIconLabel());
 
 		// The tile *is* the picker. A preview square beside a "Pick icon" button

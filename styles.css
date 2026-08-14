@@ -1189,6 +1189,51 @@ button.callout-studio-icon-picker-loading {
 	align-items: center;
 }
 
+/* ── Rows that keep their control on the label's line ─────────────
+   Obsidian stacks every setting row on the phone — name above, control on a
+   full-width row below:
+
+     .is-phone .setting-item:not(.mod-toggle):not(.setting-item-heading)
+                            :not(.mod-list-item)              (0,4,0)
+     …the same selector, ` .setting-item-control`             (0,5,0)
+
+   which is right for a text field or a dropdown, where the full width IS the
+   point, and wrong for a row whose control is a fixed little box. A 44x32
+   colour swatch or a 44px icon tile parked alone on the line below its label
+   reads as a second, half-empty row — the window grows by a row per control
+   and says nothing more. Obsidian exempts `.mod-toggle` for exactly this
+   reason; this class extends the same exemption to the few rows that earn it.
+
+   Opt-in per row, never blanket: the rows deliberately left stacked (Display
+   name, Callout IDs, palette Name, Background style, the command dropdowns,
+   every button row in the settings tab) hold controls that really do want the
+   width. Grep `cs-row-inline` for the current call sites.
+
+   The class is tripled so this clears both core rules on specificity rather
+   than !important — the house style throughout this file. Phone-only because
+   nothing else stacks these rows in the first place: on desktop and iPad they
+   are already on one line, and the base `.cs-modal .setting-item` rule above
+   is what centres them there. */
+.is-phone .setting-item.cs-row-inline.cs-row-inline.cs-row-inline {
+	flex-direction: row;
+	align-items: center;
+}
+
+/* Undoing the stacked `width: 100%` is not enough on its own: the control
+   column is a growing flex item by default (`.setting-item-control
+   { flex: 1 1 auto }`), so it would still stretch to the row's full width and
+   push a 44px swatch to the far edge with the label crushed beside it.
+   Shrink-wrapping it is what hands the leftover space back to the name, which
+   is the half that can use it — an icon row's description is the icon's full
+   name, and it wraps. */
+.is-phone
+	.setting-item.cs-row-inline.cs-row-inline.cs-row-inline
+	.setting-item-control {
+	margin-top: 0;
+	width: auto;
+	flex: 0 0 auto;
+}
+
 /* ── Footer ───────────────────────────────────────────────────────
    Mirror of the header. Windows with no actions never build one, so an empty
    bar can't leave a stray second rule along the bottom. */
