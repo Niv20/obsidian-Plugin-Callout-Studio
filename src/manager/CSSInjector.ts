@@ -596,6 +596,59 @@ export class CSSInjector {
 	}
 
 	/**
+	 * The outline half of `transparentBg` — emitted only for a def that clears
+	 * its background, and only for the block-callout roles.
+	 *
+	 * Clearing the background alone still leaves the box outlined on any theme
+	 * that gives callouts a frame. Core draws that frame itself:
+	 *
+	 *     .callout {
+	 *       border-style: solid;
+	 *       border-color: color-mix(in oklch, var(--callout-color)
+	 *                     calc(var(--callout-border-opacity) * 100%), transparent);
+	 *       border-width: var(--callout-border-width);   // 0px out of the box
+	 *     }
+	 *
+	 * so a theme turns it on by doing nothing more than raising that width — and
+	 * the colour it comes out in is `--callout-color`, which is *this plugin's*
+	 * accent. The callout the user asked to disappear reads as an empty outline
+	 * in their custom colour instead. Some themes draw the same frame — or an
+	 * elevation ring — as an inset `box-shadow` keyed off the very same
+	 * variable instead of (or in addition to) `border`, so both have to go.
+	 *
+	 * `border-color` rather than the `--callout-border-opacity` knob, even
+	 * though the knob is what core's own rule reads: custom properties inherit,
+	 * so zeroing it here would also silently reach every callout NESTED inside
+	 * this one and strip the theme's frame off callouts nobody made transparent.
+	 * The colour is per-element and can't leak. It also outranks the variable
+	 * route anyway — core declares the border on `.callout` (0,1,0) while this
+	 * lands on `.callout[data-callout="…"]` (0,2,0). `box-shadow: none` has no
+	 * comparable variable to leak through in the first place — it fully
+	 * replaces whatever the theme declared for this callout alone.
+	 *
+	 * The width is deliberately left alone: the frame keeps its box, so a
+	 * transparent callout still lines up with its neighbours and nothing
+	 * reflows — only the ink goes.
+	 *
+	 * `border-color` is empty when the user has switched the plugin's OWN
+	 * global border on. That border is an explicit choice, drawn in the accent
+	 * by `generateGlobalStyleCSS` at one class less than this rule, so clearing
+	 * the colour here would quietly erase it. `box-shadow: none` carries no
+	 * such conflict — the plugin never draws its own border that way — so it is
+	 * unconditional.
+	 */
+	private transparentBorderProps(important = false): string[] {
+		const imp = important ? " !important" : "";
+		const { top, right, bottom, left } =
+			this.registry.settings.globalStyle.borderSides;
+		const props = [`  box-shadow: none${imp};`];
+		if (!(top || right || bottom || left)) {
+			props.push(`  border-color: transparent${imp};`);
+		}
+		return props;
+	}
+
+	/**
 	 * The `background-image` layer for one mode: the gradient sweep, or null
 	 * when the def has no gradient, or when the mode has no background color
 	 * to sweep from.
@@ -779,6 +832,12 @@ export class CSSInjector {
 		const lightProps: string[] = [...this.accentProps(def, "light")];
 		if (iconCSS) lightProps.push(`  --callout-icon: ${iconCSS};`);
 		lightProps.push(...this.bgProps(def, "light"));
+		// Only in the light rule, which is unscoped and so matches both themes:
+		// the frame's colour is the same in either one, and the dark block below
+		// exists purely for the values that differ.
+		if (def.transparentBg) {
+			lightProps.push(...this.transparentBorderProps());
+		}
 		parts.push(
 			`${calloutSel(def.id)} {\n${lightProps.join("\n")}\n}`,
 		);
@@ -2056,6 +2115,11 @@ export class CSSInjector {
 		if (iconCSS)
 			lightProps.push(`  --callout-icon: ${iconCSS} !important;`);
 		lightProps.push(...this.bgProps(fallbackDef, "light", true));
+		// Same border pass the registered ids get, so an unknown id inherits a
+		// transparent fallback whole rather than as a frame with nothing in it.
+		if (fallbackDef.transparentBg) {
+			lightProps.push(...this.transparentBorderProps(true));
+		}
 		parts.push(
 			`body .callout${notSelectors} {\n${lightProps.join("\n")}\n}`,
 		);
