@@ -316,6 +316,7 @@ export const uk: Record<string, string> = {
 
 	// Palette editor modal
 	"palette.newTitle": "Нова кольорова палітра",
+	"palette.groupPalette": "Палітра",
 	"palette.editTitle": "Редагувати кольорову палітру",
 	"palette.name": "Назва",
 	"palette.namePlaceholder": "Моя палітра",

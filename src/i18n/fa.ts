@@ -314,6 +314,7 @@ export const fa: Record<string, string> = {
 
 	// Palette editor modal
 	"palette.newTitle": "پالت رنگ جدید",
+	"palette.groupPalette": "پالت",
 	"palette.editTitle": "ویرایش پالت رنگ",
 	"palette.name": "نام",
 	"palette.namePlaceholder": "پالت من",

@@ -299,6 +299,7 @@ export const nb: Record<string, string> = {
 	"editor.externalStyleClose": "Forstått",
 	// Palette editor modal
 	"palette.newTitle": "Ny fargepalett",
+	"palette.groupPalette": "Palett",
 	"palette.editTitle": "Rediger fargepalett",
 	"palette.name": "Navn",
 	"palette.namePlaceholder": "Min palett",

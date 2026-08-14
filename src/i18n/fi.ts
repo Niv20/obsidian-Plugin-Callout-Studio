@@ -295,6 +295,7 @@ export const fi: Record<string, string> = {
 	"editor.externalStyleClose": "Selvä",
 	// Palette editor modal
 	"palette.newTitle": "Uusi väripaletti",
+	"palette.groupPalette": "Paletti",
 	"palette.editTitle": "Muokkaa väripalettia",
 	"palette.name": "Nimi",
 	"palette.namePlaceholder": "Oma paletti",

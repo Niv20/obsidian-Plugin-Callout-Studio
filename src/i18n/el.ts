@@ -304,6 +304,7 @@ export const el: Record<string, string> = {
 	"editor.externalStyleClose": "Το κατάλαβα",
 	// Palette editor modal
 	"palette.newTitle": "Νέα παλέτα χρωμάτων",
+	"palette.groupPalette": "Παλέτα",
 	"palette.editTitle": "Επεξεργασία παλέτας χρωμάτων",
 	"palette.name": "Όνομα",
 	"palette.namePlaceholder": "Η παλέτα μου",

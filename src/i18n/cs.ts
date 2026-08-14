@@ -313,6 +313,7 @@ export const cs: Record<string, string> = {
 
 	// Palette editor modal
 	"palette.newTitle": "Nová barevná paleta",
+	"palette.groupPalette": "Paleta",
 	"palette.editTitle": "Upravit barevnou paletu",
 	"palette.name": "Název",
 	"palette.namePlaceholder": "Moje paleta",

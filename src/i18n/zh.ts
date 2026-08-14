@@ -301,6 +301,7 @@ export const zh: Record<string, string> = {
 
 	// Palette editor modal
 	"palette.newTitle": "新建调色板",
+	"palette.groupPalette": "调色板",
 	"palette.editTitle": "编辑调色板",
 	"palette.name": "名称",
 	"palette.namePlaceholder": "我的调色板",

@@ -319,6 +319,7 @@ export const fr: Record<string, string> = {
 
 	// Palette editor modal
 	"palette.newTitle": "Nouvelle palette de couleurs",
+	"palette.groupPalette": "Palette",
 	"palette.editTitle": "Modifier la palette de couleurs",
 	"palette.name": "Nom",
 	"palette.namePlaceholder": "Ma palette",

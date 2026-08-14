@@ -314,6 +314,7 @@ export const id: Record<string, string> = {
 
 	// Palette editor modal
 	"palette.newTitle": "Palet warna baru",
+	"palette.groupPalette": "Palet",
 	"palette.editTitle": "Edit palet warna",
 	"palette.name": "Nama",
 	"palette.namePlaceholder": "Palet saya",

@@ -284,6 +284,7 @@ export const zhTW: Record<string, string> = {
 	"editor.externalStyleClose": "知道了",
 	// Palette editor modal
 	"palette.newTitle": "新增調色盤",
+	"palette.groupPalette": "調色盤",
 	"palette.editTitle": "編輯調色盤",
 	"palette.name": "名稱",
 	"palette.namePlaceholder": "我的調色盤",

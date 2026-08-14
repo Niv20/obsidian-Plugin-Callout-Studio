@@ -305,6 +305,7 @@ export const ms: Record<string, string> = {
 	"editor.externalStyleClose": "Faham",
 	// Palette editor modal
 	"palette.newTitle": "Palet warna baharu",
+	"palette.groupPalette": "Palet",
 	"palette.editTitle": "Edit palet warna",
 	"palette.name": "Nama",
 	"palette.namePlaceholder": "Palet saya",

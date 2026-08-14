@@ -312,6 +312,7 @@ export const ko: Record<string, string> = {
 
 	// Palette editor modal
 	"palette.newTitle": "새 색상 팔레트",
+	"palette.groupPalette": "팔레트",
 	"palette.editTitle": "색상 팔레트 편집",
 	"palette.name": "이름",
 	"palette.namePlaceholder": "내 팔레트",

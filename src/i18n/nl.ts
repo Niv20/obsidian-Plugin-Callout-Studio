@@ -317,6 +317,7 @@ export const nl: Record<string, string> = {
 
 	// Palette editor modal
 	"palette.newTitle": "Nieuw kleurenpalet",
+	"palette.groupPalette": "Palet",
 	"palette.editTitle": "Kleurenpalet bewerken",
 	"palette.name": "Naam",
 	"palette.namePlaceholder": "Mijn palet",

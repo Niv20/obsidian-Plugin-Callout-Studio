@@ -315,6 +315,7 @@ export const sv: Record<string, string> = {
 
 	// Palette editor modal
 	"palette.newTitle": "Ny färgpalett",
+	"palette.groupPalette": "Palett",
 	"palette.editTitle": "Redigera färgpalett",
 	"palette.name": "Namn",
 	"palette.namePlaceholder": "Min palett",

@@ -297,6 +297,7 @@ export const da: Record<string, string> = {
 	"editor.externalStyleClose": "Forstået",
 	// Palette editor modal
 	"palette.newTitle": "Ny farvepalet",
+	"palette.groupPalette": "Palette",
 	"palette.editTitle": "Rediger farvepalet",
 	"palette.name": "Navn",
 	"palette.namePlaceholder": "Min palet",

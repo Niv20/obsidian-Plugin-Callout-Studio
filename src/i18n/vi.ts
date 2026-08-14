@@ -311,6 +311,7 @@ export const vi: Record<string, string> = {
 
 	// Palette editor modal
 	"palette.newTitle": "Bảng màu mới",
+	"palette.groupPalette": "Bảng màu",
 	"palette.editTitle": "Chỉnh sửa bảng màu",
 	"palette.name": "Tên",
 	"palette.namePlaceholder": "Bảng màu của tôi",

@@ -315,6 +315,7 @@ export const hi: Record<string, string> = {
 
 	// Palette editor modal
 	"palette.newTitle": "नया रंग पैलेट",
+	"palette.groupPalette": "पैलेट",
 	"palette.editTitle": "रंग पैलेट संपादित करें",
 	"palette.name": "नाम",
 	"palette.namePlaceholder": "मेरा पैलेट",

@@ -335,6 +335,7 @@ export const he: Record<string, string> = {
 	// Icon Picker
 	// Palette editor modal
 	"palette.newTitle": "פלטת צבעים חדשה",
+	"palette.groupPalette": "פלטה",
 	"palette.editTitle": "עריכת פלטת צבעים",
 	"palette.name": "שם",
 	"palette.namePlaceholder": "הפלטה שלי",

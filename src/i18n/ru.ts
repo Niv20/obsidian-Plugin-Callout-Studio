@@ -314,6 +314,7 @@ export const ru: Record<string, string> = {
 
 	// Palette editor modal
 	"palette.newTitle": "Новая цветовая палитра",
+	"palette.groupPalette": "Палитра",
 	"palette.editTitle": "Редактировать цветовую палитру",
 	"palette.name": "Название",
 	"palette.namePlaceholder": "Моя палитра",

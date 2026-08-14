@@ -317,6 +317,7 @@ export const it: Record<string, string> = {
 
 	// Palette editor modal
 	"palette.newTitle": "Nuova tavolozza di colori",
+	"palette.groupPalette": "Tavolozza",
 	"palette.editTitle": "Modifica tavolozza di colori",
 	"palette.name": "Nome",
 	"palette.namePlaceholder": "La mia tavolozza",

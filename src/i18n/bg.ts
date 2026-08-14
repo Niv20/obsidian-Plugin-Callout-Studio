@@ -297,6 +297,7 @@ export const bg: Record<string, string> = {
 	"editor.externalStyleClose": "Разбрах",
 	// Palette editor modal
 	"palette.newTitle": "Нова цветова палитра",
+	"palette.groupPalette": "Палитра",
 	"palette.editTitle": "Редактиране на цветова палитра",
 	"palette.name": "Име",
 	"palette.namePlaceholder": "Моята палитра",

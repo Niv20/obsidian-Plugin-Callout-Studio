@@ -313,6 +313,7 @@ export const ja: Record<string, string> = {
 
 	// Palette editor modal
 	"palette.newTitle": "新しいカラーパレット",
+	"palette.groupPalette": "パレット",
 	"palette.editTitle": "カラーパレットを編集",
 	"palette.name": "名前",
 	"palette.namePlaceholder": "マイパレット",

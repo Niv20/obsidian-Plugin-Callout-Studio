@@ -319,6 +319,7 @@ export const hu: Record<string, string> = {
 
 	// Palette editor modal
 	"palette.newTitle": "Új színpaletta",
+	"palette.groupPalette": "Paletta",
 	"palette.editTitle": "Színpaletta szerkesztése",
 	"palette.name": "Név",
 	"palette.namePlaceholder": "Saját paletta",

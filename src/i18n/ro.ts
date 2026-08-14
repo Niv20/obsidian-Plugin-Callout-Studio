@@ -318,6 +318,7 @@ export const ro: Record<string, string> = {
 
 	// Palette editor modal
 	"palette.newTitle": "Paletă de culori nouă",
+	"palette.groupPalette": "Paletă",
 	"palette.editTitle": "Editați paleta de culori",
 	"palette.name": "Nume",
 	"palette.namePlaceholder": "Paleta mea",

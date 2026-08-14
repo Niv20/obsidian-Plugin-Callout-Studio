@@ -307,6 +307,7 @@ export const ar: Record<string, string> = {
 
 	// Palette editor modal
 	"palette.newTitle": "لوحة ألوان جديدة",
+	"palette.groupPalette": "لوحة",
 	"palette.editTitle": "تعديل لوحة الألوان",
 	"palette.name": "الاسم",
 	"palette.namePlaceholder": "لوحتي",

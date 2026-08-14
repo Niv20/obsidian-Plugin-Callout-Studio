@@ -316,6 +316,7 @@ export const tr: Record<string, string> = {
 
 	// Palette editor modal
 	"palette.newTitle": "Yeni renk paleti",
+	"palette.groupPalette": "Palet",
 	"palette.editTitle": "Renk paletini düzenle",
 	"palette.name": "Ad",
 	"palette.namePlaceholder": "Paletim",

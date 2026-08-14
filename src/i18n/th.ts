@@ -309,6 +309,7 @@ export const th: Record<string, string> = {
 
 	// Palette editor modal
 	"palette.newTitle": "ชุดสีใหม่",
+	"palette.groupPalette": "แผงสี",
 	"palette.editTitle": "แก้ไขชุดสี",
 	"palette.name": "ชื่อ",
 	"palette.namePlaceholder": "ชุดสีของฉัน",
