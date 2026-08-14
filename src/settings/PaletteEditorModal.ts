@@ -130,8 +130,15 @@ export class PaletteEditorModal extends Modal {
 	/**
 	 * Whether the color section shows the advanced per-color grid instead of
 	 * the single Base color control. Only takes effect while `bgStyle` is
-	 * "solid" (see renderColorSection); toggling it never changes any color
-	 * value, only which controls are shown.
+	 * "solid" (see renderColorSection).
+	 *
+	 * The two directions are deliberately not symmetric. Turning it ON is a
+	 * pure view switch — the grid opens on the six colors Base color already
+	 * derived, so there is nothing to convert. Turning it OFF is the "Revert"
+	 * link, and reverting to a single base color means the palette really does
+	 * go back to that color's derivation (see buildAdvancedColorRows); leaving
+	 * the hand-edited channels in place would show the base color in the row
+	 * while painting something else.
 	 */
 	private advancedColors: boolean;
 	/** The "Colors" card. Its header stays put; renderColorSection() rebuilds the rows under it. */
@@ -655,9 +662,11 @@ export class PaletteEditorModal extends Modal {
 	 * Direction / Gradient title text that state calls for.
 	 *
 	 * Called on open and whenever advancedColors or bgStyle changes. It never
-	 * touches a color value, purely a view switch (see the class-level doc on
-	 * advancedColors) — every value it doesn't show is still in state, and the
-	 * rows come back carrying it if the user switches back.
+	 * touches a color value itself — every value it doesn't show is still in
+	 * state, and the rows come back carrying it if the user switches back. Two
+	 * callers re-derive right after it returns, for reasons of their own: the
+	 * background-style dropdown (per-style default intensity) and the "Revert"
+	 * link (dropping the per-channel edits it just hid).
 	 *
 	 * The rows are torn down and rebuilt rather than hidden in place. They are
 	 * direct children of the card so that its sibling-separator rule can draw
@@ -718,7 +727,8 @@ export class PaletteEditorModal extends Modal {
 
 	/**
 	 * Advanced per-color grid: a note saying which theme mode is being edited
-	 * (with the link back to the single Base color), then independent
+	 * (with the "Revert" link back to the single Base color, which re-derives
+	 * all six from it rather than keeping the edits below), then independent
 	 * Accent/Background/Text swatches for ONLY that mode. Editing one infers a
 	 * matching value for the hidden mode via inferOppositeModeColor (mirror
 	 * lightness, then contrast-correct for Accent/Text — see that
@@ -742,9 +752,18 @@ export class PaletteEditorModal extends Modal {
 		renderInlineLinkHint(note.descEl, {
 			textKey: "palette.revertHint",
 			linkKey: "palette.revertHintLink",
+			// Reverting is an undo, not just a view switch: the six colors go
+			// back to what Base color derives, discarding whatever the rows
+			// above wrote. Without this the hand-edited channels stayed in
+			// state — the simple row showed the untouched base color while the
+			// preview, and then the saved palette, still painted the manual
+			// ones, so "revert" visibly did nothing. Rebuild first, then
+			// derive: applyDerived() pushes into swatches, which have to be the
+			// fresh ones (same order as the background-style dropdown).
 			onClick: () => {
 				this.advancedColors = false;
 				this.renderColorSection();
+				this.applyDerived();
 			},
 		});
 
