@@ -57,10 +57,12 @@ jobs:
             # the current size so a careless import trips it here rather than
             # in users' vaults; raise it consciously when a feature earns it.
             # Raised from 3 MiB for Tabler Icons, whose two search indexes are
-            # 357 KB between them for 5,130 icons.
+            # 357 KB between them for 5,130 icons. Raised again to 4 MiB for
+            # 2.9.0's custom commands feature, Callout Manager import support,
+            # and Palette Editor enhancements.
             - name: Check bundle size
               run: |
-                  limit=3670016  # 3.5 MiB
+                  limit=4194304  # 4 MiB
                   size=$(wc -c < main.js)
                   printf 'main.js is %s bytes (%.2f MiB), limit %s bytes.\n' \
                       "$size" "$(echo "scale=2; $size/1048576" | bc)" "$limit"
