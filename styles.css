@@ -4545,11 +4545,11 @@ input.cs-input-invalid:focus {
    view's RENDERED_HEADING_TOKEN_RE match consumes that separating space when
    stripping the token prefix (calloutPostProcessor.ts), so without this the
    title text would sit glued directly against the icon. Only set when the
-   source really had that space — `[!id]-Title` is glued in both views. */
-   `:not(.cs-token-empty)` because a hidden sibling is still a sibling: a
-   heading callout drawn with no icon leaves a token with nothing in it, and
-   spacing the title away from something that occupies no width would indent it
-   0.35em past the bar's own inset for no visible reason. */
+   source really had that space — `[!id]-Title` is glued in both views. The
+   selector spells out `:not(.cs-token-empty)` because a hidden sibling is still
+   a sibling: a heading callout drawn with no icon leaves a token with nothing
+   in it, and spacing the title away from something that occupies no width would
+   indent it 0.35em past the bar's own inset for no visible reason. */
 .cs-heading-callout:not(.cm-line)
 	.cs-heading-token:not(.cs-token-empty)
 	+ .cs-heading-title-gap {
