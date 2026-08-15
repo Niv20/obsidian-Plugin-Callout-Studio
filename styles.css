@@ -5033,6 +5033,15 @@ body.cs-anim-window .cs-heading-callout:not(.cm-line) {
 	opacity: 0.65;
 }
 
+/* A language the user has picked but that could not be downloaded yet. Styled
+   as a notice rather than an error: the plugin is fully usable in English, and
+   the next launch retries on its own, so this states a fact and offers a retry
+   instead of demanding attention. Only the name is tinted — a fully coloured
+   block would outweigh every real setting around it. */
+.callout-studio-locale-warning .setting-item-name {
+	color: var(--text-warning);
+}
+
 /* Sources the pooled "All sources" list cannot include yet. */
 .icon-picker-missing-sources {
 	padding: 8px 0 4px;

@@ -143,6 +143,40 @@ export function registerCalloutCommands(
 ): void {
 	for (const id of FIXED_COMMAND_IDS) {
 		if (!isFixedCommandEnabled(plugin.settings, id)) continue;
+		const command = buildFixedCommand(id, plugin, openEditor);
+		registeredNames.set(id, command.name);
+		plugin.addCommand(command);
+	}
+}
+
+/**
+ * The name each fixed command is currently registered under, so a refresh can
+ * tell a real language change from a no-op.
+ */
+const registeredNames = new Map<FixedCommandId, string>();
+
+/**
+ * Re-register the fixed commands whose displayed name has changed.
+ *
+ * The command palette snapshots a name when the command is added, and
+ * {@link registerCalloutCommands} only runs at startup — so without this, the
+ * translations that arrive after a download (or when the user picks a different
+ * language) leave the palette in the old language until Obsidian restarts.
+ *
+ * Re-adding under the **same id** is what makes this safe: Obsidian keys the
+ * user's hotkey by command id, so the binding survives. Only a changed name
+ * triggers the call, because `addCommand` mutates its argument and appends an
+ * unload callback — doing it needlessly would accumulate both.
+ */
+export function refreshFixedCommandNames(
+	plugin: CommandHostPlugin,
+	openEditor: () => CalloutEditor,
+): void {
+	for (const id of FIXED_COMMAND_IDS) {
+		if (!isFixedCommandEnabled(plugin.settings, id)) continue;
+		const name = t(FIXED_COMMAND_NAME_KEYS[id]);
+		if (registeredNames.get(id) === name) continue;
+		registeredNames.set(id, name);
 		plugin.addCommand(buildFixedCommand(id, plugin, openEditor));
 	}
 }
@@ -178,9 +212,12 @@ export function setFixedCommandEnabled(
 	const index = disabled.indexOf(id);
 	if (enabled) {
 		if (index >= 0) disabled.splice(index, 1);
-		plugin.addCommand(buildFixedCommand(id, plugin, openEditor));
+		const command = buildFixedCommand(id, plugin, openEditor);
+		registeredNames.set(id, command.name);
+		plugin.addCommand(command);
 	} else {
 		if (index < 0) disabled.push(id);
+		registeredNames.delete(id);
 		plugin.removeCommand(id);
 	}
 }

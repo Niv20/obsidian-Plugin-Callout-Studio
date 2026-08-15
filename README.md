@@ -195,6 +195,8 @@ Callout Studio never sends vault content anywhere, and collects no telemetry or 
 
 **Nothing is fetched by opening a note, or by opening the icon picker.** Browsing and searching every icon source works offline from the moment you install the plugin, because the names, keywords and categories are all bundled. Only artwork is ever downloaded, and only for icons you actually choose.
 
+The one request that is not tied to a button is the [translation](#translations) of your own interface language, and only when it is not already on your device.
+
 ### Downloadable icon sources
 
 Tabler Icons, Font Awesome, Octicons and RPG Awesome ship their artwork as files downloaded the first time you press **Download** on that source in the picker. After that the source works entirely offline. A source with styles is several files, one per style, fetched together by that one button — and only the ones you do not already have.
@@ -232,6 +234,25 @@ Material Symbols is the exception: it has over 100,000 style and weight combinat
 
 If you never open the Material source, none of this happens. If the preview font cannot be reached, the grid says so and shows icon names instead — searching and picking still work, and a **Try again** button retries once you are back online.
 
+### Translations
+
+Callout Studio's interface is available in 32 languages. **English is built in; the other 31 are downloaded.** This is the one request the plugin makes on its own, without a button — the alternative was shipping every language to everyone, which made the plugin more than twice as large for a set of translations any one person will never read.
+
+- **It happens only when your language is not already on your device.** If Obsidian is in English, or you have chosen English, nothing is ever requested. On a normal launch, when the file has been sitting on disk for months, nothing is requested either.
+- **It happens in the background, after the plugin has loaded**, so it never delays startup. Until it arrives the interface is in English.
+- **If it fails — you are offline, or the CDN is blocked — nothing breaks.** The plugin stays in English and tries again the next time Obsidian starts. *Settings → Language* says so, with a **Retry** button.
+
+The files come from this plugin's own repository, pinned to the release you have installed:
+
+```
+https://cdn.jsdelivr.net/gh/Niv20/obsidian-plugin-callout-studio@<version>/locales/<language>.json
+https://raw.githubusercontent.com/Niv20/obsidian-plugin-callout-studio/<version>/locales/<language>.json   (fallback)
+```
+
+Each one is about 40–65 KB and is checked against a SHA-256 checksum built into the plugin, exactly like an icon source, then stored at `.obsidian/plugins/callout-studio/translations/<language>.json`.
+
+**Updating the plugin does not re-download your language, and never deletes it.** The checksum decides: a release that did not change your translation reuses the copy you already have. When new text *is* added, the updated file is fetched once in the background — and in the meantime the old one keeps working, with only the new labels appearing in English. A file is replaced only after its replacement has arrived and been verified, so a failed update leaves your translation exactly where it was.
+
 ### Your own pictures
 
 **Your images** is the one source that downloads nothing, ever. You add SVG, PNG, JPEG or WebP files from your own computer, and they stay on your device.
@@ -247,6 +268,7 @@ If you never open the Material source, none of this happens. If the preview font
 - **The pictures you added yourself**, also in `data.json` — typically five to twenty kilobytes each after the size cap above. The picker shows the running total, and **Reset all** clears them along with everything else you made.
 - **The commands you built**, in `data.json` — a few bytes each, recording only the format, callout and heading level you chose. The shortcut itself belongs to Obsidian and lives in its own `hotkeys.json`, so it survives the command being edited.
 - **Downloaded icon sources** live in `.obsidian/plugins/callout-studio/icon-packs/`. Deleting them is safe: your callouts keep rendering from the copy in `data.json`, and the picker offers the download again. If a callout does turn out to need artwork that only the deleted file had, it is fetched again on the next launch.
+- **Your interface language**, in `.obsidian/plugins/callout-studio/translations/` — one 40–65 KB file for the language you read, and only that one. Deleting it is safe: the plugin falls back to English and downloads it again on the next launch.
 - **The Material Symbols preview font**, in `.obsidian/plugins/callout-studio/icon-fonts/` — one 1.0–1.5 MB file per style you have opened in the picker. It is only used to draw the picker's grid, never your notes, so deleting it costs nothing beyond re-downloading it the next time you browse that style.
 - **A snapshot of the plugin's generated CSS**, to shorten the brief flash of unstyled callouts on slow startups (mainly mobile). It is a small per-device cache in the app's own local storage — not a file in your vault — and it holds only generated styling, never vault content. It never leaves your device, and it is re-read the moment the plugin starts loading, before anything is fetched from disk. Versions up to 2.5.0 also wrote a CSS snippet into `.obsidian/snippets/`; that file is no longer created, and any copy left from an older version is deleted automatically the next time the plugin loads.
 

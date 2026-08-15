@@ -90,6 +90,17 @@ export const en: Record<string, string> = {
 	"settings.languageDesc":
 		"Display language for Callout Studio. Defaults to Obsidian's interface language.",
 	"settings.languageAuto": "Automatic (match Obsidian)",
+
+	// Downloadable translations. English is built in; every other language is
+	// fetched the first time it is needed and kept for later.
+	"locale.downloading": "Downloading translation…",
+	"locale.notDownloaded": "{{name}} is not downloaded yet",
+	"locale.notDownloadedDesc":
+		"Callout Studio is showing English until the translation can be downloaded. It will try again the next time Obsidian starts.",
+	"locale.retry": "Retry",
+	"locale.diskWriteFailed":
+		"Callout Studio could not save the translation to disk, so it will need downloading again next time.",
+
 	"settings.importExport": "Import / export",
 	"settings.import": "Import",
 	"settings.export": "Export",

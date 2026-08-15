@@ -54,6 +54,10 @@ export default tseslint.config(
 		// than suppressed per-import (obsidianmd/* disables are blocked by
 		// eslint-comments/no-restricted-disable, and rightly so for src/).
 		files: ["tests/**/*.ts"],
+		// Node globals for the same reason: a test that reads a generated file
+		// off disk needs `process.cwd()`, which the browser globals above do
+		// not cover.
+		languageOptions: { globals: { ...globals.node } },
 		rules: { "obsidianmd/no-nodejs-modules": "off" },
 	},
 	globalIgnores([

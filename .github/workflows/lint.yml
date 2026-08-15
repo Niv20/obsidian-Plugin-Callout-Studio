@@ -24,6 +24,17 @@ jobs:
                   cache: "npm"
             - run: npm ci
             - run: npm run build --if-present
+
+            # The downloadable locale files and the checksums compiled into
+            # main.js are generated from src/i18n/*.ts by the build above. If a
+            # translation was edited without committing the regenerated output,
+            # every locale download for that release would fail its checksum —
+            # so catch it here rather than in users' vaults.
+            - name: Locale data is in sync
+              run: |
+                  git diff --exit-code locales src/i18n/localeManifest.ts \
+                      || { echo "::error::locales/ is stale — run npm run i18n:generate and commit."; exit 1; }
+
             - run: npm run lint
             - run: npm test
 

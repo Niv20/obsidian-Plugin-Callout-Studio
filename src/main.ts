@@ -38,6 +38,7 @@ import { refreshAllCalloutEditors } from "./editor/livepreview/refresh";
 import { OutlineDecorator } from "./outline/OutlineDecorator";
 import { createCalloutReadingPostProcessor } from "./reading/calloutPostProcessor";
 import {
+	refreshFixedCommandNames,
 	registerCalloutCommands,
 	setFixedCommandEnabled as applyFixedCommandToggle,
 	type FixedCommandId,
@@ -46,7 +47,8 @@ import { CustomCommandManager } from "./editor/CustomCommandManager";
 import { CalloutStudioAPI } from "./api/PluginAPI";
 import { FirstRunScanModal } from "./utils/FirstRunScanModal";
 import { HEAVY_VAULT_FILE_THRESHOLD } from "./constants";
-import { setLocale, t } from "./i18n";
+import { getLocale, setLocale, t } from "./i18n";
+import { LocaleStore } from "./i18n/LocaleStore";
 
 /**
  * How long the startup entrance animation window stays open. Long enough to
@@ -63,6 +65,8 @@ export default class CalloutStudioPlugin extends Plugin {
 	customCommands!: CustomCommandManager;
 	outlineDecorator!: OutlineDecorator;
 	icons!: IconService;
+	locales!: LocaleStore;
+	private settingsTab!: CalloutStudioSettingsTab;
 	private discovery!: CalloutDiscovery;
 	private linkSuggestDecorator!: LinkSuggestDecorator;
 
@@ -115,6 +119,16 @@ export default class CalloutStudioPlugin extends Plugin {
 
 		// UI locale follows the user's saved preference; "auto" (the default)
 		// tracks Obsidian's interface language.
+		//
+		// Only English is bundled, so a translated UI first has to come off disk.
+		// This is the one locale step that blocks: it is a single ~50 KB read,
+		// it never touches the network, and it has to finish before the first
+		// translated string below. It sits after injectFromCache() above, so the
+		// startup CSS fast path is unaffected. Anything missing or outdated is
+		// fetched later, in the background — see ensureLocale() at the end of
+		// onload.
+		this.locales = new LocaleStore(this.app, this.manifest);
+		await this.locales.prepare(this.settings.language);
 		setLocale(this.settings.language);
 
 		// After setLocale, since this is the first user-facing string of the
@@ -253,8 +267,10 @@ export default class CalloutStudioPlugin extends Plugin {
 			}),
 		);
 
-		// Settings tab
-		this.addSettingTab(new CalloutStudioSettingsTab(this.app, this));
+		// Settings tab. Held onto so a locale arriving mid-session can re-render
+		// it (see applyLocaleChange).
+		this.settingsTab = new CalloutStudioSettingsTab(this.app, this);
+		this.addSettingTab(this.settingsTab);
 
 		// Dev/test convenience: from a terminal, `open "obsidian://callout-studio-welcome"`
 		// re-opens the welcome modal on demand (bypasses the welcomeSeen flag).
@@ -289,6 +305,13 @@ export default class CalloutStudioPlugin extends Plugin {
 		// and neither reaches the network unless artwork is genuinely absent.
 		void this.icons.initialize();
 
+		// Fetch the user's language if it is missing or older than this build.
+		// Background, and a no-op on the ordinary launch: the file is normally
+		// already on disk and already current, in which case nothing is
+		// requested. Failure is silent by design — English is a working UI, and
+		// the next launch tries again.
+		void this.ensureLocale();
+
 		// First-run vault discovery.
 		//
 		// Decoupled from initial render so onload stays fast. The flag is
@@ -316,6 +339,38 @@ export default class CalloutStudioPlugin extends Plugin {
 				this.discovery.registerIncrementalWatchers();
 			}
 		});
+	}
+
+	/**
+	 * Make sure the saved language is downloaded, and apply it if it arrives.
+	 *
+	 * Returns whether the language is now usable, so the settings picker can
+	 * report a failure; the startup caller ignores the result.
+	 */
+	async ensureLocale(): Promise<boolean> {
+		const before = getLocale();
+		const ok = await this.locales.ensure(this.settings.language);
+		setLocale(this.settings.language);
+		if (getLocale() !== before) this.applyLocaleChange();
+		return ok;
+	}
+
+	/**
+	 * Re-render the surfaces that snapshot translated text.
+	 *
+	 * Most of the UI calls `t()` as it draws, so it picks up a new locale for
+	 * free. These three do not: the settings tab is already on screen, the
+	 * heading fold chevron bakes its tooltip into a CodeMirror widget, and
+	 * Obsidian keeps a command's name from the moment it was added. Called both
+	 * when the user picks a language and when a download lands mid-session.
+	 */
+	applyLocaleChange(): void {
+		// Only when the tab is actually on screen: re-rendering a detached
+		// container would throw away work no one is looking at, and the picker
+		// re-renders itself on the path where the user chose the language.
+		if (this.settingsTab?.containerEl.isConnected) this.settingsTab.display();
+		refreshFixedCommandNames(this, () => new CalloutEditor(this));
+		this.refreshRenderModes();
 	}
 
 	/**

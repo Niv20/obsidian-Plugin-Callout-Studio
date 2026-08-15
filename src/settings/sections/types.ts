@@ -13,6 +13,7 @@ import type { CustomCommandManager } from "../../editor/CustomCommandManager";
 import type { FixedCommandId } from "../../editor/commands";
 import type { OutlineDecorator } from "../../outline/OutlineDecorator";
 import type { PackDataStore } from "../../icons/PackDataStore";
+import type { LocaleStore } from "../../i18n/LocaleStore";
 import type {
 	CalloutIcon,
 	CalloutRenderRole,
@@ -41,6 +42,12 @@ export type SettingsTabPlugin = Plugin & {
 	hasIconFetchFailed(icon: CalloutIcon, role: CalloutRenderRole): boolean;
 	/** Icon sources and their downloadable artwork, for the picker. */
 	icons: { packs: PackDataStore };
+	/** Downloaded translations, for the language picker. */
+	locales: Pick<LocaleStore, "isReady">;
+	/** Download the saved language if needed; resolves to whether it is usable. */
+	ensureLocale(): Promise<boolean>;
+	/** Re-render the surfaces that snapshot translated text. */
+	applyLocaleChange(): void;
 	/** The user's own commands, and the sweep that keeps them registered. */
 	customCommands: CustomCommandManager;
 	/** Switch one of the five fixed commands on or off, and persist it. */

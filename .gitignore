@@ -27,6 +27,12 @@ data.json
 # Icon packs downloaded at runtime — served from the packs-v2 tag, never committed
 icon-packs/
 
+# Translations downloaded at runtime — served from the plugin's own release tag,
+# never committed. The committed sources they are generated from live in
+# locales/, which is a different name on purpose: in development the repository
+# IS the plugin folder, so one name would have the cache overwrite the sources.
+translations/
+
 # Material Symbols webfonts cached at runtime — fetched from fonts.gstatic.com on
 # first use of the picker's Material grid. A cache, never a dependency: Google
 # reissues the file whenever the icon set changes, so a pinned copy would go stale.
