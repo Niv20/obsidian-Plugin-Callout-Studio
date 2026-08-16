@@ -781,26 +781,57 @@ describe("onChange — the unsubscribe really detaches", () => {
 		assert.equal(fired, 1);
 	});
 
-	it(
-		"does not cost the next listener its turn when one unsubscribes itself",
-		{ todo: "notifyChange walks changeCallbacks with for…of while offChange splices it" },
-		() => {
-			// `notifyChange` iterates the live array, so removing the running
-			// listener shifts everything after it down one while the iterator
-			// index has already moved up — and the very next listener is passed
-			// over for that round. It has never bitten anyone because API.md
-			// tells consumers to unsubscribe from `onunload`, and the fix is to
-			// iterate a copy.
-			const { api, registry } = apiHarness();
-			const fired: string[] = [];
-			const off = api.onChange(() => {
-				fired.push("first");
-				off();
-			});
-			api.onChange(() => fired.push("second"));
+	it("does not cost the next listener its turn when one unsubscribes itself", () => {
+		// `notifyChange` used to iterate the live array, so removing the running
+		// listener shifted everything after it down one while the iterator index
+		// had already moved up — and the very next listener was passed over for
+		// that round. Two plugins subscribing is enough: whether the second one
+		// hears about an add depended on what the first one did.
+		const { api, registry } = apiHarness();
+		const fired: string[] = [];
+		const off = api.onChange(() => {
+			fired.push("first");
+			off();
+		});
+		api.onChange(() => fired.push("second"));
 
-			registry.add(definition());
-			assert.deepStrictEqual(fired, ["first", "second"]);
-		},
-	);
+		registry.add(definition());
+		assert.deepStrictEqual(fired, ["first", "second"]);
+	});
+
+	it("skips every listener a callback unsubscribed, not just its own", () => {
+		// The snapshot must not go the other way either: a listener taken off
+		// during the round is gone, even though the copy still names it. Here
+		// the first callback retires both of the ones behind it.
+		const { api, registry } = apiHarness();
+		const fired: string[] = [];
+		api.onChange(() => {
+			fired.push("first");
+			offB();
+			offC();
+		});
+		const offB = api.onChange(() => fired.push("second"));
+		const offC = api.onChange(() => fired.push("third"));
+
+		registry.add(definition());
+		assert.deepStrictEqual(fired, ["first"]);
+	});
+
+	it("does not call a listener subscribed from inside the same round", () => {
+		// The mirror image. Appending to the live array mid-iteration would run
+		// the newcomer immediately, before the mutation it is watching has
+		// finished settling — and it would see the round it was not there for.
+		const { api, registry } = apiHarness();
+		const fired: string[] = [];
+		api.onChange(() => {
+			fired.push("first");
+			api.onChange(() => fired.push("late"));
+		});
+
+		registry.add(definition({ id: "a", displayName: "A" }));
+		assert.deepStrictEqual(fired, ["first"], "the newcomer waits for the next");
+
+		registry.add(definition({ id: "b", displayName: "B" }));
+		assert.deepStrictEqual(fired, ["first", "first", "late"]);
+	});
 });

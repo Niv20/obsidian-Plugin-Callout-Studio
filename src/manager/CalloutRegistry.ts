@@ -37,6 +37,7 @@ import {
 	resolveCalloutManagerColors,
 } from "../utils/colorPalettes";
 import { bgGradientsEqual, derivedBgAmount } from "../utils/colorUtils";
+import { notifyListeners } from "./listenerList";
 import { mergeSavedSettings } from "../utils/settingsMerge";
 import { setUserImages } from "../icons/packs/userImages";
 import { sortCalloutsByDisplayName } from "../utils/sorting";
@@ -2067,14 +2068,13 @@ export class CalloutRegistry {
 		}
 	}
 
+	/** Through {@link notifyListeners} — the list can change mid-round. */
 	private notifyChange(): void {
 		if (this.batchDepth > 0) {
 			this.batchDirty = true;
 			return;
 		}
-		for (const cb of this.changeCallbacks) {
-			cb();
-		}
+		notifyListeners(this.changeCallbacks);
 	}
 
 	/**
@@ -2095,9 +2095,8 @@ export class CalloutRegistry {
 		}
 	}
 
+	/** Likewise. */
 	private notifyPreviewChange(): void {
-		for (const cb of this.previewChangeCallbacks) {
-			cb();
-		}
+		notifyListeners(this.previewChangeCallbacks);
 	}
 }

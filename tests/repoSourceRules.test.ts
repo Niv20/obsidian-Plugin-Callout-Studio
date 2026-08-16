@@ -599,7 +599,7 @@ describe("no new oversized files", () => {
 	const FROZEN: Record<string, number> = {
 		"src/settings/CalloutEditor.ts": 2328,
 		"src/manager/CSSInjector.ts": 2253,
-		"src/manager/CalloutRegistry.ts": 2103,
+		"src/manager/CalloutRegistry.ts": 2102,
 		"src/utils/importValidator.ts": 1249,
 		"src/settings/PaletteEditorModal.ts": 1106,
 		"src/editor/calloutTokens.ts": 840,
