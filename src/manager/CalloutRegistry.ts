@@ -49,6 +49,7 @@ import {
 	sanitizeCustomPalettes,
 } from "../utils/colorPalettes";
 import { bgGradientsEqual, derivedBgAmount } from "../utils/colorUtils";
+import { clampGlobalStyle } from "../utils/settingsGuards";
 import { sanitizeUserImages } from "../utils/userImages";
 import { sanitizeCustomCommands } from "../utils/customCommands";
 import { setUserImages } from "../icons/packs/userImages";
@@ -171,12 +172,11 @@ export function mergeSavedSettings(
 	savedSettings: LegacySavedSettings,
 ): PluginSettings {
 	const savedGlobal = savedSettings.globalStyle as
-		| Partial<PluginSettings["globalStyle"]>
-		| undefined;
+		Partial<PluginSettings["globalStyle"]> | undefined;
 	const legacyPopup = savedSettings.popup;
 	const savedMenuItems = savedSettings.contextMenu?.items;
 	return {
-		globalStyle: {
+		globalStyle: clampGlobalStyle({
 			...DEFAULT_SETTINGS.globalStyle,
 			...savedGlobal,
 			// Ensure borderSides is always a proper object
@@ -200,7 +200,7 @@ export function mergeSavedSettings(
 						| undefined),
 				},
 			},
-		},
+		}),
 		contextMenu: {
 			enabled:
 				savedSettings.contextMenu?.enabled ??
