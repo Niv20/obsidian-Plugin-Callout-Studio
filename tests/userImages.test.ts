@@ -210,34 +210,49 @@ describe("claimUserImageName", () => {
 		assert.ok(claimed.endsWith(".png"));
 	});
 
-	it("terminates when truncation folds every candidate back onto itself", () => {
-		// A stem already at the cap absorbs the ` (2)` suffix and truncates
-		// straight back to the name being avoided, so the numbered loop makes no
-		// progress at all. What is guaranteed is that it still RETURNS: bounded
-		// loop, capped length, extension intact.
+	it("makes room for the number on a stem already at the cap", () => {
+		// The regression this guards: building the candidate as
+		// `${stem} (2)${ext}` and truncating the result afterwards throws the
+		// ` (2)` away again on a maximal stem, so the numbered loop makes no
+		// progress and hands back the name it was avoiding. Shortening the stem
+		// instead keeps the suffix, which is the only part that makes the name
+		// new.
 		const capped = userImageNameFromFilename(`${"a".repeat(300)}.png`);
 		const taken = new Set([normalizeUserImageName(capped)]);
 		const claimed = claimUserImageName(capped, taken, "img-abcd1234");
 		assert.ok(claimed.length <= MAX_NAME_LENGTH, `${claimed.length}: ${claimed}`);
-		assert.ok(claimed.endsWith(".png"), claimed);
+		assert.ok(claimed.endsWith(" (2).png"), `suffix truncated away: ${claimed}`);
+		assert.notEqual(
+			normalizeUserImageName(claimed),
+			normalizeUserImageName(capped),
+			"handed back a name that was already taken",
+		);
 	});
 
-	it("KNOWN GAP: a maximal stem defeats the id fallback and collides", () => {
+	it("keeps the id fallback free of collisions even at the cap", () => {
 		// The doc promises `unique` "collides with nothing, because it is the
-		// picture's own id" — but the id is appended to the *stem*, and a stem
-		// already at the cap truncates it away again. The result is a name that
-		// was already taken.
-		//
-		// Narrow and cosmetic: it needs two pictures whose first 56 characters
-		// and extension all match, and a name is a label, not a key (the id is
-		// separate), so nothing is lost — the grid just shows two cells reading
-		// the same. Locked in so a fix (e.g. trimming the stem to make room for
-		// the suffix instead of appending then truncating) arrives as a
-		// deliberate change with a failing test.
+		// picture's own id". That is only true while the id survives the length
+		// cap — appending it to a maximal stem and truncating afterwards cut it
+		// straight back off, and the fallback returned the taken name.
 		const capped = userImageNameFromFilename(`${"a".repeat(300)}.png`);
 		const taken = new Set([normalizeUserImageName(capped)]);
+		// Every number spoken for, so only the id fallback is left. Claimed
+		// through the function itself rather than spelled out, so the set holds
+		// exactly the names it really hands out.
+		for (let n = 2; n < 100; n++) claimUserImageName(capped, taken, `img-${n}`);
+		const before = new Set(taken);
+
 		const claimed = claimUserImageName(capped, taken, "img-abcd1234");
-		assert.equal(normalizeUserImageName(claimed), normalizeUserImageName(capped));
+		assert.ok(
+			claimed.includes("(img-abcd1234)"),
+			`the id was truncated out of the fallback name: ${claimed}`,
+		);
+		assert.ok(
+			!before.has(normalizeUserImageName(claimed)),
+			`handed back a name that was already taken: ${claimed}`,
+		);
+		assert.ok(claimed.length <= MAX_NAME_LENGTH, `${claimed.length}: ${claimed}`);
+		assert.ok(claimed.endsWith(".png"), claimed);
 	});
 
 	it("leaves room for the suffix whenever the stem is short enough", () => {

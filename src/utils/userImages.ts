@@ -109,9 +109,12 @@ export function takenUserImageNames(
  * a batch, it may run twice over the same source, and dropping an entry there
  * would quietly cost a callout its icon. So it renames.
  *
- * The loop is bounded because `userImageNameFromFilename` caps the length, and
- * a long enough stem truncates back to the very name being avoided. `unique` is
- * the way out: it is the picture's own id, so it collides with nothing.
+ * The loop is bounded, and `unique` is the way out: it is the picture's own id,
+ * so it collides with nothing. That promise only holds because every candidate
+ * is built by {@link withSuffix}, which makes room by shortening the *stem*.
+ * Appending the suffix and truncating the result afterwards throws the suffix
+ * away again whenever the stem is already at the cap — which handed back the
+ * very name being avoided, id fallback included.
  */
 export function claimUserImageName(
 	name: string,
@@ -124,14 +127,33 @@ export function claimUserImageName(
 
 	let candidate = name;
 	for (let n = 2; n < 100 && taken.has(normalizeUserImageName(candidate)); n++) {
-		candidate = userImageNameFromFilename(`${stem} (${n})${extension}`);
+		candidate = withSuffix(stem, String(n), extension);
 	}
 	if (taken.has(normalizeUserImageName(candidate))) {
-		candidate = userImageNameFromFilename(`${stem} (${unique})${extension}`);
+		candidate = withSuffix(stem, unique, extension);
 	}
 
 	taken.add(normalizeUserImageName(candidate));
 	return candidate;
+}
+
+/**
+ * `stem (suffix).ext`, kept inside the cap by shortening the stem alone.
+ *
+ * The suffix is the only part that makes the name new and the extension is half
+ * of what tells two pictures apart, so neither may be cut — which leaves the
+ * stem, down to a single character if that is what it takes. A label the user
+ * can still tell apart, however short, beats two rows reading the same.
+ *
+ * A pathological extension (a last dot near the end of a very long name) can
+ * still push the result past the cap, exactly as it can in
+ * {@link userImageNameFromFilename}: the cap is a guard, and losing the suffix
+ * to honour it is the worse trade.
+ */
+function withSuffix(stem: string, suffix: string, extension: string): string {
+	const tail = ` (${suffix})${extension}`;
+	const room = Math.max(1, MAX_NAME_LENGTH - tail.length);
+	return `${stem.slice(0, room).trimEnd()}${tail}`;
 }
 
 /**
