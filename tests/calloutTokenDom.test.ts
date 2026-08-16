@@ -1,0 +1,436 @@
+/**
+ * tests/calloutTokenDom.test.ts — `buildCalloutTokenDom` and its two companions.
+ *
+ * This is the one builder behind three surfaces: the Live Preview widgets, the
+ * reading-view post-processor, and every reference token (outline pane, links,
+ * the `[[` suggestion popup). They are byte-identical because they all come from
+ * here, so a change in this shape is a change on all three at once.
+ *
+ * What the assertions are about:
+ *
+ * - **`hideIcon` builds no icon span at all.** Not an empty one, and not a
+ *   hidden one. The token roots are flex boxes, so an empty item would still
+ *   claim the container's `gap` and read as a stray space before the text — the
+ *   same reason the ref token suppresses its icon by omission. `CSS_TOKEN_EMPTY`
+ *   then covers the remaining case: nothing to draw *and* no name to draw it
+ *   beside, where even the root has to leave the flow.
+ * - **The root class is the variant's**, and `data-callout` is what per-callout
+ *   CSS keys on — so `calloutDomId` has to hand back a spelling the generated
+ *   selectors actually contain (the id or one of its aliases), never the
+ *   attribute-form spelling that only Obsidian's own block callout understands.
+ * - **An unknown id keeps what the user wrote**, both as the label and in the
+ *   attribute, because that is what `.cs-unknown` styling expects to find.
+ *
+ * The DOM is the fake one from `tests/support/fakeDom.ts`; icons are Lucide
+ * throughout, so painting bottoms out in the stubbed `setIcon` and no artwork
+ * is involved. What is checked is the *shape* the builder produces, which is the
+ * part every surface depends on.
+ */
+import assert from "node:assert";
+import { describe, it } from "node:test";
+// Listed first: importing it installs the DOM globals (`createSpan` and the
+// rest are free identifiers in the bundle), before anything under test loads.
+import { fakeDom } from "./support/fakeDom";
+import { CalloutRegistry } from "../src/manager/CalloutRegistry";
+import {
+	CSS_CALLOUT_LEAD,
+	CSS_CALLOUT_PAYLOAD,
+	CSS_HEADING_TOKEN,
+	CSS_INLINE_HAS_CONTENT,
+	CSS_INLINE_TOKEN,
+	CSS_REF_TOKEN,
+	CSS_TOKEN_EMPTY,
+	CSS_TOKEN_ICON,
+	CSS_TOKEN_NAME,
+	CSS_UNKNOWN,
+	VARIANT_ROLE,
+	buildCalloutLeadDom,
+	buildCalloutTokenDom,
+	buildContentPillDom,
+	calloutDomId,
+	resolveCalloutDef,
+	tokenIconKey,
+} from "../src/editor/renderShared";
+
+type Registry = InstanceType<typeof CalloutRegistry>;
+type AnyElement = ReturnType<typeof buildCalloutTokenDom>;
+
+/* -------------------------------------------------------------------------- */
+/* Harness                                                                    */
+/* -------------------------------------------------------------------------- */
+
+/** A registry seeded exactly as a first run seeds it, plus whatever a test adds. */
+function harness(): Registry {
+	const registry = new CalloutRegistry();
+	registry.load(null);
+	return registry;
+}
+
+function addCallout(
+	registry: Registry,
+	over: Partial<Parameters<Registry["add"]>[0]> = {},
+): void {
+	registry.add({
+		id: "quiet",
+		displayName: "Quiet",
+		icon: { type: "lucide", value: "pencil" },
+		colorLight: "#336699",
+		colorDark: "#88bbee",
+		foldable: true,
+		defaultFolded: false,
+		builtIn: false,
+		source: "user",
+		...over,
+	});
+}
+
+/** The classes on an element, as a set assertions can talk about. */
+const classes = (element: AnyElement): string[] =>
+	(element as unknown as { classList: { toArray(): string[] } }).classList.toArray();
+
+const hasClass = (element: AnyElement, cls: string): boolean =>
+	classes(element).includes(cls);
+
+/** Direct element children, in order. */
+const kids = (element: AnyElement): AnyElement[] =>
+	(element as unknown as { children: AnyElement[] }).children;
+
+const token = (
+	registry: Registry,
+	options: Partial<Parameters<typeof buildCalloutTokenDom>[0]> = {},
+): AnyElement =>
+	buildCalloutTokenDom({
+		rawId: "quiet",
+		registry,
+		variant: "inline",
+		showName: true,
+		...options,
+	});
+
+/* -------------------------------------------------------------------------- */
+/* hideIcon                                                                   */
+/* -------------------------------------------------------------------------- */
+
+describe("buildCalloutTokenDom — hideIcon", () => {
+	it("builds no icon span at all, rather than an empty one", () => {
+		const registry = harness();
+		addCallout(registry, { hideIcon: true });
+
+		const el = token(registry);
+		assert.deepStrictEqual(
+			kids(el).map((child) => classes(child)),
+			[[CSS_TOKEN_NAME]],
+			"an icon span would still claim the flex gap, even empty",
+		);
+	});
+
+	it("builds one when the flag is absent or explicitly false", () => {
+		const registry = harness();
+		addCallout(registry);
+		assert.ok(hasClass(kids(token(registry))[0]!, CSS_TOKEN_ICON));
+
+		const registryFalse = harness();
+		addCallout(registryFalse, { hideIcon: false });
+		assert.ok(hasClass(kids(token(registryFalse))[0]!, CSS_TOKEN_ICON));
+	});
+
+	it("takes the root itself out of flow when there is no name either", () => {
+		// The ref token, and a content pill's lead: nothing but an icon that
+		// isn't drawn, so the root's own gap is all that would be left.
+		const registry = harness();
+		addCallout(registry, { hideIcon: true });
+
+		const el = token(registry, { variant: "ref", showName: false });
+		assert.ok(hasClass(el, CSS_TOKEN_EMPTY));
+		assert.strictEqual(kids(el).length, 0);
+	});
+
+	it("does NOT mark the root empty while a name still renders", () => {
+		const registry = harness();
+		addCallout(registry, { hideIcon: true });
+
+		assert.ok(!hasClass(token(registry, { showName: true }), CSS_TOKEN_EMPTY));
+	});
+
+	it("keeps the icon span when only the name is suppressed", () => {
+		const registry = harness();
+		addCallout(registry);
+
+		const el = token(registry, { showName: false });
+		assert.deepStrictEqual(
+			kids(el).map((child) => classes(child)),
+			[[CSS_TOKEN_ICON]],
+		);
+		assert.ok(!hasClass(el, CSS_TOKEN_EMPTY));
+	});
+
+	it("is what `tokenIconKey` reports, so a toggled widget cannot compare equal", () => {
+		// `iconRenderKey` alone would not move: the icon it *would* have drawn
+		// is unchanged, only whether it is drawn at all.
+		const registry = harness();
+		addCallout(registry);
+		const shown = registry.get("quiet");
+		assert.ok(shown);
+
+		const before = tokenIconKey(shown, registry, "inline");
+		registry.update("quiet", { hideIcon: true });
+		const after = tokenIconKey(registry.get("quiet"), registry, "inline");
+
+		assert.strictEqual(after, "none");
+		assert.notStrictEqual(before, after);
+		assert.strictEqual(tokenIconKey(undefined, registry, "inline"), "");
+	});
+});
+
+/* -------------------------------------------------------------------------- */
+/* Variants                                                                   */
+/* -------------------------------------------------------------------------- */
+
+describe("buildCalloutTokenDom — variant classes", () => {
+	it("stamps one root class per variant", () => {
+		const registry = harness();
+		addCallout(registry);
+
+		assert.ok(hasClass(token(registry, { variant: "inline" }), CSS_INLINE_TOKEN));
+		assert.ok(
+			hasClass(token(registry, { variant: "heading" }), CSS_HEADING_TOKEN),
+		);
+		assert.ok(hasClass(token(registry, { variant: "ref" }), CSS_REF_TOKEN));
+	});
+
+	it("never stamps two of them", () => {
+		const registry = harness();
+		addCallout(registry);
+		const roots = [CSS_INLINE_TOKEN, CSS_HEADING_TOKEN, CSS_REF_TOKEN];
+
+		for (const variant of ["inline", "heading", "ref"] as const) {
+			const on = classes(token(registry, { variant })).filter((cls) =>
+				roots.includes(cls),
+			);
+			assert.strictEqual(on.length, 1, `${variant} carried ${on.join()}`);
+		}
+	});
+
+	it("draws a reference at inline size — a ref is a compact inline copy", () => {
+		assert.strictEqual(VARIANT_ROLE.ref, "inline");
+		assert.strictEqual(VARIANT_ROLE.inline, "inline");
+		assert.strictEqual(VARIANT_ROLE.heading, "heading");
+	});
+});
+
+/* -------------------------------------------------------------------------- */
+/* Identity: data-callout and the label                                        */
+/* -------------------------------------------------------------------------- */
+
+describe("buildCalloutTokenDom — data-callout", () => {
+	it("carries the definition's own id for a plain match", () => {
+		const registry = harness();
+		addCallout(registry);
+
+		assert.strictEqual(token(registry).getAttribute("data-callout"), "quiet");
+	});
+
+	it("keeps the alias the user actually wrote, because CSS is emitted for it", () => {
+		const registry = harness();
+		addCallout(registry, { aliases: ["hush"] });
+
+		const el = token(registry, { rawId: "hush" });
+		assert.strictEqual(el.getAttribute("data-callout"), "hush");
+		// …while the label still comes from the definition.
+		assert.strictEqual(kids(el).at(-1)?.textContent, "Quiet");
+	});
+
+	it("falls back to the definition's id when only the attribute form matched", () => {
+		// `[!a-b]` written for the callout `a b`: Obsidian renders both the same,
+		// but no generated selector carries the dashed spelling, so the token
+		// would come out with its icon painted and no colour.
+		const registry = harness();
+		addCallout(registry, { id: "a b", displayName: "A B" });
+
+		const el = token(registry, { rawId: "a-b" });
+		assert.strictEqual(el.getAttribute("data-callout"), "a b");
+		assert.strictEqual(
+			calloutDomId("a-b", resolveCalloutDef(registry, "a-b")),
+			"a b",
+		);
+	});
+
+	it("normalizes case and whitespace", () => {
+		const registry = harness();
+		addCallout(registry, { id: "two words", displayName: "Two Words" });
+
+		assert.strictEqual(
+			token(registry, { rawId: "  Two   Words " }).getAttribute(
+				"data-callout",
+			),
+			"two words",
+		);
+	});
+
+	it("keeps an unknown id exactly as normalized, spelling included", () => {
+		const registry = harness();
+
+		const el = token(registry, { rawId: "Nope" });
+		assert.strictEqual(el.getAttribute("data-callout"), "nope");
+		assert.ok(hasClass(el, CSS_UNKNOWN));
+	});
+});
+
+describe("buildCalloutTokenDom — the label", () => {
+	it("shows the display name for a known callout", () => {
+		const registry = harness();
+		addCallout(registry, { displayName: "Be Quiet" });
+
+		assert.strictEqual(kids(token(registry)).at(-1)?.textContent, "Be Quiet");
+	});
+
+	it("shows what the user wrote for an unknown one", () => {
+		const registry = harness();
+
+		const el = token(registry, { rawId: "  mystery  " });
+		assert.strictEqual(kids(el).at(-1)?.textContent, "mystery");
+	});
+
+	it("builds no name span at all when showName is false", () => {
+		const registry = harness();
+		addCallout(registry);
+
+		const el = token(registry, { showName: false });
+		assert.ok(!kids(el).some((child) => hasClass(child, CSS_TOKEN_NAME)));
+	});
+});
+
+/* -------------------------------------------------------------------------- */
+/* Metadata                                                                   */
+/* -------------------------------------------------------------------------- */
+
+describe("buildCalloutTokenDom — metadata", () => {
+	it("mirrors Obsidian's data-callout-metadata", () => {
+		const registry = harness();
+		addCallout(registry);
+
+		assert.strictEqual(
+			token(registry, { metadata: "purple" }).getAttribute(
+				"data-callout-metadata",
+			),
+			"purple",
+		);
+	});
+
+	it("leaves the attribute off entirely when there is none", () => {
+		// An empty attribute is a selector match, which is not the same thing.
+		const registry = harness();
+		addCallout(registry);
+
+		for (const metadata of [undefined, ""]) {
+			assert.strictEqual(
+				token(registry, { metadata }).hasAttribute(
+					"data-callout-metadata",
+				),
+				false,
+			);
+		}
+	});
+});
+
+/* -------------------------------------------------------------------------- */
+/* The content pill                                                           */
+/* -------------------------------------------------------------------------- */
+
+describe("buildCalloutLeadDom", () => {
+	it("is nothing but the icon", () => {
+		const registry = harness();
+		addCallout(registry);
+
+		const lead = buildCalloutLeadDom("quiet", registry);
+		assert.ok(hasClass(lead, CSS_CALLOUT_LEAD));
+		assert.deepStrictEqual(
+			kids(lead).map((child) => classes(child)),
+			[[CSS_TOKEN_ICON]],
+		);
+	});
+
+	it("empties out when the callout draws no icon", () => {
+		// Its own margin-inline-end would otherwise open a gap before a payload
+		// that has nothing in front of it.
+		const registry = harness();
+		addCallout(registry, { hideIcon: true });
+
+		const lead = buildCalloutLeadDom("quiet", registry);
+		assert.ok(hasClass(lead, CSS_TOKEN_EMPTY));
+		assert.strictEqual(kids(lead).length, 0);
+	});
+});
+
+describe("buildContentPillDom", () => {
+	it("is one pill box holding exactly a lead and a payload", () => {
+		const registry = harness();
+		addCallout(registry);
+
+		const { root, payload } = buildContentPillDom({
+			rawId: "quiet",
+			registry,
+		});
+
+		assert.ok(hasClass(root, CSS_INLINE_TOKEN));
+		assert.ok(hasClass(root, CSS_INLINE_HAS_CONTENT));
+		assert.deepStrictEqual(
+			kids(root).map((child) => classes(child)),
+			[[CSS_CALLOUT_LEAD], [CSS_CALLOUT_PAYLOAD]],
+		);
+		// Returned rather than found by position: with an icon hidden the lead
+		// is still there, so "the last child" and "the second child" are not
+		// reliably the same element.
+		assert.strictEqual(payload, kids(root)[1]);
+	});
+
+	it("still returns a usable payload when the lead is empty", () => {
+		const registry = harness();
+		addCallout(registry, { hideIcon: true });
+
+		const { root, payload } = buildContentPillDom({
+			rawId: "quiet",
+			registry,
+		});
+		assert.strictEqual(kids(root).length, 2);
+		assert.ok(hasClass(payload, CSS_CALLOUT_PAYLOAD));
+	});
+
+	it("carries the unknown marker and the metadata like a plain token", () => {
+		const registry = harness();
+
+		const { root } = buildContentPillDom({
+			rawId: "nope",
+			metadata: "purple",
+			registry,
+		});
+		assert.ok(hasClass(root, CSS_UNKNOWN));
+		assert.strictEqual(root.getAttribute("data-callout"), "nope");
+		assert.strictEqual(
+			root.getAttribute("data-callout-metadata"),
+			"purple",
+		);
+	});
+});
+
+/* -------------------------------------------------------------------------- */
+/* Theme-independence                                                          */
+/* -------------------------------------------------------------------------- */
+
+describe("buildCalloutTokenDom — what it does not do", () => {
+	it("bakes no colour into the DOM, in either theme", () => {
+		// Colour reaches these tokens through the generated stylesheet, keyed on
+		// `data-callout`. A style attribute here would pin them to one theme.
+		const registry = harness();
+		addCallout(registry);
+
+		fakeDom.dark();
+		const darkEl = token(registry);
+		fakeDom.light();
+		const lightEl = token(registry);
+
+		for (const el of [darkEl, lightEl]) {
+			assert.strictEqual(el.hasAttribute("style"), false);
+		}
+	});
+});

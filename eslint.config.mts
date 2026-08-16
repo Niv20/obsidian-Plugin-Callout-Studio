@@ -58,7 +58,16 @@ export default tseslint.config(
 		// off disk needs `process.cwd()`, which the browser globals above do
 		// not cover.
 		languageOptions: { globals: { ...globals.node } },
-		rules: { "obsidianmd/no-nodejs-modules": "off" },
+		rules: {
+			"obsidianmd/no-nodejs-modules": "off",
+			// A fake vault adapter has to be handed *some* config folder, and the
+			// literal is the point: the assertion is that a pack lands under the
+			// folder it was given. Nothing here reads a real vault.
+			"obsidianmd/hardcoded-config-path": "off",
+			// `window` and `activeWindow` are what a *plugin* must use; a test
+			// runs in Node, where the only realm there is is `globalThis`.
+			"obsidianmd/no-global-this": "off",
+		},
 	},
 	globalIgnores([
 		"node_modules",

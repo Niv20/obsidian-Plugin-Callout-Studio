@@ -20,8 +20,7 @@
  */
 import { build } from "esbuild";
 import { spawn } from "node:child_process";
-import { mkdtempSync, readdirSync, rmSync, writeFileSync } from "node:fs";
-import { tmpdir } from "node:os";
+import { readdirSync, rmSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -38,45 +37,26 @@ if (entryPoints.length === 0) {
 	process.exit(1);
 }
 
-// Minimal `obsidian` stand-in. Anything a test actually exercises should be
-// pure; this exists so a transitive import doesn't fail the bundle.
-const stubDir = mkdtempSync(path.join(tmpdir(), "cs-test-stub-"));
-const obsidianStub = path.join(stubDir, "obsidian.js");
-writeFileSync(
-	obsidianStub,
-	`export const Platform = { isMobile: false, isDesktop: true, isMacOS: false };
-export class TFile {}
-export class Plugin {}
-export class Notice {}
-export class Component {}
-export class Modal {}
-export class MarkdownRenderer { static render() { return Promise.resolve(); } }
-export function setIcon() {}
-export function getIconIds() { return []; }
-export function normalizePath(p) { return p; }
-export function requestUrl() { return Promise.reject(new Error("no network in tests")); }
-export function requireApiVersion() { return true; }
-export const Keymap = { isModEvent: () => false };
-`,
-);
+// Minimal `obsidian` stand-in — see tests/support/obsidianStub.ts, which
+// documents what is in it and why. It lives in `tests/` rather than being
+// written out here as a string because it has to import `@codemirror/state`
+// (`editorLivePreviewField` must be a real StateField), and a file in
+// `os.tmpdir()` cannot resolve this project's node_modules.
+const obsidianStub = path.join(testDir, "support", "obsidianStub.ts");
 
 rmSync(outDir, { recursive: true, force: true });
 
-try {
-	await build({
-		entryPoints,
-		outdir: outDir,
-		bundle: true,
-		platform: "node",
-		format: "esm",
-		target: "node20",
-		sourcemap: "inline",
-		logLevel: "warning",
-		alias: { obsidian: obsidianStub },
-	});
-} finally {
-	rmSync(stubDir, { recursive: true, force: true });
-}
+await build({
+	entryPoints,
+	outdir: outDir,
+	bundle: true,
+	platform: "node",
+	format: "esm",
+	target: "node20",
+	sourcemap: "inline",
+	logLevel: "warning",
+	alias: { obsidian: obsidianStub },
+});
 
 // Explicit file list rather than `--test <dir>` or a glob. The directory form
 // silently refuses this output: Node's test walker skips dot-prefixed
