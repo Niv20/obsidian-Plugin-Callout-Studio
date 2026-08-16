@@ -807,35 +807,58 @@ export class CalloutRegistry {
 			// being renamed is what still lets it take one of its own aliases.
 			const aliasOwner = this.findByAlias(partial.id);
 			if (aliasOwner && aliasOwner.id !== id) return false;
-			this.callouts.delete(id);
-			this.setCallout(partial.id, { ...existing, ...partial });
-		} else {
-			this.setCallout(id, { ...existing, ...partial });
 		}
 
-		// If the user just edited the active fallback callout's appearance,
-		// re-mirror it onto every uncustomized fallback-source row so the
-		// change is visible immediately in settings and in the vault.
-		if (newId === this.settings.fallbackCalloutId) {
-			this.restyleUncustomizedFallbackRows();
-		}
+		// Batched because the mirror pass below announces itself: see the note
+		// on {@link mirrorFallbackRowsFor}.
+		this.batch(() => {
+			if (partial.id && partial.id !== id) {
+				this.callouts.delete(id);
+				this.setCallout(partial.id, { ...existing, ...partial });
+			} else {
+				this.setCallout(id, { ...existing, ...partial });
+			}
 
-		this.notifyChange();
+			// If the user just edited the active fallback callout's appearance,
+			// re-mirror it onto every uncustomized fallback-source row so the
+			// change is visible immediately in settings and in the vault.
+			this.mirrorFallbackRowsFor(newId);
+			this.notifyChange();
+		});
 		return true;
+	}
+
+	/**
+	 * Re-mirror the uncustomized fallback rows when `id` is the callout they
+	 * copy — the shared half of the four writers that can move that target.
+	 *
+	 * Its callers all wrap this and their own `notifyChange` in a {@link batch},
+	 * because {@link restyleUncustomizedFallbackRows} announces itself: one
+	 * logical operation — one edit, one delete, one palette repaint — otherwise
+	 * fired two full rounds, and a round is a whole stylesheet regenerated,
+	 * every icon in the document repainted and `data.json` written. The batch is
+	 * what makes the pair a single consistent event, exactly as it does for the
+	 * rename's remove + add in `CalloutEditorSave`.
+	 */
+	private mirrorFallbackRowsFor(id: string): void {
+		if (id !== this.settings.fallbackCalloutId) return;
+		this.restyleUncustomizedFallbackRows();
 	}
 
 	remove(id: string): boolean {
 		const def = this.callouts.get(id);
 		if (!def || def.builtIn) return false;
-		this.callouts.delete(id);
-		// If the removed callout was the active fallback, reset to "note"
-		// and re-mirror uncustomized fallback rows onto the new fallback.
-		if (this.settings.fallbackCalloutId === id) {
-			this.settings.fallbackCalloutId =
-				DEFAULT_SETTINGS.fallbackCalloutId;
-			this.restyleUncustomizedFallbackRows();
-		}
-		this.notifyChange();
+		this.batch(() => {
+			this.callouts.delete(id);
+			// If the removed callout was the active fallback, reset to "note"
+			// and re-mirror uncustomized fallback rows onto the new fallback.
+			if (this.settings.fallbackCalloutId === id) {
+				this.settings.fallbackCalloutId =
+					DEFAULT_SETTINGS.fallbackCalloutId;
+				this.restyleUncustomizedFallbackRows();
+			}
+			this.notifyChange();
+		});
 		return true;
 	}
 
@@ -953,19 +976,26 @@ export class CalloutRegistry {
 		>,
 	): number {
 		let updated = 0;
-		let touchedFallback = false;
-		for (const def of this.callouts.values()) {
-			if (def.paletteId !== paletteId) continue;
-			this.setCallout(def.id, { ...def, ...colors });
-			updated++;
-			if (def.id === this.settings.fallbackCalloutId) touchedFallback = true;
-		}
-		if (touchedFallback) {
-			this.restyleUncustomizedFallbackRows();
-		}
-		if (updated > 0) {
-			this.notifyChange();
-		}
+		// Batched for the same reason as the writers above: the mirror pass
+		// announces itself, so a repaint that reaches the fallback target would
+		// otherwise cost two rounds. See {@link mirrorFallbackRowsFor}.
+		this.batch(() => {
+			let touchedFallback = false;
+			for (const def of this.callouts.values()) {
+				if (def.paletteId !== paletteId) continue;
+				this.setCallout(def.id, { ...def, ...colors });
+				updated++;
+				if (def.id === this.settings.fallbackCalloutId) {
+					touchedFallback = true;
+				}
+			}
+			if (touchedFallback) {
+				this.restyleUncustomizedFallbackRows();
+			}
+			if (updated > 0) {
+				this.notifyChange();
+			}
+		});
 		return updated;
 	}
 
@@ -1178,9 +1208,13 @@ export class CalloutRegistry {
 			source: "fallback",
 		};
 		delete next.customized;
-		this.setCallout(id, next);
-		this.restyleUncustomizedFallbackRows();
-		this.notifyChange();
+		// Batched: the mirror pass announces itself, so the conversion and the
+		// re-style are one round, not two. See {@link mirrorFallbackRowsFor}.
+		this.batch(() => {
+			this.setCallout(id, next);
+			this.restyleUncustomizedFallbackRows();
+			this.notifyChange();
+		});
 		return true;
 	}
 

@@ -322,13 +322,33 @@ describe("restyleUncustomizedFallbackRows — the callers that trigger it", () =
 		);
 	});
 
-	it("costs two change rounds on those paths, not one", () => {
-		// Pinned as found, same shape as applyPaletteColors: the mirror pass
-		// notifies on its own and then the caller notifies again, so one delete
-		// (or one edit) regenerates the stylesheet and writes data.json twice.
+	it("costs ONE change round on those paths, not two", () => {
+		// The mirror pass notifies on its own and the caller notifies again, so
+		// un-batched a single delete (or edit) regenerated the stylesheet,
+		// repainted every icon and wrote data.json twice.
 		const { registry, events } = withFallback();
 		registry.remove("base");
-		assert.strictEqual(events(), 2);
+		assert.strictEqual(events(), 1);
+	});
+
+	it("costs one round for an edit of the fallback callout too", () => {
+		const { registry, events } = withFallback();
+		registry.update("base", { colorLight: "#00ff00" });
+		assert.strictEqual(events(), 1);
+		assert.strictEqual(registry.get("f1")?.colorLight, "#00ff00", "still mirrored");
+	});
+
+	it("holds the mirrored rows back until the one event fires", () => {
+		// The whole point of the batch: a listener must never see the fallback
+		// deleted while the rows that copy it still wear its old style.
+		const { registry } = withFallback();
+		let seen: string | undefined;
+		registry.onChange(() => {
+			seen = registry.get("f1")?.colorLight;
+		});
+		registry.remove("base");
+
+		assert.strictEqual(seen, registry.get("note")?.colorLight);
 	});
 });
 
@@ -350,6 +370,14 @@ describe("convertToFallback", () => {
 		registry.convertToFallback("mine");
 
 		assert.ok(!("customized" in (registry.get("mine") as object)), "deleted, not false");
+	});
+
+	it("announces the conversion and the re-style as one round", () => {
+		const { registry, events } = withFallback({}, [
+			def({ id: "mine", source: "user", customized: true }),
+		]);
+		assert.strictEqual(registry.convertToFallback("mine"), true);
+		assert.strictEqual(events(), 1);
 	});
 
 	it("refuses a built-in", () => {

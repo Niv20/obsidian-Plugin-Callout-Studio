@@ -279,11 +279,11 @@ describe("applyPaletteColors", () => {
 		);
 	});
 
-	it("costs two change rounds when it does, not one", () => {
-		// Pinned as found. `restyleUncustomizedFallbackRows` notifies on its own
-		// before `applyPaletteColors` notifies for the repaint, so one logical
-		// operation regenerates the stylesheet and writes data.json twice. The
-		// class has `batch()` for exactly this, and does not use it here.
+	it("costs ONE change round when it re-mirrors, not two", () => {
+		// `restyleUncustomizedFallbackRows` notifies on its own before
+		// `applyPaletteColors` notifies for the repaint, so un-batched one
+		// logical operation regenerated the stylesheet and wrote data.json
+		// twice. The class has `batch()` for exactly this.
 		const { registry, events } = loaded(
 			saved(
 				[
@@ -294,7 +294,7 @@ describe("applyPaletteColors", () => {
 			),
 		);
 		registry.applyPaletteColors("cp-1", colors());
-		assert.strictEqual(events(), 2);
+		assert.strictEqual(events(), 1);
 	});
 });
 
