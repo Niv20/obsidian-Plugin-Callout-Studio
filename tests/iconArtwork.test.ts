@@ -472,22 +472,36 @@ describe("ensureArtworkFor — the one repair path", () => {
 		assert.ok(h.registry.findIconSvg("fa-brands", "apple", ""));
 	});
 
-	it("retries per icon, not per group, when the pack cannot be got at all", async () => {
-		// PINNED AS CURRENT BEHAVIOUR, and flagged: the "one download per group"
-		// property above holds only while the pack is obtainable. `fetchArtwork`
-		// re-checks `state !== "ready"` for every icon, and a pack that failed is
-		// never "ready" — so an offline import of twenty Brands icons makes
-		// twenty attempts, each of which is two URLs behind a 30-second timeout.
-		// The `hasFailed` filter that would stop it is evaluated once, up front,
-		// before the first attempt has had a chance to fail. See the session
-		// summary.
+	it("gives up on the group, not once per icon, when the pack cannot be got", async () => {
+		// The other half of "one download per group": the property has to hold
+		// when the pack is *unobtainable* too, which is exactly when it costs
+		// something. `fetchArtwork` re-checks `state !== "ready"` for every icon
+		// and a failed pack is never "ready", so the group loop has to carry the
+		// `hasFailed` test itself — the filter before it ran before anything had
+		// had the chance to fail. Offline, twenty Brands icons must be one
+		// answer, not twenty × two URLs behind a 30-second timeout.
 		const h = service();
 		await h.service.ensureArtworkFor([
 			{ type: "rpg-awesome", value: "acid" },
 			{ type: "rpg-awesome", value: "anvil" },
 			{ type: "rpg-awesome", value: "arrow-cluster" },
 		]);
-		assert.equal(h.looked.filter((p) => p.endsWith("rpg-awesome.json")).length, 3);
+		assert.equal(h.looked.filter((p) => p.endsWith("rpg-awesome.json")).length, 1);
+	});
+
+	it("still tries every other library after one of them fails", async () => {
+		// Giving up is per pack, never per batch: an import mixing a source that
+		// cannot be reached with one already on disk must still repair the
+		// second.
+		const h = service();
+		h.files.set(h.service.packs.packPath("fa-solid"), realPackText("fa-solid"));
+		await h.service.ensureArtworkFor([
+			{ type: "rpg-awesome", value: "acid" },
+			{ type: "rpg-awesome", value: "anvil" },
+			{ type: "fa-solid", value: "star" },
+		]);
+		assert.equal(h.looked.filter((p) => p.endsWith("rpg-awesome.json")).length, 1);
+		assert.ok(h.registry.findIconSvg("fa-solid", "star", ""));
 	});
 
 	it("does not pull down the other styles of a library it did not ask for", async () => {
