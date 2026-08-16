@@ -550,16 +550,15 @@ describe("inject — what lands in the stylesheet", () => {
  * Security: the id in the selector
  * ──────────────────────────────────────────────────────────────────────────── */
 
-describe("SECURITY — a callout id is interpolated into a selector unescaped", () => {
+describe("SECURITY — a callout id in a selector is escaped, not concatenated", () => {
 	/**
-	 * `calloutSel` builds `.callout[data-callout="<id>"]` by concatenation.
-	 * `obsidianCalloutAttrId` only trims, lowercases and dasherizes whitespace —
-	 * it escapes nothing — so a `"` or a `\` in the id reaches the stylesheet
-	 * verbatim.
+	 * `calloutSel` builds `.callout[data-callout="<id>"]`, and
+	 * `obsidianCalloutAttrId` — which is all it used to run the id through —
+	 * only trims, lowercases and dasherizes whitespace. It escapes nothing, so
+	 * a `"` or a `\` in the id used to reach the stylesheet verbatim.
 	 *
-	 * Both characters can get there without the user typing them into the ID
-	 * field (`sanitizeCalloutIdInput` does strip them, which is what has hidden
-	 * this):
+	 * Both characters get there without the user typing them into the ID field
+	 * (`sanitizeCalloutIdInput` does strip them, which is what hid this):
 	 *
 	 * - **Vault discovery.** The scanner's header regex is `\[!([^\]\n\r]+)\]`,
 	 *   so a note containing `> [!ev"il]` yields the id `ev"il`, and
@@ -568,23 +567,20 @@ describe("SECURITY — a callout id is interpolated into a selector unescaped", 
 	 * - **Import.** `ID_BAD_CHAR_RE` is `/[|\][\t\n\r]/` — it rejects pipes,
 	 *   brackets and non-space whitespace, and permits `"` and `\`.
 	 *
-	 * What it costs: `]` IS filtered on both paths, so an attacker cannot close
-	 * the attribute selector and open a declaration block of their own — this is
-	 * not arbitrary rule injection. What they get is parser corruption. A bare
-	 * `"` makes the selector invalid, and CSS error recovery discards the whole
-	 * rule; a TRAILING `\` escapes the closing quote calloutSel writes, so the
-	 * string token runs on and swallows the text after it. Either way a callout
-	 * the user did define can silently lose its styling, and the blast radius is
-	 * the generated sheet.
+	 * What it cost: `]` IS filtered on both paths, so an attacker cannot close
+	 * the attribute selector and open a declaration block of their own — this
+	 * was never arbitrary rule injection. What they got is parser corruption. A
+	 * bare `"` makes the selector invalid, and CSS error recovery discards the
+	 * whole rule; a TRAILING `\` escapes the closing quote the selector wrote,
+	 * so the string token runs on and swallows the text after it. Either way a
+	 * callout the user did define silently loses its styling, and the blast
+	 * radius is the rest of the generated sheet.
 	 *
-	 * The fix is one function: run the id through a CSS string escaper in
-	 * `calloutSel` (and in the `[data-callout="…"]` selectors `generateFoldArrowCSS`,
-	 * `generateTokenColorCSS`, `iconTransformSelector`, `externalExclusion` and
-	 * `generateFallbackCSS` build for the plugin's own DOM), the way
-	 * `generateEmojiOverride` already escapes the one string it interpolates.
-	 *
-	 * Marked `todo`: these report the gap on every run without turning the suite
-	 * red for a bug the tests did not introduce. Drop the flag with the fix.
+	 * The fix is one function — `cssAttrValue` in `CSSInjector.ts` — reached
+	 * from both selector builders (`calloutSel` for Obsidian's own DOM,
+	 * `tokenAttrSel` for the heading/pill/ref DOM that is ours), which is why
+	 * the last two tests here drive the token emitters rather than only
+	 * `generateCalloutCSS`.
 	 */
 	const generate = (id: string): string => {
 		const registry = new CalloutRegistry();
@@ -635,58 +631,92 @@ describe("SECURITY — a callout id is interpolated into a selector unescaped", 
 		);
 	});
 
-	it(
-		"a double quote in the id does not break out of the attribute selector",
-		{ todo: "calloutSel does not escape — see the block comment above" },
-		() => {
-			const css = generate('ev"il');
-			assert.ok(
-				!css.includes('data-callout="ev"il"'),
-				"the id closed the attribute selector early",
-			);
-			assert.strictEqual(
-				bracesInsideStrings(css),
-				0,
-				"rule bodies ended up inside a string token",
-			);
-		},
-	);
+	it("a double quote in the id does not break out of the attribute selector", () => {
+		const css = generate('ev"il');
+		assert.ok(
+			!css.includes('data-callout="ev"il"'),
+			"the id closed the attribute selector early",
+		);
+		assert.ok(
+			css.includes('data-callout="ev\\"il"'),
+			"the quote should survive as an escape, not be dropped",
+		);
+		assert.strictEqual(
+			bracesInsideStrings(css),
+			0,
+			"rule bodies ended up inside a string token",
+		);
+	});
 
-	it(
-		"a trailing backslash does not escape the closing quote",
-		{ todo: "calloutSel does not escape — see the block comment above" },
-		() => {
-			// The nastier of the two: `[data-callout="back\"]` leaves the string
-			// token open, so the parser eats whatever the generator wrote next.
-			const css = generate("back\\");
-			assert.ok(
-				!css.includes('data-callout="back\\"'),
-				"the id escaped its own closing quote",
-			);
-			assert.strictEqual(bracesInsideStrings(css), 0);
-		},
-	);
+	it("a trailing backslash does not escape the closing quote", () => {
+		// The nastier of the two: `[data-callout="back\"]` leaves the string
+		// token open, so the parser eats whatever the generator wrote next.
+		const css = generate("back\\");
+		assert.ok(
+			!css.includes('data-callout="back\\"'),
+			"the id escaped its own closing quote",
+		);
+		assert.ok(css.includes('data-callout="back\\\\"'));
+		assert.strictEqual(bracesInsideStrings(css), 0);
+	});
 
-	it(
-		"a hostile id cannot cost a neighbouring callout its rules",
-		{ todo: "calloutSel does not escape — see the block comment above" },
-		() => {
-			const registry = new CalloutRegistry();
-			registry.load(null);
-			const injector = new CSSInjector({} as App, registry);
-			const css = injector as unknown as {
-				generateCalloutCSS(d: ReturnType<typeof definition>): string;
-			};
-			// One discovered row is enough to reach the rest of the sheet: the
-			// blast radius is what makes this worth fixing rather than a curiosity
-			// about one broken selector.
-			const sheet = [
-				css.generateCalloutCSS(definition({ id: "back\\" })),
-				css.generateCalloutCSS(definition({ id: "innocent" })),
-			].join("\n\n");
-			assert.strictEqual(bracesInsideStrings(sheet), 0);
-		},
-	);
+	it("a hostile id cannot cost a neighbouring callout its rules", () => {
+		const registry = new CalloutRegistry();
+		registry.load(null);
+		const injector = new CSSInjector({} as App, registry);
+		const css = injector as unknown as {
+			generateCalloutCSS(d: ReturnType<typeof definition>): string;
+		};
+		// One discovered row is enough to reach the rest of the sheet: the
+		// blast radius is what makes this worth fixing rather than a curiosity
+		// about one broken selector.
+		const sheet = [
+			css.generateCalloutCSS(definition({ id: "back\\" })),
+			css.generateCalloutCSS(definition({ id: "innocent" })),
+		].join("\n\n");
+		assert.strictEqual(bracesInsideStrings(sheet), 0);
+		// Not just "no braces got swallowed": the innocent row's own rule has to
+		// still be there to apply, which is the damage a reader would notice.
+		assert.ok(sheet.includes('data-callout="innocent"'));
+	});
+
+	it("escapes an alias and the plugin's own token DOM too", () => {
+		// calloutSel is not the only builder — the heading bar, the inline pill
+		// and the ref token carry the space-preserving id through tokenAttrSel,
+		// and an alias reaches both. Fixing only the `.callout[…]` selector
+		// would leave every one of these open.
+		const registry = new CalloutRegistry();
+		registry.load(null);
+		const injector = new CSSInjector({} as App, registry);
+		const css = (
+			injector as unknown as {
+				generateTokenColorCSS(d: CalloutDefinition): string;
+			}
+		).generateTokenColorCSS(
+			definition({ id: "plain", aliases: ['ev"il', "back\\"] }),
+		);
+		assert.strictEqual(bracesInsideStrings(css), 0);
+		assert.ok(!css.includes('data-callout="ev"il"'));
+		assert.ok(!css.includes('data-callout="back\\"'));
+	});
+
+	it("keeps the fallback's :not() chain from swallowing the sheet", () => {
+		// The catch-all lists every known id, so ONE hostile row breaks the
+		// exclusion for all of them — and these rules carry `!important`, so a
+		// broken chain repaints callouts the user did define.
+		const registry = new CalloutRegistry();
+		registry.load(null);
+		registry.add(definition({ id: "back\\" }));
+		registry.settings.fallbackCalloutId = "note";
+		const injector = new CSSInjector({} as App, registry);
+		const css = (
+			injector as unknown as {
+				generateFallbackCSS(c: CalloutDefinition[]): string;
+			}
+		).generateFallbackCSS(registry.getAll());
+		assert.strictEqual(bracesInsideStrings(css), 0);
+		assert.ok(css.includes(':not([data-callout="back\\\\"])'));
+	});
 
 	it("the two ways such an id reaches the registry are both open", () => {
 		// This one is NOT todo — it asserts current, verifiable behaviour, and is
