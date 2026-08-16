@@ -605,7 +605,7 @@ describe("no new oversized files", () => {
 		"src/editor/calloutTokens.ts": 840,
 		"src/types.ts": 794,
 		"src/editor/livepreview/widgets.ts": 794,
-		"src/reading/calloutPostProcessor.ts": 782,
+		"src/reading/calloutPostProcessor.ts": 781,
 		"src/settings/iconpicker/PackPanel.ts": 736,
 		"src/utils/colorUtils.ts": 727,
 		"src/settings/iconpicker/IconPickerModal.ts": 681,

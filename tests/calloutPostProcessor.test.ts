@@ -732,27 +732,33 @@ describe("inline pills", () => {
 		assert.ok(one(root, `.${CSS_HEADING_TITLE}`).querySelector(`.${CSS_INLINE_TOKEN}`));
 	});
 
-	it(
-		"leaves a heading's token raw when the heading role is off",
-		{
-			todo:
-				"the `headingCallouts.enabled` term in the isHeadingLeadingTextNode " +
-				"guard turns the guard OFF with the role, so reading view pills the " +
-				"heading token while Live Preview (which `continue`s on " +
-				"`role === \"heading\"`) leaves it raw",
-		},
-		() => {
-			const h = withQuiet();
-			h.settings.headingCallouts.enabled = false;
-			const root = h.render(
-				"<div><h2>[!quiet] My title</h2></div>",
-				"## [!quiet] My title",
-			);
+	it("leaves a heading's token raw when the heading role is off", () => {
+		// Turning the role off must stop the BAR, not swap it for a pill. Live
+		// Preview `continue`s on `role === "heading"` and leaves the raw `[!id]`
+		// standing, so the guard that keeps a heading's own token out of this
+		// pass has to hold whether the role is on or off — otherwise the same
+		// note reads two different ways on the two surfaces.
+		const h = withQuiet();
+		h.settings.headingCallouts.enabled = false;
+		const root = h.render(
+			"<div><h2>[!quiet] My title</h2></div>",
+			"## [!quiet] My title",
+		);
 
-			assert.strictEqual(pills(root).length, 0);
-			assert.strictEqual(one(root, "h2").textContent, "[!quiet] My title");
-		},
-	);
+		assert.strictEqual(pills(root).length, 0);
+		assert.strictEqual(one(root, "h2").textContent, "[!quiet] My title");
+	});
+
+	it("leaves it raw with no source line to consult either", () => {
+		// The embed / PDF-export path: `getSectionInfo` answers null, so the
+		// guard is the only thing standing between the heading token and a pill.
+		const h = withQuiet();
+		h.settings.headingCallouts.enabled = false;
+		const root = h.render("<div><h2>[!quiet] My title</h2></div>");
+
+		assert.strictEqual(pills(root).length, 0);
+		assert.strictEqual(one(root, "h2").textContent, "[!quiet] My title");
+	});
 });
 
 describe("inline pills — escaped tokens", () => {
@@ -998,5 +1004,25 @@ describe("content pills — the shapes it refuses", () => {
 		);
 
 		assert.strictEqual(root.textContent, "x [!quiet]{be careful} y");
+	});
+
+	it("a heading's own token, even with the heading role off", () => {
+		// Same guard as the plain-pill pass, and for the same reason: with the
+		// role off the heading transform never runs, so this pass is what stands
+		// between `## [!quiet]{x}` and a content pill Live Preview would never
+		// draw. The inline role is still on here — that is the whole point.
+		const h = withQuiet();
+		h.settings.headingCallouts.enabled = false;
+		const root = h.render(
+			"<div><h2>[!quiet]{shhh} My title</h2></div>",
+			"## [!quiet]{shhh} My title",
+		);
+
+		assert.strictEqual(pills(root).length, 0);
+		assert.strictEqual(root.querySelector(`.${CSS_CALLOUT_PAYLOAD}`), null);
+		assert.strictEqual(
+			one(root, "h2").textContent,
+			"[!quiet]{shhh} My title",
+		);
 	});
 });

@@ -401,6 +401,13 @@ function transformHeadingRefLinks(
  * After a successful heading transform the token DOM element precedes the
  * remaining title text, so findLeadingTextNode returns null and genuine
  * inline tokens inside the title are unaffected.
+ *
+ * **Its callers must never condition it on `headingCallouts.enabled`.** The
+ * role being off is precisely the case the guard exists for: Live Preview
+ * `continue`s on `role === "heading"` and leaves the raw `[!id]` standing, so a
+ * reading view that pilled it instead would make the same note read two
+ * different ways. Switching the role off must stop the *bar*, not swap it for a
+ * pill.
  */
 function isHeadingLeadingTextNode(node: Text): boolean {
 	const h = node.parentElement?.closest<HTMLElement>("h1,h2,h3,h4,h5,h6");
@@ -580,11 +587,7 @@ function transformContentPills(el: HTMLElement, host: ReadingRenderHost): number
 				if (token.content && token.content.to === token.content.from + 2) {
 					continue;
 				}
-				if (
-					token.from === 0 &&
-					host.settings.headingCallouts.enabled &&
-					isHeadingLeadingTextNode(text)
-				) {
+				if (token.from === 0 && isHeadingLeadingTextNode(text)) {
 					continue;
 				}
 				if (!shouldRenderToken(resolveCalloutDef(host.registry, token.rawId))) {
@@ -667,11 +670,7 @@ function transformInlinePills(
 			inlineContent: host.settings.inlineCallouts.allowContent,
 		})) {
 			if (token.role !== "inline") continue;
-			if (
-				token.from === 0 &&
-				host.settings.headingCallouts.enabled &&
-				isHeadingLeadingTextNode(node as Text)
-			) {
+			if (token.from === 0 && isHeadingLeadingTextNode(node as Text)) {
 				continue;
 			}
 			// A payload still being typed renders nothing at all, matching Live
