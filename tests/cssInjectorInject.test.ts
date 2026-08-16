@@ -23,9 +23,9 @@
  * debounce was removed. What collapses repeat work now is `lastCssText`: every
  * change injects, and every inject whose output is byte-identical stops before
  * the stylesheet swap, the localStorage write and the `css-change`. That is the
- * property pinned below. (`CLAUDE.md`'s data-flow step 2 and the doc comment at
- * the top of `settings/styleControls.ts` both still name `scheduleInject`; both
- * are stale.)
+ * property pinned below — and, since the two docs that still named the removed
+ * method were what made this look like a missing feature rather than a decision,
+ * the last describe block keeps them honest as text.
  *
  * **A callout id is interpolated into a CSS selector unescaped.** See the last
  * describe block. Its tests are `todo`, so they report without failing the
@@ -37,6 +37,7 @@ import type { App } from "obsidian";
 import { CalloutRegistry } from "../src/manager/CalloutRegistry";
 import { CSSInjector } from "../src/manager/CSSInjector";
 import { definition, outline, parseRules } from "./support/cssInjectorHarness";
+import { pluginSourceFiles, readRepoFile } from "./support/sourceScan";
 import type { CalloutDefinition } from "../src/types";
 
 /* ────────────────────────────────────────────────────────────────────────────
@@ -711,5 +712,62 @@ describe("SECURITY — a callout id is interpolated into a selector unescaped", 
 		// anything that is not #rgb / #rrggbb.
 		const css = generate("plain");
 		assert.ok(!css.includes(";}"), css);
+	});
+});
+
+/* ────────────────────────────────────────────────────────────────────────────
+ * The docs describe the injector that exists
+ * ──────────────────────────────────────────────────────────────────────────── */
+
+/**
+ * A text check rather than a behavioural one, because the defect is textual:
+ * `scheduleInject` was removed from the injector, and two documents kept
+ * naming it — `CLAUDE.md`'s data-flow step 2 and the header of
+ * `settings/styleControls.ts`. Both read as a promise of a debounce that no
+ * caller can get, which is exactly how the absence of one came to look like an
+ * oversight instead of the deliberate reversal `main.ts` records.
+ *
+ * Scoped to the identifier alone: prose may (and now does) say there *is* no
+ * `scheduleInject`, so the rule is about naming it as something the code
+ * offers, not about the word appearing. Hence the call/member forms below
+ * rather than a bare substring.
+ */
+describe("nothing documents a scheduleInject the injector does not have", () => {
+	/** `scheduleInject(` or `.scheduleInject` — the two ways a doc names it as API. */
+	const NAMED_AS_API = /\.scheduleInject\b|\bscheduleInject\s*\(/;
+
+	it("the injector really has no such member", () => {
+		// The premise. If this ever fails, the rule below is wrong rather than the
+		// docs, and the debounce needs tests of its own (see the suite header).
+		const registry = new CalloutRegistry();
+		registry.load(null);
+		const injector = new CSSInjector({} as App, registry);
+		assert.strictEqual(
+			(injector as unknown as Record<string, unknown>).scheduleInject,
+			undefined,
+		);
+	});
+
+	it("no source file names it as a call or a member", () => {
+		const offenders = pluginSourceFiles()
+			.filter((f) => NAMED_AS_API.test(f.text))
+			.map((f) => f.path);
+		assert.deepStrictEqual(
+			offenders,
+			[],
+			"these still describe cssInjector.scheduleInject(); it was removed",
+		);
+	});
+
+	it("CLAUDE.md's data-flow step names inject() instead", () => {
+		const doc = readRepoFile("CLAUDE.md");
+		assert.ok(
+			!NAMED_AS_API.test(doc),
+			"CLAUDE.md still documents cssInjector.scheduleInject()",
+		);
+		assert.ok(
+			/`cssInjector\.inject\(\)`/.test(doc),
+			"CLAUDE.md's data flow no longer names the method that does exist",
+		);
 	});
 });

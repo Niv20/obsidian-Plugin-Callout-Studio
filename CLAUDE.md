@@ -30,7 +30,7 @@ Callout Studio is an Obsidian plugin that lets users create and manage custom ca
 ### Data flow
 
 1. User edits a callout → `registry.update()` → `onChange` fires  
-2. `onChange` → `cssInjector.scheduleInject()` + Obsidian CSS-change trigger  
+2. `onChange` → `cssInjector.inject()`, which emits the Obsidian CSS-change trigger itself. There is no `scheduleInject` and no debounce: scheduling one *and* triggering `css-change` ran the whole pass twice per mutation (see `main.ts`). Repeat work is collapsed by output instead — an inject whose text is byte-identical to the last stops before the stylesheet swap, the `localStorage` write and the trigger.  
 3. `CSSInjector.inject()` → new CSS in `adoptedStyleSheets` + DOM icon refresh  
 4. User opens a note → `CalloutDiscovery` scans → auto-creates fallback rows if needed  
 5. Icon selected → `IconService.ensureArtwork()` → fetch if needed → copy into `iconSvgCache` → re-inject  
