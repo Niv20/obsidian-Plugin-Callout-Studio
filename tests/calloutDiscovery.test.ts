@@ -242,28 +242,61 @@ describe("addUnknownCalloutsAsFallback — the shape of a created row", () => {
 		assert.strictEqual(h.registry.get("alpha"), undefined);
 	});
 
-	it(
-		"gives every row its own icon object",
-		{ todo: "`icon: fallback.icon` re-aliases what the spread copied" },
-		() => {
-			// `{ ...fallback, icon: fallback.icon, … }` restates a key the spread
-			// had already copied, and restates it as the *same reference* — so
-			// every row a scan creates, and the live fallback definition in the
-			// registry, all share one `CalloutIcon`. Nothing mutates an icon in
-			// place today, which is exactly why this has stayed invisible; the
-			// sibling path `restyleUncustomizedFallbackRows` clones it
-			// (`icon: { ...fallback.icon }`) rather than rely on that.
-			const h = discoveryHarness();
-			h.discovery.addUnknownCalloutsAsFallback(["alpha", "beta"]);
-			const alpha = row(h.registry.get("alpha"), "alpha");
-			const beta = row(h.registry.get("beta"), "beta");
-			const note = row(h.registry.get("note"), "note");
+	it("gives every row its own icon object", () => {
+		// `{ ...fallback, icon: fallback.icon, … }` restated a key the spread
+		// had already copied, and restated it as the *same reference* — so
+		// every row a scan created, and the live fallback definition in the
+		// registry, all shared one `CalloutIcon`. Nothing mutates an icon in
+		// place today, which is exactly why it stayed invisible; the sibling
+		// path `restyleUncustomizedFallbackRows` clones it rather than rely on
+		// that, and so does this one now.
+		const h = discoveryHarness();
+		h.discovery.addUnknownCalloutsAsFallback(["alpha", "beta"]);
+		const alpha = row(h.registry.get("alpha"), "alpha");
+		const beta = row(h.registry.get("beta"), "beta");
+		const note = row(h.registry.get("note"), "note");
 
-			assert.deepStrictEqual(alpha.icon, note.icon, "same drawing");
-			assert.notStrictEqual(alpha.icon, beta.icon, "shared between rows");
-			assert.notStrictEqual(alpha.icon, note.icon, "shared with the source");
-		},
-	);
+		assert.deepStrictEqual(alpha.icon, note.icon, "same drawing");
+		assert.notStrictEqual(alpha.icon, beta.icon, "shared between rows");
+		assert.notStrictEqual(alpha.icon, note.icon, "shared with the source");
+		// A write through one row must not be visible through any other — the
+		// failure the identity assertions above are standing in for.
+		alpha.icon.value = "lucide-anchor";
+		assert.notStrictEqual(beta.icon.value, "lucide-anchor");
+		assert.notStrictEqual(note.icon.value, "lucide-anchor");
+	});
+
+	it("clones the other objects the fallback hands over by reference", () => {
+		// `icon` is not the only one the spread aliases: a gradient and a
+		// per-role icon-adjust map are objects too, and the sibling path clones
+		// both (`{ ...bgGradient }`, `structuredClone(iconAdjust)`).
+		const h = discoveryHarness();
+		h.registry.add(
+			definition({
+				id: "fancy",
+				source: "user",
+				bgColorLight: "#101010",
+				bgColorDark: "#202020",
+				bgGradient: {
+					angleDeg: 45,
+					toColorLight: "#303030",
+					toColorDark: "#404040",
+				},
+				iconAdjust: { regular: { offsetX: 2 } },
+			}),
+		);
+		h.settings.fallbackCalloutId = "fancy";
+		h.discovery.addUnknownCalloutsAsFallback(["alpha"]);
+		const alpha = row(h.registry.get("alpha"), "alpha");
+		const fancy = row(h.registry.get("fancy"), "fancy");
+
+		assert.deepStrictEqual(alpha.bgGradient, fancy.bgGradient);
+		assert.notStrictEqual(alpha.bgGradient, fancy.bgGradient);
+		assert.deepStrictEqual(alpha.iconAdjust, fancy.iconAdjust);
+		assert.notStrictEqual(alpha.iconAdjust, fancy.iconAdjust);
+		// Nested one level down as well, which a shallow spread would miss.
+		assert.notStrictEqual(alpha.iconAdjust?.regular, fancy.iconAdjust?.regular);
+	});
 
 	it("falls back to the SHIPPED note when the configured fallback is gone", () => {
 		// `registry.get(fallbackId) ?? noteDefault` reaches past the registry to

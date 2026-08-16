@@ -60,7 +60,22 @@ export function buildDiscoveredRow(
 ): CalloutDefinition {
 	return {
 		...fallback,
-		icon: fallback.icon,
+		// Restated only to CLONE it. `{ ...fallback }` copies the reference, so
+		// writing `icon: fallback.icon` after it changed nothing: every row a
+		// scan created, and the live fallback definition the registry hands the
+		// renderer, all shared one `CalloutIcon` object. Nothing mutates an icon
+		// in place today, which is exactly why it stayed invisible — but a
+		// single in-place write (a resolver stamping a resolved value, an
+		// importer normalizing a pack id) would then travel to every row at
+		// once, with no `update()` and no save. `restyleUncustomizedFallbackRows`
+		// clones for the same reason rather than rely on that.
+		icon: { ...fallback.icon },
+		// The only other objects the spread hands over by reference, cloned on
+		// the same grounds and with the same depth the sibling path uses.
+		bgGradient: fallback.bgGradient ? { ...fallback.bgGradient } : undefined,
+		iconAdjust: fallback.iconAdjust
+			? structuredClone(fallback.iconAdjust)
+			: undefined,
 		id,
 		// Dash-to-space before capitalizing, matching Obsidian's own
 		// default-title algorithm — see obsidianDefaultTitle.
