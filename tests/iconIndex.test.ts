@@ -181,20 +181,47 @@ describe("decodeIndex — the shape it produces", () => {
 		}
 	});
 
-	it("gives every entry a label once ANY entry has one", () => {
-		// The label column is all-or-nothing: `encodeIndex` writes it when some
-		// entry's label differs from its name, and fills the rest in with their
-		// own name. So an entry that declared no label comes back carrying its
-		// raw name as one — which is the *unprettified* spelling the tooltip
-		// would otherwise have cleaned up. Harmless today (no bundled index has
-		// labels) and pinned here so it is a decision rather than a surprise the
-		// day one does.
+	it("leaves an entry that declared no label without one, column or not", () => {
+		// The column used to be all-or-nothing: one entry with a label gave every
+		// entry a label, and an entry that had declared none was filled in with
+		// its own raw name. That is not the same as having no label — the tooltip
+		// falls back to a *prettified* name, so `b_c` would have shipped as
+		// "b_c" where it should read "B c". Only the entries that actually said
+		// something carry anything.
 		const index = build([
 			{ name: "a", label: "Alpha", categories: [], keywords: [] },
 			{ name: "b_c", categories: [], keywords: [] },
 		]);
 		assert.equal(index.entries[0]?.label, "Alpha");
-		assert.equal(index.entries[1]?.label, "b_c");
+		assert.ok(
+			!("label" in (index.entries[1] as object)),
+			"an entry that declared no label was given its own name as one",
+		);
+	});
+
+	it("does not spend the whole name list on a column two entries use", () => {
+		// The byte half of the same bug: filling every row in meant the label
+		// column was a second copy of every name in the library, and Material's
+		// names alone are 60 KB.
+		const encoded: EncodedIndex = encodeIndex([
+			{ name: "a", label: "Alpha", categories: [], keywords: [] },
+			{ name: "an-extremely-long-icon-name", categories: [], keywords: [] },
+		]);
+		assert.ok(
+			!encoded.l?.includes("an-extremely-long-icon-name"),
+			"a label-less entry paid for its own name in the label column",
+		);
+	});
+
+	it("treats a label identical to its name as no label at all", () => {
+		// Both spellings of "nothing to add" have to land in the same place, or
+		// which one a generator happens to emit changes what ships.
+		const index = build([
+			{ name: "a", label: "Alpha", categories: [], keywords: [] },
+			{ name: "b", label: "b", categories: [], keywords: [] },
+		]);
+		assert.equal(index.entries[0]?.label, "Alpha");
+		assert.ok(!("label" in (index.entries[1] as object)));
 	});
 
 	it("leaves the label column out when every label just repeats its name", () => {

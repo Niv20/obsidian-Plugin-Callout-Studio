@@ -692,11 +692,15 @@ async function assertRoundTrip(entries, encoded) {
 	const { decodeIndex } = await jiti.import(join(DATA_DIR, "codec.ts"));
 
 	const decoded = decodeIndex(encoded);
+	// A label identical to its name is dropped on the way in, deliberately —
+	// see encodeIndex. Normalising both sides the same way keeps that from
+	// reading as the encoder and decoder disagreeing, without excusing any
+	// other difference.
 	const normalize = (list) =>
 		JSON.stringify(
 			list.map((e) => ({
 				name: e.name,
-				label: e.label ?? undefined,
+				label: e.label && e.label !== e.name ? e.label : undefined,
 				categories: [...e.categories],
 				keywords: [...e.keywords],
 			})),
