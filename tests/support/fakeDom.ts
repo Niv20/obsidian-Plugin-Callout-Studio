@@ -26,9 +26,17 @@
  *   an invariant the post-processor is written around and a snapshot would hide;
  * - `closest` / `matches` / `querySelector`, over a selector grammar that is a
  *   comma-separated list of *compound* selectors (`tag`, `.class`, `[attr]`,
- *   `[attr="v"]`), plus the one combinator production really uses:
- *   `:scope > .cls` (`OutlineDecorator.clearDecoration`), handled as a whole
- *   selector rather than as a general combinator grammar;
+ *   `[attr="v"]`), optionally chained by the descendant combinator
+ *   (`.search-input-container input`, which `hotkeyLink` uses), plus the one
+ *   child production really uses: `:scope > .cls`
+ *   (`OutlineDecorator.clearDecoration`), handled as a whole selector rather
+ *   than as a general combinator grammar — on `FakeDocument` too, whose root is
+ *   `documentElement` and not `body`;
+ * - element-level `addEventListener` / `dispatchEvent` (bubbling, because
+ *   `hotkeyLink` relies on it) and the handful of `HTMLInputElement` fields
+ *   `hotkeyLink.findVisibleInput` reads before it will write to a search box;
+ * - `window.setTimeout`, deferred exactly like `requestAnimationFrame` so a
+ *   suite states when a retry fires instead of racing it;
  * - `MutationObserver` and `requestAnimationFrame`, which are the entire input
  *   to `OutlineDecorator` — both deferred until a test flushes them, so a suite
  *   states when the pane re-renders instead of racing it;
@@ -522,6 +530,26 @@ export class FakeElement {
 		this.classList.remove(...classes);
 	}
 
+	/**
+	 * The plural form. Obsidian ships both, and they take their arguments
+	 * differently — `removeClass(...names)` is variadic, `removeClasses(names)`
+	 * takes one array — which is exactly the sort of thing a stand-in gets
+	 * wrong. `removeModalChrome` calls this one.
+	 */
+	removeClasses(classes: string[]): void {
+		this.classList.remove(...classes);
+	}
+
+	/**
+	 * Obsidian's array-returning `querySelectorAll`. Its whole reason to exist
+	 * is that the real one returns a `NodeList`, so callers `.forEach` over the
+	 * result and index into it — `applyModalChrome` detaches an old footer this
+	 * way.
+	 */
+	findAll(selector: string): FakeElement[] {
+		return this.querySelectorAll(selector);
+	}
+
 	toggleClass(classes: string | string[], value: boolean): void {
 		for (const cls of Array.isArray(classes) ? classes : [classes]) {
 			this.classList.toggle(cls, value);
@@ -573,6 +601,83 @@ export class FakeElement {
 	 */
 	setCssProp(name: string, value: string): void {
 		this.cssProps.set(name, value);
+	}
+
+	/* ---- form controls ---- */
+
+	/**
+	 * The four things `hotkeyLink.findVisibleInput` asks of a candidate input,
+	 * plus the value it then writes. Plain fields rather than a separate
+	 * `FakeInput` subclass: the code under test finds these through
+	 * `querySelectorAll<HTMLInputElement>`, which does no narrowing at runtime,
+	 * so any element it reaches has to be able to answer.
+	 *
+	 * `rects` defaults to 1 — laid out. There is no layout here to derive it
+	 * from, and defaulting to 0 would make every input in every suite invisible,
+	 * which is the wrong way round: a suite that wants a hidden input says so.
+	 */
+	value = "";
+	disabled = false;
+	readOnly = false;
+	/** How many client rects {@link getClientRects} reports. 0 = not rendered. */
+	rects = 1;
+	/** Bumped by {@link focus} / {@link select}, which have nothing else to do. */
+	focusCount = 0;
+	selectCount = 0;
+
+	focus(): void {
+		this.focusCount++;
+		this.ownerDocument.activeElement = this;
+	}
+
+	select(): void {
+		this.selectCount++;
+	}
+
+	getClientRects(): { length: number } {
+		return { length: this.rects };
+	}
+
+	/* ---- events ---- */
+
+	private readonly listeners = new Map<string, Array<(ev: unknown) => void>>();
+
+	addEventListener(type: string, fn: (ev: unknown) => void): void {
+		const list = this.listeners.get(type) ?? [];
+		list.push(fn);
+		this.listeners.set(type, list);
+	}
+
+	removeEventListener(type: string, fn: (ev: unknown) => void): void {
+		const list = this.listeners.get(type);
+		if (!list) return;
+		const at = list.indexOf(fn);
+		if (at >= 0) list.splice(at, 1);
+	}
+
+	/** Fire this element's own listeners for a type. No bubbling. */
+	fire(type: string, event: unknown = { type }): void {
+		for (const fn of [...(this.listeners.get(type) ?? [])]) fn(event);
+	}
+
+	/**
+	 * A real dispatch: the target first, then every ancestor, when the event
+	 * says it bubbles. Modelled rather than collapsed into {@link fire} because
+	 * `hotkeyLink` dispatches a *bubbling* `input` at the search box precisely
+	 * so the pane's own delegated listener hears it — an implementation that
+	 * only fired locally would pass a test the real DOM would fail.
+	 */
+	dispatchEvent(event: { type: string; bubbles?: boolean }): boolean {
+		this.fire(event.type, event);
+		if (event.bubbles !== true) return true;
+		for (
+			let node = this.parentElement;
+			node;
+			node = node.parentElement
+		) {
+			node.fire(event.type, event);
+		}
+		return true;
 	}
 }
 
@@ -642,9 +747,42 @@ function matchesCompound(el: FakeElement, compound: string): boolean {
 }
 
 function matchesSelector(el: FakeElement, selector: string): boolean {
-	return selector
-		.split(",")
-		.some((compound) => matchesCompound(el, compound));
+	return selector.split(",").some((part) => matchesDescendantChain(el, part));
+}
+
+/**
+ * One comma-separated part, which may be a chain of compounds joined by the
+ * descendant combinator — `.search-input-container input`, which `hotkeyLink`
+ * uses to find the settings pane's search box.
+ *
+ * Matched right to left: the element itself against the last compound, then
+ * each preceding one against the nearest ancestor that satisfies it. Greedy is
+ * correct here, and only here: "is an ancestor of" is transitive, so consuming
+ * the closest match can never strand a compound that a farther one would have
+ * satisfied. That stops being true the moment `>` or `~` joins the chain, which
+ * is why neither is accepted — a general combinator grammar is a different
+ * thing from this, and `:scope > .cls` stays handled whole in
+ * {@link FakeElement.querySelectorAll}.
+ *
+ * Note that the ancestors are walked past the root a `querySelectorAll` was
+ * called on. That is the real behaviour: a selector is matched against the
+ * whole tree and only the *results* are restricted to the root's descendants.
+ */
+function matchesDescendantChain(el: FakeElement, part: string): boolean {
+	const compounds = part.trim().split(/\s+/).filter(Boolean);
+	const last = compounds.pop();
+	if (last === undefined) return false;
+	if (!matchesCompound(el, last)) return false;
+
+	let pending = compounds.length - 1;
+	for (
+		let node = el.parentElement;
+		node && pending >= 0;
+		node = node.parentElement
+	) {
+		if (matchesCompound(node, compounds[pending] as string)) pending--;
+	}
+	return pending < 0;
 }
 
 /* -------------------------------------------------------------------------- */
@@ -821,6 +959,52 @@ export class FakeWindow {
 	pendingFrames(): number {
 		return this.frames.size;
 	}
+
+	/* ---- timers ---- */
+
+	/**
+	 * Deferred exactly like the frames above, and for the same reason: a suite
+	 * has to be able to say *when* the retry happens. `hotkeyLink` polls for the
+	 * settings pane's search box on a 50ms timer up to twelve times, and a real
+	 * timer would make the difference between "gave up" and "has not tried yet"
+	 * a race.
+	 *
+	 * The delay is accepted and ignored — nothing here has a clock, and every
+	 * caller under test uses one fixed interval, so ordering by delay would be
+	 * modelling a distinction no test can observe.
+	 */
+	private readonly timers = new Map<number, () => void>();
+
+	setTimeout(fn: () => void, _delayMs?: number): number {
+		const id = this.seq++;
+		this.timers.set(id, fn);
+		return id;
+	}
+
+	clearTimeout(id: number): void {
+		this.timers.delete(id);
+	}
+
+	/** Fire every timer queued *now*; timers they queue wait for the next flush. */
+	flushTimers(): void {
+		const due = [...this.timers.values()];
+		this.timers.clear();
+		for (const fn of due) fn();
+	}
+
+	pendingTimers(): number {
+		return this.timers.size;
+	}
+
+	/**
+	 * Drop every queued timer without running it. For a suite tearing down
+	 * between cases: several of `hotkeyLink`'s tests deliberately leave a retry
+	 * pending, and flushing those into the next test would have it start with a
+	 * stray `Notice` and a search of the wrong DOM.
+	 */
+	clearTimers(): void {
+		this.timers.clear();
+	}
 }
 
 /* -------------------------------------------------------------------------- */
@@ -839,6 +1023,8 @@ export class FakeDocument {
 	readonly documentElement: FakeElement;
 	/** What `container.ownerDocument.defaultView` resolves to. */
 	defaultView: FakeWindow;
+	/** Last element {@link FakeElement.focus} was called on. */
+	activeElement: FakeElement | null = null;
 	/** Every listener added through `addEventListener`, by type. */
 	readonly listeners = new Map<string, Array<() => void>>();
 
@@ -863,6 +1049,25 @@ export class FakeDocument {
 
 	createDocumentFragment(): FakeDocumentFragment {
 		return new FakeDocumentFragment();
+	}
+
+	/* ---- selectors ---- */
+
+	/**
+	 * Document-level search, which is a different root from any element's:
+	 * `document.querySelectorAll` considers `documentElement` itself as well as
+	 * its subtree. `hotkeyLink` reaches for `.modal.mod-settings` this way and
+	 * would never find a modal appended to `<html>` if this only walked `body`.
+	 */
+	querySelectorAll(selector: string): FakeElement[] {
+		const root = this.documentElement;
+		const found = root.matches(selector) ? [root] : [];
+		found.push(...root.querySelectorAll(selector));
+		return found;
+	}
+
+	querySelector(selector: string): FakeElement | null {
+		return this.querySelectorAll(selector)[0] ?? null;
 	}
 
 	createTreeWalker(
@@ -952,7 +1157,10 @@ export interface FakeDomHandle {
  * `KeyboardEvent` are here because each is read as a value in the code under
  * test (`resolve.ts` guards on `HTMLElement`, `LinkSuggestDecorator` on
  * `Node.TEXT_NODE`, the reading post-processor on `NodeFilter.SHOW_TEXT`,
- * `OutlineDecorator` constructs a `MutationObserver`).
+ * `OutlineDecorator` constructs a `MutationObserver`). `Event` is deliberately
+ * NOT among them: Node has had a spec-compliant global since v15, so
+ * `new Event("input", { bubbles: true })` — what `hotkeyLink` dispatches —
+ * already behaves, and shadowing it would only invent a way to diverge.
  *
  * `node --test` runs each test *file* in its own process, so nothing installed
  * here can leak into another suite; `restore()` exists for the one suite that

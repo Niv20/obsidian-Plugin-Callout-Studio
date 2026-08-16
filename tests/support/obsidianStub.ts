@@ -27,10 +27,18 @@
  * - `__CS_NOTICES__`    — an array collecting every `new Notice(...)` message,
  *   so a suite can assert the user was told something. Absent by default, in
  *   which case `Notice` records nothing.
+ * - `__CS_MACOS__`      — whether `Platform.isMacOS` reports a Mac. Default
+ *   `false`, so the spelled-out Windows/Linux chord is what a suite gets unless
+ *   it says otherwise. Read once, at module scope, because that is when
+ *   `hotkeyLink` builds its glyph tables from it — which is why the only way to
+ *   flip it is a module imported *before* the code under test (see
+ *   tests/support/macPlatform.ts), and why the Mac chords live in a test file
+ *   of their own.
  *
  * Everything else is the smallest shape that lets `instanceof` and `super(...)`
- * work. Nothing here has behaviour worth asserting, and no test should assert
- * on it.
+ * work, with two exceptions carrying real behaviour — `Setting` and
+ * `SliderComponent`, which `settings/styleControls.ts` genuinely drives — and
+ * both say so at their definition.
  */
 import { StateField } from "@codemirror/state";
 
@@ -42,6 +50,7 @@ interface TestGlobals {
 	__CS_ICON_IDS__?: string[];
 	__CS_LIVE_PREVIEW__?: boolean;
 	__CS_NOTICES__?: string[];
+	__CS_MACOS__?: boolean;
 }
 
 const seams = globalThis as unknown as TestGlobals;
@@ -50,7 +59,11 @@ const seams = globalThis as unknown as TestGlobals;
 /* Platform / misc                                                            */
 /* -------------------------------------------------------------------------- */
 
-export const Platform = { isMobile: false, isDesktop: true, isMacOS: false };
+export const Platform = {
+	isMobile: false,
+	isDesktop: true,
+	isMacOS: seams.__CS_MACOS__ === true,
+};
 
 export const Keymap = { isModEvent: () => false };
 
@@ -91,12 +104,153 @@ export class Editor {}
  * that touches the popover. None of it is constructed there, and a suite that
  * did construct one would need real implementations rather than these.
  */
-export class Setting {}
-export class SliderComponent {}
 export class ToggleComponent {}
 export class PluginSettingTab {}
 export class Menu {}
 export class WorkspaceLeaf {}
+
+/* -------------------------------------------------------------------------- */
+/* Settings components — the two that ARE driven                              */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * The sliver of `HTMLElement` the two components below touch. Structural, so
+ * `tests/support/fakeDom.ts`'s `FakeElement` satisfies it without this file
+ * importing that one — which it must not, or every suite that so much as
+ * imports `obsidian` would have a fake DOM installed on it.
+ */
+type ElementLike = {
+	createDiv(options?: { cls?: string }): ElementLike;
+	value: string;
+};
+
+/**
+ * A real slider, unlike its neighbours above, because `settings/styleControls.ts`
+ * drives one: it formats the readout through it, sets the limits and the value
+ * through it, and hangs its own `input`/`pointer*` listeners on `sliderEl`.
+ *
+ * Two things are modelled deliberately:
+ *
+ * - **`setValue` clamps.** That is the `<input type="range">` doing it, not
+ *   Obsidian — which is exactly why `addStyleSlider` has to call `setLimits`
+ *   *before* `setValue`, and why that ordering is worth a test.
+ * - **`setDisplayFormat` is present.** It arrived in Obsidian 1.13, and this
+ *   models a build that has it. The older builds `setSliderDisplay` also has to
+ *   survive are covered by handing that helper a bare object without the method
+ *   — the branch is in the helper, not here.
+ *
+ * `onChange` is NOT wired to any DOM event: which event Obsidian fires it from
+ * is its own business, and pinning a guess here would be asserting a fact this
+ * file does not know. A suite calls {@link commit} to say "the component
+ * notified its consumer", which is the whole of the contract `styleControls`
+ * is written against.
+ */
+/**
+ * Every `SliderComponent` built since a suite last emptied it.
+ *
+ * `addStyleSlider` constructs its slider inside a callback it never hands back,
+ * so this is the only way to reach the component itself — the element is
+ * findable in the DOM, but `onChange` is not on the element. Empty it in a
+ * `beforeEach`; nothing resets it on its own.
+ */
+export const createdSliders: SliderComponent[] = [];
+
+export class SliderComponent {
+	readonly sliderEl: ElementLike;
+	min = 0;
+	max = 100;
+	step = 1;
+	/** The formatter `setSliderDisplay` installed, or null on an older build. */
+	displayFormat: ((value: number) => string) | null = null;
+	/** Every `setLimits`/`setValue` call, in order — the ordering is the point. */
+	readonly calls: string[] = [];
+	private changeCb: ((value: number) => unknown) | null = null;
+
+	constructor(containerEl: ElementLike) {
+		this.sliderEl = containerEl.createDiv({ cls: "slider" });
+		createdSliders.push(this);
+	}
+
+	setLimits(min: number, max: number, step: number): this {
+		this.min = min;
+		this.max = max;
+		this.step = step;
+		this.calls.push("setLimits");
+		return this;
+	}
+
+	setValue(value: number): this {
+		this.calls.push("setValue");
+		this.sliderEl.value = String(
+			Math.min(this.max, Math.max(this.min, value)),
+		);
+		return this;
+	}
+
+	getValue(): number {
+		return Number(this.sliderEl.value);
+	}
+
+	onChange(cb: (value: number) => unknown): this {
+		this.changeCb = cb;
+		return this;
+	}
+
+	setDynamicTooltip(): this {
+		return this;
+	}
+
+	setDisplayFormat(format: (value: number) => string): this {
+		this.displayFormat = format;
+		return this;
+	}
+
+	/** Test seam: the component telling its consumer the value changed. */
+	commit(value: number): unknown {
+		return this.changeCb?.(value);
+	}
+}
+
+/**
+ * Obsidian's setting row, as far as `styleControls` uses it: a container that
+ * builds the three-element skeleton and hands out components. Only `addSlider`
+ * is real — nothing else under test constructs one — and the rest are the
+ * fluent no-ops that keep a chained call from throwing.
+ */
+export class Setting {
+	readonly settingEl: ElementLike;
+	readonly infoEl: ElementLike;
+	readonly controlEl: ElementLike;
+	/** Every slider this row created, in order. */
+	readonly sliders: SliderComponent[] = [];
+
+	constructor(containerEl: ElementLike) {
+		this.settingEl = containerEl.createDiv({ cls: "setting-item" });
+		this.infoEl = this.settingEl.createDiv({ cls: "setting-item-info" });
+		this.controlEl = this.settingEl.createDiv({
+			cls: "setting-item-control",
+		});
+	}
+
+	setName(): this {
+		return this;
+	}
+
+	setDesc(): this {
+		return this;
+	}
+
+	setClass(): this {
+		return this;
+	}
+
+	addSlider(cb: (slider: SliderComponent) => unknown): this {
+		const slider = new SliderComponent(this.controlEl);
+		this.sliders.push(slider);
+		cb(slider);
+		return this;
+	}
+}
 
 /** Records its message when `__CS_NOTICES__` is an array; inert otherwise. */
 export class Notice {
