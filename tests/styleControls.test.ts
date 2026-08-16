@@ -23,7 +23,7 @@
  * or an end (pointer vs. keyboard), and a caller swapping in a bespoke preview
  * for the duration must see exactly one start and one end per drag.
  */
-import { fakeDom, type FakeElement } from "./support/fakeDom";
+import { asEl, fakeDom, type FakeElement } from "./support/fakeDom";
 import assert from "node:assert";
 import { describe, it } from "node:test";
 import { createdSliders } from "./support/obsidianStub";
@@ -41,7 +41,14 @@ import type { SettingsTabPlugin } from "../src/settings/sections/types";
 /* -------------------------------------------------------------------------- */
 
 type Harness = {
-	parent: FakeElement;
+	/**
+	 * Cast once here rather than at each of the three dozen call sites below:
+	 * `addStyleSlider` and `createSliderRow` are typed against the real DOM, and
+	 * nothing in this suite asks the parent for anything a real `HTMLElement`
+	 * could not answer — it is passed straight through, compared for identity,
+	 * and read via `children` / `querySelector`.
+	 */
+	parent: HTMLElement;
 	plugin: SettingsTabPlugin;
 	/** Every `cssInjector.inject(...)` argument, in order. */
 	injects: Array<boolean | undefined>;
@@ -64,7 +71,7 @@ function harness(): Harness {
 	fakeDom.window.flushFrames();
 	fakeDom.document.body.empty();
 
-	const parent = fakeDom.document.body.createDiv({});
+	const parent = asEl(fakeDom.document.body.createDiv({}));
 	const injects: Array<boolean | undefined> = [];
 	const state = { saves: 0 };
 

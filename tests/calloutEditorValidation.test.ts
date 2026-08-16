@@ -224,10 +224,16 @@ describe("buildStateSnapshot — how the JSON shape behaves", () => {
 		// a different order stringify differently. Harmless — both snapshots come
 		// from the same literal in CalloutEditor — but it is the reason this is a
 		// dirty *flag* and never a diff, and the reason nothing may persist one.
+		// Destructured rather than written as two keys ahead of a spread of the
+		// whole thing: that form names `calloutId`/`displayName` twice, and the
+		// second one wins, so the compiler rejects it outright. Pulling them out
+		// first says the same thing — same values, `calloutId` ahead of
+		// `displayName` instead of behind it — with each key written once.
+		const { calloutId, displayName, ...rest } = baseSnapshot;
 		const reordered = buildStateSnapshot({
-			calloutId: baseSnapshot.calloutId,
-			displayName: baseSnapshot.displayName,
-			...baseSnapshot,
+			calloutId,
+			displayName,
+			...rest,
 		} as SnapshotInput);
 		assert.notStrictEqual(reordered, buildStateSnapshot(baseSnapshot));
 	});
