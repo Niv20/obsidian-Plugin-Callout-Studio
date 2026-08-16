@@ -46,19 +46,25 @@ function assertPathData(d, where) {
 
 /**
  * Upstream search terms, as the index should hold them: whitespace collapsed,
- * blanks dropped.
+ * blanks dropped, repeats dropped, otherwise in the order upstream gave them.
  *
  * Applied to every pack in `main()` rather than left to each builder, because
  * "the upstream data has debris in it" is not a property of any one library.
  * Octicons tags `eye-closed` with an empty string, which buys a whole
  * dictionary slot and a reference on the entry carrying it in exchange for
  * matching nothing at all — the search filters empty words out of a query
- * before it ever looks.
+ * before it ever looks. Font Awesome lists `replicate` on `copy` three times
+ * and `plume` on `feather` four; a repeat costs a reference apiece and cannot
+ * match anything the first one did not, since matching is a membership test.
  */
 function cleanTerms(values) {
-	return values
-		.map((value) => String(value).replace(/\s+/g, " ").trim())
-		.filter((value) => value.length > 0);
+	return [
+		...new Set(
+			values
+				.map((value) => String(value).replace(/\s+/g, " ").trim())
+				.filter((value) => value.length > 0),
+		),
+	];
 }
 
 /** One index entry with its upstream text put through `cleanTerms`. */
@@ -506,22 +512,15 @@ async function buildMaterial() {
 	);
 
 	// Google's table carries a little editorial debris — one tag on `moving`
-	// reads "potential tags could relate to:\n\nmoving". Collapsing whitespace
-	// keeps it searchable without letting a newline break the line-per-icon
-	// framing the index format relies on. Duplicates are dropped because a
-	// repeated tag costs a reference and matches nothing extra.
-	const clean = (values) => [
-		...new Set(
-			values
-				.map((value) => String(value).replace(/\s+/g, " ").trim())
-				.filter((value) => value.length > 0),
-		),
-	];
-
+	// reads "potential tags could relate to:\n\nmoving". `cleanTerms` collapses
+	// that whitespace, which keeps the tag searchable without letting a newline
+	// break the line-per-icon framing the index format relies on. It is called
+	// here rather than only in `main()` because the categories are sorted after
+	// it, and sorting the raw strings would sort the debris.
 	const entries = MATERIAL_ICON_METADATA.map((icon) => ({
 		name: icon.name,
-		categories: clean(icon.categories).sort(),
-		keywords: clean(icon.tags),
+		categories: cleanTerms(icon.categories).sort(),
+		keywords: cleanTerms(icon.tags),
 	}));
 
 	return {

@@ -354,6 +354,20 @@ describe("the bundled indexes decode to the libraries they claim", () => {
 			}
 		});
 
+		it(`${id} lists each of an icon's keywords once`, () => {
+			// Upstream repeats itself: Font Awesome tags `copy` with `replicate`
+			// three times and `feather` with `plume` four. Every repeat is
+			// another reference in the index and another string the search walks
+			// per keystroke, and it cannot match anything the first one did not.
+			for (const e of index.entries) {
+				assert.equal(
+					new Set(e.keywords).size,
+					e.keywords.length,
+					`"${e.name}" carries the same keyword twice`,
+				);
+			}
+		});
+
 		it(`${id} points every keyword code at a slot the dictionary has`, () => {
 			// The check has to be on the *codes*, not on the strings they decode
 			// to: an out-of-range code yields "" rather than throwing, so a width
