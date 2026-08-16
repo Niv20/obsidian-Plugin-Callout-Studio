@@ -799,6 +799,14 @@ export class CalloutRegistry {
 		// If the id is being changed, remove old and re-add
 		if (partial.id && partial.id !== id) {
 			if (this.callouts.has(partial.id)) return false;
+			// An id another definition already answers to is taken, whether it
+			// owns it outright or as an alias — {@link add} refuses both, and a
+			// rename that refused only the first left one raw id resolving
+			// through two definitions (`[!summary]` reaching the new row here
+			// and the built-in `abstract` through its alias). Skipping the row
+			// being renamed is what still lets it take one of its own aliases.
+			const aliasOwner = this.findByAlias(partial.id);
+			if (aliasOwner && aliasOwner.id !== id) return false;
 			this.callouts.delete(id);
 			this.setCallout(partial.id, { ...existing, ...partial });
 		} else {

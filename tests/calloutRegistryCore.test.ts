@@ -367,17 +367,29 @@ describe("update()", () => {
 		assert.strictEqual(events(), 0);
 	});
 
-	it("does NOT check aliases on a rename, unlike add()", () => {
-		// Documented as found, not as desired: `add()` rejects an id that is
-		// already an alias, `update()`'s rename path checks only `callouts.has`.
-		// So a rename can land on `summary` — the built-in `abstract`'s alias —
-		// and leave one raw id resolving through two definitions.
-		const { registry } = loaded(null);
+	it("checks aliases on a rename, exactly as add() does", () => {
+		// `summary` is the built-in `abstract`'s alias. A rename that landed on
+		// it left one raw id resolving through two definitions — `[!summary]`
+		// reaching the renamed row here and `abstract` through its alias.
+		const { registry, events } = loaded(null);
 		registry.add(def({ id: "mine" }));
+		const before = events();
 
-		assert.strictEqual(registry.update("mine", { id: "summary" }), true);
-		assert.ok(registry.has("summary"));
+		assert.strictEqual(registry.update("mine", { id: "summary" }), false);
+		assert.ok(registry.has("mine"), "the source row must survive a refusal");
+		assert.strictEqual(registry.has("summary"), false);
 		assert.strictEqual(registry.findByAlias("summary")?.id, "abstract");
+		assert.strictEqual(events(), before, "a refusal announces nothing");
+	});
+
+	it("still lets a callout be renamed onto one of its OWN aliases", () => {
+		// The row cannot conflict with itself, and `add()` accepts the same
+		// shape — a fresh definition whose id is also one of its aliases.
+		const { registry } = loaded(null);
+		registry.add(def({ id: "mine", aliases: ["mine-alt"] }));
+
+		assert.strictEqual(registry.update("mine", { id: "mine-alt" }), true);
+		assert.ok(registry.has("mine-alt"));
 	});
 });
 
