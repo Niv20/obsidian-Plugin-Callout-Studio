@@ -49,7 +49,7 @@ import {
 	sanitizeCustomPalettes,
 } from "../utils/colorPalettes";
 import { bgGradientsEqual, derivedBgAmount } from "../utils/colorUtils";
-import { clampGlobalStyle } from "../utils/settingsGuards";
+import { clampGlobalStyle, localePreference } from "../utils/settingsGuards";
 import { sanitizeUserImages } from "../utils/userImages";
 import { sanitizeCustomCommands } from "../utils/customCommands";
 import { setUserImages } from "../icons/packs/userImages";
@@ -255,7 +255,7 @@ export function mergeSavedSettings(
 		fallbackCalloutId:
 			savedSettings.fallbackCalloutId ??
 			DEFAULT_SETTINGS.fallbackCalloutId,
-		language: savedSettings.language ?? DEFAULT_SETTINGS.language,
+		language: localePreference(savedSettings.language),
 		customPalettes: sanitizeCustomPalettes(savedSettings.customPalettes),
 		userImages: sanitizeUserImages(savedSettings.userImages),
 		customCommands: sanitizeCustomCommands(savedSettings.customCommands),

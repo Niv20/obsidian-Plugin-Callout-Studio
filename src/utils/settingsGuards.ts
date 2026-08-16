@@ -26,6 +26,21 @@
 import { DEFAULT_SETTINGS } from "../constants";
 import type { GlobalStyleSettings } from "../types";
 
+/**
+ * The saved UI language preference, or the default when the file's value is not
+ * even a string.
+ *
+ * `main.ts` hands this straight to `setLocale` and `LocaleStore.prepare` during
+ * load, both of which lowercase it — so a `data.json` carrying `"language": 5`
+ * is not one mislabelled button, it is a `TypeError` before the plugin has
+ * registered anything, and a vault whose callouts have lost their styling
+ * altogether. An unrecognized *string* needs no guard: `resolve()` already walks
+ * the language chain down to English.
+ */
+export function localePreference(pref: unknown): string {
+	return typeof pref === "string" ? pref : DEFAULT_SETTINGS.language;
+}
+
 interface Range {
 	min: number;
 	max: number;

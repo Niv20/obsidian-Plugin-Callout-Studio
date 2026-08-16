@@ -166,6 +166,19 @@ describe("sanitizeImportedSettings — the merge against defaults", () => {
 		);
 	});
 
+	it("refuses a language that is not a string", () => {
+		// `main.ts` hands this to `setLocale`, which lowercases it on the load
+		// path — so a file carrying `"language": 5` is a `TypeError` during
+		// startup, not a mislabelled button. An unknown *string* is fine and
+		// stays untouched: the i18n resolver falls back to English by itself.
+		assert.equal(sanitizeImportedSettings({ language: 5 }).settings?.language, "auto");
+		assert.equal(
+			sanitizeImportedSettings({ language: { code: "he" } }).settings?.language,
+			"auto",
+		);
+		assert.equal(sanitizeImportedSettings({ language: "kl-DK" }).settings?.language, "kl-DK");
+	});
+
 	it("forces the settings that are no longer user-configurable", () => {
 		const { settings } = sanitizeImportedSettings({
 			headingCallouts: { refCleanTitles: false, refShowIcon: false },

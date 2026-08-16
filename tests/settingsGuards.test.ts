@@ -1,6 +1,6 @@
 /**
- * tests/settingsGuards.test.ts — the range check on the numbers a settings file
- * carries.
+ * tests/settingsGuards.test.ts — the values a settings file is allowed to carry:
+ * the range check on its numbers, and the type check on its language.
  *
  * `globalStyle` is merged with a plain spread, which is right for its shape and
  * blind to its values, and every one of those values is interpolated straight
@@ -26,7 +26,10 @@
  */
 import assert from "node:assert";
 import { describe, it } from "node:test";
-import { clampGlobalStyle } from "../src/utils/settingsGuards";
+import {
+	clampGlobalStyle,
+	localePreference,
+} from "../src/utils/settingsGuards";
 import { DEFAULT_SETTINGS } from "../src/constants";
 import type { GlobalStyleSettings } from "../src/types";
 
@@ -158,6 +161,33 @@ describe("clampGlobalStyle — what a hand-edited or hostile file says", () => {
 				.borderRadius,
 			0,
 		);
+	});
+});
+
+describe("localePreference — the saved UI language", () => {
+	it("keeps any string the file carries", () => {
+		assert.equal(localePreference("he"), "he");
+		assert.equal(localePreference("auto"), "auto");
+		// An unrecognized string needs no guard here — `resolve()` in `i18n/`
+		// already walks the language chain down to English — and rejecting one
+		// would mean a locale added in a newer build reads as corrupt in an
+		// older one.
+		assert.equal(localePreference("kl-DK"), "kl-DK");
+	});
+
+	it("replaces anything that is not a string with the default", () => {
+		// The reachable crash: `main.ts` hands this to `setLocale`, which
+		// lowercases it during load. `5` is a `TypeError` before the plugin has
+		// registered a thing, not a mislabelled button.
+		for (const junk of [5, null, undefined, true, {}, ["he"], NaN]) {
+			assert.equal(localePreference(junk), DEFAULT_SETTINGS.language);
+		}
+	});
+
+	it("does not fold an empty string into the default", () => {
+		// Empty is still a string, and `resolve("")` already resolves it to
+		// English. Nothing here needs to second-guess that.
+		assert.equal(localePreference(""), "");
 	});
 });
 
