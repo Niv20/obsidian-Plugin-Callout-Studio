@@ -8,9 +8,12 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 npm run dev       # watch-mode build (esbuild, inline sourcemaps)
 npm run build     # production build (typecheck + minify)
 npm run lint      # ESLint across src/
+npm test          # node:test suites in tests/, bundled through esbuild
 ```
 
-No automated test suite — testing is manual: copy `main.js`, `manifest.json`, and `styles.css` to `<Vault>/.obsidian/plugins/callout-studio/` and reload Obsidian.
+The suites are **inside** the build's typecheck: `tsconfig.json` includes `tests/` as well as `src/`, so `npm run build` compiles them too — a test that no longer typechecks fails the build, and `target: ES6` rules out top-level `await` in a test file. `tests/repoTestGate.test.ts` holds both to it.
+
+In-app behaviour is still checked by hand: copy `main.js`, `manifest.json`, and `styles.css` to `<Vault>/.obsidian/plugins/callout-studio/` and reload Obsidian.
 
 Versions: bump `manifest.json` + `versions.json` together. Tag must match `manifest.json` version exactly (no leading `v`).
 

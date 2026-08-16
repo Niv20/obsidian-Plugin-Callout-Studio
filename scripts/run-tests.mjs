@@ -14,9 +14,17 @@
  * - Some modules under test transitively import `obsidian`, which only exists
  *   inside the app. esbuild's `alias` swaps in the stub below instead.
  *
- * Tests live in `tests/` rather than `src/` on purpose: `tsconfig.json` includes
- * `src/**\/*.ts`, so a test file there would join the `tsc -noEmit` gate in
- * `npm run build` and drag `node:test` typings into the shipping typecheck.
+ * The suites sit inside the build's typecheck, not beside it: `tsconfig.json`
+ * includes the `tests/` tree alongside `src/`, so the `tsc -noEmit` gate in
+ * `npm run build` checks them too. Two things follow, and both bite silently
+ * otherwise. A suite that no longer compiles fails the *build*, which is the
+ * point — these assert against real signatures, and one that has drifted off
+ * them is worth stopping for. And `target: ES6` applies here as well, so a test
+ * file cannot use top-level `await`; a dynamic import is awaited inside the
+ * test body instead. `tests/repoTestGate.test.ts` holds both to it.
+ *
+ * They live in `tests/` rather than `src/` so the tree esbuild bundles stays
+ * exactly the shipped plugin.
  */
 import { build } from "esbuild";
 import { spawn } from "node:child_process";
