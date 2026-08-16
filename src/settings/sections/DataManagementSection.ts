@@ -11,6 +11,7 @@ import { t } from "../../i18n";
 import { ConfirmModal } from "../../utils/ConfirmModal";
 import { ImportReportModal } from "../../utils/ImportReportModal";
 import { validateImportPayload } from "../../utils/importValidator";
+import { mergeById } from "../../utils/mergeById";
 import { ImportSourceModal } from "../ImportSourceModal";
 import {
 	countCalloutUsages,
@@ -255,16 +256,10 @@ export async function processImportedJSON(
 		} = result.settings;
 		Object.assign(ctx.plugin.registry.settings, restSettings);
 		if (importedPalettes) {
-			const byId = new Map(
-				ctx.plugin.registry.settings.customPalettes.map((p) => [
-					p.id,
-					p,
-				]),
+			ctx.plugin.registry.settings.customPalettes = mergeById(
+				ctx.plugin.registry.settings.customPalettes,
+				importedPalettes,
 			);
-			for (const palette of importedPalettes) {
-				byId.set(palette.id, palette);
-			}
-			ctx.plugin.registry.settings.customPalettes = [...byId.values()];
 			// Merging by id routinely brings in a palette that duplicates a
 			// local one's colors under a different id — the two vaults named
 			// the same color independently. No vault may hold two of those, so
@@ -279,29 +274,17 @@ export async function processImportedJSON(
 			}
 		}
 		if (importedImages) {
-			const byId = new Map(
-				ctx.plugin.registry
-					.getUserImages()
-					.map((image) => [image.id, image]),
-			);
-			for (const image of importedImages) {
-				byId.set(image.id, image);
-			}
 			// Through the registry rather than by assignment: it is what
 			// hands the new pictures to the pack that draws them.
-			ctx.plugin.registry.setUserImages([...byId.values()]);
+			ctx.plugin.registry.setUserImages(
+				mergeById(ctx.plugin.registry.getUserImages(), importedImages),
+			);
 		}
 		if (importedCommands) {
-			const byId = new Map(
-				ctx.plugin.registry.settings.customCommands.map((c) => [
-					c.id,
-					c,
-				]),
+			ctx.plugin.registry.settings.customCommands = mergeById(
+				ctx.plugin.registry.settings.customCommands,
+				importedCommands,
 			);
-			for (const command of importedCommands) {
-				byId.set(command.id, command);
-			}
-			ctx.plugin.registry.settings.customCommands = [...byId.values()];
 			// Anything pointing at a callout this vault doesn't have is
 			// dropped by the sweep, which also registers the rest.
 			ctx.plugin.customCommands.syncAll();

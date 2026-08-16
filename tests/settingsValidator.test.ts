@@ -19,6 +19,8 @@
  * `DataManagementSection.applyImport`. The tests below state that boundary
  * explicitly, because reading this function alone makes `Object.assign` look
  * safe, and it is exactly what would wipe the three lists a user builds up.
+ * The other half of that boundary — the merge itself — is
+ * `utils/mergeById.ts`, tested in `importListMerge.test.ts`.
  */
 import assert from "node:assert";
 import { describe, it } from "node:test";

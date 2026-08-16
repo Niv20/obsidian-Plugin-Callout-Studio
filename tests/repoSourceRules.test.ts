@@ -630,7 +630,7 @@ describe("no new oversized files", () => {
 		"src/settings/EmbeddableMarkdownEditor.ts": 377,
 		"src/icons/svg.ts": 367,
 		"src/settings/iconpicker/ImagePanel.ts": 354,
-		"src/settings/sections/DataManagementSection.ts": 352,
+		"src/settings/sections/DataManagementSection.ts": 335,
 		"src/settings/CommandBuilderModal.ts": 345,
 		"src/settings/iconpicker/IconGrid.ts": 343,
 		"src/utils/calloutManagerImport.ts": 340,
