@@ -212,31 +212,35 @@ describe("addUnknownCalloutsAsFallback — the shape of a created row", () => {
 		assert.strictEqual(h.registry.get("alpha"), undefined);
 	});
 
-	it(
-		"does not inherit the fallback callout's `externalStyle` flag",
-		{
-			todo: "`{...fallback}` copies it — same cause as `customized` above",
-		},
-		async () => {
-			// The same spread, and a sharper consequence: `externalStyle` means
-			// "this callout's styling belongs to the theme", so a row born with
-			// it is skipped by `restyleUncustomizedFallbackRows` as well as by
-			// the prune — it can never follow the fallback again, and the CSS
-			// that would have painted it is suppressed.
-			const h = discoveryHarness({ "note.md": "plain" });
-			h.registry.add(
-				definition({ id: "themed", source: "user", externalStyle: true }),
-			);
-			h.settings.fallbackCalloutId = "themed";
-			h.discovery.addUnknownCalloutsAsFallback(["alpha"]);
+	it("does not inherit the fallback callout's `externalStyle` flag", async () => {
+		// The same spread, and a sharper consequence: `externalStyle` means
+		// "this callout's styling belongs to the theme", so a row born with it
+		// was skipped by `restyleUncustomizedFallbackRows` as well as by the
+		// prune — it could never follow the fallback again, and the CSS that
+		// would have painted it was suppressed.
+		const h = discoveryHarness({ "note.md": "plain" });
+		h.registry.add(
+			definition({ id: "themed", source: "user", externalStyle: true }),
+		);
+		h.settings.fallbackCalloutId = "themed";
+		h.discovery.addUnknownCalloutsAsFallback(["alpha"]);
 
-			assert.notStrictEqual(
-				row(h.registry.get("alpha"), "alpha").externalStyle,
-				true,
-			);
-			assert.strictEqual(await h.discovery.pruneUnused(), 1);
-		},
-	);
+		assert.notStrictEqual(
+			row(h.registry.get("alpha"), "alpha").externalStyle,
+			true,
+		);
+		// The consequence the flag would have cost it: pointing the setting
+		// somewhere else must still re-style the row.
+		h.settings.fallbackCalloutId = "warning";
+		assert.strictEqual(h.discovery.restyleUncustomizedFallbackRows(), 1);
+		assert.strictEqual(
+			row(h.registry.get("alpha"), "alpha").colorLight,
+			warningDefault.colorLight,
+		);
+		// And the prune must still be able to take it.
+		assert.strictEqual(await h.discovery.pruneUnused(), 1);
+		assert.strictEqual(h.registry.get("alpha"), undefined);
+	});
 
 	it(
 		"gives every row its own icon object",

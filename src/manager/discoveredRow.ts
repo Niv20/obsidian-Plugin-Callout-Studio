@@ -81,5 +81,14 @@ export function buildDiscoveredRow(
 		// usage went away. `restyleUncustomizedFallbackRows` never copies this
 		// flag either — that is the agreement this file exists to keep.
 		customized: undefined,
+		// Ownership, not look, and sharper than the flag above: it means "this
+		// callout's styling belongs to the theme", so a row born wearing it is
+		// skipped by `restyleUncustomizedFallbackRows` as well as by the prune.
+		// It could never follow the fallback again, and `CSSInjector` — which
+		// treats the flag as an opt-out from the whole generated block, the
+		// id-blind global rules and the icon repaint alike — would emit nothing
+		// for it, leaving a row the user can see in settings and style there
+		// while the note stays unpainted.
+		externalStyle: undefined,
 	};
 }
