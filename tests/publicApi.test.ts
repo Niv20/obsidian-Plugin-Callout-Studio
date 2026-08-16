@@ -499,13 +499,11 @@ describe("getCallout — only ever answers with what the list shows", () => {
 		assert.equal(api.getCallout("draft")?.id, "draft");
 	});
 
-	it("shows an in-progress edit of an EXISTING callout through", () => {
-		// Deliberate, and the one case where "the preview cannot leak" means the
-		// row cannot leak rather than the values cannot. A non-demo preview
-		// stands in for a real callout the user already has, and the settings
-		// rows are supposed to track that edit live — so the same map entry is
-		// what the API reads. The id set never changes; only the draft title
-		// and colours show through, and only while the modal is open.
+	it("hides an in-progress edit of an EXISTING callout", () => {
+		// The settings rows track the open editor keystroke by keystroke, and a
+		// non-demo preview passes through the registry's list view as-is so they
+		// can. An outside consumer must not see it: the API is the committed
+		// state, and `usableDefinitions` reads every row through `getReal`.
 		const { api, registry } = apiHarness();
 		registry.add(definition({ id: "quiet", displayName: "Quiet" }));
 		const before = ids(api.getCallouts());
@@ -514,9 +512,43 @@ describe("getCallout — only ever answers with what the list shows", () => {
 			definition({ id: "quiet", displayName: "Quiet (draft)" }),
 		);
 		assert.deepStrictEqual(ids(api.getCallouts()), before, "no row appeared");
-		assert.equal(api.getCallout("quiet")?.title, "Quiet (draft)");
+		assert.equal(api.getCallout("quiet")?.title, "Quiet");
 
 		registry.setPreviewDefinition(null);
+		assert.equal(api.getCallout("quiet")?.title, "Quiet");
+	});
+
+	it("hides a draft's colours from the detailed list too", () => {
+		// The same window, seen through the surface that actually carries the
+		// styling. A consumer painting a swatch per callout would otherwise
+		// track the colour picker live and keep whatever it happened to read.
+		const { api, registry } = apiHarness();
+		registry.add(definition({ id: "quiet", colorLight: "#336699" }));
+
+		registry.setPreviewDefinition(
+			definition({ id: "quiet", colorLight: "#ff0000" }),
+		);
+		const detailed = api.getCalloutsDetailed().find((d) => d.id === "quiet");
+		assert.equal(detailed?.colorLight, "#336699");
+	});
+
+	it("never answers with a draft a cancelled edit threw away", () => {
+		// Why the window matters at all. A preview fires no `onChange`, and so
+		// does taking one down — so a consumer that re-read the list mid-edit
+		// (any unrelated mutation prompts one) would cache the draft title and
+		// never be told the user pressed Cancel.
+		const { api, registry } = apiHarness();
+		registry.add(definition({ id: "quiet", displayName: "Quiet" }));
+
+		registry.setPreviewDefinition(
+			definition({ id: "quiet", displayName: "Never saved" }),
+		);
+		// Something unrelated changes, so the consumer re-reads.
+		registry.add(definition({ id: "other", displayName: "Other" }));
+		const seen = api.getCallouts().find((c) => c.id === "quiet");
+
+		registry.setPreviewDefinition(null);
+		assert.equal(seen?.title, "Quiet");
 		assert.equal(api.getCallout("quiet")?.title, "Quiet");
 	});
 });

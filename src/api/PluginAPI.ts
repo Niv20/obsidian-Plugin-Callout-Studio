@@ -74,8 +74,9 @@ export class CalloutStudioAPI implements CalloutStudioApi {
 		// Re-find it in the published list rather than returning `resolved`
 		// directly. That list is the one filtered view: it hides the transient
 		// live-preview row and unused discovered callouts, and where a preview
-		// shadows a real callout it substitutes the real one back. Matching by id
-		// rather than by identity is what makes that substitution work.
+		// shadows a real callout it substitutes the committed one back. Matching
+		// by id rather than by identity is what makes that substitution work —
+		// `resolved` here is often the preview stand-in itself.
 		const published = usableDefinitions(this.#plugin).find(
 			(def) => def.id === resolved.id,
 		);
@@ -103,14 +104,27 @@ export class CalloutStudioAPI implements CalloutStudioApi {
  * would offer a list full of ids the user deleted from their notes hours
  * ago. Same predicate the autocomplete dropdown uses, for the same reason.
  *
+ * Every row is then read through `getReal`, which is what makes the list
+ * *committed* state. The registry's list view hides a preview that occupies a
+ * fresh id, but a preview standing in for a callout the user already has passes
+ * through as-is — deliberately, because the settings rows are supposed to track
+ * the open editor keystroke by keystroke. An outside consumer is not: a preview
+ * fires no `onChange`, so a consumer that happens to re-read the list during
+ * that window (any unrelated mutation will make it) caches a title the user may
+ * then cancel, and hears nothing when they do. `getReal` hands back the row the
+ * preview shadows, so the API answers with what is saved.
+ *
  * A module-level function, not a method: a `private` method is an ordinary
  * prototype member at runtime, and this file's whole job is that nothing
  * beyond the documented five is reachable.
  */
 const usableDefinitions = (plugin: CalloutStudioPlugin): CalloutDefinition[] => {
-	const defs = filterUsableCallouts(
-		[...plugin.registry.getBuiltIn(), ...plugin.registry.getUserDefined()],
-		(id) => plugin.isKnownZeroUsageFallback(id),
+	const { registry } = plugin;
+	const committed = [...registry.getBuiltIn(), ...registry.getUserDefined()].map(
+		(def) => registry.getReal(def.id) ?? def,
+	);
+	const defs = filterUsableCallouts(committed, (id) =>
+		plugin.isKnownZeroUsageFallback(id),
 	);
 	return sortCalloutsByDisplayName(defs, getLocale());
 };
