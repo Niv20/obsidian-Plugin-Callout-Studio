@@ -12,8 +12,8 @@
  * decides whether a repair is written back. It is not bookkeeping: a migration
  * that mutates the map without raising it is re-run on every single launch and
  * never persisted — the exact failure the flag exists to prevent, and one the
- * `stripMetadataFromIds` alias branch was fixed for. Two passes still behave
- * that way; both are pinned below as found, with the reasoning spelled out.
+ * `stripMetadataFromIds` alias branch was fixed for. One pass still behaves
+ * that way; it is pinned below as found, with the reasoning spelled out.
  *
  * Order matters between them and is asserted where it does:
  *   dropStaleTransparencyFlags → consolidateDuplicatePalettes →
@@ -659,12 +659,11 @@ describe("needsSaveAfterLoad()", () => {
 		assert.strictEqual(registry.needsSaveAfterLoad(), false);
 	});
 
-	it("is NOT raised by reconcileAttrIdCollisions, which DELETES a row", () => {
-		// Pinned as found, and the more consequential of the two: the merge
-		// deletes a definition and rewrites the survivor's aliases, yet
-		// `data.json` still holds both rows afterwards. The merge is idempotent,
-		// so it simply happens again on every launch — the user sees one row,
-		// the file keeps two.
+	it("is raised by reconcileAttrIdCollisions, which DELETES a row", () => {
+		// The merge deletes a definition and rewrites the survivor's aliases, so
+		// it has to be written back like any other rewrite. Un-flushed,
+		// `data.json` kept both rows and the merge was simply redone on every
+		// launch — the user saw one row, the file held two.
 		const registry = load(
 			saved([
 				def({ id: "c-d", source: "user" }),
@@ -672,7 +671,25 @@ describe("needsSaveAfterLoad()", () => {
 			]),
 		);
 		assert.strictEqual(registry.getAll().length, 14, "one row really did go");
-		assert.strictEqual(registry.needsSaveAfterLoad(), false);
+		assert.strictEqual(registry.needsSaveAfterLoad(), true);
+	});
+
+	it("stays down on the next load, once that merge has been written back", () => {
+		// The flag must not re-arm forever: the loser survives only as an alias
+		// of the survivor, so the group it forms next load names one definition
+		// and there is nothing left to merge.
+		const first = load(
+			saved([
+				def({ id: "c-d", source: "user" }),
+				def({ id: "c d", source: "user" }),
+			]),
+		);
+		assert.strictEqual(first.needsSaveAfterLoad(), true);
+
+		const second = load(first.toSaveData());
+		assert.strictEqual(second.getAll().length, 14, "still the one merged row");
+		assert.deepStrictEqual(second.get("c d")?.aliases, ["c-d"]);
+		assert.strictEqual(second.needsSaveAfterLoad(), false);
 	});
 });
 

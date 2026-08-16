@@ -588,6 +588,15 @@ export class CalloutRegistry {
 	 * dash-free spelling wins, per the user's stated preference. A losing real
 	 * row's id is folded in as an alias of the survivor so no customization or
 	 * usage-matching is lost.
+	 *
+	 * A merge deletes a definition and rewrites the survivor's aliases, so it
+	 * raises {@link needsSaveAfterLoad} like every other pass here. Un-flushed,
+	 * `data.json` kept both rows and the merge was simply redone on every launch
+	 * — the user saw one row, the file held two — the same failure the flag was
+	 * added for and the {@link stripMetadataFromIds} alias branch was fixed for.
+	 * Once written back the pass is a fixed point: the loser's id survives only
+	 * as an alias of the survivor, so the group it forms next load names a single
+	 * definition and nothing changes.
 	 */
 	private reconcileAttrIdCollisions(): void {
 		const groups = new Map<string, Set<string>>();
@@ -606,6 +615,7 @@ export class CalloutRegistry {
 		const isDisposable = (d: CalloutDefinition): boolean =>
 			d.source === "fallback" && d.customized !== true;
 
+		let merged = 0;
 		for (const defIds of groups.values()) {
 			if (defIds.size < 2) continue;
 			const defs = Array.from(defIds)
@@ -624,6 +634,7 @@ export class CalloutRegistry {
 			for (const loser of defs) {
 				if (loser.id === survivor.id || loser.builtIn) continue;
 				this.callouts.delete(loser.id);
+				merged++;
 				if (isDisposable(loser)) continue;
 				const aliases = new Set(survivor.aliases ?? []);
 				aliases.add(loser.id);
@@ -632,6 +643,7 @@ export class CalloutRegistry {
 				survivor.aliases = Array.from(aliases);
 			}
 		}
+		if (merged > 0) this.pendingLoadMigrationSave = true;
 	}
 
 	toSaveData(): PluginData {
