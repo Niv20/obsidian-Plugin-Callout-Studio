@@ -340,13 +340,25 @@ describe("the bundled indexes decode to the libraries they claim", () => {
 			}
 		});
 
+		it(`${id} spends no dictionary slot on a keyword that says nothing`, () => {
+			// Upstream ships debris: Octicons tags `eye-closed` with an empty
+			// string. A blank keyword buys a dictionary slot and a reference on
+			// every entry carrying it, and matches nothing in return — the
+			// search drops empty words out of a query before it ever looks. The
+			// generator cleans them, and this is what says it still does.
+			for (const keyword of decodeFrontCoded(encoded.k)) {
+				assert.ok(
+					keyword.length > 0,
+					"the keyword dictionary has a blank slot",
+				);
+			}
+		});
+
 		it(`${id} points every keyword code at a slot the dictionary has`, () => {
 			// The check has to be on the *codes*, not on the strings they decode
 			// to: an out-of-range code yields "" rather than throwing, so a width
-			// or dictionary bug would look exactly like a keyword that is
-			// legitimately empty. Octicons has one of those — `eye-closed` really
-			// does carry an empty keyword upstream — and it must not be able to
-			// hide a decoder fault behind itself.
+			// or dictionary bug would decode as a keyword that is merely empty
+			// and never fail loudly.
 			const dictSize = decodeFrontCoded(encoded.k).length;
 			for (const ref of allRefs(encoded.kr, encoded.kw)) {
 				assert.ok(

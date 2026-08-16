@@ -44,6 +44,32 @@ function assertPathData(d, where) {
 	}
 }
 
+/**
+ * Upstream search terms, as the index should hold them: whitespace collapsed,
+ * blanks dropped.
+ *
+ * Applied to every pack in `main()` rather than left to each builder, because
+ * "the upstream data has debris in it" is not a property of any one library.
+ * Octicons tags `eye-closed` with an empty string, which buys a whole
+ * dictionary slot and a reference on the entry carrying it in exchange for
+ * matching nothing at all — the search filters empty words out of a query
+ * before it ever looks.
+ */
+function cleanTerms(values) {
+	return values
+		.map((value) => String(value).replace(/\s+/g, " ").trim())
+		.filter((value) => value.length > 0);
+}
+
+/** One index entry with its upstream text put through `cleanTerms`. */
+function cleanEntry(entry) {
+	return {
+		...entry,
+		categories: cleanTerms(entry.categories),
+		keywords: cleanTerms(entry.keywords),
+	};
+}
+
 // ── Octicons ────────────────────────────────────────────────────────────
 
 /**
@@ -734,6 +760,7 @@ async function main() {
 		if (!build) throw new Error(`unknown pack "${id}"`);
 
 		const pack = await build();
+		pack.entries = pack.entries.map(cleanEntry);
 		const encoded = encodeIndex(pack.entries);
 		await assertRoundTrip(pack.entries, encoded);
 
