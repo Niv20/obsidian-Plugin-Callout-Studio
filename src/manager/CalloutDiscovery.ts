@@ -11,12 +11,8 @@ import { Platform, TFile } from "obsidian";
 import type { App, EventRef } from "obsidian";
 import type { CalloutRegistry } from "./CalloutRegistry";
 import type { PluginSettings } from "../types";
-import { DEFAULT_CALLOUTS } from "../constants";
-import {
-	normalizeCalloutId,
-	obsidianCalloutAttrId,
-	obsidianDefaultTitle,
-} from "../utils/calloutId";
+import { normalizeCalloutId, obsidianCalloutAttrId } from "../utils/calloutId";
+import { buildDiscoveredRow, fallbackSourceFor } from "./discoveredRow";
 import { scanLineForCalloutTokens } from "../editor/calloutTokens";
 import {
 	scanFileForUnknownCallouts,
@@ -175,11 +171,10 @@ export class CalloutDiscovery {
 	 */
 	addUnknownCalloutsAsFallback(unknownIds: string[]): number {
 		if (unknownIds.length === 0) return 0;
-		const fallbackId = this.host.settings.fallbackCalloutId || "note";
-		const noteDefault =
-			DEFAULT_CALLOUTS.find((c) => c.id === "note") ??
-			DEFAULT_CALLOUTS[0]!;
-		const fallback = this.host.registry.get(fallbackId) ?? noteDefault;
+		const fallback = fallbackSourceFor(
+			this.host.registry,
+			this.host.settings.fallbackCalloutId,
+		);
 		// One notification for the whole batch. Each `add` below would otherwise
 		// fire its own, and a single one costs a full stylesheet regeneration, a
 		// document-wide icon repaint, an editor refresh in every leaf, a
@@ -202,18 +197,10 @@ export class CalloutDiscovery {
 				// paths from reaching here at all; this covers the first-run
 				// scan modal, which hands a user-approved list straight in.
 				if (this.host.registry.findAttrIdConflict(id, null)) continue;
-				const def = {
-					...fallback,
-					icon: fallback.icon,
-					id,
-					// Dash-to-space before capitalizing, matching Obsidian's own
-					// default-title algorithm — see obsidianDefaultTitle.
-					displayName: obsidianDefaultTitle(id),
-					aliases: [],
-					builtIn: false,
-					source: "fallback" as const,
-				};
-				if (this.host.registry.add(def)) {
+				// What a fallback row inherits from the fallback callout, and
+				// what it deliberately does not, is decided in one place — see
+				// discoveredRow.ts.
+				if (this.host.registry.add(buildDiscoveredRow(id, fallback))) {
 					added++;
 					// Being (re)discovered means it currently appears in file
 					// content — any stale "confirmed zero usage" verdict from an

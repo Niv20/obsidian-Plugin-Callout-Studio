@@ -618,7 +618,7 @@ describe("no new oversized files", () => {
 		"src/icons/renderIcon.ts": 547,
 		"src/settings/GlobalStyleModal.ts": 528,
 		"src/editor/renderShared.ts": 498,
-		"src/manager/CalloutDiscovery.ts": 467,
+		"src/manager/CalloutDiscovery.ts": 454,
 		"src/editor/contextmenu/resolve.ts": 455,
 		"src/ui/TagInput.ts": 414,
 		"src/settings/editor/CalloutEditorSave.ts": 410,
