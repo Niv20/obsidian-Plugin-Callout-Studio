@@ -37,6 +37,7 @@ import {
 	ruleFor,
 	valueOf,
 } from "./support/cssInjectorHarness";
+import { readRepoFile } from "./support/sourceScan";
 import { CALLOUT_RENDER_ROLES } from "../src/types";
 import type { CalloutDefinition, UserImageIcon } from "../src/types";
 
@@ -502,99 +503,74 @@ describe("getIconTransformCSS — per-role rules", () => {
 	});
 });
 
-describe("updateMaterialFontLinks", () => {
-	/**
-	 * `ensureMaterialFontLoaded` reads `activeDocument` and returns early when the
-	 * family is already drawable, so a document that reports all three Material
-	 * families as loaded exercises the forwarding with no network at all — which
-	 * is the point: this method must never be able to start a fetch for a style
-	 * nobody asked for.
-	 */
-	function withLoadedFonts<T>(body: () => T): T {
-		const g = globalThis as Record<string, unknown>;
-		const saved = g.activeDocument;
-		const families = [
-			"Material Symbols Outlined",
-			"Material Symbols Rounded",
-			"Material Symbols Sharp",
-		];
-		g.activeDocument = {
-			fonts: {
-				forEach(cb: (f: { family: string; status: string }) => void) {
-					for (const family of families) cb({ family, status: "loaded" });
-				},
-			},
-		};
-		try {
-			return body();
-		} finally {
-			g.activeDocument = saved;
-		}
-	}
-
-	it("forwards exactly the four named styles", () => {
+/**
+ * The injector used to carry an `updateMaterialFontLinks`, and `injectNow`
+ * called it once per pass with a `Set` it had just built and never added to —
+ * so it iterated nothing, warmed nothing, and its own doc ("Fires on every
+ * inject") described a behaviour that had stopped existing. It was removed
+ * rather than wired up, and these tests are why the wiring would have been the
+ * wrong repair: a Material glyph never reaches a rendered callout as a glyph at
+ * all, and warming its family per inject would have meant a fonts.gstatic.com
+ * request on every startup, with no user action, for artwork the stylesheet
+ * does not use.
+ *
+ * The picker is where a Material font legitimately belongs — `PackPanel` asks
+ * for one when the user opens that source — and nothing here should ever start
+ * that fetch again.
+ */
+describe("no webfont path through the injector", () => {
+	it("draws a Material icon as a mask over its cached SVG, not as a glyph", () => {
 		const { css } = harness();
-		// The guard is the contract: anything that is not one of the four must
-		// never reach ensureMaterialFontLoaded, which would build a font family
-		// name out of it and request that name from fonts.gstatic.com.
-		withLoadedFonts(() => {
-			assert.doesNotThrow(() =>
-				css.updateMaterialFontLinks(
-					new Set(["outlined", "rounded", "sharp", "filled"]),
-				),
-			);
-		});
-	});
-
-	it("ignores anything that is not one of them, without touching a document", () => {
-		const { css } = harness();
-		// No `activeDocument` seeded on purpose: if the guard let one of these
-		// through, ensureMaterialFontLoaded would dereference it and throw.
-		assert.doesNotThrow(() =>
-			css.updateMaterialFontLinks(
-				new Set(["not-a-style", "", "OUTLINED", "material", "solid"]),
-			),
+		// The premise for everything below: if this ever became a font glyph
+		// (`font-family` + a codepoint in `content`), the injector really would
+		// need the family loaded, and deleting the warm-up would be a bug.
+		const rule = ruleFor(
+			css.generateIconMaskOverride("starred", SVG),
+			".callout[data-callout=\"starred\"] > .callout-title > .callout-icon::after",
+		);
+		assert.ok(valueOf(rule, "mask-image"));
+		assert.ok(
+			!rule.props.some((p) => p.startsWith("font")),
+			"a Material icon must not be drawn from a webfont",
 		);
 	});
 
-	it("does nothing at all for an empty set", () => {
-		const { css } = harness();
-		assert.doesNotThrow(() => css.updateMaterialFontLinks(new Set()));
+	it("emits no font-family and no @font-face for a Material callout", () => {
+		const { registry, css } = harness();
+		registry.add(
+			definition({
+				id: "starred",
+				icon: { type: "material", value: "star", style: "rounded" } as never,
+			}),
+		);
+		const sheet = registry
+			.getAll()
+			.map((def) => css.generateCalloutCSS(def))
+			.join("\n\n");
+		assert.ok(!/Material Symbols/.test(sheet), sheet);
+		assert.ok(!/@font-face/.test(sheet), sheet);
 	});
 
-	/**
-	 * KNOWN GAP, not a passing assertion — see the report accompanying this
-	 * suite. `injectNow` builds `const materialFonts = new Set<string>()` and
-	 * hands it straight to `updateMaterialFontLinks` without ever adding to it,
-	 * so on the real inject path this method always iterates an empty set and
-	 * warms nothing. The doc comment above it ("Fires on every inject") and the
-	 * call site's ("Clean up any leftover material font links") both describe a
-	 * behaviour that no longer exists.
-	 *
-	 * Marked `todo` so it reports rather than fails: the fix is a product
-	 * decision (populate the set from the callouts being emitted, or delete the
-	 * method and its call), not something a test should choose.
-	 */
-	it(
-		"is fed the styles the emitted callouts actually use",
-		{ todo: "injectNow always passes an empty set — see suite header" },
-		() => {
-			const { registry, css } = harness();
-			registry.add(
-				definition({
-					id: "starred",
-					icon: { type: "material", value: "star", style: "rounded" } as never,
-				}),
-			);
-			const seen = new Set<string>();
-			const original = css.updateMaterialFontLinks.bind(css);
-			(css as { updateMaterialFontLinks: (s: Set<string>) => void }).updateMaterialFontLinks =
-				(s) => {
-					for (const v of s) seen.add(v);
-					original(s);
-				};
-			for (const def of registry.getAll()) css.generateCalloutCSS(def);
-			assert.ok(seen.has("rounded"));
-		},
-	);
+	it("has no updateMaterialFontLinks left to call", () => {
+		const { injector } = harness();
+		// The dead method itself. Present, it iterates an empty set on every
+		// inject; wired up, it fetches a font nothing draws. Neither is wanted.
+		assert.strictEqual(
+			(injector as unknown as Record<string, unknown>)
+				.updateMaterialFontLinks,
+			undefined,
+		);
+	});
+
+	it("does not even import the font loader", () => {
+		// The import is the network surface: a later edit that reaches for
+		// `ensureMaterialFontLoaded` from here would put a fonts.gstatic.com
+		// request back on the startup path, which is exactly what the removal
+		// bought. Read as text because an absent import has no runtime trace.
+		const source = readRepoFile("src/manager/CSSInjector.ts");
+		assert.ok(
+			!/ensureMaterialFontLoaded/.test(source),
+			"CSSInjector reaches for the Material webfont again",
+		);
+	});
 });

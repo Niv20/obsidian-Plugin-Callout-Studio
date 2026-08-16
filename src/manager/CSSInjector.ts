@@ -5,7 +5,14 @@
  * `<style>` element into the document head with per-callout CSS custom
  * properties (colors, icon offsets, sizes). A re-entrancy latch keeps the
  * `css-change` this emits from starting a second pass through the plugin's own
- * listener. Also manages the Material Symbols font link element when needed.
+ * listener.
+ *
+ * Deliberately touches no webfont. A Material icon reaches a rendered callout
+ * as a `mask-image` over the SVG the pack store cached, never as a glyph, so
+ * the Material Symbols families are the icon *picker's* business — `PackPanel`
+ * asks for one when the user opens that source, which is the explicit action
+ * the network policy requires. An injector that warmed a family per pass would
+ * fetch from fonts.gstatic.com on every startup for artwork it does not draw.
  */
 import { setIcon } from "obsidian";
 import type { App } from "obsidian";
@@ -37,7 +44,6 @@ import {
 } from "../utils/colorUtils";
 import { OBSIDIAN_CALLOUT_VAR } from "../constants";
 import { svgToDataUri } from "../icons/svg";
-import { ensureMaterialFontLoaded } from "../icons/packs/materialFont";
 import {
 	applyTitleGradient,
 	clearGradientChars,
@@ -354,17 +360,12 @@ export class CSSInjector {
 				".callout > .callout-title > .callout-icon > span.cs-export-icon { font-size: var(--icon-size, 1.2em); line-height: 1; }",
 		);
 
-		const materialFonts = new Set<string>();
-
 		for (const def of callouts) {
 			rules.push(this.generateCalloutCSS(def));
 		}
 
 		// Fallback rule: style unrecognized callout IDs with the fallback callout
 		rules.push(this.generateFallbackCSS(callouts));
-
-		// Clean up any leftover material font links (no longer needed for rendering)
-		this.updateMaterialFontLinks(materialFonts);
 
 		const cssText = rules.join("\n\n");
 		// Write the CSS to BOTH targets:
@@ -1502,27 +1503,6 @@ export class CSSInjector {
 			`}\n` +
 			`}`
 		);
-	}
-
-	/**
-	 * Warm the webfont for the styles rendered callouts use.
-	 *
-	 * Fires on every inject, which is safe only because `ensureMaterialFontLoaded`
-	 * holds a failed family off for a cooldown — an offline vault would otherwise
-	 * retry here on each one, now that a failure is no longer (wrongly) cached as
-	 * a success for the session.
-	 */
-	private updateMaterialFontLinks(needed: Set<string>): void {
-		for (const style of needed) {
-			if (
-				style === "outlined" ||
-				style === "rounded" ||
-				style === "sharp" ||
-				style === "filled"
-			) {
-				void ensureMaterialFontLoaded(style);
-			}
-		}
 	}
 
 	/**

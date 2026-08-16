@@ -99,7 +99,6 @@ export interface InjectorInternals {
 		hideElementGradient: boolean,
 	): string;
 	needsDarkBlock(def: CalloutDefinition): boolean;
-	updateMaterialFontLinks(needed: Set<string>): void;
 	externalExclusion(): string;
 }
 
