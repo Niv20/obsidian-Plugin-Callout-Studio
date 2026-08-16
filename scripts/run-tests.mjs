@@ -40,6 +40,14 @@ if (entryPoints.length === 0) {
 
 // Minimal `obsidian` stand-in. Anything a test actually exercises should be
 // pure; this exists so a transitive import doesn't fail the bundle.
+//
+// `getIconIds` is the one entry here a module reads as *data* rather than
+// calls for effect: `icons/lucideId.ts` decides from it whether a `lucide-`
+// prefix names anything, and `icons/nameCheck.ts` builds a membership test out
+// of it. An always-empty list would leave exactly half of each of those
+// untestable, so it is seedable — a test writes `globalThis.__CS_ICON_IDS__`
+// before the first call and everything else keeps the empty default. It stays
+// a *list*, not a stubbed implementation: nothing here pretends to draw.
 const stubDir = mkdtempSync(path.join(tmpdir(), "cs-test-stub-"));
 const obsidianStub = path.join(stubDir, "obsidian.js");
 writeFileSync(
@@ -52,7 +60,7 @@ export class Component {}
 export class Modal {}
 export class MarkdownRenderer { static render() { return Promise.resolve(); } }
 export function setIcon() {}
-export function getIconIds() { return []; }
+export function getIconIds() { return globalThis.__CS_ICON_IDS__ ?? []; }
 export function normalizePath(p) { return p; }
 export function requestUrl() { return Promise.reject(new Error("no network in tests")); }
 export function requireApiVersion() { return true; }
