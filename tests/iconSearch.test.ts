@@ -11,11 +11,13 @@
  * *by identity*, so opening a source costs one comparison rather than a copy of
  * five thousand entries.
  *
- * NOTE ON SCOPE. This filter does not rank and does not float an exact match to
- * the front — it is `Array.prototype.filter`, so results come back in the
- * index's own (alphabetical) order and `home` lands wherever the alphabet puts
- * it among `home-storage`, `smart-home` and the rest. That is tested below as
- * the behaviour it is, not asserted away; see the note in the session summary.
+ * The other half is the order, which matters as much as the membership. `home`
+ * has to come back ahead of `home-storage` and `smart-home`, so a match is
+ * ranked by how the *name* answered: it is the query, it starts with it, it
+ * contains it, or it only matched a label or keyword. The one thing ranking is
+ * not allowed to do is reorder across sources — the pooled "All sources" grid
+ * finds its headings by watching `entry.pack` change from one entry to the
+ * next, so each source's run stays whole and is ordered inside itself.
  */
 import assert from "node:assert";
 import { describe, it } from "node:test";
@@ -177,25 +179,126 @@ describe("filterIcons — the category filter", () => {
 });
 
 describe("filterIcons — order and ranking", () => {
-	it("returns matches in the index's own order, unranked", () => {
-		// Pinned as behaviour, not endorsed as design: there is no scoring pass,
-		// so an exact hit sits wherever the alphabet left it. `home` comes
-		// before `home_work` here only because the index does.
-		assert.deepStrictEqual(names(filterIcons(INDEX, "home")), [
+	/** The four tiers, deliberately in the *worst* order the index could hold. */
+	const TIERS: IconIndex = {
+		entries: [
+			// Matches only through a keyword — related, but not named.
+			entry({ name: "roofing", keywords: ["home"] }),
+			// The name contains the query, but not at the front.
+			entry({ name: "smart-home" }),
+			// The name starts with the query.
+			entry({ name: "home-storage" }),
+			// The name *is* the query.
+			entry({ name: "home" }),
+		],
+		categories: [],
+	};
+
+	it("floats an exact name match to the front", () => {
+		// The whole point of ranking: `home` is buried last in the index and has
+		// to come back first anyway.
+		assert.equal(names(filterIcons(TIERS, "home"))[0], "home");
+	});
+
+	it("orders exact, then prefix, then substring, then keyword-only", () => {
+		assert.deepStrictEqual(names(filterIcons(TIERS, "home")), [
+			"home",
+			"home-storage",
+			"smart-home",
+			"roofing",
+		]);
+	});
+
+	it("ranks a multi-word query as the phrase it spells", () => {
+		// "arrow right" is the whole of `arrow_right` once separators are
+		// spaces, so it outranks a name that merely contains both words.
+		const index: IconIndex = {
+			entries: [
+				entry({ name: "arrow_right_alt" }),
+				entry({ name: "arrow_right" }),
+			],
+			categories: [],
+		};
+		assert.deepStrictEqual(names(filterIcons(index, "arrow right")), [
+			"arrow_right",
+			"arrow_right_alt",
+		]);
+	});
+
+	it("keeps equally good matches in the index's own order", () => {
+		// Ranking reorders only what it has a reason to; two prefix matches are
+		// left exactly as the library listed them.
+		assert.deepStrictEqual(names(filterIcons(INDEX, "arrow")), [
+			"arrow_right",
+			"arrow-left",
+		]);
+	});
+
+	it("ranks a name above an entry that only matched its label", () => {
+		const index: IconIndex = {
+			entries: [
+				entry({ name: "zzz", label: "Home" }),
+				entry({ name: "home" }),
+			],
+			categories: [],
+		};
+		assert.deepStrictEqual(names(filterIcons(index, "home")), ["home", "zzz"]);
+	});
+
+	it("leaves a category-only query in the index's own order", () => {
+		// Nothing was typed, so there is nothing to be more or less relevant to.
+		assert.deepStrictEqual(names(filterIcons(INDEX, "", "places")), [
 			"home",
 			"home_work",
 		]);
 	});
 
-	it("does not float an exact name match to the front", () => {
-		const shuffled: IconIndex = {
-			entries: [entry({ name: "home_work" }), entry({ name: "home" })],
+	it("ranks inside each source, never across them", () => {
+		// The pooled "All sources" grid heads each run of one library's entries
+		// with that library's name, and finds the boundary by watching `pack`
+		// change from one entry to the next. A global sort would interleave the
+		// two libraries here and shatter two headings into four.
+		const pooled: IconIndex = {
+			entries: [
+				entry({ name: "home-storage", pack: "octicons" }),
+				entry({ name: "home", pack: "octicons" }),
+				entry({ name: "smart-home", pack: "tabler" }),
+				entry({ name: "home", pack: "tabler" }),
+			],
 			categories: [],
 		};
-		assert.deepStrictEqual(names(filterIcons(shuffled, "home")), [
-			"home_work",
-			"home",
-		]);
+		const result = filterIcons(pooled, "home");
+		assert.deepStrictEqual(
+			result.map((e) => [e.pack, e.name]),
+			[
+				// Ranked within Octicons…
+				["octicons", "home"],
+				["octicons", "home-storage"],
+				// …and within Tabler, with the boundary still a single step.
+				["tabler", "home"],
+				["tabler", "smart-home"],
+			],
+		);
+	});
+
+	it("keeps every source's run contiguous in the pooled list", () => {
+		const pooled: IconIndex = {
+			entries: [
+				entry({ name: "home-a", pack: "octicons" }),
+				entry({ name: "home", pack: "octicons" }),
+				entry({ name: "home-b", pack: "octicons" }),
+				entry({ name: "home-c", pack: "material" }),
+				entry({ name: "home", pack: "material" }),
+			],
+			categories: [],
+		};
+		const order = filterIcons(pooled, "home").map((e) => e.pack);
+		assert.equal(
+			new Set(order).size,
+			// One run per source, so the number of boundaries equals the number
+			// of sources — any interleaving makes this larger.
+			order.filter((p, i) => p !== order[i - 1]).length,
+		);
 	});
 });
 
@@ -215,6 +318,15 @@ describe("filterIcons — against a real bundled index", () => {
 			names(filterIcons(octicons, "arrow up")).includes("arrow-up"),
 			"arrow-up must answer to `arrow up`",
 		);
+	});
+
+	it("puts the icon actually named `alert` first among the alerts", () => {
+		// Alphabetically `alert` sits above `alert-fill`, but the tie is not
+		// what is being relied on: `bell` matches through a keyword and has to
+		// end up behind both however the library happens to be ordered.
+		const result = names(filterIcons(octicons, "alert"));
+		assert.equal(result[0], "alert");
+		assert.ok(result.length > 1, "alert must not be the only match");
 	});
 
 	it("never invents an entry the index does not hold", () => {
