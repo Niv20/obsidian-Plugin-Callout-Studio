@@ -100,7 +100,7 @@ Search indexes are bundled (packed by `icons/data/codec.ts`); artwork is not. Re
 | `fallback` | Auto-created by discovery for unknown IDs |
 | `theme`/`plugin` | Injected by an import or an older build's API |
 
-Built-in callouts are never stored unless modified — `toSaveData()` only persists modified built-ins and all user callouts. That rule is about `data.json` alone: `load()` seeds all 13 into the in-memory map unconditionally, so `getAll()` always returns every built-in.
+Built-in callouts are never stored unless modified — `toSaveData()` only persists modified built-ins and all user callouts. That rule is about `data.json` alone: `load()` seeds all 13 into the in-memory map unconditionally, so `getAll()` always returns every built-in. Nothing may displace one either — a saved row on a built-in id is merged onto the default and re-stamped `builtIn: true` whatever its own flag says, because there is only ever one callout per id, so such a row is that built-in's customization with its flag lost.
 
 ### Callout metadata (`[!type|metadata]`)
 

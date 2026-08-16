@@ -484,15 +484,15 @@ describe("isBuiltInModified", () => {
 		assert.strictEqual(registry.isBuiltInModified("nope"), false);
 	});
 
-	it("answers about a saved USER row squatting on a built-in id, too", () => {
-		// Pinned as found: the comparison is keyed on the id, not on the row's
-		// own `builtIn`. Harmless — `toSaveData` persists such a row through the
-		// user branch anyway — but the name reads as a question about a built-in
-		// when the row in question is not one.
+	it("answers about a row that squatted on a built-in id — now reclaimed as one", () => {
+		// The comparison is keyed on the id rather than on the row's own
+		// `builtIn`, which used to mean it answered "yes, modified" about a row
+		// whose `builtIn` was false. `load()` reclaims such a row as the
+		// built-in it names, so the two now agree.
 		const { registry } = loaded(
 			saved([def({ id: "note", displayName: "Mine", builtIn: false, source: "user" })]),
 		);
-		assert.strictEqual(registry.get("note")?.builtIn, false);
+		assert.strictEqual(registry.get("note")?.builtIn, true);
 		assert.strictEqual(registry.isBuiltInModified("note"), true);
 	});
 });
@@ -547,11 +547,14 @@ describe("resetBuiltIn", () => {
 		assert.strictEqual(events(), 0);
 	});
 
-	it("re-seeds a built-in id a saved user row had taken over", () => {
+	it("clears the edit a saved row had carried onto a built-in id", () => {
+		// `load()` reclaims such a row as the built-in it names, keeping its
+		// edit; this is the user throwing that edit away.
 		const { registry } = loaded(
 			saved([def({ id: "note", displayName: "Mine", builtIn: false, source: "user" })]),
 		);
 		assert.strictEqual(registry.resetBuiltIn("note"), true);
+		assert.strictEqual(registry.get("note")?.displayName, "Note");
 		assert.strictEqual(registry.get("note")?.builtIn, true);
 		assert.strictEqual(registry.getBuiltIn().length, 13);
 	});

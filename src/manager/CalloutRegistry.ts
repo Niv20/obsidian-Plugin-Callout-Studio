@@ -183,10 +183,26 @@ export class CalloutRegistry {
 
 		// Merge saved callouts (user overrides and custom callouts)
 		if (data.callouts) {
+			// Saved rows that claim one of the 13 ids without claiming to BE a
+			// built-in. An older build, a hand-edited file or a foreign importer
+			// could write one, and it used to overwrite the seed outright: the
+			// map came back with 12 built-ins, breaking the invariant every other
+			// subsystem reads (`getAll()` always returns every built-in), and
+			// `isBuiltInModified("note")` answered about a row whose own
+			// `builtIn` was false. There is only ever one callout per id — a note
+			// writing `[!note]` means the built-in — so the row is the built-in's
+			// customization with its flag lost, and merging it onto the default
+			// keeps every edit while restoring the seed.
+			let reclaimedBuiltIns = 0;
 			for (const saved of data.callouts) {
-				if (this.callouts.has(saved.id) && saved.builtIn) {
+				// Keyed on the shipped defaults rather than on what the map holds
+				// so far: `callouts.has` would also be true of a user row added
+				// by an earlier turn of this same loop, and stamping THAT as a
+				// built-in is exactly the confusion being repaired.
+				if (this.builtInDefaults.has(saved.id)) {
 					// Merge overrides onto built-in
 					const existing = this.callouts.get(saved.id)!;
+					if (saved.builtIn !== true) reclaimedBuiltIns++;
 					this.setCallout(saved.id, {
 						...existing,
 						...saved,
@@ -197,6 +213,10 @@ export class CalloutRegistry {
 					this.setCallout(saved.id, saved);
 				}
 			}
+			// Written back like the other repairs: the reclaimed row is saved
+			// through the built-in gate now (and not at all when it matches the
+			// default), so the file stops carrying the broken shape.
+			if (reclaimedBuiltIns > 0) this.pendingLoadMigrationSave = true;
 		}
 
 		// Merge settings (field-by-field against defaults; see mergeSavedSettings)

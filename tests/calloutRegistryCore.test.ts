@@ -171,15 +171,62 @@ describe("load() — seeding the built-ins", () => {
 		assert.strictEqual(registry.getAll().length, 13);
 	});
 
-	it("lets a saved user row take over a built-in id outright", () => {
-		// See the note in the file header of calloutRegistryViews.test.ts: this
-		// is the one way `getAll()` can come back WITHOUT one of the 13.
+	it("reclaims a built-in id a saved user row had taken over", () => {
+		// Such a row overwrote the seed outright and left `getAll()` holding 12
+		// built-ins — against the invariant CSSInjector, AutoComplete and the
+		// public API all read. There is only one callout per id, so the row is
+		// the built-in's customization with its flag lost: merge it onto the
+		// default, keeping the edit and restoring the seed.
 		const { registry } = loaded(
 			saved([def({ id: "note", displayName: "Mine", builtIn: false, source: "user" })]),
 		);
-		assert.strictEqual(registry.get("note")?.displayName, "Mine");
-		assert.strictEqual(registry.get("note")?.builtIn, false);
-		assert.strictEqual(registry.getBuiltIn().length, 12);
+		assert.strictEqual(registry.get("note")?.displayName, "Mine", "the edit is kept");
+		assert.strictEqual(registry.get("note")?.builtIn, true);
+		assert.strictEqual(registry.get("note")?.source, "builtin");
+		assert.strictEqual(registry.getBuiltIn().length, 13);
+		assert.strictEqual(registry.getAll().length, 13, "no duplicate row beside it");
+	});
+
+	it("keeps the rest of the built-in's fields underneath that row", () => {
+		const { registry } = loaded(
+			saved([def({ id: "note", displayName: "Mine", builtIn: false, source: "user" })]),
+		);
+		// `def()` states colours of its own, so the ones it does NOT state have
+		// to come from the shipped default, exactly as for a `builtIn: true` row.
+		assert.strictEqual(registry.get("note")?.foldable, true);
+		assert.strictEqual(registry.get("note")?.colorLight, "#336699", "the row's own");
+	});
+
+	it("flushes that repair so the file stops carrying the broken shape", () => {
+		const registry = new CalloutRegistry();
+		registry.load(
+			saved([def({ id: "note", displayName: "Mine", builtIn: false, source: "user" })]),
+		);
+		assert.strictEqual(registry.needsSaveAfterLoad(), true);
+
+		const rewritten = registry.toSaveData();
+		assert.strictEqual(rewritten.callouts[0]?.builtIn, true, "saved as a built-in now");
+
+		const second = new CalloutRegistry();
+		second.load(rewritten);
+		assert.strictEqual(second.needsSaveAfterLoad(), false, "nothing left to repair");
+		assert.strictEqual(second.get("note")?.displayName, "Mine");
+	});
+
+	it("drops a reclaimed row that turned out to match the default", () => {
+		// It carries no edit at all, so the built-in gate stops persisting it —
+		// which is only durable because the repair flushes.
+		const { registry } = loaded(
+			saved([
+				{
+					...DEFAULT_CALLOUTS.find((d) => d.id === "note"),
+					builtIn: false,
+					source: "user",
+				} as CalloutDefinition,
+			]),
+		);
+		assert.strictEqual(registry.isBuiltInModified("note"), false);
+		assert.deepStrictEqual(registry.toSaveData().callouts, []);
 	});
 
 	it("restores the icon of a callout still on the removed `svg` type", () => {

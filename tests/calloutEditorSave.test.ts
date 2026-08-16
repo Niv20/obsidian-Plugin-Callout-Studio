@@ -571,12 +571,15 @@ describe("performCalloutEditorSave — which row this becomes", () => {
 		assert.strictEqual(saved?.customized, undefined);
 	});
 
+	// A discovery row is only ever created for an id the registry does NOT
+	// know, so these use one — a stored `fallback` row on a built-in id is the
+	// damaged shape `load()` reclaims as the built-in it names.
 	it("promotes an untouched fallback row the moment it is styled", async () => {
-		const stored = def({ id: "tip", source: "fallback" });
+		const stored = def({ id: "found", source: "fallback" });
 		const h = harness([stored]);
 		const saved = await h.save({
-			existingId: "tip",
-			state: formState({ calloutId: "tip", colorLight: "#ff0000" }),
+			existingId: "found",
+			state: formState({ calloutId: "found", colorLight: "#ff0000" }),
 			baselineDef: stored,
 			hasStyleChanges: true,
 		});
@@ -585,11 +588,11 @@ describe("performCalloutEditorSave — which row this becomes", () => {
 	});
 
 	it("leaves an unstyled fallback row a fallback row", async () => {
-		const stored = def({ id: "tip", source: "fallback" });
+		const stored = def({ id: "found", source: "fallback" });
 		const h = harness([stored]);
 		const saved = await h.save({
-			existingId: "tip",
-			state: formState({ calloutId: "tip" }),
+			existingId: "found",
+			state: formState({ calloutId: "found" }),
 			baselineDef: stored,
 			hasStyleChanges: false,
 		});
@@ -597,11 +600,11 @@ describe("performCalloutEditorSave — which row this becomes", () => {
 	});
 
 	it("never demotes a row the user already adopted", async () => {
-		const stored = def({ id: "tip", source: "fallback", customized: true });
+		const stored = def({ id: "found", source: "fallback", customized: true });
 		const h = harness([stored]);
 		const saved = await h.save({
-			existingId: "tip",
-			state: formState({ calloutId: "tip" }),
+			existingId: "found",
+			state: formState({ calloutId: "found" }),
 			baselineDef: stored,
 			hasStyleChanges: false,
 		});
