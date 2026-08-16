@@ -13,9 +13,14 @@
  * `sanitizeUserImages` is covered here only up to the point where it hands the
  * markup to `sanitizeUserSvg`, which needs a real `DOMParser`. Node has none, so
  * every case below is one that is decided *before* the artwork is filtered —
- * which is all of the "junk input, missing fields, missing SVG" surface. The
- * artwork filter itself is exercised in the app, not here; a test that stubbed
- * a DOM would be testing the stub.
+ * which is all of the "junk input, missing fields, missing SVG" surface. Which
+ * drawings survive the filter is exercised in the app, not here; a test that
+ * stubbed a DOM would be testing the stub.
+ *
+ * Node's missing `DOMParser` does buy one real case, and the last suite spends
+ * it: a filter that cannot run at all. That is the shape of the risk in the app
+ * too — this runs inside `mergeSavedSettings`, on the load path, so a picture
+ * that makes the filter throw must cost that picture and not the whole plugin.
  */
 import assert from "node:assert";
 import { describe, it } from "node:test";
@@ -376,5 +381,47 @@ describe("sanitizeUserImages — what is refused before the artwork is even read
 				[],
 			]),
 		);
+	});
+});
+
+describe("sanitizeUserImages — when the artwork filter cannot run at all", () => {
+	it("drops the picture instead of throwing", () => {
+		// `sanitizeUserSvg` needs `DOMParser`, which Node has not got — so in
+		// here the filter does not refuse the drawing, it *explodes*. That is
+		// worth pinning rather than working around: this function runs from
+		// `mergeSavedSettings`, on the load path, before a single callout has
+		// been styled. An escaping throw is not one missing icon, it is the
+		// plugin failing to load and taking every callout's styling with it.
+		assert.doesNotThrow(() => sanitizeUserImages([image()]));
+		assert.deepStrictEqual(sanitizeUserImages([image()]), []);
+	});
+
+	it("lets nothing unfiltered through in its place", () => {
+		// "The artwork could not be checked" and "the artwork did not pass" have
+		// to have the same answer, or the repair would be worse than the crash.
+		assert.deepStrictEqual(
+			sanitizeUserImages([
+				image({ svg: `<svg xmlns="http://www.w3.org/2000/svg"><script/></svg>` }),
+			]),
+			[],
+		);
+	});
+
+	it("keeps going after one entry blows up", () => {
+		// Whether it is a broken drawing or a missing DOM, the loop has to reach
+		// the entries behind it — otherwise one bad picture silently costs the
+		// user every picture stored after it. Read through a getter, since in
+		// Node every entry is dropped and the returned list cannot tell the two
+		// apart.
+		let reached = false;
+		const second = {
+			...image({ id: "b" }),
+			get svg(): string {
+				reached = true;
+				return "<svg/>";
+			},
+		};
+		sanitizeUserImages([image({ id: "a" }), second]);
+		assert.ok(reached, "the loop stopped at the first unfilterable picture");
 	});
 });

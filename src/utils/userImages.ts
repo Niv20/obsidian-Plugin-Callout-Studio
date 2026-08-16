@@ -12,7 +12,7 @@
  * that happened on some other machine would be trusting nothing at all — the
  * same reasoning that makes PackDataStore re-verify its checksums on each load.
  */
-import { sanitizeUserSvg } from "../icons/svg";
+import { sanitizeUserSvg, type SanitizedUserSvg } from "../icons/svg";
 import type { UserImageIcon } from "../types";
 
 /** Prefix for a picture's stable id, stored as `CalloutIcon.value`. */
@@ -178,7 +178,7 @@ export function sanitizeUserImages(raw: unknown): UserImageIcon[] {
 
 		// Re-filter rather than trust: this markup may have been written by an
 		// older build, edited by hand, or handed over in an import file.
-		const artwork = sanitizeUserSvg(image.svg);
+		const artwork = filterArtwork(image.svg);
 		if (!artwork) continue;
 
 		const format = image.format as UserImageIcon["format"];
@@ -210,6 +210,29 @@ export function sanitizeUserImages(raw: unknown): UserImageIcon[] {
 		});
 	}
 	return result;
+}
+
+/**
+ * `sanitizeUserSvg`, with a thrown error read the same way as a refusal.
+ *
+ * This filter runs on every read of `data.json`, from inside
+ * `mergeSavedSettings` — the load path, before anything is on screen. So one
+ * picture must not be able to throw here: that is not a missing icon, it is the
+ * plugin failing to load and every callout in the vault losing its styling at
+ * once. The filter also needs `DOMParser`, which Obsidian has and not every
+ * realm this module can be evaluated in does (`renderIcon` guards the same way,
+ * for the same reason).
+ *
+ * Dropping is the safe direction, and the only one: "the artwork could not be
+ * checked" and "the artwork did not pass" have the same answer, so nothing
+ * unfiltered is ever let through here.
+ */
+function filterArtwork(raw: string): SanitizedUserSvg | null {
+	try {
+		return sanitizeUserSvg(raw);
+	} catch {
+		return null;
+	}
 }
 
 /**
