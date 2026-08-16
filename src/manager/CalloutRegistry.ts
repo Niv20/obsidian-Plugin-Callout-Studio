@@ -1003,17 +1003,25 @@ export class CalloutRegistry {
 	 * How many callouts still carry `paletteId`, optionally ignoring one.
 	 *
 	 * Used to tell the user how many *other* callouts a revive will regroup, so
-	 * it deliberately walks the same `this.callouts` map {@link relinkPalette}
-	 * will walk: a count taken from `getAll()` (or from any list view) could
-	 * promise a number the relink then fails to touch.
+	 * it counts committed callouts and nothing else — {@link realDefinitions}
+	 * rather than the raw map. A number shown to the user must not include the
+	 * callout editor's in-progress draft: a brand-new one is not a callout yet,
+	 * and one shadowing a real row would be counted twice over if it and the row
+	 * it stands in for disagreed about the link.
 	 *
-	 * Transient live-preview rows cannot skew it — {@link setPreviewDefinition}
-	 * stores a definition built without a `paletteId` at all, so a preview never
-	 * matches here whatever the form is currently showing.
+	 * It used to walk the raw map and claim a preview could not skew it. That
+	 * held only because `CalloutEditor.buildPreviewDefinition` happens to build
+	 * without a `paletteId`: nothing enforced it, and {@link withIdentityOf} —
+	 * which does re-stamp the ownership fields — leaves the field alone.
+	 *
+	 * {@link relinkPalette} still walks the raw map, which it must: the preview
+	 * slot holds the draft, and the shadowed original is restored over anything
+	 * written there. That makes this the *committed* count, which is the one the
+	 * user is being told.
 	 */
 	countPaletteLinks(paletteId: string, exceptCalloutId?: string | null): number {
 		let count = 0;
-		for (const def of this.callouts.values()) {
+		for (const def of this.realDefinitions()) {
 			if (def.paletteId !== paletteId) continue;
 			if (exceptCalloutId != null && def.id === exceptCalloutId) continue;
 			count++;
