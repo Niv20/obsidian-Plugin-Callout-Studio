@@ -2,28 +2,42 @@
  * tests/support/fakeDom.ts — the smallest DOM the editor surfaces can be
  * exercised against.
  *
- * Four of the modules under test are DOM producers or DOM readers and nothing
- * else: `renderShared.buildCalloutTokenDom` builds token DOM, `resolve.ts`
- * walks up from a right-clicked element, `LinkSuggestDecorator` rewrites a
- * rendered suggestion in place, and `AutoComplete.renderSuggestion` paints a
- * dropdown row. Node has no DOM at all, so nothing here is *replacing*
- * anything — this is the only document that code ever sees in a test.
+ * Several of the modules under test are DOM producers or DOM readers and
+ * nothing else: `renderShared.buildCalloutTokenDom` builds token DOM,
+ * `resolve.ts` walks up from a right-clicked element, `LinkSuggestDecorator`
+ * rewrites a rendered suggestion in place, `AutoComplete.renderSuggestion`
+ * paints a dropdown row, the reading-view post-processor rewrites a whole
+ * rendered block, and `OutlineDecorator` watches a pane and rewrites its items.
+ * Node has no DOM at all, so nothing here is *replacing* anything — this is the
+ * only document that code ever sees in a test.
  *
- * It is deliberately not jsdom. Everything below is reachable from what the
- * code under test actually calls:
+ * It is deliberately not jsdom. Everything below is reachable from what the code
+ * under test actually calls:
  *
- * - tree + attributes + classes, and Obsidian's own element helpers
- *   (`createDiv`/`createSpan`/`appendText`/`addClass`/`empty`), which are
- *   `obsidian.d.ts` augmentations of `HTMLElement` and therefore just methods;
+ * - tree + attributes + classes + `dataset`, and Obsidian's own element helpers
+ *   (`createDiv`/`createSpan`/`createFragment`/`appendText`/`addClass`/`empty`),
+ *   which are `obsidian.d.ts` augmentations of `HTMLElement` and therefore just
+ *   methods;
+ * - the mutation surface the rewriters use — `splitText`, `replaceWith`,
+ *   `remove`, `normalize`, sibling links, and document fragments as a staging
+ *   list;
+ * - `createTreeWalker` over `NodeFilter.SHOW_TEXT`, walked lazily off live
+ *   parent/sibling pointers, because "mutating mid-walk derails the walker" is
+ *   an invariant the post-processor is written around and a snapshot would hide;
  * - `closest` / `matches` / `querySelector`, over a selector grammar that is a
  *   comma-separated list of *compound* selectors (`tag`, `.class`, `[attr]`,
- *   `[attr="v"]`). No combinators — the production selectors never use one, and
- *   supporting them would be inventing coverage for code that does not exist;
- * - `HTMLElement`, `Node`, `MouseEvent` and `KeyboardEvent` as globals, because
- *   `instanceof` against each of them is a live branch in the code under test.
+ *   `[attr="v"]`), plus the one combinator production really uses:
+ *   `:scope > .cls` (`OutlineDecorator.clearDecoration`), handled as a whole
+ *   selector rather than as a general combinator grammar;
+ * - `MutationObserver` and `requestAnimationFrame`, which are the entire input
+ *   to `OutlineDecorator` — both deferred until a test flushes them, so a suite
+ *   states when the pane re-renders instead of racing it;
+ * - `HTMLElement`, `Node`, `NodeFilter`, `MouseEvent` and `KeyboardEvent` as
+ *   globals, because `instanceof`/constant reads against them are live branches
+ *   in the code under test.
  *
- * Layout, measurement, events and CSS cascade are all absent, and no test may
- * assert on them.
+ * Layout, measurement, real event dispatch and CSS cascade are all absent, and
+ * no test may assert on them.
  */
 
 /* -------------------------------------------------------------------------- */
@@ -32,19 +46,164 @@
 
 export const NODE_ELEMENT = 1;
 export const NODE_TEXT = 3;
+export const NODE_FRAGMENT = 11;
+
+/** Sibling `delta` places from `node`, or null (used by next/previousSibling). */
+function siblingOf(node: FakeNode, delta: number): FakeNode | null {
+	const parent = node.parentElement;
+	if (!parent) return null;
+	const at = parent.childNodes.indexOf(node);
+	if (at < 0) return null;
+	return parent.childNodes[at + delta] ?? null;
+}
+
+/** Expand any fragment in `nodes` into its children, emptying it as it goes. */
+function flattenNodes(
+	nodes: ReadonlyArray<FakeNode | FakeDocumentFragment>,
+): FakeNode[] {
+	const flat: FakeNode[] = [];
+	for (const node of nodes) {
+		if (node instanceof FakeDocumentFragment) flat.push(...node.drain());
+		else flat.push(node);
+	}
+	return flat;
+}
+
+/** Shared body of `FakeText.replaceWith` and `FakeElement.replaceWith`. */
+function replaceNode(
+	node: FakeNode,
+	incoming: ReadonlyArray<FakeNode | FakeDocumentFragment>,
+): void {
+	const parent = node.parentElement;
+	if (!parent) return;
+	const flat = flattenNodes(incoming);
+	// Detach first, then locate: one of the incoming nodes may be a child of the
+	// same parent (`span.replaceWith(...span.childNodes)` is the common shape),
+	// and removing it would shift the index computed before.
+	for (const child of flat) child.parentElement?.removeChild(child);
+	const at = parent.childNodes.indexOf(node);
+	if (at < 0) return;
+	parent.childNodes.splice(at, 1, ...flat);
+	for (const child of flat) child.parentElement = parent;
+	node.parentElement = null;
+	parent.ownerDocument.recordMutation("childList", parent);
+}
 
 export class FakeText {
 	readonly nodeType = NODE_TEXT;
 	parentElement: FakeElement | null = null;
 
-	constructor(public nodeValue: string) {}
+	private text: string;
+
+	constructor(nodeValue: string) {
+		this.text = nodeValue;
+	}
+
+	get nodeValue(): string {
+		return this.text;
+	}
+
+	set nodeValue(value: string) {
+		this.text = value;
+		const parent = this.parentElement;
+		if (parent) parent.ownerDocument.recordMutation("characterData", parent);
+	}
+
+	/**
+	 * The other name every `Text` answers to. Both spellings are live in the code
+	 * under test — the post-processor reads `.data` while the outline decorator
+	 * reads `.nodeValue` — so they have to be one value, not two fields.
+	 */
+	get data(): string {
+		return this.text;
+	}
+
+	set data(value: string) {
+		this.nodeValue = value;
+	}
 
 	get textContent(): string {
-		return this.nodeValue;
+		return this.text;
+	}
+
+	set textContent(value: string) {
+		this.nodeValue = value;
+	}
+
+	get parentNode(): FakeElement | null {
+		return this.parentElement;
+	}
+
+	get nextSibling(): FakeNode | null {
+		return siblingOf(this, 1);
+	}
+
+	get previousSibling(): FakeNode | null {
+		return siblingOf(this, -1);
+	}
+
+	get ownerDocument(): FakeDocument {
+		return this.parentElement?.ownerDocument ?? sharedDocument;
+	}
+
+	/**
+	 * Keep `[0, offset)` here and hand back a new node holding the rest, inserted
+	 * directly after this one. An `offset` at the very end yields an empty tail
+	 * node rather than nothing, exactly as the real one does — the pill splicer
+	 * relies on that node existing.
+	 */
+	splitText(offset: number): FakeText {
+		const tail = new FakeText(this.text.slice(offset));
+		const parent = this.parentElement;
+		const after = this.nextSibling;
+		// Assigned directly rather than through the setter, so the split reports
+		// one mutation instead of two.
+		this.text = this.text.slice(0, offset);
+		if (parent) {
+			parent.insertBefore(tail, after);
+			parent.ownerDocument.recordMutation("characterData", parent);
+		}
+		return tail;
+	}
+
+	remove(): void {
+		this.parentElement?.removeChild(this);
+	}
+
+	replaceWith(...nodes: Array<FakeNode | FakeDocumentFragment>): void {
+		replaceNode(this, nodes);
 	}
 }
 
 export type FakeNode = FakeElement | FakeText;
+
+/**
+ * A staging list, which is all a fragment ever is here: `gradientTitleText`
+ * builds its per-grapheme spans into one and hands it to `replaceWith`, which
+ * splices the children in and leaves the fragment empty. Nodes parked in a
+ * fragment deliberately report `parentElement === null` — the real one is not an
+ * element either, and nothing under test asks.
+ */
+export class FakeDocumentFragment {
+	readonly nodeType = NODE_FRAGMENT;
+	readonly childNodes: FakeNode[] = [];
+
+	appendChild<T extends FakeNode>(node: T): T {
+		node.parentElement?.removeChild(node);
+		node.parentElement = null;
+		this.childNodes.push(node);
+		return node;
+	}
+
+	get textContent(): string {
+		return this.childNodes.map((node) => node.textContent).join("");
+	}
+
+	/** Hand over every child and empty out — what an insertion does to it. */
+	drain(): FakeNode[] {
+		return this.childNodes.splice(0, this.childNodes.length);
+	}
+}
 
 class FakeClassList {
 	private readonly names = new Set<string>();
@@ -92,6 +251,10 @@ function createStyle(custom: Map<string, string>): FakeStyle {
 	return style as FakeStyle;
 }
 
+/** `csOrig` → `data-cs-orig`, the mapping `dataset` is defined by. */
+const dataAttrName = (key: string): string =>
+	`data-${key.replace(/[A-Z]/g, (c) => `-${c.toLowerCase()}`)}`;
+
 /** Options accepted by Obsidian's `createEl` / `createDiv` / `createSpan`. */
 export interface ElOptions {
 	cls?: string | string[];
@@ -111,12 +274,18 @@ export class FakeElement {
 	readonly style = createStyle(this.cssProps);
 	readonly childNodes: FakeNode[] = [];
 	parentElement: FakeElement | null = null;
+	/**
+	 * Plain field, not derived from the tree: suites build detached trees and say
+	 * for themselves whether the thing is on screen. `OutlineDecorator` reads it
+	 * to prune panes whose leaf is gone.
+	 */
 	isConnected = false;
 	ownerDocument: FakeDocument;
 	/** Set by the suites that build a `.cm-callout` widget host. */
 	cmView?: unknown;
 
 	private readonly attrs = new Map<string, string>();
+	private datasetView?: Record<string, string | undefined>;
 
 	constructor(tagName: string, ownerDocument?: FakeDocument) {
 		this.tagName = tagName.toUpperCase();
@@ -124,6 +293,21 @@ export class FakeElement {
 	}
 
 	/* ---- attributes ---- */
+
+	/**
+	 * The whole class list as one string. A real alias of {@link classList},
+	 * not a second field: `gradientTitleText` assigns `span.className` while
+	 * everything else calls `addClass`, and a span whose class only exists on
+	 * one of the two is invisible to the `querySelectorAll` that finds it again.
+	 */
+	get className(): string {
+		return this.classList.value;
+	}
+
+	set className(value: string) {
+		this.classList.remove(...this.classList.toArray());
+		this.classList.add(...value.split(/\s+/).filter(Boolean));
+	}
 
 	setAttribute(name: string, value: string): void {
 		this.attrs.set(name, value);
@@ -139,6 +323,39 @@ export class FakeElement {
 
 	removeAttribute(name: string): void {
 		this.attrs.delete(name);
+	}
+
+	/**
+	 * A real `dataset`: a live view over the `data-*` attributes, not a side
+	 * table. `OutlineDecorator` only ever goes through `dataset`, but writing its
+	 * markers somewhere `getAttribute` cannot see would be a divergence waiting
+	 * to be depended on.
+	 */
+	get dataset(): Record<string, string | undefined> {
+		this.datasetView ??= new Proxy(
+			{},
+			{
+				get: (_target, key) =>
+					typeof key === "string"
+						? (this.getAttribute(dataAttrName(key)) ?? undefined)
+						: undefined,
+				set: (_target, key, value) => {
+					if (typeof key === "string") {
+						this.setAttribute(dataAttrName(key), String(value));
+					}
+					return true;
+				},
+				deleteProperty: (_target, key) => {
+					if (typeof key === "string") {
+						this.removeAttribute(dataAttrName(key));
+					}
+					return true;
+				},
+				has: (_target, key) =>
+					typeof key === "string" && this.hasAttribute(dataAttrName(key)),
+			},
+		) as Record<string, string | undefined>;
+		return this.datasetView;
 	}
 
 	/* ---- tree ---- */
@@ -157,10 +374,23 @@ export class FakeElement {
 		return this.childNodes.at(-1) ?? null;
 	}
 
+	get parentNode(): FakeElement | null {
+		return this.parentElement;
+	}
+
+	get nextSibling(): FakeNode | null {
+		return siblingOf(this, 1);
+	}
+
+	get previousSibling(): FakeNode | null {
+		return siblingOf(this, -1);
+	}
+
 	appendChild<T extends FakeNode>(node: T): T {
 		node.parentElement?.removeChild(node);
 		node.parentElement = this;
 		this.childNodes.push(node);
+		this.ownerDocument.recordMutation("childList", this);
 		return node;
 	}
 
@@ -170,6 +400,7 @@ export class FakeElement {
 		const at = reference ? this.childNodes.indexOf(reference) : -1;
 		if (at < 0) this.childNodes.push(node);
 		else this.childNodes.splice(at, 0, node);
+		this.ownerDocument.recordMutation("childList", this);
 		return node;
 	}
 
@@ -177,6 +408,7 @@ export class FakeElement {
 		const at = this.childNodes.indexOf(node);
 		if (at >= 0) this.childNodes.splice(at, 1);
 		node.parentElement = null;
+		if (at >= 0) this.ownerDocument.recordMutation("childList", this);
 		return node;
 	}
 
@@ -185,8 +417,44 @@ export class FakeElement {
 		for (const node of nodes) this.appendChild(node);
 	}
 
+	remove(): void {
+		this.parentElement?.removeChild(this);
+	}
+
+	replaceWith(...nodes: Array<FakeNode | FakeDocumentFragment>): void {
+		replaceNode(this, nodes);
+	}
+
 	detach(): void {
 		this.parentElement?.removeChild(this);
+	}
+
+	/**
+	 * Merge adjacent text children and drop empty ones, recursively — what
+	 * `clearGradientChars` calls to put a title back to the single text node it
+	 * was before the per-grapheme wrapping.
+	 */
+	normalize(): void {
+		for (let i = this.childNodes.length - 1; i >= 0; i--) {
+			const child = this.childNodes[i];
+			if (!child) continue;
+			if (child.nodeType === NODE_ELEMENT) {
+				child.normalize();
+				continue;
+			}
+			const text = child;
+			if (text.nodeValue === "") {
+				this.childNodes.splice(i, 1);
+				text.parentElement = null;
+				continue;
+			}
+			const prev = this.childNodes[i - 1];
+			if (prev && prev.nodeType === NODE_TEXT) {
+				prev.nodeValue += text.nodeValue;
+				this.childNodes.splice(i, 1);
+				text.parentElement = null;
+			}
+		}
 	}
 
 	contains(node: FakeNode | null): boolean {
@@ -226,6 +494,16 @@ export class FakeElement {
 	}
 
 	querySelectorAll(selector: string): FakeElement[] {
+		// `:scope > .cls` is the one combinator production uses, and it is used
+		// whole rather than as one term of a list — so it is recognized as a
+		// whole selector instead of pretending to support a combinator grammar.
+		const scoped = SCOPE_CHILD_RE.exec(selector.trim());
+		if (scoped) {
+			const compound = scoped[1] ?? "";
+			return this.children.filter((child) =>
+				matchesSelector(child, compound),
+			);
+		}
 		const found: FakeElement[] = [];
 		for (const child of this.children) {
 			if (matchesSelector(child, selector)) found.push(child);
@@ -334,6 +612,9 @@ function applyElOptions(el: FakeElement, options?: ElOptions): void {
 /** One `tag`/`.class`/`[attr]`/`[attr="value"]` piece of a compound selector. */
 const SIMPLE_RE = /([.#]?[\w-]+)|(\[[^\]]+\])/g;
 
+/** The whole-selector form `:scope > <compound>` — see querySelectorAll. */
+const SCOPE_CHILD_RE = /^:scope\s*>\s*(.+)$/;
+
 function matchesCompound(el: FakeElement, compound: string): boolean {
 	const pieces = compound.trim().match(SIMPLE_RE);
 	// An unparseable selector must never silently match everything.
@@ -367,6 +648,182 @@ function matchesSelector(el: FakeElement, selector: string): boolean {
 }
 
 /* -------------------------------------------------------------------------- */
+/* Tree walker                                                                */
+/* -------------------------------------------------------------------------- */
+
+export const FILTER_ACCEPT = 1;
+export const FILTER_REJECT = 2;
+export const FILTER_SKIP = 3;
+export const SHOW_ELEMENT = 1;
+export const SHOW_TEXT = 4;
+
+type WalkerFilter =
+	| { acceptNode(node: FakeNode): number }
+	| ((node: FakeNode) => number)
+	| null;
+
+/** Pre-order successor of `from`, never leaving `root`'s subtree. */
+function advance(from: FakeNode, root: FakeNode): FakeNode | null {
+	if (from.nodeType === NODE_ELEMENT) {
+		const first = from.childNodes[0];
+		if (first) return first;
+	}
+	// Climbing off a node whose parent chain was cut mid-walk simply ends the
+	// walk — the real TreeWalker keeps going in the detached tree, and either
+	// way the production code is written never to mutate while walking.
+	for (let cur: FakeNode | null = from; cur && cur !== root; ) {
+		const next = siblingOf(cur, 1);
+		if (next) return next;
+		cur = cur.parentElement;
+	}
+	return null;
+}
+
+/**
+ * Lazy pre-order walker. Deliberately *not* a snapshot: the post-processor's
+ * comments turn on "replacing nodes mid-walk derails TreeWalker", and a
+ * pre-computed list would quietly make that untrue.
+ */
+class FakeTreeWalker {
+	currentNode: FakeNode;
+
+	constructor(
+		readonly root: FakeNode,
+		private readonly whatToShow: number,
+		private readonly filter: WalkerFilter,
+	) {
+		this.currentNode = root;
+	}
+
+	nextNode(): FakeNode | null {
+		let node: FakeNode | null = this.currentNode;
+		for (;;) {
+			node = advance(node, this.root);
+			if (!node) return null;
+			if (!this.shows(node)) continue;
+			if (this.verdict(node) !== FILTER_ACCEPT) continue;
+			this.currentNode = node;
+			return node;
+		}
+	}
+
+	private shows(node: FakeNode): boolean {
+		const bit = node.nodeType === NODE_TEXT ? SHOW_TEXT : SHOW_ELEMENT;
+		return (this.whatToShow & bit) !== 0;
+	}
+
+	private verdict(node: FakeNode): number {
+		if (!this.filter) return FILTER_ACCEPT;
+		return typeof this.filter === "function"
+			? this.filter(node)
+			: this.filter.acceptNode(node);
+	}
+}
+
+/* -------------------------------------------------------------------------- */
+/* Mutation observers                                                         */
+/* -------------------------------------------------------------------------- */
+
+/** The one field of a record anything under test could read. */
+export interface FakeMutationRecord {
+	type: "childList" | "characterData";
+	target: FakeElement;
+}
+
+/**
+ * A `MutationObserver` whose delivery a test decides.
+ *
+ * The real one delivers on a microtask, which would make every outline
+ * assertion a race. Records queue here instead and are handed over by
+ * {@link FakeDocument.flushMutations}, which is also what makes
+ * `OutlineDecorator`'s `takeRecords()` drain observable: records the decorator
+ * produced during its own pass are gone before any flush can deliver them.
+ *
+ * `observe`'s options are stored and not filtered on. The one caller passes
+ * `childList + subtree + characterData`, so there is no combination here that
+ * could tell them apart, and inventing one would be coverage for code that does
+ * not exist.
+ */
+export class FakeMutationObserver {
+	private records: FakeMutationRecord[] = [];
+	private targets: FakeElement[] = [];
+	options: unknown;
+
+	constructor(
+		private readonly callback: (
+			records: FakeMutationRecord[],
+			observer: FakeMutationObserver,
+		) => void,
+	) {}
+
+	observe(target: FakeElement, options?: unknown): void {
+		this.options = options;
+		if (!this.targets.includes(target)) this.targets.push(target);
+		target.ownerDocument.addObserver(this);
+	}
+
+	disconnect(): void {
+		for (const target of this.targets) {
+			target.ownerDocument.removeObserver(this);
+		}
+		this.targets = [];
+		this.records = [];
+	}
+
+	takeRecords(): FakeMutationRecord[] {
+		return this.records.splice(0, this.records.length);
+	}
+
+	/** Called by the document on every mutation; filters by observed subtree. */
+	record(record: FakeMutationRecord): void {
+		if (!this.targets.some((target) => target.contains(record.target))) return;
+		this.records.push(record);
+	}
+
+	/** Called by the document's flush; a no-op when nothing queued up. */
+	deliver(): void {
+		const records = this.takeRecords();
+		if (records.length === 0) return;
+		this.callback(records, this);
+	}
+}
+
+/* -------------------------------------------------------------------------- */
+/* Window                                                                     */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * Just enough `window` for `requestAnimationFrame`, which is how
+ * `OutlineDecorator` coalesces an observer burst into one pass. Frames are
+ * queued and fired on demand for the same reason mutations are.
+ */
+export class FakeWindow {
+	private readonly frames = new Map<number, () => void>();
+	private seq = 1;
+
+	requestAnimationFrame(fn: () => void): number {
+		const id = this.seq++;
+		this.frames.set(id, fn);
+		return id;
+	}
+
+	cancelAnimationFrame(id: number): void {
+		this.frames.delete(id);
+	}
+
+	/** Fire every frame queued *now*; frames they queue wait for the next flush. */
+	flushFrames(): void {
+		const due = [...this.frames.values()];
+		this.frames.clear();
+		for (const fn of due) fn();
+	}
+
+	pendingFrames(): number {
+		return this.frames.size;
+	}
+}
+
+/* -------------------------------------------------------------------------- */
 /* Document                                                                   */
 /* -------------------------------------------------------------------------- */
 
@@ -380,10 +837,15 @@ export class FakeDocument {
 	 * installs this DOM *and* imports CodeMirror needs it to be there.
 	 */
 	readonly documentElement: FakeElement;
+	/** What `container.ownerDocument.defaultView` resolves to. */
+	defaultView: FakeWindow;
 	/** Every listener added through `addEventListener`, by type. */
 	readonly listeners = new Map<string, Array<() => void>>();
 
-	constructor() {
+	private readonly observers: FakeMutationObserver[] = [];
+
+	constructor(defaultView?: FakeWindow) {
+		this.defaultView = defaultView ?? new FakeWindow();
 		this.documentElement = new FakeElement("html", this);
 		this.body = new FakeElement("body", this);
 		this.head = new FakeElement("head", this);
@@ -394,6 +856,48 @@ export class FakeDocument {
 	createElement(tag: string): FakeElement {
 		return new FakeElement(tag, this);
 	}
+
+	createTextNode(text: string): FakeText {
+		return new FakeText(text);
+	}
+
+	createDocumentFragment(): FakeDocumentFragment {
+		return new FakeDocumentFragment();
+	}
+
+	createTreeWalker(
+		root: FakeNode,
+		whatToShow = SHOW_ELEMENT | SHOW_TEXT,
+		filter: WalkerFilter = null,
+	): FakeTreeWalker {
+		return new FakeTreeWalker(root, whatToShow, filter);
+	}
+
+	/* ---- mutation observers ---- */
+
+	addObserver(observer: FakeMutationObserver): void {
+		if (!this.observers.includes(observer)) this.observers.push(observer);
+	}
+
+	removeObserver(observer: FakeMutationObserver): void {
+		const at = this.observers.indexOf(observer);
+		if (at >= 0) this.observers.splice(at, 1);
+	}
+
+	recordMutation(
+		type: FakeMutationRecord["type"],
+		target: FakeElement,
+	): void {
+		if (this.observers.length === 0) return;
+		for (const observer of this.observers) observer.record({ type, target });
+	}
+
+	/** Hand every observer whatever it still holds (see FakeMutationObserver). */
+	flushMutations(): void {
+		for (const observer of [...this.observers]) observer.deliver();
+	}
+
+	/* ---- events ---- */
 
 	addEventListener(type: string, fn: () => void): void {
 		const list = this.listeners.get(type) ?? [];
@@ -423,10 +927,17 @@ let sharedDocument = new FakeDocument();
 /** Handle on the installed globals. */
 export interface FakeDomHandle {
 	document: FakeDocument;
+	window: FakeWindow;
 	/** Put `theme-dark` on `<body>`, as Obsidian does in dark mode. */
 	dark(): void;
 	/** Take it off again. */
 	light(): void;
+	/**
+	 * Deliver queued mutation records, then fire the animation frames they
+	 * scheduled — the two-step the outline pane's re-render really is. Repeats
+	 * while either queue refills, so one call takes the pane to rest.
+	 */
+	settle(): void;
 	/** Restore every global this replaced. */
 	restore(): void;
 }
@@ -434,12 +945,14 @@ export interface FakeDomHandle {
 /**
  * Install the fake DOM on `globalThis`.
  *
- * `createSpan`, `createDiv`, `createEl`, `activeDocument` and `activeWindow` are
- * ambient globals in the Obsidian renderer; esbuild leaves them as free
- * identifiers, so seeding `globalThis` is all it takes. `HTMLElement`, `Node`,
- * `MouseEvent` and `KeyboardEvent` are here because `instanceof` against each is
- * a live branch (`resolve.ts` guards on `HTMLElement`, `LinkSuggestDecorator`
- * on `Node.TEXT_NODE`, `AutoComplete.selectSuggestion` on `KeyboardEvent`).
+ * `createSpan`, `createDiv`, `createEl`, `createFragment`, `activeDocument` and
+ * `activeWindow` are ambient globals in the Obsidian renderer; esbuild leaves
+ * them as free identifiers, so seeding `globalThis` is all it takes.
+ * `HTMLElement`, `Node`, `NodeFilter`, `MutationObserver`, `MouseEvent` and
+ * `KeyboardEvent` are here because each is read as a value in the code under
+ * test (`resolve.ts` guards on `HTMLElement`, `LinkSuggestDecorator` on
+ * `Node.TEXT_NODE`, the reading post-processor on `NodeFilter.SHOW_TEXT`,
+ * `OutlineDecorator` constructs a `MutationObserver`).
  *
  * `node --test` runs each test *file* in its own process, so nothing installed
  * here can leak into another suite; `restore()` exists for the one suite that
@@ -456,13 +969,17 @@ export function installFakeDom(): FakeDomHandle {
 		"createEl",
 		"createDiv",
 		"createSpan",
+		"createFragment",
 		"HTMLElement",
 		"Node",
+		"NodeFilter",
+		"MutationObserver",
 		"MouseEvent",
 		"KeyboardEvent",
 	];
 
-	const doc = new FakeDocument();
+	const win = new FakeWindow();
+	const doc = new FakeDocument(win);
 	sharedDocument = doc;
 
 	/**
@@ -479,20 +996,45 @@ export function installFakeDom(): FakeDomHandle {
 
 	g.document = doc;
 	g.activeDocument = doc;
-	g.window = g.window ?? {};
-	g.activeWindow = g.window;
+	g.window = win;
+	g.activeWindow = win;
 	g.createEl = make;
 	g.createDiv = (options?: ElOptions) => make("div", options);
 	g.createSpan = (options?: ElOptions) => make("span", options);
+	g.createFragment = () => new FakeDocumentFragment();
 	g.HTMLElement = FakeElement;
-	g.Node = { ELEMENT_NODE: NODE_ELEMENT, TEXT_NODE: NODE_TEXT };
+	g.Node = {
+		ELEMENT_NODE: NODE_ELEMENT,
+		TEXT_NODE: NODE_TEXT,
+		DOCUMENT_FRAGMENT_NODE: NODE_FRAGMENT,
+	};
+	g.NodeFilter = {
+		SHOW_ALL: -1,
+		SHOW_ELEMENT,
+		SHOW_TEXT,
+		FILTER_ACCEPT,
+		FILTER_REJECT,
+		FILTER_SKIP,
+	};
+	g.MutationObserver = FakeMutationObserver;
 	g.MouseEvent = class MouseEvent {};
 	g.KeyboardEvent = class KeyboardEvent {};
 
 	return {
 		document: doc,
+		window: win,
 		dark: () => doc.body.classList.add("theme-dark"),
 		light: () => doc.body.classList.remove("theme-dark"),
+		settle(): void {
+			// 32 is far above anything a real pane does; a higher count means a
+			// pass is re-triggering itself, which is worth failing over.
+			for (let guard = 0; guard < 32; guard++) {
+				doc.flushMutations();
+				if (win.pendingFrames() === 0) return;
+				win.flushFrames();
+			}
+			throw new Error("fakeDom.settle(): the DOM never came to rest");
+		},
 		restore() {
 			for (const key of keys) {
 				if (key in saved) g[key] = saved[key];
@@ -524,6 +1066,68 @@ export function el(spec: ElementSpec = {}): FakeElement {
 	if (spec.text !== undefined) node.appendText(spec.text);
 	for (const child of spec.children ?? []) node.appendChild(child);
 	return node;
+}
+
+/** One tag, one closing tag, or a run of text, in source order. */
+const HTML_TOKEN_RE =
+	/<\/([a-zA-Z][\w-]*)\s*>|<([a-zA-Z][\w-]*)((?:\s+[\w:-]+(?:="[^"]*")?)*)\s*(\/?)>/g;
+const HTML_ATTR_RE = /([\w:-]+)(?:="([^"]*)")?/g;
+/** Tags that never have children, so they never look for a closing tag. */
+const HTML_VOID = new Set(["br", "hr", "img", "input"]);
+
+/**
+ * Parse a fragment of markup into fake elements — the input to the reading-view
+ * post-processor is "whatever Obsidian's renderer already produced", and writing
+ * those trees out as nested `el()` calls buries the one thing each test is
+ * about.
+ *
+ * Grammar is exactly what those fixtures need: tags with quoted or bare
+ * attributes, the void tags above, and text. No entities, no comments, no
+ * implied end tags — a fixture that needs one of those is better written by
+ * hand. Requires exactly one root element.
+ */
+export function html(markup: string): FakeElement {
+	const root = new FakeElement("root", sharedDocument);
+	const stack: FakeElement[] = [root];
+	let at = 0;
+	HTML_TOKEN_RE.lastIndex = 0;
+	let match: RegExpExecArray | null;
+
+	const top = (): FakeElement => stack[stack.length - 1] as FakeElement;
+	const text = (raw: string): void => {
+		if (raw !== "") top().appendText(raw);
+	};
+
+	while ((match = HTML_TOKEN_RE.exec(markup)) !== null) {
+		text(markup.slice(at, match.index));
+		at = match.index + match[0].length;
+		const closing = match[1];
+		if (closing !== undefined) {
+			if (stack.length > 1) stack.pop();
+			continue;
+		}
+		const tag = (match[2] ?? "").toLowerCase();
+		const node = new FakeElement(tag, sharedDocument);
+		HTML_ATTR_RE.lastIndex = 0;
+		let attr: RegExpExecArray | null;
+		while ((attr = HTML_ATTR_RE.exec(match[3] ?? "")) !== null) {
+			const name = attr[1] ?? "";
+			const value = attr[2] ?? "";
+			if (name === "class") node.classList.add(...value.split(/\s+/).filter(Boolean));
+			else node.setAttribute(name, value);
+		}
+		top().appendChild(node);
+		if (!HTML_VOID.has(tag) && match[4] !== "/") stack.push(node);
+	}
+	text(markup.slice(at));
+
+	const roots = root.children;
+	if (roots.length !== 1 || root.childNodes.length !== 1) {
+		throw new Error(`html(): expected exactly one root element in ${markup}`);
+	}
+	const only = roots[0] as FakeElement;
+	root.removeChild(only);
+	return only;
 }
 
 /** Cast helper: the code under test is typed against the real DOM. */
