@@ -16,7 +16,7 @@
  * top-level `await` while the target forbids it.
  */
 import assert from "node:assert";
-import { describe, it } from "node:test";
+import { after, afterEach, before, beforeEach, describe, it } from "node:test";
 import { readRepoJson, readRepoFile, testSourceFiles } from "./support/sourceScan";
 
 interface TsConfig {
@@ -26,6 +26,7 @@ interface TsConfig {
 
 interface PackageJson {
 	scripts?: Record<string, string>;
+	devDependencies?: Record<string, string>;
 }
 
 const tsconfig = readRepoJson<TsConfig>("tsconfig.json");
@@ -136,5 +137,81 @@ describe("no suite relies on top-level await", () => {
 	it("and the scan is looking at something", () => {
 		// An empty file list would make the assertion above pass for free.
 		assert.ok(testSourceFiles().length > 50);
+	});
+});
+
+/* -------------------------------------------------------------------------- */
+/* The typings the gate checks against                                         */
+/* -------------------------------------------------------------------------- */
+
+describe("the node typings describe the node the suites run on", () => {
+	/**
+	 * `@types/node` was pinned at 16 — three majors behind everything that
+	 * actually runs here — and being inside the typecheck is what made that
+	 * expensive rather than cosmetic. `node:test` in those typings predates the
+	 * lifecycle hooks entirely: `beforeEach` was a compile error under the same
+	 * `tsc -noEmit` gate above, while the runner executed it perfectly well. A
+	 * suite that needed setup had to fake it at module scope.
+	 *
+	 * The major is checked against the two places that decide which Node this
+	 * repository really uses, rather than being restated as a third number.
+	 */
+	const majorOf = (range: string): number =>
+		Number(/(\d+)/.exec(range)?.[1] ?? NaN);
+
+	const declared = majorOf(pkg.devDependencies?.["@types/node"] ?? "");
+
+	it("matches the oldest Node CI runs", () => {
+		// Older than CI's oldest under-types the runner (the bug above); newer
+		// promises APIs that Node is missing on the job that runs first.
+		const workflow = readRepoFile(".github/workflows/lint.yml");
+		const matrix = /node-version:\s*\[([^\]]+)\]/.exec(workflow)?.[1] ?? "";
+		const majors = matrix
+			.split(",")
+			.map((entry) => majorOf(entry.trim()))
+			.filter((n) => !Number.isNaN(n));
+
+		assert.ok(majors.length > 0, "could not read the node-version matrix");
+		assert.strictEqual(declared, Math.min(...majors));
+	});
+
+	it("matches what the runner bundles for", () => {
+		const runner = readRepoFile("scripts/run-tests.mjs");
+		const target = /target:\s*"node(\d+)"/.exec(runner)?.[1];
+		assert.strictEqual(declared, Number(target));
+	});
+});
+
+/* -------------------------------------------------------------------------- */
+/* What that buys                                                              */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * The four lifecycle hooks, used rather than described.
+ *
+ * This suite exists to be *compiled*: `node:test` under the old typings
+ * exported `describe`, `it`, `test` and `TestContext` and nothing else, so the
+ * import line above was the failure — `has no exported member 'beforeEach'`,
+ * from the build, for a file the test runner had no trouble with at all.
+ */
+describe("the runner's lifecycle hooks are usable", () => {
+	const log: string[] = [];
+
+	before(() => log.push("before"));
+	beforeEach(() => log.push("beforeEach"));
+	afterEach(() => log.push("afterEach"));
+	after(() => log.push("after"));
+
+	it("has run the suite hook, then the per-test one", () => {
+		assert.deepStrictEqual(log, ["before", "beforeEach"]);
+	});
+
+	it("teardown, then setup again, for the next test", () => {
+		assert.deepStrictEqual(log, [
+			"before",
+			"beforeEach",
+			"afterEach",
+			"beforeEach",
+		]);
 	});
 });
