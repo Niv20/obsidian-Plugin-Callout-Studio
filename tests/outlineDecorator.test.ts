@@ -662,3 +662,45 @@ describe("the observer", () => {
 		);
 	});
 });
+
+/* -------------------------------------------------------------------------- */
+/* The one combinator                                                         */
+/* -------------------------------------------------------------------------- */
+
+describe("clearDecoration removes its own token and no other", () => {
+	/**
+	 * `clearDecoration` is the whole reason `:scope > .cs-ref-token` exists in
+	 * this plugin — the single production selector that is not a plain compound
+	 * (see `tests/support/fakeDom.ts`, whose engine says so in as many words).
+	 *
+	 * That the fake DOM *answers* it at all is already pinned by the restore
+	 * tests above: an engine that matched nothing would leave the token behind
+	 * and they would fail. What they cannot see is the opposite mistake —
+	 * answering it as a descendant match, which every suite in this file would
+	 * pass while the real DOM reached one level deeper than production means to.
+	 * The outline pane is not ours; a token below the top level of a row belongs
+	 * to whoever put it there.
+	 */
+	it("the fake DOM's `:scope >` means a child, not a descendant", () => {
+		const row = el({ cls: "tree-item-inner" });
+		const deep = row.createDiv().createSpan({ cls: CSS_REF_TOKEN });
+
+		assert.strictEqual(row.querySelector(`:scope > .${CSS_REF_TOKEN}`), null);
+		assert.strictEqual(row.querySelector(`.${CSS_REF_TOKEN}`), deep);
+	});
+
+	it("a restore leaves a lookalike nested in the row alone", () => {
+		// Deliberately inserted ahead of our own token, which is what makes this
+		// tell the two engines apart: a descendant match takes the first hit in
+		// document order, and that would be this one.
+		const { h, row } = decorated();
+		const wrapper = el({ tag: "span" });
+		const foreign = wrapper.createSpan({ cls: CSS_REF_TOKEN });
+		row.insertBefore(wrapper, row.firstChild);
+
+		h.decorator.destroy();
+
+		assert.strictEqual(row.querySelectorAll(`.${CSS_REF_TOKEN}`).length, 1);
+		assert.strictEqual(tokenOf(row), foreign);
+	});
+});
