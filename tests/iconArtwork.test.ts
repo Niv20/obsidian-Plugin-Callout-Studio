@@ -29,10 +29,10 @@
  * the failure *in memory only*, so a vault that was merely offline gets a clean
  * chance on the next launch rather than a permanent error.
  *
- * NOTE ON SCOPE. `cacheOne`'s retry loop waits through `window.setTimeout`,
- * which Node has not got, so the offline path is exercised through `ensureAll`
- * — the sweep that is built for startup and takes a single attempt. And there is
- * no request de-duplication in this class to test: see the session summary.
+ * `cacheOne` de-duplicates concurrent callers the way `PackDataStore` does for
+ * a whole pack, and is tested the same way: by promise identity, which is the
+ * only evidence that the second caller joined the first request rather than
+ * starting a second one that happens to fetch the same bytes.
  */
 import assert from "node:assert";
 import { readFileSync } from "node:fs";
@@ -758,6 +758,148 @@ describe("IconFetchManager", () => {
 		const h = fetchHarness();
 		const icon: CalloutIcon = { type: "material", value: "home" };
 		assert.equal(h.fetch.hasFailed(icon), h.fetch.hasFailed(icon, "regular"));
+	});
+});
+
+describe("IconFetchManager.cacheOne — one request per drawing", () => {
+	interface FetchSeams {
+		__CS_REQUEST_URL__?: (url: string) => Promise<{ text: string }>;
+		window?: unknown;
+	}
+	const seams = globalThis as unknown as FetchSeams;
+
+	/**
+	 * Count every request and refuse all of them, so what a test reads is the
+	 * number of attempts rather than what came back.
+	 *
+	 * The `window` here is not a fake DOM — `cacheOne`'s retry wait reaches for
+	 * exactly one member of it, and what it wants from that member is to be
+	 * called back later. A resolved promise is later enough, and costs the three
+	 * attempts no wall clock at all.
+	 */
+	function offline(): { requests: () => number; restore: () => void } {
+		const savedServe = seams.__CS_REQUEST_URL__;
+		const savedWindow = seams.window;
+		let requests = 0;
+		seams.__CS_REQUEST_URL__ = () => {
+			requests++;
+			return Promise.reject(new Error("offline"));
+		};
+		seams.window = {
+			setTimeout: (fn: () => void) => {
+				void Promise.resolve().then(fn);
+				return 0;
+			},
+		};
+		return {
+			requests: () => requests,
+			restore: () => {
+				seams.__CS_REQUEST_URL__ = savedServe;
+				seams.window = savedWindow;
+			},
+		};
+	}
+
+	function manager(): IconFetchManager {
+		return new IconFetchManager({
+			registry: registry(),
+			cssInjector: { inject: () => undefined } as unknown as CSSInjector,
+			saveSettings: () => Promise.resolve(),
+		});
+	}
+
+	it("hands two concurrent callers the very same request", async () => {
+		// Identity, not a count, is the property: an `async` method returns a
+		// fresh promise every call, so sharing one is only observable this way.
+		// The picker's confirm and the editor's save can land on the same icon
+		// in the same tick, and two fetches of one drawing is two rounds of
+		// three attempts, two waits apiece, racing to store identical bytes.
+		const net = offline();
+		try {
+			const fetch = manager();
+			const icon: CalloutIcon = { type: "material", value: "home" };
+			const first = fetch.cacheOne(icon);
+			const second = fetch.cacheOne(icon);
+			assert.strictEqual(first, second, "the second caller started its own");
+			await first;
+			assert.equal(net.requests(), 3, "one round of attempts, not two");
+		} finally {
+			net.restore();
+		}
+	});
+
+	it("keeps two different drawings on their own requests", async () => {
+		// The other half of the same property: de-duplication is keyed the way
+		// the cache is, so `home` joining `house` would be a bug of its own.
+		const net = offline();
+		try {
+			const fetch = manager();
+			const home = fetch.cacheOne({ type: "material", value: "home" });
+			const house = fetch.cacheOne({ type: "material", value: "house" });
+			assert.notStrictEqual(home, house);
+			await Promise.all([home, house]);
+			assert.equal(net.requests(), 6);
+		} finally {
+			net.restore();
+		}
+	});
+
+	it("keys the sharing by style and weight, not by name alone", async () => {
+		// One name is over a hundred drawings; two of them are two fetches.
+		const net = offline();
+		try {
+			const fetch = manager();
+			const a = fetch.cacheOne({ type: "material", value: "home", weight: 400 });
+			const b = fetch.cacheOne({ type: "material", value: "home", weight: 700 });
+			assert.notStrictEqual(a, b);
+			await Promise.all([a, b]);
+			assert.equal(net.requests(), 6);
+		} finally {
+			net.restore();
+		}
+	});
+
+	it("lets the next caller try again once the request has settled", async () => {
+		// The map is cleared in a `finally`, so this shares *concurrent* callers
+		// rather than locking the icon out for the session. Retrying is what the
+		// picker's second press has to be able to do.
+		const net = offline();
+		try {
+			const fetch = manager();
+			const icon: CalloutIcon = { type: "material", value: "home" };
+			await fetch.cacheOne(icon);
+			const after = net.requests();
+			const again = fetch.cacheOne(icon);
+			assert.equal(net.requests() > after, true, "it refused to try again");
+			await again;
+		} finally {
+			net.restore();
+		}
+	});
+
+	it("asks for nothing at all when the drawing is already cached", async () => {
+		const net = offline();
+		try {
+			const fetch = manager();
+			const reg = registry();
+			reg.addIconSvg({
+				pack: "material",
+				name: "home",
+				variant: "outlined|400",
+				svg: "<svg/>",
+			});
+			const cached = new IconFetchManager({
+				registry: reg,
+				cssInjector: { inject: () => undefined } as unknown as CSSInjector,
+				saveSettings: () => Promise.resolve(),
+			});
+			await cached.cacheOne({ type: "material", value: "home" });
+			assert.equal(net.requests(), 0);
+			await fetch.cacheOne({ type: "lucide", value: "star" });
+			assert.equal(net.requests(), 0, "a builtin pack asked for artwork");
+		} finally {
+			net.restore();
+		}
 	});
 });
 

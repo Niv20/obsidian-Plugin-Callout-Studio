@@ -36,6 +36,14 @@ export class IconFetchManager {
 	 * happened to be offline.
 	 */
 	private readonly failed: Set<string> = new Set();
+	/**
+	 * De-duplicates concurrent requests for the same drawing, the way
+	 * `PackDataStore.inFlight` does for a whole pack. Keyed the same way the
+	 * cache is, so the picker's confirm and the editor's save asking for one
+	 * icon at the same moment share one request instead of racing to store the
+	 * same bytes twice — three attempts and two waits apiece.
+	 */
+	private readonly inFlight: Map<string, Promise<void>> = new Map();
 	/** Notified when a fetch finishes, either way. */
 	private readonly listeners: Set<() => void> = new Set();
 
@@ -98,12 +106,28 @@ export class IconFetchManager {
 	/**
 	 * Fetch and cache one icon's artwork, retrying a few times before giving up
 	 * and telling the user.
+	 *
+	 * Concurrent calls for the same drawing share one request. Not `async`, so
+	 * the second caller gets the *same* promise back rather than a new one
+	 * wrapping it — which is what makes the sharing observable and testable.
 	 */
-	async cacheOne(icon: CalloutIcon): Promise<void> {
-		if (!this.needsFetch(icon)) return;
+	cacheOne(icon: CalloutIcon): Promise<void> {
+		if (!this.needsFetch(icon)) return Promise.resolve();
 		const key = this.keyFor(icon, "regular");
-		if (key === null) return;
+		if (key === null) return Promise.resolve();
 
+		const existing = this.inFlight.get(key);
+		if (existing) return existing;
+
+		const run = this.runFetch(icon, key).finally(() => {
+			this.inFlight.delete(key);
+		});
+		this.inFlight.set(key, run);
+		return run;
+	}
+
+	/** The attempts behind one `cacheOne`. */
+	private async runFetch(icon: CalloutIcon, key: string): Promise<void> {
 		const { style, weight } = materialVariantOf(icon);
 		let lastErr: unknown;
 		for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
