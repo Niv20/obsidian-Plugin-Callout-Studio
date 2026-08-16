@@ -676,10 +676,10 @@ function transformInlinePills(
 			// A payload still being typed renders nothing at all, matching Live
 			// Preview — a pill in front of half-written text is noise.
 			if (token.contentOpen) continue;
-			// A non-empty payload belongs to pass A. Reaching here means its
-			// walk refused the shape (interleaved markup, a `<br>`, a block
-			// element); rendering a plain pill widened over the braces would
-			// swallow the author's own words, so leave the raw text alone.
+			// A non-empty payload belongs to pass A. What reaches here is pass A
+			// disagreeing with this scan inside one node (its brace walk reads
+			// the raw text, the scan blanks code and math) or hitting its
+			// 256-splice cap — and a widened plain pill would eat the payload.
 			if (token.content && token.content.to > token.content.from + 2) {
 				continue;
 			}

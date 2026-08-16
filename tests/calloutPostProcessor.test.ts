@@ -1033,6 +1033,50 @@ describe("content pills — the shapes it refuses", () => {
 	});
 });
 
+describe("content pills — what survives pass A", () => {
+	/**
+	 * The plain-pill pass refuses a token whose payload is non-empty, because
+	 * widening a pill over `{…}` would swallow the payload instead of rendering
+	 * it. Reaching that guard at all takes some doing, and the two ways below
+	 * are the whole list — which is what makes them worth pinning:
+	 *
+	 * The shapes pass A *refuses across siblings* (interleaved markup, a `<br>`,
+	 * a block element) never arrive as a closed payload at all: the `}` is then
+	 * in another node, so scanning this node alone reports `contentOpen` and the
+	 * line above it takes them first. Neither does anything while `allowContent`
+	 * is off — the scan is told not to parse payloads, so no token carries one.
+	 */
+	it("a payload pass A could not balance inside one node", () => {
+		// Pass A counts braces in the raw node text; the scan that classified
+		// the token blanks inline code first. An escaped backtick span carrying
+		// an unmatched `{` is where the two disagree — the scan closes the
+		// payload at the final `}`, pass A's walk never gets back to depth zero.
+		const h = withQuiet();
+		const root = h.render(
+			"<p>[!quiet]{a `x{` b} tail</p>",
+			"[!quiet]{a \\`x{\\` b} tail",
+		);
+
+		assert.strictEqual(pills(root).length, 0);
+		assert.strictEqual(root.textContent, "[!quiet]{a `x{` b} tail");
+	});
+
+	it("everything past pass A's 256-splice cap", () => {
+		// Pass A restarts its walk after every splice and is bounded at 256, so
+		// a block with more payloads than that hands the remainder on with the
+		// payload still closed. The 257th stays the author's own text.
+		const h = withQuiet();
+		const root = h.render(`<p>${"[!quiet]{x} ".repeat(257)}</p>`);
+
+		assert.strictEqual(
+			root.querySelectorAll(`.${CSS_CALLOUT_PAYLOAD}`).length,
+			256,
+		);
+		assert.strictEqual(pills(root).length, 256);
+		assert.ok(root.textContent.endsWith("[!quiet]{x} "));
+	});
+});
+
 /* -------------------------------------------------------------------------- */
 /* The entry point's own shape                                                */
 /* -------------------------------------------------------------------------- */
