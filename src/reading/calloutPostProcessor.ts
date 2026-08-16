@@ -127,6 +127,8 @@ export function createCalloutReadingPostProcessor(
 			return sectionLines;
 		};
 
+		// Both heading passes answer to the one setting, so one branch carries
+		// them — a second `if (headingEnabled)` reads as a second condition.
 		if (headingEnabled) {
 			const headings =
 				el.querySelectorAll<HTMLElement>("h1,h2,h3,h4,h5,h6");
@@ -139,8 +141,6 @@ export function createCalloutReadingPostProcessor(
 			for (const h of Array.from(headings)) {
 				transformHeading(h, host, linesGetter);
 			}
-		}
-		if (headingEnabled) {
 			transformHeadingRefLinks(el, host);
 		}
 		if (inlineEnabled) {

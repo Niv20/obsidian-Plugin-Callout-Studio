@@ -25,6 +25,11 @@
  *   counts disagree, or when pass A already removed some, everything renders. A
  *   missing escape is a milder failure than a missing pill.
  *
+ * The last suite is the odd one out: it reads this processor's own source
+ * rather than running it, because "the two heading passes share one branch" has
+ * no behaviour to observe — and a duplicated branch on one setting is precisely
+ * the shape a later edit splits in half.
+ *
  * The DOM is the fake one from `tests/support/fakeDom.ts` and icons are Lucide
  * throughout, so painting bottoms out in the stubbed `setIcon`.
  */
@@ -38,6 +43,7 @@ import {
 	readingHarness,
 	type ReadingHarness,
 } from "./support/readingHarness";
+import { pluginSourceFiles } from "./support/sourceScan";
 import { CSS_GRAD_CHAR } from "../src/reading/gradientTitleText";
 import {
 	CSS_ANIM_IN,
@@ -1023,6 +1029,39 @@ describe("content pills — the shapes it refuses", () => {
 		assert.strictEqual(
 			one(root, "h2").textContent,
 			"[!quiet]{shhh} My title",
+		);
+	});
+});
+
+/* -------------------------------------------------------------------------- */
+/* The entry point's own shape                                                */
+/* -------------------------------------------------------------------------- */
+
+describe("the heading passes share one branch", () => {
+	// Nothing behavioural separates one `if (headingEnabled)` from two running
+	// back to back, which is exactly why only the source can catch it: both
+	// heading passes answer to the one setting, and a second branch on it reads
+	// as a second condition. The cost is paid later — the next pass gets added
+	// under whichever branch is nearest, and the two are then one edit away from
+	// disagreeing about when the role is on.
+	const file = pluginSourceFiles().find(
+		(f) => f.path === "src/reading/calloutPostProcessor.ts",
+	);
+
+	it("is still the file this suite is about", () => {
+		assert.ok(file, "src/reading/calloutPostProcessor.ts moved or is gone");
+	});
+
+	it("branches on `headingEnabled` exactly once", () => {
+		// `file.code` has comments and string bodies blanked, so a mention of
+		// the branch in prose above it cannot be mistaken for the branch itself.
+		const hits = (file?.code ?? "").match(/if\s*\(\s*headingEnabled\s*\)/g);
+
+		assert.strictEqual(
+			hits?.length,
+			1,
+			`the post-processor tests headingEnabled ${hits?.length ?? 0} times — ` +
+				"the heading transform and the reference repair belong in one block",
 		);
 	});
 });
