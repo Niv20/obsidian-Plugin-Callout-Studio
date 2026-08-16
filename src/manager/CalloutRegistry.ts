@@ -845,10 +845,17 @@ export class CalloutRegistry {
 	 * whenever the fallback selection changes (user-driven via the settings
 	 * dropdown, or implicitly when the active fallback row is deleted and
 	 * resets to the default) or when the fallback callout itself is edited.
-	 * Returns the number of rows updated. Callers decide whether to flush
-	 * (`notifyChange`) afterwards — we emit a notification only when at
+	 * Returns the number of rows that actually changed. Callers decide whether
+	 * to flush (`notifyChange`) afterwards — we emit a notification only when at
 	 * least one row actually changed so settings UI re-renders to reflect
 	 * the new mirror style.
+	 *
+	 * "Actually changed" is a content test, not a visit count. The pass runs on
+	 * every fallback edit, every fallback-target delete and every discovery
+	 * sweep, so most of its work lands on rows already wearing exactly this
+	 * style; writing those back unconditionally reported them as updated and
+	 * fired the change event anyway — a full stylesheet regeneration, an icon
+	 * repaint and a `data.json` write for a no-op.
 	 */
 	restyleUncustomizedFallbackRows(): number {
 		const fallbackId =
@@ -866,7 +873,7 @@ export class CalloutRegistry {
 			// change and make the row look edited in an export.
 			if (def.externalStyle === true) continue;
 			if (def.id === fallbackId) continue;
-			this.setCallout(def.id, {
+			const next: CalloutDefinition = {
 				...def,
 				icon: { ...fallback.icon },
 				// Spelled out (`undefined` included) for the same reason
@@ -901,7 +908,14 @@ export class CalloutRegistry {
 				iconOffsetX: fallback.iconOffsetX,
 				iconOffsetY: fallback.iconOffsetY,
 				iconSize: fallback.iconSize,
-			});
+			};
+			// A structural compare, and sound precisely because `next` is a
+			// spread of `def`: the keys they share keep their order, and a
+			// mirrored key the row lacks is either `undefined` — which
+			// stringify drops on both sides, so the absent-vs-explicitly-absent
+			// pair reads as equal — or a value the row genuinely did not have.
+			if (JSON.stringify(next) === JSON.stringify(def)) continue;
+			this.setCallout(def.id, next);
 			updated++;
 		}
 		if (updated > 0) {

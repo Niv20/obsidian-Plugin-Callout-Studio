@@ -150,17 +150,35 @@ describe("restyleUncustomizedFallbackRows — who is mirrored", () => {
 		assert.strictEqual(events(), before);
 	});
 
-	it("counts rows TOUCHED, not rows changed — a second call is not free", () => {
-		// Pinned as found. The pass writes unconditionally instead of diffing,
-		// so calling it on an already-mirrored vault still reports the row and
-		// still fires the change event: a full stylesheet regeneration, an icon
-		// repaint and a data.json write for a no-op. The method's own doc says
-		// it notifies "only when at least one row actually changed", which is
-		// true of the count but not of the content.
+	it("counts rows CHANGED, not rows visited — a second call is free", () => {
+		// The pass runs on every fallback edit, every fallback-target delete and
+		// every discovery sweep, so most of its work lands on rows already
+		// wearing this style. Writing those back unconditionally reported them
+		// as updated and fired the change event anyway: a full stylesheet
+		// regeneration, an icon repaint and a data.json write for a no-op.
 		const { registry, events } = withFallback();
 		assert.strictEqual(registry.restyleUncustomizedFallbackRows(), 1);
+		assert.strictEqual(registry.restyleUncustomizedFallbackRows(), 0);
+		assert.strictEqual(events(), 1);
+	});
+
+	it("still reports a row that drifts back out of the mirror", () => {
+		// The diff is on content, so it must not latch: a row edited away from
+		// the fallback style is mirrored again on the next pass.
+		const { registry } = withFallback();
 		assert.strictEqual(registry.restyleUncustomizedFallbackRows(), 1);
-		assert.strictEqual(events(), 2);
+
+		registry.update("f1", { colorLight: "#00ff00" });
+		assert.strictEqual(registry.restyleUncustomizedFallbackRows(), 1);
+		assert.strictEqual(registry.get("f1")?.colorLight, "#ff0000");
+	});
+
+	it("reports only the rows that differ, not every row it walks", () => {
+		const { registry } = withFallback({}, [
+			def({ id: "drifted", source: "fallback", colorLight: "#0000ff" }),
+		]);
+		assert.strictEqual(registry.restyleUncustomizedFallbackRows(), 2);
+		assert.strictEqual(registry.restyleUncustomizedFallbackRows(), 0);
 	});
 });
 
