@@ -124,14 +124,44 @@ describe("buildCalloutTokenDom — hideIcon", () => {
 		);
 	});
 
-	it("builds one when the flag is absent or explicitly false", () => {
-		const registry = harness();
-		addCallout(registry);
-		assert.ok(hasClass(kids(token(registry))[0]!, CSS_TOKEN_ICON));
+	/**
+	 * Which way round the flag works, for all three builders at once.
+	 *
+	 * The inverse — "no icon span *without* `hideIcon`" — reads just as
+	 * plausibly, and no single assertion above refutes it: each one fixes the
+	 * flag and looks at one builder. This fixes the builder and varies the flag,
+	 * so the statement cannot be made backwards without something here failing.
+	 *
+	 * `false` and absent are listed separately because they reach the check by
+	 * different routes (`=== true` on a present value, and on `undefined`), and
+	 * an inversion written as `!== true` would keep one of them working.
+	 */
+	it("drops the span when the flag is ON, in all three builders", () => {
+		const cases = [
+			{ label: "hideIcon: true", over: { hideIcon: true }, icons: 0 },
+			{ label: "hideIcon: false", over: { hideIcon: false }, icons: 1 },
+			{ label: "flag absent", over: {}, icons: 1 },
+		];
 
-		const registryFalse = harness();
-		addCallout(registryFalse, { hideIcon: false });
-		assert.ok(hasClass(kids(token(registryFalse))[0]!, CSS_TOKEN_ICON));
+		for (const { label, over, icons } of cases) {
+			const registry = harness();
+			addCallout(registry, over);
+
+			const inToken = kids(token(registry)).filter((child) =>
+				hasClass(child, CSS_TOKEN_ICON),
+			);
+			assert.strictEqual(inToken.length, icons, `token — ${label}`);
+
+			const lead = buildCalloutLeadDom("quiet", registry);
+			assert.strictEqual(kids(lead).length, icons, `lead — ${label}`);
+
+			const { root } = buildContentPillDom({ rawId: "quiet", registry });
+			assert.strictEqual(
+				kids(kids(root)[0]!).length,
+				icons,
+				`pill lead — ${label}`,
+			);
+		}
 	});
 
 	it("takes the root itself out of flow when there is no name either", () => {

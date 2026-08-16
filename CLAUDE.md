@@ -13,6 +13,8 @@ npm test          # every tests/*.test.ts, bundled by esbuild and run by node:te
 
 `npm test` is a gate, not a courtesy — CI runs it beside the lint (`.github/workflows/lint.yml`), and it covers the pure utilities, the registry, the CSS it generates, both editor surfaces, the public API and the repo's own rules. Take it as the first place a change is proved, and add to it: a `todo` entry in a suite is a known bug someone wrote down, not a test that is allowed to stay red.
 
+The suites are also **inside** the build's typecheck rather than beside it: `tsconfig.json` includes `tests/` as well as `src/`, so `npm run build` compiles them too — a test that no longer typechecks fails the build, and `target: ES6` rules out top-level `await` in a test file. `tests/repoTestGate.test.ts` holds both to it.
+
 What it deliberately cannot see is Obsidian. The DOM is the stand-in in `tests/support/fakeDom.ts` and the `obsidian` module is a stub (`tests/support/obsidianStub.ts`), so anything that has to *look* right is still checked by hand: copy `main.js`, `manifest.json`, and `styles.css` to `<Vault>/.obsidian/plugins/callout-studio/` and reload Obsidian.
 
 Versions: bump `manifest.json` + `versions.json` together. Tag must match `manifest.json` version exactly (no leading `v`).

@@ -107,15 +107,10 @@ export function isGeneratedOrData(path: string): boolean {
 }
 
 let cached: SourceFile[] | null = null;
+let cachedTests: SourceFile[] | null = null;
 
-/**
- * Every `.ts` file under `src/`, scanned once and memoised.
- *
- * The scan is the expensive part (176 files, ~71k lines), and five suites want
- * it, so it happens once per `npm test` process rather than once per assertion.
- */
-export function allSourceFiles(): SourceFile[] {
-	if (cached) return cached;
+/** Every `.ts` file under one repo-relative tree, scanned and blanked. */
+function scanTree(relDir: string): SourceFile[] {
 	const out: SourceFile[] = [];
 	const walk = (dir: string): void => {
 		for (const entry of readdirSync(dir).sort()) {
@@ -133,9 +128,31 @@ export function allSourceFiles(): SourceFile[] {
 			});
 		}
 	};
-	walk(join(REPO_ROOT, "src"));
-	cached = out;
+	walk(join(REPO_ROOT, relDir));
 	return out;
+}
+
+/**
+ * Every `.ts` file under `src/`, scanned once and memoised.
+ *
+ * The scan is the expensive part (176 files, ~71k lines), and five suites want
+ * it, so it happens once per `npm test` process rather than once per assertion.
+ */
+export function allSourceFiles(): SourceFile[] {
+	cached ??= scanTree("src");
+	return cached;
+}
+
+/**
+ * Every `.ts` file under `tests/`, the suites and their support modules alike.
+ *
+ * They are source too: `tsconfig.json` includes them, so `npm run build`
+ * typechecks them, and the rules that follow from that (see
+ * `tests/repoTestGate.test.ts`) need to read them the same way.
+ */
+export function testSourceFiles(): SourceFile[] {
+	cachedTests ??= scanTree("tests");
+	return cachedTests;
 }
 
 /** Hand-written plugin source: {@link allSourceFiles} minus the data trees. */

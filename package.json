@@ -25,7 +25,7 @@
 		"@fortawesome/fontawesome-free": "^7.3.1",
 		"@primer/octicons": "19.31.0",
 		"@tabler/icons": "^3.46.0",
-		"@types/node": "^16.11.6",
+		"@types/node": "^20.19.0",
 		"esbuild": "0.25.5",
 		"eslint-plugin-obsidianmd": "^0.4.1",
 		"globals": "14.0.0",
