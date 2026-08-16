@@ -30,7 +30,7 @@
  */
 import assert from "node:assert";
 import { describe, it } from "node:test";
-import { mergeSavedSettings } from "../src/manager/CalloutRegistry";
+import { mergeSavedSettings } from "../src/utils/settingsMerge";
 import {
 	DEFAULT_CONTEXT_MENU_ITEMS,
 	DEFAULT_SETTINGS,

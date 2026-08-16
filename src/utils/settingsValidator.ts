@@ -8,7 +8,7 @@
  * the callouts in the same file from importing.
  */
 import type { PluginSettings } from "../types";
-import { mergeSavedSettings } from "../manager/CalloutRegistry";
+import { mergeSavedSettings } from "./settingsMerge";
 import type { ValidationIssue } from "./importValidator";
 
 export interface SettingsValidationResult {
