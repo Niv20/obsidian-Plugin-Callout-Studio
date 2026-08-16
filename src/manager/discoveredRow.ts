@@ -70,5 +70,16 @@ export function buildDiscoveredRow(
 		aliases: [],
 		builtIn: false,
 		source: "fallback",
+		// Authorship, not look — and the spread would otherwise copy it.
+		// `CalloutEditorSave` stamps `customized: true` on every callout the
+		// user creates, so the moment **Fallback callout** points at one of
+		// their own, every row discovery mints from then on is born claiming to
+		// have been hand-edited. Both consequences are silent and permanent:
+		// `pruneUnused` skips such a row forever, so auto-created rows pile up
+		// and never clean themselves out, and `filterUsableCallouts` reads it
+		// as adopted and keeps offering it in autocomplete long after its last
+		// usage went away. `restyleUncustomizedFallbackRows` never copies this
+		// flag either — that is the agreement this file exists to keep.
+		customized: undefined,
 	};
 }
