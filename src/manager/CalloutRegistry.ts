@@ -292,8 +292,14 @@ export class CalloutRegistry {
 		}
 		// Migration: link any callout saved before `paletteId` existed but whose
 		// baked colors still exactly match a saved custom palette, so an edit to
-		// that palette (applyPaletteColors) cascades onto it too.
-		this.adoptOrphansMatchingPalettes();
+		// that palette (applyPaletteColors) cascades onto it too. Stamping a
+		// `paletteId` onto a row is a rewrite of the stored definitions like any
+		// other, so it flushes; un-flushed the adoption was simply re-derived on
+		// every launch. The flag is raised here rather than inside the pass
+		// because the settings caller (CustomPalettesSection) saves for itself.
+		if (this.adoptOrphansMatchingPalettes() > 0) {
+			this.pendingLoadMigrationSave = true;
+		}
 		this.dropDerivedBackgrounds();
 		this.dropSolidBackgroundFlags();
 		// Before reconcileAttrIdCollisions: a row this pass renames back to its
