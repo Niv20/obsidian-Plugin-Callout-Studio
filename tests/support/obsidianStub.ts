@@ -27,6 +27,13 @@
  * - `__CS_NOTICES__`    — an array collecting every `new Notice(...)` message,
  *   so a suite can assert the user was told something. Absent by default, in
  *   which case `Notice` records nothing.
+ * - `__CS_REQUEST_URL__` — a stand-in for one HTTP request. Absent by default,
+ *   and `requestUrl` then rejects, which is what keeps every other suite off
+ *   the network by construction. A suite that seeds it is not "allowed online"
+ *   — it is *serving* the bytes itself, which is the only way to test what a
+ *   downloader does with a truncated, mis-served or unverifiable response
+ *   (`tests/localeStore.test.ts`). Empty it again in a `beforeEach`; nothing
+ *   resets it on its own.
  * - `__CS_MACOS__`      — whether `Platform.isMacOS` reports a Mac. Default
  *   `false`, so the spelled-out Windows/Linux chord is what a suite gets unless
  *   it says otherwise. Read once, at module scope, because that is when
@@ -46,11 +53,17 @@ import { StateField } from "@codemirror/state";
 /* Seams                                                                      */
 /* -------------------------------------------------------------------------- */
 
+/** The sliver of Obsidian's `RequestUrlResponse` the plugin's fetchers read. */
+export interface StubResponse {
+	text: string;
+}
+
 interface TestGlobals {
 	__CS_ICON_IDS__?: string[];
 	__CS_LIVE_PREVIEW__?: boolean;
 	__CS_NOTICES__?: string[];
 	__CS_MACOS__?: boolean;
+	__CS_REQUEST_URL__?: (url: string) => Promise<StubResponse>;
 }
 
 const seams = globalThis as unknown as TestGlobals;
@@ -79,8 +92,17 @@ export function normalizePath(p: string): string {
 	return p;
 }
 
-export function requestUrl(): Promise<never> {
-	return Promise.reject(new Error("no network in tests"));
+/**
+ * Rejects unless a suite has seeded `__CS_REQUEST_URL__`, so "the tests must
+ * not touch the network" stays true by default rather than by discipline. The
+ * seam is read on every call, not captured once, so a suite can change what a
+ * URL serves between requests — which is how a first-URL failure falling
+ * through to the second is testable at all.
+ */
+export function requestUrl(options: { url: string }): Promise<StubResponse> {
+	const serve = seams.__CS_REQUEST_URL__;
+	if (!serve) return Promise.reject(new Error("no network in tests"));
+	return serve(options.url);
 }
 
 export function requireApiVersion(): boolean {
