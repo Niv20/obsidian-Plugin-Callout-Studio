@@ -29,9 +29,15 @@
  *   today's size is what makes the number mean something: nothing new joins the
  *   list, and nothing on it grows.
  *
- * All six read the source as text, through `tests/support/sourceScan.ts`, which
- * blanks comments and string bodies first. That is not a detail — every one of
- * these checks has an obvious grep-shaped version, and every grep-shaped version
+ * A seventh suite turns the document around and checks *it* instead: CLAUDE.md
+ * spent a long release cycle stating that this repository has no automated
+ * tests, while `npm test` was the thing every one of the rules above ran under.
+ * A stale sentence there is worse than no sentence, because it is read as the
+ * instruction — a contributor who believes it writes no test at all.
+ *
+ * The other six read the source as text, through `tests/support/sourceScan.ts`,
+ * which blanks comments and string bodies first. That is not a detail — every
+ * one of these checks has an obvious grep-shaped version, and every such version
  * is wrong. `src/utils/iconAdjust.ts` has a local variable called `any`;
  * `src/manager/CalloutRegistry.ts` has a comment beginning "Migration: any
  * callout…"; four more files say "has anything" in prose. A grep for `any`
@@ -47,6 +53,7 @@ import {
 	lineOf,
 	literals,
 	pluginSourceFiles,
+	readRepoFile,
 	report,
 	scanIsBalanced,
 	type SourceFile,
@@ -693,6 +700,45 @@ describe("no new oversized files", () => {
 			stale,
 			[],
 			report("Tighten the ratchet — these entries are looser than the truth:", stale),
+		);
+	});
+});
+
+/* -------------------------------------------------------------------------- */
+/* The document itself                                                        */
+/* -------------------------------------------------------------------------- */
+
+describe("CLAUDE.md describes the checks that exist", () => {
+	const doc = readRepoFile("CLAUDE.md");
+
+	it("does not claim the repository is untested", () => {
+		// It said exactly this while every suite above was already running under
+		// `npm test`. The damage is not the inaccuracy: CLAUDE.md is read as the
+		// instruction, so a contributor who believes the sentence writes no test.
+		assert.strictEqual(
+			/no automated test/i.test(doc),
+			false,
+			"CLAUDE.md still says there is no automated test suite",
+		);
+	});
+
+	it("lists `npm test` among the commands", () => {
+		const commands = doc.split("```")[1] ?? "";
+
+		assert.ok(
+			/^npm test\b/m.test(commands),
+			"CLAUDE.md's Commands block does not mention `npm test`",
+		);
+	});
+
+	it("still says what the suite cannot see", () => {
+		// The manual pass is not superstition — the DOM is a stand-in and
+		// `obsidian` is a stub, so nothing here can tell whether a callout
+		// *looks* right. Dropping that sentence would trade one wrong
+		// instruction for another.
+		assert.ok(
+			doc.includes("reload Obsidian"),
+			"CLAUDE.md no longer tells anyone to check the result in Obsidian",
 		);
 	});
 });
