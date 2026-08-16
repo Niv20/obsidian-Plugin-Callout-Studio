@@ -11,6 +11,15 @@
  * that the renderer reads on every paint; letting a consumer hold one meant a
  * stray assignment could change styling with no re-inject and no save.
  *
+ * That is also why the plugin handle is a `#private` field and the list builder
+ * is a module-level function rather than a method. TypeScript's `private` is a
+ * compile-time keyword: `constructor(private readonly plugin)` compiles to
+ * `this.plugin = plugin`, so it put the whole plugin — `registry.update()`,
+ * `registry.remove()`, `settings`, every live definition — one property access
+ * away from any consumer holding the api object. `#` is a runtime private, and
+ * a module-level function is on no object at all, which is what makes the
+ * documented five members the *only* five that exist.
+ *
  * Depends on CalloutRegistry for data and CalloutDiscovery (via the plugin's
  * forwarders) to know which auto-discovered callouts are actually in use.
  * See API.md for the consumer-facing documentation.
@@ -31,21 +40,26 @@ import { sortCalloutsByDisplayName } from "../utils/sorting";
 export class CalloutStudioAPI implements CalloutStudioApi {
 	readonly version = 1;
 
-	constructor(private readonly plugin: CalloutStudioPlugin) {}
+	/** Real ECMAScript privacy — see the file header for why it has to be. */
+	readonly #plugin: CalloutStudioPlugin;
+
+	constructor(plugin: CalloutStudioPlugin) {
+		this.#plugin = plugin;
+	}
 
 	getCallouts(): readonly Callout[] {
-		return Object.freeze(this.usableDefinitions().map(toCallout));
+		return Object.freeze(usableDefinitions(this.#plugin).map(toCallout));
 	}
 
 	getCalloutsDetailed(): readonly CalloutDetails[] {
 		const dark = isDarkMode();
 		return Object.freeze(
-			this.usableDefinitions().map((def) => toDetails(def, dark)),
+			usableDefinitions(this.#plugin).map((def) => toDetails(def, dark)),
 		);
 	}
 
 	getCallout(id: string): Callout | undefined {
-		const { registry } = this.plugin;
+		const { registry } = this.#plugin;
 		const wanted = normalizeCalloutId(id);
 		// The first three rungs of resolveCalloutDef — id, then alias, then the
 		// dashed `data-callout` spelling. Deliberately NOT the fourth: the
@@ -62,43 +76,44 @@ export class CalloutStudioAPI implements CalloutStudioApi {
 		// live-preview row and unused discovered callouts, and where a preview
 		// shadows a real callout it substitutes the real one back. Matching by id
 		// rather than by identity is what makes that substitution work.
-		const published = this.usableDefinitions().find(
+		const published = usableDefinitions(this.#plugin).find(
 			(def) => def.id === resolved.id,
 		);
 		return published ? toCallout(published) : undefined;
 	}
 
 	onChange(callback: () => void): () => void {
-		this.plugin.registry.onChange(callback);
-		return () => this.plugin.registry.offChange(callback);
-	}
-
-	/**
-	 * Every callout a user could write today, in display order.
-	 *
-	 * `getBuiltIn()` and `getUserDefined()` both read through the registry's
-	 * list view, so their union already excludes the settings live-preview
-	 * placeholder. Between them they cover all five sources — the built-ins are
-	 * seeded into the registry on every load, so all of Obsidian's own types are
-	 * here whether or not the user has ever touched them.
-	 *
-	 * Auto-discovered rows are then dropped unless they are customized or still
-	 * used somewhere in the vault. Discovery creates one for every `[!id]` it
-	 * has ever seen, so without this a consumer building a command per callout
-	 * would offer a list full of ids the user deleted from their notes hours
-	 * ago. Same predicate the autocomplete dropdown uses, for the same reason.
-	 */
-	private usableDefinitions(): CalloutDefinition[] {
-		const defs = filterUsableCallouts(
-			[
-				...this.plugin.registry.getBuiltIn(),
-				...this.plugin.registry.getUserDefined(),
-			],
-			(id) => this.plugin.isKnownZeroUsageFallback(id),
-		);
-		return sortCalloutsByDisplayName(defs, getLocale());
+		this.#plugin.registry.onChange(callback);
+		return () => this.#plugin.registry.offChange(callback);
 	}
 }
+
+/**
+ * Every callout a user could write today, in display order.
+ *
+ * `getBuiltIn()` and `getUserDefined()` both read through the registry's
+ * list view, so their union already excludes the settings live-preview
+ * placeholder. Between them they cover all five sources — the built-ins are
+ * seeded into the registry on every load, so all of Obsidian's own types are
+ * here whether or not the user has ever touched them.
+ *
+ * Auto-discovered rows are then dropped unless they are customized or still
+ * used somewhere in the vault. Discovery creates one for every `[!id]` it
+ * has ever seen, so without this a consumer building a command per callout
+ * would offer a list full of ids the user deleted from their notes hours
+ * ago. Same predicate the autocomplete dropdown uses, for the same reason.
+ *
+ * A module-level function, not a method: a `private` method is an ordinary
+ * prototype member at runtime, and this file's whole job is that nothing
+ * beyond the documented five is reachable.
+ */
+const usableDefinitions = (plugin: CalloutStudioPlugin): CalloutDefinition[] => {
+	const defs = filterUsableCallouts(
+		[...plugin.registry.getBuiltIn(), ...plugin.registry.getUserDefined()],
+		(id) => plugin.isKnownZeroUsageFallback(id),
+	);
+	return sortCalloutsByDisplayName(defs, getLocale());
+};
 
 /** Whether the window is currently showing the dark theme. */
 const isDarkMode = (): boolean =>

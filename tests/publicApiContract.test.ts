@@ -16,11 +16,15 @@
  *   the class, the header line of API.md and its stability section, and a
  *   consumer feature-detects on it. Three copies of one number.
  *
- * Note what "reachable" means below. `private` is a TypeScript keyword, not a
- * runtime one: a parameter property compiles to `this.plugin = plugin` and a
- * private method to a plain prototype method, so both are readable by any
- * consumer holding the api object. They are listed explicitly rather than
- * filtered away by a naming rule, so the list stays a decision somebody made.
+ * Note what "reachable" means below: everything `Object.getOwnPropertyNames`
+ * sees on the instance and on its prototype, which is everything a consumer
+ * holding the api object can read. That is deliberately not the same as
+ * "everything TypeScript calls public" — `private` is a compile-time keyword,
+ * so a parameter property (`this.plugin = plugin`) and a private method are
+ * both perfectly readable at runtime. This suite once had to carry them in a
+ * `TS_PRIVATE_INTERNALS` list for exactly that reason; the class now uses a
+ * `#private` field and a module-level list builder, so the list is gone and
+ * the reachable surface really is the documented five.
  */
 import assert from "node:assert";
 import { readFileSync } from "node:fs";
@@ -41,15 +45,6 @@ const DOCUMENTED = [
 	"onChange",
 	"version",
 ];
-
-/**
- * Members that exist at runtime because TypeScript's `private` is erased.
- *
- * `plugin` is the constructor's parameter property; `usableDefinitions` is the
- * private list builder. Neither is documented, neither is API, and neither may
- * grow a third sibling without this test saying so.
- */
-const TS_PRIVATE_INTERNALS = ["plugin", "usableDefinitions"];
 
 /** Every property name a consumer can read off the api object. */
 function reachableSurface(api: object): string[] {
@@ -85,49 +80,49 @@ describe("the API surface", () => {
 		assert.equal(api.onChange.length, 1);
 	});
 
-	it(
-		"exposes exactly those five and nothing else",
-		{
-			todo: "`private` is erased — `plugin` and `usableDefinitions` ship on the object",
-		},
-		() => {
-			// The contract as written. It does not hold: TypeScript's `private`
-			// is a compile-time keyword, so the constructor's parameter property
-			// and the private list builder are both ordinary runtime members.
-			const { api } = apiHarness();
-			assert.deepStrictEqual(reachableSurface(api), [...DOCUMENTED].sort());
-		},
-	);
-
-	it(
-		"hands out no live handle on the plugin",
-		{ todo: "`api.plugin.registry` is the whole store, unfrozen and writable" },
-		() => {
-			// The consequence, and why the member count is worth caring about.
-			// PluginAPI.ts exists to make sure nothing live escapes: every
-			// return value is a frozen copy precisely because a consumer holding
-			// a real definition could change styling with no re-inject and no
-			// save. `api.plugin` hands over all of them at once, plus
-			// `registry.update()`, `remove()` and `settings`.
-			const { api } = apiHarness();
-			assert.equal(
-				(api as unknown as Record<string, unknown>).plugin,
-				undefined,
-			);
-		},
-	);
-
-	it("has grown no member since the surface was last reviewed", () => {
-		// The guard that actually runs green, so a sixth member arriving is a
-		// red suite rather than a shrug. If this fails because something was
-		// added on purpose, add it to API.md and to DOCUMENTED — or to
-		// TS_PRIVATE_INTERNALS if it is genuinely internal — and say which in
-		// the commit message.
+	it("exposes exactly those five and nothing else", () => {
+		// The contract as written, and now as it runs. A sixth member arriving
+		// — including one TypeScript calls `private`, which is erased — is a red
+		// suite rather than a shrug. If this fails because something was added
+		// on purpose, add it to API.md and to DOCUMENTED, and say so in the
+		// commit message. If it fails because something *internal* was added,
+		// that is the finding: make it a `#private` field or a module-level
+		// function, because a consumer can read anything else.
 		const { api } = apiHarness();
-		assert.deepStrictEqual(
-			reachableSurface(api),
-			[...DOCUMENTED, ...TS_PRIVATE_INTERNALS].sort(),
-		);
+		assert.deepStrictEqual(reachableSurface(api), [...DOCUMENTED].sort());
+	});
+
+	it("hands out no live handle on the plugin", () => {
+		// The consequence, and why the member count is worth caring about.
+		// PluginAPI.ts exists to make sure nothing live escapes: every return
+		// value is a frozen copy precisely because a consumer holding a real
+		// definition could change styling with no re-inject and no save. The
+		// constructor's plugin handed over all of them at once, plus
+		// `registry.update()`, `remove()` and `settings`.
+		const { api } = apiHarness();
+		const reachable = api as unknown as Record<string, unknown>;
+		for (const name of ["plugin", "_plugin", "#plugin"]) {
+			assert.equal(reachable[name], undefined, `${name} is reachable`);
+		}
+		// Not just undefined by name — no own property anywhere holds an object
+		// with a `registry` on it, whatever a downlevel compile chose to call
+		// it. `version` is the only own property, and it is a number.
+		for (const name of Object.getOwnPropertyNames(api)) {
+			const value = reachable[name];
+			assert.ok(
+				typeof value !== "object" || value === null || !("registry" in value),
+				`${name} exposes the registry`,
+			);
+		}
+	});
+
+	it("keeps the list builder off the object", () => {
+		// `usableDefinitions` is the one internal this class needs, and it lived
+		// on the prototype as a `private` method — where `api.usableDefinitions()`
+		// returned the live `CalloutDefinition[]`, unfrozen, straight out of the
+		// registry. It is a module-level function now.
+		const { api } = apiHarness();
+		assert.ok(!("usableDefinitions" in api));
 	});
 
 	it("exposes no way to mutate anything", () => {
