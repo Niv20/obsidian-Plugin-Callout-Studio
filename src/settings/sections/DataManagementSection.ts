@@ -6,7 +6,7 @@
  * validation (via importValidator), vault re-scan, and full data reset.
  * Uses ImportReportModal to surface validation issues before import.
  */
-import { Notice, Setting } from "obsidian";
+import { Notice, Setting, normalizePath } from "obsidian";
 import { t } from "../../i18n";
 import { ConfirmModal } from "../../utils/ConfirmModal";
 import { ImportReportModal } from "../../utils/ImportReportModal";
@@ -48,6 +48,20 @@ export function renderImportExportSection(
 			btn.setButtonText(t("settings.export"))
 				.setIcon("upload")
 				.onClick(() => exportCallouts(ctx));
+			btn.buttonEl.addClass("cs-settings-neutral-btn");
+		});
+
+	new Setting(containerEl)
+		.setName("Export CSS snippet")
+		.setDesc(
+			"Save your custom Callout Studio callouts as an Obsidian CSS snippet.",
+		)
+		.addButton((btn) => {
+			btn.setButtonText("Export CSS")
+				.setIcon("file-code")
+				.onClick(() => {
+					void exportCalloutCSS(ctx);
+				});
 			btn.buttonEl.addClass("cs-settings-neutral-btn");
 		});
 }
@@ -167,6 +181,54 @@ function exportCallouts(ctx: SettingsSectionContext): void {
 	URL.revokeObjectURL(url);
 	new Notice(t("notice.exported"));
 }
+
+
+/**
+ * Export Callout Studio's customized callouts as an Obsidian CSS snippet.
+ *
+ * The file is written directly into the vault's CSS snippets folder.
+ * Exporting again replaces the previous generated file.
+ */
+async function exportCalloutCSS(
+	ctx: SettingsSectionContext,
+): Promise<void> {
+	const css = ctx.plugin.cssInjector.generateExportCSS();
+
+	if (!css.trim()) {
+		new Notice("There are no custom callouts to export.");
+		return;
+	}
+
+	const snippetsDir = normalizePath(
+		`${ctx.app.vault.configDir}/snippets`,
+	);
+
+	const filePath = normalizePath(
+		`${snippetsDir}/callout-studio-custom.css`,
+	);
+
+	try {
+		if (!(await ctx.app.vault.adapter.exists(snippetsDir))) {
+			await ctx.app.vault.adapter.mkdir(snippetsDir);
+		}
+
+		await ctx.app.vault.adapter.write(filePath, css);
+
+		new Notice(
+			`CSS exported to ${filePath}`,
+		);
+	} catch (error) {
+		console.error(
+			"[Callout Studio] CSS export failed:",
+			error,
+		);
+
+		new Notice(
+			"Failed to export the CSS snippet. Check the developer console for details.",
+		);
+	}
+}
+
 
 /**
  * Parses and applies a Callout Studio JSON export. Takes an already-chosen

@@ -320,6 +320,50 @@ export class CSSInjector {
 		}
 	}
 
+
+	/**
+	 * Generate a standalone CSS stylesheet containing all callouts
+	 * that the user has explicitly customized.
+	 *
+	 * This reuses the same CSS generation code used by the live
+	 * Callout Studio stylesheet, so exported callouts stay visually
+	 * consistent with the plugin.
+	 *
+	 * This includes:
+	 * - User-created callouts
+	 * - Built-in callouts that the user has modified
+	 *
+	 * It deliberately excludes:
+	 * - Unmodified built-in callouts
+	 * - Transient preview definitions
+	 * - The global Callout Studio styling
+	 * - The fallback catch-all rule
+	 */
+	generateExportCSS(): string {
+		const callouts = this.registry.getExportableDefinitions();
+
+		if (callouts.length === 0) {
+			return "";
+		}
+
+		const rules: string[] = [
+			"/* ============================================================",
+			"   Callout Studio — Custom Callouts",
+			"   Generated automatically. Do not edit manually.",
+			"   ============================================================ */",
+		];
+
+		for (const def of callouts) {
+			const css = this.generateCalloutCSS(def);
+			if (css.trim()) {
+				rules.push(css);
+			}
+		}
+
+		return rules.join("\n\n");
+	}
+	
+
 	private injectNow(emitCssChange: boolean): void {
 		this.ensureStyleSheet();
 
