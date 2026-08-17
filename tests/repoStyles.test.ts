@@ -16,9 +16,10 @@
  * *is* the escape hatch — several exist on purpose, so a user's CSS snippet can
  * nudge the fold chevron or the icon gap without the plugin shipping a setting
  * for it. That distinction makes the rule crisp: **a fallback-less read must
- * have a writer.** It found one already — `--cs-icon-transform`, read bare by
- * `.callout-studio-icon-transformed`, written by nothing, in a rule no code
- * applies.
+ * have a writer.** It found one immediately — `--cs-icon-transform`, read bare
+ * by `.callout-studio-icon-transformed`, written by nothing, in a rule no code
+ * applied. Both halves have since been deleted, and the rule now holds with no
+ * exceptions at all.
  *
  * **Class names cannot be, and this file says so rather than pretending.** Some
  * are assembled from a prefix and a variant (`cs-import-issue-${severity}`),
@@ -108,21 +109,17 @@ describe("--cs-* custom properties", () => {
 		assert.ok(readBare.size + readWithFallback.size > 5, "no --cs-* reads found");
 	});
 
-	/**
-	 * Reads with no writer that are known, and are the *same defect* as an entry
-	 * in `RULES_WITHOUT_EMITTERS` below rather than a separate one.
-	 *
-	 * `--cs-icon-transform` is read bare by `.callout-studio-icon-transformed`,
-	 * a rule no code applies. Both halves are dead and one deletion fixes both,
-	 * so listing it twice would mean two failures for one line of CSS. Deleting
-	 * that rule is a visible change and belongs in its own commit, not in a
-	 * test run.
-	 */
-	const ORPHANS_OF_DEAD_RULES = new Set(["--cs-icon-transform"]);
-
 	it("every fallback-less read has a writer", () => {
+		// No exceptions, deliberately. There was one — `--cs-icon-transform`,
+		// read bare by `.callout-studio-icon-transformed` and written by nothing.
+		// Both halves were dead: the shared-class-plus-variable pair that
+		// `ccf79a4` built the icon offset/size controls on, left behind when
+		// `CSSInjector.getIconTransformCSS` took the feature over and started
+		// baking the computed `transform` straight into a per-callout, per-role
+		// rule. Deleting the rule retired the exception with it, and an empty
+		// allowance is worth more as a closed door than as an open one.
 		const orphans = [...readBare.entries()]
-			.filter(([name]) => !written.has(name) && !ORPHANS_OF_DEAD_RULES.has(name))
+			.filter(([name]) => !written.has(name))
 			.map(([name, where]) => `${name}  (${where})`);
 		assert.deepStrictEqual(
 			orphans,
@@ -239,10 +236,11 @@ describe("class names in styles.css and src/ agree", () => {
 	 * Rules in `styles.css` that nothing in `src/` applies.
 	 *
 	 * These are the orphans — features removed or renamed without their CSS.
-	 * `callout-studio-icon-transformed` is the clearest: it is the rule whose
-	 * `var(--cs-icon-transform)` has no writer either, so both halves of it are
-	 * dead. Frozen rather than deleted, because deleting CSS is a change to how
-	 * the plugin looks and belongs in its own commit, not in a test.
+	 * The clearest one is gone now: `callout-studio-icon-transformed` was the
+	 * rule whose `var(--cs-icon-transform)` had no writer either, so both halves
+	 * of it were dead, and it has been deleted rather than frozen. The rest are
+	 * still here, and each is the same shape of debt — a rename or a removal
+	 * that only landed on one side.
 	 */
 	const RULES_WITHOUT_EMITTERS = new Set([
 		"callout-studio-actions",
@@ -251,7 +249,6 @@ describe("class names in styles.css and src/ agree", () => {
 		"callout-studio-color-grid-header",
 		"callout-studio-color-row",
 		"callout-studio-color-swatch",
-		"callout-studio-icon-transformed",
 		"callout-studio-kebab-btn",
 		"callout-studio-preview-toggle",
 		"callout-studio-reset-btn",

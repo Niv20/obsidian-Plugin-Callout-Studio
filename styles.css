@@ -1501,11 +1501,6 @@ button.callout-studio-icon-picker-loading {
 	font-size: var(--font-ui-smaller);
 }
 
-.callout-studio-icon-transformed {
-	transform: var(--cs-icon-transform);
-	transform-origin: center;
-}
-
 /* ─── Color Palette Presets ───────────────────────────────────── */
 
 .cs-palette-dropdown {
