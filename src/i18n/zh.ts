@@ -184,7 +184,7 @@ export const zh: Record<string, string> = {
 	"settings.vaultMaintenance": "库洞察与维护",
 	"settings.vaultStats": "Callout 统计",
 	"settings.vaultStatsDesc":
-		"统计 Markdown 笔记中每个 callout 块并按类型分组。",
+		"统计 Markdown 笔记中的每个 callout（块级、标题和行内）并按类型分组。",
 	"settings.vaultStatsButton": "查看统计",
 	"settings.vaultStatsScanning": "扫描中",
 	"settings.resetAll": "重置",

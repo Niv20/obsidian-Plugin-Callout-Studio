@@ -181,7 +181,7 @@ export const ms: Record<string, string> = {
 	"settings.vaultMaintenance": "Wawasan & penyelenggaraan vault",
 	"settings.vaultStats": "Statistik callout",
 	"settings.vaultStatsDesc":
-		"Mengira semua blok callout dalam nota Markdown anda dan mengumpulkannya mengikut jenis.",
+		"Mengira setiap callout dalam nota Markdown anda — blok, tajuk dan sebaris — dan mengumpulkannya mengikut jenis.",
 	"settings.vaultStatsButton": "Lihat statistik",
 	"settings.vaultStatsScanning": "Mengimbas",
 	"settings.resetAll": "Set semula",

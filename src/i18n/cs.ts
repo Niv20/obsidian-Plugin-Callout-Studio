@@ -188,7 +188,7 @@ export const cs: Record<string, string> = {
 	"settings.vaultMaintenance": "Statistiky a údržba vaultu",
 	"settings.vaultStats": "Statistiky callout",
 	"settings.vaultStatsDesc":
-		"Počítá všechny bloky callout v poznámkách Markdown a seskupuje je podle typu.",
+		"Počítá každý callout v poznámkách Markdown — blokový, nadpisový i vložený — a seskupuje je podle typu.",
 	"settings.vaultStatsButton": "Zobrazit statistiky",
 	"settings.vaultStatsScanning": "Prohledávání",
 	"settings.resetAll": "Obnovit",

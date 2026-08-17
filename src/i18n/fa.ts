@@ -190,7 +190,7 @@ export const fa: Record<string, string> = {
 	"settings.vaultMaintenance": "بینش‌ها و نگهداری vault",
 	"settings.vaultStats": "آمار callout",
 	"settings.vaultStatsDesc":
-		"همه بلوک‌های callout را در یادداشت‌های Markdown شمارش می‌کند و بر اساس نوع گروه‌بندی می‌کند.",
+		"هر فراخوان را در یادداشت‌های Markdown شما — بلوکی، تیتری و درون‌خطی — می‌شمارد و بر اساس نوع گروه‌بندی می‌کند.",
 	"settings.vaultStatsButton": "مشاهده آمار",
 	"settings.vaultStatsScanning": "در حال اسکان",
 	"settings.resetAll": "بازنشانی",

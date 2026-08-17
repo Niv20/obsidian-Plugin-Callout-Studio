@@ -178,7 +178,7 @@ export const el: Record<string, string> = {
 	"settings.vaultMaintenance": "Πληροφορίες vault και συντήρηση",
 	"settings.vaultStats": "Στατιστικά callout",
 	"settings.vaultStatsDesc":
-		"Μετράει όλα τα μπλοκ callout στις σημειώσεις Markdown και τα ομαδοποιεί ανά τύπο.",
+		"Μετράει κάθε callout στις σημειώσεις Markdown — μπλοκ, επικεφαλίδας και ενσωματωμένο — και τα ομαδοποιεί ανά τύπο.",
 	"settings.vaultStatsButton": "Προβολή στατιστικών",
 	"settings.vaultStatsScanning": "Σάρωση",
 	"settings.resetAll": "Επαναφορά",

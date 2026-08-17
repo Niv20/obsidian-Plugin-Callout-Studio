@@ -2,14 +2,15 @@
  * utils/vaultCalloutScanner.ts — Scans vault markdown files for callout usage.
  *
  * Provides async functions for reading every markdown file in the vault:
- * discovering unknown callout IDs, counting per-type usage statistics,
- * bulk-replacing callout IDs or titles, converting callouts to plain text,
- * and normalizing fold markers. Used by CalloutDiscovery (auto-discovery),
- * DataManagementSection (re-scan), and CalloutRowActions (pre-delete counts).
+ * discovering unknown callout IDs, counting usages, bulk-replacing callout IDs
+ * or titles, converting callouts to plain text, and normalizing fold markers.
+ * Used by CalloutDiscovery (auto-discovery), DataManagementSection (re-scan),
+ * and CalloutRowActions (pre-delete counts). The user-facing usage report lives
+ * next door in vaultCalloutStats.ts.
  *
- * Both the read-only scanners (statistics, unknown discovery, usage counting)
- * and the write operations (bulk id/title replacement, plain-text conversion)
- * go through the shared tokenizer in editor/calloutTokens, so they all see the
+ * Both the read-only scanners (unknown discovery, usage counting) and the write
+ * operations (bulk id/title replacement, plain-text conversion) go through the
+ * shared tokenizer in editor/calloutTokens, so they all see the
  * same three render roles — block (`> [!id]`), heading (`## [!id]`), and
  * inline (`[!id]` mid-line) — and all agree on which occurrences are real:
  * escapes, markdown links, wikilink contents, inline code, fenced code blocks
@@ -133,66 +134,6 @@ function rewriteCalloutLines(
 	}
 
 	return total > 0 ? { content: lines.join("\n"), count: total } : null;
-}
-
-export interface VaultCalloutTypeStatistics {
-	id: string;
-	fileCount: number;
-	totalCount: number;
-}
-
-export interface VaultCalloutStatistics {
-	markdownFileCount: number;
-	filesWithCallouts: number;
-	totalCount: number;
-	types: VaultCalloutTypeStatistics[];
-}
-
-export async function scanVaultCalloutStatistics(
-	app: App,
-): Promise<VaultCalloutStatistics> {
-	const files = app.vault.getMarkdownFiles();
-	const byId = new Map<string, VaultCalloutTypeStatistics>();
-	let filesWithCallouts = 0;
-	let totalCount = 0;
-
-	for (const file of files) {
-		const content = await app.vault.cachedRead(file);
-		const seenInFile = new Set<string>();
-
-		forEachCalloutToken(content, (rawId) => {
-			const id = normalizeCalloutId(rawId);
-			if (!id) return;
-
-			let entry = byId.get(id);
-			if (!entry) {
-				entry = { id, fileCount: 0, totalCount: 0 };
-				byId.set(id, entry);
-			}
-			entry.totalCount++;
-			totalCount++;
-			seenInFile.add(id);
-		});
-
-		if (seenInFile.size > 0) {
-			filesWithCallouts++;
-			for (const id of seenInFile) {
-				const entry = byId.get(id);
-				if (entry) entry.fileCount++;
-			}
-		}
-	}
-
-	const types = Array.from(byId.values()).sort(
-		(a, b) => b.totalCount - a.totalCount || a.id.localeCompare(b.id),
-	);
-
-	return {
-		markdownFileCount: files.length,
-		filesWithCallouts,
-		totalCount,
-		types,
-	};
 }
 
 /**

@@ -188,7 +188,7 @@ export const vi: Record<string, string> = {
 	"settings.vaultMaintenance": "Thông tin & bảo trì vault",
 	"settings.vaultStats": "Thống kê callout",
 	"settings.vaultStatsDesc":
-		"Đếm tất cả các khối callout trong ghi chú Markdown và nhóm theo loại.",
+		"Đếm mọi callout trong ghi chú Markdown của bạn — dạng khối, tiêu đề và nội tuyến — và nhóm theo loại.",
 	"settings.vaultStatsButton": "Xem thống kê",
 	"settings.vaultStatsScanning": "Đang quét",
 	"settings.resetAll": "Đặt lại",

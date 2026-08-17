@@ -170,7 +170,7 @@ export const zhTW: Record<string, string> = {
 	"settings.vaultMaintenance": "Vault 洞察與維護",
 	"settings.vaultStats": "Callout 統計",
 	"settings.vaultStatsDesc":
-		"統計 Markdown 筆記中每個 callout 區塊並按類型分組。",
+		"統計 Markdown 筆記中的每個 callout（區塊、標題與行內）並按類型分組。",
 	"settings.vaultStatsButton": "檢視統計",
 	"settings.vaultStatsScanning": "掃描中",
 	"settings.resetAll": "重置",

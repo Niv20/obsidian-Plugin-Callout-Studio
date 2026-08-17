@@ -3799,11 +3799,14 @@ input.cs-input-invalid:focus {
 	background: var(--cs-surface, var(--background-primary));
 }
 
+/* Three columns, all always on: type, the per-role chips, files. Source and
+   Count were dropped rather than made narrower — the chips already carry the
+   split, and their sum is the count. The chips themselves used to be a cell
+   spanning the row that opened on hover, which made the row change height
+   under the pointer. */
 .callout-studio-vault-stats .cs-vault-stats-row {
 	display: grid;
-	grid-template-columns:
-		minmax(120px, 1.2fr) minmax(120px, 1fr) minmax(100px, 0.9fr)
-		minmax(64px, 0.5fr) minmax(64px, 0.5fr);
+	grid-template-columns: minmax(110px, 1fr) minmax(170px, 1.4fr) minmax(56px, 0.35fr);
 	gap: 10px;
 	align-items: center;
 	padding: 8px 10px;
@@ -3855,23 +3858,51 @@ input.cs-input-invalid:focus {
 	color: var(--text-faint);
 }
 
-.callout-studio-vault-stats .cs-vault-stats-name,
-.callout-studio-vault-stats .cs-vault-stats-source {
+/* The raw `[!id]`, so a row can be found in a note. Monospace because that is
+   what it is — text the user types, not a name we chose. */
+.callout-studio-vault-stats .cs-vault-stats-type-id {
 	min-width: 0;
 	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
+	font-family: var(--font-monospace);
 }
 
-.callout-studio-vault-stats .cs-vault-stats-source {
-	color: var(--text-muted);
-	font-size: var(--font-ui-smaller);
+/* Only two rows in the whole table carry one — an id nothing defines, and an id
+   that counted under another callout's aliases — so it sits beside the id
+   rather than in a column of its own, which is what the Source column was. */
+.callout-studio-vault-stats .cs-vault-stats-type-note {
+	flex: 0 1 auto;
+	min-width: 0;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	color: var(--text-faint);
+	font-size: var(--font-smallest);
 }
 
-.callout-studio-vault-stats .cs-vault-stats-count,
 .callout-studio-vault-stats .cs-vault-stats-files {
 	font-variant-numeric: tabular-nums;
 	text-align: start;
+}
+
+/* The exact numbers, as an ordinary column. No transition and no reveal: a row
+   that grows under the pointer is the thing this replaced. */
+.callout-studio-vault-stats .cs-vault-stats-roles {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 4px;
+	min-width: 0;
+}
+
+.callout-studio-vault-stats .cs-vault-stats-role-chip {
+	padding: 1px 6px;
+	border-radius: var(--radius-s);
+	background: var(--background-modifier-hover);
+	color: var(--text-muted);
+	font-size: var(--font-smallest);
+	line-height: 1.5;
+	white-space: nowrap;
 }
 
 .callout-studio-vault-stats .cs-vault-stats-empty {
@@ -3893,20 +3924,17 @@ input.cs-input-invalid:focus {
 		gap: 4px 10px;
 	}
 
+	/* Type over chips down the left, the file count on the right. The chips wrap
+	   inside their own line rather than pushing the row wider, which is why they
+	   keep `min-width: 0`. */
 	.callout-studio-vault-stats .cs-vault-stats-type,
-	.callout-studio-vault-stats .cs-vault-stats-name,
-	.callout-studio-vault-stats .cs-vault-stats-source {
+	.callout-studio-vault-stats .cs-vault-stats-roles {
 		grid-column: 1;
-	}
-
-	.callout-studio-vault-stats .cs-vault-stats-count {
-		grid-column: 2;
-		grid-row: 1;
 	}
 
 	.callout-studio-vault-stats .cs-vault-stats-files {
 		grid-column: 2;
-		grid-row: 2;
+		grid-row: 1;
 		color: var(--text-muted);
 		font-size: var(--font-ui-smaller);
 	}

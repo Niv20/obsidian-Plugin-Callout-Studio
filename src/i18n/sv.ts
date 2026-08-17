@@ -191,7 +191,7 @@ export const sv: Record<string, string> = {
 	"settings.vaultMaintenance": "Vault-insikter och underhåll",
 	"settings.vaultStats": "Callout-statistik",
 	"settings.vaultStatsDesc":
-		"Räknar alla callout-block i dina Markdown-anteckningar och grupperar dem efter typ.",
+		"Räknar alla callouts i dina Markdown-anteckningar — block, rubrik och inline — och grupperar dem efter typ.",
 	"settings.vaultStatsButton": "Visa statistik",
 	"settings.vaultStatsScanning": "Skannar",
 	"settings.resetAll": "Återställ",

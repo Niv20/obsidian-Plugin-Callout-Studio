@@ -187,7 +187,7 @@ export const th: Record<string, string> = {
 	"settings.vaultMaintenance": "ข้อมูลเชิงลึกและการบำรุงรักษา vault",
 	"settings.vaultStats": "สถิติ callout",
 	"settings.vaultStatsDesc":
-		"นับบล็อก callout ทั้งหมดในโน้ต Markdown และจัดกลุ่มตามประเภท",
+		"นับ callout ทุกรายการในโน้ต Markdown ของคุณ — แบบบล็อก แบบหัวข้อ และแบบอินไลน์ — แล้วจัดกลุ่มตามประเภท",
 	"settings.vaultStatsButton": "ดูสถิติ",
 	"settings.vaultStatsScanning": "กำลังสแกน",
 	"settings.resetAll": "รีเซ็ต",

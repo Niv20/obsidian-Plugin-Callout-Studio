@@ -226,7 +226,7 @@ export const en: Record<string, string> = {
 	"settings.vaultMaintenance": "Vault insights & maintenance",
 	"settings.vaultStats": "Callout statistics",
 	"settings.vaultStatsDesc":
-		"Count every block callout in your Markdown notes and group them by type.",
+		"Count every callout in your Markdown notes — block, heading and inline — and group them by type.",
 	"settings.vaultStatsButton": "View statistics",
 	"settings.vaultStatsScanning": "Scanning",
 	"settings.resetAll": "Reset",
@@ -737,17 +737,31 @@ export const en: Record<string, string> = {
 	"vaultStats.filesScanned": "Markdown files scanned",
 	"vaultStats.empty": "No callouts were found in Markdown notes.",
 	"vaultStats.columnType": "Type",
+	"vaultStats.columnFiles": "Files",
+	"vaultStats.sourceAlias": "Alias of {{id}}",
+	"vaultStats.sourceUnknown": "Not defined",
+	// Retained unused. The report is three columns now — type, how it is written
+	// (`byRole`) and files — so the Name, Source and Count headers are gone with
+	// their columns, `unknown` went when an unresolved row started being named
+	// after its own id, and of the six source labels only the two above survive,
+	// as a tag beside the id. Deleting an English key while the 31 generated
+	// locale files still carry it fails their "no key English lacks" check until
+	// the next translation pass, and the strings cost nothing to keep.
+	"vaultStats.unknown": "Unknown",
 	"vaultStats.columnName": "Name",
 	"vaultStats.columnSource": "Source",
 	"vaultStats.columnCount": "Count",
-	"vaultStats.columnFiles": "Files",
-	"vaultStats.unknown": "Unknown",
 	"vaultStats.sourceBuiltIn": "Built-in",
 	"vaultStats.sourceCustom": "Custom",
 	"vaultStats.sourceAutoFallback": "Auto fallback",
 	"vaultStats.sourceTheme": "CSS snippet",
-	"vaultStats.sourceAlias": "Alias of {{id}}",
-	"vaultStats.sourceUnknown": "Unknown",
+	"vaultStats.byRole": "Written as",
+	"vaultStats.roleBlock": "Block",
+	"vaultStats.roleHeading": "Heading",
+	"vaultStats.roleInline": "Inline",
+	"vaultStats.defineUndefined": "Define {{count}} missing",
+	"vaultStats.defineRunning": "Scanning",
+	"vaultStats.defineDone": "Added {{count}} callout types.",
 	"vaultStats.close": "Close",
 
 	// Import validation

@@ -177,7 +177,7 @@ export const da: Record<string, string> = {
 	"settings.vaultMaintenance": "Vault-indsigt og vedligeholdelse",
 	"settings.vaultStats": "Callout-statistik",
 	"settings.vaultStatsDesc":
-		"Tæller alle callout-blokke i dine Markdown-noter og grupperer dem efter type.",
+		"Tæller alle callouts i dine Markdown-noter — blok, overskrift og indlejret — og grupperer dem efter type.",
 	"settings.vaultStatsButton": "Vis statistik",
 	"settings.vaultStatsScanning": "Scanner",
 	"settings.resetAll": "Nulstil",

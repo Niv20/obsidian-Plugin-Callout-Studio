@@ -1,46 +1,39 @@
 /**
  * utils/VaultCalloutStatisticsModal.ts — Vault callout usage statistics modal.
  *
- * Displays a summary of how many markdown files and callout blocks were found,
- * broken down by callout type. Each row shows the callout's icon, name, and
- * counts. Aliases are resolved back to their primary definition via the
- * registry so duplicates are grouped correctly. Opened from DataManagementSection.
+ * Four metric tiles, then one row per callout type: its icon and id, how it is
+ * written (block / heading / inline) and the number of files it appears in. The
+ * row rendering — and the resolution of a scanned id back to a definition —
+ * lives in vaultStatsRow.ts. Opened from DataManagementSection.
+ *
+ * This is also the only surface that reads the WHOLE vault on demand, so it is
+ * where an id no discovery pass has reached yet shows up. Those rows are named
+ * and labelled rather than dressed as broken, and the footer offers the same
+ * vault scan the settings tab does, so a callout used in notes but missing from
+ * the registry can be turned into a real row from here.
  */
-import { Modal, setIcon } from "obsidian";
-import type { App } from "obsidian";
-import type { CalloutDefinition } from "../types";
-import type { CalloutRegistry } from "../manager/CalloutRegistry";
-import { renderIconInto, renderNoIcon } from "../icons/renderIcon";
-import { createIconResolver } from "../icons/resolver";
+import { Modal, Notice } from "obsidian";
 import { getLocale, t } from "../i18n";
 import { applyModalChrome } from "../settings/modalChrome";
-import type {
-	VaultCalloutStatistics,
-	VaultCalloutTypeStatistics,
-} from "./vaultCalloutScanner";
-
-type DefinitionLookup = {
-	def: CalloutDefinition;
-	isAlias: boolean;
-};
+import {
+	resolveStatsRows,
+	renderStatsTypeRow,
+	undefinedRowIds,
+	type StatsRow,
+} from "./vaultStatsRow";
+import type { SettingsSectionContext } from "../settings/sections/types";
+import type { VaultCalloutStatistics } from "./vaultCalloutStats";
 
 export class VaultCalloutStatisticsModal extends Modal {
-	private readonly primaryIds = new Map<string, CalloutDefinition>();
-	private readonly aliases = new Map<string, CalloutDefinition>();
 	private readonly numberFormat = new Intl.NumberFormat(getLocale());
+	private rows: StatsRow[] = [];
+	private listEl: HTMLElement | null = null;
 
 	constructor(
-		app: App,
+		private ctx: SettingsSectionContext,
 		private stats: VaultCalloutStatistics,
-		private registry: CalloutRegistry,
 	) {
-		super(app);
-		for (const def of registry.getAll()) {
-			this.primaryIds.set(def.id.toLowerCase(), def);
-			for (const alias of def.aliases ?? []) {
-				this.aliases.set(alias.toLowerCase(), def);
-			}
-		}
+		super(ctx.app);
 	}
 
 	onOpen(): void {
@@ -57,13 +50,17 @@ export class VaultCalloutStatisticsModal extends Modal {
 				text: t("vaultStats.empty"),
 			});
 		} else {
-			this.renderTypeList(contentEl);
+			this.listEl = contentEl.createDiv({ cls: "cs-vault-stats-list" });
+			this.renderTypeList();
 		}
 
+		// Dismiss first, action last — the footer is right-aligned, so the
+		// rightmost button is the primary one (see ConfirmModal).
 		const btnContainer = applyModalChrome(this, { footer: true });
 		btnContainer
 			.createEl("button", { text: t("vaultStats.close") })
 			.addEventListener("click", () => this.close());
+		this.renderDefineButton(btnContainer);
 	}
 
 	onClose(): void {
@@ -116,101 +113,82 @@ export class VaultCalloutStatisticsModal extends Modal {
 		});
 	}
 
-	private renderTypeList(contentEl: HTMLElement): void {
-		const listEl = contentEl.createDiv({ cls: "cs-vault-stats-list" });
+	/**
+	 * (Re)build the table. Resolution happens here, once per render, so the
+	 * footer button and the rows always agree on which ids are undefined — and
+	 * so a scan that defines them can simply re-render.
+	 */
+	private renderTypeList(): void {
+		const listEl = this.listEl;
+		if (!listEl) return;
+		listEl.empty();
+		this.rows = resolveStatsRows(this.ctx.plugin.registry, this.stats.types);
+
 		const headerEl = listEl.createDiv({
 			cls: "cs-vault-stats-row cs-vault-stats-header",
 		});
 		for (const label of [
 			t("vaultStats.columnType"),
-			t("vaultStats.columnName"),
-			t("vaultStats.columnSource"),
-			t("vaultStats.columnCount"),
+			t("vaultStats.byRole"),
 			t("vaultStats.columnFiles"),
 		]) {
 			headerEl.createDiv({ text: label });
 		}
 
-		for (const entry of this.stats.types) {
-			this.renderTypeRow(listEl, entry);
+		const deps = {
+			registry: this.ctx.plugin.registry,
+			format: (value: number) => this.format(value),
+		};
+		for (const row of this.rows) {
+			renderStatsTypeRow(listEl, row, deps);
 		}
 	}
 
-	private renderTypeRow(
-		containerEl: HTMLElement,
-		entry: VaultCalloutTypeStatistics,
-	): void {
-		const lookup = this.findDefinition(entry.id);
-		const rowEl = containerEl.createDiv({ cls: "cs-vault-stats-row" });
-
-		const typeEl = rowEl.createDiv({ cls: "cs-vault-stats-type" });
-		const iconEl = typeEl.createSpan({ cls: "cs-vault-stats-type-icon" });
-		if (lookup) {
-			iconEl.style.color = this.getCalloutColor(lookup.def);
-			this.renderIcon(iconEl, lookup.def);
-		} else {
-			iconEl.addClass("is-unknown");
-			setIcon(iconEl, "circle-help");
-		}
-		rowEl.createDiv({
-			cls: "cs-vault-stats-name",
-			text: lookup?.def.displayName ?? t("vaultStats.unknown"),
+	/**
+	 * Offers the vault scan when — and only when — the report found ids nothing
+	 * defines. `runVaultScan` is the same path the settings tab's "Re-scan
+	 * vault" button takes: it clears the rediscovery hold (a user-requested scan
+	 * may bring anything back), derives the known set including attribute-form
+	 * spellings, saves, and re-injects. Calling it rather than adding the rows
+	 * from the list here keeps that one code path.
+	 */
+	private renderDefineButton(footerEl: HTMLElement): void {
+		const undefinedIds = undefinedRowIds(this.rows);
+		if (undefinedIds.length === 0) return;
+		const btn = footerEl.createEl("button", {
+			cls: "mod-cta",
+			text: t("vaultStats.defineUndefined", {
+				count: this.format(undefinedIds.length),
+			}),
 		});
-		rowEl.createDiv({
-			cls: "cs-vault-stats-source",
-			text: this.getSourceLabel(lookup),
-		});
-		rowEl.createDiv({
-			cls: "cs-vault-stats-count",
-			text: this.format(entry.totalCount),
-		});
-		rowEl.createDiv({
-			cls: "cs-vault-stats-files",
-			text: this.format(entry.fileCount),
-		});
+		btn.addEventListener("click", () => void this.defineUndefined(btn));
 	}
 
-	private findDefinition(id: string): DefinitionLookup | null {
-		const primary = this.primaryIds.get(id);
-		if (primary) return { def: primary, isAlias: false };
-		const alias = this.aliases.get(id);
-		if (alias) return { def: alias, isAlias: true };
-		return null;
-	}
-
-	private getSourceLabel(lookup: DefinitionLookup | null): string {
-		if (!lookup) return t("vaultStats.sourceUnknown");
-		if (lookup.isAlias) {
-			return t("vaultStats.sourceAlias", { id: lookup.def.id });
+	private async defineUndefined(btn: HTMLButtonElement): Promise<void> {
+		btn.disabled = true;
+		btn.setText(t("vaultStats.defineRunning"));
+		let added = 0;
+		try {
+			added = await this.ctx.plugin.runVaultScan(false);
+		} finally {
+			// Either way: the counts cannot have moved — the vault was read, not
+			// edited — so only each row's *resolution* can differ. Re-render in
+			// place, and never leave the button reading "Scanning" if the scan
+			// threw.
+			btn.disabled = false;
+			this.renderTypeList();
+			const left = undefinedRowIds(this.rows).length;
+			if (left === 0) btn.remove();
+			else {
+				btn.setText(
+					t("vaultStats.defineUndefined", {
+						count: this.format(left),
+					}),
+				);
+			}
 		}
-		if (lookup.def.builtIn) return t("vaultStats.sourceBuiltIn");
-		if (
-			lookup.def.source === "fallback" &&
-			lookup.def.customized !== true
-		) {
-			return t("vaultStats.sourceAutoFallback");
-		}
-		if (lookup.def.source === "theme") return t("vaultStats.sourceTheme");
-		return t("vaultStats.sourceCustom");
-	}
-
-	private renderIcon(iconEl: HTMLElement, def: CalloutDefinition): void {
-		if (def.hideIcon === true) {
-			renderNoIcon(iconEl);
-			return;
-		}
-		renderIconInto(iconEl, def.icon, createIconResolver(this.registry), {
-			role: "regular",
-			fill: "currentColor",
-			missing: { kind: "placeholder", lucideId: "pencil" },
-			errorText: "?",
-		});
-	}
-
-	private getCalloutColor(def: CalloutDefinition): string {
-		return activeDocument.body.classList.contains("theme-dark")
-			? def.colorDark
-			: def.colorLight;
+		new Notice(t("vaultStats.defineDone", { count: this.format(added) }));
+		this.ctx.display();
 	}
 
 	private format(value: number): string {

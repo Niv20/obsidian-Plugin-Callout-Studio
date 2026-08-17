@@ -189,7 +189,7 @@ export const id: Record<string, string> = {
 	"settings.vaultMaintenance": "Wawasan & pemeliharaan vault",
 	"settings.vaultStats": "Statistik callout",
 	"settings.vaultStatsDesc":
-		"Menghitung semua blok callout di catatan Markdown Anda dan mengelompokkannya berdasarkan tipe.",
+		"Menghitung setiap callout di catatan Markdown Anda — blok, judul, dan sebaris — lalu mengelompokkannya berdasarkan tipe.",
 	"settings.vaultStatsButton": "Lihat statistik",
 	"settings.vaultStatsScanning": "Memindai",
 	"settings.resetAll": "Reset",

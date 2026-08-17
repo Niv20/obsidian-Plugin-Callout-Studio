@@ -187,7 +187,7 @@ export const ar: Record<string, string> = {
 	"settings.vaultMaintenance": "رؤى المخزن والصيانة",
 	"settings.vaultStats": "إحصائيات الـ callout",
 	"settings.vaultStatsDesc":
-		"يحصي جميع كتل الـ callout في ملاحظات Markdown ويجمّعها حسب النوع.",
+		"يحصي كل تنبيه في ملاحظات Markdown — كتلة أو عنوان أو ضمني — ويجمّعها حسب النوع.",
 	"settings.vaultStatsButton": "عرض الإحصائيات",
 	"settings.vaultStatsScanning": "جارٍ المسح",
 	"settings.resetAll": "إعادة التعيين",

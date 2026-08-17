@@ -190,7 +190,7 @@ export const it: Record<string, string> = {
 	"settings.vaultMaintenance": "Approfondimenti e manutenzione vault",
 	"settings.vaultStats": "Statistiche callout",
 	"settings.vaultStatsDesc":
-		"Conta tutti i blocchi callout nelle note Markdown e li raggruppa per tipo.",
+		"Conta ogni callout nelle tue note Markdown — a blocco, di intestazione e in linea — e li raggruppa per tipo.",
 	"settings.vaultStatsButton": "Visualizza statistiche",
 	"settings.vaultStatsScanning": "Scansione",
 	"settings.resetAll": "Ripristina",

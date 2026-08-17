@@ -188,7 +188,7 @@ export const ko: Record<string, string> = {
 	"settings.vaultMaintenance": "볼트 인사이트 및 유지보수",
 	"settings.vaultStats": "Callout 통계",
 	"settings.vaultStatsDesc":
-		"Markdown 노트의 모든 callout 블록을 계산하고 유형별로 그룹화합니다.",
+		"Markdown 노트의 모든 callout(블록, 헤딩, 인라인)을 계산하고 유형별로 그룹화합니다.",
 	"settings.vaultStatsButton": "통계 보기",
 	"settings.vaultStatsScanning": "스캔 중",
 	"settings.resetAll": "재설정",

@@ -191,7 +191,7 @@ export const hu: Record<string, string> = {
 	"settings.vaultMaintenance": "Tár-elemzések és karbantartás",
 	"settings.vaultStats": "Callout-statisztikák",
 	"settings.vaultStatsDesc":
-		"Megszámolja az összes callout-blokkot a Markdown-jegyzetekben, és típusonként csoportosítja.",
+		"Megszámolja a Markdown-jegyzetekben található összes callout-ot — blokk, cím és beágyazott — és típusonként csoportosítja.",
 	"settings.vaultStatsButton": "Statisztikák megtekintése",
 	"settings.vaultStatsScanning": "Szkennelés",
 	"settings.resetAll": "Visszaállítás",

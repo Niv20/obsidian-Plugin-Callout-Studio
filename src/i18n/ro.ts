@@ -191,7 +191,7 @@ export const ro: Record<string, string> = {
 	"settings.vaultMaintenance": "Informații și întreținere vault",
 	"settings.vaultStats": "Statistici callout",
 	"settings.vaultStatsDesc":
-		"Numără toate blocurile callout din notele Markdown și le grupează după tip.",
+		"Numără fiecare callout din notele Markdown — de bloc, de titlu și inline — și le grupează după tip.",
 	"settings.vaultStatsButton": "Vizualizare statistici",
 	"settings.vaultStatsScanning": "Scanare",
 	"settings.resetAll": "Resetați",

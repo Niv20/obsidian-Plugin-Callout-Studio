@@ -190,7 +190,7 @@ export const tr: Record<string, string> = {
 	"settings.vaultMaintenance": "Vault içgörüleri ve bakımı",
 	"settings.vaultStats": "Callout istatistikleri",
 	"settings.vaultStatsDesc":
-		"Markdown notlarınızdaki tüm callout bloklarını sayar ve türe göre gruplar.",
+		"Markdown notlarınızdaki her callout'u — blok, başlık ve satır içi — sayar ve türe göre gruplar.",
 	"settings.vaultStatsButton": "İstatistikleri görüntüle",
 	"settings.vaultStatsScanning": "Taranıyor",
 	"settings.resetAll": "Sıfırla",

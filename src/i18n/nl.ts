@@ -190,7 +190,7 @@ export const nl: Record<string, string> = {
 	"settings.vaultMaintenance": "Vault-inzichten & onderhoud",
 	"settings.vaultStats": "Callout-statistieken",
 	"settings.vaultStatsDesc":
-		"Telt alle callout-blokken in uw Markdown-notities en groepeert ze op type.",
+		"Telt elke callout in uw Markdown-notities — blok, kop en inline — en groepeert ze op type.",
 	"settings.vaultStatsButton": "Statistieken bekijken",
 	"settings.vaultStatsScanning": "Scannen",
 	"settings.resetAll": "Terugzetten",

@@ -191,7 +191,7 @@ export const hi: Record<string, string> = {
 	"settings.vaultMaintenance": "vault अंतर्दृष्टि और रखरखाव",
 	"settings.vaultStats": "Callout आँकड़े",
 	"settings.vaultStatsDesc":
-		"Markdown नोट्स में सभी callout ब्लॉक गिनता है और प्रकार के अनुसार समूहित करता है।",
+		"आपके Markdown नोट्स में हर callout — ब्लॉक, हेडिंग और इनलाइन — गिनता है और प्रकार के अनुसार समूहित करता है।",
 	"settings.vaultStatsButton": "आँकड़े देखें",
 	"settings.vaultStatsScanning": "स्कैन हो रहा है",
 	"settings.resetAll": "रीसेट",

@@ -191,7 +191,7 @@ export const uk: Record<string, string> = {
 	"settings.vaultMaintenance": "Аналітика та обслуговування сховища",
 	"settings.vaultStats": "Статистика callout",
 	"settings.vaultStatsDesc":
-		"Підраховує всі блоки callout у Markdown-нотатках і групує за типом.",
+		"Підраховує кожен callout у Markdown-нотатках — блоковий, заголовковий і вбудований — і групує за типом.",
 	"settings.vaultStatsButton": "Переглянути статистику",
 	"settings.vaultStatsScanning": "Сканування",
 	"settings.resetAll": "Скинути",

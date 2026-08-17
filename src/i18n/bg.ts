@@ -176,7 +176,7 @@ export const bg: Record<string, string> = {
 	"settings.vaultMaintenance": "Прегледи и поддръжка на хранилището",
 	"settings.vaultStats": "Статистика за callout",
 	"settings.vaultStatsDesc":
-		"Брои всички блокове callout в бележките Markdown и ги групира по тип.",
+		"Брои всеки callout в бележките Markdown — блок, заглавие и вграден — и ги групира по тип.",
 	"settings.vaultStatsButton": "Преглед на статистиката",
 	"settings.vaultStatsScanning": "Сканиране",
 	"settings.resetAll": "Нулиране",

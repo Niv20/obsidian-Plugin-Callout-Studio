@@ -189,7 +189,7 @@ export const ja: Record<string, string> = {
 	"settings.vaultMaintenance": "vaultの洞察とメンテナンス",
 	"settings.vaultStats": "callout統計",
 	"settings.vaultStatsDesc":
-		"Markdownノート内のすべてのcalloutブロックをカウントし、タイプ別にグループ化します。",
+		"Markdownノート内のすべてのcallout（ブロック、見出し、インライン）をカウントし、タイプ別にグループ化します。",
 	"settings.vaultStatsButton": "統計を表示",
 	"settings.vaultStatsScanning": "スキャン中",
 	"settings.resetAll": "リセット",

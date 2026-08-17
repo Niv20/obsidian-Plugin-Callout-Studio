@@ -211,7 +211,7 @@ export const he: Record<string, string> = {
 	"settings.vaultMaintenance": "סקירה ותחזוקה של הכספת",
 	"settings.vaultStats": "סטטיסטיקת תיבות־הבלטה",
 	"settings.vaultStatsDesc":
-		"ספירת כל בלוקי תיבות־ההבלטה בקובצי Markdown וחלוקה לפי סוג.",
+		"ספירת כל תיבת־הבלטה בקובצי Markdown — בלוק, כותרת ומוטבעת — וחלוקה לפי סוג.",
 	"settings.vaultStatsButton": "צפייה בסטטיסטיקה",
 	"settings.vaultStatsScanning": "בסריקה...",
 	"settings.resetAll": "איפוס",

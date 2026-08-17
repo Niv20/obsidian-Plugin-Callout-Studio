@@ -176,7 +176,7 @@ export const nb: Record<string, string> = {
 	"settings.vaultMaintenance": "Vault-innsikt og vedlikehold",
 	"settings.vaultStats": "Callout-statistikk",
 	"settings.vaultStatsDesc":
-		"Teller alle callout-blokker i Markdown-notatene dine og grupperer dem etter type.",
+		"Teller hver callout i Markdown-notatene dine — blokk, overskrift og inline — og grupperer dem etter type.",
 	"settings.vaultStatsButton": "Vis statistikk",
 	"settings.vaultStatsScanning": "Skanner",
 	"settings.resetAll": "Tilbakestill",

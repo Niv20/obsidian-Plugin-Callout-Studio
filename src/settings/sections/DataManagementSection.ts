@@ -15,11 +15,11 @@ import { ImportReportModal } from "../../utils/ImportReportModal";
 import { validateImportPayload } from "../../utils/importValidator";
 import { mergeById } from "../../utils/mergeById";
 import { ImportSourceModal } from "../ImportSourceModal";
+import { countCalloutUsages } from "../../utils/vaultCalloutScanner";
 import {
-	countCalloutUsages,
 	scanVaultCalloutStatistics,
 	type VaultCalloutStatistics,
-} from "../../utils/vaultCalloutScanner";
+} from "../../utils/vaultCalloutStats";
 import { VaultCalloutStatisticsModal } from "../../utils/VaultCalloutStatisticsModal";
 import type { App } from "obsidian";
 import type { SettingsSectionContext } from "./types";
@@ -150,11 +150,7 @@ async function runVaultRescan(ctx: SettingsSectionContext): Promise<void> {
 }
 
 async function showVaultStatistics(ctx: SettingsSectionContext): Promise<void> {
-	new VaultCalloutStatisticsModal(
-		ctx.app,
-		await scanVaultStats(ctx.app),
-		ctx.plugin.registry,
-	).open();
+	new VaultCalloutStatisticsModal(ctx, await scanVaultStats(ctx.app)).open();
 }
 
 /**

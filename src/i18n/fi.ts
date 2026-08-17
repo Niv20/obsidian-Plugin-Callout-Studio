@@ -178,7 +178,7 @@ export const fi: Record<string, string> = {
 	"settings.vaultMaintenance": "Holvin näkemykset ja huolto",
 	"settings.vaultStats": "Callout-tilastot",
 	"settings.vaultStatsDesc":
-		"Laskee kaikki callout-lohkot Markdown-muistiinpanoissasi ja ryhmittelee ne tyypin mukaan.",
+		"Laskee jokaisen calloutin Markdown-muistiinpanoissasi — lohko-, otsikko- ja rivinsisäisen — ja ryhmittelee ne tyypin mukaan.",
 	"settings.vaultStatsButton": "Näytä tilastot",
 	"settings.vaultStatsScanning": "Skannataan",
 	"settings.resetAll": "Palauta",
