@@ -61,7 +61,9 @@ export async function buildSnippetFile(body: string): Promise<string> {
 		" * gradient or transparent), icons, borders, sizes and aliases, in both\n" +
 		" * modes. Heading and inline callouts are Callout Studio's own elements and\n" +
 		" * cannot be reproduced in plain CSS, so they are absent, as is the\n" +
-		" * fallback style. In PDF export a non-Lucide icon prints as a pencil.\n" +
+		" * fallback style. In PDF export a non-Lucide icon prints as a pencil:\n" +
+		" * printing one needs a real SVG element in the page, and a stylesheet can\n" +
+		" * style an element but never create one. Colours and gradients do print.\n" +
 		` * fingerprint: ${fingerprint}${HEADER_END}` +
 		body
 	);

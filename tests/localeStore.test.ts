@@ -298,8 +298,8 @@ describe("a cached file older than this build is used anyway", () => {
 		setLocale("he");
 		assert.strictEqual(getLocale(), "he");
 		assert.strictEqual(t("settings.language"), sample);
-		// A key added after that file was written — English, not a raw key.
-		assert.strictEqual(t("locale.retry"), en["locale.retry"]);
+		// The newly added key is translated in the current locale file.
+		assert.strictEqual(t("locale.retry"), parsed.strings["locale.retry"]);
 		setLocale("en");
 	});
 

@@ -21,6 +21,7 @@
  * `CSSInjector`, so the snippet cannot drift from what the plugin draws. The
  * preamble wrapped around them, and the fingerprint that tells our file from a
  * hand-edited one, live in `cssSnippetFile.ts`.
+ *
  * `standalone` drops what only means something while the plugin runs —
  * `.cs-heading-callout`, `.cs-inline-callout` and `.cs-ref-token` are classes
  * our own post-processors stamp, so nothing carries them once we are gone. The
@@ -28,9 +29,13 @@
  * over every known id and would restyle callouts this export never touched.
  *
  * Two survivors that can look like oversights. Icon `::after` overrides stay
- * inside `@media screen`, so a non-Lucide icon prints as core's pencil — the
- * DOM copies `paintIcons` bakes for PDF exist only while we are loaded. And
- * `calloutColorValue` emits the `--callout-color` format the *running* Obsidian
+ * inside `@media screen`, so a non-Lucide icon prints as core's pencil: print
+ * is served by the inline `<svg>` `paintIcon` bakes into the DOM, and that is
+ * the one repair a stylesheet is structurally unable to make — CSS styles
+ * elements, it never creates them — so the exported file cannot have it at any
+ * price. Everything else print gets wrong IS pure CSS and does travel:
+ * `printGradientCSS` is emitted here too. And `calloutColorValue` emits the
+ * `--callout-color` format the *running* Obsidian
  * expects (a bare RGB triplet on ≤1.12, a color on 1.13+): right for this
  * vault, worth knowing before carrying the file to a much older one.
  */
