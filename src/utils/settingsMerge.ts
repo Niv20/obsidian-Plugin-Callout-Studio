@@ -23,21 +23,20 @@
  * Retiring a field by `delete`ing it by name only worked for the one field
  * anybody remembered to name. Naming the fields that *stay* is what makes
  * `settingsValidator`'s "unknown fields are dropped" promise true at depth.
+ * `globalStyle` is the one section deep enough to have its own module for that
+ * (`globalStyleMerge.ts`); everything else is named here.
  */
 import type {
-	BorderSidesSettings,
 	ContextMenuItemConfig,
 	ContextMenuItemId,
 	ContextMenuSettings,
-	GlobalStyleSettings,
-	HeadingFrameStyleSettings,
 	IconSourceSettings,
-	InlineFrameStyleSettings,
 	LegacyPopupSettings,
 	PluginSettings,
 } from "../types";
 import { DEFAULT_CONTEXT_MENU_ITEMS, DEFAULT_SETTINGS } from "../constants";
 import { sanitizeCustomPalettes } from "./colorPalettes";
+import { mergeGlobalStyle } from "./globalStyleMerge";
 import { clampGlobalStyle, localePreference } from "./settingsGuards";
 import { sanitizeUserImages } from "./userImages";
 import { sanitizeCustomCommands } from "./customCommands";
@@ -146,81 +145,6 @@ function legacyMenuState(
 		}
 	}
 	return state;
-}
-
-/**
- * Merge the four per-side border booleans over a role's defaults.
- *
- * Shared by all three frame styles, which is the only reason it is a helper —
- * the point is the same one the rest of this file makes: the sides are named,
- * so a fifth key a file happens to carry is not one of them.
- */
-function mergeBorderSides(
-	saved: Partial<BorderSidesSettings> | undefined,
-	defaults: BorderSidesSettings,
-): BorderSidesSettings {
-	return {
-		top: saved?.top ?? defaults.top,
-		right: saved?.right ?? defaults.right,
-		bottom: saved?.bottom ?? defaults.bottom,
-		left: saved?.left ?? defaults.left,
-	};
-}
-
-/**
- * Merge a saved heading frame style over the defaults, field by field.
- *
- * Spelled out rather than spread for the reason on {@link mergeSavedSettings}:
- * a spread keeps every key the current version knows nothing about, and
- * settings are written back wholesale by both `toSaveData()` and
- * `exportToJSONv2()`, so such a key would be re-saved forever and copied into
- * every new export file. Naming the fields is what retires `paddingStart` (the
- * "Icon indent" slider, a static 10px in styles.css since 2.7.0) — and, unlike
- * the `delete` it replaced, everything else a future version drops too.
- */
-function mergeHeadingStyle(
-	saved: Partial<HeadingFrameStyleSettings> | undefined,
-): HeadingFrameStyleSettings {
-	const defaults = DEFAULT_SETTINGS.globalStyle.heading;
-	return {
-		borderSides: mergeBorderSides(saved?.borderSides, defaults.borderSides),
-		borderWidth: saved?.borderWidth ?? defaults.borderWidth,
-		borderRadius: saved?.borderRadius ?? defaults.borderRadius,
-		paddingTop: saved?.paddingTop ?? defaults.paddingTop,
-		paddingBottom: saved?.paddingBottom ?? defaults.paddingBottom,
-		marginTop: saved?.marginTop ?? defaults.marginTop,
-	};
-}
-
-/** Merge a saved inline frame style over the defaults. See mergeHeadingStyle. */
-function mergeInlineStyle(
-	saved: Partial<InlineFrameStyleSettings> | undefined,
-): InlineFrameStyleSettings {
-	const defaults = DEFAULT_SETTINGS.globalStyle.inline;
-	return {
-		borderSides: mergeBorderSides(saved?.borderSides, defaults.borderSides),
-		borderWidth: saved?.borderWidth ?? defaults.borderWidth,
-		borderRadius: saved?.borderRadius ?? defaults.borderRadius,
-		fontScale: saved?.fontScale ?? defaults.fontScale,
-	};
-}
-
-/** Merge a saved global (block callout) style over the defaults. */
-function mergeGlobalStyle(
-	saved: Partial<GlobalStyleSettings> | undefined,
-): GlobalStyleSettings {
-	const defaults = DEFAULT_SETTINGS.globalStyle;
-	return {
-		borderSides: mergeBorderSides(saved?.borderSides, defaults.borderSides),
-		borderWidth: saved?.borderWidth ?? defaults.borderWidth,
-		titleScale: saved?.titleScale ?? defaults.titleScale,
-		contentScale: saved?.contentScale ?? defaults.contentScale,
-		borderRadius: saved?.borderRadius ?? defaults.borderRadius,
-		alignContentWithTitle:
-			saved?.alignContentWithTitle ?? defaults.alignContentWithTitle,
-		heading: mergeHeadingStyle(saved?.heading),
-		inline: mergeInlineStyle(saved?.inline),
-	};
 }
 
 /**
