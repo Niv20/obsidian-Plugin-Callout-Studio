@@ -653,28 +653,71 @@ describe("a file that says almost nothing", () => {
 		assert.strictEqual(registry.getBuiltIn().length, DEFAULT_CALLOUTS.length);
 	});
 
-	it("drops a row saved as a built-in that this version has no built-in for", () => {
-		// Pinned as found. `load()` merges a `builtIn: true` row onto the shipped
-		// default and skips it entirely when there is none to merge onto — so a
-		// callout that some build shipped as a built-in and a later one retired
-		// is gone rather than demoted to a user row. Unreachable today (the 13
-		// have never changed), and the shape to remember if one is ever removed.
+	it("demotes a row saved as a built-in this version has no built-in for", () => {
+		// The mirror of the reclaim above. `load()` merges a `builtIn: true` row
+		// onto the shipped default; when there is none to merge onto it used to
+		// skip the row entirely, so a callout some build shipped as a built-in
+		// and a later one retired took every vault's customization of it away —
+		// while notes went on writing `[!retired-builtin]`. Unreachable today
+		// (the 13 have never changed), and the shape to hold to if one ever is.
 		const registry = load({
-			callouts: [
-				{
-					id: "retired-builtin",
-					displayName: "Retired",
-					icon: { type: "lucide", value: "star" },
-					colorLight: "#336699",
-					colorDark: "#88bbee",
-					foldable: true,
-					defaultFolded: false,
-					builtIn: true,
-					source: "builtin",
-				},
-			] as CalloutDefinition[],
+			callouts: [retiredBuiltIn()],
+		});
+		const row = registry.get("retired-builtin");
+
+		assert.strictEqual(row?.displayName, "Retired");
+		assert.strictEqual(row.colorLight, "#336699", "its styling came with it");
+		assert.strictEqual(row.builtIn, false, "but not the flag it lied about");
+		assert.strictEqual(row.source, "user");
+	});
+
+	it("shows it in the user's own list, and never among the built-ins", () => {
+		// The lists partition on `builtIn`, so a row left claiming the flag
+		// would re-home itself into the built-in half and be compared against a
+		// shipped default that does not exist.
+		const registry = load({ callouts: [retiredBuiltIn()] });
+
+		assert.deepStrictEqual(userIds(registry), ["retired-builtin"]);
+		assert.strictEqual(registry.getBuiltIn().length, DEFAULT_CALLOUTS.length);
+	});
+
+	it("keeps a non-`builtin` source it also carried", () => {
+		// Only the one claim is disproved. An import's `"theme"` row with a
+		// stray `builtIn: true` is still a theme row.
+		const registry = load({
+			callouts: [{ ...retiredBuiltIn(), source: "theme" }],
 		});
 
-		assert.strictEqual(registry.has("retired-builtin"), false);
+		assert.strictEqual(registry.get("retired-builtin")?.source, "theme");
+		assert.strictEqual(registry.get("retired-builtin")?.builtIn, false);
+	});
+
+	it("rewrites the file so the broken shape stops coming back", () => {
+		// Same treatment the reclaim gets: repaired in memory AND flushed, or
+		// every launch would demote it again and the next export would carry
+		// the lie onward.
+		const registry = load({ callouts: [retiredBuiltIn()] });
+
+		assert.strictEqual(registry.needsSaveAfterLoad(), true);
+		const saved = registry.toSaveData().callouts.find(
+			(c) => c.id === "retired-builtin",
+		);
+		assert.strictEqual(saved?.builtIn, false);
+		assert.strictEqual(saved.source, "user");
 	});
 });
+
+/** A row that claims to be one of the shipped built-ins, on an id that is not. */
+function retiredBuiltIn(): CalloutDefinition {
+	return {
+		id: "retired-builtin",
+		displayName: "Retired",
+		icon: { type: "lucide", value: "star" },
+		colorLight: "#336699",
+		colorDark: "#88bbee",
+		foldable: true,
+		defaultFolded: false,
+		builtIn: true,
+		source: "builtin",
+	} as CalloutDefinition;
+}
