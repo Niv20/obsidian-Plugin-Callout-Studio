@@ -389,13 +389,68 @@ describe("normalizeFoldMarkersInVault — what it must not touch", () => {
 		assert.strictEqual((await normalize("> [!tip] Hi", "-")).text, "> [!tip] Hi");
 	});
 
-	it("leaves a nested block header alone — `^>` spans one `>` only", async () => {
-		// Recorded as behaviour rather than endorsed: a callout inside another
-		// callout keeps whatever marker it already had. Nothing depends on it,
-		// and widening the anchor is a vault-wide rewrite that deserves its own
-		// decision rather than a quiet fix here.
-		const { text, count } = await normalize(">> [!note]+ Hi", "-");
-		assert.strictEqual(text, ">> [!note]+ Hi");
+	it("leaves a `[!note]` that merely follows a lone `>` on the line before", async () => {
+		// The reason the quote run is `[ \t]` and not `\s`: with `\s` the run
+		// crossed the newline, so an empty quote line followed by a paragraph
+		// that happens to start with the token collected a fold mark it has no
+		// business carrying — a callout is not what either line renders as.
+		const { text, count } = await normalize(">\n[!note] Hi", "-");
+		assert.strictEqual(text, ">\n[!note] Hi");
+		assert.strictEqual(count, 0);
+	});
+});
+
+describe("normalizeFoldMarkersInVault — nesting", () => {
+	// The gap this suite was written to record, now closed. A callout inside
+	// another callout is a callout: Obsidian renders it, folds it, and reads its
+	// `+`/`-` exactly as it does at the top level. Anchoring to a single `>` left
+	// every nested occurrence on the old default while its siblings moved — a
+	// "fold defaults" change that silently did not apply to part of the vault.
+
+	it("rewrites a nested header", async () => {
+		assert.strictEqual((await normalize(">> [!note]+ Hi", "-")).text, ">> [!note]- Hi");
+		assert.strictEqual((await normalize(">> [!note] Hi", "-")).text, ">> [!note]- Hi");
+		assert.strictEqual((await normalize(">> [!note]- Hi", "")).text, ">> [!note] Hi");
+	});
+
+	it("reads the spaced spelling of the same nesting", async () => {
+		// `> > [!note]` and `>> [!note]` are one thing to Obsidian, so they must
+		// be one thing here — this is the tokenizer's own prefix, not a new one.
+		assert.strictEqual(
+			(await normalize("> > [!note]+ Hi", "-")).text,
+			"> > [!note]- Hi",
+		);
+		assert.strictEqual(
+			(await normalize(">>> [!note] Hi", "-")).text,
+			">>> [!note]- Hi",
+		);
+	});
+
+	it("keeps the quote prefix exactly as it was written", async () => {
+		// The prefix is captured and re-emitted, so a rewrite must not tidy the
+		// user's spacing into some canonical form.
+		assert.strictEqual((await normalize(">>[!note] Hi", "-")).text, ">>[!note]- Hi");
+		assert.strictEqual(
+			(await normalize(">  [!note] Hi", "-")).text,
+			">  [!note]- Hi",
+		);
+	});
+
+	it("counts a nested occurrence beside its parent", async () => {
+		const { text, count } = await normalize(
+			"> [!note] outer\n>> [!note]+ inner",
+			"-",
+		);
+		assert.strictEqual(text, "> [!note]- outer\n>> [!note]- inner");
+		assert.strictEqual(count, 2);
+	});
+
+	it("still leaves a nested heading callout alone", async () => {
+		// Depth is not what decides this — the role is. `>> ## [!note]-` is a
+		// heading inside a quote, and its `-` is still the title's first
+		// character.
+		const { text, count } = await normalize(">> ## [!note]- Hi", "-");
+		assert.strictEqual(text, ">> ## [!note]- Hi");
 		assert.strictEqual(count, 0);
 	});
 });
