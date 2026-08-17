@@ -38,6 +38,7 @@ import {
 } from "../utils/colorPalettes";
 import { bgGradientsEqual, derivedBgAmount } from "../utils/colorUtils";
 import { notifyListeners } from "./listenerList";
+import { reconcileSavedRow } from "./savedCalloutRows";
 import { mergeSavedSettings } from "../utils/settingsMerge";
 import { setUserImages } from "../icons/packs/userImages";
 import { sortCalloutsByDisplayName } from "../utils/sorting";
@@ -182,42 +183,25 @@ export class CalloutRegistry {
 
 		if (!data) return;
 
-		// Merge saved callouts (user overrides and custom callouts)
+		// Merge saved callouts (user overrides and custom callouts), each read
+		// against the shipped defaults by `reconcileSavedRow` — which is where
+		// the two flag repairs and their reasoning live.
 		if (data.callouts) {
-			// Saved rows that claim one of the 13 ids without claiming to BE a
-			// built-in. An older build, a hand-edited file or a foreign importer
-			// could write one, and it used to overwrite the seed outright: the
-			// map came back with 12 built-ins, breaking the invariant every other
-			// subsystem reads (`getAll()` always returns every built-in), and
-			// `isBuiltInModified("note")` answered about a row whose own
-			// `builtIn` was false. There is only ever one callout per id — a note
-			// writing `[!note]` means the built-in — so the row is the built-in's
-			// customization with its flag lost, and merging it onto the default
-			// keeps every edit while restoring the seed.
-			let reclaimedBuiltIns = 0;
 			for (const saved of data.callouts) {
-				// Keyed on the shipped defaults rather than on what the map holds
-				// so far: `callouts.has` would also be true of a user row added
-				// by an earlier turn of this same loop, and stamping THAT as a
-				// built-in is exactly the confusion being repaired.
-				if (this.builtInDefaults.has(saved.id)) {
-					// Merge overrides onto built-in
-					const existing = this.callouts.get(saved.id)!;
-					if (saved.builtIn !== true) reclaimedBuiltIns++;
-					this.setCallout(saved.id, {
-						...existing,
-						...saved,
-						builtIn: true,
-						source: "builtin",
-					});
-				} else if (!saved.builtIn) {
-					this.setCallout(saved.id, saved);
-				}
+				// Whether this id HAS a built-in is asked of the shipped
+				// defaults, not of `this.callouts` — the map would also answer
+				// yes for a user row added by an earlier turn of this loop.
+				const seeded = this.builtInDefaults.has(saved.id)
+					? this.callouts.get(saved.id)
+					: undefined;
+				const { def, repaired } = reconcileSavedRow(saved, seeded);
+				this.setCallout(saved.id, def);
+				// A repaired row is written back like the other load migrations:
+				// through the built-in gate when it was reclaimed (so not at all
+				// when it matches the default) or the user gate when it was
+				// demoted, either way so the file stops carrying the broken shape.
+				if (repaired) this.pendingLoadMigrationSave = true;
 			}
-			// Written back like the other repairs: the reclaimed row is saved
-			// through the built-in gate now (and not at all when it matches the
-			// default), so the file stops carrying the broken shape.
-			if (reclaimedBuiltIns > 0) this.pendingLoadMigrationSave = true;
 		}
 
 		// Merge settings (field-by-field against defaults; see mergeSavedSettings)

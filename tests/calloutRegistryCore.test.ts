@@ -159,16 +159,21 @@ describe("load() — seeding the built-ins", () => {
 		assert.strictEqual(note?.source, "builtin", "re-stamped, never trusted");
 	});
 
-	it("drops a saved builtIn:true row whose id is not one of the 13", () => {
-		// Neither branch of the merge accepts it — it can't be merged onto a
-		// default that doesn't exist, and the `!saved.builtIn` branch rejects
-		// it. That is the right call (a forged built-in must not gain the
-		// built-in's theme deference), but it IS silent.
+	it("demotes a saved builtIn:true row whose id is not one of the 13", () => {
+		// It can't be merged onto a default that doesn't exist, and it must not
+		// keep the flag either — a forged built-in would gain the built-in's
+		// theme deference and be compared against a shipped row that is not
+		// there. Kept as the user row it really is, rather than dropped: the
+		// alternative silently deletes a callout the vault's notes still use.
 		const { registry } = loaded(
 			saved([def({ id: "ghost", builtIn: true, source: "builtin" })]),
 		);
-		assert.strictEqual(registry.has("ghost"), false);
-		assert.strictEqual(registry.getAll().length, 13);
+		const ghost = registry.get("ghost");
+
+		assert.strictEqual(ghost?.builtIn, false);
+		assert.strictEqual(ghost?.source, "user");
+		assert.strictEqual(registry.getAll().length, 14);
+		assert.strictEqual(registry.getBuiltIn().length, 13);
 	});
 
 	it("reclaims a built-in id a saved user row had taken over", () => {

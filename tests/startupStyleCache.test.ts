@@ -345,13 +345,13 @@ describe("StartupStyleCache — a store that refuses", () => {
 		});
 	});
 
-	it("does not retry a refused write with the same text — pinned as found", () => {
-		// The memo is raised BEFORE the `try`, so a write that was turned away
-		// is remembered as if it had landed. Harmless for the case it was written
-		// for (a full store refuses the retry too) and self-healing across
-		// launches, since the memo is per instance — but it does mean a transient
-		// refusal costs that snapshot for the rest of the session. If the memo is
-		// ever moved inside the `try`, this is the assertion to flip.
+	it("retries the same text once the store stops refusing", () => {
+		// The memo is raised only after `setItem` returns. Raised before the
+		// `try` it remembered a refused write as a landed one, and since the
+		// memo is exactly what turns a repeat inject into a no-op, that text was
+		// never offered to storage again for the rest of the session — so a
+		// store that frees up mid-session went on launching without a snapshot
+		// until a style edit happened to change the CSS.
 		const store = storage();
 		store.failWrite = true;
 		withWindow(store, () => {
@@ -360,8 +360,36 @@ describe("StartupStyleCache — a store that refuses", () => {
 			store.failWrite = false;
 			cache.persist(".x{}");
 
-			assert.strictEqual(store.writes.length, 1, "the retry never happened");
-			assert.strictEqual(cache.loadCachedCss(), null);
+			assert.strictEqual(store.writes.length, 2, "it tried again");
+			assert.strictEqual(cache.loadCachedCss(), ".x{}");
+		});
+	});
+
+	it("still writes a text that landed exactly once", () => {
+		// The other half: the memo has to keep doing its own job, which is to
+		// collapse the no-op injects that follow every external css-change.
+		const store = storage();
+		withWindow(store, () => {
+			const cache = new StartupStyleCache(app({ appId: "v" }));
+			cache.persist(".x{}");
+			cache.persist(".x{}");
+			cache.persist(".x{}");
+
+			assert.strictEqual(store.writes.length, 1);
+		});
+	});
+
+	it("a window with no localStorage at all is retried too", () => {
+		// `window.localStorage` being absent throws on property access, before
+		// `setItem` is ever reached — the memo must not be raised there either.
+		const store = storage();
+		withWindow(null, () => {
+			const cache = new StartupStyleCache(app({ appId: "v" }));
+			cache.persist(".x{}");
+			withWindow(store, () => {
+				cache.persist(".x{}");
+				assert.strictEqual(store.writes.length, 1);
+			});
 		});
 	});
 });

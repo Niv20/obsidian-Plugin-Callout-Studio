@@ -344,47 +344,75 @@ describe("mergeSavedSettings — keys that must NOT survive", () => {
 		assert.ok(!("fromTheFuture" in merged));
 	});
 
-	it("…but KEEPS one nested inside a spread section — pinned as found", () => {
-		// The retirement above is by name, not by shape: `mergeHeadingStyle`
-		// spreads the saved object and then `delete`s the one key it knows about.
-		// Every other unknown key rides through — and settings are written back
-		// wholesale by `toSaveData()` and copied into every export, so it rides
-		// through forever. That is the exact outcome the doc comment on
-		// `mergeHeadingStyle` says the helper exists to prevent, and it is true
-		// only of `paddingStart`.
+	it("drops an unknown field nested inside a section too", () => {
+		// The retirement above must be by shape, not by name. While the nested
+		// sections were built by spreading the saved object over the defaults,
+		// `paddingStart` was the only key that went away — because it was the
+		// only one anybody had written a `delete` for. Everything else rode
+		// through, and settings are written back wholesale by `toSaveData()`
+		// and copied into every export, so it rode through forever.
 		//
-		// The sections that spread rather than rebuild are `globalStyle`, its
-		// `heading` / `inline` / `borderSides` children, and `iconSources`;
-		// `contextMenu`, `autocomplete`, `headingCallouts` and `inlineCallouts`
-		// name their fields and so really are total. Pinned as found rather than
-		// asserted the other way: the fix is to spell out the role frame styles
-		// the way the top level is spelled out, and these are the assertions to
-		// flip when it lands.
+		// These are the four sections that were spread: `globalStyle`, its
+		// `heading` / `inline` / `borderSides` children, and `iconSources`.
+		// (`contextMenu`, `autocomplete`, `headingCallouts` and `inlineCallouts`
+		// always named their fields.)
 		const merged = mergeSavedSettings({
 			globalStyle: {
 				fromTheFuture: 1,
-				heading: { fromTheFuture: 2 },
+				heading: { fromTheFuture: 2, borderSides: { fromTheFuture: 5 } },
 				inline: { fromTheFuture: 3 },
+				borderSides: { fromTheFuture: 6 },
 			},
 			iconSources: { fromTheFuture: 4 },
 		} as unknown as Partial<PluginSettings>);
 
-		const style = merged.globalStyle as unknown as Record<string, unknown>;
-		assert.strictEqual(style.fromTheFuture, 1);
-		assert.strictEqual(
-			(merged.globalStyle.heading as unknown as Record<string, unknown>)
-				.fromTheFuture,
-			2,
+		const unknownIn = (node: unknown): boolean =>
+			"fromTheFuture" in (node as Record<string, unknown>);
+
+		assert.ok(!unknownIn(merged.globalStyle), "globalStyle");
+		assert.ok(!unknownIn(merged.globalStyle.heading), "globalStyle.heading");
+		assert.ok(!unknownIn(merged.globalStyle.inline), "globalStyle.inline");
+		assert.ok(!unknownIn(merged.globalStyle.borderSides), "borderSides");
+		assert.ok(
+			!unknownIn(merged.globalStyle.heading.borderSides),
+			"heading.borderSides",
 		);
-		assert.strictEqual(
-			(merged.globalStyle.inline as unknown as Record<string, unknown>)
-				.fromTheFuture,
-			3,
-		);
-		assert.strictEqual(
-			(merged.iconSources as unknown as Record<string, unknown>).fromTheFuture,
-			4,
-		);
+		assert.ok(!unknownIn(merged.iconSources), "iconSources");
+	});
+
+	it("keeps the known fields of a section that also carried an unknown one", () => {
+		// The other half of the same behaviour, and the one that would break if
+		// a section were "fixed" by rebuilding it from the defaults alone.
+		const merged = mergeSavedSettings({
+			globalStyle: {
+				borderWidth: 4,
+				fromTheFuture: 1,
+				heading: { marginTop: 1.5, fromTheFuture: 2 },
+				inline: { fontScale: 1.2, fromTheFuture: 3 },
+			},
+			iconSources: { materialWeightDefault: 500, fromTheFuture: 4 },
+		} as unknown as Partial<PluginSettings>);
+
+		assert.strictEqual(merged.globalStyle.borderWidth, 4);
+		assert.strictEqual(merged.globalStyle.heading.marginTop, 1.5);
+		assert.strictEqual(merged.globalStyle.inline.fontScale, 1.2);
+		assert.strictEqual(merged.iconSources.materialWeightDefault, 500);
+	});
+
+	it("keeps the optional picker styles, and invents neither", () => {
+		// `faStyleDefault` / `tablerStyleDefault` are the two fields with no
+		// entry in the defaults at all, so the rebuild has to write them only
+		// when the file names them — an `undefined` value is still a key, and
+		// would ride into `data.json` and every export as one.
+		const named = mergeSavedSettings({
+			iconSources: { faStyleDefault: "brands", tablerStyleDefault: "filled" },
+		} as Partial<PluginSettings>);
+		assert.strictEqual(named.iconSources.faStyleDefault, "brands");
+		assert.strictEqual(named.iconSources.tablerStyleDefault, "filled");
+
+		const silent = mergeSavedSettings({});
+		assert.ok(!("faStyleDefault" in silent.iconSources));
+		assert.ok(!("tablerStyleDefault" in silent.iconSources));
 	});
 
 	it("folds `lastMaterialCategory` into `lastCategory` and deletes it", () => {
@@ -553,6 +581,106 @@ describe("mergeSavedSettings — the context menu's item lists", () => {
 });
 
 /* ────────────────────────────────────────────────────────────────────────────
+ * The 1.x booleans the item list replaced
+ * ──────────────────────────────────────────────────────────────────────────── */
+
+/** The `enabled` state of one item id, in one role's merged list. */
+function state(
+	saved: Parameters<typeof mergeSavedSettings>[0],
+	role: "regular" | "heading" | "inline",
+	id: string,
+): boolean | undefined {
+	return mergeSavedSettings(saved).contextMenu.items[role].find(
+		(i) => i.id === id,
+	)?.enabled;
+}
+
+describe("mergeSavedSettings — 1.x's three menu booleans", () => {
+	it("switches the matching item off", () => {
+		// Until these were mapped, an upgrade appended the defaults whole and
+		// every hidden entry came back — a setting reset without being asked.
+		const saved = {
+			contextMenu: { enabled: true, showCopyMarkdown: false },
+		} as Parameters<typeof mergeSavedSettings>[0];
+
+		assert.strictEqual(state(saved, "regular", "copyMarkdown"), false);
+	});
+
+	it("covers all three of them", () => {
+		const saved = {
+			contextMenu: {
+				showEditCallout: false,
+				showOpenSettings: false,
+				showCopyMarkdown: false,
+			},
+		} as Parameters<typeof mergeSavedSettings>[0];
+
+		assert.strictEqual(state(saved, "regular", "edit"), false);
+		assert.strictEqual(state(saved, "regular", "openSettings"), false);
+		assert.strictEqual(state(saved, "regular", "copyMarkdown"), false);
+	});
+
+	it("leaves the items it says nothing about alone", () => {
+		const saved = {
+			contextMenu: { showCopyMarkdown: false },
+		} as Parameters<typeof mergeSavedSettings>[0];
+
+		assert.strictEqual(state(saved, "regular", "edit"), true);
+		assert.strictEqual(state(saved, "regular", "foldDefaults"), true);
+	});
+
+	it("applies to the roles 1.x never had", () => {
+		// Heading and inline callouts did not exist then, so nobody expressed an
+		// opinion about their menus — but "no Edit entry in the callout
+		// right-click menu" is an opinion that was expressed.
+		const saved = {
+			contextMenu: { showEditCallout: false },
+		} as Parameters<typeof mergeSavedSettings>[0];
+
+		assert.strictEqual(state(saved, "heading", "edit"), false);
+		assert.strictEqual(state(saved, "inline", "edit"), false);
+		assert.strictEqual(state(saved, "heading", "cutSection"), true);
+	});
+
+	it("reads them from the pre-1.0 `popup` block too", () => {
+		const saved = {
+			popup: { showCopyMarkdown: false },
+		} as Parameters<typeof mergeSavedSettings>[0];
+
+		assert.strictEqual(state(saved, "regular", "copyMarkdown"), false);
+	});
+
+	it("lets a real item list win over them — the newer shape is the answer", () => {
+		// Only reachable in a hand-built hybrid, but the precedence has to be
+		// the same one `enabled` uses: the shape this version writes wins.
+		const saved = {
+			contextMenu: {
+				showCopyMarkdown: false,
+				items: { regular: [{ id: "copyMarkdown", enabled: true }] },
+			},
+		} as Parameters<typeof mergeSavedSettings>[0];
+
+		assert.strictEqual(state(saved, "regular", "copyMarkdown"), true);
+	});
+
+	it("ignores a non-boolean, and never re-saves the dead keys", () => {
+		const saved = {
+			contextMenu: { showCopyMarkdown: "no", showEditCallout: false },
+		} as unknown as Parameters<typeof mergeSavedSettings>[0];
+		const menu = mergeSavedSettings(saved).contextMenu as unknown as Record<
+			string,
+			unknown
+		>;
+
+		assert.strictEqual(state(saved, "regular", "copyMarkdown"), true);
+		assert.strictEqual(state(saved, "regular", "edit"), false);
+		for (const key of ["showEditCallout", "showOpenSettings", "showCopyMarkdown"]) {
+			assert.ok(!(key in menu), key);
+		}
+	});
+});
+
+/* ────────────────────────────────────────────────────────────────────────────
  * The three lists
  * ──────────────────────────────────────────────────────────────────────────── */
 
@@ -707,23 +835,42 @@ describe("mergeSavedSettings — what the caller is handed", () => {
 		assert.strictEqual(DEFAULT_SETTINGS.globalStyle.borderSides.top, false);
 	});
 
-	it("`iconSources.lastCategory` is the ONE piece still shared — pinned as found", () => {
-		// `mergeIconSources` spreads `DEFAULT_SETTINGS.iconSources` and then
-		// replaces `lastCategory` only when the pre-2.4 field is present, so a
-		// file that names no category is handed the defaults' own object.
+	it("`iconSources.lastCategory` is a fresh object even when the file names none", () => {
+		// It used to be the defaults' own object: `mergeIconSources` spread
+		// `DEFAULT_SETTINGS.iconSources` and replaced `lastCategory` only when
+		// the pre-2.4 field was present, so every fresh install — and every
+		// "reset to defaults" — shared one map with the constants.
 		//
-		// Safe today only by the writer's convention: `IconPickerModal` does
-		// `sources.lastCategory = { ...sources.lastCategory, [id]: category }` —
-		// it REPLACES the object rather than assigning into it. The day someone
-		// writes `lastCategory[id] = category` instead, the picker's last-opened
-		// category leaks into `DEFAULT_SETTINGS` and from there into every merge
-		// for the rest of the session, including the "reset to defaults" path.
-		// The fix is one spread in `mergeIconSources`; this is the assertion to
-		// flip when it lands.
+		// Safe only by the writer's convention while it lasted: `IconPickerModal`
+		// does `sources.lastCategory = { ...sources.lastCategory, [id]: cat }`,
+		// which REPLACES the object rather than assigning into it. The assertion
+		// below is about the day someone writes `lastCategory[id] = cat`.
 		const merged = mergeSavedSettings({});
-		assert.strictEqual(
+		assert.notStrictEqual(
 			merged.iconSources.lastCategory,
 			DEFAULT_SETTINGS.iconSources.lastCategory,
+		);
+		assert.deepStrictEqual(
+			merged.iconSources.lastCategory,
+			DEFAULT_SETTINGS.iconSources.lastCategory,
+			"same contents, different object",
+		);
+	});
+
+	it("an in-place write to it reaches neither the defaults nor the next merge", () => {
+		const first = mergeSavedSettings({});
+		(first.iconSources.lastCategory as Record<string, string>).material =
+			"Household";
+
+		assert.strictEqual(
+			DEFAULT_SETTINGS.iconSources.lastCategory?.material,
+			"",
+			"the constants must not have moved",
+		);
+		assert.strictEqual(
+			mergeSavedSettings({}).iconSources.lastCategory?.material,
+			"",
+			"nor the merge that follows it",
 		);
 	});
 
