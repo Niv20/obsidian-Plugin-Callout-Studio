@@ -2097,8 +2097,8 @@ export class CalloutEditor extends Modal {
 
 	/**
 	 * The callout ID the live preview should render under: the real primary ID
-	 * being edited, or a readable placeholder while it is still empty (a brand-new
-	 * callout before the user types a name).
+	 * being edited, or the reserved placeholder while it is still empty (a
+	 * brand-new callout before the user types a name).
 	 */
 	private currentPreviewId(): string {
 		return this.calloutId.trim() || PREVIEW_PLACEHOLDER_ID;

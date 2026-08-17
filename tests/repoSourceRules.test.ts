@@ -619,7 +619,7 @@ describe("no new oversized files", () => {
 		"src/editor/livepreview/calloutViewPlugin.ts": 676,
 		"src/utils/colorPalettes.ts": 666,
 		"src/editor/CalloutBlockTools.ts": 666,
-		"src/utils/vaultCalloutScanner.ts": 658,
+		"src/utils/vaultCalloutScanner.ts": 654,
 		"src/editor/AutoComplete.ts": 596,
 		"src/main.ts": 556,
 		"src/icons/renderIcon.ts": 547,

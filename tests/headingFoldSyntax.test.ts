@@ -47,6 +47,7 @@ import { CALLOUT_FOLD_MARK_REGEX } from "../src/editor/contextmenu/resolve";
 import {
 	buildBlockHeaderToken,
 	buildHeadingToken,
+	splitFoldMark,
 } from "../src/editor/calloutWriter";
 import { normalizeFoldMarkersInVault } from "../src/utils/vaultCalloutScanner";
 import type { App } from "obsidian";
@@ -174,6 +175,74 @@ describe("the writers", () => {
 		);
 	});
 });
+
+/* -------------------------------------------------------------------------- */
+/* The reader, which is where the rule is actually enforced                   */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * `splitFoldMark` is the one place a `+`/`-` after a `]` is read as syntax, and
+ * it takes the role as an argument for a reason that is easy to lose.
+ *
+ * Every reader of a fold mark used to state the role rule in its own shape. The
+ * vault rewriter tested `token.role`; AutoComplete's `selectSuggestion` ran
+ * `/^([+-]?)\s*(.*)$/` with no role in it at all, and was correct only because
+ * the inline and heading branches `return` above it. That is a real guarantee
+ * and an invisible one: nothing in the regex, its variable names or its comment
+ * says the line is a blockquote, so tidying two early returns into a `switch`
+ * with shared tail work would have started eating the first character of every
+ * heading title beginning with `-` — a rewrite that looks like it worked.
+ *
+ * Passing the role in makes that a compiler-visible obligation instead. These
+ * assertions are the property itself: for the two roles that have no fold
+ * syntax, a leading `-` is title text no matter what the caller believes.
+ */
+describe("splitFoldMark reads the mark from the role, not from the caller", () => {
+	it("takes the mark off a blockquote header", () => {
+		assert.deepStrictEqual(splitFoldMark("- Title", "regular"), {
+			foldMark: "-",
+			title: " Title",
+		});
+		assert.deepStrictEqual(splitFoldMark("+ Title", "regular"), {
+			foldMark: "+",
+			title: " Title",
+		});
+	});
+
+	it("leaves a heading's leading `-` in the title", () => {
+		assert.deepStrictEqual(splitFoldMark("- Title", "heading"), {
+			foldMark: "",
+			title: "- Title",
+		});
+		assert.deepStrictEqual(splitFoldMark("+ Title", "heading"), {
+			foldMark: "",
+			title: "+ Title",
+		});
+	});
+
+	it("leaves an inline pill's alone too", () => {
+		// `[!note]-ish` is a pill followed by the user's prose; a pill has no
+		// title of its own and no fold syntax to read.
+		assert.deepStrictEqual(splitFoldMark("-ish", "inline"), {
+			foldMark: "",
+			title: "-ish",
+		});
+	});
+
+	it("reports no mark when there is none, on every role", () => {
+		for (const role of ["regular", "heading", "inline"] as const) {
+			assert.deepStrictEqual(splitFoldMark(" Title", role), {
+				foldMark: "",
+				title: " Title",
+			});
+			assert.deepStrictEqual(splitFoldMark("", role), {
+				foldMark: "",
+				title: "",
+			});
+		}
+	});
+});
+
 
 /* -------------------------------------------------------------------------- */
 /* The blockquote role, which is untouched                                    */
@@ -320,13 +389,68 @@ describe("normalizeFoldMarkersInVault — what it must not touch", () => {
 		assert.strictEqual((await normalize("> [!tip] Hi", "-")).text, "> [!tip] Hi");
 	});
 
-	it("leaves a nested block header alone — `^>` spans one `>` only", async () => {
-		// Recorded as behaviour rather than endorsed: a callout inside another
-		// callout keeps whatever marker it already had. Nothing depends on it,
-		// and widening the anchor is a vault-wide rewrite that deserves its own
-		// decision rather than a quiet fix here.
-		const { text, count } = await normalize(">> [!note]+ Hi", "-");
-		assert.strictEqual(text, ">> [!note]+ Hi");
+	it("leaves a `[!note]` that merely follows a lone `>` on the line before", async () => {
+		// The reason the quote run is `[ \t]` and not `\s`: with `\s` the run
+		// crossed the newline, so an empty quote line followed by a paragraph
+		// that happens to start with the token collected a fold mark it has no
+		// business carrying — a callout is not what either line renders as.
+		const { text, count } = await normalize(">\n[!note] Hi", "-");
+		assert.strictEqual(text, ">\n[!note] Hi");
+		assert.strictEqual(count, 0);
+	});
+});
+
+describe("normalizeFoldMarkersInVault — nesting", () => {
+	// The gap this suite was written to record, now closed. A callout inside
+	// another callout is a callout: Obsidian renders it, folds it, and reads its
+	// `+`/`-` exactly as it does at the top level. Anchoring to a single `>` left
+	// every nested occurrence on the old default while its siblings moved — a
+	// "fold defaults" change that silently did not apply to part of the vault.
+
+	it("rewrites a nested header", async () => {
+		assert.strictEqual((await normalize(">> [!note]+ Hi", "-")).text, ">> [!note]- Hi");
+		assert.strictEqual((await normalize(">> [!note] Hi", "-")).text, ">> [!note]- Hi");
+		assert.strictEqual((await normalize(">> [!note]- Hi", "")).text, ">> [!note] Hi");
+	});
+
+	it("reads the spaced spelling of the same nesting", async () => {
+		// `> > [!note]` and `>> [!note]` are one thing to Obsidian, so they must
+		// be one thing here — this is the tokenizer's own prefix, not a new one.
+		assert.strictEqual(
+			(await normalize("> > [!note]+ Hi", "-")).text,
+			"> > [!note]- Hi",
+		);
+		assert.strictEqual(
+			(await normalize(">>> [!note] Hi", "-")).text,
+			">>> [!note]- Hi",
+		);
+	});
+
+	it("keeps the quote prefix exactly as it was written", async () => {
+		// The prefix is captured and re-emitted, so a rewrite must not tidy the
+		// user's spacing into some canonical form.
+		assert.strictEqual((await normalize(">>[!note] Hi", "-")).text, ">>[!note]- Hi");
+		assert.strictEqual(
+			(await normalize(">  [!note] Hi", "-")).text,
+			">  [!note]- Hi",
+		);
+	});
+
+	it("counts a nested occurrence beside its parent", async () => {
+		const { text, count } = await normalize(
+			"> [!note] outer\n>> [!note]+ inner",
+			"-",
+		);
+		assert.strictEqual(text, "> [!note]- outer\n>> [!note]- inner");
+		assert.strictEqual(count, 2);
+	});
+
+	it("still leaves a nested heading callout alone", async () => {
+		// Depth is not what decides this — the role is. `>> ## [!note]-` is a
+		// heading inside a quote, and its `-` is still the title's first
+		// character.
+		const { text, count } = await normalize(">> ## [!note]- Hi", "-");
+		assert.strictEqual(text, ">> ## [!note]- Hi");
 		assert.strictEqual(count, 0);
 	});
 });
