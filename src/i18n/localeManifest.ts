@@ -84,9 +84,9 @@ export const LOCALE_MANIFEST = {
 		keys: 678,
 	},
 	"hi": {
-		bytes: 70648,
-		sha256: "f8c57557dc68b4bc2346bfe092b83cfa04f67954ac783c7b2648b6a4a6baac90",
-		keys: 676,
+		bytes: 71047,
+		sha256: "2ade980fdfde6a07bf509eefc703294ddc627943a4bcc32ef44fa9fd42b5ec4e",
+		keys: 678,
 	},
 	"hu": {
 		bytes: 47006,
@@ -124,9 +124,9 @@ export const LOCALE_MANIFEST = {
 		keys: 678,
 	},
 	"nl": {
-		bytes: 44668,
-		sha256: "75676574438d747bba39ca92c8fec11866c2b63e67a951519af2c1ced0f1a7b6",
-		keys: 676,
+		bytes: 44909,
+		sha256: "2bc27a5f11b212ff599adec5bfc193070ea2ce4acf502f5356f4879f4daaf666",
+		keys: 678,
 	},
 	"pl": {
 		bytes: 44608,

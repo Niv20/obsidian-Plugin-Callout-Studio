@@ -400,6 +400,9 @@ export const nl: Record<string, string> = {
 	"iconPicker.materialWeight500": "Gemiddeld (Medium)",
 	"iconPicker.materialWeight600": "Half vet (Semi Bold)",
 	"iconPicker.materialWeight700": "Vet (Bold)",
+	"iconPicker.materialFontFailed":
+		"De voorbeelden van Material-pictogrammen konden niet worden geladen. In plaats daarvan worden pictogramnamen getoond — zoeken en kiezen werken nog steeds.",
+	"iconPicker.materialFontRetry": "Opnieuw proberen",
 	"iconPicker.searchMaterial": "Material-pictogrammen zoeken",
 	"iconPicker.searchEmoji": "Emoji zoeken",
 	"iconPicker.skinTone": "Huidskleur",

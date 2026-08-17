@@ -400,6 +400,9 @@ export const hi: Record<string, string> = {
 	"iconPicker.materialWeight500": "मध्यम (Medium)",
 	"iconPicker.materialWeight600": "अर्ध-मोटा (Semi Bold)",
 	"iconPicker.materialWeight700": "मोटा (Bold)",
+	"iconPicker.materialFontFailed":
+		"Material आइकन के पूर्वावलोकन लोड नहीं हो सके। इसके बजाय आइकन के नाम दिखाए जा रहे हैं — खोज और चयन अब भी काम करते हैं।",
+	"iconPicker.materialFontRetry": "फिर से कोशिश करें",
 	"iconPicker.searchMaterial": "Material आइकन खोजें",
 	"iconPicker.searchEmoji": "इमोजी खोजें",
 	"iconPicker.skinTone": "त्वचा का रंग",
