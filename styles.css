@@ -499,13 +499,21 @@
 	box-shadow: 0 0 0 2px rgba(var(--interactive-accent-rgb), 0.2);
 }
 
+/* A greyed-out control still has to read as a control, which means it has to
+   stay *raised off* the window rather than merging into it. `--background-
+   secondary` is that raised shade only while `--modal-background` is
+   `--background-primary`; on mobile dark the two swap, so this fill landed
+   exactly on the surface behind it and the field read as a hole punched in the
+   modal — with `opacity: 0.5` making the remaining border fainter still. This
+   rule is already scoped to the callout editor, which is a chromed window, so
+   the token is always in scope here and the fallback never fires. */
 .callout-studio-editor
 	.setting-item-control
 	input[type="text"]:not(.cs-tag-input-field):disabled {
 	color: var(--text-faint);
 	opacity: 0.5;
 	cursor: not-allowed;
-	background: var(--background-secondary);
+	background: var(--cs-surface-raised, var(--background-secondary));
 }
 
 /* ─── Live Preview ────────────────────────────────────────────── */
