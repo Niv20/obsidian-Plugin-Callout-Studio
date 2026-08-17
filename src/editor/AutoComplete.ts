@@ -28,38 +28,25 @@ import { createIconResolver } from "../icons/resolver";
 import { getLocale, t } from "../i18n";
 import { splitCalloutMetadata } from "../utils/calloutId";
 import { filterUsableCallouts } from "../utils/usableCallouts";
+import { isCalloutTokenInCode } from "./calloutCodeContext";
+import {
+	moveCursorToLineBelow,
+	placeCursorAfterPick,
+} from "./autoCompleteCursor";
 import {
 	buildBlockHeaderToken,
 	buildHeadingToken,
 	buildInlineToken,
 	metadataSuffixOf,
+	splitFoldMark,
 } from "./calloutWriter";
 import {
 	getSortedCalloutIds,
 	sortCalloutsByDisplayName,
 } from "../utils/sorting";
 
-const CALLOUT_QUOTE_PREFIX_REGEX = /^((?:\s*> ?|\t)+)/;
-
-const countQuoteTokens = (prefix: string): number =>
-	(prefix.match(/>/g) ?? []).length;
-
 /** Heading hashes + whitespace and nothing else before the `[!` trigger. */
 const HEADING_TRIGGER_PREFIX_REGEX = /^#{1,6}[ \t]+$/;
-
-/**
- * Move the cursor to the start of the line below `line`, creating a plain
- * new line at end-of-document. Used after a heading-callout selection.
- */
-function moveCursorToLineBelow(editor: Editor, line: number): void {
-	const nextLine = line + 1;
-	if (nextLine < editor.lineCount()) {
-		editor.setCursor({ line: nextLine, ch: 0 });
-		return;
-	}
-	editor.replaceRange("\n", { line, ch: editor.getLine(line).length });
-	editor.setCursor({ line: nextLine, ch: 0 });
-}
 
 interface CreateNewSuggestion {
 	__createNew: true;
@@ -95,58 +82,7 @@ export class CalloutAutoComplete extends EditorSuggest<CalloutSuggestion> {
 		this.pendingRole = "regular";
 		super.close();
 
-		if (editor && line >= 0) {
-			window.requestAnimationFrame(() => {
-				window.setTimeout(() => {
-					if (role === "heading") {
-						// Heading callout: Enter drops the cursor to the
-						// START of the next line — plain, with NO `>` prefix
-						// (a heading callout has no body of its own).
-						moveCursorToLineBelow(editor, line);
-						return;
-					}
-
-					const lineText = editor.getLine(line);
-					const quoteMatch =
-						CALLOUT_QUOTE_PREFIX_REGEX.exec(lineText);
-					const quotePrefix = quoteMatch?.[1] ?? "> ";
-					const quoteDepth = countQuoteTokens(quotePrefix);
-					const nextLine = line + 1;
-
-					if (nextLine < editor.lineCount()) {
-						const nextLineText = editor.getLine(nextLine);
-						const nextPrefix =
-							CALLOUT_QUOTE_PREFIX_REGEX.exec(
-								nextLineText,
-							)?.[1] ?? "";
-						const nextDepth = countQuoteTokens(nextPrefix);
-						const targetPrefix =
-							nextDepth >= quoteDepth ? nextPrefix : quotePrefix;
-
-						if (nextPrefix !== targetPrefix) {
-							editor.replaceRange(
-								targetPrefix,
-								{ line: nextLine, ch: 0 },
-								{ line: nextLine, ch: nextPrefix.length },
-							);
-						}
-
-						editor.setCursor({
-							line: nextLine,
-							ch: targetPrefix.length,
-						});
-						return;
-					}
-
-					const endPos = { line, ch: lineText.length };
-					editor.replaceRange("\n" + quotePrefix, endPos);
-					editor.setCursor({
-						line: line + 1,
-						ch: quotePrefix.length,
-					});
-				}, 50);
-			});
-		}
+		if (editor && line >= 0) placeCursorAfterPick(editor, line, role);
 	}
 
 	/**
@@ -227,7 +163,6 @@ export class CalloutAutoComplete extends EditorSuggest<CalloutSuggestion> {
 			if (!inlineCallouts.enabled) return null;
 			role = "inline";
 		}
-		this.triggerRole = role;
 
 		// Capture the full token body (from `[!` to the next `]`, or end of
 		// line), independent of where the cursor sits within it. Reading only up
@@ -248,6 +183,20 @@ export class CalloutAutoComplete extends EditorSuggest<CalloutSuggestion> {
 		// over, so the popup closes rather than filtering on them.
 		const idEndCh = triggerIdx + 2 + query.length;
 		if (cursor.ch > idEndCh) return null;
+
+		// A `[!` in code is code, exactly as every other reader of this syntax
+		// already has it. Asked last, deliberately: it is the only check that
+		// reads past this line, and by here the cursor is known to sit inside a
+		// token — a handful of keystrokes, not every one.
+		const inCode = isCalloutTokenInCode({
+			line,
+			tokenIndex: triggerIdx,
+			lineIndex: cursor.line,
+			lineAt: (index) => editor.getLine(index),
+		});
+		if (inCode) return null;
+
+		this.triggerRole = role;
 
 		return {
 			start: { line: cursor.line, ch: triggerIdx },
@@ -481,10 +430,9 @@ export class CalloutAutoComplete extends EditorSuggest<CalloutSuggestion> {
 			return;
 		}
 
-		// Regular callout header. Pattern after `]`: optional fold mark (+/-),
-		// optional title.
-		const restMatch = /^([+-]?)\s*(.*)$/.exec(afterHeader);
-		const existingTitle = restMatch?.[2]?.trim() ?? "";
+		// Regular callout header: an optional fold mark after the `]`, then the
+		// title. The role is the splitter's argument, not the caller's position.
+		const existingTitle = splitFoldMark(afterHeader, this.triggerRole).title.trim();
 
 		// Detect if this is a brand-new callout (no title text after the header)
 		const isNewCallout = existingTitle === "";

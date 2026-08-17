@@ -676,6 +676,10 @@ export const he: Record<string, string> = {
 
 	// Vault edge-case modals
 	"vault.filesUpdated": "עודכנו {{count}} הפניות בקובצי הכספת.",
+	// The arrow stays "→" although the sentence is RTL: it sits between two
+	// callout ids, which are normally Latin, so the bidi algorithm resolves that
+	// fragment left-to-right and a mirrored "←" would point from the new id back
+	// to the old one. Prose paths such as `firstRun.laterHint` do mirror.
 	"vault.idsUpdated":
 		"עודכנו {{count}} מזהים של תיבות־הבלטה בקובצי הכספת: {{oldIds}} → {{newId}}",
 	"vault.titlesUpdated":

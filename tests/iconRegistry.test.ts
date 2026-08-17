@@ -539,13 +539,34 @@ describe("describeIcon", () => {
 		);
 	});
 
-	it("does NOT distinguish Tabler's two styles", () => {
-		// Pinned as current behaviour, not as intent: the style suffix is added
-		// only for Font Awesome, so Outline and Filled describe identically even
-		// though they are two different drawings the picker can both produce.
+	it("says which of Tabler's two styles is about to be saved", () => {
+		// The same reason Font Awesome gets a suffix: one source, one name, two
+		// different drawings the picker can both produce. A summary that reads
+		// the same for either is a summary that answers nothing.
 		assert.equal(
 			describeIcon(icon("tabler-outline", "home"), []),
-			describeIcon(icon("tabler-filled", "home"), []),
+			"Tabler Icons: home (outline)",
 		);
+		assert.equal(
+			describeIcon(icon("tabler-filled", "home"), []),
+			"Tabler Icons: home (filled)",
+		);
+	});
+
+	it("names a style for every source that has more than one", () => {
+		// The bug was one library left off the list, so the guard is the list
+		// rather than the two entries on it: a source whose `dataPacks` holds
+		// more than one file draws one name several ways, and the summary has to
+		// say which — for a style control added later just as much as for these.
+		for (const id of ICON_SOURCE_IDS) {
+			const packs = ICON_SOURCES[id].dataPacks ?? [];
+			if (packs.length < 2) continue;
+			const described = packs.map((type) => describeIcon(icon(type, "home"), []));
+			assert.equal(
+				new Set(described).size,
+				packs.length,
+				`${id} describes two of its styles the same way: ${described.join(" / ")}`,
+			);
+		}
 	});
 });

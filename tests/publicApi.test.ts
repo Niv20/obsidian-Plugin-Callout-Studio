@@ -499,13 +499,11 @@ describe("getCallout — only ever answers with what the list shows", () => {
 		assert.equal(api.getCallout("draft")?.id, "draft");
 	});
 
-	it("shows an in-progress edit of an EXISTING callout through", () => {
-		// Deliberate, and the one case where "the preview cannot leak" means the
-		// row cannot leak rather than the values cannot. A non-demo preview
-		// stands in for a real callout the user already has, and the settings
-		// rows are supposed to track that edit live — so the same map entry is
-		// what the API reads. The id set never changes; only the draft title
-		// and colours show through, and only while the modal is open.
+	it("hides an in-progress edit of an EXISTING callout", () => {
+		// The settings rows track the open editor keystroke by keystroke, and a
+		// non-demo preview passes through the registry's list view as-is so they
+		// can. An outside consumer must not see it: the API is the committed
+		// state, and `usableDefinitions` reads every row through `getReal`.
 		const { api, registry } = apiHarness();
 		registry.add(definition({ id: "quiet", displayName: "Quiet" }));
 		const before = ids(api.getCallouts());
@@ -514,9 +512,43 @@ describe("getCallout — only ever answers with what the list shows", () => {
 			definition({ id: "quiet", displayName: "Quiet (draft)" }),
 		);
 		assert.deepStrictEqual(ids(api.getCallouts()), before, "no row appeared");
-		assert.equal(api.getCallout("quiet")?.title, "Quiet (draft)");
+		assert.equal(api.getCallout("quiet")?.title, "Quiet");
 
 		registry.setPreviewDefinition(null);
+		assert.equal(api.getCallout("quiet")?.title, "Quiet");
+	});
+
+	it("hides a draft's colours from the detailed list too", () => {
+		// The same window, seen through the surface that actually carries the
+		// styling. A consumer painting a swatch per callout would otherwise
+		// track the colour picker live and keep whatever it happened to read.
+		const { api, registry } = apiHarness();
+		registry.add(definition({ id: "quiet", colorLight: "#336699" }));
+
+		registry.setPreviewDefinition(
+			definition({ id: "quiet", colorLight: "#ff0000" }),
+		);
+		const detailed = api.getCalloutsDetailed().find((d) => d.id === "quiet");
+		assert.equal(detailed?.colorLight, "#336699");
+	});
+
+	it("never answers with a draft a cancelled edit threw away", () => {
+		// Why the window matters at all. A preview fires no `onChange`, and so
+		// does taking one down — so a consumer that re-read the list mid-edit
+		// (any unrelated mutation prompts one) would cache the draft title and
+		// never be told the user pressed Cancel.
+		const { api, registry } = apiHarness();
+		registry.add(definition({ id: "quiet", displayName: "Quiet" }));
+
+		registry.setPreviewDefinition(
+			definition({ id: "quiet", displayName: "Never saved" }),
+		);
+		// Something unrelated changes, so the consumer re-reads.
+		registry.add(definition({ id: "other", displayName: "Other" }));
+		const seen = api.getCallouts().find((c) => c.id === "quiet");
+
+		registry.setPreviewDefinition(null);
+		assert.equal(seen?.title, "Quiet");
 		assert.equal(api.getCallout("quiet")?.title, "Quiet");
 	});
 });
@@ -781,26 +813,57 @@ describe("onChange — the unsubscribe really detaches", () => {
 		assert.equal(fired, 1);
 	});
 
-	it(
-		"does not cost the next listener its turn when one unsubscribes itself",
-		{ todo: "notifyChange walks changeCallbacks with for…of while offChange splices it" },
-		() => {
-			// `notifyChange` iterates the live array, so removing the running
-			// listener shifts everything after it down one while the iterator
-			// index has already moved up — and the very next listener is passed
-			// over for that round. It has never bitten anyone because API.md
-			// tells consumers to unsubscribe from `onunload`, and the fix is to
-			// iterate a copy.
-			const { api, registry } = apiHarness();
-			const fired: string[] = [];
-			const off = api.onChange(() => {
-				fired.push("first");
-				off();
-			});
-			api.onChange(() => fired.push("second"));
+	it("does not cost the next listener its turn when one unsubscribes itself", () => {
+		// `notifyChange` used to iterate the live array, so removing the running
+		// listener shifted everything after it down one while the iterator index
+		// had already moved up — and the very next listener was passed over for
+		// that round. Two plugins subscribing is enough: whether the second one
+		// hears about an add depended on what the first one did.
+		const { api, registry } = apiHarness();
+		const fired: string[] = [];
+		const off = api.onChange(() => {
+			fired.push("first");
+			off();
+		});
+		api.onChange(() => fired.push("second"));
 
-			registry.add(definition());
-			assert.deepStrictEqual(fired, ["first", "second"]);
-		},
-	);
+		registry.add(definition());
+		assert.deepStrictEqual(fired, ["first", "second"]);
+	});
+
+	it("skips every listener a callback unsubscribed, not just its own", () => {
+		// The snapshot must not go the other way either: a listener taken off
+		// during the round is gone, even though the copy still names it. Here
+		// the first callback retires both of the ones behind it.
+		const { api, registry } = apiHarness();
+		const fired: string[] = [];
+		api.onChange(() => {
+			fired.push("first");
+			offB();
+			offC();
+		});
+		const offB = api.onChange(() => fired.push("second"));
+		const offC = api.onChange(() => fired.push("third"));
+
+		registry.add(definition());
+		assert.deepStrictEqual(fired, ["first"]);
+	});
+
+	it("does not call a listener subscribed from inside the same round", () => {
+		// The mirror image. Appending to the live array mid-iteration would run
+		// the newcomer immediately, before the mutation it is watching has
+		// finished settling — and it would see the round it was not there for.
+		const { api, registry } = apiHarness();
+		const fired: string[] = [];
+		api.onChange(() => {
+			fired.push("first");
+			api.onChange(() => fired.push("late"));
+		});
+
+		registry.add(definition({ id: "a", displayName: "A" }));
+		assert.deepStrictEqual(fired, ["first"], "the newcomer waits for the next");
+
+		registry.add(definition({ id: "b", displayName: "B" }));
+		assert.deepStrictEqual(fired, ["first", "first", "late"]);
+	});
 });

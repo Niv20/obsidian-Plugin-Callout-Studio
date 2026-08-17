@@ -159,27 +159,79 @@ describe("load() — seeding the built-ins", () => {
 		assert.strictEqual(note?.source, "builtin", "re-stamped, never trusted");
 	});
 
-	it("drops a saved builtIn:true row whose id is not one of the 13", () => {
-		// Neither branch of the merge accepts it — it can't be merged onto a
-		// default that doesn't exist, and the `!saved.builtIn` branch rejects
-		// it. That is the right call (a forged built-in must not gain the
-		// built-in's theme deference), but it IS silent.
+	it("demotes a saved builtIn:true row whose id is not one of the 13", () => {
+		// It can't be merged onto a default that doesn't exist, and it must not
+		// keep the flag either — a forged built-in would gain the built-in's
+		// theme deference and be compared against a shipped row that is not
+		// there. Kept as the user row it really is, rather than dropped: the
+		// alternative silently deletes a callout the vault's notes still use.
 		const { registry } = loaded(
 			saved([def({ id: "ghost", builtIn: true, source: "builtin" })]),
 		);
-		assert.strictEqual(registry.has("ghost"), false);
-		assert.strictEqual(registry.getAll().length, 13);
+		const ghost = registry.get("ghost");
+
+		assert.strictEqual(ghost?.builtIn, false);
+		assert.strictEqual(ghost?.source, "user");
+		assert.strictEqual(registry.getAll().length, 14);
+		assert.strictEqual(registry.getBuiltIn().length, 13);
 	});
 
-	it("lets a saved user row take over a built-in id outright", () => {
-		// See the note in the file header of calloutRegistryViews.test.ts: this
-		// is the one way `getAll()` can come back WITHOUT one of the 13.
+	it("reclaims a built-in id a saved user row had taken over", () => {
+		// Such a row overwrote the seed outright and left `getAll()` holding 12
+		// built-ins — against the invariant CSSInjector, AutoComplete and the
+		// public API all read. There is only one callout per id, so the row is
+		// the built-in's customization with its flag lost: merge it onto the
+		// default, keeping the edit and restoring the seed.
 		const { registry } = loaded(
 			saved([def({ id: "note", displayName: "Mine", builtIn: false, source: "user" })]),
 		);
-		assert.strictEqual(registry.get("note")?.displayName, "Mine");
-		assert.strictEqual(registry.get("note")?.builtIn, false);
-		assert.strictEqual(registry.getBuiltIn().length, 12);
+		assert.strictEqual(registry.get("note")?.displayName, "Mine", "the edit is kept");
+		assert.strictEqual(registry.get("note")?.builtIn, true);
+		assert.strictEqual(registry.get("note")?.source, "builtin");
+		assert.strictEqual(registry.getBuiltIn().length, 13);
+		assert.strictEqual(registry.getAll().length, 13, "no duplicate row beside it");
+	});
+
+	it("keeps the rest of the built-in's fields underneath that row", () => {
+		const { registry } = loaded(
+			saved([def({ id: "note", displayName: "Mine", builtIn: false, source: "user" })]),
+		);
+		// `def()` states colours of its own, so the ones it does NOT state have
+		// to come from the shipped default, exactly as for a `builtIn: true` row.
+		assert.strictEqual(registry.get("note")?.foldable, true);
+		assert.strictEqual(registry.get("note")?.colorLight, "#336699", "the row's own");
+	});
+
+	it("flushes that repair so the file stops carrying the broken shape", () => {
+		const registry = new CalloutRegistry();
+		registry.load(
+			saved([def({ id: "note", displayName: "Mine", builtIn: false, source: "user" })]),
+		);
+		assert.strictEqual(registry.needsSaveAfterLoad(), true);
+
+		const rewritten = registry.toSaveData();
+		assert.strictEqual(rewritten.callouts[0]?.builtIn, true, "saved as a built-in now");
+
+		const second = new CalloutRegistry();
+		second.load(rewritten);
+		assert.strictEqual(second.needsSaveAfterLoad(), false, "nothing left to repair");
+		assert.strictEqual(second.get("note")?.displayName, "Mine");
+	});
+
+	it("drops a reclaimed row that turned out to match the default", () => {
+		// It carries no edit at all, so the built-in gate stops persisting it —
+		// which is only durable because the repair flushes.
+		const { registry } = loaded(
+			saved([
+				{
+					...DEFAULT_CALLOUTS.find((d) => d.id === "note"),
+					builtIn: false,
+					source: "user",
+				} as CalloutDefinition,
+			]),
+		);
+		assert.strictEqual(registry.isBuiltInModified("note"), false);
+		assert.deepStrictEqual(registry.toSaveData().callouts, []);
 	});
 
 	it("restores the icon of a callout still on the removed `svg` type", () => {
@@ -367,17 +419,29 @@ describe("update()", () => {
 		assert.strictEqual(events(), 0);
 	});
 
-	it("does NOT check aliases on a rename, unlike add()", () => {
-		// Documented as found, not as desired: `add()` rejects an id that is
-		// already an alias, `update()`'s rename path checks only `callouts.has`.
-		// So a rename can land on `summary` — the built-in `abstract`'s alias —
-		// and leave one raw id resolving through two definitions.
-		const { registry } = loaded(null);
+	it("checks aliases on a rename, exactly as add() does", () => {
+		// `summary` is the built-in `abstract`'s alias. A rename that landed on
+		// it left one raw id resolving through two definitions — `[!summary]`
+		// reaching the renamed row here and `abstract` through its alias.
+		const { registry, events } = loaded(null);
 		registry.add(def({ id: "mine" }));
+		const before = events();
 
-		assert.strictEqual(registry.update("mine", { id: "summary" }), true);
-		assert.ok(registry.has("summary"));
+		assert.strictEqual(registry.update("mine", { id: "summary" }), false);
+		assert.ok(registry.has("mine"), "the source row must survive a refusal");
+		assert.strictEqual(registry.has("summary"), false);
 		assert.strictEqual(registry.findByAlias("summary")?.id, "abstract");
+		assert.strictEqual(events(), before, "a refusal announces nothing");
+	});
+
+	it("still lets a callout be renamed onto one of its OWN aliases", () => {
+		// The row cannot conflict with itself, and `add()` accepts the same
+		// shape — a fresh definition whose id is also one of its aliases.
+		const { registry } = loaded(null);
+		registry.add(def({ id: "mine", aliases: ["mine-alt"] }));
+
+		assert.strictEqual(registry.update("mine", { id: "mine-alt" }), true);
+		assert.ok(registry.has("mine-alt"));
 	});
 });
 

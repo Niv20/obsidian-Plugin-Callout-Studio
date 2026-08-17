@@ -29,6 +29,7 @@ import {
 	scanLineForCalloutTokens,
 	tokenEnd,
 } from "../editor/calloutTokens";
+import { splitFoldMark } from "../editor/calloutWriter";
 
 function escapeRegex(str: string): string {
 	return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -64,20 +65,15 @@ function metadataSuffix(token: LineCalloutToken): string {
  * Shared by the two writers that reason about a title: the rename
  * ({@link replaceCalloutTitlesInVault}) and the type swap
  * ({@link replaceCalloutIdsInVault}). They must agree on where the title starts
- * or a replace would eat a fold mark the rename preserves.
+ * or a replace would eat a fold mark the rename preserves — which is also why
+ * the rule itself lives in `calloutWriter.splitFoldMark`, next to the writer
+ * that emits the mark, rather than being spelled out once per caller.
  */
 function splitFoldAndTitle(
 	line: string,
 	token: LineCalloutToken,
 ): { foldMark: string; title: string } {
-	const rest = line.slice(token.to);
-	if (token.role === "regular") {
-		const mark = rest.charAt(0);
-		if (mark === "+" || mark === "-") {
-			return { foldMark: mark, title: rest.slice(1) };
-		}
-	}
-	return { foldMark: "", title: rest };
+	return splitFoldMark(line.slice(token.to), token.role);
 }
 
 /**
@@ -535,19 +531,19 @@ export async function replaceCalloutIdsInVault(
 }
 
 /**
- * Rewrite `+/-` fold markers on every `> [!id]` (or alias) line in the vault
- * to match `desiredMarker` ("" = no marker, "+" = open, "-" = closed).
- * Only writes a file if at least one line changed.
+ * Rewrite `+/-` fold markers on every `> [!id]` (or alias) line in the vault to
+ * match `desiredMarker` ("" = none, "+" = open, "-" = closed). Changed files only.
  *
- * Blockquote-only, unlike the other writers in this file: `+/-` is fold syntax
- * for a block callout alone. A heading callout has no fold syntax — its
- * folding is driven by the two chevrons — so anything after `## [!id]` there is
- * plain title text and must not be touched.
+ * Blockquote-only, unlike the other writers here: `+/-` is fold syntax for a
+ * block callout alone. A heading has none — its folding is the two chevrons —
+ * so anything after `## [!id]` there is title text and must not be touched.
  *
- * The optional `|…` before `]` matches occurrences carrying Obsidian metadata:
- * `> [!note|purple]-` is a fold mark on the `note` callout like any other, and
- * an id-only pattern would silently skip it. The marker sits after the closing
- * bracket, so the metadata is only ever passed through.
+ * Any *depth* of blockquote, though: a nested `>> [!note]` folds exactly as its
+ * parent does, so the prefix matched is the tokenizer's own — and `[ \t]` not
+ * `\s`, so the run cannot cross a newline onto a `[!note]` after a lone `>`.
+ *
+ * The optional `|…` before `]` matches occurrences carrying metadata, which an
+ * id-only pattern would skip; the mark sits after the `]` and passes through.
  */
 export async function normalizeFoldMarkersInVault(
 	app: App,
@@ -558,7 +554,7 @@ export async function normalizeFoldMarkersInVault(
 
 	const pattern = ids.map(escapeRegex).join("|");
 	const regex = new RegExp(
-		`(^>\\s*\\[!(?:${pattern})(?:\\|[^\\]\\n\\r]*)?\\])([+-]?)`,
+		`(^(?:>[ \\t]*)+\\[!(?:${pattern})(?:\\|[^\\]\\n\\r]*)?\\])([+-]?)`,
 		"gim",
 	);
 

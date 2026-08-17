@@ -8,6 +8,7 @@ import type { CalloutIcon, UserImageIcon } from "../types";
 import { packFor } from "./registry";
 import { MATERIAL_DEFAULT_STYLE, MATERIAL_DEFAULT_WEIGHT } from "./packs/material";
 import { faStyleOf } from "./packs/fontAwesome";
+import { tablerStyleOf } from "./packs/tabler";
 import { emojiLabelFor } from "./packs/emoji";
 import { t } from "../i18n";
 
@@ -30,9 +31,11 @@ export function describeIcon(
 	if (icon.type === "emoji") {
 		return `${source}: ${emojiLabelFor(icon.value) ?? icon.value}`;
 	}
-	// Font Awesome's three styles share one source, so the name alone would not
-	// say which drawing is about to be saved.
-	const faStyle = faStyleOf(icon);
-	if (faStyle) return `${source}: ${icon.value} (${faStyle})`;
+	// Both libraries with a style control put several drawings of one name under
+	// one source, so the name alone would not say which is about to be saved.
+	// Every such source belongs here — leaving Tabler out was what let its
+	// Outline and Filled describe identically.
+	const style = faStyleOf(icon) ?? tablerStyleOf(icon);
+	if (style) return `${source}: ${icon.value} (${style})`;
 	return `${source}: ${icon.value}`;
 }

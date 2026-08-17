@@ -12,7 +12,7 @@
  * that happened on some other machine would be trusting nothing at all — the
  * same reasoning that makes PackDataStore re-verify its checksums on each load.
  */
-import { sanitizeUserSvg } from "../icons/svg";
+import { sanitizeUserSvg, type SanitizedUserSvg } from "../icons/svg";
 import type { UserImageIcon } from "../types";
 
 /** Prefix for a picture's stable id, stored as `CalloutIcon.value`. */
@@ -109,9 +109,12 @@ export function takenUserImageNames(
  * a batch, it may run twice over the same source, and dropping an entry there
  * would quietly cost a callout its icon. So it renames.
  *
- * The loop is bounded because `userImageNameFromFilename` caps the length, and
- * a long enough stem truncates back to the very name being avoided. `unique` is
- * the way out: it is the picture's own id, so it collides with nothing.
+ * The loop is bounded, and `unique` is the way out: it is the picture's own id,
+ * so it collides with nothing. That promise only holds because every candidate
+ * is built by {@link withSuffix}, which makes room by shortening the *stem*.
+ * Appending the suffix and truncating the result afterwards throws the suffix
+ * away again whenever the stem is already at the cap — which handed back the
+ * very name being avoided, id fallback included.
  */
 export function claimUserImageName(
 	name: string,
@@ -124,14 +127,33 @@ export function claimUserImageName(
 
 	let candidate = name;
 	for (let n = 2; n < 100 && taken.has(normalizeUserImageName(candidate)); n++) {
-		candidate = userImageNameFromFilename(`${stem} (${n})${extension}`);
+		candidate = withSuffix(stem, String(n), extension);
 	}
 	if (taken.has(normalizeUserImageName(candidate))) {
-		candidate = userImageNameFromFilename(`${stem} (${unique})${extension}`);
+		candidate = withSuffix(stem, unique, extension);
 	}
 
 	taken.add(normalizeUserImageName(candidate));
 	return candidate;
+}
+
+/**
+ * `stem (suffix).ext`, kept inside the cap by shortening the stem alone.
+ *
+ * The suffix is the only part that makes the name new and the extension is half
+ * of what tells two pictures apart, so neither may be cut — which leaves the
+ * stem, down to a single character if that is what it takes. A label the user
+ * can still tell apart, however short, beats two rows reading the same.
+ *
+ * A pathological extension (a last dot near the end of a very long name) can
+ * still push the result past the cap, exactly as it can in
+ * {@link userImageNameFromFilename}: the cap is a guard, and losing the suffix
+ * to honour it is the worse trade.
+ */
+function withSuffix(stem: string, suffix: string, extension: string): string {
+	const tail = ` (${suffix})${extension}`;
+	const room = Math.max(1, MAX_NAME_LENGTH - tail.length);
+	return `${stem.slice(0, room).trimEnd()}${tail}`;
 }
 
 /**
@@ -156,7 +178,7 @@ export function sanitizeUserImages(raw: unknown): UserImageIcon[] {
 
 		// Re-filter rather than trust: this markup may have been written by an
 		// older build, edited by hand, or handed over in an import file.
-		const artwork = sanitizeUserSvg(image.svg);
+		const artwork = filterArtwork(image.svg);
 		if (!artwork) continue;
 
 		const format = image.format as UserImageIcon["format"];
@@ -188,6 +210,29 @@ export function sanitizeUserImages(raw: unknown): UserImageIcon[] {
 		});
 	}
 	return result;
+}
+
+/**
+ * `sanitizeUserSvg`, with a thrown error read the same way as a refusal.
+ *
+ * This filter runs on every read of `data.json`, from inside
+ * `mergeSavedSettings` — the load path, before anything is on screen. So one
+ * picture must not be able to throw here: that is not a missing icon, it is the
+ * plugin failing to load and every callout in the vault losing its styling at
+ * once. The filter also needs `DOMParser`, which Obsidian has and not every
+ * realm this module can be evaluated in does (`renderIcon` guards the same way,
+ * for the same reason).
+ *
+ * Dropping is the safe direction, and the only one: "the artwork could not be
+ * checked" and "the artwork did not pass" have the same answer, so nothing
+ * unfiltered is ever let through here.
+ */
+function filterArtwork(raw: string): SanitizedUserSvg | null {
+	try {
+		return sanitizeUserSvg(raw);
+	} catch {
+		return null;
+	}
 }
 
 /**

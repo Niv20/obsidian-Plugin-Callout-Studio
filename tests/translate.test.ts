@@ -202,25 +202,52 @@ describe("t() interpolates {{placeholder}} tokens", () => {
 	});
 
 	/**
-	 * `String.prototype.replace` reads `$&`, `` $` ``, `$'`, `$$` and `$1` in a
-	 * *string* replacement as patterns, and `t()` passes the parameter straight
-	 * in as one. Almost every `{{name}}` in this plugin carries user-controlled
-	 * text — a callout's display name, a file name, an icon name — so a callout
-	 * called `A$&B` renders as `A{{name}}B`, and one called `$$` renders as `$`.
+	 * `String.prototype.replace` reads `$&`, `` $` ``, `$'`, `$$` and `$n` in a
+	 * *string* replacement as patterns rather than as characters, so passing the
+	 * parameter straight in as one makes the substituted text re-enter the
+	 * substitution. Almost every `{{name}}` in this plugin carries text the user
+	 * typed — a callout's display name, a file name, an icon name — so this is
+	 * reachable without anyone doing anything unusual: a callout called `A$&B`
+	 * used to render as `A{{name}}B`, because `$&` re-inserts the token that was
+	 * just matched, and one called `$$` used to render as a single `$`.
 	 *
-	 * Marked `todo` so it reports on every run without failing the suite: the
-	 * fix is one line (pass a replacer function instead of a string), but it is
-	 * a change to shipping code and this file's job is to report, not to force.
+	 * The fix is to hand `replace` a function, which receives the value verbatim.
 	 */
-	it(
-		"treats a parameter as literal text, not as a replacement pattern",
-		{ todo: "String.replace reads $& / $$ in the replacement — see above" },
-		() => {
-			setLocale("partial");
-			assert.strictEqual(t("probe.template", { name: "A$&B" }), "one A$&B, two A$&B");
-			assert.strictEqual(t("probe.template", { name: "$$" }), "one $$, two $$");
-		},
-	);
+	it("treats a parameter as literal text, not as a replacement pattern", () => {
+		setLocale("partial");
+		// `$&` — the whole match. Used to put the token back, unfilled.
+		assert.strictEqual(t("probe.template", { name: "A$&B" }), "one A$&B, two A$&B");
+		// `$$` — an escaped dollar. Used to halve every run of them.
+		assert.strictEqual(t("probe.template", { name: "$$" }), "one $$, two $$");
+		assert.strictEqual(t("probe.template", { name: "$" }), "one $, two $");
+		// `` $` `` / `$'` — the text before and after the match. Used to splice
+		// the rest of the sentence in, at a position that differs per occurrence.
+		assert.strictEqual(
+			t("probe.template", { name: "X$`Y" }),
+			"one X$`Y, two X$`Y",
+		);
+		assert.strictEqual(
+			t("probe.template", { name: "X$'Y" }),
+			"one X$'Y, two X$'Y",
+		);
+		// `$n` / `$<n>` — capture groups. The token regex has none, so these
+		// already survived; pinned so a future capturing group cannot break them.
+		assert.strictEqual(t("probe.template", { name: "$1" }), "one $1, two $1");
+		assert.strictEqual(
+			t("probe.template", { name: "$<name>" }),
+			"one $<name>, two $<name>",
+		);
+	});
+
+	it("substitutes a real display name that is nothing but dollars", () => {
+		// The regression as a user meets it rather than as a pattern table: a
+		// callout named `$$$` in a sentence English really ships. Before the fix
+		// this rendered `$$`, one character short, with nothing to suggest why.
+		setLocale("en");
+		const rendered = t(REAL_TEMPLATE_KEY, { name: "$$$" });
+		assert.ok(rendered.includes("$$$"), rendered);
+		assert.ok(!rendered.includes("{{"), rendered);
+	});
 });
 
 /* -------------------------------------------------------------------------- */

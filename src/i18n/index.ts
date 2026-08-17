@@ -214,6 +214,15 @@ export function setLocale(pref: string): void {
 
 /**
  * Translate a key, optionally interpolating `{{placeholder}}` tokens.
+ *
+ * The replacement is passed as a **function**, never as a string. Almost every
+ * `{{name}}` in this plugin carries text the user typed — a callout's display
+ * name, a file name, an icon name — and `String.prototype.replace` reads `$&`,
+ * `` $` ``, `$'`, `$$` and `$1` in a *string* replacement as patterns rather
+ * than as characters. A callout called `A$&B` would come back as `A{{name}}B`
+ * (`$&` re-inserting the token that was just matched) and one called `$$` as a
+ * single `$`. A replacer function is handed the value verbatim, so the only
+ * thing this substitutes is the parameter itself.
  */
 export function t(key: string, vars?: Record<string, string | number>): string {
 	const table = locales[currentLocale] ?? en;
@@ -221,9 +230,10 @@ export function t(key: string, vars?: Record<string, string | number>): string {
 
 	if (vars) {
 		for (const [k, v] of Object.entries(vars)) {
+			const literal = String(v);
 			value = value.replace(
 				new RegExp(`\\{\\{${k}\\}\\}`, "g"),
-				String(v),
+				() => literal,
 			);
 		}
 	}

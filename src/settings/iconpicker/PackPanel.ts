@@ -411,9 +411,9 @@ export class PackPanel {
 	/**
 	 * The heading that opens each source's run of results in the pooled list.
 	 *
-	 * Pooling preserves order — the pooled index concatenates its members and the
-	 * search filters in place — so a source change is exactly a group boundary,
-	 * and no sorting is needed to find one.
+	 * Pooling preserves the run — the pooled index concatenates its members and
+	 * `filterIcons` ranks within a source, not across the list — so a source
+	 * change is exactly a group boundary, and no sorting is needed to find one.
 	 */
 	private groupLabelFor(
 		entry: IconEntry,

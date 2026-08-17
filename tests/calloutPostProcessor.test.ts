@@ -25,6 +25,11 @@
  *   counts disagree, or when pass A already removed some, everything renders. A
  *   missing escape is a milder failure than a missing pill.
  *
+ * The last suite is the odd one out: it reads this processor's own source
+ * rather than running it, because "the two heading passes share one branch" has
+ * no behaviour to observe — and a duplicated branch on one setting is precisely
+ * the shape a later edit splits in half.
+ *
  * The DOM is the fake one from `tests/support/fakeDom.ts` and icons are Lucide
  * throughout, so painting bottoms out in the stubbed `setIcon`.
  */
@@ -38,6 +43,7 @@ import {
 	readingHarness,
 	type ReadingHarness,
 } from "./support/readingHarness";
+import { pluginSourceFiles } from "./support/sourceScan";
 import { CSS_GRAD_CHAR } from "../src/reading/gradientTitleText";
 import {
 	CSS_ANIM_IN,
@@ -732,27 +738,33 @@ describe("inline pills", () => {
 		assert.ok(one(root, `.${CSS_HEADING_TITLE}`).querySelector(`.${CSS_INLINE_TOKEN}`));
 	});
 
-	it(
-		"leaves a heading's token raw when the heading role is off",
-		{
-			todo:
-				"the `headingCallouts.enabled` term in the isHeadingLeadingTextNode " +
-				"guard turns the guard OFF with the role, so reading view pills the " +
-				"heading token while Live Preview (which `continue`s on " +
-				"`role === \"heading\"`) leaves it raw",
-		},
-		() => {
-			const h = withQuiet();
-			h.settings.headingCallouts.enabled = false;
-			const root = h.render(
-				"<div><h2>[!quiet] My title</h2></div>",
-				"## [!quiet] My title",
-			);
+	it("leaves a heading's token raw when the heading role is off", () => {
+		// Turning the role off must stop the BAR, not swap it for a pill. Live
+		// Preview `continue`s on `role === "heading"` and leaves the raw `[!id]`
+		// standing, so the guard that keeps a heading's own token out of this
+		// pass has to hold whether the role is on or off — otherwise the same
+		// note reads two different ways on the two surfaces.
+		const h = withQuiet();
+		h.settings.headingCallouts.enabled = false;
+		const root = h.render(
+			"<div><h2>[!quiet] My title</h2></div>",
+			"## [!quiet] My title",
+		);
 
-			assert.strictEqual(pills(root).length, 0);
-			assert.strictEqual(one(root, "h2").textContent, "[!quiet] My title");
-		},
-	);
+		assert.strictEqual(pills(root).length, 0);
+		assert.strictEqual(one(root, "h2").textContent, "[!quiet] My title");
+	});
+
+	it("leaves it raw with no source line to consult either", () => {
+		// The embed / PDF-export path: `getSectionInfo` answers null, so the
+		// guard is the only thing standing between the heading token and a pill.
+		const h = withQuiet();
+		h.settings.headingCallouts.enabled = false;
+		const root = h.render("<div><h2>[!quiet] My title</h2></div>");
+
+		assert.strictEqual(pills(root).length, 0);
+		assert.strictEqual(one(root, "h2").textContent, "[!quiet] My title");
+	});
 });
 
 describe("inline pills — escaped tokens", () => {
@@ -998,5 +1010,102 @@ describe("content pills — the shapes it refuses", () => {
 		);
 
 		assert.strictEqual(root.textContent, "x [!quiet]{be careful} y");
+	});
+
+	it("a heading's own token, even with the heading role off", () => {
+		// Same guard as the plain-pill pass, and for the same reason: with the
+		// role off the heading transform never runs, so this pass is what stands
+		// between `## [!quiet]{x}` and a content pill Live Preview would never
+		// draw. The inline role is still on here — that is the whole point.
+		const h = withQuiet();
+		h.settings.headingCallouts.enabled = false;
+		const root = h.render(
+			"<div><h2>[!quiet]{shhh} My title</h2></div>",
+			"## [!quiet]{shhh} My title",
+		);
+
+		assert.strictEqual(pills(root).length, 0);
+		assert.strictEqual(root.querySelector(`.${CSS_CALLOUT_PAYLOAD}`), null);
+		assert.strictEqual(
+			one(root, "h2").textContent,
+			"[!quiet]{shhh} My title",
+		);
+	});
+});
+
+describe("content pills — what survives pass A", () => {
+	/**
+	 * The plain-pill pass refuses a token whose payload is non-empty, because
+	 * widening a pill over `{…}` would swallow the payload instead of rendering
+	 * it. Reaching that guard at all takes some doing, and the two ways below
+	 * are the whole list — which is what makes them worth pinning:
+	 *
+	 * The shapes pass A *refuses across siblings* (interleaved markup, a `<br>`,
+	 * a block element) never arrive as a closed payload at all: the `}` is then
+	 * in another node, so scanning this node alone reports `contentOpen` and the
+	 * line above it takes them first. Neither does anything while `allowContent`
+	 * is off — the scan is told not to parse payloads, so no token carries one.
+	 */
+	it("a payload pass A could not balance inside one node", () => {
+		// Pass A counts braces in the raw node text; the scan that classified
+		// the token blanks inline code first. An escaped backtick span carrying
+		// an unmatched `{` is where the two disagree — the scan closes the
+		// payload at the final `}`, pass A's walk never gets back to depth zero.
+		const h = withQuiet();
+		const root = h.render(
+			"<p>[!quiet]{a `x{` b} tail</p>",
+			"[!quiet]{a \\`x{\\` b} tail",
+		);
+
+		assert.strictEqual(pills(root).length, 0);
+		assert.strictEqual(root.textContent, "[!quiet]{a `x{` b} tail");
+	});
+
+	it("everything past pass A's 256-splice cap", () => {
+		// Pass A restarts its walk after every splice and is bounded at 256, so
+		// a block with more payloads than that hands the remainder on with the
+		// payload still closed. The 257th stays the author's own text.
+		const h = withQuiet();
+		const root = h.render(`<p>${"[!quiet]{x} ".repeat(257)}</p>`);
+
+		assert.strictEqual(
+			root.querySelectorAll(`.${CSS_CALLOUT_PAYLOAD}`).length,
+			256,
+		);
+		assert.strictEqual(pills(root).length, 256);
+		assert.ok(root.textContent.endsWith("[!quiet]{x} "));
+	});
+});
+
+/* -------------------------------------------------------------------------- */
+/* The entry point's own shape                                                */
+/* -------------------------------------------------------------------------- */
+
+describe("the heading passes share one branch", () => {
+	// Nothing behavioural separates one `if (headingEnabled)` from two running
+	// back to back, which is exactly why only the source can catch it: both
+	// heading passes answer to the one setting, and a second branch on it reads
+	// as a second condition. The cost is paid later — the next pass gets added
+	// under whichever branch is nearest, and the two are then one edit away from
+	// disagreeing about when the role is on.
+	const file = pluginSourceFiles().find(
+		(f) => f.path === "src/reading/calloutPostProcessor.ts",
+	);
+
+	it("is still the file this suite is about", () => {
+		assert.ok(file, "src/reading/calloutPostProcessor.ts moved or is gone");
+	});
+
+	it("branches on `headingEnabled` exactly once", () => {
+		// `file.code` has comments and string bodies blanked, so a mention of
+		// the branch in prose above it cannot be mistaken for the branch itself.
+		const hits = (file?.code ?? "").match(/if\s*\(\s*headingEnabled\s*\)/g);
+
+		assert.strictEqual(
+			hits?.length,
+			1,
+			`the post-processor tests headingEnabled ${hits?.length ?? 0} times — ` +
+				"the heading transform and the reference repair belong in one block",
+		);
 	});
 });

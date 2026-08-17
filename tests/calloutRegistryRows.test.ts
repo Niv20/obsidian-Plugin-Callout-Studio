@@ -150,17 +150,35 @@ describe("restyleUncustomizedFallbackRows — who is mirrored", () => {
 		assert.strictEqual(events(), before);
 	});
 
-	it("counts rows TOUCHED, not rows changed — a second call is not free", () => {
-		// Pinned as found. The pass writes unconditionally instead of diffing,
-		// so calling it on an already-mirrored vault still reports the row and
-		// still fires the change event: a full stylesheet regeneration, an icon
-		// repaint and a data.json write for a no-op. The method's own doc says
-		// it notifies "only when at least one row actually changed", which is
-		// true of the count but not of the content.
+	it("counts rows CHANGED, not rows visited — a second call is free", () => {
+		// The pass runs on every fallback edit, every fallback-target delete and
+		// every discovery sweep, so most of its work lands on rows already
+		// wearing this style. Writing those back unconditionally reported them
+		// as updated and fired the change event anyway: a full stylesheet
+		// regeneration, an icon repaint and a data.json write for a no-op.
 		const { registry, events } = withFallback();
 		assert.strictEqual(registry.restyleUncustomizedFallbackRows(), 1);
+		assert.strictEqual(registry.restyleUncustomizedFallbackRows(), 0);
+		assert.strictEqual(events(), 1);
+	});
+
+	it("still reports a row that drifts back out of the mirror", () => {
+		// The diff is on content, so it must not latch: a row edited away from
+		// the fallback style is mirrored again on the next pass.
+		const { registry } = withFallback();
 		assert.strictEqual(registry.restyleUncustomizedFallbackRows(), 1);
-		assert.strictEqual(events(), 2);
+
+		registry.update("f1", { colorLight: "#00ff00" });
+		assert.strictEqual(registry.restyleUncustomizedFallbackRows(), 1);
+		assert.strictEqual(registry.get("f1")?.colorLight, "#ff0000");
+	});
+
+	it("reports only the rows that differ, not every row it walks", () => {
+		const { registry } = withFallback({}, [
+			def({ id: "drifted", source: "fallback", colorLight: "#0000ff" }),
+		]);
+		assert.strictEqual(registry.restyleUncustomizedFallbackRows(), 2);
+		assert.strictEqual(registry.restyleUncustomizedFallbackRows(), 0);
 	});
 });
 
@@ -304,13 +322,33 @@ describe("restyleUncustomizedFallbackRows — the callers that trigger it", () =
 		);
 	});
 
-	it("costs two change rounds on those paths, not one", () => {
-		// Pinned as found, same shape as applyPaletteColors: the mirror pass
-		// notifies on its own and then the caller notifies again, so one delete
-		// (or one edit) regenerates the stylesheet and writes data.json twice.
+	it("costs ONE change round on those paths, not two", () => {
+		// The mirror pass notifies on its own and the caller notifies again, so
+		// un-batched a single delete (or edit) regenerated the stylesheet,
+		// repainted every icon and wrote data.json twice.
 		const { registry, events } = withFallback();
 		registry.remove("base");
-		assert.strictEqual(events(), 2);
+		assert.strictEqual(events(), 1);
+	});
+
+	it("costs one round for an edit of the fallback callout too", () => {
+		const { registry, events } = withFallback();
+		registry.update("base", { colorLight: "#00ff00" });
+		assert.strictEqual(events(), 1);
+		assert.strictEqual(registry.get("f1")?.colorLight, "#00ff00", "still mirrored");
+	});
+
+	it("holds the mirrored rows back until the one event fires", () => {
+		// The whole point of the batch: a listener must never see the fallback
+		// deleted while the rows that copy it still wear its old style.
+		const { registry } = withFallback();
+		let seen: string | undefined;
+		registry.onChange(() => {
+			seen = registry.get("f1")?.colorLight;
+		});
+		registry.remove("base");
+
+		assert.strictEqual(seen, registry.get("note")?.colorLight);
 	});
 });
 
@@ -332,6 +370,14 @@ describe("convertToFallback", () => {
 		registry.convertToFallback("mine");
 
 		assert.ok(!("customized" in (registry.get("mine") as object)), "deleted, not false");
+	});
+
+	it("announces the conversion and the re-style as one round", () => {
+		const { registry, events } = withFallback({}, [
+			def({ id: "mine", source: "user", customized: true }),
+		]);
+		assert.strictEqual(registry.convertToFallback("mine"), true);
+		assert.strictEqual(events(), 1);
 	});
 
 	it("refuses a built-in", () => {
@@ -438,15 +484,15 @@ describe("isBuiltInModified", () => {
 		assert.strictEqual(registry.isBuiltInModified("nope"), false);
 	});
 
-	it("answers about a saved USER row squatting on a built-in id, too", () => {
-		// Pinned as found: the comparison is keyed on the id, not on the row's
-		// own `builtIn`. Harmless — `toSaveData` persists such a row through the
-		// user branch anyway — but the name reads as a question about a built-in
-		// when the row in question is not one.
+	it("answers about a row that squatted on a built-in id — now reclaimed as one", () => {
+		// The comparison is keyed on the id rather than on the row's own
+		// `builtIn`, which used to mean it answered "yes, modified" about a row
+		// whose `builtIn` was false. `load()` reclaims such a row as the
+		// built-in it names, so the two now agree.
 		const { registry } = loaded(
 			saved([def({ id: "note", displayName: "Mine", builtIn: false, source: "user" })]),
 		);
-		assert.strictEqual(registry.get("note")?.builtIn, false);
+		assert.strictEqual(registry.get("note")?.builtIn, true);
 		assert.strictEqual(registry.isBuiltInModified("note"), true);
 	});
 });
@@ -501,11 +547,14 @@ describe("resetBuiltIn", () => {
 		assert.strictEqual(events(), 0);
 	});
 
-	it("re-seeds a built-in id a saved user row had taken over", () => {
+	it("clears the edit a saved row had carried onto a built-in id", () => {
+		// `load()` reclaims such a row as the built-in it names, keeping its
+		// edit; this is the user throwing that edit away.
 		const { registry } = loaded(
 			saved([def({ id: "note", displayName: "Mine", builtIn: false, source: "user" })]),
 		);
 		assert.strictEqual(registry.resetBuiltIn("note"), true);
+		assert.strictEqual(registry.get("note")?.displayName, "Note");
 		assert.strictEqual(registry.get("note")?.builtIn, true);
 		assert.strictEqual(registry.getBuiltIn().length, 13);
 	});

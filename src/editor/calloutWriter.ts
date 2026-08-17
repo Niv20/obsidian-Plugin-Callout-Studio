@@ -11,7 +11,7 @@
  * Placing the token in the document is the caller's job, because that is where
  * the nesting and selection math lives (see CalloutBlockTools).
  */
-import type { CalloutDefinition } from "../types";
+import type { CalloutDefinition, CalloutRenderRole } from "../types";
 import { splitCalloutMetadata } from "../utils/calloutId";
 
 export interface TokenBuildOptions {
@@ -45,6 +45,31 @@ export function metadataSuffixOf(line: string, startCh: number): string {
 export function foldMarkFor(def: CalloutDefinition): string {
 	if (!def.foldable) return "";
 	return def.defaultFolded ? "-" : "+";
+}
+
+/**
+ * The reading half of {@link foldMarkFor}: splits the text that follows a
+ * token's `]` into the fold mark and the title, for a token in `role`.
+ *
+ * The role is an argument rather than an assumption, and that is the whole
+ * point. Only the blockquote role has fold syntax — `### [!tip]- Title` is the
+ * `tip` callout titled `- Title`, and `[!tip]-` inline is a pill followed by a
+ * dash — so reading a mark on any other role deletes a character the user
+ * typed, in a rewrite that looks like it worked. Both callers used to decide
+ * that by *where the call sat*: the vault rewriter behind a `token.role` test,
+ * AutoComplete behind two early `return`s that keep the inline and heading
+ * roles from ever reaching its regex. The second is a rule no signature states,
+ * that no compiler checks, and that tidying the returns would quietly undo.
+ */
+export function splitFoldMark(
+	afterBracket: string,
+	role: CalloutRenderRole,
+): { foldMark: "" | "+" | "-"; title: string } {
+	const mark = afterBracket.charAt(0);
+	if (role === "regular" && (mark === "+" || mark === "-")) {
+		return { foldMark: mark, title: afterBracket.slice(1) };
+	}
+	return { foldMark: "", title: afterBracket };
 }
 
 /**

@@ -332,6 +332,25 @@ describe("setPreviewDefinition — the bookkeeping around the slot", () => {
 		assert.strictEqual(previews, 0, "rows keep rendering the last committed state");
 	});
 
+	it("keeps the next listener's turn when one unsubscribes itself", () => {
+		// Same defect as onChange's, in the other notifier: walking the live
+		// array while `offPreviewChange` splices it costs the following listener
+		// that round. The settings tab is the only subscriber today, so this is
+		// a guard rather than a report — but fixing one notifier and not the
+		// other is exactly how the two drift apart.
+		const registry = loaded(saved([def({ id: "mine" })]));
+		const fired: string[] = [];
+		const first = (): void => {
+			fired.push("first");
+			registry.offPreviewChange(first);
+		};
+		registry.onPreviewChange(first);
+		registry.onPreviewChange(() => fired.push("second"));
+
+		registry.setPreviewDefinition(def({ id: "mine", displayName: "Typing…" }));
+		assert.deepStrictEqual(fired, ["first", "second"]);
+	});
+
 	it("unsubscribes cleanly from both listener lists", () => {
 		const registry = loaded(null);
 		let changes = 0;

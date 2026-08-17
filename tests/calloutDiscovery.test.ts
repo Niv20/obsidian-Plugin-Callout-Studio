@@ -39,6 +39,7 @@ import {
 } from "./support/discoveryHarness";
 import { DEFAULT_CALLOUTS } from "../src/constants";
 import { scanStringForUnknownCallouts } from "../src/utils/vaultCalloutScanner";
+import { filterUsableCallouts } from "../src/utils/usableCallouts";
 import type { CalloutDefinition } from "../src/types";
 
 const noteDefault = DEFAULT_CALLOUTS.find(
@@ -174,93 +175,128 @@ describe("addUnknownCalloutsAsFallback — the shape of a created row", () => {
 		);
 	});
 
-	it(
-		"does not inherit the fallback callout's `customized` flag",
-		{
-			todo: "`{...fallback}` copies it — see the block comment below",
-		},
-		async () => {
-			// The row is built by spreading the fallback definition whole, and
-			// only six keys are overridden after it (`icon`, `id`,
-			// `displayName`, `aliases`, `builtIn`, `source`). `customized` is not
-			// one of them, so the moment the user points **Fallback callout** at
-			// one of their own callouts — every user-created callout is saved
-			// with `customized: true` — every row discovery creates from then on
-			// is born claiming to have been edited by hand.
-			//
-			// Two things follow, and both are silent: `pruneUnused` skips the row
-			// forever, so auto-created rows accumulate and never clean
-			// themselves up; and `filterUsableCallouts` reads it as adopted, so
-			// it keeps being offered in autocomplete long after its last usage
-			// is gone.
-			//
-			// `restyleUncustomizedFallbackRows` — the *other* place a fallback
-			// row is made to mirror the fallback callout — deliberately copies
-			// only the style fields and never this flag. The two paths should
-			// agree on what "mirror the fallback" means.
-			const h = discoveryHarness({ "note.md": "plain" });
-			h.registry.add(
-				definition({ id: "mystyle", source: "user", customized: true }),
-			);
-			h.settings.fallbackCalloutId = "mystyle";
-			h.discovery.addUnknownCalloutsAsFallback(["alpha"]);
+	it("does not inherit the fallback callout's `customized` flag", async () => {
+		// The row is built by spreading the fallback definition whole, and the
+		// keys overridden after it are this row's own identity. `customized`
+		// used not to be among them, so the moment the user pointed **Fallback
+		// callout** at one of their own callouts — every user-created callout
+		// is saved with `customized: true` — every row discovery created from
+		// then on was born claiming to have been edited by hand.
+		//
+		// Two things followed, and both were silent: `pruneUnused` skipped the
+		// row forever, so auto-created rows accumulated and never cleaned
+		// themselves up; and `filterUsableCallouts` read it as adopted, so it
+		// kept being offered in autocomplete long after its last usage was
+		// gone.
+		//
+		// `restyleUncustomizedFallbackRows` — the *other* place a fallback row
+		// is made to mirror the fallback callout — copies only the style fields
+		// and never this flag. Both assertions below are on the consequences
+		// rather than the flag alone, because the flag is only ever read
+		// through them.
+		const h = discoveryHarness({ "note.md": "plain" });
+		h.registry.add(
+			definition({ id: "mystyle", source: "user", customized: true }),
+		);
+		h.settings.fallbackCalloutId = "mystyle";
+		h.discovery.addUnknownCalloutsAsFallback(["alpha"]);
 
-			assert.notStrictEqual(
-				row(h.registry.get("alpha"), "alpha").customized,
-				true,
-			);
-			assert.strictEqual(await h.discovery.pruneUnused(), 1);
-		},
-	);
+		const alpha = row(h.registry.get("alpha"), "alpha");
+		assert.notStrictEqual(alpha.customized, true);
+		// Autocomplete: a row a scan has confirmed is unused must not survive
+		// the filter as if the user had adopted it.
+		assert.deepStrictEqual(filterUsableCallouts([alpha], () => true), []);
+		// The prune: `note.md` never mentions `[!alpha]`, so the row is unused
+		// and must go.
+		assert.strictEqual(await h.discovery.pruneUnused(), 1);
+		assert.strictEqual(h.registry.get("alpha"), undefined);
+	});
 
-	it(
-		"does not inherit the fallback callout's `externalStyle` flag",
-		{
-			todo: "`{...fallback}` copies it — same cause as `customized` above",
-		},
-		async () => {
-			// The same spread, and a sharper consequence: `externalStyle` means
-			// "this callout's styling belongs to the theme", so a row born with
-			// it is skipped by `restyleUncustomizedFallbackRows` as well as by
-			// the prune — it can never follow the fallback again, and the CSS
-			// that would have painted it is suppressed.
-			const h = discoveryHarness({ "note.md": "plain" });
-			h.registry.add(
-				definition({ id: "themed", source: "user", externalStyle: true }),
-			);
-			h.settings.fallbackCalloutId = "themed";
-			h.discovery.addUnknownCalloutsAsFallback(["alpha"]);
+	it("does not inherit the fallback callout's `externalStyle` flag", async () => {
+		// The same spread, and a sharper consequence: `externalStyle` means
+		// "this callout's styling belongs to the theme", so a row born with it
+		// was skipped by `restyleUncustomizedFallbackRows` as well as by the
+		// prune — it could never follow the fallback again, and the CSS that
+		// would have painted it was suppressed.
+		const h = discoveryHarness({ "note.md": "plain" });
+		h.registry.add(
+			definition({ id: "themed", source: "user", externalStyle: true }),
+		);
+		h.settings.fallbackCalloutId = "themed";
+		h.discovery.addUnknownCalloutsAsFallback(["alpha"]);
 
-			assert.notStrictEqual(
-				row(h.registry.get("alpha"), "alpha").externalStyle,
-				true,
-			);
-			assert.strictEqual(await h.discovery.pruneUnused(), 1);
-		},
-	);
+		assert.notStrictEqual(
+			row(h.registry.get("alpha"), "alpha").externalStyle,
+			true,
+		);
+		// The consequence the flag would have cost it: pointing the setting
+		// somewhere else must still re-style the row.
+		h.settings.fallbackCalloutId = "warning";
+		assert.strictEqual(h.discovery.restyleUncustomizedFallbackRows(), 1);
+		assert.strictEqual(
+			row(h.registry.get("alpha"), "alpha").colorLight,
+			warningDefault.colorLight,
+		);
+		// And the prune must still be able to take it.
+		assert.strictEqual(await h.discovery.pruneUnused(), 1);
+		assert.strictEqual(h.registry.get("alpha"), undefined);
+	});
 
-	it(
-		"gives every row its own icon object",
-		{ todo: "`icon: fallback.icon` re-aliases what the spread copied" },
-		() => {
-			// `{ ...fallback, icon: fallback.icon, … }` restates a key the spread
-			// had already copied, and restates it as the *same reference* — so
-			// every row a scan creates, and the live fallback definition in the
-			// registry, all share one `CalloutIcon`. Nothing mutates an icon in
-			// place today, which is exactly why this has stayed invisible; the
-			// sibling path `restyleUncustomizedFallbackRows` clones it
-			// (`icon: { ...fallback.icon }`) rather than rely on that.
-			const h = discoveryHarness();
-			h.discovery.addUnknownCalloutsAsFallback(["alpha", "beta"]);
-			const alpha = row(h.registry.get("alpha"), "alpha");
-			const beta = row(h.registry.get("beta"), "beta");
-			const note = row(h.registry.get("note"), "note");
+	it("gives every row its own icon object", () => {
+		// `{ ...fallback, icon: fallback.icon, … }` restated a key the spread
+		// had already copied, and restated it as the *same reference* — so
+		// every row a scan created, and the live fallback definition in the
+		// registry, all shared one `CalloutIcon`. Nothing mutates an icon in
+		// place today, which is exactly why it stayed invisible; the sibling
+		// path `restyleUncustomizedFallbackRows` clones it rather than rely on
+		// that, and so does this one now.
+		const h = discoveryHarness();
+		h.discovery.addUnknownCalloutsAsFallback(["alpha", "beta"]);
+		const alpha = row(h.registry.get("alpha"), "alpha");
+		const beta = row(h.registry.get("beta"), "beta");
+		const note = row(h.registry.get("note"), "note");
 
-			assert.deepStrictEqual(alpha.icon, note.icon, "same drawing");
-			assert.notStrictEqual(alpha.icon, beta.icon, "shared between rows");
-			assert.notStrictEqual(alpha.icon, note.icon, "shared with the source");
-		},
-	);
+		assert.deepStrictEqual(alpha.icon, note.icon, "same drawing");
+		assert.notStrictEqual(alpha.icon, beta.icon, "shared between rows");
+		assert.notStrictEqual(alpha.icon, note.icon, "shared with the source");
+		// A write through one row must not be visible through any other — the
+		// failure the identity assertions above are standing in for.
+		alpha.icon.value = "lucide-anchor";
+		assert.notStrictEqual(beta.icon.value, "lucide-anchor");
+		assert.notStrictEqual(note.icon.value, "lucide-anchor");
+	});
+
+	it("clones the other objects the fallback hands over by reference", () => {
+		// `icon` is not the only one the spread aliases: a gradient and a
+		// per-role icon-adjust map are objects too, and the sibling path clones
+		// both (`{ ...bgGradient }`, `structuredClone(iconAdjust)`).
+		const h = discoveryHarness();
+		h.registry.add(
+			definition({
+				id: "fancy",
+				source: "user",
+				bgColorLight: "#101010",
+				bgColorDark: "#202020",
+				bgGradient: {
+					angleDeg: 45,
+					toColorLight: "#303030",
+					toColorDark: "#404040",
+				},
+				iconAdjust: { regular: { offsetX: 2 } },
+			}),
+		);
+		h.settings.fallbackCalloutId = "fancy";
+		h.discovery.addUnknownCalloutsAsFallback(["alpha"]);
+		const alpha = row(h.registry.get("alpha"), "alpha");
+		const fancy = row(h.registry.get("fancy"), "fancy");
+
+		assert.deepStrictEqual(alpha.bgGradient, fancy.bgGradient);
+		assert.notStrictEqual(alpha.bgGradient, fancy.bgGradient);
+		assert.deepStrictEqual(alpha.iconAdjust, fancy.iconAdjust);
+		assert.notStrictEqual(alpha.iconAdjust, fancy.iconAdjust);
+		// Nested one level down as well, which a shallow spread would miss.
+		assert.notStrictEqual(alpha.iconAdjust?.regular, fancy.iconAdjust?.regular);
+	});
 
 	it("falls back to the SHIPPED note when the configured fallback is gone", () => {
 		// `registry.get(fallbackId) ?? noteDefault` reaches past the registry to

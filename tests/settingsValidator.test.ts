@@ -19,6 +19,8 @@
  * `DataManagementSection.applyImport`. The tests below state that boundary
  * explicitly, because reading this function alone makes `Object.assign` look
  * safe, and it is exactly what would wipe the three lists a user builds up.
+ * The other half of that boundary — the merge itself — is
+ * `utils/mergeById.ts`, tested in `importListMerge.test.ts`.
  */
 import assert from "node:assert";
 import { describe, it } from "node:test";
@@ -164,6 +166,19 @@ describe("sanitizeImportedSettings — the merge against defaults", () => {
 		);
 	});
 
+	it("refuses a language that is not a string", () => {
+		// `main.ts` hands this to `setLocale`, which lowercases it on the load
+		// path — so a file carrying `"language": 5` is a `TypeError` during
+		// startup, not a mislabelled button. An unknown *string* is fine and
+		// stays untouched: the i18n resolver falls back to English by itself.
+		assert.equal(sanitizeImportedSettings({ language: 5 }).settings?.language, "auto");
+		assert.equal(
+			sanitizeImportedSettings({ language: { code: "he" } }).settings?.language,
+			"auto",
+		);
+		assert.equal(sanitizeImportedSettings({ language: "kl-DK" }).settings?.language, "kl-DK");
+	});
+
 	it("forces the settings that are no longer user-configurable", () => {
 		const { settings } = sanitizeImportedSettings({
 			headingCallouts: { refCleanTitles: false, refShowIcon: false },
@@ -172,19 +187,40 @@ describe("sanitizeImportedSettings — the merge against defaults", () => {
 		assert.equal(settings?.headingCallouts.refShowIcon, true);
 	});
 
-	it("does NOT range-check the numeric global-style values", () => {
-		// Documented limitation, not an endorsement: border/radius/scale are
-		// merged by plain spread, so a hand-edited or hostile file can carry a
-		// value the sliders cannot represent. Nothing downstream crashes on it
-		// (the CSS simply reads odd), but a clamp here would be the natural
-		// place for one. Locked in so a future clamp is a deliberate change
-		// with a failing test, rather than a silent behaviour shift.
+	it("range-checks the numeric global-style values", () => {
+		// The spread that merges `globalStyle` is blind to values, and every one
+		// of them is interpolated straight into a stylesheet. A file can carry a
+		// number no slider can produce — and then no slider can undo it either,
+		// short of dragging the one control it belongs to. `clampGlobalStyle`
+		// repairs it on the way in; `settingsGuards.test.ts` owns the limits.
 		const { settings } = sanitizeImportedSettings({
 			globalStyle: { borderWidth: -999, borderRadius: 1e6, titleScale: 0 },
 		});
-		assert.equal(settings?.globalStyle.borderWidth, -999);
-		assert.equal(settings?.globalStyle.borderRadius, 1e6);
-		assert.equal(settings?.globalStyle.titleScale, 0);
+		assert.equal(settings?.globalStyle.borderWidth, 0);
+		assert.equal(settings?.globalStyle.borderRadius, 64);
+		assert.equal(settings?.globalStyle.titleScale, 0.1);
+	});
+
+	it("replaces a style value that is not a number at all", () => {
+		// `border-radius: ${gs.borderRadius}px` — a string closes that
+		// declaration and opens rules of its own, so an import file must not be
+		// able to put one there.
+		const { settings } = sanitizeImportedSettings({
+			globalStyle: { borderRadius: "0px; } .callout { display: none } .x {" },
+		});
+		assert.equal(
+			settings?.globalStyle.borderRadius,
+			DEFAULT_SETTINGS.globalStyle.borderRadius,
+		);
+	});
+
+	it("leaves a value the sliders can actually produce exactly as given", () => {
+		const { settings } = sanitizeImportedSettings({
+			globalStyle: { borderWidth: 2.5, borderRadius: 12, titleScale: 1.35 },
+		});
+		assert.equal(settings?.globalStyle.borderWidth, 2.5);
+		assert.equal(settings?.globalStyle.borderRadius, 12);
+		assert.equal(settings?.globalStyle.titleScale, 1.35);
 	});
 });
 

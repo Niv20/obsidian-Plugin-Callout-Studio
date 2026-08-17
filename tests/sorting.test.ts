@@ -140,11 +140,24 @@ describe("compareText — the locale is really consulted", () => {
 		assert.equal(compareText("a", "b", "   "), compareText("a", "b", "en"));
 	});
 
-	it("requires a well-formed BCP-47 tag — documented precondition", () => {
-		// The locale comes from `settings.language`, a fixed list, so this is
-		// never reached in the app. Stated here so a future call site that
-		// passes free text knows it has to sanitize first.
-		assert.throws(() => compareText("a", "b", "!!"), RangeError);
+	it("sorts in English rather than throwing on a malformed tag", () => {
+		// `Intl` rejects a tag that is not structurally BCP-47 by throwing, and
+		// it validates the whole list at once, so one bad tag used to take the
+		// valid ones with it. That is not a misordered list — it is an exception
+		// out of `Array.sort`, while the settings tab or the autocomplete
+		// dropdown is mid-build. Today every caller passes `getLocale()`, which
+		// can only return a registered code; this is what keeps that a
+		// precondition rather than a trap for the next call site.
+		assert.doesNotThrow(() => compareText("a", "b", "!!"));
+		assert.equal(compareText("a", "b", "!!"), compareText("a", "b", "en"));
+		assert.doesNotThrow(() => sortIds(["b", "a"], "e n"));
+	});
+
+	it("keeps the language when only the region is malformed", () => {
+		// The chain is filtered tag by tag rather than abandoned whole, so
+		// `de-!!` still sorts as German instead of dropping to English.
+		assert.equal(sign(compareText("ä", "z", "de-!!")), sign(compareText("ä", "z", "de")));
+		assert.notEqual(sign(compareText("ä", "z", "sv-!!")), sign(compareText("ä", "z", "de")));
 	});
 });
 

@@ -25,12 +25,13 @@
  * What this file can and cannot see is worth being exact about. A CSS selector
  * says where a rule applies, not where the element ends up: `.cs-color-circle`
  * is rendered both in the settings tab and inside the callout editor, and its
- * selector cannot tell you which. So the invariant splits in two — rules
- * *scoped* to `.cs-modal` are checked outright, and every other rule of this
+ * selector cannot tell you which. So the invariant is checked three ways —
+ * rules *scoped* to `.cs-modal` are checked outright; the handful whose selector
+ * straddles the boundary are named one at a time in the middle of this file,
+ * with the reasoning for each written beside it; and every other rule of this
  * plugin's that paints a raw variable is pinned in one of the two review lists
- * near the bottom, each entry carrying a line on why it is there. Some of those
- * entries say "deliberate" and some say "flagged"; what the list buys is that a
- * new one cannot appear without somebody deciding which it is.
+ * near the bottom. What those lists buy is that a new one cannot appear without
+ * somebody deciding whether it is deliberate.
  */
 import assert from "node:assert";
 import { readFileSync } from "node:fs";
@@ -269,6 +270,107 @@ describe("every call site carries its own half's fallback", () => {
 });
 
 /* -------------------------------------------------------------------------- */
+/* Rules whose selector cannot place them, resolved one at a time             */
+/* -------------------------------------------------------------------------- */
+
+/** The one rule written exactly as `selector`, with its whitespace flattened. */
+function ruleFor(selector: string): Rule {
+	const found = rules.filter(
+		(r) => r.selector.replace(/\s+/g, " ") === selector,
+	);
+	assert.strictEqual(
+		found.length,
+		1,
+		`expected exactly one \`${selector}\` rule, found ${found.length}`,
+	);
+	return found[0] as Rule;
+}
+
+/** `rule`'s declaration for `property`, flattened, or "" when it sets none. */
+function declaration(rule: Rule, property: string): string {
+	const decl = rule.declarations
+		.split(";")
+		.map((d) => d.trim())
+		.find((d) => d.split(":")[0]?.trim() === property);
+	return (decl ?? "").replace(/\s+/g, " ");
+}
+
+describe("the swatch widget follows the surface it is drawn on", () => {
+	// `renderColorCircles` (src/ui/ColorCircles.ts) has four call sites, and they
+	// straddle the boundary this file is about: the settings rows and the custom
+	// palettes section are in the settings tab, while the callout editor's
+	// trigger swatch and every one of its palette-menu items are inside a chromed
+	// window. One rule serves all four, so it has to name the token rather than
+	// either concrete colour — the fallback is what keeps the settings tab
+	// unchanged.
+	it("the ring around a circle is a cut-out of the window, not of the note", () => {
+		// A `box-shadow` cut-out that paints something other than what is behind
+		// it stops being a cut-out and becomes a halo. On mobile dark
+		// `--background-primary` is a true `#000` while the modal is not, so the
+		// raw variable drew exactly that halo, in black, around every swatch in
+		// the editor.
+		assert.strictEqual(
+			declaration(ruleFor(".cs-color-circle"), "box-shadow"),
+			"box-shadow: 0 0 0 1.5px var(--cs-surface, var(--background-primary))",
+		);
+	});
+
+	it('the "no background" checkerboard is woven out of that same surface', () => {
+		// Both tones: the pale square is a `color-mix` toward the surface and the
+		// other square IS the surface. Fixing one alone would leave the pattern
+		// mixing a colour from one window against a colour from another.
+		const decl = declaration(
+			ruleFor(".cs-color-circle.is-transparent"),
+			"background-image",
+		);
+		assert.match(decl, /^background-image: repeating-conic-gradient\(/);
+		assert.strictEqual(
+			decl.match(/var\(--cs-surface, var\(--background-primary\)\)/g)?.length,
+			2,
+			`both stops must name the token — got: ${decl}`,
+		);
+	});
+});
+
+describe("a disabled text field stays raised off the window", () => {
+	// The greyed-out state of the editor's two text fields — the display name of
+	// a built-in, and the IDs field while the name is linked to the id. Disabled
+	// is meant to read as "a control you cannot use", so the fill has to stay a
+	// step *above* whatever is behind it. `--background-secondary` is that step
+	// only while `--modal-background` is `--background-primary`; mobile dark
+	// points the modal AT `--background-secondary`, so the fill landed on the
+	// window and the field read as a hole rather than as a control.
+	const RAISED = "var(--cs-surface-raised, var(--background-secondary))";
+
+	it("the display-name field in the callout editor", () => {
+		assert.strictEqual(
+			declaration(
+				ruleFor(
+					'.callout-studio-editor .setting-item-control input[type="text"]:not(.cs-tag-input-field):disabled',
+				),
+				"background",
+			),
+			`background: ${RAISED}`,
+		);
+	});
+
+	it("the Callout IDs field directly below it", () => {
+		// Asserted separately rather than looped over, because the pairing is the
+		// point: these two fields were given matching box models on purpose (see
+		// the comment on `.cs-tag-input-field`), and fixing one without the other
+		// would make them disagree on mobile dark alone — the hardest place to
+		// notice and the only place it shows.
+		assert.strictEqual(
+			declaration(
+				ruleFor(".cs-tag-input-row > .cs-tag-input-field:disabled"),
+				"background",
+			),
+			`background: ${RAISED}`,
+		);
+	});
+});
+
+/* -------------------------------------------------------------------------- */
 /* Everything else that paints the raw surface colour                          */
 /* -------------------------------------------------------------------------- */
 
@@ -278,8 +380,12 @@ describe("every call site carries its own half's fallback", () => {
  *
  * This is a review list, not a ban. A rule reaches it because its selector does
  * not say whether the element is inside a window, so only a person can answer
- * whether the raw variable is right — and the list is here so that a sixth
+ * whether the raw variable is right — and the list is here so that a fourth
  * entry has to be added by hand, with a reason, rather than appearing.
+ *
+ * Every entry left is deliberate. The two that were not — the swatch ring and
+ * its transparency checkerboard — are fixed, and are now asserted positively
+ * above rather than merely tolerated here.
  */
 const KNOWN_RAW_PRIMARY = [
 	// Deliberate. Both emulate a NOTE surface rather than the window, and a note
@@ -292,16 +398,6 @@ const KNOWN_RAW_PRIMARY = [
 	// `--background-primary`; there is no `--cs-surface` in scope there and the
 	// fallback would resolve to the same colour anyway.
 	".callout-studio-row-syntax | background",
-
-	// NOT deliberate — flagged, not endorsed. `renderColorCircles` is called
-	// from the settings rows AND from inside the callout editor (its trigger
-	// swatch and every palette-menu item), so on mobile dark both of these paint
-	// a colour that is not the surface behind them: the ring reads as a black
-	// halo and the transparency checkerboard as a black-on-black square. Both
-	// are the case the module header describes, and both want
-	// `var(--cs-surface, var(--background-primary))`.
-	".cs-color-circle | box-shadow",
-	".cs-color-circle.is-transparent | background-image",
 ];
 
 describe("nothing else paints --background-primary unexamined", () => {
@@ -321,23 +417,18 @@ describe("nothing else paints --background-primary unexamined", () => {
 });
 
 /**
- * The same review list for the raised half.
+ * The same review list for the raised half — and it is **empty**, which is a
+ * stronger statement than the flush list can make.
  *
- * It is shorter than the flush one because there is no equivalent of the
- * settings tab here: a surface wanting the raised shade wants it *relative to
- * whatever it is sitting on*, and `--background-secondary` only answers that
- * while `--modal-background` is `--background-primary`.
+ * There is no equivalent of the settings tab here. A surface wanting the raised
+ * shade wants it *relative to whatever it is sitting on*, and
+ * `--background-secondary` only answers that while `--modal-background` is
+ * `--background-primary` — so unlike `--background-primary`, which is genuinely
+ * the right answer for a note or for the settings tab, there is no context in
+ * which naming this one raw is correct. An entry here would be a bug awaiting
+ * triage, not a decision; the empty list says so.
  */
-const KNOWN_RAW_SECONDARY = [
-	// NOT deliberate — flagged, not endorsed. Both are the disabled state of a
-	// text field inside the callout editor, which is a chromed window, so on
-	// mobile dark the fill lands exactly on the surface behind it and the field
-	// reads as a hole rather than as a greyed-out control. The `opacity: 0.5`
-	// beside it makes that worse, not better. Both want
-	// `var(--cs-surface-raised, var(--background-secondary))`.
-	'.callout-studio-editor .setting-item-control input[type="text"]:not(.cs-tag-input-field):disabled | background',
-	".cs-tag-input-row > .cs-tag-input-field:disabled | background",
-];
+const KNOWN_RAW_SECONDARY: string[] = [];
 
 describe("nothing else paints --background-secondary unexamined", () => {
 	const found = rules

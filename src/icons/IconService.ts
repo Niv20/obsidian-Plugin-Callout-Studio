@@ -182,7 +182,8 @@ export class IconService implements IconResolver {
 	 * arrived from somewhere other than the picker — an import, or the vault
 	 * itself on startup — carrying an icon whose artwork this device may not
 	 * have. `ensureArtwork` handles one icon; this handles a set without
-	 * downloading the same pack once per icon.
+	 * downloading the same pack once per icon — failed downloads included,
+	 * which is the case where asking twice actually costs something.
 	 *
 	 * Icons already drawable are skipped entirely, which is what keeps a second
 	 * device that synced `data.json` from re-downloading packs it never needed.
@@ -210,15 +211,16 @@ export class IconService implements IconResolver {
 		let stored = false;
 		for (const group of byType.values()) {
 			// Sequential: parallel requests to one CDN gain nothing and make a
-			// failure harder to attribute. The first icon pulls the pack down,
-			// the rest then only copy artwork out of it.
+			// failure harder to attribute. The first icon pulls the pack down
+			// and the rest only copy artwork out of it — or, if it could not be
+			// got at all, read that off `hasFailed`, which the filter above ran
+			// too early to know and which a failed pack never stops answering.
 			for (const icon of group) {
+				if (this.hasFailed(icon, "regular")) continue;
 				if (await this.fetchArtwork(icon)) stored = true;
 			}
 			const first = group[0];
-			if (!first || !group.every((icon) => this.isFullyCached(icon))) {
-				continue;
-			}
+			if (!first || !group.every((i) => this.isFullyCached(i))) continue;
 			const title = packFor(first)?.attribution.title;
 			if (title) restored.add(title);
 		}

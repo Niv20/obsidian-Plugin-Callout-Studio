@@ -181,20 +181,47 @@ describe("decodeIndex — the shape it produces", () => {
 		}
 	});
 
-	it("gives every entry a label once ANY entry has one", () => {
-		// The label column is all-or-nothing: `encodeIndex` writes it when some
-		// entry's label differs from its name, and fills the rest in with their
-		// own name. So an entry that declared no label comes back carrying its
-		// raw name as one — which is the *unprettified* spelling the tooltip
-		// would otherwise have cleaned up. Harmless today (no bundled index has
-		// labels) and pinned here so it is a decision rather than a surprise the
-		// day one does.
+	it("leaves an entry that declared no label without one, column or not", () => {
+		// The column used to be all-or-nothing: one entry with a label gave every
+		// entry a label, and an entry that had declared none was filled in with
+		// its own raw name. That is not the same as having no label — the tooltip
+		// falls back to a *prettified* name, so `b_c` would have shipped as
+		// "b_c" where it should read "B c". Only the entries that actually said
+		// something carry anything.
 		const index = build([
 			{ name: "a", label: "Alpha", categories: [], keywords: [] },
 			{ name: "b_c", categories: [], keywords: [] },
 		]);
 		assert.equal(index.entries[0]?.label, "Alpha");
-		assert.equal(index.entries[1]?.label, "b_c");
+		assert.ok(
+			!("label" in (index.entries[1] as object)),
+			"an entry that declared no label was given its own name as one",
+		);
+	});
+
+	it("does not spend the whole name list on a column two entries use", () => {
+		// The byte half of the same bug: filling every row in meant the label
+		// column was a second copy of every name in the library, and Material's
+		// names alone are 60 KB.
+		const encoded: EncodedIndex = encodeIndex([
+			{ name: "a", label: "Alpha", categories: [], keywords: [] },
+			{ name: "an-extremely-long-icon-name", categories: [], keywords: [] },
+		]);
+		assert.ok(
+			!encoded.l?.includes("an-extremely-long-icon-name"),
+			"a label-less entry paid for its own name in the label column",
+		);
+	});
+
+	it("treats a label identical to its name as no label at all", () => {
+		// Both spellings of "nothing to add" have to land in the same place, or
+		// which one a generator happens to emit changes what ships.
+		const index = build([
+			{ name: "a", label: "Alpha", categories: [], keywords: [] },
+			{ name: "b", label: "b", categories: [], keywords: [] },
+		]);
+		assert.equal(index.entries[0]?.label, "Alpha");
+		assert.ok(!("label" in (index.entries[1] as object)));
 	});
 
 	it("leaves the label column out when every label just repeats its name", () => {
@@ -313,13 +340,39 @@ describe("the bundled indexes decode to the libraries they claim", () => {
 			}
 		});
 
+		it(`${id} spends no dictionary slot on a keyword that says nothing`, () => {
+			// Upstream ships debris: Octicons tags `eye-closed` with an empty
+			// string. A blank keyword buys a dictionary slot and a reference on
+			// every entry carrying it, and matches nothing in return — the
+			// search drops empty words out of a query before it ever looks. The
+			// generator cleans them, and this is what says it still does.
+			for (const keyword of decodeFrontCoded(encoded.k)) {
+				assert.ok(
+					keyword.length > 0,
+					"the keyword dictionary has a blank slot",
+				);
+			}
+		});
+
+		it(`${id} lists each of an icon's keywords once`, () => {
+			// Upstream repeats itself: Font Awesome tags `copy` with `replicate`
+			// three times and `feather` with `plume` four. Every repeat is
+			// another reference in the index and another string the search walks
+			// per keystroke, and it cannot match anything the first one did not.
+			for (const e of index.entries) {
+				assert.equal(
+					new Set(e.keywords).size,
+					e.keywords.length,
+					`"${e.name}" carries the same keyword twice`,
+				);
+			}
+		});
+
 		it(`${id} points every keyword code at a slot the dictionary has`, () => {
 			// The check has to be on the *codes*, not on the strings they decode
 			// to: an out-of-range code yields "" rather than throwing, so a width
-			// or dictionary bug would look exactly like a keyword that is
-			// legitimately empty. Octicons has one of those — `eye-closed` really
-			// does carry an empty keyword upstream — and it must not be able to
-			// hide a decoder fault behind itself.
+			// or dictionary bug would decode as a keyword that is merely empty
+			// and never fail loudly.
 			const dictSize = decodeFrontCoded(encoded.k).length;
 			for (const ref of allRefs(encoded.kr, encoded.kw)) {
 				assert.ok(

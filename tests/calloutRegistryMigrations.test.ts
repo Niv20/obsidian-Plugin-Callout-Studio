@@ -12,8 +12,9 @@
  * decides whether a repair is written back. It is not bookkeeping: a migration
  * that mutates the map without raising it is re-run on every single launch and
  * never persisted — the exact failure the flag exists to prevent, and one the
- * `stripMetadataFromIds` alias branch was fixed for. Two passes still behave
- * that way; both are pinned below as found, with the reasoning spelled out.
+ * `stripMetadataFromIds` alias branch was fixed for. Every pass that rewrites
+ * the map raises it, and each one is pinned below with the round trip that
+ * proves it settles rather than re-arming on the next launch.
  *
  * Order matters between them and is asserted where it does:
  *   dropStaleTransparencyFlags → consolidateDuplicatePalettes →
@@ -643,28 +644,49 @@ describe("needsSaveAfterLoad()", () => {
 		});
 	}
 
-	it("is NOT raised by adoptOrphansMatchingPalettes, which rewrites definitions too", () => {
-		// Pinned as found. The adoption stamps a `paletteId` onto the row and
-		// never persists it, so it is re-derived on every launch. Harmless in
-		// practice — the pass is idempotent and cheap — but it is the same
-		// shape as the alias-only bug above, which WAS fixed by raising the
-		// flag. If that is ever made consistent, this assertion is the one to
-		// flip.
+	it("is raised by adoptOrphansMatchingPalettes, which rewrites definitions too", () => {
+		// The adoption stamps a `paletteId` onto the row, which is a rewrite of
+		// the stored definitions like any other. Un-flushed it was re-derived on
+		// every launch — the same shape as the alias-only bug above.
 		const registry = load(
 			saved([def({ id: "orphan", ...paletteColors() })], {
 				customPalettes: [palette()],
 			}),
 		);
 		assert.strictEqual(registry.get("orphan")?.paletteId, "cp-1", "it did rewrite");
+		assert.strictEqual(registry.needsSaveAfterLoad(), true);
+	});
+
+	it("stays down once that adoption has been written back", () => {
+		const first = load(
+			saved([def({ id: "orphan", ...paletteColors() })], {
+				customPalettes: [palette()],
+			}),
+		);
+		assert.strictEqual(first.needsSaveAfterLoad(), true);
+
+		const second = load(first.toSaveData());
+		assert.strictEqual(second.get("orphan")?.paletteId, "cp-1");
+		assert.strictEqual(second.needsSaveAfterLoad(), false);
+	});
+
+	it("is not raised by the settings caller, which saves for itself", () => {
+		// CustomPalettesSection calls the pass directly after a palette edit and
+		// then saves; raising a load-time flag there would leave it standing
+		// until some unrelated startup happened to read it.
+		const registry = load(saved([def({ id: "orphan", ...paletteColors() })]));
+		assert.strictEqual(registry.needsSaveAfterLoad(), false);
+
+		registry.settings.customPalettes = [palette()];
+		assert.strictEqual(registry.adoptOrphansMatchingPalettes(), 1);
 		assert.strictEqual(registry.needsSaveAfterLoad(), false);
 	});
 
-	it("is NOT raised by reconcileAttrIdCollisions, which DELETES a row", () => {
-		// Pinned as found, and the more consequential of the two: the merge
-		// deletes a definition and rewrites the survivor's aliases, yet
-		// `data.json` still holds both rows afterwards. The merge is idempotent,
-		// so it simply happens again on every launch — the user sees one row,
-		// the file keeps two.
+	it("is raised by reconcileAttrIdCollisions, which DELETES a row", () => {
+		// The merge deletes a definition and rewrites the survivor's aliases, so
+		// it has to be written back like any other rewrite. Un-flushed,
+		// `data.json` kept both rows and the merge was simply redone on every
+		// launch — the user saw one row, the file held two.
 		const registry = load(
 			saved([
 				def({ id: "c-d", source: "user" }),
@@ -672,7 +694,25 @@ describe("needsSaveAfterLoad()", () => {
 			]),
 		);
 		assert.strictEqual(registry.getAll().length, 14, "one row really did go");
-		assert.strictEqual(registry.needsSaveAfterLoad(), false);
+		assert.strictEqual(registry.needsSaveAfterLoad(), true);
+	});
+
+	it("stays down on the next load, once that merge has been written back", () => {
+		// The flag must not re-arm forever: the loser survives only as an alias
+		// of the survivor, so the group it forms next load names one definition
+		// and there is nothing left to merge.
+		const first = load(
+			saved([
+				def({ id: "c-d", source: "user" }),
+				def({ id: "c d", source: "user" }),
+			]),
+		);
+		assert.strictEqual(first.needsSaveAfterLoad(), true);
+
+		const second = load(first.toSaveData());
+		assert.strictEqual(second.getAll().length, 14, "still the one merged row");
+		assert.deepStrictEqual(second.get("c d")?.aliases, ["c-d"]);
+		assert.strictEqual(second.needsSaveAfterLoad(), false);
 	});
 });
 

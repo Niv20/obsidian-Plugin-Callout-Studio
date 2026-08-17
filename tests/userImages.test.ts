@@ -13,9 +13,14 @@
  * `sanitizeUserImages` is covered here only up to the point where it hands the
  * markup to `sanitizeUserSvg`, which needs a real `DOMParser`. Node has none, so
  * every case below is one that is decided *before* the artwork is filtered —
- * which is all of the "junk input, missing fields, missing SVG" surface. The
- * artwork filter itself is exercised in the app, not here; a test that stubbed
- * a DOM would be testing the stub.
+ * which is all of the "junk input, missing fields, missing SVG" surface. Which
+ * drawings survive the filter is exercised in the app, not here; a test that
+ * stubbed a DOM would be testing the stub.
+ *
+ * Node's missing `DOMParser` does buy one real case, and the last suite spends
+ * it: a filter that cannot run at all. That is the shape of the risk in the app
+ * too — this runs inside `mergeSavedSettings`, on the load path, so a picture
+ * that makes the filter throw must cost that picture and not the whole plugin.
  */
 import assert from "node:assert";
 import { describe, it } from "node:test";
@@ -210,34 +215,49 @@ describe("claimUserImageName", () => {
 		assert.ok(claimed.endsWith(".png"));
 	});
 
-	it("terminates when truncation folds every candidate back onto itself", () => {
-		// A stem already at the cap absorbs the ` (2)` suffix and truncates
-		// straight back to the name being avoided, so the numbered loop makes no
-		// progress at all. What is guaranteed is that it still RETURNS: bounded
-		// loop, capped length, extension intact.
+	it("makes room for the number on a stem already at the cap", () => {
+		// The regression this guards: building the candidate as
+		// `${stem} (2)${ext}` and truncating the result afterwards throws the
+		// ` (2)` away again on a maximal stem, so the numbered loop makes no
+		// progress and hands back the name it was avoiding. Shortening the stem
+		// instead keeps the suffix, which is the only part that makes the name
+		// new.
 		const capped = userImageNameFromFilename(`${"a".repeat(300)}.png`);
 		const taken = new Set([normalizeUserImageName(capped)]);
 		const claimed = claimUserImageName(capped, taken, "img-abcd1234");
 		assert.ok(claimed.length <= MAX_NAME_LENGTH, `${claimed.length}: ${claimed}`);
-		assert.ok(claimed.endsWith(".png"), claimed);
+		assert.ok(claimed.endsWith(" (2).png"), `suffix truncated away: ${claimed}`);
+		assert.notEqual(
+			normalizeUserImageName(claimed),
+			normalizeUserImageName(capped),
+			"handed back a name that was already taken",
+		);
 	});
 
-	it("KNOWN GAP: a maximal stem defeats the id fallback and collides", () => {
+	it("keeps the id fallback free of collisions even at the cap", () => {
 		// The doc promises `unique` "collides with nothing, because it is the
-		// picture's own id" — but the id is appended to the *stem*, and a stem
-		// already at the cap truncates it away again. The result is a name that
-		// was already taken.
-		//
-		// Narrow and cosmetic: it needs two pictures whose first 56 characters
-		// and extension all match, and a name is a label, not a key (the id is
-		// separate), so nothing is lost — the grid just shows two cells reading
-		// the same. Locked in so a fix (e.g. trimming the stem to make room for
-		// the suffix instead of appending then truncating) arrives as a
-		// deliberate change with a failing test.
+		// picture's own id". That is only true while the id survives the length
+		// cap — appending it to a maximal stem and truncating afterwards cut it
+		// straight back off, and the fallback returned the taken name.
 		const capped = userImageNameFromFilename(`${"a".repeat(300)}.png`);
 		const taken = new Set([normalizeUserImageName(capped)]);
+		// Every number spoken for, so only the id fallback is left. Claimed
+		// through the function itself rather than spelled out, so the set holds
+		// exactly the names it really hands out.
+		for (let n = 2; n < 100; n++) claimUserImageName(capped, taken, `img-${n}`);
+		const before = new Set(taken);
+
 		const claimed = claimUserImageName(capped, taken, "img-abcd1234");
-		assert.equal(normalizeUserImageName(claimed), normalizeUserImageName(capped));
+		assert.ok(
+			claimed.includes("(img-abcd1234)"),
+			`the id was truncated out of the fallback name: ${claimed}`,
+		);
+		assert.ok(
+			!before.has(normalizeUserImageName(claimed)),
+			`handed back a name that was already taken: ${claimed}`,
+		);
+		assert.ok(claimed.length <= MAX_NAME_LENGTH, `${claimed.length}: ${claimed}`);
+		assert.ok(claimed.endsWith(".png"), claimed);
 	});
 
 	it("leaves room for the suffix whenever the stem is short enough", () => {
@@ -361,5 +381,47 @@ describe("sanitizeUserImages — what is refused before the artwork is even read
 				[],
 			]),
 		);
+	});
+});
+
+describe("sanitizeUserImages — when the artwork filter cannot run at all", () => {
+	it("drops the picture instead of throwing", () => {
+		// `sanitizeUserSvg` needs `DOMParser`, which Node has not got — so in
+		// here the filter does not refuse the drawing, it *explodes*. That is
+		// worth pinning rather than working around: this function runs from
+		// `mergeSavedSettings`, on the load path, before a single callout has
+		// been styled. An escaping throw is not one missing icon, it is the
+		// plugin failing to load and taking every callout's styling with it.
+		assert.doesNotThrow(() => sanitizeUserImages([image()]));
+		assert.deepStrictEqual(sanitizeUserImages([image()]), []);
+	});
+
+	it("lets nothing unfiltered through in its place", () => {
+		// "The artwork could not be checked" and "the artwork did not pass" have
+		// to have the same answer, or the repair would be worse than the crash.
+		assert.deepStrictEqual(
+			sanitizeUserImages([
+				image({ svg: `<svg xmlns="http://www.w3.org/2000/svg"><script/></svg>` }),
+			]),
+			[],
+		);
+	});
+
+	it("keeps going after one entry blows up", () => {
+		// Whether it is a broken drawing or a missing DOM, the loop has to reach
+		// the entries behind it — otherwise one bad picture silently costs the
+		// user every picture stored after it. Read through a getter, since in
+		// Node every entry is dropped and the returned list cannot tell the two
+		// apart.
+		let reached = false;
+		const second = {
+			...image({ id: "b" }),
+			get svg(): string {
+				reached = true;
+				return "<svg/>";
+			},
+		};
+		sanitizeUserImages([image({ id: "a" }), second]);
+		assert.ok(reached, "the loop stopped at the first unfilterable picture");
 	});
 });

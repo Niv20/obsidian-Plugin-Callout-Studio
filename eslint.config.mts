@@ -67,6 +67,26 @@ export default tseslint.config(
 			// `window` and `activeWindow` are what a *plugin* must use; a test
 			// runs in Node, where the only realm there is is `globalThis`.
 			"obsidianmd/no-global-this": "off",
+			// `node:test` types its registration functions as returning a
+			// promise, and the runner is what awaits them — a suite that awaited
+			// its own `it` calls would nest them instead of registering them. So
+			// they are named here rather than `void`-ed at ~4,000 call sites,
+			// which is noise that would hide the real floating promise this rule
+			// exists to catch.
+			//
+			// Four names for two functions: `@types/node` declares `test` and
+			// `suite` and re-exports them as `it` and `describe`, and the rule
+			// matches the *declared* name, not the imported one. Bare names
+			// rather than a `{ from: "package" }` specifier because both halves
+			// of that specifier miss here — `suite` is declared inside a nested
+			// `namespace test`, so the `declare module "node:test"` above it is
+			// not the enclosing one the matcher looks for.
+			"@typescript-eslint/no-floating-promises": [
+				"error",
+				{
+					allowForKnownSafeCalls: ["describe", "it", "suite", "test"],
+				},
+			],
 		},
 	},
 	globalIgnores([

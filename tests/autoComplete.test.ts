@@ -10,6 +10,9 @@
  *    role decides what `selectSuggestion` writes and where the cursor lands
  *    afterwards, so a misclassification rewrites the user's line as the wrong
  *    kind of callout.
+ *    It also decides *whether* there is a callout to classify at all: a `[!`
+ *    inside inline code or a fenced block is code, and opening there is how a
+ *    note that documents callout syntax gets rewritten into one that uses it.
  * 2. **It stops filtering once the cursor leaves the id.** The dropdown has no
  *    say over metadata, the fold mark or the title, so it closes rather than
  *    matching on them — and it reads the token body to its `]` rather than to
@@ -90,28 +93,33 @@ function addCallout(
 }
 
 /**
- * Run `onTrigger` for a line with `⎸` marking the cursor. Returns the trigger
- * info, or null when the popover would not open.
+ * Run `onTrigger` for a document with `⎸` marking the cursor. Most sources here
+ * are a single line, but the code-context guard reads the lines above the
+ * cursor, so `⎸` is located in the whole buffer rather than assumed to be on
+ * line 0. Returns the trigger info, or null when the popover would not open.
  */
 function triggerAt(
 	h: Harness,
 	source: string,
-): { info: ReturnType<Suggest["onTrigger"]>; editor: FakeEditor; ch: number } {
-	const ch = source.indexOf("⎸");
-	assert.notStrictEqual(ch, -1, "the source needs a ⎸ cursor mark");
-	const line = source.replace("⎸", "");
-	const ed = editor(line);
-	const info = h.suggest.onTrigger(
-		{ line: 0, ch },
-		asEditor(ed),
-		null,
-	);
-	return { info, editor: ed, ch };
+): {
+	info: ReturnType<Suggest["onTrigger"]>;
+	editor: FakeEditor;
+	line: number;
+	ch: number;
+} {
+	const marker = source.indexOf("⎸");
+	assert.notStrictEqual(marker, -1, "the source needs a ⎸ cursor mark");
+	const before = source.slice(0, marker);
+	const line = (before.match(/\n/g) ?? []).length;
+	const ch = before.length - (before.lastIndexOf("\n") + 1);
+	const ed = editor(source.replace("⎸", ""));
+	const info = h.suggest.onTrigger({ line, ch }, asEditor(ed), null);
+	return { info, editor: ed, line, ch };
 }
 
 /** `onTrigger`, then `selectSuggestion` on one definition. Returns the buffer. */
 function pick(h: Harness, source: string, calloutId: string): FakeEditor {
-	const { info, editor: ed, ch } = triggerAt(h, source);
+	const { info, editor: ed, line, ch } = triggerAt(h, source);
 	assert.ok(info, "expected the popover to open");
 	const def = h.registry.get(calloutId);
 	assert.ok(def, `no callout "${calloutId}"`);
@@ -120,7 +128,7 @@ function pick(h: Harness, source: string, calloutId: string): FakeEditor {
 		editor: asEditor(ed),
 		file: null,
 		start: info.start,
-		end: { line: 0, ch },
+		end: { line, ch },
 		query: info.query,
 	};
 	// The fake `MouseEvent` takes no arguments; only `instanceof KeyboardEvent`
@@ -274,21 +282,83 @@ describe("onTrigger — the query", () => {
 		assert.strictEqual(triggerAt(h, "> [!warn⎸").info?.query, "warn");
 	});
 
-	/**
-	 * Characterization, not endorsement: `onTrigger` has no code-context guard
-	 * at all — no fence tracking, no inline-code check. A `[!` typed inside
-	 * backticks or a fenced block opens the popover exactly as it does in prose.
-	 *
-	 * Everything else that reads callout syntax DOES skip code
-	 * (`scanLineForCalloutTokens` strips inline-code spans, the vault scanner
-	 * tracks fences, both render surfaces consult the syntax tree), so this is
-	 * the one surface where the two disagree. Pinned here so the disagreement is
-	 * visible rather than assumed.
-	 */
-	it("does open inside code, which nothing else that reads this syntax does", () => {
+});
+
+/* -------------------------------------------------------------------------- */
+/* onTrigger — code is not callout syntax                                      */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * The popover used to be the one surface that read a `[!` in code as callout
+ * syntax. That is worse than a stray dropdown: picking a row rewrites the token
+ * *and* `close()` then pushes a `> ` prefix onto the following line, so a note
+ * documenting callout syntax gets edited into one that uses it.
+ *
+ * It now asks the same two questions the rest of the codebase asks —
+ * `stripInlineCode` for the line, `createDocumentLineFilter` for the document —
+ * so the answers cannot drift from what discovery, the statistics scan and the
+ * vault rewriters see.
+ */
+describe("onTrigger — code is not callout syntax", () => {
+	it("stays shut inside an inline code span", () => {
 		const h = harness();
-		assert.ok(triggerAt(h, "`> [!no⎸`").info, "inline code");
-		assert.ok(triggerAt(h, "    > [!no⎸").info, "indented code block");
+		assert.strictEqual(triggerAt(h, "`> [!no⎸`").info, null);
+		assert.strictEqual(triggerAt(h, "prose `[!no⎸te]` prose").info, null);
+	});
+
+	it("still opens beside one, on the same line", () => {
+		// The span is blanked in place, so the guard has to answer for the
+		// token's own offset rather than for the line as a whole.
+		const h = harness();
+		assert.ok(triggerAt(h, "`code` then [!no⎸").info);
+	});
+
+	it("stays shut inside a fenced block", () => {
+		const h = harness();
+		assert.strictEqual(
+			triggerAt(h, "```markdown\n> [!no⎸\n```").info,
+			null,
+			"backtick fence",
+		);
+		assert.strictEqual(
+			triggerAt(h, "~~~\n> [!no⎸\n~~~").info,
+			null,
+			"tilde fence",
+		);
+		assert.strictEqual(
+			triggerAt(h, "> ```\n> > [!no⎸\n> ```").info,
+			null,
+			"fence nested in a blockquote",
+		);
+	});
+
+	it("opens again below a fence that closed", () => {
+		const h = harness();
+		assert.ok(triggerAt(h, "```\ncode\n```\n\n> [!no⎸").info);
+	});
+
+	it("takes the longer marker run to close a fence", () => {
+		// ``` inside a ```` block is content, not the closer — so the line after
+		// it is still code.
+		const h = harness();
+		assert.strictEqual(
+			triggerAt(h, "````\n```\n> [!no⎸").info,
+			null,
+		);
+	});
+
+	it("stays shut in YAML frontmatter", () => {
+		const h = harness();
+		assert.strictEqual(triggerAt(h, "---\ntag: [!no⎸\n---").info, null);
+	});
+
+	it("does not read indentation as code", () => {
+		// Four spaces is an indented code block only at the top level; the same
+		// line under a list item is an ordinary blockquote, and nothing else that
+		// reads this syntax treats indentation as code either. Suppressing here
+		// would create the asymmetry rather than remove it.
+		const h = harness();
+		assert.ok(triggerAt(h, "- item\n    > [!no⎸").info);
 	});
 });
 
@@ -435,6 +505,24 @@ describe("selectSuggestion — block header", () => {
 		);
 	});
 
+	it("reads a fold mark already on the line as syntax, not as title", () => {
+		// The blockquote half of what `splitFoldMark` decides: here the `-` is
+		// Obsidian's fold syntax, so it is consumed and reissued from the picked
+		// callout's own defaults — a `-` kept as text would render as a title
+		// beginning with a dash. The heading role does the opposite; see the
+		// heading suite below.
+		const h = harness();
+		assert.strictEqual(
+			pick(h, "> [!no⎸]- My own words", "note").getValue(),
+			"> [!note] My own words",
+		);
+		addCallout(h.registry, { foldable: true, defaultFolded: true });
+		assert.strictEqual(
+			pick(h, "> [!qu⎸]+ My own words", "quiet").getValue(),
+			"> [!quiet]- My own words",
+		);
+	});
+
 	it("replaces a title that is only some other callout's display name", () => {
 		const h = harness();
 		assert.strictEqual(
@@ -497,6 +585,19 @@ describe("selectSuggestion — heading callout", () => {
 		assert.strictEqual(
 			pick(h, "## [!no⎸|purple]", "note").getValue(),
 			"## [!note|purple]",
+		);
+	});
+
+	it("keeps a title that starts with a dash", () => {
+		// The heading role has no fold syntax, so the `-` is the first character
+		// of the user's title. `selectSuggestion` reads the mark off through
+		// `splitFoldMark`, which is told the role — until it was, the rule lived
+		// only in the fact that this role `return`s before the read. See
+		// `headingFoldSyntax.test.ts` for the property on its own.
+		const h = harness();
+		assert.strictEqual(
+			pick(h, "## [!no⎸]- My section", "note").getValue(),
+			"## [!note] - My section",
 		);
 	});
 });

@@ -247,27 +247,31 @@ describe("a data.json written by 1.0.0", () => {
 		assert.ok(!("showColorPreviews" in autocomplete));
 	});
 
-	it("does NOT carry the granular menu toggles across — pinned as found", () => {
-		// 1.x had three booleans; the menu is an ordered, per-role item list now,
-		// and nothing translates one into the other. So a vault that had hidden
-		// "Copy markdown" gets it back on the first launch of a modern build,
-		// silently. Small, and reversible by the user in one click — but it IS a
-		// setting quietly reset by an upgrade, and the fix (map the three
-		// booleans onto the matching item ids before `mergeMenuItems` runs) is a
-		// few lines. This is the assertion to flip if that lands.
+	it("carries the granular menu toggles onto the item list", () => {
+		// 1.x had three booleans; the menu is an ordered, per-role item list now.
+		// Until the two shapes were mapped onto each other a vault that had
+		// hidden "Copy markdown" got it back on the first launch of a modern
+		// build — small and reversible in one click, but a setting reset by an
+		// upgrade without the user asking.
 		const items = load(vaultFrom_1_0_0()).settings.contextMenu.items;
 		const copyMarkdown = items.regular.find((i) => i.id === "copyMarkdown");
 
-		assert.strictEqual(copyMarkdown?.enabled, true, "the saved `false` is gone");
+		assert.strictEqual(copyMarkdown?.enabled, false, "the saved `false` holds");
 		assert.deepStrictEqual(
 			items.regular.map((i) => i.id),
 			DEFAULT_CONTEXT_MENU_REGULAR,
+			"the order is still the default one — 1.x had no order to keep",
+		);
+		assert.deepStrictEqual(
+			items.regular.filter((i) => i.enabled).map((i) => i.id),
+			["foldDefaults", "edit", "openSettings"],
+			"and the two the file left on are still on",
 		);
 		const menu = load(vaultFrom_1_0_0()).settings.contextMenu as unknown as Record<
 			string,
 			unknown
 		>;
-		assert.ok(!("showCopyMarkdown" in menu), "at least the dead key is dropped");
+		assert.ok(!("showCopyMarkdown" in menu), "and the dead key is dropped");
 	});
 
 	it("re-stamps the file to the current data version on the next save", () => {
@@ -649,28 +653,71 @@ describe("a file that says almost nothing", () => {
 		assert.strictEqual(registry.getBuiltIn().length, DEFAULT_CALLOUTS.length);
 	});
 
-	it("drops a row saved as a built-in that this version has no built-in for", () => {
-		// Pinned as found. `load()` merges a `builtIn: true` row onto the shipped
-		// default and skips it entirely when there is none to merge onto — so a
-		// callout that some build shipped as a built-in and a later one retired
-		// is gone rather than demoted to a user row. Unreachable today (the 13
-		// have never changed), and the shape to remember if one is ever removed.
+	it("demotes a row saved as a built-in this version has no built-in for", () => {
+		// The mirror of the reclaim above. `load()` merges a `builtIn: true` row
+		// onto the shipped default; when there is none to merge onto it used to
+		// skip the row entirely, so a callout some build shipped as a built-in
+		// and a later one retired took every vault's customization of it away —
+		// while notes went on writing `[!retired-builtin]`. Unreachable today
+		// (the 13 have never changed), and the shape to hold to if one ever is.
 		const registry = load({
-			callouts: [
-				{
-					id: "retired-builtin",
-					displayName: "Retired",
-					icon: { type: "lucide", value: "star" },
-					colorLight: "#336699",
-					colorDark: "#88bbee",
-					foldable: true,
-					defaultFolded: false,
-					builtIn: true,
-					source: "builtin",
-				},
-			] as CalloutDefinition[],
+			callouts: [retiredBuiltIn()],
+		});
+		const row = registry.get("retired-builtin");
+
+		assert.strictEqual(row?.displayName, "Retired");
+		assert.strictEqual(row.colorLight, "#336699", "its styling came with it");
+		assert.strictEqual(row.builtIn, false, "but not the flag it lied about");
+		assert.strictEqual(row.source, "user");
+	});
+
+	it("shows it in the user's own list, and never among the built-ins", () => {
+		// The lists partition on `builtIn`, so a row left claiming the flag
+		// would re-home itself into the built-in half and be compared against a
+		// shipped default that does not exist.
+		const registry = load({ callouts: [retiredBuiltIn()] });
+
+		assert.deepStrictEqual(userIds(registry), ["retired-builtin"]);
+		assert.strictEqual(registry.getBuiltIn().length, DEFAULT_CALLOUTS.length);
+	});
+
+	it("keeps a non-`builtin` source it also carried", () => {
+		// Only the one claim is disproved. An import's `"theme"` row with a
+		// stray `builtIn: true` is still a theme row.
+		const registry = load({
+			callouts: [{ ...retiredBuiltIn(), source: "theme" }],
 		});
 
-		assert.strictEqual(registry.has("retired-builtin"), false);
+		assert.strictEqual(registry.get("retired-builtin")?.source, "theme");
+		assert.strictEqual(registry.get("retired-builtin")?.builtIn, false);
+	});
+
+	it("rewrites the file so the broken shape stops coming back", () => {
+		// Same treatment the reclaim gets: repaired in memory AND flushed, or
+		// every launch would demote it again and the next export would carry
+		// the lie onward.
+		const registry = load({ callouts: [retiredBuiltIn()] });
+
+		assert.strictEqual(registry.needsSaveAfterLoad(), true);
+		const saved = registry.toSaveData().callouts.find(
+			(c) => c.id === "retired-builtin",
+		);
+		assert.strictEqual(saved?.builtIn, false);
+		assert.strictEqual(saved.source, "user");
 	});
 });
+
+/** A row that claims to be one of the shipped built-ins, on an id that is not. */
+function retiredBuiltIn(): CalloutDefinition {
+	return {
+		id: "retired-builtin",
+		displayName: "Retired",
+		icon: { type: "lucide", value: "star" },
+		colorLight: "#336699",
+		colorDark: "#88bbee",
+		foldable: true,
+		defaultFolded: false,
+		builtIn: true,
+		source: "builtin",
+	} as CalloutDefinition;
+}

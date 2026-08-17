@@ -29,10 +29,10 @@
  * the failure *in memory only*, so a vault that was merely offline gets a clean
  * chance on the next launch rather than a permanent error.
  *
- * NOTE ON SCOPE. `cacheOne`'s retry loop waits through `window.setTimeout`,
- * which Node has not got, so the offline path is exercised through `ensureAll`
- * — the sweep that is built for startup and takes a single attempt. And there is
- * no request de-duplication in this class to test: see the session summary.
+ * `cacheOne` de-duplicates concurrent callers the way `PackDataStore` does for
+ * a whole pack, and is tested the same way: by promise identity, which is the
+ * only evidence that the second caller joined the first request rather than
+ * starting a second one that happens to fetch the same bytes.
  */
 import assert from "node:assert";
 import { readFileSync } from "node:fs";
@@ -472,22 +472,36 @@ describe("ensureArtworkFor — the one repair path", () => {
 		assert.ok(h.registry.findIconSvg("fa-brands", "apple", ""));
 	});
 
-	it("retries per icon, not per group, when the pack cannot be got at all", async () => {
-		// PINNED AS CURRENT BEHAVIOUR, and flagged: the "one download per group"
-		// property above holds only while the pack is obtainable. `fetchArtwork`
-		// re-checks `state !== "ready"` for every icon, and a pack that failed is
-		// never "ready" — so an offline import of twenty Brands icons makes
-		// twenty attempts, each of which is two URLs behind a 30-second timeout.
-		// The `hasFailed` filter that would stop it is evaluated once, up front,
-		// before the first attempt has had a chance to fail. See the session
-		// summary.
+	it("gives up on the group, not once per icon, when the pack cannot be got", async () => {
+		// The other half of "one download per group": the property has to hold
+		// when the pack is *unobtainable* too, which is exactly when it costs
+		// something. `fetchArtwork` re-checks `state !== "ready"` for every icon
+		// and a failed pack is never "ready", so the group loop has to carry the
+		// `hasFailed` test itself — the filter before it ran before anything had
+		// had the chance to fail. Offline, twenty Brands icons must be one
+		// answer, not twenty × two URLs behind a 30-second timeout.
 		const h = service();
 		await h.service.ensureArtworkFor([
 			{ type: "rpg-awesome", value: "acid" },
 			{ type: "rpg-awesome", value: "anvil" },
 			{ type: "rpg-awesome", value: "arrow-cluster" },
 		]);
-		assert.equal(h.looked.filter((p) => p.endsWith("rpg-awesome.json")).length, 3);
+		assert.equal(h.looked.filter((p) => p.endsWith("rpg-awesome.json")).length, 1);
+	});
+
+	it("still tries every other library after one of them fails", async () => {
+		// Giving up is per pack, never per batch: an import mixing a source that
+		// cannot be reached with one already on disk must still repair the
+		// second.
+		const h = service();
+		h.files.set(h.service.packs.packPath("fa-solid"), realPackText("fa-solid"));
+		await h.service.ensureArtworkFor([
+			{ type: "rpg-awesome", value: "acid" },
+			{ type: "rpg-awesome", value: "anvil" },
+			{ type: "fa-solid", value: "star" },
+		]);
+		assert.equal(h.looked.filter((p) => p.endsWith("rpg-awesome.json")).length, 1);
+		assert.ok(h.registry.findIconSvg("fa-solid", "star", ""));
 	});
 
 	it("does not pull down the other styles of a library it did not ask for", async () => {
@@ -758,6 +772,148 @@ describe("IconFetchManager", () => {
 		const h = fetchHarness();
 		const icon: CalloutIcon = { type: "material", value: "home" };
 		assert.equal(h.fetch.hasFailed(icon), h.fetch.hasFailed(icon, "regular"));
+	});
+});
+
+describe("IconFetchManager.cacheOne — one request per drawing", () => {
+	interface FetchSeams {
+		__CS_REQUEST_URL__?: (url: string) => Promise<{ text: string }>;
+		window?: unknown;
+	}
+	const seams = globalThis as unknown as FetchSeams;
+
+	/**
+	 * Count every request and refuse all of them, so what a test reads is the
+	 * number of attempts rather than what came back.
+	 *
+	 * The `window` here is not a fake DOM — `cacheOne`'s retry wait reaches for
+	 * exactly one member of it, and what it wants from that member is to be
+	 * called back later. A resolved promise is later enough, and costs the three
+	 * attempts no wall clock at all.
+	 */
+	function offline(): { requests: () => number; restore: () => void } {
+		const savedServe = seams.__CS_REQUEST_URL__;
+		const savedWindow = seams.window;
+		let requests = 0;
+		seams.__CS_REQUEST_URL__ = () => {
+			requests++;
+			return Promise.reject(new Error("offline"));
+		};
+		seams.window = {
+			setTimeout: (fn: () => void) => {
+				void Promise.resolve().then(fn);
+				return 0;
+			},
+		};
+		return {
+			requests: () => requests,
+			restore: () => {
+				seams.__CS_REQUEST_URL__ = savedServe;
+				seams.window = savedWindow;
+			},
+		};
+	}
+
+	function manager(): IconFetchManager {
+		return new IconFetchManager({
+			registry: registry(),
+			cssInjector: { inject: () => undefined } as unknown as CSSInjector,
+			saveSettings: () => Promise.resolve(),
+		});
+	}
+
+	it("hands two concurrent callers the very same request", async () => {
+		// Identity, not a count, is the property: an `async` method returns a
+		// fresh promise every call, so sharing one is only observable this way.
+		// The picker's confirm and the editor's save can land on the same icon
+		// in the same tick, and two fetches of one drawing is two rounds of
+		// three attempts, two waits apiece, racing to store identical bytes.
+		const net = offline();
+		try {
+			const fetch = manager();
+			const icon: CalloutIcon = { type: "material", value: "home" };
+			const first = fetch.cacheOne(icon);
+			const second = fetch.cacheOne(icon);
+			assert.strictEqual(first, second, "the second caller started its own");
+			await first;
+			assert.equal(net.requests(), 3, "one round of attempts, not two");
+		} finally {
+			net.restore();
+		}
+	});
+
+	it("keeps two different drawings on their own requests", async () => {
+		// The other half of the same property: de-duplication is keyed the way
+		// the cache is, so `home` joining `house` would be a bug of its own.
+		const net = offline();
+		try {
+			const fetch = manager();
+			const home = fetch.cacheOne({ type: "material", value: "home" });
+			const house = fetch.cacheOne({ type: "material", value: "house" });
+			assert.notStrictEqual(home, house);
+			await Promise.all([home, house]);
+			assert.equal(net.requests(), 6);
+		} finally {
+			net.restore();
+		}
+	});
+
+	it("keys the sharing by style and weight, not by name alone", async () => {
+		// One name is over a hundred drawings; two of them are two fetches.
+		const net = offline();
+		try {
+			const fetch = manager();
+			const a = fetch.cacheOne({ type: "material", value: "home", weight: 400 });
+			const b = fetch.cacheOne({ type: "material", value: "home", weight: 700 });
+			assert.notStrictEqual(a, b);
+			await Promise.all([a, b]);
+			assert.equal(net.requests(), 6);
+		} finally {
+			net.restore();
+		}
+	});
+
+	it("lets the next caller try again once the request has settled", async () => {
+		// The map is cleared in a `finally`, so this shares *concurrent* callers
+		// rather than locking the icon out for the session. Retrying is what the
+		// picker's second press has to be able to do.
+		const net = offline();
+		try {
+			const fetch = manager();
+			const icon: CalloutIcon = { type: "material", value: "home" };
+			await fetch.cacheOne(icon);
+			const after = net.requests();
+			const again = fetch.cacheOne(icon);
+			assert.equal(net.requests() > after, true, "it refused to try again");
+			await again;
+		} finally {
+			net.restore();
+		}
+	});
+
+	it("asks for nothing at all when the drawing is already cached", async () => {
+		const net = offline();
+		try {
+			const fetch = manager();
+			const reg = registry();
+			reg.addIconSvg({
+				pack: "material",
+				name: "home",
+				variant: "outlined|400",
+				svg: "<svg/>",
+			});
+			const cached = new IconFetchManager({
+				registry: reg,
+				cssInjector: { inject: () => undefined } as unknown as CSSInjector,
+				saveSettings: () => Promise.resolve(),
+			});
+			await cached.cacheOne({ type: "material", value: "home" });
+			assert.equal(net.requests(), 0);
+			await fetch.cacheOne({ type: "lucide", value: "star" });
+			assert.equal(net.requests(), 0, "a builtin pack asked for artwork");
+		} finally {
+			net.restore();
+		}
 	});
 });
 

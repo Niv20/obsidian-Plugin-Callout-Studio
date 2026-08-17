@@ -61,4 +61,6 @@ Don't bump `manifest.json`, `package.json`, or `versions.json` in a feature or f
 
 ## License
 
-A permissive [license](LICENSE) with one restriction: it may not be used to build another Obsidian plugin. By submitting a change you agree it's licensed under the same terms.
+A permissive [license](LICENSE) — free to use, copy, modify, and distribute, with no conditions attached. By submitting a change you agree it's licensed under the same terms.
+
+There is one informal ask, and it is not a license term: please don't repackage this code and publish it as a new plugin in Obsidian's Community Plugins directory. Reuse it, learn from it, build on it — just not that.

@@ -402,36 +402,50 @@ describe("navigation arrows survive translation", () => {
 	}
 
 	/**
-	 * `vault.idsUpdated` / `vault.titlesUpdated` read `{{oldIds}} → {{newId}}`,
-	 * and the two placeholders are callout ids — normally Latin. The Unicode
-	 * bidi algorithm resolves a neutral arrow between two left-to-right runs as
-	 * left-to-right too, so that fragment renders LTR *inside* an RTL sentence
-	 * and `→` is the correct glyph there. Hebrew does exactly that; Arabic and
-	 * Persian mirror it to `←`, which renders as "old ← new" — pointing from
-	 * the new id back to the old one.
+	 * The other half, and the reason the suite above is direction-agnostic.
 	 *
-	 * Marked `todo` rather than asserted: it reports on every run without
-	 * failing the suite, because which of the two is right is a call for
-	 * whoever owns those translations, not for this file.
+	 * `vault.idsUpdated` / `vault.titlesUpdated` read `{{oldIds}} → {{newId}}`,
+	 * and both placeholders are callout ids — normally Latin. The Unicode bidi
+	 * algorithm resolves a neutral character between two left-to-right runs as
+	 * left-to-right too (UAX #9, rule N1), so that fragment renders LTR *inside*
+	 * an RTL sentence, and `→` is the glyph that points from the old id to the
+	 * new one there. Mirroring it to `←` renders "old ← new": an arrow pointing
+	 * from the replacement back to the thing it replaced, which is the opposite
+	 * of what the sentence says. Hebrew already had this right; Arabic and
+	 * Persian did not, and this is what pins it for all three.
+	 *
+	 * The distinction against `firstRun.laterHint` is the whole point: there the
+	 * arrows sit between *translated words*, the run is RTL, and `←` is correct.
+	 * Direction here is decided by what surrounds the arrow, not by the language.
 	 */
 	for (const fileId of RTL_LOCALES) {
-		it(
-			`${fileId}.ts leaves the id-transition arrow pointing forward`,
-			{
-				todo:
-					"ar/fa mirror an arrow that sits between two LTR placeholders — " +
-					"see the block comment above",
-			},
-			() => {
-				for (const key of ["vault.idsUpdated", "vault.titlesUpdated"]) {
-					const value = LOCALE_TABLES[fileId][key];
-					if (value === undefined) continue;
-					assert.ok(
-						value.includes("→"),
-						`${fileId}.${key} mirrors an arrow between two LTR runs`,
-					);
-				}
-			},
-		);
+		it(`${fileId}.ts leaves the id-transition arrow pointing forward`, () => {
+			for (const key of ["vault.idsUpdated", "vault.titlesUpdated"]) {
+				const value = LOCALE_TABLES[fileId][key];
+				if (value === undefined) continue;
+				assert.ok(
+					value.includes("→"),
+					`${fileId}.${key} lost the forward arrow between two LTR runs`,
+				);
+				assert.ok(
+					!value.includes("←"),
+					`${fileId}.${key} mirrors an arrow between two LTR runs, so it ` +
+						`renders "old ← new" — pointing from the new id to the old`,
+				);
+			}
+		});
 	}
+
+	it("keeps the two arrow rules from collapsing into one", () => {
+		// If every RTL string mirrored, or none did, one of the two suites above
+		// would be vacuous and could be deleted without a failure. English is the
+		// control: it uses `→` in both places, so the split really is about
+		// direction and not about the two keys being different sentences.
+		for (const fileId of RTL_LOCALES) {
+			assert.ok(LOCALE_TABLES[fileId]["firstRun.laterHint"]?.includes("←"));
+			assert.ok(LOCALE_TABLES[fileId]["vault.idsUpdated"]?.includes("→"));
+		}
+		assert.ok(en["firstRun.laterHint"]?.includes("→"));
+		assert.ok(en["vault.idsUpdated"]?.includes("→"));
+	});
 });

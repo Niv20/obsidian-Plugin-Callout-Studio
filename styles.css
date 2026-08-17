@@ -65,65 +65,6 @@
 	padding-bottom: 0;
 }
 
-.callout-studio-settings .cs-subheader-row .cs-refresh-inline-link {
-	appearance: none;
-	height: auto;
-	padding: 0;
-	border: none;
-	background: transparent;
-	box-shadow: none;
-	color: var(--text-muted);
-	font-size: var(--font-smallest);
-	font-weight: 400;
-	line-height: 1;
-	text-decoration: underline;
-	cursor: pointer;
-}
-
-.callout-studio-settings .cs-subheader-row .cs-refresh-inline-link:hover,
-.callout-studio-settings
-	.cs-subheader-row
-	.cs-refresh-inline-link:focus-visible {
-	background: transparent;
-	color: var(--text-normal);
-	box-shadow: none;
-}
-
-/* Empty state — notice + add button stacked */
-.callout-studio-settings .cs-empty-state {
-	display: flex;
-	flex-direction: column;
-	align-items: flex-start;
-	gap: 8px;
-	padding: 12px 0;
-	margin-bottom: 8px;
-}
-
-.callout-studio-settings .cs-empty-state .callout-studio-empty-state {
-	margin: 0;
-}
-
-.callout-studio-settings .callout-studio-toolbar {
-	display: flex;
-	align-items: center;
-	gap: 8px;
-	margin-bottom: 12px;
-}
-
-.callout-studio-toolbar-search {
-	flex: 1;
-	min-width: 0;
-}
-
-.callout-studio-toolbar-search .setting-item {
-	border: none;
-	padding: 0;
-}
-
-.callout-studio-toolbar-search .setting-item-info {
-	display: none;
-}
-
 .callout-studio-settings .cs-settings-neutral-btn {
 	background: var(--background-modifier-form-field);
 	border: 1px solid var(--background-modifier-border);
@@ -146,10 +87,6 @@
    regardless of theme. */
 .callout-studio-settings .setting-item:not(.setting-item-heading) {
 	align-items: center;
-}
-
-.callout-studio-kebab-btn {
-	flex-shrink: 0;
 }
 
 .callout-studio-empty-state {
@@ -265,27 +202,6 @@
 	display: flex;
 	gap: 6px;
 	flex-shrink: 0;
-}
-
-.callout-studio-color-swatch {
-	position: relative;
-	width: 24px;
-	height: 24px;
-	border-radius: 6px;
-	border: 1px solid var(--background-modifier-border);
-	cursor: default;
-}
-
-.callout-studio-swatch-label {
-	position: absolute;
-	bottom: -1px;
-	right: 1px;
-	font-size: 9px;
-	font-weight: 700;
-	color: rgba(255, 255, 255, 0.9);
-	text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
-	pointer-events: none;
-	line-height: 1;
 }
 
 /* ─── Row Buttons ─────────────────────────────────────────────── */
@@ -499,13 +415,21 @@
 	box-shadow: 0 0 0 2px rgba(var(--interactive-accent-rgb), 0.2);
 }
 
+/* A greyed-out control still has to read as a control, which means it has to
+   stay *raised off* the window rather than merging into it. `--background-
+   secondary` is that raised shade only while `--modal-background` is
+   `--background-primary`; on mobile dark the two swap, so this fill landed
+   exactly on the surface behind it and the field read as a hole punched in the
+   modal — with `opacity: 0.5` making the remaining border fainter still. This
+   rule is already scoped to the callout editor, which is a chromed window, so
+   the token is always in scope here and the fallback never fires. */
 .callout-studio-editor
 	.setting-item-control
 	input[type="text"]:not(.cs-tag-input-field):disabled {
 	color: var(--text-faint);
 	opacity: 0.5;
 	cursor: not-allowed;
-	background: var(--background-secondary);
+	background: var(--cs-surface-raised, var(--background-secondary));
 }
 
 /* ─── Live Preview ────────────────────────────────────────────── */
@@ -1493,11 +1417,6 @@ button.callout-studio-icon-picker-loading {
 	font-size: var(--font-ui-smaller);
 }
 
-.callout-studio-icon-transformed {
-	transform: var(--cs-icon-transform);
-	transform-origin: center;
-}
-
 /* ─── Color Palette Presets ───────────────────────────────────── */
 
 .cs-palette-dropdown {
@@ -1721,7 +1640,17 @@ button.callout-studio-icon-picker-loading {
 	/* Visible border: the right circle shows the callout BACKGROUND color,
 	   which is pale and would otherwise vanish against the panel. */
 	border: 1px solid var(--background-modifier-border);
-	box-shadow: 0 0 0 1.5px var(--background-primary);
+	/* The ring is a cut-out, not a colour: it repaints the surface behind the
+	   circle so the one in front reads as separated from the one behind it. So
+	   it has to be whatever that surface actually is. This widget renders in the
+	   settings tab (rows, custom palettes) AND inside the callout editor — its
+	   trigger swatch and every palette-menu item — and its selector cannot say
+	   which. `--cs-surface` answers both: undefined outside a window, so the
+	   fallback keeps the settings tab exactly as it was, and the window's own
+	   background inside one. Painting `--background-primary` raw drew a pure
+	   black halo on mobile dark, where that variable is `#000` for OLED and the
+	   modal is not. */
+	box-shadow: 0 0 0 1.5px var(--cs-surface, var(--background-primary));
 	box-sizing: border-box;
 	position: relative;
 }
@@ -1750,60 +1679,38 @@ button.callout-studio-icon-picker-loading {
    standard transparency checkerboard, because an empty circle at 16px is
    indistinguishable from a swatch that failed to render.
 
-   Both tones are derived from the page itself, so one rule reads correctly on a
-   light and a dark theme — white-on-grey where the page is white, and two quiet
-   darks where it is dark (a fixed white checker would glow on a dark page). The
-   mix, rather than --background-modifier-border, guarantees the squares stay
-   apart in themes that make that variable nearly invisible.
+   Both tones are derived from the surface the swatch is drawn on, so one rule
+   reads correctly on a light and a dark theme — white-on-grey where that
+   surface is white, and two quiet darks where it is dark (a fixed white checker
+   would glow on a dark page). The mix, rather than --background-modifier-border,
+   guarantees the squares stay apart in themes that make that variable nearly
+   invisible.
+
+   `--cs-surface` rather than `--background-primary`, and for the same reason as
+   the ring above: this widget is drawn both in the settings tab and inside the
+   callout editor. On mobile dark the raw variable is a true `#000` while the
+   modal is not, so "empty" came out as a black square on the window instead of
+   as a checkerboard — the one thing the pattern exists to avoid being confused
+   with is a swatch that failed to render.
 
    Tile size is half the circle so each square is a quarter of it: the accent
    circle in front covers ~40%, leaving roughly a 10px crescent to read in, and
    anything finer than ~4px turns to mush at this scale. */
 .cs-color-circle.is-transparent {
 	background-image: repeating-conic-gradient(
-		color-mix(in srgb, var(--text-normal) 22%, var(--background-primary)) 0%
-			25%,
-		var(--background-primary) 0% 50%
+		color-mix(
+				in srgb,
+				var(--text-normal) 22%,
+				var(--cs-surface, var(--background-primary))
+			)
+			0% 25%,
+		var(--cs-surface, var(--background-primary)) 0% 50%
 	);
 	background-size: calc(var(--cs-circle-size) / 2)
 		calc(var(--cs-circle-size) / 2);
 }
 
 /* ─── Compact Color Grid ──────────────────────────────────────── */
-
-.callout-studio-color-grid {
-	padding: 6px 10px 8px;
-}
-
-.callout-studio-color-grid-header {
-	display: grid;
-	grid-template-columns: repeat(3, minmax(0, 1fr));
-	gap: 2px;
-	font-size: 10px;
-	color: var(--text-faint);
-	text-align: center;
-	margin-bottom: 4px;
-}
-
-.callout-studio-color-grid-header span:first-child {
-	text-align: center;
-}
-
-.callout-studio-color-row {
-	display: grid;
-	grid-template-columns: repeat(3, minmax(0, 1fr));
-	gap: 2px;
-	align-items: center;
-	padding: 2px 0;
-}
-
-.callout-studio-color-row > span {
-	font-size: var(--font-ui-smaller);
-	color: var(--text-muted);
-	text-align: center;
-	justify-self: center;
-	width: 100%;
-}
 
 /* The visible swatch is this wrapper's background-color — a box we fully
    control, so it renders identically on desktop, iPhone and tablets and can
@@ -2631,10 +2538,8 @@ button.callout-studio-icon-picker-loading {
 /* ─── Accessibility & Mobile ─────────────────────────────────── */
 
 /* Focus-visible for all interactive elements */
-.callout-studio-settings .callout-studio-actions button:focus-visible,
 .callout-studio-row-buttons button:focus-visible,
-.cs-modal-footer button:focus-visible,
-.callout-studio-preview-toggle:focus-visible {
+.cs-modal-footer button:focus-visible {
 	outline: 2px solid var(--text-accent);
 	outline-offset: -2px;
 }
@@ -2649,11 +2554,6 @@ button.callout-studio-icon-picker-loading {
 .icon-picker-toolbar input,
 .icon-picker-toolbar select {
 	min-height: 32px;
-}
-
-.callout-studio-preview-toggle {
-	min-height: 32px;
-	min-width: 32px;
 }
 
 /* ─── Tag Input (Aliases) ─────────────────────────────────────── */
@@ -2756,11 +2656,18 @@ input.cs-input-invalid:focus {
 	box-shadow: 0 0 0 2px rgba(var(--interactive-accent-rgb), 0.2);
 }
 
+/* The same raised shade as the display-name field above it, for the same
+   reason: the two sit one on top of the other in the callout editor and were
+   deliberately styled to match, so a fix to one that skipped the other would
+   split them apart on exactly the platform the fix is for. The only host of a
+   `.cs-tag-input-row` is that editor (src/ui/TagInput.ts), which is a chromed
+   window — but the fallback stays, because it is what makes the token safe to
+   name from a rule whose selector does not say so. */
 .cs-tag-input-row > .cs-tag-input-field:disabled {
 	color: var(--text-faint);
 	opacity: 0.5;
 	cursor: not-allowed;
-	background: var(--background-secondary);
+	background: var(--cs-surface-raised, var(--background-secondary));
 }
 
 .cs-tag-input-row > .cs-tag-input-field::placeholder {
@@ -2950,9 +2857,6 @@ input.cs-input-invalid:focus {
 	.callout-studio-row-colors {
 		display: none;
 	}
-	.callout-studio-reset-btn {
-		display: none;
-	}
 }
 
 /*
@@ -2972,96 +2876,6 @@ input.cs-input-invalid:focus {
 	.callout-studio-row-name {
 		display: none;
 	}
-}
-
-/* ─── Disabled Reset Button ───────────────────────────────────── */
-
-.callout-studio-btn-disabled {
-	opacity: 0.25;
-	cursor: default;
-	pointer-events: none;
-	color: var(--background-modifier-border);
-	filter: grayscale(1) brightness(0.6);
-}
-
-/* ─── Global Callout Style Section ────────────────────────────── */
-
-.cs-global-preview-label {
-	font-size: var(--font-ui-smaller);
-	font-weight: var(--font-semibold);
-	color: var(--text-muted);
-	text-transform: uppercase;
-	letter-spacing: 0.5px;
-	margin-bottom: 8px;
-}
-
-.cs-global-preview-card {
-	padding: 0;
-}
-
-.cs-global-preview-body {
-	min-width: 0;
-}
-
-/* Preview callout mock — neutral gray */
-.cs-global-preview-callout {
-	--cs-color-rgb: 158, 158, 158;
-	background: rgba(var(--cs-color-rgb), 0.1);
-	padding: 0;
-	margin: 0;
-	overflow: hidden;
-	border-radius: var(--cs-preview-radius, 4px);
-	border: var(--cs-preview-border, none);
-	border-top: var(--cs-preview-border-top, none);
-	border-right: var(--cs-preview-border-right, none);
-	border-bottom: var(--cs-preview-border-bottom, none);
-	border-left: var(--cs-preview-border-left, none);
-}
-
-.cs-global-preview-callout > .callout-title {
-	display: flex;
-	align-items: center;
-	gap: 8px;
-	padding: 8px 12px;
-	font-weight: var(--font-semibold);
-	color: rgb(var(--cs-color-rgb));
-}
-
-.cs-global-preview-callout > .callout-title > .callout-icon {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	flex-shrink: 0;
-	color: rgb(var(--cs-color-rgb));
-}
-
-.cs-global-preview-callout > .callout-title > .callout-icon svg {
-	width: 18px;
-	height: 18px;
-}
-
-.cs-global-preview-callout > .callout-title > .callout-title-inner {
-	font-size: var(--cs-preview-title-size, 1em);
-}
-
-.callout.cs-global-preview-callout > .callout-content {
-	padding: 0 12px 10px;
-	padding-inline-start: var(--cs-preview-content-indent, 12px);
-	color: var(--text-normal);
-	line-height: 1.5;
-	font-size: var(--cs-preview-content-size, 1em);
-}
-
-/* Square icon placeholder for the locked preview */
-.cs-global-preview-callout .cs-preview-square-icon {
-	width: 14px;
-	height: 14px;
-	border-radius: 2px;
-	background: rgb(var(--cs-color-rgb));
-}
-
-.cs-global-preview-callout > .callout-content p {
-	margin: 0;
 }
 
 /* ─── Settings group (sub-sections) ───────────────────────────── */
@@ -3207,16 +3021,6 @@ input.cs-input-invalid:focus {
 
 	/* Roomier color grid on narrow screens so native color swatches
 	   (iOS renders them as large circles) don't visually overlap. */
-	.callout-studio-color-grid {
-		padding: 8px 12px 12px;
-	}
-	.callout-studio-color-row {
-		padding: 8px 0;
-		min-height: 44px;
-	}
-	.callout-studio-color-row + .callout-studio-color-row {
-		border-top: 1px solid var(--background-modifier-border);
-	}
 	.callout-studio-color-input-wrap {
 		width: 44px;
 		height: 32px;
@@ -3608,45 +3412,6 @@ input.cs-input-invalid:focus {
    anyway. The name error, which lives inside a row's description, keeps it. */
 .callout-studio-palette-editor .cs-palette-color-error:not(.is-visible) {
 	display: none;
-}
-
-/* "Customize all colors" collapsible card header. The button element keeps
-   the shared adjust-header look; these rules strip Obsidian's default button
-   chrome and add the open/closed chevron. */
-.cs-collapse-header {
-	appearance: none;
-	display: flex;
-	align-items: center;
-	gap: 6px;
-	width: 100%;
-	margin: 0;
-	border: none;
-	box-shadow: none;
-	cursor: pointer;
-	text-align: start;
-}
-
-/* Collapsed: the header IS the whole card, so round all corners. */
-.cs-collapse-header:not(.is-open) {
-	border-radius: 7px;
-}
-
-.cs-collapse-header:hover {
-	color: var(--text-normal);
-}
-
-.cs-collapse-chevron {
-	display: inline-flex;
-	transition: transform 120ms ease;
-}
-
-.cs-collapse-chevron .svg-icon {
-	width: 14px;
-	height: 14px;
-}
-
-.cs-collapse-header.is-open .cs-collapse-chevron {
-	transform: rotate(90deg);
 }
 
 /* Generic row-hide utility (e.g. the command editor's role-specific rows). It

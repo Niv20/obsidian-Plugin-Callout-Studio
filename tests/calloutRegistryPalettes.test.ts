@@ -135,19 +135,38 @@ describe("countPaletteLinks", () => {
 		assert.strictEqual(registry.relinkPalette("cp-1", "cp-2"), promised);
 	});
 
-	it("DOES see a live-preview row that carries a paletteId", () => {
-		// Pinned as found. The method's own doc says a preview cannot skew it,
-		// but that holds only because `CalloutEditor.buildPreviewDefinition`
-		// happens to build without a `paletteId` — nothing here enforces it,
-		// and `withIdentityOf` does not strip the field either.
+	it("does NOT see a brand-new draft that carries a paletteId", () => {
+		// The number is shown to the user as "how many other callouts will be
+		// regrouped", and a callout still being typed in the editor is not one
+		// of them. Relying on `CalloutEditor.buildPreviewDefinition` happening
+		// to build without a `paletteId` is not an enforcement — `withIdentityOf`
+		// does not strip the field either.
 		const { registry } = loaded(saved([def({ id: "a", paletteId: "cp-1" })]));
 		assert.strictEqual(registry.countPaletteLinks("cp-1"), 1);
 
 		registry.setPreviewDefinition(def({ id: "draft", paletteId: "cp-1" }));
-		assert.strictEqual(registry.countPaletteLinks("cp-1"), 2);
+		assert.strictEqual(registry.countPaletteLinks("cp-1"), 1);
 
 		registry.setPreviewDefinition(null);
 		assert.strictEqual(registry.countPaletteLinks("cp-1"), 1);
+	});
+
+	it("counts the callout a preview shadows, not the preview's own link", () => {
+		// An in-progress edit of a real callout is that callout for counting
+		// purposes: the committed row is what a revive would regroup.
+		const { registry } = loaded(saved([def({ id: "a", paletteId: "cp-1" })]));
+
+		registry.setPreviewDefinition(def({ id: "a", paletteId: "cp-2" }));
+		assert.strictEqual(registry.countPaletteLinks("cp-1"), 1, "still the real link");
+		assert.strictEqual(registry.countPaletteLinks("cp-2"), 0, "not the draft's");
+	});
+
+	it("still excludes by id while a preview is up", () => {
+		const { registry } = loaded(
+			saved([def({ id: "a", paletteId: "cp-1" }), def({ id: "b", paletteId: "cp-1" })]),
+		);
+		registry.setPreviewDefinition(def({ id: "a", paletteId: "cp-1" }));
+		assert.strictEqual(registry.countPaletteLinks("cp-1", "a"), 1);
 	});
 });
 
@@ -279,11 +298,11 @@ describe("applyPaletteColors", () => {
 		);
 	});
 
-	it("costs two change rounds when it does, not one", () => {
-		// Pinned as found. `restyleUncustomizedFallbackRows` notifies on its own
-		// before `applyPaletteColors` notifies for the repaint, so one logical
-		// operation regenerates the stylesheet and writes data.json twice. The
-		// class has `batch()` for exactly this, and does not use it here.
+	it("costs ONE change round when it re-mirrors, not two", () => {
+		// `restyleUncustomizedFallbackRows` notifies on its own before
+		// `applyPaletteColors` notifies for the repaint, so un-batched one
+		// logical operation regenerated the stylesheet and wrote data.json
+		// twice. The class has `batch()` for exactly this.
 		const { registry, events } = loaded(
 			saved(
 				[
@@ -294,7 +313,7 @@ describe("applyPaletteColors", () => {
 			),
 		);
 		registry.applyPaletteColors("cp-1", colors());
-		assert.strictEqual(events(), 2);
+		assert.strictEqual(events(), 1);
 	});
 });
 

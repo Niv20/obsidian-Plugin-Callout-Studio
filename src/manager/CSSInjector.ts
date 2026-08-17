@@ -5,7 +5,14 @@
  * `<style>` element into the document head with per-callout CSS custom
  * properties (colors, icon offsets, sizes). A re-entrancy latch keeps the
  * `css-change` this emits from starting a second pass through the plugin's own
- * listener. Also manages the Material Symbols font link element when needed.
+ * listener.
+ *
+ * Deliberately touches no webfont. A Material icon reaches a rendered callout
+ * as a `mask-image` over the SVG the pack store cached, never as a glyph, so
+ * the Material Symbols families are the icon *picker's* business — `PackPanel`
+ * asks for one when the user opens that source, which is the explicit action
+ * the network policy requires. An injector that warmed a family per pass would
+ * fetch from fonts.gstatic.com on every startup for artwork it does not draw.
  */
 import { setIcon } from "obsidian";
 import type { App } from "obsidian";
@@ -37,7 +44,6 @@ import {
 } from "../utils/colorUtils";
 import { OBSIDIAN_CALLOUT_VAR } from "../constants";
 import { svgToDataUri } from "../icons/svg";
-import { ensureMaterialFontLoaded } from "../icons/packs/materialFont";
 import {
 	applyTitleGradient,
 	clearGradientChars,
@@ -60,6 +66,7 @@ import {
 } from "../editor/renderShared";
 import { refreshAllCalloutEditors } from "../editor/livepreview/refresh";
 import { obsidianCalloutAttrId } from "../utils/calloutId";
+import { calloutSel, tokenAttrSel } from "../utils/calloutSelector";
 import type { CalloutRegistry } from "./CalloutRegistry";
 import { StartupStyleCache } from "./StartupStyleCache";
 
@@ -69,22 +76,6 @@ type RegistryWindow = Window & {
 };
 
 const STYLE_EL_ID = "callout-studio-dynamic-css";
-
-/**
- * The `.callout[data-callout=…]` selector base for one callout ID, with an
- * optional theme prefix. THE single place this plugin writes that selector.
- *
- * Obsidian dasherizes the ID it writes into that attribute (see
- * obsidianCalloutAttrId), so `> [!multi word callout]` renders as
- * `data-callout="multi-word-callout"` and a space-form selector matches
- * nothing. Callers append their own `> .callout-title …` tail.
- *
- * Deliberately does NOT cover the heading-bar / inline-pill / ref-token
- * selectors: that DOM is ours and carries the space-preserving normalized ID
- * (see renderShared.buildCalloutTokenDom).
- */
-const calloutSel = (id: string, themePrefix = ""): string =>
-	`${themePrefix}.callout[data-callout="${obsidianCalloutAttrId(id)}"]`;
 
 /**
  * How far off square a picture may be drawn before it is squeezed back.
@@ -354,17 +345,12 @@ export class CSSInjector {
 				".callout > .callout-title > .callout-icon > span.cs-export-icon { font-size: var(--icon-size, 1.2em); line-height: 1; }",
 		);
 
-		const materialFonts = new Set<string>();
-
 		for (const def of callouts) {
 			rules.push(this.generateCalloutCSS(def));
 		}
 
 		// Fallback rule: style unrecognized callout IDs with the fallback callout
 		rules.push(this.generateFallbackCSS(callouts));
-
-		// Clean up any leftover material font links (no longer needed for rendering)
-		this.updateMaterialFontLinks(materialFonts);
 
 		const cssText = rules.join("\n\n");
 		// Write the CSS to BOTH targets:
@@ -1024,9 +1010,9 @@ export class CSSInjector {
 						// The two conventions are deliberate — do not unify them.
 						`${calloutSel(id, themePrefix)} > ` +
 						`.callout-title > .callout-fold, ` +
-						`${themePrefix}.${CSS_HEADING_LINE}[data-callout="${id}"] ` +
+						`${themePrefix}.${CSS_HEADING_LINE}${tokenAttrSel(id)} ` +
 						`.${CSS_FOLD_ARROW}, ` +
-						`${themePrefix}.${CSS_HEADING_LINE}[data-callout="${id}"] ` +
+						`${themePrefix}.${CSS_HEADING_LINE}${tokenAttrSel(id)} ` +
 						`.heading-collapse-indicator`,
 				)
 				.join(",\n");
@@ -1055,9 +1041,9 @@ export class CSSInjector {
 			ids
 				.map(
 					(id) =>
-						`${themePrefix}.${CSS_INLINE_TOKEN}[data-callout="${id}"], ` +
-						`${themePrefix}.${CSS_HEADING_LINE}[data-callout="${id}"], ` +
-						`${themePrefix}.${CSS_REF_TOKEN}[data-callout="${id}"]`,
+						`${themePrefix}.${CSS_INLINE_TOKEN}${tokenAttrSel(id)}, ` +
+						`${themePrefix}.${CSS_HEADING_LINE}${tokenAttrSel(id)}, ` +
+						`${themePrefix}.${CSS_REF_TOKEN}${tokenAttrSel(id)}`,
 				)
 				.join(",\n");
 
@@ -1081,8 +1067,8 @@ export class CSSInjector {
 			ids
 				.map(
 					(id) =>
-						`${themePrefix}.${CSS_INLINE_TOKEN}[data-callout="${id}"], ` +
-						`${themePrefix}.${CSS_HEADING_LINE}[data-callout="${id}"]`,
+						`${themePrefix}.${CSS_INLINE_TOKEN}${tokenAttrSel(id)}, ` +
+						`${themePrefix}.${CSS_HEADING_LINE}${tokenAttrSel(id)}`,
 				)
 				.join(",\n");
 		const lightBg = this.bgProps(def, "light");
@@ -1108,7 +1094,7 @@ export class CSSInjector {
 				ids
 					.map(
 						(id) =>
-							`${themePrefix}.${CSS_INLINE_TOKEN}[data-callout="${id}"]${suffix}`,
+							`${themePrefix}.${CSS_INLINE_TOKEN}${tokenAttrSel(id)}${suffix}`,
 					)
 					.join(",\n"),
 			true,
@@ -1120,7 +1106,7 @@ export class CSSInjector {
 				ids
 					.map(
 						(id) =>
-							`${themePrefix}.${CSS_HEADING_LINE}[data-callout="${id}"]${suffix}`,
+							`${themePrefix}.${CSS_HEADING_LINE}${tokenAttrSel(id)}${suffix}`,
 					)
 					.join(",\n"),
 			false,
@@ -1139,7 +1125,7 @@ export class CSSInjector {
 					ids
 						.map(
 							(id) =>
-								`${themePrefix}.${CSS_INLINE_TOKEN}.${CSS_INLINE_TOKEN}[data-callout="${id}"]`,
+								`${themePrefix}.${CSS_INLINE_TOKEN}.${CSS_INLINE_TOKEN}${tokenAttrSel(id)}`,
 						)
 						.join(",\n"),
 				true,
@@ -1159,8 +1145,8 @@ export class CSSInjector {
 			ids
 				.map(
 					(id) =>
-						`${themePrefix}.${CSS_HEADING_LINE}[data-callout="${id}"] .${CSS_HEADING_TITLE},\n` +
-						`${themePrefix}.${CSS_HEADING_TOKEN}[data-callout="${id}"] > .${CSS_TOKEN_NAME}`,
+						`${themePrefix}.${CSS_HEADING_LINE}${tokenAttrSel(id)} .${CSS_HEADING_TITLE},\n` +
+						`${themePrefix}.${CSS_HEADING_TOKEN}${tokenAttrSel(id)} > .${CSS_TOKEN_NAME}`,
 				)
 				.join(",\n");
 		parts.push(...this.textSweepRules(def, headingTextSelectors, false));
@@ -1250,7 +1236,7 @@ export class CSSInjector {
 				// Obsidian's own DOM → dasherized attr; the two tokens are ours.
 				return `${calloutSel(id)} > .callout-title > .callout-icon`;
 			case "heading":
-				return `.${CSS_HEADING_TOKEN}[data-callout="${id}"] > .${CSS_TOKEN_ICON}`;
+				return `.${CSS_HEADING_TOKEN}${tokenAttrSel(id)} > .${CSS_TOKEN_ICON}`;
 			case "inline":
 				// Two depths, spelled out rather than collapsed to a descendant
 				// combinator. A plain pill holds its icon directly; a content
@@ -1267,8 +1253,8 @@ export class CSSInjector {
 				// styles.css); a transform written onto it would fight that,
 				// while on the icon inside it it composes cleanly.
 				return (
-					`.${CSS_INLINE_TOKEN}[data-callout="${id}"] > .${CSS_TOKEN_ICON}, ` +
-					`.${CSS_INLINE_TOKEN}[data-callout="${id}"] > .${CSS_CALLOUT_LEAD} > .${CSS_TOKEN_ICON}`
+					`.${CSS_INLINE_TOKEN}${tokenAttrSel(id)} > .${CSS_TOKEN_ICON}, ` +
+					`.${CSS_INLINE_TOKEN}${tokenAttrSel(id)} > .${CSS_CALLOUT_LEAD} > .${CSS_TOKEN_ICON}`
 				);
 		}
 	}
@@ -1502,27 +1488,6 @@ export class CSSInjector {
 			`}\n` +
 			`}`
 		);
-	}
-
-	/**
-	 * Warm the webfont for the styles rendered callouts use.
-	 *
-	 * Fires on every inject, which is safe only because `ensureMaterialFontLoaded`
-	 * holds a failed family off for a cooldown — an offline vault would otherwise
-	 * retry here on each one, now that a failure is no longer (wrongly) cached as
-	 * a success for the session.
-	 */
-	private updateMaterialFontLinks(needed: Set<string>): void {
-		for (const style of needed) {
-			if (
-				style === "outlined" ||
-				style === "rounded" ||
-				style === "sharp" ||
-				style === "filled"
-			) {
-				void ensureMaterialFontLoaded(style);
-			}
-		}
 	}
 
 	/**
@@ -1846,7 +1811,7 @@ export class CSSInjector {
 		}
 		if (attrIds.size === 0) return "";
 		const list = Array.from(attrIds)
-			.map((id) => `[data-callout="${id}"]`)
+			.map((id) => tokenAttrSel(id))
 			.join(",");
 		return `:not(:where(${list}))`;
 	}
@@ -2072,7 +2037,7 @@ export class CSSInjector {
 		}
 
 		const notSelectors = Array.from(knownAttrIds)
-			.map((id) => `:not([data-callout="${id}"])`)
+			.map((id) => `:not(${tokenAttrSel(id)})`)
 			.join("");
 
 		// The fallback template drawn with no icon means every unknown id in the

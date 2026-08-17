@@ -9,25 +9,14 @@
  */
 import type {
 	CalloutDefinition,
-	ContextMenuItemConfig,
-	ContextMenuItemId,
-	ContextMenuSettings,
-	HeadingFrameStyleSettings,
 	IconPackId,
-	IconSourceSettings,
 	IconSvgCacheEntry,
-	LegacyPopupSettings,
 	PluginData,
 	PluginSettings,
 	UserImageIcon,
 } from "../types";
 import { CALLOUT_RENDER_ROLES } from "../types";
-import {
-	DEFAULT_CALLOUTS,
-	DEFAULT_CONTEXT_MENU_ITEMS,
-	DEFAULT_SETTINGS,
-	FALLBACK_ICON,
-} from "../constants";
+import { DEFAULT_CALLOUTS, DEFAULT_SETTINGS, FALLBACK_ICON } from "../constants";
 import { iconCacheKey, packFor } from "../icons/registry";
 import { iconsEqual, resolveLucideId } from "../icons/lucideId";
 import { materialPack } from "../icons/packs/material";
@@ -46,11 +35,11 @@ import {
 	getAllColorPalettes,
 	resolveCalloutManagerColor,
 	resolveCalloutManagerColors,
-	sanitizeCustomPalettes,
 } from "../utils/colorPalettes";
 import { bgGradientsEqual, derivedBgAmount } from "../utils/colorUtils";
-import { sanitizeUserImages } from "../utils/userImages";
-import { sanitizeCustomCommands } from "../utils/customCommands";
+import { notifyListeners } from "./listenerList";
+import { reconcileSavedRow } from "./savedCalloutRows";
+import { mergeSavedSettings } from "../utils/settingsMerge";
 import { setUserImages } from "../icons/packs/userImages";
 import { sortCalloutsByDisplayName } from "../utils/sorting";
 
@@ -65,211 +54,9 @@ import { sortCalloutsByDisplayName } from "../utils/sorting";
 const CURRENT_DATA_VERSION = 3;
 const SORTED_DEFAULT_CALLOUTS = sortCalloutsByDisplayName(DEFAULT_CALLOUTS);
 
-/**
- * Merge saved icon-picker state over the defaults, folding the pre-2.4
- * `lastMaterialCategory` into `lastCategory`, which is keyed by icon source
- * now that there is more than one source with categories.
- */
-function mergeIconSources(
-	saved: Partial<IconSourceSettings> | undefined,
-): IconSourceSettings {
-	const merged: IconSourceSettings = {
-		...DEFAULT_SETTINGS.iconSources,
-		...saved,
-	};
-	const legacyCategory = saved?.lastMaterialCategory;
-	if (legacyCategory) {
-		merged.lastCategory = {
-			...merged.lastCategory,
-			material: legacyCategory,
-		};
-	}
-	delete merged.lastMaterialCategory;
-	return merged;
-}
-
 /** Identifier stamped into v2 export files so the importer can recognize them. */
 export const EXPORT_FORMAT_ID = "callout-studio";
 export const EXPORT_FORMAT_VERSION = 2;
-
-type LegacySavedSettings = Partial<PluginSettings> & {
-	popup?: Partial<LegacyPopupSettings>;
-	contextMenu?: Partial<ContextMenuSettings>;
-};
-
-/** Saved heading frame style, plus fields removed by a later version. */
-type LegacyHeadingStyle = Partial<HeadingFrameStyleSettings> & {
-	/** The "Icon indent" slider (px start inset), removed in 2.7.0. */
-	paddingStart?: number;
-};
-
-/**
- * Merge a saved heading frame style over the defaults. Needs its own helper
- * rather than a plain spread inside mergeSavedSettings because a spread keeps
- * keys the current version knows nothing about — and settings are written back
- * wholesale by both `toSaveData()` and `exportToJSONv2()`, so a stale key would
- * otherwise be re-saved forever and copied into every new export file. Deleting
- * it here is what makes settingsValidator's "unknown fields are dropped"
- * promise true for nested role styles too (same pattern as mergeIconSources's
- * `lastMaterialCategory`).
- */
-function mergeHeadingStyle(
-	saved: LegacyHeadingStyle | undefined,
-): HeadingFrameStyleSettings {
-	const merged: LegacyHeadingStyle = {
-		...DEFAULT_SETTINGS.globalStyle.heading,
-		...saved,
-		borderSides: {
-			...DEFAULT_SETTINGS.globalStyle.heading.borderSides,
-			...(saved?.borderSides as Record<string, boolean> | undefined),
-		},
-	};
-	// The bar's start inset is a static 10px in styles.css now; nothing reads
-	// a saved value, so drop it instead of carrying it around inert.
-	delete merged.paddingStart;
-	return merged as HeadingFrameStyleSettings;
-}
-
-/**
- * Merges a saved per-role menu item list against that role's defaults:
- * keeps the user's order, drops unknown ids and duplicates, and appends
- * items introduced by newer plugin versions at the end. Tolerates arbitrary
- * junk (saved data and import files are untrusted).
- */
-function mergeMenuItems(
-	saved: unknown,
-	defaults: ContextMenuItemConfig[],
-): ContextMenuItemConfig[] {
-	const knownIds = new Set<string>(defaults.map((d) => d.id));
-	const merged: ContextMenuItemConfig[] = [];
-	if (Array.isArray(saved)) {
-		for (const entry of saved) {
-			if (!entry || typeof entry !== "object") continue;
-			const id = (entry as { id?: unknown }).id;
-			if (typeof id !== "string" || !knownIds.has(id)) continue;
-			if (merged.some((m) => m.id === id)) continue;
-			merged.push({
-				id: id as ContextMenuItemId,
-				enabled: (entry as { enabled?: unknown }).enabled !== false,
-			});
-		}
-	}
-	for (const def of defaults) {
-		if (!merged.some((m) => m.id === def.id)) merged.push({ ...def });
-	}
-	return merged;
-}
-
-/**
- * Rebuilds a complete PluginSettings object from possibly-partial/legacy
- * saved data. Every field is merged explicitly against DEFAULT_SETTINGS —
- * a new settings field MUST be handled here (and added to DEFAULT_SETTINGS)
- * or it will be silently dropped on load. Shared by the registry loader and
- * the settings importer (import/export v2).
- */
-export function mergeSavedSettings(
-	savedSettings: LegacySavedSettings,
-): PluginSettings {
-	const savedGlobal = savedSettings.globalStyle as
-		| Partial<PluginSettings["globalStyle"]>
-		| undefined;
-	const legacyPopup = savedSettings.popup;
-	const savedMenuItems = savedSettings.contextMenu?.items;
-	return {
-		globalStyle: {
-			...DEFAULT_SETTINGS.globalStyle,
-			...savedGlobal,
-			// Ensure borderSides is always a proper object
-			borderSides: {
-				...DEFAULT_SETTINGS.globalStyle.borderSides,
-				...(savedGlobal?.borderSides as
-					| Record<string, boolean>
-					| undefined),
-			},
-			// Nested role frame styles need their own deep merge — a spread of
-			// savedGlobal would replace them wholesale (dropping fields added
-			// in newer versions) or leave them undefined on legacy data.
-			heading: mergeHeadingStyle(savedGlobal?.heading),
-			inline: {
-				...DEFAULT_SETTINGS.globalStyle.inline,
-				...savedGlobal?.inline,
-				borderSides: {
-					...DEFAULT_SETTINGS.globalStyle.inline.borderSides,
-					...(savedGlobal?.inline?.borderSides as
-						| Record<string, boolean>
-						| undefined),
-				},
-			},
-		},
-		contextMenu: {
-			enabled:
-				savedSettings.contextMenu?.enabled ??
-				legacyPopup?.enabled ??
-				DEFAULT_SETTINGS.contextMenu.enabled,
-			items: {
-				regular: mergeMenuItems(
-					savedMenuItems?.regular,
-					DEFAULT_CONTEXT_MENU_ITEMS.regular,
-				),
-				heading: mergeMenuItems(
-					savedMenuItems?.heading,
-					DEFAULT_CONTEXT_MENU_ITEMS.heading,
-				),
-				inline: mergeMenuItems(
-					savedMenuItems?.inline,
-					DEFAULT_CONTEXT_MENU_ITEMS.inline,
-				),
-			},
-		},
-		autocomplete: {
-			enabled:
-				savedSettings.autocomplete?.enabled ??
-				DEFAULT_SETTINGS.autocomplete.enabled,
-		},
-		iconSources: mergeIconSources(savedSettings.iconSources),
-		headingCallouts: {
-			enabled:
-				savedSettings.headingCallouts?.enabled ??
-				DEFAULT_SETTINGS.headingCallouts.enabled,
-			// Outline/link cleaning + icons are always on and no longer
-			// user-configurable; ignore any saved-off value from old data.
-			refCleanTitles: true,
-			refShowIcon: true,
-			showFoldArrow:
-				savedSettings.headingCallouts?.showFoldArrow ??
-				DEFAULT_SETTINGS.headingCallouts.showFoldArrow,
-		},
-		inlineCallouts: {
-			enabled:
-				savedSettings.inlineCallouts?.enabled ??
-				DEFAULT_SETTINGS.inlineCallouts.enabled,
-			allowContent:
-				savedSettings.inlineCallouts?.allowContent ??
-				DEFAULT_SETTINGS.inlineCallouts.allowContent,
-		},
-		firstRunCompleted:
-			savedSettings.firstRunCompleted ??
-			DEFAULT_SETTINGS.firstRunCompleted,
-		welcomeSeen:
-			savedSettings.welcomeSeen ?? DEFAULT_SETTINGS.welcomeSeen,
-		fallbackCalloutId:
-			savedSettings.fallbackCalloutId ??
-			DEFAULT_SETTINGS.fallbackCalloutId,
-		language: savedSettings.language ?? DEFAULT_SETTINGS.language,
-		customPalettes: sanitizeCustomPalettes(savedSettings.customPalettes),
-		userImages: sanitizeUserImages(savedSettings.userImages),
-		customCommands: sanitizeCustomCommands(savedSettings.customCommands),
-		disabledFixedCommands: Array.isArray(savedSettings.disabledFixedCommands)
-			? [
-					...new Set(
-						savedSettings.disabledFixedCommands.filter(
-							(id): id is string => typeof id === "string",
-						),
-					),
-				]
-			: [],
-	};
-}
 
 export type RegistryChangeCallback = () => void;
 
@@ -396,21 +183,24 @@ export class CalloutRegistry {
 
 		if (!data) return;
 
-		// Merge saved callouts (user overrides and custom callouts)
+		// Merge saved callouts (user overrides and custom callouts), each read
+		// against the shipped defaults by `reconcileSavedRow` — which is where
+		// the two flag repairs and their reasoning live.
 		if (data.callouts) {
 			for (const saved of data.callouts) {
-				if (this.callouts.has(saved.id) && saved.builtIn) {
-					// Merge overrides onto built-in
-					const existing = this.callouts.get(saved.id)!;
-					this.setCallout(saved.id, {
-						...existing,
-						...saved,
-						builtIn: true,
-						source: "builtin",
-					});
-				} else if (!saved.builtIn) {
-					this.setCallout(saved.id, saved);
-				}
+				// Whether this id HAS a built-in is asked of the shipped
+				// defaults, not of `this.callouts` — the map would also answer
+				// yes for a user row added by an earlier turn of this loop.
+				const seeded = this.builtInDefaults.has(saved.id)
+					? this.callouts.get(saved.id)
+					: undefined;
+				const { def, repaired } = reconcileSavedRow(saved, seeded);
+				this.setCallout(saved.id, def);
+				// A repaired row is written back like the other load migrations:
+				// through the built-in gate when it was reclaimed (so not at all
+				// when it matches the default) or the user gate when it was
+				// demoted, either way so the file stops carrying the broken shape.
+				if (repaired) this.pendingLoadMigrationSave = true;
 			}
 		}
 
@@ -507,8 +297,14 @@ export class CalloutRegistry {
 		}
 		// Migration: link any callout saved before `paletteId` existed but whose
 		// baked colors still exactly match a saved custom palette, so an edit to
-		// that palette (applyPaletteColors) cascades onto it too.
-		this.adoptOrphansMatchingPalettes();
+		// that palette (applyPaletteColors) cascades onto it too. Stamping a
+		// `paletteId` onto a row is a rewrite of the stored definitions like any
+		// other, so it flushes; un-flushed the adoption was simply re-derived on
+		// every launch. The flag is raised here rather than inside the pass
+		// because the settings caller (CustomPalettesSection) saves for itself.
+		if (this.adoptOrphansMatchingPalettes() > 0) {
+			this.pendingLoadMigrationSave = true;
+		}
 		this.dropDerivedBackgrounds();
 		this.dropSolidBackgroundFlags();
 		// Before reconcileAttrIdCollisions: a row this pass renames back to its
@@ -803,6 +599,15 @@ export class CalloutRegistry {
 	 * dash-free spelling wins, per the user's stated preference. A losing real
 	 * row's id is folded in as an alias of the survivor so no customization or
 	 * usage-matching is lost.
+	 *
+	 * A merge deletes a definition and rewrites the survivor's aliases, so it
+	 * raises {@link needsSaveAfterLoad} like every other pass here. Un-flushed,
+	 * `data.json` kept both rows and the merge was simply redone on every launch
+	 * — the user saw one row, the file held two — the same failure the flag was
+	 * added for and the {@link stripMetadataFromIds} alias branch was fixed for.
+	 * Once written back the pass is a fixed point: the loser's id survives only
+	 * as an alias of the survivor, so the group it forms next load names a single
+	 * definition and nothing changes.
 	 */
 	private reconcileAttrIdCollisions(): void {
 		const groups = new Map<string, Set<string>>();
@@ -821,6 +626,7 @@ export class CalloutRegistry {
 		const isDisposable = (d: CalloutDefinition): boolean =>
 			d.source === "fallback" && d.customized !== true;
 
+		let merged = 0;
 		for (const defIds of groups.values()) {
 			if (defIds.size < 2) continue;
 			const defs = Array.from(defIds)
@@ -839,6 +645,7 @@ export class CalloutRegistry {
 			for (const loser of defs) {
 				if (loser.id === survivor.id || loser.builtIn) continue;
 				this.callouts.delete(loser.id);
+				merged++;
 				if (isDisposable(loser)) continue;
 				const aliases = new Set(survivor.aliases ?? []);
 				aliases.add(loser.id);
@@ -847,6 +654,7 @@ export class CalloutRegistry {
 				survivor.aliases = Array.from(aliases);
 			}
 		}
+		if (merged > 0) this.pendingLoadMigrationSave = true;
 	}
 
 	toSaveData(): PluginData {
@@ -996,35 +804,66 @@ export class CalloutRegistry {
 		// If the id is being changed, remove old and re-add
 		if (partial.id && partial.id !== id) {
 			if (this.callouts.has(partial.id)) return false;
-			this.callouts.delete(id);
-			this.setCallout(partial.id, { ...existing, ...partial });
-		} else {
-			this.setCallout(id, { ...existing, ...partial });
+			// An id another definition already answers to is taken, whether it
+			// owns it outright or as an alias — {@link add} refuses both, and a
+			// rename that refused only the first left one raw id resolving
+			// through two definitions (`[!summary]` reaching the new row here
+			// and the built-in `abstract` through its alias). Skipping the row
+			// being renamed is what still lets it take one of its own aliases.
+			const aliasOwner = this.findByAlias(partial.id);
+			if (aliasOwner && aliasOwner.id !== id) return false;
 		}
 
-		// If the user just edited the active fallback callout's appearance,
-		// re-mirror it onto every uncustomized fallback-source row so the
-		// change is visible immediately in settings and in the vault.
-		if (newId === this.settings.fallbackCalloutId) {
-			this.restyleUncustomizedFallbackRows();
-		}
+		// Batched because the mirror pass below announces itself: see the note
+		// on {@link mirrorFallbackRowsFor}.
+		this.batch(() => {
+			if (partial.id && partial.id !== id) {
+				this.callouts.delete(id);
+				this.setCallout(partial.id, { ...existing, ...partial });
+			} else {
+				this.setCallout(id, { ...existing, ...partial });
+			}
 
-		this.notifyChange();
+			// If the user just edited the active fallback callout's appearance,
+			// re-mirror it onto every uncustomized fallback-source row so the
+			// change is visible immediately in settings and in the vault.
+			this.mirrorFallbackRowsFor(newId);
+			this.notifyChange();
+		});
 		return true;
+	}
+
+	/**
+	 * Re-mirror the uncustomized fallback rows when `id` is the callout they
+	 * copy — the shared half of the four writers that can move that target.
+	 *
+	 * Its callers all wrap this and their own `notifyChange` in a {@link batch},
+	 * because {@link restyleUncustomizedFallbackRows} announces itself: one
+	 * logical operation — one edit, one delete, one palette repaint — otherwise
+	 * fired two full rounds, and a round is a whole stylesheet regenerated,
+	 * every icon in the document repainted and `data.json` written. The batch is
+	 * what makes the pair a single consistent event, exactly as it does for the
+	 * rename's remove + add in `CalloutEditorSave`.
+	 */
+	private mirrorFallbackRowsFor(id: string): void {
+		if (id !== this.settings.fallbackCalloutId) return;
+		this.restyleUncustomizedFallbackRows();
 	}
 
 	remove(id: string): boolean {
 		const def = this.callouts.get(id);
 		if (!def || def.builtIn) return false;
-		this.callouts.delete(id);
-		// If the removed callout was the active fallback, reset to "note"
-		// and re-mirror uncustomized fallback rows onto the new fallback.
-		if (this.settings.fallbackCalloutId === id) {
-			this.settings.fallbackCalloutId =
-				DEFAULT_SETTINGS.fallbackCalloutId;
-			this.restyleUncustomizedFallbackRows();
-		}
-		this.notifyChange();
+		this.batch(() => {
+			this.callouts.delete(id);
+			// If the removed callout was the active fallback, reset to "note"
+			// and re-mirror uncustomized fallback rows onto the new fallback.
+			if (this.settings.fallbackCalloutId === id) {
+				this.settings.fallbackCalloutId =
+					DEFAULT_SETTINGS.fallbackCalloutId;
+				this.restyleUncustomizedFallbackRows();
+			}
+			this.notifyChange();
+		});
 		return true;
 	}
 
@@ -1034,10 +873,17 @@ export class CalloutRegistry {
 	 * whenever the fallback selection changes (user-driven via the settings
 	 * dropdown, or implicitly when the active fallback row is deleted and
 	 * resets to the default) or when the fallback callout itself is edited.
-	 * Returns the number of rows updated. Callers decide whether to flush
-	 * (`notifyChange`) afterwards — we emit a notification only when at
+	 * Returns the number of rows that actually changed. Callers decide whether
+	 * to flush (`notifyChange`) afterwards — we emit a notification only when at
 	 * least one row actually changed so settings UI re-renders to reflect
 	 * the new mirror style.
+	 *
+	 * "Actually changed" is a content test, not a visit count. The pass runs on
+	 * every fallback edit, every fallback-target delete and every discovery
+	 * sweep, so most of its work lands on rows already wearing exactly this
+	 * style; writing those back unconditionally reported them as updated and
+	 * fired the change event anyway — a full stylesheet regeneration, an icon
+	 * repaint and a `data.json` write for a no-op.
 	 */
 	restyleUncustomizedFallbackRows(): number {
 		const fallbackId =
@@ -1055,7 +901,7 @@ export class CalloutRegistry {
 			// change and make the row look edited in an export.
 			if (def.externalStyle === true) continue;
 			if (def.id === fallbackId) continue;
-			this.setCallout(def.id, {
+			const next: CalloutDefinition = {
 				...def,
 				icon: { ...fallback.icon },
 				// Spelled out (`undefined` included) for the same reason
@@ -1090,7 +936,14 @@ export class CalloutRegistry {
 				iconOffsetX: fallback.iconOffsetX,
 				iconOffsetY: fallback.iconOffsetY,
 				iconSize: fallback.iconSize,
-			});
+			};
+			// A structural compare, and sound precisely because `next` is a
+			// spread of `def`: the keys they share keep their order, and a
+			// mirrored key the row lacks is either `undefined` — which
+			// stringify drops on both sides, so the absent-vs-explicitly-absent
+			// pair reads as equal — or a value the row genuinely did not have.
+			if (JSON.stringify(next) === JSON.stringify(def)) continue;
+			this.setCallout(def.id, next);
 			updated++;
 		}
 		if (updated > 0) {
@@ -1128,19 +981,26 @@ export class CalloutRegistry {
 		>,
 	): number {
 		let updated = 0;
-		let touchedFallback = false;
-		for (const def of this.callouts.values()) {
-			if (def.paletteId !== paletteId) continue;
-			this.setCallout(def.id, { ...def, ...colors });
-			updated++;
-			if (def.id === this.settings.fallbackCalloutId) touchedFallback = true;
-		}
-		if (touchedFallback) {
-			this.restyleUncustomizedFallbackRows();
-		}
-		if (updated > 0) {
-			this.notifyChange();
-		}
+		// Batched for the same reason as the writers above: the mirror pass
+		// announces itself, so a repaint that reaches the fallback target would
+		// otherwise cost two rounds. See {@link mirrorFallbackRowsFor}.
+		this.batch(() => {
+			let touchedFallback = false;
+			for (const def of this.callouts.values()) {
+				if (def.paletteId !== paletteId) continue;
+				this.setCallout(def.id, { ...def, ...colors });
+				updated++;
+				if (def.id === this.settings.fallbackCalloutId) {
+					touchedFallback = true;
+				}
+			}
+			if (touchedFallback) {
+				this.restyleUncustomizedFallbackRows();
+			}
+			if (updated > 0) {
+				this.notifyChange();
+			}
+		});
 		return updated;
 	}
 
@@ -1148,17 +1008,25 @@ export class CalloutRegistry {
 	 * How many callouts still carry `paletteId`, optionally ignoring one.
 	 *
 	 * Used to tell the user how many *other* callouts a revive will regroup, so
-	 * it deliberately walks the same `this.callouts` map {@link relinkPalette}
-	 * will walk: a count taken from `getAll()` (or from any list view) could
-	 * promise a number the relink then fails to touch.
+	 * it counts committed callouts and nothing else — {@link realDefinitions}
+	 * rather than the raw map. A number shown to the user must not include the
+	 * callout editor's in-progress draft: a brand-new one is not a callout yet,
+	 * and one shadowing a real row would be counted twice over if it and the row
+	 * it stands in for disagreed about the link.
 	 *
-	 * Transient live-preview rows cannot skew it — {@link setPreviewDefinition}
-	 * stores a definition built without a `paletteId` at all, so a preview never
-	 * matches here whatever the form is currently showing.
+	 * It used to walk the raw map and claim a preview could not skew it. That
+	 * held only because `CalloutEditor.buildPreviewDefinition` happens to build
+	 * without a `paletteId`: nothing enforced it, and {@link withIdentityOf} —
+	 * which does re-stamp the ownership fields — leaves the field alone.
+	 *
+	 * {@link relinkPalette} still walks the raw map, which it must: the preview
+	 * slot holds the draft, and the shadowed original is restored over anything
+	 * written there. That makes this the *committed* count, which is the one the
+	 * user is being told.
 	 */
 	countPaletteLinks(paletteId: string, exceptCalloutId?: string | null): number {
 		let count = 0;
-		for (const def of this.callouts.values()) {
+		for (const def of this.realDefinitions()) {
 			if (def.paletteId !== paletteId) continue;
 			if (exceptCalloutId != null && def.id === exceptCalloutId) continue;
 			count++;
@@ -1353,9 +1221,13 @@ export class CalloutRegistry {
 			source: "fallback",
 		};
 		delete next.customized;
-		this.setCallout(id, next);
-		this.restyleUncustomizedFallbackRows();
-		this.notifyChange();
+		// Batched: the mirror pass announces itself, so the conversion and the
+		// re-style are one round, not two. See {@link mirrorFallbackRowsFor}.
+		this.batch(() => {
+			this.setCallout(id, next);
+			this.restyleUncustomizedFallbackRows();
+			this.notifyChange();
+		});
 		return true;
 	}
 
@@ -1495,7 +1367,7 @@ export class CalloutRegistry {
 			if (def.id !== this.previewActiveId) {
 				out.push(def);
 			} else if (this.previewShadowedDef) {
-				// Show the real callout the demo overlays (e.g. built-in example).
+				// Show the real callout a demo was raised over, not the demo.
 				out.push(this.previewShadowedDef);
 			}
 			// else: demo occupies a fresh id → omit it entirely.
@@ -1677,9 +1549,9 @@ export class CalloutRegistry {
 	 * `isDemo` marks a placeholder preview (palette editor, global-style popups,
 	 * or an unnamed new-callout draft) whose id is not a real callout the user is
 	 * editing. Such previews are hidden from the settings lists entirely, so a
-	 * demo whose id collides with an existing callout — notably the built-in
-	 * `example`, reused as the preview placeholder id — can't leak a phantom
-	 * "My callout types" row while the modal is open. See {@link definitionsForLists}.
+	 * demo whose id collides with an existing callout — as it did back when the
+	 * placeholder was the built-in `example` — can't leak a phantom "My callout
+	 * types" row while the modal is open. See {@link definitionsForLists}.
 	 *
 	 * Deliberately does NOT call `notifyChange()`: that would trigger the
 	 * `onChange` → `saveSettings` write and force every open note to re-render.
@@ -1730,8 +1602,8 @@ export class CalloutRegistry {
 			// A preview never owns the identity of the callout it shadows —
 			// see withIdentityOf. Applied to demos too: they are already hidden
 			// from the lists, but it keeps the map entry a faithful stand-in for
-			// the CSS pipeline (notably the built-in `example`, whose id doubles
-			// as the demo placeholder, keeping its aliases styled).
+			// the CSS pipeline — a demo standing on a real id (the reserved ones
+			// name none, but a discovered row can) keeps its aliases styled.
 			this.setCallout(
 				def.id,
 				existing ? withIdentityOf(existing, def) : def,
@@ -2180,14 +2052,13 @@ export class CalloutRegistry {
 		}
 	}
 
+	/** Through {@link notifyListeners} — the list can change mid-round. */
 	private notifyChange(): void {
 		if (this.batchDepth > 0) {
 			this.batchDirty = true;
 			return;
 		}
-		for (const cb of this.changeCallbacks) {
-			cb();
-		}
+		notifyListeners(this.changeCallbacks);
 	}
 
 	/**
@@ -2208,9 +2079,8 @@ export class CalloutRegistry {
 		}
 	}
 
+	/** Likewise. */
 	private notifyPreviewChange(): void {
-		for (const cb of this.previewChangeCallbacks) {
-			cb();
-		}
+		notifyListeners(this.previewChangeCallbacks);
 	}
 }

@@ -30,7 +30,7 @@ export interface LocaleManifestEntry {
 export const LOCALE_MANIFEST = {
 	"ar": {
 		bytes: 51742,
-		sha256: "774e36521ffedd5d7467b16494656f94e8114295ffac6428b185a3894ee73eec",
+		sha256: "307f5bacbc29c1a4412b8259908a6d9fc0c61aeee6dd9cd2d457ad13c0874342",
 		keys: 659,
 	},
 	"bg": {
@@ -65,7 +65,7 @@ export const LOCALE_MANIFEST = {
 	},
 	"fa": {
 		bytes: 54913,
-		sha256: "72e00f76ed87b8a665f5700944fbad2e4b93fcbadb6540c0a0f87b320fdcdabf",
+		sha256: "44fce3332cd70dd64811939f8239f9e2bcbde19c4339698e61eb30a3043c3572",
 		keys: 659,
 	},
 	"fi": {

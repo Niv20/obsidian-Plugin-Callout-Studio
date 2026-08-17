@@ -5,8 +5,10 @@
  * Extracted from the old GlobalStyleSection so the three per-role "Global
  * callout style" popups (regular / heading / inline) compose the same control
  * groups. Every control follows the same live-update contract: dragging
- * previews the change via cssInjector.scheduleInject(), releasing commits it
- * via saveSettings() + cssInjector.inject().
+ * previews the change via cssInjector.inject(false), coalesced to one pass per
+ * animation frame (see scheduleLiveInject) and skipping the css-change
+ * re-render; releasing commits it via saveSettings() + cssInjector.inject().
+ * There is no scheduleInject — the injector has no debounce at all.
  */
 import { Setting, type SliderComponent } from "obsidian";
 import { t } from "../i18n";

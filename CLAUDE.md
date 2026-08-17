@@ -8,9 +8,14 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 npm run dev       # watch-mode build (esbuild, inline sourcemaps)
 npm run build     # production build (typecheck + minify)
 npm run lint      # ESLint across src/
+npm test          # every tests/*.test.ts, bundled by esbuild and run by node:test
 ```
 
-No automated test suite — testing is manual: copy `main.js`, `manifest.json`, and `styles.css` to `<Vault>/.obsidian/plugins/callout-studio/` and reload Obsidian.
+`npm test` is a gate, not a courtesy — CI runs it beside the lint (`.github/workflows/lint.yml`), and it covers the pure utilities, the registry, the CSS it generates, both editor surfaces, the public API and the repo's own rules. Take it as the first place a change is proved, and add to it: a `todo` entry in a suite is a known bug someone wrote down, not a test that is allowed to stay red.
+
+The suites are also **inside** the build's typecheck rather than beside it: `tsconfig.json` includes `tests/` as well as `src/`, so `npm run build` compiles them too — a test that no longer typechecks fails the build, and `target: ES6` rules out top-level `await` in a test file. `tests/repoTestGate.test.ts` holds both to it.
+
+What it deliberately cannot see is Obsidian. The DOM is the stand-in in `tests/support/fakeDom.ts` and the `obsidian` module is a stub (`tests/support/obsidianStub.ts`), so anything that has to *look* right is still checked by hand: copy `main.js`, `manifest.json`, and `styles.css` to `<Vault>/.obsidian/plugins/callout-studio/` and reload Obsidian.
 
 Versions: bump `manifest.json` + `versions.json` together. Tag must match `manifest.json` version exactly (no leading `v`).
 
@@ -23,14 +28,14 @@ Callout Studio is an Obsidian plugin that lets users create and manage custom ca
 ### Core managers (`src/manager/`)
 
 - **CalloutRegistry** — single source of truth for all callout definitions. Owns the `Map<id, CalloutDefinition>`, serializes to/from `data.json`, runs CRUD and data migrations, fires `onChange` callbacks on every mutation.
-- **CSSInjector** — reads the registry and generates dynamic CSS custom properties per callout (colors, icons, light/dark overrides). Uses `adoptedStyleSheets` (one global per window). Injects synchronously, guarded by a re-entrancy latch. Calls `app.workspace.trigger("css-change")` after inject to force Obsidian re-render.
+- **CSSInjector** — reads the registry and generates dynamic CSS custom properties per callout (colors, icons, light/dark overrides). Uses `adoptedStyleSheets` (one global per window). Injects synchronously, guarded by a re-entrancy latch. Calls `app.workspace.trigger("css-change")` after inject to force Obsidian re-render. **Every `[data-callout="…"]` it writes goes through `utils/calloutSelector.ts`** — `calloutSel` for Obsidian's own DOM (dasherized id), `tokenAttrSel` for the heading/pill/ref DOM (space-preserving id), both escaping through `cssAttrValue`. A `"` or `\` reaches an id without the user typing it (vault discovery's header regex allows both; import's `ID_BAD_CHAR_RE` only rejects pipes and brackets), and concatenating one corrupts the sheet from that rule onward.
 - **CalloutDiscovery** — watches file-open/modify events and scans markdown for unknown `[!id]` patterns. Auto-creates "fallback" rows for new IDs. Prunes unused auto-created rows in a background debounced pass. **An explicit delete wins over discovery**: `suppressRediscovery()` holds an id off for a few seconds, because the delete's `vault.modify` reaches open CodeMirror buffers asynchronously and `SettingsTab.display()` — called on the very next line — scans exactly those buffers, so without it the row returns one tick later as an *uncustomized* fallback row and the delete reads as a style reset. `runVaultScan` clears the hold; a user-requested scan may bring anything back.
 - **IconService** (`src/icons/`) — the one entry point to icon artwork. Owns `IconFetchManager` (Material's per-icon fetches from fonts.gstatic.com) and `PackDataStore` (whole-pack downloads, SHA-256 verified on download *and* on every disk read, cached under `<plugin-dir>/icon-packs/`). Notifies listeners when artwork lands so CSS can re-inject. `ensureArtwork()` covers one icon (the picker); **`ensureArtworkFor()` is the only repair path** — it takes a batch, skips anything already drawable from `iconSvgCache`, groups the rest by `icon.type` so a pack downloads once, and is what import and startup both call.
 
 ### Data flow
 
 1. User edits a callout → `registry.update()` → `onChange` fires  
-2. `onChange` → `cssInjector.scheduleInject()` + Obsidian CSS-change trigger  
+2. `onChange` → `cssInjector.inject()`, which emits the Obsidian CSS-change trigger itself. There is no `scheduleInject` and no debounce: scheduling one *and* triggering `css-change` ran the whole pass twice per mutation (see `main.ts`). Repeat work is collapsed by output instead — an inject whose text is byte-identical to the last stops before the stylesheet swap, the `localStorage` write and the trigger.  
 3. `CSSInjector.inject()` → new CSS in `adoptedStyleSheets` + DOM icon refresh  
 4. User opens a note → `CalloutDiscovery` scans → auto-creates fallback rows if needed  
 5. Icon selected → `IconService.ensureArtwork()` → fetch if needed → copy into `iconSvgCache` → re-inject  
@@ -89,7 +94,7 @@ Search indexes are bundled (packed by `icons/data/codec.ts`); artwork is not. Re
 
 **`hideIcon` is a display flag, not an icon.** It is deliberately not a `"none"` member of `IconPackId`: that union means *one body of artwork* (pack manifest entry, downloaded file, SVG cache key), a sentinel there would have to overwrite `icon` and lose the user's pick, and every older build would reject the whole entry on import since `validateIcon` only accepts a type it knows. So `icon` keeps holding the last drawing — turning the icon back on is instant and offline, because `cleanupUnusedIconSvgs` still counts it as in use. `true`-or-absent, like `transparentBg`/`externalStyle`. Three seams: `CSSInjector.iconHiddenCSS` (`display: none` on `.callout-icon`, outside `@media screen` so it holds in print, plus the per-callout reset of the global *Align content with title* indent); `buildCalloutTokenDom` builds no icon span at all (flex `gap` collapses with it, same trick as `refShowIcon`); and `renderNoIcon` draws a muted dashed ring on the surfaces that *manage* callouts, where a blank slot would read as a stalled download. `CalloutRegistry.COLOUR_NEUTRAL_FIELDS` is why hiding a built-in's icon persists without costing it the theme's `--callout-*` deference.
 
-`PluginSettings` holds global style (border, radius, scale), feature toggles (autocomplete, context menu, icon source preferences), and the three lists the user builds up: `customPalettes`, `userImages` and `customCommands`. All live in settings rather than on `PluginData` precisely so `exportToJSONv2()` carries them — and all must therefore be **merged by id** on import, never `Object.assign`ed, or importing a file without them wipes the user's own. A new list also needs registering in **three** places or it is silently dropped on load: the `PluginSettings` interface, `DEFAULT_SETTINGS`, and `mergeSavedSettings()`.
+`PluginSettings` holds global style (border, radius, scale), feature toggles (autocomplete, context menu, icon source preferences), and the three lists the user builds up: `customPalettes`, `userImages` and `customCommands`. All live in settings rather than on `PluginData` precisely so `exportToJSONv2()` carries them — and all must therefore be **merged by id** on import, never `Object.assign`ed, or importing a file without them wipes the user's own. A new list also needs registering in **three** places or it is silently dropped on load: the `PluginSettings` interface, `DEFAULT_SETTINGS`, and `mergeSavedSettings()` (`utils/settingsMerge.ts` — its own module because the registry's `load()` and the import validator both ask it the same question).
 
 ### Callout sources
 
@@ -100,7 +105,7 @@ Search indexes are bundled (packed by `icons/data/codec.ts`); artwork is not. Re
 | `fallback` | Auto-created by discovery for unknown IDs |
 | `theme`/`plugin` | Injected by an import or an older build's API |
 
-Built-in callouts are never stored unless modified — `toSaveData()` only persists modified built-ins and all user callouts. That rule is about `data.json` alone: `load()` seeds all 13 into the in-memory map unconditionally, so `getAll()` always returns every built-in.
+Built-in callouts are never stored unless modified — `toSaveData()` only persists modified built-ins and all user callouts. That rule is about `data.json` alone: `load()` seeds all 13 into the in-memory map unconditionally, so `getAll()` always returns every built-in. Nothing may displace one either — a saved row on a built-in id is merged onto the default and re-stamped `builtIn: true` whatever its own flag says, because there is only ever one callout per id, so such a row is that built-in's customization with its flag lost.
 
 ### Callout metadata (`[!type|metadata]`)
 
@@ -113,7 +118,7 @@ Obsidian splits a callout header at the **first `|`**: everything before it is t
 Two rules the implementation exists to enforce, both of which had been broken before:
 
 - **Nothing live escapes.** Every return value is a frozen copy built by the mappers at the bottom of the file. The registry hands out real objects the renderer reads on every paint, so a consumer holding one could change styling with no re-inject and no save.
-- **`usableDefinitions()` is the only list.** It unions `getBuiltIn()` + `getUserDefined()` (both read through the registry's list view, so the transient live-preview row can't leak) and then drops unused discovered rows with the same predicate AutoComplete uses. `getCallout(id)` resolves through the registry ladder but then re-finds the result *in that list by id*, which is what keeps a lookup from returning something the list won't show.
+- **`usableDefinitions()` is the only list, and it is committed state.** It unions `getBuiltIn()` + `getUserDefined()` (both read through the registry's list view, so the transient live-preview *row* can't leak), reads every row through `getReal()` so the *values* can't either, and then drops unused discovered rows with the same predicate AutoComplete uses. The `getReal()` step is not redundant: a preview standing in for a callout the user already has passes through the list view as-is — the settings rows are meant to track the open editor live — but a preview fires no `onChange`, so a consumer reading during that window would cache a draft title and never hear that it was cancelled. `getCallout(id)` resolves through the registry ladder but then re-finds the result *in that list by id*, which is what keeps a lookup from returning something the list won't show.
 
 `src/api/types.ts` holds the public shapes, deliberately separate from `src/types.ts` — `CalloutDefinition` moves whenever a feature lands, and this surface must not. Mutation, modals, icon artwork and wrap/unwrap are all intentionally absent; the earlier `registerCallout`/`unregisterCallout` pair was removed rather than fixed because it had no ownership model and leaked `source: "plugin"` rows into `data.json` forever.
 

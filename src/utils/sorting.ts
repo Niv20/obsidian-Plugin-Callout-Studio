@@ -10,13 +10,38 @@ import type { CalloutDefinition } from "../types";
 
 const FALLBACK_LOCALE = "en";
 
+/**
+ * Will `Intl` accept this tag at all?
+ *
+ * It rejects anything not structurally BCP-47 — `"!!"`, `"e n"` — by throwing,
+ * and it validates the whole list it is given, so one bad tag takes the valid
+ * ones down with it. In a *comparator* that is not a misordered list, it is an
+ * exception thrown out of `Array.sort` while the settings tab or the
+ * autocomplete dropdown is being built.
+ *
+ * Nothing malformed reaches here today: every call site passes `getLocale()`,
+ * which can only return a code the plugin itself registered. This is what keeps
+ * that a precondition of the *caller* rather than a trap — the next call site to
+ * pass free text gets English, not a broken list.
+ */
+const isWellFormed = (tag: string): boolean => {
+	try {
+		Intl.getCanonicalLocales(tag);
+		return true;
+	} catch {
+		return false;
+	}
+};
+
 const buildLocaleChain = (locale?: string): string[] => {
-	const trimmed = locale?.trim();
+	const trimmed = typeof locale === "string" ? locale.trim() : "";
 	if (!trimmed) return [FALLBACK_LOCALE];
 
 	const base = trimmed.split("-")[0] ?? "";
 	const chain = [trimmed, base, FALLBACK_LOCALE].filter(Boolean);
-	return Array.from(new Set(chain));
+	// Dropped one by one rather than all together, so a malformed *region*
+	// still sorts in its own language: `de-!!` keeps `de`.
+	return Array.from(new Set(chain)).filter(isWellFormed);
 };
 
 const createBaseCollator = (locale?: string): Intl.Collator =>
