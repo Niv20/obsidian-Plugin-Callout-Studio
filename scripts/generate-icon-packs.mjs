@@ -28,6 +28,8 @@ import { encodeIndex, encodedIndexLiteral } from "./lib/encodeIndex.mjs";
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const PACK_DIR = join(ROOT, "packs");
 const DATA_DIR = join(ROOT, "src", "icons", "data");
+/** Upstream tables that ship with the generator rather than with a package. */
+const GENERATOR_DATA_DIR = join(ROOT, "scripts", "data");
 
 /** The on-disk pack format. Bumping this invalidates every cached pack file. */
 const PACK_FORMAT = 1;
@@ -42,6 +44,38 @@ function assertPathData(d, where) {
 	if (typeof d !== "string" || d.length === 0 || !PATH_DATA_RE.test(d)) {
 		throw new Error(`invalid path data at ${where}: ${JSON.stringify(d)?.slice(0, 120)}`);
 	}
+}
+
+/**
+ * Upstream search terms, as the index should hold them: whitespace collapsed,
+ * blanks dropped, repeats dropped, otherwise in the order upstream gave them.
+ *
+ * Applied to every pack in `main()` rather than left to each builder, because
+ * "the upstream data has debris in it" is not a property of any one library.
+ * Octicons tags `eye-closed` with an empty string, which buys a whole
+ * dictionary slot and a reference on the entry carrying it in exchange for
+ * matching nothing at all — the search filters empty words out of a query
+ * before it ever looks. Font Awesome lists `replicate` on `copy` three times
+ * and `plume` on `feather` four; a repeat costs a reference apiece and cannot
+ * match anything the first one did not, since matching is a membership test.
+ */
+function cleanTerms(values) {
+	return [
+		...new Set(
+			values
+				.map((value) => String(value).replace(/\s+/g, " ").trim())
+				.filter((value) => value.length > 0),
+		),
+	];
+}
+
+/** One index entry with its upstream text put through `cleanTerms`. */
+function cleanEntry(entry) {
+	return {
+		...entry,
+		categories: cleanTerms(entry.categories),
+		keywords: cleanTerms(entry.keywords),
+	};
 }
 
 // ── Octicons ────────────────────────────────────────────────────────────
@@ -467,35 +501,32 @@ function buildRpgAwesome() {
  * time from Google, because 3,870 icons across 4 styles and 7 weights is over
  * 100,000 variants and no bulk file exists to ship. Only the index is built.
  *
- * The source is the metadata table Google publishes, previously committed as a
- * 2.24 MB TypeScript array. Packing it costs nothing in fidelity — every name,
- * tag and category survives, as the round-trip check asserts — and takes the
- * bundled form to well under a third of that.
+ * The source is the metadata table Google publishes, held as generator input at
+ * scripts/data/material-metadata.json. Packing it costs nothing in fidelity —
+ * every name, tag and category survives, as the round-trip check asserts — and
+ * takes the bundled form to well under a third of its size.
  */
 async function buildMaterial() {
-	const { createJiti } = await import("jiti");
-	const jiti = createJiti(import.meta.url);
-	const { MATERIAL_ICON_METADATA } = await jiti.import(
-		join(ROOT, "src/data/materialIconsMetadata.ts"),
+	// The other seven packs read their upstream out of `node_modules`; Material
+	// has no such package, because the tags and categories live behind Google's
+	// web metadata endpoint rather than in anything published to npm. So the
+	// table is committed here, beside the generator that consumes it — outside
+	// `src/`, which keeps it out of `main.js` and out of the build's typecheck,
+	// the two costs that got the original 2.24 MB TypeScript copy deleted.
+	const { icons } = JSON.parse(
+		readFileSync(join(GENERATOR_DATA_DIR, "material-metadata.json"), "utf8"),
 	);
 
 	// Google's table carries a little editorial debris — one tag on `moving`
-	// reads "potential tags could relate to:\n\nmoving". Collapsing whitespace
-	// keeps it searchable without letting a newline break the line-per-icon
-	// framing the index format relies on. Duplicates are dropped because a
-	// repeated tag costs a reference and matches nothing extra.
-	const clean = (values) => [
-		...new Set(
-			values
-				.map((value) => String(value).replace(/\s+/g, " ").trim())
-				.filter((value) => value.length > 0),
-		),
-	];
-
-	const entries = MATERIAL_ICON_METADATA.map((icon) => ({
+	// reads "potential tags could relate to:\n\nmoving". `cleanTerms` collapses
+	// that whitespace, which keeps the tag searchable without letting a newline
+	// break the line-per-icon framing the index format relies on. It is called
+	// here rather than only in `main()` because the categories are sorted after
+	// it, and sorting the raw strings would sort the debris.
+	const entries = icons.map((icon) => ({
 		name: icon.name,
-		categories: clean(icon.categories).sort(),
-		keywords: clean(icon.tags),
+		categories: cleanTerms(icon.categories).sort(),
+		keywords: cleanTerms(icon.tags),
 	}));
 
 	return {
@@ -692,11 +723,15 @@ async function assertRoundTrip(entries, encoded) {
 	const { decodeIndex } = await jiti.import(join(DATA_DIR, "codec.ts"));
 
 	const decoded = decodeIndex(encoded);
+	// A label identical to its name is dropped on the way in, deliberately —
+	// see encodeIndex. Normalising both sides the same way keeps that from
+	// reading as the encoder and decoder disagreeing, without excusing any
+	// other difference.
 	const normalize = (list) =>
 		JSON.stringify(
 			list.map((e) => ({
 				name: e.name,
-				label: e.label ?? undefined,
+				label: e.label && e.label !== e.name ? e.label : undefined,
 				categories: [...e.categories],
 				keywords: [...e.keywords],
 			})),
@@ -730,6 +765,7 @@ async function main() {
 		if (!build) throw new Error(`unknown pack "${id}"`);
 
 		const pack = await build();
+		pack.entries = pack.entries.map(cleanEntry);
 		const encoded = encodeIndex(pack.entries);
 		await assertRoundTrip(pack.entries, encoded);
 

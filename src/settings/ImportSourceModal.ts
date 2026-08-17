@@ -1,7 +1,7 @@
 /**
  * settings/ImportSourceModal.ts — Chooser shown by the settings tab's Import
  * button: Callout Studio's own file format, the competing "Callout Manager"
- * plugin's clipboard export, or the "Admonition" plugin's admonitions.
+ * plugin's callouts, or the "Admonition" plugin's admonitions.
  *
  * Owns only the choice between the three; each source's own flow (file
  * picker, paste box) lives in its own module.
@@ -65,7 +65,9 @@ export class ImportSourceModal extends Modal {
 				onClick: () => this.fileInput.click(),
 			},
 			{
-				icon: "clipboard-paste",
+				// Not "clipboard-paste" any more: pasting is now one of two ways
+				// in, and no longer the one most people will take.
+				icon: "paintbrush",
 				title: t("import.sourceCalloutManager"),
 				desc: t("import.sourceCalloutManagerDesc"),
 				onClick: () => {

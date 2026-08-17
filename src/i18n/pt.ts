@@ -5,6 +5,11 @@ export const pt: Record<string, string> = {
 	"cmd.calloutWrap": "Envolver em callout",
 	"cmd.calloutUnwrap": "Remover callout",
 
+	"cmd.customWrapBlock": "Envolver em callout {{name}}",
+	"cmd.customInsertBlock": "Inserir callout {{name}}",
+	"cmd.customInsertHeading": "Inserir título H{{level}} callout {{name}}",
+	"cmd.customInsertInline": "Inserir callout inline {{name}}",
+
 	"autocomplete.createNew": 'Criar novo callout: "{{name}}"',
 
 	"settings.fallbackTag": "Padrão",
@@ -16,6 +21,8 @@ export const pt: Record<string, string> = {
 	"settings.rescanComplete":
 		"Redigitalização concluída: {{count}} novo(s) callout(s) adicionado(s).",
 	"replaceModal.deleteWithoutReplaceSuffix": "(volta ao padrão)",
+	"replaceModal.titleDelete": "Excluir callout",
+	"replaceModal.titleReplace": "Substituir no vault",
 
 	"firstRun.title": "Encontrar callouts existentes no seu vault?",
 	"firstRun.body":
@@ -135,10 +142,50 @@ export const pt: Record<string, string> = {
 	"settings.enableAutocompleteDesc":
 		'Mostra sugestões quando você digita "[!" dentro de uma citação no editor. Escolha um tipo de callout da lista para inserir um cabeçalho de callout completo.',
 
-	"settings.openHotkeys": "Atalhos do Callout Studio",
-	"settings.openHotkeysDesc":
-		"Abre as configurações de atalhos do Obsidian para comandos do Callout Studio, onde você pode escolher seus próprios atalhos para Criar novo tipo de callout, Abrir configurações, Remover callout e Envolver em callout. Nenhum atalho é atribuído por padrão.",
-	"settings.openHotkeysButton": "Abrir configurações de atalhos",
+	"settings.customCommands": "Comandos e atalhos",
+	"settings.customCommandsDesc":
+		"Veja todos os comandos do Callout Studio e o atalho ao qual estão vinculados, e crie seus próprios comandos para os callouts que você mais usa. Nenhum atalho é atribuído por padrão.",
+	"settings.customCommandsButton": "Gerenciar comandos",
+
+	"commandBuilder.title": "Comandos e atalhos",
+	"commandBuilder.desc":
+		"Use o botão + para definir ou alterar um atalho nas configurações de atalhos do Obsidian.",
+	"commandBuilder.builtIn": "Comandos integrados",
+	"commandBuilder.toggleAria": "Ativar ou desativar {{name}}",
+	"commandBuilder.hotkeyBlank": "Vazio",
+	"commandBuilder.hotkeyAria": "Definir um atalho para {{name}}",
+	"commandBuilder.yourCommands": "Seus comandos",
+	"commandBuilder.newCommand": "Novo comando",
+	"commandBuilder.empty": "Ainda não há comandos personalizados.",
+	"commandBuilder.unknownCommand": "este comando",
+	"commandBuilder.editAria": "Editar {{name}}",
+	"commandBuilder.deleteAria": "Excluir {{name}}",
+	"commandBuilder.deleteConfirm":
+		"Excluir o comando {{name}}? Qualquer atalho atribuído a ele deixará de funcionar.",
+	"commandBuilder.newTitle": "Novo comando",
+	"commandBuilder.editTitle": "Editar comando",
+	"commandBuilder.format": "Formato do callout",
+	"commandBuilder.formatDesc": "Que tipo de callout o comando escreve.",
+	"commandBuilder.formatHeading": "Título",
+	"commandBuilder.formatInline": "Inline",
+	"commandBuilder.formatBlock": "Bloco",
+	"commandBuilder.roleDisabled":
+		"Este formato está desativado, então o comando inserirá texto simples até que você o reative.",
+	"commandBuilder.callout": "Tipo de callout",
+	"commandBuilder.calloutDesc": "O callout que este comando insere.",
+	"commandBuilder.headingLevel": "Nível do título",
+	"commandBuilder.headingLevelDesc": "Qual nível de título escrever.",
+	"commandBuilder.action": "Ação",
+	"commandBuilder.actionDesc":
+		"Envolver transforma a seleção em um callout; inserir adiciona um vazio.",
+	"commandBuilder.actionWrap": "Envolver seleção",
+	"commandBuilder.actionInsert": "Inserir novo",
+	"commandBuilder.preview": "Nome do comando",
+	"commandBuilder.duplicate":
+		"Você já tem um comando que faz exatamente isso.",
+	"commandBuilder.noCallouts":
+		"Ainda não há tipos de callout para construir um comando.",
+	"commandBuilder.save": "Salvar",
 
 	"settings.vaultMaintenance": "Insights e manutenção do vault",
 	"settings.vaultStats": "Estatísticas de callouts",
@@ -153,6 +200,11 @@ export const pt: Record<string, string> = {
 	"settings.resetAllConfirm":
 		"Isso excluirá todos os callouts personalizados, redefinirá callouts integrados, estilos globais, paletas de cores salvas, a personalização do menu de clique direito e todos os SVGs Material em cache. Esta ação não pode ser desfeita. Tem certeza?",
 	"notice.resetAllDone": "Tudo foi redefinido para os padrões.",
+
+	"notice.customCommandsRemoved":
+		"{{count}} comando(s) personalizado(s) removido(s) cujo tipo de callout não existe mais.",
+	"notice.customCommandMissingCallout":
+		"O tipo de callout deste comando não existe mais.",
 
 	"notice.exported": "Callouts exportados para callout-studio-export.json",
 	"notice.importedJSON": "{{count}} tipo(s) de callout importado(s) de JSON.",
@@ -266,6 +318,7 @@ export const pt: Record<string, string> = {
 
 	// Palette editor modal
 	"palette.newTitle": "Nova paleta de cores",
+	"palette.groupPalette": "Paleta",
 	"palette.editTitle": "Editar paleta de cores",
 	"palette.name": "Nome",
 	"palette.namePlaceholder": "Minha paleta",
@@ -585,6 +638,13 @@ export const pt: Record<string, string> = {
 
 	"confirm.ok": "Excluir",
 	"confirm.cancel": "Cancelar",
+	// Headings for each confirmation — every window carries one, so each
+	// caller of ConfirmModal names what it is about to do.
+	"confirm.titleDeleteCommand": "Excluir comando",
+	"confirm.titleResetAll": "Redefinir todos os callouts",
+	"confirm.titleResetCallout": "Redefinir callout",
+	"confirm.titleDeletePalette": "Excluir paleta",
+	"confirm.titleDeleteImage": "Excluir imagem",
 
 	"vault.filesUpdated":
 		"{{count}} referência(s) de callout atualizadas nos arquivos do vault.",
@@ -710,31 +770,56 @@ export const pt: Record<string, string> = {
 	"import.warn.iconNameUnknown":
 		'Não existe o ícone "{{value}}" em {{type}}, por isso foi usado o ícone padrão.',
 	"import.warn.cmIconUnknownNew":
-		'Não existe o ícone "{{value}}" no Obsidian, por isso foi usado o ícone padrão.',
+		'O ícone "{{value}}" não está disponível neste cofre, por isso foi usado o ícone padrão.',
 	"import.warn.cmIconUnknownExisting":
-		'Não existe o ícone "{{value}}" no Obsidian, por isso "{{id}}" manteve o ícone que já tinha.',
+		'O ícone "{{value}}" não está disponível neste cofre, por isso "{{id}}" manteve o ícone que já tinha.',
 	"import.chooseSource": "Importar de",
 	"import.sourceStudio": "Callout Studio",
 	"import.sourceStudioDesc":
 		"Carregar um arquivo .json exportado do Callout Studio.",
 	"import.sourceCalloutManager": "Callout Manager",
 	"import.sourceCalloutManagerDesc":
-		"Cole os estilos que copiou pelo botão Copy do Callout Manager.",
+		"Traga os seus callouts personalizados do plugin Callout Manager.",
 	"import.sourceAdmonition": "Admonition",
 	"import.sourceAdmonitionDesc":
 		"Traga as suas admonitions personalizadas do plugin Admonition.",
 	"import.cmTitle": "Importar do Callout Manager",
 	"import.cmInstructions":
-		"No Callout Manager, use o botão Copy para copiar os estilos de callout personalizados e depois cole-os abaixo.",
-	"import.cmPlaceholder": "Cole os estilos copiados aqui…",
+		"Cada callout personalizado passa a ser trazido com o seu ícone e " +
+		"cor. Estilos por tema e CSS personalizado não têm equivalente " +
+		"aqui e ficam para trás.",
+	"import.cmFromVault": "Este cofre",
+	"import.cmVaultChecking": "A procurar o plugin Callout Manager…",
+	"import.cmVaultFound":
+		"Encontrados {{count}} callout(s) personalizados.",
+	"import.cmVaultNotFound":
+		"Não foram encontrados callouts personalizados neste cofre.",
+	"import.cmPasteLabel":
+		"Ou cole aqui os estilos copiados do Callout Manager:",
+	"import.cmPlaceholder": "Cole os estilos copiados, ou um data.json, aqui…",
 	"import.cmBtnCancel": "Cancelar",
 	"import.cmBtnImport": "Importar",
 	"import.err.cmNoBlocksFound":
 		"Nenhum estilo do Callout Manager foi encontrado no texto colado.",
+	"import.err.cmNotRecognized":
+		"Ficheiro não reconhecido: era esperado o estilo produzido pelo " +
+		"botão Copy do Callout Manager, ou um data.json do Callout Manager.",
+	"import.err.cmNoEntries":
+		"Não foram encontrados callouts personalizados para importar.",
 	"import.err.cmNoColorForNew":
 		'Nenhuma cor utilizável foi encontrada para o novo callout "{{value}}"; foi ignorado.',
 	"import.err.cmIdConflict":
 		'O ID "{{value}}" já está sendo usado como alias por outro callout ("{{other}}") e foi ignorado.',
+	"import.warn.cmNoColorDefault":
+		"Nenhuma cor foi definida no Callout Manager, por isso foi usado o cinza padrão.",
+	"import.warn.cmThemeCondition":
+		"A cor ou o ícone deste callout foi definido apenas para um tema. " +
+		"O Callout Studio não tem estilos por tema, por isso foi trazido " +
+		"para todos os temas.",
+	"import.warn.cmCustomStyles":
+		"Este callout também tem CSS personalizado no Callout Manager. Esse " +
+		"estilo não faz parte da importação, por isso só o ícone e a cor " +
+		"foram trazidos.",
 
 	// Import — Admonition
 	"import.admTitle": "Importar do Admonition",

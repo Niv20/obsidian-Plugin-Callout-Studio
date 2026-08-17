@@ -5,8 +5,10 @@
  * Extracted from the old GlobalStyleSection so the three per-role "Global
  * callout style" popups (regular / heading / inline) compose the same control
  * groups. Every control follows the same live-update contract: dragging
- * previews the change via cssInjector.scheduleInject(), releasing commits it
- * via saveSettings() + cssInjector.inject().
+ * previews the change via cssInjector.inject(false), coalesced to one pass per
+ * animation frame (see scheduleLiveInject) and skipping the css-change
+ * re-render; releasing commits it via saveSettings() + cssInjector.inject().
+ * There is no scheduleInject — the injector has no debounce at all.
  */
 import { Setting, type SliderComponent } from "obsidian";
 import { t } from "../i18n";
@@ -59,6 +61,29 @@ export function createControlGroup(
 	return groupEl;
 }
 
+/**
+ * The shell of a slider row: a muted label (and room for Obsidian's value
+ * readout beside it) above a track that takes the row's full width.
+ *
+ * Split out of {@link addStyleSlider} so a caller that does NOT commit to
+ * settings can still get the same row — the palette editor's Intensity slider
+ * only re-derives colours and refreshes its preview, so it cannot use the
+ * live-update contract `addStyleSlider` is built around. Fill the returned
+ * element with `new Setting(row).addSlider(…)`; styles.css hides that Setting's
+ * info column and stretches its control to 100%.
+ *
+ * @returns the row element, ready to take a Setting.
+ */
+export function createSliderRow(
+	parentEl: HTMLElement,
+	label: string,
+): HTMLElement {
+	const row = parentEl.createDiv({ cls: "callout-studio-slider-row" });
+	const labelEl = row.createDiv({ cls: "callout-studio-slider-label" });
+	labelEl.createSpan({ text: label });
+	return row;
+}
+
 export interface StyleSliderSpec {
 	label: string;
 	min: number;
@@ -96,9 +121,7 @@ export function addStyleSlider(
 	parentEl: HTMLElement,
 	spec: StyleSliderSpec,
 ): void {
-	const row = parentEl.createDiv({ cls: "callout-studio-slider-row" });
-	const labelEl = row.createDiv({ cls: "callout-studio-slider-label" });
-	labelEl.createSpan({ text: spec.label });
+	const row = createSliderRow(parentEl, spec.label);
 
 	const factor = Math.pow(10, spec.decimals);
 	const round = (v: number): number => Math.round(v * factor) / factor;

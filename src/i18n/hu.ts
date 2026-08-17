@@ -5,6 +5,11 @@ export const hu: Record<string, string> = {
 	"cmd.calloutWrap": "Callout-ba csomagolás",
 	"cmd.calloutUnwrap": "Callout eltávolítása",
 
+	"cmd.customWrapBlock": "Becsomagolás {{name}} callout-ba",
+	"cmd.customInsertBlock": "{{name}} callout beszúrása",
+	"cmd.customInsertHeading": "H{{level}} {{name}} címsor callout beszúrása",
+	"cmd.customInsertInline": "{{name}} beágyazott callout beszúrása",
+
 	"autocomplete.createNew": 'Új callout létrehozása: "{{name}}"',
 
 	"settings.fallbackTag": "Alapértelmezett",
@@ -17,6 +22,8 @@ export const hu: Record<string, string> = {
 		"Újraszkennelés kész: {{count}} új callout hozzáadva.",
 	"replaceModal.deleteWithoutReplaceSuffix":
 		"(visszaesik az alapértelmezettre)",
+	"replaceModal.titleDelete": "Callout törlése",
+	"replaceModal.titleReplace": "Csere a tárban",
 
 	"firstRun.title": "Meglévő callout-ok keresése a tárban?",
 	"firstRun.body":
@@ -136,10 +143,50 @@ export const hu: Record<string, string> = {
 	"settings.enableAutocompleteDesc":
 		'Javaslatokat jelenít meg, amikor "[!" szöveget gépel egy blokkidézet-belsejébe a szerkesztőben. Válasszon callout-típust a listából egy teljes callout fejléc beillesztéséhez.',
 
-	"settings.openHotkeys": "Callout Studio billentyűparancsok",
-	"settings.openHotkeysDesc":
-		"Megnyitja az Obsidian billentyűparancs-beállításait a Callout Studio parancsaihoz, ahol saját parancsokat rendelhet az Új típus létrehozása, Beállítások megnyitása, Callout eltávolítása és Callout-ba csomagolás funkciókhoz. Alapértelmezés szerint nincs hozzárendelt parancs.",
-	"settings.openHotkeysButton": "Billentyűparancs-beállítások megnyitása",
+	"settings.customCommands": "Parancsok és billentyűparancsok",
+	"settings.customCommandsDesc":
+		"Tekintse meg az összes Callout Studio parancsot és a hozzájuk rendelt billentyűparancsot, valamint hozzon létre saját parancsokat a leggyakrabban használt callout-okhoz. Alapértelmezés szerint nincs hozzárendelt billentyűparancs.",
+	"settings.customCommandsButton": "Parancsok kezelése",
+
+	"commandBuilder.title": "Parancsok és billentyűparancsok",
+	"commandBuilder.desc":
+		"Használja a + gombot billentyűparancs beállításához vagy módosításához az Obsidian billentyűparancs-beállításaiban.",
+	"commandBuilder.builtIn": "Beépített parancsok",
+	"commandBuilder.toggleAria": "{{name}} be- vagy kikapcsolása",
+	"commandBuilder.hotkeyBlank": "Üres",
+	"commandBuilder.hotkeyAria": "Billentyűparancs beállítása ehhez: {{name}}",
+	"commandBuilder.yourCommands": "Saját parancsai",
+	"commandBuilder.newCommand": "Új parancs",
+	"commandBuilder.empty": "Még nincsenek egyéni parancsok.",
+	"commandBuilder.unknownCommand": "ez a parancs",
+	"commandBuilder.editAria": "{{name}} szerkesztése",
+	"commandBuilder.deleteAria": "{{name}} törlése",
+	"commandBuilder.deleteConfirm":
+		"Törli a(z) {{name}} parancsot? A hozzárendelt billentyűparancs megszűnik működni.",
+	"commandBuilder.newTitle": "Új parancs",
+	"commandBuilder.editTitle": "Parancs szerkesztése",
+	"commandBuilder.format": "Callout formátum",
+	"commandBuilder.formatDesc": "Milyen típusú callout-ot ír be a parancs.",
+	"commandBuilder.formatHeading": "Címsor",
+	"commandBuilder.formatInline": "Beágyazott",
+	"commandBuilder.formatBlock": "Block",
+	"commandBuilder.roleDisabled":
+		"Ez a formátum ki van kapcsolva, ezért a parancs egyszerű szöveget szúr be, amíg vissza nem kapcsolja.",
+	"commandBuilder.callout": "Callout típus",
+	"commandBuilder.calloutDesc": "A callout, amelyet ez a parancs beszúr.",
+	"commandBuilder.headingLevel": "Címsorszint",
+	"commandBuilder.headingLevelDesc": "Melyik címsorszintet írja be.",
+	"commandBuilder.action": "Művelet",
+	"commandBuilder.actionDesc":
+		"A becsomagolás callout-tá alakítja a kijelölést; a beszúrás egy üreset ad hozzá.",
+	"commandBuilder.actionWrap": "Kijelölés becsomagolása",
+	"commandBuilder.actionInsert": "Új beszúrása",
+	"commandBuilder.preview": "Parancs neve",
+	"commandBuilder.duplicate":
+		"Már van egy parancsa, amely pontosan ezt teszi.",
+	"commandBuilder.noCallouts":
+		"Még nincs callout-típus, amiből parancsot lehetne készíteni.",
+	"commandBuilder.save": "Mentés",
 
 	"settings.vaultMaintenance": "Tár-elemzések és karbantartás",
 	"settings.vaultStats": "Callout-statisztikák",
@@ -154,6 +201,11 @@ export const hu: Record<string, string> = {
 	"settings.resetAllConfirm":
 		"Ez törli az összes egyéni callout-ot, visszaállítja a beépített callout-okat, a globális stílusokat, a mentett színpalettákat, a jobb gombos menü testreszabását és az összes gyorsítótárazott Material SVG-t. Ez a művelet nem vonható vissza. Biztos benne?",
 	"notice.resetAllDone": "Minden visszaállt az alapértelmezettekre.",
+
+	"notice.customCommandsRemoved":
+		"{{count}} egyéni parancs eltávolítva, amelyek callout-típusa már nem létezik.",
+	"notice.customCommandMissingCallout":
+		"Ennek a parancsnak a callout-típusa már nem létezik.",
 
 	"notice.exported": "A callout-ok exportálva: callout-studio-export.json",
 	"notice.importedJSON": "{{count}} callout-típus importálva JSON-ból.",
@@ -269,6 +321,7 @@ export const hu: Record<string, string> = {
 
 	// Palette editor modal
 	"palette.newTitle": "Új színpaletta",
+	"palette.groupPalette": "Paletta",
 	"palette.editTitle": "Színpaletta szerkesztése",
 	"palette.name": "Név",
 	"palette.namePlaceholder": "Saját paletta",
@@ -587,6 +640,13 @@ export const hu: Record<string, string> = {
 
 	"confirm.ok": "Törlés",
 	"confirm.cancel": "Mégse",
+	// Headings for each confirmation — every window carries one, so each
+	// caller of ConfirmModal names what it is about to do.
+	"confirm.titleDeleteCommand": "Parancs törlése",
+	"confirm.titleResetAll": "Összes callout visszaállítása",
+	"confirm.titleResetCallout": "Callout visszaállítása",
+	"confirm.titleDeletePalette": "Paletta törlése",
+	"confirm.titleDeleteImage": "Kép törlése",
 
 	"vault.filesUpdated":
 		"{{count}} callout-hivatkozás frissítve a tárfájlokban.",
@@ -714,31 +774,47 @@ export const hu: Record<string, string> = {
 	"import.warn.iconNameUnknown":
 		'Nincs "{{value}}" ikon a következőben: {{type}}, ezért az alapértelmezett ikont használtuk.',
 	"import.warn.cmIconUnknownNew":
-		'Nincs "{{value}}" ikon az Obsidianban, ezért az alapértelmezett ikont használtuk.',
+		'A "{{value}}" ikon nem érhető el ebben a vaultban, ezért az alapértelmezett ikont használtuk.',
 	"import.warn.cmIconUnknownExisting":
-		'Nincs "{{value}}" ikon az Obsidianban, ezért a "{{id}}" megtartotta a korábban beállított ikont.',
+		'A "{{value}}" ikon nem érhető el ebben a vaultban, ezért a "{{id}}" megtartotta a korábban beállított ikont.',
 	"import.chooseSource": "Importálás innen",
 	"import.sourceStudio": "Callout Studio",
 	"import.sourceStudioDesc":
 		"Egy Callout Studióból exportált .json fájl betöltése.",
 	"import.sourceCalloutManager": "Callout Manager",
 	"import.sourceCalloutManagerDesc":
-		"Illeszd be a Callout Manager Copy gombjáról másolt stílusokat.",
+		"Hozd át a testreszabott callout-jaidat a Callout Manager bővítményből.",
 	"import.sourceAdmonition": "Admonition",
 	"import.sourceAdmonitionDesc":
 		"Hozd át a saját admonition-jeidet az Admonition bővítményből.",
 	"import.cmTitle": "Importálás a Callout Managerből",
 	"import.cmInstructions":
-		"A Callout Managerben használd a Copy gombot a testreszabott callout stílusaid másolásához, majd illeszd be őket lentebb.",
-	"import.cmPlaceholder": "Illeszd be a másolt stílusokat ide…",
+		"Minden testreszabott callout az ikonjával és a színével együtt kerül át. A témánkénti stílusoknak és az egyéni CSS-nek itt nincs megfelelője, ezek nem kerülnek át.",
+	"import.cmFromVault": "Ez a vault",
+	"import.cmVaultChecking": "Callout Manager bővítmény keresése…",
+	"import.cmVaultFound": "{{count}} testreszabott callout található.",
+	"import.cmVaultNotFound":
+		"Nem található testreszabott callout ebben a vaultban.",
+	"import.cmPasteLabel": "Vagy illeszd be ide a Callout Manager Copy gombjáról másolt stílusokat:",
+	"import.cmPlaceholder": "Illeszd be a másolt stílusokat, vagy egy data.json fájlt, ide…",
 	"import.cmBtnCancel": "Mégse",
 	"import.cmBtnImport": "Importálás",
 	"import.err.cmNoBlocksFound":
 		"Nem találhatók Callout Manager stílusok a beillesztett szövegben.",
+	"import.err.cmNotRecognized":
+		"Ismeretlen fájl: a Callout Manager Copy gombja által előállított stílusokat, vagy egy Callout Manager data.json fájlt vártunk.",
+	"import.err.cmNoEntries":
+		"Nem található importálható, testreszabott callout.",
 	"import.err.cmNoColorForNew":
 		'Nem található használható szín az új "{{value}}" callouthoz; kihagyva.',
 	"import.err.cmIdConflict":
 		'A "{{value}}" azonosítót már egy másik callout ("{{other}}") alias-ként használja, ezért kihagyva.',
+	"import.warn.cmNoColorDefault":
+		"A Callout Managerben nem volt beállítva szín, ezért az alapértelmezett szürkét használtuk.",
+	"import.warn.cmThemeCondition":
+		"Ennek a callout-nak a színe vagy ikonja csak egy témára volt beállítva. A Callout Studióban nincs témánkénti stílus, ezért minden témára átkerült.",
+	"import.warn.cmCustomStyles":
+		"Ennek a callout-nak egyéni CSS-e is van a Callout Managerben. Az a stílus nem része az importnak, csak az ikonja és a színe került át.",
 
 	// Import — Admonition
 	"import.admTitle": "Importálás az Admonitionből",

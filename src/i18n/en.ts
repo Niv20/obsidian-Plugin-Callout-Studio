@@ -13,6 +13,13 @@ export const en: Record<string, string> = {
 	"cmd.calloutWrap": "Wrap in callout",
 	"cmd.calloutUnwrap": "Unwrap from callout",
 
+	// Commands — names generated for the user's own commands. Obsidian adds
+	// the "Callout Studio: " prefix itself, so these must not repeat it.
+	"cmd.customWrapBlock": "Wrap in {{name}} callout",
+	"cmd.customInsertBlock": "Insert {{name}} callout",
+	"cmd.customInsertHeading": "Insert H{{level}} {{name}} heading callout",
+	"cmd.customInsertInline": "Insert {{name}} inline callout",
+
 	// Autocomplete
 	"autocomplete.createNew": 'Create new callout: "{{name}}"',
 
@@ -26,6 +33,8 @@ export const en: Record<string, string> = {
 	"settings.rescanComplete":
 		"Re-scan complete: {{count}} new callout(s) added.",
 	"replaceModal.deleteWithoutReplaceSuffix": "(falls back to default)",
+	"replaceModal.titleDelete": "Delete callout",
+	"replaceModal.titleReplace": "Replace in vault",
 
 	// First-run scan modal (shown once on first install for large vaults)
 	"firstRun.title": "Find existing callouts in your vault?",
@@ -81,6 +90,17 @@ export const en: Record<string, string> = {
 	"settings.languageDesc":
 		"Display language for Callout Studio. Defaults to Obsidian's interface language.",
 	"settings.languageAuto": "Automatic (match Obsidian)",
+
+	// Downloadable translations. English is built in; every other language is
+	// fetched the first time it is needed and kept for later.
+	"locale.downloading": "Downloading translation…",
+	"locale.notDownloaded": "{{name}} is not downloaded yet",
+	"locale.notDownloadedDesc":
+		"Callout Studio is showing English until the translation can be downloaded. It will try again the next time Obsidian starts.",
+	"locale.retry": "Retry",
+	"locale.diskWriteFailed":
+		"Callout Studio could not save the translation to disk, so it will need downloading again next time.",
+
 	"settings.importExport": "Import / export",
 	"settings.import": "Import",
 	"settings.export": "Export",
@@ -155,10 +175,51 @@ export const en: Record<string, string> = {
 		'Show suggestions when you type "[!" inside a block callout in the editor. Pick a callout type from the list to insert a complete callout header.',
 
 	// Settings — Keyboard shortcuts
-	"settings.openHotkeys": "Callout Studio hotkeys",
-	"settings.openHotkeysDesc":
-		"Open Obsidian's hotkeys settings for Callout Studio commands, where you can choose your own shortcuts for Create new callout type, Open settings, Unwrap from callout, and Wrap in callout. No shortcuts are assigned by default.",
-	"settings.openHotkeysButton": "Open hotkey settings",
+	"settings.customCommands": "Commands and shortcuts",
+	"settings.customCommandsDesc":
+		"See every Callout Studio command and the shortcut it is bound to, and create your own commands for the callouts you use most. No shortcuts are assigned by default.",
+	"settings.customCommandsButton": "Manage commands",
+
+	// Command builder
+	"commandBuilder.title": "Commands and shortcuts",
+	"commandBuilder.desc":
+		"Use the + button to set or change a shortcut in Obsidian's hotkey settings.",
+	"commandBuilder.builtIn": "Built-in commands",
+	"commandBuilder.toggleAria": "Turn {{name}} on or off",
+	"commandBuilder.hotkeyBlank": "Blank",
+	"commandBuilder.hotkeyAria": "Set a shortcut for {{name}}",
+	"commandBuilder.yourCommands": "Your commands",
+	"commandBuilder.newCommand": "New command",
+	"commandBuilder.empty": "No custom commands yet.",
+	"commandBuilder.unknownCommand": "this command",
+	"commandBuilder.editAria": "Edit {{name}}",
+	"commandBuilder.deleteAria": "Delete {{name}}",
+	"commandBuilder.deleteConfirm":
+		"Delete the command {{name}}? Any shortcut assigned to it will stop working.",
+	"commandBuilder.newTitle": "New command",
+	"commandBuilder.editTitle": "Edit command",
+	"commandBuilder.format": "Callout format",
+	"commandBuilder.formatDesc": "Which kind of callout the command writes.",
+	"commandBuilder.formatHeading": "Heading",
+	"commandBuilder.formatInline": "Inline",
+	"commandBuilder.formatBlock": "Block",
+	"commandBuilder.roleDisabled":
+		"This format is turned off, so the command will insert plain text until you switch it back on.",
+	"commandBuilder.callout": "Callout type",
+	"commandBuilder.calloutDesc": "The callout this command inserts.",
+	"commandBuilder.headingLevel": "Heading level",
+	"commandBuilder.headingLevelDesc": "Which heading level to write.",
+	"commandBuilder.action": "Action",
+	"commandBuilder.actionDesc":
+		"Wrap turns the selection into a callout; insert adds an empty one.",
+	"commandBuilder.actionWrap": "Wrap selection",
+	"commandBuilder.actionInsert": "Insert new",
+	"commandBuilder.preview": "Command name",
+	"commandBuilder.duplicate":
+		"You already have a command that does exactly this.",
+	"commandBuilder.noCallouts":
+		"There are no callout types to build a command from yet.",
+	"commandBuilder.save": "Save",
 
 	// Settings — Reset
 	"settings.vaultMaintenance": "Vault insights & maintenance",
@@ -176,6 +237,10 @@ export const en: Record<string, string> = {
 	"notice.resetAllDone": "Everything has been reset to defaults.",
 
 	// Notices
+	"notice.customCommandsRemoved":
+		"Removed {{count}} custom command(s) whose callout type no longer exists.",
+	"notice.customCommandMissingCallout":
+		"That command's callout type no longer exists.",
 	"notice.exported": "Callouts exported to callout-studio-export.json",
 	"notice.importedJSON": "Imported {{count}} callout type(s) from JSON.",
 	"notice.importedSettings": "Imported plugin settings.",
@@ -288,6 +353,7 @@ export const en: Record<string, string> = {
 	// Palette editor modal
 	"palette.newTitle": "New color palette",
 	"palette.editTitle": "Edit color palette",
+	"palette.groupPalette": "Palette",
 	"palette.name": "Name",
 	"palette.namePlaceholder": "My palette",
 	"palette.nameExists": "A palette with this name already exists",
@@ -295,6 +361,8 @@ export const en: Record<string, string> = {
 	"palette.baseColorHint":
 		"We'll automatically match the background color to it. If you'd like, you can control it separately by {{link}}.",
 	"palette.baseColorHintLink": "clicking here",
+	// Doubles as the title of the palette editor's "Colors" card, which holds
+	// the simple Base color row as well as the advanced per-channel grid.
 	"palette.advancedColors": "Colors",
 	"palette.advancedColorsHint":
 		"Editing colors for {{mode}} mode - the other mode updates automatically. Switch Obsidian's theme to check it.",
@@ -616,6 +684,13 @@ export const en: Record<string, string> = {
 	// Confirm modal
 	"confirm.ok": "Delete",
 	"confirm.cancel": "Cancel",
+	// Headings for each confirmation — every window carries one, so each
+	// caller of ConfirmModal names what it is about to do.
+	"confirm.titleDeleteCommand": "Delete command",
+	"confirm.titleResetAll": "Reset all callouts",
+	"confirm.titleResetCallout": "Reset callout",
+	"confirm.titleDeletePalette": "Delete palette",
+	"confirm.titleDeleteImage": "Delete image",
 
 	// Vault edge-case modals
 	"vault.filesUpdated":
@@ -740,10 +815,13 @@ export const en: Record<string, string> = {
 		'"paletteId" must be a non-empty text ID (got "{{value}}").',
 	"import.warn.iconNameUnknown":
 		'There is no "{{value}}" icon in {{type}}, so the default icon was used instead.',
+	// Not necessarily a typo: Callout Manager lets you pick any icon Obsidian
+	// knows about, which includes ones other plugins register — so the name can
+	// be perfectly real and simply belong to a plugin this vault does not have.
 	"import.warn.cmIconUnknownNew":
-		'There is no "{{value}}" icon in Obsidian, so the default icon was used instead.',
+		'The "{{value}}" icon is not available in this vault, so the default icon was used instead.',
 	"import.warn.cmIconUnknownExisting":
-		'There is no "{{value}}" icon in Obsidian, so "{{id}}" kept the icon it already had.',
+		'The "{{value}}" icon is not available in this vault, so "{{id}}" kept the icon it already had.',
 
 	// Import — source chooser
 	"import.chooseSource": "Import from",
@@ -752,25 +830,43 @@ export const en: Record<string, string> = {
 		"Load a .json file exported from Callout Studio.",
 	"import.sourceCalloutManager": "Callout Manager",
 	"import.sourceCalloutManagerDesc":
-		"Paste the styles you copied from Callout Manager's Copy button.",
+		"Bring your customized callouts over from the Callout Manager plugin.",
 	"import.sourceAdmonition": "Admonition",
 	"import.sourceAdmonitionDesc":
 		"Bring your custom admonitions over from the Admonition plugin.",
 
-	// Import — Callout Manager paste flow
+	// Import — Callout Manager
 	"import.cmTitle": "Import from Callout Manager",
 	"import.cmInstructions":
-		"In Callout Manager, use its Copy button to copy your customized " +
-		"callout styles, then paste them below.",
-	"import.cmPlaceholder": "Paste the copied styles here…",
+		"Each customized callout comes over with its icon and color. Per-theme " +
+		"styling and custom CSS have no equivalent here and are left behind.",
+	"import.cmFromVault": "This vault",
+	"import.cmVaultChecking": "Looking for the Callout Manager plugin…",
+	"import.cmVaultFound": "{{count}} customized callout(s) found.",
+	"import.cmVaultNotFound":
+		"No customized callouts were found in this vault.",
+	"import.cmPasteLabel": "Or paste Callout Manager's copied styles here:",
+	"import.cmPlaceholder": "Paste the copied styles, or a data.json, here…",
 	"import.cmBtnCancel": "Cancel",
 	"import.cmBtnImport": "Import",
 	"import.err.cmNoBlocksFound":
 		"No Callout Manager styles were found in the pasted text.",
+	"import.err.cmNotRecognized":
+		"Unrecognized file: expected the styles Callout Manager's Copy button " +
+		"produces, or a Callout Manager data.json.",
+	"import.err.cmNoEntries": "No customized callouts were found to import.",
 	"import.err.cmNoColorForNew":
 		'No usable color was found for the new callout "{{value}}"; it was skipped.',
 	"import.err.cmIdConflict":
 		'ID "{{value}}" is already used as an alias by another callout ("{{other}}") and was skipped.',
+	"import.warn.cmNoColorDefault":
+		"No color was set in Callout Manager, so its default gray was used.",
+	"import.warn.cmThemeCondition":
+		"This callout's color or icon was set for one theme only. Callout " +
+		"Studio has no per-theme styling, so it was brought over for every theme.",
+	"import.warn.cmCustomStyles":
+		"This callout also has custom CSS in Callout Manager. That styling is " +
+		"not part of the import, so only its icon and color came over.",
 
 	// Import — Admonition
 	"import.admTitle": "Import from Admonition",

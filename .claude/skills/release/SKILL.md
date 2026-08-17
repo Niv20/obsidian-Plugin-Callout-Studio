@@ -104,10 +104,23 @@ contains no user-visible changes so the user can cancel if they'd rather wait.
 Read the full subjects **and bodies** of the commits in the range. Rewrite them as
 release notes aimed at plugin users, not at developers.
 
-House style, matching the existing releases:
+**House style — every release, no exceptions (standardized 2026-08-14 across all
+past releases too; see git history of this file if you need the old, inconsistent
+rule):**
 
 - English, plain sentences. Past tense: "Fixed…", "Added…", "Improved…".
-- A numbered list when there are several items; a single sentence when there's one.
+- No bold lead-in on list items. Just the sentence — "Fixed the icon picker
+  losing its scroll position when reopened," not "**Icon picker:** Fixed …".
+- **One change total** → a single plain sentence paragraph. No bullet, no header.
+- **Several changes, all one kind** (all fixes, or all new things) → a `-` bullet
+  list, one line per change, no header.
+- **Several changes of more than one kind** → exactly two possible `##` headers,
+  in this order, only the ones that have content:
+  - `## What's new` — new features and improvements
+  - `## Bug fixes` — fixes
+  Each header's items are a `-` bullet list underneath it. Never invent other
+  section names (no "Improvements", no emoji in headers, no per-feature bold
+  sub-headers).
 - Describe the **effect the user sees**, not the code that changed. `fix: renaming a
   callout only rewrote its blockquote usages` becomes "Fixed renaming a callout type
   so heading and inline callouts are updated too, instead of being left with a dead
@@ -116,9 +129,10 @@ House style, matching the existing releases:
   symbol names.
 - Collapse several commits that fix one user-facing problem into one line.
 - Skip pure `chore:` noise (lockfile bumps, formatting) unless it's the whole release.
+- Never add a "Full Changelog" line — GitHub already appends that to the draft
+  automatically; a manual one duplicates it.
 
-Write the result to a temp file — `notes=$(mktemp)` — and keep the path. Do not add a
-"Full Changelog" line; GitHub already appends that to the draft.
+Write the result to a temp file — `notes=$(mktemp)` — and keep the path.
 
 ## Step 4 — The approval gate
 

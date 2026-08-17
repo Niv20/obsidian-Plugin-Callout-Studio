@@ -29,6 +29,7 @@ import {
 	scanLineForCalloutTokens,
 	tokenEnd,
 } from "../editor/calloutTokens";
+import { splitFoldMark } from "../editor/calloutWriter";
 
 function escapeRegex(str: string): string {
 	return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -50,6 +51,29 @@ function tokenBracketEnd(token: LineCalloutToken): number {
 /** The `|metadata` suffix to re-emit for a token, or "" when it had none. */
 function metadataSuffix(token: LineCalloutToken): string {
 	return token.hasMetadata ? `|${token.metadata}` : "";
+}
+
+/**
+ * Splits what follows a token into its fold mark and its title text.
+ *
+ * A block callout header may carry a `+`/`-` fold marker right after `]`; that
+ * is syntax, not title, and has to survive any rewrite. A heading callout has no
+ * fold syntax — its folding is driven by the two chevrons — so everything after
+ * `]` there is plain title text, which is why `## [!id]- Old Title` is titled
+ * `- Old Title` and correctly fails to match a rename of `Old Title`.
+ *
+ * Shared by the two writers that reason about a title: the rename
+ * ({@link replaceCalloutTitlesInVault}) and the type swap
+ * ({@link replaceCalloutIdsInVault}). They must agree on where the title starts
+ * or a replace would eat a fold mark the rename preserves — which is also why
+ * the rule itself lives in `calloutWriter.splitFoldMark`, next to the writer
+ * that emits the mark, rather than being spelled out once per caller.
+ */
+function splitFoldAndTitle(
+	line: string,
+	token: LineCalloutToken,
+): { foldMark: string; title: string } {
+	return splitFoldMark(line.slice(token.to), token.role);
 }
 
 /**
@@ -274,10 +298,15 @@ export async function countCalloutUsagesMap(
  *
  * - regular  `> [!id] Title` → the block is unwrapped: the header keeps only its
  *   title text and the body lines lose their leading `> `. Only outermost blocks
- *   (single `>`) are unwrapped; callouts nested inside non-matching blocks stay.
+ *   (single `>`) are unwrapped — a nested `>> [!id] Title` keeps its blockquote
+ *   depth, which belongs to the parent callout, and loses just the token:
+ *   `>> Title`.
  * - heading   `### [!id] Title` → `### Title`, or `### [!id]` → `### <name>`
  *   when the heading has no title of its own to fall back on.
  * - inline    `[!id]` → `<name>`.
+ *
+ * Either way no `[!id]` survives anywhere, which is what lets a delete stick: a
+ * live reference left behind is one discovery re-creates a row for.
  *
  * `displayName` is that fallback name — a heading or a pill carries no text
  * besides the token, so dropping the token outright would delete the line's
@@ -351,7 +380,6 @@ export async function convertCalloutsToPlainTextInVault(
 					line,
 					lineTokens,
 					(token) => {
-						if (token.role === "regular") return null;
 						if (nested.has(token)) return null;
 						if (!idSet.has(normalizeCalloutId(token.rawId))) {
 							return null;
@@ -368,14 +396,34 @@ export async function convertCalloutsToPlainTextInVault(
 								end: tokenEnd(token),
 							};
 						}
-						// Heading: swallow the whitespace after the token and
-						// let the heading's own title stand — falling back to
-						// the name when the token was all the heading had.
-						const after = line.slice(token.to);
-						const gap = after.length - after.replace(/^[ \t]+/, "").length;
+						// Heading, or a *nested* block header. An outermost
+						// `> [!id]` was unwrapped by the branch above, which
+						// `continue`d past here, so a `regular` token reaching
+						// this point sits inside another blockquote: there the
+						// `>` prefix belongs to the parent callout, and
+						// unwrapping it the way an outermost block is unwrapped
+						// would break the parent. So only the token goes —
+						// `>> [!id] Title` becomes `>> Title`. Leaving it would
+						// keep a live reference to an id the caller is deleting,
+						// which discovery then re-creates a row for.
+						//
+						// Either role: swallow the fold mark (block syntax) and
+						// the whitespace after the token, and let the line's own
+						// title stand — falling back to the name when the token
+						// was all it had. Read that title back off the line
+						// rather than from `token.hasTitle`, which the tokenizer
+						// only computes for headings (a block token always
+						// reports false, because Obsidian renders the whole rest
+						// of the line as the title itself).
+						const { foldMark, title } = splitFoldAndTitle(
+							line,
+							token,
+						);
+						const gap =
+							title.length - title.replace(/^[ \t]+/, "").length;
 						return {
-							text: token.hasTitle ? "" : name,
-							end: token.to + gap,
+							text: title.trim() ? "" : name,
+							end: token.to + foldMark.length + gap,
 						};
 					},
 				);
@@ -398,6 +446,19 @@ export async function convertCalloutsToPlainTextInVault(
 }
 
 /**
+ * The optional title rewrite that rides along with a type swap — see
+ * {@link replaceCalloutIdsInVault}.
+ */
+export interface CalloutTitleSwap {
+	/**
+	 * Only a title that is exactly this (trimmed, case-insensitive) is
+	 * swapped, so a title the user wrote themselves is never clobbered.
+	 */
+	from: string;
+	to: string;
+}
+
+/**
  * Replace callout IDs in all markdown files. Every occurrence of `[!oldId]`
  * (for any oldId in `oldIds`) becomes `[!newId]`, in all three render roles —
  * a heading callout and an inline callout carry the id just as a block callout
@@ -408,30 +469,57 @@ export async function convertCalloutsToPlainTextInVault(
  * any `|metadata` — that belongs to the occurrence, not to the callout type, so
  * renaming `note` must turn `[!note|purple]` into `[!newId|purple]`.
  *
+ * With `titleSwap`, the *name* travels with the type. A block header written by
+ * this plugin carries the callout's display name as its title (see
+ * `calloutWriter.buildBlockHeaderToken`), so swapping the token alone would
+ * leave `> [!danger] Warning` on screen. The match rule is the same one
+ * {@link replaceCalloutTitlesInVault} uses for a rename — whole title, exact,
+ * case-insensitive — so `> [!warning] read this first` keeps its own words and
+ * a title-less `> [!warning]` stays title-less, which is already right: Obsidian
+ * renders the new callout's name for it.
+ *
  * Returns the number of references replaced.
  */
 export async function replaceCalloutIdsInVault(
 	app: App,
 	oldIds: string[],
 	newId: string,
+	titleSwap?: CalloutTitleSwap,
 ): Promise<number> {
 	if (oldIds.length === 0) return 0;
 
 	const idSet = new Set(oldIds.map((id) => normalizeCalloutId(id)));
+	// An empty old title would match every title-less header and *add* a title
+	// to it, which is never what a type swap means. Same guard, same reason, as
+	// in replaceCalloutTitlesInVault.
+	const wanted = titleSwap?.from.trim().toLowerCase() ?? "";
 	const files = app.vault.getMarkdownFiles();
 	let totalReplacements = 0;
 
 	for (const file of files) {
 		const content = await app.vault.read(file);
 		const result = rewriteCalloutLines(content, (line, tokens) =>
-			rewriteTokensOnLine(line, tokens, (token) =>
-				idSet.has(normalizeCalloutId(token.rawId))
-					? {
-							text: `[!${newId}${metadataSuffix(token)}]`,
-							end: tokenBracketEnd(token),
-						}
-					: null,
-			),
+			rewriteTokensOnLine(line, tokens, (token) => {
+				if (!idSet.has(normalizeCalloutId(token.rawId))) return null;
+				const bracket = `[!${newId}${metadataSuffix(token)}]`;
+				// A pill has no title text of its own, so there is nothing to
+				// carry across for an inline token.
+				if (titleSwap && wanted && token.role !== "inline") {
+					const { foldMark, title } = splitFoldAndTitle(line, token);
+					if (title.trim().toLowerCase() === wanted) {
+						// Widening to end-of-line is safe here precisely
+						// because the title matched: a title that is exactly a
+						// plain display name holds no tokens of its own, so
+						// rewriteTokensOnLine (which works right-to-left) has
+						// not edited anything to the right of this token.
+						return {
+							text: `${bracket}${foldMark} ${titleSwap.to}`,
+							end: line.length,
+						};
+					}
+				}
+				return { text: bracket, end: tokenBracketEnd(token) };
+			}),
 		);
 		if (result) {
 			totalReplacements += result.count;
@@ -443,19 +531,19 @@ export async function replaceCalloutIdsInVault(
 }
 
 /**
- * Rewrite `+/-` fold markers on every `> [!id]` (or alias) line in the vault
- * to match `desiredMarker` ("" = no marker, "+" = open, "-" = closed).
- * Only writes a file if at least one line changed.
+ * Rewrite `+/-` fold markers on every `> [!id]` (or alias) line in the vault to
+ * match `desiredMarker` ("" = none, "+" = open, "-" = closed). Changed files only.
  *
- * Blockquote-only, unlike the other writers in this file: `+/-` is fold syntax
- * for a block callout alone. A heading callout has no fold syntax — its
- * folding is driven by the two chevrons — so anything after `## [!id]` there is
- * plain title text and must not be touched.
+ * Blockquote-only, unlike the other writers here: `+/-` is fold syntax for a
+ * block callout alone. A heading has none — its folding is the two chevrons —
+ * so anything after `## [!id]` there is title text and must not be touched.
  *
- * The optional `|…` before `]` matches occurrences carrying Obsidian metadata:
- * `> [!note|purple]-` is a fold mark on the `note` callout like any other, and
- * an id-only pattern would silently skip it. The marker sits after the closing
- * bracket, so the metadata is only ever passed through.
+ * Any *depth* of blockquote, though: a nested `>> [!note]` folds exactly as its
+ * parent does, so the prefix matched is the tokenizer's own — and `[ \t]` not
+ * `\s`, so the run cannot cross a newline onto a `[!note]` after a lone `>`.
+ *
+ * The optional `|…` before `]` matches occurrences carrying metadata, which an
+ * id-only pattern would skip; the mark sits after the `]` and passes through.
  */
 export async function normalizeFoldMarkersInVault(
 	app: App,
@@ -466,7 +554,7 @@ export async function normalizeFoldMarkersInVault(
 
 	const pattern = ids.map(escapeRegex).join("|");
 	const regex = new RegExp(
-		`(^>\\s*\\[!(?:${pattern})(?:\\|[^\\]\\n\\r]*)?\\])([+-]?)`,
+		`(^(?:>[ \\t]*)+\\[!(?:${pattern})(?:\\|[^\\]\\n\\r]*)?\\])([+-]?)`,
 		"gim",
 	);
 
@@ -548,21 +636,7 @@ export async function replaceCalloutTitlesInVault(
 			rewriteTokensOnLine(line, tokens, (token) => {
 				if (token.role === "inline") return null;
 				if (!idSet.has(normalizeCalloutId(token.rawId))) return null;
-				const rest = line.slice(token.to);
-				// A block callout header may carry a fold marker right after `]`;
-				// that is syntax, not title, and has to survive the rename. A
-				// heading has no such syntax — everything after `]` is its
-				// title, so `## [!id]- Old Title` is titled `- Old Title` and
-				// correctly does not match a rename of `Old Title`.
-				let foldMark = "";
-				let title = rest;
-				if (token.role === "regular") {
-					const mark = rest.charAt(0);
-					if (mark === "+" || mark === "-") {
-						foldMark = mark;
-						title = rest.slice(1);
-					}
-				}
+				const { foldMark, title } = splitFoldAndTitle(line, token);
 				if (title.trim().toLowerCase() !== wanted) return null;
 				return {
 					text: `${line.slice(token.from, token.to)}${foldMark} ${newTitle}`,

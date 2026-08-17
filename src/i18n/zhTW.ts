@@ -4,6 +4,10 @@ export const zhTW: Record<string, string> = {
 	"cmd.insertEmptyCallout": "插入空白 callout",
 	"cmd.calloutWrap": "以 callout 包覆",
 	"cmd.calloutUnwrap": "移除 callout",
+	"cmd.customWrapBlock": "以 {{name}} callout 包覆",
+	"cmd.customInsertBlock": "插入 {{name}} callout",
+	"cmd.customInsertHeading": "插入 H{{level}} {{name}} 標題 callout",
+	"cmd.customInsertInline": "插入 {{name}} 行內 callout",
 	"autocomplete.createNew": "建立新 callout：「{{name}}」",
 	"settings.fallbackTag": "預設",
 	"settings.fallbackTagAuto": "自動預設",
@@ -13,6 +17,8 @@ export const zhTW: Record<string, string> = {
 	"settings.rescanVaultHintAction": "立即掃描",
 	"settings.rescanComplete": "重新掃描完成：已新增 {{count}} 個新 callout。",
 	"replaceModal.deleteWithoutReplaceSuffix": "（回復為預設值）",
+	"replaceModal.titleDelete": "刪除 callout",
+	"replaceModal.titleReplace": "在 vault 中替換",
 	"firstRun.title": "在 vault 中尋找現有的 callout？",
 	"firstRun.body":
 		"Callout Studio 可以掃描您的 vault 以探索您已在使用的 callout，使其出現在設定清單中並套用備用樣式。",
@@ -120,10 +126,47 @@ export const zhTW: Record<string, string> = {
 	"settings.enableAutocomplete": "啟用 [! 自動完成",
 	"settings.enableAutocompleteDesc":
 		"在編輯器區塊引用中輸入「[!」時顯示建議。從清單中選擇 callout 類型以插入完整的 callout 標題。",
-	"settings.openHotkeys": "Callout Studio 快速鍵",
-	"settings.openHotkeysDesc":
-		"開啟 Obsidian 的快速鍵設定，在那裡您可以為「建立新 callout 類型」、「開啟設定」、「從 callout 中解包」和「以 callout 包覆」設定快速鍵。預設不分配快速鍵。",
-	"settings.openHotkeysButton": "開啟快速鍵設定",
+	"settings.customCommands": "指令與快速鍵",
+	"settings.customCommandsDesc":
+		"查看每個 Callout Studio 指令及其綁定的快速鍵，並為您最常用的 callout 建立自己的指令。預設不分配快速鍵。",
+	"settings.customCommandsButton": "管理指令",
+	"commandBuilder.title": "指令與快速鍵",
+	"commandBuilder.desc":
+		"點擊「+」按鈕以在 Obsidian 的快速鍵設定中設定或變更快速鍵。",
+	"commandBuilder.builtIn": "內建指令",
+	"commandBuilder.toggleAria": "開啟或關閉 {{name}}",
+	"commandBuilder.hotkeyBlank": "空白",
+	"commandBuilder.hotkeyAria": "為 {{name}} 設定快速鍵",
+	"commandBuilder.yourCommands": "您的指令",
+	"commandBuilder.newCommand": "新增指令",
+	"commandBuilder.empty": "尚無自訂指令。",
+	"commandBuilder.unknownCommand": "此指令",
+	"commandBuilder.editAria": "編輯 {{name}}",
+	"commandBuilder.deleteAria": "刪除 {{name}}",
+	"commandBuilder.deleteConfirm":
+		"刪除指令 {{name}}？為其設定的快速鍵將停止作用。",
+	"commandBuilder.newTitle": "新增指令",
+	"commandBuilder.editTitle": "編輯指令",
+	"commandBuilder.format": "Callout 格式",
+	"commandBuilder.formatDesc": "此指令寫入的 callout 類型。",
+	"commandBuilder.formatHeading": "標題",
+	"commandBuilder.formatInline": "行內",
+	"commandBuilder.formatBlock": "區塊",
+	"commandBuilder.roleDisabled":
+		"此格式目前關閉，因此在您重新開啟之前，指令將插入純文字。",
+	"commandBuilder.callout": "Callout 類型",
+	"commandBuilder.calloutDesc": "此指令插入的 callout。",
+	"commandBuilder.headingLevel": "標題層級",
+	"commandBuilder.headingLevelDesc": "要寫入的標題層級。",
+	"commandBuilder.action": "動作",
+	"commandBuilder.actionDesc":
+		"「包覆」會將所選內容轉換為 callout；「插入」會新增一個空白的。",
+	"commandBuilder.actionWrap": "包覆所選內容",
+	"commandBuilder.actionInsert": "插入新項目",
+	"commandBuilder.preview": "指令名稱",
+	"commandBuilder.duplicate": "您已經有一個執行完全相同動作的指令。",
+	"commandBuilder.noCallouts": "目前沒有可用來建立指令的 callout 類型。",
+	"commandBuilder.save": "儲存",
 	"settings.vaultMaintenance": "Vault 洞察與維護",
 	"settings.vaultStats": "Callout 統計",
 	"settings.vaultStatsDesc":
@@ -137,6 +180,9 @@ export const zhTW: Record<string, string> = {
 	"settings.resetAllConfirm":
 		"此操作將刪除所有自訂 callout，重置內建 callout、全域樣式、已儲存的調色盤、右鍵選單自訂設定和所有快取的 Material SVG。此操作無法還原。確定嗎？",
 	"notice.resetAllDone": "所有內容已重置為預設值。",
+	"notice.customCommandsRemoved":
+		"已移除 {{count}} 個 callout 類型已不存在的自訂指令。",
+	"notice.customCommandMissingCallout": "該指令的 callout 類型已不存在。",
 	"notice.exported": "Callout 已匯出到 callout-studio-export.json",
 	"notice.importedJSON": "已從 JSON 匯入 {{count}} 個 callout 類型。",
 	"notice.importedSettings": "已匯入外掛設定。",
@@ -240,6 +286,7 @@ export const zhTW: Record<string, string> = {
 	"editor.externalStyleClose": "知道了",
 	// Palette editor modal
 	"palette.newTitle": "新增調色盤",
+	"palette.groupPalette": "調色盤",
 	"palette.editTitle": "編輯調色盤",
 	"palette.name": "名稱",
 	"palette.namePlaceholder": "我的調色盤",
@@ -550,6 +597,13 @@ export const zhTW: Record<string, string> = {
 	"menuItem.deleteSection": "刪除部分",
 	"confirm.ok": "刪除",
 	"confirm.cancel": "取消",
+	// Headings for each confirmation — every window carries one, so each
+	// caller of ConfirmModal names what it is about to do.
+	"confirm.titleDeleteCommand": "刪除指令",
+	"confirm.titleResetAll": "重置所有 callout",
+	"confirm.titleResetCallout": "重置 callout",
+	"confirm.titleDeletePalette": "刪除調色盤",
+	"confirm.titleDeleteImage": "刪除圖片",
 	"vault.filesUpdated": "已更新 vault 檔案中的 {{count}} 個 callout 參照。",
 	"vault.idsUpdated":
 		"已更新 vault 檔案中的 {{count}} 個 callout ID：{{oldIds}} → {{newId}}",
@@ -672,14 +726,28 @@ export const zhTW: Record<string, string> = {
 	"import.sourceAdmonitionDesc":
 		"從 Admonition 外掛匯入您的自訂 admonition。",
 	"import.cmTitle": "從 Callout Manager 匯入",
+	"import.cmFromVault": "本儲存庫",
+	"import.cmVaultChecking": "正在尋找 Callout Manager 外掛…",
+	"import.cmVaultFound": "找到 {{count}} 個自訂 callout。",
+	"import.cmVaultNotFound": "在本儲存庫中找不到自訂 callout。",
+	"import.cmPasteLabel": "或在此貼上從 Callout Manager 複製的樣式：",
 	"import.cmInstructions":
 		"在 Callout Manager 中，使用其 Copy 按鈕複製您自訂的 callout 樣式，然後將其貼到下方。",
 	"import.cmPlaceholder": "在此貼上複製的樣式…",
 	"import.cmBtnCancel": "取消",
 	"import.cmBtnImport": "匯入",
+	"import.err.cmNotRecognized":
+		"無法辨識的檔案：應為 Callout Manager Copy 按鈕產生的樣式，或 Callout Manager 的 data.json。",
+	"import.err.cmNoEntries": "找不到可匯入的自訂 callout。",
 	"import.err.cmNoBlocksFound": "在貼上的文字中未找到 Callout Manager 樣式。",
 	"import.err.cmNoColorForNew":
 		'未找到適用於新 callout "{{value}}" 的可用顏色；已跳過。',
+	"import.warn.cmNoColorDefault":
+		"Callout Manager 未設定顏色，因此使用預設灰色。",
+	"import.warn.cmThemeCondition":
+		"此 callout 的顏色或圖示只為單一佈景主題設定。Callout Studio 不支援各主題獨立樣式，因此已套用至所有主題。",
+	"import.warn.cmCustomStyles":
+		"此 callout 在 Callout Manager 中還有自訂 CSS。該樣式不包含在匯入內容中，因此僅匯入其圖示與顏色。",
 	"import.err.cmIdConflict":
 		'ID "{{value}}" 已被另一個 callout ("{{other}}") 用作別名，已跳過。',
 
@@ -718,9 +786,9 @@ export const zhTW: Record<string, string> = {
 	"footer.tagline": "有反饋、意見或建議？歡迎告訴我！",
 	"footer.madeBy": "由 Niv 製作  •  ",
 	"settings.deletePaletteConfirmLinkedOne":
-		'刪除色盤「{{name}}」？\n1 個 callout 正在使用它。它會保留原有色彩，你之後可以在其編輯器的顏色列重新連結。',
+		"刪除色盤「{{name}}」？\n1 個 callout 正在使用它。它會保留原有色彩，你之後可以在其編輯器的顏色列重新連結。",
 	"settings.deletePaletteConfirmLinked":
-		'刪除色盤「{{name}}」？\n{{count}} 個 callout 正在使用它。它們會保留原有色彩，你之後可以在任一編輯器的顏色列重新連結。',
+		"刪除色盤「{{name}}」？\n{{count}} 個 callout 正在使用它。它們會保留原有色彩，你之後可以在任一編輯器的顏色列重新連結。",
 	"settings.unlinkedColors": "未連結色彩",
 	"settings.unlinkedColorsDesc":
 		"這些 callout 的已儲存色彩已被刪除。它們會保留原有色彩；還原會重新儲存該色彩並重新連結整個群組。",
@@ -739,8 +807,8 @@ export const zhTW: Record<string, string> = {
 		"此 callout 的已儲存色彩已被刪除。你可以透過{{link}}重新儲存——另外 {{count}} 個使用該色彩的 callout 也會重新連結。",
 	"editor.colorsDescDeletedLink": "點這裡",
 	"palette.colorExists":
-		'這些色彩與「{{name}}」完全相同。兩個已儲存色彩不能相同——請修改一個色彩以區分它們。',
+		"這些色彩與「{{name}}」完全相同。兩個已儲存色彩不能相同——請修改一個色彩以區分它們。",
 	"palette.colorExistsUse":
-		'這些色彩與「{{name}}」完全相同。兩個已儲存色彩不能相同——請修改一個色彩，或{{link}}。',
+		"這些色彩與「{{name}}」完全相同。兩個已儲存色彩不能相同——請修改一個色彩，或{{link}}。",
 	"palette.colorExistsUseLink": "使用現有色彩",
 };

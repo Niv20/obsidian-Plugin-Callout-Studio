@@ -5,6 +5,11 @@ export const cs: Record<string, string> = {
 	"cmd.calloutWrap": "Zabalit do callout",
 	"cmd.calloutUnwrap": "Odebrat callout",
 
+	"cmd.customWrapBlock": "Zabalit do callout {{name}}",
+	"cmd.customInsertBlock": "Vložit callout {{name}}",
+	"cmd.customInsertHeading": "Vložit nadpisový callout {{name}} (H{{level}})",
+	"cmd.customInsertInline": "Vložit vložený callout {{name}}",
+
 	"autocomplete.createNew": 'Vytvořit nový callout: "{{name}}"',
 
 	"settings.fallbackTag": "Výchozí",
@@ -16,6 +21,8 @@ export const cs: Record<string, string> = {
 	"settings.rescanComplete":
 		"Opětovné prohledávání dokončeno: přidáno {{count}} nových callout(ů).",
 	"replaceModal.deleteWithoutReplaceSuffix": "(vrátí se na výchozí)",
+	"replaceModal.titleDelete": "Smazat callout",
+	"replaceModal.titleReplace": "Nahradit ve vaultu",
 
 	"firstRun.title": "Najít existující callouts ve vaultu?",
 	"firstRun.body":
@@ -134,10 +141,49 @@ export const cs: Record<string, string> = {
 	"settings.enableAutocompleteDesc":
 		'Zobrazuje návrhy při psaní "[!" v bloku citace v editoru. Vyberte typ callout ze seznamu a vložte úplnou hlavičku callout.',
 
-	"settings.openHotkeys": "Klávesové zkratky Callout Studio",
-	"settings.openHotkeysDesc":
-		"Otevře nastavení klávesových zkratek Obsidian pro příkazy Callout Studio, kde si můžete zvolit vlastní zkratky pro Vytvořit nový typ, Otevřít nastavení, Odebrat callout a Zabalit do callout. Ve výchozím nastavení nejsou přiřazeny žádné zkratky.",
-	"settings.openHotkeysButton": "Otevřít nastavení zkratek",
+	"settings.customCommands": "Příkazy a zkratky",
+	"settings.customCommandsDesc":
+		"Prohlédněte si všechny příkazy Callout Studio a zkratku, ke které je každý přiřazen, a vytvořte si vlastní příkazy pro callouty, které používáte nejčastěji. Ve výchozím nastavení nejsou přiřazeny žádné zkratky.",
+	"settings.customCommandsButton": "Spravovat příkazy",
+
+	"commandBuilder.title": "Příkazy a zkratky",
+	"commandBuilder.desc":
+		"Pomocí tlačítka + nastavte nebo změňte zkratku v nastavení klávesových zkratek Obsidian.",
+	"commandBuilder.builtIn": "Vestavěné příkazy",
+	"commandBuilder.toggleAria": "Zapnout nebo vypnout {{name}}",
+	"commandBuilder.hotkeyBlank": "Prázdné",
+	"commandBuilder.hotkeyAria": "Nastavit zkratku pro {{name}}",
+	"commandBuilder.yourCommands": "Vaše příkazy",
+	"commandBuilder.newCommand": "Nový příkaz",
+	"commandBuilder.empty": "Zatím žádné vlastní příkazy.",
+	"commandBuilder.unknownCommand": "tento příkaz",
+	"commandBuilder.editAria": "Upravit {{name}}",
+	"commandBuilder.deleteAria": "Smazat {{name}}",
+	"commandBuilder.deleteConfirm":
+		"Smazat příkaz {{name}}? Případná přiřazená zkratka přestane fungovat.",
+	"commandBuilder.newTitle": "Nový příkaz",
+	"commandBuilder.editTitle": "Upravit příkaz",
+	"commandBuilder.format": "Formát callout",
+	"commandBuilder.formatDesc": "Jaký druh callout příkaz zapisuje.",
+	"commandBuilder.formatHeading": "Nadpis",
+	"commandBuilder.formatInline": "Vložený",
+	"commandBuilder.formatBlock": "Blokový",
+	"commandBuilder.roleDisabled":
+		"Tento formát je vypnutý, takže příkaz bude vkládat obyčejný text, dokud jej znovu nezapnete.",
+	"commandBuilder.callout": "Typ callout",
+	"commandBuilder.calloutDesc": "Callout, který tento příkaz vkládá.",
+	"commandBuilder.headingLevel": "Úroveň nadpisu",
+	"commandBuilder.headingLevelDesc": "Jakou úroveň nadpisu zapsat.",
+	"commandBuilder.action": "Akce",
+	"commandBuilder.actionDesc":
+		"Zabalení promění výběr v callout; vložení přidá prázdný.",
+	"commandBuilder.actionWrap": "Zabalit výběr",
+	"commandBuilder.actionInsert": "Vložit nový",
+	"commandBuilder.preview": "Název příkazu",
+	"commandBuilder.duplicate": "Takový příkaz už máte.",
+	"commandBuilder.noCallouts":
+		"Zatím neexistují žádné typy callout, ze kterých by šlo příkaz vytvořit.",
+	"commandBuilder.save": "Uložit",
 
 	"settings.vaultMaintenance": "Statistiky a údržba vaultu",
 	"settings.vaultStats": "Statistiky callout",
@@ -153,6 +199,10 @@ export const cs: Record<string, string> = {
 		"Tím se odstraní všechny vlastní callouts, obnoví vestavěné callouts, globální styly, uložené barevné palety, přizpůsobení kontextové nabídky a všechny SVG Material v mezipaměti. Tuto akci nelze vrátit zpět. Jste si jisti?",
 	"notice.resetAllDone": "Vše bylo obnoveno na výchozí hodnoty.",
 
+	"notice.customCommandsRemoved":
+		"Odstraněno {{count}} vlastní(ch) příkaz(ů), jejichž typ callout již neexistuje.",
+	"notice.customCommandMissingCallout":
+		"Typ callout tohoto příkazu již neexistuje.",
 	"notice.exported": "Callouts exportovány do callout-studio-export.json",
 	"notice.importedJSON": "Importováno {{count}} typ(ů) callout z JSON.",
 	"notice.importedSettings": "Importováno nastavení doplňku.",
@@ -265,6 +315,7 @@ export const cs: Record<string, string> = {
 
 	// Palette editor modal
 	"palette.newTitle": "Nová barevná paleta",
+	"palette.groupPalette": "Paleta",
 	"palette.editTitle": "Upravit barevnou paletu",
 	"palette.name": "Název",
 	"palette.namePlaceholder": "Moje paleta",
@@ -582,6 +633,13 @@ export const cs: Record<string, string> = {
 
 	"confirm.ok": "Smazat",
 	"confirm.cancel": "Zrušit",
+	// Headings for each confirmation — every window carries one, so each
+	// caller of ConfirmModal names what it is about to do.
+	"confirm.titleDeleteCommand": "Smazat příkaz",
+	"confirm.titleResetAll": "Obnovit všechny callouty",
+	"confirm.titleResetCallout": "Obnovit callout",
+	"confirm.titleDeletePalette": "Smazat paletu",
+	"confirm.titleDeleteImage": "Smazat obrázek",
 
 	"vault.filesUpdated":
 		"Aktualizováno {{count}} odkazů na callout v souborech vaultu.",
@@ -705,31 +763,53 @@ export const cs: Record<string, string> = {
 	"import.warn.iconNameUnknown":
 		'Ikona "{{value}}" v {{type}} neexistuje, proto byla použita výchozí ikona.',
 	"import.warn.cmIconUnknownNew":
-		'Ikona "{{value}}" v Obsidian neexistuje, proto byla použita výchozí ikona.',
+		'Ikona "{{value}}" není v tomto trezoru dostupná, proto byla použita výchozí ikona.',
 	"import.warn.cmIconUnknownExisting":
-		'Ikona "{{value}}" v Obsidian neexistuje, proto "{{id}}" si ponechalo ikonu, kterou již mělo.',
+		'Ikona "{{value}}" není v tomto trezoru dostupná, proto "{{id}}" si ponechalo ikonu, kterou již mělo.',
 	"import.chooseSource": "Importovat z",
 	"import.sourceStudio": "Callout Studio",
 	"import.sourceStudioDesc":
 		"Načíst soubor .json exportovaný z Callout Studio.",
 	"import.sourceCalloutManager": "Callout Manager",
 	"import.sourceCalloutManagerDesc":
-		"Vložte styly zkopírované z tlačítka Copy v Callout Manager.",
+		"Přeneste své přizpůsobené callouty z pluginu Callout Manager.",
 	"import.sourceAdmonition": "Admonition",
 	"import.sourceAdmonitionDesc":
 		"Přeneste své vlastní admonition z pluginu Admonition.",
 	"import.cmTitle": "Import z Callout Manager",
 	"import.cmInstructions":
-		"V Callout Manager použijte tlačítko Copy ke zkopírování přizpůsobených stylů calloutů, poté je vložte níže.",
-	"import.cmPlaceholder": "Vložte zkopírované styly sem…",
+		"Každý přizpůsobený callout se přenese se svou ikonou a barvou. Styly " +
+		"pro jednotlivá témata a vlastní CSS zde nemají obdobu a nepřenášejí se.",
+	"import.cmFromVault": "Tento trezor",
+	"import.cmVaultChecking": "Hledání pluginu Callout Manager…",
+	"import.cmVaultFound": "Nalezeno přizpůsobených calloutů: {{count}}.",
+	"import.cmVaultNotFound":
+		"V tomto trezoru nebyly nalezeny žádné přizpůsobené callouty.",
+	"import.cmPasteLabel": "Nebo sem vložte styly zkopírované z Callout Manager:",
+	"import.cmPlaceholder": "Vložte zkopírované styly nebo soubor data.json sem…",
 	"import.cmBtnCancel": "Zrušit",
 	"import.cmBtnImport": "Importovat",
 	"import.err.cmNoBlocksFound":
 		"Ve vloženém textu nebyly nalezeny žádné styly Callout Manager.",
+	"import.err.cmNotRecognized":
+		"Nerozpoznaný soubor: očekávány byly styly generované tlačítkem Copy " +
+		"v Callout Manager, nebo soubor data.json z Callout Manager.",
+	"import.err.cmNoEntries":
+		"Nebyly nalezeny žádné přizpůsobené callouty k importu.",
 	"import.err.cmNoColorForNew":
 		'Pro nový callout "{{value}}" nebyla nalezena použitelná barva; byl přeskočen.',
 	"import.err.cmIdConflict":
 		'ID "{{value}}" je již používáno jako alias jiným calloutem ("{{other}}") a bylo přeskočeno.',
+	"import.warn.cmNoColorDefault":
+		"V Callout Manager nebyla nastavena barva, proto byla použita výchozí " +
+		"šedá.",
+	"import.warn.cmThemeCondition":
+		"Barva nebo ikona tohoto calloutu byla nastavena jen pro jedno téma. " +
+		"Callout Studio nemá styly pro jednotlivá témata, proto byla přenesena " +
+		"pro všechna témata.",
+	"import.warn.cmCustomStyles":
+		"Tento callout má v Callout Manager i vlastní CSS. Tento styl není " +
+		"součástí importu, proto se přenesla jen jeho ikona a barva.",
 
 	// Import — Admonition
 	"import.admTitle": "Import z Admonition",

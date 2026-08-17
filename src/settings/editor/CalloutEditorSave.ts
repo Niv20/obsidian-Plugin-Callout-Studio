@@ -301,8 +301,20 @@ export async function performCalloutEditorSave(
 	let saved = false;
 	if (existingId) {
 		if (isIdChanged) {
-			plugin.registry.remove(existingId);
-			saved = plugin.registry.add(def);
+			// Batched so the remove and the add announce themselves once,
+			// together. Un-batched, the remove's change event would reach the
+			// custom-command sweep while the commands still pointed at an id
+			// that had just stopped existing, and they would be pruned as
+			// broken. Inside the batch the migration lands first, so the single
+			// event that follows sees a consistent world.
+			saved = plugin.registry.batch(() => {
+				plugin.registry.remove(existingId);
+				const added = plugin.registry.add(def);
+				if (added) {
+					plugin.customCommands.migrateCalloutId(existingId, def.id);
+				}
+				return added;
+			});
 		} else {
 			saved = plugin.registry.update(existingId, def);
 		}

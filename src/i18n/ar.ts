@@ -5,6 +5,11 @@ export const ar: Record<string, string> = {
 	"cmd.calloutWrap": "التفاف في callout",
 	"cmd.calloutUnwrap": "إزالة callout",
 
+	"cmd.customWrapBlock": "التفاف في callout {{name}}",
+	"cmd.customInsertBlock": "إدراج callout {{name}}",
+	"cmd.customInsertHeading": "إدراج عنوان callout {{name}} من المستوى H{{level}}",
+	"cmd.customInsertInline": "إدراج callout {{name}} ضمن السطر",
+
 	"autocomplete.createNew": 'إنشاء callout جديد: "{{name}}"',
 
 	"settings.fallbackTag": "افتراضي",
@@ -16,6 +21,8 @@ export const ar: Record<string, string> = {
 	"settings.rescanComplete":
 		"اكتمل إعادة المسح: تمت إضافة {{count}} callout جديد.",
 	"replaceModal.deleteWithoutReplaceSuffix": "(يعود إلى الافتراضي)",
+	"replaceModal.titleDelete": "حذف الـ callout",
+	"replaceModal.titleReplace": "استبدال في المخزن",
 
 	"firstRun.title": "البحث عن callouts الموجودة في مخزنك؟",
 	"firstRun.body":
@@ -133,10 +140,48 @@ export const ar: Record<string, string> = {
 	"settings.enableAutocompleteDesc":
 		'يعرض اقتراحات عند كتابة "[!" داخل اقتباس محظور في المحرر. اختر نوع callout من القائمة لإدراج عنوان callout كامل.',
 
-	"settings.openHotkeys": "اختصارات Callout Studio",
-	"settings.openHotkeysDesc":
-		"يفتح إعدادات الاختصارات في Obsidian لأوامر Callout Studio، حيث يمكنك اختيار اختصاراتك الخاصة لإنشاء نوع جديد وفتح الإعدادات وإزالة الـ callout والالتفاف فيه. لا يتم تعيين أي اختصارات افتراضياً.",
-	"settings.openHotkeysButton": "فتح إعدادات الاختصارات",
+	"settings.customCommands": "الأوامر والاختصارات",
+	"settings.customCommandsDesc":
+		"اطّلع على كل أوامر Callout Studio والاختصار المرتبط بكل منها، وأنشئ أوامرك الخاصة للـ callouts التي تستخدمها كثيرًا. لا يتم تعيين أي اختصارات افتراضياً.",
+	"settings.customCommandsButton": "إدارة الأوامر",
+
+	"commandBuilder.title": "الأوامر والاختصارات",
+	"commandBuilder.desc":
+		"استخدم زر + لتعيين اختصار أو تغييره في إعدادات اختصارات Obsidian.",
+	"commandBuilder.builtIn": "الأوامر المدمجة",
+	"commandBuilder.toggleAria": "تفعيل أو تعطيل {{name}}",
+	"commandBuilder.hotkeyBlank": "فارغ",
+	"commandBuilder.hotkeyAria": "تعيين اختصار لـ {{name}}",
+	"commandBuilder.yourCommands": "أوامرك",
+	"commandBuilder.newCommand": "أمر جديد",
+	"commandBuilder.empty": "لا توجد أوامر مخصصة بعد.",
+	"commandBuilder.unknownCommand": "هذا الأمر",
+	"commandBuilder.editAria": "تعديل {{name}}",
+	"commandBuilder.deleteAria": "حذف {{name}}",
+	"commandBuilder.deleteConfirm":
+		"حذف الأمر {{name}}؟ أي اختصار مُعيَّن له سيتوقف عن العمل.",
+	"commandBuilder.newTitle": "أمر جديد",
+	"commandBuilder.editTitle": "تعديل الأمر",
+	"commandBuilder.format": "تنسيق الـ callout",
+	"commandBuilder.formatDesc": "نوع الـ callout الذي يكتبه الأمر.",
+	"commandBuilder.formatHeading": "عنوان",
+	"commandBuilder.formatInline": "ضمن السطر",
+	"commandBuilder.formatBlock": "كتلة",
+	"commandBuilder.roleDisabled":
+		"هذا التنسيق معطّل، لذا سيُدرج الأمر نصًا عاديًا حتى تُعيد تفعيله.",
+	"commandBuilder.callout": "نوع الـ callout",
+	"commandBuilder.calloutDesc": "الـ callout الذي يُدرجه هذا الأمر.",
+	"commandBuilder.headingLevel": "مستوى العنوان",
+	"commandBuilder.headingLevelDesc": "مستوى العنوان الذي سيُكتب.",
+	"commandBuilder.action": "الإجراء",
+	"commandBuilder.actionDesc":
+		"الالتفاف يحوّل التحديد إلى callout؛ الإدراج يضيف واحدًا فارغًا.",
+	"commandBuilder.actionWrap": "التفاف حول التحديد",
+	"commandBuilder.actionInsert": "إدراج جديد",
+	"commandBuilder.preview": "اسم الأمر",
+	"commandBuilder.duplicate": "لديك بالفعل أمر يقوم بنفس الشيء تمامًا.",
+	"commandBuilder.noCallouts": "لا توجد أنواع callout لإنشاء أمر منها بعد.",
+	"commandBuilder.save": "حفظ",
 
 	"settings.vaultMaintenance": "رؤى المخزن والصيانة",
 	"settings.vaultStats": "إحصائيات الـ callout",
@@ -152,6 +197,10 @@ export const ar: Record<string, string> = {
 		"سيؤدي هذا إلى حذف جميع الـ callouts المخصصة، وإعادة تعيين الـ callouts المدمجة والأنماط العامة، ولوحات الألوان المحفوظة، وتخصيص قائمة النقر بزر الماوس الأيمن، وجميع SVGs Material المخزنة مؤقتاً. لا يمكن التراجع عن هذا الإجراء. هل أنت متأكد؟",
 	"notice.resetAllDone": "تمت إعادة تعيين كل شيء إلى الإعدادات الافتراضية.",
 
+	"notice.customCommandsRemoved":
+		"تمت إزالة {{count}} أمر/أوامر مخصصة لم يعد نوع الـ callout الخاص بها موجودًا.",
+	"notice.customCommandMissingCallout":
+		"نوع الـ callout لهذا الأمر لم يعد موجودًا.",
 	"notice.exported": "تم تصدير الـ callouts إلى callout-studio-export.json",
 	"notice.importedJSON": "تم استيراد {{count}} نوع callout من JSON.",
 	"notice.importedSettings": "تم استيراد إعدادات الإضافة.",
@@ -260,6 +309,7 @@ export const ar: Record<string, string> = {
 
 	// Palette editor modal
 	"palette.newTitle": "لوحة ألوان جديدة",
+	"palette.groupPalette": "لوحة",
 	"palette.editTitle": "تعديل لوحة الألوان",
 	"palette.name": "الاسم",
 	"palette.namePlaceholder": "لوحتي",
@@ -574,12 +624,23 @@ export const ar: Record<string, string> = {
 
 	"confirm.ok": "حذف",
 	"confirm.cancel": "إلغاء",
+	// Headings for each confirmation — every window carries one, so each
+	// caller of ConfirmModal names what it is about to do.
+	"confirm.titleDeleteCommand": "حذف الأمر",
+	"confirm.titleResetAll": "إعادة تعيين كل الـ callouts",
+	"confirm.titleResetCallout": "إعادة تعيين الـ callout",
+	"confirm.titleDeletePalette": "حذف لوحة الألوان",
+	"confirm.titleDeleteImage": "حذف الصورة",
 
 	"vault.filesUpdated": "تم تحديث {{count}} مرجع callout في ملفات المخزن.",
+	// The arrow stays "→" although the sentence is RTL: it sits between two
+	// callout ids, which are normally Latin, so the bidi algorithm resolves that
+	// fragment left-to-right and a mirrored "←" would point from the new id back
+	// to the old one. Prose paths such as `firstRun.laterHint` do mirror.
 	"vault.idsUpdated":
-		"تم تحديث {{count}} معرّف callout في ملفات المخزن: {{oldIds}} ← {{newId}}",
+		"تم تحديث {{count}} معرّف callout في ملفات المخزن: {{oldIds}} → {{newId}}",
 	"vault.titlesUpdated":
-		"تم تحديث {{count}} عنوان callout في ملفات المخزن: {{oldTitle}} ← {{newTitle}}",
+		"تم تحديث {{count}} عنوان callout في ملفات المخزن: {{oldTitle}} → {{newTitle}}",
 	"vault.replaceWith": "الاستبدال بـ:",
 	"vault.deleteWithout": "حذف بدون استبدال",
 	"vault.confirmDelete": "تأكيد",
@@ -696,30 +757,48 @@ export const ar: Record<string, string> = {
 	"import.warn.iconNameUnknown":
 		'لا يوجد أيقونة باسم "{{value}}" في {{type}}، لذلك تم استخدام الأيقونة الافتراضية بدلاً منها.',
 	"import.warn.cmIconUnknownNew":
-		'لا يوجد أيقونة باسم "{{value}}" في Obsidian، لذلك تم استخدام الأيقونة الافتراضية بدلاً منها.',
+		'الأيقونة "{{value}}" غير متوفرة في هذه الخزينة، لذلك تم استخدام الأيقونة الافتراضية بدلاً منها.',
 	"import.warn.cmIconUnknownExisting":
-		'لا يوجد أيقونة باسم "{{value}}" في Obsidian، لذلك احتفظ "{{id}}" بالأيقونة التي كانت لديه.',
+		'الأيقونة "{{value}}" غير متوفرة في هذه الخزينة، لذلك احتفظ "{{id}}" بالأيقونة التي كانت لديه.',
 	"import.chooseSource": "استيراد من",
 	"import.sourceStudio": "Callout Studio",
 	"import.sourceStudioDesc": "تحميل ملف ‎.json تم تصديره من Callout Studio.",
 	"import.sourceCalloutManager": "Callout Manager",
 	"import.sourceCalloutManagerDesc":
-		"الصق الأنماط التي نسختها من زر Copy في Callout Manager.",
+		"انقل التلميحات المخصصة لديك من إضافة Callout Manager.",
 	"import.sourceAdmonition": "Admonition",
 	"import.sourceAdmonitionDesc":
 		"انقل تنبيهات admonition المخصصة لديك من إضافة Admonition.",
 	"import.cmTitle": "استيراد من Callout Manager",
 	"import.cmInstructions":
-		"في Callout Manager، استخدم زر Copy لنسخ أنماط تلميحاتك المخصصة، ثم الصقها أدناه.",
-	"import.cmPlaceholder": "الصق الأنماط المنسوخة هنا…",
+		"ينتقل كل تلميح مخصص بأيقونته ولونه. تنسيق كل سمة على حدة وأنماط " +
+		"CSS المخصصة لا مقابل لها هنا ولا يتم استيرادها.",
+	"import.cmFromVault": "هذه الخزينة",
+	"import.cmVaultChecking": "جارٍ البحث عن إضافة Callout Manager…",
+	"import.cmVaultFound": "تم العثور على {{count}} تلميح(ات) مخصصة.",
+	"import.cmVaultNotFound": "لم يتم العثور على أي تلميحات مخصصة في هذه الخزينة.",
+	"import.cmPasteLabel": "أو الصق الأنماط المنسوخة من Callout Manager هنا:",
+	"import.cmPlaceholder": "الصق الأنماط المنسوخة، أو ملف data.json، هنا…",
 	"import.cmBtnCancel": "إلغاء",
 	"import.cmBtnImport": "استيراد",
 	"import.err.cmNoBlocksFound":
 		"لم يتم العثور على أي أنماط Callout Manager في النص الملصق.",
+	"import.err.cmNotRecognized":
+		"ملف غير معروف: كان متوقعاً الأنماط الناتجة عن زر Copy في Callout " +
+		"Manager، أو ملف data.json الخاص به.",
+	"import.err.cmNoEntries": "لم يتم العثور على أي تلميحات مخصصة لاستيرادها.",
 	"import.err.cmNoColorForNew":
 		'لم يتم العثور على لون قابل للاستخدام للتلميح الجديد "{{value}}"; تم تخطيه.',
 	"import.err.cmIdConflict":
 		'المعرّف "{{value}}" مستخدم بالفعل كاسم مستعار لتلميح آخر ("{{other}}")، وتم تخطيه.',
+	"import.warn.cmNoColorDefault":
+		"لم يتم تعيين لون في Callout Manager، لذلك تم استخدام الرمادي الافتراضي.",
+	"import.warn.cmThemeCondition":
+		"تم تعيين لون أو أيقونة هذا التلميح لسمة واحدة فقط. لا يدعم Callout " +
+		"Studio تنسيقاً خاصاً بكل سمة، لذلك تم نقله ليشمل جميع السمات.",
+	"import.warn.cmCustomStyles":
+		"يحتوي هذا التلميح أيضاً على CSS مخصص في Callout Manager. هذا التنسيق " +
+		"ليس جزءاً من الاستيراد، لذلك تم نقل الأيقونة واللون فقط.",
 
 	// Import — Admonition
 	"import.admTitle": "استيراد من Admonition",

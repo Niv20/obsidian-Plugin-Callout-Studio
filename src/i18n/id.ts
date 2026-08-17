@@ -5,6 +5,11 @@ export const id: Record<string, string> = {
 	"cmd.calloutWrap": "Bungkus dalam callout",
 	"cmd.calloutUnwrap": "Hapus callout",
 
+	"cmd.customWrapBlock": "Bungkus dalam callout {{name}}",
+	"cmd.customInsertBlock": "Sisipkan callout {{name}}",
+	"cmd.customInsertHeading": "Sisipkan heading callout {{name}} H{{level}}",
+	"cmd.customInsertInline": "Sisipkan inline callout {{name}}",
+
 	"autocomplete.createNew": 'Buat callout baru: "{{name}}"',
 
 	"settings.fallbackTag": "Default",
@@ -16,6 +21,8 @@ export const id: Record<string, string> = {
 	"settings.rescanComplete":
 		"Pemindaian ulang selesai: {{count}} callout baru ditambahkan.",
 	"replaceModal.deleteWithoutReplaceSuffix": "(kembali ke default)",
+	"replaceModal.titleDelete": "Hapus callout",
+	"replaceModal.titleReplace": "Ganti di vault",
 
 	"firstRun.title": "Temukan callout yang ada di vault Anda?",
 	"firstRun.body":
@@ -134,10 +141,50 @@ export const id: Record<string, string> = {
 	"settings.enableAutocompleteDesc":
 		'Menampilkan saran saat Anda mengetik "[!" di dalam Block Callout di editor. Pilih tipe callout dari daftar untuk menyisipkan header callout lengkap.',
 
-	"settings.openHotkeys": "Pintasan Callout Studio",
-	"settings.openHotkeysDesc":
-		"Membuka pengaturan pintasan Obsidian untuk perintah Callout Studio, di mana Anda dapat memilih pintasan sendiri untuk Buat tipe baru, Buka pengaturan, Hapus callout, dan Bungkus dalam callout. Tidak ada pintasan yang ditetapkan secara default.",
-	"settings.openHotkeysButton": "Buka pengaturan pintasan",
+	"settings.customCommands": "Perintah dan pintasan",
+	"settings.customCommandsDesc":
+		"Lihat setiap perintah Callout Studio dan pintasan yang ditetapkan padanya, serta buat perintah Anda sendiri untuk callout yang paling sering Anda gunakan. Tidak ada pintasan yang ditetapkan secara default.",
+	"settings.customCommandsButton": "Kelola perintah",
+
+	"commandBuilder.title": "Perintah dan pintasan",
+	"commandBuilder.desc":
+		"Gunakan tombol + untuk menetapkan atau mengubah pintasan di pengaturan hotkey Obsidian.",
+	"commandBuilder.builtIn": "Perintah bawaan",
+	"commandBuilder.toggleAria": "Aktifkan atau nonaktifkan {{name}}",
+	"commandBuilder.hotkeyBlank": "Kosong",
+	"commandBuilder.hotkeyAria": "Tetapkan pintasan untuk {{name}}",
+	"commandBuilder.yourCommands": "Perintah Anda",
+	"commandBuilder.newCommand": "Perintah baru",
+	"commandBuilder.empty": "Belum ada perintah kustom.",
+	"commandBuilder.unknownCommand": "perintah ini",
+	"commandBuilder.editAria": "Edit {{name}}",
+	"commandBuilder.deleteAria": "Hapus {{name}}",
+	"commandBuilder.deleteConfirm":
+		"Hapus perintah {{name}}? Pintasan apa pun yang ditetapkan padanya akan berhenti berfungsi.",
+	"commandBuilder.newTitle": "Perintah baru",
+	"commandBuilder.editTitle": "Edit perintah",
+	"commandBuilder.format": "Format callout",
+	"commandBuilder.formatDesc": "Jenis callout apa yang ditulis perintah ini.",
+	"commandBuilder.formatHeading": "Heading",
+	"commandBuilder.formatInline": "Inline",
+	"commandBuilder.formatBlock": "Block",
+	"commandBuilder.roleDisabled":
+		"Format ini dimatikan, sehingga perintah akan menyisipkan teks biasa sampai Anda mengaktifkannya kembali.",
+	"commandBuilder.callout": "Tipe callout",
+	"commandBuilder.calloutDesc": "Callout yang disisipkan oleh perintah ini.",
+	"commandBuilder.headingLevel": "Level heading",
+	"commandBuilder.headingLevelDesc": "Level heading mana yang akan ditulis.",
+	"commandBuilder.action": "Aksi",
+	"commandBuilder.actionDesc":
+		"Bungkus mengubah seleksi menjadi callout; sisipkan menambahkan callout kosong.",
+	"commandBuilder.actionWrap": "Bungkus seleksi",
+	"commandBuilder.actionInsert": "Sisipkan baru",
+	"commandBuilder.preview": "Nama perintah",
+	"commandBuilder.duplicate":
+		"Anda sudah memiliki perintah yang melakukan persis hal ini.",
+	"commandBuilder.noCallouts":
+		"Belum ada tipe callout untuk membuat perintah.",
+	"commandBuilder.save": "Simpan",
 
 	"settings.vaultMaintenance": "Wawasan & pemeliharaan vault",
 	"settings.vaultStats": "Statistik callout",
@@ -152,6 +199,11 @@ export const id: Record<string, string> = {
 	"settings.resetAllConfirm":
 		"Ini akan menghapus semua callout kustom, mereset callout bawaan, gaya global, palet warna tersimpan, penyesuaian menu klik kanan, dan semua SVG Material yang di-cache. Tindakan ini tidak dapat dibatalkan. Apakah Anda yakin?",
 	"notice.resetAllDone": "Semua telah direset ke default.",
+
+	"notice.customCommandsRemoved":
+		"Menghapus {{count}} perintah kustom yang tipe callout-nya sudah tidak ada.",
+	"notice.customCommandMissingCallout":
+		"Tipe callout untuk perintah tersebut sudah tidak ada.",
 
 	"notice.exported": "Callout diekspor ke callout-studio-export.json",
 	"notice.importedJSON": "{{count}} tipe callout diimpor dari JSON.",
@@ -264,6 +316,7 @@ export const id: Record<string, string> = {
 
 	// Palette editor modal
 	"palette.newTitle": "Palet warna baru",
+	"palette.groupPalette": "Palet",
 	"palette.editTitle": "Edit palet warna",
 	"palette.name": "Nama",
 	"palette.namePlaceholder": "Palet saya",
@@ -585,6 +638,13 @@ export const id: Record<string, string> = {
 
 	"confirm.ok": "Hapus",
 	"confirm.cancel": "Batal",
+	// Headings for each confirmation — every window carries one, so each
+	// caller of ConfirmModal names what it is about to do.
+	"confirm.titleDeleteCommand": "Hapus perintah",
+	"confirm.titleResetAll": "Reset semua callout",
+	"confirm.titleResetCallout": "Reset callout",
+	"confirm.titleDeletePalette": "Hapus palet",
+	"confirm.titleDeleteImage": "Hapus gambar",
 
 	"vault.filesUpdated":
 		"{{count}} referensi callout diperbarui di file vault.",
@@ -709,31 +769,47 @@ export const id: Record<string, string> = {
 	"import.warn.iconNameUnknown":
 		'Tidak ada ikon "{{value}}" di {{type}}, sehingga ikon default digunakan.',
 	"import.warn.cmIconUnknownNew":
-		'Tidak ada ikon "{{value}}" di Obsidian, sehingga ikon default digunakan.',
+		'Ikon "{{value}}" tidak tersedia di vault ini, sehingga ikon default digunakan.',
 	"import.warn.cmIconUnknownExisting":
-		'Tidak ada ikon "{{value}}" di Obsidian, sehingga "{{id}}" mempertahankan ikon yang sudah dimilikinya.',
+		'Ikon "{{value}}" tidak tersedia di vault ini, sehingga "{{id}}" mempertahankan ikon yang sudah dimilikinya.',
 	"import.chooseSource": "Impor dari",
 	"import.sourceStudio": "Callout Studio",
 	"import.sourceStudioDesc":
 		"Muat file .json yang diekspor dari Callout Studio.",
 	"import.sourceCalloutManager": "Callout Manager",
 	"import.sourceCalloutManagerDesc":
-		"Tempel gaya yang Anda salin dari tombol Copy Callout Manager.",
+		"Bawa callout kustom Anda dari plugin Callout Manager.",
 	"import.sourceAdmonition": "Admonition",
 	"import.sourceAdmonitionDesc":
 		"Bawa admonition kustom Anda dari plugin Admonition.",
 	"import.cmTitle": "Impor dari Callout Manager",
 	"import.cmInstructions":
-		"Di Callout Manager, gunakan tombol Copy untuk menyalin gaya callout yang disesuaikan, lalu tempelkan di bawah.",
-	"import.cmPlaceholder": "Tempel gaya yang disalin di sini…",
+		"Setiap callout yang disesuaikan dibawa beserta ikon dan warnanya. Gaya per-tema dan CSS kustom tidak memiliki padanan di sini dan tidak ikut dibawa.",
+	"import.cmFromVault": "Vault ini",
+	"import.cmVaultChecking": "Mencari plugin Callout Manager…",
+	"import.cmVaultFound": "{{count}} callout kustom ditemukan.",
+	"import.cmVaultNotFound":
+		"Tidak ada callout kustom yang ditemukan di vault ini.",
+	"import.cmPasteLabel": "Atau tempel gaya yang disalin dari Callout Manager di sini:",
+	"import.cmPlaceholder": "Tempel gaya yang disalin, atau file data.json, di sini…",
 	"import.cmBtnCancel": "Batal",
 	"import.cmBtnImport": "Impor",
 	"import.err.cmNoBlocksFound":
 		"Tidak ada gaya Callout Manager yang ditemukan dalam teks yang ditempel.",
+	"import.err.cmNotRecognized":
+		"File tidak dikenali: yang diharapkan adalah gaya yang dihasilkan oleh tombol Copy Callout Manager, atau file data.json Callout Manager.",
+	"import.err.cmNoEntries":
+		"Tidak ada callout kustom yang ditemukan untuk diimpor.",
 	"import.err.cmNoColorForNew":
 		'Tidak ada warna yang dapat digunakan ditemukan untuk callout baru "{{value}}"; dilewati.',
 	"import.err.cmIdConflict":
 		'ID "{{value}}" sudah digunakan sebagai alias oleh callout lain ("{{other}}") dan dilewati.',
+	"import.warn.cmNoColorDefault":
+		"Tidak ada warna yang diatur di Callout Manager, sehingga abu-abu default digunakan.",
+	"import.warn.cmThemeCondition":
+		"Warna atau ikon callout ini hanya diatur untuk satu tema. Callout Studio tidak memiliki gaya per-tema, sehingga dibawa untuk semua tema.",
+	"import.warn.cmCustomStyles":
+		"Callout ini juga memiliki CSS kustom di Callout Manager. Gaya tersebut bukan bagian dari impor, sehingga hanya ikon dan warnanya yang dibawa.",
 
 	// Import — Admonition
 	"import.admTitle": "Impor dari Admonition",

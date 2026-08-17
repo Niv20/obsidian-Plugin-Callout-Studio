@@ -5,6 +5,11 @@ export const sv: Record<string, string> = {
 	"cmd.calloutWrap": "Lägg i callout",
 	"cmd.calloutUnwrap": "Ta bort callout",
 
+	"cmd.customWrapBlock": "Lägg i callout {{name}}",
+	"cmd.customInsertBlock": "Infoga callout {{name}}",
+	"cmd.customInsertHeading": "Infoga H{{level}}-rubrikcallout {{name}}",
+	"cmd.customInsertInline": "Infoga infogad callout {{name}}",
+
 	"autocomplete.createNew": 'Skapa ny callout: "{{name}}"',
 
 	"settings.fallbackTag": "Standard",
@@ -17,6 +22,8 @@ export const sv: Record<string, string> = {
 		"Omskanningen klar: {{count}} ny(a) callout(s) tillagd(a).",
 	"replaceModal.deleteWithoutReplaceSuffix":
 		"(faller tillbaka till standard)",
+	"replaceModal.titleDelete": "Ta bort callout",
+	"replaceModal.titleReplace": "Ersätt i vault",
 
 	"firstRun.title": "Hitta befintliga callouts i ditt vault?",
 	"firstRun.body":
@@ -136,10 +143,50 @@ export const sv: Record<string, string> = {
 	"settings.enableAutocompleteDesc":
 		'Visar förslag när du skriver "[!" i ett blockcitat i editorn. Välj en callout-typ från listan för att infoga en komplett callout-rubrik.',
 
-	"settings.openHotkeys": "Callout Studio-genvägar",
-	"settings.openHotkeysDesc":
-		"Öppnar Obsidians genväginställningar för Callout Studio-kommandon, där du kan välja egna genvägar för Skapa ny typ, Öppna inställningar, Ta bort callout och Lägg i callout. Inga genvägar tilldelas som standard.",
-	"settings.openHotkeysButton": "Öppna genväginställningar",
+	"settings.customCommands": "Kommandon och genvägar",
+	"settings.customCommandsDesc":
+		"Se alla Callout Studio-kommandon och genvägen de är bundna till, och skapa egna kommandon för de callouts du använder mest. Inga genvägar tilldelas som standard.",
+	"settings.customCommandsButton": "Hantera kommandon",
+
+	"commandBuilder.title": "Kommandon och genvägar",
+	"commandBuilder.desc":
+		"Använd +-knappen för att ställa in eller ändra en genväg i Obsidians genväginställningar.",
+	"commandBuilder.builtIn": "Inbyggda kommandon",
+	"commandBuilder.toggleAria": "Slå på eller av {{name}}",
+	"commandBuilder.hotkeyBlank": "Tom",
+	"commandBuilder.hotkeyAria": "Ställ in en genväg för {{name}}",
+	"commandBuilder.yourCommands": "Dina kommandon",
+	"commandBuilder.newCommand": "Nytt kommando",
+	"commandBuilder.empty": "Inga egna kommandon än.",
+	"commandBuilder.unknownCommand": "detta kommando",
+	"commandBuilder.editAria": "Redigera {{name}}",
+	"commandBuilder.deleteAria": "Ta bort {{name}}",
+	"commandBuilder.deleteConfirm":
+		"Ta bort kommandot {{name}}? Eventuell genväg som tilldelats det slutar fungera.",
+	"commandBuilder.newTitle": "Nytt kommando",
+	"commandBuilder.editTitle": "Redigera kommando",
+	"commandBuilder.format": "Callout-format",
+	"commandBuilder.formatDesc": "Vilken typ av callout kommandot skriver.",
+	"commandBuilder.formatHeading": "Rubrik",
+	"commandBuilder.formatInline": "Infogad",
+	"commandBuilder.formatBlock": "Block",
+	"commandBuilder.roleDisabled":
+		"Detta format är avstängt, så kommandot infogar vanlig text tills du slår på det igen.",
+	"commandBuilder.callout": "Callout-typ",
+	"commandBuilder.calloutDesc": "Callouten kommandot infogar.",
+	"commandBuilder.headingLevel": "Rubriknivå",
+	"commandBuilder.headingLevelDesc": "Vilken rubriknivå som ska skrivas.",
+	"commandBuilder.action": "Åtgärd",
+	"commandBuilder.actionDesc":
+		"Lägg i omvandlar markeringen till en callout; infoga lägger till en tom.",
+	"commandBuilder.actionWrap": "Lägg i markering",
+	"commandBuilder.actionInsert": "Infoga ny",
+	"commandBuilder.preview": "Kommandonamn",
+	"commandBuilder.duplicate":
+		"Du har redan ett kommando som gör exakt detta.",
+	"commandBuilder.noCallouts":
+		"Det finns inga callout-typer att bygga ett kommando från än.",
+	"commandBuilder.save": "Spara",
 
 	"settings.vaultMaintenance": "Vault-insikter och underhåll",
 	"settings.vaultStats": "Callout-statistik",
@@ -155,6 +202,10 @@ export const sv: Record<string, string> = {
 		"Detta tar bort alla anpassade callouts, återställer inbyggda callouts, globala stilar, sparade färgpaletter, anpassningen av högerklicksmenyn och alla cachade Material-SVG:er. Åtgärden kan inte ångras. Är du säker?",
 	"notice.resetAllDone": "Allt har återställts till standard.",
 
+	"notice.customCommandsRemoved":
+		"{{count}} eget kommando/egna kommandon vars callout-typ inte längre finns togs bort.",
+	"notice.customCommandMissingCallout":
+		"Kommandots callout-typ finns inte längre.",
 	"notice.exported": "Callouts exporterade till callout-studio-export.json",
 	"notice.importedJSON": "{{count}} callout-typ(er) importerade från JSON.",
 	"notice.importedSettings": "Tilläggets inställningar importerade.",
@@ -266,6 +317,7 @@ export const sv: Record<string, string> = {
 
 	// Palette editor modal
 	"palette.newTitle": "Ny färgpalett",
+	"palette.groupPalette": "Palett",
 	"palette.editTitle": "Redigera färgpalett",
 	"palette.name": "Namn",
 	"palette.namePlaceholder": "Min palett",
@@ -581,6 +633,13 @@ export const sv: Record<string, string> = {
 
 	"confirm.ok": "Ta bort",
 	"confirm.cancel": "Avbryt",
+	// Headings for each confirmation — every window carries one, so each
+	// caller of ConfirmModal names what it is about to do.
+	"confirm.titleDeleteCommand": "Ta bort kommando",
+	"confirm.titleResetAll": "Återställ alla callouts",
+	"confirm.titleResetCallout": "Återställ callout",
+	"confirm.titleDeletePalette": "Ta bort palett",
+	"confirm.titleDeleteImage": "Ta bort bild",
 
 	"vault.filesUpdated":
 		"{{count}} callout-referens(er) uppdaterade i vault-filer.",
@@ -705,31 +764,50 @@ export const sv: Record<string, string> = {
 	"import.warn.iconNameUnknown":
 		'Det finns ingen "{{value}}" ikon i {{type}}, så standardikonen användes istället.',
 	"import.warn.cmIconUnknownNew":
-		'Det finns ingen "{{value}}" ikon i Obsidian, så standardikonen användes istället.',
+		'Ikonen "{{value}}" finns inte i det här valvet, så standardikonen användes istället.',
 	"import.warn.cmIconUnknownExisting":
-		'Det finns ingen "{{value}}" ikon i Obsidian, så "{{id}}" behöll ikonen det redan hade.',
+		'Ikonen "{{value}}" finns inte i det här valvet, så "{{id}}" behöll ikonen det redan hade.',
 	"import.chooseSource": "Importera från",
 	"import.sourceStudio": "Callout Studio",
 	"import.sourceStudioDesc":
 		"Läs in en .json-fil exporterad från Callout Studio.",
 	"import.sourceCalloutManager": "Callout Manager",
 	"import.sourceCalloutManagerDesc":
-		"Klistra in stilarna du kopierade från Copy-knappen i Callout Manager.",
+		"Ta med dina anpassade callouts från tillägget Callout Manager.",
 	"import.sourceAdmonition": "Admonition",
 	"import.sourceAdmonitionDesc":
 		"Hämta dina egna admonitions från Admonition-tillägget.",
 	"import.cmTitle": "Importera från Callout Manager",
 	"import.cmInstructions":
-		"I Callout Manager, använd Copy-knappen för att kopiera dina anpassade callout-stilar och klistra sedan in dem nedan.",
-	"import.cmPlaceholder": "Klistra in de kopierade stilarna här…",
+		"Varje anpassad callout tas med tillsammans med sin ikon och färg. Temaspecifik " +
+		"styling och egen CSS har ingen motsvarighet här och lämnas kvar.",
+	"import.cmFromVault": "Det här valvet",
+	"import.cmVaultChecking": "Söker efter tillägget Callout Manager…",
+	"import.cmVaultFound": "{{count}} anpassad(e) callout(s) hittades.",
+	"import.cmVaultNotFound":
+		"Inga anpassade callouts hittades i det här valvet.",
+	"import.cmPasteLabel": "Eller klistra in Callout Managers kopierade stilar här:",
+	"import.cmPlaceholder": "Klistra in de kopierade stilarna, eller en data.json, här…",
 	"import.cmBtnCancel": "Avbryt",
 	"import.cmBtnImport": "Importera",
 	"import.err.cmNoBlocksFound":
 		"Inga Callout Manager-stilar hittades i den inklistrade texten.",
+	"import.err.cmNotRecognized":
+		"Filen kändes inte igen: förväntade stilarna från Callout Managers Copy-knapp, " +
+		"eller en data.json från Callout Manager.",
+	"import.err.cmNoEntries": "Inga anpassade callouts hittades att importera.",
 	"import.err.cmNoColorForNew":
 		'Ingen användbar färg hittades för den nya callouten "{{value}}"; den hoppades över.',
 	"import.err.cmIdConflict":
 		'ID "{{value}}" används redan som ett alias av en annan callout ("{{other}}") och hoppades över.',
+	"import.warn.cmNoColorDefault":
+		"Ingen färg var angiven i Callout Manager, så dess standardgrå användes.",
+	"import.warn.cmThemeCondition":
+		"Den här calloutens färg eller ikon var bara angiven för ett tema. Callout " +
+		"Studio har ingen temaspecifik styling, så den togs med för alla teman.",
+	"import.warn.cmCustomStyles":
+		"Den här callouten har också egen CSS i Callout Manager. Den stylingen är " +
+		"inte en del av importen, så bara dess ikon och färg togs med.",
 
 	// Import — Admonition
 	"import.admTitle": "Importera från Admonition",

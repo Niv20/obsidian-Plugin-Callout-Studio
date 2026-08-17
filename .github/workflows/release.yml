@@ -51,16 +51,29 @@ jobs:
             - run: npm ci
             - run: npm run build
 
+            # The locale JSON served from this tag must be byte-identical to the
+            # checksums compiled into the main.js built above, or every download
+            # fails verification for this entire version. `npm run build` already
+            # regenerates both; this proves the result is what was committed.
+            - name: Locale data is in sync
+              run: |
+                  git diff --exit-code locales src/i18n/localeManifest.ts \
+                      || { echo "::error::locales/ is stale — run npm run i18n:generate and commit."; exit 1; }
+
             # main.js is the only file Obsidian downloads to install or update
             # the plugin, and icon metadata makes it easy to grow it by a
             # megabyte without noticing. The ceiling is deliberately close to
             # the current size so a careless import trips it here rather than
             # in users' vaults; raise it consciously when a feature earns it.
             # Raised from 3 MiB for Tabler Icons, whose two search indexes are
-            # 357 KB between them for 5,130 icons.
+            # 357 KB between them for 5,130 icons. Raised again to 4 MiB for
+            # 2.9.0's custom commands feature, Callout Manager import support,
+            # and Palette Editor enhancements. Cut to 2 MiB once the 31
+            # non-English locales moved out of the bundle and became downloads,
+            # which took main.js from 3.70 MiB to 1.70 MiB.
             - name: Check bundle size
               run: |
-                  limit=3670016  # 3.5 MiB
+                  limit=2097152  # 2 MiB
                   size=$(wc -c < main.js)
                   printf 'main.js is %s bytes (%.2f MiB), limit %s bytes.\n' \
                       "$size" "$(echo "scale=2; $size/1048576" | bc)" "$limit"

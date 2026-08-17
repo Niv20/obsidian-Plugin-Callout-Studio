@@ -28,7 +28,7 @@ export function renderFallbackSection(
 				getLocale(),
 			);
 			for (const c of allCallouts) {
-				dd.addOption(c.id, `${c.displayName} (${c.id})`);
+				dd.addOption(c.id, c.displayName);
 			}
 			dd.setValue(ctx.plugin.settings.fallbackCalloutId).onChange(
 				async (val) => {

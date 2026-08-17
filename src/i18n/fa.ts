@@ -5,6 +5,11 @@ export const fa: Record<string, string> = {
 	"cmd.calloutWrap": "پیچیدن در callout",
 	"cmd.calloutUnwrap": "حذف callout",
 
+	"cmd.customWrapBlock": "پیچیدن در callout {{name}}",
+	"cmd.customInsertBlock": "درج callout {{name}}",
+	"cmd.customInsertHeading": "درج سرتیتر H{{level}} از نوع callout {{name}}",
+	"cmd.customInsertInline": "درج callout درون‌خطی {{name}}",
+
 	"autocomplete.createNew": 'ایجاد callout جدید: "{{name}}"',
 
 	"settings.fallbackTag": "پیش‌فرض",
@@ -16,6 +21,8 @@ export const fa: Record<string, string> = {
 	"settings.rescanComplete":
 		"اسکان مجدد کامل شد: {{count}} callout جدید اضافه شد.",
 	"replaceModal.deleteWithoutReplaceSuffix": "(به پیش‌فرض برمی‌گردد)",
+	"replaceModal.titleDelete": "حذف callout",
+	"replaceModal.titleReplace": "جایگزینی در vault",
 
 	"firstRun.title": "callout‌های موجود در vault را پیدا کنیم؟",
 	"firstRun.body":
@@ -134,10 +141,51 @@ export const fa: Record<string, string> = {
 	"settings.enableAutocompleteDesc":
 		'هنگام تایپ "[!" در یک بلوک نقل‌قول در ویرایشگر، پیشنهادات نمایش می‌دهد. یک نوع callout از لیست انتخاب کنید تا سرتیتر کامل callout درج شود.',
 
-	"settings.openHotkeys": "میانبرهای Callout Studio",
-	"settings.openHotkeysDesc":
-		"تنظیمات میانبرهای Obsidian را برای دستورات Callout Studio باز می‌کند، جایی که می‌توانید میانبرهای خود را برای ایجاد نوع جدید، باز کردن تنظیمات، حذف callout و پیچیدن در callout انتخاب کنید. به صورت پیش‌فرض هیچ میانبری اختصاص داده نشده است.",
-	"settings.openHotkeysButton": "باز کردن تنظیمات میانبر",
+	"settings.customCommands": "دستورات و میانبرها",
+	"settings.customCommandsDesc":
+		"همه دستورات Callout Studio و میانبری که به آن‌ها متصل است را ببینید، و برای callout‌هایی که بیشتر استفاده می‌کنید دستورات خودتان را بسازید. به صورت پیش‌فرض هیچ میانبری اختصاص داده نشده است.",
+	"settings.customCommandsButton": "مدیریت دستورات",
+
+	// سازنده دستور
+	"commandBuilder.title": "دستورات و میانبرها",
+	"commandBuilder.desc":
+		"از دکمه + برای تنظیم یا تغییر یک میانبر در تنظیمات میانبر Obsidian استفاده کنید.",
+	"commandBuilder.builtIn": "دستورات داخلی",
+	"commandBuilder.toggleAria": "روشن یا خاموش کردن {{name}}",
+	"commandBuilder.hotkeyBlank": "خالی",
+	"commandBuilder.hotkeyAria": "تنظیم میانبر برای {{name}}",
+	"commandBuilder.yourCommands": "دستورات شما",
+	"commandBuilder.newCommand": "دستور جدید",
+	"commandBuilder.empty": "هنوز دستور سفارشی وجود ندارد.",
+	"commandBuilder.unknownCommand": "این دستور",
+	"commandBuilder.editAria": "ویرایش {{name}}",
+	"commandBuilder.deleteAria": "حذف {{name}}",
+	"commandBuilder.deleteConfirm":
+		"دستور {{name}} حذف شود؟ هر میانبر اختصاص‌یافته به آن دیگر کار نخواهد کرد.",
+	"commandBuilder.newTitle": "دستور جدید",
+	"commandBuilder.editTitle": "ویرایش دستور",
+	"commandBuilder.format": "قالب callout",
+	"commandBuilder.formatDesc": "این دستور چه نوع callout‌ای می‌نویسد.",
+	"commandBuilder.formatHeading": "سرتیتر",
+	"commandBuilder.formatInline": "درون‌خطی",
+	"commandBuilder.formatBlock": "بلوک",
+	"commandBuilder.roleDisabled":
+		"این قالب خاموش است، بنابراین دستور تا زمانی که آن را دوباره روشن نکنید متن ساده درج خواهد کرد.",
+	"commandBuilder.callout": "نوع callout",
+	"commandBuilder.calloutDesc": "callout‌ای که این دستور درج می‌کند.",
+	"commandBuilder.headingLevel": "سطح سرتیتر",
+	"commandBuilder.headingLevelDesc": "کدام سطح سرتیتر نوشته شود.",
+	"commandBuilder.action": "عملکرد",
+	"commandBuilder.actionDesc":
+		"پیچیدن، انتخاب را به یک callout تبدیل می‌کند؛ درج، یک callout خالی اضافه می‌کند.",
+	"commandBuilder.actionWrap": "پیچیدن انتخاب",
+	"commandBuilder.actionInsert": "درج جدید",
+	"commandBuilder.preview": "نام دستور",
+	"commandBuilder.duplicate":
+		"شما همین حالا دستوری دارید که دقیقاً همین کار را انجام می‌دهد.",
+	"commandBuilder.noCallouts":
+		"هنوز هیچ نوع calloutای برای ساخت یک دستور از آن وجود ندارد.",
+	"commandBuilder.save": "ذخیره",
 
 	"settings.vaultMaintenance": "بینش‌ها و نگهداری vault",
 	"settings.vaultStats": "آمار callout",
@@ -152,6 +200,11 @@ export const fa: Record<string, string> = {
 	"settings.resetAllConfirm":
 		"این عمل همه callout‌های سفارشی را حذف می‌کند، callout‌های داخلی، سبک‌های کلی، پالت‌های رنگ ذخیره‌شده، سفارشی‌سازی منوی کلیک راست و همه SVG‌های Material در حافظه نهان را بازنشانی می‌کند. این عمل قابل برگشت نیست. مطمئن هستید؟",
 	"notice.resetAllDone": "همه چیز به پیش‌فرض بازنشانی شد.",
+
+	"notice.customCommandsRemoved":
+		"{{count}} دستور سفارشی که نوع callout آن‌ها دیگر وجود ندارد حذف شد.",
+	"notice.customCommandMissingCallout":
+		"نوع callout آن دستور دیگر وجود ندارد.",
 
 	"notice.exported": "callout‌ها در callout-studio-export.json صادر شدند",
 	"notice.importedJSON": "{{count}} نوع callout از JSON وارد شد.",
@@ -265,6 +318,7 @@ export const fa: Record<string, string> = {
 
 	// Palette editor modal
 	"palette.newTitle": "پالت رنگ جدید",
+	"palette.groupPalette": "پالت",
 	"palette.editTitle": "ویرایش پالت رنگ",
 	"palette.name": "نام",
 	"palette.namePlaceholder": "پالت من",
@@ -580,13 +634,24 @@ export const fa: Record<string, string> = {
 
 	"confirm.ok": "حذف",
 	"confirm.cancel": "لغو",
+	// Headings for each confirmation — every window carries one, so each
+	// caller of ConfirmModal names what it is about to do.
+	"confirm.titleDeleteCommand": "حذف دستور",
+	"confirm.titleResetAll": "بازنشانی همه callout‌ها",
+	"confirm.titleResetCallout": "بازنشانی callout",
+	"confirm.titleDeletePalette": "حذف پالت",
+	"confirm.titleDeleteImage": "حذف تصویر",
 
 	"vault.filesUpdated":
 		"{{count}} مرجع callout در فایل‌های vault به‌روزرسانی شد.",
+	// The arrow stays "→" although the sentence is RTL: it sits between two
+	// callout ids, which are normally Latin, so the bidi algorithm resolves that
+	// fragment left-to-right and a mirrored "←" would point from the new id back
+	// to the old one. Prose paths such as `firstRun.laterHint` do mirror.
 	"vault.idsUpdated":
-		"{{count}} شناسه callout در فایل‌های vault به‌روزرسانی شد: {{oldIds}} ← {{newId}}",
+		"{{count}} شناسه callout در فایل‌های vault به‌روزرسانی شد: {{oldIds}} → {{newId}}",
 	"vault.titlesUpdated":
-		"{{count}} عنوان callout در فایل‌های vault به‌روزرسانی شد: {{oldTitle}} ← {{newTitle}}",
+		"{{count}} عنوان callout در فایل‌های vault به‌روزرسانی شد: {{oldTitle}} → {{newTitle}}",
 	"vault.replaceWith": "جایگزینی با:",
 	"vault.deleteWithout": "حذف بدون جایگزینی",
 	"vault.confirmDelete": "تأیید",
@@ -720,6 +785,12 @@ export const fa: Record<string, string> = {
 		"admonition‌های سفارشی خود را از افزونهٔ Admonition به اینجا " +
 		"بیاورید.",
 	"import.cmTitle": "وارد کردن از Callout Manager",
+	"import.cmFromVault": "این گاوصندوق",
+	"import.cmVaultChecking": "در حال جست‌وجوی افزونهٔ Callout Manager…",
+	"import.cmVaultFound": "{{count}} callout سفارشی پیدا شد.",
+	"import.cmVaultNotFound": "هیچ callout سفارشی در این گاوصندوق پیدا نشد.",
+	"import.cmPasteLabel":
+		"یا استایل‌های کپی‌شده از Callout Manager را اینجا بچسبانید:",
 	"import.cmInstructions":
 		"در Callout Manager، از دکمه Copy برای کپی کردن استایل‌های callout سفارشی خود استفاده کنید، سپس آن‌ها را در زیر بچسبانید.",
 	"import.cmPlaceholder": "استایل‌های کپی‌شده را اینجا بچسبانید…",
@@ -727,10 +798,19 @@ export const fa: Record<string, string> = {
 	"import.cmBtnImport": "وارد کردن",
 	"import.err.cmNoBlocksFound":
 		"هیچ استایل Callout Manager در متن چسبانده‌شده یافت نشد.",
+	"import.err.cmNotRecognized":
+		"فایل شناسایی نشد: استایل‌های تولیدشده با دکمهٔ Copy در Callout Manager یا data.json این افزونه مورد انتظار بود.",
+	"import.err.cmNoEntries": "هیچ callout سفارشی برای درون‌ریزی یافت نشد.",
 	"import.err.cmNoColorForNew":
 		'هیچ رنگ قابل استفاده‌ای برای callout جدید "{{value}}" یافت نشد؛ از آن صرف‌نظر شد.',
 	"import.err.cmIdConflict":
 		'شناسه "{{value}}" قبلاً به عنوان نام مستعار توسط callout دیگری ("{{other}}") استفاده می‌شود و از آن صرف‌نظر شد.',
+	"import.warn.cmNoColorDefault":
+		"در Callout Manager رنگی تنظیم نشده بود، بنابراین خاکستری پیش‌فرض استفاده شد.",
+	"import.warn.cmThemeCondition":
+		"رنگ یا نماد این callout فقط برای یک پوسته تنظیم شده بود. Callout Studio استایل‌دهی جداگانه برای پوسته‌ها ندارد، بنابراین برای همهٔ پوسته‌ها منتقل شد.",
+	"import.warn.cmCustomStyles":
+		"این callout در Callout Manager دارای CSS سفارشی نیز هست. این استایل بخشی از درون‌ریزی نیست، بنابراین فقط نماد و رنگ منتقل شدند.",
 
 	// Import — Admonition
 	"import.admTitle": "درون‌ریزی از Admonition",

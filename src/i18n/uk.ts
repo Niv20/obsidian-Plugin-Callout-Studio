@@ -5,6 +5,11 @@ export const uk: Record<string, string> = {
 	"cmd.calloutWrap": "Обгорнути в callout",
 	"cmd.calloutUnwrap": "Видалити callout",
 
+	"cmd.customWrapBlock": "Обгорнути в callout {{name}}",
+	"cmd.customInsertBlock": "Вставити callout {{name}}",
+	"cmd.customInsertHeading": "Вставити заголовок H{{level}} callout {{name}}",
+	"cmd.customInsertInline": "Вставити вбудований callout {{name}}",
+
 	"autocomplete.createNew": 'Створити новий callout: "{{name}}"',
 
 	"settings.fallbackTag": "За замовчуванням",
@@ -16,6 +21,8 @@ export const uk: Record<string, string> = {
 	"settings.rescanComplete":
 		"Повторне сканування завершено: додано {{count}} нових callout(ів).",
 	"replaceModal.deleteWithoutReplaceSuffix": "(повернення до типового)",
+	"replaceModal.titleDelete": "Видалити callout",
+	"replaceModal.titleReplace": "Замінити у сховищі",
 
 	"firstRun.title": "Знайти наявні callout у сховищі?",
 	"firstRun.body":
@@ -136,10 +143,50 @@ export const uk: Record<string, string> = {
 	"settings.enableAutocompleteDesc":
 		"Показує підказки при введенні «[!» у блоку цитати в редакторі. Виберіть тип callout зі списку, щоб вставити повний заголовок callout.",
 
-	"settings.openHotkeys": "Гарячі клавіші Callout Studio",
-	"settings.openHotkeysDesc":
-		"Відкриває налаштування гарячих клавіш Obsidian для команд Callout Studio, де можна встановити власні клавіші для створення нового типу, відкриття налаштувань, видалення та обгортання callout. За замовчуванням гарячі клавіші не призначені.",
-	"settings.openHotkeysButton": "Відкрити налаштування гарячих клавіш",
+	"settings.customCommands": "Команди та гарячі клавіші",
+	"settings.customCommandsDesc":
+		"Перегляньте всі команди Callout Studio та прив'язані до них гарячі клавіші, а також створіть власні команди для найуживаніших callout. За замовчуванням гарячі клавіші не призначені.",
+	"settings.customCommandsButton": "Керувати командами",
+
+	"commandBuilder.title": "Команди та гарячі клавіші",
+	"commandBuilder.desc":
+		"Натисніть +, щоб встановити або змінити гарячу клавішу в налаштуваннях гарячих клавіш Obsidian.",
+	"commandBuilder.builtIn": "Вбудовані команди",
+	"commandBuilder.toggleAria": "Увімкнути або вимкнути {{name}}",
+	"commandBuilder.hotkeyBlank": "Порожньо",
+	"commandBuilder.hotkeyAria": "Встановити гарячу клавішу для {{name}}",
+	"commandBuilder.yourCommands": "Ваші команди",
+	"commandBuilder.newCommand": "Нова команда",
+	"commandBuilder.empty": "Користувацьких команд ще немає.",
+	"commandBuilder.unknownCommand": "цю команду",
+	"commandBuilder.editAria": "Редагувати {{name}}",
+	"commandBuilder.deleteAria": "Видалити {{name}}",
+	"commandBuilder.deleteConfirm":
+		"Видалити команду {{name}}? Будь-яка призначена їй гаряча клавіша перестане працювати.",
+	"commandBuilder.newTitle": "Нова команда",
+	"commandBuilder.editTitle": "Редагувати команду",
+	"commandBuilder.format": "Формат callout",
+	"commandBuilder.formatDesc": "Який тип callout записує команда.",
+	"commandBuilder.formatHeading": "Заголовок",
+	"commandBuilder.formatInline": "Вбудований",
+	"commandBuilder.formatBlock": "Блок",
+	"commandBuilder.roleDisabled":
+		"Цей формат вимкнено, тому команда вставлятиме звичайний текст, поки ви не увімкнете його знову.",
+	"commandBuilder.callout": "Тип callout",
+	"commandBuilder.calloutDesc": "Callout, який вставляє ця команда.",
+	"commandBuilder.headingLevel": "Рівень заголовка",
+	"commandBuilder.headingLevelDesc": "Який рівень заголовка записувати.",
+	"commandBuilder.action": "Дія",
+	"commandBuilder.actionDesc":
+		"«Обгорнути» перетворює виділення на callout; «Вставити» додає порожній.",
+	"commandBuilder.actionWrap": "Обгорнути виділення",
+	"commandBuilder.actionInsert": "Вставити новий",
+	"commandBuilder.preview": "Назва команди",
+	"commandBuilder.duplicate":
+		"У вас уже є команда, яка робить точно те саме.",
+	"commandBuilder.noCallouts":
+		"Поки немає типів callout, з яких можна створити команду.",
+	"commandBuilder.save": "Зберегти",
 
 	"settings.vaultMaintenance": "Аналітика та обслуговування сховища",
 	"settings.vaultStats": "Статистика callout",
@@ -155,6 +202,10 @@ export const uk: Record<string, string> = {
 		"Це видалить усі користувацькі callout, скине вбудовані callout, глобальні стилі, збережені колірні палітри, налаштування контекстного меню та всі кешовані SVG Material. Дію не можна скасувати. Ви впевнені?",
 	"notice.resetAllDone": "Все скинуто до типових значень.",
 
+	"notice.customCommandsRemoved":
+		"Видалено {{count}} користувацьких команд, тип callout яких більше не існує.",
+	"notice.customCommandMissingCallout":
+		"Тип callout цієї команди більше не існує.",
 	"notice.exported": "Callout експортовано до callout-studio-export.json",
 	"notice.importedJSON": "Імпортовано {{count}} тип(ів) callout з JSON.",
 	"notice.importedSettings": "Імпортовано налаштування плагіна.",
@@ -268,6 +319,7 @@ export const uk: Record<string, string> = {
 
 	// Palette editor modal
 	"palette.newTitle": "Нова кольорова палітра",
+	"palette.groupPalette": "Палітра",
 	"palette.editTitle": "Редагувати кольорову палітру",
 	"palette.name": "Назва",
 	"palette.namePlaceholder": "Моя палітра",
@@ -590,6 +642,13 @@ export const uk: Record<string, string> = {
 
 	"confirm.ok": "Видалити",
 	"confirm.cancel": "Скасувати",
+	// Headings for each confirmation — every window carries one, so each
+	// caller of ConfirmModal names what it is about to do.
+	"confirm.titleDeleteCommand": "Видалити команду",
+	"confirm.titleResetAll": "Скинути всі callouts",
+	"confirm.titleResetCallout": "Скинути callout",
+	"confirm.titleDeletePalette": "Видалити палітру",
+	"confirm.titleDeleteImage": "Видалити зображення",
 
 	"vault.filesUpdated":
 		"Оновлено {{count}} посилань на callout у файлах сховища.",
@@ -728,15 +787,30 @@ export const uk: Record<string, string> = {
 	"import.sourceAdmonitionDesc":
 		"Перенесіть свої власні admonition із плагіна Admonition.",
 	"import.cmTitle": "Імпорт з Callout Manager",
+	"import.cmFromVault": "Це сховище",
+	"import.cmVaultChecking": "Пошук плагіна Callout Manager…",
+	"import.cmVaultFound": "Знайдено власних callout: {{count}}.",
+	"import.cmVaultNotFound": "У цьому сховищі не знайдено власних callout.",
+	"import.cmPasteLabel":
+		"Або вставте сюди стилі, скопійовані з Callout Manager:",
 	"import.cmInstructions":
 		"У Callout Manager скористайтесь кнопкою Copy, щоб скопіювати налаштовані стилі callout, після чого вставте їх нижче.",
 	"import.cmPlaceholder": "Вставте скопійовані стилі сюди…",
 	"import.cmBtnCancel": "Скасувати",
 	"import.cmBtnImport": "Імпорт",
+	"import.err.cmNotRecognized":
+		"Файл не розпізнано: очікувалися стилі, створені кнопкою Copy у Callout Manager, або data.json із Callout Manager.",
+	"import.err.cmNoEntries": "Не знайдено власних callout для імпорту.",
 	"import.err.cmNoBlocksFound":
 		"У вставленому тексті не знайдено стилів Callout Manager.",
 	"import.err.cmNoColorForNew":
 		'Не знайдено придатного кольору для нового callout "{{value}}"; його було пропущено.',
+	"import.warn.cmNoColorDefault":
+		"У Callout Manager колір не задано, тому використано стандартний сірий.",
+	"import.warn.cmThemeCondition":
+		"Колір або піктограму цього callout задано лише для однієї теми. Callout Studio не підтримує стилі для окремих тем, тому їх перенесено для всіх тем.",
+	"import.warn.cmCustomStyles":
+		"Цей callout також має власний CSS у Callout Manager. Цей стиль не входить до імпорту, тому перенесено лише піктограму та колір.",
 	"import.err.cmIdConflict":
 		'ID "{{value}}" вже використовується як псевдонім іншим callout ("{{other}}") і було пропущено.',
 

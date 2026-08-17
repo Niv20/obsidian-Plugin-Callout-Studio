@@ -5,6 +5,11 @@ export const tr: Record<string, string> = {
 	"cmd.calloutWrap": "Callout'a sar",
 	"cmd.calloutUnwrap": "Callout'u kaldır",
 
+	"cmd.customWrapBlock": "{{name}} callout'una sar",
+	"cmd.customInsertBlock": "{{name}} callout'u ekle",
+	"cmd.customInsertHeading": "H{{level}} {{name}} başlık callout'u ekle",
+	"cmd.customInsertInline": "{{name}} satır içi callout'u ekle",
+
 	"autocomplete.createNew": 'Yeni callout oluştur: "{{name}}"',
 
 	"settings.fallbackTag": "Varsayılan",
@@ -16,6 +21,8 @@ export const tr: Record<string, string> = {
 	"settings.rescanComplete":
 		"Yeniden tarama tamamlandı: {{count}} yeni callout eklendi.",
 	"replaceModal.deleteWithoutReplaceSuffix": "(varsayılana geri döner)",
+	"replaceModal.titleDelete": "Callout'u sil",
+	"replaceModal.titleReplace": "Vault'ta değiştir",
 
 	"firstRun.title": "Vault'unuzdaki mevcut callout'ları bulsun mu?",
 	"firstRun.body":
@@ -135,10 +142,50 @@ export const tr: Record<string, string> = {
 	"settings.enableAutocompleteDesc":
 		'Düzenleyicide blok alıntı içinde "[!" yazdığınızda öneriler gösterir. Tam bir callout başlığı eklemek için listeden bir callout türü seçin.',
 
-	"settings.openHotkeys": "Callout Studio kısayolları",
-	"settings.openHotkeysDesc":
-		"Callout Studio komutları için Obsidian kısayol ayarlarını açar; burada Yeni callout türü oluştur, Ayarları aç, Callout'u kaldır ve Callout'a sar için kendi kısayollarınızı belirleyebilirsiniz. Varsayılan olarak kısayol atanmamıştır.",
-	"settings.openHotkeysButton": "Kısayol ayarlarını aç",
+	"settings.customCommands": "Komutlar ve kısayollar",
+	"settings.customCommandsDesc":
+		"Her Callout Studio komutunu ve bağlı olduğu kısayolu görün, en sık kullandığınız callout'lar için kendi komutlarınızı oluşturun. Varsayılan olarak kısayol atanmamıştır.",
+	"settings.customCommandsButton": "Komutları yönet",
+
+	"commandBuilder.title": "Komutlar ve kısayollar",
+	"commandBuilder.desc":
+		"Obsidian'ın kısayol ayarlarında bir kısayol belirlemek veya değiştirmek için + düğmesini kullanın.",
+	"commandBuilder.builtIn": "Yerleşik komutlar",
+	"commandBuilder.toggleAria": "{{name}} komutunu aç veya kapat",
+	"commandBuilder.hotkeyBlank": "Boş",
+	"commandBuilder.hotkeyAria": "{{name}} için bir kısayol belirle",
+	"commandBuilder.yourCommands": "Komutlarınız",
+	"commandBuilder.newCommand": "Yeni komut",
+	"commandBuilder.empty": "Henüz özel komut yok.",
+	"commandBuilder.unknownCommand": "bu komut",
+	"commandBuilder.editAria": "{{name}} düzenle",
+	"commandBuilder.deleteAria": "{{name}} sil",
+	"commandBuilder.deleteConfirm":
+		"{{name}} komutu silinsin mi? Ona atanmış kısayol varsa çalışmayı durduracak.",
+	"commandBuilder.newTitle": "Yeni komut",
+	"commandBuilder.editTitle": "Komutu düzenle",
+	"commandBuilder.format": "Callout biçimi",
+	"commandBuilder.formatDesc": "Komutun yazacağı callout türü.",
+	"commandBuilder.formatHeading": "Başlık",
+	"commandBuilder.formatInline": "Satır içi",
+	"commandBuilder.formatBlock": "Blok",
+	"commandBuilder.roleDisabled":
+		"Bu biçim kapalı, bu yüzden siz tekrar açana kadar komut düz metin ekleyecek.",
+	"commandBuilder.callout": "Callout türü",
+	"commandBuilder.calloutDesc": "Bu komutun ekleyeceği callout.",
+	"commandBuilder.headingLevel": "Başlık düzeyi",
+	"commandBuilder.headingLevelDesc": "Hangi başlık düzeyinin yazılacağı.",
+	"commandBuilder.action": "Eylem",
+	"commandBuilder.actionDesc":
+		"Sar, seçimi bir callout'a dönüştürür; ekle boş bir tane ekler.",
+	"commandBuilder.actionWrap": "Seçimi sar",
+	"commandBuilder.actionInsert": "Yeni ekle",
+	"commandBuilder.preview": "Komut adı",
+	"commandBuilder.duplicate":
+		"Tam olarak aynısını yapan bir komutunuz zaten var.",
+	"commandBuilder.noCallouts":
+		"Henüz bir komut oluşturabileceğiniz callout türü yok.",
+	"commandBuilder.save": "Kaydet",
 
 	"settings.vaultMaintenance": "Vault içgörüleri ve bakımı",
 	"settings.vaultStats": "Callout istatistikleri",
@@ -154,6 +201,10 @@ export const tr: Record<string, string> = {
 		"Bu işlem tüm özel callout'ları siler, yerleşik callout'ları, global stilleri, kaydedilmiş renk paletlerini, sağ tık menüsü özelleştirmesini ve önbelleğe alınmış tüm Material SVG'leri sıfırlar. Bu işlem geri alınamaz. Emin misiniz?",
 	"notice.resetAllDone": "Her şey varsayılanlara sıfırlandı.",
 
+	"notice.customCommandsRemoved":
+		"Callout türü artık mevcut olmayan {{count}} özel komut kaldırıldı.",
+	"notice.customCommandMissingCallout":
+		"Bu komutun callout türü artık mevcut değil.",
 	"notice.exported":
 		"Callout'lar callout-studio-export.json dosyasına dışa aktarıldı",
 	"notice.importedJSON": "JSON'dan {{count}} callout türü içe aktarıldı.",
@@ -267,6 +318,7 @@ export const tr: Record<string, string> = {
 
 	// Palette editor modal
 	"palette.newTitle": "Yeni renk paleti",
+	"palette.groupPalette": "Palet",
 	"palette.editTitle": "Renk paletini düzenle",
 	"palette.name": "Ad",
 	"palette.namePlaceholder": "Paletim",
@@ -587,6 +639,13 @@ export const tr: Record<string, string> = {
 
 	"confirm.ok": "Sil",
 	"confirm.cancel": "İptal",
+	// Headings for each confirmation — every window carries one, so each
+	// caller of ConfirmModal names what it is about to do.
+	"confirm.titleDeleteCommand": "Komutu sil",
+	"confirm.titleResetAll": "Tüm callout'ları sıfırla",
+	"confirm.titleResetCallout": "Callout'u sıfırla",
+	"confirm.titleDeletePalette": "Paleti sil",
+	"confirm.titleDeleteImage": "Resmi sil",
 
 	"vault.filesUpdated":
 		"Vault dosyalarında {{count}} callout referansı güncellendi.",
@@ -723,15 +782,30 @@ export const tr: Record<string, string> = {
 	"import.sourceAdmonitionDesc":
 		"Özel admonition'larınızı Admonition eklentisinden getirin.",
 	"import.cmTitle": "Callout Manager'dan İçe Aktar",
+	"import.cmFromVault": "Bu kasa",
+	"import.cmVaultChecking": "Callout Manager eklentisi aranıyor…",
+	"import.cmVaultFound": "{{count}} özel callout bulundu.",
+	"import.cmVaultNotFound": "Bu kasada özel callout bulunamadı.",
+	"import.cmPasteLabel":
+		"Veya Callout Manager'dan kopyalanan stilleri buraya yapıştırın:",
 	"import.cmInstructions":
 		"Callout Manager'da, özelleştirilmiş callout stillerinizi kopyalamak için Copy düğmesini kullanın, ardından aşağıya yapıştırın.",
 	"import.cmPlaceholder": "Kopyalanan stilleri buraya yapıştırın…",
 	"import.cmBtnCancel": "İptal",
 	"import.cmBtnImport": "İçe aktar",
+	"import.err.cmNotRecognized":
+		"Dosya tanınmadı: Callout Manager'ın Copy düğmesiyle oluşturulan stiller veya Callout Manager data.json dosyası bekleniyordu.",
+	"import.err.cmNoEntries": "İçe aktarılacak özel callout bulunamadı.",
 	"import.err.cmNoBlocksFound":
 		"Yapıştırılan metinde Callout Manager stilleri bulunamadı.",
 	"import.err.cmNoColorForNew":
 		'Yeni callout "{{value}}" için kullanılabilir bir renk bulunamadı; atlandı.',
+	"import.warn.cmNoColorDefault":
+		"Callout Manager'da renk ayarlanmadığından varsayılan gri kullanıldı.",
+	"import.warn.cmThemeCondition":
+		"Bu callout'un rengi veya simgesi yalnızca bir tema için ayarlanmıştı. Callout Studio tema başına stil oluşturmadığından tüm temalara aktarıldı.",
+	"import.warn.cmCustomStyles":
+		"Bu callout'un Callout Manager'da özel CSS'i de var. Bu stil içe aktarmaya dahil olmadığından yalnızca simgesi ve rengi aktarıldı.",
 	"import.err.cmIdConflict":
 		'"{{value}}" ID\'si zaten başka bir callout ("{{other}}") tarafından takma ad olarak kullanılıyor ve atlandı.',
 

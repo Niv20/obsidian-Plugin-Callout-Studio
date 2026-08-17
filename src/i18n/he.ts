@@ -13,6 +13,12 @@ export const he: Record<string, string> = {
 	"cmd.calloutWrap": "עטיפה ב־callout",
 	"cmd.calloutUnwrap": "חילוץ מתוך callout",
 
+	// Commands — names generated for the user's own commands
+	"cmd.customWrapBlock": "עטיפה בתיבת־הבלטה {{name}}",
+	"cmd.customInsertBlock": "הוספת תיבת־הבלטה {{name}}",
+	"cmd.customInsertHeading": "הוספת כותרת H{{level}} מסוג {{name}}",
+	"cmd.customInsertInline": "הוספת תיבת־הבלטה מוטבעת {{name}}",
+
 	// Autocomplete
 	"autocomplete.createNew": 'יצירת תיבת־הבלטה חדשה: "{{name}}"',
 
@@ -25,6 +31,8 @@ export const he: Record<string, string> = {
 	"settings.rescanVaultHintAction": "סריקה עכשיו",
 	"settings.rescanComplete": "הסריקה הסתיימה: נוספו {{count}} בלוקים חדשים.",
 	"replaceModal.deleteWithoutReplaceSuffix": "(החלה של ברירת־מחדל)",
+	"replaceModal.titleDelete": "מחיקת תיבת־ההבלטה",
+	"replaceModal.titleReplace": "החלפה בכספת",
 
 	// פופאפ סריקה ראשונית (מוצג פעם אחת בהתקנה ראשונה ל-Vault גדול)
 	"firstRun.title": "לזהות תיבות־הבלטה קיימות בכספת שלכם?",
@@ -154,10 +162,50 @@ export const he: Record<string, string> = {
 		'מציג הצעות בעת הקלדת "[!" בתוך בלוק ציטוט בעורך. בחירה של סוג מתוך הרשימה תשלים אוטומטית את כותרת תיבת־ההבלטה.',
 
 	// Settings — Keyboard shortcuts
-	"settings.openHotkeys": "קיצורי המקלדת של Callout Studio",
-	"settings.openHotkeysDesc":
-		"פתיחת מסך קיצורי המקלדת של Obsidian עבור פקודות Callout Studio, שם תוכלו לבחור קיצורים ליצירת סוג חדש, פתיחת הגדרות, עטיפה בתוך או חילוץ מתיבת־הבלטה. כברירת־מחדל, לא מוגדרים קיצורי מקלדת.",
-	"settings.openHotkeysButton": "פתיחת הגדרות",
+	"settings.customCommands": "פקודות וקיצורי מקלדת",
+	"settings.customCommandsDesc":
+		"צפו בכל פקודה של Callout Studio ובקיצור המקלדת המשויך לה, וצרו פקודות משלכם לתיבות־ההבלטה שבהן אתם משתמשים הכי הרבה. כברירת־מחדל, לא מוגדרים קיצורי מקלדת.",
+	"settings.customCommandsButton": "ניהול פקודות",
+
+	// Command builder
+	"commandBuilder.title": "פקודות וקיצורי מקלדת",
+	"commandBuilder.desc":
+		"השתמשו בכפתור + כדי להגדיר או לשנות קיצור מקלדת בהגדרות קיצורי המקלדת של Obsidian.",
+	"commandBuilder.builtIn": "פקודות מובנות",
+	"commandBuilder.toggleAria": "הפעלה או כיבוי של {{name}}",
+	"commandBuilder.hotkeyBlank": "ריק",
+	"commandBuilder.hotkeyAria": "הגדרת קיצור מקלדת עבור {{name}}",
+	"commandBuilder.yourCommands": "הפקודות שלכם",
+	"commandBuilder.newCommand": "פקודה חדשה",
+	"commandBuilder.empty": "אין עדיין פקודות מותאמות־אישית.",
+	"commandBuilder.unknownCommand": "הפקודה הזו",
+	"commandBuilder.editAria": "עריכת {{name}}",
+	"commandBuilder.deleteAria": "מחיקת {{name}}",
+	"commandBuilder.deleteConfirm":
+		"למחוק את הפקודה {{name}}? כל קיצור מקלדת שהוגדר עבורה יפסיק לפעול.",
+	"commandBuilder.newTitle": "פקודה חדשה",
+	"commandBuilder.editTitle": "עריכת פקודה",
+	"commandBuilder.format": "פורמט תיבת־הבלטה",
+	"commandBuilder.formatDesc": "איזה סוג תיבת־הבלטה הפקודה כותבת.",
+	"commandBuilder.formatHeading": "כותרת",
+	"commandBuilder.formatInline": "מוטבעת",
+	"commandBuilder.formatBlock": "בלוק",
+	"commandBuilder.roleDisabled":
+		"הפורמט הזה כבוי, כך שהפקודה תוסיף טקסט רגיל עד שתפעילו אותו מחדש.",
+	"commandBuilder.callout": "סוג תיבת־הבלטה",
+	"commandBuilder.calloutDesc": "תיבת־ההבלטה שהפקודה הזו מוסיפה.",
+	"commandBuilder.headingLevel": "רמת כותרת",
+	"commandBuilder.headingLevelDesc": "איזו רמת כותרת לכתוב.",
+	"commandBuilder.action": "פעולה",
+	"commandBuilder.actionDesc":
+		"עטיפה הופכת את הבחירה לתיבת־הבלטה; הוספה מוסיפה תיבה ריקה.",
+	"commandBuilder.actionWrap": "עטיפת הבחירה",
+	"commandBuilder.actionInsert": "הוספת חדשה",
+	"commandBuilder.preview": "שם הפקודה",
+	"commandBuilder.duplicate": "כבר יש לכם פקודה שעושה בדיוק את זה.",
+	"commandBuilder.noCallouts":
+		"אין עדיין סוגי תיבות־הבלטה שניתן לבנות מהם פקודה.",
+	"commandBuilder.save": "שמירה",
 
 	// Settings — Reset
 	"settings.vaultMaintenance": "סקירה ותחזוקה של הכספת",
@@ -173,6 +221,11 @@ export const he: Record<string, string> = {
 	"settings.resetAllConfirm":
 		"פעולה זו תמחק תיבות־הבלטה מותאמות־אישית, תאפס תיבות מובנות, סגנונות גלובליים, פלטות צבעים שמורות, התאמת תפריט הקליק־הימני ותמחק קובצי Material SVG שהורדו. לא ניתן לבטל פעולה זו. להמשיך?",
 	"notice.resetAllDone": "הכול אופס לברירות־המחדל.",
+
+	"notice.customCommandsRemoved":
+		"הוסרו {{count}} פקודות מותאמות־אישית שסוג תיבת־ההבלטה שלהן כבר לא קיים.",
+	"notice.customCommandMissingCallout":
+		"סוג תיבת־ההבלטה של הפקודה הזו כבר לא קיים.",
 
 	// Notices
 	"notice.exported": "תיבות־ההבלטה יוצאו לקובץ callout-studio-export.json",
@@ -285,6 +338,7 @@ export const he: Record<string, string> = {
 	// Icon Picker
 	// Palette editor modal
 	"palette.newTitle": "פלטת צבעים חדשה",
+	"palette.groupPalette": "פלטה",
 	"palette.editTitle": "עריכת פלטת צבעים",
 	"palette.name": "שם",
 	"palette.namePlaceholder": "הפלטה שלי",
@@ -612,9 +666,20 @@ export const he: Record<string, string> = {
 	// Confirm modal
 	"confirm.ok": "מחיקה",
 	"confirm.cancel": "ביטול",
+	// Headings for each confirmation — every window carries one, so each
+	// caller of ConfirmModal names what it is about to do.
+	"confirm.titleDeleteCommand": "מחיקת פקודה",
+	"confirm.titleResetAll": "איפוס כל תיבות ההבלטה",
+	"confirm.titleResetCallout": "איפוס תיבת הבלטה",
+	"confirm.titleDeletePalette": "מחיקת פלטה",
+	"confirm.titleDeleteImage": "מחיקת תמונה",
 
 	// Vault edge-case modals
 	"vault.filesUpdated": "עודכנו {{count}} הפניות בקובצי הכספת.",
+	// The arrow stays "→" although the sentence is RTL: it sits between two
+	// callout ids, which are normally Latin, so the bidi algorithm resolves that
+	// fragment left-to-right and a mirrored "←" would point from the new id back
+	// to the old one. Prose paths such as `firstRun.laterHint` do mirror.
 	"vault.idsUpdated":
 		"עודכנו {{count}} מזהים של תיבות־הבלטה בקובצי הכספת: {{oldIds}} → {{newId}}",
 	"vault.titlesUpdated":
@@ -758,6 +823,12 @@ export const he: Record<string, string> = {
 
 	// ייבוא — הדבקה מתוך Callout Manager
 	"import.cmTitle": "ייבוא מתוך Callout Manager",
+	"import.cmFromVault": "הכספת הזו",
+	"import.cmVaultChecking": "מחפש את התוסף Callout Manager…",
+	"import.cmVaultFound": "נמצאו {{count}} תיבות־הבלטה מותאמות־אישית.",
+	"import.cmVaultNotFound": "לא נמצאו תיבות־הבלטה מותאמות־אישית בכספת הזו.",
+	"import.cmPasteLabel":
+		"או הדביקו כאן את הסגנונות שהועתקו מ־Callout Manager:",
 	"import.cmInstructions":
 		"ב־Callout Manager, השתמשו בכפתור ה־Copy שלו כדי להעתיק את סגנונות " +
 		"תיבות־ההבלטה המותאמות־אישית שלכם, ואז הדביקו אותם למטה.",
@@ -766,10 +837,19 @@ export const he: Record<string, string> = {
 	"import.cmBtnImport": "ייבוא",
 	"import.err.cmNoBlocksFound":
 		"לא נמצאו סגנונות של Callout Manager בטקסט שהודבק.",
+	"import.err.cmNotRecognized":
+		"קובץ לא מזוהה: נדרשו הסגנונות שנוצרים באמצעות כפתור ה־Copy של Callout Manager, או קובץ data.json של Callout Manager.",
+	"import.err.cmNoEntries": "לא נמצאו תיבות־הבלטה מותאמות־אישית לייבוא.",
 	"import.err.cmNoColorForNew":
 		'לא נמצא צבע תקין עבור תיבת־ההבלטה החדשה "{{value}}"; היא דולגה.',
 	"import.err.cmIdConflict":
 		'המזהה "{{value}}" כבר משמש ככינוי (alias) עבור תיבת־הבלטה אחרת ("{{other}}"), ולכן דולג.',
+	"import.warn.cmNoColorDefault":
+		"לא הוגדר צבע ב־Callout Manager, ולכן נעשה שימוש באפור ברירת־המחדל.",
+	"import.warn.cmThemeCondition":
+		"הצבע או הסמל של תיבת־הבלטה זו הוגדרו עבור ערכת נושא אחת בלבד. Callout Studio אינו תומך בעיצוב נפרד לכל ערכת נושא, ולכן הם הועברו לכל ערכות הנושא.",
+	"import.warn.cmCustomStyles":
+		"לתיבת־הבלטה הזו יש גם CSS מותאם־אישית ב־Callout Manager. הסגנון הזה אינו חלק מהייבוא, ולכן הועברו רק הסמל והצבע.",
 
 	// Import — Admonition
 	"import.admTitle": "ייבוא מתוך Admonition",

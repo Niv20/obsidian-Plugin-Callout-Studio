@@ -4,6 +4,10 @@ export const fi: Record<string, string> = {
 	"cmd.insertEmptyCallout": "Lisää tyhjä callout",
 	"cmd.calloutWrap": "Kääri calloutiin",
 	"cmd.calloutUnwrap": "Poista callout",
+	"cmd.customWrapBlock": "Kääri {{name}}-calloutiin",
+	"cmd.customInsertBlock": "Lisää {{name}}-callout",
+	"cmd.customInsertHeading": "Lisää H{{level}}-otsikkocallout ({{name}})",
+	"cmd.customInsertInline": "Lisää {{name}}-rivin sisäinen callout",
 	"autocomplete.createNew": 'Luo uusi callout: "{{name}}"',
 	"settings.fallbackTag": "Oletus",
 	"settings.fallbackTagAuto": "Automaattinen oletus",
@@ -14,6 +18,8 @@ export const fi: Record<string, string> = {
 	"settings.rescanComplete":
 		"Uudelleenskannaus valmis: {{count}} uutta callouttia lisätty.",
 	"replaceModal.deleteWithoutReplaceSuffix": "(palaa oletukseen)",
+	"replaceModal.titleDelete": "Poista callout",
+	"replaceModal.titleReplace": "Korvaa holvissa",
 	"firstRun.title": "Etsitkö olemassa olevia callouteja holvista?",
 	"firstRun.body":
 		"Callout Studio voi skannata holvisi löytääkseen jo käyttämäsi calloutit, jotta ne näkyvät asetusluettelossasi ja omaksuvat varatyylisi.",
@@ -125,10 +131,48 @@ export const fi: Record<string, string> = {
 	"settings.enableAutocomplete": "Ota [! automaattinen täydennys käyttöön",
 	"settings.enableAutocompleteDesc":
 		'Näyttää ehdotuksia, kun kirjoitat "[!" lainausblokissa editorissa. Valitse callout-tyyppi luettelosta lisätäksesi täydellisen callout-otsikon.',
-	"settings.openHotkeys": "Callout Studio -oikotiet",
-	"settings.openHotkeysDesc":
-		"Avaa Obsidianin oikotieasetukset Callout Studio -komennoille. Oletuksena ei ole määritetty oikoteitä.",
-	"settings.openHotkeysButton": "Avaa oikotieasetukset",
+	"settings.customCommands": "Komennot ja pikanäppäimet",
+	"settings.customCommandsDesc":
+		"Näytä jokainen Callout Studion komento ja sen pikanäppäin, ja luo omia komentoja eniten käyttämillesi callouteille. Oletuksena ei ole määritetty pikanäppäimiä.",
+	"settings.customCommandsButton": "Hallinnoi komentoja",
+	"commandBuilder.title": "Komennot ja pikanäppäimet",
+	"commandBuilder.desc":
+		"Aseta tai vaihda pikanäppäin Obsidianin pikanäppäinasetuksista +-painikkeella.",
+	"commandBuilder.builtIn": "Sisäänrakennetut komennot",
+	"commandBuilder.toggleAria": "Ota {{name}} käyttöön tai pois käytöstä",
+	"commandBuilder.hotkeyBlank": "Tyhjä",
+	"commandBuilder.hotkeyAria": "Aseta pikanäppäin komennolle {{name}}",
+	"commandBuilder.yourCommands": "Omat komentosi",
+	"commandBuilder.newCommand": "Uusi komento",
+	"commandBuilder.empty": "Ei vielä mukautettuja komentoja.",
+	"commandBuilder.unknownCommand": "tämä komento",
+	"commandBuilder.editAria": "Muokkaa {{name}}",
+	"commandBuilder.deleteAria": "Poista {{name}}",
+	"commandBuilder.deleteConfirm":
+		"Poistetaanko komento {{name}}? Sille asetettu pikanäppäin lakkaa toimimasta.",
+	"commandBuilder.newTitle": "Uusi komento",
+	"commandBuilder.editTitle": "Muokkaa komentoa",
+	"commandBuilder.format": "Callout-muoto",
+	"commandBuilder.formatDesc": "Minkä tyyppisen calloutin komento kirjoittaa.",
+	"commandBuilder.formatHeading": "Otsikko",
+	"commandBuilder.formatInline": "Rivin sisäinen",
+	"commandBuilder.formatBlock": "Lohko",
+	"commandBuilder.roleDisabled":
+		"Tämä muoto on pois käytöstä, joten komento lisää tavallista tekstiä, kunnes otat sen taas käyttöön.",
+	"commandBuilder.callout": "Callout-tyyppi",
+	"commandBuilder.calloutDesc": "Callout, jonka tämä komento lisää.",
+	"commandBuilder.headingLevel": "Otsikkotaso",
+	"commandBuilder.headingLevelDesc": "Mikä otsikkotaso kirjoitetaan.",
+	"commandBuilder.action": "Toiminto",
+	"commandBuilder.actionDesc":
+		"Kääri muuttaa valinnan calloutiksi; lisää lisää tyhjän.",
+	"commandBuilder.actionWrap": "Kääri valinta",
+	"commandBuilder.actionInsert": "Lisää uusi",
+	"commandBuilder.preview": "Komennon nimi",
+	"commandBuilder.duplicate": "Sinulla on jo täsmälleen tämän tekevä komento.",
+	"commandBuilder.noCallouts":
+		"Ei vielä callout-tyyppejä, joista rakentaa komento.",
+	"commandBuilder.save": "Tallenna",
 	"settings.vaultMaintenance": "Holvin näkemykset ja huolto",
 	"settings.vaultStats": "Callout-tilastot",
 	"settings.vaultStatsDesc":
@@ -142,6 +186,9 @@ export const fi: Record<string, string> = {
 	"settings.resetAllConfirm":
 		"Tämä poistaa kaikki mukautetut calloutit, palauttaa sisäänrakennetut calloutit, yleiset tyylit, tallennetut väripaletit, hiiren kakkospainikkeen valikon mukautukset ja kaikki välimuistissa olevat Material-SVG:t. Toimintoa ei voi kumota. Oletko varma?",
 	"notice.resetAllDone": "Kaikki on palautettu oletuksiksi.",
+	"notice.customCommandsRemoved":
+		"Poistettiin {{count}} mukautettu(a) komento(a), joiden callout-tyyppiä ei enää ole.",
+	"notice.customCommandMissingCallout": "Tämän komennon callout-tyyppiä ei enää ole.",
 	"notice.exported": "Calloutit viety tiedostoon callout-studio-export.json",
 	"notice.importedJSON": "{{count}} callout-tyyppiä tuotu JSONista.",
 	"notice.importedSettings": "Lisäosan asetukset tuotu.",
@@ -250,6 +297,7 @@ export const fi: Record<string, string> = {
 	"editor.externalStyleClose": "Selvä",
 	// Palette editor modal
 	"palette.newTitle": "Uusi väripaletti",
+	"palette.groupPalette": "Paletti",
 	"palette.editTitle": "Muokkaa väripalettia",
 	"palette.name": "Nimi",
 	"palette.namePlaceholder": "Oma paletti",
@@ -565,6 +613,13 @@ export const fi: Record<string, string> = {
 	"menuItem.deleteSection": "Poista osio",
 	"confirm.ok": "Poista",
 	"confirm.cancel": "Peruuta",
+	// Headings for each confirmation — every window carries one, so each
+	// caller of ConfirmModal names what it is about to do.
+	"confirm.titleDeleteCommand": "Poista komento",
+	"confirm.titleResetAll": "Palauta kaikki calloutit",
+	"confirm.titleResetCallout": "Palauta callout",
+	"confirm.titleDeletePalette": "Poista paletti",
+	"confirm.titleDeleteImage": "Poista kuva",
 	"vault.filesUpdated":
 		"{{count}} callout-viite(ttä) päivitetty holvin tiedostoissa.",
 	"vault.idsUpdated":
@@ -685,30 +740,49 @@ export const fi: Record<string, string> = {
 	"import.warn.iconNameUnknown":
 		'Kuvaketta "{{value}}" ei ole {{type}}:ssa, joten käytettiin oletuskuvaketta.',
 	"import.warn.cmIconUnknownNew":
-		'Kuvaketta "{{value}}" ei ole Obsidianissa, joten käytettiin oletuskuvaketta.',
+		'Kuvaketta "{{value}}" ei ole tässä holvissa, joten käytettiin oletuskuvaketta.',
 	"import.warn.cmIconUnknownExisting":
-		'Kuvaketta "{{value}}" ei ole Obsidianissa, joten "{{id}}" säilytti jo olemassa olevan kuvakkeensa.',
+		'Kuvaketta "{{value}}" ei ole tässä holvissa, joten "{{id}}" säilytti jo olemassa olevan kuvakkeensa.',
 	"import.chooseSource": "Tuo kohteesta",
 	"import.sourceStudio": "Callout Studio",
 	"import.sourceStudioDesc": "Lataa Callout Studiosta viety .json-tiedosto.",
 	"import.sourceCalloutManager": "Callout Manager",
 	"import.sourceCalloutManagerDesc":
-		"Liitä Callout Managerin Copy-painikkeella kopioimasi tyylit.",
+		"Tuo mukautetut calloutisi Callout Manager -laajennuksesta.",
 	"import.sourceAdmonition": "Admonition",
 	"import.sourceAdmonitionDesc":
 		"Tuo omat admonitionisi Admonition-laajennuksesta.",
 	"import.cmTitle": "Tuo Callout Managerista",
 	"import.cmInstructions":
-		"Kopioi Callout Managerissa mukautetut callout-tyylisi sen Copy-painikkeella ja liitä ne sitten alle.",
-	"import.cmPlaceholder": "Liitä kopioidut tyylit tähän…",
+		"Jokainen mukautettu callout tuodaan kuvakkeineen ja väreineen. Teemakohtaiselle " +
+		"tyylittelylle ja mukautetulle CSS:lle ei ole vastinetta täällä, joten ne jäävät tuomatta.",
+	"import.cmFromVault": "Tämä holvi",
+	"import.cmVaultChecking": "Etsitään Callout Manager -laajennusta…",
+	"import.cmVaultFound": "{{count}} mukautettua callouttia löydetty.",
+	"import.cmVaultNotFound":
+		"Tästä holvista ei löytynyt mukautettuja callouteja.",
+	"import.cmPasteLabel": "Tai liitä Callout Managerin kopioimat tyylit tähän:",
+	"import.cmPlaceholder": "Liitä kopioidut tyylit tai data.json tähän…",
 	"import.cmBtnCancel": "Peruuta",
 	"import.cmBtnImport": "Tuo",
 	"import.err.cmNoBlocksFound":
 		"Liitetystä tekstistä ei löydetty Callout Manager -tyylejä.",
+	"import.err.cmNotRecognized":
+		"Tuntematon tiedosto: odotettiin Callout Managerin Copy-painikkeen tuottamia " +
+		"tyylejä tai Callout Managerin data.json-tiedostoa.",
+	"import.err.cmNoEntries": "Tuotavia mukautettuja callouteja ei löytynyt.",
 	"import.err.cmNoColorForNew":
 		'Uudelle calloutille "{{value}}" ei löydetty käyttökelpoista väriä; se ohitettiin.',
 	"import.err.cmIdConflict":
 		'Tunnus "{{value}}" on jo käytössä toisen calloutin aliaksena ("{{other}}") ja se ohitettiin.',
+	"import.warn.cmNoColorDefault":
+		"Callout Managerissa ei ollut asetettu väriä, joten käytettiin sen oletusharmaata.",
+	"import.warn.cmThemeCondition":
+		"Tämän calloutin väri tai kuvake oli asetettu vain yhdelle teemalle. Callout " +
+		"Studiossa ei ole teemakohtaista tyylittelyä, joten se tuotiin kaikille teemoille.",
+	"import.warn.cmCustomStyles":
+		"Tällä calloutilla on myös mukautettu CSS Callout Managerissa. Kyseinen tyylittely " +
+		"ei ole osa tuontia, joten vain sen kuvake ja väri tuotiin.",
 
 	// Import — Admonition
 	"import.admTitle": "Tuo Admonitionista",

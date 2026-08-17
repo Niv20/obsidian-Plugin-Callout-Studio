@@ -4,6 +4,10 @@ export const bg: Record<string, string> = {
 	"cmd.insertEmptyCallout": "Вмъкване на празен callout",
 	"cmd.calloutWrap": "Обвиване в callout",
 	"cmd.calloutUnwrap": "Премахване на callout",
+	"cmd.customWrapBlock": "Обвиване в callout {{name}}",
+	"cmd.customInsertBlock": "Вмъкване на callout {{name}}",
+	"cmd.customInsertHeading": "Вмъкване на заглавен callout {{name}} (H{{level}})",
+	"cmd.customInsertInline": "Вмъкване на вграден callout {{name}}",
 	"autocomplete.createNew": 'Създаване на нов callout: "{{name}}"',
 	"settings.fallbackTag": "По подразбиране",
 	"settings.fallbackTagAuto": "Авт. по подразбиране",
@@ -14,6 +18,8 @@ export const bg: Record<string, string> = {
 	"settings.rescanComplete":
 		"Повторното сканиране завърши: добавени са {{count}} нови callout(а).",
 	"replaceModal.deleteWithoutReplaceSuffix": "(връща се към стандартното)",
+	"replaceModal.titleDelete": "Изтриване на callout",
+	"replaceModal.titleReplace": "Замяна в хранилището",
 	"firstRun.title": "Намиране на съществуващи callout-и в хранилището?",
 	"firstRun.body":
 		"Callout Studio може да сканира хранилището ви, за да открие callout-и, които вече използвате, така че да се показват в списъка с настройки и да приемат вашия резервен стил.",
@@ -124,11 +130,48 @@ export const bg: Record<string, string> = {
 	"settings.enableAutocomplete": "Активиране на автоматично довършване [!",
 	"settings.enableAutocompleteDesc":
 		'Показва предложения при въвеждане на "[!" в блоков цитат в редактора. Изберете тип callout от списъка, за да вмъкнете пълно заглавие на callout.',
-	"settings.openHotkeys": "Клавишни комбинации на Callout Studio",
-	"settings.openHotkeysDesc":
-		"Отваря настройките за клавишни комбинации на Obsidian за командите на Callout Studio. По подразбиране не са зададени комбинации.",
-	"settings.openHotkeysButton":
-		"Отваряне на настройките за клавишни комбинации",
+	"settings.customCommands": "Команди и клавишни комбинации",
+	"settings.customCommandsDesc":
+		"Вижте всяка команда на Callout Studio и клавишната комбинация, към която е обвързана, и създайте свои команди за callout-ите, които използвате най-често. По подразбиране не са зададени комбинации.",
+	"settings.customCommandsButton": "Управление на командите",
+	"commandBuilder.title": "Команди и клавишни комбинации",
+	"commandBuilder.desc":
+		"Използвайте бутона +, за да зададете или промените клавишна комбинация в настройките на Obsidian.",
+	"commandBuilder.builtIn": "Вградени команди",
+	"commandBuilder.toggleAria": "Включване или изключване на {{name}}",
+	"commandBuilder.hotkeyBlank": "Празно",
+	"commandBuilder.hotkeyAria": "Задаване на комбинация за {{name}}",
+	"commandBuilder.yourCommands": "Вашите команди",
+	"commandBuilder.newCommand": "Нова команда",
+	"commandBuilder.empty": "Все още няма персонализирани команди.",
+	"commandBuilder.unknownCommand": "тази команда",
+	"commandBuilder.editAria": "Редактиране на {{name}}",
+	"commandBuilder.deleteAria": "Изтриване на {{name}}",
+	"commandBuilder.deleteConfirm":
+		"Изтриване на командата {{name}}? Всяка зададена ѝ комбинация ще спре да работи.",
+	"commandBuilder.newTitle": "Нова команда",
+	"commandBuilder.editTitle": "Редактиране на команда",
+	"commandBuilder.format": "Формат на callout",
+	"commandBuilder.formatDesc": "Какъв вид callout записва командата.",
+	"commandBuilder.formatHeading": "Заглавие",
+	"commandBuilder.formatInline": "Вграден",
+	"commandBuilder.formatBlock": "Блоков",
+	"commandBuilder.roleDisabled":
+		"Този формат е изключен, затова командата ще вмъква обикновен текст, докато не го включите отново.",
+	"commandBuilder.callout": "Тип callout",
+	"commandBuilder.calloutDesc": "Callout-ът, който вмъква тази команда.",
+	"commandBuilder.headingLevel": "Ниво на заглавие",
+	"commandBuilder.headingLevelDesc": "На кое ниво да се запише заглавието.",
+	"commandBuilder.action": "Действие",
+	"commandBuilder.actionDesc":
+		"Обвиването превръща избора в callout; вмъкването добавя празен.",
+	"commandBuilder.actionWrap": "Обвиване на избора",
+	"commandBuilder.actionInsert": "Вмъкване на нов",
+	"commandBuilder.preview": "Име на командата",
+	"commandBuilder.duplicate": "Вече имате команда, която прави точно това.",
+	"commandBuilder.noCallouts":
+		"Все още няма типове callout, от които да се създаде команда.",
+	"commandBuilder.save": "Запазване",
 	"settings.vaultMaintenance": "Прегледи и поддръжка на хранилището",
 	"settings.vaultStats": "Статистика за callout",
 	"settings.vaultStatsDesc":
@@ -142,6 +185,10 @@ export const bg: Record<string, string> = {
 	"settings.resetAllConfirm":
 		"Това ще изтрие всички персонализирани callout-и, ще нулира вградените callout-и, глобалните стилове, запазените цветови палитри, персонализирането на контекстното меню и всички кеширани SVG файлове на Material. Действието не може да бъде отменено. Сигурни ли сте?",
 	"notice.resetAllDone": "Всичко е нулирано до стандартните стойности.",
+	"notice.customCommandsRemoved":
+		"Премахнати са {{count}} персонализирана(и) команда(и), чийто тип callout вече не съществува.",
+	"notice.customCommandMissingCallout":
+		"Типът callout на тази команда вече не съществува.",
 	"notice.exported":
 		"Callout-ите са експортирани в callout-studio-export.json",
 	"notice.importedJSON": "Импортирани са {{count}} тип(а) callout от JSON.",
@@ -252,6 +299,7 @@ export const bg: Record<string, string> = {
 	"editor.externalStyleClose": "Разбрах",
 	// Palette editor modal
 	"palette.newTitle": "Нова цветова палитра",
+	"palette.groupPalette": "Палитра",
 	"palette.editTitle": "Редактиране на цветова палитра",
 	"palette.name": "Име",
 	"palette.namePlaceholder": "Моята палитра",
@@ -571,6 +619,13 @@ export const bg: Record<string, string> = {
 	"menuItem.deleteSection": "Изтриване на раздел",
 	"confirm.ok": "Изтриване",
 	"confirm.cancel": "Отказ",
+	// Headings for each confirmation — every window carries one, so each
+	// caller of ConfirmModal names what it is about to do.
+	"confirm.titleDeleteCommand": "Изтриване на команда",
+	"confirm.titleResetAll": "Нулиране на всички callouts",
+	"confirm.titleResetCallout": "Нулиране на callout",
+	"confirm.titleDeletePalette": "Изтриване на палитра",
+	"confirm.titleDeleteImage": "Изтриване на изображение",
 	"vault.filesUpdated":
 		"Актуализирани са {{count}} препратка/и към callout в файловете на хранилището.",
 	"vault.idsUpdated":
@@ -690,32 +745,56 @@ export const bg: Record<string, string> = {
 	"import.warn.iconNameUnknown":
 		'Няма икона "{{value}}" в {{type}}, затова беше използвана иконата по подразбиране.',
 	"import.warn.cmIconUnknownNew":
-		'Няма икона "{{value}}" в Obsidian, затова беше използвана иконата по подразбиране.',
+		'Иконата "{{value}}" не е налична в това хранилище, затова беше използвана иконата по подразбиране.',
 	"import.warn.cmIconUnknownExisting":
-		'Няма икона "{{value}}" в Obsidian, затова "{{id}}" запази иконата, която вече имаше.',
+		'Иконата "{{value}}" не е налична в това хранилище, затова "{{id}}" запази иконата, която вече имаше.',
 	"import.chooseSource": "Импортиране от",
 	"import.sourceStudio": "Callout Studio",
 	"import.sourceStudioDesc":
 		"Зареди .json файл, експортиран от Callout Studio.",
 	"import.sourceCalloutManager": "Callout Manager",
 	"import.sourceCalloutManagerDesc":
-		"Поставете стиловете, копирани от бутона Copy на Callout Manager.",
+		"Пренесете персонализираните си callout-и от приставката Callout Manager.",
 	"import.sourceAdmonition": "Admonition",
 	"import.sourceAdmonitionDesc":
 		"Пренесете своите персонализирани admonition от приставката " +
 		"Admonition.",
 	"import.cmTitle": "Импортиране от Callout Manager",
 	"import.cmInstructions":
-		"В Callout Manager използвайте бутона Copy, за да копирате персонализираните стилове на callout-ите, след което ги поставете по-долу.",
-	"import.cmPlaceholder": "Поставете копираните стилове тук…",
+		"Всеки персонализиран callout се пренася с иконата и цвета си. Стиловете " +
+		"по теми и персонализираният CSS нямат съответствие тук и не се пренасят.",
+	"import.cmFromVault": "Това хранилище",
+	"import.cmVaultChecking": "Търсене на приставката Callout Manager…",
+	"import.cmVaultFound": "Намерени са {{count}} персонализирани callout-и.",
+	"import.cmVaultNotFound":
+		"В това хранилище не бяха намерени персонализирани callout-и.",
+	"import.cmPasteLabel":
+		"Или поставете копираните от Callout Manager стилове тук:",
+	"import.cmPlaceholder":
+		"Поставете копираните стилове или файл data.json тук…",
 	"import.cmBtnCancel": "Отказ",
 	"import.cmBtnImport": "Импортиране",
 	"import.err.cmNoBlocksFound":
 		"Не бяха намерени стилове на Callout Manager в поставения текст.",
+	"import.err.cmNotRecognized":
+		"Непознат файл: очакваха се стиловете, генерирани от бутона Copy " +
+		"на Callout Manager, или файл data.json на Callout Manager.",
+	"import.err.cmNoEntries":
+		"Не бяха намерени персонализирани callout-и за импортиране.",
 	"import.err.cmNoColorForNew":
 		'Не беше намерен използваем цвят за новия callout "{{value}}"; той беше пропуснат.',
 	"import.err.cmIdConflict":
 		'ID "{{value}}" вече се използва като псевдоним от друг callout ("{{other}}") и беше пропуснат.',
+	"import.warn.cmNoColorDefault":
+		"В Callout Manager не беше зададен цвят, затова беше използвано " +
+		"стандартното сиво.",
+	"import.warn.cmThemeCondition":
+		"Цветът или иконата на този callout бяха зададени само за една тема. " +
+		"Callout Studio няма стилове по теми, затова той беше пренесен за " +
+		"всички теми.",
+	"import.warn.cmCustomStyles":
+		"Този callout има и персонализиран CSS в Callout Manager. Този стил не " +
+		"е част от импортирането, затова бяха пренесени само иконата и цветът.",
 
 	// Import — Admonition
 	"import.admTitle": "Внасяне от Admonition",

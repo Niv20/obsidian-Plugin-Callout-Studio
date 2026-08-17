@@ -155,11 +155,11 @@ export class IconGrid {
 	}
 
 	/**
-	 * Split the flat, already-sorted list into runs. Pooling preserves order —
-	 * the pooled index concatenates its members and the search filters in
-	 * place — so a source change is exactly a group boundary, and no sorting is
-	 * needed to find one. A grid with no `groupLabelFor` produces one segment
-	 * covering everything.
+	 * Split the flat, already-sorted list into runs. Pooling preserves the run —
+	 * the pooled index concatenates its members, and `filterIcons` ranks within
+	 * a source rather than across the whole list — so a source change is exactly
+	 * a group boundary, and no sorting is needed here to find one. A grid with
+	 * no `groupLabelFor` produces one segment covering everything.
 	 */
 	private partition(entries: readonly IconEntry[]): GridSegment[] {
 		const segments: GridSegment[] = [];

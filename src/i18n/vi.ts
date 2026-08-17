@@ -5,6 +5,11 @@ export const vi: Record<string, string> = {
 	"cmd.calloutWrap": "Bọc trong callout",
 	"cmd.calloutUnwrap": "Bỏ callout",
 
+	"cmd.customWrapBlock": "Bọc trong callout {{name}}",
+	"cmd.customInsertBlock": "Chèn callout {{name}}",
+	"cmd.customInsertHeading": "Chèn tiêu đề callout H{{level}} {{name}}",
+	"cmd.customInsertInline": "Chèn callout nội dòng {{name}}",
+
 	"autocomplete.createNew": 'Tạo callout mới: "{{name}}"',
 
 	"settings.fallbackTag": "Mặc định",
@@ -16,6 +21,8 @@ export const vi: Record<string, string> = {
 	"settings.rescanComplete":
 		"Quét lại hoàn tất: đã thêm {{count}} callout mới.",
 	"replaceModal.deleteWithoutReplaceSuffix": "(quay lại mặc định)",
+	"replaceModal.titleDelete": "Xóa callout",
+	"replaceModal.titleReplace": "Thay thế trong vault",
 
 	"firstRun.title": "Tìm callouts hiện có trong vault?",
 	"firstRun.body":
@@ -135,10 +142,49 @@ export const vi: Record<string, string> = {
 	"settings.enableAutocompleteDesc":
 		'Hiển thị gợi ý khi bạn gõ "[!" trong trích dẫn khối trong trình soạn thảo. Chọn loại callout từ danh sách để chèn tiêu đề callout đầy đủ.',
 
-	"settings.openHotkeys": "Phím tắt Callout Studio",
-	"settings.openHotkeysDesc":
-		"Mở cài đặt phím tắt Obsidian cho các lệnh Callout Studio, nơi bạn có thể chọn phím tắt riêng cho Tạo loại mới, Mở cài đặt, Bỏ callout và Bọc trong callout. Không có phím tắt nào được gán theo mặc định.",
-	"settings.openHotkeysButton": "Mở cài đặt phím tắt",
+	"settings.customCommands": "Lệnh và phím tắt",
+	"settings.customCommandsDesc":
+		"Xem mọi lệnh của Callout Studio và phím tắt được gán cho lệnh đó, đồng thời tạo lệnh riêng cho những callout bạn dùng nhiều nhất. Không có phím tắt nào được gán theo mặc định.",
+	"settings.customCommandsButton": "Quản lý lệnh",
+
+	"commandBuilder.title": "Lệnh và phím tắt",
+	"commandBuilder.desc":
+		"Dùng nút + để đặt hoặc thay đổi phím tắt trong cài đặt phím tắt của Obsidian.",
+	"commandBuilder.builtIn": "Lệnh tích hợp",
+	"commandBuilder.toggleAria": "Bật hoặc tắt {{name}}",
+	"commandBuilder.hotkeyBlank": "Trống",
+	"commandBuilder.hotkeyAria": "Đặt phím tắt cho {{name}}",
+	"commandBuilder.yourCommands": "Lệnh của bạn",
+	"commandBuilder.newCommand": "Lệnh mới",
+	"commandBuilder.empty": "Chưa có lệnh tùy chỉnh nào.",
+	"commandBuilder.unknownCommand": "lệnh này",
+	"commandBuilder.editAria": "Chỉnh sửa {{name}}",
+	"commandBuilder.deleteAria": "Xóa {{name}}",
+	"commandBuilder.deleteConfirm":
+		"Xóa lệnh {{name}}? Phím tắt gán cho lệnh này sẽ ngừng hoạt động.",
+	"commandBuilder.newTitle": "Lệnh mới",
+	"commandBuilder.editTitle": "Chỉnh sửa lệnh",
+	"commandBuilder.format": "Định dạng callout",
+	"commandBuilder.formatDesc": "Loại callout mà lệnh này sẽ viết.",
+	"commandBuilder.formatHeading": "Tiêu đề",
+	"commandBuilder.formatInline": "Nội dòng",
+	"commandBuilder.formatBlock": "Khối",
+	"commandBuilder.roleDisabled":
+		"Định dạng này đang tắt, vì vậy lệnh sẽ chèn văn bản thường cho đến khi bạn bật lại.",
+	"commandBuilder.callout": "Loại callout",
+	"commandBuilder.calloutDesc": "Callout mà lệnh này chèn vào.",
+	"commandBuilder.headingLevel": "Cấp độ tiêu đề",
+	"commandBuilder.headingLevelDesc": "Cấp độ tiêu đề sẽ được viết.",
+	"commandBuilder.action": "Hành động",
+	"commandBuilder.actionDesc":
+		"Bọc sẽ biến phần chọn thành callout; chèn sẽ thêm một callout trống.",
+	"commandBuilder.actionWrap": "Bọc phần chọn",
+	"commandBuilder.actionInsert": "Chèn mới",
+	"commandBuilder.preview": "Tên lệnh",
+	"commandBuilder.duplicate": "Bạn đã có một lệnh làm chính xác việc này.",
+	"commandBuilder.noCallouts":
+		"Chưa có loại callout nào để tạo lệnh.",
+	"commandBuilder.save": "Lưu",
 
 	"settings.vaultMaintenance": "Thông tin & bảo trì vault",
 	"settings.vaultStats": "Thống kê callout",
@@ -154,6 +200,10 @@ export const vi: Record<string, string> = {
 		"Điều này sẽ xóa tất cả callouts tùy chỉnh, đặt lại callouts tích hợp, kiểu toàn cục, bảng màu đã lưu, tùy chỉnh menu chuột phải và tất cả SVG Material đã cache. Hành động này không thể hoàn tác. Bạn có chắc không?",
 	"notice.resetAllDone": "Đã đặt lại tất cả về mặc định.",
 
+	"notice.customCommandsRemoved":
+		"Đã xóa {{count}} lệnh tùy chỉnh có loại callout không còn tồn tại.",
+	"notice.customCommandMissingCallout":
+		"Loại callout của lệnh đó không còn tồn tại.",
 	"notice.exported": "Đã xuất callouts vào callout-studio-export.json",
 	"notice.importedJSON": "Đã nhập {{count}} loại callout từ JSON.",
 	"notice.importedSettings": "Đã nhập cài đặt plugin.",
@@ -263,6 +313,7 @@ export const vi: Record<string, string> = {
 
 	// Palette editor modal
 	"palette.newTitle": "Bảng màu mới",
+	"palette.groupPalette": "Bảng màu",
 	"palette.editTitle": "Chỉnh sửa bảng màu",
 	"palette.name": "Tên",
 	"palette.namePlaceholder": "Bảng màu của tôi",
@@ -586,6 +637,13 @@ export const vi: Record<string, string> = {
 
 	"confirm.ok": "Xóa",
 	"confirm.cancel": "Hủy",
+	// Headings for each confirmation — every window carries one, so each
+	// caller of ConfirmModal names what it is about to do.
+	"confirm.titleDeleteCommand": "Xóa lệnh",
+	"confirm.titleResetAll": "Đặt lại tất cả callout",
+	"confirm.titleResetCallout": "Đặt lại callout",
+	"confirm.titleDeletePalette": "Xóa bảng màu",
+	"confirm.titleDeleteImage": "Xóa hình ảnh",
 
 	"vault.filesUpdated":
 		"Đã cập nhật {{count}} tham chiếu callout trong các tệp vault.",
@@ -710,30 +768,45 @@ export const vi: Record<string, string> = {
 	"import.warn.iconNameUnknown":
 		'Không có biểu tượng "{{value}}" trong {{type}}, vì vậy biểu tượng mặc định đã được sử dụng.',
 	"import.warn.cmIconUnknownNew":
-		'Không có biểu tượng "{{value}}" trong Obsidian, vì vậy biểu tượng mặc định đã được sử dụng.',
+		'Biểu tượng "{{value}}" không có sẵn trong vault này, vì vậy biểu tượng mặc định đã được sử dụng.',
 	"import.warn.cmIconUnknownExisting":
-		'Không có biểu tượng "{{value}}" trong Obsidian, vì vậy "{{id}}" giữ nguyên biểu tượng đã có.',
+		'Biểu tượng "{{value}}" không có sẵn trong vault này, vì vậy "{{id}}" giữ nguyên biểu tượng đã có.',
 	"import.chooseSource": "Nhập từ",
 	"import.sourceStudio": "Callout Studio",
 	"import.sourceStudioDesc": "Tải tệp .json được xuất từ Callout Studio.",
 	"import.sourceCalloutManager": "Callout Manager",
 	"import.sourceCalloutManagerDesc":
-		"Dán các kiểu bạn đã sao chép từ nút Copy của Callout Manager.",
+		"Mang các callout đã tùy chỉnh của bạn từ plugin Callout Manager sang.",
 	"import.sourceAdmonition": "Admonition",
 	"import.sourceAdmonitionDesc":
 		"Mang các admonition tùy chỉnh của bạn từ plugin Admonition sang.",
 	"import.cmTitle": "Nhập từ Callout Manager",
 	"import.cmInstructions":
-		"Trong Callout Manager, sử dụng nút Copy để sao chép các kiểu callout tùy chỉnh, sau đó dán bên dưới.",
-	"import.cmPlaceholder": "Dán các kiểu đã sao chép vào đây…",
+		"Mỗi callout đã tùy chỉnh được mang sang cùng biểu tượng và màu sắc. Kiểu dáng theo từng giao diện và CSS tùy chỉnh không có tương đương ở đây nên sẽ không được mang sang.",
+	"import.cmFromVault": "Vault này",
+	"import.cmVaultChecking": "Đang tìm plugin Callout Manager…",
+	"import.cmVaultFound": "Đã tìm thấy {{count}} callout đã tùy chỉnh.",
+	"import.cmVaultNotFound":
+		"Không tìm thấy callout đã tùy chỉnh nào trong vault này.",
+	"import.cmPasteLabel": "Hoặc dán các kiểu đã sao chép từ Callout Manager vào đây:",
+	"import.cmPlaceholder": "Dán các kiểu đã sao chép, hoặc một tệp data.json, vào đây…",
 	"import.cmBtnCancel": "Hủy",
 	"import.cmBtnImport": "Nhập",
 	"import.err.cmNoBlocksFound":
 		"Không tìm thấy kiểu Callout Manager nào trong văn bản đã dán.",
+	"import.err.cmNotRecognized":
+		"Tệp không nhận dạng được: cần các kiểu do nút Copy của Callout Manager tạo ra, hoặc một tệp data.json của Callout Manager.",
+	"import.err.cmNoEntries": "Không tìm thấy callout đã tùy chỉnh nào để nhập.",
 	"import.err.cmNoColorForNew":
 		'Không tìm thấy màu sắc có thể sử dụng cho callout mới "{{value}}"; đã bỏ qua.',
 	"import.err.cmIdConflict":
 		'ID "{{value}}" đã được sử dụng làm bí danh bởi một callout khác ("{{other}}") và đã bị bỏ qua.',
+	"import.warn.cmNoColorDefault":
+		"Không có màu nào được đặt trong Callout Manager, nên màu xám mặc định đã được sử dụng.",
+	"import.warn.cmThemeCondition":
+		"Màu hoặc biểu tượng của callout này chỉ được đặt cho một giao diện. Callout Studio không có kiểu dáng theo từng giao diện, nên nó đã được mang sang cho mọi giao diện.",
+	"import.warn.cmCustomStyles":
+		"Callout này cũng có CSS tùy chỉnh trong Callout Manager. Kiểu dáng đó không thuộc phạm vi nhập, nên chỉ biểu tượng và màu sắc được mang sang.",
 
 	// Import — Admonition
 	"import.admTitle": "Nhập từ Admonition",

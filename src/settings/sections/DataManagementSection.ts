@@ -11,6 +11,7 @@ import { t } from "../../i18n";
 import { ConfirmModal } from "../../utils/ConfirmModal";
 import { ImportReportModal } from "../../utils/ImportReportModal";
 import { validateImportPayload } from "../../utils/importValidator";
+import { mergeById } from "../../utils/mergeById";
 import { ImportSourceModal } from "../ImportSourceModal";
 import {
 	countCalloutUsages,
@@ -137,6 +138,7 @@ export function renderResetSection(
 
 					const confirmed = await new ConfirmModal(
 						ctx.app,
+						t("confirm.titleResetAll"),
 						messageFrag,
 					).confirm();
 					if (!confirmed) return;
@@ -305,23 +307,21 @@ export async function processImportedJSON(
 		// replace the arrays — otherwise importing a file with none of either
 		// would silently wipe the user's existing ones. This mirrors how
 		// callouts are merged (add new / overwrite same id).
+		// Commands are on that list too: an export predating them carries
+		// none, and replacing the array wholesale would delete every
+		// command the user had built here.
 		const {
 			customPalettes: importedPalettes,
 			userImages: importedImages,
+			customCommands: importedCommands,
 			...restSettings
 		} = result.settings;
 		Object.assign(ctx.plugin.registry.settings, restSettings);
 		if (importedPalettes) {
-			const byId = new Map(
-				ctx.plugin.registry.settings.customPalettes.map((p) => [
-					p.id,
-					p,
-				]),
+			ctx.plugin.registry.settings.customPalettes = mergeById(
+				ctx.plugin.registry.settings.customPalettes,
+				importedPalettes,
 			);
-			for (const palette of importedPalettes) {
-				byId.set(palette.id, palette);
-			}
-			ctx.plugin.registry.settings.customPalettes = [...byId.values()];
 			// Merging by id routinely brings in a palette that duplicates a
 			// local one's colors under a different id — the two vaults named
 			// the same color independently. No vault may hold two of those, so
@@ -336,17 +336,20 @@ export async function processImportedJSON(
 			}
 		}
 		if (importedImages) {
-			const byId = new Map(
-				ctx.plugin.registry
-					.getUserImages()
-					.map((image) => [image.id, image]),
-			);
-			for (const image of importedImages) {
-				byId.set(image.id, image);
-			}
 			// Through the registry rather than by assignment: it is what
 			// hands the new pictures to the pack that draws them.
-			ctx.plugin.registry.setUserImages([...byId.values()]);
+			ctx.plugin.registry.setUserImages(
+				mergeById(ctx.plugin.registry.getUserImages(), importedImages),
+			);
+		}
+		if (importedCommands) {
+			ctx.plugin.registry.settings.customCommands = mergeById(
+				ctx.plugin.registry.settings.customCommands,
+				importedCommands,
+			);
+			// Anything pointing at a callout this vault doesn't have is
+			// dropped by the sweep, which also registers the rest.
+			ctx.plugin.customCommands.syncAll();
 		}
 		await ctx.plugin.saveSettings();
 		ctx.plugin.refreshRenderModes();

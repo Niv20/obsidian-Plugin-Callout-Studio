@@ -5,6 +5,11 @@ export const ro: Record<string, string> = {
 	"cmd.calloutWrap": "Înfășoară în callout",
 	"cmd.calloutUnwrap": "Elimină callout",
 
+	"cmd.customWrapBlock": "Înfășoară în callout {{name}}",
+	"cmd.customInsertBlock": "Inserează callout {{name}}",
+	"cmd.customInsertHeading": "Inserează titlu H{{level}} callout {{name}}",
+	"cmd.customInsertInline": "Inserează callout inline {{name}}",
+
 	"autocomplete.createNew": 'Creează callout nou: "{{name}}"',
 
 	"settings.fallbackTag": "Implicit",
@@ -16,6 +21,8 @@ export const ro: Record<string, string> = {
 	"settings.rescanComplete":
 		"Rescanare completă: {{count}} callout(uri) noi adăugate.",
 	"replaceModal.deleteWithoutReplaceSuffix": "(revine la implicit)",
+	"replaceModal.titleDelete": "Șterge callout",
+	"replaceModal.titleReplace": "Înlocuiți în vault",
 
 	"firstRun.title": "Găsiți callouts existente în vault?",
 	"firstRun.body":
@@ -135,10 +142,51 @@ export const ro: Record<string, string> = {
 	"settings.enableAutocompleteDesc":
 		'Afișează sugestii când tastați "[!" într-un citat bloc în editor. Alegeți un tip de callout din listă pentru a insera un antet callout complet.',
 
-	"settings.openHotkeys": "Scurtături Callout Studio",
-	"settings.openHotkeysDesc":
-		"Deschide setările de scurtături Obsidian pentru comenzile Callout Studio, unde puteți alege propriile scurtături pentru Creare tip nou, Deschide setări, Elimină callout și Înfășoară în callout. Implicit nu sunt atribuite scurtături.",
-	"settings.openHotkeysButton": "Deschide setările de scurtături",
+	"settings.customCommands": "Comenzi și scurtături",
+	"settings.customCommandsDesc":
+		"Vedeți fiecare comandă Callout Studio și scurtătura la care este asociată, și creați-vă propriile comenzi pentru callouts pe care le folosiți cel mai mult. Implicit nu sunt atribuite scurtături.",
+	"settings.customCommandsButton": "Gestionați comenzile",
+
+	"commandBuilder.title": "Comenzi și scurtături",
+	"commandBuilder.desc":
+		"Folosiți butonul + pentru a seta sau schimba o scurtătură în setările de scurtături ale Obsidian.",
+	"commandBuilder.builtIn": "Comenzi integrate",
+	"commandBuilder.toggleAria": "Activați sau dezactivați {{name}}",
+	"commandBuilder.hotkeyBlank": "Gol",
+	"commandBuilder.hotkeyAria": "Setați o scurtătură pentru {{name}}",
+	"commandBuilder.yourCommands": "Comenzile dvs.",
+	"commandBuilder.newCommand": "Comandă nouă",
+	"commandBuilder.empty": "Nicio comandă personalizată încă.",
+	"commandBuilder.unknownCommand": "această comandă",
+	"commandBuilder.editAria": "Editați {{name}}",
+	"commandBuilder.deleteAria": "Ștergeți {{name}}",
+	"commandBuilder.deleteConfirm":
+		"Ștergeți comanda {{name}}? Orice scurtătură atribuită acesteia va înceta să funcționeze.",
+	"commandBuilder.newTitle": "Comandă nouă",
+	"commandBuilder.editTitle": "Editați comanda",
+	"commandBuilder.format": "Format callout",
+	"commandBuilder.formatDesc": "Ce fel de callout scrie comanda.",
+	"commandBuilder.formatHeading": "Titlu",
+	"commandBuilder.formatInline": "Inline",
+	"commandBuilder.formatBlock": "Bloc",
+	"commandBuilder.roleDisabled":
+		"Acest format este dezactivat, așa că această comandă va insera text simplu până când îl reactivați.",
+	"commandBuilder.callout": "Tip de callout",
+	"commandBuilder.calloutDesc":
+		"Callout-ul pe care îl inserează această comandă.",
+	"commandBuilder.headingLevel": "Nivel de titlu",
+	"commandBuilder.headingLevelDesc": "Ce nivel de titlu se scrie.",
+	"commandBuilder.action": "Acțiune",
+	"commandBuilder.actionDesc":
+		"Înfășoară transformă selecția într-un callout; inserează adaugă unul gol.",
+	"commandBuilder.actionWrap": "Înfășoară selecția",
+	"commandBuilder.actionInsert": "Inserează nou",
+	"commandBuilder.preview": "Numele comenzii",
+	"commandBuilder.duplicate":
+		"Aveți deja o comandă care face exact acest lucru.",
+	"commandBuilder.noCallouts":
+		"Nu există încă tipuri de callout din care să construiți o comandă.",
+	"commandBuilder.save": "Salvați",
 
 	"settings.vaultMaintenance": "Informații și întreținere vault",
 	"settings.vaultStats": "Statistici callout",
@@ -153,6 +201,11 @@ export const ro: Record<string, string> = {
 	"settings.resetAllConfirm":
 		"Aceasta va șterge toate callouts personalizate, va reseta callouts integrate, stilurile globale, paletele de culori salvate, personalizarea meniului clic dreapta și toate SVG-urile Material din cache. Această acțiune nu poate fi anulată. Ești sigur?",
 	"notice.resetAllDone": "Totul a fost resetat la valorile implicite.",
+
+	"notice.customCommandsRemoved":
+		"Au fost eliminate {{count}} comandă/comenzi personalizată(e) al căror tip de callout nu mai există.",
+	"notice.customCommandMissingCallout":
+		"Tipul de callout al acestei comenzi nu mai există.",
 
 	"notice.exported": "Callouts exportate în callout-studio-export.json",
 	"notice.importedJSON":
@@ -268,6 +321,7 @@ export const ro: Record<string, string> = {
 
 	// Palette editor modal
 	"palette.newTitle": "Paletă de culori nouă",
+	"palette.groupPalette": "Paletă",
 	"palette.editTitle": "Editați paleta de culori",
 	"palette.name": "Nume",
 	"palette.namePlaceholder": "Paleta mea",
@@ -586,6 +640,13 @@ export const ro: Record<string, string> = {
 
 	"confirm.ok": "Șterge",
 	"confirm.cancel": "Anulare",
+	// Headings for each confirmation — every window carries one, so each
+	// caller of ConfirmModal names what it is about to do.
+	"confirm.titleDeleteCommand": "Șterge comanda",
+	"confirm.titleResetAll": "Resetează toate callout-urile",
+	"confirm.titleResetCallout": "Resetează callout",
+	"confirm.titleDeletePalette": "Șterge paleta",
+	"confirm.titleDeleteImage": "Șterge imaginea",
 
 	"vault.filesUpdated":
 		"Au fost actualizate {{count}} referință(e) callout în fișierele vault.",
@@ -727,15 +788,32 @@ export const ro: Record<string, string> = {
 	"import.sourceAdmonitionDesc":
 		"Adu-ți admonition-urile personalizate din pluginul Admonition.",
 	"import.cmTitle": "Importați din Callout Manager",
+	"import.cmFromVault": "Acest vault",
+	"import.cmVaultChecking": "Se caută pluginul Callout Manager…",
+	"import.cmVaultFound": "S-au găsit {{count}} callout-uri personalizate.",
+	"import.cmVaultNotFound":
+		"Nu s-au găsit callout-uri personalizate în acest vault.",
+	"import.cmPasteLabel":
+		"Sau lipește aici stilurile copiate din Callout Manager:",
 	"import.cmInstructions":
 		"În Callout Manager, utilizați butonul Copy pentru a copia stilurile de callout personalizate, apoi lipiți-le mai jos.",
 	"import.cmPlaceholder": "Lipiți stilurile copiate aici…",
 	"import.cmBtnCancel": "Anulare",
 	"import.cmBtnImport": "Importați",
+	"import.err.cmNotRecognized":
+		"Fișier nerecunoscut: se așteptau stilurile produse de butonul Copy din Callout Manager sau un data.json al pluginului Callout Manager.",
+	"import.err.cmNoEntries":
+		"Nu s-au găsit callout-uri personalizate de importat.",
 	"import.err.cmNoBlocksFound":
 		"Nu au fost găsite stiluri Callout Manager în textul lipit.",
 	"import.err.cmNoColorForNew":
 		'Nu a fost găsită nicio culoare utilizabilă pentru noul callout "{{value}}"; a fost omis.',
+	"import.warn.cmNoColorDefault":
+		"Nu a fost setată nicio culoare în Callout Manager, așa că s-a folosit griul implicit.",
+	"import.warn.cmThemeCondition":
+		"Culoarea sau pictograma acestui callout a fost setată pentru o singură temă. Callout Studio nu are stilizare per temă, așa că a fost adusă pentru toate temele.",
+	"import.warn.cmCustomStyles":
+		"Acest callout are și CSS personalizat în Callout Manager. Stilul nu face parte din import, așa că au fost aduse doar pictograma și culoarea.",
 	"import.err.cmIdConflict":
 		'ID-ul "{{value}}" este deja utilizat ca alias de un alt callout ("{{other}}") și a fost omis.',
 

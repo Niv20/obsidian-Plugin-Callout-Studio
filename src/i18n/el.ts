@@ -4,6 +4,10 @@ export const el: Record<string, string> = {
 	"cmd.insertEmptyCallout": "Εισαγωγή κενού callout",
 	"cmd.calloutWrap": "Αναδίπλωση σε callout",
 	"cmd.calloutUnwrap": "Αφαίρεση callout",
+	"cmd.customWrapBlock": "Αναδίπλωση σε callout {{name}}",
+	"cmd.customInsertBlock": "Εισαγωγή callout {{name}}",
+	"cmd.customInsertHeading": "Εισαγωγή callout επικεφαλίδας H{{level}} {{name}}",
+	"cmd.customInsertInline": "Εισαγωγή ενσωματωμένου callout {{name}}",
 	"autocomplete.createNew": 'Δημιουργία νέου callout: "{{name}}"',
 	"settings.fallbackTag": "Προεπιλογή",
 	"settings.fallbackTagAuto": "Αυτόματη προεπιλογή",
@@ -14,6 +18,8 @@ export const el: Record<string, string> = {
 	"settings.rescanComplete":
 		"Η επανασάρωση ολοκληρώθηκε: προστέθηκαν {{count}} νέα callout(s).",
 	"replaceModal.deleteWithoutReplaceSuffix": "(επιστρέφει στην προεπιλογή)",
+	"replaceModal.titleDelete": "Διαγραφή callout",
+	"replaceModal.titleReplace": "Αντικατάσταση στο vault",
 	"firstRun.title": "Εύρεση υπαρχόντων callouts στο vault;",
 	"firstRun.body":
 		"Το Callout Studio μπορεί να σαρώσει το vault σας για να ανακαλύψει callouts που ήδη χρησιμοποιείτε, ώστε να εμφανίζονται στη λίστα ρυθμίσεων και να υιοθετούν το εφεδρικό σας στυλ.",
@@ -126,10 +132,49 @@ export const el: Record<string, string> = {
 	"settings.enableAutocomplete": "Ενεργοποίηση αυτόματης συμπλήρωσης [!",
 	"settings.enableAutocompleteDesc":
 		'Εμφανίζει προτάσεις όταν πληκτρολογείτε "[!" μέσα σε αποσπασματική παράθεση στον επεξεργαστή. Επιλέξτε τύπο callout από τη λίστα για εισαγωγή πλήρους επικεφαλίδας callout.',
-	"settings.openHotkeys": "Συντομεύσεις Callout Studio",
-	"settings.openHotkeysDesc":
-		"Ανοίγει τις ρυθμίσεις συντομεύσεων του Obsidian για εντολές Callout Studio. Καμία συντόμευση δεν έχει ανατεθεί από προεπιλογή.",
-	"settings.openHotkeysButton": "Άνοιγμα ρυθμίσεων συντομεύσεων",
+	"settings.customCommands": "Εντολές και συντομεύσεις",
+	"settings.customCommandsDesc":
+		"Δείτε κάθε εντολή του Callout Studio και τη συντόμευση στην οποία είναι δεσμευμένη, και δημιουργήστε τις δικές σας εντολές για τα callouts που χρησιμοποιείτε περισσότερο. Καμία συντόμευση δεν έχει ανατεθεί από προεπιλογή.",
+	"settings.customCommandsButton": "Διαχείριση εντολών",
+	"commandBuilder.title": "Εντολές και συντομεύσεις",
+	"commandBuilder.desc":
+		"Χρησιμοποιήστε το κουμπί + για να ορίσετε ή να αλλάξετε μια συντόμευση στις ρυθμίσεις συντομεύσεων του Obsidian.",
+	"commandBuilder.builtIn": "Ενσωματωμένες εντολές",
+	"commandBuilder.toggleAria": "Ενεργοποίηση ή απενεργοποίηση του {{name}}",
+	"commandBuilder.hotkeyBlank": "Κενό",
+	"commandBuilder.hotkeyAria": "Ορισμός συντόμευσης για {{name}}",
+	"commandBuilder.yourCommands": "Οι εντολές σας",
+	"commandBuilder.newCommand": "Νέα εντολή",
+	"commandBuilder.empty": "Δεν υπάρχουν ακόμη προσαρμοσμένες εντολές.",
+	"commandBuilder.unknownCommand": "αυτή την εντολή",
+	"commandBuilder.editAria": "Επεξεργασία {{name}}",
+	"commandBuilder.deleteAria": "Διαγραφή {{name}}",
+	"commandBuilder.deleteConfirm":
+		"Διαγραφή της εντολής {{name}}; Τυχόν συντόμευση που της έχει ανατεθεί θα σταματήσει να λειτουργεί.",
+	"commandBuilder.newTitle": "Νέα εντολή",
+	"commandBuilder.editTitle": "Επεξεργασία εντολής",
+	"commandBuilder.format": "Μορφή callout",
+	"commandBuilder.formatDesc": "Τι είδους callout γράφει η εντολή.",
+	"commandBuilder.formatHeading": "Επικεφαλίδα",
+	"commandBuilder.formatInline": "Ενσωματωμένο",
+	"commandBuilder.formatBlock": "Μπλοκ",
+	"commandBuilder.roleDisabled":
+		"Αυτή η μορφή είναι απενεργοποιημένη, οπότε η εντολή θα εισάγει απλό κείμενο μέχρι να την ενεργοποιήσετε ξανά.",
+	"commandBuilder.callout": "Τύπος callout",
+	"commandBuilder.calloutDesc": "Το callout που εισάγει αυτή η εντολή.",
+	"commandBuilder.headingLevel": "Επίπεδο επικεφαλίδας",
+	"commandBuilder.headingLevelDesc": "Ποιο επίπεδο επικεφαλίδας θα γραφτεί.",
+	"commandBuilder.action": "Ενέργεια",
+	"commandBuilder.actionDesc":
+		"Η αναδίπλωση μετατρέπει την επιλογή σε callout· η εισαγωγή προσθέτει ένα κενό.",
+	"commandBuilder.actionWrap": "Αναδίπλωση επιλογής",
+	"commandBuilder.actionInsert": "Εισαγωγή νέου",
+	"commandBuilder.preview": "Όνομα εντολής",
+	"commandBuilder.duplicate":
+		"Έχετε ήδη μια εντολή που κάνει ακριβώς αυτό.",
+	"commandBuilder.noCallouts":
+		"Δεν υπάρχουν ακόμη τύποι callout για να δημιουργήσετε μια εντολή.",
+	"commandBuilder.save": "Αποθήκευση",
 	"settings.vaultMaintenance": "Πληροφορίες vault και συντήρηση",
 	"settings.vaultStats": "Στατιστικά callout",
 	"settings.vaultStatsDesc":
@@ -143,6 +188,10 @@ export const el: Record<string, string> = {
 	"settings.resetAllConfirm":
 		"Αυτό θα διαγράψει όλα τα προσαρμοσμένα callouts, θα επαναφέρει τα ενσωματωμένα callouts, τα καθολικά στυλ, τις αποθηκευμένες παλέτες χρωμάτων, την προσαρμογή του μενού δεξιού κλικ και όλα τα αποθηκευμένα SVG Material. Η ενέργεια δεν μπορεί να αναιρεθεί. Είστε σίγουροι;",
 	"notice.resetAllDone": "Όλα επαναφέρθηκαν στις προεπιλογές.",
+	"notice.customCommandsRemoved":
+		"Αφαιρέθηκαν {{count}} προσαρμοσμένη(-ες) εντολή(-ές) των οποίων ο τύπος callout δεν υπάρχει πια.",
+	"notice.customCommandMissingCallout":
+		"Ο τύπος callout αυτής της εντολής δεν υπάρχει πια.",
 	"notice.exported": "Τα callouts εξήχθησαν στο callout-studio-export.json",
 	"notice.importedJSON": "Εισήχθησαν {{count}} τύπος/τύποι callout από JSON.",
 	"notice.importedSettings": "Οι ρυθμίσεις του προσθέτου εισήχθησαν.",
@@ -257,6 +306,7 @@ export const el: Record<string, string> = {
 	"editor.externalStyleClose": "Το κατάλαβα",
 	// Palette editor modal
 	"palette.newTitle": "Νέα παλέτα χρωμάτων",
+	"palette.groupPalette": "Παλέτα",
 	"palette.editTitle": "Επεξεργασία παλέτας χρωμάτων",
 	"palette.name": "Όνομα",
 	"palette.namePlaceholder": "Η παλέτα μου",
@@ -577,6 +627,13 @@ export const el: Record<string, string> = {
 	"menuItem.deleteSection": "Διαγραφή ενότητας",
 	"confirm.ok": "Διαγραφή",
 	"confirm.cancel": "Ακύρωση",
+	// Headings for each confirmation — every window carries one, so each
+	// caller of ConfirmModal names what it is about to do.
+	"confirm.titleDeleteCommand": "Διαγραφή εντολής",
+	"confirm.titleResetAll": "Επαναφορά όλων των callouts",
+	"confirm.titleResetCallout": "Επαναφορά callout",
+	"confirm.titleDeletePalette": "Διαγραφή παλέτας",
+	"confirm.titleDeleteImage": "Διαγραφή εικόνας",
 	"vault.filesUpdated":
 		"Ενημερώθηκαν {{count}} αναφορές callout σε αρχεία vault.",
 	"vault.idsUpdated":
@@ -701,32 +758,57 @@ export const el: Record<string, string> = {
 	"import.warn.iconNameUnknown":
 		'Δεν υπάρχει εικονίδιο "{{value}}" στο {{type}}, οπότε χρησιμοποιήθηκε το προεπιλεγμένο εικονίδιο.',
 	"import.warn.cmIconUnknownNew":
-		'Δεν υπάρχει εικονίδιο "{{value}}" στο Obsidian, οπότε χρησιμοποιήθηκε το προεπιλεγμένο εικονίδιο.',
+		'Το εικονίδιο "{{value}}" δεν είναι διαθέσιμο σε αυτό το vault, οπότε χρησιμοποιήθηκε το προεπιλεγμένο εικονίδιο.',
 	"import.warn.cmIconUnknownExisting":
-		'Δεν υπάρχει εικονίδιο "{{value}}" στο Obsidian, οπότε το "{{id}}" διατήρησε το εικονίδιο που είχε ήδη.',
+		'Το εικονίδιο "{{value}}" δεν είναι διαθέσιμο σε αυτό το vault, οπότε το "{{id}}" διατήρησε το εικονίδιο που είχε ήδη.',
 	"import.chooseSource": "Εισαγωγή από",
 	"import.sourceStudio": "Callout Studio",
 	"import.sourceStudioDesc":
 		"Φόρτωση αρχείου .json εξαγόμενου από το Callout Studio.",
 	"import.sourceCalloutManager": "Callout Manager",
 	"import.sourceCalloutManagerDesc":
-		"Επικολλήστε τα στυλ που αντιγράψατε από το κουμπί Copy του Callout Manager.",
+		"Μεταφέρετε τα προσαρμοσμένα σας callout από το πρόσθετο Callout Manager.",
 	"import.sourceAdmonition": "Admonition",
 	"import.sourceAdmonitionDesc":
 		"Φέρτε τα προσαρμοσμένα admonition σας από το πρόσθετο " +
 		"Admonition.",
 	"import.cmTitle": "Εισαγωγή από Callout Manager",
 	"import.cmInstructions":
-		"Στο Callout Manager, χρησιμοποιήστε το κουμπί Copy για να αντιγράψετε τα προσαρμοσμένα στυλ callout, και στη συνέχεια επικολλήστε τα παρακάτω.",
-	"import.cmPlaceholder": "Επικολλήστε τα αντιγραμμένα στυλ εδώ…",
+		"Κάθε προσαρμοσμένο callout μεταφέρεται με το εικονίδιο και το χρώμα " +
+		"του. Τα στυλ ανά θέμα και το προσαρμοσμένο CSS δεν έχουν αντίστοιχο " +
+		"εδώ και δεν μεταφέρονται.",
+	"import.cmFromVault": "Αυτό το vault",
+	"import.cmVaultChecking": "Αναζήτηση του πρόσθετου Callout Manager…",
+	"import.cmVaultFound": "Βρέθηκαν {{count}} προσαρμοσμένα callout.",
+	"import.cmVaultNotFound":
+		"Δεν βρέθηκαν προσαρμοσμένα callout σε αυτό το vault.",
+	"import.cmPasteLabel":
+		"Ή επικολλήστε εδώ τα αντιγραμμένα στυλ του Callout Manager:",
+	"import.cmPlaceholder": "Επικολλήστε τα αντιγραμμένα στυλ, ή ένα data.json, εδώ…",
 	"import.cmBtnCancel": "Ακύρωση",
 	"import.cmBtnImport": "Εισαγωγή",
 	"import.err.cmNoBlocksFound":
 		"Δεν βρέθηκαν στυλ Callout Manager στο επικολλημένο κείμενο.",
+	"import.err.cmNotRecognized":
+		"Μη αναγνωρίσιμο αρχείο: αναμένονται τα στυλ που παράγει το κουμπί " +
+		"Copy του Callout Manager, ή ένα data.json του Callout Manager.",
+	"import.err.cmNoEntries":
+		"Δεν βρέθηκαν προσαρμοσμένα callout προς εισαγωγή.",
 	"import.err.cmNoColorForNew":
 		'Δεν βρέθηκε χρησιμοποιήσιμο χρώμα για το νέο callout "{{value}}"· παραλείφθηκε.',
 	"import.err.cmIdConflict":
 		'Το ID "{{value}}" χρησιμοποιείται ήδη ως ψευδώνυμο από άλλο callout ("{{other}}") και παραλείφθηκε.',
+	"import.warn.cmNoColorDefault":
+		"Δεν είχε οριστεί χρώμα στο Callout Manager, οπότε χρησιμοποιήθηκε " +
+		"το προεπιλεγμένο γκρι του.",
+	"import.warn.cmThemeCondition":
+		"Το χρώμα ή το εικονίδιο αυτού του callout είχε οριστεί μόνο για ένα " +
+		"θέμα. Το Callout Studio δεν έχει στυλ ανά θέμα, οπότε μεταφέρθηκε " +
+		"για όλα τα θέματα.",
+	"import.warn.cmCustomStyles":
+		"Αυτό το callout έχει επίσης προσαρμοσμένο CSS στο Callout Manager. " +
+		"Αυτό το στυλ δεν αποτελεί μέρος της εισαγωγής, οπότε μεταφέρθηκαν " +
+		"μόνο το εικονίδιο και το χρώμα του.",
 
 	// Import — Admonition
 	"import.admTitle": "Εισαγωγή από το Admonition",

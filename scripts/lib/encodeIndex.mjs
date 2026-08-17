@@ -79,9 +79,16 @@ export function encodeIndex(entries) {
 			.join("\n"),
 	};
 
-	// Labels only earn their bytes when at least one differs from its name.
-	if (entries.some((e) => e.label && e.label !== e.name)) {
-		encoded.l = entries.map((e) => e.label ?? e.name).join("\n");
+	// Labels only earn their bytes when at least one differs from its name, and
+	// then only the ones that do. An entry with nothing to say contributes an
+	// empty line, which `decodeIndex` reads back as *no label at all* rather
+	// than as one — so the tooltip still falls through to its prettified name
+	// instead of being handed the raw id, and the column costs the length of
+	// the labels rather than of every name in the library. A label identical to
+	// its name is the same thing as none, and is dropped either way.
+	const labelOf = (e) => (e.label && e.label !== e.name ? e.label : "");
+	if (entries.some((e) => labelOf(e))) {
+		encoded.l = entries.map(labelOf).join("\n");
 	}
 
 	if (categoryList.length > 0) {

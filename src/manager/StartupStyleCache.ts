@@ -61,12 +61,19 @@ export class StartupStyleCache {
 	/** Record freshly generated CSS for the next launch's fast path. */
 	persist(cssText: string): void {
 		if (cssText === this.lastPersisted) return;
-		this.lastPersisted = cssText;
 		try {
 			window.localStorage.setItem(
 				this.scopedKey(LOCAL_STORAGE_KEY),
 				cssText,
 			);
+			// Only once the write has actually landed. Raised before the `try`,
+			// the memo remembered a refused write as a successful one — and
+			// since the memo is what makes a repeat inject a no-op, the same
+			// text was then never offered to storage again for the rest of the
+			// session. A store that frees up mid-session (the user deletes
+			// something, another plugin's quota is reclaimed) would have gone on
+			// launching without a snapshot until a style edit changed the text.
+			this.lastPersisted = cssText;
 		} catch {
 			// Quota exceeded / storage unavailable — the normal inject path still
 			// works, so styling is never lost; only the fast path is skipped.

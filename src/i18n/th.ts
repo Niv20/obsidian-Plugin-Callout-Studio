@@ -5,6 +5,11 @@ export const th: Record<string, string> = {
 	"cmd.calloutWrap": "ห่อใน callout",
 	"cmd.calloutUnwrap": "นำ callout ออก",
 
+	"cmd.customWrapBlock": "ห่อใน callout {{name}}",
+	"cmd.customInsertBlock": "แทรก callout {{name}}",
+	"cmd.customInsertHeading": "แทรกหัวข้อ callout H{{level}} {{name}}",
+	"cmd.customInsertInline": "แทรก callout แบบอินไลน์ {{name}}",
+
 	"autocomplete.createNew": 'สร้าง callout ใหม่: "{{name}}"',
 
 	"settings.fallbackTag": "ค่าเริ่มต้น",
@@ -16,6 +21,8 @@ export const th: Record<string, string> = {
 	"settings.rescanComplete":
 		"สแกนใหม่เสร็จแล้ว: เพิ่ม {{count}} callout ใหม่",
 	"replaceModal.deleteWithoutReplaceSuffix": "(กลับไปใช้ค่าเริ่มต้น)",
+	"replaceModal.titleDelete": "ลบ callout",
+	"replaceModal.titleReplace": "แทนที่ใน vault",
 
 	"firstRun.title": "ค้นหา callout ที่มีอยู่ใน vault หรือไม่?",
 	"firstRun.body":
@@ -134,10 +141,48 @@ export const th: Record<string, string> = {
 	"settings.enableAutocompleteDesc":
 		'แสดงคำแนะนำเมื่อพิมพ์ "[!" ในบล็อกอ้างอิงในตัวแก้ไข เลือกประเภท callout จากรายการเพื่อแทรกส่วนหัว callout ที่สมบูรณ์',
 
-	"settings.openHotkeys": "แป้นพิมพ์ลัด Callout Studio",
-	"settings.openHotkeysDesc":
-		"เปิดการตั้งค่าแป้นพิมพ์ลัดของ Obsidian สำหรับคำสั่ง Callout Studio ซึ่งคุณสามารถเลือกแป้นพิมพ์ลัดของคุณเองสำหรับการสร้างประเภทใหม่ เปิดการตั้งค่า นำ callout ออก และห่อใน callout ไม่มีการกำหนดแป้นพิมพ์ลัดโดยค่าเริ่มต้น",
-	"settings.openHotkeysButton": "เปิดการตั้งค่าแป้นพิมพ์ลัด",
+	"settings.customCommands": "คำสั่งและแป้นพิมพ์ลัด",
+	"settings.customCommandsDesc":
+		"ดูคำสั่งทั้งหมดของ Callout Studio และแป้นพิมพ์ลัดที่ผูกไว้ พร้อมสร้างคำสั่งของคุณเองสำหรับ callout ที่คุณใช้บ่อยที่สุด ไม่มีการกำหนดแป้นพิมพ์ลัดโดยค่าเริ่มต้น",
+	"settings.customCommandsButton": "จัดการคำสั่ง",
+
+	"commandBuilder.title": "คำสั่งและแป้นพิมพ์ลัด",
+	"commandBuilder.desc":
+		"ใช้ปุ่ม + เพื่อตั้งค่าหรือเปลี่ยนแป้นพิมพ์ลัดในการตั้งค่าแป้นพิมพ์ลัดของ Obsidian",
+	"commandBuilder.builtIn": "คำสั่งในตัว",
+	"commandBuilder.toggleAria": "เปิดหรือปิด {{name}}",
+	"commandBuilder.hotkeyBlank": "ว่าง",
+	"commandBuilder.hotkeyAria": "ตั้งค่าแป้นพิมพ์ลัดสำหรับ {{name}}",
+	"commandBuilder.yourCommands": "คำสั่งของคุณ",
+	"commandBuilder.newCommand": "คำสั่งใหม่",
+	"commandBuilder.empty": "ยังไม่มีคำสั่งแบบกำหนดเอง",
+	"commandBuilder.unknownCommand": "คำสั่งนี้",
+	"commandBuilder.editAria": "แก้ไข {{name}}",
+	"commandBuilder.deleteAria": "ลบ {{name}}",
+	"commandBuilder.deleteConfirm":
+		"ลบคำสั่ง {{name}} หรือไม่? แป้นพิมพ์ลัดที่กำหนดไว้จะใช้งานไม่ได้อีกต่อไป",
+	"commandBuilder.newTitle": "คำสั่งใหม่",
+	"commandBuilder.editTitle": "แก้ไขคำสั่ง",
+	"commandBuilder.format": "รูปแบบ callout",
+	"commandBuilder.formatDesc": "ชนิดของ callout ที่คำสั่งนี้เขียน",
+	"commandBuilder.formatHeading": "หัวข้อ",
+	"commandBuilder.formatInline": "อินไลน์",
+	"commandBuilder.formatBlock": "บล็อก",
+	"commandBuilder.roleDisabled":
+		"รูปแบบนี้ถูกปิดอยู่ คำสั่งจึงจะแทรกข้อความธรรมดาจนกว่าคุณจะเปิดใช้อีกครั้ง",
+	"commandBuilder.callout": "ประเภท callout",
+	"commandBuilder.calloutDesc": "callout ที่คำสั่งนี้แทรก",
+	"commandBuilder.headingLevel": "ระดับหัวข้อ",
+	"commandBuilder.headingLevelDesc": "ระดับหัวข้อที่จะเขียน",
+	"commandBuilder.action": "การกระทำ",
+	"commandBuilder.actionDesc":
+		"ห่อจะเปลี่ยนข้อความที่เลือกให้เป็น callout ส่วนแทรกจะเพิ่ม callout เปล่า",
+	"commandBuilder.actionWrap": "ห่อข้อความที่เลือก",
+	"commandBuilder.actionInsert": "แทรกใหม่",
+	"commandBuilder.preview": "ชื่อคำสั่ง",
+	"commandBuilder.duplicate": "คุณมีคำสั่งที่ทำแบบนี้อยู่แล้ว",
+	"commandBuilder.noCallouts": "ยังไม่มีประเภท callout ให้สร้างคำสั่งจาก",
+	"commandBuilder.save": "บันทึก",
 
 	"settings.vaultMaintenance": "ข้อมูลเชิงลึกและการบำรุงรักษา vault",
 	"settings.vaultStats": "สถิติ callout",
@@ -153,6 +198,10 @@ export const th: Record<string, string> = {
 		"การดำเนินการนี้จะลบ callout แบบกำหนดเองทั้งหมด รีเซ็ต callout ในตัว สไตล์ส่วนกลาง ชุดสีที่บันทึกไว้ การปรับแต่งเมนูคลิกขวา และ SVG Material ที่แคชทั้งหมด ไม่สามารถยกเลิกได้ คุณแน่ใจหรือไม่?",
 	"notice.resetAllDone": "รีเซ็ตทุกอย่างเป็นค่าเริ่มต้นแล้ว",
 
+	"notice.customCommandsRemoved":
+		"ลบคำสั่งแบบกำหนดเอง {{count}} รายการที่ประเภท callout ไม่มีอยู่แล้ว",
+	"notice.customCommandMissingCallout":
+		"ประเภท callout ของคำสั่งนี้ไม่มีอยู่แล้ว",
 	"notice.exported": "ส่งออก callout ไปยัง callout-studio-export.json แล้ว",
 	"notice.importedJSON": "นำเข้า {{count}} ประเภท callout จาก JSON แล้ว",
 	"notice.importedSettings": "นำเข้าการตั้งค่าปลั๊กอินแล้ว",
@@ -261,6 +310,7 @@ export const th: Record<string, string> = {
 
 	// Palette editor modal
 	"palette.newTitle": "ชุดสีใหม่",
+	"palette.groupPalette": "แผงสี",
 	"palette.editTitle": "แก้ไขชุดสี",
 	"palette.name": "ชื่อ",
 	"palette.namePlaceholder": "ชุดสีของฉัน",
@@ -580,6 +630,13 @@ export const th: Record<string, string> = {
 
 	"confirm.ok": "ลบ",
 	"confirm.cancel": "ยกเลิก",
+	// Headings for each confirmation — every window carries one, so each
+	// caller of ConfirmModal names what it is about to do.
+	"confirm.titleDeleteCommand": "ลบคำสั่ง",
+	"confirm.titleResetAll": "รีเซ็ต callout ทั้งหมด",
+	"confirm.titleResetCallout": "รีเซ็ต callout",
+	"confirm.titleDeletePalette": "ลบชุดสี",
+	"confirm.titleDeleteImage": "ลบรูปภาพ",
 
 	"vault.filesUpdated":
 		"อัปเดต {{count}} การอ้างอิง callout ในไฟล์ vault แล้ว",
@@ -700,9 +757,9 @@ export const th: Record<string, string> = {
 	"import.warn.iconNameUnknown":
 		'ไม่มีไอคอน "{{value}}" ใน {{type}} จึงใช้ไอคอนเริ่มต้นแทน',
 	"import.warn.cmIconUnknownNew":
-		'ไม่มีไอคอน "{{value}}" ใน Obsidian จึงใช้ไอคอนเริ่มต้นแทน',
+		'ไอคอน "{{value}}" ไม่พร้อมใช้งานในโวลต์นี้ จึงใช้ไอคอนเริ่มต้นแทน',
 	"import.warn.cmIconUnknownExisting":
-		'ไม่มีไอคอน "{{value}}" ใน Obsidian ดังนั้น "{{id}}" จึงยังคงใช้ไอคอนเดิม',
+		'ไอคอน "{{value}}" ไม่พร้อมใช้งานในโวลต์นี้ ดังนั้น "{{id}}" จึงยังคงใช้ไอคอนเดิม',
 	"import.chooseSource": "นำเข้าจาก",
 	"import.sourceStudio": "Callout Studio",
 	"import.sourceStudioDesc": "โหลดไฟล์ .json ที่ส่งออกจาก Callout Studio",
@@ -713,14 +770,28 @@ export const th: Record<string, string> = {
 	"import.sourceAdmonitionDesc":
 		"นำ admonition ที่คุณกำหนดเองมาจากปลั๊กอิน Admonition",
 	"import.cmTitle": "นำเข้าจาก Callout Manager",
+	"import.cmFromVault": "ห้องนิรภัยนี้",
+	"import.cmVaultChecking": "กำลังค้นหาปลั๊กอิน Callout Manager…",
+	"import.cmVaultFound": "พบ callout ที่กำหนดเอง {{count}} รายการ",
+	"import.cmVaultNotFound": "ไม่พบ callout ที่กำหนดเองในห้องนิรภัยนี้",
+	"import.cmPasteLabel": "หรือวางสไตล์ที่คัดลอกจาก Callout Manager ที่นี่:",
 	"import.cmInstructions":
 		"ใน Callout Manager ให้ใช้ปุ่ม Copy เพื่อคัดลอกสไตล์ callout ที่กำหนดเอง จากนั้นวางด้านล่าง",
 	"import.cmPlaceholder": "วางสไตล์ที่คัดลอกไว้ที่นี่…",
 	"import.cmBtnCancel": "ยกเลิก",
 	"import.cmBtnImport": "นำเข้า",
+	"import.err.cmNotRecognized":
+		"ไม่รู้จักไฟล์นี้: ต้องเป็นสไตล์ที่สร้างจากปุ่ม Copy ของ Callout Manager หรือไฟล์ data.json ของ Callout Manager",
+	"import.err.cmNoEntries": "ไม่พบ callout ที่กำหนดเองเพื่อนำเข้า",
 	"import.err.cmNoBlocksFound": "ไม่พบสไตล์ Callout Manager ในข้อความที่วาง",
 	"import.err.cmNoColorForNew":
 		'ไม่พบสีที่ใช้งานได้สำหรับ callout ใหม่ "{{value}}" จึงถูกข้ามไป',
+	"import.warn.cmNoColorDefault":
+		"ไม่ได้ตั้งค่าสีไว้ใน Callout Manager จึงใช้สีเทาเริ่มต้น",
+	"import.warn.cmThemeCondition":
+		"สีหรือไอคอนของ callout นี้ตั้งไว้สำหรับธีมเดียวเท่านั้น Callout Studio ไม่รองรับสไตล์แยกตามธีม จึงนำมาใช้กับทุกธีม",
+	"import.warn.cmCustomStyles":
+		"callout นี้มี CSS แบบกำหนดเองใน Callout Manager ด้วย สไตล์ดังกล่าวไม่รวมอยู่ในการนำเข้า จึงนำมาเฉพาะไอคอนและสี",
 	"import.err.cmIdConflict":
 		'ID "{{value}}" ถูกใช้เป็น alias โดย callout อื่น ("{{other}}") แล้ว จึงถูกข้ามไป',
 

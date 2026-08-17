@@ -65,65 +65,6 @@
 	padding-bottom: 0;
 }
 
-.callout-studio-settings .cs-subheader-row .cs-refresh-inline-link {
-	appearance: none;
-	height: auto;
-	padding: 0;
-	border: none;
-	background: transparent;
-	box-shadow: none;
-	color: var(--text-muted);
-	font-size: var(--font-smallest);
-	font-weight: 400;
-	line-height: 1;
-	text-decoration: underline;
-	cursor: pointer;
-}
-
-.callout-studio-settings .cs-subheader-row .cs-refresh-inline-link:hover,
-.callout-studio-settings
-	.cs-subheader-row
-	.cs-refresh-inline-link:focus-visible {
-	background: transparent;
-	color: var(--text-normal);
-	box-shadow: none;
-}
-
-/* Empty state — notice + add button stacked */
-.callout-studio-settings .cs-empty-state {
-	display: flex;
-	flex-direction: column;
-	align-items: flex-start;
-	gap: 8px;
-	padding: 12px 0;
-	margin-bottom: 8px;
-}
-
-.callout-studio-settings .cs-empty-state .callout-studio-empty-state {
-	margin: 0;
-}
-
-.callout-studio-settings .callout-studio-toolbar {
-	display: flex;
-	align-items: center;
-	gap: 8px;
-	margin-bottom: 12px;
-}
-
-.callout-studio-toolbar-search {
-	flex: 1;
-	min-width: 0;
-}
-
-.callout-studio-toolbar-search .setting-item {
-	border: none;
-	padding: 0;
-}
-
-.callout-studio-toolbar-search .setting-item-info {
-	display: none;
-}
-
 .callout-studio-settings .cs-settings-neutral-btn {
 	background: var(--background-modifier-form-field);
 	border: 1px solid var(--background-modifier-border);
@@ -148,10 +89,6 @@
 	align-items: center;
 }
 
-.callout-studio-kebab-btn {
-	flex-shrink: 0;
-}
-
 .callout-studio-empty-state {
 	color: var(--text-muted);
 	font-style: italic;
@@ -167,13 +104,18 @@
 	margin-bottom: 24px;
 }
 
+/* The row is a pill on whatever it sits on, and it sits on two different
+   things: the settings tab, where the token is undefined and the fallback keeps
+   `--background-secondary`, and a modal (Commands and shortcuts, the palette
+   list), where on mobile dark `--background-secondary` IS the window and the
+   pills would otherwise vanish. */
 .callout-studio-row {
 	display: flex;
 	align-items: center;
 	gap: 12px;
 	padding: 8px 12px;
 	border-radius: 8px;
-	background: var(--background-secondary);
+	background: var(--cs-surface-raised, var(--background-secondary));
 	transition: background 120ms ease;
 	container-type: inline-size;
 }
@@ -262,27 +204,6 @@
 	flex-shrink: 0;
 }
 
-.callout-studio-color-swatch {
-	position: relative;
-	width: 24px;
-	height: 24px;
-	border-radius: 6px;
-	border: 1px solid var(--background-modifier-border);
-	cursor: default;
-}
-
-.callout-studio-swatch-label {
-	position: absolute;
-	bottom: -1px;
-	right: 1px;
-	font-size: 9px;
-	font-weight: 700;
-	color: rgba(255, 255, 255, 0.9);
-	text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
-	pointer-events: none;
-	line-height: 1;
-}
-
 /* ─── Row Buttons ─────────────────────────────────────────────── */
 
 .callout-studio-row-buttons {
@@ -328,29 +249,32 @@
 
 /* ─── Customize Right-Click Menu Modal ────────────────────────── */
 
-/* Role section headers: clearly a heading, spaced from the list above,
-   left-aligned with the row cards below. */
-.cs-menu-customize .setting-item.setting-item-heading {
-	margin-top: 28px;
-	padding: 0 0 6px 0;
+/* Section heading divider — shared with the Commands and shortcuts modal
+   (`.cs-command-builder`, see the Custom commands section below) so both
+   render identically. Same rule the main settings tab draws between "My
+   callout types" and "Built-in callouts": one symmetric block of space,
+   border, then space again, above the heading text — not an underline
+   below it — and Obsidian's own default heading color, size and weight
+   (no muted, uppercase treatment of its own). */
+.cs-menu-customize .setting-item.setting-item-heading,
+.cs-command-builder .setting-item.setting-item-heading {
+	margin-top: 36px;
+	padding: 36px 0 0 0;
 	border: none;
-	border-bottom: 1px solid var(--background-modifier-border);
+	border-top: 1px solid var(--background-modifier-border);
 	border-radius: 0;
 }
 
-.cs-menu-customize .setting-item.setting-item-heading .setting-item-name {
-	font-size: var(--font-ui-smaller);
-	font-weight: 700;
-	text-transform: uppercase;
-	letter-spacing: 0.06em;
-	color: var(--text-muted);
-}
-
-/* First header sits closer to the intro description. */
-.cs-menu-customize
-	.setting-item-description
-	+ .setting-item.setting-item-heading {
-	margin-top: 18px;
+/* The first heading in each modal sits directly under the intro
+   description, so — like "My callout types" in the main settings tab — it
+   gets no divider line of its own. It still wants clear air above it,
+   though — the paragraph above has no margin of its own, so without this
+   the heading would sit flush against it. */
+.cs-menu-customize .setting-item-description + .setting-item.setting-item-heading,
+.cs-command-builder .setting-item-description + .setting-item.setting-item-heading {
+	margin-top: 24px;
+	padding-top: 0;
+	border-top: none;
 }
 
 .cs-menu-customize-list {
@@ -491,13 +415,21 @@
 	box-shadow: 0 0 0 2px rgba(var(--interactive-accent-rgb), 0.2);
 }
 
+/* A greyed-out control still has to read as a control, which means it has to
+   stay *raised off* the window rather than merging into it. `--background-
+   secondary` is that raised shade only while `--modal-background` is
+   `--background-primary`; on mobile dark the two swap, so this fill landed
+   exactly on the surface behind it and the field read as a hole punched in the
+   modal — with `opacity: 0.5` making the remaining border fainter still. This
+   rule is already scoped to the callout editor, which is a chromed window, so
+   the token is always in scope here and the fallback never fires. */
 .callout-studio-editor
 	.setting-item-control
 	input[type="text"]:not(.cs-tag-input-field):disabled {
 	color: var(--text-faint);
 	opacity: 0.5;
 	cursor: not-allowed;
-	background: var(--background-secondary);
+	background: var(--cs-surface-raised, var(--background-secondary));
 }
 
 /* ─── Live Preview ────────────────────────────────────────────── */
@@ -514,7 +446,7 @@
 	align-items: center;
 	justify-content: space-between;
 	padding: 6px 10px;
-	background: var(--background-secondary);
+	background: var(--cs-surface-raised, var(--background-secondary));
 	font-size: var(--font-ui-smaller);
 	color: var(--text-muted);
 	font-weight: var(--font-semibold);
@@ -772,7 +704,7 @@
 	border: none;
 	border-radius: 50%;
 	background-color: var(--color-red, #e93147);
-	box-shadow: 0 0 0 1.5px var(--background-primary);
+	box-shadow: 0 0 0 1.5px var(--cs-surface, var(--background-primary));
 	color: #fff;
 	cursor: pointer;
 	transition:
@@ -834,7 +766,7 @@
 	button.cs-icon-tile-clear:focus-visible {
 	outline: none;
 	box-shadow:
-		0 0 0 1.5px var(--background-primary),
+		0 0 0 1.5px var(--cs-surface, var(--background-primary)),
 		0 0 0 3.5px var(--background-modifier-border-focus);
 }
 
@@ -1008,10 +940,64 @@ button.callout-studio-icon-picker-loading {
 
 .modal.cs-modal {
 	--cs-modal-inset: var(--size-4-4);
+	/* The window's own paint, for anything inside it that has to read as flush
+	   with it — a fixed band, a panel, a popup, the ring cut out around a badge.
+
+	   It exists because `--background-primary` is NOT that colour on mobile.
+	   Obsidian ties the two together on the desktop (`--modal-background:
+	   var(--background-primary)`) and then breaks the tie twice over: mobile
+	   dark redefines `--color-base-00` to a true `#000` for OLED, and the tablet
+	   moves `--modal-background` off it onto `--background-secondary`. A band
+	   painted `--background-primary` therefore matched the window everywhere it
+	   was ever looked at and came out as a pure-black stripe across an iPad in
+	   dark mode. Following the window instead is right on all three, and is what
+	   the footer below already does.
+
+	   Defined here and nowhere else, so every call site reads it as
+	   `var(--cs-surface, var(--background-primary))`: outside a chromed modal
+	   the property is undefined and the fallback keeps the old behaviour, which
+	   is what the settings tab (painted `--background-primary` by Obsidian
+	   itself) still wants. */
+	--cs-surface: var(--modal-background);
+	/* Its companion: the shade for anything that has to read as RAISED off that
+	   surface — a group box's header strip, a card, a control.
+
+	   The two only ever make sense as a pair, and setting one without the other
+	   is exactly how the group boxes regressed: the body was moved onto
+	   `--cs-surface` while the header stayed pinned to `--background-secondary`,
+	   which on mobile dark IS the window (see the override below), so the strip
+	   disappeared into it. Move one, move the other. */
+	--cs-surface-raised: var(--background-secondary);
 	display: flex;
 	flex-direction: column;
 	padding: 0;
 	overflow: hidden;
+}
+
+/* `--background-secondary` is the raised shade only while `--modal-background`
+   is `--background-primary`. Mobile dark is where that stops being true —
+   `.is-mobile.theme-dark` repoints `--modal-background` ONTO
+   `--background-secondary` (phone and tablet alike), so a band painted with it
+   lands exactly on the surface it is meant to sit above.
+
+   Step off `--cs-surface` rather than naming a replacement colour: that
+   reproduces desktop's own step (#1C1C1C → #282828, +12/255) on whatever the
+   window turns out to be — here #1e1e1e → ≈#292929 — and stays clear of the
+   #333 border, which a stock `--color-base-25` would nearly merge with.
+   `--mono-100` is `white` under `.theme-dark`, which this is scoped to, so the
+   literal fallback is the same colour. Should a theme ever make the whole
+   `color-mix` invalid at computed-value time, the property drops out and every
+   call site's `var(…, var(--background-secondary))` fallback restores today's
+   behaviour.
+
+   Dark only: mobile light keeps `--modal-background` on `--background-primary`
+   and so already matches the desktop exactly. */
+.is-mobile.theme-dark .modal.cs-modal {
+	--cs-surface-raised: color-mix(
+		in srgb,
+		var(--cs-surface) 95%,
+		var(--mono-100, #fff)
+	);
 }
 
 /* The two editors used to be inset by the modal's own 16px PLUS their
@@ -1093,20 +1079,11 @@ button.callout-studio-icon-picker-loading {
 	padding: var(--size-4-4) var(--cs-modal-inset);
 }
 
-/* Two windows never set a title — the generic confirmation and the replace
-   picker. Obsidian hides the empty title itself (`.modal-title:empty`) but not
-   the header around it, which would leave a padded band and a rule under
-   nothing: it reads as a heading that failed to load. Nothing has to be given
-   back to the body, which carries the full inset on all four sides anyway.
-
-   Driven by `.cs-modal-no-title` (set in modalChrome.ts by the two callers
-   that pass `title: false`) rather than `:has(> .modal-title:empty)` — a
-   `:has()` selector forces the browser to re-check this rule against every
-   ancestor whenever any descendant changes, which is needless cost paid on
-   every window when a plain, explicitly-set class says the same thing. */
-.cs-modal.cs-modal-no-title > .modal-header {
-	display: none;
-}
+/* There is no headerless variant. The generic confirmation and the replace
+   picker used to set no title and hide the band with `.cs-modal-no-title`;
+   both now name themselves, so every window wearing this chrome has a header.
+   Don't bring the class back — hiding the band is what let an unlabelled
+   window ship unnoticed in the first place. */
 
 /* Only the margin reset survives here. This selector is (0,3,0) and Obsidian's
    own `.modal:not(.mod-settings) .setting-item:not(.setting-item-heading)
@@ -1125,6 +1102,51 @@ button.callout-studio-icon-picker-loading {
    size. */
 .cs-modal .setting-item:not(.setting-item-heading) {
 	align-items: center;
+}
+
+/* ── Rows that keep their control on the label's line ─────────────
+   Obsidian stacks every setting row on the phone — name above, control on a
+   full-width row below:
+
+     .is-phone .setting-item:not(.mod-toggle):not(.setting-item-heading)
+                            :not(.mod-list-item)              (0,4,0)
+     …the same selector, ` .setting-item-control`             (0,5,0)
+
+   which is right for a text field or a dropdown, where the full width IS the
+   point, and wrong for a row whose control is a fixed little box. A 44x32
+   colour swatch or a 44px icon tile parked alone on the line below its label
+   reads as a second, half-empty row — the window grows by a row per control
+   and says nothing more. Obsidian exempts `.mod-toggle` for exactly this
+   reason; this class extends the same exemption to the few rows that earn it.
+
+   Opt-in per row, never blanket: the rows deliberately left stacked (Display
+   name, Callout IDs, palette Name, Background style, the command dropdowns,
+   every button row in the settings tab) hold controls that really do want the
+   width. Grep `cs-row-inline` for the current call sites.
+
+   The class is tripled so this clears both core rules on specificity rather
+   than !important — the house style throughout this file. Phone-only because
+   nothing else stacks these rows in the first place: on desktop and iPad they
+   are already on one line, and the base `.cs-modal .setting-item` rule above
+   is what centres them there. */
+.is-phone .setting-item.cs-row-inline.cs-row-inline.cs-row-inline {
+	flex-direction: row;
+	align-items: center;
+}
+
+/* Undoing the stacked `width: 100%` is not enough on its own: the control
+   column is a growing flex item by default (`.setting-item-control
+   { flex: 1 1 auto }`), so it would still stretch to the row's full width and
+   push a 44px swatch to the far edge with the label crushed beside it.
+   Shrink-wrapping it is what hands the leftover space back to the name, which
+   is the half that can use it — an icon row's description is the icon's full
+   name, and it wraps. */
+.is-phone
+	.setting-item.cs-row-inline.cs-row-inline.cs-row-inline
+	.setting-item-control {
+	margin-top: 0;
+	width: auto;
+	flex: 0 0 auto;
 }
 
 /* ── Footer ───────────────────────────────────────────────────────
@@ -1150,6 +1172,67 @@ button.callout-studio-icon-picker-loading {
 .cs-modal > .cs-modal-footer button.cs-btn-disabled {
 	opacity: 0.4;
 	cursor: not-allowed;
+}
+
+/* ── Stacked windows on mobile ────────────────────────────────────
+   Opening a window on top of another one darkens everything behind the front
+   one — on desktop. On iPhone and iPad it doesn't, and the layer underneath is
+   plainly exposed (a picker sitting over the callout editor leaves the editor's
+   header above it and its button bar below), so there is nothing covering it:
+   Obsidian's backdrop just never paints. `Modal.open()` splits by platform —
+
+       Platform.isPhone ? this.animateOpen()
+                        : bgEl.style.opacity = dimBackground ? this.bgOpacity : "0"
+
+   so off the phone the opacity is set synchronously and unconditionally, while
+   on the phone it is only ever reached as the END STATE of the slide-up
+   animation, which `animateOpen()` skips outright when `shouldAnimate` is false.
+   The dim is a side effect of an animation there rather than a property of the
+   window, which is how it comes to be missing.
+
+   So this paints its own, on the container `applyModalChrome()` marks.
+
+   A pseudo-element rather than a `.modal-bg` override, and that is the point:
+   Obsidian drives that element's opacity from JS, so a rule there either loses
+   to the inline style or needs `!important` — and `!important` would also pin
+   the CLOSING fade, which animates the same property back to 0. A layer of our
+   own is purely additive, can't be overwritten, and leaves the animation alone;
+   if Obsidian ever fixes its mobile path the two simply composite.
+
+   `pointer-events: none` keeps tap-outside-to-close working — that listener
+   lives on `.modal-bg`, underneath. Layering needs no z-index: this and
+   `.modal-bg` are both `position: absolute; z-index: auto` and composite in DOM
+   order, and `.modal` is a later `position: relative` sibling so it stays on
+   top. `.modal-container` is itself positioned, so `inset: 0` covers the window;
+   being out of flow also keeps this from becoming a flex item in it.
+
+   The light colour is not picked by eye. It is desktop's own
+   `--background-modifier-cover` (`rgba(220,220,220,0.4)`) with `Modal.bgOpacity`
+   (0.85) folded into the alpha, so one stacked window lands on exactly the
+   shade desktop produces and three compound the same way. Deliberately NOT
+   `var(--background-modifier-cover)`: `.is-mobile` redefines that to
+   `rgba(0,0,0,0.25)` / `rgba(0,0,0,0.5)` for the sidebar drawer backdrop, a
+   heavier look than the dialog dim being matched here. The dark variant starts
+   from the same desktop base (`rgba(10,10,10,0.4)`) but its alpha is bumped
+   past the 0.34 the same fold would give it — on a dark theme the exact-match
+   shade read as too faint to tell a stacked window apart from a single one.
+
+   `WelcomeModal` opts out of the chrome entirely, so it is never marked and
+   never dims — it is a splash, and that is consistent with the rest of it. */
+.is-mobile .cs-modal-container.cs-modal-stacked {
+	--cs-stacked-cover: rgba(220, 220, 220, 0.34);
+}
+
+.is-mobile.theme-dark .cs-modal-container.cs-modal-stacked {
+	--cs-stacked-cover: rgba(10, 10, 10, 0.55);
+}
+
+.is-mobile .cs-modal-container.cs-modal-stacked::before {
+	content: "";
+	position: absolute;
+	inset: 0;
+	background-color: var(--cs-stacked-cover);
+	pointer-events: none;
 }
 
 /* ─── Callout / palette editor window size ────────────────────── */
@@ -1212,15 +1295,18 @@ button.callout-studio-icon-picker-loading {
 	/* Allow palette/fold popups to overflow outside the section while
 	   keeping the inner header's background clipped via its own radius. */
 	overflow: visible;
-	background: var(--background-primary);
+	background: var(--cs-surface, var(--background-primary));
 }
 
+/* The strip must stay a step off `.callout-studio-adjust-section`'s own paint
+   above — hence the raised token rather than `--background-secondary`, which is
+   the window itself on mobile dark. */
 .callout-studio-adjust-header {
 	font-size: var(--font-ui-smaller);
 	font-weight: var(--font-semibold);
 	color: var(--text-muted);
 	padding: 6px 10px;
-	background: var(--background-secondary);
+	background: var(--cs-surface-raised, var(--background-secondary));
 	border-radius: 7px 7px 0 0;
 }
 
@@ -1331,11 +1417,6 @@ button.callout-studio-icon-picker-loading {
 	font-size: var(--font-ui-smaller);
 }
 
-.callout-studio-icon-transformed {
-	transform: var(--cs-icon-transform);
-	transform-origin: center;
-}
-
 /* ─── Color Palette Presets ───────────────────────────────────── */
 
 .cs-palette-dropdown {
@@ -1392,7 +1473,7 @@ button.callout-studio-icon-picker-loading {
 	padding: 6px 8px;
 	border-radius: var(--radius-s);
 	border: 1px solid var(--background-modifier-border);
-	background-color: var(--background-secondary);
+	background-color: var(--cs-surface-raised, var(--background-secondary));
 	color: var(--text-normal);
 	font-size: var(--font-ui-small);
 	cursor: pointer;
@@ -1459,7 +1540,7 @@ button.callout-studio-icon-picker-loading {
 	padding: 6px 0;
 	border-radius: var(--radius-s);
 	border: 1px solid var(--background-modifier-border);
-	background-color: var(--background-primary);
+	background-color: var(--cs-surface, var(--background-primary));
 	box-shadow:
 		0 8px 18px rgba(0, 0, 0, 0.22),
 		0 2px 6px rgba(0, 0, 0, 0.18);
@@ -1559,7 +1640,17 @@ button.callout-studio-icon-picker-loading {
 	/* Visible border: the right circle shows the callout BACKGROUND color,
 	   which is pale and would otherwise vanish against the panel. */
 	border: 1px solid var(--background-modifier-border);
-	box-shadow: 0 0 0 1.5px var(--background-primary);
+	/* The ring is a cut-out, not a colour: it repaints the surface behind the
+	   circle so the one in front reads as separated from the one behind it. So
+	   it has to be whatever that surface actually is. This widget renders in the
+	   settings tab (rows, custom palettes) AND inside the callout editor — its
+	   trigger swatch and every palette-menu item — and its selector cannot say
+	   which. `--cs-surface` answers both: undefined outside a window, so the
+	   fallback keeps the settings tab exactly as it was, and the window's own
+	   background inside one. Painting `--background-primary` raw drew a pure
+	   black halo on mobile dark, where that variable is `#000` for OLED and the
+	   modal is not. */
+	box-shadow: 0 0 0 1.5px var(--cs-surface, var(--background-primary));
 	box-sizing: border-box;
 	position: relative;
 }
@@ -1588,60 +1679,38 @@ button.callout-studio-icon-picker-loading {
    standard transparency checkerboard, because an empty circle at 16px is
    indistinguishable from a swatch that failed to render.
 
-   Both tones are derived from the page itself, so one rule reads correctly on a
-   light and a dark theme — white-on-grey where the page is white, and two quiet
-   darks where it is dark (a fixed white checker would glow on a dark page). The
-   mix, rather than --background-modifier-border, guarantees the squares stay
-   apart in themes that make that variable nearly invisible.
+   Both tones are derived from the surface the swatch is drawn on, so one rule
+   reads correctly on a light and a dark theme — white-on-grey where that
+   surface is white, and two quiet darks where it is dark (a fixed white checker
+   would glow on a dark page). The mix, rather than --background-modifier-border,
+   guarantees the squares stay apart in themes that make that variable nearly
+   invisible.
+
+   `--cs-surface` rather than `--background-primary`, and for the same reason as
+   the ring above: this widget is drawn both in the settings tab and inside the
+   callout editor. On mobile dark the raw variable is a true `#000` while the
+   modal is not, so "empty" came out as a black square on the window instead of
+   as a checkerboard — the one thing the pattern exists to avoid being confused
+   with is a swatch that failed to render.
 
    Tile size is half the circle so each square is a quarter of it: the accent
    circle in front covers ~40%, leaving roughly a 10px crescent to read in, and
    anything finer than ~4px turns to mush at this scale. */
 .cs-color-circle.is-transparent {
 	background-image: repeating-conic-gradient(
-		color-mix(in srgb, var(--text-normal) 22%, var(--background-primary)) 0%
-			25%,
-		var(--background-primary) 0% 50%
+		color-mix(
+				in srgb,
+				var(--text-normal) 22%,
+				var(--cs-surface, var(--background-primary))
+			)
+			0% 25%,
+		var(--cs-surface, var(--background-primary)) 0% 50%
 	);
 	background-size: calc(var(--cs-circle-size) / 2)
 		calc(var(--cs-circle-size) / 2);
 }
 
 /* ─── Compact Color Grid ──────────────────────────────────────── */
-
-.callout-studio-color-grid {
-	padding: 6px 10px 8px;
-}
-
-.callout-studio-color-grid-header {
-	display: grid;
-	grid-template-columns: repeat(3, minmax(0, 1fr));
-	gap: 2px;
-	font-size: 10px;
-	color: var(--text-faint);
-	text-align: center;
-	margin-bottom: 4px;
-}
-
-.callout-studio-color-grid-header span:first-child {
-	text-align: center;
-}
-
-.callout-studio-color-row {
-	display: grid;
-	grid-template-columns: repeat(3, minmax(0, 1fr));
-	gap: 2px;
-	align-items: center;
-	padding: 2px 0;
-}
-
-.callout-studio-color-row > span {
-	font-size: var(--font-ui-smaller);
-	color: var(--text-muted);
-	text-align: center;
-	justify-self: center;
-	width: 100%;
-}
 
 /* The visible swatch is this wrapper's background-color — a box we fully
    control, so it renders identically on desktop, iPhone and tablets and can
@@ -1832,7 +1901,7 @@ button.callout-studio-icon-picker-loading {
 	border-bottom: 1px solid var(--background-modifier-border);
 	padding: 10px var(--cs-modal-inset);
 	flex-shrink: 0;
-	background: var(--background-primary);
+	background: var(--cs-surface, var(--background-primary));
 }
 
 .icon-picker-source-label {
@@ -1905,7 +1974,7 @@ button.callout-studio-icon-picker-loading {
 	padding: 6px 0;
 	border-radius: var(--radius-s);
 	border: 1px solid var(--background-modifier-border);
-	background-color: var(--background-primary);
+	background-color: var(--cs-surface, var(--background-primary));
 	box-shadow:
 		0 8px 18px rgba(0, 0, 0, 0.22),
 		0 2px 6px rgba(0, 0, 0, 0.18);
@@ -2078,25 +2147,11 @@ button.callout-studio-icon-picker-loading {
 	padding: 0 var(--cs-modal-inset) 12px;
 }
 
-.icon-picker-search {
-	position: sticky;
-	top: 0;
-	z-index: 1;
-	background: var(--background-primary);
-	padding: 12px 0;
-	margin-bottom: 0;
-}
-
-.icon-picker-search input {
-	width: 100%;
-	padding: 6px 10px;
-}
-
 .icon-picker-toolbar {
 	position: sticky;
 	top: 0;
 	z-index: 1;
-	background: var(--background-primary);
+	background: var(--cs-surface, var(--background-primary));
 	display: flex;
 	gap: 8px;
 	padding: 12px 0;
@@ -2483,16 +2538,12 @@ button.callout-studio-icon-picker-loading {
 /* ─── Accessibility & Mobile ─────────────────────────────────── */
 
 /* Focus-visible for all interactive elements */
-.callout-studio-settings .callout-studio-actions button:focus-visible,
 .callout-studio-row-buttons button:focus-visible,
-.cs-modal-footer button:focus-visible,
-.callout-studio-preview-toggle:focus-visible,
-.icon-picker-tab:focus-visible {
+.cs-modal-footer button:focus-visible {
 	outline: 2px solid var(--text-accent);
 	outline-offset: -2px;
 }
 
-.icon-picker-search input:focus-visible,
 .icon-picker-toolbar input:focus-visible,
 .icon-picker-toolbar select:focus-visible {
 	outline: 2px solid var(--text-accent);
@@ -2500,15 +2551,9 @@ button.callout-studio-icon-picker-loading {
 }
 
 /* Minimum 32px touch targets */
-.icon-picker-search input,
 .icon-picker-toolbar input,
 .icon-picker-toolbar select {
 	min-height: 32px;
-}
-
-.callout-studio-preview-toggle {
-	min-height: 32px;
-	min-width: 32px;
 }
 
 /* ─── Tag Input (Aliases) ─────────────────────────────────────── */
@@ -2611,11 +2656,18 @@ input.cs-input-invalid:focus {
 	box-shadow: 0 0 0 2px rgba(var(--interactive-accent-rgb), 0.2);
 }
 
+/* The same raised shade as the display-name field above it, for the same
+   reason: the two sit one on top of the other in the callout editor and were
+   deliberately styled to match, so a fix to one that skipped the other would
+   split them apart on exactly the platform the fix is for. The only host of a
+   `.cs-tag-input-row` is that editor (src/ui/TagInput.ts), which is a chromed
+   window — but the fallback stays, because it is what makes the token safe to
+   name from a rule whose selector does not say so. */
 .cs-tag-input-row > .cs-tag-input-field:disabled {
 	color: var(--text-faint);
 	opacity: 0.5;
 	cursor: not-allowed;
-	background: var(--background-secondary);
+	background: var(--cs-surface-raised, var(--background-secondary));
 }
 
 .cs-tag-input-row > .cs-tag-input-field::placeholder {
@@ -2805,9 +2857,6 @@ input.cs-input-invalid:focus {
 	.callout-studio-row-colors {
 		display: none;
 	}
-	.callout-studio-reset-btn {
-		display: none;
-	}
 }
 
 /*
@@ -2829,96 +2878,6 @@ input.cs-input-invalid:focus {
 	}
 }
 
-/* ─── Disabled Reset Button ───────────────────────────────────── */
-
-.callout-studio-btn-disabled {
-	opacity: 0.25;
-	cursor: default;
-	pointer-events: none;
-	color: var(--background-modifier-border);
-	filter: grayscale(1) brightness(0.6);
-}
-
-/* ─── Global Callout Style Section ────────────────────────────── */
-
-.cs-global-preview-label {
-	font-size: var(--font-ui-smaller);
-	font-weight: var(--font-semibold);
-	color: var(--text-muted);
-	text-transform: uppercase;
-	letter-spacing: 0.5px;
-	margin-bottom: 8px;
-}
-
-.cs-global-preview-card {
-	padding: 0;
-}
-
-.cs-global-preview-body {
-	min-width: 0;
-}
-
-/* Preview callout mock — neutral gray */
-.cs-global-preview-callout {
-	--cs-color-rgb: 158, 158, 158;
-	background: rgba(var(--cs-color-rgb), 0.1);
-	padding: 0;
-	margin: 0;
-	overflow: hidden;
-	border-radius: var(--cs-preview-radius, 4px);
-	border: var(--cs-preview-border, none);
-	border-top: var(--cs-preview-border-top, none);
-	border-right: var(--cs-preview-border-right, none);
-	border-bottom: var(--cs-preview-border-bottom, none);
-	border-left: var(--cs-preview-border-left, none);
-}
-
-.cs-global-preview-callout > .callout-title {
-	display: flex;
-	align-items: center;
-	gap: 8px;
-	padding: 8px 12px;
-	font-weight: var(--font-semibold);
-	color: rgb(var(--cs-color-rgb));
-}
-
-.cs-global-preview-callout > .callout-title > .callout-icon {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	flex-shrink: 0;
-	color: rgb(var(--cs-color-rgb));
-}
-
-.cs-global-preview-callout > .callout-title > .callout-icon svg {
-	width: 18px;
-	height: 18px;
-}
-
-.cs-global-preview-callout > .callout-title > .callout-title-inner {
-	font-size: var(--cs-preview-title-size, 1em);
-}
-
-.callout.cs-global-preview-callout > .callout-content {
-	padding: 0 12px 10px;
-	padding-inline-start: var(--cs-preview-content-indent, 12px);
-	color: var(--text-normal);
-	line-height: 1.5;
-	font-size: var(--cs-preview-content-size, 1em);
-}
-
-/* Square icon placeholder for the locked preview */
-.cs-global-preview-callout .cs-preview-square-icon {
-	width: 14px;
-	height: 14px;
-	border-radius: 2px;
-	background: rgb(var(--cs-color-rgb));
-}
-
-.cs-global-preview-callout > .callout-content p {
-	margin: 0;
-}
-
 /* ─── Settings group (sub-sections) ───────────────────────────── */
 
 .cs-settings-group {
@@ -2927,15 +2886,17 @@ input.cs-input-invalid:focus {
 	padding: 0;
 	margin-bottom: 0;
 	overflow: visible;
-	background: var(--background-primary);
+	background: var(--cs-surface, var(--background-primary));
 }
 
+/* `createControlGroup()` hangs BOTH class pairs on the same two elements, so
+   this and `.callout-studio-adjust-header` above have to move together. */
 .cs-settings-group-header {
 	font-size: var(--font-ui-smaller);
 	font-weight: var(--font-semibold);
 	color: var(--text-muted);
 	padding: 6px 10px;
-	background: var(--background-secondary);
+	background: var(--cs-surface-raised, var(--background-secondary));
 	border-radius: 7px 7px 0 0;
 	margin-bottom: 0;
 }
@@ -3031,6 +2992,18 @@ input.cs-input-invalid:focus {
 		.callout-studio-preview-panel {
 		grid-template-columns: 1fr;
 	}
+	/* …and once stacked, put the options back on top. Its preview column comes
+	   FIRST in the DOM (that is what puts it on the left on a wide window), so
+	   the stack would otherwise open on a preview card up to 340px tall with
+	   every control pushed below the fold. `order` is all it takes — these are
+	   grid items. The callout editor needs no counterpart: its DOM order is
+	   preview-first too, but it stacks under a form that already fills the top
+	   of the window. */
+	.callout-studio-editor-modal
+		.callout-studio-palette-editor
+		.callout-studio-preview-col {
+		order: 2;
+	}
 	/* Same fix for the per-role "Global callout style" popups (opened from the
 	   3 "Customize" buttons in Global settings): their own unscoped override
 	   below (`.cs-role-style-modal .callout-studio-preview-panel`, 2 classes,
@@ -3048,16 +3021,6 @@ input.cs-input-invalid:focus {
 
 	/* Roomier color grid on narrow screens so native color swatches
 	   (iOS renders them as large circles) don't visually overlap. */
-	.callout-studio-color-grid {
-		padding: 8px 12px 12px;
-	}
-	.callout-studio-color-row {
-		padding: 8px 0;
-		min-height: 44px;
-	}
-	.callout-studio-color-row + .callout-studio-color-row {
-		border-top: 1px solid var(--background-modifier-border);
-	}
 	.callout-studio-color-input-wrap {
 		width: 44px;
 		height: 32px;
@@ -3125,7 +3088,7 @@ input.cs-input-invalid:focus {
 	right: -8px;
 	display: none;
 	color: var(--text-warning);
-	background: var(--background-primary);
+	background: var(--cs-surface, var(--background-primary));
 	border-radius: 50%;
 	line-height: 0;
 	padding: 1px;
@@ -3162,11 +3125,144 @@ input.cs-input-invalid:focus {
 	height: 14px;
 }
 
-/* Saved palettes list (settings section) */
+/* ─── Custom commands ─────────────────────────────────────────────────── */
+
+/* A little wider than a stock dialog (560px). A command row carries a long
+   generated name — "Insert H3 Abstract heading callout" — plus a shortcut chip
+   and two buttons, and at the default width the name was truncating with room
+   to spare on either side of it. Hung on `modalEl`, since `--dialog-width` is
+   read by `.modal` itself. */
+.modal.cs-command-builder {
+	--dialog-width: 620px;
+}
+
+/* Both lists, at the callout list's own 2px rhythm
+   (.callout-studio-callout-list) — these are the same row, so they get the
+   same spacing rather than a second, looser one. margin-top matches
+   .cs-menu-customize-list, so the gap from heading to list is the same in
+   both modals too. */
+.cs-command-list,
+.cs-command-fixed-list {
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+	margin-top: 8px;
+	margin-bottom: 12px;
+}
+
+/* Section heading divider is defined once, shared with the Customize
+   right-click menu modal — see ".cs-menu-customize .setting-item.setting-item-heading"
+   in the Customize Right-Click Menu Modal section above. */
+
+/* Command names run long, so the row text truncates rather than pushing the
+   chip and buttons off a narrow window. The shared 22ch cap is dropped: it is
+   measured for a callout's display name and would clip these long before the
+   row itself runs out of room. */
+.cs-command-row .callout-studio-row-name {
+	max-width: none;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+/* The five fixed commands wear the same row, minus the icon column — there is
+   no callout behind a built-in command, so the name starts at the row's own
+   padding instead. */
+.cs-command-fixed-row .callout-studio-row-info {
+	flex: 1;
+	min-width: 0;
+}
+
+/* Without an icon column, a fixed row's height is only text plus the row's
+   own padding — visibly shorter than a custom command's row next to it.
+   48px matches that row's real height (the 32px icon column plus 8px of
+   padding top and bottom), so the two lists line up. */
+.cs-command-fixed-row {
+	min-height: 48px;
+}
+
+/* Turned off: the row stays exactly where it was — this is a fixed set of
+   five the user is choosing among, not a list they're pruning — and fades
+   rather than disappears, since its shortcut is still worth reading in case
+   it comes back on. */
+.cs-command-fixed-row.is-disabled {
+	opacity: 0.55;
+}
+
+.cs-command-row-toggle {
+	display: flex;
+	align-items: center;
+	flex-shrink: 0;
+}
+
+/* The name and its shortcut pills share the callout list's own name line, which
+   already wraps — so a command bound to several shortcuts breaks onto a second
+   line instead of pushing the buttons off the end. `flex` + `min-width` because
+   .callout-studio-row-info is itself a flex row: without them the line will not
+   shrink, and the name's ellipsis (above) never gets the chance to fire. */
+.cs-command-row .callout-studio-row-name-line {
+	flex: 1;
+	min-width: 0;
+}
+
+/* The shortcut pill itself is defined with .cs-fallback-tag — see "name +
+   fallback tag" further down; they are one design on purpose. */
+
+/* A switched-off fixed command's shortcut button: nowhere left for a click to
+   lead while nothing is registered, so it neither hovers nor invites one. The
+   row is already faded by .cs-command-fixed-row.is-disabled, so nothing here
+   dims it a second time. */
+.cs-command-row .callout-studio-row-buttons button:disabled {
+	cursor: default;
+	pointer-events: none;
+}
+
+/* Editor: the generated command name, shown as the user picks. */
+.cs-command-preview {
+	margin-top: 16px;
+	padding: 10px 12px;
+	border: 1px solid var(--background-modifier-border);
+	border-radius: var(--radius-s);
+	background: var(--cs-surface-raised, var(--background-secondary));
+}
+
+.cs-command-preview-label {
+	font-size: var(--font-ui-smaller);
+	color: var(--text-muted);
+	margin-bottom: 2px;
+}
+
+.cs-command-preview-name {
+	font-size: var(--font-ui-small);
+	color: var(--text-normal);
+}
+
+/* Same show/hide shape as .cs-tag-error, in the warning colour: an off render
+   role is worth flagging but does not stop the command being saved. */
+.cs-command-role-notice {
+	color: var(--text-warning);
+	font-size: var(--font-ui-smaller);
+	overflow: hidden;
+	opacity: 0;
+	max-height: 0;
+	transition:
+		opacity 0.3s ease,
+		max-height 0.3s ease;
+}
+
+.cs-command-role-notice.is-visible {
+	opacity: 1;
+	max-height: 4em;
+	margin-top: 4px;
+}
+
+/* Saved palettes list (settings section). Its rows are .callout-studio-rows,
+   so they sit on the same 2px rhythm as the callout list above them rather
+   than on a looser one of their own. */
 .cs-palette-list {
 	display: flex;
 	flex-direction: column;
-	gap: 6px;
+	gap: 2px;
 	margin-bottom: 12px;
 }
 
@@ -3188,11 +3284,13 @@ input.cs-input-invalid:focus {
 	display: flex;
 }
 
-/* Palette editor modal — two-column body: options (left, narrow) + sticky
-   preview (right, flexible). Columns follow DOM order, so only the widths
-   need overriding vs. the callout editor's panel. */
+/* Palette editor modal — two-column body: sticky preview (left, flexible) +
+   control cards (right, fixed). Columns follow DOM order, so only the widths
+   need overriding vs. the callout editor's panel. Deliberately the same pair of
+   values as `.cs-role-style-modal` below: the two windows are meant to read as
+   one layout, so they should stay in step. */
 .callout-studio-palette-editor .callout-studio-preview-panel {
-	grid-template-columns: 240px minmax(0, 1fr);
+	grid-template-columns: minmax(0, 1fr) 280px;
 	justify-content: stretch;
 }
 
@@ -3208,11 +3306,12 @@ input.cs-input-invalid:focus {
 }
 
 /* ── Name field + Style dropdown: one shared width ───────────────
-   The column above is 240px, and these are the only two rows in it whose
-   control is a box with an edge of its own (everything below is a colour
-   swatch, a slider or a toggle). Left alone they size to their content — the
-   text input to its browser default, the select to its longest option — so the
-   two boxes stacked directly on top of each other ended on different edges.
+   These two share the "Palette" card, and they are the only rows in the column
+   whose control is a box with an edge of its own (everything in the Colors card
+   below is a colour swatch, a slider or a toggle). Left alone they size to their
+   content — the text input to its browser default, the select to its longest
+   option — so the two boxes stacked directly on top of each other ended on
+   different edges.
 
    One variable rather than a number on each rule, mirroring
    `--cs-editor-control-width` in the callout editor: the phone case is then a
@@ -3220,9 +3319,9 @@ input.cs-input-invalid:focus {
    Obsidian's `.setting-item-control` is a growing flex item and would otherwise
    ignore the width and fill the row.
 
-   The value leaves ~100px for the name column beside it, which every label
-   here fits on one line — including the longest translations of "Name" and
-   "Style". */
+   The value leaves ~110px for the name column beside it (280px of column, less
+   the card's border and its 14px side padding), which every label here fits on
+   one line — including the longest translations of "Name" and "Style". */
 .callout-studio-palette-editor {
 	--cs-palette-control-width: 140px;
 }
@@ -3258,113 +3357,67 @@ input.cs-input-invalid:focus {
 	min-width: 0;
 }
 
-/* ── Option-column row rhythm ────────────────────────────────────
-   Obsidian 1.13 gives every modal setting row its own hairline plus 16px of air
-   on each side of it, so consecutive rows are symmetric on their own:
+/* ── Card row separators ─────────────────────────────────────────
+   This column holds two `cs-layout-group` cards (see createControlGroup), and
+   that modifier strips every row's chrome — including the border Obsidian draws
+   between consecutive modal rows — so a card of 3-5 rows would run together as
+   one block. Put a hairline back between siblings.
 
-     .modal:not(.mod-settings) .setting-item:not(.setting-item-heading)
-       :where(:not(.setting-group *)) { padding: var(--size-4-4) 0;
-                                        border-top: var(--border-width) … }
-     …:first-child { border-top: none; padding-top: 0 }      (0,5,0)
-     …:last-child  { padding-bottom: 0 }                     (0,5,0)
+   A universal sibling selector rather than `.setting-item + .setting-item`
+   because the Intensity row is a .callout-studio-slider-row div, not a Setting,
+   and it needs the same line above and below it as every other row. The
+   `:not()` excludes the card's own header band — it is child #1, so the first
+   row would otherwise take a hairline directly under it, which none of the
+   cards in the per-role style popups draw.
 
-   Two things pulled this column off that grid; both are undone below.
+   The class is doubled so this outweighs the `border: none` it has to beat,
+   which lives on `.modal .cs-settings-group.cs-layout-group > .setting-item:not(…)`
+   at (0,5,0) — the house style throughout this file, in preference to
+   !important.
 
-   1. The shared .callout-studio-adjust-col carries `gap: 8px`, which is right
-      where that column holds .callout-studio-adjust-section cards (the callout
-      editor, the per-role style popups) and wrong here, where it holds bare
-      setting rows: the gap lands BELOW a row's 16px bottom padding but ABOVE the
-      next row's border, so every line sat 24px under one row and 16px over the
-      next — most obvious on a short row like Direction. The rows already carry
-      their own spacing, so the gap goes rather than gets halved.
-
-   2. :first-child / :last-child are structural, not visual, so the
-      .cs-palette-color-section wrapper re-triggers both edge rules INSIDE
-      itself. In the simple view that wrapper holds exactly one row — Base color
-      — which therefore matched both and came out with no vertical padding at
-      all: visibly shorter than Second color, with its hint text flush against
-      the line below. In the advanced view the "Colors" header lost its top
-      padding and the Text color row its bottom padding. The column's own last
-      row is caught by the same rule, and that row is the Gradient title text one
-      — hidden in Solid — so the column ended flush in Gradient and 16px lower in
-      Solid.
-
-   Doubling .setting-item takes these to (0,6,0) so they beat the core rules
-   outright rather than on load order, the way the rest of this file does it. No
-   border-top is restored on the wrapper's first row: .cs-palette-divider already
-   draws that line. */
-.callout-studio-palette-editor .callout-studio-adjust-col {
-	gap: 0;
-}
-
-.callout-studio-editor-modal
+   This works only because renderColorSection() REBUILDS the card's rows instead
+   of hiding them: `+` is structural, so a row parked under `display: none`
+   would still count as the previous sibling and hand a stray line to the first
+   row actually on screen. */
+.modal
 	.callout-studio-palette-editor
-	.cs-palette-color-section
-	> .setting-item.setting-item:first-child {
-	padding-top: var(--size-4-4);
+	.cs-settings-group.cs-settings-group.cs-layout-group
+	> :not(.cs-settings-group-header) + * {
+	border-top: var(--border-width) solid var(--background-modifier-border);
 }
 
-.callout-studio-editor-modal
-	.callout-studio-palette-editor
-	.cs-palette-color-section
-	> .setting-item.setting-item:last-child,
-.callout-studio-editor-modal
-	.callout-studio-palette-editor
-	.callout-studio-adjust-col
-	> .setting-item.setting-item:last-child {
-	padding-bottom: var(--size-4-4);
+/* The Intensity row is a .callout-studio-slider-row sharing a card with plain
+   Setting rows, and the two carry different side padding of their own — 10px on
+   the slider row, 14px from the cs-layout-group rule on the Settings — so its
+   label and track sat 4px left of every other label in the card. Only the
+   inline padding is taken over; the vertical rhythm is left exactly as the
+   per-role style popups have it, since that is the look being matched. */
+.callout-studio-palette-editor .callout-studio-slider-row {
+	padding-inline: 14px;
 }
 
-/* "Customize all colors" collapsible card header. The button element keeps
-   the shared adjust-header look; these rules strip Obsidian's default button
-   chrome and add the open/closed chevron. */
-.cs-collapse-header {
-	appearance: none;
-	display: flex;
-	align-items: center;
-	gap: 6px;
-	width: 100%;
-	margin: 0;
-	border: none;
-	box-shadow: none;
-	cursor: pointer;
-	text-align: start;
-}
-
-/* Collapsed: the header IS the whole card, so round all corners. */
-.cs-collapse-header:not(.is-open) {
-	border-radius: 7px;
-}
-
-.cs-collapse-header:hover {
-	color: var(--text-normal);
-}
-
-.cs-collapse-chevron {
-	display: inline-flex;
-	transition: transform 120ms ease;
-}
-
-.cs-collapse-chevron .svg-icon {
-	width: 14px;
-	height: 14px;
-}
-
-.cs-collapse-header.is-open .cs-collapse-chevron {
-	transform: rotate(90deg);
-}
-
-/* Rows/controls shown only while the gradient background is enabled.
-   Both hide utilities below land on a Setting's own .setting-item element,
-   whose `display: flex` is exactly as specific as a single class — so the
-   class is doubled to win on specificity rather than on which stylesheet
-   happens to be loaded last. */
-.cs-gradient-hidden.cs-gradient-hidden {
+/* The advanced grid's "you are editing {mode} colors" line is a Setting with a
+   description but no name. Drop the empty name element so it cannot contribute
+   a stray line box above the sentence. */
+.callout-studio-palette-editor .cs-palette-mode-note .setting-item-name:empty {
 	display: none;
 }
 
-/* Generic row-hide utility (e.g. the Intensity slider while the palette
-   editor's advanced per-color grid is showing) */
+/* The duplicate-colour message sits between the two cards, in a flex column
+   with `gap: 8px`. .cs-tag-error hides itself with opacity + max-height rather
+   than `display`, which keeps it a flex item — and so keeps its share of the
+   gap — leaving 8px of dead air between the cards whenever there is no clash.
+   Taking it out of flow costs the 0.3s fade, which is no loss here: this error
+   appears and disappears under a colour drag, where a fade is the wrong effect
+   anyway. The name error, which lives inside a row's description, keeps it. */
+.callout-studio-palette-editor .cs-palette-color-error:not(.is-visible) {
+	display: none;
+}
+
+/* Generic row-hide utility (e.g. the command editor's role-specific rows). It
+   lands on a Setting's own .setting-item element, whose `display: flex` is
+   exactly as specific as a single class — so the class is doubled to win on
+   specificity rather than on which stylesheet happens to be loaded last. */
 .cs-row-hidden.cs-row-hidden {
 	display: none;
 }
@@ -3417,17 +3470,6 @@ input.cs-input-invalid:focus {
 	font-size: inherit;
 }
 
-/* Fixed divider under the palette editor's Style row, shown regardless of
-   Solid/Gradient. Modals do NOT suppress the setting-item border-top — each row
-   draws its own (see the rhythm block above). The line is needed here because
-   the row below is the first child of the .cs-palette-color-section wrapper and
-   so matches Obsidian's `:first-child { border-top: none }` rule, which is what
-   takes its own line away. Same hairline width as those borders, so the two read
-   as one rule down the column. */
-.cs-palette-divider {
-	border-top: var(--border-width) solid var(--background-modifier-border);
-}
-
 /* linear-gradient direction picker */
 .cs-gradient-dir-row {
 	display: flex;
@@ -3442,7 +3484,7 @@ input.cs-input-invalid:focus {
 	height: 26px;
 	padding: 0;
 	box-shadow: none;
-	background: var(--background-secondary);
+	background: var(--cs-surface-raised, var(--background-secondary));
 	border: 1px solid var(--background-modifier-border);
 	border-radius: var(--radius-s, 4px);
 	color: var(--text-muted);
@@ -3483,7 +3525,7 @@ input.cs-input-invalid:focus {
 	padding: 4px 8px;
 	border-radius: 4px;
 	border: 1px solid var(--background-modifier-border);
-	background: var(--background-secondary);
+	background: var(--cs-surface-raised, var(--background-secondary));
 	color: var(--text-normal);
 	font-size: var(--font-small);
 }
@@ -3495,17 +3537,31 @@ input.cs-input-invalid:focus {
 	gap: 8px;
 	flex-wrap: wrap;
 }
-.cs-fallback-tag {
+/* One pill, two uses: a callout row's tag ("Default", "Default fallback",
+   "External style") and a command's shortcut in the Commands and shortcuts
+   window. The same surface on purpose — both are a fact about the row rather
+   than something to press, and in the command list the button that changes the
+   shortcut sits in the row's button group instead. Hence no hover, no focus and
+   no disabled state anywhere in this rule: there is nothing here to click. */
+.cs-fallback-tag,
+.cs-hotkey-chip {
 	display: inline-flex;
 	align-items: center;
 	height: 18px;
 	padding: 0 8px;
 	border-radius: 9px;
-	background: var(--background-secondary);
+	/* Same fill as the `.callout-studio-row` it sits in — the border is what
+	   draws the pill's edge — so it has to follow the row onto the raised token
+	   or it would come out DARKER than its own row on mobile dark. */
+	background: var(--cs-surface-raised, var(--background-secondary));
 	color: var(--text-faint);
 	font-size: var(--font-smallest, 11px);
 	line-height: 1;
 	border: 1px solid var(--background-modifier-border);
+	/* A chord must not be broken across lines mid-glyph; the line wraps between
+	   whole pills instead. */
+	white-space: nowrap;
+	flex-shrink: 0;
 }
 
 /* Phase 7: delete-without-replace styling */
@@ -3538,7 +3594,7 @@ input.cs-input-invalid:focus {
 	padding: 0.5rem 0.75rem;
 	border: 1px solid var(--background-modifier-border);
 	border-radius: 6px;
-	background: var(--background-secondary);
+	background: var(--cs-surface-raised, var(--background-secondary));
 }
 .callout-studio-import-report
 	.cs-import-report-group
@@ -3625,33 +3681,22 @@ input.cs-input-invalid:focus {
 	color: var(--text-muted);
 }
 
-/* ─── Callout Manager paste modal ─────────────────────────── */
-.callout-studio-cm-import-modal {
-	max-width: 560px;
-}
-.cs-cm-import-instructions {
-	margin-top: 0;
-	color: var(--text-muted);
-}
-.cs-cm-import-textarea {
-	width: 100%;
-	min-height: 220px;
-	font-family: var(--font-monospace);
-	font-size: 0.85em;
-	resize: vertical;
-}
-
-/* ─── Admonition import modal ──────────────────────────────── */
+/* ─── Plugin import modals (Admonition, Callout Manager) ───── */
+/* One widget, two windows: both offer ready-made sources as rows with a paste
+   box underneath, so the rules are shared rather than copied per modal. */
+.callout-studio-cm-import-modal,
 .callout-studio-adm-import-modal {
 	max-width: 560px;
 }
-.cs-adm-import-instructions {
+.cs-import-instructions {
 	margin-top: 0;
 	color: var(--text-muted);
 }
 /* One row per ready-made source (this vault, a file). The paste box below is
-   the fallback, so these read as offers rather than as a list of steps. */
-.cs-adm-import-row {
+   the fallback, so these read as offers rather than as a list of steps.
+   Deliberately unpainted — a border and nothing else — so it needs no
+   --cs-surface / --cs-surface-raised pairing to stay right on mobile dark. */
+.cs-import-row {
 	display: flex;
 	align-items: center;
 	gap: 0.75rem;
@@ -3660,14 +3705,14 @@ input.cs-input-invalid:focus {
 	border: 1px solid var(--background-modifier-border);
 	border-radius: 6px;
 }
-.cs-adm-import-row-icon {
+.cs-import-row-icon {
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	color: var(--text-accent);
 	flex-shrink: 0;
 }
-.cs-adm-import-row-text {
+.cs-import-row-text {
 	display: flex;
 	flex-direction: column;
 	gap: 0.1rem;
@@ -3676,22 +3721,25 @@ input.cs-input-invalid:focus {
 	flex: 1;
 	min-width: 0;
 }
-.cs-adm-import-row-title {
+.cs-import-row-title {
 	font-weight: 600;
 	color: var(--text-normal);
 }
-.cs-adm-import-row-desc {
+.cs-import-row-desc {
 	font-size: 0.85em;
 	color: var(--text-muted);
 }
-.cs-adm-import-row button {
+.cs-import-row button {
 	flex-shrink: 0;
 }
-.cs-adm-import-paste-label {
+.cs-import-paste-label {
 	margin-bottom: 0.35rem;
 	color: var(--text-muted);
 }
-.cs-adm-import-textarea {
+/* 160px, not the 220px the Callout Manager box used while it was the whole
+   window: both modals now carry rows above it, and the taller box pushes the
+   pinned footer off a short window. */
+.cs-import-textarea {
 	width: 100%;
 	min-height: 160px;
 	font-family: var(--font-monospace);
@@ -3715,7 +3763,7 @@ input.cs-input-invalid:focus {
 	padding: 10px 12px;
 	border: 1px solid var(--background-modifier-border);
 	border-radius: 6px;
-	background: var(--background-secondary);
+	background: var(--cs-surface-raised, var(--background-secondary));
 }
 
 .callout-studio-vault-stats .cs-vault-stats-metric-value {
@@ -3736,7 +3784,7 @@ input.cs-input-invalid:focus {
 	overflow-y: auto;
 	border: 1px solid var(--background-modifier-border);
 	border-radius: 6px;
-	background: var(--background-primary);
+	background: var(--cs-surface, var(--background-primary));
 }
 
 .callout-studio-vault-stats .cs-vault-stats-row {
@@ -3754,6 +3802,9 @@ input.cs-input-invalid:focus {
 	border-bottom: none;
 }
 
+/* Opaque on purpose — rows scroll under it — and a step off the list's own
+   `--cs-surface` paint, which is why it takes the raised token rather than
+   `--background-secondary`. */
 .callout-studio-vault-stats .cs-vault-stats-header {
 	position: sticky;
 	top: 0;
@@ -3761,7 +3812,7 @@ input.cs-input-invalid:focus {
 	font-size: var(--font-ui-smaller);
 	font-weight: 700;
 	color: var(--text-muted);
-	background: var(--background-secondary);
+	background: var(--cs-surface-raised, var(--background-secondary));
 }
 
 .callout-studio-vault-stats .cs-vault-stats-type {
@@ -4259,11 +4310,11 @@ input.cs-input-invalid:focus {
    view's RENDERED_HEADING_TOKEN_RE match consumes that separating space when
    stripping the token prefix (calloutPostProcessor.ts), so without this the
    title text would sit glued directly against the icon. Only set when the
-   source really had that space — `[!id]-Title` is glued in both views. */
-   `:not(.cs-token-empty)` because a hidden sibling is still a sibling: a
-   heading callout drawn with no icon leaves a token with nothing in it, and
-   spacing the title away from something that occupies no width would indent it
-   0.35em past the bar's own inset for no visible reason. */
+   source really had that space — `[!id]-Title` is glued in both views. The
+   selector spells out `:not(.cs-token-empty)` because a hidden sibling is still
+   a sibling: a heading callout drawn with no icon leaves a token with nothing
+   in it, and spacing the title away from something that occupies no width would
+   indent it 0.35em past the bar's own inset for no visible reason. */
 .cs-heading-callout:not(.cm-line)
 	.cs-heading-token:not(.cs-token-empty)
 	+ .cs-heading-title-gap {
@@ -4745,6 +4796,15 @@ body.cs-anim-window .cs-heading-callout:not(.cm-line) {
    swatches are omitted entirely (see CalloutRowRenderer). */
 .callout-studio-row.is-external-style {
 	opacity: 0.65;
+}
+
+/* A language the user has picked but that could not be downloaded yet. Styled
+   as a notice rather than an error: the plugin is fully usable in English, and
+   the next launch retries on its own, so this states a fact and offers a retry
+   instead of demanding attention. Only the name is tinted — a fully coloured
+   block would outweigh every real setting around it. */
+.callout-studio-locale-warning .setting-item-name {
+	color: var(--text-warning);
 }
 
 /* Sources the pooled "All sources" list cannot include yet. */

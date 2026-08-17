@@ -117,7 +117,11 @@ export function renderCustomPalettesSection(
 					name: palette.name,
 					count: linked,
 				});
-		const ok = await new ConfirmModal(ctx.app, message).confirm();
+		const ok = await new ConfirmModal(
+			ctx.app,
+			t("confirm.titleDeletePalette"),
+			message,
+		).confirm();
 		if (!ok) return;
 		const list = ctx.plugin.settings.customPalettes;
 		const idx = list.findIndex((p) => p.id === palette.id);

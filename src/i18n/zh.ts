@@ -5,6 +5,11 @@ export const zh: Record<string, string> = {
 	"cmd.calloutWrap": "用 callout 包裹",
 	"cmd.calloutUnwrap": "从 callout 中解包",
 
+	"cmd.customWrapBlock": "用 {{name}} callout 包裹",
+	"cmd.customInsertBlock": "插入 {{name}} callout",
+	"cmd.customInsertHeading": "插入 H{{level}} {{name}} 标题 callout",
+	"cmd.customInsertInline": "插入 {{name}} 行内 callout",
+
 	"autocomplete.createNew": '创建新 callout："{{name}}"',
 
 	"settings.fallbackTag": "默认",
@@ -15,6 +20,8 @@ export const zh: Record<string, string> = {
 	"settings.rescanVaultHintAction": "立即扫描",
 	"settings.rescanComplete": "重新扫描完成：已添加 {{count}} 个新 callout。",
 	"replaceModal.deleteWithoutReplaceSuffix": "（回退到默认值）",
+	"replaceModal.titleDelete": "删除 callout",
+	"replaceModal.titleReplace": "在库中替换",
 
 	"firstRun.title": "在库中查找现有的 callout？",
 	"firstRun.body":
@@ -131,10 +138,48 @@ export const zh: Record<string, string> = {
 	"settings.enableAutocompleteDesc":
 		'在编辑器块引用中输入"[!"时显示建议。从列表中选择 callout 类型以插入完整的 callout 标题。',
 
-	"settings.openHotkeys": "Callout Studio 快捷键",
-	"settings.openHotkeysDesc":
-		"打开 Obsidian 的快捷键设置，在那里您可以为「创建新 callout 类型」、「打开设置」、「从 callout 中解包」和「用 callout 包裹」设置快捷键。默认不分配快捷键。",
-	"settings.openHotkeysButton": "打开快捷键设置",
+	"settings.customCommands": "命令与快捷键",
+	"settings.customCommandsDesc":
+		"查看每个 Callout Studio 命令及其绑定的快捷键，并为您最常用的 callout 创建自己的命令。默认不分配快捷键。",
+	"settings.customCommandsButton": "管理命令",
+
+	"commandBuilder.title": "命令与快捷键",
+	"commandBuilder.desc":
+		"点击「+」按钮以在 Obsidian 的快捷键设置中设置或更改快捷键。",
+	"commandBuilder.builtIn": "内置命令",
+	"commandBuilder.toggleAria": "开启或关闭 {{name}}",
+	"commandBuilder.hotkeyBlank": "空",
+	"commandBuilder.hotkeyAria": "为 {{name}} 设置快捷键",
+	"commandBuilder.yourCommands": "您的命令",
+	"commandBuilder.newCommand": "新建命令",
+	"commandBuilder.empty": "还没有自定义命令。",
+	"commandBuilder.unknownCommand": "此命令",
+	"commandBuilder.editAria": "编辑 {{name}}",
+	"commandBuilder.deleteAria": "删除 {{name}}",
+	"commandBuilder.deleteConfirm":
+		"删除命令 {{name}}？为其分配的快捷键将停止生效。",
+	"commandBuilder.newTitle": "新建命令",
+	"commandBuilder.editTitle": "编辑命令",
+	"commandBuilder.format": "Callout 格式",
+	"commandBuilder.formatDesc": "此命令写入的 callout 类型。",
+	"commandBuilder.formatHeading": "标题",
+	"commandBuilder.formatInline": "行内",
+	"commandBuilder.formatBlock": "块",
+	"commandBuilder.roleDisabled":
+		"此格式已关闭，因此在您重新开启之前，该命令将插入纯文本。",
+	"commandBuilder.callout": "Callout 类型",
+	"commandBuilder.calloutDesc": "此命令插入的 callout。",
+	"commandBuilder.headingLevel": "标题级别",
+	"commandBuilder.headingLevelDesc": "要写入的标题级别。",
+	"commandBuilder.action": "操作",
+	"commandBuilder.actionDesc":
+		"「包裹」将选中内容转换为 callout；「插入」添加一个空 callout。",
+	"commandBuilder.actionWrap": "包裹所选内容",
+	"commandBuilder.actionInsert": "插入新的",
+	"commandBuilder.preview": "命令名称",
+	"commandBuilder.duplicate": "您已经有一个执行完全相同操作的命令。",
+	"commandBuilder.noCallouts": "目前还没有可用于创建命令的 callout 类型。",
+	"commandBuilder.save": "保存",
 
 	"settings.vaultMaintenance": "库洞察与维护",
 	"settings.vaultStats": "Callout 统计",
@@ -150,6 +195,9 @@ export const zh: Record<string, string> = {
 		"此操作将删除所有自定义 callout，重置内置 callout、全局样式、已保存的调色板、右键菜单自定义设置和所有缓存的 Material SVG。此操作无法撤销。确定吗？",
 	"notice.resetAllDone": "所有内容已重置为默认值。",
 
+	"notice.customCommandsRemoved":
+		"已移除 {{count}} 个 callout 类型已不存在的自定义命令。",
+	"notice.customCommandMissingCallout": "该命令的 callout 类型已不存在。",
 	"notice.exported": "Callout 已导出到 callout-studio-export.json",
 	"notice.importedJSON": "已从 JSON 导入 {{count}} 个 callout 类型。",
 	"notice.importedSettings": "已导入插件设置。",
@@ -255,6 +303,7 @@ export const zh: Record<string, string> = {
 
 	// Palette editor modal
 	"palette.newTitle": "新建调色板",
+	"palette.groupPalette": "调色板",
 	"palette.editTitle": "编辑调色板",
 	"palette.name": "名称",
 	"palette.namePlaceholder": "我的调色板",
@@ -571,6 +620,13 @@ export const zh: Record<string, string> = {
 
 	"confirm.ok": "删除",
 	"confirm.cancel": "取消",
+	// Headings for each confirmation — every window carries one, so each
+	// caller of ConfirmModal names what it is about to do.
+	"confirm.titleDeleteCommand": "删除命令",
+	"confirm.titleResetAll": "重置所有 callout",
+	"confirm.titleResetCallout": "重置 callout",
+	"confirm.titleDeletePalette": "删除调色板",
+	"confirm.titleDeleteImage": "删除图片",
 
 	"vault.filesUpdated": "已更新库文件中的 {{count}} 个 callout 引用。",
 	"vault.idsUpdated":
@@ -684,29 +740,43 @@ export const zh: Record<string, string> = {
 	"import.warn.iconNameUnknown":
 		'"{{value}}" 图标在 {{type}} 中不存在，因此使用了默认图标。',
 	"import.warn.cmIconUnknownNew":
-		'"{{value}}" 图标在 Obsidian 中不存在，因此使用了默认图标。',
+		'"{{value}}" 图标在此 vault 中不可用，因此使用了默认图标。',
 	"import.warn.cmIconUnknownExisting":
-		'"{{value}}" 图标在 Obsidian 中不存在，因此 "{{id}}" 保留了它原有的图标。',
+		'"{{value}}" 图标在此 vault 中不可用，因此 "{{id}}" 保留了它原有的图标。',
 	"import.chooseSource": "从以下位置导入",
 	"import.sourceStudio": "Callout Studio",
 	"import.sourceStudioDesc": "加载从 Callout Studio 导出的 .json 文件。",
 	"import.sourceCalloutManager": "Callout Manager",
 	"import.sourceCalloutManagerDesc":
-		"粘贴您从 Callout Manager 的 Copy 按钮复制的样式。",
+		"从 Callout Manager 插件导入您自定义的 callout。",
 	"import.sourceAdmonition": "Admonition",
 	"import.sourceAdmonitionDesc":
 		"从 Admonition 插件中导入您的自定义 admonition。",
 	"import.cmTitle": "从 Callout Manager 导入",
 	"import.cmInstructions":
-		"在 Callout Manager 中，使用其 Copy 按钮复制您自定义的 callout 样式，然后将其粘贴到下方。",
-	"import.cmPlaceholder": "在此粘贴复制的样式…",
+		"每个自定义 callout 都会连同其图标和颜色一起导入。分主题样式和自定义 CSS 在此没有对应项，不会被导入。",
+	"import.cmFromVault": "此 vault",
+	"import.cmVaultChecking": "正在查找 Callout Manager 插件…",
+	"import.cmVaultFound": "找到 {{count}} 个自定义 callout。",
+	"import.cmVaultNotFound": "在此 vault 中未找到任何自定义 callout。",
+	"import.cmPasteLabel": "或将 Callout Manager 复制的样式粘贴到此处：",
+	"import.cmPlaceholder": "在此粘贴复制的样式，或一个 data.json 文件…",
 	"import.cmBtnCancel": "取消",
 	"import.cmBtnImport": "导入",
 	"import.err.cmNoBlocksFound": "在粘贴的文本中未找到 Callout Manager 样式。",
+	"import.err.cmNotRecognized":
+		"无法识别的文件：应为 Callout Manager 的 Copy 按钮生成的样式，或一个 Callout Manager 的 data.json 文件。",
+	"import.err.cmNoEntries": "未找到可导入的自定义 callout。",
 	"import.err.cmNoColorForNew":
 		'未找到适用于新 callout "{{value}}" 的可用颜色；已跳过。',
 	"import.err.cmIdConflict":
 		'ID "{{value}}" 已被另一个 callout ("{{other}}") 用作别名，已跳过。',
+	"import.warn.cmNoColorDefault":
+		"Callout Manager 中未设置颜色，因此使用了默认的灰色。",
+	"import.warn.cmThemeCondition":
+		"此 callout 的颜色或图标仅针对一个主题设置。Callout Studio 没有分主题样式，因此已将其应用于所有主题。",
+	"import.warn.cmCustomStyles":
+		"此 callout 在 Callout Manager 中还有自定义 CSS。该样式不在导入范围内，因此仅导入了图标和颜色。",
 
 	// Import — Admonition
 	"import.admTitle": "从 Admonition 导入",

@@ -5,6 +5,11 @@ export const ja: Record<string, string> = {
 	"cmd.calloutWrap": "calloutで囲む",
 	"cmd.calloutUnwrap": "calloutを解除",
 
+	"cmd.customWrapBlock": "{{name}}calloutで囲む",
+	"cmd.customInsertBlock": "{{name}}calloutを挿入",
+	"cmd.customInsertHeading": "H{{level}} {{name}}見出しcalloutを挿入",
+	"cmd.customInsertInline": "{{name}}インラインcalloutを挿入",
+
 	"autocomplete.createNew": '新しいcalloutを作成: "{{name}}"',
 
 	"settings.fallbackTag": "デフォルト",
@@ -16,6 +21,8 @@ export const ja: Record<string, string> = {
 	"settings.rescanComplete":
 		"再スキャン完了: {{count}}件の新しいcalloutを追加しました。",
 	"replaceModal.deleteWithoutReplaceSuffix": "（デフォルトにフォールバック）",
+	"replaceModal.titleDelete": "calloutを削除",
+	"replaceModal.titleReplace": "vaultで置き換え",
 
 	"firstRun.title": "vault内の既存のcalloutを検索しますか？",
 	"firstRun.body":
@@ -134,10 +141,50 @@ export const ja: Record<string, string> = {
 	"settings.enableAutocompleteDesc":
 		'エディターの引用ブロック内で"[!"と入力すると候補を表示します。リストからcalloutタイプを選択して完全なcalloutヘッダーを挿入します。',
 
-	"settings.openHotkeys": "Callout Studioショートカット",
-	"settings.openHotkeysDesc":
-		"Callout StudioコマンドのObsidianホットキー設定を開きます。新しいcalloutタイプの作成、設定を開く、callout解除、calloutで囲むの独自ショートカットを設定できます。デフォルトではショートカットは割り当てられていません。",
-	"settings.openHotkeysButton": "ホットキー設定を開く",
+	"settings.customCommands": "コマンドとショートカット",
+	"settings.customCommandsDesc":
+		"すべてのCallout Studioコマンドと割り当てられたショートカットを確認し、よく使うcalloutのために独自のコマンドを作成できます。デフォルトではショートカットは割り当てられていません。",
+	"settings.customCommandsButton": "コマンドを管理",
+
+	"commandBuilder.title": "コマンドとショートカット",
+	"commandBuilder.desc":
+		"+ボタンを使って、Obsidianのホットキー設定でショートカットを設定または変更します。",
+	"commandBuilder.builtIn": "組み込みコマンド",
+	"commandBuilder.toggleAria": "{{name}}のオン/オフを切り替え",
+	"commandBuilder.hotkeyBlank": "未設定",
+	"commandBuilder.hotkeyAria": "{{name}}のショートカットを設定",
+	"commandBuilder.yourCommands": "あなたのコマンド",
+	"commandBuilder.newCommand": "新規コマンド",
+	"commandBuilder.empty": "まだカスタムコマンドはありません。",
+	"commandBuilder.unknownCommand": "このコマンド",
+	"commandBuilder.editAria": "{{name}}を編集",
+	"commandBuilder.deleteAria": "{{name}}を削除",
+	"commandBuilder.deleteConfirm":
+		"コマンド{{name}}を削除しますか？割り当てられているショートカットは機能しなくなります。",
+	"commandBuilder.newTitle": "新規コマンド",
+	"commandBuilder.editTitle": "コマンドを編集",
+	"commandBuilder.format": "calloutの形式",
+	"commandBuilder.formatDesc": "コマンドが書き込むcalloutの種類。",
+	"commandBuilder.formatHeading": "見出し",
+	"commandBuilder.formatInline": "インライン",
+	"commandBuilder.formatBlock": "Block",
+	"commandBuilder.roleDisabled":
+		"この形式はオフになっているため、再度オンにするまでコマンドはプレーンテキストを挿入します。",
+	"commandBuilder.callout": "calloutタイプ",
+	"commandBuilder.calloutDesc": "このコマンドが挿入するcallout。",
+	"commandBuilder.headingLevel": "見出しレベル",
+	"commandBuilder.headingLevelDesc": "どの見出しレベルを書き込むか。",
+	"commandBuilder.action": "アクション",
+	"commandBuilder.actionDesc":
+		"「囲む」は選択範囲をcalloutに変換し、「挿入」は空のcalloutを追加します。",
+	"commandBuilder.actionWrap": "選択範囲を囲む",
+	"commandBuilder.actionInsert": "新規挿入",
+	"commandBuilder.preview": "コマンド名",
+	"commandBuilder.duplicate":
+		"まったく同じことを行うコマンドが既に存在します。",
+	"commandBuilder.noCallouts":
+		"コマンドを作成するためのcalloutタイプがまだありません。",
+	"commandBuilder.save": "保存",
 
 	"settings.vaultMaintenance": "vaultの洞察とメンテナンス",
 	"settings.vaultStats": "callout統計",
@@ -152,6 +199,11 @@ export const ja: Record<string, string> = {
 	"settings.resetAllConfirm":
 		"すべてのカスタムcalloutを削除し、組み込みcallout、グローバルスタイル、保存済みのカラーパレット、右クリックメニューのカスタマイズ、キャッシュ済みMaterial SVGをリセットします。この操作は元に戻せません。よろしいですか？",
 	"notice.resetAllDone": "すべてデフォルトにリセットされました。",
+
+	"notice.customCommandsRemoved":
+		"calloutタイプが存在しなくなったカスタムコマンドを{{count}}件削除しました。",
+	"notice.customCommandMissingCallout":
+		"このコマンドのcalloutタイプはもう存在しません。",
 
 	"notice.exported":
 		"calloutをcallout-studio-export.jsonにエクスポートしました",
@@ -263,6 +315,7 @@ export const ja: Record<string, string> = {
 
 	// Palette editor modal
 	"palette.newTitle": "新しいカラーパレット",
+	"palette.groupPalette": "パレット",
 	"palette.editTitle": "カラーパレットを編集",
 	"palette.name": "名前",
 	"palette.namePlaceholder": "マイパレット",
@@ -585,6 +638,13 @@ export const ja: Record<string, string> = {
 
 	"confirm.ok": "削除",
 	"confirm.cancel": "キャンセル",
+	// Headings for each confirmation — every window carries one, so each
+	// caller of ConfirmModal names what it is about to do.
+	"confirm.titleDeleteCommand": "コマンドを削除",
+	"confirm.titleResetAll": "すべてのcalloutをリセット",
+	"confirm.titleResetCallout": "calloutをリセット",
+	"confirm.titleDeletePalette": "パレットを削除",
+	"confirm.titleDeleteImage": "画像を削除",
 
 	"vault.filesUpdated":
 		"vaultファイルの{{count}}件のcallout参照を更新しました。",
@@ -726,6 +786,13 @@ export const ja: Record<string, string> = {
 	"import.sourceAdmonitionDesc":
 		"Admonition プラグインからカスタム admonition を引き継ぎます。",
 	"import.cmTitle": "Callout Manager からインポート",
+	"import.cmFromVault": "この保管庫",
+	"import.cmVaultChecking": "Callout Manager プラグインを探しています…",
+	"import.cmVaultFound": "カスタム callout が {{count}} 件見つかりました。",
+	"import.cmVaultNotFound":
+		"この保管庫にカスタム callout は見つかりませんでした。",
+	"import.cmPasteLabel":
+		"または Callout Manager からコピーしたスタイルをここに貼り付け：",
 	"import.cmInstructions":
 		"Callout Manager で Copy ボタンを使用してカスタマイズされた callout スタイルをコピーし、以下に貼り付けてください。",
 	"import.cmPlaceholder": "コピーしたスタイルをここに貼り付け…",
@@ -733,10 +800,20 @@ export const ja: Record<string, string> = {
 	"import.cmBtnImport": "インポート",
 	"import.err.cmNoBlocksFound":
 		"貼り付けたテキストに Callout Manager のスタイルが見つかりませんでした。",
+	"import.err.cmNotRecognized":
+		"ファイルを認識できませんでした。Callout Manager の Copy ボタンで作成されたスタイル、または Callout Manager の data.json が必要です。",
+	"import.err.cmNoEntries":
+		"インポートするカスタム callout が見つかりませんでした。",
 	"import.err.cmNoColorForNew":
 		'新しい callout "{{value}}" に使用できる色が見つからなかったため、スキップされました。',
 	"import.err.cmIdConflict":
 		'ID "{{value}}" は別の callout ("{{other}}") によって既にエイリアスとして使用されているため、スキップされました。',
+	"import.warn.cmNoColorDefault":
+		"Callout Manager で色が設定されていなかったため、デフォルトのグレーが使用されました。",
+	"import.warn.cmThemeCondition":
+		"この callout の色またはアイコンは 1 つのテーマにのみ設定されていました。Callout Studio はテーマごとのスタイルに対応していないため、すべてのテーマに引き継がれました。",
+	"import.warn.cmCustomStyles":
+		"この callout には Callout Manager のカスタム CSS もあります。このスタイルはインポート対象外のため、アイコンと色だけが引き継がれました。",
 
 	// Import — Admonition
 	"import.admTitle": "Admonition からインポート",
@@ -780,9 +857,9 @@ export const ja: Record<string, string> = {
 		"フィードバック、コメント、提案はありますか？ぜひお聞かせください！",
 	"footer.madeBy": "Nivが作成  •  ",
 	"settings.deletePaletteConfirmLinkedOne":
-		'パレット「{{name}}」を削除しますか？\n1 件の callout が使用しています。色は保持され、後でエディターの色の行から再接続できます。',
+		"パレット「{{name}}」を削除しますか？\n1 件の callout が使用しています。色は保持され、後でエディターの色の行から再接続できます。",
 	"settings.deletePaletteConfirmLinked":
-		'パレット「{{name}}」を削除しますか？\n{{count}} 件の callout が使用しています。色は保持され、後で各エディターの色の行から再接続できます。',
+		"パレット「{{name}}」を削除しますか？\n{{count}} 件の callout が使用しています。色は保持され、後で各エディターの色の行から再接続できます。",
 	"settings.unlinkedColors": "未リンクの色",
 	"settings.unlinkedColorsDesc":
 		"保存済みの色が削除された callout です。現在の色は保持されます。復元すると色が再保存され、グループ全体が再リンクされます。",
@@ -801,8 +878,8 @@ export const ja: Record<string, string> = {
 		"この callout の保存済み色は削除されました。{{link}}ことで再保存できます — 同じ色を使う他の {{count}} 件の callout も再リンクされます。",
 	"editor.colorsDescDeletedLink": "ここをクリックする",
 	"palette.colorExists":
-		'これらの色は「{{name}}」と同じです。保存済みの色を 2 つ同じにすることはできません — 区別するために色を変更してください。',
+		"これらの色は「{{name}}」と同じです。保存済みの色を 2 つ同じにすることはできません — 区別するために色を変更してください。",
 	"palette.colorExistsUse":
-		'これらの色は「{{name}}」と同じです。保存済みの色を 2 つ同じにすることはできません — 色を変更するか、{{link}}。',
+		"これらの色は「{{name}}」と同じです。保存済みの色を 2 つ同じにすることはできません — 色を変更するか、{{link}}。",
 	"palette.colorExistsUseLink": "既存の色を使う",
 };

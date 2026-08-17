@@ -4,6 +4,11 @@ export const nb: Record<string, string> = {
 	"cmd.insertEmptyCallout": "Sett inn tom callout",
 	"cmd.calloutWrap": "Pakk inn i callout",
 	"cmd.calloutUnwrap": "Fjern callout",
+	"cmd.customWrapBlock": "Pakk inn i {{name}}-callout",
+	"cmd.customInsertBlock": "Sett inn {{name}}-callout",
+	"cmd.customInsertHeading":
+		"Sett inn H{{level}} {{name}}-overskriftscallout",
+	"cmd.customInsertInline": "Sett inn {{name}}-inline-callout",
 	"autocomplete.createNew": 'Opprett ny callout: "{{name}}"',
 	"settings.fallbackTag": "Standard",
 	"settings.fallbackTagAuto": "Automatisk standard",
@@ -14,6 +19,8 @@ export const nb: Record<string, string> = {
 	"settings.rescanComplete":
 		"Ny skanning ferdig: {{count}} ny(e) callout(er) lagt til.",
 	"replaceModal.deleteWithoutReplaceSuffix": "(faller tilbake til standard)",
+	"replaceModal.titleDelete": "Slett callout",
+	"replaceModal.titleReplace": "Erstatt i vault",
 	"firstRun.title": "Finn eksisterende callouts i valvet?",
 	"firstRun.body":
 		"Callout Studio kan skanne valvet ditt for å oppdage callouts du allerede bruker, slik at de vises i innstillingslisten og tar i bruk reservestilen din.",
@@ -123,10 +130,49 @@ export const nb: Record<string, string> = {
 	"settings.enableAutocomplete": "Aktiver [! autofullføring",
 	"settings.enableAutocompleteDesc":
 		'Viser forslag når du skriver "[!" inne i et blokkssitat i redigeringsprogrammet. Velg en callout-type fra listen for å sette inn en komplett callout-overskrift.',
-	"settings.openHotkeys": "Callout Studio-snarveier",
-	"settings.openHotkeysDesc":
-		"Åpner Obsidians snarveisinnstillinger for Callout Studio-kommandoer. Som standard er ingen snarveier tildelt.",
-	"settings.openHotkeysButton": "Åpne snarveisinnstillinger",
+	"settings.customCommands": "Kommandoer og snarveier",
+	"settings.customCommandsDesc":
+		"Se alle Callout Studio-kommandoer og snarveien de er bundet til, og lag dine egne kommandoer for callouts du bruker mest. Ingen snarveier er tildelt som standard.",
+	"settings.customCommandsButton": "Administrer kommandoer",
+	"commandBuilder.title": "Kommandoer og snarveier",
+	"commandBuilder.desc":
+		"Bruk +-knappen for å angi eller endre en snarvei i Obsidians hurtigtastinnstillinger.",
+	"commandBuilder.builtIn": "Innebygde kommandoer",
+	"commandBuilder.toggleAria": "Slå {{name}} av eller på",
+	"commandBuilder.hotkeyBlank": "Tom",
+	"commandBuilder.hotkeyAria": "Angi en snarvei for {{name}}",
+	"commandBuilder.yourCommands": "Dine kommandoer",
+	"commandBuilder.newCommand": "Ny kommando",
+	"commandBuilder.empty": "Ingen tilpassede kommandoer ennå.",
+	"commandBuilder.unknownCommand": "denne kommandoen",
+	"commandBuilder.editAria": "Rediger {{name}}",
+	"commandBuilder.deleteAria": "Slett {{name}}",
+	"commandBuilder.deleteConfirm":
+		"Slette kommandoen {{name}}? Eventuelle snarveier tildelt den vil slutte å fungere.",
+	"commandBuilder.newTitle": "Ny kommando",
+	"commandBuilder.editTitle": "Rediger kommando",
+	"commandBuilder.format": "Callout-format",
+	"commandBuilder.formatDesc": "Hvilken type callout kommandoen skriver.",
+	"commandBuilder.formatHeading": "Overskrift",
+	"commandBuilder.formatInline": "Inline",
+	"commandBuilder.formatBlock": "Blokk",
+	"commandBuilder.roleDisabled":
+		"Dette formatet er slått av, så kommandoen setter inn ren tekst til du slår det på igjen.",
+	"commandBuilder.callout": "Callout-type",
+	"commandBuilder.calloutDesc": "Callouten denne kommandoen setter inn.",
+	"commandBuilder.headingLevel": "Overskriftsnivå",
+	"commandBuilder.headingLevelDesc": "Hvilket overskriftsnivå som skrives.",
+	"commandBuilder.action": "Handling",
+	"commandBuilder.actionDesc":
+		"Pakk inn gjør utvalget om til en callout; sett inn legger til en tom en.",
+	"commandBuilder.actionWrap": "Pakk inn utvalg",
+	"commandBuilder.actionInsert": "Sett inn ny",
+	"commandBuilder.preview": "Kommandonavn",
+	"commandBuilder.duplicate":
+		"Du har allerede en kommando som gjør nøyaktig dette.",
+	"commandBuilder.noCallouts":
+		"Det finnes ingen callout-typer å bygge en kommando fra ennå.",
+	"commandBuilder.save": "Lagre",
 	"settings.vaultMaintenance": "Vault-innsikt og vedlikehold",
 	"settings.vaultStats": "Callout-statistikk",
 	"settings.vaultStatsDesc":
@@ -140,6 +186,10 @@ export const nb: Record<string, string> = {
 	"settings.resetAllConfirm":
 		"Dette sletter alle tilpassede callouts, tilbakestiller innebygde callouts, globale stiler, lagrede fargepaletter, tilpasningen av høyreklikkmenyen og alle cachede Material-SVG-er. Handlingen kan ikke angres. Er du sikker?",
 	"notice.resetAllDone": "Alt er tilbakestilt til standardinnstillingene.",
+	"notice.customCommandsRemoved":
+		"Fjernet {{count}} tilpasset(e) kommando(er) hvis callout-type ikke lenger finnes.",
+	"notice.customCommandMissingCallout":
+		"Denne kommandoens callout-type finnes ikke lenger.",
 	"notice.exported": "Callouts eksportert til callout-studio-export.json",
 	"notice.importedJSON": "{{count}} callout-type(r) importert fra JSON.",
 	"notice.importedSettings": "Plugin-innstillinger importert.",
@@ -252,6 +302,7 @@ export const nb: Record<string, string> = {
 	"editor.externalStyleClose": "Forstått",
 	// Palette editor modal
 	"palette.newTitle": "Ny fargepalett",
+	"palette.groupPalette": "Palett",
 	"palette.editTitle": "Rediger fargepalett",
 	"palette.name": "Navn",
 	"palette.namePlaceholder": "Min palett",
@@ -566,6 +617,13 @@ export const nb: Record<string, string> = {
 	"menuItem.deleteSection": "Slett seksjon",
 	"confirm.ok": "Slett",
 	"confirm.cancel": "Avbryt",
+	// Headings for each confirmation — every window carries one, so each
+	// caller of ConfirmModal names what it is about to do.
+	"confirm.titleDeleteCommand": "Slett kommando",
+	"confirm.titleResetAll": "Tilbakestill alle callouts",
+	"confirm.titleResetCallout": "Tilbakestill callout",
+	"confirm.titleDeletePalette": "Slett palett",
+	"confirm.titleDeleteImage": "Slett bilde",
 	"vault.filesUpdated":
 		"{{count}} callout-referanse(r) oppdatert i vault-filer.",
 	"vault.idsUpdated":
@@ -698,6 +756,12 @@ export const nb: Record<string, string> = {
 	"import.sourceAdmonitionDesc":
 		"Hent dine egne admonitions fra Admonition-tillegget.",
 	"import.cmTitle": "Importer fra Callout Manager",
+	"import.cmFromVault": "Dette hvelvet",
+	"import.cmVaultChecking": "Ser etter Callout Manager-tillegget…",
+	"import.cmVaultFound": "Fant {{count}} tilpassede callouts.",
+	"import.cmVaultNotFound": "Fant ingen tilpassede callouts i dette hvelvet.",
+	"import.cmPasteLabel":
+		"Eller lim inn de kopierte stilene fra Callout Manager her:",
 	"import.cmInstructions":
 		"I Callout Manager bruker du Copy-knappen for å kopiere de tilpassede callout-stilene dine, og limer dem inn nedenfor.",
 	"import.cmPlaceholder": "Lim inn de kopierte stilene her…",
@@ -705,10 +769,19 @@ export const nb: Record<string, string> = {
 	"import.cmBtnImport": "Importer",
 	"import.err.cmNoBlocksFound":
 		"Ingen Callout Manager-stiler ble funnet i den innlimte teksten.",
+	"import.err.cmNotRecognized":
+		"Ukjent fil: forventet stilene fra Callout Managers Copy-knapp eller en data.json fra Callout Manager.",
+	"import.err.cmNoEntries": "Fant ingen tilpassede callouts å importere.",
 	"import.err.cmNoColorForNew":
 		'Ingen brukbar farge ble funnet for den nye callouten "{{value}}"; den ble hoppet over.',
 	"import.err.cmIdConflict":
 		'ID "{{value}}" brukes allerede som et alias av en annen callout ("{{other}}") og ble hoppet over.',
+	"import.warn.cmNoColorDefault":
+		"Ingen farge var angitt i Callout Manager, så standardgrå ble brukt.",
+	"import.warn.cmThemeCondition":
+		"Fargen eller ikonet til denne callouten var bare angitt for ett tema. Callout Studio støtter ikke temaspesifikk styling, så den ble tatt med for alle temaer.",
+	"import.warn.cmCustomStyles":
+		"Denne callouten har også egendefinert CSS i Callout Manager. Denne stylingen er ikke en del av importen, så bare ikonet og fargen ble tatt med.",
 
 	// Import — Admonition
 	"import.admTitle": "Importer fra Admonition",

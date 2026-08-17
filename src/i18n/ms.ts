@@ -4,6 +4,12 @@ export const ms: Record<string, string> = {
 	"cmd.insertEmptyCallout": "Masukkan callout kosong",
 	"cmd.calloutWrap": "Balut dalam callout",
 	"cmd.calloutUnwrap": "Buang callout",
+
+	"cmd.customWrapBlock": "Balut dalam callout {{name}}",
+	"cmd.customInsertBlock": "Masukkan callout {{name}}",
+	"cmd.customInsertHeading": "Masukkan callout tajuk H{{level}} {{name}}",
+	"cmd.customInsertInline": "Masukkan callout sebaris {{name}}",
+
 	"autocomplete.createNew": 'Cipta callout baharu: "{{name}}"',
 	"settings.fallbackTag": "Lalai",
 	"settings.fallbackTagAuto": "Lalai automatik",
@@ -14,6 +20,8 @@ export const ms: Record<string, string> = {
 	"settings.rescanComplete":
 		"Pengimbasan semula selesai: {{count}} callout baharu ditambah.",
 	"replaceModal.deleteWithoutReplaceSuffix": "(kembali ke lalai)",
+	"replaceModal.titleDelete": "Padam callout",
+	"replaceModal.titleReplace": "Ganti dalam vault",
 	"firstRun.title": "Cari callouts sedia ada dalam vault?",
 	"firstRun.body":
 		"Callout Studio boleh mengimbas vault anda untuk menemui callouts yang sudah anda gunakan, supaya ia muncul dalam senarai tetapan dan menggunakan gaya sandaran anda.",
@@ -124,10 +132,52 @@ export const ms: Record<string, string> = {
 	"settings.enableAutocomplete": "Aktifkan lengkap automatik [!",
 	"settings.enableAutocompleteDesc":
 		'Menunjukkan cadangan apabila anda menaip "[!" dalam sebutan blok dalam editor. Pilih jenis callout dari senarai untuk memasukkan pengepala callout lengkap.',
-	"settings.openHotkeys": "Pintasan Callout Studio",
-	"settings.openHotkeysDesc":
-		"Membuka tetapan pintasan Obsidian untuk arahan Callout Studio. Tiada pintasan ditetapkan secara lalai.",
-	"settings.openHotkeysButton": "Buka tetapan pintasan",
+
+	"settings.customCommands": "Arahan dan pintasan",
+	"settings.customCommandsDesc":
+		"Lihat setiap arahan Callout Studio dan pintasan yang ditetapkan padanya, dan cipta arahan anda sendiri untuk callout yang paling kerap anda gunakan. Tiada pintasan ditetapkan secara lalai.",
+	"settings.customCommandsButton": "Urus arahan",
+
+	"commandBuilder.title": "Arahan dan pintasan",
+	"commandBuilder.desc":
+		"Gunakan butang + untuk menetapkan atau menukar pintasan dalam tetapan hotkey Obsidian.",
+	"commandBuilder.builtIn": "Arahan terbina dalam",
+	"commandBuilder.toggleAria": "Hidupkan atau matikan {{name}}",
+	"commandBuilder.hotkeyBlank": "Kosong",
+	"commandBuilder.hotkeyAria": "Tetapkan pintasan untuk {{name}}",
+	"commandBuilder.yourCommands": "Arahan anda",
+	"commandBuilder.newCommand": "Arahan baharu",
+	"commandBuilder.empty": "Belum ada arahan tersuai.",
+	"commandBuilder.unknownCommand": "arahan ini",
+	"commandBuilder.editAria": "Edit {{name}}",
+	"commandBuilder.deleteAria": "Padam {{name}}",
+	"commandBuilder.deleteConfirm":
+		"Padam arahan {{name}}? Sebarang pintasan yang ditetapkan padanya akan berhenti berfungsi.",
+	"commandBuilder.newTitle": "Arahan baharu",
+	"commandBuilder.editTitle": "Edit arahan",
+	"commandBuilder.format": "Format callout",
+	"commandBuilder.formatDesc": "Jenis callout yang ditulis oleh arahan ini.",
+	"commandBuilder.formatHeading": "Tajuk",
+	"commandBuilder.formatInline": "Sebaris",
+	"commandBuilder.formatBlock": "Block",
+	"commandBuilder.roleDisabled":
+		"Format ini dimatikan, jadi arahan akan memasukkan teks biasa sehingga anda menghidupkannya semula.",
+	"commandBuilder.callout": "Jenis callout",
+	"commandBuilder.calloutDesc": "Callout yang dimasukkan oleh arahan ini.",
+	"commandBuilder.headingLevel": "Tahap tajuk",
+	"commandBuilder.headingLevelDesc": "Tahap tajuk yang akan ditulis.",
+	"commandBuilder.action": "Tindakan",
+	"commandBuilder.actionDesc":
+		"Balut menukar pilihan menjadi callout; masukkan menambah satu yang kosong.",
+	"commandBuilder.actionWrap": "Balut pilihan",
+	"commandBuilder.actionInsert": "Masukkan baharu",
+	"commandBuilder.preview": "Nama arahan",
+	"commandBuilder.duplicate":
+		"Anda sudah mempunyai arahan yang melakukan perkara yang sama.",
+	"commandBuilder.noCallouts":
+		"Belum ada jenis callout untuk membina arahan.",
+	"commandBuilder.save": "Simpan",
+
 	"settings.vaultMaintenance": "Wawasan & penyelenggaraan vault",
 	"settings.vaultStats": "Statistik callout",
 	"settings.vaultStatsDesc":
@@ -141,6 +191,12 @@ export const ms: Record<string, string> = {
 	"settings.resetAllConfirm":
 		"Ini akan memadam semua callouts tersuai, menetapkan semula callouts terbina dalam, gaya global, palet warna yang disimpan, penyesuaian menu klik kanan dan semua SVG Material yang dicache. Tindakan ini tidak boleh dibatalkan. Adakah anda pasti?",
 	"notice.resetAllDone": "Semua telah ditetapkan semula ke lalai.",
+
+	"notice.customCommandsRemoved":
+		"{{count}} arahan tersuai yang jenis callout-nya tidak lagi wujud telah dibuang.",
+	"notice.customCommandMissingCallout":
+		"Jenis callout untuk arahan itu tidak lagi wujud.",
+
 	"notice.exported": "Callouts dieksport ke callout-studio-export.json",
 	"notice.importedJSON": "{{count}} jenis callout diimport dari JSON.",
 	"notice.importedSettings": "Tetapan plugin diimport.",
@@ -251,6 +307,7 @@ export const ms: Record<string, string> = {
 	"editor.externalStyleClose": "Faham",
 	// Palette editor modal
 	"palette.newTitle": "Palet warna baharu",
+	"palette.groupPalette": "Palet",
 	"palette.editTitle": "Edit palet warna",
 	"palette.name": "Nama",
 	"palette.namePlaceholder": "Palet saya",
@@ -565,6 +622,13 @@ export const ms: Record<string, string> = {
 	"menuItem.deleteSection": "Padam bahagian",
 	"confirm.ok": "Padam",
 	"confirm.cancel": "Batal",
+	// Headings for each confirmation — every window carries one, so each
+	// caller of ConfirmModal names what it is about to do.
+	"confirm.titleDeleteCommand": "Padam arahan",
+	"confirm.titleResetAll": "Set semula semua callout",
+	"confirm.titleResetCallout": "Set semula callout",
+	"confirm.titleDeletePalette": "Padam palet",
+	"confirm.titleDeleteImage": "Padam gambar",
 	"vault.filesUpdated":
 		"{{count}} rujukan callout dikemas kini dalam fail vault.",
 	"vault.idsUpdated":
@@ -682,31 +746,49 @@ export const ms: Record<string, string> = {
 	"import.warn.iconNameUnknown":
 		'Tiada ikon "{{value}}" dalam {{type}}, jadi ikon lalai digunakan sebagai gantinya.',
 	"import.warn.cmIconUnknownNew":
-		'Tiada ikon "{{value}}" dalam Obsidian, jadi ikon lalai digunakan sebagai gantinya.',
+		'Ikon "{{value}}" tidak tersedia dalam vault ini, jadi ikon lalai digunakan sebagai gantinya.',
 	"import.warn.cmIconUnknownExisting":
-		'Tiada ikon "{{value}}" dalam Obsidian, jadi "{{id}}" mengekalkan ikon yang sudah ada.',
+		'Ikon "{{value}}" tidak tersedia dalam vault ini, jadi "{{id}}" mengekalkan ikon yang sudah ada.',
 	"import.chooseSource": "Import dari",
 	"import.sourceStudio": "Callout Studio",
 	"import.sourceStudioDesc":
 		"Muatkan fail .json yang dieksport dari Callout Studio.",
 	"import.sourceCalloutManager": "Callout Manager",
 	"import.sourceCalloutManagerDesc":
-		"Tampal gaya yang anda salin daripada butang Copy Callout Manager.",
+		"Bawa callout tersuai anda dari pemalam Callout Manager.",
 	"import.sourceAdmonition": "Admonition",
 	"import.sourceAdmonitionDesc":
 		"Bawa admonition tersuai anda dari pemalam Admonition.",
 	"import.cmTitle": "Import dari Callout Manager",
 	"import.cmInstructions":
-		"Dalam Callout Manager, gunakan butang Copy untuk menyalin gaya callout tersuai anda, kemudian tampalnya di bawah.",
-	"import.cmPlaceholder": "Tampal gaya yang disalin di sini…",
+		"Setiap callout tersuai dibawa masuk berserta ikon dan warnanya. Gaya " +
+		"khusus tema dan CSS tersuai tiada yang setara di sini dan tidak dibawa.",
+	"import.cmFromVault": "Vault ini",
+	"import.cmVaultChecking": "Mencari pemalam Callout Manager…",
+	"import.cmVaultFound": "{{count}} callout tersuai ditemukan.",
+	"import.cmVaultNotFound": "Tiada callout tersuai ditemukan dalam vault ini.",
+	"import.cmPasteLabel": "Atau tampal gaya yang disalin daripada Callout Manager di sini:",
+	"import.cmPlaceholder": "Tampal gaya yang disalin, atau fail data.json, di sini…",
 	"import.cmBtnCancel": "Batal",
 	"import.cmBtnImport": "Import",
 	"import.err.cmNoBlocksFound":
 		"Tiada gaya Callout Manager ditemukan dalam teks yang ditampal.",
+	"import.err.cmNotRecognized":
+		"Fail tidak dikenali: dijangka gaya yang dihasilkan oleh butang Copy " +
+		"Callout Manager, atau fail data.json Callout Manager.",
+	"import.err.cmNoEntries": "Tiada callout tersuai ditemukan untuk diimport.",
 	"import.err.cmNoColorForNew":
 		'Tiada warna yang boleh digunakan ditemukan untuk callout baru "{{value}}"; ia dilangkau.',
 	"import.err.cmIdConflict":
 		'ID "{{value}}" sudah digunakan sebagai alias oleh callout lain ("{{other}}") dan dilangkau.',
+	"import.warn.cmNoColorDefault":
+		"Tiada warna ditetapkan dalam Callout Manager, jadi kelabu lalainya digunakan.",
+	"import.warn.cmThemeCondition":
+		"Warna atau ikon callout ini hanya ditetapkan untuk satu tema. Callout " +
+		"Studio tiada gaya khusus tema, jadi ia dibawa untuk semua tema.",
+	"import.warn.cmCustomStyles":
+		"Callout ini juga mempunyai CSS tersuai dalam Callout Manager. Gaya " +
+		"tersebut bukan sebahagian daripada import, jadi hanya ikon dan warnanya dibawa.",
 
 	// Import — Admonition
 	"import.admTitle": "Import daripada Admonition",
