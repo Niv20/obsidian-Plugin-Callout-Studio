@@ -1,9 +1,9 @@
 /**
  * utils/settingsGuards.ts — the values a settings blob is allowed to carry.
  *
- * `mergeSavedSettings` merges `globalStyle` with a plain spread. That is right
- * for its *shape* and blind to its *values*: whatever the file says lands in the
- * settings object, and `CSSInjector` interpolates it straight into a stylesheet
+ * `mergeSavedSettings` merges `globalStyle` field by field. That settles its
+ * *shape* and says nothing about its *values*: whatever the file says lands in
+ * the settings object, and `CSSInjector` interpolates it straight into a stylesheet
  * (`border-radius: ${gs.borderRadius}px`). Both inputs to that merge are
  * untrusted — an import file, and a `data.json` that syncs between devices and
  * can be hand-edited — so "whatever the file says" also covers a `titleScale`

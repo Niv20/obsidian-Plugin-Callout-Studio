@@ -344,47 +344,75 @@ describe("mergeSavedSettings — keys that must NOT survive", () => {
 		assert.ok(!("fromTheFuture" in merged));
 	});
 
-	it("…but KEEPS one nested inside a spread section — pinned as found", () => {
-		// The retirement above is by name, not by shape: `mergeHeadingStyle`
-		// spreads the saved object and then `delete`s the one key it knows about.
-		// Every other unknown key rides through — and settings are written back
-		// wholesale by `toSaveData()` and copied into every export, so it rides
-		// through forever. That is the exact outcome the doc comment on
-		// `mergeHeadingStyle` says the helper exists to prevent, and it is true
-		// only of `paddingStart`.
+	it("drops an unknown field nested inside a section too", () => {
+		// The retirement above must be by shape, not by name. While the nested
+		// sections were built by spreading the saved object over the defaults,
+		// `paddingStart` was the only key that went away — because it was the
+		// only one anybody had written a `delete` for. Everything else rode
+		// through, and settings are written back wholesale by `toSaveData()`
+		// and copied into every export, so it rode through forever.
 		//
-		// The sections that spread rather than rebuild are `globalStyle`, its
-		// `heading` / `inline` / `borderSides` children, and `iconSources`;
-		// `contextMenu`, `autocomplete`, `headingCallouts` and `inlineCallouts`
-		// name their fields and so really are total. Pinned as found rather than
-		// asserted the other way: the fix is to spell out the role frame styles
-		// the way the top level is spelled out, and these are the assertions to
-		// flip when it lands.
+		// These are the four sections that were spread: `globalStyle`, its
+		// `heading` / `inline` / `borderSides` children, and `iconSources`.
+		// (`contextMenu`, `autocomplete`, `headingCallouts` and `inlineCallouts`
+		// always named their fields.)
 		const merged = mergeSavedSettings({
 			globalStyle: {
 				fromTheFuture: 1,
-				heading: { fromTheFuture: 2 },
+				heading: { fromTheFuture: 2, borderSides: { fromTheFuture: 5 } },
 				inline: { fromTheFuture: 3 },
+				borderSides: { fromTheFuture: 6 },
 			},
 			iconSources: { fromTheFuture: 4 },
 		} as unknown as Partial<PluginSettings>);
 
-		const style = merged.globalStyle as unknown as Record<string, unknown>;
-		assert.strictEqual(style.fromTheFuture, 1);
-		assert.strictEqual(
-			(merged.globalStyle.heading as unknown as Record<string, unknown>)
-				.fromTheFuture,
-			2,
+		const unknownIn = (node: unknown): boolean =>
+			"fromTheFuture" in (node as Record<string, unknown>);
+
+		assert.ok(!unknownIn(merged.globalStyle), "globalStyle");
+		assert.ok(!unknownIn(merged.globalStyle.heading), "globalStyle.heading");
+		assert.ok(!unknownIn(merged.globalStyle.inline), "globalStyle.inline");
+		assert.ok(!unknownIn(merged.globalStyle.borderSides), "borderSides");
+		assert.ok(
+			!unknownIn(merged.globalStyle.heading.borderSides),
+			"heading.borderSides",
 		);
-		assert.strictEqual(
-			(merged.globalStyle.inline as unknown as Record<string, unknown>)
-				.fromTheFuture,
-			3,
-		);
-		assert.strictEqual(
-			(merged.iconSources as unknown as Record<string, unknown>).fromTheFuture,
-			4,
-		);
+		assert.ok(!unknownIn(merged.iconSources), "iconSources");
+	});
+
+	it("keeps the known fields of a section that also carried an unknown one", () => {
+		// The other half of the same behaviour, and the one that would break if
+		// a section were "fixed" by rebuilding it from the defaults alone.
+		const merged = mergeSavedSettings({
+			globalStyle: {
+				borderWidth: 4,
+				fromTheFuture: 1,
+				heading: { marginTop: 1.5, fromTheFuture: 2 },
+				inline: { fontScale: 1.2, fromTheFuture: 3 },
+			},
+			iconSources: { materialWeightDefault: 500, fromTheFuture: 4 },
+		} as unknown as Partial<PluginSettings>);
+
+		assert.strictEqual(merged.globalStyle.borderWidth, 4);
+		assert.strictEqual(merged.globalStyle.heading.marginTop, 1.5);
+		assert.strictEqual(merged.globalStyle.inline.fontScale, 1.2);
+		assert.strictEqual(merged.iconSources.materialWeightDefault, 500);
+	});
+
+	it("keeps the optional picker styles, and invents neither", () => {
+		// `faStyleDefault` / `tablerStyleDefault` are the two fields with no
+		// entry in the defaults at all, so the rebuild has to write them only
+		// when the file names them — an `undefined` value is still a key, and
+		// would ride into `data.json` and every export as one.
+		const named = mergeSavedSettings({
+			iconSources: { faStyleDefault: "brands", tablerStyleDefault: "filled" },
+		} as Partial<PluginSettings>);
+		assert.strictEqual(named.iconSources.faStyleDefault, "brands");
+		assert.strictEqual(named.iconSources.tablerStyleDefault, "filled");
+
+		const silent = mergeSavedSettings({});
+		assert.ok(!("faStyleDefault" in silent.iconSources));
+		assert.ok(!("tablerStyleDefault" in silent.iconSources));
 	});
 
 	it("folds `lastMaterialCategory` into `lastCategory` and deletes it", () => {

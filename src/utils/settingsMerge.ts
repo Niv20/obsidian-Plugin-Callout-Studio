@@ -13,13 +13,26 @@
  * Every field is merged explicitly against `DEFAULT_SETTINGS` — a new settings
  * field MUST be handled here (and added to `DEFAULT_SETTINGS`) or it will be
  * silently dropped on load.
+ *
+ * "Explicitly" reaches all the way down, and has to. The nested sections used
+ * to be built by spreading the saved object over the defaults, which is total
+ * in *shape* and blind to anything extra the file carried: a key the current
+ * version knows nothing about rode straight through, and since settings are
+ * written back wholesale by both `toSaveData()` and `exportToJSONv2()`, it was
+ * then re-saved forever and copied into every export file made afterwards.
+ * Retiring a field by `delete`ing it by name only worked for the one field
+ * anybody remembered to name. Naming the fields that *stay* is what makes
+ * `settingsValidator`'s "unknown fields are dropped" promise true at depth.
  */
 import type {
+	BorderSidesSettings,
 	ContextMenuItemConfig,
 	ContextMenuItemId,
 	ContextMenuSettings,
+	GlobalStyleSettings,
 	HeadingFrameStyleSettings,
 	IconSourceSettings,
+	InlineFrameStyleSettings,
 	LegacyPopupSettings,
 	PluginSettings,
 } from "../types";
@@ -33,13 +46,23 @@ import { sanitizeCustomCommands } from "./customCommands";
  * Merge saved icon-picker state over the defaults, folding the pre-2.4
  * `lastMaterialCategory` into `lastCategory`, which is keyed by icon source
  * now that there is more than one source with categories.
+ *
+ * Field by field rather than `{...defaults, ...saved}` for the reason spelled
+ * out on {@link mergeSavedSettings}: a spread carries every key the current
+ * version knows nothing about straight back into `data.json` and into every
+ * export. The two optional style defaults are only written when the file
+ * actually names them, since the defaults object has no key for them at all
+ * and an `undefined` one is still a key.
  */
 function mergeIconSources(
 	saved: Partial<IconSourceSettings> | undefined,
 ): IconSourceSettings {
+	const defaults = DEFAULT_SETTINGS.iconSources;
 	const merged: IconSourceSettings = {
-		...DEFAULT_SETTINGS.iconSources,
-		...saved,
+		materialStyleDefault:
+			saved?.materialStyleDefault ?? defaults.materialStyleDefault,
+		materialWeightDefault:
+			saved?.materialWeightDefault ?? defaults.materialWeightDefault,
 		// Its own object on every merge, whatever the file said. A plain spread
 		// of the defaults copies the *reference*, so a file that names no
 		// category — every fresh install, and every "reset to defaults" — was
@@ -48,10 +71,19 @@ function mergeIconSources(
 		// last-opened category would be stuck in the defaults for the rest of
 		// the session and leak into every later merge.
 		lastCategory: {
-			...DEFAULT_SETTINGS.iconSources.lastCategory,
+			...defaults.lastCategory,
 			...saved?.lastCategory,
 		},
+		lastEmojiSkinTone:
+			saved?.lastEmojiSkinTone ?? defaults.lastEmojiSkinTone,
 	};
+	if (saved?.faStyleDefault !== undefined) {
+		merged.faStyleDefault = saved.faStyleDefault;
+	}
+	if (saved?.tablerStyleDefault !== undefined) {
+		merged.tablerStyleDefault = saved.tablerStyleDefault;
+	}
+	// Pre-2.4: one source had categories, so the field named Material directly.
 	const legacyCategory = saved?.lastMaterialCategory;
 	if (legacyCategory) {
 		merged.lastCategory = {
@@ -59,7 +91,6 @@ function mergeIconSources(
 			material: legacyCategory,
 		};
 	}
-	delete merged.lastMaterialCategory;
 	return merged;
 }
 
@@ -68,37 +99,79 @@ export type LegacySavedSettings = Partial<PluginSettings> & {
 	contextMenu?: Partial<ContextMenuSettings>;
 };
 
-/** Saved heading frame style, plus fields removed by a later version. */
-type LegacyHeadingStyle = Partial<HeadingFrameStyleSettings> & {
-	/** The "Icon indent" slider (px start inset), removed in 2.7.0. */
-	paddingStart?: number;
-};
+/**
+ * Merge the four per-side border booleans over a role's defaults.
+ *
+ * Shared by all three frame styles, which is the only reason it is a helper —
+ * the point is the same one the rest of this file makes: the sides are named,
+ * so a fifth key a file happens to carry is not one of them.
+ */
+function mergeBorderSides(
+	saved: Partial<BorderSidesSettings> | undefined,
+	defaults: BorderSidesSettings,
+): BorderSidesSettings {
+	return {
+		top: saved?.top ?? defaults.top,
+		right: saved?.right ?? defaults.right,
+		bottom: saved?.bottom ?? defaults.bottom,
+		left: saved?.left ?? defaults.left,
+	};
+}
 
 /**
- * Merge a saved heading frame style over the defaults. Needs its own helper
- * rather than a plain spread inside mergeSavedSettings because a spread keeps
- * keys the current version knows nothing about — and settings are written back
- * wholesale by both `toSaveData()` and `exportToJSONv2()`, so a stale key would
- * otherwise be re-saved forever and copied into every new export file. Deleting
- * it here is what makes settingsValidator's "unknown fields are dropped"
- * promise true for nested role styles too (same pattern as mergeIconSources's
- * `lastMaterialCategory`).
+ * Merge a saved heading frame style over the defaults, field by field.
+ *
+ * Spelled out rather than spread for the reason on {@link mergeSavedSettings}:
+ * a spread keeps every key the current version knows nothing about, and
+ * settings are written back wholesale by both `toSaveData()` and
+ * `exportToJSONv2()`, so such a key would be re-saved forever and copied into
+ * every new export file. Naming the fields is what retires `paddingStart` (the
+ * "Icon indent" slider, a static 10px in styles.css since 2.7.0) — and, unlike
+ * the `delete` it replaced, everything else a future version drops too.
  */
 function mergeHeadingStyle(
-	saved: LegacyHeadingStyle | undefined,
+	saved: Partial<HeadingFrameStyleSettings> | undefined,
 ): HeadingFrameStyleSettings {
-	const merged: LegacyHeadingStyle = {
-		...DEFAULT_SETTINGS.globalStyle.heading,
-		...saved,
-		borderSides: {
-			...DEFAULT_SETTINGS.globalStyle.heading.borderSides,
-			...(saved?.borderSides as Record<string, boolean> | undefined),
-		},
+	const defaults = DEFAULT_SETTINGS.globalStyle.heading;
+	return {
+		borderSides: mergeBorderSides(saved?.borderSides, defaults.borderSides),
+		borderWidth: saved?.borderWidth ?? defaults.borderWidth,
+		borderRadius: saved?.borderRadius ?? defaults.borderRadius,
+		paddingTop: saved?.paddingTop ?? defaults.paddingTop,
+		paddingBottom: saved?.paddingBottom ?? defaults.paddingBottom,
+		marginTop: saved?.marginTop ?? defaults.marginTop,
 	};
-	// The bar's start inset is a static 10px in styles.css now; nothing reads
-	// a saved value, so drop it instead of carrying it around inert.
-	delete merged.paddingStart;
-	return merged as HeadingFrameStyleSettings;
+}
+
+/** Merge a saved inline frame style over the defaults. See mergeHeadingStyle. */
+function mergeInlineStyle(
+	saved: Partial<InlineFrameStyleSettings> | undefined,
+): InlineFrameStyleSettings {
+	const defaults = DEFAULT_SETTINGS.globalStyle.inline;
+	return {
+		borderSides: mergeBorderSides(saved?.borderSides, defaults.borderSides),
+		borderWidth: saved?.borderWidth ?? defaults.borderWidth,
+		borderRadius: saved?.borderRadius ?? defaults.borderRadius,
+		fontScale: saved?.fontScale ?? defaults.fontScale,
+	};
+}
+
+/** Merge a saved global (block callout) style over the defaults. */
+function mergeGlobalStyle(
+	saved: Partial<GlobalStyleSettings> | undefined,
+): GlobalStyleSettings {
+	const defaults = DEFAULT_SETTINGS.globalStyle;
+	return {
+		borderSides: mergeBorderSides(saved?.borderSides, defaults.borderSides),
+		borderWidth: saved?.borderWidth ?? defaults.borderWidth,
+		titleScale: saved?.titleScale ?? defaults.titleScale,
+		contentScale: saved?.contentScale ?? defaults.contentScale,
+		borderRadius: saved?.borderRadius ?? defaults.borderRadius,
+		alignContentWithTitle:
+			saved?.alignContentWithTitle ?? defaults.alignContentWithTitle,
+		heading: mergeHeadingStyle(saved?.heading),
+		inline: mergeInlineStyle(saved?.inline),
+	};
 }
 
 /**
@@ -146,31 +219,7 @@ export function mergeSavedSettings(
 	const legacyPopup = savedSettings.popup;
 	const savedMenuItems = savedSettings.contextMenu?.items;
 	return {
-		globalStyle: clampGlobalStyle({
-			...DEFAULT_SETTINGS.globalStyle,
-			...savedGlobal,
-			// Ensure borderSides is always a proper object
-			borderSides: {
-				...DEFAULT_SETTINGS.globalStyle.borderSides,
-				...(savedGlobal?.borderSides as
-					| Record<string, boolean>
-					| undefined),
-			},
-			// Nested role frame styles need their own deep merge — a spread of
-			// savedGlobal would replace them wholesale (dropping fields added
-			// in newer versions) or leave them undefined on legacy data.
-			heading: mergeHeadingStyle(savedGlobal?.heading),
-			inline: {
-				...DEFAULT_SETTINGS.globalStyle.inline,
-				...savedGlobal?.inline,
-				borderSides: {
-					...DEFAULT_SETTINGS.globalStyle.inline.borderSides,
-					...(savedGlobal?.inline?.borderSides as
-						| Record<string, boolean>
-						| undefined),
-				},
-			},
-		}),
+		globalStyle: clampGlobalStyle(mergeGlobalStyle(savedGlobal)),
 		contextMenu: {
 			enabled:
 				savedSettings.contextMenu?.enabled ??
