@@ -177,17 +177,29 @@ describe("no locale carries a key English lacks", () => {
 		});
 	}
 
-	it("allows a locale to trail en.ts, which is the normal state", () => {
-		// Asserted rather than assumed: if every locale were complete, the
-		// fallback in `t()` would be untested by this file's premise, and a
-		// future change that started *requiring* completeness would go
-		// unnoticed until the next string was added.
-		const trailing = entries.filter(([, table]) =>
-			Object.keys(en).some((key) => !(key in table)),
-		);
-		assert.ok(
-			trailing.length > 0,
-			"no locale is behind en.ts — this test's premise no longer holds",
+	it("reports how far each locale trails en.ts, and gates on nothing", (t) => {
+		// This used to *assert* that some locale was behind en.ts, on the
+		// reasoning that a fully translated set would leave `t()`'s per-key
+		// fallback untested. That reasoning was wrong, and the assertion was a
+		// trap: it made finishing the last translation fail the build. The
+		// fallback is asserted directly, against a synthetic one-key table, in
+		// `tests/locales.test.ts` ("fills a missing key from English rather
+		// than showing the key") — which holds whether the shipped tables are
+		// complete or not, so nothing here needs the gap to exist. Trailing is
+		// a normal state, not a required one; both ends of the range are fine,
+		// and this only says which end we are at.
+		const trailing = entries
+			.map(([fileId, table]) => ({
+				fileId,
+				missing: Object.keys(en).filter((key) => !(key in table)).length,
+			}))
+			.filter((row) => row.missing > 0);
+		t.diagnostic(
+			trailing.length === 0
+				? `all ${entries.length} locales are level with en.ts`
+				: trailing
+						.map((row) => `${row.fileId} is missing ${row.missing}`)
+						.join(", "),
 		);
 	});
 });
