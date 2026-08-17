@@ -152,11 +152,54 @@ Custom commands stay tied to the callout they use. Renaming a callout updates th
 ### Import / export
 
 - **Export** offers two formats. A **Callout Studio backup** is a JSON file holding your callout definitions, saved color palettes and settings — the one to import into another vault.
-- A **CSS snippet** is the same styling as plain CSS, written to `.obsidian/snippets/callout-studio-custom.css`, for anywhere Callout Studio isn't running: another vault, Obsidian Publish, a static-site build. It carries your global style and your own callouts; heading bars and inline pills are left out, since that part is drawn by the plugin rather than by CSS. It is not switched on for you — in this vault the plugin already styles these callouts — and exporting again replaces that one file, asking first if you have edited it.
+- A **CSS snippet** is the same styling as plain CSS, written into this vault's snippets folder, for anywhere Callout Studio isn't running: another vault, Obsidian Publish, a static-site build. See [Export as a CSS snippet](#export-as-a-css-snippet) below for exactly what it does and does not carry.
 - Import a JSON file produced by Callout Studio. The importer validates every entry, reports issues per row, lets you import only the valid entries, and merges imported color palettes into your existing ones instead of overwriting them.
 - **Import from Callout Manager** — bring your customized callouts over with their icons and colors. It can read the Callout Manager plugin's own settings straight out of this vault (nothing is exported first, and nothing is written back), or take the styles its Copy button puts on your clipboard. The vault route brings over more: colors it stored separately for light and dark mode arrive as both, and callouts you created but never restyled come across too — neither of which appears in the copied styles at all. Per-theme styling and custom CSS have no equivalent here and are left behind, and anything that could not be brought over is listed before the import runs.
 - **Import from Admonition** — bring your custom admonitions over with their names, icons and colors. It can read the Admonition plugin's own settings straight out of this vault (nothing is exported first, and nothing is written back), or take an `admonitions.json` file or pasted JSON. Every icon library Admonition offers — Obsidian's own, Font Awesome, Octicons, RPG Awesome — is one Callout Studio already has, and pictures you uploaded there come across into **Your images**. Settings with no equivalent here (command, copy button, hidden title) are left behind, and anything that could not be brought over is listed before the import runs.
 - Import callout definitions detected in your vault's CSS snippets folder.
+
+### Export as a CSS snippet
+
+**Settings → Callout Studio → Import / export → Export → CSS snippet** writes your callout styling as plain CSS to `.obsidian/snippets/callout-studio-custom.css`. It is for taking your look somewhere Callout Studio isn't running — another vault, Obsidian Publish, a Digital Garden or other static-site build, or a vault you hand to someone else.
+
+It is the same CSS the plugin itself paints with. The file is generated from the very same code that styles your callouts on screen, so it cannot drift into describing something you never see.
+
+**It is a snapshot, not a live link.** Nothing updates the file after it is written — change a callout colour, swap an icon, adjust the global border, and the snippet still holds what you had at export time. Export again to bring it up to date. Doing so is cheap and safe:
+
+- Exporting again **replaces** the file. If you have hand-edited it, or something else wrote a file by that name, you are asked first — your edits are never silently overwritten.
+- If nothing has changed since the last export, **nothing is written at all** and you are told the file is already up to date. This matters on a synced vault, where every write is a sync event.
+
+**Turning it on is your call.** Callout Studio never enables the snippet — inside this vault the plugin is already styling these callouts, and an enabled copy could only ever hold an older version of them. Enable it yourself under **Settings → Appearance → CSS snippets**, or just copy the file to wherever you actually need it.
+
+> One thing that surprises people: Obsidian remembers enabled snippets by **name**, and keeps the name even after the file is deleted. So if you enabled this snippet once before, a later export brings the file back **already switched on**. Callout Studio notices this and warns you when it happens.
+
+#### What it carries
+
+Everything about a regular callout — the `> [!type]` block:
+
+- Accent colour, in **light and dark mode separately**.
+- Background: flat tint, **gradient**, and **transparent** (including clearing the frame and shadow a theme would otherwise draw around an invisible box).
+- Body text colour, per mode.
+- The icon, with its size and offset. Lucide icons reference Obsidian's own set by name; icons from Tabler, Material Symbols, Font Awesome, Octicons, RPG Awesome and your own uploaded pictures are **inlined into the file as artwork**, so they work with no plugin, no download and no internet. Emoji icons come across too, as does a callout you set to show **no icon at all**.
+- Gradient title text and the coloured fold arrow, where you used them.
+- Your **global callout style**: border sides and width, corner radius, title and content scale, and **Align content with title**.
+- **Aliases**, written out as their own rules — an aliased callout looks right on its own.
+
+#### What it leaves out
+
+- **Heading callouts and inline callouts.** Those are not blockquotes: Callout Studio builds that markup itself as you type, so the CSS has nothing to attach to once the plugin is gone. The regular block form is the only one plain CSS can style, so it is the only one exported. Everything else — autocomplete, the right-click menu, vault discovery, your commands — is likewise behaviour, not CSS.
+- **The fallback style for unknown callout types.** In the plugin this is a catch-all that reaches every callout ID it does not recognise; frozen into a file it would restyle callouts in the target vault that this export never knew about, so it is deliberately dropped.
+- **Callouts you handed to your theme.** A callout marked [External style](#external-style--let-your-theme-own-a-callout) is styled by nothing here by design, so the snippet says nothing about it either — with one exception: if you also hid its icon, that one rule is kept, since a theme cannot express it for you.
+- **Callouts nobody uses.** Auto-created rows for IDs found in your vault, never adopted and no longer written anywhere, are skipped — they are invisible in your own list, so rules for them would style something you cannot see.
+- **Icons in PDF export.** On screen the snippet draws every icon correctly. Obsidian's PDF export is a separate rendering path that Callout Studio normally supports by hand; without the plugin loaded, a non-Lucide icon prints as Obsidian's default pencil. The colours, backgrounds and gradients print fine.
+
+If none of your callouts produce any CSS — you have no custom ones, or you handed every one of them to your theme — no file is written, and you are told why rather than left with an empty snippet in your vault.
+
+#### Notes for carrying it elsewhere
+
+- The file is self-contained: no `@import`, no external fonts, no network requests. Icon artwork is embedded directly.
+- One version detail worth knowing if the destination runs a much older Obsidian: `--callout-color` changed format in Obsidian 1.13, and the export writes whichever format the Obsidian you exported *from* uses. Going from 1.13+ back to 1.12 or earlier, re-export from a matching version.
+- The file opens with a comment carrying everything above in short, plus a fingerprint of its own contents. That fingerprint is how a later export can tell "the settings changed" from "the user edited this file" — so leave it alone if you want the overwrite prompt to keep protecting your edits.
 
 ### Reset
 

@@ -855,7 +855,7 @@ export const en: Record<string, string> = {
 		"A .json file with your callouts and settings, for importing into another vault.",
 	"export.formatCss": "CSS snippet",
 	"export.formatCssDesc":
-		"A .css file saved into this vault's snippets folder, for use where Callout Studio isn't installed. Not switched on automatically.",
+		"A .css file saved into this vault's snippets folder, for use where Callout Studio isn't installed. It covers regular callouts only, and is a snapshot — export again after you change a callout.",
 
 	// Import — Callout Manager
 	"import.cmTitle": "Import from Callout Manager",
