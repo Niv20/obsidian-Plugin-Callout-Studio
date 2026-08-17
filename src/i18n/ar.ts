@@ -633,10 +633,14 @@ export const ar: Record<string, string> = {
 	"confirm.titleDeleteImage": "حذف الصورة",
 
 	"vault.filesUpdated": "تم تحديث {{count}} مرجع callout في ملفات المخزن.",
+	// The arrow stays "→" although the sentence is RTL: it sits between two
+	// callout ids, which are normally Latin, so the bidi algorithm resolves that
+	// fragment left-to-right and a mirrored "←" would point from the new id back
+	// to the old one. Prose paths such as `firstRun.laterHint` do mirror.
 	"vault.idsUpdated":
-		"تم تحديث {{count}} معرّف callout في ملفات المخزن: {{oldIds}} ← {{newId}}",
+		"تم تحديث {{count}} معرّف callout في ملفات المخزن: {{oldIds}} → {{newId}}",
 	"vault.titlesUpdated":
-		"تم تحديث {{count}} عنوان callout في ملفات المخزن: {{oldTitle}} ← {{newTitle}}",
+		"تم تحديث {{count}} عنوان callout في ملفات المخزن: {{oldTitle}} → {{newTitle}}",
 	"vault.replaceWith": "الاستبدال بـ:",
 	"vault.deleteWithout": "حذف بدون استبدال",
 	"vault.confirmDelete": "تأكيد",
