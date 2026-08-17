@@ -43,6 +43,7 @@ import { CalloutRegistry } from "../src/manager/CalloutRegistry";
 import { DEFAULT_CALLOUTS, PREVIEW_PLACEHOLDER_ID } from "../src/constants";
 import { STYLE_DEMO_ID } from "../src/settings/GlobalStyleModal";
 import { sanitizeCalloutIdInput } from "../src/utils/calloutId";
+import { readRepoFile } from "./support/sourceScan";
 import type { CalloutDefinition, PluginData } from "../src/types";
 
 function def(over: Partial<CalloutDefinition> = {}): CalloutDefinition {
@@ -301,5 +302,64 @@ describe("`isDemo` is what decides this, and it defaults to false", () => {
 			false,
 		);
 		assert.ok(ids(registry.getAll()).includes("style-popup-demo"));
+	});
+});
+
+/* -------------------------------------------------------------------------- */
+/* The prose the fix left behind                                              */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * The code moved off `example` and the comments around it did not, which is a
+ * failure mode of its own: a reader who believes `setPreviewDefinition`'s doc
+ * comment concludes the placeholder still collides with a built-in, and either
+ * "fixes" a bug that is gone or leaves the real reservation rule undiscovered.
+ *
+ * Named literally, in the shape `repoTestGate.test.ts` already uses for retired
+ * claims, and for its reason: a stale sentence has nothing to derive it from,
+ * and reads perfectly well. Anything more general has to tell "is the
+ * placeholder" from "was the placeholder", which is where a text check stops
+ * being able to help.
+ */
+describe("no comment still says a shipped callout is the placeholder", () => {
+	const RETIRED = [
+		{
+			file: "src/manager/CalloutRegistry.ts",
+			phrase: "reused as the preview placeholder id",
+			since: "the placeholder is `new-callout-preview`, which nothing ships",
+		},
+		{
+			file: "src/manager/CalloutRegistry.ts",
+			phrase: "as the demo placeholder",
+			since: "no reserved demo id is a built-in id any more",
+		},
+		{
+			file: "src/settings/CalloutEditor.ts",
+			phrase: "a readable placeholder",
+			since: "it is reserved rather than readable — see constants.ts",
+		},
+	];
+
+	for (const { file, phrase, since } of RETIRED) {
+		it(`${file} no longer says "${phrase}"`, () => {
+			assert.strictEqual(
+				readRepoFile(file).includes(phrase),
+				false,
+				`${file} still says "${phrase}" — ${since}`,
+			);
+		});
+	}
+
+	it("and the files being read are the ones that own this", () => {
+		// A rename would otherwise make every assertion above pass by reading a
+		// file that no longer contains the subject at all.
+		assert.match(
+			readRepoFile("src/manager/CalloutRegistry.ts"),
+			/setPreviewDefinition\(/,
+		);
+		assert.match(
+			readRepoFile("src/settings/CalloutEditor.ts"),
+			/PREVIEW_PLACEHOLDER_ID/,
+		);
 	});
 });

@@ -1367,7 +1367,7 @@ export class CalloutRegistry {
 			if (def.id !== this.previewActiveId) {
 				out.push(def);
 			} else if (this.previewShadowedDef) {
-				// Show the real callout the demo overlays (e.g. built-in example).
+				// Show the real callout a demo was raised over, not the demo.
 				out.push(this.previewShadowedDef);
 			}
 			// else: demo occupies a fresh id → omit it entirely.
@@ -1549,9 +1549,9 @@ export class CalloutRegistry {
 	 * `isDemo` marks a placeholder preview (palette editor, global-style popups,
 	 * or an unnamed new-callout draft) whose id is not a real callout the user is
 	 * editing. Such previews are hidden from the settings lists entirely, so a
-	 * demo whose id collides with an existing callout — notably the built-in
-	 * `example`, reused as the preview placeholder id — can't leak a phantom
-	 * "My callout types" row while the modal is open. See {@link definitionsForLists}.
+	 * demo whose id collides with an existing callout — as it did back when the
+	 * placeholder was the built-in `example` — can't leak a phantom "My callout
+	 * types" row while the modal is open. See {@link definitionsForLists}.
 	 *
 	 * Deliberately does NOT call `notifyChange()`: that would trigger the
 	 * `onChange` → `saveSettings` write and force every open note to re-render.
@@ -1602,8 +1602,8 @@ export class CalloutRegistry {
 			// A preview never owns the identity of the callout it shadows —
 			// see withIdentityOf. Applied to demos too: they are already hidden
 			// from the lists, but it keeps the map entry a faithful stand-in for
-			// the CSS pipeline (notably the built-in `example`, whose id doubles
-			// as the demo placeholder, keeping its aliases styled).
+			// the CSS pipeline — a demo standing on a real id (the reserved ones
+			// name none, but a discovered row can) keeps its aliases styled.
 			this.setCallout(
 				def.id,
 				existing ? withIdentityOf(existing, def) : def,
