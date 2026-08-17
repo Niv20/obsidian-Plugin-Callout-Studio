@@ -499,13 +499,21 @@
 	box-shadow: 0 0 0 2px rgba(var(--interactive-accent-rgb), 0.2);
 }
 
+/* A greyed-out control still has to read as a control, which means it has to
+   stay *raised off* the window rather than merging into it. `--background-
+   secondary` is that raised shade only while `--modal-background` is
+   `--background-primary`; on mobile dark the two swap, so this fill landed
+   exactly on the surface behind it and the field read as a hole punched in the
+   modal — with `opacity: 0.5` making the remaining border fainter still. This
+   rule is already scoped to the callout editor, which is a chromed window, so
+   the token is always in scope here and the fallback never fires. */
 .callout-studio-editor
 	.setting-item-control
 	input[type="text"]:not(.cs-tag-input-field):disabled {
 	color: var(--text-faint);
 	opacity: 0.5;
 	cursor: not-allowed;
-	background: var(--background-secondary);
+	background: var(--cs-surface-raised, var(--background-secondary));
 }
 
 /* ─── Live Preview ────────────────────────────────────────────── */
@@ -1721,7 +1729,17 @@ button.callout-studio-icon-picker-loading {
 	/* Visible border: the right circle shows the callout BACKGROUND color,
 	   which is pale and would otherwise vanish against the panel. */
 	border: 1px solid var(--background-modifier-border);
-	box-shadow: 0 0 0 1.5px var(--background-primary);
+	/* The ring is a cut-out, not a colour: it repaints the surface behind the
+	   circle so the one in front reads as separated from the one behind it. So
+	   it has to be whatever that surface actually is. This widget renders in the
+	   settings tab (rows, custom palettes) AND inside the callout editor — its
+	   trigger swatch and every palette-menu item — and its selector cannot say
+	   which. `--cs-surface` answers both: undefined outside a window, so the
+	   fallback keeps the settings tab exactly as it was, and the window's own
+	   background inside one. Painting `--background-primary` raw drew a pure
+	   black halo on mobile dark, where that variable is `#000` for OLED and the
+	   modal is not. */
+	box-shadow: 0 0 0 1.5px var(--cs-surface, var(--background-primary));
 	box-sizing: border-box;
 	position: relative;
 }
@@ -1750,20 +1768,32 @@ button.callout-studio-icon-picker-loading {
    standard transparency checkerboard, because an empty circle at 16px is
    indistinguishable from a swatch that failed to render.
 
-   Both tones are derived from the page itself, so one rule reads correctly on a
-   light and a dark theme — white-on-grey where the page is white, and two quiet
-   darks where it is dark (a fixed white checker would glow on a dark page). The
-   mix, rather than --background-modifier-border, guarantees the squares stay
-   apart in themes that make that variable nearly invisible.
+   Both tones are derived from the surface the swatch is drawn on, so one rule
+   reads correctly on a light and a dark theme — white-on-grey where that
+   surface is white, and two quiet darks where it is dark (a fixed white checker
+   would glow on a dark page). The mix, rather than --background-modifier-border,
+   guarantees the squares stay apart in themes that make that variable nearly
+   invisible.
+
+   `--cs-surface` rather than `--background-primary`, and for the same reason as
+   the ring above: this widget is drawn both in the settings tab and inside the
+   callout editor. On mobile dark the raw variable is a true `#000` while the
+   modal is not, so "empty" came out as a black square on the window instead of
+   as a checkerboard — the one thing the pattern exists to avoid being confused
+   with is a swatch that failed to render.
 
    Tile size is half the circle so each square is a quarter of it: the accent
    circle in front covers ~40%, leaving roughly a 10px crescent to read in, and
    anything finer than ~4px turns to mush at this scale. */
 .cs-color-circle.is-transparent {
 	background-image: repeating-conic-gradient(
-		color-mix(in srgb, var(--text-normal) 22%, var(--background-primary)) 0%
-			25%,
-		var(--background-primary) 0% 50%
+		color-mix(
+				in srgb,
+				var(--text-normal) 22%,
+				var(--cs-surface, var(--background-primary))
+			)
+			0% 25%,
+		var(--cs-surface, var(--background-primary)) 0% 50%
 	);
 	background-size: calc(var(--cs-circle-size) / 2)
 		calc(var(--cs-circle-size) / 2);
@@ -2756,11 +2786,18 @@ input.cs-input-invalid:focus {
 	box-shadow: 0 0 0 2px rgba(var(--interactive-accent-rgb), 0.2);
 }
 
+/* The same raised shade as the display-name field above it, for the same
+   reason: the two sit one on top of the other in the callout editor and were
+   deliberately styled to match, so a fix to one that skipped the other would
+   split them apart on exactly the platform the fix is for. The only host of a
+   `.cs-tag-input-row` is that editor (src/ui/TagInput.ts), which is a chromed
+   window — but the fallback stays, because it is what makes the token safe to
+   name from a rule whose selector does not say so. */
 .cs-tag-input-row > .cs-tag-input-field:disabled {
 	color: var(--text-faint);
 	opacity: 0.5;
 	cursor: not-allowed;
-	background: var(--background-secondary);
+	background: var(--cs-surface-raised, var(--background-secondary));
 }
 
 .cs-tag-input-row > .cs-tag-input-field::placeholder {
