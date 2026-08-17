@@ -313,6 +313,22 @@ describe("the swatch widget follows the surface it is drawn on", () => {
 			"box-shadow: 0 0 0 1.5px var(--cs-surface, var(--background-primary))",
 		);
 	});
+
+	it('the "no background" checkerboard is woven out of that same surface', () => {
+		// Both tones: the pale square is a `color-mix` toward the surface and the
+		// other square IS the surface. Fixing one alone would leave the pattern
+		// mixing a colour from one window against a colour from another.
+		const decl = declaration(
+			ruleFor(".cs-color-circle.is-transparent"),
+			"background-image",
+		);
+		assert.match(decl, /^background-image: repeating-conic-gradient\(/);
+		assert.strictEqual(
+			decl.match(/var\(--cs-surface, var\(--background-primary\)\)/g)?.length,
+			2,
+			`both stops must name the token — got: ${decl}`,
+		);
+	});
 });
 
 /* -------------------------------------------------------------------------- */
@@ -340,13 +356,6 @@ const KNOWN_RAW_PRIMARY = [
 	// fallback would resolve to the same colour anyway.
 	".callout-studio-row-syntax | background",
 
-	// NOT deliberate — flagged, not endorsed. `renderColorCircles` is called
-	// from the settings rows AND from inside the callout editor (its trigger
-	// swatch and every palette-menu item), so on mobile dark this paints a
-	// colour that is not the surface behind it: the transparency checkerboard
-	// reads as a black-on-black square. It is the case the module header
-	// describes, and it wants `var(--cs-surface, var(--background-primary))`.
-	".cs-color-circle.is-transparent | background-image",
 ];
 
 describe("nothing else paints --background-primary unexamined", () => {
