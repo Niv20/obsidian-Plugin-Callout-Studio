@@ -70,6 +70,7 @@ function buildSandbox(): void {
 	try {
 		rmSync(SANDBOX, { recursive: true, force: true });
 		mkdirSync(join(SANDBOX, "scripts", "lib"), { recursive: true });
+		mkdirSync(join(SANDBOX, "scripts", "data"), { recursive: true });
 		mkdirSync(join(SANDBOX, "src", "icons", "data"), { recursive: true });
 
 		for (const script of ["generate-locales.mjs", "generate-icon-packs.mjs"]) {
@@ -78,6 +79,13 @@ function buildSandbox(): void {
 		cpSync(
 			join(REPO_ROOT, "scripts", "lib", "encodeIndex.mjs"),
 			join(SANDBOX, "scripts", "lib", "encodeIndex.mjs"),
+		);
+		// Material's upstream is not an npm package, so unlike the other seven it
+		// cannot come in over the node_modules symlink — the table is committed
+		// beside the generator and has to be copied like the generator itself.
+		cpSync(
+			join(REPO_ROOT, "scripts", "data", "material-metadata.json"),
+			join(SANDBOX, "scripts", "data", "material-metadata.json"),
 		);
 		// The icon generator round-trips every index through the *real* decoder
 		// before writing it, so the sandbox needs the codec too.
@@ -203,32 +211,44 @@ describe("icons:generate output is committed", () => {
 	});
 
 	/**
-	 * Marked `todo`, and that is a statement about the repository, not about
-	 * this test: **`npm run icons:generate` cannot run today.**
-	 *
 	 * Material has no pack file, so it sits outside the loop above — and it is
-	 * the one builder whose input is not an npm package but a table that used to
-	 * live here. `src/data/materialIconsMetadata.ts` was deleted in 078536a
-	 * ("perf(icons): pack the Material Symbols index"), which committed the
-	 * packed index and removed the 2.24 MB source it was built from.
-	 * `buildMaterial()` was never updated, so the script throws
-	 * MODULE_NOT_FOUND on that path — and because `main()` builds every pack in
-	 * one pass with Material first, that failure takes *all eight* packs down,
-	 * not just this one. The committed data is fine; the path back to
-	 * regenerating it is not.
+	 * the one builder whose input is not an npm package. That is what broke it:
+	 * 078536a ("perf(icons): pack the Material Symbols index") committed the
+	 * packed index and, in the same commit, deleted the 2.24 MB
+	 * `src/data/materialIconsMetadata.ts` that `buildMaterial()` had just been
+	 * written to read. The script threw MODULE_NOT_FOUND on that path from the
+	 * day it landed — and because `main()` builds every pack in one pass with
+	 * Material first, that took *all eight* packs down, not just this one.
 	 *
-	 * `todo` keeps the finding printed on every run without holding CI hostage
-	 * to a pre-existing break. Delete the option once the generator can read
-	 * `src/icons/data/material.index.ts` back through the codec (or the table is
-	 * restored) — from then on it guards for real.
+	 * The table now lives at `scripts/data/material-metadata.json`: generator
+	 * input, beside the generator, outside `src/` so it is neither bundled into
+	 * `main.js` nor typechecked by `npm run build` — the two costs that got the
+	 * TypeScript copy deleted in the first place.
+	 *
+	 * This is the assertion that would have caught it: the whole command, on the
+	 * pack that has no npm package behind it.
 	 */
-	it("the Material Symbols index can still be regenerated", { todo: "npm run icons:generate is broken — buildMaterial() reads a file deleted in 078536a" }, () => {
+	it("the Material Symbols index can still be regenerated", () => {
 		requireSandbox();
 		assert.ok(
-			repoFileExists("src/data/materialIconsMetadata.ts"),
-			"scripts/generate-icon-packs.mjs reads src/data/materialIconsMetadata.ts, which is not in the repository — so `npm run icons:generate` cannot run at all. Either restore the table, or teach buildMaterial() to read src/icons/data/material.index.ts back through the codec.",
+			repoFileExists("scripts/data/material-metadata.json"),
+			"scripts/generate-icon-packs.mjs reads scripts/data/material-metadata.json, which is not in the repository — so `npm run icons:generate` cannot run at all.",
 		);
 		generate("generate-icon-packs.mjs", ["--pack=material"]);
+		assertSameFile(join("src", "icons", "data", "material.index.ts"));
+	});
+
+	it("runs for every pack in one pass, the way npm run icons:generate does", () => {
+		// The eight-pack default path, with no `--pack=` narrowing it. Both tests
+		// above pass a list, and that is exactly the shape of run that stayed
+		// green while the real command was dead: Material is first in `BUILDERS`,
+		// so its failure was the first thing to happen and nothing after it ran.
+		requireSandbox();
+		generate("generate-icon-packs.mjs");
+		for (const id of FILE_BACKED) {
+			assertSameFile(join("packs", `${id}.json`));
+			assertSameFile(join("src", "icons", "data", `${id}.index.ts`));
+		}
 		assertSameFile(join("src", "icons", "data", "material.index.ts"));
 	});
 
