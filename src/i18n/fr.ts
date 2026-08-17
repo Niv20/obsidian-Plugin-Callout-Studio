@@ -775,9 +775,9 @@ export const fr: Record<string, string> = {
 	"import.warn.iconNameUnknown":
 		"Il n'y a aucune icône \"{{value}}\" dans {{type}}, donc l'icône par défaut a été utilisée.",
 	"import.warn.cmIconUnknownNew":
-		'L\'icône "{{value}}" n\'est pas disponible dans ce vault, donc l\'icône par défaut a été utilisée.',
+		"L'icône \"{{value}}\" n'est pas disponible dans ce vault, donc l'icône par défaut a été utilisée.",
 	"import.warn.cmIconUnknownExisting":
-		'L\'icône "{{value}}" n\'est pas disponible dans ce vault, donc "{{id}}" a conservé l\'icône qu\'il avait déjà.',
+		"L'icône \"{{value}}\" n'est pas disponible dans ce vault, donc \"{{id}}\" a conservé l'icône qu'il avait déjà.",
 	"import.chooseSource": "Importer depuis",
 	"import.sourceStudio": "Callout Studio",
 	"import.sourceStudioDesc":
@@ -798,7 +798,8 @@ export const fr: Record<string, string> = {
 	"import.cmVaultFound": "{{count}} callout(s) personnalisé(s) trouvé(s).",
 	"import.cmVaultNotFound":
 		"Aucun callout personnalisé n'a été trouvé dans ce vault.",
-	"import.cmPasteLabel": "Ou collez ici les styles copiés depuis Callout Manager :",
+	"import.cmPasteLabel":
+		"Ou collez ici les styles copiés depuis Callout Manager :",
 	"import.cmPlaceholder": "Collez ici les styles copiés, ou un data.json…",
 	"import.cmBtnCancel": "Annuler",
 	"import.cmBtnImport": "Importer",
@@ -807,7 +808,8 @@ export const fr: Record<string, string> = {
 	"import.err.cmNotRecognized":
 		"Fichier non reconnu : styles produits par le bouton Copy de Callout Manager, " +
 		"ou fichier data.json de Callout Manager attendus.",
-	"import.err.cmNoEntries": "Aucun callout personnalisé n'a été trouvé à importer.",
+	"import.err.cmNoEntries":
+		"Aucun callout personnalisé n'a été trouvé à importer.",
 	"import.err.cmNoColorForNew":
 		'Aucune couleur utilisable n\'a été trouvée pour le nouveau callout "{{value}}" ; il a été ignoré.',
 	"import.err.cmIdConflict":
@@ -898,21 +900,28 @@ export const fr: Record<string, string> = {
 	"palette.colorExistsUseLink": "utiliser celle existante",
 	"locale.downloading": "Téléchargement de la traduction…",
 	"locale.notDownloaded": "{{name}} n’est pas encore téléchargé",
-	"locale.notDownloadedDesc": "Callout Studio affiche l’anglais jusqu’au téléchargement de la traduction. Il réessaiera au prochain démarrage d’Obsidian.",
+	"locale.notDownloadedDesc":
+		"Callout Studio affiche l’anglais jusqu’au téléchargement de la traduction. Il réessaiera au prochain démarrage d’Obsidian.",
 	"locale.retry": "Réessayer",
-	"locale.diskWriteFailed": "Callout Studio n’a pas pu enregistrer la traduction sur le disque. Elle devra être téléchargée à nouveau la prochaine fois.",
+	"locale.diskWriteFailed":
+		"Callout Studio n’a pas pu enregistrer la traduction sur le disque. Elle devra être téléchargée à nouveau la prochaine fois.",
 	"notice.exportedCssCreated": "Extrait CSS enregistré dans {{path}}",
 	"notice.exportedCssUpdated": "Extrait CSS mis à jour dans {{path}}",
 	"notice.exportedCssUnchanged": "L’extrait CSS est déjà à jour.",
 	"notice.exportCssEmpty": "Aucun callout personnalisé à exporter.",
-	"notice.exportCssFailed": "Impossible d’enregistrer l’extrait CSS. Consultez la console de développement pour plus de détails.",
-	"notice.exportCssEnabled": "Cet extrait est activé dans ce vault. Callout Studio applique déjà un style à ces callouts et l’extrait conserve le style présent lors de l’exportation.",
+	"notice.exportCssFailed":
+		"Impossible d’enregistrer l’extrait CSS. Consultez la console de développement pour plus de détails.",
+	"notice.exportCssEnabled":
+		"Cet extrait est activé dans ce vault. Callout Studio applique déjà un style à ces callouts et l’extrait conserve le style présent lors de l’exportation.",
 	"confirm.titleOverwriteSnippet": "Écraser l’extrait CSS",
-	"confirm.overwriteSnippet": "L’extrait CSS de votre dossier snippets a changé depuis que Callout Studio l’a écrit. Une nouvelle exportation remplacera tout le fichier.",
+	"confirm.overwriteSnippet":
+		"L’extrait CSS de votre dossier snippets a changé depuis que Callout Studio l’a écrit. Une nouvelle exportation remplacera tout le fichier.",
 	"confirm.overwriteSnippetOk": "Écraser",
 	"export.chooseFormat": "Exporter comme",
 	"export.formatJson": "Sauvegarde Callout Studio",
-	"export.formatJsonDesc": "Un fichier .json contenant vos callouts et paramètres, à importer dans un autre vault.",
+	"export.formatJsonDesc":
+		"Un fichier .json contenant vos callouts et paramètres, à importer dans un autre vault.",
 	"export.formatCss": "Extrait CSS",
-	"export.formatCssDesc": "Un fichier .css enregistré dans le dossier snippets de ce vault, à utiliser là où Callout Studio n’est pas installé. Il couvre uniquement les callouts classiques et constitue un instantané : exportez-le à nouveau après toute modification.",
+	"export.formatCssDesc":
+		"Un fichier .css enregistré dans le dossier snippets de ce vault, à utiliser là où Callout Studio n’est pas installé. Il couvre uniquement les callouts classiques et constitue un instantané : exportez-le à nouveau après toute modification.",
 };

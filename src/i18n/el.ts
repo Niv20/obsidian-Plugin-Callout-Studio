@@ -6,7 +6,8 @@ export const el: Record<string, string> = {
 	"cmd.calloutUnwrap": "Αφαίρεση callout",
 	"cmd.customWrapBlock": "Αναδίπλωση σε callout {{name}}",
 	"cmd.customInsertBlock": "Εισαγωγή callout {{name}}",
-	"cmd.customInsertHeading": "Εισαγωγή callout επικεφαλίδας H{{level}} {{name}}",
+	"cmd.customInsertHeading":
+		"Εισαγωγή callout επικεφαλίδας H{{level}} {{name}}",
 	"cmd.customInsertInline": "Εισαγωγή ενσωματωμένου callout {{name}}",
 	"autocomplete.createNew": 'Δημιουργία νέου callout: "{{name}}"',
 	"settings.fallbackTag": "Προεπιλογή",
@@ -170,8 +171,7 @@ export const el: Record<string, string> = {
 	"commandBuilder.actionWrap": "Αναδίπλωση επιλογής",
 	"commandBuilder.actionInsert": "Εισαγωγή νέου",
 	"commandBuilder.preview": "Όνομα εντολής",
-	"commandBuilder.duplicate":
-		"Έχετε ήδη μια εντολή που κάνει ακριβώς αυτό.",
+	"commandBuilder.duplicate": "Έχετε ήδη μια εντολή που κάνει ακριβώς αυτό.",
 	"commandBuilder.noCallouts":
 		"Δεν υπάρχουν ακόμη τύποι callout για να δημιουργήσετε μια εντολή.",
 	"commandBuilder.save": "Αποθήκευση",
@@ -784,7 +784,8 @@ export const el: Record<string, string> = {
 		"Δεν βρέθηκαν προσαρμοσμένα callout σε αυτό το vault.",
 	"import.cmPasteLabel":
 		"Ή επικολλήστε εδώ τα αντιγραμμένα στυλ του Callout Manager:",
-	"import.cmPlaceholder": "Επικολλήστε τα αντιγραμμένα στυλ, ή ένα data.json, εδώ…",
+	"import.cmPlaceholder":
+		"Επικολλήστε τα αντιγραμμένα στυλ, ή ένα data.json, εδώ…",
 	"import.cmBtnCancel": "Ακύρωση",
 	"import.cmBtnImport": "Εισαγωγή",
 	"import.err.cmNoBlocksFound":
@@ -885,21 +886,28 @@ export const el: Record<string, string> = {
 	"palette.colorExistsUseLink": "χρησιμοποιήστε το υπάρχον",
 	"locale.downloading": "Λήψη μετάφρασης…",
 	"locale.notDownloaded": "Το {{name}} δεν έχει ληφθεί ακόμη",
-	"locale.notDownloadedDesc": "Το Callout Studio εμφανίζει αγγλικά μέχρι να ληφθεί η μετάφραση. Θα ξαναπροσπαθήσει την επόμενη φορά που θα ξεκινήσει το Obsidian.",
+	"locale.notDownloadedDesc":
+		"Το Callout Studio εμφανίζει αγγλικά μέχρι να ληφθεί η μετάφραση. Θα ξαναπροσπαθήσει την επόμενη φορά που θα ξεκινήσει το Obsidian.",
 	"locale.retry": "Επανάληψη",
-	"locale.diskWriteFailed": "Το Callout Studio δεν μπόρεσε να αποθηκεύσει τη μετάφραση στον δίσκο, οπότε θα χρειαστεί νέα λήψη την επόμενη φορά.",
+	"locale.diskWriteFailed":
+		"Το Callout Studio δεν μπόρεσε να αποθηκεύσει τη μετάφραση στον δίσκο, οπότε θα χρειαστεί νέα λήψη την επόμενη φορά.",
 	"notice.exportedCssCreated": "Το απόσπασμα CSS αποθηκεύτηκε στο {{path}}",
 	"notice.exportedCssUpdated": "Το απόσπασμα CSS ενημερώθηκε στο {{path}}",
 	"notice.exportedCssUnchanged": "Το απόσπασμα CSS είναι ήδη ενημερωμένο.",
 	"notice.exportCssEmpty": "Δεν υπάρχουν προσαρμοσμένα callout για εξαγωγή.",
-	"notice.exportCssFailed": "Δεν ήταν δυνατή η αποθήκευση του αποσπάσματος CSS. Ελέγξτε την κονσόλα προγραμματιστή για λεπτομέρειες.",
-	"notice.exportCssEnabled": "Αυτό το απόσπασμα είναι ενεργοποιημένο σε αυτό το vault. Το Callout Studio μορφοποιεί ήδη αυτά τα callout και το απόσπασμα διατηρεί τη μορφή κατά την εξαγωγή.",
+	"notice.exportCssFailed":
+		"Δεν ήταν δυνατή η αποθήκευση του αποσπάσματος CSS. Ελέγξτε την κονσόλα προγραμματιστή για λεπτομέρειες.",
+	"notice.exportCssEnabled":
+		"Αυτό το απόσπασμα είναι ενεργοποιημένο σε αυτό το vault. Το Callout Studio μορφοποιεί ήδη αυτά τα callout και το απόσπασμα διατηρεί τη μορφή κατά την εξαγωγή.",
 	"confirm.titleOverwriteSnippet": "Αντικατάσταση αποσπάσματος CSS",
-	"confirm.overwriteSnippet": "Το απόσπασμα CSS στον φάκελο snippets άλλαξε από τότε που το έγραψε το Callout Studio. Η νέα εξαγωγή αντικαθιστά ολόκληρο το αρχείο.",
+	"confirm.overwriteSnippet":
+		"Το απόσπασμα CSS στον φάκελο snippets άλλαξε από τότε που το έγραψε το Callout Studio. Η νέα εξαγωγή αντικαθιστά ολόκληρο το αρχείο.",
 	"confirm.overwriteSnippetOk": "Αντικατάσταση",
 	"export.chooseFormat": "Εξαγωγή ως",
 	"export.formatJson": "Αντίγραφο ασφαλείας Callout Studio",
-	"export.formatJsonDesc": "Αρχείο .json με τα callout και τις ρυθμίσεις σας για εισαγωγή σε άλλο vault.",
+	"export.formatJsonDesc":
+		"Αρχείο .json με τα callout και τις ρυθμίσεις σας για εισαγωγή σε άλλο vault.",
 	"export.formatCss": "Απόσπασμα CSS",
-	"export.formatCssDesc": "Αρχείο .css στον φάκελο snippets αυτού του vault, για χρήση όπου δεν είναι εγκατεστημένο το Callout Studio. Καλύπτει μόνο τα κανονικά callout και είναι στιγμιότυπο· κάντε νέα εξαγωγή μετά από αλλαγή.",
+	"export.formatCssDesc":
+		"Αρχείο .css στον φάκελο snippets αυτού του vault, για χρήση όπου δεν είναι εγκατεστημένο το Callout Studio. Καλύπτει μόνο τα κανονικά callout και είναι στιγμιότυπο· κάντε νέα εξαγωγή μετά από αλλαγή.",
 };

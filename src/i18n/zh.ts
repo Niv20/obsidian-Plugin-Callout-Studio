@@ -813,9 +813,9 @@ export const zh: Record<string, string> = {
 	"footer.tagline": "有反馈、意见或建议？欢迎告诉我！",
 	"footer.madeBy": "由 Niv 制作  •  ",
 	"settings.deletePaletteConfirmLinkedOne":
-		'删除调色板“{{name}}”？\n1 个 callout 正在使用它。它会保留原有颜色，你之后可以在其编辑器的颜色行重新关联。',
+		"删除调色板“{{name}}”？\n1 个 callout 正在使用它。它会保留原有颜色，你之后可以在其编辑器的颜色行重新关联。",
 	"settings.deletePaletteConfirmLinked":
-		'删除调色板“{{name}}”？\n{{count}} 个 callout 正在使用它。它们会保留原有颜色，你之后可以在任一编辑器的颜色行重新关联。',
+		"删除调色板“{{name}}”？\n{{count}} 个 callout 正在使用它。它们会保留原有颜色，你之后可以在任一编辑器的颜色行重新关联。",
 	"settings.unlinkedColors": "未关联颜色",
 	"settings.unlinkedColorsDesc":
 		"这些 callout 的已保存颜色已被删除。它们会保留原有颜色；恢复会重新保存该颜色并重新关联整个组。",
@@ -834,27 +834,33 @@ export const zh: Record<string, string> = {
 		"此 callout 的已保存颜色已被删除。你可以通过{{link}}重新保存——另外 {{count}} 个使用该颜色的 callout 也会重新关联。",
 	"editor.colorsDescDeletedLink": "点击这里",
 	"palette.colorExists":
-		'这些颜色与“{{name}}”完全相同。两个已保存颜色不能相同——请修改一个颜色以区分它们。',
+		"这些颜色与“{{name}}”完全相同。两个已保存颜色不能相同——请修改一个颜色以区分它们。",
 	"palette.colorExistsUse":
-		'这些颜色与“{{name}}”完全相同。两个已保存颜色不能相同——请修改一个颜色，或{{link}}。',
+		"这些颜色与“{{name}}”完全相同。两个已保存颜色不能相同——请修改一个颜色，或{{link}}。",
 	"palette.colorExistsUseLink": "使用现有颜色",
 	"locale.downloading": "正在下载翻译…",
 	"locale.notDownloaded": "{{name}} 尚未下载",
-	"locale.notDownloadedDesc": "在翻译下载完成前，Callout Studio 将显示英文。下次启动 Obsidian 时会重试。",
+	"locale.notDownloadedDesc":
+		"在翻译下载完成前，Callout Studio 将显示英文。下次启动 Obsidian 时会重试。",
 	"locale.retry": "重试",
-	"locale.diskWriteFailed": "Callout Studio 无法将翻译保存到磁盘，因此下次需要重新下载。",
+	"locale.diskWriteFailed":
+		"Callout Studio 无法将翻译保存到磁盘，因此下次需要重新下载。",
 	"notice.exportedCssCreated": "CSS 片段已保存到 {{path}}",
 	"notice.exportedCssUpdated": "CSS 片段已在 {{path}} 更新",
 	"notice.exportedCssUnchanged": "CSS 片段已经是最新版本。",
 	"notice.exportCssEmpty": "没有可导出的自定义 callout。",
 	"notice.exportCssFailed": "无法保存 CSS 片段。请查看开发者控制台了解详情。",
-	"notice.exportCssEnabled": "此片段已在此 vault 中启用。Callout Studio 已经为这些 callout 设置样式，而片段保留导出时的样式。",
+	"notice.exportCssEnabled":
+		"此片段已在此 vault 中启用。Callout Studio 已经为这些 callout 设置样式，而片段保留导出时的样式。",
 	"confirm.titleOverwriteSnippet": "覆盖 CSS 片段",
-	"confirm.overwriteSnippet": "snippets 文件夹中的 CSS 片段自 Callout Studio 写入后已发生变化。再次导出会替换整个文件。",
+	"confirm.overwriteSnippet":
+		"snippets 文件夹中的 CSS 片段自 Callout Studio 写入后已发生变化。再次导出会替换整个文件。",
 	"confirm.overwriteSnippetOk": "覆盖",
 	"export.chooseFormat": "导出为",
 	"export.formatJson": "Callout Studio 备份",
-	"export.formatJsonDesc": "包含 callout 和设置的 .json 文件，可导入到其他 vault。",
+	"export.formatJsonDesc":
+		"包含 callout 和设置的 .json 文件，可导入到其他 vault。",
 	"export.formatCss": "CSS 片段",
-	"export.formatCssDesc": "保存在此 vault 的 snippets 文件夹中的 .css 文件，可在未安装 Callout Studio 的地方使用。仅涵盖普通 callout，是一个快照；更改 callout 后请重新导出。",
+	"export.formatCssDesc":
+		"保存在此 vault 的 snippets 文件夹中的 .css 文件，可在未安装 Callout Studio 的地方使用。仅涵盖普通 callout，是一个快照；更改 callout 后请重新导出。",
 };

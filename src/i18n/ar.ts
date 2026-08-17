@@ -7,7 +7,8 @@ export const ar: Record<string, string> = {
 
 	"cmd.customWrapBlock": "التفاف في callout {{name}}",
 	"cmd.customInsertBlock": "إدراج callout {{name}}",
-	"cmd.customInsertHeading": "إدراج عنوان callout {{name}} من المستوى H{{level}}",
+	"cmd.customInsertHeading":
+		"إدراج عنوان callout {{name}} من المستوى H{{level}}",
 	"cmd.customInsertInline": "إدراج callout {{name}} ضمن السطر",
 
 	"autocomplete.createNew": 'إنشاء callout جديد: "{{name}}"',
@@ -776,7 +777,8 @@ export const ar: Record<string, string> = {
 	"import.cmFromVault": "هذه الخزينة",
 	"import.cmVaultChecking": "جارٍ البحث عن إضافة Callout Manager…",
 	"import.cmVaultFound": "تم العثور على {{count}} تلميح(ات) مخصصة.",
-	"import.cmVaultNotFound": "لم يتم العثور على أي تلميحات مخصصة في هذه الخزينة.",
+	"import.cmVaultNotFound":
+		"لم يتم العثور على أي تلميحات مخصصة في هذه الخزينة.",
 	"import.cmPasteLabel": "أو الصق الأنماط المنسوخة من Callout Manager هنا:",
 	"import.cmPlaceholder": "الصق الأنماط المنسوخة، أو ملف data.json، هنا…",
 	"import.cmBtnCancel": "إلغاء",
@@ -872,21 +874,28 @@ export const ar: Record<string, string> = {
 	"palette.colorExistsUseLink": "استخدام الموجود",
 	"locale.downloading": "جارٍ تنزيل الترجمة…",
 	"locale.notDownloaded": "لم يتم تنزيل {{name}} بعد",
-	"locale.notDownloadedDesc": "يعرض Callout Studio اللغة الإنجليزية حتى يمكن تنزيل الترجمة. ستتم إعادة المحاولة عند تشغيل Obsidian التالي.",
+	"locale.notDownloadedDesc":
+		"يعرض Callout Studio اللغة الإنجليزية حتى يمكن تنزيل الترجمة. ستتم إعادة المحاولة عند تشغيل Obsidian التالي.",
 	"locale.retry": "إعادة المحاولة",
-	"locale.diskWriteFailed": "تعذر على Callout Studio حفظ الترجمة على القرص، لذا سيلزم تنزيلها مرة أخرى في المرة القادمة.",
+	"locale.diskWriteFailed":
+		"تعذر على Callout Studio حفظ الترجمة على القرص، لذا سيلزم تنزيلها مرة أخرى في المرة القادمة.",
 	"notice.exportedCssCreated": "تم حفظ مقطع CSS في {{path}}",
 	"notice.exportedCssUpdated": "تم تحديث مقطع CSS في {{path}}",
 	"notice.exportedCssUnchanged": "مقطع CSS محدث بالفعل.",
 	"notice.exportCssEmpty": "لا توجد أنواع نداء مخصصة لتصديرها.",
-	"notice.exportCssFailed": "تعذر حفظ مقطع CSS. راجع وحدة تحكم المطور للحصول على التفاصيل.",
-	"notice.exportCssEnabled": "هذا المقطع مفعّل في هذه الخزنة. يقوم Callout Studio بتنسيق هذه النداءات بالفعل، والمقطع يحتفظ بالتنسيق الذي كان عليه عند تصديره.",
+	"notice.exportCssFailed":
+		"تعذر حفظ مقطع CSS. راجع وحدة تحكم المطور للحصول على التفاصيل.",
+	"notice.exportCssEnabled":
+		"هذا المقطع مفعّل في هذه الخزنة. يقوم Callout Studio بتنسيق هذه النداءات بالفعل، والمقطع يحتفظ بالتنسيق الذي كان عليه عند تصديره.",
 	"confirm.titleOverwriteSnippet": "استبدال مقطع CSS",
-	"confirm.overwriteSnippet": "تغير مقطع CSS في مجلد المقاطع منذ أن كتبه Callout Studio. سيؤدي التصدير مرة أخرى إلى استبدال الملف بالكامل.",
+	"confirm.overwriteSnippet":
+		"تغير مقطع CSS في مجلد المقاطع منذ أن كتبه Callout Studio. سيؤدي التصدير مرة أخرى إلى استبدال الملف بالكامل.",
 	"confirm.overwriteSnippetOk": "استبدال",
 	"export.chooseFormat": "تصدير كـ",
 	"export.formatJson": "نسخة Callout Studio الاحتياطية",
-	"export.formatJsonDesc": "ملف ‎.json يحتوي على النداءات والإعدادات لاستيرادها إلى خزنة أخرى.",
+	"export.formatJsonDesc":
+		"ملف ‎.json يحتوي على النداءات والإعدادات لاستيرادها إلى خزنة أخرى.",
 	"export.formatCss": "مقطع CSS",
-	"export.formatCssDesc": "ملف ‎.css محفوظ في مجلد المقاطع بهذه الخزنة، لاستخدامه حيث لا يكون Callout Studio مثبتًا. يغطي النداءات العادية فقط، وهو لقطة؛ صدّره مرة أخرى بعد تغيير نداء.",
+	"export.formatCssDesc":
+		"ملف ‎.css محفوظ في مجلد المقاطع بهذه الخزنة، لاستخدامه حيث لا يكون Callout Studio مثبتًا. يغطي النداءات العادية فقط، وهو لقطة؛ صدّره مرة أخرى بعد تغيير نداء.",
 };

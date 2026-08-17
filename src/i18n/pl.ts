@@ -789,9 +789,9 @@ export const pl: Record<string, string> = {
 	"import.cmFromVault": "Ten sejf",
 	"import.cmVaultChecking": "Szukanie wtyczki Callout Manager…",
 	"import.cmVaultFound": "Znaleziono {{count}} własnych calloutów.",
-	"import.cmVaultNotFound":
-		"Nie znaleziono własnych calloutów w tym sejfie.",
-	"import.cmPasteLabel": "Albo wklej tutaj style skopiowane z Callout Manager:",
+	"import.cmVaultNotFound": "Nie znaleziono własnych calloutów w tym sejfie.",
+	"import.cmPasteLabel":
+		"Albo wklej tutaj style skopiowane z Callout Manager:",
 	"import.cmPlaceholder": "Wklej skopiowane style lub plik data.json tutaj…",
 	"import.cmBtnCancel": "Anuluj",
 	"import.cmBtnImport": "Importuj",
@@ -890,21 +890,29 @@ export const pl: Record<string, string> = {
 	"palette.colorExistsUseLink": "użyć istniejącego",
 	"locale.downloading": "Pobieranie tłumaczenia…",
 	"locale.notDownloaded": "{{name}} nie zostało jeszcze pobrane",
-	"locale.notDownloadedDesc": "Callout Studio wyświetla angielski do czasu pobrania tłumaczenia. Spróbuje ponownie przy następnym uruchomieniu Obsidiana.",
+	"locale.notDownloadedDesc":
+		"Callout Studio wyświetla angielski do czasu pobrania tłumaczenia. Spróbuje ponownie przy następnym uruchomieniu Obsidiana.",
 	"locale.retry": "Spróbuj ponownie",
-	"locale.diskWriteFailed": "Callout Studio nie mogło zapisać tłumaczenia na dysku, więc następnym razem trzeba będzie pobrać je ponownie.",
+	"locale.diskWriteFailed":
+		"Callout Studio nie mogło zapisać tłumaczenia na dysku, więc następnym razem trzeba będzie pobrać je ponownie.",
 	"notice.exportedCssCreated": "Fragment CSS zapisano w {{path}}",
 	"notice.exportedCssUpdated": "Fragment CSS zaktualizowano w {{path}}",
 	"notice.exportedCssUnchanged": "Fragment CSS jest już aktualny.",
-	"notice.exportCssEmpty": "Brak niestandardowych calloutów do wyeksportowania.",
-	"notice.exportCssFailed": "Nie można zapisać fragmentu CSS. Szczegóły znajdziesz w konsoli deweloperskiej.",
-	"notice.exportCssEnabled": "Ten fragment jest włączony w tym vault. Callout Studio już stylizuje te callouty, a fragment zachowuje styl z chwili eksportu.",
+	"notice.exportCssEmpty":
+		"Brak niestandardowych calloutów do wyeksportowania.",
+	"notice.exportCssFailed":
+		"Nie można zapisać fragmentu CSS. Szczegóły znajdziesz w konsoli deweloperskiej.",
+	"notice.exportCssEnabled":
+		"Ten fragment jest włączony w tym vault. Callout Studio już stylizuje te callouty, a fragment zachowuje styl z chwili eksportu.",
 	"confirm.titleOverwriteSnippet": "Zastąp fragment CSS",
-	"confirm.overwriteSnippet": "Fragment CSS w folderze snippets zmienił się od czasu zapisu przez Callout Studio. Ponowny eksport zastąpi cały plik.",
+	"confirm.overwriteSnippet":
+		"Fragment CSS w folderze snippets zmienił się od czasu zapisu przez Callout Studio. Ponowny eksport zastąpi cały plik.",
 	"confirm.overwriteSnippetOk": "Zastąp",
 	"export.chooseFormat": "Eksportuj jako",
 	"export.formatJson": "Kopia zapasowa Callout Studio",
-	"export.formatJsonDesc": "Plik .json z calloutami i ustawieniami do zaimportowania w innym vault.",
+	"export.formatJsonDesc":
+		"Plik .json z calloutami i ustawieniami do zaimportowania w innym vault.",
 	"export.formatCss": "Fragment CSS",
-	"export.formatCssDesc": "Plik .css zapisany w folderze snippets tego vaultu, do użycia tam, gdzie Callout Studio nie jest zainstalowane. Obejmuje tylko zwykłe callouty i jest migawką; po zmianie wyeksportuj go ponownie.",
+	"export.formatCssDesc":
+		"Plik .css zapisany w folderze snippets tego vaultu, do użycia tam, gdzie Callout Studio nie jest zainstalowane. Obejmuje tylko zwykłe callouty i jest migawką; po zmianie wyeksportuj go ponownie.",
 };

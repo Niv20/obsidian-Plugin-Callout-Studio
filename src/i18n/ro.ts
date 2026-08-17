@@ -892,21 +892,28 @@ export const ro: Record<string, string> = {
 	"palette.colorExistsUseLink": "folosiți-o pe cea existentă",
 	"locale.downloading": "Se descarcă traducerea…",
 	"locale.notDownloaded": "{{name}} nu a fost descărcat încă",
-	"locale.notDownloadedDesc": "Callout Studio afișează engleza până când traducerea poate fi descărcată. Va încerca din nou la următoarea pornire a Obsidian.",
+	"locale.notDownloadedDesc":
+		"Callout Studio afișează engleza până când traducerea poate fi descărcată. Va încerca din nou la următoarea pornire a Obsidian.",
 	"locale.retry": "Încearcă din nou",
-	"locale.diskWriteFailed": "Callout Studio nu a putut salva traducerea pe disc, așa că va trebui descărcată din nou data viitoare.",
+	"locale.diskWriteFailed":
+		"Callout Studio nu a putut salva traducerea pe disc, așa că va trebui descărcată din nou data viitoare.",
 	"notice.exportedCssCreated": "Fragmentul CSS a fost salvat în {{path}}",
 	"notice.exportedCssUpdated": "Fragmentul CSS a fost actualizat în {{path}}",
 	"notice.exportedCssUnchanged": "Fragmentul CSS este deja actualizat.",
 	"notice.exportCssEmpty": "Nu există callouturi personalizate de exportat.",
-	"notice.exportCssFailed": "Fragmentul CSS nu a putut fi salvat. Verifică consola dezvoltatorului pentru detalii.",
-	"notice.exportCssEnabled": "Acest fragment este activat în acest vault. Callout Studio stilizează deja aceste callouturi, iar fragmentul păstrează stilul din momentul exportului.",
+	"notice.exportCssFailed":
+		"Fragmentul CSS nu a putut fi salvat. Verifică consola dezvoltatorului pentru detalii.",
+	"notice.exportCssEnabled":
+		"Acest fragment este activat în acest vault. Callout Studio stilizează deja aceste callouturi, iar fragmentul păstrează stilul din momentul exportului.",
 	"confirm.titleOverwriteSnippet": "Suprascrie fragmentul CSS",
-	"confirm.overwriteSnippet": "Fragmentul CSS din folderul snippets s-a schimbat de când a fost scris de Callout Studio. Un nou export va înlocui întregul fișier.",
+	"confirm.overwriteSnippet":
+		"Fragmentul CSS din folderul snippets s-a schimbat de când a fost scris de Callout Studio. Un nou export va înlocui întregul fișier.",
 	"confirm.overwriteSnippetOk": "Suprascrie",
 	"export.chooseFormat": "Exportă ca",
 	"export.formatJson": "Copie de siguranță Callout Studio",
-	"export.formatJsonDesc": "Un fișier .json cu callouturile și setările tale, pentru import într-un alt vault.",
+	"export.formatJsonDesc":
+		"Un fișier .json cu callouturile și setările tale, pentru import într-un alt vault.",
 	"export.formatCss": "Fragment CSS",
-	"export.formatCssDesc": "Un fișier .css salvat în folderul snippets al acestui vault, pentru utilizare unde Callout Studio nu este instalat. Acoperă doar callouturile obișnuite și este un instantaneu; exportă din nou după modificare.",
+	"export.formatCssDesc":
+		"Un fișier .css salvat în folderul snippets al acestui vault, pentru utilizare unde Callout Studio nu este instalat. Acoperă doar callouturile obișnuite și este un instantaneu; exportă din nou după modificare.",
 };

@@ -874,21 +874,28 @@ export const hi: Record<string, string> = {
 	"palette.colorExistsUseLink": "मौजूदा वाला उपयोग करें",
 	"locale.downloading": "अनुवाद डाउनलोड हो रहा है…",
 	"locale.notDownloaded": "{{name}} अभी डाउनलोड नहीं हुआ है",
-	"locale.notDownloadedDesc": "अनुवाद डाउनलोड होने तक Callout Studio अंग्रेज़ी दिखा रहा है। Obsidian अगली बार शुरू होने पर फिर प्रयास किया जाएगा।",
+	"locale.notDownloadedDesc":
+		"अनुवाद डाउनलोड होने तक Callout Studio अंग्रेज़ी दिखा रहा है। Obsidian अगली बार शुरू होने पर फिर प्रयास किया जाएगा।",
 	"locale.retry": "पुनः प्रयास करें",
-	"locale.diskWriteFailed": "Callout Studio अनुवाद को डिस्क पर सहेज नहीं सका, इसलिए अगली बार इसे फिर डाउनलोड करना होगा।",
+	"locale.diskWriteFailed":
+		"Callout Studio अनुवाद को डिस्क पर सहेज नहीं सका, इसलिए अगली बार इसे फिर डाउनलोड करना होगा।",
 	"notice.exportedCssCreated": "CSS स्निपेट {{path}} में सहेजा गया",
 	"notice.exportedCssUpdated": "CSS स्निपेट {{path}} में अपडेट किया गया",
 	"notice.exportedCssUnchanged": "CSS स्निपेट पहले से अद्यतन है।",
 	"notice.exportCssEmpty": "निर्यात करने के लिए कोई कस्टम callout नहीं है।",
-	"notice.exportCssFailed": "CSS स्निपेट सहेजा नहीं जा सका। विवरण के लिए डेवलपर कंसोल देखें।",
-	"notice.exportCssEnabled": "यह स्निपेट इस vault में चालू है। Callout Studio पहले से इन callout को स्टाइल करता है और स्निपेट निर्यात के समय वाली शैली रखता है।",
+	"notice.exportCssFailed":
+		"CSS स्निपेट सहेजा नहीं जा सका। विवरण के लिए डेवलपर कंसोल देखें।",
+	"notice.exportCssEnabled":
+		"यह स्निपेट इस vault में चालू है। Callout Studio पहले से इन callout को स्टाइल करता है और स्निपेट निर्यात के समय वाली शैली रखता है।",
 	"confirm.titleOverwriteSnippet": "CSS स्निपेट ओवरराइट करें",
-	"confirm.overwriteSnippet": "snippets फ़ोल्डर में CSS स्निपेट Callout Studio द्वारा लिखे जाने के बाद बदल गया है। दोबारा निर्यात करने पर पूरी फ़ाइल बदल जाएगी।",
+	"confirm.overwriteSnippet":
+		"snippets फ़ोल्डर में CSS स्निपेट Callout Studio द्वारा लिखे जाने के बाद बदल गया है। दोबारा निर्यात करने पर पूरी फ़ाइल बदल जाएगी।",
 	"confirm.overwriteSnippetOk": "ओवरराइट करें",
 	"export.chooseFormat": "इस रूप में निर्यात करें",
 	"export.formatJson": "Callout Studio बैकअप",
-	"export.formatJsonDesc": "आपके callout और सेटिंग वाला .json फ़ाइल, जिसे दूसरी vault में आयात किया जा सकता है।",
+	"export.formatJsonDesc":
+		"आपके callout और सेटिंग वाला .json फ़ाइल, जिसे दूसरी vault में आयात किया जा सकता है।",
 	"export.formatCss": "CSS स्निपेट",
-	"export.formatCssDesc": "इस vault के snippets फ़ोल्डर में सहेजी गई .css फ़ाइल, जहाँ Callout Studio इंस्टॉल नहीं है वहाँ उपयोग के लिए। यह केवल नियमित callout को कवर करती है और एक स्नैपशॉट है; बदलाव के बाद फिर निर्यात करें।",
+	"export.formatCssDesc":
+		"इस vault के snippets फ़ोल्डर में सहेजी गई .css फ़ाइल, जहाँ Callout Studio इंस्टॉल नहीं है वहाँ उपयोग के लिए। यह केवल नियमित callout को कवर करती है और एक स्नैपशॉट है; बदलाव के बाद फिर निर्यात करें।",
 };

@@ -795,8 +795,10 @@ export const hu: Record<string, string> = {
 	"import.cmVaultFound": "{{count}} testreszabott callout található.",
 	"import.cmVaultNotFound":
 		"Nem található testreszabott callout ebben a vaultban.",
-	"import.cmPasteLabel": "Vagy illeszd be ide a Callout Manager Copy gombjáról másolt stílusokat:",
-	"import.cmPlaceholder": "Illeszd be a másolt stílusokat, vagy egy data.json fájlt, ide…",
+	"import.cmPasteLabel":
+		"Vagy illeszd be ide a Callout Manager Copy gombjáról másolt stílusokat:",
+	"import.cmPlaceholder":
+		"Illeszd be a másolt stílusokat, vagy egy data.json fájlt, ide…",
 	"import.cmBtnCancel": "Mégse",
 	"import.cmBtnImport": "Importálás",
 	"import.err.cmNoBlocksFound":
@@ -892,21 +894,28 @@ export const hu: Record<string, string> = {
 	"palette.colorExistsUseLink": "használd a meglévőt",
 	"locale.downloading": "Fordítás letöltése…",
 	"locale.notDownloaded": "A(z) {{name}} még nincs letöltve",
-	"locale.notDownloadedDesc": "A Callout Studio angolul jelenik meg, amíg a fordítás letölthetővé nem válik. Az Obsidian következő indításakor újra próbálkozik.",
+	"locale.notDownloadedDesc":
+		"A Callout Studio angolul jelenik meg, amíg a fordítás letölthetővé nem válik. Az Obsidian következő indításakor újra próbálkozik.",
 	"locale.retry": "Újrapróbálkozás",
-	"locale.diskWriteFailed": "A Callout Studio nem tudta lemezre menteni a fordítást, ezért legközelebb újra le kell tölteni.",
+	"locale.diskWriteFailed":
+		"A Callout Studio nem tudta lemezre menteni a fordítást, ezért legközelebb újra le kell tölteni.",
 	"notice.exportedCssCreated": "A CSS-részlet mentve ide: {{path}}",
 	"notice.exportedCssUpdated": "A CSS-részlet frissítve itt: {{path}}",
 	"notice.exportedCssUnchanged": "A CSS-részlet már naprakész.",
 	"notice.exportCssEmpty": "Nincs exportálható egyéni callout.",
-	"notice.exportCssFailed": "A CSS-részlet mentése nem sikerült. Részletekért nézd meg a fejlesztői konzolt.",
-	"notice.exportCssEnabled": "Ez a részlet engedélyezve van ebben a vaultban. A Callout Studio már formázza ezeket a calloutokat, a részlet pedig az exportáláskori stílust őrzi.",
+	"notice.exportCssFailed":
+		"A CSS-részlet mentése nem sikerült. Részletekért nézd meg a fejlesztői konzolt.",
+	"notice.exportCssEnabled":
+		"Ez a részlet engedélyezve van ebben a vaultban. A Callout Studio már formázza ezeket a calloutokat, a részlet pedig az exportáláskori stílust őrzi.",
 	"confirm.titleOverwriteSnippet": "CSS-részlet felülírása",
-	"confirm.overwriteSnippet": "A snippets mappában lévő CSS-részlet megváltozott azóta, hogy a Callout Studio létrehozta. Az újbóli exportálás a teljes fájlt lecseréli.",
+	"confirm.overwriteSnippet":
+		"A snippets mappában lévő CSS-részlet megváltozott azóta, hogy a Callout Studio létrehozta. Az újbóli exportálás a teljes fájlt lecseréli.",
 	"confirm.overwriteSnippetOk": "Felülírás",
 	"export.chooseFormat": "Exportálás mint",
 	"export.formatJson": "Callout Studio biztonsági mentés",
-	"export.formatJsonDesc": ".json fájl a calloutokkal és beállításokkal, másik vaultba való importáláshoz.",
+	"export.formatJsonDesc":
+		".json fájl a calloutokkal és beállításokkal, másik vaultba való importáláshoz.",
 	"export.formatCss": "CSS-részlet",
-	"export.formatCssDesc": ".css fájl a vault snippets mappájában való használatra ott, ahol a Callout Studio nincs telepítve. Csak a normál calloutokat fedi le, és pillanatkép; módosítás után exportáld újra.",
+	"export.formatCssDesc":
+		".css fájl a vault snippets mappájában való használatra ott, ahol a Callout Studio nincs telepítve. Csak a normál calloutokat fedi le, és pillanatkép; módosítás után exportáld újra.",
 };

@@ -884,21 +884,28 @@ export const ru: Record<string, string> = {
 	"palette.colorExistsUseLink": "использовать существующий",
 	"locale.downloading": "Загрузка перевода…",
 	"locale.notDownloaded": "{{name}} ещё не загружен",
-	"locale.notDownloadedDesc": "Callout Studio показывает английский, пока перевод не удастся загрузить. Повторная попытка будет выполнена при следующем запуске Obsidian.",
+	"locale.notDownloadedDesc":
+		"Callout Studio показывает английский, пока перевод не удастся загрузить. Повторная попытка будет выполнена при следующем запуске Obsidian.",
 	"locale.retry": "Повторить",
-	"locale.diskWriteFailed": "Callout Studio не удалось сохранить перевод на диске, поэтому в следующий раз его придётся загрузить снова.",
+	"locale.diskWriteFailed":
+		"Callout Studio не удалось сохранить перевод на диске, поэтому в следующий раз его придётся загрузить снова.",
 	"notice.exportedCssCreated": "Фрагмент CSS сохранён в {{path}}",
 	"notice.exportedCssUpdated": "Фрагмент CSS обновлён в {{path}}",
 	"notice.exportedCssUnchanged": "Фрагмент CSS уже актуален.",
 	"notice.exportCssEmpty": "Нет пользовательских callout для экспорта.",
-	"notice.exportCssFailed": "Не удалось сохранить фрагмент CSS. Подробности смотрите в консоли разработчика.",
-	"notice.exportCssEnabled": "Этот фрагмент включён в данном vault. Callout Studio уже оформляет эти callout, а фрагмент сохраняет стиль на момент экспорта.",
+	"notice.exportCssFailed":
+		"Не удалось сохранить фрагмент CSS. Подробности смотрите в консоли разработчика.",
+	"notice.exportCssEnabled":
+		"Этот фрагмент включён в данном vault. Callout Studio уже оформляет эти callout, а фрагмент сохраняет стиль на момент экспорта.",
 	"confirm.titleOverwriteSnippet": "Перезаписать фрагмент CSS",
-	"confirm.overwriteSnippet": "Фрагмент CSS в папке snippets изменился с момента записи Callout Studio. Повторный экспорт заменит весь файл.",
+	"confirm.overwriteSnippet":
+		"Фрагмент CSS в папке snippets изменился с момента записи Callout Studio. Повторный экспорт заменит весь файл.",
 	"confirm.overwriteSnippetOk": "Перезаписать",
 	"export.chooseFormat": "Экспортировать как",
 	"export.formatJson": "Резервная копия Callout Studio",
-	"export.formatJsonDesc": "Файл .json с вашими callout и настройками для импорта в другой vault.",
+	"export.formatJsonDesc":
+		"Файл .json с вашими callout и настройками для импорта в другой vault.",
 	"export.formatCss": "Фрагмент CSS",
-	"export.formatCssDesc": "Файл .css, сохранённый в папке snippets этого vault для использования там, где Callout Studio не установлен. Он охватывает только обычные callout и является снимком; после изменений экспортируйте его снова.",
+	"export.formatCssDesc":
+		"Файл .css, сохранённый в папке snippets этого vault для использования там, где Callout Studio не установлен. Он охватывает только обычные callout и является снимком; после изменений экспортируйте его снова.",
 };

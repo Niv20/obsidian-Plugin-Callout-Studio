@@ -182,8 +182,7 @@ export const vi: Record<string, string> = {
 	"commandBuilder.actionInsert": "Chèn mới",
 	"commandBuilder.preview": "Tên lệnh",
 	"commandBuilder.duplicate": "Bạn đã có một lệnh làm chính xác việc này.",
-	"commandBuilder.noCallouts":
-		"Chưa có loại callout nào để tạo lệnh.",
+	"commandBuilder.noCallouts": "Chưa có loại callout nào để tạo lệnh.",
 	"commandBuilder.save": "Lưu",
 
 	"settings.vaultMaintenance": "Thông tin & bảo trì vault",
@@ -788,15 +787,18 @@ export const vi: Record<string, string> = {
 	"import.cmVaultFound": "Đã tìm thấy {{count}} callout đã tùy chỉnh.",
 	"import.cmVaultNotFound":
 		"Không tìm thấy callout đã tùy chỉnh nào trong vault này.",
-	"import.cmPasteLabel": "Hoặc dán các kiểu đã sao chép từ Callout Manager vào đây:",
-	"import.cmPlaceholder": "Dán các kiểu đã sao chép, hoặc một tệp data.json, vào đây…",
+	"import.cmPasteLabel":
+		"Hoặc dán các kiểu đã sao chép từ Callout Manager vào đây:",
+	"import.cmPlaceholder":
+		"Dán các kiểu đã sao chép, hoặc một tệp data.json, vào đây…",
 	"import.cmBtnCancel": "Hủy",
 	"import.cmBtnImport": "Nhập",
 	"import.err.cmNoBlocksFound":
 		"Không tìm thấy kiểu Callout Manager nào trong văn bản đã dán.",
 	"import.err.cmNotRecognized":
 		"Tệp không nhận dạng được: cần các kiểu do nút Copy của Callout Manager tạo ra, hoặc một tệp data.json của Callout Manager.",
-	"import.err.cmNoEntries": "Không tìm thấy callout đã tùy chỉnh nào để nhập.",
+	"import.err.cmNoEntries":
+		"Không tìm thấy callout đã tùy chỉnh nào để nhập.",
 	"import.err.cmNoColorForNew":
 		'Không tìm thấy màu sắc có thể sử dụng cho callout mới "{{value}}"; đã bỏ qua.',
 	"import.err.cmIdConflict":
@@ -881,21 +883,28 @@ export const vi: Record<string, string> = {
 	"palette.colorExistsUseLink": "dùng màu hiện có",
 	"locale.downloading": "Đang tải bản dịch…",
 	"locale.notDownloaded": "{{name}} chưa được tải xuống",
-	"locale.notDownloadedDesc": "Callout Studio đang hiển thị tiếng Anh cho đến khi có thể tải bản dịch. Sẽ thử lại vào lần Obsidian khởi động tiếp theo.",
+	"locale.notDownloadedDesc":
+		"Callout Studio đang hiển thị tiếng Anh cho đến khi có thể tải bản dịch. Sẽ thử lại vào lần Obsidian khởi động tiếp theo.",
 	"locale.retry": "Thử lại",
-	"locale.diskWriteFailed": "Callout Studio không thể lưu bản dịch vào đĩa, nên lần sau sẽ phải tải xuống lại.",
+	"locale.diskWriteFailed":
+		"Callout Studio không thể lưu bản dịch vào đĩa, nên lần sau sẽ phải tải xuống lại.",
 	"notice.exportedCssCreated": "Đã lưu đoạn CSS vào {{path}}",
 	"notice.exportedCssUpdated": "Đã cập nhật đoạn CSS tại {{path}}",
 	"notice.exportedCssUnchanged": "Đoạn CSS đã được cập nhật.",
 	"notice.exportCssEmpty": "Không có callout tùy chỉnh nào để xuất.",
-	"notice.exportCssFailed": "Không thể lưu đoạn CSS. Hãy kiểm tra bảng điều khiển dành cho nhà phát triển để biết chi tiết.",
-	"notice.exportCssEnabled": "Đoạn này đang được bật trong vault. Callout Studio đã tạo kiểu cho các callout này và đoạn này giữ nguyên kiểu tại thời điểm xuất.",
+	"notice.exportCssFailed":
+		"Không thể lưu đoạn CSS. Hãy kiểm tra bảng điều khiển dành cho nhà phát triển để biết chi tiết.",
+	"notice.exportCssEnabled":
+		"Đoạn này đang được bật trong vault. Callout Studio đã tạo kiểu cho các callout này và đoạn này giữ nguyên kiểu tại thời điểm xuất.",
 	"confirm.titleOverwriteSnippet": "Ghi đè đoạn CSS",
-	"confirm.overwriteSnippet": "Đoạn CSS trong thư mục snippets đã thay đổi kể từ khi Callout Studio ghi nó. Xuất lại sẽ thay thế toàn bộ tệp.",
+	"confirm.overwriteSnippet":
+		"Đoạn CSS trong thư mục snippets đã thay đổi kể từ khi Callout Studio ghi nó. Xuất lại sẽ thay thế toàn bộ tệp.",
 	"confirm.overwriteSnippetOk": "Ghi đè",
 	"export.chooseFormat": "Xuất dưới dạng",
 	"export.formatJson": "Bản sao lưu Callout Studio",
-	"export.formatJsonDesc": "Tệp .json chứa callout và cài đặt của bạn để nhập vào vault khác.",
+	"export.formatJsonDesc":
+		"Tệp .json chứa callout và cài đặt của bạn để nhập vào vault khác.",
 	"export.formatCss": "Đoạn CSS",
-	"export.formatCssDesc": "Tệp .css được lưu trong thư mục snippets của vault này để dùng ở nơi chưa cài Callout Studio. Chỉ bao gồm callout thông thường và là ảnh chụp; hãy xuất lại sau khi thay đổi.",
+	"export.formatCssDesc":
+		"Tệp .css được lưu trong thư mục snippets của vault này để dùng ở nơi chưa cài Callout Studio. Chỉ bao gồm callout thông thường và là ảnh chụp; hãy xuất lại sau khi thay đổi.",
 };

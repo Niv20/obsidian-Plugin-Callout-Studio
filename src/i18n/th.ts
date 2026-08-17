@@ -863,21 +863,28 @@ export const th: Record<string, string> = {
 	"palette.colorExistsUseLink": "ใช้สีที่มีอยู่",
 	"locale.downloading": "กำลังดาวน์โหลดคำแปล…",
 	"locale.notDownloaded": "ยังไม่ได้ดาวน์โหลด {{name}}",
-	"locale.notDownloadedDesc": "Callout Studio กำลังแสดงภาษาอังกฤษจนกว่าจะดาวน์โหลดคำแปลได้ และจะลองอีกครั้งเมื่อ Obsidian เริ่มทำงานครั้งถัดไป",
+	"locale.notDownloadedDesc":
+		"Callout Studio กำลังแสดงภาษาอังกฤษจนกว่าจะดาวน์โหลดคำแปลได้ และจะลองอีกครั้งเมื่อ Obsidian เริ่มทำงานครั้งถัดไป",
 	"locale.retry": "ลองอีกครั้ง",
-	"locale.diskWriteFailed": "Callout Studio ไม่สามารถบันทึกคำแปลลงดิสก์ได้ จึงต้องดาวน์โหลดใหม่ในครั้งถัดไป",
+	"locale.diskWriteFailed":
+		"Callout Studio ไม่สามารถบันทึกคำแปลลงดิสก์ได้ จึงต้องดาวน์โหลดใหม่ในครั้งถัดไป",
 	"notice.exportedCssCreated": "บันทึก CSS snippet ไว้ที่ {{path}} แล้ว",
 	"notice.exportedCssUpdated": "อัปเดต CSS snippet ที่ {{path}} แล้ว",
 	"notice.exportedCssUnchanged": "CSS snippet เป็นข้อมูลล่าสุดอยู่แล้ว",
 	"notice.exportCssEmpty": "ไม่มี callout แบบกำหนดเองให้ส่งออก",
-	"notice.exportCssFailed": "ไม่สามารถบันทึก CSS snippet ได้ ดูรายละเอียดในคอนโซลนักพัฒนา",
-	"notice.exportCssEnabled": "เปิดใช้ snippet นี้ใน vault นี้อยู่ Callout Studio จัดรูปแบบ callout เหล่านี้อยู่แล้ว และ snippet จะคงรูปแบบ ณ เวลาที่ส่งออก",
+	"notice.exportCssFailed":
+		"ไม่สามารถบันทึก CSS snippet ได้ ดูรายละเอียดในคอนโซลนักพัฒนา",
+	"notice.exportCssEnabled":
+		"เปิดใช้ snippet นี้ใน vault นี้อยู่ Callout Studio จัดรูปแบบ callout เหล่านี้อยู่แล้ว และ snippet จะคงรูปแบบ ณ เวลาที่ส่งออก",
 	"confirm.titleOverwriteSnippet": "เขียนทับ CSS snippet",
-	"confirm.overwriteSnippet": "CSS snippet ในโฟลเดอร์ snippets เปลี่ยนไปตั้งแต่ Callout Studio เขียนไว้ การส่งออกอีกครั้งจะแทนที่ทั้งไฟล์",
+	"confirm.overwriteSnippet":
+		"CSS snippet ในโฟลเดอร์ snippets เปลี่ยนไปตั้งแต่ Callout Studio เขียนไว้ การส่งออกอีกครั้งจะแทนที่ทั้งไฟล์",
 	"confirm.overwriteSnippetOk": "เขียนทับ",
 	"export.chooseFormat": "ส่งออกเป็น",
 	"export.formatJson": "ข้อมูลสำรอง Callout Studio",
-	"export.formatJsonDesc": "ไฟล์ .json ที่มี callout และการตั้งค่าของคุณสำหรับนำเข้าใน vault อื่น",
+	"export.formatJsonDesc":
+		"ไฟล์ .json ที่มี callout และการตั้งค่าของคุณสำหรับนำเข้าใน vault อื่น",
 	"export.formatCss": "CSS snippet",
-	"export.formatCssDesc": "ไฟล์ .css ที่บันทึกในโฟลเดอร์ snippets ของ vault นี้ เพื่อใช้ในที่ที่ไม่ได้ติดตั้ง Callout Studio ครอบคลุมเฉพาะ callout ปกติและเป็นภาพ snapshot; ส่งออกอีกครั้งหลังเปลี่ยนแปลง callout",
+	"export.formatCssDesc":
+		"ไฟล์ .css ที่บันทึกในโฟลเดอร์ snippets ของ vault นี้ เพื่อใช้ในที่ที่ไม่ได้ติดตั้ง Callout Studio ครอบคลุมเฉพาะ callout ปกติและเป็นภาพ snapshot; ส่งออกอีกครั้งหลังเปลี่ยนแปลง callout",
 };

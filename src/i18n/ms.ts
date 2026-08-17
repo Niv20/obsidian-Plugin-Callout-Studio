@@ -766,9 +766,12 @@ export const ms: Record<string, string> = {
 	"import.cmFromVault": "Vault ini",
 	"import.cmVaultChecking": "Mencari pemalam Callout Manager…",
 	"import.cmVaultFound": "{{count}} callout tersuai ditemukan.",
-	"import.cmVaultNotFound": "Tiada callout tersuai ditemukan dalam vault ini.",
-	"import.cmPasteLabel": "Atau tampal gaya yang disalin daripada Callout Manager di sini:",
-	"import.cmPlaceholder": "Tampal gaya yang disalin, atau fail data.json, di sini…",
+	"import.cmVaultNotFound":
+		"Tiada callout tersuai ditemukan dalam vault ini.",
+	"import.cmPasteLabel":
+		"Atau tampal gaya yang disalin daripada Callout Manager di sini:",
+	"import.cmPlaceholder":
+		"Tampal gaya yang disalin, atau fail data.json, di sini…",
 	"import.cmBtnCancel": "Batal",
 	"import.cmBtnImport": "Import",
 	"import.err.cmNoBlocksFound":
@@ -863,21 +866,28 @@ export const ms: Record<string, string> = {
 	"palette.colorExistsUseLink": "guna yang sedia ada",
 	"locale.downloading": "Memuat turun terjemahan…",
 	"locale.notDownloaded": "{{name}} belum dimuat turun",
-	"locale.notDownloadedDesc": "Callout Studio memaparkan bahasa Inggeris sehingga terjemahan boleh dimuat turun. Ia akan mencuba lagi apabila Obsidian dimulakan seterusnya.",
+	"locale.notDownloadedDesc":
+		"Callout Studio memaparkan bahasa Inggeris sehingga terjemahan boleh dimuat turun. Ia akan mencuba lagi apabila Obsidian dimulakan seterusnya.",
 	"locale.retry": "Cuba lagi",
-	"locale.diskWriteFailed": "Callout Studio tidak dapat menyimpan terjemahan ke cakera, jadi ia perlu dimuat turun semula lain kali.",
+	"locale.diskWriteFailed":
+		"Callout Studio tidak dapat menyimpan terjemahan ke cakera, jadi ia perlu dimuat turun semula lain kali.",
 	"notice.exportedCssCreated": "Coretan CSS disimpan di {{path}}",
 	"notice.exportedCssUpdated": "Coretan CSS dikemas kini di {{path}}",
 	"notice.exportedCssUnchanged": "Coretan CSS sudah terkini.",
 	"notice.exportCssEmpty": "Tiada callout tersuai untuk dieksport.",
-	"notice.exportCssFailed": "Coretan CSS tidak dapat disimpan. Semak konsol pembangun untuk mendapatkan butiran.",
-	"notice.exportCssEnabled": "Coretan ini dihidupkan dalam vault ini. Callout Studio sudah menggayakan callout ini, dan coretan mengekalkan gaya semasa dieksport.",
+	"notice.exportCssFailed":
+		"Coretan CSS tidak dapat disimpan. Semak konsol pembangun untuk mendapatkan butiran.",
+	"notice.exportCssEnabled":
+		"Coretan ini dihidupkan dalam vault ini. Callout Studio sudah menggayakan callout ini, dan coretan mengekalkan gaya semasa dieksport.",
 	"confirm.titleOverwriteSnippet": "Tulis ganti coretan CSS",
-	"confirm.overwriteSnippet": "Coretan CSS dalam folder snippets telah berubah sejak Callout Studio menulisnya. Mengeksport semula akan menggantikan keseluruhan fail.",
+	"confirm.overwriteSnippet":
+		"Coretan CSS dalam folder snippets telah berubah sejak Callout Studio menulisnya. Mengeksport semula akan menggantikan keseluruhan fail.",
 	"confirm.overwriteSnippetOk": "Tulis ganti",
 	"export.chooseFormat": "Eksport sebagai",
 	"export.formatJson": "Sandaran Callout Studio",
-	"export.formatJsonDesc": "Fail .json dengan callout dan tetapan anda untuk diimport ke vault lain.",
+	"export.formatJsonDesc":
+		"Fail .json dengan callout dan tetapan anda untuk diimport ke vault lain.",
 	"export.formatCss": "Coretan CSS",
-	"export.formatCssDesc": "Fail .css yang disimpan dalam folder snippets vault ini, untuk digunakan apabila Callout Studio tidak dipasang. Ia hanya meliputi callout biasa dan merupakan petikan keadaan; eksport semula selepas perubahan.",
+	"export.formatCssDesc":
+		"Fail .css yang disimpan dalam folder snippets vault ini, untuk digunakan apabila Callout Studio tidak dipasang. Ia hanya meliputi callout biasa dan merupakan petikan keadaan; eksport semula selepas perubahan.",
 };

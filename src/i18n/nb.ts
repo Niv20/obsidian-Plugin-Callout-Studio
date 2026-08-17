@@ -855,21 +855,29 @@ export const nb: Record<string, string> = {
 	"palette.colorExistsUseLink": "bruk den eksisterende",
 	"locale.downloading": "Laster ned oversettelse…",
 	"locale.notDownloaded": "{{name}} er ikke lastet ned ennå",
-	"locale.notDownloadedDesc": "Callout Studio viser engelsk til oversettelsen kan lastes ned. Det prøver igjen neste gang Obsidian starter.",
+	"locale.notDownloadedDesc":
+		"Callout Studio viser engelsk til oversettelsen kan lastes ned. Det prøver igjen neste gang Obsidian starter.",
 	"locale.retry": "Prøv igjen",
-	"locale.diskWriteFailed": "Callout Studio kunne ikke lagre oversettelsen på disken, så den må lastes ned på nytt neste gang.",
+	"locale.diskWriteFailed":
+		"Callout Studio kunne ikke lagre oversettelsen på disken, så den må lastes ned på nytt neste gang.",
 	"notice.exportedCssCreated": "CSS-utdrag lagret i {{path}}",
 	"notice.exportedCssUpdated": "CSS-utdrag oppdatert i {{path}}",
 	"notice.exportedCssUnchanged": "CSS-utdraget er allerede oppdatert.",
-	"notice.exportCssEmpty": "Det finnes ingen egendefinerte callouts å eksportere.",
-	"notice.exportCssFailed": "Kunne ikke lagre CSS-utdraget. Se utviklerkonsollen for detaljer.",
-	"notice.exportCssEnabled": "Dette utdraget er aktivert i denne vaulten. Callout Studio styler allerede disse calloutene, og utdraget beholder stilen fra eksporttidspunktet.",
+	"notice.exportCssEmpty":
+		"Det finnes ingen egendefinerte callouts å eksportere.",
+	"notice.exportCssFailed":
+		"Kunne ikke lagre CSS-utdraget. Se utviklerkonsollen for detaljer.",
+	"notice.exportCssEnabled":
+		"Dette utdraget er aktivert i denne vaulten. Callout Studio styler allerede disse calloutene, og utdraget beholder stilen fra eksporttidspunktet.",
 	"confirm.titleOverwriteSnippet": "Overskriv CSS-utdrag",
-	"confirm.overwriteSnippet": "CSS-utdraget i snippets-mappen er endret siden Callout Studio skrev det. En ny eksport erstatter hele filen.",
+	"confirm.overwriteSnippet":
+		"CSS-utdraget i snippets-mappen er endret siden Callout Studio skrev det. En ny eksport erstatter hele filen.",
 	"confirm.overwriteSnippetOk": "Overskriv",
 	"export.chooseFormat": "Eksporter som",
 	"export.formatJson": "Callout Studio-sikkerhetskopi",
-	"export.formatJsonDesc": "En .json-fil med callouts og innstillinger for import til en annen vault.",
+	"export.formatJsonDesc":
+		"En .json-fil med callouts og innstillinger for import til en annen vault.",
 	"export.formatCss": "CSS-utdrag",
-	"export.formatCssDesc": "En .css-fil lagret i denne vaultens snippets-mappe, for bruk der Callout Studio ikke er installert. Den dekker bare vanlige callouts og er et øyeblikksbilde; eksporter på nytt etter endringer.",
+	"export.formatCssDesc":
+		"En .css-fil lagret i denne vaultens snippets-mappe, for bruk der Callout Studio ikke er installert. Den dekker bare vanlige callouts og er et øyeblikksbilde; eksporter på nytt etter endringer.",
 };

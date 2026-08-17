@@ -7,7 +7,8 @@ export const de: Record<string, string> = {
 
 	"cmd.customWrapBlock": "In {{name}}-Callout einbetten",
 	"cmd.customInsertBlock": "{{name}}-Callout einfügen",
-	"cmd.customInsertHeading": "H{{level}}-{{name}}-Überschrift-Callout einfügen",
+	"cmd.customInsertHeading":
+		"H{{level}}-{{name}}-Überschrift-Callout einfügen",
 	"cmd.customInsertInline": "{{name}}-Inline-Callout einfügen",
 
 	"autocomplete.createNew": 'Neuen Callout erstellen: "{{name}}"',
@@ -174,7 +175,8 @@ export const de: Record<string, string> = {
 	"commandBuilder.callout": "Callout-Typ",
 	"commandBuilder.calloutDesc": "Der Callout, den dieser Befehl einfügt.",
 	"commandBuilder.headingLevel": "Überschriftsebene",
-	"commandBuilder.headingLevelDesc": "Welche Überschriftsebene geschrieben wird.",
+	"commandBuilder.headingLevelDesc":
+		"Welche Überschriftsebene geschrieben wird.",
 	"commandBuilder.action": "Aktion",
 	"commandBuilder.actionDesc":
 		"Einbetten verwandelt die Auswahl in einen Callout; Einfügen fügt einen leeren hinzu.",
@@ -904,21 +906,29 @@ export const de: Record<string, string> = {
 	"palette.colorExistsUseLink": "die bestehende verwenden",
 	"locale.downloading": "Übersetzung wird heruntergeladen…",
 	"locale.notDownloaded": "{{name}} wurde noch nicht heruntergeladen",
-	"locale.notDownloadedDesc": "Callout Studio zeigt Englisch, bis die Übersetzung heruntergeladen werden kann. Beim nächsten Start von Obsidian wird es erneut versucht.",
+	"locale.notDownloadedDesc":
+		"Callout Studio zeigt Englisch, bis die Übersetzung heruntergeladen werden kann. Beim nächsten Start von Obsidian wird es erneut versucht.",
 	"locale.retry": "Erneut versuchen",
-	"locale.diskWriteFailed": "Callout Studio konnte die Übersetzung nicht auf der Festplatte speichern. Sie muss beim nächsten Mal erneut heruntergeladen werden.",
+	"locale.diskWriteFailed":
+		"Callout Studio konnte die Übersetzung nicht auf der Festplatte speichern. Sie muss beim nächsten Mal erneut heruntergeladen werden.",
 	"notice.exportedCssCreated": "CSS-Snippet in {{path}} gespeichert",
 	"notice.exportedCssUpdated": "CSS-Snippet in {{path}} aktualisiert",
 	"notice.exportedCssUnchanged": "Das CSS-Snippet ist bereits aktuell.",
-	"notice.exportCssEmpty": "Es gibt keine benutzerdefinierten Callouts zum Exportieren.",
-	"notice.exportCssFailed": "Das CSS-Snippet konnte nicht gespeichert werden. Einzelheiten finden Sie in der Entwicklerkonsole.",
-	"notice.exportCssEnabled": "Dieses Snippet ist in diesem Vault aktiviert. Callout Studio gestaltet diese Callouts bereits, und das Snippet behält den Stand beim Export bei.",
+	"notice.exportCssEmpty":
+		"Es gibt keine benutzerdefinierten Callouts zum Exportieren.",
+	"notice.exportCssFailed":
+		"Das CSS-Snippet konnte nicht gespeichert werden. Einzelheiten finden Sie in der Entwicklerkonsole.",
+	"notice.exportCssEnabled":
+		"Dieses Snippet ist in diesem Vault aktiviert. Callout Studio gestaltet diese Callouts bereits, und das Snippet behält den Stand beim Export bei.",
 	"confirm.titleOverwriteSnippet": "CSS-Snippet überschreiben",
-	"confirm.overwriteSnippet": "Das CSS-Snippet in Ihrem Snippets-Ordner wurde geändert, seit Callout Studio es geschrieben hat. Ein erneuter Export ersetzt die gesamte Datei.",
+	"confirm.overwriteSnippet":
+		"Das CSS-Snippet in Ihrem Snippets-Ordner wurde geändert, seit Callout Studio es geschrieben hat. Ein erneuter Export ersetzt die gesamte Datei.",
 	"confirm.overwriteSnippetOk": "Überschreiben",
 	"export.chooseFormat": "Exportieren als",
 	"export.formatJson": "Callout-Studio-Sicherung",
-	"export.formatJsonDesc": "Eine .json-Datei mit Ihren Callouts und Einstellungen zum Import in einen anderen Vault.",
+	"export.formatJsonDesc":
+		"Eine .json-Datei mit Ihren Callouts und Einstellungen zum Import in einen anderen Vault.",
 	"export.formatCss": "CSS-Snippet",
-	"export.formatCssDesc": "Eine .css-Datei im Snippets-Ordner dieses Vaults, für die Verwendung ohne installiertes Callout Studio. Sie umfasst nur reguläre Callouts und ist eine Momentaufnahme; nach Änderungen erneut exportieren.",
+	"export.formatCssDesc":
+		"Eine .css-Datei im Snippets-Ordner dieses Vaults, für die Verwendung ohne installiertes Callout Studio. Sie umfasst nur reguläre Callouts und ist eine Momentaufnahme; nach Änderungen erneut exportieren.",
 };

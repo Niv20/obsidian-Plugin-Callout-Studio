@@ -6,7 +6,8 @@ export const bg: Record<string, string> = {
 	"cmd.calloutUnwrap": "Премахване на callout",
 	"cmd.customWrapBlock": "Обвиване в callout {{name}}",
 	"cmd.customInsertBlock": "Вмъкване на callout {{name}}",
-	"cmd.customInsertHeading": "Вмъкване на заглавен callout {{name}} (H{{level}})",
+	"cmd.customInsertHeading":
+		"Вмъкване на заглавен callout {{name}} (H{{level}})",
 	"cmd.customInsertInline": "Вмъкване на вграден callout {{name}}",
 	"autocomplete.createNew": 'Създаване на нов callout: "{{name}}"',
 	"settings.fallbackTag": "По подразбиране",
@@ -870,21 +871,28 @@ export const bg: Record<string, string> = {
 	"palette.colorExistsUseLink": "използвайте съществуващия",
 	"locale.downloading": "Изтегляне на превода…",
 	"locale.notDownloaded": "{{name}} още не е изтеглен",
-	"locale.notDownloadedDesc": "Callout Studio показва английски, докато преводът бъде изтеглен. Ще опита отново при следващото стартиране на Obsidian.",
+	"locale.notDownloadedDesc":
+		"Callout Studio показва английски, докато преводът бъде изтеглен. Ще опита отново при следващото стартиране на Obsidian.",
 	"locale.retry": "Опитай отново",
-	"locale.diskWriteFailed": "Callout Studio не успя да запази превода на диска, затова ще трябва да бъде изтеглен отново следващия път.",
+	"locale.diskWriteFailed":
+		"Callout Studio не успя да запази превода на диска, затова ще трябва да бъде изтеглен отново следващия път.",
 	"notice.exportedCssCreated": "CSS фрагментът е записан в {{path}}",
 	"notice.exportedCssUpdated": "CSS фрагментът е обновен в {{path}}",
 	"notice.exportedCssUnchanged": "CSS фрагментът вече е актуален.",
 	"notice.exportCssEmpty": "Няма персонализирани callout-и за експортиране.",
-	"notice.exportCssFailed": "CSS фрагментът не може да бъде записан. Проверете конзолата за разработчици за подробности.",
-	"notice.exportCssEnabled": "Този фрагмент е включен в тази vault. Callout Studio вече стилизира тези callout-и, а фрагментът запазва стила от момента на експортиране.",
+	"notice.exportCssFailed":
+		"CSS фрагментът не може да бъде записан. Проверете конзолата за разработчици за подробности.",
+	"notice.exportCssEnabled":
+		"Този фрагмент е включен в тази vault. Callout Studio вече стилизира тези callout-и, а фрагментът запазва стила от момента на експортиране.",
 	"confirm.titleOverwriteSnippet": "Замяна на CSS фрагмент",
-	"confirm.overwriteSnippet": "CSS фрагментът в папката със snippets е променен, след като Callout Studio го записа. Новият експорт ще замени целия файл.",
+	"confirm.overwriteSnippet":
+		"CSS фрагментът в папката със snippets е променен, след като Callout Studio го записа. Новият експорт ще замени целия файл.",
 	"confirm.overwriteSnippetOk": "Замени",
 	"export.chooseFormat": "Експортиране като",
 	"export.formatJson": "Архив на Callout Studio",
-	"export.formatJsonDesc": ".json файл с вашите callout-и и настройки за импортиране в друга vault.",
+	"export.formatJsonDesc":
+		".json файл с вашите callout-и и настройки за импортиране в друга vault.",
 	"export.formatCss": "CSS фрагмент",
-	"export.formatCssDesc": ".css файл, записан в папката със snippets на тази vault, за използване там, където Callout Studio не е инсталиран. Обхваща само обикновени callout-и и е моментна снимка; експортирайте отново след промяна.",
+	"export.formatCssDesc":
+		".css файл, записан в папката със snippets на тази vault, за използване там, където Callout Studio не е инсталиран. Обхваща само обикновени callout-и и е моментна снимка; експортирайте отново след промяна.",
 };

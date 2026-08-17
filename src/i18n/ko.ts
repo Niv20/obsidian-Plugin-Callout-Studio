@@ -785,16 +785,20 @@ export const ko: Record<string, string> = {
 	"import.cmFromVault": "이 vault",
 	"import.cmVaultChecking": "Callout Manager 플러그인을 찾는 중…",
 	"import.cmVaultFound": "사용자 지정 callout {{count}}개를 찾았습니다.",
-	"import.cmVaultNotFound": "이 vault에서 사용자 지정 callout을 찾지 못했습니다.",
-	"import.cmPasteLabel": "또는 Callout Manager에서 복사한 스타일을 여기에 붙여넣으세요:",
-	"import.cmPlaceholder": "복사한 스타일 또는 data.json을 여기에 붙여넣으세요…",
+	"import.cmVaultNotFound":
+		"이 vault에서 사용자 지정 callout을 찾지 못했습니다.",
+	"import.cmPasteLabel":
+		"또는 Callout Manager에서 복사한 스타일을 여기에 붙여넣으세요:",
+	"import.cmPlaceholder":
+		"복사한 스타일 또는 data.json을 여기에 붙여넣으세요…",
 	"import.cmBtnCancel": "취소",
 	"import.cmBtnImport": "가져오기",
 	"import.err.cmNoBlocksFound":
 		"붙여넣은 텍스트에서 Callout Manager 스타일을 찾을 수 없습니다.",
 	"import.err.cmNotRecognized":
 		"인식할 수 없는 파일입니다. Callout Manager의 Copy 버튼으로 생성한 스타일 또는 Callout Manager의 data.json 파일이 필요합니다.",
-	"import.err.cmNoEntries": "가져올 수 있는 사용자 지정 callout을 찾지 못했습니다.",
+	"import.err.cmNoEntries":
+		"가져올 수 있는 사용자 지정 callout을 찾지 못했습니다.",
 	"import.err.cmNoColorForNew":
 		'새 callout "{{value}}"에 사용 가능한 색상을 찾을 수 없어 건너뛰었습니다.',
 	"import.err.cmIdConflict":
@@ -873,21 +877,28 @@ export const ko: Record<string, string> = {
 	"palette.colorExistsUseLink": "기존 색상 사용",
 	"locale.downloading": "번역 다운로드 중…",
 	"locale.notDownloaded": "{{name}}이(가) 아직 다운로드되지 않았습니다",
-	"locale.notDownloadedDesc": "번역을 다운로드할 수 있을 때까지 Callout Studio는 영어로 표시됩니다. 다음 Obsidian 시작 시 다시 시도합니다.",
+	"locale.notDownloadedDesc":
+		"번역을 다운로드할 수 있을 때까지 Callout Studio는 영어로 표시됩니다. 다음 Obsidian 시작 시 다시 시도합니다.",
 	"locale.retry": "다시 시도",
-	"locale.diskWriteFailed": "Callout Studio가 번역을 디스크에 저장하지 못했습니다. 다음에 다시 다운로드해야 합니다.",
+	"locale.diskWriteFailed":
+		"Callout Studio가 번역을 디스크에 저장하지 못했습니다. 다음에 다시 다운로드해야 합니다.",
 	"notice.exportedCssCreated": "CSS 스니펫을 {{path}}에 저장했습니다",
 	"notice.exportedCssUpdated": "CSS 스니펫을 {{path}}에서 업데이트했습니다",
 	"notice.exportedCssUnchanged": "CSS 스니펫이 이미 최신 상태입니다.",
 	"notice.exportCssEmpty": "내보낼 사용자 지정 callout이 없습니다.",
-	"notice.exportCssFailed": "CSS 스니펫을 저장하지 못했습니다. 자세한 내용은 개발자 콘솔을 확인하세요.",
-	"notice.exportCssEnabled": "이 스니펫은 이 vault에서 켜져 있습니다. Callout Studio가 이미 이 callout을 스타일링하며, 스니펫은 내보낼 당시의 스타일을 유지합니다.",
+	"notice.exportCssFailed":
+		"CSS 스니펫을 저장하지 못했습니다. 자세한 내용은 개발자 콘솔을 확인하세요.",
+	"notice.exportCssEnabled":
+		"이 스니펫은 이 vault에서 켜져 있습니다. Callout Studio가 이미 이 callout을 스타일링하며, 스니펫은 내보낼 당시의 스타일을 유지합니다.",
 	"confirm.titleOverwriteSnippet": "CSS 스니펫 덮어쓰기",
-	"confirm.overwriteSnippet": "Callout Studio가 작성한 후 snippets 폴더의 CSS 스니펫이 변경되었습니다. 다시 내보내면 파일 전체를 교체합니다.",
+	"confirm.overwriteSnippet":
+		"Callout Studio가 작성한 후 snippets 폴더의 CSS 스니펫이 변경되었습니다. 다시 내보내면 파일 전체를 교체합니다.",
 	"confirm.overwriteSnippetOk": "덮어쓰기",
 	"export.chooseFormat": "내보내기 형식",
 	"export.formatJson": "Callout Studio 백업",
-	"export.formatJsonDesc": "다른 vault로 가져올 수 있도록 callout과 설정을 담은 .json 파일입니다.",
+	"export.formatJsonDesc":
+		"다른 vault로 가져올 수 있도록 callout과 설정을 담은 .json 파일입니다.",
 	"export.formatCss": "CSS 스니펫",
-	"export.formatCssDesc": "Callout Studio가 설치되지 않은 곳에서 사용할 수 있도록 이 vault의 snippets 폴더에 저장되는 .css 파일입니다. 일반 callout만 포함하며 스냅샷이므로 변경 후 다시 내보내야 합니다.",
+	"export.formatCssDesc":
+		"Callout Studio가 설치되지 않은 곳에서 사용할 수 있도록 이 vault의 snippets 폴더에 저장되는 .css 파일입니다. 일반 callout만 포함하며 스냅샷이므로 변경 후 다시 내보내야 합니다.",
 };

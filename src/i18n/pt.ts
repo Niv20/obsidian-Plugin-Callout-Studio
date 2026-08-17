@@ -790,8 +790,7 @@ export const pt: Record<string, string> = {
 		"aqui e ficam para trás.",
 	"import.cmFromVault": "Este cofre",
 	"import.cmVaultChecking": "A procurar o plugin Callout Manager…",
-	"import.cmVaultFound":
-		"Encontrados {{count}} callout(s) personalizados.",
+	"import.cmVaultFound": "Encontrados {{count}} callout(s) personalizados.",
 	"import.cmVaultNotFound":
 		"Não foram encontrados callouts personalizados neste cofre.",
 	"import.cmPasteLabel":
@@ -898,21 +897,29 @@ export const pt: Record<string, string> = {
 	"palette.colorExistsUseLink": "usar a existente",
 	"locale.downloading": "A transferir tradução…",
 	"locale.notDownloaded": "{{name}} ainda não foi transferido",
-	"locale.notDownloadedDesc": "O Callout Studio mostra inglês até ser possível transferir a tradução. Tentará novamente na próxima vez que o Obsidian iniciar.",
+	"locale.notDownloadedDesc":
+		"O Callout Studio mostra inglês até ser possível transferir a tradução. Tentará novamente na próxima vez que o Obsidian iniciar.",
 	"locale.retry": "Tentar novamente",
-	"locale.diskWriteFailed": "O Callout Studio não conseguiu guardar a tradução no disco, pelo que será necessário transferi-la novamente da próxima vez.",
+	"locale.diskWriteFailed":
+		"O Callout Studio não conseguiu guardar a tradução no disco, pelo que será necessário transferi-la novamente da próxima vez.",
 	"notice.exportedCssCreated": "Snippet CSS guardado em {{path}}",
 	"notice.exportedCssUpdated": "Snippet CSS atualizado em {{path}}",
 	"notice.exportedCssUnchanged": "O snippet CSS já está atualizado.",
-	"notice.exportCssEmpty": "Não existem callouts personalizados para exportar.",
-	"notice.exportCssFailed": "Não foi possível guardar o snippet CSS. Consulte a consola de programador para obter detalhes.",
-	"notice.exportCssEnabled": "Este snippet está ativado neste vault. O Callout Studio já aplica estilos a estes callouts e o snippet mantém o estilo do momento da exportação.",
+	"notice.exportCssEmpty":
+		"Não existem callouts personalizados para exportar.",
+	"notice.exportCssFailed":
+		"Não foi possível guardar o snippet CSS. Consulte a consola de programador para obter detalhes.",
+	"notice.exportCssEnabled":
+		"Este snippet está ativado neste vault. O Callout Studio já aplica estilos a estes callouts e o snippet mantém o estilo do momento da exportação.",
 	"confirm.titleOverwriteSnippet": "Substituir snippet CSS",
-	"confirm.overwriteSnippet": "O snippet CSS na pasta snippets foi alterado desde que o Callout Studio o escreveu. Exportá-lo novamente substitui o ficheiro inteiro.",
+	"confirm.overwriteSnippet":
+		"O snippet CSS na pasta snippets foi alterado desde que o Callout Studio o escreveu. Exportá-lo novamente substitui o ficheiro inteiro.",
 	"confirm.overwriteSnippetOk": "Substituir",
 	"export.chooseFormat": "Exportar como",
 	"export.formatJson": "Cópia de segurança do Callout Studio",
-	"export.formatJsonDesc": "Um ficheiro .json com os seus callouts e definições para importar para outro vault.",
+	"export.formatJsonDesc":
+		"Um ficheiro .json com os seus callouts e definições para importar para outro vault.",
 	"export.formatCss": "Snippet CSS",
-	"export.formatCssDesc": "Um ficheiro .css guardado na pasta snippets deste vault, para utilizar onde o Callout Studio não está instalado. Abrange apenas callouts normais e é um instantâneo; exporte novamente depois de alterar um callout.",
+	"export.formatCssDesc":
+		"Um ficheiro .css guardado na pasta snippets deste vault, para utilizar onde o Callout Studio não está instalado. Abrange apenas callouts normais e é um instantâneo; exporte novamente depois de alterar um callout.",
 };

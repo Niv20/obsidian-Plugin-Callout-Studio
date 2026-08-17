@@ -785,8 +785,10 @@ export const cs: Record<string, string> = {
 	"import.cmVaultFound": "Nalezeno přizpůsobených calloutů: {{count}}.",
 	"import.cmVaultNotFound":
 		"V tomto trezoru nebyly nalezeny žádné přizpůsobené callouty.",
-	"import.cmPasteLabel": "Nebo sem vložte styly zkopírované z Callout Manager:",
-	"import.cmPlaceholder": "Vložte zkopírované styly nebo soubor data.json sem…",
+	"import.cmPasteLabel":
+		"Nebo sem vložte styly zkopírované z Callout Manager:",
+	"import.cmPlaceholder":
+		"Vložte zkopírované styly nebo soubor data.json sem…",
 	"import.cmBtnCancel": "Zrušit",
 	"import.cmBtnImport": "Importovat",
 	"import.err.cmNoBlocksFound":
@@ -884,21 +886,28 @@ export const cs: Record<string, string> = {
 	"palette.colorExistsUseLink": "použít existující",
 	"locale.downloading": "Stahování překladu…",
 	"locale.notDownloaded": "{{name}} zatím není stažen",
-	"locale.notDownloadedDesc": "Callout Studio zobrazuje angličtinu, dokud nebude možné stáhnout překlad. Zkusí to znovu při příštím spuštění Obsidianu.",
+	"locale.notDownloadedDesc":
+		"Callout Studio zobrazuje angličtinu, dokud nebude možné stáhnout překlad. Zkusí to znovu při příštím spuštění Obsidianu.",
 	"locale.retry": "Zkusit znovu",
-	"locale.diskWriteFailed": "Callout Studio nemohl uložit překlad na disk, takže jej bude nutné příště stáhnout znovu.",
+	"locale.diskWriteFailed":
+		"Callout Studio nemohl uložit překlad na disk, takže jej bude nutné příště stáhnout znovu.",
 	"notice.exportedCssCreated": "CSS fragment byl uložen do {{path}}",
 	"notice.exportedCssUpdated": "CSS fragment byl aktualizován v {{path}}",
 	"notice.exportedCssUnchanged": "CSS fragment je již aktuální.",
 	"notice.exportCssEmpty": "Nejsou žádné vlastní callouty k exportu.",
-	"notice.exportCssFailed": "CSS fragment nelze uložit. Podrobnosti najdete v konzoli pro vývojáře.",
-	"notice.exportCssEnabled": "Tento fragment je v tomto vaultu zapnutý. Callout Studio tyto callouty již styluje a fragment zachovává podobu z doby exportu.",
+	"notice.exportCssFailed":
+		"CSS fragment nelze uložit. Podrobnosti najdete v konzoli pro vývojáře.",
+	"notice.exportCssEnabled":
+		"Tento fragment je v tomto vaultu zapnutý. Callout Studio tyto callouty již styluje a fragment zachovává podobu z doby exportu.",
 	"confirm.titleOverwriteSnippet": "Přepsat CSS fragment",
-	"confirm.overwriteSnippet": "CSS fragment ve složce snippets se od posledního zápisu Callout Studiem změnil. Další export nahradí celý soubor.",
+	"confirm.overwriteSnippet":
+		"CSS fragment ve složce snippets se od posledního zápisu Callout Studiem změnil. Další export nahradí celý soubor.",
 	"confirm.overwriteSnippetOk": "Přepsat",
 	"export.chooseFormat": "Exportovat jako",
 	"export.formatJson": "Záloha Callout Studio",
-	"export.formatJsonDesc": "Soubor .json s callouty a nastavením pro import do jiného vaultu.",
+	"export.formatJsonDesc":
+		"Soubor .json s callouty a nastavením pro import do jiného vaultu.",
 	"export.formatCss": "CSS fragment",
-	"export.formatCssDesc": "Soubor .css uložený ve složce snippets tohoto vaultu pro použití tam, kde není Callout Studio nainstalováno. Pokrývá pouze běžné callouty a je snímkem; po změně calloutu jej exportujte znovu.",
+	"export.formatCssDesc":
+		"Soubor .css uložený ve složce snippets tohoto vaultu pro použití tam, kde není Callout Studio nainstalováno. Pokrývá pouze běžné callouty a je snímkem; po změně calloutu jej exportujte znovu.",
 };

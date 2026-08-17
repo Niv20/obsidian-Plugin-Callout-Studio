@@ -7,7 +7,8 @@ export const es: Record<string, string> = {
 
 	"cmd.customWrapBlock": "Envolver en callout {{name}}",
 	"cmd.customInsertBlock": "Insertar callout {{name}}",
-	"cmd.customInsertHeading": "Insertar encabezado H{{level}} de callout {{name}}",
+	"cmd.customInsertHeading":
+		"Insertar encabezado H{{level}} de callout {{name}}",
 	"cmd.customInsertInline": "Insertar callout en línea {{name}}",
 
 	"autocomplete.createNew": 'Crear nuevo callout: "{{name}}"',
@@ -794,7 +795,8 @@ export const es: Record<string, string> = {
 		"y se dejan atrás.",
 	"import.cmFromVault": "Este vault",
 	"import.cmVaultChecking": "Buscando el plugin Callout Manager…",
-	"import.cmVaultFound": "Se encontraron {{count}} callout(s) personalizado(s).",
+	"import.cmVaultFound":
+		"Se encontraron {{count}} callout(s) personalizado(s).",
 	"import.cmVaultNotFound":
 		"No se encontraron callouts personalizados en este vault.",
 	"import.cmPasteLabel":
@@ -900,21 +902,28 @@ export const es: Record<string, string> = {
 	"palette.colorExistsUseLink": "usar el existente",
 	"locale.downloading": "Descargando traducción…",
 	"locale.notDownloaded": "{{name}} aún no se ha descargado",
-	"locale.notDownloadedDesc": "Callout Studio muestra el inglés hasta que se pueda descargar la traducción. Lo intentará de nuevo la próxima vez que se inicie Obsidian.",
+	"locale.notDownloadedDesc":
+		"Callout Studio muestra el inglés hasta que se pueda descargar la traducción. Lo intentará de nuevo la próxima vez que se inicie Obsidian.",
 	"locale.retry": "Reintentar",
-	"locale.diskWriteFailed": "Callout Studio no pudo guardar la traducción en el disco, así que tendrá que descargarse de nuevo la próxima vez.",
+	"locale.diskWriteFailed":
+		"Callout Studio no pudo guardar la traducción en el disco, así que tendrá que descargarse de nuevo la próxima vez.",
 	"notice.exportedCssCreated": "Fragmento CSS guardado en {{path}}",
 	"notice.exportedCssUpdated": "Fragmento CSS actualizado en {{path}}",
 	"notice.exportedCssUnchanged": "El fragmento CSS ya está actualizado.",
 	"notice.exportCssEmpty": "No hay callouts personalizados para exportar.",
-	"notice.exportCssFailed": "No se pudo guardar el fragmento CSS. Consulta la consola del desarrollador para obtener más detalles.",
-	"notice.exportCssEnabled": "Este fragmento está activado en esta vault. Callout Studio ya aplica estilos a estos callouts y el fragmento conserva el estilo que tenía al exportarlo.",
+	"notice.exportCssFailed":
+		"No se pudo guardar el fragmento CSS. Consulta la consola del desarrollador para obtener más detalles.",
+	"notice.exportCssEnabled":
+		"Este fragmento está activado en esta vault. Callout Studio ya aplica estilos a estos callouts y el fragmento conserva el estilo que tenía al exportarlo.",
 	"confirm.titleOverwriteSnippet": "Sobrescribir fragmento CSS",
-	"confirm.overwriteSnippet": "El fragmento CSS de la carpeta de snippets ha cambiado desde que Callout Studio lo escribió. Volver a exportarlo reemplaza todo el archivo.",
+	"confirm.overwriteSnippet":
+		"El fragmento CSS de la carpeta de snippets ha cambiado desde que Callout Studio lo escribió. Volver a exportarlo reemplaza todo el archivo.",
 	"confirm.overwriteSnippetOk": "Sobrescribir",
 	"export.chooseFormat": "Exportar como",
 	"export.formatJson": "Copia de seguridad de Callout Studio",
-	"export.formatJsonDesc": "Un archivo .json con tus callouts y ajustes para importarlos en otra vault.",
+	"export.formatJsonDesc":
+		"Un archivo .json con tus callouts y ajustes para importarlos en otra vault.",
 	"export.formatCss": "Fragmento CSS",
-	"export.formatCssDesc": "Un archivo .css guardado en la carpeta de snippets de esta vault, para usarlo donde Callout Studio no esté instalado. Solo cubre callouts normales y es una instantánea; vuelve a exportarlo después de cambiar un callout.",
+	"export.formatCssDesc":
+		"Un archivo .css guardado en la carpeta de snippets de esta vault, para usarlo donde Callout Studio no esté instalado. Solo cubre callouts normales y es una instantánea; vuelve a exportarlo después de cambiar un callout.",
 };

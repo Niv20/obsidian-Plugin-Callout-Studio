@@ -786,8 +786,10 @@ export const sv: Record<string, string> = {
 	"import.cmVaultFound": "{{count}} anpassad(e) callout(s) hittades.",
 	"import.cmVaultNotFound":
 		"Inga anpassade callouts hittades i det här valvet.",
-	"import.cmPasteLabel": "Eller klistra in Callout Managers kopierade stilar här:",
-	"import.cmPlaceholder": "Klistra in de kopierade stilarna, eller en data.json, här…",
+	"import.cmPasteLabel":
+		"Eller klistra in Callout Managers kopierade stilar här:",
+	"import.cmPlaceholder":
+		"Klistra in de kopierade stilarna, eller en data.json, här…",
 	"import.cmBtnCancel": "Avbryt",
 	"import.cmBtnImport": "Importera",
 	"import.err.cmNoBlocksFound":
@@ -882,21 +884,28 @@ export const sv: Record<string, string> = {
 	"palette.colorExistsUseLink": "använda den befintliga",
 	"locale.downloading": "Laddar ner översättning…",
 	"locale.notDownloaded": "{{name}} har inte laddats ner än",
-	"locale.notDownloadedDesc": "Callout Studio visar engelska tills översättningen kan laddas ner. Det försöker igen nästa gång Obsidian startar.",
+	"locale.notDownloadedDesc":
+		"Callout Studio visar engelska tills översättningen kan laddas ner. Det försöker igen nästa gång Obsidian startar.",
 	"locale.retry": "Försök igen",
-	"locale.diskWriteFailed": "Callout Studio kunde inte spara översättningen på disken, så den måste laddas ner igen nästa gång.",
+	"locale.diskWriteFailed":
+		"Callout Studio kunde inte spara översättningen på disken, så den måste laddas ner igen nästa gång.",
 	"notice.exportedCssCreated": "CSS-utdrag sparat i {{path}}",
 	"notice.exportedCssUpdated": "CSS-utdrag uppdaterat i {{path}}",
 	"notice.exportedCssUnchanged": "CSS-utdraget är redan uppdaterat.",
 	"notice.exportCssEmpty": "Det finns inga anpassade callouts att exportera.",
-	"notice.exportCssFailed": "CSS-utdraget kunde inte sparas. Kontrollera utvecklarkonsolen för mer information.",
-	"notice.exportCssEnabled": "Det här utdraget är aktiverat i den här vaulten. Callout Studio formger redan dessa callouts och utdraget behåller stilen från exporten.",
+	"notice.exportCssFailed":
+		"CSS-utdraget kunde inte sparas. Kontrollera utvecklarkonsolen för mer information.",
+	"notice.exportCssEnabled":
+		"Det här utdraget är aktiverat i den här vaulten. Callout Studio formger redan dessa callouts och utdraget behåller stilen från exporten.",
 	"confirm.titleOverwriteSnippet": "Skriv över CSS-utdrag",
-	"confirm.overwriteSnippet": "CSS-utdraget i snippets-mappen har ändrats sedan Callout Studio skrev det. En ny export ersätter hela filen.",
+	"confirm.overwriteSnippet":
+		"CSS-utdraget i snippets-mappen har ändrats sedan Callout Studio skrev det. En ny export ersätter hela filen.",
 	"confirm.overwriteSnippetOk": "Skriv över",
 	"export.chooseFormat": "Exportera som",
 	"export.formatJson": "Callout Studio-säkerhetskopia",
-	"export.formatJsonDesc": "En .json-fil med dina callouts och inställningar för import till en annan vault.",
+	"export.formatJsonDesc":
+		"En .json-fil med dina callouts och inställningar för import till en annan vault.",
 	"export.formatCss": "CSS-utdrag",
-	"export.formatCssDesc": "En .css-fil som sparas i den här vaultens snippets-mapp för användning där Callout Studio inte är installerat. Den omfattar bara vanliga callouts och är en ögonblicksbild; exportera igen efter ändringar.",
+	"export.formatCssDesc":
+		"En .css-fil som sparas i den här vaultens snippets-mapp för användning där Callout Studio inte är installerat. Den omfattar bara vanliga callouts och är en ögonblicksbild; exportera igen efter ändringar.",
 };

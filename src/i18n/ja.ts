@@ -884,21 +884,28 @@ export const ja: Record<string, string> = {
 	"palette.colorExistsUseLink": "既存の色を使う",
 	"locale.downloading": "翻訳をダウンロード中…",
 	"locale.notDownloaded": "{{name}}はまだダウンロードされていません",
-	"locale.notDownloadedDesc": "翻訳をダウンロードできるまで、Callout Studioは英語で表示されます。次回Obsidianの起動時に再試行します。",
+	"locale.notDownloadedDesc":
+		"翻訳をダウンロードできるまで、Callout Studioは英語で表示されます。次回Obsidianの起動時に再試行します。",
 	"locale.retry": "再試行",
-	"locale.diskWriteFailed": "Callout Studioは翻訳をディスクに保存できませんでした。次回、再度ダウンロードする必要があります。",
+	"locale.diskWriteFailed":
+		"Callout Studioは翻訳をディスクに保存できませんでした。次回、再度ダウンロードする必要があります。",
 	"notice.exportedCssCreated": "CSSスニペットを{{path}}に保存しました",
 	"notice.exportedCssUpdated": "CSSスニペットを{{path}}で更新しました",
 	"notice.exportedCssUnchanged": "CSSスニペットはすでに最新です。",
 	"notice.exportCssEmpty": "エクスポートするカスタムcalloutがありません。",
-	"notice.exportCssFailed": "CSSスニペットを保存できませんでした。詳細は開発者コンソールを確認してください。",
-	"notice.exportCssEnabled": "このスニペットはこのvaultで有効です。Callout Studioはすでにこれらのcalloutをスタイル設定しており、スニペットにはエクスポート時の状態が保存されています。",
+	"notice.exportCssFailed":
+		"CSSスニペットを保存できませんでした。詳細は開発者コンソールを確認してください。",
+	"notice.exportCssEnabled":
+		"このスニペットはこのvaultで有効です。Callout Studioはすでにこれらのcalloutをスタイル設定しており、スニペットにはエクスポート時の状態が保存されています。",
 	"confirm.titleOverwriteSnippet": "CSSスニペットを上書き",
-	"confirm.overwriteSnippet": "snippetsフォルダのCSSスニペットは、Callout Studioが書き込んだ後に変更されています。再度エクスポートするとファイル全体が置き換えられます。",
+	"confirm.overwriteSnippet":
+		"snippetsフォルダのCSSスニペットは、Callout Studioが書き込んだ後に変更されています。再度エクスポートするとファイル全体が置き換えられます。",
 	"confirm.overwriteSnippetOk": "上書き",
 	"export.chooseFormat": "エクスポート形式",
 	"export.formatJson": "Callout Studioバックアップ",
-	"export.formatJsonDesc": "calloutと設定を含む.jsonファイル。他のvaultにインポートできます。",
+	"export.formatJsonDesc":
+		"calloutと設定を含む.jsonファイル。他のvaultにインポートできます。",
 	"export.formatCss": "CSSスニペット",
-	"export.formatCssDesc": "このvaultのsnippetsフォルダに保存する.cssファイル。Callout Studioがインストールされていない場所で使用できます。通常のcalloutのみを対象とするスナップショットです。変更後に再度エクスポートしてください。",
+	"export.formatCssDesc":
+		"このvaultのsnippetsフォルダに保存する.cssファイル。Callout Studioがインストールされていない場所で使用できます。通常のcalloutのみを対象とするスナップショットです。変更後に再度エクスポートしてください。",
 };

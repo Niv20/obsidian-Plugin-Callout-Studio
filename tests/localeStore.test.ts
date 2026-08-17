@@ -280,7 +280,10 @@ describe("a cached file older than this build is used anyway", () => {
 		assert.strictEqual(await h.store.prepare("he"), "stale");
 		assert.deepStrictEqual(h.requests, []);
 		assert.strictEqual(h.store.state("he"), "stale");
-		assert.ok(h.store.isReady("he"), "a stale translation is still readable");
+		assert.ok(
+			h.store.isReady("he"),
+			"a stale translation is still readable",
+		);
 		assert.ok(isLocaleRegistered("he"));
 	});
 
@@ -332,7 +335,10 @@ describe("a cached file that is not a locale file is refused", () => {
 
 	it("rejects one that is not JSON", async () => {
 		const h = harness();
-		h.files.set(h.path("ru"), "<!doctype html><title>captive portal</title>");
+		h.files.set(
+			h.path("ru"),
+			"<!doctype html><title>captive portal</title>",
+		);
 
 		assert.strictEqual(await h.store.loadFromDisk("ru"), "invalid");
 		assert.ok(!isLocaleRegistered("ru"));
@@ -476,7 +482,11 @@ describe("a download is verified before it is believed", () => {
 
 	it("discards a captive portal's login page", async () => {
 		const h = harness();
-		serveEverywhere(h, "el", "<!doctype html><title>Sign in to Wi-Fi</title>");
+		serveEverywhere(
+			h,
+			"el",
+			"<!doctype html><title>Sign in to Wi-Fi</title>",
+		);
 
 		assert.strictEqual(await h.store.ensure("el"), false);
 		assert.strictEqual(h.store.state("el"), "failed");
@@ -510,7 +520,11 @@ describe("a failed refresh never damages the copy already on disk", () => {
 	 * readable.
 	 */
 	const survives = (h: Harness, id: LocaleFileId, before: string): void => {
-		assert.strictEqual(h.files.get(h.path(id)), before, "the file was altered");
+		assert.strictEqual(
+			h.files.get(h.path(id)),
+			before,
+			"the file was altered",
+		);
 		assert.deepStrictEqual(h.writes, [], "a write was attempted");
 		assert.strictEqual(h.store.state(id), "stale");
 		assert.ok(h.store.isReady(id), "the language stopped being readable");
@@ -598,7 +612,9 @@ describe("a vault that cannot be written to only loses the cache", () => {
 		assert.strictEqual(h.store.state("hi"), "ready");
 		assert.ok(isLocaleRegistered("hi"));
 		assert.deepStrictEqual(h.writes, []);
-		assert.deepStrictEqual(globals.__CS_NOTICES__, [en["locale.diskWriteFailed"]]);
+		assert.deepStrictEqual(globals.__CS_NOTICES__, [
+			en["locale.diskWriteFailed"],
+		]);
 
 		// A second failure must not tell them again.
 		assert.strictEqual(await h.store.download("ms"), true);

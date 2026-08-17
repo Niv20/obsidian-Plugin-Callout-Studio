@@ -887,21 +887,29 @@ export const nl: Record<string, string> = {
 	"palette.colorExistsUseLink": "de bestaande gebruiken",
 	"locale.downloading": "Vertaling downloaden…",
 	"locale.notDownloaded": "{{name}} is nog niet gedownload",
-	"locale.notDownloadedDesc": "Callout Studio toont Engels totdat de vertaling kan worden gedownload. De volgende keer dat Obsidian start wordt het opnieuw geprobeerd.",
+	"locale.notDownloadedDesc":
+		"Callout Studio toont Engels totdat de vertaling kan worden gedownload. De volgende keer dat Obsidian start wordt het opnieuw geprobeerd.",
 	"locale.retry": "Opnieuw proberen",
-	"locale.diskWriteFailed": "Callout Studio kon de vertaling niet op schijf opslaan. De vertaling moet de volgende keer opnieuw worden gedownload.",
+	"locale.diskWriteFailed":
+		"Callout Studio kon de vertaling niet op schijf opslaan. De vertaling moet de volgende keer opnieuw worden gedownload.",
 	"notice.exportedCssCreated": "CSS-fragment opgeslagen in {{path}}",
 	"notice.exportedCssUpdated": "CSS-fragment bijgewerkt in {{path}}",
 	"notice.exportedCssUnchanged": "Het CSS-fragment is al bijgewerkt.",
-	"notice.exportCssEmpty": "Er zijn geen aangepaste callouts om te exporteren.",
-	"notice.exportCssFailed": "Het CSS-fragment kon niet worden opgeslagen. Bekijk de ontwikkelaarsconsole voor details.",
-	"notice.exportCssEnabled": "Dit fragment is ingeschakeld in deze vault. Callout Studio stijlt deze callouts al en het fragment behoudt de stijl van het exportmoment.",
+	"notice.exportCssEmpty":
+		"Er zijn geen aangepaste callouts om te exporteren.",
+	"notice.exportCssFailed":
+		"Het CSS-fragment kon niet worden opgeslagen. Bekijk de ontwikkelaarsconsole voor details.",
+	"notice.exportCssEnabled":
+		"Dit fragment is ingeschakeld in deze vault. Callout Studio stijlt deze callouts al en het fragment behoudt de stijl van het exportmoment.",
 	"confirm.titleOverwriteSnippet": "CSS-fragment overschrijven",
-	"confirm.overwriteSnippet": "Het CSS-fragment in je snippets-map is gewijzigd sinds Callout Studio het schreef. Opnieuw exporteren vervangt het hele bestand.",
+	"confirm.overwriteSnippet":
+		"Het CSS-fragment in je snippets-map is gewijzigd sinds Callout Studio het schreef. Opnieuw exporteren vervangt het hele bestand.",
 	"confirm.overwriteSnippetOk": "Overschrijven",
 	"export.chooseFormat": "Exporteren als",
 	"export.formatJson": "Callout Studio-back-up",
-	"export.formatJsonDesc": "Een .json-bestand met je callouts en instellingen om in een andere vault te importeren.",
+	"export.formatJsonDesc":
+		"Een .json-bestand met je callouts en instellingen om in een andere vault te importeren.",
 	"export.formatCss": "CSS-fragment",
-	"export.formatCssDesc": "Een .css-bestand in de snippets-map van deze vault, voor gebruik waar Callout Studio niet is geïnstalleerd. Het bevat alleen gewone callouts en is een momentopname; exporteer opnieuw na wijzigingen.",
+	"export.formatCssDesc":
+		"Een .css-bestand in de snippets-map van deze vault, voor gebruik waar Callout Studio niet is geïnstalleerd. Het bevat alleen gewone callouts en is een momentopname; exporteer opnieuw na wijzigingen.",
 };

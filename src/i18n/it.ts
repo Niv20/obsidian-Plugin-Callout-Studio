@@ -174,15 +174,15 @@ export const it: Record<string, string> = {
 	"commandBuilder.callout": "Tipo di callout",
 	"commandBuilder.calloutDesc": "Il callout che questo comando inserisce.",
 	"commandBuilder.headingLevel": "Livello di intestazione",
-	"commandBuilder.headingLevelDesc": "Quale livello di intestazione scrivere.",
+	"commandBuilder.headingLevelDesc":
+		"Quale livello di intestazione scrivere.",
 	"commandBuilder.action": "Azione",
 	"commandBuilder.actionDesc":
 		"Racchiudi trasforma la selezione in un callout; inserisci ne aggiunge uno vuoto.",
 	"commandBuilder.actionWrap": "Racchiudi selezione",
 	"commandBuilder.actionInsert": "Inserisci nuovo",
 	"commandBuilder.preview": "Nome del comando",
-	"commandBuilder.duplicate":
-		"Hai già un comando che fa esattamente questo.",
+	"commandBuilder.duplicate": "Hai già un comando che fa esattamente questo.",
 	"commandBuilder.noCallouts":
 		"Non ci sono ancora tipi di callout da cui creare un comando.",
 	"commandBuilder.save": "Salva",
@@ -798,8 +798,10 @@ export const it: Record<string, string> = {
 	"import.cmVaultFound": "{{count}} callout personalizzati trovati.",
 	"import.cmVaultNotFound":
 		"Nessun callout personalizzato è stato trovato in questo vault.",
-	"import.cmPasteLabel": "Oppure incolla qui gli stili copiati da Callout Manager:",
-	"import.cmPlaceholder": "Incolla qui gli stili copiati, o un file data.json…",
+	"import.cmPasteLabel":
+		"Oppure incolla qui gli stili copiati da Callout Manager:",
+	"import.cmPlaceholder":
+		"Incolla qui gli stili copiati, o un file data.json…",
 	"import.cmBtnCancel": "Annulla",
 	"import.cmBtnImport": "Importa",
 	"import.err.cmNoBlocksFound":
@@ -896,21 +898,28 @@ export const it: Record<string, string> = {
 	"palette.colorExistsUseLink": "usa quello esistente",
 	"locale.downloading": "Download della traduzione…",
 	"locale.notDownloaded": "{{name}} non è ancora stata scaricata",
-	"locale.notDownloadedDesc": "Callout Studio mostra l’inglese finché non sarà possibile scaricare la traduzione. Riproverà al prossimo avvio di Obsidian.",
+	"locale.notDownloadedDesc":
+		"Callout Studio mostra l’inglese finché non sarà possibile scaricare la traduzione. Riproverà al prossimo avvio di Obsidian.",
 	"locale.retry": "Riprova",
-	"locale.diskWriteFailed": "Callout Studio non ha potuto salvare la traduzione sul disco, quindi dovrà essere scaricata di nuovo la prossima volta.",
+	"locale.diskWriteFailed":
+		"Callout Studio non ha potuto salvare la traduzione sul disco, quindi dovrà essere scaricata di nuovo la prossima volta.",
 	"notice.exportedCssCreated": "Snippet CSS salvato in {{path}}",
 	"notice.exportedCssUpdated": "Snippet CSS aggiornato in {{path}}",
 	"notice.exportedCssUnchanged": "Lo snippet CSS è già aggiornato.",
 	"notice.exportCssEmpty": "Non ci sono callout personalizzati da esportare.",
-	"notice.exportCssFailed": "Impossibile salvare lo snippet CSS. Controlla la console per sviluppatori per i dettagli.",
-	"notice.exportCssEnabled": "Questo snippet è attivo in questo vault. Callout Studio applica già lo stile a questi callout e lo snippet conserva lo stile del momento dell’esportazione.",
+	"notice.exportCssFailed":
+		"Impossibile salvare lo snippet CSS. Controlla la console per sviluppatori per i dettagli.",
+	"notice.exportCssEnabled":
+		"Questo snippet è attivo in questo vault. Callout Studio applica già lo stile a questi callout e lo snippet conserva lo stile del momento dell’esportazione.",
 	"confirm.titleOverwriteSnippet": "Sovrascrivi snippet CSS",
-	"confirm.overwriteSnippet": "Lo snippet CSS nella cartella snippets è cambiato da quando Callout Studio lo ha scritto. Una nuova esportazione sostituirà l’intero file.",
+	"confirm.overwriteSnippet":
+		"Lo snippet CSS nella cartella snippets è cambiato da quando Callout Studio lo ha scritto. Una nuova esportazione sostituirà l’intero file.",
 	"confirm.overwriteSnippetOk": "Sovrascrivi",
 	"export.chooseFormat": "Esporta come",
 	"export.formatJson": "Backup di Callout Studio",
-	"export.formatJsonDesc": "Un file .json con callout e impostazioni da importare in un altro vault.",
+	"export.formatJsonDesc":
+		"Un file .json con callout e impostazioni da importare in un altro vault.",
 	"export.formatCss": "Snippet CSS",
-	"export.formatCssDesc": "Un file .css salvato nella cartella snippets di questo vault, da usare dove Callout Studio non è installato. Copre solo i callout normali ed è un’istantanea; esportalo di nuovo dopo una modifica.",
+	"export.formatCssDesc":
+		"Un file .css salvato nella cartella snippets di questo vault, da usare dove Callout Studio non è installato. Copre solo i callout normali ed è un’istantanea; esportalo di nuovo dopo una modifica.",
 };

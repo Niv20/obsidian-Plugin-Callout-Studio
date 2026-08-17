@@ -917,21 +917,28 @@ export const he: Record<string, string> = {
 	"palette.colorExistsUseLink": "להשתמש בקיים",
 	"locale.downloading": "מוריד את התרגום…",
 	"locale.notDownloaded": "{{name}} עדיין לא הורדה",
-	"locale.notDownloadedDesc": "Callout Studio מציג באנגלית עד שניתן יהיה להוריד את התרגום. הניסיון יחזור בהפעלה הבאה של Obsidian.",
+	"locale.notDownloadedDesc":
+		"Callout Studio מציג באנגלית עד שניתן יהיה להוריד את התרגום. הניסיון יחזור בהפעלה הבאה של Obsidian.",
 	"locale.retry": "ניסיון חוזר",
-	"locale.diskWriteFailed": "Callout Studio לא הצליח לשמור את התרגום בדיסק, ולכן יהיה צורך להוריד אותו שוב בפעם הבאה.",
+	"locale.diskWriteFailed":
+		"Callout Studio לא הצליח לשמור את התרגום בדיסק, ולכן יהיה צורך להוריד אותו שוב בפעם הבאה.",
 	"notice.exportedCssCreated": "קטע ה־CSS נשמר ב־{{path}}",
 	"notice.exportedCssUpdated": "קטע ה־CSS עודכן ב־{{path}}",
 	"notice.exportedCssUnchanged": "קטע ה־CSS כבר מעודכן.",
 	"notice.exportCssEmpty": "אין תיבות־הבלטה מותאמות־אישית לייצוא.",
-	"notice.exportCssFailed": "לא ניתן לשמור את קטע ה־CSS. בדקו את קונסולת המפתחים לפרטים.",
-	"notice.exportCssEnabled": "קטע זה מופעל בכספת הזו. Callout Studio כבר מעצב כאן את תיבות־ההבלטה, והקטע שומר את העיצוב שהיה בעת הייצוא.",
+	"notice.exportCssFailed":
+		"לא ניתן לשמור את קטע ה־CSS. בדקו את קונסולת המפתחים לפרטים.",
+	"notice.exportCssEnabled":
+		"קטע זה מופעל בכספת הזו. Callout Studio כבר מעצב כאן את תיבות־ההבלטה, והקטע שומר את העיצוב שהיה בעת הייצוא.",
 	"confirm.titleOverwriteSnippet": "שכתוב קטע CSS",
-	"confirm.overwriteSnippet": "קטע ה־CSS בתיקיית הקטעים השתנה מאז ש־Callout Studio כתב אותו. ייצוא נוסף יחליף את כל הקובץ.",
+	"confirm.overwriteSnippet":
+		"קטע ה־CSS בתיקיית הקטעים השתנה מאז ש־Callout Studio כתב אותו. ייצוא נוסף יחליף את כל הקובץ.",
 	"confirm.overwriteSnippetOk": "שכתוב",
 	"export.chooseFormat": "ייצוא בתור",
 	"export.formatJson": "גיבוי של Callout Studio",
-	"export.formatJsonDesc": "קובץ ‎.json עם תיבות־ההבלטה וההגדרות שלכם, לייבוא בכספת אחרת.",
+	"export.formatJsonDesc":
+		"קובץ ‎.json עם תיבות־ההבלטה וההגדרות שלכם, לייבוא בכספת אחרת.",
 	"export.formatCss": "קטע CSS",
-	"export.formatCssDesc": "קובץ ‎.css שנשמר בתיקיית הקטעים של הכספת הזו, לשימוש במקום שבו Callout Studio אינו מותקן. הוא מכסה תיבות־הבלטה רגילות בלבד ומהווה תמונת מצב; ייצאו אותו שוב לאחר שינוי.",
+	"export.formatCssDesc":
+		"קובץ ‎.css שנשמר בתיקיית הקטעים של הכספת הזו, לשימוש במקום שבו Callout Studio אינו מותקן. הוא מכסה תיבות־הבלטה רגילות בלבד ומהווה תמונת מצב; ייצאו אותו שוב לאחר שינוי.",
 };

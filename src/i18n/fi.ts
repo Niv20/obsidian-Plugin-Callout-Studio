@@ -153,7 +153,8 @@ export const fi: Record<string, string> = {
 	"commandBuilder.newTitle": "Uusi komento",
 	"commandBuilder.editTitle": "Muokkaa komentoa",
 	"commandBuilder.format": "Callout-muoto",
-	"commandBuilder.formatDesc": "Minkä tyyppisen calloutin komento kirjoittaa.",
+	"commandBuilder.formatDesc":
+		"Minkä tyyppisen calloutin komento kirjoittaa.",
 	"commandBuilder.formatHeading": "Otsikko",
 	"commandBuilder.formatInline": "Rivin sisäinen",
 	"commandBuilder.formatBlock": "Lohko",
@@ -169,7 +170,8 @@ export const fi: Record<string, string> = {
 	"commandBuilder.actionWrap": "Kääri valinta",
 	"commandBuilder.actionInsert": "Lisää uusi",
 	"commandBuilder.preview": "Komennon nimi",
-	"commandBuilder.duplicate": "Sinulla on jo täsmälleen tämän tekevä komento.",
+	"commandBuilder.duplicate":
+		"Sinulla on jo täsmälleen tämän tekevä komento.",
 	"commandBuilder.noCallouts":
 		"Ei vielä callout-tyyppejä, joista rakentaa komento.",
 	"commandBuilder.save": "Tallenna",
@@ -188,7 +190,8 @@ export const fi: Record<string, string> = {
 	"notice.resetAllDone": "Kaikki on palautettu oletuksiksi.",
 	"notice.customCommandsRemoved":
 		"Poistettiin {{count}} mukautettu(a) komento(a), joiden callout-tyyppiä ei enää ole.",
-	"notice.customCommandMissingCallout": "Tämän komennon callout-tyyppiä ei enää ole.",
+	"notice.customCommandMissingCallout":
+		"Tämän komennon callout-tyyppiä ei enää ole.",
 	"notice.exported": "Calloutit viety tiedostoon callout-studio-export.json",
 	"notice.importedJSON": "{{count}} callout-tyyppiä tuotu JSONista.",
 	"notice.importedSettings": "Lisäosan asetukset tuotu.",
@@ -761,7 +764,8 @@ export const fi: Record<string, string> = {
 	"import.cmVaultFound": "{{count}} mukautettua callouttia löydetty.",
 	"import.cmVaultNotFound":
 		"Tästä holvista ei löytynyt mukautettuja callouteja.",
-	"import.cmPasteLabel": "Tai liitä Callout Managerin kopioimat tyylit tähän:",
+	"import.cmPasteLabel":
+		"Tai liitä Callout Managerin kopioimat tyylit tähän:",
 	"import.cmPlaceholder": "Liitä kopioidut tyylit tai data.json tähän…",
 	"import.cmBtnCancel": "Peruuta",
 	"import.cmBtnImport": "Tuo",
@@ -856,21 +860,28 @@ export const fi: Record<string, string> = {
 	"palette.colorExistsUseLink": "käytä olemassa olevaa",
 	"locale.downloading": "Ladataan käännöstä…",
 	"locale.notDownloaded": "{{name}} ei ole vielä ladattu",
-	"locale.notDownloadedDesc": "Callout Studio näyttää englanninkielisenä, kunnes käännös voidaan ladata. Se yrittää uudelleen, kun Obsidian käynnistetään seuraavan kerran.",
+	"locale.notDownloadedDesc":
+		"Callout Studio näyttää englanninkielisenä, kunnes käännös voidaan ladata. Se yrittää uudelleen, kun Obsidian käynnistetään seuraavan kerran.",
 	"locale.retry": "Yritä uudelleen",
-	"locale.diskWriteFailed": "Callout Studio ei voinut tallentaa käännöstä levylle, joten se on ladattava uudelleen seuraavalla kerralla.",
+	"locale.diskWriteFailed":
+		"Callout Studio ei voinut tallentaa käännöstä levylle, joten se on ladattava uudelleen seuraavalla kerralla.",
 	"notice.exportedCssCreated": "CSS-katkelma tallennettu sijaintiin {{path}}",
 	"notice.exportedCssUpdated": "CSS-katkelma päivitetty sijaintiin {{path}}",
 	"notice.exportedCssUnchanged": "CSS-katkelma on jo ajan tasalla.",
 	"notice.exportCssEmpty": "Vietäviä mukautettuja callouteja ei ole.",
-	"notice.exportCssFailed": "CSS-katkelmaa ei voitu tallentaa. Katso lisätietoja kehittäjäkonsolista.",
-	"notice.exportCssEnabled": "Tämä katkelma on käytössä tässä vaultissa. Callout Studio tyylittelee nämä calloutit jo, ja katkelma säilyttää vientihetken tyylin.",
+	"notice.exportCssFailed":
+		"CSS-katkelmaa ei voitu tallentaa. Katso lisätietoja kehittäjäkonsolista.",
+	"notice.exportCssEnabled":
+		"Tämä katkelma on käytössä tässä vaultissa. Callout Studio tyylittelee nämä calloutit jo, ja katkelma säilyttää vientihetken tyylin.",
 	"confirm.titleOverwriteSnippet": "Korvaa CSS-katkelma",
-	"confirm.overwriteSnippet": "Snippets-kansiossa oleva CSS-katkelma on muuttunut sen jälkeen, kun Callout Studio kirjoitti sen. Uusi vienti korvaa koko tiedoston.",
+	"confirm.overwriteSnippet":
+		"Snippets-kansiossa oleva CSS-katkelma on muuttunut sen jälkeen, kun Callout Studio kirjoitti sen. Uusi vienti korvaa koko tiedoston.",
 	"confirm.overwriteSnippetOk": "Korvaa",
 	"export.chooseFormat": "Vie muodossa",
 	"export.formatJson": "Callout Studion varmuuskopio",
-	"export.formatJsonDesc": ".json-tiedosto, joka sisältää calloutit ja asetukset tuontia varten toiseen vaultiin.",
+	"export.formatJsonDesc":
+		".json-tiedosto, joka sisältää calloutit ja asetukset tuontia varten toiseen vaultiin.",
 	"export.formatCss": "CSS-katkelma",
-	"export.formatCssDesc": ".css-tiedosto tämän vaultin snippets-kansiossa käytettäväksi siellä, missä Callout Studioa ei ole asennettu. Se kattaa vain tavalliset calloutit ja on tilannekuva; vie uudelleen muutoksen jälkeen.",
+	"export.formatCssDesc":
+		".css-tiedosto tämän vaultin snippets-kansiossa käytettäväksi siellä, missä Callout Studioa ei ole asennettu. Se kattaa vain tavalliset calloutit ja on tilannekuva; vie uudelleen muutoksen jälkeen.",
 };
