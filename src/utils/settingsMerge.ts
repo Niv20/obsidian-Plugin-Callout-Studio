@@ -40,6 +40,17 @@ function mergeIconSources(
 	const merged: IconSourceSettings = {
 		...DEFAULT_SETTINGS.iconSources,
 		...saved,
+		// Its own object on every merge, whatever the file said. A plain spread
+		// of the defaults copies the *reference*, so a file that names no
+		// category — every fresh install, and every "reset to defaults" — was
+		// handed `DEFAULT_SETTINGS`' own map. Nothing writes into it in place
+		// today, by the picker's convention alone; the day something does, the
+		// last-opened category would be stuck in the defaults for the rest of
+		// the session and leak into every later merge.
+		lastCategory: {
+			...DEFAULT_SETTINGS.iconSources.lastCategory,
+			...saved?.lastCategory,
+		},
 	};
 	const legacyCategory = saved?.lastMaterialCategory;
 	if (legacyCategory) {

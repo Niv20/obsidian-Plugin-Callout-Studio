@@ -707,23 +707,42 @@ describe("mergeSavedSettings — what the caller is handed", () => {
 		assert.strictEqual(DEFAULT_SETTINGS.globalStyle.borderSides.top, false);
 	});
 
-	it("`iconSources.lastCategory` is the ONE piece still shared — pinned as found", () => {
-		// `mergeIconSources` spreads `DEFAULT_SETTINGS.iconSources` and then
-		// replaces `lastCategory` only when the pre-2.4 field is present, so a
-		// file that names no category is handed the defaults' own object.
+	it("`iconSources.lastCategory` is a fresh object even when the file names none", () => {
+		// It used to be the defaults' own object: `mergeIconSources` spread
+		// `DEFAULT_SETTINGS.iconSources` and replaced `lastCategory` only when
+		// the pre-2.4 field was present, so every fresh install — and every
+		// "reset to defaults" — shared one map with the constants.
 		//
-		// Safe today only by the writer's convention: `IconPickerModal` does
-		// `sources.lastCategory = { ...sources.lastCategory, [id]: category }` —
-		// it REPLACES the object rather than assigning into it. The day someone
-		// writes `lastCategory[id] = category` instead, the picker's last-opened
-		// category leaks into `DEFAULT_SETTINGS` and from there into every merge
-		// for the rest of the session, including the "reset to defaults" path.
-		// The fix is one spread in `mergeIconSources`; this is the assertion to
-		// flip when it lands.
+		// Safe only by the writer's convention while it lasted: `IconPickerModal`
+		// does `sources.lastCategory = { ...sources.lastCategory, [id]: cat }`,
+		// which REPLACES the object rather than assigning into it. The assertion
+		// below is about the day someone writes `lastCategory[id] = cat`.
 		const merged = mergeSavedSettings({});
-		assert.strictEqual(
+		assert.notStrictEqual(
 			merged.iconSources.lastCategory,
 			DEFAULT_SETTINGS.iconSources.lastCategory,
+		);
+		assert.deepStrictEqual(
+			merged.iconSources.lastCategory,
+			DEFAULT_SETTINGS.iconSources.lastCategory,
+			"same contents, different object",
+		);
+	});
+
+	it("an in-place write to it reaches neither the defaults nor the next merge", () => {
+		const first = mergeSavedSettings({});
+		(first.iconSources.lastCategory as Record<string, string>).material =
+			"Household";
+
+		assert.strictEqual(
+			DEFAULT_SETTINGS.iconSources.lastCategory?.material,
+			"",
+			"the constants must not have moved",
+		);
+		assert.strictEqual(
+			mergeSavedSettings({}).iconSources.lastCategory?.material,
+			"",
+			"nor the merge that follows it",
 		);
 	});
 
