@@ -10,32 +10,15 @@ It lets you create, edit, and style your own callout types, override the built-i
 
 The same callout type can be written three ways:
 
-```md
-> [!note] A Block Callout — the classic Obsidian blockquote
-## [!note] A Heading Callout — a colored, foldable heading bar
-Some text with an [!note] Inline Callout dropped right in
-```
+| Type    | Default content | Custom content                      |
+| ------- | --------------- | ----------------------------------- |
+| Heading | `## [!note]`    | `## [!note] A custom heading title` |
+| Inline  | `[!note]`       | `[!note]{A custom inline title}`    |
+| Block   | `> [!note]`     | `> [!note] A custom block title`    |
 
 <img alt="Three ways to use a callout" src="https://github.com/user-attachments/assets/3cf88262-184d-42e6-b810-d43889629afb" />
 
-That's the whole syntax. Everything else — colors and palettes, icons, global style, the right-click menu, commands, vault discovery, import/export, themes, and more — is covered in the full guide:
-
-**➡️ [Read the Callout Studio user guide](user-guide/README.md)**
-
-## Privacy, in short
-
-Callout Studio never sends vault content anywhere, and collects no telemetry or analytics. The only things it ever downloads are icon artwork you actually pick and, when needed, the plugin's own UI translation — both explained in full, with exactly what's stored where, in [Privacy & permissions](user-guide/16-privacy-and-permissions.md).
-
-## Icon licences and attribution
-
-Callout Studio's own code is under a permissive [license](LICENSE) — free to use, copy, modify, and distribute. The icon libraries it draws on keep their own licences — see **[THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md)** for the full text of each, also reachable from *Settings → Icon licences and credits*.
-
-One informal ask, not a license term: please don't repackage this code and publish it as a new plugin in Obsidian's Community Plugins directory. Feel free to reuse, learn from, and build on it — just don't be that person.
-
-Two points worth knowing before you publish something made with these icons:
-
-- **Font Awesome Free** icons are [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/), © Fonticons, Inc. Attribution travels with them, so a theme or template you share that uses them carries the same requirement.
-- **Brand icons** — Font Awesome's Brands style, Tabler's Brand category, and GitHub's own marks within Octicons — are trademarks, which no icon licence grants rights to. Font Awesome asks that they be used only to represent the company, product or service they refer to; the picker repeats that notice whenever the Brands style is selected, and the same caution applies to the other two.
+Unlock the full potential of Callout Studio! Explore the [User Guide](user-guide/README.md) to discover advanced features like custom color palettes, icon management, global styling, context menus, vault discovery, themes, and more.
 
 ## 💖 Special Thanks
 
@@ -48,6 +31,10 @@ And a huge thank you to everyone who shared ideas, suggested enhancements, and h
 [ericxob77](https://github.com/ericxob77) · [TechnoMaverick](https://github.com/TechnoMaverick) · [epilo9er](https://github.com/epilo9er) · [Xto-tT0](https://github.com/Xto-tT0) · [TyceHerrman](https://github.com/TyceHerrman) · [eth-p](https://github.com/eth-p) · [kwhsiung](https://github.com/kwhsiung) · [archangelglass](https://github.com/archangelglass) · [quantumstargazer](https://github.com/quantumstargazer)
 
 Thank you all for helping make Callout Studio better!
+
+## Privacy, in short
+
+Callout Studio never sends vault content anywhere, and collects no telemetry or analytics. The only things it ever downloads are icon artwork you actually pick and, when needed, the plugin's own UI translation — both explained in full, with exactly what's stored where, in [Privacy & permissions](user-guide/16-privacy-and-permissions.md).
 
 ## Install
 
@@ -79,8 +66,8 @@ Digging into how it's built, or preparing a pull request? See [`internals-docs/`
 
 Callout Studio exposes a small read-only API so other plugins can list the user's callout types and react when that list changes. See [API.md](API.md).
 
-## License
+## License & Third-Party Assets
 
-Callout Studio's own code is under a permissive [license](LICENSE) — use it however you like, no attribution required.
+Callout Studio's code is available under a permissive [license](https://www.google.com/search?q=LICENSE) — use it however you like, no attribution required. Please just honor one informal request: feel free to learn from and build upon this code, but don't simply repackage and publish it as a new plugin in the Obsidian Community Plugins directory.
 
-The icon libraries it offers are separate works under their own licences, which this license does not cover. See [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md).
+The icon libraries offered within the plugin are separate works and retain their own licenses. You can view the full text for each in **[THIRD-PARTY-NOTICES.md](https://www.google.com/search?q=THIRD-PARTY-NOTICES.md)** or directly through the plugin via _Settings → Icon licences and credits_.
