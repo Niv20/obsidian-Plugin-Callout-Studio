@@ -32,7 +32,7 @@ Describe the problem you're trying to solve rather than a finished spec. There's
 ## Submitting a change
 
 1. Fork the repo, branch off `master` (`feature/short-description` or `fix/short-description`).
-2. Make your change. [CLAUDE.md](CLAUDE.md) has the architecture overview — read the "Data flow" section before touching anything under `src/manager/`. A couple of real bugs here have come from missing one of the registry → CSS injector → re-render steps.
+2. Make your change. [CLAUDE.md](CLAUDE.md) has the architecture overview — read the "Data flow" section before touching anything under `src/manager/`. A couple of real bugs here have come from missing one of the registry → CSS injector → re-render steps. For the full internals — how a subsystem actually works, not just the summary, and step-by-step checklists for adding a setting/command/callout field/icon source — see [`internals-docs/00-index.md`](internals-docs/00-index.md).
 3. Run `npm run lint` and `npm run build` before pushing. CI runs the same two commands on every push and PR, so anything that fails locally will fail there too.
 4. Test the change in Obsidian (see Setup above), and say how you tested it in the PR description — with no test suite, that's the only signal a reviewer has.
 

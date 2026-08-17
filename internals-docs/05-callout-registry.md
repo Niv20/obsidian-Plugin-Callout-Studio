@@ -109,7 +109,7 @@ second callout to choose between*:
 
 ## Load-time migrations
 
-All eight migrations below are **content-keyed, not version-keyed** — each one
+All ten migrations below are **content-keyed, not version-keyed** — each one
 checks the shape of the data itself rather than trusting `data.version`. This
 is deliberate and stated repeatedly in the source: an imported or hand-edited
 file can carry any version number it likes, and a migration that trusted the
@@ -156,6 +156,11 @@ by hand, or from a palette) is kept, because `CSSInjector` re-expresses
 *every* background as a translucent tint of the rendered colour regardless —
 so a hand-picked background nests correctly too, without being altered.
 
+A definition with `bgGradient` set is skipped outright, before the
+accent-match check even runs: a gradient is authored, never derived, and its
+start colour is the stop the sweep would otherwise mistake for a derived
+tint — removing it would delete the gradient.
+
 ### `stripMetadataFromIds` — retiring pre-understanding rows
 
 Before `splitCalloutMetadata` was understood, discovery read a callout's whole
@@ -173,6 +178,15 @@ spelling, and merging it into the survivor would silently restyle a callout the
 user never asked to touch. This is safe specifically because the retired
 spelling was never a real callout ID to begin with — Obsidian split the pipe
 off before this plugin ever saw the token.
+
+The same sweep also strips any piped entry out of a *surviving* row's
+`aliases` array, not just primary ids — an alias is reachable the same way an
+id is, so a piped alias is exactly as unreachable. And when the dropped or
+renamed row was the configured `settings.fallbackCalloutId`,
+`releaseFallbackTarget()` repoints it to the row's replacement (or back to the
+default) in the same pass — otherwise `generateFallbackCSS` would bail on a
+fallback id that no longer resolves, and every unrecognized callout in the
+vault would silently lose its styling.
 
 > [!IMPORTANT]
 > **Only the piped ID itself is retired — not the "pipe-eaten" spelling an old

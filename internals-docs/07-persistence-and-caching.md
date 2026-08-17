@@ -15,6 +15,12 @@ else in the plugin writes to disk except:
 - The Material Symbols preview webfont cache (`icon-fonts/`).
 - Downloaded locale files (`translations/`).
 - The user-requested CSS snippet export (`.obsidian/snippets/callout-studio-custom.css`).
+- **The user's own vault notes**, via `app.vault.modify()` — not a
+  plugin-owned file at all, and the most consequential write the plugin
+  makes since it touches arbitrary user content. The vault rewriters
+  (`src/utils/vaultCalloutScanner.ts` — rename/replace-id, convert-to-plain-
+  text) and the delete flow's cleanup (`CalloutDiscovery`) both go through
+  this path. See [Vault discovery](10-vault-discovery.md).
 
 Every write to `data.json` happens through `registry.toSaveData()` — never a
 partial patch — so understanding what that method includes/excludes (see
@@ -78,7 +84,7 @@ doesn't silently switch a hidden menu item back on.
 | `LocaleStore`'s per-file load state and in-flight map | `LocaleStore` | Re-derived by `prepare()`/`ensure()` on next launch |
 | The `i18n/index.ts` module-level locale table map | `i18n/index.ts` | Re-populated by `registerLocaleFile` when a file is read/downloaded again |
 | `startupEntranceActive` flag | `renderShared.ts` | Reset every launch; closes itself after `STARTUP_ENTRANCE_MS` |
-| The Live Preview content-pill render cache | `contentPillRender.ts` | Cleared on every registry change and on unload |
+| The Live Preview content-pill render cache | `contentPillRender.ts` | Cleared on unload and by `plugin.refreshCallouts()` — **not** by every registry change; the generic `registry.onChange` listener in `main.ts` only re-injects CSS, it never calls `refreshCallouts()`. An ordinary `CalloutEditor` save does not clear this cache. Explicit callers include the external-style toggle, fallback-callout changes, row delete/reset, and discovery's prune. |
 
 All of these share one property: losing them costs nothing but a moment of
 recomputation. None of them is a source of truth for anything the user would

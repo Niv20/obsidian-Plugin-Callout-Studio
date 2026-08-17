@@ -1,18 +1,23 @@
-# Callout Studio developer guide
+# Callout Studio internals
 
-This is a from-the-source developer guide to the Callout Studio Obsidian
-plugin — how it's built, why it's built that way, and what to check before
-changing it. It documents the repository as it actually exists today; where
-something looked intentional but the reason wasn't provable from the code,
-that's said explicitly rather than guessed at.
+This is a from-the-source guide to how Callout Studio actually works
+underneath — the mechanisms, the data flow, and the reasons a given piece of
+code looks the way it does. It's written for two audiences and no others:
+someone reading the source to understand a subsystem before changing it, and
+someone preparing a pull request who needs to know every place a change has
+to land together. It documents the repository as it actually exists today;
+where something looked intentional but the reason wasn't provable from the
+code, that's said explicitly rather than guessed at.
 
-It complements, rather than replaces, three other documents already in the
+**This is not a how-to for using the plugin.** There's no "how to create your
+own callout" or "how to pick a colour" here — the README and `video-scripts/`
+already cover that ground for end users, and duplicating it here would just
+give it a second place to go stale. If you're looking for that, start there
+instead.
+
+It complements, rather than replaces, two other documents already in the
 repo:
 
-- **[`README.md`](../README.md)** — the user-facing feature list and privacy/
-  network disclosure. This guide explains the *mechanism* behind what the
-  README describes; [21-features.md](21-features.md) is the bridge between
-  the two.
 - **[`API.md`](../API.md)** — the public plugin API contract for other
   Obsidian plugins. [18-public-api.md](18-public-api.md) explains how the
   implementation enforces what that document promises.
@@ -30,11 +35,10 @@ is shaped and stored, and how a callout actually gets from a definition to
 pixels on screen. After that, the remaining files are largely independent
 and can be read in whatever order matches what you're touching.
 
-## Everyone
+## Core concepts — read in order
 
-These explain what the plugin is and how it's put together — useful whether
-you're fixing a bug, reviewing a PR, or just trying to understand a
-subsystem you've never touched.
+The mental model: what the plugin is, how its pieces fit together, and the
+mutate → CSS → repaint loop everything else builds on.
 
 | File | What it covers |
 | --- | --- |
@@ -47,6 +51,14 @@ subsystem you've never touched.
 | [07-persistence-and-caching.md](07-persistence-and-caching.md) | What's saved to `data.json`, what's cached on disk, what's runtime-only, and the startup CSS snapshot. |
 | [08-render-roles.md](08-render-roles.md) | The token grammar, and how heading/inline callouts render in Live Preview and Reading view. |
 | [09-editor-integrations.md](09-editor-integrations.md) | Autocomplete, wrap/unwrap, the five fixed commands, custom commands, the right-click menu, Outline/link cleanup. |
+
+## Subsystems — reference, as needed
+
+Independent of each other and of reading order. Go straight to the one
+covering whatever you're touching.
+
+| File | What it covers |
+| --- | --- |
 | [10-vault-discovery.md](10-vault-discovery.md) | Auto-discovering unknown callouts, pruning unused rows, statistics, replace-in-vault, and the delete flow. |
 | [11-color-system.md](11-color-system.md) | The translucent-tint nesting invariant, palette derivation and baking, the Obsidian 1.13 colour-format split. |
 | [12-icons.md](12-icons.md) | The icon-pack model, fetch/cache/verify pipeline, rendering, SVG sanitization, and "Your images." |
@@ -54,12 +66,11 @@ subsystem you've never touched.
 | [14-import-export.md](14-import-export.md) | The JSON backup format and validator, the CSS-snippet export, and the Callout Manager / Admonition importers. |
 | [15-settings-ui-and-modals.md](15-settings-ui-and-modals.md) | The settings tab's composition, the shared modal chrome, and the individual modals. |
 | [16-i18n.md](16-i18n.md) | How `t()` resolves strings, the locale download/verification pipeline, and the contribution workflow. |
-| [21-features.md](21-features.md) | A user-facing feature catalog, each entry paired with a pointer into the relevant technical doc. |
 
-## Contributors and maintainers
+## Shipping a change
 
-More specialized: extension workflows, build/release mechanics, the public
-API's implementation guarantees, and a concentrated list of traps this
+Build/release mechanics, the public API's implementation guarantees,
+step-by-step extension checklists, and a concentrated list of traps this
 codebase has already been bitten by once.
 
 | File | What it covers |
@@ -69,11 +80,15 @@ codebase has already been bitten by once.
 | [19-extending.md](19-extending.md) | Step-by-step checklists for adding a setting, a command, a callout field, a menu item, an icon source, and more. |
 | [20-common-pitfalls.md](20-common-pitfalls.md) | Concentrated warnings: state sync, id normalization, helpers that must always be used, mobile quirks, backward compatibility. |
 
+Opening a PR? [`CONTRIBUTING.md`](../CONTRIBUTING.md) (repo root) has the
+process — fork, branch, lint, test, commit style. This guide is what to read
+*before* that, so the change itself lands right the first time.
+
 ## Related topics with their own dedicated skills
 
 Four subsystems are narrow and detailed enough that they live in their own
-Claude Code skills rather than as a docs/ file — this guide's relevant
-sections link out to them where useful:
+Claude Code skills rather than as an `internals-docs/` file — this guide's
+relevant sections link out to them where useful:
 
 - **`callout-color-nesting`** — the full alpha-solving derivation behind the
   translucent-tint background math (summarized in

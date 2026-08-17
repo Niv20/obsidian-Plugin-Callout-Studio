@@ -280,7 +280,7 @@ cssAttrValue(raw)                // the shared escaper both call
 > Vault discovery's header regex (`\[!([^\]\n\r]+)\]`) allows both characters
 > — opening a shared note containing `> [!ev"il]` is enough to auto-create a
 > row with that literal id. The JSON importer's `ID_BAD_CHAR_RE` also permits
-> both (it only rejects pipes and brackets). An unescaped `"` closes the
+> both (it only rejects pipes, brackets, and raw tab/newline/CR). An unescaped `"` closes the
 > attribute selector's string early, corrupting that rule; a *trailing* `\`
 > escapes the closing quote the selector itself writes, leaving the string
 > token open and swallowing every rule generated after it in the same
