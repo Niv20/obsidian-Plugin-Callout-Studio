@@ -6,320 +6,25 @@ It lets you create, edit, and style your own callout types, override the built-i
 
 <img alt="hero" src="https://github.com/user-attachments/assets/e24ff986-cf0c-4f18-95be-33a75283d83a" />
 
-## Features
+## The syntax
 
-### Three ways to use a callout
+The same callout type can be written three ways:
 
-The same callout definition can be used in **three** different forms, each with its own vault-wide style controls:
-
-1. **Block Callout** — the classic Obsidian blockquote: `> [!note]`.
-2. **Heading Callout** — put the token right after the heading marks, e.g. `## [!note]`, to turn the whole heading into a colored, foldable bar.
-3. **Inline Callout** — drop the token in the middle of a sentence, e.g. `[!note]`, to get a small colored callout without breaking the paragraph.
-
-All three forms render in Live Preview, Reading view, and PDF export.
-
-Obsidian lets you attach **metadata** to a callout after a pipe — `> [!note|purple]` is the `note` callout carrying the metadata `purple`, which themes and CSS snippets can style through `data-callout-metadata`. Callout Studio ignores the metadata when deciding *which* callout you meant, so `[!note]`, `[!note|purple]` and `[!note|green]` are all one **Note**, with a single row in your callout list. All three forms honour this, and heading and inline callouts carry `data-callout-metadata` too.
+```md
+> [!note] A Block Callout — the classic Obsidian blockquote
+## [!note] A Heading Callout — a colored, foldable heading bar
+Some text with an [!note] Inline Callout dropped right in
+```
 
 <img alt="Three ways to use a callout" src="https://github.com/user-attachments/assets/3cf88262-184d-42e6-b810-d43889629afb" />
 
+That's the whole syntax. Everything else — colors and palettes, icons, global style, the right-click menu, commands, vault discovery, import/export, themes, and more — is covered in the full guide:
 
-### Icons
+**➡️ [Read the Callout Studio user guide](user-guide/README.md)**
 
-Seven icon libraries, all from one picker — choose a source from the menu and search across it:
+## Privacy, in short
 
-| Source | Icons | Notes |
-| --- | --- | --- |
-| **Lucide** | ~1,600 | Obsidian's built-in set. Always available, always offline. |
-| **Tabler Icons** | 5,130 | Selectable style — Outline (all 5,130) or Filled (1,054). 41 categories to filter by. |
-| **Material Symbols** | 3,870 | Selectable style (Outlined / Filled / Rounded / Sharp) and weight (100–700). |
-| **Emoji** | ~1,900 | Any Unicode emoji, with a skin-tone selector. |
-| **Font Awesome** | 1,992 | Selectable style — Solid (1,422), Regular (169) or Brands (572). 68 categories to filter by. |
-| **Octicons** | 383 | GitHub's set. Drawn at two sizes and picked automatically to suit the callout. |
-| **RPG Awesome** | 495 | Fantasy and tabletop icons. |
-
-Or leave it on **All sources** and search every library at once.
-
-Searching works offline for every source from the moment you install — the names, keywords and categories all ship with the plugin. Tabler Icons, Font Awesome, Octicons and RPG Awesome download their artwork once, when you first press **Download** in the picker, and work offline afterwards. See [Network usage and privacy](#network-usage-and-privacy).
-
-You can also fine-tune each callout's icon size and horizontal/vertical offset.
-
-**Or no icon at all.** Hover the icon tile in the callout editor and a small **✕** appears in its corner (always visible on phone and tablet, where there is no hover); press it and the callout renders with no icon anywhere — block, heading, inline, and in an exported PDF. The title moves left to the callout's edge, and if **Align content with title** is on, the body follows it rather than staying indented under nothing. The icon you had picked is remembered, so pressing the tile again reopens the picker on that exact drawing.
-
-### Per-mode colors
-
-- Separate **Light** and **Dark** colors for every callout. Callout Studio honors Obsidian's current theme automatically.
-- Color presets: Obsidian's original callout palette plus extra curated presets.
-
-<img alt="Per-mode colors" src="https://github.com/user-attachments/assets/8a37477c-2323-4464-9494-f3ed35e56f18" />
-
-### Custom color palettes
-
-Save your own reusable color palettes from **Settings → Custom palettes**, then pick them from the color dropdown on any callout:
-
-- **Simple mode** — choose one base color and Callout Studio derives light and dark backgrounds and accents automatically, auto-correcting contrast so text stays readable.
-- **Advanced mode** — fine-tune all four colors (light/dark accent and background) by hand, with live contrast warnings.
-- Editing or deleting a saved palette never changes callouts you already colored with it - the colors are copied onto the callout the moment you pick the palette.
-
-### `[!` autocomplete
-
-When you type `[!` inside a blockquote, Callout Studio shows a suggestion list of available callouts:
-
-- Picking a suggestion inserts a complete callout header.
-- You can confirm a brand-new callout name on the spot — it will be added as a fallback row to the registry.
-
-<img alt="autocomplete" src="https://github.com/user-attachments/assets/f3fd6c6c-e5de-4847-b46f-c7b42856d2fc" />
-
-### Global callout style
-
-Block, heading, and inline callouts each get their own style popup, opened from **Settings → Global settings**:
-
-- **Block callouts** — border sides and thickness, corner rounding, independent Title scale and Content scale, and an option to align the body with the title.
-- **Heading callouts** — border sides and thickness, corner rounding, vertical padding around the heading text, and a horizontal icon inset.
-- **Inline callouts** — border sides and thickness, corner rounding, and a dedicated font scale for the callout text.
-
-<img alt="Global callout style" src="https://github.com/user-attachments/assets/7558c077-1396-43de-9715-6538b4ca8297" />
-
-### Default fallback callout
-
-When a note uses a callout ID that doesn't exist in the registry, Callout Studio styles it using the **default fallback callout**. You can pick which callout acts as the fallback in settings.
-
-### External style — let your theme own a callout
-
-Some themes (ITS, Border, AnuPpuccin…) ship elaborate callout styling of their own, and Callout Studio wins those conflicts by default: its CSS is applied last, so at the specificity a theme normally writes, the plugin's rule takes precedence.
-
-**External style** turns that off for one callout at a time. Open the **⋯** menu on any row — built-in or custom — and pick **Use external style (theme or CSS)**. From then on Callout Studio emits no CSS and renders no DOM for that callout: no colors, no background, no icon, no border, radius or text-size from Global style, and no icon repainting. Your theme, your CSS snippet, or plain Obsidian decides how it looks.
-
-Two things to know:
-
-- The callout's **heading** (`## [!type]`) and **inline** (`word [!type] word`) forms stop rendering too. Those are Callout Studio's own syntax, so there is no theme styling for them to fall back to — the `[!type]` simply stays as the text you wrote.
-- The row stays in your list, tagged **External style**, with its icon and color swatches hidden — they no longer describe anything you'd see. Clicking edit opens a window that explains the situation and shows a live preview of how your theme actually renders it, with one button to take control back.
-
-The **default fallback callout** can't be marked this way; pick a different fallback first.
-
-### Vault discovery
-
-Callout Studio keeps the registry in sync with what's actually used in your vault:
-
-- **Large vaults:** If your vault has 500 or more markdown files, the plugin will ask for your permission before performing a full initial scan. If you decline, files will be scanned individually as you open them.
-- New callout IDs typed in open notes are picked up automatically.
-- When you open the settings tab, in-memory editor buffers are scanned for unsaved IDs.
-- A **Scan now** button performs a one-shot vault scan that adds any unrecognized IDs as fallback rows so you can see them in the list and customize them.
-- Auto-created fallback rows that are never used and never customized are pruned automatically in the background.
-
-### Right-click context menu
-
-Right-click on any callout - block, heading, or inline - to get extra actions injected into Obsidian's native menu:
-
-- Edit callout settings
-- Open Callout Studio settings
-- Block callouts: copy callout Markdown, set the fold state (open / closed / non-collapsible)
-- Heading callouts: cut, copy, or delete the whole heading section
-
-You can choose which of these actions appear for each of the three forms, and reorder them, from **Settings → Customize menu items**.
-
-<img alt="Right-click context menu" src="https://github.com/user-attachments/assets/4100cbe6-ba6f-45ce-986f-f3d7d17fdbac" />
-
-### Editor commands
-
-Callout Studio adds the following commands. **No keyboard shortcuts are assigned by default.** **Settings → Keyboard shortcuts → Manage commands** lists every one of them with the shortcut it is currently bound to; selecting a shortcut — or the word *Blank*, where there isn't one — opens Obsidian's own hotkey settings on that command.
-
-- **Open settings** — opens the Callout Studio settings tab.
-- **Create new callout type** — opens the callout editor.
-- **Insert empty callout** — starts a new callout at the cursor, then triggers the autocomplete so you can pick a type.
-- **Wrap in callout** — wraps the current paragraph or selection in a callout, then triggers the autocomplete so you can pick a type.
-- **Unwrap from callout** — removes one callout level around the cursor or selection.
-
-### Custom commands
-
-Those five are all Callout Studio ever adds on its own — it deliberately does **not** register a command per callout type, which would flood the command palette with hundreds of entries.
-
-Instead, build the specific ones you want in that same **Manage commands** window. Pick a format (heading, inline or block), a callout type, and — where the format offers a choice — a heading level or whether the command wraps the selection or inserts a new callout. Each command you create is registered with Obsidian, so it shows up in the command palette and in **Settings → Hotkeys** ready for a shortcut:
-
-- *Wrap in Warning callout*
-- *Insert H2 Note heading callout*
-- *Insert Important inline callout*
-
-They behave exactly like the generic commands above — same handling of selections, cursor position, nesting, code blocks and frontmatter — with the type already chosen, so there is no autocomplete step.
-
-Custom commands stay tied to the callout they use. Renaming a callout updates the command's name and keeps your shortcut; deleting a callout removes the commands that depended on it, so nothing broken is left behind in the palette. Editing a command keeps its shortcut, because a command's identity is independent of what it does.
-
-### Vault insights & maintenance
-
-- **Callout statistics** — scans every Markdown file in the vault and lists every callout type with its usage count, file count, and source (built-in / custom / auto-fallback / CSS snippet / unknown).
-- **Replace in vault** — replace every occurrence of one callout ID with another, in one pass.
-- **Convert to plain text** — strip a callout while preserving its content as a normal paragraph block.
-
-### Import / export
-
-- **Export** offers two formats. A **Callout Studio backup** is a JSON file holding your callout definitions, saved color palettes and settings — the one to import into another vault.
-- A **CSS snippet** is the same styling as plain CSS, written into this vault's snippets folder, for anywhere Callout Studio isn't running: another vault, Obsidian Publish, a static-site build. See [Export as a CSS snippet](#export-as-a-css-snippet) below for exactly what it does and does not carry.
-- Import a JSON file produced by Callout Studio. The importer validates every entry, reports issues per row, lets you import only the valid entries, and merges imported color palettes into your existing ones instead of overwriting them.
-- **Import from Callout Manager** — bring your customized callouts over with their icons and colors. It can read the Callout Manager plugin's own settings straight out of this vault (nothing is exported first, and nothing is written back), or take the styles its Copy button puts on your clipboard. The vault route brings over more: colors it stored separately for light and dark mode arrive as both, and callouts you created but never restyled come across too — neither of which appears in the copied styles at all. Per-theme styling and custom CSS have no equivalent here and are left behind, and anything that could not be brought over is listed before the import runs.
-- **Import from Admonition** — bring your custom admonitions over with their names, icons and colors. It can read the Admonition plugin's own settings straight out of this vault (nothing is exported first, and nothing is written back), or take an `admonitions.json` file or pasted JSON. Every icon library Admonition offers — Obsidian's own, Font Awesome, Octicons, RPG Awesome — is one Callout Studio already has, and pictures you uploaded there come across into **Your images**. Settings with no equivalent here (command, copy button, hidden title) are left behind, and anything that could not be brought over is listed before the import runs.
-- Import callout definitions detected in your vault's CSS snippets folder.
-
-### Export as a CSS snippet
-
-**Settings → Callout Studio → Import / export → Export → CSS snippet** writes your callout styling as plain CSS to `.obsidian/snippets/callout-studio-custom.css`. It is for taking your look somewhere Callout Studio isn't running — another vault, Obsidian Publish, a Digital Garden or other static-site build, or a vault you hand to someone else.
-
-It is the same CSS the plugin itself paints with. The file is generated from the very same code that styles your callouts on screen, so it cannot drift into describing something you never see.
-
-**It is a snapshot, not a live link.** Nothing updates the file after it is written — change a callout colour, swap an icon, adjust the global border, and the snippet still holds what you had at export time. Export again to bring it up to date. Doing so is cheap and safe:
-
-- Exporting again **replaces** the file. If you have hand-edited it, or something else wrote a file by that name, you are asked first — your edits are never silently overwritten.
-- If nothing has changed since the last export, **nothing is written at all** and you are told the file is already up to date. This matters on a synced vault, where every write is a sync event.
-
-**Turning it on is your call.** Callout Studio never enables the snippet — inside this vault the plugin is already styling these callouts, and an enabled copy could only ever hold an older version of them. Enable it yourself under **Settings → Appearance → CSS snippets**, or just copy the file to wherever you actually need it.
-
-> One thing that surprises people: Obsidian remembers enabled snippets by **name**, and keeps the name even after the file is deleted. So if you enabled this snippet once before, a later export brings the file back **already switched on**. Callout Studio notices this and warns you when it happens.
-
-#### What it carries
-
-Everything about a regular callout — the `> [!type]` block:
-
-- Accent colour, in **light and dark mode separately**.
-- Background: flat tint, **gradient**, and **transparent** (including clearing the frame and shadow a theme would otherwise draw around an invisible box).
-- Body text colour, per mode.
-- The icon, with its size and offset. Lucide icons reference Obsidian's own set by name; icons from Tabler, Material Symbols, Font Awesome, Octicons, RPG Awesome and your own uploaded pictures are **inlined into the file as artwork**, so they work with no plugin, no download and no internet. Emoji icons come across too, as does a callout you set to show **no icon at all**.
-- Gradient title text and the coloured fold arrow, where you used them.
-- Your **global callout style**: border sides and width, corner radius, title and content scale, and **Align content with title**.
-- **Aliases**, written out as their own rules — an aliased callout looks right on its own.
-
-#### What it leaves out
-
-- **Heading callouts and inline callouts.** Those are not blockquotes: Callout Studio builds that markup itself as you type, so the CSS has nothing to attach to once the plugin is gone. The regular block form is the only one plain CSS can style, so it is the only one exported. Everything else — autocomplete, the right-click menu, vault discovery, your commands — is likewise behaviour, not CSS.
-- **The fallback style for unknown callout types.** In the plugin this is a catch-all that reaches every callout ID it does not recognise; frozen into a file it would restyle callouts in the target vault that this export never knew about, so it is deliberately dropped.
-- **Callouts you handed to your theme.** A callout marked [External style](#external-style--let-your-theme-own-a-callout) is styled by nothing here by design, so the snippet says nothing about it either — with one exception: if you also hid its icon, that one rule is kept, since a theme cannot express it for you.
-- **Callouts nobody uses.** Auto-created rows for IDs found in your vault, never adopted and no longer written anywhere, are skipped — they are invisible in your own list, so rules for them would style something you cannot see.
-- **Icons in PDF export.** On screen the snippet draws every icon correctly, and colours, backgrounds and gradients print correctly too. Icons are the one exception, and the reason is worth knowing.
-
-  Obsidian builds a callout's icon by reading the `--callout-icon` variable once and drawing one Lucide icon from it — that variable only speaks Lucide. An icon from Tabler, Material Symbols, Font Awesome, Octicons or RPG Awesome, an emoji, or one of your own pictures is not a name Obsidian knows, so CSS can only paint it as a mask laid over the icon slot. Chromium's print engine renders those masks unreliably, so Callout Studio marks them screen-only and, for printing, **builds a real SVG element into the page instead**, with the callout's colour written straight onto it.
-
-  That step is why the snippet stops here: a stylesheet can style an element, but it can never create one. With the plugin gone there is nothing to build that element, so printing falls back to the placeholder Lucide icon — a pencil — that the snippet sets so Obsidian draws something at all. Everything else that PDF export gets wrong is fixed in pure CSS and travels with the file: the gradient repaint that works around Chromium's inline-box gradients and macOS Preview's truncated colour ramps is a `@media print` rule, and it is exported.
-
-If none of your callouts produce any CSS — you have no custom ones, or you handed every one of them to your theme — no file is written, and you are told why rather than left with an empty snippet in your vault.
-
-#### Notes for carrying it elsewhere
-
-- The file is self-contained: no `@import`, no external fonts, no network requests. Icon artwork is embedded directly.
-- One version detail worth knowing if the destination runs a much older Obsidian: `--callout-color` changed format in Obsidian 1.13, and the export writes whichever format the Obsidian you exported *from* uses. Going from 1.13+ back to 1.12 or earlier, re-export from a matching version.
-- The file opens with a comment carrying everything above in short, plus a fingerprint of its own contents. That fingerprint is how a later export can tell "the settings changed" from "the user edited this file" — so leave it alone if you want the overwrite prompt to keep protecting your edits.
-
-### Reset
-
-A single **Reset everything** action returns the plugin to defaults: removes user callouts, restores built-in callouts, resets global styles, and clears cached icon artwork.
-
-### Localization
-
-The plugin UI is available in **32 languages**. The active language follows Obsidian's interface language automatically, but you can also select a different language manually from the plugin settings.
-
-**Supported languages:** Arabic (العربية), Bulgarian (Български), Chinese Simplified (中文简体), Chinese Traditional (中文繁體), Czech (Čeština), Danish (Dansk), Dutch (Nederlands), English, Finnish (Suomi), French (Français), German (Deutsch), Greek (Ελληνικά), Hebrew (עברית), Hindi (हिन्दी), Hungarian (Magyar), Indonesian (Bahasa Indonesia), Italian (Italiano), Japanese (日本語), Korean (한국어), Malay (Bahasa Melayu), Norwegian Bokmål (Norsk), Persian (فارسی), Polish (Polski), Portuguese (Português), Romanian (Română), Russian (Русский), Spanish (Español), Swedish (Svenska), Thai (ภาษาไทย), Turkish (Türkçe), Ukrainian (Українська), Vietnamese (Tiếng Việt).
-
-> **Note for native speakers:** All translations except English were generated with AI assistance and may contain errors or unnatural phrasing. If you spot a mistake, contributions are very welcome!
->
-> **To fix a translation via pull request:**
->
-> 1. Fork the repository on GitHub.
-> 2. Edit the relevant file in `src/i18n/` (e.g. `fr.ts` for French).
-> 3. Open a pull request with your changes.
->
-> Alternatively, you can report issues by email at [anivbniv@gmail.com](mailto:anivbniv@gmail.com).
-
-## Permissions
-
-Callout Studio uses a few Obsidian APIs that touch the vault and the system clipboard. Every use is local to your machine and tied to plugin functionality you can see and control:
-
-- **Vault file enumeration** (`vault.getMarkdownFiles`). Used to power the features listed under **Vault discovery** and **Vault insights & maintenance** above: the optional initial scan, the **Scan now** button, callout statistics, **Replace in vault**, **Convert to plain text**, and the pre-delete usage check that warns you before removing an in-use callout. The plugin reads file contents with the standard `vault.cachedRead` / `vault.read` APIs and never sends them anywhere.
-- **Vault file modification** (`vault.modify`). Only triggered when you explicitly run **Replace in vault**, **Convert to plain text**, or the editor commands (**Wrap in callout** / **Unwrap from callout**).
-- **Clipboard access**. Two narrow, user-initiated uses:
-    - **Copy callout Markdown** writes the selected callout to your clipboard when you click the menu item.
-    - The ID/alias input field reads a paste event's text so you can paste multiple comma- or space-separated IDs at once. Only the text you actively paste into that field is read; the clipboard is never read otherwise.
-
-No vault content, clipboard data, or usage information is ever transmitted off your device.
-
-## Network usage and privacy
-
-Callout Studio never sends vault content anywhere, and collects no telemetry or analytics. Every network request it makes is listed here.
-
-**Nothing is fetched by opening a note, or by opening the icon picker.** Browsing and searching every icon source works offline from the moment you install the plugin, because the names, keywords and categories are all bundled. Only artwork is ever downloaded, and only for icons you actually choose.
-
-The one request that is not tied to a button is the [translation](#translations) of your own interface language, and only when it is not already on your device.
-
-### Downloadable icon sources
-
-Tabler Icons, Font Awesome, Octicons and RPG Awesome ship their artwork as files downloaded the first time you press **Download** on that source in the picker. After that the source works entirely offline. A source with styles is several files, one per style, fetched together by that one button — and only the ones you do not already have.
-
-| Source | Download size |
-| --- | --- |
-| Tabler Icons | 1.7 MB (Outline 1.14 MB, Filled 503 KB) |
-| Font Awesome | 1.4 MB (Solid 794 KB, Regular 105 KB, Brands 559 KB) |
-| Octicons | 375 KB |
-| RPG Awesome | 625 KB |
-
-These come from this plugin's own repository, pinned to an immutable tag:
-
-```
-https://cdn.jsdelivr.net/gh/Niv20/obsidian-plugin-callout-studio@packs-v2/packs/<source>.json
-https://raw.githubusercontent.com/Niv20/obsidian-plugin-callout-studio/packs-v2/packs/<source>.json   (fallback)
-```
-
-Each download is checked against a SHA-256 checksum built into the plugin, and rejected unless it matches exactly — so a compromised CDN, a captive portal or a truncated response cannot substitute anything. The file is then stored at `.obsidian/plugins/callout-studio/icon-packs/<source>.json`, and re-checked against the same checksum every time it is read, so a file that is later edited or damaged is never trusted.
-
-**Two things download a source without you pressing the button**, because in both you have already asked for the icons in question:
-
-- **Importing callouts.** An import file names icons but carries no artwork, so whatever the imported callouts need and this vault does not have is fetched, and a notice says which sources arrived.
-- **Repairing a damaged or deleted pack file.** On startup, a source a callout uses that has gone missing or no longer matches its checksum is downloaded again. This only happens if a callout would otherwise be undrawable — if the icons you use are already cached in `data.json` (which is the normal case), nothing is fetched.
-
-**Installing a source without a network:** download the file from the plugin's [GitHub release](https://github.com/Niv20/obsidian-plugin-callout-studio/releases) and drop it into that folder, named after the source (`tabler-outline.json`, `fa-solid.json`, `octicons.json`, and so on). It is verified against the same checksum on the next launch.
-
-### Material Symbols
-
-Material Symbols is the exception: it has over 100,000 style and weight combinations, so there is no single file to ship. It fetches one drawing at a time instead:
-
-- While its tab is open, the Google Fonts stylesheet is loaded from `https://fonts.googleapis.com/css2?...` so the grid can preview icons in the chosen style and weight. The font file it points at is then saved to `.obsidian/plugins/callout-studio/icon-fonts/`, so every later launch previews the grid from disk and this source works offline too. One file per style you open, 1.0–1.5 MB each; deleting them is safe, and they are fetched again the next time you open that style.
-- When you pick an icon, that one SVG is downloaded from `https://fonts.gstatic.com/s/i/short-term/...`.
-- On startup, if a callout uses a Material icon whose artwork is missing locally (after an import, say), only those are fetched.
-
-If you never open the Material source, none of this happens. If the preview font cannot be reached, the grid says so and shows icon names instead — searching and picking still work, and a **Try again** button retries once you are back online.
-
-### Translations
-
-Callout Studio's interface is available in 32 languages. **English is built in; the other 31 are downloaded.** This is the one request the plugin makes on its own, without a button — the alternative was shipping every language to everyone, which made the plugin more than twice as large for a set of translations any one person will never read.
-
-- **It happens only when your language is not already on your device.** If Obsidian is in English, or you have chosen English, nothing is ever requested. On a normal launch, when the file has been sitting on disk for months, nothing is requested either.
-- **It happens in the background, after the plugin has loaded**, so it never delays startup. Until it arrives the interface is in English.
-- **If it fails — you are offline, or the CDN is blocked — nothing breaks.** The plugin stays in English and tries again the next time Obsidian starts. *Settings → Language* says so, with a **Retry** button.
-
-The files come from this plugin's own repository, pinned to the release you have installed:
-
-```
-https://cdn.jsdelivr.net/gh/Niv20/obsidian-plugin-callout-studio@<version>/locales/<language>.json
-https://raw.githubusercontent.com/Niv20/obsidian-plugin-callout-studio/<version>/locales/<language>.json   (fallback)
-```
-
-Each one is about 40–65 KB and is checked against a SHA-256 checksum built into the plugin, exactly like an icon source, then stored at `.obsidian/plugins/callout-studio/translations/<language>.json`.
-
-**Updating the plugin does not re-download your language, and never deletes it.** The checksum decides: a release that did not change your translation reuses the copy you already have. When new text *is* added, the updated file is fetched once in the background — and in the meantime the old one keeps working, with only the new labels appearing in English. A file is replaced only after its replacement has arrived and been verified, so a failed update leaves your translation exactly where it was.
-
-### Your own pictures
-
-**Your images** is the one source that downloads nothing, ever. You add SVG, PNG, JPEG or WebP files from your own computer, and they stay on your device.
-
-- **An SVG stays an SVG**, so it is sharp at any size — but only after being filtered through a strict allow-list. Shapes, gradients and clipping survive; scripts, event handlers, `<foreignObject>`, external references and anything that could fetch from the network do not. That filtering is repeated every time the file is read, not just when you add it, so a picture that arrives in an import or is edited by hand is checked too.
-- **A PNG, JPEG or WebP is re-encoded**: it is decoded, scaled so its longest side is at most 128 pixels, and drawn onto a canvas. What gets stored is the resulting pixels, so nothing of the original file survives to be interpreted later.
-- **Pictures live in `data.json` with the rest of your settings.** That means they sync wherever your settings sync, and an export carries them — one JSON file, the same **Import** button, no archive to unpack.
-- **SVG pictures can follow the callout's color** instead of keeping their own, which is what makes a flat one-color logo track your light and dark themes. Callout Studio guesses when you add the file — one color means follow, several means keep — and there is a toggle in the picker either way. PNG, JPEG and WebP always keep their own colors: painting a callout's color through a picture is a stencil, and a photograph would come out a silhouette.
-
-### What is stored locally
-
-- **The artwork of icons you actually use** is copied into the plugin's `data.json`, so your callouts still render on a device that synced your settings but never downloaded the source, and after a cached pack file is deleted. Unused entries are cleaned up automatically when you edit or delete a callout; **Reset all** clears them outright.
-- **The pictures you added yourself**, also in `data.json` — typically five to twenty kilobytes each after the size cap above. The picker shows the running total, and **Reset all** clears them along with everything else you made.
-- **The commands you built**, in `data.json` — a few bytes each, recording only the format, callout and heading level you chose. The shortcut itself belongs to Obsidian and lives in its own `hotkeys.json`, so it survives the command being edited.
-- **Downloaded icon sources** live in `.obsidian/plugins/callout-studio/icon-packs/`. Deleting them is safe: your callouts keep rendering from the copy in `data.json`, and the picker offers the download again. If a callout does turn out to need artwork that only the deleted file had, it is fetched again on the next launch.
-- **Your interface language**, in `.obsidian/plugins/callout-studio/translations/` — one 40–65 KB file for the language you read, and only that one. Deleting it is safe: the plugin falls back to English and downloads it again on the next launch.
-- **The Material Symbols preview font**, in `.obsidian/plugins/callout-studio/icon-fonts/` — one 1.0–1.5 MB file per style you have opened in the picker. It is only used to draw the picker's grid, never your notes, so deleting it costs nothing beyond re-downloading it the next time you browse that style.
-- **A snapshot of the plugin's generated CSS**, to shorten the brief flash of unstyled callouts on slow startups (mainly mobile). It is a small per-device cache in the app's own local storage — not a file in your vault — and it holds only generated styling, never vault content. It never leaves your device, and it is re-read the moment the plugin starts loading, before anything is fetched from disk. Versions up to 2.5.0 also wrote a CSS snippet into `.obsidian/snippets/` *automatically* and switched it on for you; that file is no longer created, and any copy left from an older version is deleted the next time the plugin loads.
-- **A CSS snippet, only if you ask for one.** *Export → CSS snippet* writes `callout-studio-custom.css` into `.obsidian/snippets/`. It is never switched on for you — inside this vault the plugin already draws these callouts, and the file is there so you can carry your styling somewhere it isn't installed. Exporting again replaces that one file and nothing else; if it has been edited since Callout Studio wrote it, you are asked first. Deleting it is safe.
+Callout Studio never sends vault content anywhere, and collects no telemetry or analytics. The only things it ever downloads are icon artwork you actually pick and, when needed, the plugin's own UI translation — both explained in full, with exactly what's stored where, in [Privacy & permissions](user-guide/16-privacy-and-permissions.md).
 
 ## Icon licences and attribution
 
@@ -367,6 +72,8 @@ npm run lint   # ESLint with the official obsidianmd plugin rules
 ```
 
 Source lives under `src/` and is bundled by esbuild into `main.js`. The release artifacts are `main.js`, `manifest.json`, and `styles.css`.
+
+Digging into how it's built, or preparing a pull request? See [`internals-docs/`](internals-docs/00-index.md) for the architecture, and [CONTRIBUTING.md](CONTRIBUTING.md) for the process.
 
 ### Plugin API
 

@@ -10,8 +10,8 @@ where something looked intentional but the reason wasn't provable from the
 code, that's said explicitly rather than guessed at.
 
 **This is not a how-to for using the plugin.** There's no "how to create your
-own callout" or "how to pick a colour" here — the README and `video-scripts/`
-already cover that ground for end users, and duplicating it here would just
+own callout" or "how to pick a colour" here — [`user-guide/`](../user-guide/README.md)
+already covers that ground for end users, and duplicating it here would just
 give it a second place to go stale. If you're looking for that, start there
 instead.
 
