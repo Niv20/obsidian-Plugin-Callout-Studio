@@ -16,9 +16,10 @@
  * *is* the escape hatch — several exist on purpose, so a user's CSS snippet can
  * nudge the fold chevron or the icon gap without the plugin shipping a setting
  * for it. That distinction makes the rule crisp: **a fallback-less read must
- * have a writer.** It found one already — `--cs-icon-transform`, read bare by
- * `.callout-studio-icon-transformed`, written by nothing, in a rule no code
- * applies.
+ * have a writer.** It found one immediately — `--cs-icon-transform`, read bare
+ * by `.callout-studio-icon-transformed`, written by nothing, in a rule no code
+ * applied. Both halves have since been deleted, and the rule now holds with no
+ * exceptions at all.
  *
  * **Class names cannot be, and this file says so rather than pretending.** Some
  * are assembled from a prefix and a variant (`cs-import-issue-${severity}`),
@@ -108,21 +109,17 @@ describe("--cs-* custom properties", () => {
 		assert.ok(readBare.size + readWithFallback.size > 5, "no --cs-* reads found");
 	});
 
-	/**
-	 * Reads with no writer that are known, and are the *same defect* as an entry
-	 * in `RULES_WITHOUT_EMITTERS` below rather than a separate one.
-	 *
-	 * `--cs-icon-transform` is read bare by `.callout-studio-icon-transformed`,
-	 * a rule no code applies. Both halves are dead and one deletion fixes both,
-	 * so listing it twice would mean two failures for one line of CSS. Deleting
-	 * that rule is a visible change and belongs in its own commit, not in a
-	 * test run.
-	 */
-	const ORPHANS_OF_DEAD_RULES = new Set(["--cs-icon-transform"]);
-
 	it("every fallback-less read has a writer", () => {
+		// No exceptions, deliberately. There was one — `--cs-icon-transform`,
+		// read bare by `.callout-studio-icon-transformed` and written by nothing.
+		// Both halves were dead: the shared-class-plus-variable pair that
+		// `ccf79a4` built the icon offset/size controls on, left behind when
+		// `CSSInjector.getIconTransformCSS` took the feature over and started
+		// baking the computed `transform` straight into a per-callout, per-role
+		// rule. Deleting the rule retired the exception with it, and an empty
+		// allowance is worth more as a closed door than as an open one.
 		const orphans = [...readBare.entries()]
-			.filter(([name]) => !written.has(name) && !ORPHANS_OF_DEAD_RULES.has(name))
+			.filter(([name]) => !written.has(name))
 			.map(([name, where]) => `${name}  (${where})`);
 		assert.deepStrictEqual(
 			orphans,
@@ -134,17 +131,47 @@ describe("--cs-* custom properties", () => {
 		);
 	});
 
+	/**
+	 * Written on purpose for readers *outside* this repository, and so read by
+	 * nothing inside it.
+	 *
+	 * `--cs-color-rgb` is the legacy bare triplet `CSSInjector.ownAccentProps`
+	 * still emits beside `--cs-accent`, kept one release for user snippets and
+	 * other plugins that read it; the source says in as many words that nothing
+	 * here depends on it any more. It looked read until the dead
+	 * `.cs-global-preview-callout` mock was deleted — that rule matched no
+	 * element in any build, so it was never really a reader, only the thing
+	 * hiding that there wasn't one.
+	 *
+	 * Pinned by name, and asserted still-written below, so that retiring the
+	 * variable fails here and takes this entry with it.
+	 */
+	const COMPAT_EXPORTS = new Set(["--cs-color-rgb"]);
+
 	it("every property that is written is also read", () => {
 		// The other direction. A property nothing reads is either a rule that
 		// was deleted around it, or a name that was changed on one side.
 		const unread = [...written]
-			.filter((n) => !readBare.has(n) && !readWithFallback.has(n))
+			.filter(
+				(n) => !readBare.has(n) && !readWithFallback.has(n) && !COMPAT_EXPORTS.has(n),
+			)
 			.sort();
 		assert.deepStrictEqual(
 			unread,
 			[],
 			report("Written but never read — dead custom properties:", unread),
 		);
+	});
+
+	it("the compatibility exports are still written", () => {
+		// Otherwise the allowance outlives the variable it was granted for and
+		// silently permits the next write-only property to join it.
+		for (const name of COMPAT_EXPORTS) {
+			assert.ok(
+				written.has(name),
+				`${name} is listed as a compatibility export but nothing writes it any more — delete the entry`,
+			);
+		}
 	});
 
 	it("the documented escape hatches still have their fallbacks", () => {
@@ -203,7 +230,7 @@ describe("class names in styles.css and src/ agree", () => {
 	]);
 
 	/**
-	 * Classes the code applies that `styles.css` says nothing about.
+	 * Classes the code applies that *nothing* styles.
 	 *
 	 * Not all of these are wrong — a class can exist purely as a query hook or
 	 * as a stable handle for a user's own snippet — but the list is frozen so a
@@ -223,51 +250,57 @@ describe("class names in styles.css and src/ agree", () => {
 		"cs-callout-name",
 		"cs-cm-widget",
 		"cs-command-editor",
-		"cs-export-icon",
 		"cs-external-panel",
 		"cs-fold-dropdown",
 		"cs-fold-trigger",
 		"cs-heading-title",
 		"cs-icon-source",
 		"cs-source-name",
-		"cs-unknown",
 		"cs-welcome-hero",
 		"cs-welcome-panel",
 	]);
 
 	/**
+	 * Styled, but not from `styles.css` — so absent for a reason this file's
+	 * scan structurally cannot see, and *not* the same finding as the list
+	 * above.
+	 *
+	 * `styles.css` is only half of this plugin's CSS. `CSSInjector` builds the
+	 * other half as strings and hands it to `adoptedStyleSheets`, and a rule
+	 * that has to name a *user's* callout id can only be written there. Two
+	 * classes are dressed entirely from that side:
+	 *
+	 * - `cs-export-icon` — the baked print copy of a callout's artwork, hidden
+	 *   on screen and shown in print (`CSSInjector.ts:340` and `:345`).
+	 * - `cs-unknown` — the accent and background an unresolved `[!id]` token
+	 *   borrows from the fallback callout, which is a *setting*, so the rule
+	 *   cannot be static (`CSSInjector.ts:2172` onwards).
+	 *
+	 * Kept apart from `EMITTED_WITHOUT_RULES` because the two say opposite
+	 * things: that list is debt, and this one is the design working. Merging
+	 * them would mean a genuinely unstyled class could be waved through by
+	 * citing the wrong reason.
+	 */
+	const STYLED_BY_GENERATED_CSS = new Set(["cs-export-icon", "cs-unknown"]);
+
+	/**
 	 * Rules in `styles.css` that nothing in `src/` applies.
 	 *
-	 * These are the orphans — features removed or renamed without their CSS.
-	 * `callout-studio-icon-transformed` is the clearest: it is the rule whose
-	 * `var(--cs-icon-transform)` has no writer either, so both halves of it are
-	 * dead. Frozen rather than deleted, because deleting CSS is a change to how
-	 * the plugin looks and belongs in its own commit, not in a test.
+	 * Empty, and it stays that way. All 22 have been deleted: the orphans of
+	 * five features that were rewritten without their CSS — the settings
+	 * toolbar and its search box, the compact colour grid, the old swatch and
+	 * kebab buttons, the pre-`LiveCalloutPreview` global-style mock
+	 * (`cs-global-preview-*`), and the "Customize all colors" collapsible
+	 * header. None had a single reference left anywhere in `src/` or the docs,
+	 * so none of them could ever match an element; deleting them changes no
+	 * pixel, which is exactly why they survived review for so long.
+	 *
+	 * An empty allowance is the point. A rule that styles nothing is invisible
+	 * to `tsc`, to the linter and to a reader, and the only thing that ever
+	 * finds it is this test — so the useful state for it to be in is one where
+	 * the next orphan fails it rather than joining a list.
 	 */
-	const RULES_WITHOUT_EMITTERS = new Set([
-		"callout-studio-actions",
-		"callout-studio-btn-disabled",
-		"callout-studio-color-grid",
-		"callout-studio-color-grid-header",
-		"callout-studio-color-row",
-		"callout-studio-color-swatch",
-		"callout-studio-icon-transformed",
-		"callout-studio-kebab-btn",
-		"callout-studio-preview-toggle",
-		"callout-studio-reset-btn",
-		"callout-studio-swatch-label",
-		"callout-studio-toolbar",
-		"callout-studio-toolbar-search",
-		"cs-collapse-chevron",
-		"cs-collapse-header",
-		"cs-empty-state",
-		"cs-global-preview-body",
-		"cs-global-preview-callout",
-		"cs-global-preview-card",
-		"cs-global-preview-label",
-		"cs-preview-square-icon",
-		"cs-refresh-inline-link",
-	]);
+	const RULES_WITHOUT_EMITTERS = new Set<string>([]);
 
 	/** Class selectors in `styles.css`. */
 	const styled = new Set<string>();
@@ -313,14 +346,19 @@ describe("class names in styles.css and src/ agree", () => {
 
 	it("every class the code applies has a rule", () => {
 		const bad = [...emitted.entries()]
-			.filter(([name]) => !styled.has(name) && !EMITTED_WITHOUT_RULES.has(name))
+			.filter(
+				([name]) =>
+					!styled.has(name) &&
+					!EMITTED_WITHOUT_RULES.has(name) &&
+					!STYLED_BY_GENERATED_CSS.has(name),
+			)
 			.map(([name, where]) => `${name}  (${where})`)
 			.sort();
 		assert.deepStrictEqual(
 			bad,
 			[],
 			report(
-				"These classes are applied but styled by nothing. Add the rule, or — if the class is only a JS hook — add it to EMITTED_WITHOUT_RULES with the reason:",
+				"These classes are applied but styled by nothing. Add the rule; if CSSInjector already styles it, add it to STYLED_BY_GENERATED_CSS; if it is only a JS hook, add it to EMITTED_WITHOUT_RULES with the reason:",
 				bad,
 			),
 		);
@@ -362,6 +400,20 @@ describe("class names in styles.css and src/ agree", () => {
 				stale.push(`RULES_WITHOUT_EMITTERS: ${name} is emitted now — remove it`);
 			} else if (!styled.has(name)) {
 				stale.push(`RULES_WITHOUT_EMITTERS: ${name} has no rule left — remove it`);
+			}
+		}
+		for (const name of STYLED_BY_GENERATED_CSS) {
+			// The generated half is the whole justification, so a class that has
+			// picked up a static rule no longer belongs here — and one nothing
+			// applies any more is an exception outliving its class.
+			if (styled.has(name)) {
+				stale.push(
+					`STYLED_BY_GENERATED_CSS: ${name} has a styles.css rule now — remove it`,
+				);
+			} else if (!emitted.has(name)) {
+				stale.push(
+					`STYLED_BY_GENERATED_CSS: ${name} is no longer emitted — remove it`,
+				);
 			}
 		}
 		assert.deepStrictEqual(stale, [], report("Stale exceptions:", stale));

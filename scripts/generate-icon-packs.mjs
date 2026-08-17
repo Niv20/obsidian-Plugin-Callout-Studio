@@ -28,6 +28,8 @@ import { encodeIndex, encodedIndexLiteral } from "./lib/encodeIndex.mjs";
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const PACK_DIR = join(ROOT, "packs");
 const DATA_DIR = join(ROOT, "src", "icons", "data");
+/** Upstream tables that ship with the generator rather than with a package. */
+const GENERATOR_DATA_DIR = join(ROOT, "scripts", "data");
 
 /** The on-disk pack format. Bumping this invalidates every cached pack file. */
 const PACK_FORMAT = 1;
@@ -499,16 +501,20 @@ function buildRpgAwesome() {
  * time from Google, because 3,870 icons across 4 styles and 7 weights is over
  * 100,000 variants and no bulk file exists to ship. Only the index is built.
  *
- * The source is the metadata table Google publishes, previously committed as a
- * 2.24 MB TypeScript array. Packing it costs nothing in fidelity — every name,
- * tag and category survives, as the round-trip check asserts — and takes the
- * bundled form to well under a third of that.
+ * The source is the metadata table Google publishes, held as generator input at
+ * scripts/data/material-metadata.json. Packing it costs nothing in fidelity —
+ * every name, tag and category survives, as the round-trip check asserts — and
+ * takes the bundled form to well under a third of its size.
  */
 async function buildMaterial() {
-	const { createJiti } = await import("jiti");
-	const jiti = createJiti(import.meta.url);
-	const { MATERIAL_ICON_METADATA } = await jiti.import(
-		join(ROOT, "src/data/materialIconsMetadata.ts"),
+	// The other seven packs read their upstream out of `node_modules`; Material
+	// has no such package, because the tags and categories live behind Google's
+	// web metadata endpoint rather than in anything published to npm. So the
+	// table is committed here, beside the generator that consumes it — outside
+	// `src/`, which keeps it out of `main.js` and out of the build's typecheck,
+	// the two costs that got the original 2.24 MB TypeScript copy deleted.
+	const { icons } = JSON.parse(
+		readFileSync(join(GENERATOR_DATA_DIR, "material-metadata.json"), "utf8"),
 	);
 
 	// Google's table carries a little editorial debris — one tag on `moving`
@@ -517,7 +523,7 @@ async function buildMaterial() {
 	// break the line-per-icon framing the index format relies on. It is called
 	// here rather than only in `main()` because the categories are sorted after
 	// it, and sorting the raw strings would sort the debris.
-	const entries = MATERIAL_ICON_METADATA.map((icon) => ({
+	const entries = icons.map((icon) => ({
 		name: icon.name,
 		categories: cleanTerms(icon.categories).sort(),
 		keywords: cleanTerms(icon.tags),
