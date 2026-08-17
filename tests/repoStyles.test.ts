@@ -230,7 +230,7 @@ describe("class names in styles.css and src/ agree", () => {
 	]);
 
 	/**
-	 * Classes the code applies that `styles.css` says nothing about.
+	 * Classes the code applies that *nothing* styles.
 	 *
 	 * Not all of these are wrong — a class can exist purely as a query hook or
 	 * as a stable handle for a user's own snippet — but the list is frozen so a
@@ -250,17 +250,38 @@ describe("class names in styles.css and src/ agree", () => {
 		"cs-callout-name",
 		"cs-cm-widget",
 		"cs-command-editor",
-		"cs-export-icon",
 		"cs-external-panel",
 		"cs-fold-dropdown",
 		"cs-fold-trigger",
 		"cs-heading-title",
 		"cs-icon-source",
 		"cs-source-name",
-		"cs-unknown",
 		"cs-welcome-hero",
 		"cs-welcome-panel",
 	]);
+
+	/**
+	 * Styled, but not from `styles.css` — so absent for a reason this file's
+	 * scan structurally cannot see, and *not* the same finding as the list
+	 * above.
+	 *
+	 * `styles.css` is only half of this plugin's CSS. `CSSInjector` builds the
+	 * other half as strings and hands it to `adoptedStyleSheets`, and a rule
+	 * that has to name a *user's* callout id can only be written there. Two
+	 * classes are dressed entirely from that side:
+	 *
+	 * - `cs-export-icon` — the baked print copy of a callout's artwork, hidden
+	 *   on screen and shown in print (`CSSInjector.ts:340` and `:345`).
+	 * - `cs-unknown` — the accent and background an unresolved `[!id]` token
+	 *   borrows from the fallback callout, which is a *setting*, so the rule
+	 *   cannot be static (`CSSInjector.ts:2172` onwards).
+	 *
+	 * Kept apart from `EMITTED_WITHOUT_RULES` because the two say opposite
+	 * things: that list is debt, and this one is the design working. Merging
+	 * them would mean a genuinely unstyled class could be waved through by
+	 * citing the wrong reason.
+	 */
+	const STYLED_BY_GENERATED_CSS = new Set(["cs-export-icon", "cs-unknown"]);
 
 	/**
 	 * Rules in `styles.css` that nothing in `src/` applies.
@@ -325,14 +346,19 @@ describe("class names in styles.css and src/ agree", () => {
 
 	it("every class the code applies has a rule", () => {
 		const bad = [...emitted.entries()]
-			.filter(([name]) => !styled.has(name) && !EMITTED_WITHOUT_RULES.has(name))
+			.filter(
+				([name]) =>
+					!styled.has(name) &&
+					!EMITTED_WITHOUT_RULES.has(name) &&
+					!STYLED_BY_GENERATED_CSS.has(name),
+			)
 			.map(([name, where]) => `${name}  (${where})`)
 			.sort();
 		assert.deepStrictEqual(
 			bad,
 			[],
 			report(
-				"These classes are applied but styled by nothing. Add the rule, or — if the class is only a JS hook — add it to EMITTED_WITHOUT_RULES with the reason:",
+				"These classes are applied but styled by nothing. Add the rule; if CSSInjector already styles it, add it to STYLED_BY_GENERATED_CSS; if it is only a JS hook, add it to EMITTED_WITHOUT_RULES with the reason:",
 				bad,
 			),
 		);
@@ -374,6 +400,20 @@ describe("class names in styles.css and src/ agree", () => {
 				stale.push(`RULES_WITHOUT_EMITTERS: ${name} is emitted now — remove it`);
 			} else if (!styled.has(name)) {
 				stale.push(`RULES_WITHOUT_EMITTERS: ${name} has no rule left — remove it`);
+			}
+		}
+		for (const name of STYLED_BY_GENERATED_CSS) {
+			// The generated half is the whole justification, so a class that has
+			// picked up a static rule no longer belongs here — and one nothing
+			// applies any more is an exception outliving its class.
+			if (styled.has(name)) {
+				stale.push(
+					`STYLED_BY_GENERATED_CSS: ${name} has a styles.css rule now — remove it`,
+				);
+			} else if (!emitted.has(name)) {
+				stale.push(
+					`STYLED_BY_GENERATED_CSS: ${name} is no longer emitted — remove it`,
+				);
 			}
 		}
 		assert.deepStrictEqual(stale, [], report("Stale exceptions:", stale));
