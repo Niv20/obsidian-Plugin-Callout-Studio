@@ -59,15 +59,13 @@ export class ImportSourceModal extends Modal {
 
 		const rows: SourceRow[] = [
 			{
-				icon: "download",
+				icon: "paintbrush",
 				title: t("import.sourceStudio"),
 				desc: t("import.sourceStudioDesc"),
 				onClick: () => this.fileInput.click(),
 			},
 			{
-				// Not "clipboard-paste" any more: pasting is now one of two ways
-				// in, and no longer the one most people will take.
-				icon: "paintbrush",
+				icon: "file",
 				title: t("import.sourceCalloutManager"),
 				desc: t("import.sourceCalloutManagerDesc"),
 				onClick: () => {
@@ -76,7 +74,7 @@ export class ImportSourceModal extends Modal {
 				},
 			},
 			{
-				icon: "puzzle",
+				icon: "message-square-quote",
 				title: t("import.sourceAdmonition"),
 				desc: t("import.sourceAdmonitionDesc"),
 				onClick: () => {
