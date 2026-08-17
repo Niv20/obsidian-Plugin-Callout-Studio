@@ -224,6 +224,7 @@ describe("class names in styles.css and src/ agree", () => {
 		"callout-studio-css", // localStorage key for the startup CSS snapshot
 		"callout-studio-dynamic-css", // <style> element id
 		"callout-studio-do-not-delete", // the legacy vault snippet's filename
+		"callout-studio-custom", // the exported vault snippet's filename
 		"callout-studio-welcome", // obsidian:// URI action
 		"callout-studio-context-menu", // Menu section id
 		"callout-studio-export", // export filename stem

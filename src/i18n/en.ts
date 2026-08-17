@@ -106,7 +106,8 @@ export const en: Record<string, string> = {
 	"settings.export": "Export",
 	"settings.importDesc":
 		"Import your Callout Studio progress from another vault, or bring your callouts over from a different plugin.",
-	"settings.exportDesc": "Save all your custom callout types in JSON format.",
+	"settings.exportDesc":
+		"Save your callouts as a Callout Studio backup, or as a CSS snippet you can use elsewhere.",
 	"settings.importConflictNotice":
 		"Imported {{count}} callout type(s); {{overwritten}} existing entry/entries were overwritten.",
 
@@ -242,6 +243,14 @@ export const en: Record<string, string> = {
 	"notice.customCommandMissingCallout":
 		"That command's callout type no longer exists.",
 	"notice.exported": "Callouts exported to callout-studio-export.json",
+	"notice.exportedCssCreated": "CSS snippet saved to {{path}}",
+	"notice.exportedCssUpdated": "CSS snippet updated at {{path}}",
+	"notice.exportedCssUnchanged": "The CSS snippet is already up to date.",
+	"notice.exportCssEmpty": "There are no custom callouts to export.",
+	"notice.exportCssFailed":
+		"Could not save the CSS snippet. Check the developer console for details.",
+	"notice.exportCssEnabled":
+		"This snippet is switched on in this vault. Callout Studio already styles these callouts here, and the snippet keeps the styling it had when you exported.",
 	"notice.importedJSON": "Imported {{count}} callout type(s) from JSON.",
 	"notice.importedSettings": "Imported plugin settings.",
 	"notice.importedCalloutManager":
@@ -691,6 +700,10 @@ export const en: Record<string, string> = {
 	"confirm.titleResetCallout": "Reset callout",
 	"confirm.titleDeletePalette": "Delete palette",
 	"confirm.titleDeleteImage": "Delete image",
+	"confirm.titleOverwriteSnippet": "Overwrite CSS snippet",
+	"confirm.overwriteSnippet":
+		"The CSS snippet in your snippets folder has changed since Callout Studio wrote it. Exporting again replaces the whole file.",
+	"confirm.overwriteSnippetOk": "Overwrite",
 
 	// Vault edge-case modals
 	"vault.filesUpdated":
@@ -834,6 +847,15 @@ export const en: Record<string, string> = {
 	"import.sourceAdmonition": "Admonition",
 	"import.sourceAdmonitionDesc":
 		"Bring your custom admonitions over from the Admonition plugin.",
+
+	// Export — format chooser
+	"export.chooseFormat": "Export as",
+	"export.formatJson": "Callout Studio backup",
+	"export.formatJsonDesc":
+		"A .json file with your callouts and settings, for importing into another vault.",
+	"export.formatCss": "CSS snippet",
+	"export.formatCssDesc":
+		"A .css file saved into this vault's snippets folder, for use where Callout Studio isn't installed. Not switched on automatically.",
 
 	// Import — Callout Manager
 	"import.cmTitle": "Import from Callout Manager",

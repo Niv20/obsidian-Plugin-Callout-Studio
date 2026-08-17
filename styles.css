@@ -3635,20 +3635,27 @@ input.cs-input-invalid:focus {
 	font-size: 0.9em;
 }
 
-/* ─── Import source chooser modal ─────────────────────────── */
-.callout-studio-import-source-modal {
+/* ─── Import source / export format chooser modals ────────── */
+/* One widget, two windows: Import picks a source, Export picks a format, and
+ * both are a column of clickable rows. Shared as selector lists rather than
+ * renamed to something neutral — the import names are load-bearing in a lot of
+ * places, and duplicating the rule blocks is how the two would drift apart. */
+.callout-studio-import-source-modal,
+.callout-studio-export-format-modal {
 	max-width: 480px;
 }
 .cs-import-file-input {
 	display: none;
 }
-.cs-import-source-list {
+.cs-import-source-list,
+.cs-export-format-list {
 	display: flex;
 	flex-direction: column;
 	gap: 0.5rem;
 	margin-top: 0.5rem;
 }
-.cs-import-source-item {
+.cs-import-source-item,
+.cs-export-format-item {
 	display: flex;
 	align-items: center;
 	gap: 0.75rem;
@@ -3657,26 +3664,31 @@ input.cs-input-invalid:focus {
 	border-radius: 6px;
 	cursor: pointer;
 }
-.cs-import-source-item:hover {
+.cs-import-source-item:hover,
+.cs-export-format-item:hover {
 	background: var(--background-modifier-hover);
 }
-.cs-import-source-item-icon {
+.cs-import-source-item-icon,
+.cs-export-format-item-icon {
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	color: var(--text-accent);
 	flex-shrink: 0;
 }
-.cs-import-source-item-text {
+.cs-import-source-item-text,
+.cs-export-format-item-text {
 	display: flex;
 	flex-direction: column;
 	gap: 0.1rem;
 }
-.cs-import-source-item-title {
+.cs-import-source-item-title,
+.cs-export-format-item-title {
 	font-weight: 600;
 	color: var(--text-normal);
 }
-.cs-import-source-item-desc {
+.cs-import-source-item-desc,
+.cs-export-format-item-desc {
 	font-size: 0.85em;
 	color: var(--text-muted);
 }

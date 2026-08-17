@@ -2,13 +2,15 @@
  * settings/sections/DataManagementSection.ts — Import, export, and reset settings.
  *
  * Renders the "Vault insights & maintenance" and "Import / Export" sections in
- * the settings tab. Handles JSON export of all user callouts, JSON import with
- * validation (via importValidator), vault re-scan, and full data reset.
- * Uses ImportReportModal to surface validation issues before import.
+ * the settings tab. Handles JSON import with validation (via importValidator),
+ * vault re-scan, and full data reset. Uses ImportReportModal to surface
+ * validation issues before import. Both export formats live behind
+ * ExportFormatModal, the way both import sources live behind ImportSourceModal.
  */
-import { Notice, Setting, normalizePath } from "obsidian";
+import { Notice, Setting } from "obsidian";
 import { t } from "../../i18n";
 import { ConfirmModal } from "../../utils/ConfirmModal";
+import { ExportFormatModal } from "../ExportFormatModal";
 import { ImportReportModal } from "../../utils/ImportReportModal";
 import { validateImportPayload } from "../../utils/importValidator";
 import { mergeById } from "../../utils/mergeById";
@@ -47,21 +49,7 @@ export function renderImportExportSection(
 		.addButton((btn) => {
 			btn.setButtonText(t("settings.export"))
 				.setIcon("upload")
-				.onClick(() => exportCallouts(ctx));
-			btn.buttonEl.addClass("cs-settings-neutral-btn");
-		});
-
-	new Setting(containerEl)
-		.setName("Export CSS snippet")
-		.setDesc(
-			"Save your custom Callout Studio callouts as an Obsidian CSS snippet.",
-		)
-		.addButton((btn) => {
-			btn.setButtonText("Export CSS")
-				.setIcon("file-code")
-				.onClick(() => {
-					void exportCalloutCSS(ctx);
-				});
+				.onClick(() => new ExportFormatModal(ctx).open());
 			btn.buttonEl.addClass("cs-settings-neutral-btn");
 		});
 }
@@ -168,67 +156,6 @@ async function showVaultStatistics(ctx: SettingsSectionContext): Promise<void> {
 		ctx.plugin.registry,
 	).open();
 }
-
-function exportCallouts(ctx: SettingsSectionContext): void {
-	// v2 export: callouts + all plugin settings (menu config, role toggles, …).
-	const json = ctx.plugin.registry.exportToJSONv2();
-	const blob = new Blob([json], { type: "application/json" });
-	const url = URL.createObjectURL(blob);
-	const a = createEl("a");
-	a.href = url;
-	a.download = "callout-studio-export.json";
-	a.click();
-	URL.revokeObjectURL(url);
-	new Notice(t("notice.exported"));
-}
-
-
-/**
- * Export Callout Studio's customized callouts as an Obsidian CSS snippet.
- *
- * The file is written directly into the vault's CSS snippets folder.
- * Exporting again replaces the previous generated file.
- */
-async function exportCalloutCSS(
-	ctx: SettingsSectionContext,
-): Promise<void> {
-	const css = ctx.plugin.cssInjector.generateExportCSS();
-
-	if (!css.trim()) {
-		new Notice("There are no custom callouts to export.");
-		return;
-	}
-
-	const snippetsDir = normalizePath(
-		`${ctx.app.vault.configDir}/snippets`,
-	);
-
-	const filePath = normalizePath(
-		`${snippetsDir}/callout-studio-custom.css`,
-	);
-
-	try {
-		if (!(await ctx.app.vault.adapter.exists(snippetsDir))) {
-			await ctx.app.vault.adapter.mkdir(snippetsDir);
-		}
-
-		await ctx.app.vault.adapter.write(filePath, css);
-
-		new Notice(
-			`CSS exported to ${filePath}`,
-		);
-	} catch (error) {
-		console.error(
-			"[Callout Studio] CSS export failed:",
-			error,
-		);
-
-		new Notice(
-			"Failed to export the CSS snippet. Check the developer console for details.",
-		);
-	}
-}
-
 
 /**
  * Parses and applies a Callout Studio JSON export. Takes an already-chosen

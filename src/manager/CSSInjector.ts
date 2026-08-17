@@ -320,50 +320,6 @@ export class CSSInjector {
 		}
 	}
 
-
-	/**
-	 * Generate a standalone CSS stylesheet containing all callouts
-	 * that the user has explicitly customized.
-	 *
-	 * This reuses the same CSS generation code used by the live
-	 * Callout Studio stylesheet, so exported callouts stay visually
-	 * consistent with the plugin.
-	 *
-	 * This includes:
-	 * - User-created callouts
-	 * - Built-in callouts that the user has modified
-	 *
-	 * It deliberately excludes:
-	 * - Unmodified built-in callouts
-	 * - Transient preview definitions
-	 * - The global Callout Studio styling
-	 * - The fallback catch-all rule
-	 */
-	generateExportCSS(): string {
-		const callouts = this.registry.getExportableDefinitions();
-
-		if (callouts.length === 0) {
-			return "";
-		}
-
-		const rules: string[] = [
-			"/* ============================================================",
-			"   Callout Studio — Custom Callouts",
-			"   Generated automatically. Do not edit manually.",
-			"   ============================================================ */",
-		];
-
-		for (const def of callouts) {
-			const css = this.generateCalloutCSS(def);
-			if (css.trim()) {
-				rules.push(css);
-			}
-		}
-
-		return rules.join("\n\n");
-	}
-	
-
 	private injectNow(emitCssChange: boolean): void {
 		this.ensureStyleSheet();
 
@@ -523,7 +479,7 @@ export class CSSInjector {
 	 * Obsidian's `--callout-color`. Used on the heading-bar / inline-pill / ref
 	 * token DOM, which is ours and where core's variable would go unread.
 	 */
-	private ownAccentProps(
+	ownAccentProps(
 		def: CalloutDefinition,
 		mode: "light" | "dark",
 		important = false,
@@ -830,7 +786,7 @@ export class CSSInjector {
 		);
 	}
 
-	private generateCalloutCSS(def: CalloutDefinition): string {
+	generateCalloutCSS(def: CalloutDefinition, standalone = false): string {
 		// The theme (or a CSS snippet, or Obsidian itself) owns this one — see
 		// CalloutDefinition.externalStyle. Guarding the whole function rather
 		// than its one call site means every block below goes quiet together:
@@ -940,8 +896,8 @@ export class CSSInjector {
 			),
 		);
 
-		// Heading-bar / inline-pill colors for this callout (both surfaces).
-		parts.push(this.generateTokenColorCSS(def));
+		// Heading-bar / inline-pill colors: our own DOM — see cssSnippetExport.
+		if (!standalone) parts.push(this.generateTokenColorCSS(def));
 
 		// Fold chevron in the palette's second color (gradients only).
 		const foldCSS = this.generateFoldArrowCSS(def);
@@ -1860,7 +1816,7 @@ export class CSSInjector {
 		return `:not(:where(${list}))`;
 	}
 
-	private generateGlobalStyleCSS(): string {
+	generateGlobalStyleCSS(standalone = false): string {
 		const gs = this.registry.settings.globalStyle;
 		const parts: string[] = ["/* Global callout style */"];
 		const excl = this.externalExclusion();
@@ -1989,7 +1945,7 @@ export class CSSInjector {
 				`  --cs-heading-gap-top: ${gs.heading.marginTop}em;`,
 			);
 		}
-		if (headingProps.length > 0) {
+		if (headingProps.length > 0 && !standalone) {
 			parts.push(
 				`.${CSS_HEADING_LINE} {\n${headingProps.join("\n")}\n}`,
 			);
@@ -2006,7 +1962,7 @@ export class CSSInjector {
 		if (gs.inline.fontScale !== 1) {
 			inlineProps.push(`  --cs-inline-scale: ${gs.inline.fontScale};`);
 		}
-		if (inlineProps.length > 0) {
+		if (inlineProps.length > 0 && !standalone) {
 			parts.push(`.${CSS_INLINE_TOKEN} {\n${inlineProps.join("\n")}\n}`);
 		}
 
