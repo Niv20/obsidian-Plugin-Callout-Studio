@@ -1760,20 +1760,32 @@ button.callout-studio-icon-picker-loading {
    standard transparency checkerboard, because an empty circle at 16px is
    indistinguishable from a swatch that failed to render.
 
-   Both tones are derived from the page itself, so one rule reads correctly on a
-   light and a dark theme — white-on-grey where the page is white, and two quiet
-   darks where it is dark (a fixed white checker would glow on a dark page). The
-   mix, rather than --background-modifier-border, guarantees the squares stay
-   apart in themes that make that variable nearly invisible.
+   Both tones are derived from the surface the swatch is drawn on, so one rule
+   reads correctly on a light and a dark theme — white-on-grey where that
+   surface is white, and two quiet darks where it is dark (a fixed white checker
+   would glow on a dark page). The mix, rather than --background-modifier-border,
+   guarantees the squares stay apart in themes that make that variable nearly
+   invisible.
+
+   `--cs-surface` rather than `--background-primary`, and for the same reason as
+   the ring above: this widget is drawn both in the settings tab and inside the
+   callout editor. On mobile dark the raw variable is a true `#000` while the
+   modal is not, so "empty" came out as a black square on the window instead of
+   as a checkerboard — the one thing the pattern exists to avoid being confused
+   with is a swatch that failed to render.
 
    Tile size is half the circle so each square is a quarter of it: the accent
    circle in front covers ~40%, leaving roughly a 10px crescent to read in, and
    anything finer than ~4px turns to mush at this scale. */
 .cs-color-circle.is-transparent {
 	background-image: repeating-conic-gradient(
-		color-mix(in srgb, var(--text-normal) 22%, var(--background-primary)) 0%
-			25%,
-		var(--background-primary) 0% 50%
+		color-mix(
+				in srgb,
+				var(--text-normal) 22%,
+				var(--cs-surface, var(--background-primary))
+			)
+			0% 25%,
+		var(--cs-surface, var(--background-primary)) 0% 50%
 	);
 	background-size: calc(var(--cs-circle-size) / 2)
 		calc(var(--cs-circle-size) / 2);
