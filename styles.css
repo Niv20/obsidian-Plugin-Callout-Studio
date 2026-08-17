@@ -65,65 +65,6 @@
 	padding-bottom: 0;
 }
 
-.callout-studio-settings .cs-subheader-row .cs-refresh-inline-link {
-	appearance: none;
-	height: auto;
-	padding: 0;
-	border: none;
-	background: transparent;
-	box-shadow: none;
-	color: var(--text-muted);
-	font-size: var(--font-smallest);
-	font-weight: 400;
-	line-height: 1;
-	text-decoration: underline;
-	cursor: pointer;
-}
-
-.callout-studio-settings .cs-subheader-row .cs-refresh-inline-link:hover,
-.callout-studio-settings
-	.cs-subheader-row
-	.cs-refresh-inline-link:focus-visible {
-	background: transparent;
-	color: var(--text-normal);
-	box-shadow: none;
-}
-
-/* Empty state — notice + add button stacked */
-.callout-studio-settings .cs-empty-state {
-	display: flex;
-	flex-direction: column;
-	align-items: flex-start;
-	gap: 8px;
-	padding: 12px 0;
-	margin-bottom: 8px;
-}
-
-.callout-studio-settings .cs-empty-state .callout-studio-empty-state {
-	margin: 0;
-}
-
-.callout-studio-settings .callout-studio-toolbar {
-	display: flex;
-	align-items: center;
-	gap: 8px;
-	margin-bottom: 12px;
-}
-
-.callout-studio-toolbar-search {
-	flex: 1;
-	min-width: 0;
-}
-
-.callout-studio-toolbar-search .setting-item {
-	border: none;
-	padding: 0;
-}
-
-.callout-studio-toolbar-search .setting-item-info {
-	display: none;
-}
-
 .callout-studio-settings .cs-settings-neutral-btn {
 	background: var(--background-modifier-form-field);
 	border: 1px solid var(--background-modifier-border);
@@ -146,10 +87,6 @@
    regardless of theme. */
 .callout-studio-settings .setting-item:not(.setting-item-heading) {
 	align-items: center;
-}
-
-.callout-studio-kebab-btn {
-	flex-shrink: 0;
 }
 
 .callout-studio-empty-state {
@@ -265,27 +202,6 @@
 	display: flex;
 	gap: 6px;
 	flex-shrink: 0;
-}
-
-.callout-studio-color-swatch {
-	position: relative;
-	width: 24px;
-	height: 24px;
-	border-radius: 6px;
-	border: 1px solid var(--background-modifier-border);
-	cursor: default;
-}
-
-.callout-studio-swatch-label {
-	position: absolute;
-	bottom: -1px;
-	right: 1px;
-	font-size: 9px;
-	font-weight: 700;
-	color: rgba(255, 255, 255, 0.9);
-	text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
-	pointer-events: none;
-	line-height: 1;
 }
 
 /* ─── Row Buttons ─────────────────────────────────────────────── */
@@ -1796,40 +1712,6 @@ button.callout-studio-icon-picker-loading {
 
 /* ─── Compact Color Grid ──────────────────────────────────────── */
 
-.callout-studio-color-grid {
-	padding: 6px 10px 8px;
-}
-
-.callout-studio-color-grid-header {
-	display: grid;
-	grid-template-columns: repeat(3, minmax(0, 1fr));
-	gap: 2px;
-	font-size: 10px;
-	color: var(--text-faint);
-	text-align: center;
-	margin-bottom: 4px;
-}
-
-.callout-studio-color-grid-header span:first-child {
-	text-align: center;
-}
-
-.callout-studio-color-row {
-	display: grid;
-	grid-template-columns: repeat(3, minmax(0, 1fr));
-	gap: 2px;
-	align-items: center;
-	padding: 2px 0;
-}
-
-.callout-studio-color-row > span {
-	font-size: var(--font-ui-smaller);
-	color: var(--text-muted);
-	text-align: center;
-	justify-self: center;
-	width: 100%;
-}
-
 /* The visible swatch is this wrapper's background-color — a box we fully
    control, so it renders identically on desktop, iPhone and tablets and can
    never be clipped. The native <input type="color"> sits invisibly on top to
@@ -2656,10 +2538,8 @@ button.callout-studio-icon-picker-loading {
 /* ─── Accessibility & Mobile ─────────────────────────────────── */
 
 /* Focus-visible for all interactive elements */
-.callout-studio-settings .callout-studio-actions button:focus-visible,
 .callout-studio-row-buttons button:focus-visible,
-.cs-modal-footer button:focus-visible,
-.callout-studio-preview-toggle:focus-visible {
+.cs-modal-footer button:focus-visible {
 	outline: 2px solid var(--text-accent);
 	outline-offset: -2px;
 }
@@ -2674,11 +2554,6 @@ button.callout-studio-icon-picker-loading {
 .icon-picker-toolbar input,
 .icon-picker-toolbar select {
 	min-height: 32px;
-}
-
-.callout-studio-preview-toggle {
-	min-height: 32px;
-	min-width: 32px;
 }
 
 /* ─── Tag Input (Aliases) ─────────────────────────────────────── */
@@ -2982,9 +2857,6 @@ input.cs-input-invalid:focus {
 	.callout-studio-row-colors {
 		display: none;
 	}
-	.callout-studio-reset-btn {
-		display: none;
-	}
 }
 
 /*
@@ -3004,96 +2876,6 @@ input.cs-input-invalid:focus {
 	.callout-studio-row-name {
 		display: none;
 	}
-}
-
-/* ─── Disabled Reset Button ───────────────────────────────────── */
-
-.callout-studio-btn-disabled {
-	opacity: 0.25;
-	cursor: default;
-	pointer-events: none;
-	color: var(--background-modifier-border);
-	filter: grayscale(1) brightness(0.6);
-}
-
-/* ─── Global Callout Style Section ────────────────────────────── */
-
-.cs-global-preview-label {
-	font-size: var(--font-ui-smaller);
-	font-weight: var(--font-semibold);
-	color: var(--text-muted);
-	text-transform: uppercase;
-	letter-spacing: 0.5px;
-	margin-bottom: 8px;
-}
-
-.cs-global-preview-card {
-	padding: 0;
-}
-
-.cs-global-preview-body {
-	min-width: 0;
-}
-
-/* Preview callout mock — neutral gray */
-.cs-global-preview-callout {
-	--cs-color-rgb: 158, 158, 158;
-	background: rgba(var(--cs-color-rgb), 0.1);
-	padding: 0;
-	margin: 0;
-	overflow: hidden;
-	border-radius: var(--cs-preview-radius, 4px);
-	border: var(--cs-preview-border, none);
-	border-top: var(--cs-preview-border-top, none);
-	border-right: var(--cs-preview-border-right, none);
-	border-bottom: var(--cs-preview-border-bottom, none);
-	border-left: var(--cs-preview-border-left, none);
-}
-
-.cs-global-preview-callout > .callout-title {
-	display: flex;
-	align-items: center;
-	gap: 8px;
-	padding: 8px 12px;
-	font-weight: var(--font-semibold);
-	color: rgb(var(--cs-color-rgb));
-}
-
-.cs-global-preview-callout > .callout-title > .callout-icon {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	flex-shrink: 0;
-	color: rgb(var(--cs-color-rgb));
-}
-
-.cs-global-preview-callout > .callout-title > .callout-icon svg {
-	width: 18px;
-	height: 18px;
-}
-
-.cs-global-preview-callout > .callout-title > .callout-title-inner {
-	font-size: var(--cs-preview-title-size, 1em);
-}
-
-.callout.cs-global-preview-callout > .callout-content {
-	padding: 0 12px 10px;
-	padding-inline-start: var(--cs-preview-content-indent, 12px);
-	color: var(--text-normal);
-	line-height: 1.5;
-	font-size: var(--cs-preview-content-size, 1em);
-}
-
-/* Square icon placeholder for the locked preview */
-.cs-global-preview-callout .cs-preview-square-icon {
-	width: 14px;
-	height: 14px;
-	border-radius: 2px;
-	background: rgb(var(--cs-color-rgb));
-}
-
-.cs-global-preview-callout > .callout-content p {
-	margin: 0;
 }
 
 /* ─── Settings group (sub-sections) ───────────────────────────── */
@@ -3239,16 +3021,6 @@ input.cs-input-invalid:focus {
 
 	/* Roomier color grid on narrow screens so native color swatches
 	   (iOS renders them as large circles) don't visually overlap. */
-	.callout-studio-color-grid {
-		padding: 8px 12px 12px;
-	}
-	.callout-studio-color-row {
-		padding: 8px 0;
-		min-height: 44px;
-	}
-	.callout-studio-color-row + .callout-studio-color-row {
-		border-top: 1px solid var(--background-modifier-border);
-	}
 	.callout-studio-color-input-wrap {
 		width: 44px;
 		height: 32px;
@@ -3640,45 +3412,6 @@ input.cs-input-invalid:focus {
    anyway. The name error, which lives inside a row's description, keeps it. */
 .callout-studio-palette-editor .cs-palette-color-error:not(.is-visible) {
 	display: none;
-}
-
-/* "Customize all colors" collapsible card header. The button element keeps
-   the shared adjust-header look; these rules strip Obsidian's default button
-   chrome and add the open/closed chevron. */
-.cs-collapse-header {
-	appearance: none;
-	display: flex;
-	align-items: center;
-	gap: 6px;
-	width: 100%;
-	margin: 0;
-	border: none;
-	box-shadow: none;
-	cursor: pointer;
-	text-align: start;
-}
-
-/* Collapsed: the header IS the whole card, so round all corners. */
-.cs-collapse-header:not(.is-open) {
-	border-radius: 7px;
-}
-
-.cs-collapse-header:hover {
-	color: var(--text-normal);
-}
-
-.cs-collapse-chevron {
-	display: inline-flex;
-	transition: transform 120ms ease;
-}
-
-.cs-collapse-chevron .svg-icon {
-	width: 14px;
-	height: 14px;
-}
-
-.cs-collapse-header.is-open .cs-collapse-chevron {
-	transform: rotate(90deg);
 }
 
 /* Generic row-hide utility (e.g. the command editor's role-specific rows). It

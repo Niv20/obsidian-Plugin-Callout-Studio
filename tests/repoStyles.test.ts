@@ -131,17 +131,47 @@ describe("--cs-* custom properties", () => {
 		);
 	});
 
+	/**
+	 * Written on purpose for readers *outside* this repository, and so read by
+	 * nothing inside it.
+	 *
+	 * `--cs-color-rgb` is the legacy bare triplet `CSSInjector.ownAccentProps`
+	 * still emits beside `--cs-accent`, kept one release for user snippets and
+	 * other plugins that read it; the source says in as many words that nothing
+	 * here depends on it any more. It looked read until the dead
+	 * `.cs-global-preview-callout` mock was deleted — that rule matched no
+	 * element in any build, so it was never really a reader, only the thing
+	 * hiding that there wasn't one.
+	 *
+	 * Pinned by name, and asserted still-written below, so that retiring the
+	 * variable fails here and takes this entry with it.
+	 */
+	const COMPAT_EXPORTS = new Set(["--cs-color-rgb"]);
+
 	it("every property that is written is also read", () => {
 		// The other direction. A property nothing reads is either a rule that
 		// was deleted around it, or a name that was changed on one side.
 		const unread = [...written]
-			.filter((n) => !readBare.has(n) && !readWithFallback.has(n))
+			.filter(
+				(n) => !readBare.has(n) && !readWithFallback.has(n) && !COMPAT_EXPORTS.has(n),
+			)
 			.sort();
 		assert.deepStrictEqual(
 			unread,
 			[],
 			report("Written but never read — dead custom properties:", unread),
 		);
+	});
+
+	it("the compatibility exports are still written", () => {
+		// Otherwise the allowance outlives the variable it was granted for and
+		// silently permits the next write-only property to join it.
+		for (const name of COMPAT_EXPORTS) {
+			assert.ok(
+				written.has(name),
+				`${name} is listed as a compatibility export but nothing writes it any more — delete the entry`,
+			);
+		}
 	});
 
 	it("the documented escape hatches still have their fallbacks", () => {
@@ -235,36 +265,21 @@ describe("class names in styles.css and src/ agree", () => {
 	/**
 	 * Rules in `styles.css` that nothing in `src/` applies.
 	 *
-	 * These are the orphans — features removed or renamed without their CSS.
-	 * The clearest one is gone now: `callout-studio-icon-transformed` was the
-	 * rule whose `var(--cs-icon-transform)` had no writer either, so both halves
-	 * of it were dead, and it has been deleted rather than frozen. The rest are
-	 * still here, and each is the same shape of debt — a rename or a removal
-	 * that only landed on one side.
+	 * Empty, and it stays that way. All 22 have been deleted: the orphans of
+	 * five features that were rewritten without their CSS — the settings
+	 * toolbar and its search box, the compact colour grid, the old swatch and
+	 * kebab buttons, the pre-`LiveCalloutPreview` global-style mock
+	 * (`cs-global-preview-*`), and the "Customize all colors" collapsible
+	 * header. None had a single reference left anywhere in `src/` or the docs,
+	 * so none of them could ever match an element; deleting them changes no
+	 * pixel, which is exactly why they survived review for so long.
+	 *
+	 * An empty allowance is the point. A rule that styles nothing is invisible
+	 * to `tsc`, to the linter and to a reader, and the only thing that ever
+	 * finds it is this test — so the useful state for it to be in is one where
+	 * the next orphan fails it rather than joining a list.
 	 */
-	const RULES_WITHOUT_EMITTERS = new Set([
-		"callout-studio-actions",
-		"callout-studio-btn-disabled",
-		"callout-studio-color-grid",
-		"callout-studio-color-grid-header",
-		"callout-studio-color-row",
-		"callout-studio-color-swatch",
-		"callout-studio-kebab-btn",
-		"callout-studio-preview-toggle",
-		"callout-studio-reset-btn",
-		"callout-studio-swatch-label",
-		"callout-studio-toolbar",
-		"callout-studio-toolbar-search",
-		"cs-collapse-chevron",
-		"cs-collapse-header",
-		"cs-empty-state",
-		"cs-global-preview-body",
-		"cs-global-preview-callout",
-		"cs-global-preview-card",
-		"cs-global-preview-label",
-		"cs-preview-square-icon",
-		"cs-refresh-inline-link",
-	]);
+	const RULES_WITHOUT_EMITTERS = new Set<string>([]);
 
 	/** Class selectors in `styles.css`. */
 	const styled = new Set<string>();
