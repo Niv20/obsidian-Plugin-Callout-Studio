@@ -331,6 +331,29 @@ describe("the swatch widget follows the surface it is drawn on", () => {
 	});
 });
 
+describe("a disabled text field stays raised off the window", () => {
+	// The greyed-out state of the editor's two text fields — the display name of
+	// a built-in, and the IDs field while the name is linked to the id. Disabled
+	// is meant to read as "a control you cannot use", so the fill has to stay a
+	// step *above* whatever is behind it. `--background-secondary` is that step
+	// only while `--modal-background` is `--background-primary`; mobile dark
+	// points the modal AT `--background-secondary`, so the fill landed on the
+	// window and the field read as a hole rather than as a control.
+	const RAISED = "var(--cs-surface-raised, var(--background-secondary))";
+
+	it("the display-name field in the callout editor", () => {
+		assert.strictEqual(
+			declaration(
+				ruleFor(
+					'.callout-studio-editor .setting-item-control input[type="text"]:not(.cs-tag-input-field):disabled',
+				),
+				"background",
+			),
+			`background: ${RAISED}`,
+		);
+	});
+});
+
 /* -------------------------------------------------------------------------- */
 /* Everything else that paints the raw surface colour                          */
 /* -------------------------------------------------------------------------- */
@@ -383,13 +406,12 @@ describe("nothing else paints --background-primary unexamined", () => {
  * while `--modal-background` is `--background-primary`.
  */
 const KNOWN_RAW_SECONDARY = [
-	// NOT deliberate — flagged, not endorsed. Both are the disabled state of a
-	// text field inside the callout editor, which is a chromed window, so on
-	// mobile dark the fill lands exactly on the surface behind it and the field
-	// reads as a hole rather than as a greyed-out control. The `opacity: 0.5`
-	// beside it makes that worse, not better. Both want
+	// NOT deliberate — flagged, not endorsed. The disabled state of a text field
+	// inside the callout editor, which is a chromed window, so on mobile dark the
+	// fill lands exactly on the surface behind it and the field reads as a hole
+	// rather than as a greyed-out control. The `opacity: 0.5` beside it makes
+	// that worse, not better. It wants
 	// `var(--cs-surface-raised, var(--background-secondary))`.
-	'.callout-studio-editor .setting-item-control input[type="text"]:not(.cs-tag-input-field):disabled | background',
 	".cs-tag-input-row > .cs-tag-input-field:disabled | background",
 ];
 
