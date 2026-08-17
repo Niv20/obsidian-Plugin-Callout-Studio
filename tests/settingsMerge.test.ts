@@ -581,6 +581,106 @@ describe("mergeSavedSettings — the context menu's item lists", () => {
 });
 
 /* ────────────────────────────────────────────────────────────────────────────
+ * The 1.x booleans the item list replaced
+ * ──────────────────────────────────────────────────────────────────────────── */
+
+/** The `enabled` state of one item id, in one role's merged list. */
+function state(
+	saved: Parameters<typeof mergeSavedSettings>[0],
+	role: "regular" | "heading" | "inline",
+	id: string,
+): boolean | undefined {
+	return mergeSavedSettings(saved).contextMenu.items[role].find(
+		(i) => i.id === id,
+	)?.enabled;
+}
+
+describe("mergeSavedSettings — 1.x's three menu booleans", () => {
+	it("switches the matching item off", () => {
+		// Until these were mapped, an upgrade appended the defaults whole and
+		// every hidden entry came back — a setting reset without being asked.
+		const saved = {
+			contextMenu: { enabled: true, showCopyMarkdown: false },
+		} as Parameters<typeof mergeSavedSettings>[0];
+
+		assert.strictEqual(state(saved, "regular", "copyMarkdown"), false);
+	});
+
+	it("covers all three of them", () => {
+		const saved = {
+			contextMenu: {
+				showEditCallout: false,
+				showOpenSettings: false,
+				showCopyMarkdown: false,
+			},
+		} as Parameters<typeof mergeSavedSettings>[0];
+
+		assert.strictEqual(state(saved, "regular", "edit"), false);
+		assert.strictEqual(state(saved, "regular", "openSettings"), false);
+		assert.strictEqual(state(saved, "regular", "copyMarkdown"), false);
+	});
+
+	it("leaves the items it says nothing about alone", () => {
+		const saved = {
+			contextMenu: { showCopyMarkdown: false },
+		} as Parameters<typeof mergeSavedSettings>[0];
+
+		assert.strictEqual(state(saved, "regular", "edit"), true);
+		assert.strictEqual(state(saved, "regular", "foldDefaults"), true);
+	});
+
+	it("applies to the roles 1.x never had", () => {
+		// Heading and inline callouts did not exist then, so nobody expressed an
+		// opinion about their menus — but "no Edit entry in the callout
+		// right-click menu" is an opinion that was expressed.
+		const saved = {
+			contextMenu: { showEditCallout: false },
+		} as Parameters<typeof mergeSavedSettings>[0];
+
+		assert.strictEqual(state(saved, "heading", "edit"), false);
+		assert.strictEqual(state(saved, "inline", "edit"), false);
+		assert.strictEqual(state(saved, "heading", "cutSection"), true);
+	});
+
+	it("reads them from the pre-1.0 `popup` block too", () => {
+		const saved = {
+			popup: { showCopyMarkdown: false },
+		} as Parameters<typeof mergeSavedSettings>[0];
+
+		assert.strictEqual(state(saved, "regular", "copyMarkdown"), false);
+	});
+
+	it("lets a real item list win over them — the newer shape is the answer", () => {
+		// Only reachable in a hand-built hybrid, but the precedence has to be
+		// the same one `enabled` uses: the shape this version writes wins.
+		const saved = {
+			contextMenu: {
+				showCopyMarkdown: false,
+				items: { regular: [{ id: "copyMarkdown", enabled: true }] },
+			},
+		} as Parameters<typeof mergeSavedSettings>[0];
+
+		assert.strictEqual(state(saved, "regular", "copyMarkdown"), true);
+	});
+
+	it("ignores a non-boolean, and never re-saves the dead keys", () => {
+		const saved = {
+			contextMenu: { showCopyMarkdown: "no", showEditCallout: false },
+		} as unknown as Parameters<typeof mergeSavedSettings>[0];
+		const menu = mergeSavedSettings(saved).contextMenu as unknown as Record<
+			string,
+			unknown
+		>;
+
+		assert.strictEqual(state(saved, "regular", "copyMarkdown"), true);
+		assert.strictEqual(state(saved, "regular", "edit"), false);
+		for (const key of ["showEditCallout", "showOpenSettings", "showCopyMarkdown"]) {
+			assert.ok(!(key in menu), key);
+		}
+	});
+});
+
+/* ────────────────────────────────────────────────────────────────────────────
  * The three lists
  * ──────────────────────────────────────────────────────────────────────────── */
 

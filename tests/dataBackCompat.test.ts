@@ -247,27 +247,31 @@ describe("a data.json written by 1.0.0", () => {
 		assert.ok(!("showColorPreviews" in autocomplete));
 	});
 
-	it("does NOT carry the granular menu toggles across — pinned as found", () => {
-		// 1.x had three booleans; the menu is an ordered, per-role item list now,
-		// and nothing translates one into the other. So a vault that had hidden
-		// "Copy markdown" gets it back on the first launch of a modern build,
-		// silently. Small, and reversible by the user in one click — but it IS a
-		// setting quietly reset by an upgrade, and the fix (map the three
-		// booleans onto the matching item ids before `mergeMenuItems` runs) is a
-		// few lines. This is the assertion to flip if that lands.
+	it("carries the granular menu toggles onto the item list", () => {
+		// 1.x had three booleans; the menu is an ordered, per-role item list now.
+		// Until the two shapes were mapped onto each other a vault that had
+		// hidden "Copy markdown" got it back on the first launch of a modern
+		// build — small and reversible in one click, but a setting reset by an
+		// upgrade without the user asking.
 		const items = load(vaultFrom_1_0_0()).settings.contextMenu.items;
 		const copyMarkdown = items.regular.find((i) => i.id === "copyMarkdown");
 
-		assert.strictEqual(copyMarkdown?.enabled, true, "the saved `false` is gone");
+		assert.strictEqual(copyMarkdown?.enabled, false, "the saved `false` holds");
 		assert.deepStrictEqual(
 			items.regular.map((i) => i.id),
 			DEFAULT_CONTEXT_MENU_REGULAR,
+			"the order is still the default one — 1.x had no order to keep",
+		);
+		assert.deepStrictEqual(
+			items.regular.filter((i) => i.enabled).map((i) => i.id),
+			["foldDefaults", "edit", "openSettings"],
+			"and the two the file left on are still on",
 		);
 		const menu = load(vaultFrom_1_0_0()).settings.contextMenu as unknown as Record<
 			string,
 			unknown
 		>;
-		assert.ok(!("showCopyMarkdown" in menu), "at least the dead key is dropped");
+		assert.ok(!("showCopyMarkdown" in menu), "and the dead key is dropped");
 	});
 
 	it("re-stamps the file to the current data version on the next save", () => {

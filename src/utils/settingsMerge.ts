@@ -94,10 +94,59 @@ function mergeIconSources(
 	return merged;
 }
 
+/**
+ * The three per-item booleans the context menu had until 1.2.2, when it became
+ * an ordered per-role list of items. Written by every 1.x build (and, before
+ * the menu was renamed, inside the `popup` block).
+ */
+interface LegacyMenuToggles {
+	showEditCallout?: boolean;
+	showOpenSettings?: boolean;
+	showCopyMarkdown?: boolean;
+}
+
 export type LegacySavedSettings = Partial<PluginSettings> & {
-	popup?: Partial<LegacyPopupSettings>;
-	contextMenu?: Partial<ContextMenuSettings>;
+	popup?: Partial<LegacyPopupSettings> & LegacyMenuToggles;
+	contextMenu?: Partial<ContextMenuSettings> & LegacyMenuToggles;
 };
+
+/** Which menu item each 1.x boolean switched off. */
+const LEGACY_MENU_TOGGLES: Record<keyof LegacyMenuToggles, ContextMenuItemId> =
+	{
+		showEditCallout: "edit",
+		showOpenSettings: "openSettings",
+		showCopyMarkdown: "copyMarkdown",
+	};
+
+/**
+ * The 1.x booleans read as the item states they meant, `{}` for any file that
+ * carries none of them.
+ *
+ * Without this an upgrade silently switched hidden items back on: nothing
+ * mapped the old shape onto the new one, so the defaults were appended whole
+ * and a vault that had turned "Copy markdown" off got it back. Small and
+ * reversible, but it is a setting changed without the user asking.
+ *
+ * The state applies to every role, not just the block callout the booleans
+ * were written for. Heading and inline callouts did not exist in 1.x, so
+ * nobody expressed an opinion about their menus — and "I don't want an Edit
+ * entry in the callout right-click menu" is the opinion that was expressed.
+ */
+function legacyMenuState(
+	savedSettings: LegacySavedSettings,
+): Partial<Record<ContextMenuItemId, boolean>> {
+	const state: Partial<Record<ContextMenuItemId, boolean>> = {};
+	// `popup` first so the later `contextMenu` block wins, matching how
+	// `enabled` below prefers the newer of the two names.
+	for (const source of [savedSettings.popup, savedSettings.contextMenu]) {
+		if (!source) continue;
+		for (const [key, id] of Object.entries(LEGACY_MENU_TOGGLES)) {
+			const value = (source as Record<string, unknown>)[key];
+			if (typeof value === "boolean") state[id] = value;
+		}
+	}
+	return state;
+}
 
 /**
  * Merge the four per-side border booleans over a role's defaults.
@@ -179,10 +228,16 @@ function mergeGlobalStyle(
  * keeps the user's order, drops unknown ids and duplicates, and appends
  * items introduced by newer plugin versions at the end. Tolerates arbitrary
  * junk (saved data and import files are untrusted).
+ *
+ * `legacy` supplies the on/off state for an appended item, which is how a 1.x
+ * file's three booleans reach the list — the list itself is what those files
+ * do not have. An item the saved list names already carries its own state, so
+ * the newer shape always wins where both exist.
  */
 function mergeMenuItems(
 	saved: unknown,
 	defaults: ContextMenuItemConfig[],
+	legacy: Partial<Record<ContextMenuItemId, boolean>>,
 ): ContextMenuItemConfig[] {
 	const knownIds = new Set<string>(defaults.map((d) => d.id));
 	const merged: ContextMenuItemConfig[] = [];
@@ -199,7 +254,8 @@ function mergeMenuItems(
 		}
 	}
 	for (const def of defaults) {
-		if (!merged.some((m) => m.id === def.id)) merged.push({ ...def });
+		if (merged.some((m) => m.id === def.id)) continue;
+		merged.push({ ...def, enabled: legacy[def.id] ?? def.enabled });
 	}
 	return merged;
 }
@@ -218,6 +274,7 @@ export function mergeSavedSettings(
 		Partial<PluginSettings["globalStyle"]> | undefined;
 	const legacyPopup = savedSettings.popup;
 	const savedMenuItems = savedSettings.contextMenu?.items;
+	const legacyMenu = legacyMenuState(savedSettings);
 	return {
 		globalStyle: clampGlobalStyle(mergeGlobalStyle(savedGlobal)),
 		contextMenu: {
@@ -229,14 +286,17 @@ export function mergeSavedSettings(
 				regular: mergeMenuItems(
 					savedMenuItems?.regular,
 					DEFAULT_CONTEXT_MENU_ITEMS.regular,
+					legacyMenu,
 				),
 				heading: mergeMenuItems(
 					savedMenuItems?.heading,
 					DEFAULT_CONTEXT_MENU_ITEMS.heading,
+					legacyMenu,
 				),
 				inline: mergeMenuItems(
 					savedMenuItems?.inline,
 					DEFAULT_CONTEXT_MENU_ITEMS.inline,
+					legacyMenu,
 				),
 			},
 		},
