@@ -2786,11 +2786,18 @@ input.cs-input-invalid:focus {
 	box-shadow: 0 0 0 2px rgba(var(--interactive-accent-rgb), 0.2);
 }
 
+/* The same raised shade as the display-name field above it, for the same
+   reason: the two sit one on top of the other in the callout editor and were
+   deliberately styled to match, so a fix to one that skipped the other would
+   split them apart on exactly the platform the fix is for. The only host of a
+   `.cs-tag-input-row` is that editor (src/ui/TagInput.ts), which is a chromed
+   window — but the fallback stays, because it is what makes the token safe to
+   name from a rule whose selector does not say so. */
 .cs-tag-input-row > .cs-tag-input-field:disabled {
 	color: var(--text-faint);
 	opacity: 0.5;
 	cursor: not-allowed;
-	background: var(--background-secondary);
+	background: var(--cs-surface-raised, var(--background-secondary));
 }
 
 .cs-tag-input-row > .cs-tag-input-field::placeholder {

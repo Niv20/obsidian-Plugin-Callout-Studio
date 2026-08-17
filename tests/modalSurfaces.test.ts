@@ -25,12 +25,13 @@
  * What this file can and cannot see is worth being exact about. A CSS selector
  * says where a rule applies, not where the element ends up: `.cs-color-circle`
  * is rendered both in the settings tab and inside the callout editor, and its
- * selector cannot tell you which. So the invariant splits in two — rules
- * *scoped* to `.cs-modal` are checked outright, and every other rule of this
+ * selector cannot tell you which. So the invariant is checked three ways —
+ * rules *scoped* to `.cs-modal` are checked outright; the handful whose selector
+ * straddles the boundary are named one at a time in the middle of this file,
+ * with the reasoning for each written beside it; and every other rule of this
  * plugin's that paints a raw variable is pinned in one of the two review lists
- * near the bottom, each entry carrying a line on why it is there. Some of those
- * entries say "deliberate" and some say "flagged"; what the list buys is that a
- * new one cannot appear without somebody deciding which it is.
+ * near the bottom. What those lists buy is that a new one cannot appear without
+ * somebody deciding whether it is deliberate.
  */
 import assert from "node:assert";
 import { readFileSync } from "node:fs";
@@ -352,6 +353,21 @@ describe("a disabled text field stays raised off the window", () => {
 			`background: ${RAISED}`,
 		);
 	});
+
+	it("the Callout IDs field directly below it", () => {
+		// Asserted separately rather than looped over, because the pairing is the
+		// point: these two fields were given matching box models on purpose (see
+		// the comment on `.cs-tag-input-field`), and fixing one without the other
+		// would make them disagree on mobile dark alone — the hardest place to
+		// notice and the only place it shows.
+		assert.strictEqual(
+			declaration(
+				ruleFor(".cs-tag-input-row > .cs-tag-input-field:disabled"),
+				"background",
+			),
+			`background: ${RAISED}`,
+		);
+	});
 });
 
 /* -------------------------------------------------------------------------- */
@@ -364,8 +380,12 @@ describe("a disabled text field stays raised off the window", () => {
  *
  * This is a review list, not a ban. A rule reaches it because its selector does
  * not say whether the element is inside a window, so only a person can answer
- * whether the raw variable is right — and the list is here so that a sixth
+ * whether the raw variable is right — and the list is here so that a fourth
  * entry has to be added by hand, with a reason, rather than appearing.
+ *
+ * Every entry left is deliberate. The two that were not — the swatch ring and
+ * its transparency checkerboard — are fixed, and are now asserted positively
+ * above rather than merely tolerated here.
  */
 const KNOWN_RAW_PRIMARY = [
 	// Deliberate. Both emulate a NOTE surface rather than the window, and a note
@@ -378,7 +398,6 @@ const KNOWN_RAW_PRIMARY = [
 	// `--background-primary`; there is no `--cs-surface` in scope there and the
 	// fallback would resolve to the same colour anyway.
 	".callout-studio-row-syntax | background",
-
 ];
 
 describe("nothing else paints --background-primary unexamined", () => {
@@ -398,22 +417,18 @@ describe("nothing else paints --background-primary unexamined", () => {
 });
 
 /**
- * The same review list for the raised half.
+ * The same review list for the raised half — and it is **empty**, which is a
+ * stronger statement than the flush list can make.
  *
- * It is shorter than the flush one because there is no equivalent of the
- * settings tab here: a surface wanting the raised shade wants it *relative to
- * whatever it is sitting on*, and `--background-secondary` only answers that
- * while `--modal-background` is `--background-primary`.
+ * There is no equivalent of the settings tab here. A surface wanting the raised
+ * shade wants it *relative to whatever it is sitting on*, and
+ * `--background-secondary` only answers that while `--modal-background` is
+ * `--background-primary` — so unlike `--background-primary`, which is genuinely
+ * the right answer for a note or for the settings tab, there is no context in
+ * which naming this one raw is correct. An entry here would be a bug awaiting
+ * triage, not a decision; the empty list says so.
  */
-const KNOWN_RAW_SECONDARY = [
-	// NOT deliberate — flagged, not endorsed. The disabled state of a text field
-	// inside the callout editor, which is a chromed window, so on mobile dark the
-	// fill lands exactly on the surface behind it and the field reads as a hole
-	// rather than as a greyed-out control. The `opacity: 0.5` beside it makes
-	// that worse, not better. It wants
-	// `var(--cs-surface-raised, var(--background-secondary))`.
-	".cs-tag-input-row > .cs-tag-input-field:disabled | background",
-];
+const KNOWN_RAW_SECONDARY: string[] = [];
 
 describe("nothing else paints --background-secondary unexamined", () => {
 	const found = rules
