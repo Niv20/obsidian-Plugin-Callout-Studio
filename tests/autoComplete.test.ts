@@ -505,6 +505,24 @@ describe("selectSuggestion — block header", () => {
 		);
 	});
 
+	it("reads a fold mark already on the line as syntax, not as title", () => {
+		// The blockquote half of what `splitFoldMark` decides: here the `-` is
+		// Obsidian's fold syntax, so it is consumed and reissued from the picked
+		// callout's own defaults — a `-` kept as text would render as a title
+		// beginning with a dash. The heading role does the opposite; see the
+		// heading suite below.
+		const h = harness();
+		assert.strictEqual(
+			pick(h, "> [!no⎸]- My own words", "note").getValue(),
+			"> [!note] My own words",
+		);
+		addCallout(h.registry, { foldable: true, defaultFolded: true });
+		assert.strictEqual(
+			pick(h, "> [!qu⎸]+ My own words", "quiet").getValue(),
+			"> [!quiet]- My own words",
+		);
+	});
+
 	it("replaces a title that is only some other callout's display name", () => {
 		const h = harness();
 		assert.strictEqual(
@@ -567,6 +585,19 @@ describe("selectSuggestion — heading callout", () => {
 		assert.strictEqual(
 			pick(h, "## [!no⎸|purple]", "note").getValue(),
 			"## [!note|purple]",
+		);
+	});
+
+	it("keeps a title that starts with a dash", () => {
+		// The heading role has no fold syntax, so the `-` is the first character
+		// of the user's title. `selectSuggestion` reads the mark off through
+		// `splitFoldMark`, which is told the role — until it was, the rule lived
+		// only in the fact that this role `return`s before the read. See
+		// `headingFoldSyntax.test.ts` for the property on its own.
+		const h = harness();
+		assert.strictEqual(
+			pick(h, "## [!no⎸]- My section", "note").getValue(),
+			"## [!note] - My section",
 		);
 	});
 });

@@ -47,6 +47,7 @@ import { CALLOUT_FOLD_MARK_REGEX } from "../src/editor/contextmenu/resolve";
 import {
 	buildBlockHeaderToken,
 	buildHeadingToken,
+	splitFoldMark,
 } from "../src/editor/calloutWriter";
 import { normalizeFoldMarkersInVault } from "../src/utils/vaultCalloutScanner";
 import type { App } from "obsidian";
@@ -174,6 +175,74 @@ describe("the writers", () => {
 		);
 	});
 });
+
+/* -------------------------------------------------------------------------- */
+/* The reader, which is where the rule is actually enforced                   */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * `splitFoldMark` is the one place a `+`/`-` after a `]` is read as syntax, and
+ * it takes the role as an argument for a reason that is easy to lose.
+ *
+ * Every reader of a fold mark used to state the role rule in its own shape. The
+ * vault rewriter tested `token.role`; AutoComplete's `selectSuggestion` ran
+ * `/^([+-]?)\s*(.*)$/` with no role in it at all, and was correct only because
+ * the inline and heading branches `return` above it. That is a real guarantee
+ * and an invisible one: nothing in the regex, its variable names or its comment
+ * says the line is a blockquote, so tidying two early returns into a `switch`
+ * with shared tail work would have started eating the first character of every
+ * heading title beginning with `-` — a rewrite that looks like it worked.
+ *
+ * Passing the role in makes that a compiler-visible obligation instead. These
+ * assertions are the property itself: for the two roles that have no fold
+ * syntax, a leading `-` is title text no matter what the caller believes.
+ */
+describe("splitFoldMark reads the mark from the role, not from the caller", () => {
+	it("takes the mark off a blockquote header", () => {
+		assert.deepStrictEqual(splitFoldMark("- Title", "regular"), {
+			foldMark: "-",
+			title: " Title",
+		});
+		assert.deepStrictEqual(splitFoldMark("+ Title", "regular"), {
+			foldMark: "+",
+			title: " Title",
+		});
+	});
+
+	it("leaves a heading's leading `-` in the title", () => {
+		assert.deepStrictEqual(splitFoldMark("- Title", "heading"), {
+			foldMark: "",
+			title: "- Title",
+		});
+		assert.deepStrictEqual(splitFoldMark("+ Title", "heading"), {
+			foldMark: "",
+			title: "+ Title",
+		});
+	});
+
+	it("leaves an inline pill's alone too", () => {
+		// `[!note]-ish` is a pill followed by the user's prose; a pill has no
+		// title of its own and no fold syntax to read.
+		assert.deepStrictEqual(splitFoldMark("-ish", "inline"), {
+			foldMark: "",
+			title: "-ish",
+		});
+	});
+
+	it("reports no mark when there is none, on every role", () => {
+		for (const role of ["regular", "heading", "inline"] as const) {
+			assert.deepStrictEqual(splitFoldMark(" Title", role), {
+				foldMark: "",
+				title: " Title",
+			});
+			assert.deepStrictEqual(splitFoldMark("", role), {
+				foldMark: "",
+				title: "",
+			});
+		}
+	});
+});
+
 
 /* -------------------------------------------------------------------------- */
 /* The blockquote role, which is untouched                                    */

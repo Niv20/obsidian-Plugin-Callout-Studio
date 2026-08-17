@@ -38,6 +38,7 @@ import {
 	buildHeadingToken,
 	buildInlineToken,
 	metadataSuffixOf,
+	splitFoldMark,
 } from "./calloutWriter";
 import {
 	getSortedCalloutIds,
@@ -429,10 +430,9 @@ export class CalloutAutoComplete extends EditorSuggest<CalloutSuggestion> {
 			return;
 		}
 
-		// Regular callout header. Pattern after `]`: optional fold mark (+/-),
-		// optional title.
-		const restMatch = /^([+-]?)\s*(.*)$/.exec(afterHeader);
-		const existingTitle = restMatch?.[2]?.trim() ?? "";
+		// Regular callout header: an optional fold mark after the `]`, then the
+		// title. The role is the splitter's argument, not the caller's position.
+		const existingTitle = splitFoldMark(afterHeader, this.triggerRole).title.trim();
 
 		// Detect if this is a brand-new callout (no title text after the header)
 		const isNewCallout = existingTitle === "";

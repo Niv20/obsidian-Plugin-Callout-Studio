@@ -29,6 +29,7 @@ import {
 	scanLineForCalloutTokens,
 	tokenEnd,
 } from "../editor/calloutTokens";
+import { splitFoldMark } from "../editor/calloutWriter";
 
 function escapeRegex(str: string): string {
 	return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -64,20 +65,15 @@ function metadataSuffix(token: LineCalloutToken): string {
  * Shared by the two writers that reason about a title: the rename
  * ({@link replaceCalloutTitlesInVault}) and the type swap
  * ({@link replaceCalloutIdsInVault}). They must agree on where the title starts
- * or a replace would eat a fold mark the rename preserves.
+ * or a replace would eat a fold mark the rename preserves — which is also why
+ * the rule itself lives in `calloutWriter.splitFoldMark`, next to the writer
+ * that emits the mark, rather than being spelled out once per caller.
  */
 function splitFoldAndTitle(
 	line: string,
 	token: LineCalloutToken,
 ): { foldMark: string; title: string } {
-	const rest = line.slice(token.to);
-	if (token.role === "regular") {
-		const mark = rest.charAt(0);
-		if (mark === "+" || mark === "-") {
-			return { foldMark: mark, title: rest.slice(1) };
-		}
-	}
-	return { foldMark: "", title: rest };
+	return splitFoldMark(line.slice(token.to), token.role);
 }
 
 /**
