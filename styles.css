@@ -1721,7 +1721,17 @@ button.callout-studio-icon-picker-loading {
 	/* Visible border: the right circle shows the callout BACKGROUND color,
 	   which is pale and would otherwise vanish against the panel. */
 	border: 1px solid var(--background-modifier-border);
-	box-shadow: 0 0 0 1.5px var(--background-primary);
+	/* The ring is a cut-out, not a colour: it repaints the surface behind the
+	   circle so the one in front reads as separated from the one behind it. So
+	   it has to be whatever that surface actually is. This widget renders in the
+	   settings tab (rows, custom palettes) AND inside the callout editor — its
+	   trigger swatch and every palette-menu item — and its selector cannot say
+	   which. `--cs-surface` answers both: undefined outside a window, so the
+	   fallback keeps the settings tab exactly as it was, and the window's own
+	   background inside one. Painting `--background-primary` raw drew a pure
+	   black halo on mobile dark, where that variable is `#000` for OLED and the
+	   modal is not. */
+	box-shadow: 0 0 0 1.5px var(--cs-surface, var(--background-primary));
 	box-sizing: border-box;
 	position: relative;
 }

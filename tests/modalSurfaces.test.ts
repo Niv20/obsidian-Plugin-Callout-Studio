@@ -269,6 +269,53 @@ describe("every call site carries its own half's fallback", () => {
 });
 
 /* -------------------------------------------------------------------------- */
+/* Rules whose selector cannot place them, resolved one at a time             */
+/* -------------------------------------------------------------------------- */
+
+/** The one rule written exactly as `selector`, with its whitespace flattened. */
+function ruleFor(selector: string): Rule {
+	const found = rules.filter(
+		(r) => r.selector.replace(/\s+/g, " ") === selector,
+	);
+	assert.strictEqual(
+		found.length,
+		1,
+		`expected exactly one \`${selector}\` rule, found ${found.length}`,
+	);
+	return found[0] as Rule;
+}
+
+/** `rule`'s declaration for `property`, flattened, or "" when it sets none. */
+function declaration(rule: Rule, property: string): string {
+	const decl = rule.declarations
+		.split(";")
+		.map((d) => d.trim())
+		.find((d) => d.split(":")[0]?.trim() === property);
+	return (decl ?? "").replace(/\s+/g, " ");
+}
+
+describe("the swatch widget follows the surface it is drawn on", () => {
+	// `renderColorCircles` (src/ui/ColorCircles.ts) has four call sites, and they
+	// straddle the boundary this file is about: the settings rows and the custom
+	// palettes section are in the settings tab, while the callout editor's
+	// trigger swatch and every one of its palette-menu items are inside a chromed
+	// window. One rule serves all four, so it has to name the token rather than
+	// either concrete colour — the fallback is what keeps the settings tab
+	// unchanged.
+	it("the ring around a circle is a cut-out of the window, not of the note", () => {
+		// A `box-shadow` cut-out that paints something other than what is behind
+		// it stops being a cut-out and becomes a halo. On mobile dark
+		// `--background-primary` is a true `#000` while the modal is not, so the
+		// raw variable drew exactly that halo, in black, around every swatch in
+		// the editor.
+		assert.strictEqual(
+			declaration(ruleFor(".cs-color-circle"), "box-shadow"),
+			"box-shadow: 0 0 0 1.5px var(--cs-surface, var(--background-primary))",
+		);
+	});
+});
+
+/* -------------------------------------------------------------------------- */
 /* Everything else that paints the raw surface colour                          */
 /* -------------------------------------------------------------------------- */
 
@@ -295,12 +342,10 @@ const KNOWN_RAW_PRIMARY = [
 
 	// NOT deliberate — flagged, not endorsed. `renderColorCircles` is called
 	// from the settings rows AND from inside the callout editor (its trigger
-	// swatch and every palette-menu item), so on mobile dark both of these paint
-	// a colour that is not the surface behind them: the ring reads as a black
-	// halo and the transparency checkerboard as a black-on-black square. Both
-	// are the case the module header describes, and both want
-	// `var(--cs-surface, var(--background-primary))`.
-	".cs-color-circle | box-shadow",
+	// swatch and every palette-menu item), so on mobile dark this paints a
+	// colour that is not the surface behind it: the transparency checkerboard
+	// reads as a black-on-black square. It is the case the module header
+	// describes, and it wants `var(--cs-surface, var(--background-primary))`.
 	".cs-color-circle.is-transparent | background-image",
 ];
 
