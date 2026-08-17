@@ -644,10 +644,14 @@ export const fa: Record<string, string> = {
 
 	"vault.filesUpdated":
 		"{{count}} مرجع callout در فایل‌های vault به‌روزرسانی شد.",
+	// The arrow stays "→" although the sentence is RTL: it sits between two
+	// callout ids, which are normally Latin, so the bidi algorithm resolves that
+	// fragment left-to-right and a mirrored "←" would point from the new id back
+	// to the old one. Prose paths such as `firstRun.laterHint` do mirror.
 	"vault.idsUpdated":
-		"{{count}} شناسه callout در فایل‌های vault به‌روزرسانی شد: {{oldIds}} ← {{newId}}",
+		"{{count}} شناسه callout در فایل‌های vault به‌روزرسانی شد: {{oldIds}} → {{newId}}",
 	"vault.titlesUpdated":
-		"{{count}} عنوان callout در فایل‌های vault به‌روزرسانی شد: {{oldTitle}} ← {{newTitle}}",
+		"{{count}} عنوان callout در فایل‌های vault به‌روزرسانی شد: {{oldTitle}} → {{newTitle}}",
 	"vault.replaceWith": "جایگزینی با:",
 	"vault.deleteWithout": "حذف بدون جایگزینی",
 	"vault.confirmDelete": "تأیید",
