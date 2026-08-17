@@ -1,6 +1,6 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository. For a fuller derivation of any section here — full reasoning, edge cases, cross-links — see [`internals-docs/00-index.md`](internals-docs/00-index.md), which expands on this file for the same audience: programmers reading the source or preparing a PR, not end users.
 
 ## Commands
 
