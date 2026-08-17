@@ -28,6 +28,9 @@
  *   — because it is spelled with a dash and `sanitizeCalloutIdInput` never
  *   produces one — it is not a callout the user can create either. That is what
  *   keeps `previewShadowedDef` null, which is what the filter is built on.
+ *   Asserted for `STYLE_DEMO_ID` too, not for the placeholder alone: the style
+ *   popups reserve an id of their own, it reaches the same preview slot and the
+ *   same injector, and until it was exported nothing could check it at all.
  *
  * `example` is deliberately still exercised below. It is no longer the
  * placeholder, but it is still a built-in and a demo may still be raised over
@@ -38,6 +41,7 @@ import assert from "node:assert";
 import { describe, it } from "node:test";
 import { CalloutRegistry } from "../src/manager/CalloutRegistry";
 import { DEFAULT_CALLOUTS, PREVIEW_PLACEHOLDER_ID } from "../src/constants";
+import { STYLE_DEMO_ID } from "../src/settings/GlobalStyleModal";
 import { sanitizeCalloutIdInput } from "../src/utils/calloutId";
 import type { CalloutDefinition, PluginData } from "../src/types";
 
@@ -74,47 +78,61 @@ const ids = (defs: readonly CalloutDefinition[]): string[] =>
 /* The id                                                                     */
 /* -------------------------------------------------------------------------- */
 
-describe("the placeholder id names nothing real", () => {
-	it("is not the id of any callout this plugin ships", () => {
-		// The regression itself, stated as a fact about the two constants. It
-		// fails the moment somebody points the placeholder back at a real id.
-		assert.strictEqual(
-			DEFAULT_CALLOUTS.some((d) => d.id === PREVIEW_PLACEHOLDER_ID),
-			false,
-			`${PREVIEW_PLACEHOLDER_ID} is a shipped callout — a demo raised on it shadows a real row`,
-		);
-	});
+describe("no reserved demo id names anything real", () => {
+	// Stated over every reserved id rather than over the placeholder alone. The
+	// placeholder is the id that *was* wrong; `STYLE_DEMO_ID` is the one nothing
+	// was checking, and it reaches the same preview slot, the same `getAll()`
+	// and the same injector. Both are reserved for the same reason, so both are
+	// asserted by the same four claims.
+	for (const demoId of [PREVIEW_PLACEHOLDER_ID, STYLE_DEMO_ID]) {
+		describe(demoId, () => {
+			it("is not the id of any callout this plugin ships", () => {
+				// The regression itself, stated as a fact about the constants. It
+				// fails the moment somebody points one back at a real id.
+				assert.strictEqual(
+					DEFAULT_CALLOUTS.some((d) => d.id === demoId),
+					false,
+					`${demoId} is a shipped callout — a demo raised on it repaints every real occurrence`,
+				);
+			});
 
-	it("is not an alias of one either", () => {
-		// An alias is resolved by `findByAlias` and styled by its own generated
-		// selector, so colliding with one repaints a real callout just as surely.
-		const aliases = DEFAULT_CALLOUTS.flatMap((d) => d.aliases ?? []);
-		assert.strictEqual(aliases.includes(PREVIEW_PLACEHOLDER_ID), false);
-	});
+			it("is not an alias of one either", () => {
+				// An alias is resolved by `findByAlias` and styled by its own
+				// generated selector, so colliding with one repaints a real
+				// callout just as surely.
+				const aliases = DEFAULT_CALLOUTS.flatMap((d) => d.aliases ?? []);
+				assert.strictEqual(aliases.includes(demoId), false);
+			});
 
-	it("is absent from a freshly loaded registry", () => {
-		// The same claim from the other side: whatever `load` seeds, nothing
-		// answers to this id until a modal puts something there.
-		assert.strictEqual(loaded().get(PREVIEW_PLACEHOLDER_ID), undefined);
-	});
+			it("is absent from a freshly loaded registry", () => {
+				// The same claim from the other side: whatever `load` seeds,
+				// nothing answers to this id until a modal puts something there.
+				assert.strictEqual(loaded().get(demoId), undefined);
+			});
 
-	it("is spelled with a dash, which is what keeps a user from minting it", () => {
-		// `sanitizeCalloutIdInput` folds every dash run into a space, so no name
-		// the user can type in the ID field normalizes onto this id. That is not
-		// a coincidence to lean on quietly — it is the reason a dashed
-		// placeholder is safe where a one-word one would not be.
-		assert.ok(PREVIEW_PLACEHOLDER_ID.includes("-"));
-		for (const spelling of [
-			PREVIEW_PLACEHOLDER_ID,
-			"new callout preview",
-			"New-Callout-Preview",
-			"new - callout - preview",
-		]) {
-			const sanitized = sanitizeCalloutIdInput(spelling);
-			assert.ok(!sanitized.includes("-"), spelling);
-			assert.notStrictEqual(sanitized, PREVIEW_PLACEHOLDER_ID, spelling);
-		}
-	});
+			it("is spelled with a dash, which is what keeps a user from minting it", () => {
+				// `sanitizeCalloutIdInput` folds every dash run into a space, so
+				// no name the user can type in the ID field normalizes onto this
+				// id. That is not a coincidence to lean on quietly — it is the
+				// reason a dashed reserved id is safe where a one-word one would
+				// not be. Every spelling is derived from the id itself, so a new
+				// entry in the list is covered without editing this test.
+				assert.ok(demoId.includes("-"));
+				for (const spelling of [
+					demoId,
+					demoId.replace(/-/g, " "),
+					demoId.replace(/(^|-)(\w)/g, (_m, sep: string, c: string) =>
+						`${sep}${c.toUpperCase()}`,
+					),
+					demoId.replace(/-/g, " - "),
+				]) {
+					const sanitized = sanitizeCalloutIdInput(spelling);
+					assert.ok(!sanitized.includes("-"), spelling);
+					assert.notStrictEqual(sanitized, demoId, spelling);
+				}
+			});
+		});
+	}
 
 	it("still ships `example`, so the shadowing path is not dead code", () => {
 		// It stopped being the placeholder; it did not stop being a built-in a

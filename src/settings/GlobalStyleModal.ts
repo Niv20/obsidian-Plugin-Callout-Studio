@@ -28,11 +28,11 @@ import { CSS_FOLD_ARROW, CSS_HEADING_LINE } from "../editor/renderShared";
 import { applyModalChrome } from "./modalChrome";
 
 /**
- * Reserved id for the neutral demo callout rendered in the popups. Registered
- * only while a popup is open; if a user callout ever occupies the same id,
- * the preview slot shadows and later restores it.
+ * Reserved id for the popups' neutral demo callout; a user callout occupying
+ * it is shadowed, then restored. Reserved as `PREVIEW_PLACEHOLDER_ID` is and
+ * for its reason: it reaches `getAll()`, so a popup restyles it vault-wide.
  */
-const STYLE_DEMO_ID = "global-style-demo";
+export const STYLE_DEMO_ID = "global-style-demo";
 
 /** Neutral gray accent used by the demo callout in both theme modes. */
 const STYLE_DEMO_GRAY = "#808080";
