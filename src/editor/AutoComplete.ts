@@ -28,6 +28,7 @@ import { createIconResolver } from "../icons/resolver";
 import { getLocale, t } from "../i18n";
 import { splitCalloutMetadata } from "../utils/calloutId";
 import { filterUsableCallouts } from "../utils/usableCallouts";
+import { calloutMatchesQuery } from "../utils/calloutSearch";
 import { isCalloutTokenInCode } from "./calloutCodeContext";
 import {
 	moveCursorToLineBelow,
@@ -216,13 +217,9 @@ export class CalloutAutoComplete extends EditorSuggest<CalloutSuggestion> {
 			this.plugin.isKnownZeroUsageFallback(id),
 		);
 
-		// Filter
-		const filtered = all.filter(
-			(d) =>
-				d.id.toLowerCase().includes(query) ||
-				d.displayName.toLowerCase().includes(query) ||
-				(d.aliases ?? []).some((a) => a.toLowerCase().includes(query)),
-		);
+		// Filter — the same predicate the quick-insert window matches with, so
+		// the two lists can never disagree about what a typed word finds.
+		const filtered = all.filter((d) => calloutMatchesQuery(d, query));
 
 		const sorted = sortCalloutsByDisplayName(filtered, getLocale());
 
