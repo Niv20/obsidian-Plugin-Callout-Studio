@@ -102,6 +102,17 @@ function host(): Host {
 		refreshRenderModes: () => {
 			renders++;
 		},
+		// The windows the fixed commands open. Both throw: re-registering a
+		// command must never construct one — `addCommand` only ever stores the
+		// callback.
+		commandDeps: () => ({
+			openEditor: () => {
+				throw new Error("no window may be opened by a name refresh");
+			},
+			openQuickInsert: () => {
+				throw new Error("no window may be opened by a name refresh");
+			},
+		}),
 	};
 
 	return {
@@ -120,9 +131,9 @@ function host(): Host {
 }
 
 /**
- * Register and activate a translation covering only the five fixed command
- * names, under an invented code, so nothing here depends on a real language's
- * wording — and so every name differs from whatever the last test registered.
+ * Register and activate a translation covering only the fixed command names,
+ * under an invented code, so nothing here depends on a real language's wording
+ * — and so every name differs from whatever the last test registered.
  */
 function useCommandLocale(code: string): void {
 	const strings: Record<string, string> = {};
@@ -133,7 +144,7 @@ function useCommandLocale(code: string): void {
 	setLocale(code);
 }
 
-/** The names `t()` would render for the five, right now. */
+/** The names `t()` would render for them, right now. */
 const currentNames = (): string[] =>
 	FIXED_COMMAND_IDS.map((id) => t(FIXED_COMMAND_NAME_KEYS[id]));
 

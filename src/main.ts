@@ -28,6 +28,7 @@ import { runFirstRunDiscovery } from "./manager/firstRunDiscovery";
 import { CalloutStudioSettingsTab } from "./settings/SettingsTab";
 import { WelcomeModal } from "./settings/WelcomeModal";
 import { CalloutEditor } from "./settings/CalloutEditor";
+import { QuickInsertModal } from "./settings/QuickInsertModal";
 import { CalloutAutoComplete } from "./editor/AutoComplete";
 import { LinkSuggestDecorator } from "./editor/LinkSuggestDecorator";
 import { registerContextMenu } from "./editor/contextmenu";
@@ -42,10 +43,12 @@ import {
 	refreshFixedCommandNames,
 	registerCalloutCommands,
 	setFixedCommandEnabled as applyFixedCommandToggle,
+	type FixedCommandDeps,
 	type FixedCommandId,
 } from "./editor/commands";
 import { CustomCommandManager } from "./editor/CustomCommandManager";
 import { CalloutStudioAPI } from "./api/PluginAPI";
+import { PLUGIN_ICON_ID } from "./constants";
 import { getLocale, setLocale, t } from "./i18n";
 import { LocaleStore } from "./i18n/LocaleStore";
 
@@ -278,7 +281,14 @@ export default class CalloutStudioPlugin extends Plugin {
 		});
 
 		// Commands
-		registerCalloutCommands(this, () => new CalloutEditor(this));
+		registerCalloutCommands(this, this.commandDeps());
+
+		// The ribbon is a second door to the same window, not a second
+		// implementation: hiding the command leaves this one standing, and
+		// hiding the ribbon leaves the command bindable.
+		this.addRibbonIcon(PLUGIN_ICON_ID, t("quickInsert.title"), () => {
+			this.openQuickInsert();
+		});
 
 		// Editor autocomplete on [! trigger
 		this.autoComplete = new CalloutAutoComplete(this);
@@ -368,8 +378,25 @@ export default class CalloutStudioPlugin extends Plugin {
 		// container would throw away work no one is looking at, and the picker
 		// re-renders itself on the path where the user chose the language.
 		if (this.settingsTab?.containerEl.isConnected) this.settingsTab.display();
-		refreshFixedCommandNames(this, () => new CalloutEditor(this));
+		refreshFixedCommandNames(this, this.commandDeps());
 		this.refreshRenderModes();
+	}
+
+	/**
+	 * The windows the fixed commands open. Built fresh on each call because
+	 * `CalloutEditor` is single-use, and kept here so the ribbon and the
+	 * command open the very same window.
+	 */
+	private commandDeps(): FixedCommandDeps {
+		return {
+			openEditor: () => new CalloutEditor(this),
+			openQuickInsert: () => this.openQuickInsert(),
+		};
+	}
+
+	/** Open the quick-insert window. Shared by the ribbon and its command. */
+	openQuickInsert(): void {
+		new QuickInsertModal(this).open();
 	}
 
 	/**
@@ -468,7 +495,7 @@ export default class CalloutStudioPlugin extends Plugin {
 		id: FixedCommandId,
 		enabled: boolean,
 	): Promise<void> {
-		applyFixedCommandToggle(this, () => new CalloutEditor(this), id, enabled);
+		applyFixedCommandToggle(this, this.commandDeps(), id, enabled);
 		await this.saveSettings();
 	}
 

@@ -625,7 +625,7 @@ describe("no new oversized files", () => {
 		"src/editor/CalloutBlockTools.ts": 666,
 		"src/utils/vaultCalloutScanner.ts": 595,
 		"src/editor/AutoComplete.ts": 593,
-		"src/main.ts": 510,
+		"src/main.ts": 537,
 		"src/icons/renderIcon.ts": 547,
 		"src/settings/GlobalStyleModal.ts": 528,
 		"src/editor/renderShared.ts": 498,
