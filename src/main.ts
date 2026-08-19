@@ -226,7 +226,7 @@ export default class CalloutStudioPlugin extends Plugin {
 		);
 		this.register(() => this.outlineDecorator.destroy());
 
-		// The user's own commands, on top of the five fixed ones. Registering
+		// The user's own commands, on top of the six fixed ones. Registering
 		// them during onload is what makes them survive a restart or a
 		// disable/enable — Obsidian tears every plugin command down on unload
 		// by itself. The sweep re-derives the whole set from the registry, so
@@ -487,7 +487,7 @@ export default class CalloutStudioPlugin extends Plugin {
 	}
 
 	/**
-	 * Turn one of the five fixed commands on or off, from the command
+	 * Turn one of the six fixed commands on or off, from the command
 	 * builder. {@link registerCalloutCommands} only runs at startup, so this
 	 * is what (un)registers the command with Obsidian immediately.
 	 */

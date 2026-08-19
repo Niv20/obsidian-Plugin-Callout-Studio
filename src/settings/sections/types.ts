@@ -50,7 +50,7 @@ export type SettingsTabPlugin = Plugin & {
 	applyLocaleChange(): void;
 	/** The user's own commands, and the sweep that keeps them registered. */
 	customCommands: CustomCommandManager;
-	/** Switch one of the five fixed commands on or off, and persist it. */
+	/** Switch one of the six fixed commands on or off, and persist it. */
 	setFixedCommandEnabled(id: FixedCommandId, enabled: boolean): Promise<void>;
 	/**
 	 * Whether a discovered row is one the last prune scan confirmed is written

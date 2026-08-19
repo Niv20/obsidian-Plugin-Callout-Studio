@@ -24,7 +24,7 @@ export const DEFAULT_HEADING_LEVEL = 2;
  * Prefix on the Obsidian command id of every user-built command.
  *
  * Doubles as the marker the manager uses to recognize its own registrations,
- * and none of the five fixed command ids start with it. No second colon: the
+ * and no fixed command id starts with it. No second colon: the
  * full id Obsidian builds is `callout-studio:custom-cc-…`.
  */
 const CUSTOM_COMMAND_ID_PREFIX = "custom-";
