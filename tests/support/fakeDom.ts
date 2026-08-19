@@ -374,6 +374,16 @@ export class FakeElement {
 		);
 	}
 
+	/**
+	 * Element children only, like the real DOM. Present because code guards on
+	 * `childElementCount === 0` to detect "mounted nothing", and an absent
+	 * property answers `undefined` — which is never `0`, so such a guard would
+	 * silently never fire under test.
+	 */
+	get childElementCount(): number {
+		return this.children.length;
+	}
+
 	get firstChild(): FakeNode | null {
 		return this.childNodes[0] ?? null;
 	}

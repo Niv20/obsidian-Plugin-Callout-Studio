@@ -186,6 +186,10 @@ export class LiveCalloutPreview {
 				e,
 			);
 			this.editor = null;
+			// The failed constructor may have mounted (and torn down) real
+			// editor DOM in here. Clear it, or the static render below lands
+			// underneath its leftovers.
+			body.empty();
 			this.buildFallback(body);
 		}
 	}

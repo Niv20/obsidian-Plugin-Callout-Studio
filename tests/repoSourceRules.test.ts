@@ -772,7 +772,7 @@ describe("no new oversized files", () => {
 		"src/icons/packs/materialFont.ts": 398,
 		"src/settings/sections/CalloutRowActions.ts": 396,
 		"src/outline/OutlineDecorator.ts": 382,
-		"src/settings/EmbeddableMarkdownEditor.ts": 377,
+		"src/settings/EmbeddableMarkdownEditor.ts": 357,
 		"src/icons/svg.ts": 367,
 		"src/settings/iconpicker/ImagePanel.ts": 354,
 		"src/settings/sections/DataManagementSection.ts": 320,

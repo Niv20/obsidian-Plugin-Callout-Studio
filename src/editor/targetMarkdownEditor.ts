@@ -10,11 +10,18 @@
  * Two rules make that safe, and both are load-bearing:
  *
  * **Never `workspace.activeEditor`.** It is the closest-looking API and it is
- * the wrong one: `EmbeddableMarkdownEditor` installs *itself* as `activeEditor`
- * while the callout editor's live preview is on screen, so a plugin window that
- * trusted it could type into a preview widget instead of the user's note.
- * `getActiveViewOfType(MarkdownView)` only ever answers with a real markdown
- * leaf.
+ * the wrong one: Obsidian installs whatever editor last had focus there, and
+ * that includes the live preview inside this plugin's own windows — so a
+ * window that trusted it could type into a preview widget instead of the
+ * user's note. `getActiveViewOfType(MarkdownView)` only ever answers with a
+ * real markdown leaf.
+ *
+ * The registration is not even bounded by the window: nothing in Obsidian
+ * clears the slot when a modal closes, which is why `EmbeddableMarkdownEditor`
+ * has to hand it back itself (`embeddedEditorOwner.releaseActiveEditor`).
+ * Relying on that release from here would be trusting one module's teardown to
+ * make another module's read safe — the point of this rule is that the read is
+ * never made.
  *
  * **Capture, then re-check.** Resolving once at open time is what makes "the
  * note I opened this from" mean anything across split panes and a dozen tabs;

@@ -24,6 +24,11 @@ import {
 	Prec,
 	StateEffect,
 } from "@codemirror/state";
+import {
+	createEditorOwner,
+	releaseActiveEditor,
+	type EditorOwner,
+} from "./embeddedEditorOwner";
 
 /** Minimal shape of the internal edit view we touch. */
 interface InternalMarkdownEditor extends Component {
@@ -40,42 +45,6 @@ interface InternalMarkdownEditor extends Component {
 	destroy?(): void;
 	editor?: Editor & { cm?: EditorView };
 	cm?: EditorView;
-}
-
-/** The 3rd constructor arg the base editor stores as `this.owner`. */
-interface EditorOwner {
-	app: App;
-	onMarkdownScroll: () => void;
-	/**
-	 * The internal edit view's native scroll listener calls this unconditionally
-	 * (real `MarkdownView`s use it for split source/reading scroll sync). A no-op
-	 * here is enough — but it must exist: Chromium fires a spurious `scroll`
-	 * event on a scroller whenever an ancestor's `dir` flips to `rtl` (which
-	 * Obsidian sets high in the DOM under RTL interface languages), even with
-	 * zero user scrolling, and a missing method throws `TypeError` from that
-	 * event handler.
-	 */
-	syncScroll: () => void;
-	getMode: () => "source" | "preview";
-	/**
-	 * The real Obsidian editor. This owner becomes `app.workspace.activeEditor`
-	 * whenever the embedded editor is focused/clicked, so it must expose a full
-	 * `Editor`, for two independent consumers:
-	 *
-	 * - Word Count core plugin: listens on every `editor-selection-change` and
-	 *   runs `info.editor.getSelection()`, where `info` is this owner. A missing
-	 *   editor throws — surfaced asynchronously (and thus "uncaught") because
-	 *   Obsidian's `tryTrigger` re-throws listener errors via `setTimeout`.
-	 * - Command Palette: `listCommands()` runs every command's `checkCallback`,
-	 *   and the editor commands (`editor:follow-link`, `editor:toggle-fold`, …)
-	 *   call `activeEditor.editor.getCursor()` / `hasFocus()`. A partial shim
-	 *   without those methods throws `TypeError: … is not a function`.
-	 *
-	 * So the owner exposes the genuine underlying `Editor` (see the `get editor`
-	 * accessor in the constructor). Read-only is still enforced by
-	 * `EditorState.readOnly`, so a command reaching the preview cannot mutate it.
-	 */
-	readonly editor: Editor;
 }
 
 type MarkdownEditorCtor = new (
@@ -190,6 +159,13 @@ export class EmbeddableMarkdownEditor {
 	private destroyed = false;
 	/** Handle of the pending blur-park timer, so destroy() can cancel it. */
 	private parkTimer: number | null = null;
+	private readonly app: App;
+	/**
+	 * The object Obsidian installs as `app.workspace.activeEditor` when this
+	 * editor is focused. Kept so teardown can hand the slot back — see
+	 * {@link releaseActiveEditor}, which is the only thing that ever will.
+	 */
+	private readonly owner: EditorOwner;
 
 	constructor(
 		app: App,
@@ -197,43 +173,35 @@ export class EmbeddableMarkdownEditor {
 		options: EmbeddableMarkdownEditorOptions,
 	) {
 		const Ctor = resolveMarkdownEditorCtor(app);
-		// Arrow closures so the `get editor` accessor (whose own `this` is the
-		// owner object) can still reach this instance — without aliasing `this`.
-		const instanceEditor = (): Editor | undefined => this.instance?.editor;
-		const selectionText = (): string => this.currentSelectionText();
-		// getMode "source" = an editing surface (Live-Preview vs. raw source
-		// follows the vault's own setting, exactly like the user's notes), NOT
-		// the reading view.
-		const owner: EditorOwner = {
-			app,
-			onMarkdownScroll: () => {},
-			syncScroll: () => {},
-			getMode: () => "source",
-			// Once mounted, expose the REAL Obsidian editor (see EditorOwner.editor
-			// for why the owner must be a full editor: Word Count and the Command
-			// Palette both call methods on `activeEditor.editor`). Before mount —
-			// `this.instance` is still undefined during the base constructor — fall
-			// back to a selection-only shim, which is enough for the Word Count
-			// listener that fires on the initial `parkCursor` selection dispatch.
-			get editor(): Editor {
-				return (
-					instanceEditor() ??
-					({ getSelection: selectionText } as Editor)
-				);
-			},
-		};
-		this.instance = new Ctor(app, container, owner);
-		// Must sit between construction and the first `set()` — that call is
-		// what builds (and then caches) the extensions this flag decides.
-		forceLivePreview(this.instance);
-		this.instance.set(options.value, false);
+		this.app = app;
+		// Arrow closures so the owner (whose own `this` is the owner object)
+		// can still reach this instance — without aliasing `this`.
+		this.owner = createEditorOwner(app, {
+			editor: () => this.instance?.editor,
+			selection: () => this.currentSelectionText(),
+		});
+		this.instance = new Ctor(app, container, this.owner);
+		try {
+			// Must sit between construction and the first `set()` — that call
+			// is what builds (and then caches) the extensions this flag
+			// decides.
+			forceLivePreview(this.instance);
+			this.instance.set(options.value, false);
 
-		// A shape change could let construction "succeed" without mounting any
-		// DOM (a silent-empty failure that would otherwise leave a blank box).
-		// Treat that as a failure so the caller falls back to a static render.
-		if (container.childElementCount === 0) {
+			// A shape change could let construction "succeed" without mounting
+			// any DOM (a silent-empty failure that would otherwise leave a
+			// blank box). Treat that as a failure so the caller falls back to a
+			// static render.
+			if (container.childElementCount === 0) {
+				throw new Error("embedded editor did not mount");
+			}
+		} catch (e) {
+			// `set()` is what installs the focus handler that registers the
+			// owner as `activeEditor`, so a throw from here leaves a live
+			// editor no one holds a reference to. Tear it down before the
+			// caller loses the only handle to it.
 			this.destroy();
-			throw new Error("embedded editor did not mount");
+			throw e;
 		}
 
 		this.readOnly = options.readOnly ?? false;
@@ -272,6 +240,12 @@ export class EmbeddableMarkdownEditor {
 				EditorView.contentAttributes.of({ tabindex: "-1" }),
 				EditorView.domEventHandlers({
 					blur: () => {
+						// Focus is what made this the app's active editor, and
+						// losing it is what makes that untrue. Releasing here
+						// narrows the window in which core reads the preview
+						// instead of the user's note down to exactly the time
+						// the preview is focused.
+						releaseActiveEditor(this.app, this.owner);
 						// Deferred: let CodeMirror finish processing the focus
 						// change before we move the selection. Blur is also
 						// exactly what fires when the modal closes, and the
@@ -359,6 +333,12 @@ export class EmbeddableMarkdownEditor {
 
 	destroy(): void {
 		this.destroyed = true;
+		// First, and unconditionally: nothing else in Obsidian ever releases
+		// this slot for us, so skipping it leaves a destroyed editor standing
+		// as the application's `activeEditor` for the rest of the session.
+		// It has to precede the teardown below, which re-enters core code
+		// (the mobile toolbar's `update()`) that reads `activeEditor`.
+		releaseActiveEditor(this.app, this.owner);
 		if (this.parkTimer !== null) {
 			window.clearTimeout(this.parkTimer);
 			this.parkTimer = null;
