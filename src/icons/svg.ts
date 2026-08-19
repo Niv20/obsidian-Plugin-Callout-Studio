@@ -95,17 +95,17 @@ function cleanElement(el: Element): void {
  * Elements a picture is allowed to be made of.
  *
  * Shapes, grouping, gradients and clipping — enough to draw any icon, and
- * nothing that can reach outside the document. The notable absences are
- * deliberate: `<use>` and `<foreignObject>` both pull in content by reference,
- * `<animate>`/`<set>` can assign event-handler attributes at runtime, and a
- * nested `<svg>` re-opens all of it one level down.
+ * nothing that can reach outside the document. The absences are deliberate:
+ * `<use>`/`<foreignObject>` pull in content by reference, `<animate>`/`<set>`
+ * assign event handlers at runtime, and a nested `<svg>` re-opens all of it
+ * one level down. `<title>` is absent for appearance, not safety: browsers
+ * draw it as the OS tooltip. `<desc>` stays — it draws nothing.
  *
  * Lowercase, because SVG's own spelling is mixed (`linearGradient`, `clipPath`)
  * and every lookup here folds case first.
  */
 const USER_SVG_ELEMENTS = new Set([
 	"svg",
-	"title",
 	"desc",
 	"defs",
 	"g",
