@@ -3752,9 +3752,12 @@ input.cs-input-invalid:focus {
 .cs-qi-row {
 	display: flex;
 	align-items: center;
-	gap: 8px;
-	padding: 2px;
-	border-radius: var(--radius-s);
+	/* Tight: the buttons are 32px boxes around a ~16px glyph, so they already
+	   carry 8px of their own air on the side facing the callout. Anything more
+	   here reads as a gap twice the size it is. */
+	gap: 2px;
+	padding: 3px 4px;
+	border-radius: var(--radius-m);
 	cursor: pointer;
 }
 
@@ -3805,11 +3808,19 @@ input.cs-input-invalid:focus {
 	padding: 12px;
 }
 
-/* The keyboard's place in the list. Deliberately the same shade the mouse gets
-   on hover, so arrowing through the rows and pointing at them read as one
-   highlight rather than two competing ones. */
+/* The keyboard's place in the list, and the mouse's — one highlight, so
+   arrowing through the rows and pointing at them never compete.
+
+   A ring, never a fill. Every callout background in this plugin is a
+   translucent tint by design (there is no opaque option — see CLAUDE.md), so
+   ANYTHING painted behind a row composites into the callout and changes the
+   colour the row exists to show. The accent shade that used to sit here tinted
+   every preview purple; a neutral grey would have been a quieter version of the
+   same bug. Inset so it stays inside the row's own box and cannot be clipped by
+   the list's scroller, and the row's padding is what holds it off the callout's
+   own border instead of doubling it. */
 .cs-qi-row.is-active {
-	background: var(--background-modifier-active-hover);
+	box-shadow: inset 0 0 0 1px var(--background-modifier-border-hover);
 }
 
 /* ─── Plugin import modals (Admonition, Callout Manager) ───── */
