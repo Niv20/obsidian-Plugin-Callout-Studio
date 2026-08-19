@@ -83,10 +83,22 @@ function host(over: Partial<PluginSettings> = {}): CommandHost {
 	return { plugin: plugin as unknown as Host, added, removed, settings, triggered };
 }
 
-/** The editor factory the commands are handed; never called by these tests. */
+/**
+ * The windows the commands are handed. Both throw: no test here presses the two
+ * buttons that open one, so a call means a command opened a window it should
+ * not have.
+ */
 const noEditor = (() => {
 	throw new Error("the callout editor must not be constructed here");
 }) as never;
+
+/** Records quick-insert opens, so the one test that wants one can see it. */
+let quickInsertOpens = 0;
+
+const deps = (): Parameters<typeof registerCalloutCommands>[1] => ({
+	openEditor: noEditor,
+	openQuickInsert: () => void (quickInsertOpens += 1),
+});
 
 const idsOf = (commands: Command[]): string[] => commands.map((c) => c.id);
 
@@ -97,14 +109,14 @@ const idsOf = (commands: Command[]): string[] => commands.map((c) => c.id);
 describe("FIXED_COMMAND_IDS — no drift", () => {
 	it("registers exactly the declared ids, in the declared order", () => {
 		const h = host();
-		registerCalloutCommands(h.plugin, noEditor);
+		registerCalloutCommands(h.plugin, deps());
 
 		assert.deepStrictEqual(idsOf(h.added), [...FIXED_COMMAND_IDS]);
 	});
 
 	it("registers nothing the list does not declare", () => {
 		const h = host();
-		registerCalloutCommands(h.plugin, noEditor);
+		registerCalloutCommands(h.plugin, deps());
 
 		const declared = new Set<string>(FIXED_COMMAND_IDS);
 		for (const command of h.added) {
@@ -112,9 +124,9 @@ describe("FIXED_COMMAND_IDS — no drift", () => {
 		}
 	});
 
-	it("declares five, with no duplicates", () => {
-		assert.strictEqual(FIXED_COMMAND_IDS.length, 5);
-		assert.strictEqual(new Set(FIXED_COMMAND_IDS).size, 5);
+	it("declares six, with no duplicates", () => {
+		assert.strictEqual(FIXED_COMMAND_IDS.length, 6);
+		assert.strictEqual(new Set(FIXED_COMMAND_IDS).size, 6);
 	});
 
 	it("carries a name key for every id and an id for every name key", () => {
@@ -139,7 +151,7 @@ describe("FIXED_COMMAND_IDS — no drift", () => {
 
 	it("gives each registered command that key's translation", () => {
 		const h = host();
-		registerCalloutCommands(h.plugin, noEditor);
+		registerCalloutCommands(h.plugin, deps());
 
 		for (const command of h.added) {
 			const key = FIXED_COMMAND_NAME_KEYS[command.id as FixedCommandId];
@@ -147,21 +159,27 @@ describe("FIXED_COMMAND_IDS — no drift", () => {
 		}
 	});
 
-	it("gives the five distinct names, so the palette can tell them apart", () => {
+	it("gives them distinct names, so the palette can tell them apart", () => {
 		const h = host();
-		registerCalloutCommands(h.plugin, noEditor);
+		registerCalloutCommands(h.plugin, deps());
 
-		assert.strictEqual(new Set(h.added.map((c) => c.name)).size, 5);
+		assert.strictEqual(
+			new Set(h.added.map((c) => c.name)).size,
+			FIXED_COMMAND_IDS.length,
+		);
 	});
 
 	it("splits them into the two callback kinds Obsidian offers", () => {
-		// The two that need no editor are plain callbacks, so they stay available
-		// with no note open; the three that edit text are editorCallbacks.
+		// The three that need no editor are plain callbacks, so they stay
+		// available with no note open; the three that edit text are
+		// editorCallbacks. Quick insert is in the first group on purpose: the
+		// window browses and edits callouts too, and it resolves its own target
+		// editor rather than being handed one at the moment the palette opened.
 		const h = host();
-		registerCalloutCommands(h.plugin, noEditor);
+		registerCalloutCommands(h.plugin, deps());
 		const byId = new Map(h.added.map((c) => [c.id, c]));
 
-		for (const id of ["open-settings", "create-callout"]) {
+		for (const id of ["open-settings", "create-callout", "open-quick-insert"]) {
 			assert.strictEqual(typeof byId.get(id)?.callback, "function", id);
 			assert.strictEqual(byId.get(id)?.editorCallback, undefined, id);
 		}
@@ -172,6 +190,35 @@ describe("FIXED_COMMAND_IDS — no drift", () => {
 	});
 });
 
+describe("open-quick-insert", () => {
+	it("opens the window it was handed, and touches no editor", () => {
+		const h = host();
+		const before = quickInsertOpens;
+		registerCalloutCommands(h.plugin, deps());
+
+		const command = h.added.find((c) => c.id === "open-quick-insert");
+		assert.ok(command?.callback, "registered without a callback");
+		command.callback();
+
+		assert.strictEqual(quickInsertOpens, before + 1);
+		// The window resolves its own target editor when the user presses
+		// Insert; the command must not pre-empt that by re-triggering the
+		// autocomplete popover the way the two writing commands do.
+		assert.deepStrictEqual(h.triggered, []);
+	});
+
+	it("is registered last, after the commands that write text", () => {
+		// Order is asserted elsewhere against FIXED_COMMAND_IDS; this says why
+		// the new one goes on the end — the palette lists them in registration
+		// order, and the four that existed first should not move under a user
+		// who knows where they are.
+		assert.strictEqual(
+			FIXED_COMMAND_IDS[FIXED_COMMAND_IDS.length - 1],
+			"open-quick-insert",
+		);
+	});
+});
+
 /* -------------------------------------------------------------------------- */
 /* What the three editor commands do                                           */
 /* -------------------------------------------------------------------------- */
@@ -179,7 +226,7 @@ describe("FIXED_COMMAND_IDS — no drift", () => {
 describe("the editor commands", () => {
 	function run(id: FixedCommandId, buffer: string): { h: CommandHost; ed: FakeEditor } {
 		const h = host();
-		registerCalloutCommands(h.plugin, noEditor);
+		registerCalloutCommands(h.plugin, deps());
 		const command = h.added.find((c) => c.id === id);
 		assert.ok(command?.editorCallback);
 		const ed = editor(buffer);
@@ -233,18 +280,19 @@ describe("isFixedCommandEnabled", () => {
 describe("registerCalloutCommands — skipping the disabled", () => {
 	it("does not register a command the user turned off", () => {
 		const h = host({ disabledFixedCommands: ["callout-wrap", "open-settings"] });
-		registerCalloutCommands(h.plugin, noEditor);
+		registerCalloutCommands(h.plugin, deps());
 
 		assert.deepStrictEqual(idsOf(h.added), [
 			"create-callout",
 			"insert-empty-callout",
 			"callout-unwrap",
+			"open-quick-insert",
 		]);
 	});
 
 	it("registers nothing at all when every one is off", () => {
 		const h = host({ disabledFixedCommands: [...FIXED_COMMAND_IDS] });
-		registerCalloutCommands(h.plugin, noEditor);
+		registerCalloutCommands(h.plugin, deps());
 
 		assert.deepStrictEqual(h.added, []);
 	});
@@ -253,8 +301,8 @@ describe("registerCalloutCommands — skipping the disabled", () => {
 describe("setFixedCommandEnabled", () => {
 	it("tears a command down rather than hiding it", () => {
 		const h = host();
-		registerCalloutCommands(h.plugin, noEditor);
-		setFixedCommandEnabled(h.plugin, noEditor, "callout-wrap", false);
+		registerCalloutCommands(h.plugin, deps());
+		setFixedCommandEnabled(h.plugin, deps(), "callout-wrap", false);
 
 		assert.deepStrictEqual(h.removed, ["callout-wrap"]);
 		assert.deepStrictEqual(h.settings.disabledFixedCommands, ["callout-wrap"]);
@@ -262,10 +310,10 @@ describe("setFixedCommandEnabled", () => {
 
 	it("re-registers under the SAME id, which is what returns the hotkey", () => {
 		const h = host({ disabledFixedCommands: ["callout-wrap"] });
-		registerCalloutCommands(h.plugin, noEditor);
+		registerCalloutCommands(h.plugin, deps());
 		assert.ok(!idsOf(h.added).includes("callout-wrap"));
 
-		setFixedCommandEnabled(h.plugin, noEditor, "callout-wrap", true);
+		setFixedCommandEnabled(h.plugin, deps(), "callout-wrap", true);
 
 		assert.strictEqual(h.added.at(-1)?.id, "callout-wrap");
 		assert.strictEqual(h.added.at(-1)?.name, t("cmd.calloutWrap"));
@@ -274,12 +322,12 @@ describe("setFixedCommandEnabled", () => {
 
 	it("builds the re-registered command from the same definition as startup", () => {
 		const fresh = host();
-		registerCalloutCommands(fresh.plugin, noEditor);
+		registerCalloutCommands(fresh.plugin, deps());
 		const atStartup = fresh.added.find((c) => c.id === "callout-unwrap");
 
 		const h = host({ disabledFixedCommands: ["callout-unwrap"] });
-		registerCalloutCommands(h.plugin, noEditor);
-		setFixedCommandEnabled(h.plugin, noEditor, "callout-unwrap", true);
+		registerCalloutCommands(h.plugin, deps());
+		setFixedCommandEnabled(h.plugin, deps(), "callout-unwrap", true);
 		const reEnabled = h.added.at(-1);
 
 		assert.strictEqual(reEnabled?.name, atStartup?.name);
@@ -289,28 +337,28 @@ describe("setFixedCommandEnabled", () => {
 
 	it("does not list a command twice when disabled twice", () => {
 		const h = host();
-		registerCalloutCommands(h.plugin, noEditor);
-		setFixedCommandEnabled(h.plugin, noEditor, "callout-wrap", false);
-		setFixedCommandEnabled(h.plugin, noEditor, "callout-wrap", false);
+		registerCalloutCommands(h.plugin, deps());
+		setFixedCommandEnabled(h.plugin, deps(), "callout-wrap", false);
+		setFixedCommandEnabled(h.plugin, deps(), "callout-wrap", false);
 
 		assert.deepStrictEqual(h.settings.disabledFixedCommands, ["callout-wrap"]);
 	});
 
 	it("leaves the list alone when enabling one that was never off", () => {
 		const h = host();
-		registerCalloutCommands(h.plugin, noEditor);
-		setFixedCommandEnabled(h.plugin, noEditor, "callout-wrap", true);
+		registerCalloutCommands(h.plugin, deps());
+		setFixedCommandEnabled(h.plugin, deps(), "callout-wrap", true);
 
 		assert.deepStrictEqual(h.settings.disabledFixedCommands, []);
 	});
 
 	it("survives a disable/enable round trip with the same id and name", () => {
 		const h = host();
-		registerCalloutCommands(h.plugin, noEditor);
+		registerCalloutCommands(h.plugin, deps());
 		const before = h.added.find((c) => c.id === "callout-wrap");
 
-		setFixedCommandEnabled(h.plugin, noEditor, "callout-wrap", false);
-		setFixedCommandEnabled(h.plugin, noEditor, "callout-wrap", true);
+		setFixedCommandEnabled(h.plugin, deps(), "callout-wrap", false);
+		setFixedCommandEnabled(h.plugin, deps(), "callout-wrap", true);
 
 		assert.deepStrictEqual(h.settings.disabledFixedCommands, []);
 		assert.strictEqual(h.added.at(-1)?.id, before?.id);
@@ -325,11 +373,11 @@ describe("setFixedCommandEnabled", () => {
 describe("refreshFixedCommandNames", () => {
 	it("does nothing at all when no name changed", () => {
 		const h = host();
-		registerCalloutCommands(h.plugin, noEditor);
+		registerCalloutCommands(h.plugin, deps());
 		const registered = h.added.length;
 
-		refreshFixedCommandNames(h.plugin, noEditor);
-		refreshFixedCommandNames(h.plugin, noEditor);
+		refreshFixedCommandNames(h.plugin, deps());
+		refreshFixedCommandNames(h.plugin, deps());
 
 		assert.strictEqual(h.added.length, registered, "addCommand was called again");
 		assert.deepStrictEqual(h.removed, []);
@@ -337,7 +385,7 @@ describe("refreshFixedCommandNames", () => {
 
 	it("re-registers at the SAME id when a translation arrives", () => {
 		const h = host();
-		registerCalloutCommands(h.plugin, noEditor);
+		registerCalloutCommands(h.plugin, deps());
 		const before = h.added.length;
 
 		registerLocale("cs-test", {
@@ -346,10 +394,11 @@ describe("refreshFixedCommandNames", () => {
 			"cmd.insertEmptyCallout": "Insérer une callout",
 			"cmd.calloutWrap": "Envelopper",
 			"cmd.calloutUnwrap": "Désenvelopper",
+			"cmd.openQuickInsert": "Insertion rapide",
 		});
 		setLocale("cs-test");
 		try {
-			refreshFixedCommandNames(h.plugin, noEditor);
+			refreshFixedCommandNames(h.plugin, deps());
 
 			const again = h.added.slice(before);
 			assert.deepStrictEqual(idsOf(again), [...FIXED_COMMAND_IDS]);
@@ -364,14 +413,14 @@ describe("refreshFixedCommandNames", () => {
 
 	it("re-registers only the commands whose name really moved", () => {
 		const h = host();
-		registerCalloutCommands(h.plugin, noEditor);
+		registerCalloutCommands(h.plugin, deps());
 		const before = h.added.length;
 
 		// A partial table: everything else falls through to English unchanged.
 		registerLocale("cs-partial", { "cmd.calloutWrap": "Envelopper" });
 		setLocale("cs-partial");
 		try {
-			refreshFixedCommandNames(h.plugin, noEditor);
+			refreshFixedCommandNames(h.plugin, deps());
 			assert.deepStrictEqual(idsOf(h.added.slice(before)), ["callout-wrap"]);
 		} finally {
 			setLocale("en");
@@ -380,13 +429,13 @@ describe("refreshFixedCommandNames", () => {
 
 	it("skips a command the user turned off", () => {
 		const h = host({ disabledFixedCommands: ["callout-wrap"] });
-		registerCalloutCommands(h.plugin, noEditor);
+		registerCalloutCommands(h.plugin, deps());
 		const before = h.added.length;
 
 		registerLocale("cs-partial2", { "cmd.calloutWrap": "Envelopper encore" });
 		setLocale("cs-partial2");
 		try {
-			refreshFixedCommandNames(h.plugin, noEditor);
+			refreshFixedCommandNames(h.plugin, deps());
 			assert.strictEqual(h.added.length, before);
 		} finally {
 			setLocale("en");
@@ -397,13 +446,13 @@ describe("refreshFixedCommandNames", () => {
 		// It mutates what it is given (prefixing the id and the name in place),
 		// so handing back the same object would compound the prefixes.
 		const h = host();
-		registerCalloutCommands(h.plugin, noEditor);
+		registerCalloutCommands(h.plugin, deps());
 		const first = h.added.find((c) => c.id === "callout-wrap");
 
 		registerLocale("cs-fresh", { "cmd.calloutWrap": "Envelopper à nouveau" });
 		setLocale("cs-fresh");
 		try {
-			refreshFixedCommandNames(h.plugin, noEditor);
+			refreshFixedCommandNames(h.plugin, deps());
 			assert.notStrictEqual(h.added.at(-1), first);
 		} finally {
 			setLocale("en");
