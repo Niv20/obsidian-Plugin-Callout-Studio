@@ -615,7 +615,7 @@ describe("no new oversized files", () => {
 		// the remedy this list asks for is structurally unavailable to it. Raise
 		// it only for a settings field; anything else here still splits.
 		"src/types.ts": 803,
-		"src/editor/livepreview/widgets.ts": 794,
+		"src/editor/livepreview/widgets.ts": 793,
 		"src/reading/calloutPostProcessor.ts": 781,
 		"src/settings/iconpicker/PackPanel.ts": 736,
 		"src/utils/colorUtils.ts": 727,

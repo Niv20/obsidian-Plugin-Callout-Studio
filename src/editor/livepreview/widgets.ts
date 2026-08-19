@@ -724,7 +724,6 @@ export class HeadingFoldArrowWidget extends WidgetType {
 		if (this.entrance) arrow.classList.add(CSS_ANIM_IN);
 		setIcon(arrow, "chevron-down");
 		arrow.setAttribute("aria-label", this.label);
-		arrow.setAttribute("title", this.label);
 		// mousedown takes the event over so the caret never lands on the line
 		// (which would reveal the raw heading syntax) — but it does NOT fold.
 		// click does, exactly as Obsidian's own pre-heading `cm-fold-indicator`

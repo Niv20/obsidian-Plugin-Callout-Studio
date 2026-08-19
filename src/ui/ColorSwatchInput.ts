@@ -51,11 +51,8 @@ export function setContrastWarning(
 ): void {
 	warnEl.toggleClass("is-visible", visible);
 	if (visible) {
-		const label = t("editor.contrastWarning");
-		warnEl.setAttribute("aria-label", label);
-		warnEl.setAttribute("title", label);
+		warnEl.setAttribute("aria-label", t("editor.contrastWarning"));
 	} else {
 		warnEl.removeAttribute("aria-label");
-		warnEl.removeAttribute("title");
 	}
 }

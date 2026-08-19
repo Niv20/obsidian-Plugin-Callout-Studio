@@ -251,7 +251,7 @@ export function renderCustomPalettesSection(
 			row.createSpan({
 				cls: "cs-palette-list-name",
 				text: palette.name,
-				attr: { title: palette.name },
+				attr: { "aria-label": palette.name },
 			});
 
 			const buttonsEl = row.createDiv({
