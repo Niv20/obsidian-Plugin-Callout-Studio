@@ -9,6 +9,7 @@ export const vi: Record<string, string> = {
 	"cmd.customInsertBlock": "Chèn callout {{name}}",
 	"cmd.customInsertHeading": "Chèn tiêu đề callout H{{level}} {{name}}",
 	"cmd.customInsertInline": "Chèn callout nội dòng {{name}}",
+	"cmd.openQuickInsert": "Chèn nhanh callout khối",
 
 	"autocomplete.createNew": 'Tạo callout mới: "{{name}}"',
 
@@ -667,6 +668,20 @@ export const vi: Record<string, string> = {
 	"vault.resetAllInUse":
 		"⚠ {{count}} tham chiếu callout trong {{files}} tệp đang sử dụng các loại callout tùy chỉnh sẽ bị xóa.",
 
+	"quickInsert.title": "Chèn nhanh callout khối",
+	"quickInsert.desc": "Chọn một callout để chèn vào vị trí con trỏ. Chỉ callout dạng khối.",
+	"quickInsert.searchPlaceholder": "Tìm kiếm callout",
+	"quickInsert.sourceAria": "Lọc theo nguồn callout",
+	"quickInsert.sourceAll": "Tất cả",
+	"quickInsert.sourceBuiltIn": "Tích hợp",
+	"quickInsert.sourceUser": "Callout của tôi",
+	"quickInsert.editAria": "Chỉnh sửa {{name}}",
+	"quickInsert.insertAria": "Chèn {{name}} dưới dạng callout khối",
+	"quickInsert.noResults": "Không tìm thấy callout nào",
+	"quickInsert.noUserCallouts": "Bạn chưa tạo callout nào.",
+	"quickInsert.noEditorHint": "Không có ghi chú nào đang mở ở chế độ chỉnh sửa, nên không thể chèn gì cả.",
+	"quickInsert.noEditor": "Mở một ghi chú ở chế độ chỉnh sửa để chèn callout.",
+
 	"vaultStats.title": "Thống kê callout",
 	"vaultStats.totalCallouts": "Tổng callouts",
 	"vaultStats.typesFound": "Loại tìm thấy",
@@ -685,6 +700,13 @@ export const vi: Record<string, string> = {
 	"vaultStats.sourceTheme": "Đoạn CSS",
 	"vaultStats.sourceAlias": "Bí danh của {{id}}",
 	"vaultStats.sourceUnknown": "Không rõ",
+	"vaultStats.byRole": "Được viết dưới dạng",
+	"vaultStats.roleBlock": "Khối",
+	"vaultStats.roleHeading": "Tiêu đề",
+	"vaultStats.roleInline": "Nội dòng",
+	"vaultStats.defineUndefined": "Xác định {{count}} còn thiếu",
+	"vaultStats.defineRunning": "Đang quét",
+	"vaultStats.defineDone": "Đã thêm {{count}} loại callout.",
 	"vaultStats.close": "Đóng",
 
 	"import.title": "Vấn đề nhập",

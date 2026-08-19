@@ -9,6 +9,7 @@ export const uk: Record<string, string> = {
 	"cmd.customInsertBlock": "Вставити callout {{name}}",
 	"cmd.customInsertHeading": "Вставити заголовок H{{level}} callout {{name}}",
 	"cmd.customInsertInline": "Вставити вбудований callout {{name}}",
+	"cmd.openQuickInsert": "Швидка вставка блокового callout",
 
 	"autocomplete.createNew": 'Створити новий callout: "{{name}}"',
 
@@ -672,6 +673,20 @@ export const uk: Record<string, string> = {
 	"vault.resetAllInUse":
 		"⚠ {{count}} посилань на callout у {{files}} файлі(ах) використовують користувацькі типи callout, які будуть видалені.",
 
+	"quickInsert.title": "Швидка вставка блокового callout",
+	"quickInsert.desc": "Виберіть callout для вставки в позицію курсора. Лише блокові callout.",
+	"quickInsert.searchPlaceholder": "Пошук callout",
+	"quickInsert.sourceAria": "Фільтрувати за джерелом callout",
+	"quickInsert.sourceAll": "Усі",
+	"quickInsert.sourceBuiltIn": "Вбудований",
+	"quickInsert.sourceUser": "Мої callout",
+	"quickInsert.editAria": "Редагувати {{name}}",
+	"quickInsert.insertAria": "Вставити {{name}} як блоковий callout",
+	"quickInsert.noResults": "Callout не знайдено",
+	"quickInsert.noUserCallouts": "Ви ще не створили жодного callout.",
+	"quickInsert.noEditorHint": "Жодна нотатка не відкрита в режимі редагування, тому нічого вставити не можна.",
+	"quickInsert.noEditor": "Відкрийте нотатку в режимі редагування, щоб вставити callout.",
+
 	"vaultStats.title": "Статистика callout",
 	"vaultStats.totalCallouts": "Всього callout",
 	"vaultStats.typesFound": "Знайдено типів",
@@ -690,6 +705,13 @@ export const uk: Record<string, string> = {
 	"vaultStats.sourceTheme": "Сніппет CSS",
 	"vaultStats.sourceAlias": "Псевдонім {{id}}",
 	"vaultStats.sourceUnknown": "Невідомо",
+	"vaultStats.byRole": "Записано як",
+	"vaultStats.roleBlock": "Блок",
+	"vaultStats.roleHeading": "Заголовок",
+	"vaultStats.roleInline": "Вбудований",
+	"vaultStats.defineUndefined": "Визначити {{count}} відсутніх",
+	"vaultStats.defineRunning": "Сканування",
+	"vaultStats.defineDone": "Додано {{count}} типів callout.",
 	"vaultStats.close": "Закрити",
 
 	"import.title": "Проблеми імпорту",

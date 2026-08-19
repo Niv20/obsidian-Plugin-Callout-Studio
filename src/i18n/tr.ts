@@ -9,6 +9,7 @@ export const tr: Record<string, string> = {
 	"cmd.customInsertBlock": "{{name}} callout'u ekle",
 	"cmd.customInsertHeading": "H{{level}} {{name}} başlık callout'u ekle",
 	"cmd.customInsertInline": "{{name}} satır içi callout'u ekle",
+	"cmd.openQuickInsert": "Blok callout'u hızlı ekle",
 
 	"autocomplete.createNew": 'Yeni callout oluştur: "{{name}}"',
 
@@ -670,6 +671,20 @@ export const tr: Record<string, string> = {
 	"vault.resetAllInUse":
 		"⚠ {{files}} dosyadaki {{count}} callout referansı silinecek özel callout türleri kullanıyor.",
 
+	"quickInsert.title": "Blok callout'u hızlı ekle",
+	"quickInsert.desc": "İmleç konumuna eklemek için bir callout seçin. Yalnızca blok callout'lar.",
+	"quickInsert.searchPlaceholder": "Callout ara",
+	"quickInsert.sourceAria": "Callout kaynağına göre filtrele",
+	"quickInsert.sourceAll": "Tümü",
+	"quickInsert.sourceBuiltIn": "Yerleşik",
+	"quickInsert.sourceUser": "Callout'larım",
+	"quickInsert.editAria": "{{name}} düzenle",
+	"quickInsert.insertAria": "{{name}} öğesini blok callout olarak ekle",
+	"quickInsert.noResults": "Callout bulunamadı",
+	"quickInsert.noUserCallouts": "Henüz herhangi bir callout oluşturmadınız.",
+	"quickInsert.noEditorHint": "Düzenleme modunda açık bir not yok, bu yüzden hiçbir şey eklenemez.",
+	"quickInsert.noEditor": "Bir callout eklemek için bir notu düzenleme modunda açın.",
+
 	"vaultStats.title": "Callout istatistikleri",
 	"vaultStats.totalCallouts": "Toplam callout",
 	"vaultStats.typesFound": "Bulunan türler",
@@ -688,6 +703,13 @@ export const tr: Record<string, string> = {
 	"vaultStats.sourceTheme": "CSS snippet",
 	"vaultStats.sourceAlias": "{{id}}'nin takma adı",
 	"vaultStats.sourceUnknown": "Bilinmiyor",
+	"vaultStats.byRole": "Şu şekilde yazıldı",
+	"vaultStats.roleBlock": "Blok",
+	"vaultStats.roleHeading": "Başlık",
+	"vaultStats.roleInline": "Satır içi",
+	"vaultStats.defineUndefined": "{{count}} eksik olanı tanımla",
+	"vaultStats.defineRunning": "Taranıyor",
+	"vaultStats.defineDone": "{{count}} callout türü eklendi.",
 	"vaultStats.close": "Kapat",
 
 	"import.title": "İçe aktarma sorunları",

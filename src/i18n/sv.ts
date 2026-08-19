@@ -9,6 +9,7 @@ export const sv: Record<string, string> = {
 	"cmd.customInsertBlock": "Infoga callout {{name}}",
 	"cmd.customInsertHeading": "Infoga H{{level}}-rubrikcallout {{name}}",
 	"cmd.customInsertInline": "Infoga infogad callout {{name}}",
+	"cmd.openQuickInsert": "Snabbinfoga block-callout",
 
 	"autocomplete.createNew": 'Skapa ny callout: "{{name}}"',
 
@@ -664,6 +665,20 @@ export const sv: Record<string, string> = {
 	"vault.resetAllInUse":
 		"⚠ {{count}} callout-referens(er) i {{files}} fil(er) använder anpassade callout-typer som tas bort.",
 
+	"quickInsert.title": "Snabbinfoga block-callout",
+	"quickInsert.desc": "Välj en callout att infoga vid markören. Endast block-callouts.",
+	"quickInsert.searchPlaceholder": "Sök callouts",
+	"quickInsert.sourceAria": "Filtrera efter callout-källa",
+	"quickInsert.sourceAll": "Alla",
+	"quickInsert.sourceBuiltIn": "Inbyggd",
+	"quickInsert.sourceUser": "Mina callouts",
+	"quickInsert.editAria": "Redigera {{name}}",
+	"quickInsert.insertAria": "Infoga {{name}} som block-callout",
+	"quickInsert.noResults": "Inga callouts hittades",
+	"quickInsert.noUserCallouts": "Du har inte skapat några callouts än.",
+	"quickInsert.noEditorHint": "Ingen anteckning är öppen i redigeringsläge, så inget kan infogas.",
+	"quickInsert.noEditor": "Öppna en anteckning i redigeringsläge för att infoga en callout.",
+
 	"vaultStats.title": "Callout-statistik",
 	"vaultStats.totalCallouts": "Totalt callouts",
 	"vaultStats.typesFound": "Hittade typer",
@@ -682,6 +697,13 @@ export const sv: Record<string, string> = {
 	"vaultStats.sourceTheme": "CSS-kodavsnitt",
 	"vaultStats.sourceAlias": "Alias för {{id}}",
 	"vaultStats.sourceUnknown": "Okänd",
+	"vaultStats.byRole": "Skriven som",
+	"vaultStats.roleBlock": "Block",
+	"vaultStats.roleHeading": "Rubrik",
+	"vaultStats.roleInline": "Infogad",
+	"vaultStats.defineUndefined": "Definiera {{count}} saknade",
+	"vaultStats.defineRunning": "Skannar",
+	"vaultStats.defineDone": "Lade till {{count}} callout-typer.",
 	"vaultStats.close": "Stäng",
 
 	"import.title": "Importproblem",

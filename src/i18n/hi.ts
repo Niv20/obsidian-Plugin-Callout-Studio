@@ -9,6 +9,7 @@ export const hi: Record<string, string> = {
 	"cmd.customInsertBlock": "{{name}} callout डालें",
 	"cmd.customInsertHeading": "H{{level}} {{name}} हेडिंग callout डालें",
 	"cmd.customInsertInline": "{{name}} इनलाइन callout डालें",
+	"cmd.openQuickInsert": "ब्लॉक callout जल्दी डालें",
 
 	"autocomplete.createNew": 'नया callout बनाएँ: "{{name}}"',
 
@@ -667,6 +668,20 @@ export const hi: Record<string, string> = {
 	"vault.resetAllInUse":
 		"⚠ {{files}} फ़ाइल(ों) में {{count}} callout संदर्भ कस्टम callout प्रकार उपयोग कर रहे हैं जो हटाए जाएँगे।",
 
+	"quickInsert.title": "ब्लॉक callout जल्दी डालें",
+	"quickInsert.desc": "कर्सर पर डालने के लिए एक callout चुनें। केवल ब्लॉक callout।",
+	"quickInsert.searchPlaceholder": "callout खोजें",
+	"quickInsert.sourceAria": "callout स्रोत के अनुसार फ़िल्टर करें",
+	"quickInsert.sourceAll": "सभी",
+	"quickInsert.sourceBuiltIn": "बिल्ट-इन",
+	"quickInsert.sourceUser": "मेरे callout",
+	"quickInsert.editAria": "{{name}} संपादित करें",
+	"quickInsert.insertAria": "{{name}} को ब्लॉक callout के रूप में डालें",
+	"quickInsert.noResults": "कोई callout नहीं मिला",
+	"quickInsert.noUserCallouts": "आपने अभी तक कोई callout नहीं बनाया है।",
+	"quickInsert.noEditorHint": "संपादन मोड में कोई नोट खुला नहीं है, इसलिए कुछ भी नहीं डाला जा सकता।",
+	"quickInsert.noEditor": "callout डालने के लिए एक नोट संपादन मोड में खोलें।",
+
 	"vaultStats.title": "Callout आँकड़े",
 	"vaultStats.totalCallouts": "कुल callouts",
 	"vaultStats.typesFound": "मिले प्रकार",
@@ -685,6 +700,13 @@ export const hi: Record<string, string> = {
 	"vaultStats.sourceTheme": "CSS स्निपेट",
 	"vaultStats.sourceAlias": "{{id}} का उपनाम",
 	"vaultStats.sourceUnknown": "अज्ञात",
+	"vaultStats.byRole": "इस रूप में लिखा गया",
+	"vaultStats.roleBlock": "ब्लॉक",
+	"vaultStats.roleHeading": "शीर्षक",
+	"vaultStats.roleInline": "इनलाइन",
+	"vaultStats.defineUndefined": "{{count}} गुम को परिभाषित करें",
+	"vaultStats.defineRunning": "स्कैन हो रहा है",
+	"vaultStats.defineDone": "{{count}} callout प्रकार जोड़े गए।",
 	"vaultStats.close": "बंद करें",
 
 	"import.title": "आयात समस्याएँ",

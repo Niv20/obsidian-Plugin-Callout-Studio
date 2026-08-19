@@ -9,6 +9,7 @@ export const fa: Record<string, string> = {
 	"cmd.customInsertBlock": "درج callout {{name}}",
 	"cmd.customInsertHeading": "درج سرتیتر H{{level}} از نوع callout {{name}}",
 	"cmd.customInsertInline": "درج callout درون‌خطی {{name}}",
+	"cmd.openQuickInsert": "درج سریع callout بلوکی",
 
 	"autocomplete.createNew": 'ایجاد callout جدید: "{{name}}"',
 
@@ -670,6 +671,20 @@ export const fa: Record<string, string> = {
 	"vault.resetAllInUse":
 		"⚠ {{count}} مرجع callout در {{files}} فایل از انواع callout سفارشی استفاده می‌کنند که حذف خواهند شد.",
 
+	"quickInsert.title": "درج سریع callout بلوکی",
+	"quickInsert.desc": "یک callout برای درج در مکان‌نما انتخاب کنید. فقط callout‌های بلوکی.",
+	"quickInsert.searchPlaceholder": "جستجوی callout‌ها",
+	"quickInsert.sourceAria": "فیلتر بر اساس منبع callout",
+	"quickInsert.sourceAll": "همه",
+	"quickInsert.sourceBuiltIn": "داخلی",
+	"quickInsert.sourceUser": "callout‌های من",
+	"quickInsert.editAria": "ویرایش {{name}}",
+	"quickInsert.insertAria": "درج {{name}} به‌عنوان callout بلوکی",
+	"quickInsert.noResults": "هیچ callout‌ای یافت نشد",
+	"quickInsert.noUserCallouts": "هنوز هیچ callout‌ای نساخته‌اید.",
+	"quickInsert.noEditorHint": "هیچ یادداشتی در حالت ویرایش باز نیست، بنابراین چیزی قابل درج نیست.",
+	"quickInsert.noEditor": "برای درج callout یک یادداشت را در حالت ویرایش باز کنید.",
+
 	"vaultStats.title": "آمار callout",
 	"vaultStats.totalCallouts": "مجموع callout‌ها",
 	"vaultStats.typesFound": "انواع یافت‌شده",
@@ -688,6 +703,13 @@ export const fa: Record<string, string> = {
 	"vaultStats.sourceTheme": "قطعه CSS",
 	"vaultStats.sourceAlias": "نام مستعار {{id}}",
 	"vaultStats.sourceUnknown": "ناشناخته",
+	"vaultStats.byRole": "نوشته‌شده به‌صورت",
+	"vaultStats.roleBlock": "بلوکی",
+	"vaultStats.roleHeading": "عنوان",
+	"vaultStats.roleInline": "درون‌خطی",
+	"vaultStats.defineUndefined": "تعریف {{count}} مورد گمشده",
+	"vaultStats.defineRunning": "در حال اسکن",
+	"vaultStats.defineDone": "{{count}} نوع callout اضافه شد.",
 	"vaultStats.close": "بستن",
 
 	"import.title": "مشکلات وارد کردن",

@@ -9,6 +9,7 @@ export const pl: Record<string, string> = {
 	"cmd.customInsertBlock": "Wstaw callout {{name}}",
 	"cmd.customInsertHeading": "Wstaw nagłówek H{{level}} callout {{name}}",
 	"cmd.customInsertInline": "Wstaw śródtekstowy callout {{name}}",
+	"cmd.openQuickInsert": "Szybkie wstawianie callout blokowego",
 
 	"autocomplete.createNew": 'Utwórz nowy callout: "{{name}}"',
 
@@ -668,6 +669,20 @@ export const pl: Record<string, string> = {
 	"vault.resetAllInUse":
 		"⚠ {{count}} odwołanie(ń) callout w {{files}} pliku(ach) używa niestandardowych typów callout, które zostaną usunięte.",
 
+	"quickInsert.title": "Szybkie wstawianie callout blokowego",
+	"quickInsert.desc": "Wybierz callout do wstawienia w pozycji kursora. Tylko callout blokowe.",
+	"quickInsert.searchPlaceholder": "Szukaj callout",
+	"quickInsert.sourceAria": "Filtruj według źródła callout",
+	"quickInsert.sourceAll": "Wszystkie",
+	"quickInsert.sourceBuiltIn": "Wbudowany",
+	"quickInsert.sourceUser": "Moje callout",
+	"quickInsert.editAria": "Edytuj {{name}}",
+	"quickInsert.insertAria": "Wstaw {{name}} jako callout blokowy",
+	"quickInsert.noResults": "Nie znaleziono żadnych callout",
+	"quickInsert.noUserCallouts": "Nie utworzono jeszcze żadnego callout.",
+	"quickInsert.noEditorHint": "Żadna notatka nie jest otwarta w trybie edycji, więc nic nie można wstawić.",
+	"quickInsert.noEditor": "Otwórz notatkę w trybie edycji, aby wstawić callout.",
+
 	"vaultStats.title": "Statystyki callout",
 	"vaultStats.totalCallouts": "Łączna liczba callouts",
 	"vaultStats.typesFound": "Znalezione typy",
@@ -686,6 +701,13 @@ export const pl: Record<string, string> = {
 	"vaultStats.sourceTheme": "Fragment CSS",
 	"vaultStats.sourceAlias": "Alias {{id}}",
 	"vaultStats.sourceUnknown": "Nieznany",
+	"vaultStats.byRole": "Zapisano jako",
+	"vaultStats.roleBlock": "Blok",
+	"vaultStats.roleHeading": "Nagłówek",
+	"vaultStats.roleInline": "Śródtekstowy",
+	"vaultStats.defineUndefined": "Zdefiniuj {{count}} brakujących",
+	"vaultStats.defineRunning": "Skanowanie",
+	"vaultStats.defineDone": "Dodano {{count}} typów callout.",
 	"vaultStats.close": "Zamknij",
 
 	"import.title": "Problemy z importem",

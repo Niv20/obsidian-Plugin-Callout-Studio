@@ -9,6 +9,7 @@ export const ko: Record<string, string> = {
 	"cmd.customInsertBlock": "{{name}} callout 삽입",
 	"cmd.customInsertHeading": "H{{level}} {{name}} 제목 callout 삽입",
 	"cmd.customInsertInline": "{{name}} 인라인 callout 삽입",
+	"cmd.openQuickInsert": "블록 callout 빠른 삽입",
 
 	"autocomplete.createNew": '새 callout 만들기: "{{name}}"',
 
@@ -666,6 +667,20 @@ export const ko: Record<string, string> = {
 	"vault.resetAllInUse":
 		"⚠ {{files}}개의 파일에서 {{count}}개의 callout 참조가 삭제될 사용자 정의 callout 유형을 사용합니다.",
 
+	"quickInsert.title": "블록 callout 빠른 삽입",
+	"quickInsert.desc": "커서 위치에 삽입할 callout을 선택하세요. 블록 callout만 해당됩니다.",
+	"quickInsert.searchPlaceholder": "callout 검색",
+	"quickInsert.sourceAria": "callout 출처로 필터링",
+	"quickInsert.sourceAll": "전체",
+	"quickInsert.sourceBuiltIn": "기본 제공",
+	"quickInsert.sourceUser": "내 callout",
+	"quickInsert.editAria": "{{name}} 편집",
+	"quickInsert.insertAria": "{{name}}을(를) 블록 callout으로 삽입",
+	"quickInsert.noResults": "callout을 찾을 수 없습니다",
+	"quickInsert.noUserCallouts": "아직 만든 callout이 없습니다.",
+	"quickInsert.noEditorHint": "편집 모드로 열린 노트가 없어 아무것도 삽입할 수 없습니다.",
+	"quickInsert.noEditor": "callout을 삽입하려면 노트를 편집 모드로 여세요.",
+
 	"vaultStats.title": "Callout 통계",
 	"vaultStats.totalCallouts": "총 callout",
 	"vaultStats.typesFound": "발견된 유형",
@@ -684,6 +699,13 @@ export const ko: Record<string, string> = {
 	"vaultStats.sourceTheme": "CSS 스니펫",
 	"vaultStats.sourceAlias": "{{id}}의 별칭",
 	"vaultStats.sourceUnknown": "알 수 없음",
+	"vaultStats.byRole": "작성 형식",
+	"vaultStats.roleBlock": "블록",
+	"vaultStats.roleHeading": "제목",
+	"vaultStats.roleInline": "인라인",
+	"vaultStats.defineUndefined": "누락된 {{count}}개 정의",
+	"vaultStats.defineRunning": "스캔 중",
+	"vaultStats.defineDone": "callout 유형 {{count}}개를 추가했습니다.",
 	"vaultStats.close": "닫기",
 
 	"import.title": "가져오기 문제",

@@ -9,6 +9,7 @@ export const ja: Record<string, string> = {
 	"cmd.customInsertBlock": "{{name}}calloutを挿入",
 	"cmd.customInsertHeading": "H{{level}} {{name}}見出しcalloutを挿入",
 	"cmd.customInsertInline": "{{name}}インラインcalloutを挿入",
+	"cmd.openQuickInsert": "ブロックcalloutをクイック挿入",
 
 	"autocomplete.createNew": '新しいcalloutを作成: "{{name}}"',
 
@@ -669,6 +670,20 @@ export const ja: Record<string, string> = {
 	"vault.resetAllInUse":
 		"⚠ {{files}}個のファイルの{{count}}件のcallout参照が削除されるカスタムcalloutタイプを使用しています。",
 
+	"quickInsert.title": "ブロックcalloutをクイック挿入",
+	"quickInsert.desc": "カーソル位置に挿入するcalloutを選択します。ブロックcalloutのみです。",
+	"quickInsert.searchPlaceholder": "calloutを検索",
+	"quickInsert.sourceAria": "calloutのソースで絞り込み",
+	"quickInsert.sourceAll": "すべて",
+	"quickInsert.sourceBuiltIn": "組み込み",
+	"quickInsert.sourceUser": "自分のcallout",
+	"quickInsert.editAria": "{{name}}を編集",
+	"quickInsert.insertAria": "{{name}}をブロックcalloutとして挿入",
+	"quickInsert.noResults": "calloutが見つかりません",
+	"quickInsert.noUserCallouts": "まだcalloutを作成していません。",
+	"quickInsert.noEditorHint": "編集モードで開いているノートがないため、何も挿入できません。",
+	"quickInsert.noEditor": "calloutを挿入するには、ノートを編集モードで開いてください。",
+
 	"vaultStats.title": "callout統計",
 	"vaultStats.totalCallouts": "callout総数",
 	"vaultStats.typesFound": "見つかったタイプ",
@@ -687,6 +702,13 @@ export const ja: Record<string, string> = {
 	"vaultStats.sourceTheme": "CSSスニペット",
 	"vaultStats.sourceAlias": "{{id}}のエイリアス",
 	"vaultStats.sourceUnknown": "不明",
+	"vaultStats.byRole": "記述形式",
+	"vaultStats.roleBlock": "ブロック",
+	"vaultStats.roleHeading": "見出し",
+	"vaultStats.roleInline": "インライン",
+	"vaultStats.defineUndefined": "未定義の{{count}}件を定義",
+	"vaultStats.defineRunning": "スキャン中",
+	"vaultStats.defineDone": "{{count}}件のcalloutタイプを追加しました。",
 	"vaultStats.close": "閉じる",
 
 	"import.title": "インポートの問題",

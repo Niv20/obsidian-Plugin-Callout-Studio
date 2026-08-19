@@ -9,6 +9,7 @@ export const id: Record<string, string> = {
 	"cmd.customInsertBlock": "Sisipkan callout {{name}}",
 	"cmd.customInsertHeading": "Sisipkan heading callout {{name}} H{{level}}",
 	"cmd.customInsertInline": "Sisipkan inline callout {{name}}",
+	"cmd.openQuickInsert": "Sisipan cepat callout blok",
 
 	"autocomplete.createNew": 'Buat callout baru: "{{name}}"',
 
@@ -669,6 +670,20 @@ export const id: Record<string, string> = {
 	"vault.resetAllInUse":
 		"⚠ {{count}} referensi callout di {{files}} file menggunakan tipe callout kustom yang akan dihapus.",
 
+	"quickInsert.title": "Sisipan cepat callout blok",
+	"quickInsert.desc": "Pilih callout untuk disisipkan di posisi kursor. Hanya callout blok.",
+	"quickInsert.searchPlaceholder": "Cari callout",
+	"quickInsert.sourceAria": "Filter menurut sumber callout",
+	"quickInsert.sourceAll": "Semua",
+	"quickInsert.sourceBuiltIn": "Bawaan",
+	"quickInsert.sourceUser": "Callout saya",
+	"quickInsert.editAria": "Edit {{name}}",
+	"quickInsert.insertAria": "Sisipkan {{name}} sebagai callout blok",
+	"quickInsert.noResults": "Tidak ada callout yang ditemukan",
+	"quickInsert.noUserCallouts": "Anda belum membuat callout apa pun.",
+	"quickInsert.noEditorHint": "Tidak ada catatan yang terbuka dalam mode edit, jadi tidak ada yang dapat disisipkan.",
+	"quickInsert.noEditor": "Buka catatan dalam mode edit untuk menyisipkan callout.",
+
 	"vaultStats.title": "Statistik callout",
 	"vaultStats.totalCallouts": "Total callout",
 	"vaultStats.typesFound": "Tipe yang ditemukan",
@@ -687,6 +702,13 @@ export const id: Record<string, string> = {
 	"vaultStats.sourceTheme": "Cuplikan CSS",
 	"vaultStats.sourceAlias": "Alias dari {{id}}",
 	"vaultStats.sourceUnknown": "Tidak diketahui",
+	"vaultStats.byRole": "Ditulis sebagai",
+	"vaultStats.roleBlock": "Blok",
+	"vaultStats.roleHeading": "Judul",
+	"vaultStats.roleInline": "Inline",
+	"vaultStats.defineUndefined": "Definisikan {{count}} yang hilang",
+	"vaultStats.defineRunning": "Memindai",
+	"vaultStats.defineDone": "{{count}} jenis callout ditambahkan.",
 	"vaultStats.close": "Tutup",
 
 	"import.title": "Masalah impor",

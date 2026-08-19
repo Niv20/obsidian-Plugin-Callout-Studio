@@ -9,6 +9,7 @@ export const th: Record<string, string> = {
 	"cmd.customInsertBlock": "แทรก callout {{name}}",
 	"cmd.customInsertHeading": "แทรกหัวข้อ callout H{{level}} {{name}}",
 	"cmd.customInsertInline": "แทรก callout แบบอินไลน์ {{name}}",
+	"cmd.openQuickInsert": "แทรก callout แบบบล็อกอย่างรวดเร็ว",
 
 	"autocomplete.createNew": 'สร้าง callout ใหม่: "{{name}}"',
 
@@ -661,6 +662,20 @@ export const th: Record<string, string> = {
 	"vault.resetAllInUse":
 		"⚠ {{count}} การอ้างอิง callout ใน {{files}} ไฟล์ใช้ประเภท callout แบบกำหนดเองที่จะถูกลบ",
 
+	"quickInsert.title": "แทรก callout แบบบล็อกอย่างรวดเร็ว",
+	"quickInsert.desc": "เลือก callout เพื่อแทรกที่ตำแหน่งเคอร์เซอร์ เฉพาะ callout แบบบล็อกเท่านั้น",
+	"quickInsert.searchPlaceholder": "ค้นหา callout",
+	"quickInsert.sourceAria": "กรองตามแหล่งที่มาของ callout",
+	"quickInsert.sourceAll": "ทั้งหมด",
+	"quickInsert.sourceBuiltIn": "ในตัว",
+	"quickInsert.sourceUser": "callout ของฉัน",
+	"quickInsert.editAria": "แก้ไข {{name}}",
+	"quickInsert.insertAria": "แทรก {{name}} เป็น callout แบบบล็อก",
+	"quickInsert.noResults": "ไม่พบ callout",
+	"quickInsert.noUserCallouts": "คุณยังไม่ได้สร้าง callout ใดๆ",
+	"quickInsert.noEditorHint": "ไม่มีบันทึกที่เปิดอยู่ในโหมดแก้ไข จึงไม่สามารถแทรกอะไรได้",
+	"quickInsert.noEditor": "เปิดบันทึกในโหมดแก้ไขเพื่อแทรก callout",
+
 	"vaultStats.title": "สถิติ callout",
 	"vaultStats.totalCallouts": "callout ทั้งหมด",
 	"vaultStats.typesFound": "ประเภทที่พบ",
@@ -679,6 +694,13 @@ export const th: Record<string, string> = {
 	"vaultStats.sourceTheme": "CSS snippet",
 	"vaultStats.sourceAlias": "นามแฝงของ {{id}}",
 	"vaultStats.sourceUnknown": "ไม่รู้จัก",
+	"vaultStats.byRole": "เขียนเป็น",
+	"vaultStats.roleBlock": "บล็อก",
+	"vaultStats.roleHeading": "หัวเรื่อง",
+	"vaultStats.roleInline": "อินไลน์",
+	"vaultStats.defineUndefined": "กำหนด {{count}} รายการที่ขาดหายไป",
+	"vaultStats.defineRunning": "กำลังสแกน",
+	"vaultStats.defineDone": "เพิ่มประเภท callout แล้ว {{count}} รายการ",
 	"vaultStats.close": "ปิด",
 
 	"import.title": "ปัญหาการนำเข้า",
