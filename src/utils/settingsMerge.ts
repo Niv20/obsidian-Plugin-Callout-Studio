@@ -37,6 +37,7 @@ import type {
 import { DEFAULT_CONTEXT_MENU_ITEMS, DEFAULT_SETTINGS } from "../constants";
 import { sanitizeCustomPalettes } from "./colorPalettes";
 import { mergeGlobalStyle } from "./globalStyleMerge";
+import { isCalloutSourceFilter } from "./calloutSearch";
 import { clampGlobalStyle, localePreference } from "./settingsGuards";
 import { sanitizeUserImages } from "./userImages";
 import { sanitizeCustomCommands } from "./customCommands";
@@ -262,6 +263,12 @@ export function mergeSavedSettings(
 		customPalettes: sanitizeCustomPalettes(savedSettings.customPalettes),
 		userImages: sanitizeUserImages(savedSettings.userImages),
 		customCommands: sanitizeCustomCommands(savedSettings.customCommands),
+		// An unknown value here is not corruption to report — it is a filter
+		// this build no longer has (or never had). Falling back to "all" shows
+		// every callout, which is the one state that can never look broken.
+		quickInsertSource: isCalloutSourceFilter(savedSettings.quickInsertSource)
+			? savedSettings.quickInsertSource
+			: DEFAULT_SETTINGS.quickInsertSource,
 		disabledFixedCommands: Array.isArray(savedSettings.disabledFixedCommands)
 			? [
 					...new Set(

@@ -747,6 +747,15 @@ export interface PluginSettings {
 	 * membership against.
 	 */
 	disabledFixedCommands: string[];
+	/**
+	 * Which callouts the quick-insert window lists: all, built-in, or the user's
+	 * own. A standing preference, so it is remembered between openings — unlike
+	 * the search box, which is cleared on every open because a query is about one
+	 * insertion. A plain `string` for the same reason `disabledFixedCommands` is:
+	 * the union and its guard live in `utils/calloutSearch.ts`, keeping this a
+	 * leaf module.
+	 */
+	quickInsertSource: string;
 }
 
 export interface PluginData {

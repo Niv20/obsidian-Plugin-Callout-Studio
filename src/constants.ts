@@ -220,4 +220,5 @@ export const DEFAULT_SETTINGS: PluginSettings = {
 	userImages: [],
 	customCommands: [],
 	disabledFixedCommands: [],
+	quickInsertSource: "all",
 };

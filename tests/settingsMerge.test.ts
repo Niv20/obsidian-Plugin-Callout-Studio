@@ -75,6 +75,7 @@ const FIELD_KIND: Record<keyof PluginSettings, "value" | "list"> = {
 	userImages: "list",
 	customCommands: "list",
 	disabledFixedCommands: "list",
+	quickInsertSource: "value",
 };
 
 const LIST_FIELDS = Object.entries(FIELD_KIND)
@@ -172,6 +173,7 @@ const EXPECTED_LEAVES: string[] = [
 	"inlineCallouts.allowContent",
 	"inlineCallouts.enabled",
 	"language",
+	"quickInsertSource",
 	"welcomeSeen",
 ];
 
@@ -183,6 +185,18 @@ const EXPECTED_LEAVES: string[] = [
  * because the feature it switched off no longer exists to switch off.
  */
 const FORCED = new Set(["headingCallouts.refCleanTitles", "headingCallouts.refShowIcon"]);
+
+/**
+ * Leaves whose accepted values are an enum rather than free text, so the
+ * generic `twist` below cannot produce a *different but still valid* one — it
+ * would hand the merge junk and read the rejection as data loss. Each names one
+ * real alternative; that the junk case falls back is tested by hand further
+ * down. Listed only where the merge actually validates: most enum-ish leaves
+ * (`iconSources.materialStyleDefault`) are stored as written.
+ */
+const ENUM_LEAVES: Record<string, Scalar> = {
+	quickInsertSource: "user",
+};
 
 /** A value definitely different from `value`, of the same type. */
 function twist(value: Scalar): Scalar {
@@ -280,7 +294,7 @@ describe("mergeSavedSettings — every saved value comes back", () => {
 	for (const leaf of LEAVES) {
 		if (FORCED.has(leaf.name)) continue;
 		it(`${leaf.name}`, () => {
-			const wanted = twist(leaf.value);
+			const wanted = ENUM_LEAVES[leaf.name] ?? twist(leaf.value);
 			const merged = mergeSavedSettings(
 				nest(leaf.path, wanted) as Partial<PluginSettings>,
 			);
@@ -323,6 +337,17 @@ describe("mergeSavedSettings — every saved value comes back", () => {
  * ──────────────────────────────────────────────────────────────────────────── */
 
 describe("mergeSavedSettings — keys that must NOT survive", () => {
+	it("falls back to `all` for a quick-insert filter it does not know", () => {
+		// The value is persisted, so it can come back from a newer build, a
+		// hand-edit or another vault's export. "all" is the one state that can
+		// never look broken — every other choice can render an empty list.
+		const merged = mergeSavedSettings({
+			quickInsertSource: "only-the-purple-ones",
+		} as unknown as Partial<PluginSettings>);
+
+		assert.strictEqual(merged.quickInsertSource, "all");
+	});
+
 	it("drops a nested field a later version removed (`heading.paddingStart`)", () => {
 		// The bar's start inset is a static 10px in styles.css now. Settings are
 		// written back wholesale by `toSaveData()` AND copied into every export,
