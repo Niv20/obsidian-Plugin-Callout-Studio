@@ -3756,7 +3756,10 @@ input.cs-input-invalid:focus {
 	   carry 8px of their own air on the side facing the callout. Anything more
 	   here reads as a gap twice the size it is. */
 	gap: 2px;
-	padding: 3px 4px;
+	/* Right side gets a hair more than the rest: the hover/active ring below
+	   sits right on this padding, and 4px left it touching the insert
+	   button's own edge. */
+	padding: 3px 6px 3px 4px;
 	border-radius: var(--radius-m);
 	cursor: pointer;
 }
