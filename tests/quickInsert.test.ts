@@ -483,6 +483,18 @@ describe("the window writes no markdown of its own", () => {
 		assert.ok(!code.includes("[!"), "the window is building a header by hand");
 	});
 
+	it("reads committed state, not the raw map", () => {
+		// `getAll()` carries the callout editor's live-preview stand-in, and this
+		// window re-renders the moment that editor closes — the one moment a
+		// half-typed draft would be on screen. Same two steps the public API
+		// takes, for the same reason.
+		assert.match(modal, /registry\.getBuiltIn\(\)/);
+		assert.match(modal, /registry\.getUserDefined\(\)/);
+		assert.match(modal, /registry\.getReal\(def\.id\)/);
+		const code = modal.replace(/\/\*[\s\S]*?\*\/|\/\/[^\n]*/g, "");
+		assert.ok(!code.includes("getAll("), "reading the raw map");
+	});
+
 	it("never reaches for workspace.activeEditor", () => {
 		// It can be an embedded editor inside one of this plugin's own modals,
 		// so a window that trusted it could type into a live preview.
