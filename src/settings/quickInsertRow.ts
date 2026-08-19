@@ -4,22 +4,23 @@
  * Split from `QuickInsertModal` on the same line `CalloutRowRenderer` is split
  * from `CalloutListsSection`: the window owns the state — what is searched, what
  * is filtered, what the arrow keys are pointing at — and this owns what a single
- * callout looks like while that is going on. Neither needs to know how the other
- * works, and the row is a pure function of the definition plus two handlers.
+ * callout looks like while that is going on.
  *
- * The classes are the settings list's own (`callout-studio-row…`), not a second
- * visual language: this is the same object in a different window, and the rules
- * are already written to survive inside a modal on mobile dark.
+ * **The row is a real rendered callout with the controls beside it, never
+ * inside it.** Buttons within the callout box would read as its content — as
+ * something that would be inserted — so the row is a flex line: the preview
+ * (see `quickInsertPreview.ts`) takes the space, the two actions sit outside it
+ * and never shrink. Nothing here describes how a callout looks; if it did,
+ * there would be a second appearance to keep in step with the first.
  */
 import { setIcon } from "obsidian";
 import { getLocale, t } from "../i18n";
-import { renderIconInto, renderNoIcon } from "../icons/renderIcon";
-import { createIconResolver } from "../icons/resolver";
-import type { CalloutRegistry } from "../manager/CalloutRegistry";
 import type { CalloutDefinition } from "../types";
 import { getSortedCalloutIds } from "../utils/sorting";
 
 export interface QuickInsertRowHandlers {
+	/** The rendered callout for this definition, if one is ready yet. */
+	preview: (def: CalloutDefinition) => HTMLElement | null;
 	onEdit: (def: CalloutDefinition) => void;
 	onInsert: (def: CalloutDefinition) => void;
 	onHover: (el: HTMLElement) => void;
@@ -31,42 +32,30 @@ export interface QuickInsertRowHandlers {
 export function renderQuickInsertRow(
 	listEl: HTMLElement,
 	def: CalloutDefinition,
-	registry: CalloutRegistry,
 	handlers: QuickInsertRowHandlers,
 ): HTMLElement {
-	const row = listEl.createDiv({ cls: "callout-studio-row" });
+	const row = listEl.createDiv({ cls: "cs-qi-row" });
 	const name = def.displayName;
-
-	const iconEl = row.createDiv({ cls: "callout-studio-row-icon" });
-	if (def.hideIcon === true) {
-		// A blank slot would read as a stalled download; the dashed ring says
-		// "no icon, on purpose".
-		renderNoIcon(iconEl);
-	} else {
-		renderIconInto(iconEl, def.icon, createIconResolver(registry), {
-			role: "regular",
-			fill: "currentColor",
-			missing: { kind: "placeholder", lucideId: "pencil" },
-			errorText: "?",
-		});
-	}
-
-	const infoEl = row.createDiv({ cls: "callout-studio-row-info" });
-	const nameLine = infoEl.createDiv({ cls: "callout-studio-row-name-line" });
-	nameLine.createSpan({
-		cls: "callout-studio-row-name",
-		text: name,
-		attr: { title: name },
-	});
-
 	// Every id, not just the primary one: a search that matched an alias has to
-	// show what it matched, and the chips double as the syntax to type by hand.
-	const syntaxLine = infoEl.createDiv({ cls: "callout-studio-row-syntax-line" });
-	for (const id of getSortedCalloutIds(def, getLocale())) {
-		syntaxLine.createEl("code", {
-			cls: "callout-studio-row-syntax",
-			text: `[!${id}]`,
-		});
+	// be able to show what it matched. As a tooltip rather than a line of chips,
+	// because a row of rendered callouts is only scannable while each is one
+	// callout tall.
+	row.setAttribute(
+		"title",
+		getSortedCalloutIds(def, getLocale())
+			.map((id) => `[!${id}]`)
+			.join(" "),
+	);
+
+	const slot = row.createDiv({ cls: "cs-qi-slot" });
+	const preview = handlers.preview(def);
+	if (preview) {
+		slot.appendChild(preview);
+	} else {
+		// Only reachable for a callout created while the window is open, in the
+		// frame before its render lands. The name keeps the row identifiable and
+		// the height stable rather than letting the list jump when it arrives.
+		slot.createDiv({ cls: "cs-qi-pending", text: name });
 	}
 
 	const buttonsEl = row.createDiv({ cls: "callout-studio-row-buttons" });
@@ -86,6 +75,16 @@ export function renderQuickInsertRow(
 	insertBtn.toggleClass("cs-btn-disabled", !handlers.canInsert);
 	insertBtn.setAttribute("aria-disabled", String(!handlers.canInsert));
 	insertBtn.addEventListener("click", () => handlers.onInsert(def));
+
+	// Clicking the preview inserts it — the row is a picker, and the thing the
+	// pointer is already on is the thing being picked. The buttons keep their
+	// own meaning: a click that landed on one is that button's, not the row's.
+	// This is a pointer affordance only; the keyboard uses the arrows and Enter,
+	// and the two buttons remain the labelled controls.
+	row.addEventListener("click", (ev) => {
+		if ((ev.target as HTMLElement).closest("button")) return;
+		handlers.onInsert(def);
+	});
 
 	// The pointer and the keyboard share one highlight rather than showing two
 	// at once.

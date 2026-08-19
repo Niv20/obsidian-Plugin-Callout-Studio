@@ -11,6 +11,9 @@
  * pressing the button. Heading and inline stay where they already are — the
  * `[!` popover and the user's own commands.
  *
+ * Every row is the callout **as Obsidian renders it** (`quickInsertPreview.ts`),
+ * so this window has no idea what a callout looks like — the point of it.
+ *
  * It writes nothing itself. {@link wrapSelectionInCallout} is the one function
  * that turns a definition into block markdown, shared with the `Wrap in
  * callout` command and every user-built wrap command, so all three cannot
@@ -33,15 +36,10 @@ import {
 import { filterUsableCallouts } from "../utils/usableCallouts";
 import { applyModalChrome, removeModalChrome } from "./modalChrome";
 import { openCalloutEditorFor } from "./openCalloutEditor";
+import { QuickInsertPreviews } from "./quickInsertPreview";
+import { buildQuickInsertToolbar } from "./quickInsertToolbar";
 import { renderQuickInsertRow } from "./quickInsertRow";
 import type { SettingsTabPlugin } from "./sections/types";
-
-/** The three source choices, in the order they appear in the dropdown. */
-const SOURCE_OPTIONS: readonly { value: CalloutSourceFilter; key: string }[] = [
-	{ value: "all", key: "quickInsert.sourceAll" },
-	{ value: "builtin", key: "quickInsert.sourceBuiltIn" },
-	{ value: "user", key: "quickInsert.sourceUser" },
-];
 
 export class QuickInsertModal extends Modal {
 	private query = "";
@@ -59,8 +57,10 @@ export class QuickInsertModal extends Modal {
 	private rows: { def: CalloutDefinition; el: HTMLElement }[] = [];
 	private activeIndex = -1;
 
+	private previews: QuickInsertPreviews | null = null;
+
 	private readonly onRegistryChange = (): void => {
-		this.renderList();
+		void this.refresh();
 	};
 	private disposeIconListener: (() => void) | null = null;
 
@@ -95,13 +95,14 @@ export class QuickInsertModal extends Modal {
 		}
 
 		this.listEl = contentEl.createDiv({ cls: "callout-studio-callout-list" });
-		this.renderList();
+		this.previews = new QuickInsertPreviews(this.plugin.app);
+		void this.refresh();
 
 		this.plugin.registry.onChange(this.onRegistryChange);
 		// Artwork that lands after the window is up must repaint the rows it
 		// belongs to; without this a freshly picked icon stays a spinner.
 		this.disposeIconListener = this.plugin.onIconCacheChange(() => {
-			this.renderList();
+			void this.refresh();
 		});
 
 		this.searchEl?.focus();
@@ -111,6 +112,8 @@ export class QuickInsertModal extends Modal {
 		this.plugin.registry.offChange(this.onRegistryChange);
 		this.disposeIconListener?.();
 		this.disposeIconListener = null;
+		this.previews?.destroy();
+		this.previews = null;
 		this.contentEl.empty();
 		removeModalChrome(this);
 		this.modalEl.removeClass("cs-quick-insert");
@@ -119,37 +122,19 @@ export class QuickInsertModal extends Modal {
 	// ── Toolbar ─────────────────────────────────────────────────────────
 
 	private buildToolbar(parent: HTMLElement): void {
-		const toolbar = parent.createDiv({ cls: "cs-quick-insert-toolbar" });
-
-		// Always empty on open: the filter is a standing preference, a query is
-		// about one insertion.
-		this.searchEl = toolbar.createEl("input", {
-			type: "text",
-			cls: "cs-quick-insert-search",
-			placeholder: t("quickInsert.searchPlaceholder"),
-		});
-		this.searchEl.addEventListener("input", () => {
-			this.query = this.searchEl?.value ?? "";
-			this.renderList();
-		});
-		// Bound to the field rather than the window so typing and arrowing are
-		// the same gesture. Left/Right are deliberately untouched — they move
-		// the caret, and stealing them would break the search box itself.
-		this.searchEl.addEventListener("keydown", (ev) => this.onSearchKey(ev));
-
-		const select = toolbar.createEl("select", {
-			cls: "cs-quick-insert-filter dropdown",
-			attr: { "aria-label": t("quickInsert.sourceAria") },
-		});
-		for (const option of SOURCE_OPTIONS) {
-			select.createEl("option", { value: option.value, text: t(option.key) });
-		}
-		select.value = this.filter;
-		select.addEventListener("change", () => {
-			this.filter = isCalloutSourceFilter(select.value) ? select.value : "all";
-			this.plugin.settings.quickInsertSource = this.filter;
-			void this.plugin.saveSettings();
-			this.renderList();
+		this.searchEl = buildQuickInsertToolbar(parent, {
+			filter: this.filter,
+			onQuery: (query) => {
+				this.query = query;
+				this.renderList();
+			},
+			onFilter: (filter) => {
+				this.filter = filter;
+				this.plugin.settings.quickInsertSource = filter;
+				void this.plugin.saveSettings();
+				this.renderList();
+			},
+			onKey: (ev) => this.onSearchKey(ev),
 		});
 	}
 
@@ -205,14 +190,28 @@ export class QuickInsertModal extends Modal {
 		);
 	}
 
-	private renderList(): void {
+	/**
+	 * Re-render the callouts, then re-draw the rows around them. Drawn once
+	 * before the render so the window is never blank while one is in flight, and
+	 * again once it lands; every later filter and keystroke reads the cache and
+	 * stays synchronous.
+	 */
+	private async refresh(): Promise<void> {
+		const usable = this.usableCallouts();
+		this.renderList(usable);
+		await this.previews?.build(usable);
+		if (!this.previews) return; // closed while rendering
+		this.renderList(usable);
+	}
+
+	private renderList(usable = this.usableCallouts()): void {
 		const listEl = this.listEl;
 		if (!listEl) return;
 		listEl.empty();
 		this.rows = [];
 		this.activeIndex = -1;
 
-		const visible = filterCalloutList(this.usableCallouts(), {
+		const visible = filterCalloutList(usable, {
 			query: this.query,
 			filter: this.filter,
 			locale: getLocale(),
@@ -230,8 +229,9 @@ export class QuickInsertModal extends Modal {
 		}
 
 		for (const def of visible) {
-			const el = renderQuickInsertRow(listEl, def, this.plugin.registry, {
+			const el = renderQuickInsertRow(listEl, def, {
 				canInsert: this.captured !== null,
+				preview: (target) => this.previews?.get(target.id) ?? null,
 				onEdit: (target) => void this.edit(target),
 				onInsert: (target) => this.insert(target),
 				onHover: (rowEl) =>
@@ -252,7 +252,7 @@ export class QuickInsertModal extends Modal {
 	 */
 	private async edit(def: CalloutDefinition): Promise<void> {
 		await openCalloutEditorFor(this.plugin, def);
-		this.renderList();
+		await this.refresh();
 	}
 
 	/**

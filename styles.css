@@ -3745,10 +3745,70 @@ input.cs-input-invalid:focus {
 	padding-bottom: 8px;
 }
 
+/* One row: the real rendered callout, and the controls that are NOT part of it.
+   Buttons inside the callout box would read as its content — as something that
+   would be inserted with it — so they sit outside, never shrink, and the
+   preview takes whatever width is left. */
+.cs-qi-row {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	padding: 2px;
+	border-radius: var(--radius-s);
+	cursor: pointer;
+}
+
+/* min-width: 0 is what actually keeps a long callout name from pushing the two
+   buttons off the edge: without it the flex item refuses to shrink below its
+   content and the row overflows the window instead of the title truncating. */
+.cs-qi-slot {
+	flex: 1 1 auto;
+	min-width: 0;
+}
+
+.cs-qi-row .callout-studio-row-buttons {
+	flex: 0 0 auto;
+}
+
+/* Frame only — no colours, borders, radius or padding of its own, or there
+   would be a second appearance to keep in step with the note's. Deliberately
+   NOT painted --background-primary the way .cs-live-preview-body is: that is a
+   card standing apart from the modal, this is a row inside it, and the two
+   variables are the same colour everywhere except mobile dark — where painting
+   it would turn every row into a pure-black stripe (see CLAUDE.md) for a
+   fidelity nobody can see. Translucent tints composite over the modal surface
+   instead, which is the same colour a note's would.
+
+   pointer-events: none makes the whole preview inert: a foldable callout
+   renders its real chevron, and clicking it must insert the callout, not
+   collapse a preview. The click lands on .cs-qi-row underneath. */
+.cs-qi-preview {
+	pointer-events: none;
+	padding: 0;
+	background: transparent;
+}
+
+.cs-qi-preview .callout {
+	margin: 0;
+}
+
+.cs-qi-preview .callout-title-inner {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+/* A callout created while the window is open, in the frame before its render
+   lands. Sized like the row it becomes so the list does not jump. */
+.cs-qi-pending {
+	color: var(--text-muted);
+	padding: 12px;
+}
+
 /* The keyboard's place in the list. Deliberately the same shade the mouse gets
    on hover, so arrowing through the rows and pointing at them read as one
    highlight rather than two competing ones. */
-.cs-quick-insert .callout-studio-row.is-active {
+.cs-qi-row.is-active {
 	background: var(--background-modifier-active-hover);
 }
 

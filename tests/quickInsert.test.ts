@@ -34,6 +34,9 @@ import {
 	resolveTargetEditor,
 	type TargetEditor,
 } from "../src/editor/targetMarkdownEditor";
+import { previewMarkdown } from "../src/settings/quickInsertPreview";
+import { renderQuickInsertRow } from "../src/settings/quickInsertRow";
+import { asEl, el } from "./support/fakeDom";
 import { readRepoFile } from "./support/sourceScan";
 import type { CalloutDefinition } from "../src/types";
 import {
@@ -47,6 +50,14 @@ import {
 /* -------------------------------------------------------------------------- */
 /* Fixtures                                                                   */
 /* -------------------------------------------------------------------------- */
+
+/**
+ * A bubbling click whose `target` is the element the pointer really hit — the
+ * only part of the event the row's handler reads, and the part that decides
+ * whether the click was a button's or the row's.
+ */
+const clickOn = (target: unknown): Event =>
+	({ type: "click", bubbles: true, target }) as unknown as Event;
 
 const def = (over: Partial<CalloutDefinition> = {}): CalloutDefinition => ({
 	id: "warning",
@@ -674,5 +685,135 @@ describe("currentTargetEditor", () => {
 		};
 
 		assert.strictEqual(currentTargetEditor(app({}), captured), null);
+	});
+});
+
+/* -------------------------------------------------------------------------- */
+/* The row is a real callout                                                  */
+/* -------------------------------------------------------------------------- */
+
+describe("the preview is the callout, not a drawing of one", () => {
+	const preview = readRepoFile("src/settings/quickInsertPreview.ts");
+	const row = readRepoFile("src/settings/quickInsertRow.ts");
+
+	it("shows exactly the line Insert would write", () => {
+		// The anti-drift property, executable. Both sides come from
+		// `buildBlockHeaderToken`, so a change to the fold mark, the title policy
+		// or the id form moves the preview and the insertion together or not at
+		// all. `> [!x]- X` — mark and title included.
+		for (const candidate of [
+			def({ id: "warning", displayName: "Warning" }),
+			def({ id: "warning", displayName: "Warning", foldable: true }),
+			def({
+				id: "warning",
+				displayName: "Warning",
+				foldable: true,
+				defaultFolded: true,
+			}),
+			def({ id: "multi word", displayName: "Multi word" }),
+		]) {
+			const b = buffer("|");
+			wrapSelectionInCallout(asEditor(b), { def: candidate });
+			const written = b.value().split("\n")[0];
+			assert.strictEqual(previewMarkdown(candidate), written);
+		}
+	});
+
+	it("folds a newline out so rows cannot shift onto the wrong callout", () => {
+		// The batch render maps blocks back to definitions by position, and an
+		// imported display name really can carry a newline.
+		const md = previewMarkdown(def({ id: "x", displayName: "two\nlines" }));
+		assert.ok(!md.includes("\n"), md);
+	});
+
+	it("hands the markdown to Obsidian rather than building callout DOM", () => {
+		assert.match(preview, /MarkdownRenderer\.render\(/);
+		// The ancestry themes and core CSS are written against.
+		assert.match(preview, /markdown-preview-view/);
+		assert.match(preview, /markdown-rendered/);
+		const code = preview.replace(/\/\*[\s\S]*?\*\/|\/\/[^\n]*/g, "");
+		for (const forged of ["callout-title", "callout-icon", "callout-content"]) {
+			assert.ok(!code.includes(forged), `hand-building ${forged}`);
+		}
+	});
+
+	it("never builds a header by hand either", () => {
+		const code = preview.replace(/\/\*[\s\S]*?\*\/|\/\/[^\n]*/g, "");
+		assert.ok(code.includes("buildBlockHeaderToken"), "not using the writer");
+		assert.ok(!/\[!\w/.test(code), "assembling a token itself");
+	});
+
+	it("paints no appearance of its own in either module", () => {
+		// A colour, border or radius written here would be the second appearance
+		// that drifts from the note's.
+		for (const [name, text] of [
+			["quickInsertPreview.ts", preview],
+			["quickInsertRow.ts", row],
+		] as const) {
+			const code = text.replace(/\/\*[\s\S]*?\*\/|\/\/[^\n]*/g, "");
+			for (const bad of ["colorLight", "colorDark", "--callout-", "style."]) {
+				assert.ok(!code.includes(bad), `${name} sets ${bad}`);
+			}
+		}
+	});
+});
+
+describe("the row keeps its controls outside the callout", () => {
+	function renderRow(hasPreview: boolean) {
+		const list = asEl(el());
+		const rendered = asEl(el({ cls: "cs-qi-preview" }));
+		const inserted: string[] = [];
+		const edited: string[] = [];
+		const rowEl = renderQuickInsertRow(
+			list,
+			def({ id: "warning", displayName: "Warning", aliases: ["caution"] }),
+			{
+				canInsert: true,
+				preview: () => (hasPreview ? rendered : null),
+				onInsert: (d) => void inserted.push(d.id),
+				onEdit: (d) => void edited.push(d.id),
+				onHover: () => {},
+			},
+		);
+		return { rowEl, rendered, inserted, edited };
+	}
+
+	it("puts the buttons beside the preview, never inside it", () => {
+		const { rowEl, rendered } = renderRow(true);
+		const buttons = rowEl.querySelectorAll("button");
+		assert.strictEqual(buttons.length, 2);
+		for (const button of Array.from(buttons)) {
+			assert.ok(
+				!rendered.contains(button),
+				"a control rendered inside the callout reads as its content",
+			);
+		}
+		// And the preview really is in the row, in its own slot.
+		const slot = rowEl.querySelector(".cs-qi-slot");
+		assert.ok(slot?.contains(rendered));
+	});
+
+	it("falls back to the name until the render lands", () => {
+		const { rowEl } = renderRow(false);
+		assert.ok(rowEl.querySelector(".cs-qi-pending"));
+		assert.strictEqual(rowEl.querySelectorAll("button").length, 2);
+	});
+
+	it("keeps every id reachable as a tooltip", () => {
+		// The `[!id]` chips would make each row two callouts tall; the aliases a
+		// search can match still have to be visible somewhere.
+		const { rowEl } = renderRow(true);
+		assert.strictEqual(rowEl.getAttribute("title"), "[!caution] [!warning]");
+	});
+
+	it("inserts on a click anywhere but a button", () => {
+		const { rowEl, inserted, edited } = renderRow(true);
+		rowEl.dispatchEvent(clickOn(rowEl.querySelector(".cs-qi-slot")));
+		assert.deepEqual(inserted, ["warning"]);
+		// A click that landed on Edit is Edit's, not the row's.
+		const editBtn = rowEl.querySelectorAll("button")[0];
+		rowEl.dispatchEvent(clickOn(editBtn ?? null));
+		assert.deepEqual(inserted, ["warning"], "row stole the Edit click");
+		assert.deepEqual(edited, []);
 	});
 });
