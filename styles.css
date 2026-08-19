@@ -3693,6 +3693,139 @@ input.cs-input-invalid:focus {
 	color: var(--text-muted);
 }
 
+/* ─── Quick insert window (the ribbon icon) ─────────────────── */
+
+/* Narrower than the callout editor and wider than a confirmation: this is a
+   list to scan, so the rows want length, not width. */
+.cs-quick-insert {
+	--dialog-width: 560px;
+}
+
+/* Sticky at top: 0 and nowhere else. A positive offset parks this opaque band
+   below the header's rule, which then eats the rows scrolling behind it — the
+   same trap `.callout-studio-preview-col` documents. It is painted with the
+   window's own surface, never --background-primary, because those are not the
+   same colour on an iPad in dark mode. */
+.cs-quick-insert-toolbar {
+	position: sticky;
+	top: 0;
+	z-index: 1;
+	display: flex;
+	gap: 8px;
+	flex-wrap: wrap;
+	align-items: center;
+	padding-bottom: 12px;
+	background: var(--cs-surface, var(--background-primary));
+}
+
+.cs-quick-insert-search {
+	flex: 1;
+	min-width: 150px;
+}
+
+.cs-quick-insert-filter {
+	flex-shrink: 0;
+}
+
+/* Both controls take the full row on a phone, where 150px of search plus a
+   dropdown does not fit side by side. */
+@media (max-width: 600px) {
+	.cs-quick-insert-search,
+	.cs-quick-insert-filter {
+		flex-basis: 100%;
+		min-width: 100%;
+	}
+}
+
+/* Why nothing is inserted, said before the user presses a disabled button
+   rather than after. */
+.cs-quick-insert-hint {
+	color: var(--text-muted);
+	font-size: var(--font-ui-smaller);
+	padding-bottom: 8px;
+}
+
+/* One row: the real rendered callout, and the controls that are NOT part of it.
+   Buttons inside the callout box would read as its content — as something that
+   would be inserted with it — so they sit outside, never shrink, and the
+   preview takes whatever width is left. */
+.cs-qi-row {
+	display: flex;
+	align-items: center;
+	/* Tight: the buttons are 32px boxes around a ~16px glyph, so they already
+	   carry 8px of their own air on the side facing the callout. Anything more
+	   here reads as a gap twice the size it is. */
+	gap: 2px;
+	/* Right side gets a hair more than the rest: the hover/active ring below
+	   sits right on this padding, and 4px left it touching the insert
+	   button's own edge. */
+	padding: 3px 6px 3px 4px;
+	border-radius: var(--radius-m);
+	cursor: pointer;
+}
+
+/* min-width: 0 is what actually keeps a long callout name from pushing the two
+   buttons off the edge: without it the flex item refuses to shrink below its
+   content and the row overflows the window instead of the title truncating. */
+.cs-qi-slot {
+	flex: 1 1 auto;
+	min-width: 0;
+}
+
+.cs-qi-row .callout-studio-row-buttons {
+	flex: 0 0 auto;
+}
+
+/* Frame only — no colours, borders, radius or padding of its own, or there
+   would be a second appearance to keep in step with the note's. Deliberately
+   NOT painted --background-primary the way .cs-live-preview-body is: that is a
+   card standing apart from the modal, this is a row inside it, and the two
+   variables are the same colour everywhere except mobile dark — where painting
+   it would turn every row into a pure-black stripe (see CLAUDE.md) for a
+   fidelity nobody can see. Translucent tints composite over the modal surface
+   instead, which is the same colour a note's would.
+
+   pointer-events: none makes the whole preview inert: a foldable callout
+   renders its real chevron, and clicking it must insert the callout, not
+   collapse a preview. The click lands on .cs-qi-row underneath. */
+.cs-qi-preview {
+	pointer-events: none;
+	padding: 0;
+	background: transparent;
+}
+
+.cs-qi-preview .callout {
+	margin: 0;
+}
+
+.cs-qi-preview .callout-title-inner {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+/* A callout created while the window is open, in the frame before its render
+   lands. Sized like the row it becomes so the list does not jump. */
+.cs-qi-pending {
+	color: var(--text-muted);
+	padding: 12px;
+}
+
+/* The keyboard's place in the list, and the mouse's — one highlight, so
+   arrowing through the rows and pointing at them never compete.
+
+   A ring, never a fill. Every callout background in this plugin is a
+   translucent tint by design (there is no opaque option — see CLAUDE.md), so
+   ANYTHING painted behind a row composites into the callout and changes the
+   colour the row exists to show. The accent shade that used to sit here tinted
+   every preview purple; a neutral grey would have been a quieter version of the
+   same bug. Inset so it stays inside the row's own box and cannot be clipped by
+   the list's scroller, and the row's padding is what holds it off the callout's
+   own border instead of doubling it. */
+.cs-qi-row.is-active {
+	box-shadow: inset 0 0 0 1px var(--background-modifier-border-hover);
+}
+
 /* ─── Plugin import modals (Admonition, Callout Manager) ───── */
 /* One widget, two windows: both offer ready-made sources as rows with a paste
    box underneath, so the rules are shared rather than copied per modal. */

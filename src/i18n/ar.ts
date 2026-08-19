@@ -10,6 +10,7 @@ export const ar: Record<string, string> = {
 	"cmd.customInsertHeading":
 		"إدراج عنوان callout {{name}} من المستوى H{{level}}",
 	"cmd.customInsertInline": "إدراج callout {{name}} ضمن السطر",
+	"cmd.openQuickInsert": "إدراج سريع لـ callout كتلة",
 
 	"autocomplete.createNew": 'إنشاء callout جديد: "{{name}}"',
 
@@ -658,6 +659,20 @@ export const ar: Record<string, string> = {
 	"vault.resetAllInUse":
 		"⚠ يستخدم {{count}} مرجع callout في {{files}} ملف أنواع callout مخصصة ستُحذف.",
 
+	"quickInsert.title": "إدراج سريع لـ callout كتلة",
+	"quickInsert.desc": "اختر callout لإدراجه عند المؤشر. للـ callout من نوع الكتلة فقط.",
+	"quickInsert.searchPlaceholder": "بحث في الـ callouts",
+	"quickInsert.sourceAria": "التصفية حسب مصدر الـ callout",
+	"quickInsert.sourceAll": "الكل",
+	"quickInsert.sourceBuiltIn": "مدمج",
+	"quickInsert.sourceUser": "الـ callouts الخاصة بي",
+	"quickInsert.editAria": "تعديل {{name}}",
+	"quickInsert.insertAria": "إدراج {{name}} كـ callout كتلة",
+	"quickInsert.noResults": "لم يتم العثور على أي callout",
+	"quickInsert.noUserCallouts": "لم تُنشئ أي callout خاص بك بعد.",
+	"quickInsert.noEditorHint": "لا توجد ملاحظة مفتوحة في وضع التحرير، لذا لا يمكن إدراج شيء.",
+	"quickInsert.noEditor": "افتح ملاحظة في وضع التحرير لإدراج callout.",
+
 	"vaultStats.title": "إحصائيات الـ callout",
 	"vaultStats.totalCallouts": "إجمالي الـ callouts",
 	"vaultStats.typesFound": "الأنواع المكتشفة",
@@ -676,6 +691,13 @@ export const ar: Record<string, string> = {
 	"vaultStats.sourceTheme": "مقتطف CSS",
 	"vaultStats.sourceAlias": "اسم مستعار لـ {{id}}",
 	"vaultStats.sourceUnknown": "غير معروف",
+	"vaultStats.byRole": "مكتوب كـ",
+	"vaultStats.roleBlock": "كتلة",
+	"vaultStats.roleHeading": "عنوان",
+	"vaultStats.roleInline": "ضمن السطر",
+	"vaultStats.defineUndefined": "تعريف {{count}} غير معرّف",
+	"vaultStats.defineRunning": "جارٍ المسح",
+	"vaultStats.defineDone": "تمت إضافة {{count}} من أنواع الـ callout.",
 	"vaultStats.close": "إغلاق",
 
 	"import.title": "مشاكل الاستيراد",

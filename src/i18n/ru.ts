@@ -10,6 +10,7 @@ export const ru: Record<string, string> = {
 	"cmd.customInsertHeading":
 		"Вставить заголовок H{{level}} callout «{{name}}»",
 	"cmd.customInsertInline": "Вставить встроенный callout «{{name}}»",
+	"cmd.openQuickInsert": "Быстрая вставка блочного callout",
 
 	"autocomplete.createNew": 'Создать новый callout: "{{name}}"',
 
@@ -666,6 +667,20 @@ export const ru: Record<string, string> = {
 	"vault.resetAllInUse":
 		"⚠ {{count}} ссылок на callout в {{files}} файле(ах) используют пользовательские типы callout, которые будут удалены.",
 
+	"quickInsert.title": "Быстрая вставка блочного callout",
+	"quickInsert.desc": "Выберите callout для вставки в позицию курсора. Только блочные callout.",
+	"quickInsert.searchPlaceholder": "Поиск callout",
+	"quickInsert.sourceAria": "Фильтр по источнику callout",
+	"quickInsert.sourceAll": "Все",
+	"quickInsert.sourceBuiltIn": "Встроенный",
+	"quickInsert.sourceUser": "Мои callout",
+	"quickInsert.editAria": "Редактировать {{name}}",
+	"quickInsert.insertAria": "Вставить {{name}} как блочный callout",
+	"quickInsert.noResults": "Callout не найдены",
+	"quickInsert.noUserCallouts": "Вы ещё не создали ни одного callout.",
+	"quickInsert.noEditorHint": "Нет заметки, открытой в режиме редактирования, поэтому вставить ничего нельзя.",
+	"quickInsert.noEditor": "Откройте заметку в режиме редактирования, чтобы вставить callout.",
+
 	"vaultStats.title": "Статистика callout",
 	"vaultStats.totalCallouts": "Всего callout",
 	"vaultStats.typesFound": "Найдено типов",
@@ -684,6 +699,13 @@ export const ru: Record<string, string> = {
 	"vaultStats.sourceTheme": "CSS-сниппет",
 	"vaultStats.sourceAlias": "Псевдоним {{id}}",
 	"vaultStats.sourceUnknown": "Неизвестно",
+	"vaultStats.byRole": "Записано как",
+	"vaultStats.roleBlock": "Блок",
+	"vaultStats.roleHeading": "Заголовок",
+	"vaultStats.roleInline": "Встроенный",
+	"vaultStats.defineUndefined": "Определить {{count}} отсутствующих",
+	"vaultStats.defineRunning": "Сканирование",
+	"vaultStats.defineDone": "Добавлено {{count}} типов callout.",
 	"vaultStats.close": "Закрыть",
 
 	"import.title": "Проблемы импорта",

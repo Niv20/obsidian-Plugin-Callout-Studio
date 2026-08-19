@@ -9,6 +9,7 @@ export const zh: Record<string, string> = {
 	"cmd.customInsertBlock": "插入 {{name}} callout",
 	"cmd.customInsertHeading": "插入 H{{level}} {{name}} 标题 callout",
 	"cmd.customInsertInline": "插入 {{name}} 行内 callout",
+	"cmd.openQuickInsert": "快速插入块级 callout",
 
 	"autocomplete.createNew": '创建新 callout："{{name}}"',
 
@@ -649,6 +650,20 @@ export const zh: Record<string, string> = {
 	"vault.resetAllInUse":
 		"⚠ {{files}} 个文件中有 {{count}} 个 callout 引用使用了将被删除的自定义 callout 类型。",
 
+	"quickInsert.title": "快速插入块级 callout",
+	"quickInsert.desc": "选择要插入光标位置的 callout。仅限块级 callout。",
+	"quickInsert.searchPlaceholder": "搜索 callout",
+	"quickInsert.sourceAria": "按 callout 来源筛选",
+	"quickInsert.sourceAll": "全部",
+	"quickInsert.sourceBuiltIn": "内置",
+	"quickInsert.sourceUser": "我的 callout",
+	"quickInsert.editAria": "编辑 {{name}}",
+	"quickInsert.insertAria": "将 {{name}} 作为块级 callout 插入",
+	"quickInsert.noResults": "未找到 callout",
+	"quickInsert.noUserCallouts": "您还没有创建任何 callout。",
+	"quickInsert.noEditorHint": "没有笔记以编辑模式打开，因此无法插入任何内容。",
+	"quickInsert.noEditor": "以编辑模式打开一篇笔记来插入 callout。",
+
 	"vaultStats.title": "Callout 统计",
 	"vaultStats.totalCallouts": "Callout 总数",
 	"vaultStats.typesFound": "发现的类型",
@@ -667,6 +682,13 @@ export const zh: Record<string, string> = {
 	"vaultStats.sourceTheme": "CSS 片段",
 	"vaultStats.sourceAlias": "{{id}} 的别名",
 	"vaultStats.sourceUnknown": "未知",
+	"vaultStats.byRole": "写作形式",
+	"vaultStats.roleBlock": "块级",
+	"vaultStats.roleHeading": "标题",
+	"vaultStats.roleInline": "行内",
+	"vaultStats.defineUndefined": "定义 {{count}} 个缺失项",
+	"vaultStats.defineRunning": "扫描中",
+	"vaultStats.defineDone": "已添加 {{count}} 种 callout 类型。",
 	"vaultStats.close": "关闭",
 
 	"import.title": "导入问题",

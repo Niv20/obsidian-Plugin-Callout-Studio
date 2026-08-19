@@ -10,6 +10,7 @@ export const de: Record<string, string> = {
 	"cmd.customInsertHeading":
 		"H{{level}}-{{name}}-Überschrift-Callout einfügen",
 	"cmd.customInsertInline": "{{name}}-Inline-Callout einfügen",
+	"cmd.openQuickInsert": "Block-Callout schnell einfügen",
 
 	"autocomplete.createNew": 'Neuen Callout erstellen: "{{name}}"',
 
@@ -676,6 +677,20 @@ export const de: Record<string, string> = {
 	"vault.resetAllInUse":
 		"⚠ {{count}} Callout-Referenz(en) in {{files}} Datei(en) verwenden benutzerdefinierte Callout-Typen, die gelöscht werden.",
 
+	"quickInsert.title": "Block-Callout schnell einfügen",
+	"quickInsert.desc": "Callout auswählen, der an der Cursorposition eingefügt wird. Nur Block-Callouts.",
+	"quickInsert.searchPlaceholder": "Callouts durchsuchen",
+	"quickInsert.sourceAria": "Nach Callout-Quelle filtern",
+	"quickInsert.sourceAll": "Alle",
+	"quickInsert.sourceBuiltIn": "Integriert",
+	"quickInsert.sourceUser": "Meine Callouts",
+	"quickInsert.editAria": "{{name}} bearbeiten",
+	"quickInsert.insertAria": "{{name}} als Block-Callout einfügen",
+	"quickInsert.noResults": "Keine Callouts gefunden",
+	"quickInsert.noUserCallouts": "Du hast noch keine Callouts erstellt.",
+	"quickInsert.noEditorHint": "Keine Notiz ist im Bearbeitungsmodus geöffnet, daher kann nichts eingefügt werden.",
+	"quickInsert.noEditor": "Öffne eine Notiz im Bearbeitungsmodus, um einen Callout einzufügen.",
+
 	"vaultStats.title": "Callout-Statistiken",
 	"vaultStats.totalCallouts": "Callouts gesamt",
 	"vaultStats.typesFound": "Gefundene Typen",
@@ -694,6 +709,13 @@ export const de: Record<string, string> = {
 	"vaultStats.sourceTheme": "CSS-Snippet",
 	"vaultStats.sourceAlias": "Alias von {{id}}",
 	"vaultStats.sourceUnknown": "Unbekannt",
+	"vaultStats.byRole": "Geschrieben als",
+	"vaultStats.roleBlock": "Block",
+	"vaultStats.roleHeading": "Überschrift",
+	"vaultStats.roleInline": "Inline",
+	"vaultStats.defineUndefined": "{{count}} fehlende definieren",
+	"vaultStats.defineRunning": "Wird gescannt",
+	"vaultStats.defineDone": "{{count}} Callout-Typen hinzugefügt.",
 	"vaultStats.close": "Schließen",
 
 	"import.title": "Importprobleme",

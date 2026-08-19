@@ -1,7 +1,7 @@
 /**
  * settings/CommandBuilderModal.ts — Every Callout Studio command, in one place.
  *
- * Two lists. The five fixed commands are shown as plain lines, because there is
+ * Two lists. The six fixed commands are shown as plain lines, because there is
  * nothing to do to them but bind a key; the user's own commands get real rows
  * with add / edit / delete. Both carry the same two things, and they are
  * deliberately separate: pills beside the name that *read* what Obsidian has
@@ -158,7 +158,7 @@ export class CommandBuilderModal extends Modal {
 	}
 
 	/**
-	 * The five fixed commands, in the same row as the user's own.
+	 * The fixed commands, in the same row as the user's own.
 	 *
 	 * They carry no icon column: there is no callout behind a built-in
 	 * command, and an empty icon slot would read as artwork that failed to
@@ -166,7 +166,7 @@ export class CommandBuilderModal extends Modal {
 	 * name, its shortcut pills, the button that binds one, and the on/off
 	 * toggle — is all there is to do to them.
 	 *
-	 * A toggle turned off does not remove the row: the five commands are a
+	 * A toggle turned off does not remove the row: the fixed commands are a
 	 * fixed set the user is choosing among, not a list they're pruning, so a
 	 * row moving or disappearing on toggle would make it hard to find again.
 	 * It fades in place instead, and keeps showing whatever shortcut is

@@ -256,9 +256,9 @@ describe("the surfaces that emulate a note keep painting --background-primary", 
 /**
  * Every sticky layer this plugin has, and the scroller each one sticks inside.
  *
- * Frozen so a fourth cannot appear without somebody answering the question this
- * file is about. Nothing here is grandfathered — all three are at `top: 0`, and
- * the list exists to keep the next one there too.
+ * Frozen so the next one cannot appear without somebody answering the question
+ * this file is about. Nothing here is grandfathered — every one is at `top: 0`,
+ * and the list exists to keep the next one there too.
  */
 const STICKY_LAYERS: Record<string, string> = {
 	".callout-studio-preview-col":
@@ -267,6 +267,8 @@ const STICKY_LAYERS: Record<string, string> = {
 		"the icon picker's per-source search bar, inside .icon-picker-content",
 	".callout-studio-vault-stats .cs-vault-stats-header":
 		"the vault-statistics table header, inside .cs-vault-stats-list",
+	".cs-quick-insert-toolbar":
+		"the quick-insert window's search + source filter, inside .modal-content",
 };
 
 const stickyRules = rules.filter((r) =>
@@ -275,7 +277,7 @@ const stickyRules = rules.filter((r) =>
 
 describe("sticky layers", () => {
 	it("found them", () => {
-		assert.ok(stickyRules.length >= 3, `only ${stickyRules.length} found`);
+		assert.ok(stickyRules.length >= 4, `only ${stickyRules.length} found`);
 	});
 
 	it("are exactly the reviewed ones", () => {

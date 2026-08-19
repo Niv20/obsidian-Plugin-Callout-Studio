@@ -18,6 +18,7 @@ export const he: Record<string, string> = {
 	"cmd.customInsertBlock": "הוספת תיבת־הבלטה {{name}}",
 	"cmd.customInsertHeading": "הוספת כותרת H{{level}} מסוג {{name}}",
 	"cmd.customInsertInline": "הוספת תיבת־הבלטה מוטבעת {{name}}",
+	"cmd.openQuickInsert": "הוספה מהירה של תיבת־הבלטה מסוג בלוק",
 
 	// Autocomplete
 	"autocomplete.createNew": 'יצירת תיבת־הבלטה חדשה: "{{name}}"',
@@ -701,6 +702,20 @@ export const he: Record<string, string> = {
 		"⚠ {{count}} הפניות ב־{{files}} קבצים משתמשות בסוגי תיבות־הבלטה שעומדות להימחק.",
 
 	// Vault statistics modal
+	"quickInsert.title": "הוספה מהירה של תיבת־הבלטה מסוג בלוק",
+	"quickInsert.desc": "בחרו תיבת־הבלטה להוספה במיקום הסמן. תיבות־הבלטה מסוג בלוק בלבד.",
+	"quickInsert.searchPlaceholder": "חיפוש תיבות־הבלטה",
+	"quickInsert.sourceAria": "סינון לפי מקור תיבת־הבלטה",
+	"quickInsert.sourceAll": "הכול",
+	"quickInsert.sourceBuiltIn": "מובנה",
+	"quickInsert.sourceUser": "תיבות־ההבלטה שלי",
+	"quickInsert.editAria": "עריכת {{name}}",
+	"quickInsert.insertAria": "הוספת {{name}} כתיבת־הבלטה מסוג בלוק",
+	"quickInsert.noResults": "לא נמצאו תיבות־הבלטה",
+	"quickInsert.noUserCallouts": "עדיין לא יצרתם אף תיבת־הבלטה.",
+	"quickInsert.noEditorHint": "אין פתק פתוח במצב עריכה, ולכן לא ניתן להוסיף דבר.",
+	"quickInsert.noEditor": "פתחו פתק במצב עריכה כדי להוסיף תיבת־הבלטה.",
+
 	"vaultStats.title": "סטטיסטיקת תיבות־הבלטה",
 	"vaultStats.totalCallouts": "סך הכול תיבות־הבלטה",
 	"vaultStats.typesFound": "סוגים שנמצאו",
@@ -719,6 +734,13 @@ export const he: Record<string, string> = {
 	"vaultStats.sourceTheme": "מקטע CSS",
 	"vaultStats.sourceAlias": "כינוי של {{id}}",
 	"vaultStats.sourceUnknown": "לא מוכר",
+	"vaultStats.byRole": "נכתב כ־",
+	"vaultStats.roleBlock": "בלוק",
+	"vaultStats.roleHeading": "כותרת",
+	"vaultStats.roleInline": "מוטבע",
+	"vaultStats.defineUndefined": "הגדרת {{count}} חסרים",
+	"vaultStats.defineRunning": "סורק",
+	"vaultStats.defineDone": "נוספו {{count}} סוגי תיבת־הבלטה.",
 	"vaultStats.close": "סגירה",
 
 	// Import validation

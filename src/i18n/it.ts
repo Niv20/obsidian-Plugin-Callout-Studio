@@ -9,6 +9,7 @@ export const it: Record<string, string> = {
 	"cmd.customInsertBlock": "Inserisci callout {{name}}",
 	"cmd.customInsertHeading": "Inserisci titolo callout H{{level}} {{name}}",
 	"cmd.customInsertInline": "Inserisci callout in linea {{name}}",
+	"cmd.openQuickInsert": "Inserimento rapido di callout a blocco",
 
 	"autocomplete.createNew": 'Crea nuovo callout: "{{name}}"',
 
@@ -675,6 +676,20 @@ export const it: Record<string, string> = {
 	"vault.resetAllInUse":
 		"⚠ {{count}} riferimento/i callout in {{files}} file usano tipi di callout personalizzati che verranno eliminati.",
 
+	"quickInsert.title": "Inserimento rapido di callout a blocco",
+	"quickInsert.desc": "Scegli un callout da inserire nella posizione del cursore. Solo callout a blocco.",
+	"quickInsert.searchPlaceholder": "Cerca callout",
+	"quickInsert.sourceAria": "Filtra per origine del callout",
+	"quickInsert.sourceAll": "Tutti",
+	"quickInsert.sourceBuiltIn": "Integrato",
+	"quickInsert.sourceUser": "I miei callout",
+	"quickInsert.editAria": "Modifica {{name}}",
+	"quickInsert.insertAria": "Inserisci {{name}} come callout a blocco",
+	"quickInsert.noResults": "Nessun callout trovato",
+	"quickInsert.noUserCallouts": "Non hai ancora creato alcun callout.",
+	"quickInsert.noEditorHint": "Nessuna nota è aperta in modalità modifica, quindi non è possibile inserire nulla.",
+	"quickInsert.noEditor": "Apri una nota in modalità modifica per inserire un callout.",
+
 	"vaultStats.title": "Statistiche callout",
 	"vaultStats.totalCallouts": "Callout totali",
 	"vaultStats.typesFound": "Tipi trovati",
@@ -693,6 +708,13 @@ export const it: Record<string, string> = {
 	"vaultStats.sourceTheme": "Snippet CSS",
 	"vaultStats.sourceAlias": "Alias di {{id}}",
 	"vaultStats.sourceUnknown": "Sconosciuto",
+	"vaultStats.byRole": "Scritto come",
+	"vaultStats.roleBlock": "Blocco",
+	"vaultStats.roleHeading": "Titolo",
+	"vaultStats.roleInline": "In linea",
+	"vaultStats.defineUndefined": "Definisci {{count}} mancanti",
+	"vaultStats.defineRunning": "Scansione in corso",
+	"vaultStats.defineDone": "Aggiunti {{count}} tipi di callout.",
 	"vaultStats.close": "Chiudi",
 
 	"import.title": "Problemi di importazione",

@@ -33,6 +33,12 @@ import {
 } from "../src/utils/customCommands";
 import type { CalloutDefinition, CustomCommand } from "../src/types";
 import { asEditor, editor } from "./support/fakeEditor";
+import {
+	blankLiterals,
+	pluginSourceFiles,
+	readRepoFile,
+	report,
+} from "./support/sourceScan";
 
 /* -------------------------------------------------------------------------- */
 /* Harness                                                                    */
@@ -611,5 +617,113 @@ describe("the registered editorCallback", () => {
 		assert.strictEqual(notices.length, 2);
 		assert.deepStrictEqual(h.removed, [obsidianCommandId("cc-1")]);
 		assert.deepStrictEqual(h.registry.settings.customCommands, []);
+	});
+});
+
+/* -------------------------------------------------------------------------- */
+/* A callout is not a command                                                 */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * The invariant the whole feature rests on, stated as a negative.
+ *
+ * Existing *callouts* imply nothing about registered *commands*: the stored
+ * list in `settings.customCommands` is the only source. This has always been
+ * true, but it was never pinned, and it is exactly the property a well-meaning
+ * "just register them all so the picker can invoke one" change would quietly
+ * break — which is why the quick-insert window calls `wrapSelectionInCallout`
+ * directly instead of firing a command.
+ *
+ * Thirteen built-ins plus a user callout plus a discovered row is a vault where
+ * the wrong design would register fifteen palette entries.
+ */
+describe("the existence of a callout implies no command", () => {
+	function populated(): Harness {
+		const h = harness();
+		addCallout(h.registry);
+		addCallout(h.registry, { id: "louder", displayName: "Louder" });
+		addCallout(h.registry, {
+			id: "seen-in-a-note",
+			displayName: "Seen in a note",
+			source: "fallback",
+		});
+		return h;
+	}
+
+	it("registers nothing at all when the user configured nothing", () => {
+		const h = populated();
+		assert.ok(h.registry.getAll().length >= 16, "vault should be populated");
+		h.manager.syncAll();
+		assert.deepEqual(h.added, []);
+		assert.deepEqual(h.removed, []);
+	});
+
+	it("registers nothing more when a callout is created later", () => {
+		const h = populated();
+		h.manager.syncAll();
+		h.clear();
+		addCallout(h.registry, { id: "brand-new", displayName: "Brand new" });
+		h.manager.syncAll();
+		assert.deepEqual(h.added, []);
+	});
+
+	it("registers exactly the configured commands, and only those", () => {
+		const h = populated();
+		seed(h, { id: "cc-1", calloutId: "quiet" });
+		seed(h, { id: "cc-2", calloutId: "louder", role: "inline" });
+		h.manager.syncAll();
+		assert.deepEqual(idsOf(h.added), [
+			obsidianCommandId("cc-1"),
+			obsidianCommandId("cc-2"),
+		]);
+	});
+
+	it("never registers the role × callout product", () => {
+		const h = populated();
+		seed(h, { id: "cc-1", calloutId: "quiet", role: "heading" });
+		h.manager.syncAll();
+		assert.equal(h.added.length, 1);
+		// One row in the builder is one palette entry, whatever the role.
+		assert.ok(!idsOf(h.added).some((id) => id.includes("inline")));
+	});
+});
+
+describe("no code path registers a command per callout", () => {
+	/** Every module that is allowed to call `addCommand` at all. */
+	const CALLERS = ["src/editor/commands.ts", "src/editor/CustomCommandManager.ts"];
+
+	it("keeps addCommand to the two modules that own it", () => {
+		const offenders = pluginSourceFiles()
+			.filter((f) => !CALLERS.includes(f.path))
+			.filter((f) => /\.addCommand\s*\(/.test(blankLiterals(f.text)))
+			.map((f) => f.path);
+		assert.deepEqual(
+			offenders,
+			[],
+			report(
+				"addCommand belongs to commands.ts (the fixed set) and CustomCommandManager.ts (the user's list). A third caller is how a callout starts implying a command:",
+				offenders,
+			),
+		);
+	});
+
+	it("never reaches the registry's callout list from a registration site", () => {
+		const offenders: string[] = [];
+		for (const path of CALLERS) {
+			const text = blankLiterals(readRepoFile(path));
+			// `getAll()` is legitimate for *naming* (isKnownDisplayName); iterating
+			// it to register is not, and a `for` over it is what that looks like.
+			if (/for\s*\([^)]*of\s+[^)]*registry[\s\S]{0,40}\.(getAll|getBuiltIn|getUserDefined)\(/.test(text)) {
+				offenders.push(path);
+			}
+		}
+		assert.deepEqual(
+			offenders,
+			[],
+			report(
+				"A registration sweep must iterate settings.customCommands, never the registry:",
+				offenders,
+			),
+		);
 	});
 });

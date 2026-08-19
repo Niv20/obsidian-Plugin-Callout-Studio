@@ -349,7 +349,9 @@ describe("command ids have not moved since release", () => {
 	 * rename changes both sides at once.
 	 *
 	 * Order is part of it: it is the registration order and the order the
-	 * command builder lists the fixed five in, under the user's own.
+	 * command builder lists the fixed ones in, under the user's own. A new
+	 * command goes on the END for that reason — appending leaves every command
+	 * a user already knows where they left it.
 	 */
 	const RELEASED_COMMAND_IDS = [
 		"open-settings",
@@ -357,9 +359,10 @@ describe("command ids have not moved since release", () => {
 		"insert-empty-callout",
 		"callout-wrap",
 		"callout-unwrap",
+		"open-quick-insert",
 	] as const;
 
-	it("the five fixed ids are exactly the released ones, in order", () => {
+	it("the fixed ids are exactly the released ones, in order", () => {
 		assert.deepStrictEqual(
 			[...FIXED_COMMAND_IDS],
 			[...RELEASED_COMMAND_IDS],

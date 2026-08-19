@@ -9,6 +9,7 @@ export const ro: Record<string, string> = {
 	"cmd.customInsertBlock": "Inserează callout {{name}}",
 	"cmd.customInsertHeading": "Inserează titlu H{{level}} callout {{name}}",
 	"cmd.customInsertInline": "Inserează callout inline {{name}}",
+	"cmd.openQuickInsert": "Inserare rapidă de callout bloc",
 
 	"autocomplete.createNew": 'Creează callout nou: "{{name}}"',
 
@@ -672,6 +673,20 @@ export const ro: Record<string, string> = {
 	"vault.resetAllInUse":
 		"⚠ {{count}} referință(e) callout din {{files}} fișier(e) folosesc tipuri de callout personalizate care vor fi șterse.",
 
+	"quickInsert.title": "Inserare rapidă de callout bloc",
+	"quickInsert.desc": "Alege un callout de inserat la poziția cursorului. Doar callout de tip bloc.",
+	"quickInsert.searchPlaceholder": "Caută callout-uri",
+	"quickInsert.sourceAria": "Filtrează după sursa callout",
+	"quickInsert.sourceAll": "Toate",
+	"quickInsert.sourceBuiltIn": "Integrat",
+	"quickInsert.sourceUser": "Callout-urile mele",
+	"quickInsert.editAria": "Editează {{name}}",
+	"quickInsert.insertAria": "Inserează {{name}} ca callout bloc",
+	"quickInsert.noResults": "Nu s-au găsit callout-uri",
+	"quickInsert.noUserCallouts": "Nu ai creat încă niciun callout.",
+	"quickInsert.noEditorHint": "Nicio notă nu este deschisă în modul de editare, așa că nimic nu poate fi inserat.",
+	"quickInsert.noEditor": "Deschide o notă în modul de editare pentru a insera un callout.",
+
 	"vaultStats.title": "Statistici callout",
 	"vaultStats.totalCallouts": "Total callouts",
 	"vaultStats.typesFound": "Tipuri găsite",
@@ -690,6 +705,13 @@ export const ro: Record<string, string> = {
 	"vaultStats.sourceTheme": "Fragment CSS",
 	"vaultStats.sourceAlias": "Alias pentru {{id}}",
 	"vaultStats.sourceUnknown": "Necunoscut",
+	"vaultStats.byRole": "Scris ca",
+	"vaultStats.roleBlock": "Bloc",
+	"vaultStats.roleHeading": "Titlu",
+	"vaultStats.roleInline": "Inline",
+	"vaultStats.defineUndefined": "Definește {{count}} lipsă",
+	"vaultStats.defineRunning": "Scanare",
+	"vaultStats.defineDone": "S-au adăugat {{count}} tipuri de callout.",
 	"vaultStats.close": "Închide",
 
 	"import.title": "Probleme de import",

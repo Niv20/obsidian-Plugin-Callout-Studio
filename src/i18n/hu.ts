@@ -9,6 +9,7 @@ export const hu: Record<string, string> = {
 	"cmd.customInsertBlock": "{{name}} callout beszúrása",
 	"cmd.customInsertHeading": "H{{level}} {{name}} címsor callout beszúrása",
 	"cmd.customInsertInline": "{{name}} beágyazott callout beszúrása",
+	"cmd.openQuickInsert": "Blokk callout gyors beszúrása",
 
 	"autocomplete.createNew": 'Új callout létrehozása: "{{name}}"',
 
@@ -672,6 +673,20 @@ export const hu: Record<string, string> = {
 	"vault.resetAllInUse":
 		"⚠ {{count}} callout-hivatkozás {{files}} fájlban olyan egyéni callout-típusokat használ, amelyek törlődni fognak.",
 
+	"quickInsert.title": "Blokk callout gyors beszúrása",
+	"quickInsert.desc": "Válassz egy callout-ot a kurzor pozíciójába való beszúráshoz. Csak blokk callout-ok.",
+	"quickInsert.searchPlaceholder": "Callout-ok keresése",
+	"quickInsert.sourceAria": "Szűrés callout forrás szerint",
+	"quickInsert.sourceAll": "Összes",
+	"quickInsert.sourceBuiltIn": "Beépített",
+	"quickInsert.sourceUser": "Saját callout-jaim",
+	"quickInsert.editAria": "{{name}} szerkesztése",
+	"quickInsert.insertAria": "{{name}} beszúrása blokk callout-ként",
+	"quickInsert.noResults": "Nem található callout",
+	"quickInsert.noUserCallouts": "Még nem hoztál létre callout-ot.",
+	"quickInsert.noEditorHint": "Nincs szerkesztési módban megnyitott jegyzet, ezért semmit sem lehet beszúrni.",
+	"quickInsert.noEditor": "Nyiss meg egy jegyzetet szerkesztési módban a callout beszúrásához.",
+
 	"vaultStats.title": "Callout-statisztikák",
 	"vaultStats.totalCallouts": "Összes callout",
 	"vaultStats.typesFound": "Talált típusok",
@@ -690,6 +705,13 @@ export const hu: Record<string, string> = {
 	"vaultStats.sourceTheme": "CSS-részlet",
 	"vaultStats.sourceAlias": "{{id}} aliasa",
 	"vaultStats.sourceUnknown": "Ismeretlen",
+	"vaultStats.byRole": "Íráshelye",
+	"vaultStats.roleBlock": "Blokk",
+	"vaultStats.roleHeading": "Címsor",
+	"vaultStats.roleInline": "Beágyazott",
+	"vaultStats.defineUndefined": "{{count}} hiányzó meghatározása",
+	"vaultStats.defineRunning": "Vizsgálat",
+	"vaultStats.defineDone": "{{count}} callout-típus hozzáadva.",
 	"vaultStats.close": "Bezárás",
 
 	"import.title": "Importálási problémák",

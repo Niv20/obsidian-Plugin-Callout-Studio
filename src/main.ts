@@ -24,9 +24,11 @@ import {
 } from "./icons/materialFontStore";
 import { CalloutDiscovery } from "./manager/CalloutDiscovery";
 import { removeLegacyStartupSnippet } from "./manager/legacyStartupSnippet";
+import { runFirstRunDiscovery } from "./manager/firstRunDiscovery";
 import { CalloutStudioSettingsTab } from "./settings/SettingsTab";
 import { WelcomeModal } from "./settings/WelcomeModal";
 import { CalloutEditor } from "./settings/CalloutEditor";
+import { QuickInsertModal } from "./settings/QuickInsertModal";
 import { CalloutAutoComplete } from "./editor/AutoComplete";
 import { LinkSuggestDecorator } from "./editor/LinkSuggestDecorator";
 import { registerContextMenu } from "./editor/contextmenu";
@@ -41,12 +43,12 @@ import {
 	refreshFixedCommandNames,
 	registerCalloutCommands,
 	setFixedCommandEnabled as applyFixedCommandToggle,
+	type FixedCommandDeps,
 	type FixedCommandId,
 } from "./editor/commands";
 import { CustomCommandManager } from "./editor/CustomCommandManager";
 import { CalloutStudioAPI } from "./api/PluginAPI";
-import { FirstRunScanModal } from "./utils/FirstRunScanModal";
-import { HEAVY_VAULT_FILE_THRESHOLD } from "./constants";
+import { PLUGIN_ICON_ID } from "./constants";
 import { getLocale, setLocale, t } from "./i18n";
 import { LocaleStore } from "./i18n/LocaleStore";
 
@@ -224,7 +226,7 @@ export default class CalloutStudioPlugin extends Plugin {
 		);
 		this.register(() => this.outlineDecorator.destroy());
 
-		// The user's own commands, on top of the five fixed ones. Registering
+		// The user's own commands, on top of the six fixed ones. Registering
 		// them during onload is what makes them survive a restart or a
 		// disable/enable — Obsidian tears every plugin command down on unload
 		// by itself. The sweep re-derives the whole set from the registry, so
@@ -279,7 +281,14 @@ export default class CalloutStudioPlugin extends Plugin {
 		});
 
 		// Commands
-		registerCalloutCommands(this, () => new CalloutEditor(this));
+		registerCalloutCommands(this, this.commandDeps());
+
+		// The ribbon is a second door to the same window, not a second
+		// implementation: hiding the command leaves this one standing, and
+		// hiding the ribbon leaves the command bindable.
+		this.addRibbonIcon(PLUGIN_ICON_ID, t("quickInsert.title"), () => {
+			this.openQuickInsert();
+		});
 
 		// Editor autocomplete on [! trigger
 		this.autoComplete = new CalloutAutoComplete(this);
@@ -331,7 +340,7 @@ export default class CalloutStudioPlugin extends Plugin {
 				// scan modal (which only appears for large vaults).
 				await this.maybeShowWelcomeOnLaunch(isFreshInstall);
 				if (!this.settings.firstRunCompleted) {
-					await this.runFirstRunDiscovery();
+					await runFirstRunDiscovery(this);
 				} else {
 					this.discovery.schedulePrune(2000);
 				}
@@ -369,8 +378,25 @@ export default class CalloutStudioPlugin extends Plugin {
 		// container would throw away work no one is looking at, and the picker
 		// re-renders itself on the path where the user chose the language.
 		if (this.settingsTab?.containerEl.isConnected) this.settingsTab.display();
-		refreshFixedCommandNames(this, () => new CalloutEditor(this));
+		refreshFixedCommandNames(this, this.commandDeps());
 		this.refreshRenderModes();
+	}
+
+	/**
+	 * The windows the fixed commands open. Built fresh on each call because
+	 * `CalloutEditor` is single-use, and kept here so the ribbon and the
+	 * command open the very same window.
+	 */
+	private commandDeps(): FixedCommandDeps {
+		return {
+			openEditor: () => new CalloutEditor(this),
+			openQuickInsert: () => this.openQuickInsert(),
+		};
+	}
+
+	/** Open the quick-insert window. Shared by the ribbon and its command. */
+	openQuickInsert(): void {
+		new QuickInsertModal(this).open();
 	}
 
 	/**
@@ -461,7 +487,7 @@ export default class CalloutStudioPlugin extends Plugin {
 	}
 
 	/**
-	 * Turn one of the five fixed commands on or off, from the command
+	 * Turn one of the six fixed commands on or off, from the command
 	 * builder. {@link registerCalloutCommands} only runs at startup, so this
 	 * is what (un)registers the command with Obsidian immediately.
 	 */
@@ -469,7 +495,7 @@ export default class CalloutStudioPlugin extends Plugin {
 		id: FixedCommandId,
 		enabled: boolean,
 	): Promise<void> {
-		applyFixedCommandToggle(this, () => new CalloutEditor(this), id, enabled);
+		applyFixedCommandToggle(this, this.commandDeps(), id, enabled);
 		await this.saveSettings();
 	}
 
@@ -507,50 +533,5 @@ export default class CalloutStudioPlugin extends Plugin {
 
 	hasIconFetchFailed(icon: CalloutIcon, role: CalloutRenderRole): boolean {
 		return this.icons.hasFailed(icon, role);
-	}
-
-	/**
-	 * One-time post-install discovery. Picks between a silent auto-scan
-	 * (small vaults) and a consent modal (large vaults). The
-	 * `firstRunCompleted` flag is only persisted after the chosen path
-	 * finishes, so an interrupted run will retry on the next launch.
-	 */
-	private async runFirstRunDiscovery(): Promise<void> {
-		// Re-check the flag — onLayoutReady can fire after another flow
-		// (e.g. an import) already ran a scan and flipped the flag.
-		if (this.settings.firstRunCompleted) return;
-
-		const fileCount = this.app.vault.getMarkdownFiles().length;
-
-		if (fileCount < HEAVY_VAULT_FILE_THRESHOLD) {
-			// Small vault — auto-scan silently.
-			try {
-				const added = await this.runVaultScan(false);
-				if (added > 0) {
-					new Notice(
-						t("firstRun.autoScanComplete", {
-							count: String(added),
-						}),
-					);
-				}
-			} catch (e) {
-				console.error("[CalloutStudio] first-run auto scan failed", e);
-			}
-			this.registry.settings.firstRunCompleted = true;
-			await this.saveSettings();
-			return;
-		}
-
-		// Large vault — ask the user first.
-		await new FirstRunScanModal(this.app, fileCount, async () => {
-			const added = await this.runVaultScan(false);
-			new Notice(
-				t("settings.rescanComplete", {
-					count: String(added),
-				}),
-			);
-		}).prompt();
-		this.registry.settings.firstRunCompleted = true;
-		await this.saveSettings();
 	}
 }

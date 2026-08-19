@@ -2,8 +2,9 @@
  * editor/commands.ts — Registers all user-facing Obsidian commands.
  *
  * Calls plugin.addCommand() for each stable command ID (open-settings,
- * create-callout, callout-wrap, callout-unwrap). Command implementations
- * delegate to CalloutBlockTools or open the CalloutEditor modal.
+ * create-callout, callout-wrap, callout-unwrap, open-quick-insert). Command
+ * implementations delegate to CalloutBlockTools or open one of the two windows
+ * passed in as `FixedCommandDeps`.
  * Command IDs must never be renamed after release because users may have
  * them bound to hotkeys.
  */
@@ -24,20 +25,21 @@ interface SettingsApi {
 }
 
 /**
- * The five commands the plugin always registers. Stable API — never rename one.
+ * The commands the plugin always registers. Stable API — never rename one.
  */
 export type FixedCommandId =
 	| "open-settings"
 	| "create-callout"
 	| "insert-empty-callout"
 	| "callout-wrap"
-	| "callout-unwrap";
+	| "callout-unwrap"
+	| "open-quick-insert";
 
 /**
  * The name key behind each fixed command.
  *
  * A total record, so a new fixed command cannot be declared without a name, and
- * the command builder can list all five without keeping a second copy of the
+ * the command builder can list them all without keeping a second copy of the
  * ids — a display list that drifted from what is really registered would
  * deep-link the user to a command that isn't there.
  */
@@ -47,6 +49,7 @@ export const FIXED_COMMAND_NAME_KEYS: Record<FixedCommandId, string> = {
 	"insert-empty-callout": "cmd.insertEmptyCallout",
 	"callout-wrap": "cmd.calloutWrap",
 	"callout-unwrap": "cmd.calloutUnwrap",
+	"open-quick-insert": "cmd.openQuickInsert",
 };
 
 /** The fixed commands in the order they are registered below. */
@@ -56,12 +59,26 @@ export const FIXED_COMMAND_IDS: readonly FixedCommandId[] = [
 	"insert-empty-callout",
 	"callout-wrap",
 	"callout-unwrap",
+	"open-quick-insert",
 ];
 
 interface CommandHostPlugin extends Plugin {
 	app: Plugin["app"] & { setting?: SettingsApi };
 	autoComplete: CalloutAutoComplete;
 	settings: PluginSettings;
+}
+
+/**
+ * The windows these commands open, injected rather than imported.
+ *
+ * Two of the six exist only to put a window on screen, and both of those
+ * windows need far more of the plugin than {@link CommandHostPlugin} describes.
+ * Passing the openers in keeps this module's idea of "the plugin" at three
+ * members, and keeps `commands.ts` from importing the settings tree.
+ */
+export interface FixedCommandDeps {
+	openEditor: () => CalloutEditor;
+	openQuickInsert: () => void;
 }
 
 /**
@@ -73,7 +90,7 @@ interface CommandHostPlugin extends Plugin {
 function buildFixedCommand(
 	id: FixedCommandId,
 	plugin: CommandHostPlugin,
-	openEditor: () => CalloutEditor,
+	deps: FixedCommandDeps,
 ): Command {
 	const name = t(FIXED_COMMAND_NAME_KEYS[id]);
 	switch (id) {
@@ -91,7 +108,7 @@ function buildFixedCommand(
 				id,
 				name,
 				callback: () => {
-					void openEditor().openAndWait();
+					void deps.openEditor().openAndWait();
 				},
 			};
 		case "insert-empty-callout":
@@ -128,6 +145,18 @@ function buildFixedCommand(
 					unwrapCalloutAtSelection(editor);
 				},
 			};
+		case "open-quick-insert":
+			// A plain callback, not an editorCallback: the window is worth
+			// opening with no note in front — it is where callouts are browsed
+			// and edited too — and it resolves its own target editor, which an
+			// `editorCallback` would have decided for it a moment too early.
+			return {
+				id,
+				name,
+				callback: () => {
+					deps.openQuickInsert();
+				},
+			};
 	}
 }
 
@@ -139,11 +168,11 @@ function buildFixedCommand(
  */
 export function registerCalloutCommands(
 	plugin: CommandHostPlugin,
-	openEditor: () => CalloutEditor,
+	deps: FixedCommandDeps,
 ): void {
 	for (const id of FIXED_COMMAND_IDS) {
 		if (!isFixedCommandEnabled(plugin.settings, id)) continue;
-		const command = buildFixedCommand(id, plugin, openEditor);
+		const command = buildFixedCommand(id, plugin, deps);
 		registeredNames.set(id, command.name);
 		plugin.addCommand(command);
 	}
@@ -170,14 +199,14 @@ const registeredNames = new Map<FixedCommandId, string>();
  */
 export function refreshFixedCommandNames(
 	plugin: CommandHostPlugin,
-	openEditor: () => CalloutEditor,
+	deps: FixedCommandDeps,
 ): void {
 	for (const id of FIXED_COMMAND_IDS) {
 		if (!isFixedCommandEnabled(plugin.settings, id)) continue;
 		const name = t(FIXED_COMMAND_NAME_KEYS[id]);
 		if (registeredNames.get(id) === name) continue;
 		registeredNames.set(id, name);
-		plugin.addCommand(buildFixedCommand(id, plugin, openEditor));
+		plugin.addCommand(buildFixedCommand(id, plugin, deps));
 	}
 }
 
@@ -204,7 +233,7 @@ export function isFixedCommandEnabled(
  */
 export function setFixedCommandEnabled(
 	plugin: CommandHostPlugin,
-	openEditor: () => CalloutEditor,
+	deps: FixedCommandDeps,
 	id: FixedCommandId,
 	enabled: boolean,
 ): void {
@@ -212,7 +241,7 @@ export function setFixedCommandEnabled(
 	const index = disabled.indexOf(id);
 	if (enabled) {
 		if (index >= 0) disabled.splice(index, 1);
-		const command = buildFixedCommand(id, plugin, openEditor);
+		const command = buildFixedCommand(id, plugin, deps);
 		registeredNames.set(id, command.name);
 		plugin.addCommand(command);
 	} else {

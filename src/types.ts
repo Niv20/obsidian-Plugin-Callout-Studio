@@ -541,7 +541,7 @@ export type CustomCommandAction = "wrap" | "insert";
 /**
  * One user-built command, registered with Obsidian so it can be given a hotkey.
  *
- * The plugin registers only its five fixed commands by default; everything here
+ * The plugin registers only its six fixed commands by default; everything here
  * was explicitly created by the user in the command builder, and is registered
  * and unregistered as that list changes.
  */
@@ -732,21 +732,30 @@ export interface PluginSettings {
 	/**
 	 * Commands the user built for specific callouts, registered with Obsidian
 	 * so they can be given hotkeys. Empty by default — the command palette
-	 * carries only the five fixed commands unless the user adds to this.
+	 * carries only the six fixed commands unless the user adds to this.
 	 */
 	customCommands: CustomCommand[];
 	/**
-	 * Ids of the five fixed commands (`editor/commands.ts`) the user has
+	 * Ids of the six fixed commands (`editor/commands.ts`) the user has
 	 * turned off. Empty by default — every fixed command is registered unless
 	 * listed here. A disabled command is not registered with Obsidian at all,
 	 * so it drops out of the command palette and the hotkeys pane, but any
 	 * hotkey already bound to it is untouched and comes back the moment it's
 	 * re-enabled. Kept as a plain `string[]` rather than `FixedCommandId[]`
-	 * because `types.ts` stays a leaf module — the five real ids live in
+	 * because `types.ts` stays a leaf module — the real ids live in
 	 * `editor/commands.ts` and are what everything reading this list checks
 	 * membership against.
 	 */
 	disabledFixedCommands: string[];
+	/**
+	 * Which callouts the quick-insert window lists: all, built-in, or the user's
+	 * own. A standing preference, so it is remembered between openings — unlike
+	 * the search box, which is cleared on every open because a query is about one
+	 * insertion. A plain `string` for the same reason `disabledFixedCommands` is:
+	 * the union and its guard live in `utils/calloutSearch.ts`, keeping this a
+	 * leaf module.
+	 */
+	quickInsertSource: string;
 }
 
 export interface PluginData {

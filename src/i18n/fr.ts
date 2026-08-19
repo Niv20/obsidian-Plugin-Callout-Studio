@@ -9,6 +9,7 @@ export const fr: Record<string, string> = {
 	"cmd.customInsertBlock": "Insérer un callout {{name}}",
 	"cmd.customInsertHeading": "Insérer un titre H{{level}} callout {{name}}",
 	"cmd.customInsertInline": "Insérer un callout en ligne {{name}}",
+	"cmd.openQuickInsert": "Insertion rapide d'un callout de bloc",
 
 	"autocomplete.createNew": 'Créer un nouveau callout : "{{name}}"',
 
@@ -675,6 +676,20 @@ export const fr: Record<string, string> = {
 	"vault.resetAllInUse":
 		"⚠ {{count}} référence(s) de callout dans {{files}} fichier(s) utilisent des types de callout personnalisés qui seront supprimés.",
 
+	"quickInsert.title": "Insertion rapide d'un callout de bloc",
+	"quickInsert.desc": "Choisissez un callout à insérer à l'emplacement du curseur. Callouts de bloc uniquement.",
+	"quickInsert.searchPlaceholder": "Rechercher des callouts",
+	"quickInsert.sourceAria": "Filtrer par source de callout",
+	"quickInsert.sourceAll": "Tous",
+	"quickInsert.sourceBuiltIn": "Intégré",
+	"quickInsert.sourceUser": "Mes callouts",
+	"quickInsert.editAria": "Modifier {{name}}",
+	"quickInsert.insertAria": "Insérer {{name}} comme callout de bloc",
+	"quickInsert.noResults": "Aucun callout trouvé",
+	"quickInsert.noUserCallouts": "Vous n'avez encore créé aucun callout.",
+	"quickInsert.noEditorHint": "Aucune note n'est ouverte en mode édition, donc rien ne peut être inséré.",
+	"quickInsert.noEditor": "Ouvrez une note en mode édition pour insérer un callout.",
+
 	"vaultStats.title": "Statistiques des callouts",
 	"vaultStats.totalCallouts": "Total des callouts",
 	"vaultStats.typesFound": "Types trouvés",
@@ -693,6 +708,13 @@ export const fr: Record<string, string> = {
 	"vaultStats.sourceTheme": "Snippet CSS",
 	"vaultStats.sourceAlias": "Alias de {{id}}",
 	"vaultStats.sourceUnknown": "Inconnu",
+	"vaultStats.byRole": "Écrit comme",
+	"vaultStats.roleBlock": "Bloc",
+	"vaultStats.roleHeading": "Titre",
+	"vaultStats.roleInline": "En ligne",
+	"vaultStats.defineUndefined": "Définir {{count}} manquants",
+	"vaultStats.defineRunning": "Analyse en cours",
+	"vaultStats.defineDone": "{{count}} types de callout ajoutés.",
 	"vaultStats.close": "Fermer",
 
 	"import.title": "Problèmes d'importation",

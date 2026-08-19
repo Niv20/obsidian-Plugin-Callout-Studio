@@ -9,6 +9,7 @@ export const cs: Record<string, string> = {
 	"cmd.customInsertBlock": "Vložit callout {{name}}",
 	"cmd.customInsertHeading": "Vložit nadpisový callout {{name}} (H{{level}})",
 	"cmd.customInsertInline": "Vložit vložený callout {{name}}",
+	"cmd.openQuickInsert": "Rychlé vložení blokového callout",
 
 	"autocomplete.createNew": 'Vytvořit nový callout: "{{name}}"',
 
@@ -665,6 +666,20 @@ export const cs: Record<string, string> = {
 	"vault.resetAllInUse":
 		"⚠ {{count}} odkazů na callout v {{files}} souboru(ech) používá vlastní typy callout, které budou odstraněny.",
 
+	"quickInsert.title": "Rychlé vložení blokového callout",
+	"quickInsert.desc": "Vyberte callout pro vložení na pozici kurzoru. Pouze blokové callouty.",
+	"quickInsert.searchPlaceholder": "Hledat callouty",
+	"quickInsert.sourceAria": "Filtrovat podle zdroje callout",
+	"quickInsert.sourceAll": "Vše",
+	"quickInsert.sourceBuiltIn": "Vestavěný",
+	"quickInsert.sourceUser": "Moje callouty",
+	"quickInsert.editAria": "Upravit {{name}}",
+	"quickInsert.insertAria": "Vložit {{name}} jako blokový callout",
+	"quickInsert.noResults": "Nebyly nalezeny žádné callouty",
+	"quickInsert.noUserCallouts": "Zatím jste nevytvořili žádný callout.",
+	"quickInsert.noEditorHint": "Není otevřena žádná poznámka v režimu úprav, takže nelze nic vložit.",
+	"quickInsert.noEditor": "Otevřete poznámku v režimu úprav pro vložení callout.",
+
 	"vaultStats.title": "Statistiky callout",
 	"vaultStats.totalCallouts": "Celkem callouts",
 	"vaultStats.typesFound": "Nalezené typy",
@@ -683,6 +698,13 @@ export const cs: Record<string, string> = {
 	"vaultStats.sourceTheme": "Fragment CSS",
 	"vaultStats.sourceAlias": "Alias pro {{id}}",
 	"vaultStats.sourceUnknown": "Neznámý",
+	"vaultStats.byRole": "Zapsáno jako",
+	"vaultStats.roleBlock": "Blok",
+	"vaultStats.roleHeading": "Nadpis",
+	"vaultStats.roleInline": "Vložený v textu",
+	"vaultStats.defineUndefined": "Definovat {{count}} chybějících",
+	"vaultStats.defineRunning": "Skenování",
+	"vaultStats.defineDone": "Přidáno {{count}} typů callout.",
 	"vaultStats.close": "Zavřít",
 
 	"import.title": "Problémy s importem",

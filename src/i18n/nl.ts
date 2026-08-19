@@ -9,6 +9,7 @@ export const nl: Record<string, string> = {
 	"cmd.customInsertBlock": "{{name}}-callout invoegen",
 	"cmd.customInsertHeading": "H{{level}} {{name}}-kopcallout invoegen",
 	"cmd.customInsertInline": "Inline {{name}}-callout invoegen",
+	"cmd.openQuickInsert": "Blok-callout snel invoegen",
 
 	"autocomplete.createNew": 'Nieuwe callout aanmaken: "{{name}}"',
 
@@ -670,6 +671,20 @@ export const nl: Record<string, string> = {
 	"vault.resetAllInUse":
 		"⚠ {{count}} callout-referentie(s) in {{files}} bestand(en) gebruiken aangepaste callout-types die worden verwijderd.",
 
+	"quickInsert.title": "Blok-callout snel invoegen",
+	"quickInsert.desc": "Kies een callout om in te voegen op de cursorpositie. Alleen blok-callouts.",
+	"quickInsert.searchPlaceholder": "Callouts zoeken",
+	"quickInsert.sourceAria": "Filteren op callout-bron",
+	"quickInsert.sourceAll": "Alle",
+	"quickInsert.sourceBuiltIn": "Ingebouwd",
+	"quickInsert.sourceUser": "Mijn callouts",
+	"quickInsert.editAria": "{{name}} bewerken",
+	"quickInsert.insertAria": "{{name}} invoegen als blok-callout",
+	"quickInsert.noResults": "Geen callouts gevonden",
+	"quickInsert.noUserCallouts": "Je hebt nog geen callouts gemaakt.",
+	"quickInsert.noEditorHint": "Er is geen notitie geopend in bewerkingsmodus, dus er kan niets worden ingevoegd.",
+	"quickInsert.noEditor": "Open een notitie in bewerkingsmodus om een callout in te voegen.",
+
 	"vaultStats.title": "Callout-statistieken",
 	"vaultStats.totalCallouts": "Totaal callouts",
 	"vaultStats.typesFound": "Gevonden types",
@@ -688,6 +703,13 @@ export const nl: Record<string, string> = {
 	"vaultStats.sourceTheme": "CSS-fragment",
 	"vaultStats.sourceAlias": "Alias van {{id}}",
 	"vaultStats.sourceUnknown": "Onbekend",
+	"vaultStats.byRole": "Geschreven als",
+	"vaultStats.roleBlock": "Blok",
+	"vaultStats.roleHeading": "Kop",
+	"vaultStats.roleInline": "Inline",
+	"vaultStats.defineUndefined": "{{count}} ontbrekende definiëren",
+	"vaultStats.defineRunning": "Bezig met scannen",
+	"vaultStats.defineDone": "{{count}} callout-types toegevoegd.",
 	"vaultStats.close": "Sluiten",
 
 	"import.title": "Importeerproblemen",
