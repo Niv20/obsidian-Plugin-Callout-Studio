@@ -50,6 +50,7 @@ import {
 	allSourceFiles,
 	argSpan,
 	at,
+	blankLiterals,
 	lineOf,
 	literals,
 	pluginSourceFiles,
@@ -218,12 +219,25 @@ describe("no hardcoded UI copy", () => {
 		// it in English is worse than leaving a visible label in English, not
 		// better. It is set through setAttribute, which is why the generic
 		// setter list above cannot see it.
+		//
+		// The attribute *name* cannot be matched in `f.code` — the scanner
+		// blanks string bodies, so every `setAttribute("aria-label", …)` reads
+		// as `setAttribute("          ", …)` there. This looked for the name in
+		// the blanked text for a long time and therefore matched nothing at
+		// all; it now matches any string-literal first argument in `f.code` and
+		// reads the name back out of `f.text`. `title` has left the list
+		// because the suite below bans that attribute outright.
+		const NAMES = ["aria-label", "placeholder"];
 		const bad: string[] = [];
 		for (const f of files) {
 			for (const m of f.code.matchAll(
-				/setAttribute\s*\(\s*["'](aria-label|title|placeholder)["']\s*,/g,
+				/setAttribute\s*\(\s*(["'])(\s*)\1\s*,/g,
 			)) {
 				const index = m.index ?? 0;
+				const name = f.text
+					.slice(index, index + m[0].length)
+					.match(/["']([^"']*)["']/)?.[1];
+				if (name === undefined || !NAMES.includes(name)) continue;
 				const span = argSpan(f.code, f.code.indexOf("(", index));
 				if (!span) continue;
 				const raw = f.text.slice(span.start, span.end);
@@ -234,11 +248,132 @@ describe("no hardcoded UI copy", () => {
 					LOOKS_LIKE_PROSE.test(l.value),
 				);
 				if (prose.length > 0) {
-					bad.push(`${at(f, index)}  ${m[1]}="${prose[0]?.value ?? ""}"`);
+					bad.push(`${at(f, index)}  ${name}="${prose[0]?.value ?? ""}"`);
 				}
 			}
 		}
 		assert.deepStrictEqual(bad, [], report("Untranslated attribute text:", bad));
+	});
+});
+
+/* -------------------------------------------------------------------------- */
+/* 165 — only Obsidian ever draws a tooltip                                   */
+/* -------------------------------------------------------------------------- */
+
+describe("nothing sets a native tooltip", () => {
+	/**
+	 * `title` is the one attribute that draws a tooltip this plugin does not
+	 * control, and the trouble is not that it looks different:
+	 *
+	 * - **It stacks.** Obsidian draws its own tooltip for anything carrying an
+	 *   `aria-label`, so an element with both shows two at once, in two styles,
+	 *   on two delays. That is how a bare `[!bug]` came to sit beside "Insert
+	 *   Bug as a block callout" in the quick-insert window.
+	 * - **It is inherited.** A `title` fires while the pointer is over any
+	 *   descendant that has none of its own, so one set on a row reaches every
+	 *   button inside it — including buttons that were already labelled.
+	 *
+	 * `aria-label` is therefore the only hover text in `src/`. Only the three
+	 * forms that reach the DOM are matched: `title:` is *also* a plain options
+	 * field on some forty modal headings, icon-pack names and parsed callout
+	 * headers, and none of those is an attribute.
+	 */
+	interface Form {
+		label: string;
+		/** Every index in `f.code` where this form starts. */
+		find: (f: SourceFile) => number[];
+	}
+
+	/** Indices of every match of `re` in `text`. */
+	function indices(text: string, re: RegExp): number[] {
+		return [...text.matchAll(re)].map((m) => m.index ?? 0);
+	}
+
+	const FORMS: Form[] = [
+		{
+			// setAttribute("title", …) / setAttr("title", …). The name is read
+			// out of `f.text`, because `f.code` has blanked the string body.
+			label: 'setAttribute("title", …)',
+			find: (f) =>
+				indices(f.code, /\bsetAttr(?:ibute)?\s*\(\s*(["'])(\s*)\1/g).filter(
+					(i) => /["']title["']/.test(f.text.slice(i, i + 40)),
+				),
+		},
+		{
+			// attr: { title: … } in a createEl/createDiv/createSpan options
+			// object. Anchored on `attr:` so the plain options field is not
+			// touched; the key survives blanking when it is a bare identifier,
+			// and is read from `f.text` when it is quoted.
+			label: "attr: { title: … }",
+			find: (f) =>
+				indices(f.code, /\battr\s*:\s*\{/g).filter((i) => {
+					const open = f.code.indexOf("{", i);
+					const close = f.code.indexOf("}", open);
+					if (close === -1) return false;
+					return /[{,]\s*(["']?)title\1\s*:/.test(
+						f.text.slice(open, close + 1),
+					);
+				}),
+		},
+		{
+			// el.title = …, but never `this.title =`: a receiver of `this` is a
+			// class field by construction — ReplaceCalloutModal has one — and an
+			// element is never `this`. That carve-out needs no allowlist, so it
+			// cannot go stale the way a frozen list of files would.
+			label: "el.title = …",
+			find: (f) => indices(f.code, /(?<!\bthis)\.title\s*=(?!=)/g),
+		},
+	];
+
+	it("no title attribute reaches the DOM", () => {
+		const bad: string[] = [];
+		for (const f of files) {
+			for (const form of FORMS) {
+				for (const index of form.find(f)) {
+					bad.push(`${at(f, index)}  ${form.label}`);
+				}
+			}
+		}
+		assert.deepStrictEqual(
+			bad,
+			[],
+			report(
+				"A `title` draws the OS tooltip, which stacks with Obsidian's and is inherited by every child. Use aria-label:",
+				bad,
+			),
+		);
+	});
+
+	it("the rule sees each of the three forms", () => {
+		// A scan that silently matches nothing passes for years — this suite's
+		// own neighbour did exactly that. Feed it the shapes it exists to catch.
+		const fake = (text: string): SourceFile => ({
+			path: "src/fake.ts",
+			text,
+			code: blankLiterals(text),
+		});
+		const caught = (text: string): boolean =>
+			FORMS.some((form) => form.find(fake(text)).length > 0);
+
+		for (const sample of [
+			'el.setAttribute("title", label);',
+			"el.setAttr('title', label);",
+			'row.createDiv({ cls: "x", attr: { title: name } });',
+			'row.createDiv({ attr: { "title": name } });',
+			"el.title = name;",
+		]) {
+			assert.ok(caught(sample), `missed: ${sample}`);
+		}
+
+		for (const sample of [
+			'el.setAttribute("aria-label", label);',
+			'new ConfirmModal(app, { title: t("x") });',
+			'row.createDiv({ attr: { "aria-label": name } });',
+			"this.title = t('x');",
+			'const { title } = parseHeader(line);',
+		]) {
+			assert.ok(!caught(sample), `false positive: ${sample}`);
+		}
 	});
 });
 
