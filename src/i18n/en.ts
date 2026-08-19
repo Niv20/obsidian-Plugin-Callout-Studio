@@ -12,6 +12,7 @@ export const en: Record<string, string> = {
 	"cmd.insertEmptyCallout": "Insert empty callout",
 	"cmd.calloutWrap": "Wrap in callout",
 	"cmd.calloutUnwrap": "Unwrap from callout",
+	"cmd.openQuickInsert": "Quick insert block callout",
 
 	// Commands — names generated for the user's own commands. Obsidian adds
 	// the "Callout Studio: " prefix itself, so these must not repeat it.
@@ -221,6 +222,25 @@ export const en: Record<string, string> = {
 	"commandBuilder.noCallouts":
 		"There are no callout types to build a command from yet.",
 	"commandBuilder.save": "Save",
+
+	// Quick insert window (the ribbon icon). Block callouts only — the wording
+	// has to say so, because the same list could plausibly be read as offering
+	// heading and inline callouts too.
+	"quickInsert.title": "Quick insert block callout",
+	"quickInsert.desc":
+		"Pick a callout to insert at the cursor. Block callouts only.",
+	"quickInsert.searchPlaceholder": "Search callouts",
+	"quickInsert.sourceAria": "Filter by callout source",
+	"quickInsert.sourceAll": "All",
+	"quickInsert.sourceBuiltIn": "Built-in",
+	"quickInsert.sourceUser": "My callouts",
+	"quickInsert.editAria": "Edit {{name}}",
+	"quickInsert.insertAria": "Insert {{name}} as a block callout",
+	"quickInsert.noResults": "No callouts found",
+	"quickInsert.noUserCallouts": "You haven't created any callouts yet.",
+	"quickInsert.noEditorHint":
+		"No note is open in editing mode, so nothing can be inserted.",
+	"quickInsert.noEditor": "Open a note in editing mode to insert a callout.",
 
 	// Settings — Reset
 	"settings.vaultMaintenance": "Vault insights & maintenance",
