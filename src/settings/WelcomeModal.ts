@@ -15,6 +15,7 @@
  */
 import { Modal, setIcon } from "obsidian";
 import { t } from "../i18n";
+import { PLUGIN_ICON_ID } from "../constants";
 import { LiveCalloutPreview } from "./LiveCalloutPreview";
 import type { SettingsTabPlugin } from "./sections/types";
 
@@ -42,7 +43,7 @@ export class WelcomeModal extends Modal {
 		const left = panel.createDiv({ cls: "cs-welcome-left" });
 		const hero = left.createDiv({ cls: "cs-welcome-hero" });
 		const icon = hero.createDiv({ cls: "cs-welcome-icon" });
-		setIcon(icon, "paintbrush");
+		setIcon(icon, PLUGIN_ICON_ID);
 		hero.createEl("h1", {
 			cls: "cs-welcome-title",
 			text: t("welcome.title"),
