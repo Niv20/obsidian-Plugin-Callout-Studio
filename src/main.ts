@@ -24,6 +24,7 @@ import {
 } from "./icons/materialFontStore";
 import { CalloutDiscovery } from "./manager/CalloutDiscovery";
 import { removeLegacyStartupSnippet } from "./manager/legacyStartupSnippet";
+import { runFirstRunDiscovery } from "./manager/firstRunDiscovery";
 import { CalloutStudioSettingsTab } from "./settings/SettingsTab";
 import { WelcomeModal } from "./settings/WelcomeModal";
 import { CalloutEditor } from "./settings/CalloutEditor";
@@ -45,8 +46,6 @@ import {
 } from "./editor/commands";
 import { CustomCommandManager } from "./editor/CustomCommandManager";
 import { CalloutStudioAPI } from "./api/PluginAPI";
-import { FirstRunScanModal } from "./utils/FirstRunScanModal";
-import { HEAVY_VAULT_FILE_THRESHOLD } from "./constants";
 import { getLocale, setLocale, t } from "./i18n";
 import { LocaleStore } from "./i18n/LocaleStore";
 
@@ -331,7 +330,7 @@ export default class CalloutStudioPlugin extends Plugin {
 				// scan modal (which only appears for large vaults).
 				await this.maybeShowWelcomeOnLaunch(isFreshInstall);
 				if (!this.settings.firstRunCompleted) {
-					await this.runFirstRunDiscovery();
+					await runFirstRunDiscovery(this);
 				} else {
 					this.discovery.schedulePrune(2000);
 				}
@@ -507,50 +506,5 @@ export default class CalloutStudioPlugin extends Plugin {
 
 	hasIconFetchFailed(icon: CalloutIcon, role: CalloutRenderRole): boolean {
 		return this.icons.hasFailed(icon, role);
-	}
-
-	/**
-	 * One-time post-install discovery. Picks between a silent auto-scan
-	 * (small vaults) and a consent modal (large vaults). The
-	 * `firstRunCompleted` flag is only persisted after the chosen path
-	 * finishes, so an interrupted run will retry on the next launch.
-	 */
-	private async runFirstRunDiscovery(): Promise<void> {
-		// Re-check the flag — onLayoutReady can fire after another flow
-		// (e.g. an import) already ran a scan and flipped the flag.
-		if (this.settings.firstRunCompleted) return;
-
-		const fileCount = this.app.vault.getMarkdownFiles().length;
-
-		if (fileCount < HEAVY_VAULT_FILE_THRESHOLD) {
-			// Small vault — auto-scan silently.
-			try {
-				const added = await this.runVaultScan(false);
-				if (added > 0) {
-					new Notice(
-						t("firstRun.autoScanComplete", {
-							count: String(added),
-						}),
-					);
-				}
-			} catch (e) {
-				console.error("[CalloutStudio] first-run auto scan failed", e);
-			}
-			this.registry.settings.firstRunCompleted = true;
-			await this.saveSettings();
-			return;
-		}
-
-		// Large vault — ask the user first.
-		await new FirstRunScanModal(this.app, fileCount, async () => {
-			const added = await this.runVaultScan(false);
-			new Notice(
-				t("settings.rescanComplete", {
-					count: String(added),
-				}),
-			);
-		}).prompt();
-		this.registry.settings.firstRunCompleted = true;
-		await this.saveSettings();
 	}
 }
