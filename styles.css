@@ -3693,6 +3693,65 @@ input.cs-input-invalid:focus {
 	color: var(--text-muted);
 }
 
+/* ─── Quick insert window (the ribbon icon) ─────────────────── */
+
+/* Narrower than the callout editor and wider than a confirmation: this is a
+   list to scan, so the rows want length, not width. */
+.cs-quick-insert {
+	--dialog-width: 560px;
+}
+
+/* Sticky at top: 0 and nowhere else. A positive offset parks this opaque band
+   below the header's rule, which then eats the rows scrolling behind it — the
+   same trap `.callout-studio-preview-col` documents. It is painted with the
+   window's own surface, never --background-primary, because those are not the
+   same colour on an iPad in dark mode. */
+.cs-quick-insert-toolbar {
+	position: sticky;
+	top: 0;
+	z-index: 1;
+	display: flex;
+	gap: 8px;
+	flex-wrap: wrap;
+	align-items: center;
+	padding-bottom: 12px;
+	background: var(--cs-surface, var(--background-primary));
+}
+
+.cs-quick-insert-search {
+	flex: 1;
+	min-width: 150px;
+}
+
+.cs-quick-insert-filter {
+	flex-shrink: 0;
+}
+
+/* Both controls take the full row on a phone, where 150px of search plus a
+   dropdown does not fit side by side. */
+@media (max-width: 600px) {
+	.cs-quick-insert-search,
+	.cs-quick-insert-filter {
+		flex-basis: 100%;
+		min-width: 100%;
+	}
+}
+
+/* Why nothing is inserted, said before the user presses a disabled button
+   rather than after. */
+.cs-quick-insert-hint {
+	color: var(--text-muted);
+	font-size: var(--font-ui-smaller);
+	padding-bottom: 8px;
+}
+
+/* The keyboard's place in the list. Deliberately the same shade the mouse gets
+   on hover, so arrowing through the rows and pointing at them read as one
+   highlight rather than two competing ones. */
+.cs-quick-insert .callout-studio-row.is-active {
+	background: var(--background-modifier-active-hover);
+}
+
 /* ─── Plugin import modals (Admonition, Callout Manager) ───── */
 /* One widget, two windows: both offer ready-made sources as rows with a paste
    box underneath, so the rules are shared rather than copied per modal. */
