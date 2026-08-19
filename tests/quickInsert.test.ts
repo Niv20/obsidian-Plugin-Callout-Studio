@@ -799,11 +799,21 @@ describe("the row keeps its controls outside the callout", () => {
 		assert.strictEqual(rowEl.querySelectorAll("button").length, 2);
 	});
 
-	it("keeps every id reachable as a tooltip", () => {
-		// The `[!id]` chips would make each row two callouts tall; the aliases a
-		// search can match still have to be visible somewhere.
+	it("never draws a native tooltip", () => {
+		// The row used to carry its `[!id]` list as a `title`. That attribute is
+		// inherited for hover, so it fired over the buttons too — a raw token in
+		// the OS's tooltip style, beside the button's own label in Obsidian's.
+		// The two aria-labels are the only hover text the row has now.
 		const { rowEl } = renderRow(true);
-		assert.strictEqual(rowEl.getAttribute("title"), "[!caution] [!warning]");
+		assert.strictEqual(rowEl.getAttribute("title"), null);
+		assert.deepStrictEqual(Array.from(rowEl.querySelectorAll("[title]")), []);
+		const labels = Array.from(rowEl.querySelectorAll("button")).map((b) =>
+			b.getAttribute("aria-label"),
+		);
+		assert.strictEqual(labels.length, 2);
+		for (const label of labels) {
+			assert.ok(label?.includes("Warning"), `unlabelled: ${label}`);
+		}
 	});
 
 	it("inserts on a click anywhere but a button", () => {
