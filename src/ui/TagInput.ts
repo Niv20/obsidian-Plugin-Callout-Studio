@@ -113,7 +113,6 @@ export class TagInput {
 			cls: "cs-tag-add-btn",
 			attr: { type: "button", "aria-label": t("editor.addId") },
 		});
-		this.addBtnEl.setAttribute("title", t("editor.addId"));
 		setIcon(this.addBtnEl, "plus");
 		// Keep focus in the field on click. Without this the mousedown blurs the
 		// input, `blur` commits the tag and empties the value, and syncAddButton
@@ -313,7 +312,7 @@ export class TagInput {
 			// affordance is replaced by a lock sitting in the same slot. Clicking
 			// it explains why the ID can't be removed.
 			tagEl.addClass("is-pinned");
-			tagEl.setAttribute("title", t("editor.idLinkedToName"));
+			tagEl.setAttribute("aria-label", t("editor.idLinkedToName"));
 			tagEl.createSpan({ cls: "cs-tag-chip-text", text: tag });
 			const lockEl = tagEl.createSpan({
 				cls: "cs-tag-chip-remove cs-tag-chip-lock",
@@ -327,8 +326,9 @@ export class TagInput {
 		}
 
 		// Long IDs are truncated with an ellipsis in CSS; the full value is
-		// shown on hover via the native tooltip.
-		tagEl.setAttribute("title", tag);
+		// shown on hover. As an aria-label, never a `title` — that draws the OS
+		// tooltip, which stacks with Obsidian's and is inherited by the × inside.
+		tagEl.setAttribute("aria-label", tag);
 
 		const isReadonly = this.readonlyTags.has(tag);
 		if (isReadonly) tagEl.addClass("is-readonly");

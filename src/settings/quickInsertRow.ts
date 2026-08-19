@@ -14,9 +14,8 @@
  * there would be a second appearance to keep in step with the first.
  */
 import { setIcon } from "obsidian";
-import { getLocale, t } from "../i18n";
+import { t } from "../i18n";
 import type { CalloutDefinition } from "../types";
-import { getSortedCalloutIds } from "../utils/sorting";
 
 export interface QuickInsertRowHandlers {
 	/** The rendered callout for this definition, if one is ready yet. */
@@ -36,16 +35,10 @@ export function renderQuickInsertRow(
 ): HTMLElement {
 	const row = listEl.createDiv({ cls: "cs-qi-row" });
 	const name = def.displayName;
-	// Every id, not just the primary one: a search that matched an alias has to
-	// be able to show what it matched. As a tooltip rather than a line of chips,
-	// because a row of rendered callouts is only scannable while each is one
-	// callout tall.
-	row.setAttribute(
-		"title",
-		getSortedCalloutIds(def, getLocale())
-			.map((id) => `[!${id}]`)
-			.join(" "),
-	);
+	// Nothing on the row carries a `title`. It drew the OS tooltip, which is
+	// inherited by every descendant — so the `[!id]` list set here appeared
+	// beside the Insert button's own label, in a second style, on a second
+	// delay. `aria-label` on the two buttons is the only hover text left.
 
 	const slot = row.createDiv({ cls: "cs-qi-slot" });
 	const preview = handlers.preview(def);

@@ -53,7 +53,7 @@ export function renderCalloutRow(
 	nameLine.createSpan({
 		cls: "callout-studio-row-name",
 		text: def.displayName,
-		attr: { title: def.displayName },
+		attr: { "aria-label": def.displayName },
 	});
 	if (external) {
 		// First branch on purpose: it outranks both badges below, because
