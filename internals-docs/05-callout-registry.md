@@ -365,10 +365,4 @@ or force a document-wide re-render. `SettingsTab` subscribes to this so its row
 swatches track the editor modal's colour picker live, without either side
 touching disk.
 
-## Related documentation
-
-- [Data model](04-data-model.md)
-- [CSS generation](06-css-generation.md)
-- [Vault discovery](10-vault-discovery.md) — the discovery/prune side of `source: "fallback"` rows
-- [Colour system](11-color-system.md) — palette cascade and the nesting invariant
-- [Import and export](14-import-export.md)
+Next chapter: [06-css-generation.md](06-css-generation.md)

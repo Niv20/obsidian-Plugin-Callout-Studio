@@ -288,10 +288,4 @@ cssAttrValue(raw)                // the shared escaper both call
 > quotes first would double the backslashes just added), then quotes, then
 > raw newlines as hex escapes.
 
-## Related documentation
-
-- [Architecture](02-architecture.md) — the data-flow loop this class sits in
-- [Callout registry](05-callout-registry.md) — `isUnmodifiedBuiltIn`, `externalStyle`
-- [Colour system](11-color-system.md) — the tint-alpha math this file calls into
-- [Render roles and rendering surfaces](08-render-roles.md) — the DOM this CSS targets
-- [Import and export](14-import-export.md) — the CSS snippet export reuses these generators via a `standalone` flag
+Next chapter: [07-persistence-and-caching.md](07-persistence-and-caching.md)

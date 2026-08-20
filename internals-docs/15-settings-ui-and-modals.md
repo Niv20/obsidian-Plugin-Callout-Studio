@@ -272,9 +272,4 @@ never sees it. Reopenable any time via the info icon in settings, or the
 dev-convenience protocol handler `obsidian://callout-studio-welcome`
 registered in `main.ts`.
 
-## Related documentation
-
-- [Callout editor](13-callout-editor.md) — the largest single modal, covered separately
-- [Icons](12-icons.md) — the icon picker modal
-- [Vault discovery](10-vault-discovery.md) — delete/replace flow this UI drives
-- [Colour system](11-color-system.md) — palette derivation the editor calls into
+Next chapter: [16-i18n.md](16-i18n.md)

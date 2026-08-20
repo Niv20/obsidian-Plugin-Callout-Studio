@@ -228,9 +228,4 @@ to the flat trio, which is exactly what that trio meant before `iconAdjust`
 existed — this two-layer fallback is what lets pre-existing data and older
 exports keep rendering identically with no migration pass required.
 
-## Related documentation
-
-- [Data model](04-data-model.md) — `BgGradient`, `CustomPalette`, `IconAdjust`
-- [Callout registry](05-callout-registry.md) — palette cascade mechanics, migrations
-- [CSS generation](06-css-generation.md) — where these functions are actually called
-- [Callout editor](13-callout-editor.md) — the palette editor UI
+Next chapter: [12-icons.md](12-icons.md)

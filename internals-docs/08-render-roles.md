@@ -296,9 +296,4 @@ While open, freshly built inline pills, heading bars, and fold chevrons get the
 links) are deliberately excluded — they render late, well outside any window
 where a snap would be visible as a flash.
 
-## Related documentation
-
-- [Architecture](02-architecture.md)
-- [CSS generation](06-css-generation.md)
-- [Editor integrations](09-editor-integrations.md)
-- [Callout registry](05-callout-registry.md) — `externalStyle`, alias resolution
+Next chapter: [09-editor-integrations.md](09-editor-integrations.md)

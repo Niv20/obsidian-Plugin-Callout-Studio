@@ -204,8 +204,4 @@ features land — `src/api/types.ts` (`Callout`, `CalloutDetails`,
 must not move in lockstep with it. The mapper functions in `PluginAPI.ts`
 are the seam between the two.
 
-## Related documentation
-
-- [Callout registry](05-callout-registry.md) — `getReal`, the preview slot, `onChange`
-- [Architecture](02-architecture.md) — who owns state vs. who operates on it
-- `../API.md` — the consumer-facing contract document
+Next chapter: [19-extending.md](19-extending.md)

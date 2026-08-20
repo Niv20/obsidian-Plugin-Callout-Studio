@@ -359,10 +359,4 @@ separate, manual step — `npm run icons:generate` — **never** part of
 [Build, test, and release](17-build-test-release.md#regenerating-icon-and-locale-data)
 and [Adding or modifying features](19-extending.md#refreshing-icon-pack-artwork).
 
-## Related documentation
-
-- [Architecture](02-architecture.md) — the two icon id spaces
-- [Persistence and caching](07-persistence-and-caching.md) — the three icon storage layers
-- [Callout editor](13-callout-editor.md) — the icon picker UI
-- [Import and export](14-import-export.md) — how an import triggers artwork repair
-- `user-image-icons` and `tabler-outline-stroke` skills — deeper per-source derivations
+Next chapter: [13-callout-editor.md](13-callout-editor.md)

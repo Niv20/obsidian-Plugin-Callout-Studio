@@ -99,14 +99,4 @@ Every path that turns raw markdown into an ID funnels through
 ID structurally unreachable by the registry. Full treatment in
 [Callout IDs and normalization](04-data-model.md#callout-ids-and-the-three-normalizers).
 
-## Where to go next
-
-- The component map and who owns what: [Architecture](02-architecture.md)
-- What happens on load: [Plugin lifecycle](03-plugin-lifecycle.md)
-- The data shapes: [Data model](04-data-model.md)
-
-## Related documentation
-
-- [Architecture](02-architecture.md)
-- [Render roles and rendering surfaces](08-render-roles.md)
-- [Public API](18-public-api.md)
+Next chapter: [02-architecture.md](02-architecture.md)

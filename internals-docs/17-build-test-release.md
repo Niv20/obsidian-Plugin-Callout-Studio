@@ -211,8 +211,4 @@ A single pre-commit hook (`.husky/pre-commit: npx nano-staged`) runs ESLint
 against staged `*.ts`/`*.mts` files only — most style issues are caught
 before a push ever reaches CI.
 
-## Related documentation
-
-- [Icons](12-icons.md) — the pack data pipeline this generates
-- [Localization](16-i18n.md) — the locale data pipeline this generates
-- [Architecture](02-architecture.md) — the frozen oversized-file list, `repoSourceRules`
+Next chapter: [18-public-api.md](18-public-api.md)

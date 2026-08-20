@@ -276,9 +276,4 @@ or confirming a pick from a `perIconRemote`/`bundledRemote` source, ever
 touches the network. See [Icons](12-icons.md) for the fetch/cache mechanics
 this triggers.
 
-## Related documentation
-
-- [Colour system](11-color-system.md) — the nesting invariant, palette baking
-- [Callout registry](05-callout-registry.md) — the preview slot mechanics
-- [Icons](12-icons.md) — icon pack fetch/cache
-- [Settings UI and modals](15-settings-ui-and-modals.md) — the shared modal shell this modal wears
+Next chapter: [14-import-export.md](14-import-export.md)

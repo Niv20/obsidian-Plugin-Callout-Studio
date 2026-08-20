@@ -84,29 +84,4 @@ Opening a PR? [`CONTRIBUTING.md`](../CONTRIBUTING.md) (repo root) has the
 process — fork, branch, lint, test, commit style. This guide is what to read
 *before* that, so the change itself lands right the first time.
 
-## Related topics with their own dedicated skills
-
-Four subsystems are narrow and detailed enough that they live in their own
-Claude Code skills rather than as an `internals-docs/` file — this guide's
-relevant sections link out to them where useful:
-
-- **`callout-color-nesting`** — the full alpha-solving derivation behind the
-  translucent-tint background math (summarized in
-  [11-color-system.md](11-color-system.md)).
-- **`callout-metadata-pipe`** — the pipe-splitting migration and edge cases
-  in detail (summarized in [01-overview.md](01-overview.md) and
-  [04-data-model.md](04-data-model.md)).
-- **`tabler-outline-stroke`** — how Tabler's stroked outline icons are drawn
-  and coloured without storing the stroke in the pack file.
-- **`user-image-icons`** — deeper treatment of the "Your images" source
-  (summarized in [12-icons.md](12-icons.md)).
-
-## A note on how this guide was written
-
-Every claim here was checked against the source as it exists in this
-repository, not inferred from naming or assumed from convention. Where the
-reasoning behind a design decision is stated explicitly in a code comment,
-this guide quotes or closely paraphrases it. Where something looks
-deliberate but the *reason* isn't provable from the code, that uncertainty
-is stated rather than papered over. If you find a place where this guide and
-the code have drifted apart, the code is correct — please fix the doc.
+Next chapter: [01-overview.md](01-overview.md)

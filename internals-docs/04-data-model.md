@@ -283,9 +283,4 @@ derivation.
 > validation) depend on identical normalization behaviour to agree with each
 > other about what counts as "the same callout."
 
-## Related documentation
-
-- [Callout registry](05-callout-registry.md) — how these types are stored, migrated and mutated
-- [Persistence and caching](07-persistence-and-caching.md) — what's saved, cached, or runtime-only
-- [Colour system](11-color-system.md) — `BgGradient`, palettes, tint math
-- [Icons](12-icons.md) — `CalloutIcon`, `UserImageIcon`, the pack model
+Next chapter: [05-callout-registry.md](05-callout-registry.md)

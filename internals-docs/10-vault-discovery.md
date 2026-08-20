@@ -252,6 +252,7 @@ from in the vault. `handleBuiltInReset` additionally warns before dropping
 vault use — a plain reset would silently orphan those references.
 
 ## Replace flow
+### Replace flow
 
 `handleCalloutReplace` counts usages, opens `ReplaceCalloutModal` (a dropdown
 of every *other* registered callout), and on confirmation calls
@@ -260,11 +261,7 @@ from the callout being replaced, the title rewrite rides along too — because
 a header this plugin wrote carries the callout's display name as literal
 title text (`> [!danger] Warning`), so swapping only the id would leave a
 stale title behind. **Only a title that exactly matches the old display name
-is touched** — a title the user wrote themselves is theirs and survives the
-swap untouched.
+is touched** — a title the user wrote themselves is never touched.
 
-## Related documentation
+Next chapter: [11-color-system.md](11-color-system.md)
 
-- [Callout registry](05-callout-registry.md) — `source: "fallback"`, `customized`
-- [Editor integrations](09-editor-integrations.md) — `CustomCommandManager`'s prune interaction
-- [Plugin lifecycle](03-plugin-lifecycle.md) — first-run discovery ordering

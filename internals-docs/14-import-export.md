@@ -212,9 +212,4 @@ vault (again: nothing exported first, nothing written back), or an
   re-importing a file that predates a rename the user made locally doesn't
   clobber it.
 
-## Related documentation
-
-- [Callout registry](05-callout-registry.md) — `applyCalloutManagerImport`, `applyAdmonitionImport`, `batch()`
-- [Persistence and caching](07-persistence-and-caching.md) — CSS snippet export mechanics
-- [Icons](12-icons.md) — artwork repair triggered by import
-- [Data model](04-data-model.md) — `PluginSettings`, the three merge-by-id lists
+Next chapter: [15-settings-ui-and-modals.md](15-settings-ui-and-modals.md)

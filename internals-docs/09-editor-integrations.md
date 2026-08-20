@@ -366,9 +366,4 @@ suggestions itself and doesn't need cleanup. It cleans the `[[#` heading-link
 popup the same way the Outline pane is cleaned — stripping the raw `[!id]`
 token from the displayed suggestion text.
 
-## Related documentation
-
-- [Render roles and rendering surfaces](08-render-roles.md)
-- [Vault discovery](10-vault-discovery.md)
-- [Callout registry](05-callout-registry.md)
-- [Adding or modifying features](19-extending.md)
+Next chapter: [10-vault-discovery.md](10-vault-discovery.md)
