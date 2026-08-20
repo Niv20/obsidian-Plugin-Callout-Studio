@@ -237,4 +237,5 @@ unstyled), `registry.load()` re-runs every migration (idempotent — see
 re-registers every custom command **at the same ids**, so hotkeys survive
 because Obsidian keys them by command id, not by object identity.
 
+---
 Next chapter: [04-data-model.md](04-data-model.md)

@@ -212,4 +212,5 @@ vault (again: nothing exported first, nothing written back), or an
   re-importing a file that predates a rename the user made locally doesn't
   clobber it.
 
+---
 Next chapter: [15-settings-ui-and-modals.md](15-settings-ui-and-modals.md)

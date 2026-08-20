@@ -272,4 +272,5 @@ never sees it. Reopenable any time via the info icon in settings, or the
 dev-convenience protocol handler `obsidian://callout-studio-welcome`
 registered in `main.ts`.
 
+---
 Next chapter: [16-i18n.md](16-i18n.md)

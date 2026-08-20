@@ -365,4 +365,5 @@ or force a document-wide re-render. `SettingsTab` subscribes to this so its row
 swatches track the editor modal's colour picker live, without either side
 touching disk.
 
+---
 Next chapter: [06-css-generation.md](06-css-generation.md)

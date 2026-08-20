@@ -137,4 +137,5 @@ calls always use `icon.type` (an `IconPackId`) — using the source id would
 collapse both Font Awesome styles onto one cache entry. Full treatment in
 [Icons](12-icons.md).
 
+---
 Next chapter: [03-plugin-lifecycle.md](03-plugin-lifecycle.md)

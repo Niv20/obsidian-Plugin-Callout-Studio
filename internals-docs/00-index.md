@@ -84,4 +84,5 @@ Opening a PR? [`CONTRIBUTING.md`](../CONTRIBUTING.md) (repo root) has the
 process — fork, branch, lint, test, commit style. This guide is what to read
 *before* that, so the change itself lands right the first time.
 
+---
 Next chapter: [01-overview.md](01-overview.md)

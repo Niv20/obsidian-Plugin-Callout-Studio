@@ -226,4 +226,5 @@ used anyway while a background refresh runs — deliberately different from a
 hash mismatch **from the network**, which is discarded outright. English never
 needs a file at all; it's bundled in `main.js`.
 
+---
 Next chapter: [08-render-roles.md](08-render-roles.md)

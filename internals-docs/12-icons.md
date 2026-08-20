@@ -359,4 +359,5 @@ separate, manual step — `npm run icons:generate` — **never** part of
 [Build, test, and release](17-build-test-release.md#regenerating-icon-and-locale-data)
 and [Adding or modifying features](19-extending.md#refreshing-icon-pack-artwork).
 
+---
 Next chapter: [13-callout-editor.md](13-callout-editor.md)

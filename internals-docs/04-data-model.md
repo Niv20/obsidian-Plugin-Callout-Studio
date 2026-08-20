@@ -283,4 +283,5 @@ derivation.
 > validation) depend on identical normalization behaviour to agree with each
 > other about what counts as "the same callout."
 
+---
 Next chapter: [05-callout-registry.md](05-callout-registry.md)

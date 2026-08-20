@@ -217,4 +217,5 @@ Before considering a registry-touching change done, verify:
       resulting write actually `await`ed into a save, since that method
       doesn't itself call `notifyChange()`?
 
+---
 Next chapter: [20-common-pitfalls.md](20-common-pitfalls.md)

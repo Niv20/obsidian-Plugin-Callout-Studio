@@ -288,4 +288,5 @@ cssAttrValue(raw)                // the shared escaper both call
 > quotes first would double the backslashes just added), then quotes, then
 > raw newlines as hex escapes.
 
+---
 Next chapter: [07-persistence-and-caching.md](07-persistence-and-caching.md)

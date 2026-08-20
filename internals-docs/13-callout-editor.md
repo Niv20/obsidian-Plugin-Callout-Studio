@@ -276,4 +276,5 @@ or confirming a pick from a `perIconRemote`/`bundledRemote` source, ever
 touches the network. See [Icons](12-icons.md) for the fetch/cache mechanics
 this triggers.
 
+---
 Next chapter: [14-import-export.md](14-import-export.md)

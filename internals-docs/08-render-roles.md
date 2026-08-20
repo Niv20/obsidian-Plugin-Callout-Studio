@@ -296,4 +296,5 @@ While open, freshly built inline pills, heading bars, and fold chevrons get the
 links) are deliberately excluded — they render late, well outside any window
 where a snap would be visible as a flash.
 
+---
 Next chapter: [09-editor-integrations.md](09-editor-integrations.md)

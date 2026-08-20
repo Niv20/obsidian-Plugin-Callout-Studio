@@ -263,5 +263,6 @@ title text (`> [!danger] Warning`), so swapping only the id would leave a
 stale title behind. **Only a title that exactly matches the old display name
 is touched** — a title the user wrote themselves is never touched.
 
+---
 Next chapter: [11-color-system.md](11-color-system.md)
 

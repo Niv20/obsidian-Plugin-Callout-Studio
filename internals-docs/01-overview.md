@@ -99,4 +99,5 @@ Every path that turns raw markdown into an ID funnels through
 ID structurally unreachable by the registry. Full treatment in
 [Callout IDs and normalization](04-data-model.md#callout-ids-and-the-three-normalizers).
 
+---
 Next chapter: [02-architecture.md](02-architecture.md)

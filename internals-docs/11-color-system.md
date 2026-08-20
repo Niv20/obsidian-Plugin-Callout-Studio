@@ -228,4 +228,5 @@ to the flat trio, which is exactly what that trio meant before `iconAdjust`
 existed — this two-layer fallback is what lets pre-existing data and older
 exports keep rendering identically with no migration pass required.
 
+---
 Next chapter: [12-icons.md](12-icons.md)

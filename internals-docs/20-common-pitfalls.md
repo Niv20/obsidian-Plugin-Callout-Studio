@@ -246,4 +246,5 @@ sufficient**. Common cases that also need an explicit follow-up call:
   removing it would make a built-in read as "modified" after any save/load
   cycle even with no real change.
 
+---
 Next chapter: [00-index.md](00-index.md)
