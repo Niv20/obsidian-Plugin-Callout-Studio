@@ -27,10 +27,10 @@ function getCalloutStudio(app: App): CalloutStudioApi | null {
 
 Two things to be aware of:
 
-- **Ask under `onLayoutReady`.** Callout Studio assigns `api` late in its own
+* **Ask under `onLayoutReady`.** Callout Studio assigns `api` late in its own
   `onload()`, so a plugin that reads it during its own `onload()` may find
   `undefined` depending on load order.
-- **The plugin may not be installed.** Always handle `null` — do not assume the
+* **The plugin may not be installed.** Always handle `null` — do not assume the
   user has Callout Studio.
 
 ```ts
@@ -176,15 +176,17 @@ rename does. If reacting is expensive, diff against what you last saw:
 
 ```ts
 let known = "";
+
 const resync = () => {
-	const ids = api
-		.getCallouts()
-		.map((c) => `${c.id}${c.title}`)
-		.join("");
+	const ids = JSON.stringify(
+		api.getCallouts().map((c) => [c.id, c.title])
+	);
+
 	if (ids === known) return; // colour tweak, nothing to rebuild
 	known = ids;
 	this.rebuildCommands();
 };
+
 this.register(api.onChange(resync));
 ```
 
@@ -194,13 +196,13 @@ this.register(api.onChange(resync));
 
 The list contains:
 
-- **All of Obsidian's built-in types** — `note`, `abstract`, `info`, `todo`,
+* **All of Obsidian's built-in types** — `note`, `abstract`, `info`, `todo`,
   `tip`, `success`, `question`, `warning`, `failure`, `danger`, `bug`,
   `example`, `quote` — whether or not the user has customized them. Callout
   Studio lets users restyle the built-ins, so they belong in any list you show.
-- Everything the user created themselves.
-- Callouts injected by their theme or by another plugin.
-- Callouts Callout Studio discovered in their vault, **as long as they are still
+* Everything the user created themselves.
+* Callouts injected by their theme or by another plugin.
+* Callouts Callout Studio discovered in their vault, **as long as they are still
   in use** or the user has customized them. Ids that no longer appear anywhere
   in the vault are left out, so your list does not fill up with types the user
   deleted from their notes.
@@ -254,10 +256,10 @@ own naming silently disappears.
 
 ### Other details that trip people up
 
-- **Ids may contain spaces.** `[!my callout]` is valid, and Obsidian renders it
+* **Ids may contain spaces.** `[!my callout]` is valid, and Obsidian renders it
   and `[!my-callout]` to the same `data-callout="my-callout"`. Write `id`
   through verbatim; don't slugify it.
-- **Obsidian splits the header at the first `|`.** Everything after it is
+* **Obsidian splits the header at the first `|`.** Everything after it is
   metadata, not part of the type — `> [!note|purple]` is the `note` callout
   carrying the metadata `purple`. No Callout Studio id ever contains a `|`, so
   you can append your own metadata safely.
@@ -281,11 +283,11 @@ the community-plugin registry key, so it can never change.
 
 ## What is deliberately not exposed
 
-| Not exposed                   | Why, and what to do instead                                                                                                                                                                 |
-| ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Creating or editing callouts  | Keeping this read-only removes a whole class of conflicts between plugins. Ask the user to create the callout in Callout Studio's settings.                                                    |
-| Opening its modals            | Its icon picker and callout editor are internal UI, not an integration point.                                                                                                                 |
-| Icon artwork                  | Only `pack: "lucide"` names are usable outside the plugin — pass `icon.name` to Obsidian's `setIcon()`. Other packs need artwork Callout Studio downloads and caches for itself.               |
+| Not exposed                   | Why, and what to do instead                                                                                                                                                                                                       |
+| ----------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Creating or editing callouts  | Keeping this read-only removes a whole class of conflicts between plugins. Ask the user to create the callout in Callout Studio's settings.                                                                                       |
+| Opening its modals            | Its icon picker and callout editor are internal UI, not an integration point.                                                                                                                                                     |
+| Icon artwork                  | Only `pack: "lucide"` names are usable outside the plugin — pass `icon.name` to Obsidian's `setIcon()`. Other packs need artwork Callout Studio downloads and caches for itself.                                                  |
 | Wrapping/unwrapping selection | Every plugin scopes this differently (lines vs. selection, titles kept or dropped). If you want Callout Studio's exact frontmatter-skipping, fence-aware version, copy `src/editor/CalloutBlockTools.ts` — the licence allows it. |
 
 ---
@@ -293,4 +295,4 @@ the community-plugin registry key, so it can never change.
 ## Questions
 
 Open an issue at
-<https://github.com/Niv20/obsidian-Plugin-Callout-Studio/issues>.
+https://github.com/Niv20/obsidian-Plugin-Callout-Studio/issues.
